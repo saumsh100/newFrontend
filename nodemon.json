@@ -1,0 +1,14 @@
+{
+  "ignore": [
+    "server/public/",
+    "server/test/",
+    "server/node_modules/",
+    "server/app/views/",
+    "server/app/assets/",
+    "server/.idea/"
+  ],
+  "watch": [
+    "server/",
+    "webpack.base.config"
+  ]
+}

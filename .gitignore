@@ -28,10 +28,7 @@ jsconfig.json
 *.jscs.json
 typings/
 tsd.json
-varafy_app/public/assets/
-varafy_app/test/assets/
 */Session.vim
 tmux*
 xterm*
-varafy.bundle
 screen-256color.ti

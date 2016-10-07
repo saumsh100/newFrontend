@@ -11,7 +11,7 @@
   "scripts": {
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
-    "start": "nf start -w -j Procfile_dev",
+    "start": "nodemon server/bin/server.js",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "clean": "npm run clean:assets && npm run clean:modules",
     "clean:assets": "rimraf server/public/assets server/test/assets",
