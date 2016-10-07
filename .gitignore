@@ -32,3 +32,4 @@ tsd.json
 tmux*
 xterm*
 screen-256color.ti
+server/public/assets/
