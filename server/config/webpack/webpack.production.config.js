@@ -2,13 +2,8 @@
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const config = require('../config');
 const path = require('path');
 const _ = require('lodash');
-
-function relativePath(additionalPath) {
-  return path.join('../../', additionalPath);
-}
 
 // Babel Config Stuff.
 const babelQuery = {
@@ -70,13 +65,13 @@ webpackConfig.module.loaders = [
 webpackConfig.plugins = [
   new webpack.optimize.UglifyJsPlugin(),
   new webpack.optimize.CommonsChunkPlugin('app-commons.js', ['app']),
-  new webpack.optimize.CommonsChunkPlugin('default-commons.js', [
+  /*new webpack.optimize.CommonsChunkPlugin('default-commons.js', [
     'login',
     'accept',
     'acceptAuthenticated',
     'signup',
     'account',
-  ]),
+  ]),*/
   new ExtractTextPlugin('[name].css', {
     // allChunks: true,
   }),

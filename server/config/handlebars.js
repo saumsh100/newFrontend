@@ -23,7 +23,7 @@ const hbs = expressHandlebars.create({
     },
     
     productionCSS(logicalPath) {
-      if (globals.env === 'production') return '';
+      if (globals.env !== 'production') return '';
       
       logicalPath = logicalPath.fn(this);
       const fileName = forceExtension(logicalPath, '.css');
