@@ -1,7 +1,7 @@
  
 const rootRouter = require('express').Router();
 
-rootRouter.get('/', (req, res, next) => {
+rootRouter.get('(/*)?', (req, res, next) => {
   return res.render('app');
 });
 
