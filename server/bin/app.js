@@ -6,6 +6,7 @@ const globals = require('../config/globals');
 // const session = require('../config/session');
 const applyWebpack = require('../config/webpack/applyWebpack');
 const handleErrors = require('../middleware/handleErrors');
+const auth = require('../middleware/auth');
 const chalk = require('chalk');
 const app = require('../config/express');
 
@@ -30,6 +31,7 @@ app.set('view engine', 'hbs');
 // Bind Passport Authentication Middleware
 // app.use(passport.initialize());
 // app.use(passport.session());
+app.use(auth);
 
 // Extra logging for communication with server
 app.use((req, res, next) => {
