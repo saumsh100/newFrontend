@@ -3,9 +3,9 @@ const basicAuth = require('basic-auth-connect');
 
 const userWhitelist = {
   jsharp: '+n]Q83mX',
-  ian: '~6p>Dj_7',
-  sergey: 'xjp/S9S2',
-  amol: 'Whj(+9[<',
+  ian: '+n]Q83mX',
+  sergey: '+n]Q83mX',
+  amol: '+n]Q83mX',
 };
 
 const auth = basicAuth((user, pass) => {
