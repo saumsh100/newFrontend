@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Button as RSButton } from 'reactstrap';
+import RSButton from 'reactstrap/lib/Button';
 
 export default function Button(props) {
   return <RSButton {...props} />;
