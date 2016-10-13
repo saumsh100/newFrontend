@@ -31,7 +31,7 @@ app.set('view engine', 'hbs');
 // Bind Passport Authentication Middleware
 // app.use(passport.initialize());
 // app.use(passport.session());
-app.use(auth);
+// app.use(auth);
 
 // Extra logging for communication with server
 app.use((req, res, next) => {
