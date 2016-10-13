@@ -16,6 +16,14 @@ export default function Routes({ history }) {
           }}
         />
         <Route
+          path="vendasta"
+          getComponent={(location, callback) => {
+            require.ensure(['./components/Vendasta'], (require) => {
+              callback(null, require('./components/Vendasta').default);
+            });
+          }}
+        />
+        <Route
           path="account"
           getComponent={(location, callback) => {
             require.ensure(['./containers/AccountContainer'], (require) => {
