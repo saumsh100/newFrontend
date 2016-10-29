@@ -6,12 +6,13 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from '../library';
 import { Card, CardBlock, CardTitle, CardSubtitle, CardText, CardLink } from 'reactstrap';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
+import styles from './styles.scss';
 
 function Dashboard({ isActive, setIsActive }) {
   const toggle = () => setIsActive(!isActive);
   return (
     <div style={{ padding: '20px' }}>
-      <Card>
+      <Card className={styles.cardContainer}>
         <CardBlock>
           <CardTitle>
             <Link to="/reputation">Listings</Link>
@@ -21,7 +22,7 @@ function Dashboard({ isActive, setIsActive }) {
           <Listings />
         </CardBlock>
       </Card>
-      <Card>
+      <Card className={styles.cardContainer}>
         <CardBlock>
           <CardTitle>
             <Link to="/reputation">Reviews</Link>
