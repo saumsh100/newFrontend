@@ -1,38 +1,99 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import { Nav, NavItem, NavLink } from '../library';
 import styles from './styles.scss';
 
 export default function NavList({ location }) {
-  const inactiveClass = styles.navItem;
-  const activeClass = classNames(styles.navItem, styles.activeItem);
+  const {
+    navItem,
+    activeItem,
+    fixedBottomItem,
+  } = styles;
+  
+  const inactiveClass = navItem;
+  const activeClass = classNames(navItem, activeItem);
+  const bottomClass = fixedBottomItem;
+  
   return (
     <div>
       <Nav>
         <NavItem>
           <NavLink
-            href="#"
+            onClick={() => browserHistory.push('/')}
             className={location.pathname === '/' ? activeClass : inactiveClass}
           >
-            <Link to="/">Dashboard</Link>
+            Dashboard
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink
-            href="#"
-            className={location.pathname === '/vendasta' ? activeClass : inactiveClass}
+            onClick={() => browserHistory.push('/appointments')}
+            className={location.pathname === '/appointments' ? activeClass : inactiveClass}
           >
-            <Link to="/vendasta">Vendasta</Link>
+            Appointments
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink
-            href="#"
-            className={location.pathname === '/account' ? activeClass : inactiveClass}
+            onClick={() => browserHistory.push('/patients')}
+            className={location.pathname === '/patients' ? activeClass : inactiveClass}
           >
-            <Link to="/account">Account</Link>
+            Patients
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            onClick={() => browserHistory.push('/reputation')}
+            className={location.pathname === '/reputation' ? activeClass : inactiveClass}
+          >
+            Reputation
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            onClick={() => browserHistory.push('/social')}
+            className={location.pathname === '/social' ? activeClass : inactiveClass}
+          >
+            Social
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            onClick={() => browserHistory.push('/loyalty')}
+            className={location.pathname === '/loyalty' ? activeClass : inactiveClass}
+          >
+            Loyalty
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            onClick={() => browserHistory.push('/seo')}
+            className={location.pathname === '/seo' ? activeClass : inactiveClass}
+          >
+            SEO
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            onClick={() => browserHistory.push('/newsletters')}
+            className={location.pathname === '/newsletters' ? activeClass : inactiveClass}
+          >
+            Newsletters
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            onClick={() => browserHistory.push('/settings')}
+            className={
+              classNames(
+                location.pathname === '/settings' ? activeClass : inactiveClass,
+                bottomClass
+              )
+            }
+          >
+            Settings
           </NavLink>
         </NavItem>
       </Nav>

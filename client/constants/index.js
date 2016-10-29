@@ -1,0 +1,2 @@
+
+export const SET_IS_COLLAPSED = 'SET_IS_COLLAPSED';

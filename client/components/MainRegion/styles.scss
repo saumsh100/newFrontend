@@ -1,5 +1,28 @@
 
-.leftSectionContainer {
-  width: 75%;
+@import '../../ui';
+
+.rightSectionContainer {
+  padding-top: $top-nav-height;
 }
 
+.fullWidth {
+  // padding-left: 0;
+}
+
+.notFullWidth {
+  padding-left: $side-nav-width;
+}
+
+.mainRegionContainerCollapsed {
+  padding-left: 0px;
+}
+
+.mainRegionContainer {
+  @media screen and (max-width: $medium-screen-width) {
+    padding-left: 0;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    padding-left: $side-nav-width;
+  }
+}

@@ -1,12 +1,19 @@
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
-export default function NavRegion({ children }) {
+export default function NavRegion({ children, isCollapsed }) {
+  const navRegionClassName = isCollapsed ? styles.navHidden : styles.leftSectionContainer;
   return (
-    <div className={styles.leftSectionContainer}>
-      {children}
+    <div className={navRegionClassName}>
+      <div className={styles.navListWrapper}>
+        {children}
+      </div>
     </div>
   );
 }
+
+NavRegion.propTypes = {
+  isCollapsed: PropTypes.bool.isRequired,
+};

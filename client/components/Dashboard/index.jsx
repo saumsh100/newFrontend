@@ -6,7 +6,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from '../library';
 function Dashboard({ isActive, setIsActive }) {
   const toggle = () => setIsActive(!isActive);
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h1>Dashboard</h1>
       <Button
         color="primary"

@@ -1,6 +1,21 @@
 
+@import '../../ui';
+
 .leftSectionContainer {
-  float: left;
-  width: 25%;
+  top: 0;
+  left: 0;
+  width: $side-nav-width;
+  position: fixed;
+  height: 100%;
+  border-right: solid 1px #c5d6de;
+  background-color: $color-white;
+  z-index: 10;
 }
 
+.navHidden {
+  display: none;
+}
+
+.navListWrapper {
+  margin-top: $top-nav-height + 10px;
+}

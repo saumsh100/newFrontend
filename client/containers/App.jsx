@@ -1,20 +1,33 @@
 
 import React, { PropTypes } from 'react';
 import { compose, withState } from 'recompose';
-
-import NavRegion from '../components/NavRegion';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import TopBarContainer from '../containers/TopBarContainer';
+import NavRegionContainer from '../containers/NavRegionContainer';
+import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
-import MainRegion from '../components/MainRegion';
+import { setIsCollapsed } from '../actions/toolbar';
+import styles from './styles.scss';
 
-function App({ location, children }) {
+function App({ location, children, isCollapsed, setIsCollapsed }) {
+  let overlay;
+  if (isCollapsed) {
+    overlay = null;
+  } else {
+    overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
+  }
+  
   return (
-    <div style={{ marginTop: '20px' }}>
-      <NavRegion>
+    <div>
+      <TopBarContainer />
+      {overlay}
+      <NavRegionContainer>
         <NavList location={location} />
-      </NavRegion>
-      <MainRegion>
+      </NavRegionContainer>
+      <MainRegionContainer>
         {children}
-      </MainRegion>
+      </MainRegionContainer>
     </div>
   );
 }
@@ -22,10 +35,22 @@ function App({ location, children }) {
 App.propTypes = {
   children: PropTypes.node,
   location: PropTypes.object,
+  isCollapsed: PropTypes.bool.isRequired,
+  setIsCollapsed: PropTypes.func.isRequired,
 };
 
-const enhance = compose(
-  // withState('isActive', 'setIsActive', false)
-);
+function mapStateToProps({ toolbar }) {
+  return {
+    isCollapsed: toolbar.get('isCollapsed'),
+  };
+}
+
+function mapActionsToProps(dispatch) {
+  return bindActionCreators({
+    setIsCollapsed,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(App);
