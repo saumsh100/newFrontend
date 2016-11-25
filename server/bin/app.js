@@ -10,8 +10,6 @@ const auth = require('../middleware/auth');
 const chalk = require('chalk');
 const app = require('../config/express');
 
-// Connect 3rd Party Clients
-// require('../config/db');
 // require('../config/kue');
 
 // Uses the NODE_ENV to determine logging full stack or not

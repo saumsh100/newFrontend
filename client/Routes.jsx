@@ -16,10 +16,10 @@ export default function Routes({ history }) {
           }}
         />
         <Route
-          path="appointments"
+          path="schedule"
           getComponent={(location, callback) => {
-            require.ensure(['./components/Vendasta'], (require) => {
-              callback(null, require('./components/Vendasta').default);
+            require.ensure(['./components/Schedule'], (require) => {
+              callback(null, require('./components/Schedule').default);
             });
           }}
         />

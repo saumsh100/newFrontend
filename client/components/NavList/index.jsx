@@ -29,10 +29,10 @@ export default function NavList({ location }) {
         </NavItem>
         <NavItem>
           <NavLink
-            onClick={() => browserHistory.push('/appointments')}
-            className={location.pathname === '/appointments' ? activeClass : inactiveClass}
+            onClick={() => browserHistory.push('/schedule')}
+            className={location.pathname === '/schedule' ? activeClass : inactiveClass}
           >
-            Appointments
+            Schedule
           </NavLink>
         </NavItem>
         <NavItem>

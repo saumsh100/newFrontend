@@ -12,13 +12,18 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const compress = require('compression');
 const helmet = require('helmet');
+const cors = require('cors');
 const express = require('express');
 
 // Initialize Express App!
 const app = express();
 
+// TODO: configure better for just embeds, currently it is global
+app.use(cors());
+
+// FIXME: Had to turn off because cors and this dont work well together
 // Applies multiple security middle-wares
-app.use(helmet());
+// app.use(helmet());
 
 // Important this is placed before express.static
 // Returns the compression middleware using the given options.
