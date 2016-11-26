@@ -34,3 +34,5 @@ Seed database with development data. In a separate tab at the top of carecru rep
 In a separate tab at the top of carecru repo
 
 `npm start`
+
+http://localhost:5000
