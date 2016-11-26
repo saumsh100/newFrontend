@@ -52,16 +52,12 @@ class Schedule extends Component {
   }
   
   render() {
-    if (!this.state.availabilities.length) return null;
-    
     const events = this.state.availabilities.map((avail) => {
       return Object.assign({}, avail, {
         start: new Date(avail.start),
         end: new Date(avail.end),
       });
     });
-    
-    console.log('rendering!');
     
     return (
       <div className={styles.scheduleContainer}>

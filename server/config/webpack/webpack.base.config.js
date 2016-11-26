@@ -35,7 +35,7 @@ module.exports = {
       },
       {
         test: /\.jsx$/,
-        loader: `react-hot-loader!babel-loader?cacheDirectory,${fullQuery}`,
+        loader: `babel-loader?cacheDirectory,${fullQuery}`,
         exclude: /node_modules/,
       },
       {
