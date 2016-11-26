@@ -1,4 +1,4 @@
-# CareCru v3.0 Dashboard
+# CareCru Platform v3
 
 This repository is for all code necessary to the CareCru Dashboard.
 
