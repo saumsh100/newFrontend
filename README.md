@@ -1,16 +1,17 @@
-# CareCru v1.8 Dashboard
+# CareCru v3.0 Dashboard
 
-This repository is for the CareCru Dashboard.
+This repository is for all code necessary to the CareCru Dashboard.
 
 ##### Backend
-NodeJS, ExpressJS, PassportJS
+NodeJS, ExpressJS, PassportJS, RethinkDB (thinky.io ORM)
 
 ##### Frontend
 React, Redux, Sass, Reactstrap (Bootstrap 4.0)
 
 ## Install
 
-Preferably use node and npm versions in package.json file.
+Install RethinkDB (https://www.rethinkdb.com/docs/install/). 
+Use node and npm versions in package.json file, install them if not already installed.
 
 `git clone git@github.com:carecru/carecru.git`
 
@@ -18,6 +19,18 @@ Preferably use node and npm versions in package.json file.
 
 `npm install`
 
+## Database Setup
+
+`rethinkdb`
+
+Seed database with development data. In a separate tab at the top of carecru repo
+
+`node ./server/bin/seeds.js`
+
 ## Run
+
+`rethinkdb` (if not already running)
+
+In a separate tab at the top of carecru repo
 
 `npm start`
