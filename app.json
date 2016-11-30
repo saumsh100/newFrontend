@@ -1,0 +1,35 @@
+{
+  "name": "carecru",
+  "scripts": {
+  },
+  "env": {
+    "NODE_ENV": {
+      "required": true
+    },
+    "RETHINKDB_AUTHKEY": {
+      "required": true
+    },
+    "RETHINKDB_DB": {
+      "required": true
+    },
+    "RETHINKDB_HOST": {
+      "required": true
+    },
+    "RETHINKDB_PORT": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
