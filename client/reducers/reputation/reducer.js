@@ -8,7 +8,19 @@ import {
 const initialState = fromJS({
   status: 'loading', // set only to 'loading', 'success' or 'error'
   lastFetched: null,
-  data: null
+  data: {
+    sourcesNotFound: null,
+    sourcesFound: null,
+    listingScore: null,
+    listingPointScore: {
+      industryAverage: null,
+      industryLeadersAverage: null,
+      pointScore: null
+    },
+    citationsFound: null,
+    sourcesFoundWithErrors: null,
+    accuracyScore: null
+  }
 })
 
 function reputationReducer(state = initialState, action) {

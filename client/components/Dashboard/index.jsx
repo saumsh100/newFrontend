@@ -8,7 +8,7 @@ import { Card, CardBlock, CardTitle, CardSubtitle, CardText, CardLink } from 're
 import Listings from '../Listings';
 import Reviews from '../Reviews';
 import styles from './styles.scss';
-import {fetchReputation} from '../../reducers/reputation/actions'
+import { fetchReputation } from '../../reducers/reputation/actions'
 
 class Dashboard extends React.Component {
   constructor () {
@@ -22,10 +22,10 @@ class Dashboard extends React.Component {
   toggle () {
     setIsActive(!isActive);
   }
-  render () {
 
+  renderCards () {
     return (
-      <div style={{ padding: '20px' }}>
+      <div >
         <Card className={styles.cardContainer}>
           <CardBlock>
             <CardTitle>
@@ -33,7 +33,12 @@ class Dashboard extends React.Component {
             </CardTitle>
           </CardBlock>
           <CardBlock>
-            <Listings />
+            <Listings listingCount={this.props.listingCount}
+              errorCount={this.props.errorCount}
+              missingCount={this.props.missingCount}/>
+          </CardBlock>
+          <CardBlock style={{ padding: '20px'}}>
+            Last Fetched on {this.props.lastFetched}
           </CardBlock>
         </Card>
         <Card className={styles.cardContainer}>
@@ -47,6 +52,15 @@ class Dashboard extends React.Component {
           </CardBlock>
         </Card>
       </div>
+    )
+  }
+
+  render () {
+
+    return (<div style={{ padding: '20px' }}>
+      
+      {this.props.status === 'loading' ? 'Loading' : this.renderCards()}
+    </div>
     );
     
   }
@@ -60,6 +74,11 @@ const enhance = compose(
 
 function mapStateToProps(state) {
   return {
+    lastFetched: state.reputation.get('lastFetched'),
+    status: state.reputation.get('status'),
+    listingCount: state.reputation.get('data')['sourcesFound'],
+    errorCount: state.reputation.get('data')['sourcesFoundWithErrors'],
+    missingCount: state.reputation.get('data')['sourcesNotFound'],
   };
 }
 
@@ -70,9 +89,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default enhance(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
-
-
-
 
 
 /*
@@ -92,5 +108,4 @@ export default enhance(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
  <Button color="secondary" onClick={toggle}>Cancel</Button>
  </ModalFooter>
  </Modal>
-
  */

@@ -9,5 +9,5 @@ export default combineReducers({
   toolbar,
   routing,
   form: formReducer,
-  reputationReducer
+  reputation: reputationReducer
 });
