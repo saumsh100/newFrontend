@@ -2,45 +2,78 @@
 import React, { PropTypes } from 'react';
 import { withState, compose } from 'recompose';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from '../library';
 import { Card, CardBlock, CardTitle, CardSubtitle, CardText, CardLink } from 'reactstrap';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
 import styles from './styles.scss';
+import {fetchReputation} from '../../reducers/reputation/actions'
 
+class Dashboard extends React.Component {
+  constructor () {
+    super()
+  }
+
+  componentDidMount() {
+    this.props.fetchReputation()
+  }
+
+  toggle () {
+    setIsActive(!isActive);
+  }
+  render () {
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <Card className={styles.cardContainer}>
+          <CardBlock>
+            <CardTitle>
+              <Link to="/reputation">Listings</Link>
+            </CardTitle>
+          </CardBlock>
+          <CardBlock>
+            <Listings />
+          </CardBlock>
+        </Card>
+        <Card className={styles.cardContainer}>
+          <CardBlock>
+            <CardTitle>
+              <Link to="/reputation">Reviews</Link>
+            </CardTitle>
+          </CardBlock>
+          <CardBlock>
+            <Reviews />
+          </CardBlock>
+        </Card>
+      </div>
+    );
+    
+  }
+}
 function Dashboard({ isActive, setIsActive }) {
-  const toggle = () => setIsActive(!isActive);
-  return (
-    <div style={{ padding: '20px' }}>
-      <Card className={styles.cardContainer}>
-        <CardBlock>
-          <CardTitle>
-            <Link to="/reputation">Listings</Link>
-          </CardTitle>
-        </CardBlock>
-        <CardBlock>
-          <Listings />
-        </CardBlock>
-      </Card>
-      <Card className={styles.cardContainer}>
-        <CardBlock>
-          <CardTitle>
-            <Link to="/reputation">Reviews</Link>
-          </CardTitle>
-        </CardBlock>
-        <CardBlock>
-          <Reviews />
-        </CardBlock>
-      </Card>
-    </div>
-  );
 }
 
 const enhance = compose(
   withState('isActive', 'setIsActive', false)
 );
 
-export default enhance(Dashboard);
+function mapStateToProps(state) {
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchReputation: fetchReputation(dispatch)
+  }
+}
+
+export default enhance(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
+
+
+
+
 
 /*
  <Button
