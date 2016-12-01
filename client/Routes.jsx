@@ -26,8 +26,8 @@ export default function Routes({ history }) {
         <Route
           path="patients"
           getComponent={(location, callback) => {
-            require.ensure(['./components/Vendasta'], (require) => {
-              callback(null, require('./components/Vendasta').default);
+            require.ensure(['./containers/PatientsContainer'], (require) => {
+              callback(null, require('./containers/PatientsContainer').default);
             });
           }}
         />

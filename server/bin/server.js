@@ -3,6 +3,7 @@ const http = require('http');
 const globals = require('../config/globals');
 const app = require('./app');
 const Availability = require('../models/Availability');
+const Patient = require('../models/Patient');
 
 const server = http.createServer(app);
 
@@ -15,6 +16,13 @@ io.on('connection', (socket) => {
     Availability.run()
       .then((availabilities) => {
         socket.emit('receiveAvailabilities', availabilities);
+      });
+  });
+  
+  socket.on('fetchPatients', () => {
+    Patient.run()
+      .then((patients) => {
+        socket.emit('receivePatients', patients);
       });
   });
   
