@@ -2,7 +2,7 @@
 /* eslint global-require:0 */
 import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
-import thunk from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 
 export default function configure({ initialState, browserHistory, rootSaga }) {
@@ -12,7 +12,7 @@ export default function configure({ initialState, browserHistory, rootSaga }) {
   
   const createStoreWithMiddleware = applyMiddleware(
     routerMiddleware(browserHistory),
-    thunk
+    thunkMiddleware
   )(create);
   
   const store = createStoreWithMiddleware(rootReducer, initialState);
