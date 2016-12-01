@@ -3,27 +3,31 @@ import React, { PropTypes } from 'react';
 import { withState, compose } from 'recompose';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from '../library';
 import { Card, CardBlock, CardTitle, CardSubtitle, CardText, CardLink } from 'reactstrap';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
 import styles from './styles.scss';
-import { fetchReputation } from '../../reducers/reputation/actions'
+import fetchReputationData from '../../thunks/fetchReputationData';
 
 class Dashboard extends React.Component {
-  constructor () {
-    super()
+  constructor(props) {
+    super(props);
   }
 
   componentDidMount() {
-    this.props.fetchReputation()
+    this.props.fetchReputationData();
   }
 
-  toggle () {
-    setIsActive(!isActive);
-  }
-
-  renderCards () {
+  renderCards() {
+    const {
+      listingCount,
+      errorCount,
+      missingCount,
+      lastFetched,
+    } = this.props;
+    
     return (
       <div >
         <Card className={styles.cardContainer}>
@@ -33,12 +37,14 @@ class Dashboard extends React.Component {
             </CardTitle>
           </CardBlock>
           <CardBlock>
-            <Listings listingCount={this.props.listingCount}
-              errorCount={this.props.errorCount}
-              missingCount={this.props.missingCount}/>
+            <Listings
+              listingCount={listingCount}
+              errorCount={errorCount}
+              missingCount={missingCount}
+            />
           </CardBlock>
           <CardBlock style={{ padding: '20px'}}>
-            Last Fetched on {this.props.lastFetched}
+            Last Fetched on {lastFetched}
           </CardBlock>
         </Card>
         <Card className={styles.cardContainer}>
@@ -52,60 +58,40 @@ class Dashboard extends React.Component {
           </CardBlock>
         </Card>
       </div>
-    )
-  }
-
-  render () {
-
-    return (<div style={{ padding: '20px' }}>
-      
-      {this.props.status === 'loading' ? 'Loading' : this.renderCards()}
-    </div>
     );
-    
+  }
+
+  render() {
+    return (
+      <div style={{ padding: '20px' }}>
+        {this.props.status === 'loading' ? 'Loading' : this.renderCards()}
+      </div>
+    );
   }
 }
-function Dashboard({ isActive, setIsActive }) {
-}
 
-const enhance = compose(
-  withState('isActive', 'setIsActive', false)
-);
-
-function mapStateToProps(state) {
+function mapStateToProps({ reputation }) {
+  const {
+    sourcesFound,
+    sourcesFoundWithErrors,
+    sourcesNotFound,
+  } = reputation.get('data');
+  
   return {
-    lastFetched: state.reputation.get('lastFetched'),
-    status: state.reputation.get('status'),
-    listingCount: state.reputation.get('data')['sourcesFound'],
-    errorCount: state.reputation.get('data')['sourcesFoundWithErrors'],
-    missingCount: state.reputation.get('data')['sourcesNotFound'],
+    lastFetched: reputation.get('lastFetched'),
+    status: reputation.get('status'),
+    listingCount: sourcesFound,
+    errorCount: sourcesFoundWithErrors,
+    missingCount: sourcesNotFound,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    fetchReputation: fetchReputation(dispatch)
-  }
+  return bindActionCreators({
+    fetchReputationData,
+  }, dispatch);
 }
 
-export default enhance(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
-
-/*
- <Button
- color="primary"
- onClick={toggle}
- >
- Show Modal
- </Button>
- <Modal isOpen={isActive} toggle={toggle}>
- <ModalHeader toggle={toggle}>Modal title</ModalHeader>
- <ModalBody>
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
- </ModalBody>
- <ModalFooter>
- <Button color="primary" onClick={toggle}>Do Something</Button>
- <Button color="secondary" onClick={toggle}>Cancel</Button>
- </ModalFooter>
- </Modal>
- */
+export default enhance(Dashboard);

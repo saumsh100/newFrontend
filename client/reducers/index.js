@@ -1,13 +1,15 @@
 
-import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
-import reputationReducer from './reputation/reducer'
+import { routerReducer as routing } from 'react-router-redux';
+import { reducer as form } from 'redux-form';
 import toolbar from './toolbar';
+import reputation from './reputation';
 
 export default combineReducers({
-  toolbar,
   routing,
-  form: formReducer,
-  reputation: reputationReducer
+  form,
+  
+  // Written by us...
+  toolbar,
+  reputation,
 });
