@@ -10,6 +10,10 @@ import Listings from '../Listings';
 import Reviews from '../Reviews';
 import styles from './styles.scss';
 import fetchReputationData from '../../thunks/fetchReputationData';
+import CardHoc from './cardHoc'
+
+const ListingsCard = CardHoc(Listings)
+const ReviewsCard = CardHoc(Reviews)
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -26,27 +30,22 @@ class Dashboard extends React.Component {
       errorCount,
       missingCount,
       lastFetched,
+      status,
+      fetchReputationData,
     } = this.props;
     
     return (
       <div >
-        <Card className={styles.cardContainer}>
-          <CardBlock>
-            <CardTitle>
-              <Link to="/reputation">Listings</Link>
-            </CardTitle>
-          </CardBlock>
-          <CardBlock>
-            <Listings
-              listingCount={listingCount}
-              errorCount={errorCount}
-              missingCount={missingCount}
-            />
-          </CardBlock>
-          <CardBlock style={{ padding: '20px'}}>
-            Last Fetched on {lastFetched}
-          </CardBlock>
-        </Card>
+        <ListingsCard
+          title={'Listings'}
+          listingCount={listingCount}
+          errorCount={errorCount}
+          missingCount={missingCount}
+          status={status}
+          lastFetched={lastFetched}
+          reload={fetchReputationData}
+        />
+        
         <Card className={styles.cardContainer}>
           <CardBlock>
             <CardTitle>
@@ -64,25 +63,19 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div style={{ padding: '20px' }}>
-        {this.props.status === 'loading' ? 'Loading' : this.renderCards()}
+        {this.renderCards()}
       </div>
     );
   }
 }
 
 function mapStateToProps({ reputation }) {
-  const {
-    sourcesFound,
-    sourcesFoundWithErrors,
-    sourcesNotFound,
-  } = reputation.get('data');
-  
   return {
     lastFetched: reputation.get('lastFetched'),
     status: reputation.get('status'),
-    listingCount: sourcesFound,
-    errorCount: sourcesFoundWithErrors,
-    missingCount: sourcesNotFound,
+    listingCount: reputation.getIn(['data', 'sourcesFound']),
+    errorCount: reputation.getIn(['data', 'sourcesFoundWithErrors']),
+    missingCount: reputation.getIn(['data', 'sourcesNotFound']),
   };
 }
 

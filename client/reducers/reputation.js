@@ -7,22 +7,23 @@ import {
 } from '../constants';
 
 const initialState = fromJS({
-  status: 'loading', // set only to 'loading', 'success' or 'error'
+  // set only to 'loading', 'success' or 'error'
+  status: 'loading', 
   lastFetched: null,
-  data: {
-    sourcesNotFound: null,
-    sourcesFound: null,
-    listingScore: null,
-    listingPointScore: {
-      industryAverage: null,
-      industryLeadersAverage: null,
-      pointScore: null,
-    },
-    
-    citationsFound: null,
-    sourcesFoundWithErrors: null,
-    accuracyScore: null,
-  },
+  data: fromJS({
+      sourcesNotFound: null,
+      sourcesFound: null,
+      listingScore: null,
+      listingPointScore: fromJS({
+        industryAverage: null,
+        industryLeadersAverage: null,
+        pointScore: null,
+      }),
+      
+      citationsFound: null,
+      sourcesFoundWithErrors: null,
+      accuracyScore: null,
+    }),
 });
 
 export default handleActions({
@@ -33,10 +34,10 @@ export default handleActions({
   [FETCH_REPUTATION_SUCCESS](state, action) {
     const { data } = action.payload;
     
-    // TODO: remove chaining, use 'merge'
-    return state
-      .set('status', 'success')
-      .set('lastFetched', (new Date()).toLocaleString())
-      .set('data', data);
+    return state.merge({
+      status: 'success',
+      lastFetched: (new Date()).toLocaleString(),
+      data: data
+    })
   },
 }, initialState);
