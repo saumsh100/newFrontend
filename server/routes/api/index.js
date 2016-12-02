@@ -8,7 +8,7 @@
 const apiRouter = require('express').Router();
 const db = require('../../config/db');
 const axios = require('axios');
-const globals = require('../../config/globals');
+const reputationRouter = require('./reputation')
 
 const MAX_RESULTS = 100;
 
@@ -19,23 +19,6 @@ apiRouter.get('/availabilities', (req, res, next) => {
   });
 });
 
-const VENDASTA_LISTINGS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/';
-const {
-  apiKey,
-  apiUser,
-} = globals.vendasta;
-
-apiRouter.get('/reputation', (req, res, next) => {
-  
-  console.log('apiKey', apiKey);
-  console.log('apiUser', apiUser);
-  axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
-    customerIdentifier: req.params.cust_id || 'UNIQUE_CUSTOMER_IDENTIFIER',
-  }).then((response) => {
-    return res.send(response.data);
-  }).catch((error) => {
-    return res.sendStatus(404);
-  });
-});
+apiRouter.use('/reputation', reputationRouter)
 
 module.exports = apiRouter;
