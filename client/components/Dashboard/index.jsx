@@ -35,6 +35,7 @@ class Dashboard extends React.Component {
       fetchReputationData,
     } = this.props;
     
+    // TODO: for now connect Reviews card to Listings card props until its api integration
     return (
       <div >
         <ListingsCard
@@ -47,7 +48,6 @@ class Dashboard extends React.Component {
           reload={fetchReputationData}
         />
 
-        // TODO: for now connect Reviews card to Listings card props until its api integration
         <ReviewsCard
           title={'Reviews'}
           status={status}
