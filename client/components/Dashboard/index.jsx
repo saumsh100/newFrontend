@@ -10,6 +10,7 @@ import Listings from '../Listings';
 import Reviews from '../Reviews';
 import styles from './styles.scss';
 import fetchReputationData from '../../thunks/fetchReputationData';
+import fetchReviewsData from '../../thunks/fetchReviewsData';
 import CardHoc from './cardHoc'
 
 // wrap components with hoc's
@@ -23,6 +24,7 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     this.props.fetchReputationData();
+    this.props.fetchReviewsData();
   }
 
   renderCards() {
@@ -80,6 +82,7 @@ function mapStateToProps({ reputation }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchReputationData,
+    fetchReviewsData,
   }, dispatch);
 }
 

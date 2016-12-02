@@ -4,6 +4,7 @@ import { routerReducer as routing } from 'react-router-redux';
 import { reducer as form } from 'redux-form';
 import toolbar from './toolbar';
 import reputation from './reputation';
+import reviews from './reviews';
 
 export default combineReducers({
   routing,
@@ -12,4 +13,5 @@ export default combineReducers({
   // Written by us...
   toolbar,
   reputation,
+  reviews,
 });
