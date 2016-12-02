@@ -11,7 +11,13 @@ const initialState = fromJS({
   status: 'loading', 
   lastFetched: null,
   data: fromJS({
-      
+      industryAverageCount: null,
+      sourceId: null,
+      ratingCounts: null,
+      industryAverageRating: null,
+      totalCount: null,
+      recentPhrases: null,
+      sourceCounts: null,
     }),
 });
 
@@ -26,7 +32,7 @@ export default handleActions({
     return state.merge({
       status: 'success',
       lastFetched: (new Date()).toLocaleString(),
-      data: data
+      data: data,
     })
   },
 }, initialState);

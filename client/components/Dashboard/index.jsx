@@ -32,9 +32,13 @@ class Dashboard extends React.Component {
       listingCount,
       errorCount,
       missingCount,
-      lastFetched,
-      status,
+      lastFetchedListings,
+      statusListings,
       fetchReputationData,
+      statusReviews,
+      lastFetchedReviews,
+      fetchReviewsData,
+      ratingCounts,
     } = this.props;
     
     // TODO: for now connect Reviews card to Listings card props until its api integration
@@ -45,16 +49,17 @@ class Dashboard extends React.Component {
           listingCount={listingCount}
           errorCount={errorCount}
           missingCount={missingCount}
-          status={status}
-          lastFetched={lastFetched}
+          status={statusListings}
+          lastFetched={lastFetchedListings}
           reload={fetchReputationData}
         />
 
         <ReviewsCard
           title={'Reviews'}
-          status={status}
-          lastFetched={lastFetched}
-          reload={fetchReputationData}
+          status={statusReviews}
+          lastFetched={lastFetchedReviews}
+          ratingCounts={ratingCounts}
+          reload={fetchReviewsData}
         />
       </div>
     );
@@ -69,13 +74,17 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps({ reputation }) {
+function mapStateToProps({ reputation, reviews }) {
   return {
-    lastFetched: reputation.get('lastFetched'),
-    status: reputation.get('status'),
+    lastFetchedListings: reputation.get('lastFetched'),
+    statusListings: reputation.get('status'),
     listingCount: reputation.getIn(['data', 'sourcesFound']),
     errorCount: reputation.getIn(['data', 'sourcesFoundWithErrors']),
     missingCount: reputation.getIn(['data', 'sourcesNotFound']),
+
+    statusReviews: reviews.get('status'),
+    lastFetchedReviews: reviews.get('lastFetched'),
+    ratingCounts: reviews.getIn(['data', 'ratingCounts'])
   };
 }
 
