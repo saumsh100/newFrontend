@@ -7,30 +7,35 @@
 
 const apiRouter = require('express').Router();
 const db = require('../../config/db');
-import axios from 'axios';
-import {vendastaApiKey} from '../../../config.json'
+const axios = require('axios');
+const globals = require('../../config/globals');
 
 const MAX_RESULTS = 100;
 
 apiRouter.get('/availabilities', (req, res, next) => {
-  console.log('GET availabilities');
   db.getAvailabilities(MAX_RESULTS, (err, results) => {
     if (err) next(err);
     res.send(results);
   });
 });
 
+const VENDASTA_LISTINGS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/';
+const {
+  apiKey,
+  apiUser,
+} = globals.vendasta;
+
 apiRouter.get('/reputation', (req, res, next) => {
-  console.log('GET reputation');
-  axios.post('https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/?apiKey=' + vendastaApiKey + '&apiUser=CARU', {
-      customerIdentifier: req.params.cust_id || "UNIQUE_CUSTOMER_IDENTIFIER"
-    })
-    .then(function (response) {
-      return res.send(response.data);
-    })
-    .catch(function (error) {
-      return res.sendStatus(404)
-    });
-})
+  
+  console.log('apiKey', apiKey);
+  console.log('apiUser', apiUser);
+  axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
+    customerIdentifier: req.params.cust_id || 'UNIQUE_CUSTOMER_IDENTIFIER',
+  }).then((response) => {
+    return res.send(response.data);
+  }).catch((error) => {
+    return res.sendStatus(404);
+  });
+});
 
 module.exports = apiRouter;

@@ -33,4 +33,4 @@ tmux*
 xterm*
 screen-256color.ti
 server/public/assets/
-config.json
+.env

@@ -13,10 +13,16 @@ const db = {
   db: environmentVariables.RETHINKDB_DB || 'carecru_development',
 };
 
+const vendasta = {
+  apiKey: environmentVariables.VENDASTA_API_KEY,
+  apiUser: environmentVariables.VENDASTA_API_USER,
+};
+
 module.exports = {
   root,
   env,
   port,
   bundlePort,
   db,
+  vendasta,
 };
