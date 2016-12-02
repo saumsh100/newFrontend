@@ -12,6 +12,7 @@ import styles from './styles.scss';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import CardHoc from './cardHoc'
 
+// wrap components with hoc's
 const ListingsCard = CardHoc(Listings)
 const ReviewsCard = CardHoc(Reviews)
 
@@ -45,17 +46,14 @@ class Dashboard extends React.Component {
           lastFetched={lastFetched}
           reload={fetchReputationData}
         />
-        
-        <Card className={styles.cardContainer}>
-          <CardBlock>
-            <CardTitle>
-              <Link to="/reputation">Reviews</Link>
-            </CardTitle>
-          </CardBlock>
-          <CardBlock>
-            <Reviews />
-          </CardBlock>
-        </Card>
+
+        // TODO: for now connect Reviews card to Listings card props until its api integration
+        <ReviewsCard
+          title={'Reviews'}
+          status={status}
+          lastFetched={lastFetched}
+          reload={fetchReputationData}
+        />
       </div>
     );
   }
