@@ -2,62 +2,99 @@
 import React, { PropTypes } from 'react';
 import { withState, compose } from 'recompose';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from '../library';
 import { Card, CardBlock, CardTitle, CardSubtitle, CardText, CardLink } from 'reactstrap';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
 import styles from './styles.scss';
+import fetchReputationData from '../../thunks/fetchReputationData';
+import fetchReviewsData from '../../thunks/fetchReviewsData';
+import CardHoc from './cardHoc'
 
-function Dashboard({ isActive, setIsActive }) {
-  const toggle = () => setIsActive(!isActive);
-  return (
-    <div style={{ padding: '20px' }}>
-      <Card className={styles.cardContainer}>
-        <CardBlock>
-          <CardTitle>
-            <Link to="/reputation">Listings</Link>
-          </CardTitle>
-        </CardBlock>
-        <CardBlock>
-          <Listings />
-        </CardBlock>
-      </Card>
-      <Card className={styles.cardContainer}>
-        <CardBlock>
-          <CardTitle>
-            <Link to="/reputation">Reviews</Link>
-          </CardTitle>
-        </CardBlock>
-        <CardBlock>
-          <Reviews />
-        </CardBlock>
-      </Card>
-    </div>
-  );
+// wrap components with hoc's
+const ListingsCard = CardHoc(Listings)
+const ReviewsCard = CardHoc(Reviews)
+
+class Dashboard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.fetchReputationData();
+    this.props.fetchReviewsData();
+  }
+
+  renderCards() {
+    const {
+      listingCount,
+      errorCount,
+      missingCount,
+      lastFetchedListings,
+      statusListings,
+      fetchReputationData,
+      statusReviews,
+      lastFetchedReviews,
+      fetchReviewsData,
+      ratingCounts,
+    } = this.props;
+    
+    // TODO: for now connect Reviews card to Listings card props until its api integration
+    return (
+      <div >
+        <ListingsCard
+          title={'Listings'}
+          listingCount={listingCount}
+          errorCount={errorCount}
+          missingCount={missingCount}
+          status={statusListings}
+          lastFetched={lastFetchedListings}
+          reload={fetchReputationData}
+        />
+
+        <ReviewsCard
+          title={'Reviews'}
+          status={statusReviews}
+          lastFetched={lastFetchedReviews}
+          ratingCounts={ratingCounts}
+          reload={fetchReviewsData}
+        />
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div style={{ padding: '20px' }}>
+        {this.renderCards()}
+      </div>
+    );
+  }
 }
 
-const enhance = compose(
-  withState('isActive', 'setIsActive', false)
-);
+function mapStateToProps({ reputation, reviews }) {
+  return {
+    lastFetchedListings: reputation.get('lastFetched'),
+    statusListings: reputation.get('status'),
+    listingCount: reputation.getIn(['data', 'sourcesFound']),
+    errorCount: reputation.getIn(['data', 'sourcesFoundWithErrors']),
+    missingCount: reputation.getIn(['data', 'sourcesNotFound']),
+
+    statusReviews: reviews.get('status'),
+    lastFetchedReviews: reviews.get('lastFetched'),
+    ratingCounts: reviews.getIn(['data', 'ratingCounts'])
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchReputationData,
+    fetchReviewsData,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Dashboard);
-
-/*
- <Button
- color="primary"
- onClick={toggle}
- >
- Show Modal
- </Button>
- <Modal isOpen={isActive} toggle={toggle}>
- <ModalHeader toggle={toggle}>Modal title</ModalHeader>
- <ModalBody>
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
- </ModalBody>
- <ModalFooter>
- <Button color="primary" onClick={toggle}>Do Something</Button>
- <Button color="secondary" onClick={toggle}>Cancel</Button>
- </ModalFooter>
- </Modal>
-
- */
