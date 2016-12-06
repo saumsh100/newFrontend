@@ -13,6 +13,11 @@ const db = {
   db: environmentVariables.RETHINKDB_DB || 'carecru_development',
 };
 
+const vendasta = {
+  apiKey: environmentVariables.VENDASTA_API_KEY,
+  apiUser: environmentVariables.VENDASTA_API_USER,
+};
+
 const twilio = {
   number: environmentVariables.TWILIO_NUMBER,
   accountSid: environmentVariables.TWILIO_ACCOUNT_SID,
@@ -25,5 +30,6 @@ module.exports = {
   port,
   bundlePort,
   db,
+  vendasta,
   twilio,
 };

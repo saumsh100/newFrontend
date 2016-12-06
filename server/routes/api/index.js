@@ -7,6 +7,8 @@
 
 const apiRouter = require('express').Router();
 const db = require('../../config/db');
+const axios = require('axios');
+const reputationRouter = require('./reputation')
 
 const MAX_RESULTS = 100;
 
@@ -16,5 +18,7 @@ apiRouter.get('/availabilities', (req, res, next) => {
     res.send(results);
   });
 });
+
+apiRouter.use('/reputation', reputationRouter)
 
 module.exports = apiRouter;

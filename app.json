@@ -17,6 +17,12 @@
     },
     "RETHINKDB_PORT": {
       "required": true
+    },
+    "VENDASTA_API_KEY": {
+      "required": true
+    },
+    "VENDASTA_API_USER": {
+      "required": true
     }
   },
   "formation": {

@@ -2,3 +2,27 @@
 .cardContainer {
   border: 1px solid #c5d6de;
 }
+
+.loadingOuter {
+  position: absolute;
+  height: 100%;
+  width: 100% ;
+  background-color: white;
+  opacity: 0.4;
+  display: flex;
+}
+
+.loadingInner {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+}
+
+.reloadButton {
+  background-color: white;
+  border: 1px #ccc solid;
+  padding: 4px 8px;
+  border-radius: 4px;
+  
+}
