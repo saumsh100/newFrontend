@@ -48,6 +48,11 @@ Patient.save([
     lastName: 'Skovorodnikov',
     phoneNumber: '+17782422626',
   },
+  {
+    firstName: 'Mark',
+    lastName: 'Joseph',
+    phoneNumber: '+17788654451',
+  },
 ]).then((result) => {
   console.log('Successfully seeded db with patients!');
   //process.exit();

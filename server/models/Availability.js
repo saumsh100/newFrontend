@@ -8,6 +8,7 @@ const Availability = thinky.createModel('Availability', {
   title: type.string(),
   start: type.date().required(),
   end: type.date().required(),
+  createdAt: type.date().default(thinky.r.now()),
 }, {
   pk: 'id',
 });

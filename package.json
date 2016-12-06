@@ -11,7 +11,7 @@
   "scripts": {
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
-    "start": "nodemon server/bin/server.js",
+    "start": "nf start -w -j Procfile_dev",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "clean": "npm run clean:assets && npm run clean:modules",
     "clean:assets": "rimraf server/public/assets server/test/assets",
@@ -140,6 +140,7 @@
     "style-loader": "^0.13.0",
     "supertest": "^1.2.0",
     "thinky": "^2.3.8",
+    "twilio": "^2.11.1",
     "uglify-js": "~2.4.0",
     "url-loader": "^0.5.7",
     "uuid": "^2.0.2",

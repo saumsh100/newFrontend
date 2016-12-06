@@ -1,12 +1,14 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Card, CardHeader, CardBlock, Table } from 'reactstrap';
+import PatientList from './PatientList';
 import styles from './styles.scss';
 
 class Patients extends Component {
   constructor(props) {
     super(props);
     this.state = { patients: [] };
+    
+    this.sendMessage = this.sendMessage.bind(this);
   }
   
   componentDidMount() {
@@ -18,37 +20,17 @@ class Patients extends Component {
     window.socket.emit('fetchPatients');
   }
   
+  sendMessage(patient) {
+    window.socket.emit('sendMessage', { patient });
+  }
+  
   render() {
     const { patients } = this.state;
-    
     return (
-      <div className={styles.scheduleContainer}>
-        <Card className={styles.cardContainer}>
-          <CardHeader>Patients</CardHeader>
-          <CardBlock>
-            <Table>
-              <thead>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone Number</th>
-              </tr>
-              </thead>
-              <tbody>
-              {patients.map((patient) => {
-                return (
-                  <tr>
-                    <td>{patient.firstName}</td>
-                    <td>{patient.lastName}</td>
-                    <td>{patient.phoneNumber}</td>
-                  </tr>
-                );
-              })}
-              </tbody>
-            </Table>
-          </CardBlock>
-        </Card>
-      </div>
+      <PatientList
+        patients={patients}
+        onChat={this.sendMessage}
+      />
     );
   }
 }

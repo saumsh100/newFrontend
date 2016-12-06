@@ -13,10 +13,17 @@ const db = {
   db: environmentVariables.RETHINKDB_DB || 'carecru_development',
 };
 
+const twilio = {
+  number: environmentVariables.TWILIO_NUMBER,
+  accountSid: environmentVariables.TWILIO_ACCOUNT_SID,
+  authToken: environmentVariables.TWILIO_AUTH_TOKEN,
+};
+
 module.exports = {
   root,
   env,
   port,
   bundlePort,
   db,
+  twilio,
 };

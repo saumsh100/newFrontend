@@ -30,7 +30,23 @@ export default function Routes({ history }) {
               callback(null, require('./containers/PatientsContainer').default);
             });
           }}
-        />
+        >
+          <IndexRoute
+            getComponent={(location, callback) => {
+              require.ensure(['./components/Patients'], (require) => {
+                callback(null, require('./components/Patients').default);
+              });
+            }}
+          />
+          <Route
+            path=":patientId"
+            getComponent={(location, callback) => {
+              require.ensure(['./containers/PatientShowContainer'], (require) => {
+                callback(null, require('./containers/PatientShowContainer').default);
+              });
+            }}
+          />
+        </Route>
         <Route
           path="reputation"
           getComponent={(location, callback) => {
