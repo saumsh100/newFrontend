@@ -14,9 +14,17 @@ const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 const express = require('express');
+const session = require('./session')
+const passport = require('./passport')
 
 // Initialize Express App!
 const app = express();
+
+app.use(cookieParser());
+app.use(session);
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // TODO: configure better for just embeds, currently it is global
 app.use(cors());
@@ -55,8 +63,6 @@ app.use(bodyParser.json({ limit: '10mb' }));
 
 // Parses Buffer data into body
 app.use(bodyParser.raw({ limit: '10mb' }));
-
-app.use(cookieParser());
 
 // Below breaks!
 // app.use(multer());

@@ -8,7 +8,7 @@ export default class Login extends React.Component {
       <Form className={styles.loginForm}>
         <FormGroup>
           <Label for="email">Email</Label>
-          <Input type="email" name="email" id="email" />
+          <Input type="text" name="email" id="email" />
         </FormGroup>
         <FormGroup>
           <Label for="password">Password</Label>
