@@ -63,6 +63,7 @@
     "express": "^4.12.3",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.13.0",
+    "express-session-rethinkdb": "^0.4.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "flexboxgrid": "^6.3.1",

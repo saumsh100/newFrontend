@@ -3,6 +3,8 @@ const LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy(
   (username, password, done) => {
+    console.log('==============')
+    console.log('username', username)
     if (username !== 'test') {
       return done(null, false, { message: 'Incorrect username.' });
     }

@@ -2,13 +2,16 @@
 require('../config/initializeCodeTranspiler');
 
 const globals = require('../config/globals');
-// const passport = require('../config/passport');
-// const session = require('../config/session');
 const applyWebpack = require('../config/webpack/applyWebpack');
 const handleErrors = require('../middleware/handleErrors');
 const auth = require('../middleware/auth');
 const chalk = require('chalk');
 const app = require('../config/express');
+const cookieParser = require('cookie-parser');
+const session = require('../config/session')
+const passport = require('../config/passport')
+const sessionRouter = require('../routes/api/session')
+
 
 // require('../config/kue');
 
@@ -37,8 +40,17 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cookieParser());
 // Bind the routes
 app.use(require('../routes'));
+
+app.use(session);
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use('/auth/session', sessionRouter);
+
 
 // Catch errors, log and respond to client
 app.use(handleErrors);
