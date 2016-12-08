@@ -9,7 +9,7 @@ import reviews from './reviews';
 export default combineReducers({
   routing,
   form,
-  
+
   // Written by us...
   toolbar,
   reputation,

@@ -10,6 +10,9 @@ import NavList from '../components/NavList';
 import { setIsCollapsed } from '../actions/toolbar';
 import styles from './styles.scss';
 
+// refactor this to class
+// component did mount
+// set up redirect to '/' from '/login' if logged in
 function App({ location, children, isCollapsed, setIsCollapsed }) {
   let overlay;
   if (isCollapsed) {
@@ -17,7 +20,7 @@ function App({ location, children, isCollapsed, setIsCollapsed }) {
   } else {
     overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
   }
-  
+
   return (
     <div>
       <TopBarContainer />
