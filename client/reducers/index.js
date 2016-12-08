@@ -5,6 +5,7 @@ import { reducer as form } from 'redux-form';
 import toolbar from './toolbar';
 import reputation from './reputation';
 import reviews from './reviews';
+import auth from './auth';
 
 export default combineReducers({
   routing,
@@ -14,4 +15,5 @@ export default combineReducers({
   toolbar,
   reputation,
   reviews,
+  auth,
 });
