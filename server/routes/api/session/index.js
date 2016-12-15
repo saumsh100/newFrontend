@@ -1,18 +1,25 @@
-const passport = require('passport')
-
 const sessionRouter = require('express').Router();
-// const globals = require('../../../config/globals');
-
+const User = require('../../../models/User');
+const bcrypt = require('bcrypt');
 
 sessionRouter.post('/', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) { return next({info, status: 403}); }
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.json(user);
-    });
-  })(req, res, next);
+  User.filter({username: req.body.username}).run().then(function(users) {
+    if (!users.length) {
+      return next({status: 401})
+    }
+    const user = users[0];
+    bcrypt.compare(req.body.password, user.password, function (err, match) {
+      if (err) {
+        return next({status: 500});
+      }
+      if (!match) {
+        return next({status: 401});
+      }
+
+      return res.end()
+    })
+  });
+
 });
 
 sessionRouter.delete('/', (req, res, next) => {

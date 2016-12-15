@@ -1,11 +1,10 @@
 
 const apiRouter = require('./api');
 const rootRouter = require('express').Router();
-const authenticationMiddleware = require('../config/passport').authenticationMiddleware
 
 
 // Bind REST API
-rootRouter.use('/api', authenticationMiddleware(), apiRouter);
+rootRouter.use('/api', apiRouter);
 
 // Booking Widget IFRAME Embed
 rootRouter.get('/embed', (req, res, next) => {
