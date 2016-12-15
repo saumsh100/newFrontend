@@ -11,8 +11,8 @@ export default function configure({ initialState, browserHistory }) {
     : createStore;
 
   const createStoreWithMiddleware = applyMiddleware(
+    thunkMiddleware,
     routerMiddleware(browserHistory),
-    thunkMiddleware
   )(create);
 
   const store = createStoreWithMiddleware(rootReducer, initialState);

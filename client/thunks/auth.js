@@ -7,7 +7,7 @@ export default function () {
       username: getState().auth.get('username'),
       password: getState().auth.get('password'),
     }
-    return fetch('/auth/session', {
+    return fetch('/api/session', {
       method: 'post',
       body: JSON.stringify(loginDetails),
       headers: {

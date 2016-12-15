@@ -13,6 +13,8 @@ const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 const express = require('express');
+const cookieParser = require('cookie-parser');
+
 
 // Initialize Express App!
 const app = express();
@@ -45,6 +47,7 @@ app.use(express.static(`${globals.root}/public`));
 
 // Allows the use of PUT and DELETE from clients that do not support those HTTP Methods
 app.use(methodOverride());
+app.use(cookieParser());
 
 // Parse URL query strings into the body,
 // extended=true means that we use qs as the parser for Object syntax
@@ -56,7 +59,6 @@ app.use(bodyParser.json({ limit: '10mb' }));
 
 // Parses Buffer data into body
 app.use(bodyParser.raw({ limit: '10mb' }));
-
 
 
 // Below breaks!
