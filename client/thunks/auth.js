@@ -1,4 +1,4 @@
-
+import axios from 'axios';
 import { loginSuccess } from '../actions/auth';
 
 export default function () {
@@ -7,15 +7,14 @@ export default function () {
       username: getState().auth.get('username'),
       password: getState().auth.get('password'),
     }
-    return fetch('/api/session', {
-      method: 'post',
-      body: JSON.stringify(loginDetails),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    }).then(response => response.json())
-    .then(data => dispatch(loginSuccess(data)));
+    return axios
+    .post('/api/session', loginDetails)
+    .then(({data}) => {
+      console.log(data.token)
+      // set data in local storage
+      localStorage.setItem('token', data.token)
+      dispatch(loginSuccess(data))
+    });
   };
 }
 
