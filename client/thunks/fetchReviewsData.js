@@ -5,7 +5,7 @@ export default function fetchReviews() {
   return function (dispatch) {
     dispatch(fetchReviewsStart());
     return axios.get('/api/reputation/reviews')
-    .then(data => dispatch(fetchReviewsSuccess(data)));
+    .then(data => dispatch(fetchReviewsSuccess(data.data)));
   };
 }
 
