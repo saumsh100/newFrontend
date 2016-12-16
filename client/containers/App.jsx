@@ -9,39 +9,43 @@ import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
 import { setIsCollapsed } from '../actions/toolbar';
+import { browserHistory } from 'react-router';
 import styles from './styles.scss';
 
 // refactor this to class
 // component did mount
 // set up redirect to '/' from '/login' if logged in
-function App({ location, children, isCollapsed, setIsCollapsed, isLoggedIn, user, dispatch }) {
-  let overlay;
-  if (isCollapsed) {
-    overlay = null;
-  } else {
-    overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
-  }
-  const isLoginPage = location.pathname.includes('login')
+class App extends React.Component {
+  render () {
+    const { location, children, isCollapsed, setIsCollapsed, isLoggedIn, user, dispatch } = this.props;
+    let overlay;
+    if (isCollapsed) {
+      overlay = null;
+    } else {
+      overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
+    }
+    const isLoginPage = location.pathname.includes('login')
 
-  if (isLoggedIn && isLoginPage) {
-    dispatch(push('/'))
-  }
+    if (isLoggedIn && isLoginPage) {
+      browserHistory.push('/');
+    }
 
-  return (
-    <div>
-      {!isLoginPage && 
-        <div>
-          <TopBarContainer />
-          {overlay}
-          <NavRegionContainer>
-            <NavList location={location} />
-          </NavRegionContainer>
-        </div>}
-      <MainRegionContainer>
-        {children}
-      </MainRegionContainer>
-    </div>
-  );
+    return (
+      <div>
+        {!isLoginPage && 
+          <div>
+            <TopBarContainer />
+            {overlay}
+            <NavRegionContainer>
+              <NavList location={location} />
+            </NavRegionContainer>
+          </div>}
+        <MainRegionContainer>
+          {children}
+        </MainRegionContainer>
+      </div>
+    );
+  }
 }
 
 App.propTypes = {
