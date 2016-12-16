@@ -17,7 +17,7 @@ import styles from './styles.scss';
 // set up redirect to '/' from '/login' if logged in
 class App extends React.Component {
   render () {
-    const { location, children, isCollapsed, setIsCollapsed, isLoggedIn, user, dispatch } = this.props;
+    const { location, children, isCollapsed, setIsCollapsed, user, dispatch } = this.props;
     let overlay;
     if (isCollapsed) {
       overlay = null;
@@ -25,10 +25,6 @@ class App extends React.Component {
       overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
     }
     const isLoginPage = location.pathname.includes('login')
-
-    if (isLoggedIn && isLoginPage) {
-      browserHistory.push('/');
-    }
 
     return (
       <div>
@@ -58,7 +54,6 @@ App.propTypes = {
 function mapStateToProps({ toolbar, auth }) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
-    isLoggedIn: auth.get('isLoggedIn'),
     user: auth.get('user'),
   };
 }

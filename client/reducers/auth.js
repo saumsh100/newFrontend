@@ -11,13 +11,13 @@ import {
 const initialState = fromJS({
   // set only to 'loading', 'success' or 'error'
   status: 'success',
-  username: 'test',
-  password: 'test',
+  username: '',
+  password: '',
   user: fromJS({
     id: null,
     username: null,
   }),
-  isLoggedIn: false,
+  // isLoggedIn: false,
 });
 
 export default handleActions({
@@ -31,7 +31,7 @@ export default handleActions({
     return state.merge({
       status: 'success',
       user,
-      isLoggedIn: true,
+      // isLoggedIn: true,
     });
   },
 

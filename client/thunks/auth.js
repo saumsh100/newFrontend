@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { loginSuccess } from '../actions/auth';
+import { push } from 'react-router-redux'
 
 export default function () {
   return function (dispatch, getState) {
@@ -13,6 +14,7 @@ export default function () {
       // set data in local storage
       localStorage.setItem('token', data.token);
       dispatch(loginSuccess(data));
+      dispatch(push('/'))
     });
   };
 }
