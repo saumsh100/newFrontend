@@ -19,7 +19,7 @@ Use node and npm versions in package.json file, install them if not already inst
 
 `npm install`
 
-`npm install -g nodemon`
+`npm install -g foreman`
 
 ## Database Setup
 
