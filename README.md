@@ -6,7 +6,7 @@ This repository is for all code necessary to the CareCru Dashboard.
 NodeJS, ExpressJS, PassportJS, RethinkDB (thinky.io ORM)
 
 ##### Frontend
-React, Redux, Sass, Reactstrap (Bootstrap 4.0)
+React, Redux, Sass, Reactstrap
 
 ## Install
 
