@@ -7,27 +7,87 @@
 
 const twilioRouter = require('express').Router();
 const TextMessage = require('../../models/TextMessage');
+const Patient = require('../../models/Patient');
 const thinky = require('../../config/thinky');
 
 // Receive all incoming SMS traffic to the Twilio number
 twilioRouter.post('/message', (req, res, next) => {
   const {
+    AccountSid,
+    MessageSid,
     To,
     From,
     Body,
-    MessageSid,
+    ToZip,
+    ToCity,
+    ToState,
+    ToCountry,
+    FromZip,
+    FromCity,
+    FromState,
+    FromCountry,
+    SmsStatus,
+    NumMedia,
+    NumSegments,
+    ApiVersion,
   } = req.body;
   
-  // TODO: Do we need to res.send on successful saving?
-  TextMessage.save({
+  // Easily parse mediaData
+  let mediaData = {};
+  const numMedia = parseInt(NumMedia);
+  if (numMedia) {
+    for (let i = 0; i < numMedia; i++) {
+      mediaData[i] = {
+        url: req.body[`MediaUrl${i}`],
+        contentType: req.body[`MediaContentType${i}`],
+      };
+    }
+  }
+  
+  const currentDate = thinky.r.now();
+  const textMessageData = {
     id: MessageSid,
     to: To,
     from: From,
-    message: Body,
-    createdAt: thinky.r.now(), // TODO: fix unnecessary writing, fix defaults...
-  });
+    body: Body,
+    smsStatus: SmsStatus,
+  
+    // TODO: fix unnecessary writing, fix defaults...
+    createdAt: currentDate,
+    dateCreated: currentDate,
+    dateUpdated: currentDate,
+  
+    apiVersion: ApiVersion,
+    accountSid: AccountSid,
+  
+    // Depends on carrier if populated
+    toZip: ToZip,
+    toCity: ToCity,
+    toState: ToState,
+    toCountry: ToCountry,
+    fromZip: FromZip,
+    fromCity: FromCity,
+    fromState: FromState,
+    fromCountry: FromCountry,
+    numMedia: NumMedia,
+    numSegments: NumSegments,
+    mediaData,
+  };
+  
+  Patient.findByPhoneNumber(From)
+    .then((patient) => {
+      console.log(`Received communication from ${patient.firstName}`);
+      textMessageData.patientId = patient.id;
+      TextMessage.save(textMessageData);
+    })
+    .catch(() => {
+      // Assume the Patient does not exist.
+      console.log(`Received communication from unknown number: ${From}.`);
+      TextMessage.save(textMessageData);
+    });
   
   // For twilio... needs a response
+  // TODO: Do we need to res.send on successful saving?
   res.send();
 });
 

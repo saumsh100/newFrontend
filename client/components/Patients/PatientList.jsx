@@ -4,6 +4,9 @@ import { Table } from 'reactstrap';
 import PatientListItem from './PatientListItem';
 
 function PatientList({ patients, onChat }) {
+  patients = patients.get('models').toArray();
+  
+  console.log(patients);
   return (
     <Table>
       <thead>

@@ -61,18 +61,18 @@ io.on('connection', (socket) => {
       to: patient.phoneNumber,
       from: twilioConfig.number,
       body: message,
-      statusCallback: 'https://carecru.ngrok.io/twilio/status',
+      // statusCallback: 'https://carecru.ngrok.io/twilio/status',
     }).then((result) => {
       // TODO: this is queued, and not delivered, so not techincally sent...
-      console.log(typeof result.sid);
-      TextMessage.save({
+      console.log(result);
+      /*TextMessage.save({
         id: result.sid,
         to: result.to,
         from: result.from,
         body: result.body,
         status: result.status,
       }).then(tm => console.log('SMS sent and saved', tm))
-        .catch(err => console.log(err));
+        .catch(err => console.log(err));*/
     }).catch((err) => {
       console.log('Error sending SMS');
       console.log(err);

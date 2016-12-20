@@ -6,19 +6,12 @@
  */
 
 const apiRouter = require('express').Router();
-const db = require('../../config/db');
-const axios = require('axios');
-const reputationRouter = require('./reputation')
+const reputationRouter = require('./reputation');
+const patientsRouter = require('./patients');
+const textMessagesRouter = require('./textMessages');
 
-const MAX_RESULTS = 100;
-
-apiRouter.get('/availabilities', (req, res, next) => {
-  db.getAvailabilities(MAX_RESULTS, (err, results) => {
-    if (err) next(err);
-    res.send(results);
-  });
-});
-
-apiRouter.use('/reputation', reputationRouter)
+apiRouter.use('/reputation', reputationRouter);
+apiRouter.use('/patients', patientsRouter);
+apiRouter.use('/textMessages', textMessagesRouter);
 
 module.exports = apiRouter;

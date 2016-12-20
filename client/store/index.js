@@ -5,14 +5,14 @@ import { routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 
-export default function configure({ initialState, browserHistory, rootSaga }) {
+export default function configure({ initialState, browserHistory }) {
   const create = window.devToolsExtension
     ? window.devToolsExtension()(createStore)
     : createStore;
   
   const createStoreWithMiddleware = applyMiddleware(
-    routerMiddleware(browserHistory),
-    thunkMiddleware
+    thunkMiddleware,
+    routerMiddleware(browserHistory)
   )(create);
   
   const store = createStoreWithMiddleware(rootReducer, initialState);

@@ -1,5 +1,5 @@
 
-import createModel from './createModel';
+import createModel from '../createModel';
 
 const TextMessageSchema = {
   id: null,
@@ -14,4 +14,5 @@ export default class TextMessage extends createModel(TextMessageSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
+  
 }

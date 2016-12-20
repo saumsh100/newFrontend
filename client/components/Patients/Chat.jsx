@@ -16,6 +16,11 @@ class Chat extends Component {
     this.sendMessage = this.sendMessage.bind(this);
   }
   
+  componentDidMount() {
+    const { patient } = this.props;
+  }
+  
+  
   sendMessage(e, message) {
     e.preventDefault();
     window.socket.emit('sendMessage', {
@@ -25,7 +30,9 @@ class Chat extends Component {
   }
   
   render() {
-    const { patient } = this.props;
+    const { patient, textMessages } = this.props;
+    
+    console.log(textMessages.get('models').size);
     
     if (patient === null) return <div>Loading...</div>;
     
@@ -42,6 +49,7 @@ class Chat extends Component {
 
 Chat.propTypes = {
   patient: PropTypes.object,
+  textMessages: PropTypes.object.isRequired,
 };
 
 export default Chat;
