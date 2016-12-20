@@ -11,9 +11,7 @@ const {
 } = globals.vendasta;
 
 reputationRouter.get('/listings', (req, res, next) => {
-  
-  console.log('apiKey', apiKey);
-  console.log('apiUser', apiUser);
+  console.log(req.user)
   axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
     customerIdentifier: req.params.cust_id || 'UNIQUE_CUSTOMER_IDENTIFIER',
   }).then((response) => {

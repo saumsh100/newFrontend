@@ -12,9 +12,6 @@ import { setIsCollapsed } from '../actions/toolbar';
 import { browserHistory } from 'react-router';
 import styles from './styles.scss';
 
-// refactor this to class
-// component did mount
-// set up redirect to '/' from '/login' if logged in
 class App extends React.Component {
   render () {
     const { location, children, isCollapsed, setIsCollapsed, user, dispatch } = this.props;
