@@ -19,6 +19,8 @@ Use node and npm versions in package.json file, install them if not already inst
 
 `npm install`
 
+`npm install -g nodemon`
+
 ## Database Setup
 
 `rethinkdb`
@@ -26,6 +28,8 @@ Use node and npm versions in package.json file, install them if not already inst
 Seed database with development data. In a separate tab at the top of carecru repo
 
 `node ./server/bin/seeds.js`
+
+Can be re-run whenever a fresh DB is needed.
 
 ## Run
 
