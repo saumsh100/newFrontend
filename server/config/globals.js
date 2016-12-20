@@ -19,9 +19,9 @@ const vendasta = {
 };
 
 const twilio = {
-  number: environmentVariables.TWILIO_NUMBER,
-  accountSid: environmentVariables.TWILIO_ACCOUNT_SID,
-  authToken: environmentVariables.TWILIO_AUTH_TOKEN,
+  number: environmentVariables.TWILIO_NUMBER || 'asdsa',
+  accountSid: environmentVariables.TWILIO_ACCOUNT_SID || '12',
+  authToken: environmentVariables.TWILIO_AUTH_TOKEN || '12',
 };
 
 module.exports = {
