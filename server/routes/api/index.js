@@ -9,7 +9,6 @@ const axios = require('axios');
 const jwt = require('express-jwt');
 const apiRouter = require('express').Router();
 const db = require('../../config/db');
-const reputationRouter = require('./reputation');
 const sessionRouter = require('./session');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
