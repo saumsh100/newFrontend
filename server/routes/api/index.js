@@ -5,12 +5,28 @@
  *
  */
 
+const axios = require('axios');
+const jwt = require('express-jwt');
 const apiRouter = require('express').Router();
+const db = require('../../config/db');
+const reputationRouter = require('./reputation');
+const sessionRouter = require('./session');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
 const textMessagesRouter = require('./textMessages');
+const authMiddleware = jwt({secret: 'notsosecret'});
 
-apiRouter.use('/reputation', reputationRouter);
+const MAX_RESULTS = 100;
+
+apiRouter.get('/availabilities', authMiddleware, (req, res, next) => {
+  db.getAvailabilities(MAX_RESULTS, (err, results) => {
+    if (err) next(err);
+    res.send(results);
+  });
+});
+
+apiRouter.use('/reputation', authMiddleware, reputationRouter);
+apiRouter.use('/session', sessionRouter);
 apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
 

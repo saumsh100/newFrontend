@@ -3,6 +3,7 @@ const rootRouter = require('express').Router();
 const apiRouter = require('./api');
 const twilioRouter = require('./twilio');
 
+
 // Bind REST API
 rootRouter.use('/api', apiRouter);
 

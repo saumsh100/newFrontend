@@ -9,12 +9,12 @@ export default function configure({ initialState, browserHistory }) {
   const create = window.devToolsExtension
     ? window.devToolsExtension()(createStore)
     : createStore;
-  
+
   const createStoreWithMiddleware = applyMiddleware(
     thunkMiddleware,
     routerMiddleware(browserHistory)
   )(create);
-  
+
   const store = createStoreWithMiddleware(rootReducer, initialState);
 
   if (module.hot) {
@@ -23,6 +23,6 @@ export default function configure({ initialState, browserHistory }) {
       store.replaceReducer(nextReducer);
     });
   }
-  
+
   return store;
 }

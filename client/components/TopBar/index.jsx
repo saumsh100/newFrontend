@@ -1,7 +1,13 @@
 
 import React, { PropTypes } from 'react';
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from '../library';
+import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from '../library';
 import styles from './styles.scss';
+import { browserHistory } from 'react-router';
+
+function logout () {
+  localStorage.setItem('token', '')
+  browserHistory.push('/login');
+}
 
 function TopBar({ setIsCollapsed, isCollapsed }) {
   return (
@@ -21,6 +27,7 @@ function TopBar({ setIsCollapsed, isCollapsed }) {
             ariaHidden="true"
           />
         </div>
+        <Button onClick={logout} className="pull-right">Log Out</Button>
       </div>
     </header>
   );
