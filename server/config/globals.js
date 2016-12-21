@@ -18,6 +18,12 @@ const vendasta = {
   apiUser: environmentVariables.VENDASTA_API_USER,
 };
 
+const twilio = {
+  number: environmentVariables.TWILIO_NUMBER,
+  accountSid: environmentVariables.TWILIO_ACCOUNT_SID,
+  authToken: environmentVariables.TWILIO_AUTH_TOKEN,
+};
+
 module.exports = {
   root,
   env,
@@ -25,4 +31,5 @@ module.exports = {
   bundlePort,
   db,
   vendasta,
+  twilio,
 };

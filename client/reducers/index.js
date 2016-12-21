@@ -6,6 +6,7 @@ import toolbar from './toolbar';
 import reputation from './reputation';
 import reviews from './reviews';
 import auth from './auth';
+import entities from './entities';
 
 export default combineReducers({
   routing,
@@ -16,4 +17,5 @@ export default combineReducers({
   reputation,
   reviews,
   auth,
+  entities,
 });

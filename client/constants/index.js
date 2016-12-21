@@ -15,3 +15,9 @@ export const SET_USERNAME = 'auth/setUsername';
 export const SET_PASSWORD = 'auth/setPassword';
 
 export const REPUTATION_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/?apiKey=8QbTrVBOEb8XwV03GqKZOYhFyJdDnmOOTFXguZxe&apiUser=CARU';
+
+export const FETCH_ENTITIES = 'FETCH_ENTITIES';
+export const RECEIVE_ENTITIES = 'RECEIVE_ENTITIES';
+export const CREATE_ENTITY = 'CREATE_ENTITY';
+export const UPDATE_ENTITY = 'UPDATE_ENTITY';
+export const DELETE_ENTITY = 'DELETE_ENTITY';

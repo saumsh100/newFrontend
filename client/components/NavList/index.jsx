@@ -38,7 +38,9 @@ export default function NavList({ location }) {
         <NavItem>
           <NavLink
             onClick={() => browserHistory.push('/patients')}
-            className={location.pathname === '/patients' ? activeClass : inactiveClass}
+            
+            // Has the indexOf because of nested routes
+            className={location.pathname.indexOf('/patients') === 0 ? activeClass : inactiveClass}
           >
             Patients
           </NavLink>

@@ -8,8 +8,7 @@ const Availability = thinky.createModel('Availability', {
   title: type.string(),
   start: type.date().required(),
   end: type.date().required(),
-}, {
-  pk: 'id',
+  createdAt: type.date(),
 });
 
 module.exports = Availability;
