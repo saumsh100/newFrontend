@@ -3,33 +3,42 @@ import React, { PropTypes } from 'react';
 import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { push } from 'react-router-redux'
 import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
 import { setIsCollapsed } from '../actions/toolbar';
+import { browserHistory } from 'react-router';
 import styles from './styles.scss';
 
-function App({ location, children, isCollapsed, setIsCollapsed }) {
-  let overlay;
-  if (isCollapsed) {
-    overlay = null;
-  } else {
-    overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
+class App extends React.Component {
+  render () {
+    const { location, children, isCollapsed, setIsCollapsed, user, dispatch } = this.props;
+    let overlay;
+    if (isCollapsed) {
+      overlay = null;
+    } else {
+      overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
+    }
+    const isLoginPage = location.pathname.includes('login')
+
+    return (
+      <div>
+        {!isLoginPage && 
+          <div>
+            <TopBarContainer />
+            {overlay}
+            <NavRegionContainer>
+              <NavList location={location} />
+            </NavRegionContainer>
+          </div>}
+        <MainRegionContainer>
+          {children}
+        </MainRegionContainer>
+      </div>
+    );
   }
-  
-  return (
-    <div>
-      <TopBarContainer />
-      {overlay}
-      <NavRegionContainer>
-        <NavList location={location} />
-      </NavRegionContainer>
-      <MainRegionContainer>
-        {children}
-      </MainRegionContainer>
-    </div>
-  );
 }
 
 App.propTypes = {
@@ -39,15 +48,17 @@ App.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ toolbar }) {
+function mapStateToProps({ toolbar, auth }) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
+    user: auth.get('user'),
   };
 }
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     setIsCollapsed,
+    dispatch,
   }, dispatch);
 }
 

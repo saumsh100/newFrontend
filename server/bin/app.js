@@ -2,11 +2,8 @@
 require('../config/initializeCodeTranspiler');
 
 const globals = require('../config/globals');
-// const passport = require('../config/passport');
-// const session = require('../config/session');
 const applyWebpack = require('../config/webpack/applyWebpack');
 const handleErrors = require('../middleware/handleErrors');
-const auth = require('../middleware/auth');
 const chalk = require('chalk');
 const app = require('../config/express');
 
@@ -18,18 +15,11 @@ app.set('showStackError', true);
 // Load in webpack configurations
 applyWebpack(app);
 
+
 // Set the Handlebars templating engine
 app.set('views', `${globals.root}/views`);
 app.engine('hbs', require('../config/handlebars').engine);
 app.set('view engine', 'hbs');
-
-// Apple the configured Express-Session middleware
-// app.use(session);
-
-// Bind Passport Authentication Middleware
-// app.use(passport.initialize());
-// app.use(passport.session());
-// app.use(auth);
 
 // Extra logging for communication with server
 app.use((req, res, next) => {
@@ -37,7 +27,9 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Bind the routes
+
 app.use(require('../routes'));
 
 // Catch errors, log and respond to client

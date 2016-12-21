@@ -17,6 +17,11 @@ const store = configure({ browserHistory });
 const history = syncHistoryWithStore(browserHistory, store);
 // loadInitialData(store);
 
+const token = localStorage.getItem('token')
+if (!token) {
+  browserHistory.push('/login')
+}
+
 connectSocketToStore(socket, store);
 
 window.store = store;
