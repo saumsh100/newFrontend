@@ -13,7 +13,7 @@ const users = [
 
 const thinky = require('../config/thinky');
 const r = thinky.r;
-const Availability = require('../models/Availability');
+//const Availability = require('../models/Availability');
 const Patient = require('../models/Patient');
 
 console.log('Wiping tables...');

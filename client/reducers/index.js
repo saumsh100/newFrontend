@@ -11,7 +11,7 @@ import patientForm from './patientForm';
 
 export default combineReducers({
   routing,
-  form,
+//  form,
   patientForm,
   toolbar,
   reputation,
