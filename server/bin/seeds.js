@@ -76,6 +76,14 @@ const SEEDS = {
       phoneNumber: '+17788654451',
     },
   ],
+
+  Account: [
+    {
+      name: 'Beckett Dental',
+      vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      smsPhoneNumber: '+17786558613',
+    }
+  ]
 };
 
 seedDatabase(SEEDS)
