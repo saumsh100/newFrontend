@@ -1,0 +1,24 @@
+2016-12-21T10:15:58.709598447 0.232217s notice: Recursively removing directory /home/sasha/Desktop/carecru/rethinkdb_data/tmp
+2016-12-21T10:15:58.717008134 0.239628s notice: Initializing directory /home/sasha/Desktop/carecru/rethinkdb_data
+2016-12-21T10:15:58.717080733 0.239698s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/home/sasha/Desktop/carecru/rethinkdb_data' did not already exist or is empty.)
+2016-12-21T10:15:58.717098538 0.239716s notice: Running rethinkdb 2.3.5~0trusty (GCC 4.8.2)...
+2016-12-21T10:15:58.719413671 0.242033s notice: Running on Linux 4.4.0-38-generic x86_64
+2016-12-21T10:15:58.719466716 0.242084s notice: Loading data from directory /home/sasha/Desktop/carecru/rethinkdb_data
+2016-12-21T10:15:58.779902906 0.302522s info: Automatically using cache size of 6484 MB
+2016-12-21T10:15:58.780760798 0.303378s notice: Listening for intracluster connections on port 29015
+2016-12-21T10:15:58.785433689 0.308051s notice: Listening for client driver connections on port 28015
+2016-12-21T10:15:58.785578781 0.308196s notice: Listening for administrative HTTP connections on port 8080
+2016-12-21T10:15:58.785580881 0.308198s notice: Listening on cluster addresses: 127.0.0.1, 127.0.1.1, ::1
+2016-12-21T10:15:58.785583854 0.308201s notice: Listening on driver addresses: 127.0.0.1, 127.0.1.1, ::1
+2016-12-21T10:15:58.785585760 0.308203s notice: Listening on http addresses: 127.0.0.1, 127.0.1.1, ::1
+2016-12-21T10:15:58.785588245 0.308206s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2016-12-21T10:15:58.785590780 0.308208s notice: Server ready, "sasha_V100_oqv" d7b54a4a-6404-4e1f-85df-c66d530e896b
+2016-12-21T10:16:11.184478059 12.707096s info: Table e8885be4-c0eb-4a7c-8ca2-2415cb68a155: Starting a new Raft election for term 1.
+2016-12-21T10:16:11.194173413 12.716791s info: Table e8885be4-c0eb-4a7c-8ca2-2415cb68a155: Added replica on this server.
+2016-12-21T10:16:11.194192308 12.716810s info: Table d3e71c67-6348-4d5d-aca6-38bfabeba2a4: Starting a new Raft election for term 1.
+2016-12-21T10:16:11.198430646 12.721048s info: Table d3e71c67-6348-4d5d-aca6-38bfabeba2a4: Added replica on this server.
+2016-12-21T10:16:11.198541482 12.721159s info: Table 7216367e-db2e-4b33-a052-b8cf59ea6839: Starting a new Raft election for term 1.
+2016-12-21T10:16:11.198965439 12.721583s info: Table 7216367e-db2e-4b33-a052-b8cf59ea6839: Added replica on this server.
+2016-12-21T10:16:11.205938508 12.728556s info: Table e8885be4-c0eb-4a7c-8ca2-2415cb68a155: This server is Raft leader for term 1. Latest log index is 0.
+2016-12-21T10:16:11.206027368 12.728645s info: Table d3e71c67-6348-4d5d-aca6-38bfabeba2a4: This server is Raft leader for term 1. Latest log index is 0.
+2016-12-21T10:16:11.206050961 12.728668s info: Table 7216367e-db2e-4b33-a052-b8cf59ea6839: This server is Raft leader for term 1. Latest log index is 0.

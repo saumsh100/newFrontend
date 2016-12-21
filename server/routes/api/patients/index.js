@@ -26,11 +26,46 @@ patientsRouter.get('/', (req, res, next) => {
     .catch(next);
 });
 
+patientsRouter.post('/', (req, res, next) => {
+  const { firstName, lastName, phoneNumber } = req.body;
+  Patient.save({
+    firstName,
+    lastName,
+    phoneNumber
+  })
+  .then(patient => res.send(normalize(patient, patientSchema)))
+  .catch(err => console.log(err));
+});
+
 patientsRouter.get('/:patientId', (req, res, next) => {
   const { patientId } = req.params;
   Patient.get(patientId)
     .then(patient => res.send(normalize(patient, patientSchema)))
     .catch(next);
+});
+
+patientsRouter.put('/:patientId', (req, res, next) => {
+  const data = {};
+  data.firstName = req.body.firstName;
+  data.lastName = req.body.lastName;
+  data.phoneNumber = req.body.phoneNumber;
+  const { patientId } = req.params;
+  Patient.get(patientId).run().then(p => {
+    p.merge(data).save().then(patient =>{
+      res.send(normalize(patient, patientSchema));
+    })
+  })
+  .catch(err => console.log(err));
+});
+
+patientsRouter.delete('/:patientId', (req, res, next) => {
+  const { patientId } = req.params;
+  Patient.get(patientId).then(patient => {
+    patient.delete().then(result => {
+      res.send(result);
+    })
+  })
+  .catch(err => console.log(err));
 });
 
 module.exports = patientsRouter;
