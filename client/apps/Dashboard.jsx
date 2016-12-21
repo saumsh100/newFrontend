@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import socket from '../socket';
@@ -17,9 +18,9 @@ const store = configure({ browserHistory });
 const history = syncHistoryWithStore(browserHistory, store);
 // loadInitialData(store);
 
-const token = localStorage.getItem('token')
+const token = localStorage.getItem('token');
 if (!token) {
-  browserHistory.push('/login')
+  browserHistory.push('/login');
 }
 
 connectSocketToStore(socket, store);
@@ -28,6 +29,7 @@ window.store = store;
 window.browserHistory = history;
 window.socket = socket;
 window.moment = moment;
+window._ = _;
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
