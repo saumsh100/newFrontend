@@ -7,6 +7,9 @@ export default function NavRegion({ children, isCollapsed }) {
   const navRegionClassName = isCollapsed ? styles.navHidden : styles.leftSectionContainer;
   return (
     <div className={navRegionClassName}>
+      <div className={styles.logoWrapper}>
+        CARECRU
+      </div>
       <div className={styles.navListWrapper}>
         {children}
       </div>

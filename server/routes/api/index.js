@@ -13,7 +13,7 @@ const sessionRouter = require('./session');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
 const textMessagesRouter = require('./textMessages');
-const authMiddleware = jwt({secret: 'notsosecret'});
+const authMiddleware = jwt({ secret: 'notsosecret' });
 
 const MAX_RESULTS = 100;
 
