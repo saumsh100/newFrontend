@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import RouterButton from '../components/library/RouterButton';
 import styles from '../components/Patients/styles.scss';
 import AddPatientForm from '../components/Patients/AddPatientForm';
-import fetchEntities from '../thunks/fetchEntities';
+import { fetchEntities } from '../thunks/fetchEntities';
 import { openForm } from '../actions/patientForm';
 
 class PatientsContainer extends React.Component {

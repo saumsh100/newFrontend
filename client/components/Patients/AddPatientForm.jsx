@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import { Button, Modal, ModalHeader, ModalBody,
   ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 import { bindActionCreators } from 'redux';
-import { updatePatient, postPatient } from '../../thunks/fetchPatients';
+import { fetchUpdate, fetchPost } from '../../thunks/fetchEntities';
 import { closeForm } from '../../actions/patientForm';
 
 class AddPatientForm extends React.Component {
@@ -34,7 +34,7 @@ class AddPatientForm extends React.Component {
     console.log(patientToEdit);
     const patient = this.state.patient;
     if (!patientToEdit) {
-      this.props.postPatient(patient);
+      this.props.fetchPost(patient);
       this.props.closeForm();
       return;
     }
@@ -44,7 +44,7 @@ class AddPatientForm extends React.Component {
       phoneNumber: patient.phoneNumber || patientToEdit.phoneNumber,
     });
 
-    this.props.updatePatient(updatedPatient);
+    this.props.fetchUpdate(updatedPatient);
     this.props.closeForm();
     console.log(updatedPatient);
   }
@@ -122,9 +122,9 @@ AddPatientForm.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    postPatient,
+    fetchPost,
+    fetchUpdate,
     closeForm,
-    updatePatient,
   }, dispatch);
 }
 

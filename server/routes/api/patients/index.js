@@ -62,7 +62,7 @@ patientsRouter.delete('/:patientId', (req, res, next) => {
   const { patientId } = req.params;
   Patient.get(patientId).then((patient) => {
     patient.delete().then((result) => {
-      res.send(result);
+      res.send(normalize(result, patientSchema));
     });
   })
   .catch(next);
