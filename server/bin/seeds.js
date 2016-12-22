@@ -2,19 +2,21 @@
 const bcrypt = require('bcrypt');
 const Availability = require('../models/Availability');
 const User = require('../models/User');
+
 const saltRounds = 10;
 const users = [
-  {username: 'lonny@carecru.com', password: 'lonny'},
-  {username: 'mark@carecru.com', password: 'mark'},
-  {username: 'justin@carecru.com', password: 'justin'},
-  {username: 'ashmeet@carecru.com', password: 'ashmeet'},
-  {username: 'sergey@carecru.com', password: 'sergey'}
-]
+  { username: 'lonny@carecru.com', password: 'lonny' },
+  { username: 'mark@carecru.com', password: 'mark' },
+  { username: 'justin@carecru.com', password: 'justin' },
+  { username: 'ashmeet@carecru.com', password: 'ashmeet' },
+  { username: 'sergey@carecru.com', password: 'sergey' },
+];
 
 const thinky = require('../config/thinky');
-const r = thinky.r;
-//const Availability = require('../models/Availability');
 const Patient = require('../models/Patient');
+
+const r = thinky.r;
+
 
 console.log('Wiping tables...');
 

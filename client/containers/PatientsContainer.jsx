@@ -1,27 +1,21 @@
 
 import React, { PropTypes } from 'react';
 import { Card, CardHeader, CardBlock } from 'reactstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import RouterButton from '../components/library/RouterButton';
 import styles from '../components/Patients/styles.scss';
 import AddPatientForm from '../components/Patients/AddPatientForm';
 import fetchEntities from '../thunks/fetchEntities';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { openForm } from '../actions/patientForm';
 
 class PatientsContainer extends React.Component {
-  constructor(props){
-    super(props);
-
-  }
-
-
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'patients' });
   }
 
-  renderHeader(){
+  renderHeader() {
     const { location } = this.props;
     let header;
     if (location.pathname === '/patients') {
@@ -29,7 +23,7 @@ class PatientsContainer extends React.Component {
         <div>Patients
           <button
             className="btn btn-primary offset-lg-10"
-            onClick={()=> this.props.openForm()}
+            onClick={() => this.props.openForm()}
           >
               Add new patient
           </button>
@@ -45,14 +39,14 @@ class PatientsContainer extends React.Component {
     }
 
     return header;
-  };
+  }
 
-  renderChildren(props){
-    return React.Children.map(props.children, child => {
-      return React.cloneElement(child, {
-        patients: props.patients
+  renderChildren(props) {
+    return React.Children.map(props.children, child => (
+      React.cloneElement(child, {
+        patients: props.patients,
       })
-    })
+    ));
   }
 
   render() {
@@ -73,7 +67,8 @@ class PatientsContainer extends React.Component {
 }
 
 PatientsContainer.propTypes = {
-
+  fetchEntities: PropTypes.func,
+  openForm: PropTypes.func,
 };
 
 function mapStateToProps({ entities }) {
@@ -82,16 +77,11 @@ function mapStateToProps({ entities }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-      fetchEntities,
-      openForm
-    }, dispatch)
-
+    fetchEntities,
+    openForm,
+  }, dispatch);
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(PatientsContainer);
-
-
-
-//export default PatientsContainer;

@@ -5,7 +5,7 @@ const Patient = require('../../../models/Patient');
 
 const patientSchema = new Schema('patients');
 
-/*patientsRouter.param('patientId', (req, res, next, patientId) => {
+/* patientsRouter.param('patientId', (req, res, next, patientId) => {
   User.find(id, function(err, user) {
     if (err) {
       next(err);
@@ -31,10 +31,10 @@ patientsRouter.post('/', (req, res, next) => {
   Patient.save({
     firstName,
     lastName,
-    phoneNumber
+    phoneNumber,
   })
   .then(patient => res.send(normalize(patient, patientSchema)))
-  .catch(err => console.log(err));
+  .catch(next);
 });
 
 patientsRouter.get('/:patientId', (req, res, next) => {
@@ -50,22 +50,22 @@ patientsRouter.put('/:patientId', (req, res, next) => {
   data.lastName = req.body.lastName;
   data.phoneNumber = req.body.phoneNumber;
   const { patientId } = req.params;
-  Patient.get(patientId).run().then(p => {
-    p.merge(data).save().then(patient =>{
+  Patient.get(patientId).run().then((p) => {
+    p.merge(data).save().then((patient) => {
       res.send(normalize(patient, patientSchema));
-    })
+    });
   })
-  .catch(err => console.log(err));
+  .catch(next);
 });
 
 patientsRouter.delete('/:patientId', (req, res, next) => {
   const { patientId } = req.params;
-  Patient.get(patientId).then(patient => {
-    patient.delete().then(result => {
+  Patient.get(patientId).then((patient) => {
+    patient.delete().then((result) => {
       res.send(result);
-    })
+    });
   })
-  .catch(err => console.log(err));
+  .catch(next);
 });
 
 module.exports = patientsRouter;
