@@ -7,6 +7,18 @@ const User = thinky.createModel('User', {
   username: type.string().email().required(),
   password: type.string().required(),
   activeAccountId: type.string(),
+  toJson: type.virtual().default(function() {
+    const {
+      username,
+      activeAccountId,
+      id,
+    } = this
+    return {
+      username,
+      activeAccountId,
+      id,
+    }
+  }),
 }, {
   pk: 'id',
 });

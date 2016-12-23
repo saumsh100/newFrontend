@@ -18,9 +18,7 @@ sessionRouter.post('/', function(req, res, next) {
       }
 
       return jwt.sign({
-        data: {
-          username: user.username
-        },
+        data: user.toJson,
       }, 'notsosecret', { expiresIn: '1h' }, function(err, token) {
         if (err) {
           return next({status: 500});
