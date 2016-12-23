@@ -12,6 +12,7 @@ const db = require('../../config/db');
 const sessionRouter = require('./session');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
+const userRouter = require('./users');
 const textMessagesRouter = require('./textMessages');
 const authMiddleware = jwt({secret: 'notsosecret'});
 
@@ -28,5 +29,6 @@ apiRouter.use('/reputation', authMiddleware, reputationRouter);
 apiRouter.use('/session', sessionRouter);
 apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
+apiRouter.use('/users', userRouter);
 
 module.exports = apiRouter;

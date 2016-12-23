@@ -4,7 +4,6 @@ const patientsRouter = require('express').Router();
 const Patient = require('../../../models/Patient');
 
 const patientSchema = new Schema('patients');
-
 /* patientsRouter.param('patientId', (req, res, next, patientId) => {
   User.find(id, function(err, user) {
     if (err) {
