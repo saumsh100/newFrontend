@@ -22,7 +22,7 @@ console.log('Wiping tables...');
 
 Availability.run().then(results => results.forEach(result => result.delete()));
 Patient.run().then(results => results.forEach(result => result.delete()));
-
+User.run().then(results => results.forEach(result => result.delete()));
 console.log('Tables wiped!');
 console.log('Now seeding a fresh database...');
 
@@ -83,13 +83,13 @@ const hashedUsers = users.map(({username, password}) => {
   }
 })
 
-
+console.log(hashedUsers);
 
 const user = User.save(hashedUsers).then((result) => {
   console.log('Successfully seeded db with users!');
   // process.exit();
 }).catch((err) => {
-  console.error('ERROR! SEEDING DATABASE WITH AVAILABILITIES FAILED.');
+  console.error(err);
   // process.exit(err);
 });
 

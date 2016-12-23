@@ -26,7 +26,7 @@ function PatientListItem({ patient, onChat, openForm, fetchDelete }) {
         </Button>
         <Button
           style={{ marginLeft: 10 }}
-          onClick={() => fetchDelete(patient)}
+          onClick={() => fetchDelete({ key: 'patients', id: patient.id })}
         >
           Delete patient
         </Button>
