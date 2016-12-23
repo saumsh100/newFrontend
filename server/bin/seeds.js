@@ -19,23 +19,23 @@ const saltRounds = 10;
  */
 
 const SEEDS = {
-  Availability: [
-    {
-      start: new Date(2016, 11, 2, 9, 30, 0, 0),
-      end: new Date(2016, 11, 2, 12, 30, 0, 0),
-      title: 'Crown Availability',
-    },
-    {
-      start: new Date(2016, 11, 2, 14, 30, 0, 0),
-      end: new Date(2016, 11, 2, 15, 30, 0, 0),
-      title: 'Cavity Availability',
-    },
-    {
-      start: new Date(2016, 11, 3, 9, 30, 0, 0),
-      end: new Date(2016, 11, 3, 13, 30, 0, 0),
-      title: 'Braces Availability',
-    },
-  ],
+  // Appointment: [
+  //   {
+  //     start: new Date(2016, 11, 2, 9, 30, 0, 0),
+  //     end: new Date(2016, 11, 2, 12, 30, 0, 0),
+  //     title: 'Crown Availability',
+  //   },
+  //   {
+  //     start: new Date(2016, 11, 2, 14, 30, 0, 0),
+  //     end: new Date(2016, 11, 2, 15, 30, 0, 0),
+  //     title: 'Cavity Availability',
+  //   },
+  //   {
+  //     start: new Date(2016, 11, 3, 9, 30, 0, 0),
+  //     end: new Date(2016, 11, 3, 13, 30, 0, 0),
+  //     title: 'Braces Availability',
+  //   },
+  // ],
   
   User: [
     {
