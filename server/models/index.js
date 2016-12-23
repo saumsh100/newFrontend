@@ -4,9 +4,12 @@ const Patient = require('./Patient');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
 const Account = require('./Account');
+const Permission = require('./Permission');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id')
+User.belongsTo(Permission, 'permission', 'permissionId', 'id')
+
 Appointment.belongsTo(Patient, 'patient', 'patientId', 'id')
 Appointment.belongsTo(Account, 'account', 'accountId', 'id')
 
