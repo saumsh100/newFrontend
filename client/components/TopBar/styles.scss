@@ -7,10 +7,24 @@
   left: 0;
   width: 100%;
   height: $top-nav-height;
-  background-color: $color-white;
-  border-bottom: solid 1px #c5d6de;
+  background-color: $primary-grey;
+  padding-left: $side-nav-width;
   padding-top: 20px;
-  z-index: 20;
+  z-index: 10;
+}
+
+.topBarContainerCollapsed {
+  padding-left: 0px;
+}
+
+.topBarContainerUnCollapsed {
+  @media screen and (max-width: $medium-screen-width) {
+    padding-left: 0;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    padding-left: $side-nav-width;
+  }
 }
 
 .logoImg {

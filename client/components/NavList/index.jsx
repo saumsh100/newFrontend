@@ -17,7 +17,7 @@ export default function NavList({ location }) {
   const bottomClass = fixedBottomItem;
   
   return (
-    <div>
+    <div className={styles.navListWrapper}>
       <Nav>
         <NavItem>
           <NavLink

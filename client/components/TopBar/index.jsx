@@ -1,23 +1,26 @@
 
 import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from '../library';
 import styles from './styles.scss';
 import { browserHistory } from 'react-router';
 
-function logout () {
-  localStorage.setItem('token', '')
+function logout() {
+  localStorage.setItem('token', '');
   browserHistory.push('/login');
 }
 
 function TopBar({ setIsCollapsed, isCollapsed }) {
+  const topBarClassName = classNames(
+    styles.topBarContainer,
+    isCollapsed ?
+      styles.topBarContainerCollapsed :
+      styles.topBarContainerUnCollapsed
+  );
+  
   return (
-    <header className={styles.topBarContainer}>
+    <header className={topBarClassName}>
       <div className="container-fluid">
-        <img
-          src="/images/logo.png"
-          alt="CareCru Logo"
-          className={styles.logoImg}
-        />
         <div
           className={styles.collapseButton}
           onClick={() => setIsCollapsed(!isCollapsed)}
