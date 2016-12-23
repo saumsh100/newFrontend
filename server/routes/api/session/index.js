@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 sessionRouter.post('/', function(req, res, next) {
-  return User.filter({username: req.body.username}).run().then(function(users) {
+  return User.filter({username: req.body.username}).getJoin({activeAccount: true}).run().then(function(users) {
     if (!users.length) {
       return next({status: 401})
     }
@@ -16,7 +16,7 @@ sessionRouter.post('/', function(req, res, next) {
       if (!match) {
         return next({status: 401});
       }
-
+      console.log(user)
       return jwt.sign({
         data: user.toJson,
       }, 'notsosecret', { expiresIn: '1h' }, function(err, token) {

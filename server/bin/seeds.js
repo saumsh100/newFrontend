@@ -20,6 +20,7 @@ const saltRounds = 10;
 
 const accountId = uuid();
 const justinPatientId = uuid();
+const adminId = uuid();
 
 const SEEDS = {
   Appointment: [
@@ -55,30 +56,40 @@ const SEEDS = {
       password: bcrypt.hashSync('lonny', saltRounds),
       id: uuid(),
       activeAccountId: accountId,
+      // accounts: [accountId],
+      permissionId: adminId,
     },
     {
       username: 'mark@carecru.com',
       password: bcrypt.hashSync('mark', saltRounds),
       id: uuid(),
       activeAccountId: accountId,
+      // accounts: [accountId],
+      permissionId: adminId,
     },
     {
       username: 'justin@carecru.com',
       password: bcrypt.hashSync('justin', saltRounds),
       id: uuid(),
       activeAccountId: accountId,
+      // accounts: [accountId],
+      permissionId: adminId,
     },
     {
       username: 'ashmeet@carecru.com',
       password: bcrypt.hashSync('ashmeet', saltRounds),
       id: uuid(),
       activeAccountId: accountId,
+      // accounts: [accountId],
+      permissionId: adminId,
     },
     {
       username: 'sergey@carecru.com',
       password: bcrypt.hashSync('sergey', saltRounds),
       id: uuid(),
       activeAccountId: accountId,
+      // accounts: [accountId],
+      permissionId: adminId,
     },
   ],
   
@@ -109,6 +120,14 @@ const SEEDS = {
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: '+17786558613',
       id: accountId,
+    }
+  ],
+
+  Permission: [
+    {
+      scopes: ['account:create', 'account:read', 'account:update', 'account:delete'],
+      name: 'admin',
+      id: adminId,
     }
   ]
 };
