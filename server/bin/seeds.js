@@ -1,6 +1,7 @@
 
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
+const addRelations = seedDatabase.addRelationsToDatabase;
 
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
@@ -89,11 +90,11 @@ const SEEDS = {
 seedDatabase(SEEDS)
   .then(() => {
     console.log('Successfully executed bin/seeds.')
-    process.exit();
+    addRelations()
+    // process.exit();
   })
   .catch((err) => {
     console.error('Unsuccessfully executed bin/seeds.')
     console.error(err);
-    process.exit(1);
+    // process.exit(1);
   });
-

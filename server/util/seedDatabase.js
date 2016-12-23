@@ -69,3 +69,21 @@ function addSeedsToDatabase(seedJSON) {
     process.exit(1);
   });
 }
+
+module.exports.addRelationsToDatabase = addRelationsToDatabase
+
+function addRelationsToDatabase(cb) {
+  console.log('Adding relations to DB')
+  const userAccounts = models.User.run().then(function(users) {
+    return models.Account.run().then(function (accounts) {
+      return users.forEach(function(user){
+        return user.addRelation('activeAccount', accounts[0]).then(function(user) {
+          console.log(user);
+          return;
+        })
+      })
+    })
+  })
+
+
+}
