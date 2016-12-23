@@ -1,3 +1,4 @@
+// todo [meta] remove all queries from this file
 
 const r = require('rethinkdb');
 const _ = require('lodash');
