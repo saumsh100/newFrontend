@@ -42,14 +42,14 @@
 .collapseButton {
   display: inline;
   cursor: pointer;
-  color: lightgrey;
+  color: $primary-dark;
   @media screen and (max-width: $medium-screen-width) {
     font-size: 1.2rem;
-    margin-left: 15px;
+    margin-left: 5px;
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    font-size: 1.5rem;
-    margin-left: 20px;
+    font-size: 1.4rem;
+    margin-left: 10px;
   }
 }
