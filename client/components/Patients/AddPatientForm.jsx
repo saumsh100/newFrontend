@@ -34,7 +34,7 @@ class AddPatientForm extends React.Component {
     console.log(patientToEdit);
     const patient = this.state.patient;
     if (!patientToEdit) {
-      this.props.fetchPost(patient);
+      this.props.fetchPost({ key: 'patients', patient });
       this.props.closeForm();
       return;
     }
@@ -43,8 +43,8 @@ class AddPatientForm extends React.Component {
       lastName: patient.lastName || patientToEdit.lastName,
       phoneNumber: patient.phoneNumber || patientToEdit.phoneNumber,
     });
-
-    this.props.fetchUpdate(updatedPatient);
+    console.log(updatedPatient.id);
+    this.props.fetchUpdate({ key: 'patients', patient: updatedPatient });
     this.props.closeForm();
     console.log(updatedPatient);
   }
@@ -115,8 +115,8 @@ function mapStateToProps(state) {
 AddPatientForm.propTypes = {
   closeForm: PropTypes.func,
   patient: PropTypes.instanceOf(Immutable.Map),
-  postPatient: PropTypes.func,
-  updatePatient: PropTypes.func,
+  fetchPost: PropTypes.func,
+  fetchUpdate: PropTypes.func,
   opened: PropTypes.bool,
 };
 

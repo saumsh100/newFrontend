@@ -1,8 +1,8 @@
 
 import axios from 'axios';
-import { receiveEntities, deleteEntity } from '../actions/entities';
+import { receiveEntities, deleteEntity, addEntity, updateEntity } from '../actions/entities';
 
-export function fetchEntities({ key, data }) {
+export function fetchEntities({ key }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -20,31 +20,41 @@ export function fetchEntities({ key, data }) {
   };
 }
 
-export function fetchDelete(key, id) {
+export function fetchDelete({ key, id }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
     axios.delete(`${entity.getUrlRoot()}/${id}`)
       .then((response) => {
         const { data } = response;
-        dispatch(deleteEntity({ entities: data.entities }));
+        dispatch(deleteEntity({ key, entity: data.entities }));
       })
       .catch(err => console.log(err));
   };
 }
 
-export function fetchPost(patient) {
-  return (dispatch) => {
-    axios.post('/api/patients', patient)
-      .then(response => console.log(response))
+export function fetchPost({ key, patient }) {
+  return (dispatch, getState) => {
+    const { entities } = getState();
+    const entity = entities.get(key);
+    axios.post(entity.getUrlRoot(), patient)
+      .then((response) => {
+        const { data } = response;
+        dispatch(addEntity({ key, entity: data.entities }));
+      })
       .catch(err => console.log(err));
   };
 }
 
-export function fetchUpdate(patient) {
+export function fetchUpdate({ key, patient }) {
   return (dispatch, getState) => {
-    axios.put(`/api/patients/${patient.id}`, patient)
-      .then(response => console.log(response))
+    const { entities } = getState();
+    const entity = entities.get(key);
+    axios.put(`${entity.getUrlRoot()}/${patient.id}`, patient)
+      .then((response) => {
+        const { data } = response;
+        dispatch(updateEntity({ key, entity: data.entities }));
+      })
       .catch(err => console.log(err));
-  }
+  };
 }
