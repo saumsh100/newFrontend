@@ -8,8 +8,8 @@
   position: fixed;
   height: 100%;
   border-right: solid 1px #c5d6de;
-  background-color: $color-white;
-  z-index: 10;
+  background-color: $primary-dark;
+  z-index: 20;
 }
 
 .navHidden {
@@ -17,7 +17,7 @@
 }
 
 .logoWrapper {
-  padding: 30px;
+  padding-left: 20px;
 }
 
 .navListWrapper {

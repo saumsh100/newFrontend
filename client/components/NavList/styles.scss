@@ -1,17 +1,19 @@
 
+@import '../../ui';
+
 .navItem {
   padding: .3rem .5rem .3rem 1rem;
   height: 50px;
   padding-top: 12px;
   width: 100%;
-  color: grey;
+  color: $inactive-color !important;
   cursor: pointer;
 }
 
 .activeItem {
-  border-left: 3px solid #2d65a7;
-  color: #2d65a7 !important;
-  background-color: #eceff4;
+  border-left: 3px solid $primary-color;
+  color: white !important;
+  background-color: #41464c;
 }
 
 .fixedBottom {

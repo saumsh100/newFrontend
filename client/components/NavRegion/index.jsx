@@ -8,7 +8,7 @@ export default function NavRegion({ children, isCollapsed }) {
   return (
     <div className={navRegionClassName}>
       <div className={styles.logoWrapper}>
-        CARECRU
+        <img src="/images/carecru_logo.png" alt="" width="150" />
       </div>
       <div className={styles.navListWrapper}>
         {children}

@@ -6,7 +6,7 @@ import styles from './styles.scss';
 import { browserHistory } from 'react-router';
 
 function logout() {
-  localStorage.setItem('token', '')
+  localStorage.setItem('token', '');
   browserHistory.push('/login');
 }
 
