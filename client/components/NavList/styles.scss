@@ -1,13 +1,23 @@
 
 @import '../../ui';
 
+.navListWrapper {
+  margin-top: 25px;
+}
+
 .navItem {
   padding: .3rem .5rem .3rem 1rem;
-  height: 50px;
+  height: 65px;
   padding-top: 12px;
   width: 100%;
   color: $inactive-color !important;
   cursor: pointer;
+  // line-height: 65px;
+  // text-align: center;
+}
+
+.navItem > a {
+  padding-top: 20px;
 }
 
 .activeItem {
@@ -16,9 +26,4 @@
   background-color: #41464c;
 }
 
-.fixedBottom {
-  position: fixed;
-  bottom: 0px;
-  border-top: 1px solid #c5d6de;
-}
 
