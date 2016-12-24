@@ -13,6 +13,7 @@ const {
 reputationRouter.get('/listings', (req, res, next) => {
   console.log(req.user)
   axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
+    // todo use custId from user account
     customerIdentifier: req.params.cust_id || 'UNIQUE_CUSTOMER_IDENTIFIER',
   }).then((response) => {
     return res.send(response.data);

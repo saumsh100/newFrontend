@@ -11,6 +11,7 @@ export const FETCH_REVIEWS_ERROR = 'vendasta/fetchReviewsError';
 
 export const LOGIN = 'auth/login';
 export const LOGIN_SUCCESS = 'auth/loginSuccess';
+export const LOGOUT = 'auth/logout';
 export const SET_USERNAME = 'auth/setUsername';
 export const SET_PASSWORD = 'auth/setPassword';
 

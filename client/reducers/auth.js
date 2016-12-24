@@ -4,6 +4,7 @@ import { handleActions } from 'redux-actions';
 import {
   LOGIN,
   LOGIN_SUCCESS,
+  LOGOUT,
   SET_USERNAME,
   SET_PASSWORD,
 } from '../constants';
@@ -16,6 +17,7 @@ const initialState = fromJS({
   user: fromJS({
     id: null,
     username: null,
+    activeAccountId: null
   }),
   // isLoggedIn: false,
 });
@@ -26,12 +28,20 @@ export default handleActions({
   },
 
   [LOGIN_SUCCESS](state, action) {
-    const { user } = action.payload;
-
     return state.merge({
       status: 'success',
-      user,
+      user: action.payload,
       // isLoggedIn: true,
+    });
+  },
+
+  [LOGOUT](state) {
+    return state.merge({
+      user: {
+        id: null,
+        username: null,
+        activeAccountId: null
+      }
     });
   },
 
