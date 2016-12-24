@@ -6,7 +6,6 @@
  */
 
 const axios = require('axios');
-const jwt = require('express-jwt');
 const apiRouter = require('express').Router();
 const db = require('../../config/db');
 const sessionRouter = require('./session');
@@ -14,7 +13,7 @@ const appointmentRouter = require('./appointment');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
 const textMessagesRouter = require('./textMessages');
-const authMiddleware = jwt({ secret: 'notsosecret' });
+const authMiddleware = require('../../middleware/auth');
 
 apiRouter.use('/appointments', authMiddleware, appointmentRouter)
 
