@@ -20,7 +20,7 @@ const saltRounds = 10;
 
 const accountId = uuid();
 const justinPatientId = uuid();
-const adminId = uuid();
+const lonnyUserId = uuid();
 
 const SEEDS = {
   Appointment: [
@@ -54,10 +54,9 @@ const SEEDS = {
     {
       username: 'lonny@carecru.com',
       password: bcrypt.hashSync('lonny', saltRounds),
-      id: uuid(),
+      id: lonnyUserId,
       activeAccountId: accountId,
       // accounts: [accountId],
-      permissionId: adminId,
     },
     {
       username: 'mark@carecru.com',
@@ -65,7 +64,6 @@ const SEEDS = {
       id: uuid(),
       activeAccountId: accountId,
       // accounts: [accountId],
-      permissionId: adminId,
     },
     {
       username: 'justin@carecru.com',
@@ -73,7 +71,6 @@ const SEEDS = {
       id: uuid(),
       activeAccountId: accountId,
       // accounts: [accountId],
-      permissionId: adminId,
     },
     {
       username: 'ashmeet@carecru.com',
@@ -81,7 +78,6 @@ const SEEDS = {
       id: uuid(),
       activeAccountId: accountId,
       // accounts: [accountId],
-      permissionId: adminId,
     },
     {
       username: 'sergey@carecru.com',
@@ -89,7 +85,6 @@ const SEEDS = {
       id: uuid(),
       activeAccountId: accountId,
       // accounts: [accountId],
-      permissionId: adminId,
     },
   ],
   
@@ -125,9 +120,10 @@ const SEEDS = {
 
   Permission: [
     {
-      scopes: ['account:create', 'account:read', 'account:update', 'account:delete'],
-      name: 'admin',
-      id: adminId,
+      id: uuid(),
+      userId: lonnyUserId,
+      accountId: accountId,
+      role: 'OWNER',
     }
   ]
 };

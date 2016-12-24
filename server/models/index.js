@@ -8,7 +8,8 @@ const Permission = require('./Permission');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id')
-User.belongsTo(Permission, 'permission', 'permissionId', 'id')
+Permission.belongsTo(User, 'user', 'userId', 'id')
+Permission.belongsTo(Account, 'account', 'accountId', 'id')
 
 User.hasAndBelongsToMany(Account, 'accounts', 'id', 'id')
 // Account.hasAndBelongsToMany(User, 'users', 'id', 'id')
