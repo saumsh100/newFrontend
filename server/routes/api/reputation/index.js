@@ -29,8 +29,8 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
 
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
   return Account.get(req.user.activeAccountId).then((account) => {
-      axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
-        customerIdentifier: account.vendastaId,
+    axios.post(`${VENDASTA_REVIEWS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
+      customerIdentifier: account.vendastaId,
     }).then((response) => {
       return res.send(response.data);
     }).catch((error) => {
