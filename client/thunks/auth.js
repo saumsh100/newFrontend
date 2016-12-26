@@ -14,7 +14,7 @@ export default function () {
     .then(({ data }) => {
       // set data in local storage
       localStorage.setItem('token', data.token);
-      dispatch(loginSuccess(jwt(data.token).data));
+      dispatch(loginSuccess(jwt(data.token)));
       dispatch(push('/'))
     });
   };

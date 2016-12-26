@@ -29,7 +29,7 @@ if (!token) {
   if (hasExpired) {
     browserHistory.push('/login');
   } else {
-    store.dispatch(loginSuccess(decodedToken.data))
+    store.dispatch(loginSuccess(decodedToken))
     browserHistory.push('/');
   }
 }

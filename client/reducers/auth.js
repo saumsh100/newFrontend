@@ -19,6 +19,8 @@ const initialState = fromJS({
     username: null,
     activeAccountId: null
   }),
+  permissions: null,
+  role: null,
   // isLoggedIn: false,
 });
 
@@ -30,8 +32,11 @@ export default handleActions({
   [LOGIN_SUCCESS](state, action) {
     return state.merge({
       status: 'success',
-      user: action.payload,
+      user: action.payload.user,
       // isLoggedIn: true,
+      password: '',
+      permissions: action.payload.permissions,
+      role: action.payload.role,
     });
   },
 
@@ -41,7 +46,9 @@ export default handleActions({
         id: null,
         username: null,
         activeAccountId: null
-      }
+      },
+      permissions: null,
+      role: null,
     });
   },
 
