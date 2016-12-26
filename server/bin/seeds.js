@@ -21,6 +21,7 @@ const saltRounds = 10;
 const accountId = uuid();
 const justinPatientId = uuid();
 const lonnyUserId = uuid();
+const justinUserId = uuid();
 
 const SEEDS = {
   Appointment: [
@@ -68,7 +69,7 @@ const SEEDS = {
     {
       username: 'justin@carecru.com',
       password: bcrypt.hashSync('justin', saltRounds),
-      id: uuid(),
+      id: justinUserId,
       activeAccountId: accountId,
       // accounts: [accountId],
     },
@@ -124,7 +125,14 @@ const SEEDS = {
       userId: lonnyUserId,
       accountId: accountId,
       role: 'OWNER',
-      permissions: {user: {create: true}},
+      permissions: {reviews: {create: true}}, // test permission
+    },
+    {
+      id: uuid(),
+      userId: justinUserId,
+      accountId: accountId,
+      role: 'VIEWER',
+      permissions: {},
     }
   ]
 };
