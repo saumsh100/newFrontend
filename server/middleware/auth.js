@@ -3,19 +3,31 @@ const merge = require('lodash/merge')
 
 const permissions = {
   OWNER: {
-    account: {
+    accounts: {
       create: true,
       read: true,
       update: true,
       delete: true,
-    }
+    },
+    listings: {
+       read: true,
+    },
+    reviews: {
+       read: true,
+    },
   },
   ADMIN: {
-    account: {
+    accounts: {
       create: true,
       read: true,
       update: true,
-    }
+    },
+    listings: {
+       read: true,
+    },
+    reviews: {
+       read: true,
+    },
   },
   VIEWER: {
     account: {
