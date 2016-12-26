@@ -6,9 +6,8 @@ const Appointment = require('../../../models/Appointment');
 const appointmentSchema = new Schema('appointments');
 
 appointmentsRouter.get('/', (req, res, next) => {
-  console.log('user', req.user)
   Appointment.filter({
-    accountId: req.user.data.activeAccountId
+    accountId: req.user.activeAccountId
   }).run()
     .then(appointments => res.send(normalize(appointments, arrayOf(appointmentSchema))))
     .catch(next);

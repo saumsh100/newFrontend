@@ -124,6 +124,7 @@ const SEEDS = {
       userId: lonnyUserId,
       accountId: accountId,
       role: 'OWNER',
+      permissions: {user: {create: true}},
     }
   ]
 };
