@@ -2,6 +2,9 @@
 
 const r = require('rethinkdb');
 const _ = require('lodash');
+const globals = require('./globals');
+let db = globals.db;
+const fs = require('fs')
 
 // #### Connection details
 
@@ -23,6 +26,29 @@ var dbConfig = {
  * - create the `RDB_DB` database (defaults to `chat`)
  * - create tables `messages`, `cache`, `users` in this database
  */
+
+
+if (globals.env === 'production') {
+  const caCert = fs.readFileSync(`${globals.root}/compose_ca_cert`);
+  db = Object.assign({}, db, {
+    ssl: {
+      ca: caCert,
+    },
+  });
+}
+
+module.exports.dropTable = function dropTable (tableName) {
+  return r.connect(_.clone(db)).then((connection) => {
+    console.log('connected')
+    return r.tableDrop(tableName).run(connection)
+  }).error((error) => {
+    console.log('outer error')
+    console.log(error)
+    // process.exit(1)
+  })
+}
+
+
 module.exports.setup = function () {
   console.log('Setting up RethinkDB connection...');
   r.connect({ host: dbConfig.host, port: dbConfig.port }, (er, connection) => {

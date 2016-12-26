@@ -1,6 +1,7 @@
 
 const models = require('../models');
 const _ = require('lodash');
+const dropTable = require('../config/db').dropTable;
 
 /**
  * seedDatabase is the full function to wipe and seed
@@ -14,9 +15,9 @@ module.exports = function seedDatabase(seedJSON, config = { wipeTables: true }) 
   if (config.wipeTables) {
     console.log('Wiping tables...');
     wipes = _.map(seedJSON, (data, tableName) => {
-      return models[tableName].run()
+      return dropTable(tableName)
         .then((results) => {
-          results.forEach(result => result.delete());
+          // results.forEach(result => result.delete());
           console.log(`Successfully wiped ${tableName} table.`);
         })
         .catch((err) => {
