@@ -1,0 +1,17 @@
+
+@import '../../../ui.scss';
+
+.default {
+  border: none;
+  color: white;
+  text-transform: uppercase;
+  background-color: $primary-color;
+  height: 40px;
+  &:active {
+    border: none;
+  }
+
+  &:hover {
+    border: none;
+  }
+}

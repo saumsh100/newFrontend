@@ -1,7 +1,7 @@
 
 import React from 'react';
-import RSButton from 'reactstrap/lib/Button';
+import styles from './styles.scss';
 
 export default function Button(props) {
-  return <RSButton {...props} />;
+  return <button className={styles.default } {...props} />;
 }
