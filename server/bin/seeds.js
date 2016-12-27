@@ -22,6 +22,9 @@ const accountId = uuid();
 const justinPatientId = uuid();
 const lonnyUserId = uuid();
 const justinUserId = uuid();
+const markUserId = uuid();
+const ashmeetUserId = uuid();
+const sergeyUserId = uuid();
 
 const SEEDS = {
   Appointment: [
@@ -62,7 +65,7 @@ const SEEDS = {
     {
       username: 'mark@carecru.com',
       password: bcrypt.hashSync('mark', saltRounds),
-      id: uuid(),
+      id: markUserId,
       activeAccountId: accountId,
       // accounts: [accountId],
     },
@@ -76,14 +79,14 @@ const SEEDS = {
     {
       username: 'ashmeet@carecru.com',
       password: bcrypt.hashSync('ashmeet', saltRounds),
-      id: uuid(),
+      id: ashmeetUserId,
       activeAccountId: accountId,
       // accounts: [accountId],
     },
     {
       username: 'sergey@carecru.com',
       password: bcrypt.hashSync('sergey', saltRounds),
-      id: uuid(),
+      id: sergeyUserId,
       activeAccountId: accountId,
       // accounts: [accountId],
     },
@@ -130,6 +133,27 @@ const SEEDS = {
     {
       id: uuid(),
       userId: justinUserId,
+      accountId: accountId,
+      role: 'OWNER',
+      permissions: {},
+    },
+    {
+      id: uuid(),
+      userId: ashmeetUserId,
+      accountId: accountId,
+      role: 'OWNER',
+      permissions: {},
+    },
+    {
+      id: uuid(),
+      userId: markUserId,
+      accountId: accountId,
+      role: 'VIEWER',
+      permissions: {},
+    },
+    {
+      id: uuid(),
+      userId: sergeyUserId,
       accountId: accountId,
       role: 'VIEWER',
       permissions: {},
