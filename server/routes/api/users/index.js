@@ -11,10 +11,11 @@ userRouter.put('/changePassword', (req, res, next) => {
   const oldPassword = req.body.oldPassword;
   const password = req.body.password;
   const confirm = req.body.confirm;
+  if (password !== confirm) return next({ status: 401 });
   const updatedUser = {};
   updatedUser.username = req.user.data.username;
   User.get(username).run().then((user) => {
-    bcrypt.compare(oldPassword, user.password, function(err, match) {
+    bcrypt.compare(oldPassword, user.password, function (err, match) {
       if (err) {
         return next({ status: 500 });
       }
@@ -24,11 +25,11 @@ userRouter.put('/changePassword', (req, res, next) => {
       updatedUser.password = bcrypt.hashSync(password, 10);
       user.merge(updatedUser).save().then((newUser) => {
         console.log(newUser);
-        res.end();
-      })
-    })
+        return res.end();
+      });
+    });
   })
   .catch(err => next(err));
-})
+});
 
 module.exports = userRouter;
