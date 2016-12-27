@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import TopBar from '../components/TopBar';
 import { setIsCollapsed } from '../actions/toolbar';
+import { logout } from '../actions/auth';
 
 function TopBarContainer(props) {
   return <TopBar {...props}/>;
@@ -23,6 +24,7 @@ function mapStateToProps({ toolbar }) {
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     setIsCollapsed,
+    logout,
   }, dispatch);
 }
 

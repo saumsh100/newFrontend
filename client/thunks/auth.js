@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { loginSuccess } from '../actions/auth';
+import jwt from 'jwt-decode';
 import { push } from 'react-router-redux'
 
 export default function () {
@@ -13,7 +14,7 @@ export default function () {
     .then(({ data }) => {
       // set data in local storage
       localStorage.setItem('token', data.token);
-      dispatch(loginSuccess(data));
+      dispatch(loginSuccess(jwt(data.token)));
       dispatch(push('/'))
     });
   };

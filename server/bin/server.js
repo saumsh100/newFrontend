@@ -4,7 +4,7 @@ const globals = require('../config/globals');
 const app = require('./app');
 const twilioClient = require('../config/twilio');
 const twilioConfig = require('../config/globals').twilio;
-const Availability = require('../models/Availability');
+const Appointment = require('../models/Appointment');
 const Patient = require('../models/Patient');
 const TextMessage = require('../models/TextMessage');
 
@@ -15,10 +15,10 @@ const io = require('socket.io')(server);
 // TODO: implement Thinky!!!
 io.on('connection', (socket) => {
   console.log('a new socket connected');
-  socket.on('fetchAvailabilities', () => {
-    Availability.run()
-      .then((availabilities) => {
-        socket.emit('receiveAvailabilities', availabilities);
+  socket.on('fetchAppointments', () => {
+    Appointment.run()
+      .then((appointments) => {
+        socket.emit('receiveAppointments', appointments);
       });
   });
   
@@ -36,17 +36,17 @@ io.on('connection', (socket) => {
       });
   });
   
-  socket.on('addAvailability', (data) => {
-    new Availability(data).save().then((availability) => {
-      io.sockets.emit('availabilityAdded', availability);
+  socket.on('addAppointment', (data) => {
+    new Appointment(data).save().then((appointment) => {
+      io.sockets.emit('appointmentAdded', appointment);
     });
   });
   
-  socket.on('removeAvailability', (data) => {
-    Availability.get(data.id).then((availability) => {
-      availability.delete()
+  socket.on('removeAppointment', (data) => {
+    Appointment.get(data.id).then((appointment) => {
+      appointment.delete()
         .then((result) => {
-          io.sockets.emit('availabilityRemoved', result);
+          io.sockets.emit('appointmentRemoved', result);
         });
     });
   });
