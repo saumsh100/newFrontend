@@ -11,11 +11,11 @@ export default function NavList({ location }) {
     activeItem,
     fixedBottomItem,
   } = styles;
-  
+
   const inactiveClass = navItem;
   const activeClass = classNames(navItem, activeItem);
   const bottomClass = fixedBottomItem;
-  
+
   return (
     <div>
       <Nav>
@@ -38,7 +38,7 @@ export default function NavList({ location }) {
         <NavItem>
           <NavLink
             onClick={() => browserHistory.push('/patients')}
-            
+
             // Has the indexOf because of nested routes
             className={location.pathname.indexOf('/patients') === 0 ? activeClass : inactiveClass}
           >
@@ -96,6 +96,14 @@ export default function NavList({ location }) {
             }
           >
             Settings
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            onClick={() => browserHistory.push('/profile')}
+            className={location.pathname === '/profile' ? activeClass : inactiveClass}
+          >
+            Profile
           </NavLink>
         </NavItem>
       </Nav>

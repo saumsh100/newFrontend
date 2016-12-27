@@ -149,7 +149,7 @@
     "url-loader": "^0.5.7",
     "uuid": "^2.0.2",
     "webpack": "^1.12.15",
-    "zxcvbn": "^4.3.0"
+    "zxcvbn": "^4.4.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.0",

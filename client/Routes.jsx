@@ -103,6 +103,14 @@ export default function Routes({ history }) {
             });
           }}
         />
+        <Route
+          path="profile"
+          getComponent={(location, callback) => {
+            require.ensure(['./components/Profile'], (require) => {
+              callback(null, require('./components/Profile').default);
+            });
+          }}
+        />
       </Route>
     </Router>
   );

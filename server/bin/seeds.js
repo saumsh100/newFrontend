@@ -76,7 +76,7 @@ Patient.save([
   process.exit(1);
 });
 
-const hashedUsers = users.map(({username, password}) => {
+const hashedUsers = users.map(({ username, password }) => {
   return {
     username,
     password: bcrypt.hashSync(password, saltRounds)

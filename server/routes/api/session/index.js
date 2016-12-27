@@ -4,11 +4,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 sessionRouter.post('/', function(req, res, next) {
-  return User.filter({username: req.body.username}).run().then(function(users) {
+  return User.filter({ username: req.body.username }).run().then(function(users) {
     if (!users.length) {
       return next({status: 401})
     }
     const user = users[0];
+    console.log(user);
     return bcrypt.compare(req.body.password, user.password, function (err, match) {
       if (err) {
         return next({status: 500});
@@ -19,9 +20,9 @@ sessionRouter.post('/', function(req, res, next) {
 
       return jwt.sign({
         data: {
-          username: user.username
+          username: user.username,
         },
-      }, 'notsosecret', { expiresIn: '1h' }, function(err, token) {
+      }, 'notsosecret', { expiresIn: '1h' }, function (err, token) {
         if (err) {
           return next({status: 500});
         }
@@ -32,7 +33,7 @@ sessionRouter.post('/', function(req, res, next) {
 });
 
 sessionRouter.delete('/', (req, res, next) => {
-  
+
 });
 
 module.exports = sessionRouter;
