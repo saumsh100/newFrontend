@@ -5,20 +5,29 @@ const thinky = require('../config/thinky');
 const type = thinky.type;
 
 const User = thinky.createModel('User', {
+  id: type.string().uuid(4),
   username: type.string().email().required(),
   password: type.string().required(),
+  activeAccountId: type.string(),
+  permissionId: type.string(),
+  toJson: type.virtual().default(function () {
+    const {
+      username,
+      activeAccountId,
+      id,
+    } = this;
+    return {
+      username,
+      activeAccountId,
+      id,
+    };
+  }),
 }, {
-  pk: 'username',
+  pk: 'id',
 });
 
 User.pre('save', function (next) {
-  console.log('from presave', this);
-  // https://github.com/neumino/thinky/issues/11#issuecomment-241878621
-  // should it be done in this way?? code below is broken
-
-  // if(!this.isModified('password')) console.log('modified');
-  // if(!this.isModified('password')) return next();
-  // const password = bcrypt.hashSync(password, 10);
+  this.password = bcrypt.hashSync(this.password, 10);
   next();
 });
 

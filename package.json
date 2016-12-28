@@ -80,6 +80,7 @@
     "jsdom": "^7.2.2",
     "json-loader": "^0.5.4",
     "jsonwebtoken": "^7.2.1",
+    "jwt-decode": "^2.1.0",
     "keycode": "^2.1.6",
     "knox": "^0.9.2",
     "kue": "^0.10.3",
@@ -147,7 +148,7 @@
     "twilio": "^2.11.1",
     "uglify-js": "~2.4.0",
     "url-loader": "^0.5.7",
-    "uuid": "^2.0.2",
+    "uuid": "^2.0.3",
     "webpack": "^1.12.15",
     "zxcvbn": "^4.4.1"
   },

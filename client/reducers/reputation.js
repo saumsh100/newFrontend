@@ -33,7 +33,6 @@ export default handleActions({
 
   [FETCH_REPUTATION_SUCCESS](state, action) {
     const { data } = action.payload;
-
     return state.merge({
       status: 'success',
       lastFetched: (new Date()).toLocaleString(),

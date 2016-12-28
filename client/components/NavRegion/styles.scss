@@ -7,15 +7,28 @@
   width: $side-nav-width;
   position: fixed;
   height: 100%;
-  border-right: solid 1px #c5d6de;
-  background-color: $color-white;
-  z-index: 10;
+  background-color: $primary-dark;
+  z-index: 20;
 }
 
 .navHidden {
   display: none;
 }
 
+.logoWrapper {
+  // padding-left: 20px;
+  height: $top-nav-height;
+  border-bottom: 0.5px grey solid;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.logoImage {
+  width: 140px;
+  margin-left: 25px;
+  margin-top: -12px;
+}
+
 .navListWrapper {
-  margin-top: $top-nav-height + 10px;
+  //padding-top: $top-nav-height + 10px;
 }

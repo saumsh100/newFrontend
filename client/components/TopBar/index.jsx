@@ -1,36 +1,49 @@
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
+import classNames from 'classnames';
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from '../library';
 import styles from './styles.scss';
 import { browserHistory } from 'react-router';
 
-function logout () {
-  localStorage.setItem('token', '')
-  browserHistory.push('/login');
-}
 
-function TopBar({ setIsCollapsed, isCollapsed }) {
-  return (
-    <header className={styles.topBarContainer}>
-      <div className="container-fluid">
-        <img
-          src="/images/logo.png"
-          alt="CareCru Logo"
-          className={styles.logoImg}
-        />
-        <div
-          className={styles.collapseButton}
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          <i
-            className="fa fa-bars"
-            ariaHidden="true"
-          />
+class TopBar extends Component {
+  constructor () {
+    super()
+    this.logout = this.logout.bind(this);
+  }
+
+  logout() {
+    localStorage.setItem('token', '');
+    browserHistory.push('/login');
+    this.props.logout()
+  }
+
+  render () {
+    const {isCollapsed, setIsCollapsed} = this.props;
+    const topBarClassName = classNames(
+      styles.topBarContainer,
+      isCollapsed ?
+        styles.topBarContainerCollapsed :
+        styles.topBarContainerUnCollapsed
+    );
+    
+    return (
+      <header className={topBarClassName}>
+        <div className="container-fluid">
+          <div
+            className={styles.collapseButton}
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            <i
+              className="fa fa-bars"
+              ariaHidden="true"
+            />
+          </div>
+          <Button onClick={this.logout} className="pull-right">Log Out</Button>
         </div>
-        <Button onClick={logout} className="pull-right">Log Out</Button>
-      </div>
-    </header>
-  );
+      </header>
+    );
+  }
 }
 
 TopBar.propTypes = {
