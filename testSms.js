@@ -1,3 +1,5 @@
+import each from 'lodash/each';
+
 const twilio = require('twilio');
 const cron = require('node-cron');
 const Appointment = require('./server/models/Appointment');
@@ -30,7 +32,7 @@ cron.schedule('*/2 * * * * *', function () {
         const start = appointment.start.getTime();
         return ((start - now) <= mili24hours);
       });
-      shouldNotifyAppointments.map((appointment) => {
+      each(shouldNotifyAppointments, (appointment) => {
         Patient.get(appointment.patientId)
           .then((patient) => {
             twilioClient.sendMessage({

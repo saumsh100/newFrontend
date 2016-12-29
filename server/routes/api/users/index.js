@@ -14,8 +14,6 @@ userRouter.put('/:id', (req, res, next) => {
   const confirm = req.body.confirm;
   if (password !== confirm) return next({ status: 401 });
 
-  delete updatedUser.confirm;
-
   User.get(id).run().then((user) => {
     bcrypt.compare(oldPassword, user.password, function (err, match) {
       if (err) {
