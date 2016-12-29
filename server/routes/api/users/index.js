@@ -13,7 +13,8 @@ userRouter.put('/:id', (req, res, next) => {
   const password = req.body.password;
   const confirm = req.body.confirm;
   if (password !== confirm) return next({ status: 401 });
-  const updatedUser = {};
+
+  delete updatedUser.confirm;
 
   User.get(id).run().then((user) => {
     bcrypt.compare(oldPassword, user.password, function (err, match) {
@@ -23,7 +24,10 @@ userRouter.put('/:id', (req, res, next) => {
       if (!match) {
         return next({ status: 401 });
       }
-      updatedUser.password = password;
+      const updatedUser = req.body;
+      delete updatedUser.confirm;
+      delete updatedUser.oldPassword;
+      console.log(updatedUser);
       user.merge(updatedUser).save().then((newUser) => {
         console.log(newUser);
         return res.end();

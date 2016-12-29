@@ -92,6 +92,7 @@
     "mime": "~1.2.11",
     "mongoose": "~4.2.0",
     "multer": "^1.1.0",
+    "node-cron": "^1.1.2",
     "node-sass": "^3.7.0",
     "node-uuid": "~1.4.1",
     "normalizr": "^2.2.1",

@@ -31,16 +31,16 @@ const sergeyUserId = uuid();
 const SEEDS = {
   Appointment: [
     {
-      start: new Date(2016, 12, 26, 9, 30, 0, 0),
-      end: new Date(2016, 12, 26, 12, 30, 0, 0),
+      start: new Date(2016, 11, 30),
+      end: new Date(2016, 11, 30),
       title: 'Crown Availability',
       id: uuid(),
       accountId,
       patientId: justinPatientId,
     },
     {
-      start: new Date(2016, 12, 27, 14, 30, 0, 0),
-      end: new Date(2016, 12, 27, 15, 30, 0, 0),
+      start: new Date(2016, 12, 27),
+      end: new Date(2016, 12, 27),
       title: 'Cavity Availability',
       id: uuid(),
       accountId,
@@ -98,7 +98,7 @@ const SEEDS = {
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+17808508886',
+      phoneNumber: '+380672552857',
       id: justinPatientId,
     },
     {
