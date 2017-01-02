@@ -20,37 +20,50 @@ const saltRounds = 10;
 
 const accountId = uuid();
 const justinPatientId = uuid();
+const sergeyPatientId = uuid();
 const lonnyUserId = uuid();
 const justinUserId = uuid();
 const markUserId = uuid();
 const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
+const practitionerId = uuid();
+const chairId = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      start: new Date(2016, 12, 26, 9, 30, 0, 0),
-      end: new Date(2016, 12, 26, 12, 30, 0, 0),
-      title: 'Crown Availability',
-      id: uuid(),
-      accountId: accountId,
+      id: type.string().uuid(4),
+      title: 'Justin\'s appointment',
+      start: new Date(2017, 01, 04, 14, 30, 0, 0),
+      end: new Date(2016, 01, 04, 15, 30, 0, 0),
+
       patientId: justinPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
     },
     {
-      start: new Date(2016, 12, 27, 14, 30, 0, 0),
-      end: new Date(2016, 12, 27, 15, 30, 0, 0),
-      title: 'Cavity Availability',
-      id: uuid(),
+      id: type.string().uuid(4),
+      title: 'Sergey\'s appointment',
+      start: new Date(2017, 01, 04, 16, 00, 0, 0),
+      end: new Date(2016, 01, 04, 17, 00, 0, 0),
+
+      patientId: sergeyPatientId,
       accountId: accountId,
-      patientId: justinPatientId,
-    },
-    {
-      start: new Date(2016, 12, 28, 9, 30, 0, 0),
-      end: new Date(2016, 12, 28, 13, 30, 0, 0),
-      title: 'Braces Availability',
-      id: uuid(),
-      accountId: accountId,
-      patientId: justinPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
     },
   ],
   
@@ -103,7 +116,7 @@ const SEEDS = {
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       phoneNumber: '+17782422626',
-      id: uuid(),
+      id: sergeyPatientId,
     },
     {
       firstName: 'Mark',
@@ -158,6 +171,36 @@ const SEEDS = {
       role: 'VIEWER',
       permissions: {},
     }
+  ],
+
+  Service: [
+    {
+      id: serviceId,
+      accountId: accountId,
+      allowedPractitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+  ],
+
+  Practitioner: [
+    {
+      id: practitionerId,
+      accountId: accountId,
+      firstName: 'Chelsea',
+      lastName: 'Mansfield',
+    },
+  ],
+
+  Chair: [
+    {
+      id: chairId,
+      accountId: accountId,
+      name: 'Chair 1',
+      description: '',
+    },
   ]
 };
 
