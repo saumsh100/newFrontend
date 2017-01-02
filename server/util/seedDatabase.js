@@ -34,6 +34,8 @@ module.exports = function seedDatabase(seedJSON, config = { wipeTables: true }) 
     return addSeedsToDatabase(seedJSON)
       .then(() => {
         console.log('Seeding DB complete!');
+        console.log('Adding all the relations');
+        require('../models/relations')
       });
   }).catch((err) => {
     console.error('Promise.all failed for seedDatabase');

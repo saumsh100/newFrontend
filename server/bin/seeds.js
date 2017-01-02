@@ -28,14 +28,15 @@ const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
 const practitionerId = uuid();
 const chairId = uuid();
+const serviceId = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      id: type.string().uuid(4),
+      id: uuid(),
       title: 'Justin\'s appointment',
-      start: new Date(2017, 01, 04, 14, 30, 0, 0),
-      end: new Date(2016, 01, 04, 15, 30, 0, 0),
+      startTime: new Date(2017, 01, 04, 14, 30, 0, 0),
+      endTime: new Date(2016, 01, 04, 15, 30, 0, 0),
 
       patientId: justinPatientId,
       accountId: accountId,
@@ -49,10 +50,10 @@ const SEEDS = {
       isCancelled: false,
     },
     {
-      id: type.string().uuid(4),
+      id: uuid(),
       title: 'Sergey\'s appointment',
-      start: new Date(2017, 01, 04, 16, 00, 0, 0),
-      end: new Date(2016, 01, 04, 17, 00, 0, 0),
+      startTime: new Date(2017, 01, 04, 16, 00, 0, 0),
+      endTime: new Date(2016, 01, 04, 17, 00, 0, 0),
 
       patientId: sergeyPatientId,
       accountId: accountId,

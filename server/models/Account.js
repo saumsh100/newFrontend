@@ -3,6 +3,7 @@ const type = thinky.type;
 
 const Account = thinky.createModel('Account', {
   id: type.string().uuid(4),
+  users: [type.string().uuid(4)],
   name: type.string(),
   vendastaId: type.string(),
   smsPhoneNumber: type.string(),
