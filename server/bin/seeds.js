@@ -177,7 +177,7 @@ const SEEDS = {
     {
       id: serviceId,
       accountId: accountId,
-      allowedPractitioners: [ practitionerId ],
+      practitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -189,6 +189,7 @@ const SEEDS = {
     {
       id: practitionerId,
       accountId: accountId,
+      services: [ serviceId ],
       firstName: 'Chelsea',
       lastName: 'Mansfield',
     },
