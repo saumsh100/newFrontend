@@ -1,0 +1,96 @@
+
+@import '../../../ui.scss';
+
+.group {
+  position: relative;
+  margin-bottom: 45px;
+}
+
+.input {
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #757575;
+  background-color: transparent;
+  &:focus {
+    outline: none;
+  }
+
+  &:focus ~ .label {
+    color: $primary-dark;
+  }
+
+  // Bring the label above the input when focused / filled in
+  &:focus ~ .label, &:valid ~ .label {
+    top: -20px;
+    font-size: 14px;
+  }
+}
+
+.label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+}
+
+.bar {
+  position: relative;
+  display: block;
+  width: 100%;
+  &:before,  &:after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 0px;
+    position: absolute;
+    background: $primary-dark;
+    transition: 0.2s ease all;
+  }
+
+  &:before {
+    left: 50%;
+  }
+
+  &:after {
+    right: 50%;
+  }
+}
+
+// Show animation on focus
+.input:focus ~ .bar {
+  &:before, &:after {
+    width: 50%;
+  }
+}
+
+/*.highlight {
+  position: absolute;
+  height: 60%;
+  width: 100px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.input:focus ~ .highlight {
+  animation: inputHighlighter 0.3s ease;
+}
+
+@keyframes inputHighlighter {
+  from {
+    background: $primary-dark;
+  }
+
+  to {
+    width: 0;
+    background: transparent;
+  }
+}*/
