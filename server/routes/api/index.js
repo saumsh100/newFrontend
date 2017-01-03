@@ -22,6 +22,6 @@ apiRouter.use('/reputation', authMiddleware, reputationRouter);
 apiRouter.use('/session', sessionRouter);
 apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
-apiRouter.use('/users', authMiddleware, userRouter);
+apiRouter.use('/users', userRouter);
 
 module.exports = apiRouter;
