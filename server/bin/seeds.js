@@ -178,6 +178,7 @@ const SEEDS = {
     {
       id: serviceId,
       accountId: accountId,
+      name: 'Routine Checkup',
       practitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,
