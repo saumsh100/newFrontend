@@ -1,41 +1,70 @@
-import { connect } from 'react-redux';
+
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
-import React from 'react';
-import styles from './styles.scss';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { connect } from 'react-redux';
+import { Card, Button, Input } from '../library';
 import login from '../../thunks/auth';
 import { setUsername, setPassword } from '../../actions/auth';
+import styles from './styles.scss';
 
-class Login extends React.Component {
-  setUsername (e) {
-    this.props.setUsername(e.target.value)
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.setUsername = this.setUsername.bind(this);
+    this.setPassword = this.setPassword.bind(this);
+    this.login = this.login.bind(this);
   }
-  setPassword (e) {
-    this.props.setPassword(e.target.value)
+  
+  setUsername(e) {
+    this.props.setUsername(e.target.value);
   }
-  login (e) {
-    e.preventDefault()
-    this.props.login()
+  
+  setPassword(e) {
+    this.props.setPassword(e.target.value);
   }
+  
+  login(e) {
+    e.preventDefault();
+    this.props.login();
+  }
+  
   render() {
     return (
-      <div className={styles.loginForm}>
-        <h4>Log in to CareCru</h4>
-        <Form >
-          <FormGroup>
-            <Label for="email">Email</Label>
-            <Input onChange={this.setUsername.bind(this)} type="text" name="email" id="email" value={this.props.username}/>
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Password</Label>
-            <Input onChange={this.setPassword.bind(this)} type="password" name="password" id="password" value={this.props.password}/>
-          </FormGroup>
-          <Button onClick={this.login.bind(this)}>Submit</Button>
-        </Form>
-      </div>
+      <Card className={styles.loginForm}>
+        <h4>Sign In</h4>
+        <Input
+          id="email"
+          onChange={this.setUsername}
+          type="text"
+          name="email"
+          label="Email"
+          value={this.props.username}
+        />
+        <Input
+          id="password"
+          onChange={this.setPassword}
+          type="password"
+          name="password"
+          label="Password"
+          value={this.props.password}
+        />
+        <Button
+          style={{ width: '100%' }}
+          onClick={this.login}
+        >
+          Sign In
+        </Button>
+      </Card>
     );
   }
 }
+
+Login.propTypes = {
+  setUsername: PropTypes.func.isRequired,
+  setPassword: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+};
 
 function mapStateToProps({ auth }) {
   return {
