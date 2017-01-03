@@ -6,6 +6,8 @@
   color: white;
   text-transform: uppercase;
   background-color: $primary-color;
+  font-size: $font-size;
+  font-weight: 600;
   height: 40px;
   &:active {
     border: none;

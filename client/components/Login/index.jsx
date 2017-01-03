@@ -2,8 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, FormGroup, Label, Input } from 'reactstrap';
-import { Button } from '../library';
+import { Card, Button, Input } from '../library';
 import login from '../../thunks/auth';
 import { setUsername, setPassword } from '../../actions/auth';
 import styles from './styles.scss';
@@ -32,25 +31,31 @@ class Login extends Component {
   
   render() {
     return (
-      <div className={styles.loginForm}>
-        <h4>Log in to CareCru</h4>
-        <Form>
-          <FormGroup>
-            <Label for="email">Email</Label>
-            <Input onChange={this.setUsername} type="text" name="email" id="email" value={this.props.username}/>
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Password</Label>
-            <Input onChange={this.setPassword} type="password" name="password" id="password" value={this.props.password}/>
-          </FormGroup>
-          <Button
-            style={{ width: '100%' }}
-            onClick={this.login.bind(this)}
-          >
-            Sign In
-          </Button>
-        </Form>
-      </div>
+      <Card className={styles.loginForm}>
+        <h4>Sign In</h4>
+        <Input
+          id="email"
+          onChange={this.setUsername}
+          type="text"
+          name="email"
+          label="Email"
+          value={this.props.username}
+        />
+        <Input
+          id="password"
+          onChange={this.setPassword}
+          type="password"
+          name="password"
+          label="Password"
+          value={this.props.password}
+        />
+        <Button
+          style={{ width: '100%' }}
+          onClick={this.login}
+        >
+          Sign In
+        </Button>
+      </Card>
     );
   }
 }
