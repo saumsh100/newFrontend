@@ -7,12 +7,12 @@ import reputation from './reputation';
 import reviews from './reviews';
 import auth from './auth';
 import entities from './entities';
+import patientForm from './patientForm';
 
 export default combineReducers({
   routing,
-  // form,
-
-  // Written by us...
+//  form,
+  patientForm,
   toolbar,
   reputation,
   reviews,

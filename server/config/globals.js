@@ -1,5 +1,5 @@
-
 const path = require('path');
+
 const root = path.normalize(__dirname + '/..');
 
 const environmentVariables = process.env;

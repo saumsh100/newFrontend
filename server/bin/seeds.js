@@ -1,11 +1,12 @@
 
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
-const uuid = require('uuid').v4
+const uuid = require('uuid').v4;
 
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
+
 
 /**
  * Seeds Map is organized by:
@@ -18,6 +19,7 @@ const saltRounds = 10;
  *
  */
 
+
 const accountId = uuid();
 const justinPatientId = uuid();
 const lonnyUserId = uuid();
@@ -29,19 +31,19 @@ const sergeyUserId = uuid();
 const SEEDS = {
   Appointment: [
     {
-      start: new Date(2016, 12, 26, 9, 30, 0, 0),
-      end: new Date(2016, 12, 26, 12, 30, 0, 0),
+      start: new Date(2016, 11, 30),
+      end: new Date(2016, 11, 30),
       title: 'Crown Availability',
       id: uuid(),
-      accountId: accountId,
+      accountId,
       patientId: justinPatientId,
     },
     {
-      start: new Date(2016, 12, 27, 14, 30, 0, 0),
-      end: new Date(2016, 12, 27, 15, 30, 0, 0),
+      start: new Date(2016, 12, 27),
+      end: new Date(2016, 12, 27),
       title: 'Cavity Availability',
       id: uuid(),
-      accountId: accountId,
+      accountId,
       patientId: justinPatientId,
     },
     {
@@ -49,11 +51,11 @@ const SEEDS = {
       end: new Date(2016, 12, 28, 13, 30, 0, 0),
       title: 'Braces Availability',
       id: uuid(),
-      accountId: accountId,
+      accountId,
       patientId: justinPatientId,
     },
   ],
-  
+
   User: [
     {
       username: 'lonny@carecru.com',
@@ -91,12 +93,12 @@ const SEEDS = {
       // accounts: [accountId],
     },
   ],
-  
+
   Patient: [
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+17808508886',
+      phoneNumber: '+380672552857',
       id: justinPatientId,
     },
     {
@@ -119,55 +121,56 @@ const SEEDS = {
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: '+17786558613',
       id: accountId,
-    }
+    },
   ],
 
   Permission: [
     {
       id: uuid(),
       userId: lonnyUserId,
-      accountId: accountId,
+      accountId,
       role: 'OWNER',
-      permissions: {reviews: {create: true}}, // test permission
+      permissions: { reviews: { create: true } }, // test permission
     },
     {
       id: uuid(),
       userId: justinUserId,
-      accountId: accountId,
+      accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
       id: uuid(),
       userId: ashmeetUserId,
-      accountId: accountId,
+      accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
       id: uuid(),
       userId: markUserId,
-      accountId: accountId,
+      accountId,
       role: 'VIEWER',
       permissions: {},
     },
     {
       id: uuid(),
       userId: sergeyUserId,
-      accountId: accountId,
+      accountId,
       role: 'VIEWER',
       permissions: {},
-    }
-  ]
+    },
+  ],
 };
+
 
 seedDatabase(SEEDS)
   .then(() => {
-    console.log('Successfully executed bin/seeds.')
+    console.log('Successfully executed bin/seeds.');
     process.exit();
   })
   .catch((err) => {
-    console.error('Unsuccessfully executed bin/seeds.')
+    console.error('Unsuccessfully executed bin/seeds.');
     console.error(err);
     process.exit(1);
   });

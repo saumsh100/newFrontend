@@ -92,6 +92,7 @@
     "mime": "~1.2.11",
     "mongoose": "~4.2.0",
     "multer": "^1.1.0",
+    "node-cron": "^1.1.2",
     "node-sass": "^3.7.0",
     "node-uuid": "~1.4.1",
     "normalizr": "^2.2.1",
@@ -150,7 +151,7 @@
     "url-loader": "^0.5.7",
     "uuid": "^2.0.3",
     "webpack": "^1.12.15",
-    "zxcvbn": "^4.3.0"
+    "zxcvbn": "^4.4.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.0",
