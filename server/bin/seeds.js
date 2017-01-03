@@ -22,37 +22,51 @@ const saltRounds = 10;
 
 const accountId = uuid();
 const justinPatientId = uuid();
+const sergeyPatientId = uuid();
 const lonnyUserId = uuid();
 const justinUserId = uuid();
 const markUserId = uuid();
 const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
+const practitionerId = uuid();
+const chairId = uuid();
+const serviceId = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      start: new Date(2016, 11, 30),
-      end: new Date(2016, 11, 30),
-      title: 'Crown Availability',
       id: uuid(),
-      accountId,
+      title: 'Justin\'s appointment',
+      startTime: new Date(2017, 01, 04, 14, 30, 0, 0),
+      endTime: new Date(2016, 01, 04, 15, 30, 0, 0),
+
       patientId: justinPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
     },
     {
-      start: new Date(2016, 12, 27),
-      end: new Date(2016, 12, 27),
-      title: 'Cavity Availability',
       id: uuid(),
-      accountId,
-      patientId: justinPatientId,
-    },
-    {
-      start: new Date(2016, 12, 28, 9, 30, 0, 0),
-      end: new Date(2016, 12, 28, 13, 30, 0, 0),
-      title: 'Braces Availability',
-      id: uuid(),
-      accountId,
-      patientId: justinPatientId,
+      title: 'Sergey\'s appointment',
+      startTime: new Date(2017, 01, 04, 16, 00, 0, 0),
+      endTime: new Date(2016, 01, 04, 17, 00, 0, 0),
+
+      patientId: sergeyPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
     },
   ],
 
@@ -105,7 +119,7 @@ const SEEDS = {
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       phoneNumber: '+17782422626',
-      id: uuid(),
+      id: sergeyPatientId,
     },
     {
       firstName: 'Mark',
@@ -159,6 +173,38 @@ const SEEDS = {
       accountId,
       role: 'VIEWER',
       permissions: {},
+    },
+  ],
+
+  Service: [
+    {
+      id: serviceId,
+      accountId: accountId,
+      name: 'Routine Checkup',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+  ],
+
+  Practitioner: [
+    {
+      id: practitionerId,
+      accountId: accountId,
+      services: [ serviceId ],
+      firstName: 'Chelsea',
+      lastName: 'Mansfield',
+    },
+  ],
+
+  Chair: [
+    {
+      id: chairId,
+      accountId: accountId,
+      name: 'Chair 1',
+      description: '',
     },
   ],
 };

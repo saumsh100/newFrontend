@@ -7,6 +7,7 @@ const handleErrors = require('../middleware/handleErrors');
 const chalk = require('chalk');
 const app = require('../config/express');
 require('../models')
+require('../models/relations')
 
 // require('../config/kue');
 
