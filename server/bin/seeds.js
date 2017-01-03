@@ -163,7 +163,6 @@ const SEEDS = {
   ],
 };
 
-
 seedDatabase(SEEDS)
   .then(() => {
     console.log('Successfully executed bin/seeds.');

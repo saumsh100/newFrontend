@@ -26,9 +26,4 @@ const User = thinky.createModel('User', {
   pk: 'id',
 });
 
-User.pre('save', function (next) {
-  this.password = bcrypt.hashSync(this.password, 10);
-  next();
-});
-
 module.exports = User;
