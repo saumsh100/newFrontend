@@ -13,8 +13,9 @@ User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id')
 Permission.belongsTo(User, 'user', 'userId', 'id')
 Permission.belongsTo(Account, 'account', 'accountId', 'id')
 
-User.hasAndBelongsToMany(Account, 'accounts', 'id', 'id')
-Account.hasAndBelongsToMany(User, 'users', 'id', 'id')
+// TODO check if we need
+// User.hasAndBelongsToMany(Account, 'accounts', 'id', 'id')
+// Account.hasAndBelongsToMany(User, 'users', 'id', 'id')
 
 // foreign keys in Appointment
 Appointment.belongsTo(Patient, 'patient', 'patientId', 'id')
