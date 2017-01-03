@@ -1,11 +1,12 @@
 
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
-const uuid = require('uuid').v4
+const uuid = require('uuid').v4;
 
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
+
 
 /**
  * Seeds Map is organized by:
@@ -17,6 +18,7 @@ const saltRounds = 10;
  * }
  *
  */
+
 
 const accountId = uuid();
 const justinPatientId = uuid();
@@ -67,7 +69,7 @@ const SEEDS = {
       isCancelled: false,
     },
   ],
-  
+
   User: [
     {
       username: 'lonny@carecru.com',
@@ -105,12 +107,12 @@ const SEEDS = {
       // accounts: [accountId],
     },
   ],
-  
+
   Patient: [
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+17808508886',
+      phoneNumber: '+380672552857',
       id: justinPatientId,
     },
     {
@@ -133,45 +135,45 @@ const SEEDS = {
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: '+17786558613',
       id: accountId,
-    }
+    },
   ],
 
   Permission: [
     {
       id: uuid(),
       userId: lonnyUserId,
-      accountId: accountId,
+      accountId,
       role: 'OWNER',
-      permissions: {reviews: {create: true}}, // test permission
+      permissions: { reviews: { create: true } }, // test permission
     },
     {
       id: uuid(),
       userId: justinUserId,
-      accountId: accountId,
+      accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
       id: uuid(),
       userId: ashmeetUserId,
-      accountId: accountId,
+      accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
       id: uuid(),
       userId: markUserId,
-      accountId: accountId,
+      accountId,
       role: 'VIEWER',
       permissions: {},
     },
     {
       id: uuid(),
       userId: sergeyUserId,
-      accountId: accountId,
+      accountId,
       role: 'VIEWER',
       permissions: {},
-    }
+    },
   ],
 
   Service: [
@@ -204,16 +206,17 @@ const SEEDS = {
       name: 'Chair 1',
       description: '',
     },
-  ]
+  ],
 };
+
 
 seedDatabase(SEEDS)
   .then(() => {
-    console.log('Successfully executed bin/seeds.')
+    console.log('Successfully executed bin/seeds.');
     process.exit();
   })
   .catch((err) => {
-    console.error('Unsuccessfully executed bin/seeds.')
+    console.error('Unsuccessfully executed bin/seeds.');
     console.error(err);
     process.exit(1);
   });

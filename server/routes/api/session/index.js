@@ -20,34 +20,33 @@ sessionRouter.post('/', function(req, res, next) {
       if (!match) {
         return next({status: 401});
       }
-      console.log(user)
-
+      console.log(user);
       return Permission
-      .filter({userId: user.id})
+      .filter({ userId: user.id })
       .run()
-      .then(function (permission){
+      .then(function (permission) {
         if (!permission || !permission[0]) {
-          return next({status: 500});
+          return next({ status: 500 });
         }
         permission = permission[0]
         const data = {
           user: user.toJson,
           role: permission.role,
           permissions: permission.permissions || {},
-        }
-        return jwt.sign(data, 'notsosecret', { expiresIn: '1d' }, function(err, token) {
+        };
+        return jwt.sign(data, 'notsosecret', { expiresIn: '1d' }, function (err, token) {
           if (err) {
-            return next({status: 500});
+            return next({ status: 500 });
           }
-          return res.json({token})
+          return res.json({ token });
         });
-      })
-    })
+      });
+    });
   });
 });
 
 sessionRouter.delete('/', (req, res, next) => {
-  
+
 });
 
 module.exports = sessionRouter;
