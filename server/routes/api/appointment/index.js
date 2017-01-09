@@ -8,6 +8,11 @@ const appointmentSchema = new Schema('appointments');
 appointmentsRouter.get('/', (req, res, next) => {
   Appointment.filter({
     accountId: req.user.activeAccountId
+  }).getJoin({
+    patient: true,
+    practitioner: {services: false},
+    service: {practitioners: false},
+    chair: true,
   }).run()
     .then(appointments => res.send(normalize(appointments, arrayOf(appointmentSchema))))
     .catch(next);
@@ -16,6 +21,11 @@ appointmentsRouter.get('/', (req, res, next) => {
 appointmentsRouter.get('/:patientId', (req, res, next) => {
   Appointment.filter({
     patientId: req.params.patientId
+  }).getJoin({
+    patient: true,
+    practitioner: {services: false},
+    service: {practitioners: false},
+    chair: true,
   }).run()
     .then(appointments => res.send(normalize(appointments, arrayOf(appointmentSchema))))
     .catch(next);

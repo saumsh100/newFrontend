@@ -5,6 +5,9 @@ import { handleActions } from 'redux-actions';
 import {
   FETCH_ENTITIES,
   RECEIVE_ENTITIES,
+  DELETE_ENTITY,
+  ADD_ENTITY,
+  UPDATE_ENTITY,
 } from '../constants';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
@@ -30,7 +33,7 @@ export default handleActions({
   [FETCH_ENTITIES](state, { payload: key }) {
     return state.setIn([key, 'isFetching'], true);
   },
-  
+
   [RECEIVE_ENTITIES](state, { payload: { entities } }) {
     // TODO: update all appropriate entitites in state
     let newState = state;
@@ -41,19 +44,35 @@ export default handleActions({
         newState = newState.setIn([key, 'models', id], newModel);
       });
     });
-    
+
     return newState;
+  },
+
+  [DELETE_ENTITY](state, { payload: { key, entity } }) {
+    return state.deleteIn([key, 'models', Object.keys(entity[key])[0]]);
+  },
+
+  [ADD_ENTITY](state, { payload: { key, entity } }) {
+    const id = Object.keys(entity[key])[0];
+    const newEntity = entity[key][id];
+    const newModel = new Models[key](newEntity);
+    return state.setIn([key, 'models', id], newModel);
+  },
+
+  [UPDATE_ENTITY](state, { payload: { key, entity } }) {
+    const id = Object.keys(entity[key])[0];
+    const updatedEntity = entity[key][id];
+    const updatedModel = new Models[key](updatedEntity);
+    return state.updateIn([key, 'models', id], () => updatedModel);
   },
 }, initialState);
 
-/*function updateEntityStateWithEntities(state, key, id, modelData) {
+/* function updateEntityStateWithEntities(state, key, id, modelData) {
   const entityState = state.get(key);
-  
+
   if (entityState.get('isCollection')) {
     return state.setIn([key, 'models', id], entityState.getModel()(modelData));
   } else {
     return state.set('')
   }
 }*/
-
-
