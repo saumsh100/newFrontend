@@ -131,7 +131,7 @@
     "redux": "^3.4.0",
     "redux-actions": "^0.9.1",
     "redux-batch-middleware": "^0.2.0",
-    "redux-form": "^6.3.2",
+    "redux-form": "^6.4.3",
     "redux-immutable": "^3.0.6",
     "redux-saga": "^0.11.0",
     "redux-thunk": "^2.0.1",

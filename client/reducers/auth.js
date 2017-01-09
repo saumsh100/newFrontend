@@ -45,8 +45,9 @@ export default handleActions({
       user: {
         id: null,
         username: null,
-        activeAccountId: null
+        activeAccountId: null,
       },
+      
       permissions: null,
       role: null,
     });
