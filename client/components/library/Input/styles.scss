@@ -97,3 +97,28 @@ $empty-grey: $primary-darkgrey;
   top: 41px;
   font-size: 12px;
 }
+
+/*.highlight {
+  position: absolute;
+  height: 60%;
+  width: 100px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.input:focus ~ .highlight {
+  animation: inputHighlighter 0.3s ease;
+}
+
+@keyframes inputHighlighter {
+  from {
+    background: $primary-dark;
+  }
+
+  to {
+    width: 0;
+    background: transparent;
+  }
+}*/

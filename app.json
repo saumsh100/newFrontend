@@ -23,6 +23,15 @@
     },
     "VENDASTA_API_USER": {
       "required": true
+    },
+    "TWILIO_ACCOUNT_SID": {
+      "required": true
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "required": true
+    },
+    "TWILIO_NUMBER": {
+      "required": true
     }
   },
   "formation": {
