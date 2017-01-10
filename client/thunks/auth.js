@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import { push } from 'react-router-redux';
@@ -6,10 +7,10 @@ import { loginSuccess } from '../actions/auth';
 
 export default function login() {
   return function (dispatch, getState) {
-    const { form: { login: values } } = getState();
+    const { form: { login: { values: { email, password } } } } = getState();
     const loginDetails = {
-      username: values.username,
-      password: values.password,
+      username: email,
+      password,
     };
     
     return axios
@@ -21,9 +22,10 @@ export default function login() {
         dispatch(push('/'));
       })
       .catch((err) => {
+        const { data } = err;
         throw new SubmissionError({
-          email: 'Invalid credentials',
-          password: 'Invalid credentials',
+          email: data,
+          password: data,
         });
       });
   };

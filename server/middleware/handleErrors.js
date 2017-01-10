@@ -9,7 +9,7 @@ function logError(err, req, res, next) {
 }
 
 function sendError(err, req, res, next) {
-  return res.status(err.status || 500).send(err.message);
+  return res.status(err.status || 500).send(err.message || 'Not a StatusError');
 }
 
 module.exports = [logError, sendError];

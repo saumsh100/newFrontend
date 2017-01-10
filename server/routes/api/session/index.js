@@ -1,51 +1,57 @@
+
 const sessionRouter = require('express').Router();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../../../models/User');
 const Permission = require('../../../models/Permission');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const StatusError = require('../../../util/StatusError');
 
-sessionRouter.post('/', function(req, res, next) {
+sessionRouter.post('/', (req, res, next) => {
+  console.log(req.body.username, req.body.password);
+  
   return User
-  .filter({username: req.body.username})
-  .run()
-  .then(function(users) {
-    if (!users.length) {
-      return next({status: 401})
-    }
-    const user = users[0];
-    return bcrypt.compare(req.body.password, user.password, function (err, match) {
-      if (err) {
-        return next({status: 500});
+    .filter({ username: req.body.username })
+    .run()
+    .then((users) => {
+      if (!users.length) {
+        return next(StatusError(500, 'No user found'));
       }
-      if (!match) {
-        return next({status: 401});
-      }
-      return Permission
-      .filter({ userId: user.id })
-      .run()
-      .then(function (permission) {
-        if (!permission || !permission[0]) {
-          return next({ status: 500 });
+      
+      const user = users[0];
+      return bcrypt.compare(req.body.password, user.password, (err, match) => {
+        if (err) {
+          return next(StatusError(500, 'Error comparing passwords'));
         }
-        permission = permission[0]
-        const data = {
-          user: user.toJson,
-          role: permission.role,
-          permissions: permission.permissions || {},
-        };
-        return jwt.sign(data, 'notsosecret', { expiresIn: '1d' }, function (err, token) {
-          if (err) {
-            return next({ status: 500 });
-          }
-          return res.json({ token });
-        });
+        
+        if (!match) {
+          return next(StatusError(401, 'Invalid credentials'));
+        }
+        
+        return Permission
+          .filter({ userId: user.id })
+          .run()
+          .then((permission) => {
+            if (!permission || !permission[0]) {
+              return next(StatusError(500, 'User has no account permissions'));
+            }
+            
+            permission = permission[0];
+            const data = {
+              user: user.toJson,
+              role: permission.role,
+              permissions: permission.permissions || {},
+            };
+            
+            return jwt.sign(data, 'notsosecret', { expiresIn: '1d' }, (err, token) => {
+              if (err) {
+                return next(StatusError(500, 'Error signing the token'));
+              }
+              
+              return res.json({ token });
+            });
+          });
       });
     });
-  });
-});
-
-sessionRouter.delete('/', (req, res, next) => {
-
 });
 
 module.exports = sessionRouter;

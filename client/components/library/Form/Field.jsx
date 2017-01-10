@@ -15,8 +15,6 @@ function ReduxField(props) {
     component = RFComponents[component];
   }
   
-  console.log('component', component);
-  
   // need to remove required attribute from ReduxField as the Input component uses it
   // extend component attribute for reduxForm's Field props
   const newProps = Object.assign({}, omit(props, ['required']), { component });
