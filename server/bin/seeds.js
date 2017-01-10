@@ -27,24 +27,25 @@ const justinUserId = uuid();
 const markUserId = uuid();
 const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
+const alexUserId = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      start: new Date(2016, 11, 30),
-      end: new Date(2016, 11, 30),
+      start: new Date(2017, 0, 11, 9, 30, 0, 0),
+      end: new Date(2017, 0, 11, 10, 30, 0, 0),
       title: 'Crown Availability',
       id: uuid(),
       accountId,
-      patientId: justinPatientId,
+      patientId: alexUserId,
     },
     {
-      start: new Date(2016, 12, 27),
-      end: new Date(2016, 12, 27),
+      start: new Date(2017, 0, 11, 11, 30, 0, 0),
+      end: new Date(2017, 0, 11, 12, 30, 0, 0),
       title: 'Cavity Availability',
       id: uuid(),
       accountId,
-      patientId: justinPatientId,
+      patientId: alexUserId,
     },
     {
       start: new Date(2016, 12, 28, 9, 30, 0, 0),
@@ -92,13 +93,19 @@ const SEEDS = {
       activeAccountId: accountId,
       // accounts: [accountId],
     },
+    {
+      username: 'alex@carecru.com',
+      password: bcrypt.hashSync('alex', saltRounds),
+      id: alexUserId,
+      activeAccountId: accountId,
+    },
   ],
 
   Patient: [
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+380672552857',
+      phoneNumber: '',
       id: justinPatientId,
     },
     {
@@ -112,6 +119,12 @@ const SEEDS = {
       lastName: 'Joseph',
       phoneNumber: '+17788654451',
       id: uuid(),
+    },
+    {
+      firstName: 'Alex',
+      lastName: 'Bashliy',
+      phoneNumber: '+380672552857',
+      id: alexUserId,
     },
   ],
 

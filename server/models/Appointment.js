@@ -9,6 +9,11 @@ const Appointment = thinky.createModel('Appointment', {
   start: type.date().required(),
   end: type.date().required(),
   createdAt: type.date(),
+  reminderCode: type.string().default(() => (
+     `C${Math.floor((Math.random() * 90) + 10)}`
+  )),
+  confirmed: type.boolean().default(false),
 });
+
 
 module.exports = Appointment;
