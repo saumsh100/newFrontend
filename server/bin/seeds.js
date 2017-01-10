@@ -43,7 +43,7 @@ const SEEDS = {
       title: 'Crown Availability',
       id: uuid(),
       accountId,
-      patientId: alexUserId,
+      patientId: justinPatientId,
       serviceId: serviceId,
       practitionerId: practitionerId,
       chairId: chairId,
@@ -132,7 +132,7 @@ const SEEDS = {
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '',
+      phoneNumber: '+17784012237',
       id: justinPatientId,
     },
     {

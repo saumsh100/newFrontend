@@ -23,7 +23,6 @@ twilioRouter.post('/message', (req, res, next) => {
     MessageSid,
     To,
     From,
-    Body,
     ToZip,
     ToCity,
     ToState,
@@ -37,6 +36,8 @@ twilioRouter.post('/message', (req, res, next) => {
     NumSegments,
     ApiVersion,
   } = req.body;
+
+  const Body = req.body.Body.trim();
 
   // Easily parse mediaData
   let mediaData = {};
@@ -85,7 +86,7 @@ twilioRouter.post('/message', (req, res, next) => {
       console.log(`Received communication from ${patient.firstName}`);
       textMessageData.patientId = patient.id;
       TextMessage.save(textMessageData);
-      Appointment.filter({ reminderCode: Body }).run().then((a) => {
+      Appointment.filter({ reminderCode: Body, patientId: patient.id }).run().then((a) => {
         a[0].merge({ confirmed: true }).save().then((updatedAppointment) => {
           console.log(updatedAppointment);
         });
