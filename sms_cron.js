@@ -6,13 +6,13 @@ const twilio = require('./server/config/globals').twilio;
 const twilioClient = require('./server/config/twilio');
 
 // test pattern '*/2 * * * * *'
-cron.schedule('0 */30 * * * *', () => {
+cron.schedule('*/2 * * * * *', () => {
   const mili24hours = 86400000;
   Appointment.run()
     .then((appointments) => {
       const shouldNotifyAppointments = appointments.filter((appointment) => {
         const now = Date.now();
-        const start = appointment.start.getTime();
+        const start = appointment.startTime.getTime();
         return (((start - now) <= mili24hours) && appointment.confirmed === false);
       });
       each(shouldNotifyAppointments, (appointment) => {

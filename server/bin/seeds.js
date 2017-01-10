@@ -22,38 +22,65 @@ const saltRounds = 10;
 
 const accountId = uuid();
 const justinPatientId = uuid();
+const sergeyPatientId = uuid();
 const lonnyUserId = uuid();
 const justinUserId = uuid();
 const markUserId = uuid();
 const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
+
 const alexUserId = uuid();
+
+const practitionerId = uuid();
+const chairId = uuid();
+const serviceId = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      start: new Date(2017, 0, 11, 9, 30, 0, 0),
-      end: new Date(2017, 0, 11, 10, 30, 0, 0),
+      startTime: new Date(2017, 0, 11, 9, 30, 0, 0),
+      endTime: new Date(2017, 0, 11, 10, 30, 0, 0),
       title: 'Crown Availability',
       id: uuid(),
       accountId,
       patientId: alexUserId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
     },
     {
-      start: new Date(2017, 0, 11, 11, 30, 0, 0),
-      end: new Date(2017, 0, 11, 12, 30, 0, 0),
-      title: 'Cavity Availability',
-      id: uuid(),
       accountId,
-      patientId: alexUserId,
-    },
-    {
-      start: new Date(2016, 12, 28, 9, 30, 0, 0),
-      end: new Date(2016, 12, 28, 13, 30, 0, 0),
-      title: 'Braces Availability',
       id: uuid(),
-      accountId,
+      title: 'Justin\'s appointment',
+      startTime: new Date(2017, 1, 4, 14, 30, 0, 0),
+      endTime: new Date(2016, 1, 4, 15, 30, 0, 0),
+
       patientId: justinPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
+      endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
+
+      patientId: sergeyPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
     },
   ],
 
@@ -112,7 +139,7 @@ const SEEDS = {
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       phoneNumber: '+17782422626',
-      id: uuid(),
+      id: sergeyPatientId,
     },
     {
       firstName: 'Mark',
@@ -174,8 +201,39 @@ const SEEDS = {
       permissions: {},
     },
   ],
-};
 
+  Service: [
+    {
+      id: serviceId,
+      accountId: accountId,
+      name: 'Routine Checkup',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+  ],
+
+  Practitioner: [
+    {
+      id: practitionerId,
+      accountId: accountId,
+      services: [ serviceId ],
+      firstName: 'Chelsea',
+      lastName: 'Mansfield',
+    },
+  ],
+
+  Chair: [
+    {
+      id: chairId,
+      accountId: accountId,
+      name: 'Chair 1',
+      description: '',
+    },
+  ],
+};
 
 seedDatabase(SEEDS)
   .then(() => {

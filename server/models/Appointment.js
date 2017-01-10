@@ -3,16 +3,40 @@ const thinky = require('../config/thinky');
 const type = thinky.type;
 
 const Appointment = thinky.createModel('Appointment', {
-  // TODO: figure out why adding .uuid() breaks...
   id: type.string().uuid(4),
   title: type.string(),
-  start: type.date().required(),
-  end: type.date().required(),
+  startTime: type.date().required(),
+  endTime: type.date().required(),
   createdAt: type.date(),
   reminderCode: type.string().default(() => (
      `C${Math.floor((Math.random() * 90) + 10)}`
   )),
   confirmed: type.boolean().default(false),
+
+
+  comment: type.string(),
+
+  // Relations
+  patientId: type.string().uuid(4).required(),
+  accountId: type.string().uuid(4).required(),
+  serviceId: type.string().uuid(4).required(),
+  practitionerId: type.string().uuid(4).required(),
+  chairId: type.string().uuid(4),
+
+  // Lifecycle Attributes
+  isClinicConfirmed: type.boolean(),
+  isPatientConfirmed: type.boolean(),
+  isSyncedWithPMS: type.boolean(),
+  isCancelled: type.boolean(),
+
+  // Custom buffer time in minutes
+  customBufferTime: type.number().integer(),
+
+  // Split Appointments
+  isSplit: type.boolean(),
+  splitAppointments: [ type.string().uuid(4) ],
+  isParent: type.boolean(),
+
 });
 
 

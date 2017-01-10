@@ -20,7 +20,6 @@ sessionRouter.post('/', function(req, res, next) {
       if (!match) {
         return next({status: 401});
       }
-      console.log(user);
       return Permission
       .filter({ userId: user.id })
       .run()
