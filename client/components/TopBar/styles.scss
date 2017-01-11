@@ -2,15 +2,7 @@
 @import '../../ui';
 
 .topBarContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: $top-nav-height;
   background-color: $primary-grey;
-  padding-left: $side-nav-width;
-  padding-top: 20px;
-  z-index: 10;
 }
 
 .topBarContainerCollapsed {

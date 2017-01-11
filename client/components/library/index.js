@@ -1,18 +1,24 @@
 
+import AppBar from './AppBar';
 import Button from './Button';
 import Card from './Card';
-import Input from './Input';
-import Modal from './Modal';
 import Form, { Field } from './Form';
+import Icon from './Icon';
+import Input from './Input';
+import Link from './Link';
+import Modal from './Modal';
 
 export { ModalHeader, ModalBody, ModalFooter } from './RSModal';
 export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';
 
 export {
+  AppBar,
   Button,
   Card,
-  Input,
-  Modal,
-  Form,
   Field,
+  Form,
+  Icon,
+  Input,
+  Link,
+  Modal,
 };

@@ -1,111 +1,60 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { browserHistory, Link } from 'react-router';
-import { Nav, NavItem, NavLink } from '../library';
+import { Nav, NavItem, Link, Icon } from '../library';
 import styles from './styles.scss';
 
 export default function NavList({ location }) {
   const {
     navItem,
     activeItem,
-    fixedBottomItem,
+    label,
+    activeLabel,
   } = styles;
 
   const inactiveClass = navItem;
   const activeClass = classNames(navItem, activeItem);
-  const bottomClass = fixedBottomItem;
+  
+  const inactiveLabelClass = label;
+  const activeLabelClass = classNames(label, activeLabel);
+  
+  const SingleNavItem = ({ path, icon, label, active }) => {
+    active = active || location.pathname === path;
+    return (
+      <Link to={path}>
+        <NavItem className={active ? activeClass : inactiveClass}>
+          <Icon name={icon} className={styles.icon} />
+          <div className={active ? activeLabelClass : inactiveLabelClass}>
+            {label}
+          </div>
+        </NavItem>
+      </Link>
+    );
+  };
+  
+  const MultiNavItem = ({ path, icon, label, subItems }) => {
+    const active = location.pathname.indexOf('/patients') === 0;
+    return (
+      <div>
+        <SingleNavItem path={path} icon={icon} label={label} active={active} />
+      </div>
+    );
+  };
 
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/')}
-            className={location.pathname === '/' ? activeClass : inactiveClass}
-          >
-            Dashboard
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/schedule')}
-            className={location.pathname === '/schedule' ? activeClass : inactiveClass}
-          >
-            Schedule
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/patients')}
-
-            // Has the indexOf because of nested routes
-            className={location.pathname.indexOf('/patients') === 0 ? activeClass : inactiveClass}
-          >
-            Patients
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/reputation')}
-            className={location.pathname === '/reputation' ? activeClass : inactiveClass}
-          >
-            Reputation
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/social')}
-            className={location.pathname === '/social' ? activeClass : inactiveClass}
-          >
-            Social
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/loyalty')}
-            className={location.pathname === '/loyalty' ? activeClass : inactiveClass}
-          >
-            Loyalty
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/seo')}
-            className={location.pathname === '/seo' ? activeClass : inactiveClass}
-          >
-            SEO
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/newsletters')}
-            className={location.pathname === '/newsletters' ? activeClass : inactiveClass}
-          >
-            Newsletters
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/settings')}
-            className={
-              classNames(
-                location.pathname === '/settings' ? activeClass : inactiveClass,
-                bottomClass
-              )
-            }
-          >
-            Settings
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            onClick={() => browserHistory.push('/profile')}
-            className={location.pathname === '/profile' ? activeClass : inactiveClass}
-          >
-            Profile
-          </NavLink>
-        </NavItem>
+        <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
+        <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" />
+        <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
+        <MultiNavItem  path="/patients" icon="heart" label="Patient Management" />
+        <SingleNavItem path="/reputation" icon="star" label="Reputation" />
+        <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" />
+        <SingleNavItem path="/loyalty" icon="trophy" label="Loyalty" />
+        <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" />
+        <SingleNavItem path="/website" icon="desktop" label="Website" />
+        <SingleNavItem path="/settings" icon="cogs" label="Account Settings" />
+        <SingleNavItem path="/profile" icon="tachometer" label="Profile" />
       </Nav>
     </div>
   );

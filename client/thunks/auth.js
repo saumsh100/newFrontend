@@ -7,10 +7,14 @@ import { loginSuccess } from '../actions/auth';
 
 export default function login() {
   return function (dispatch, getState) {
-    const { form: { login: { values: { email, password } } } } = getState();
+    // TODO: this should really be refactored so we aren't accessing state for form values
+    // TODO: change to use values onSubmit
+    const { form: { login: { values } } } = getState();
+    // reduxForm will not have this set if form is not dirty
+    if (!values) return;
     const loginDetails = {
-      username: email,
-      password,
+      username: values.email,
+      password: values.password,
     };
     
     return axios

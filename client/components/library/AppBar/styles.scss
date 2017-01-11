@@ -1,0 +1,16 @@
+
+@import '../../../ui.scss';
+
+.appBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+  height: $top-nav-height;
+  padding-left: $side-nav-width;
+  z-index: 10;
+  width: 100%;
+}

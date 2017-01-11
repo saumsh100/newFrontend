@@ -16,6 +16,14 @@ export default function Routes({ history }) {
           }}
         />
         <Route
+          path="intelligence"
+          getComponent={(location, callback) => {
+            require.ensure(['./containers/IntelligenceContainer'], (require) => {
+              callback(null, require('./containers/IntelligenceContainer').default);
+            });
+          }}
+        />
+        <Route
           path="schedule"
           getComponent={(location, callback) => {
             require.ensure(['./components/Schedule'], (require) => {
@@ -80,7 +88,7 @@ export default function Routes({ history }) {
           }}
         />
         <Route
-          path="seo"
+          path="newsletters"
           getComponent={(location, callback) => {
             require.ensure(['./containers/AccountContainer'], (require) => {
               callback(null, require('./containers/AccountContainer').default);
@@ -88,7 +96,15 @@ export default function Routes({ history }) {
           }}
         />
         <Route
-          path="newsletters"
+          path="website"
+          getComponent={(location, callback) => {
+            require.ensure(['./containers/AccountContainer'], (require) => {
+              callback(null, require('./containers/AccountContainer').default);
+            });
+          }}
+        />
+        <Route
+          path="roadmap"
           getComponent={(location, callback) => {
             require.ensure(['./containers/AccountContainer'], (require) => {
               callback(null, require('./containers/AccountContainer').default);
