@@ -10,12 +10,10 @@ const TextMessage = require('../../models/TextMessage');
 const Appointment = require('../../models/Appointment');
 const Patient = require('../../models/Patient');
 const thinky = require('../../config/thinky');
+const twilio = require('../../config/globals').twilio;
+const twilioClient = require('../../config/twilio');
 
 // Receive all incoming SMS traffic to the Twilio number
-twilioRouter.get('/message', (req, res, next) => {
-  res.write('norm');
-  res.end();
-});
 
 twilioRouter.post('/message', (req, res, next) => {
   const {
@@ -86,11 +84,19 @@ twilioRouter.post('/message', (req, res, next) => {
       console.log(`Received communication from ${patient.firstName}`);
       textMessageData.patientId = patient.id;
       TextMessage.save(textMessageData);
-      Appointment.filter({ reminderCode: Body, patientId: patient.id }).run().then((a) => {
-        a[0].merge({ confirmed: true }).save().then((updatedAppointment) => {
-          console.log(updatedAppointment);
+      if (Body === 'C') {
+        Appointment.filter({ patientId: patient.id, confirmed: false }).orderBy('startTime').run().then((appArray) => {
+          appArray[0].merge({ confirmed: true }).save().then((confirmedAppointment) => {
+            console.log(confirmedAppointment);
+            twilioClient.sendMessage({
+              from: twilio.number,
+              to: patient.phoneNumber,
+              body: 'Your Appointment is now confirmed!',
+            })
+            .then(result => console.log(result));
+          });
         });
-      });
+      }
     })
     .catch(() => {
       // Assume the Patient does not exist.

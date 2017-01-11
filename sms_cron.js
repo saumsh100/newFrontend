@@ -21,7 +21,7 @@ cron.schedule('*/2 * * * * *', () => {
             twilioClient.sendMessage({
               from: twilio.number,
               to: patient.phoneNumber,
-              body: `Your Appointment is 24 hours away. Send "${appointment.reminderCode}" to confirm`,
+              body: 'Your Appointment is 24 hours away. Send "C"  to confirm',
             })
               .then(result => console.log(result));
           });

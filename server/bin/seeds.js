@@ -30,7 +30,7 @@ const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
 
 const alexUserId = uuid();
-
+const alexPatientId = uuid();
 const practitionerId = uuid();
 const chairId = uuid();
 const serviceId = uuid();
@@ -38,12 +38,23 @@ const serviceId = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 0, 11, 9, 30, 0, 0),
-      endTime: new Date(2017, 0, 11, 10, 30, 0, 0),
-      title: 'Crown Availability',
+      startTime: new Date(2017, 0, 12, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 12, 10, 30, 0, 0),
+      title: 'Sooner Availability',
       id: uuid(),
       accountId,
-      patientId: justinPatientId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      startTime: new Date(2017, 0, 12, 14, 30, 0, 0),
+      endTime: new Date(2017, 0, 12, 15, 30, 0, 0),
+      title: 'Later Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
       serviceId: serviceId,
       practitionerId: practitionerId,
       chairId: chairId,
@@ -150,8 +161,8 @@ const SEEDS = {
     {
       firstName: 'Alex',
       lastName: 'Bashliy',
-      phoneNumber: '+380672552857',
-      id: alexUserId,
+      phoneNumber: '+19782521845',
+      id: alexPatientId,
     },
   ],
 
