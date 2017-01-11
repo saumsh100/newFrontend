@@ -32,6 +32,7 @@ const sergeyUserId = uuid();
 const alexUserId = uuid();
 const alexPatientId = uuid();
 const practitionerId = uuid();
+const practitionerId2 = uuid();
 const chairId = uuid();
 const serviceId = uuid();
 
@@ -233,6 +234,58 @@ const SEEDS = {
       services: [ serviceId ],
       firstName: 'Chelsea',
       lastName: 'Mansfield',
+    },
+    {
+      id: practitionerId2,
+      accountId,
+      services: [serviceId],
+      firstName: 'Perry',
+      lastName: 'Cox',
+    },
+  ],
+
+  TextMessage: [
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      practitionerId,
+      body: 'from Chelsea',
+      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      practitionerId,
+      body: 'from Chelsea',
+      createdAt: new Date(2017, 0, 6, 12, 30, 0, 0),
+    },
+    {
+      id: uuid(),
+      patientId: justinPatientId,
+      practitionerId,
+      body: 'from Chelsea2',
+      createdAt: new Date(2017, 0, 2, 12, 30, 0, 0),
+    },
+    {
+      id: uuid(),
+      patientId: justinPatientId,
+      practitionerId: practitionerId2,
+      body: 'from Perry',
+      createdAt: new Date(2017, 0, 3, 12, 30, 0, 0),
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      practitionerId: practitionerId2,
+      body: 'from Perry',
+      createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      practitionerId: practitionerId2,
+      body: 'from Perry2',
+      createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
     },
   ],
 

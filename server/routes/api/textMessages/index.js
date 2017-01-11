@@ -13,9 +13,9 @@ textMessagesRouter.get('/', (req, res, next) => {
     limit,
     offset,
   } = req.query;
-  
+
   // TODO: needs an auth layer to see if this requesting account has access to this patient
-  
+
   TextMessage.getAll(patientId, { index: 'patientId' })
     .limit(Math.min(limit, 100))
     .orderBy('createdAt')
@@ -28,6 +28,19 @@ textMessagesRouter.get('/twilio', (req, res, next) => {
   twilioClient.messages.list((err, data) => {
     res.send(data);
   });
+});
+
+textMessagesRouter.get('/conversation', (req, res, next) => {
+  const { patientId, practitionerId, startDate } = req.query;
+  const startDateTimestamp = new Date(startDate).getTime();
+
+  TextMessage.filter({ patientId, practitionerId }).orderBy('createdAt').run().then((textMessages) => {
+    const smsFilteredByDate = textMessages.filter(sms =>
+      sms.createdAt.getTime() >= startDateTimestamp
+    );
+    res.send(normalize(smsFilteredByDate, arrayOf(textMessageSchema)));
+  })
+  .catch(next);
 });
 
 module.exports = textMessagesRouter;
