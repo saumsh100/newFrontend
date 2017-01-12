@@ -28,6 +28,9 @@ const justinUserId = uuid();
 const markUserId = uuid();
 const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
+
+const alexUserId = uuid();
+const alexPatientId = uuid();
 const practitionerId = uuid();
 const chairId = uuid();
 const serviceId = uuid();
@@ -35,13 +38,35 @@ const serviceId = uuid();
 const SEEDS = {
   Appointment: [
     {
+      startTime: new Date(2017, 0, 12, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 12, 10, 30, 0, 0),
+      title: 'Sooner Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      startTime: new Date(2017, 0, 12, 14, 30, 0, 0),
+      endTime: new Date(2017, 0, 12, 15, 30, 0, 0),
+      title: 'Later Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      accountId,
       id: uuid(),
       title: 'Justin\'s appointment',
-      startTime: new Date(2017, 01, 04, 14, 30, 0, 0),
-      endTime: new Date(2016, 01, 04, 15, 30, 0, 0),
+      startTime: new Date(2017, 1, 4, 14, 30, 0, 0),
+      endTime: new Date(2016, 1, 4, 15, 30, 0, 0),
 
       patientId: justinPatientId,
-      accountId: accountId,
       serviceId: serviceId,
       practitionerId: practitionerId,
       chairId: chairId,
@@ -54,8 +79,8 @@ const SEEDS = {
     {
       id: uuid(),
       title: 'Sergey\'s appointment',
-      startTime: new Date(2017, 01, 04, 16, 00, 0, 0),
-      endTime: new Date(2016, 01, 04, 17, 00, 0, 0),
+      startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
+      endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
 
       patientId: sergeyPatientId,
       accountId: accountId,
@@ -106,13 +131,19 @@ const SEEDS = {
       activeAccountId: accountId,
       // accounts: [accountId],
     },
+    {
+      username: 'alex@carecru.com',
+      password: bcrypt.hashSync('alex', saltRounds),
+      id: alexUserId,
+      activeAccountId: accountId,
+    },
   ],
 
   Patient: [
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+380672552857',
+      phoneNumber: '+17784012237',
       id: justinPatientId,
     },
     {
@@ -126,6 +157,12 @@ const SEEDS = {
       lastName: 'Joseph',
       phoneNumber: '+17788654451',
       id: uuid(),
+    },
+    {
+      firstName: 'Alex',
+      lastName: 'Bashliy',
+      phoneNumber: '+19782521845',
+      id: alexPatientId,
     },
   ],
 

@@ -7,17 +7,20 @@
 
 const twilioRouter = require('express').Router();
 const TextMessage = require('../../models/TextMessage');
+const Appointment = require('../../models/Appointment');
 const Patient = require('../../models/Patient');
 const thinky = require('../../config/thinky');
+const twilio = require('../../config/globals').twilio;
+const twilioClient = require('../../config/twilio');
 
 // Receive all incoming SMS traffic to the Twilio number
+
 twilioRouter.post('/message', (req, res, next) => {
   const {
     AccountSid,
     MessageSid,
     To,
     From,
-    Body,
     ToZip,
     ToCity,
     ToState,
@@ -31,7 +34,9 @@ twilioRouter.post('/message', (req, res, next) => {
     NumSegments,
     ApiVersion,
   } = req.body;
-  
+
+  const Body = req.body.Body.trim();
+
   // Easily parse mediaData
   let mediaData = {};
   const numMedia = parseInt(NumMedia);
@@ -43,7 +48,7 @@ twilioRouter.post('/message', (req, res, next) => {
       };
     }
   }
-  
+
   const currentDate = thinky.r.now();
   const textMessageData = {
     id: MessageSid,
@@ -51,15 +56,15 @@ twilioRouter.post('/message', (req, res, next) => {
     from: From,
     body: Body,
     smsStatus: SmsStatus,
-  
+
     // TODO: fix unnecessary writing, fix defaults...
     createdAt: currentDate,
     dateCreated: currentDate,
     dateUpdated: currentDate,
-  
+
     apiVersion: ApiVersion,
     accountSid: AccountSid,
-  
+
     // Depends on carrier if populated
     toZip: ToZip,
     toCity: ToCity,
@@ -73,19 +78,32 @@ twilioRouter.post('/message', (req, res, next) => {
     numSegments: NumSegments,
     mediaData,
   };
-  
+
   Patient.findByPhoneNumber(From)
     .then((patient) => {
       console.log(`Received communication from ${patient.firstName}`);
       textMessageData.patientId = patient.id;
       TextMessage.save(textMessageData);
+      if (Body === 'C') {
+        Appointment.filter({ patientId: patient.id, confirmed: false }).orderBy('startTime').run().then((appArray) => {
+          appArray[0].merge({ confirmed: true }).save().then((confirmedAppointment) => {
+            console.log(confirmedAppointment);
+            twilioClient.sendMessage({
+              from: twilio.number,
+              to: patient.phoneNumber,
+              body: 'Your Appointment is now confirmed!',
+            })
+            .then(result => console.log(result));
+          });
+        });
+      }
     })
     .catch(() => {
       // Assume the Patient does not exist.
       console.log(`Received communication from unknown number: ${From}.`);
       TextMessage.save(textMessageData);
     });
-  
+
   // For twilio... needs a response
   // TODO: Do we need to res.send on successful saving?
   res.send();
@@ -97,7 +115,7 @@ twilioRouter.post('/status', (req, res, next) => {
     MessageSid,
     MessageStatus,
   } = req.body;
-  
+
   // Update that message with the new status
   TextMessage.get(MessageSid).run()
     .then((textMessage) => {
@@ -107,7 +125,7 @@ twilioRouter.post('/status', (req, res, next) => {
         .catch(next);
     })
     .catch(next);
-  
+
   // For twilio... needs a response
   res.send();
 });

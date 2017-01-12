@@ -8,6 +8,8 @@ const Appointment = thinky.createModel('Appointment', {
   startTime: type.date().required(),
   endTime: type.date().required(),
   createdAt: type.date(),
+  confirmed: type.boolean().default(false),
+
 
   comment: type.string(),
 
@@ -31,6 +33,8 @@ const Appointment = thinky.createModel('Appointment', {
   isSplit: type.boolean(),
   splitAppointments: [ type.string().uuid(4) ],
   isParent: type.boolean(),
+
 });
+
 
 module.exports = Appointment;
