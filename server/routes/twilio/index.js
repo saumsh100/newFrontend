@@ -85,17 +85,27 @@ twilioRouter.post('/message', (req, res, next) => {
       textMessageData.patientId = patient.id;
       TextMessage.save(textMessageData);
       if (Body === 'C') {
-        Appointment.filter({ patientId: patient.id, confirmed: false }).orderBy('startTime').run().then((appArray) => {
-          appArray[0].merge({ confirmed: true }).save().then((confirmedAppointment) => {
-            console.log(confirmedAppointment);
-            twilioClient.sendMessage({
-              from: twilio.number,
-              to: patient.phoneNumber,
-              body: 'Your Appointment is now confirmed!',
+        Appointment.filter({ patientId: patient.id, confirmed: false })
+          .getJoin({
+            account: true,
+            practitioner: { services: false },
+            service: { practitioners: false },
+          }).orderBy('startTime')
+          .then((appArray) => {
+            appArray[0].merge({ confirmed: true }).save().then((confApp) => {
+              console.log(appArray[0]);
+              twilioClient.sendMessage({
+                from: twilio.number,
+                to: patient.phoneNumber,
+                body: `Thank you! We have confirmed that you will be attending your
+                  ${appArray[0].service.name} appointment with
+                  ${appArray[0].practitioner.firstName} ${appArray[0].practitioner.lastName}
+                  from ${appArray[0].account.name}`,
+              })
+              .then(result => console.log(result));
             })
-            .then(result => console.log(result));
+            .catch(err => console.log(err));
           });
-        });
       }
     })
     .catch(() => {

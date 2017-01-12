@@ -39,8 +39,8 @@ const serviceId = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 0, 12, 12, 30, 0, 0),
-      endTime: new Date(2017, 0, 12, 10, 30, 0, 0),
+      startTime: new Date(2017, 0, 13, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 13, 10, 30, 0, 0),
       title: 'Sooner Availability',
       id: uuid(),
       accountId,
@@ -50,8 +50,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: new Date(2017, 0, 12, 14, 30, 0, 0),
-      endTime: new Date(2017, 0, 12, 15, 30, 0, 0),
+      startTime: new Date(2017, 0, 13, 14, 30, 0, 0),
+      endTime: new Date(2017, 0, 13, 15, 30, 0, 0),
       title: 'Later Availability',
       id: uuid(),
       accountId,
