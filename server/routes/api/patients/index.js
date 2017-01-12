@@ -51,7 +51,6 @@ patientsRouter.put('/:patientId', (req, res, next) => {
   const { patientId } = req.params;
   Patient.get(patientId).run().then((p) => {
     p.merge(data).save().then((patient) => {
-      console.log(normalize(patient, patientSchema));
       res.send(normalize(patient, patientSchema));
     });
   })
