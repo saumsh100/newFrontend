@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { SubmissionError } from 'redux-form';
-import { Form, Field, Button } from '../library';
+import { Form, Field, Button } from '../../library';
 
 const containsLetter = (letter) => (value) => {
   return (value && value.includes(letter)) ? `Cannot contain the letter ${letter}` : undefined;

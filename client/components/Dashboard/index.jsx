@@ -7,6 +7,7 @@ import Reviews from '../Reviews';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
 import CardHoc from './cardHoc';
+import TestTabs from '../demo/TestTabs';
 
 // wrap components with hoc's
 const ListingsCard = CardHoc(Listings);
@@ -18,8 +19,8 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchReputationData();
-    this.props.fetchReviewsData();
+    //this.props.fetchReputationData();
+    //this.props.fetchReviewsData();
   }
 
   renderCards() {
@@ -37,7 +38,7 @@ class Dashboard extends React.Component {
     } = this.props;
     
     // TODO: for now connect Reviews card to Listings card props until its api integration
-    return (
+    /*return (
       <div >
         <ListingsCard
           title={'Listings'}
@@ -57,6 +58,9 @@ class Dashboard extends React.Component {
           reload={fetchReviewsData}
         />
       </div>
+    );*/
+    return (
+      <TestTabs />
     );
   }
 

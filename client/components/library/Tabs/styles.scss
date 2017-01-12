@@ -1,0 +1,12 @@
+
+@import '../../../ui.scss';
+
+.tab {
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.activeTab {
+  border-bottom: 3px solid $primary-color;
+}
