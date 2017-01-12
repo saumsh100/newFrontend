@@ -27,10 +27,7 @@ cron.schedule('*/2 * * * * *', () => {
         twilioClient.sendMessage({
           from: twilio.number,
           to: a.patient.phoneNumber,
-          body: `Your ${a.service.name} appointment with
-            ${a.practitioner.firstName} ${a.practitioner.lastName}
-            from ${a.account.name}
-            is less than 24 hours away. Press 'C' to confirm that you can make it.`,
+          body: `Your ${a.service.name} appointment with ${a.practitioner.firstName} ${a.practitioner.lastName} from ${a.account.name} is less than 24 hours away. Press 'C' to confirm that you can make it.`,
         })
         .then(result => console.log(result));
       });

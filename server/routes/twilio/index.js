@@ -97,10 +97,7 @@ twilioRouter.post('/message', (req, res, next) => {
               twilioClient.sendMessage({
                 from: twilio.number,
                 to: patient.phoneNumber,
-                body: `Thank you! We have confirmed that you will be attending your
-                  ${appArray[0].service.name} appointment with
-                  ${appArray[0].practitioner.firstName} ${appArray[0].practitioner.lastName}
-                  from ${appArray[0].account.name}`,
+                body: `Thank you! We have confirmed that you will be attending your ${appArray[0].service.name} appointment with ${appArray[0].practitioner.firstName} ${appArray[0].practitioner.lastName} from ${appArray[0].account.name}`,
               })
               .then(result => console.log(result));
             })
