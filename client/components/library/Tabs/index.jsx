@@ -76,10 +76,10 @@ class Tabs extends Component {
     return (
       // Order is important, classNames={classes} needs to override props.className
       <div {...this.props} className={classes}>
-        <nav>
+        <nav className={styles.nav}>
           {this.renderHeaders(headers)}
         </nav>
-        <div>
+        <div className={styles.content}>
           {this.renderContents(contents)}
         </div>
       </div>

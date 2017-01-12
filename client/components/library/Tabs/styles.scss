@@ -8,5 +8,13 @@
 }
 
 .activeTab {
-  border-bottom: 3px solid $primary-color;
+  border-bottom: $selection-border $primary-color;
+}
+
+.nav {
+
+}
+
+.content {
+  padding: 5px;
 }
