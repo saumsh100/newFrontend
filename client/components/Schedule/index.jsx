@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Card, CardHeader, CardBlock } from 'reactstrap';
+import { Card } from '../library';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import styles from './styles.scss';
@@ -62,8 +62,8 @@ class Schedule extends Component {
     return (
       <div className={styles.scheduleContainer}>
         <Card className={styles.cardContainer}>
-          <CardHeader>Schedule</CardHeader>
-          <CardBlock>
+          <h2>Schedule</h2>
+          <div>
             <BigCalendar
               timeslots={1}
               selectable={true}
@@ -77,7 +77,7 @@ class Schedule extends Component {
               max={new Date(2016, 10, 15, 18, 0, 0, 0)}
               events={events}
             />
-          </CardBlock>
+          </div>
         </Card>
       </div>
     );

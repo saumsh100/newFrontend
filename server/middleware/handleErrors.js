@@ -4,7 +4,7 @@ const globals = require('../config/globals');
 
 function logError(err, req, res, next) {
   console.log(chalk.red('[ERROR]', (err.status) ? `[${err.status}]` : '', ':', err.message));
-  if (globals.env === 'development') console.log(err.status);
+  if (globals.env === 'development') console.error(err);
   next(err);
 }
 

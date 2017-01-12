@@ -7,7 +7,6 @@ import reputation from './reputation';
 import reviews from './reviews';
 import auth from './auth';
 import entities from './entities';
-import patientForm from './patientForm';
 
 export default combineReducers({
   routing,
@@ -19,5 +18,4 @@ export default combineReducers({
   reviews,
   auth,
   entities,
-  patientForm,
 });

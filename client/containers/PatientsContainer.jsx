@@ -1,16 +1,13 @@
 
 import React, { PropTypes } from 'react';
-import { Card, CardHeader, CardBlock } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import RouterButton from '../components/library/RouterButton';
+import { Button, Card, RouterButton } from '../components/library';
 import styles from '../components/Patients/styles.scss';
 import AddPatientForm from '../components/Patients/AddPatientForm';
 import { fetchEntities } from '../thunks/fetchEntities';
-import { openForm } from '../actions/patientForm';
 
 class PatientsContainer extends React.Component {
-
   componentWillMount() {
     this.props.fetchEntities({ key: 'patients' });
   }
@@ -20,13 +17,11 @@ class PatientsContainer extends React.Component {
     let header;
     if (location.pathname === '/patients') {
       header = (
-        <div>Patients
-          <button
-            className="btn btn-primary offset-lg-10"
-            onClick={() => this.props.openForm()}
-          >
-              Add new patient
-          </button>
+        <div>
+          Patients
+          <Button>
+            Add new patient
+          </Button>
         </div>
 
       );
@@ -54,13 +49,13 @@ class PatientsContainer extends React.Component {
       <div>
         <div className={styles.scheduleContainer}>
           <Card className={styles.cardContainer}>
-            <CardHeader>{this.renderHeader()}</CardHeader>
-            <CardBlock>
+            <h3>{this.renderHeader()}</h3>
+            <div>
               {this.renderChildren(this.props)}
-            </CardBlock>
+            </div>
           </Card>
         </div>
-        <AddPatientForm />
+        <AddPatientForm onSubmit={values => alert(JSON.stringify(values))} />
       </div>
     );
   }
@@ -68,7 +63,6 @@ class PatientsContainer extends React.Component {
 
 PatientsContainer.propTypes = {
   fetchEntities: PropTypes.func,
-  openForm: PropTypes.func,
 };
 
 function mapStateToProps({ entities }) {
@@ -78,7 +72,6 @@ function mapStateToProps({ entities }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
-    openForm,
   }, dispatch);
 }
 

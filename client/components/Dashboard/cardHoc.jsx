@@ -1,36 +1,38 @@
 import React, { PropTypes } from 'react';
-import { Card, CardBlock, CardTitle } from 'reactstrap';
-import styles from './styles.scss'
+import { Card, Button } from '../library';
+import styles from './styles.scss';
 
-function Loading () {
+const Loading = () => {
   return (
     <div className={styles.loadingOuter}>
       <div className={styles.loadingInner}>
         Loading
       </div>
-    </div>);
-}
+    </div>
+  );
+};
 
 export default function CardHoc(Component) {
   return function (props) {
     return (
       <Card style={{minHeight: '480px'}}>
         {props.status === 'loading' && <Loading />}
-        <CardBlock>
-          <CardTitle>
+        <div>
+          <h3>
             {props.title}
-          </CardTitle>
-        </CardBlock>
+          </h3>
+        </div>
         {props.lastFetched && <Component {...props}/>}
-        {props.lastFetched && 
-          <CardBlock style={{ padding: '20px'}}>
+        {props.lastFetched &&
+          <div style={{ padding: '20px'}}>
             <div>
-              Last Fetched on {props.lastFetched} 
+              Last Fetched on {props.lastFetched}
             </div>
-            <button className={styles.reloadButton} onClick={props.reload}> Reload </button>
-          </CardBlock>
+            <Button onClick={props.reload}>Reload</Button>
+          </div>
         }
-      </Card>);
+      </Card>
+    );
   }
 }
 

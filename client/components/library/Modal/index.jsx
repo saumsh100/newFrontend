@@ -8,44 +8,32 @@ class Modal extends Component {
   constructor(props) {
     super(props);
     
-    this.state = {
-      active: !!props.active,
-    };
-    
-    this.handleEscKey = this.handleEscKey.bind(this);
-    this.deactivate = this.deactivate.bind(this);
+    this.handleEscKeyDown = this.handleEscKeyDown.bind(this);
+    this.handleOverlayClick = this.handleOverlayClick.bind(this);
+    // this.deactivate = this.deactivate.bind(this);
   }
   
   componentDidMount() {
-    if (this.state.active) {
+    if (this.state.active && this.props.onEscKeyDown) {
       document.body.addEventListener('keydown', this.handleEscKey);
-    }
-  }
-  
-  componentWillReceiveProps({ active }) {
-    console.log('received new props');
-    if (this.state.active !== active) {
-      this.setState({ active });
     }
   }
   
   componentDidUpdate({ active }) {
     if (active) {
-      document.body.addEventListener('keydown', this.handleEscKey);
+      document.body.addEventListener('keydown', this.handleEscKeyDown);
     } else {
-      document.body.removeEventListener('keydown', this.handleEscKey);
+      document.body.removeEventListener('keydown', this.handleEscKeyDown);
     }
   }
   
   
-  handleEscKey(e) {
-    if (this.state.active && e.which === 27) {
-      this.setState({ active: false });
-    }
+  handleEscKeyDown(e) {
+    this.state.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
   }
   
-  deactivate() {
-    this.setState({ active: false });
+  handleOverlayClick(e) {
+    this.props.onOverlayClick && this.props.onOverlayClick(e);
   }
   
   render() {
@@ -67,7 +55,7 @@ class Modal extends Component {
     return (
       <div className={modalContainerClassName}>
         <div
-          onClick={this.deactivate}
+          onClick={this.handleOverlayClick}
           className={backDropClassName}
         />
         <Card className={styles.modalBody}>
@@ -81,6 +69,8 @@ class Modal extends Component {
 Modal.propTypes = {
   active: PropTypes.bool,
   children: PropTypes.object,
+  onEscKeyDown: PropTypes.func,
+  onOverlayClick: PropTypes.func,
 };
 
 export default Modal;

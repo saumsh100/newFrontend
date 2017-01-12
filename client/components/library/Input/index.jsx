@@ -11,7 +11,8 @@ export default function Input(props) {
     icon,
   } = props;
   
-  // TODO: add support for error attribute
+  // TODO: add support for hint attribute
+  // TODO: its like a label except it doesn't go ontop (think Chat input)
   
   const valuePresent = value !== null && value !== undefined && value !== '' &&
     !(typeof value === 'number' && isNaN(value));

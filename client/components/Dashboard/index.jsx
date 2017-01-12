@@ -1,21 +1,16 @@
 
 import React, { PropTypes } from 'react';
-import { withState, compose } from 'recompose';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from '../library';
-import { Card, CardBlock, CardTitle, CardSubtitle, CardText, CardLink } from 'reactstrap';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
-import styles from './styles.scss';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
-import CardHoc from './cardHoc'
+import CardHoc from './cardHoc';
 
 // wrap components with hoc's
-const ListingsCard = CardHoc(Listings)
-const ReviewsCard = CardHoc(Reviews)
+const ListingsCard = CardHoc(Listings);
+const ReviewsCard = CardHoc(Reviews);
 
 class Dashboard extends React.Component {
   constructor(props) {

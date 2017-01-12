@@ -7,8 +7,8 @@ import Icon from './Icon';
 import Input from './Input';
 import Link from './Link';
 import Modal from './Modal';
+import RouterButton from './RouterButton';
 
-export { ModalHeader, ModalBody, ModalFooter } from './RSModal';
 export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';
 
 export {
@@ -21,4 +21,5 @@ export {
   Input,
   Link,
   Modal,
+  RouterButton,
 };
