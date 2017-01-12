@@ -1,43 +1,61 @@
 
 @import '../../../ui.scss';
 
+$error-color: $danger-color;
+$active-color: $primary-dark;
+$empty-grey: $primary-darkgrey;
+
 .group {
   position: relative;
   margin-bottom: 45px;
+  margin-top: 30px;
 }
 
 .input {
-  font-size: 18px;
+  font-size: 16px;
   padding: 10px 10px 10px 5px;
   display: block;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #757575;
+  border-bottom: 1px solid $empty-grey;
   background-color: transparent;
   &:focus {
     outline: none;
   }
 
   &:focus ~ .label {
-    color: $primary-dark;
+    color: $active-color;
   }
 
   // Bring the label above the input when focused / filled in
-  &:focus ~ .label, &:valid ~ .label {
-    top: -20px;
-    font-size: 14px;
+  &:focus ~ .label {
+    @extend .filled;
   }
 }
 
+.erroredInput {
+  border-bottom: 1px solid $error-color;
+}
+
+// TODO: figure out how to stack the CSS to make sure we dont have to use !important
+.filled {
+  top: -20px !important;
+  font-size: 12px !important;
+}
+
 .label {
-  color: #999;
-  font-size: 18px;
+  color: $empty-grey;
   font-weight: normal;
   position: absolute;
   pointer-events: none;
   left: 5px;
-  top: 10px;
   transition: 0.2s ease all;
+  top: 10px;
+  font-size: 16px;
+}
+
+.erroredLabel {
+  color: $error-color;
 }
 
 .bar {
@@ -50,7 +68,7 @@
     width: 0;
     bottom: 0px;
     position: absolute;
-    background: $primary-dark;
+    background: $active-color;
     transition: 0.2s ease all;
   }
 
@@ -68,6 +86,16 @@
   &:before, &:after {
     width: 50%;
   }
+}
+
+.error {
+  color: $error-color;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 41px;
+  font-size: 12px;
 }
 
 /*.highlight {

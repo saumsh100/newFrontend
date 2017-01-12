@@ -1,27 +1,36 @@
 
-import React from 'react';
-import RSNav from 'reactstrap/lib/Nav';
-import RSNavItem from 'reactstrap/lib/NavItem';
-import RSNavLink from 'reactstrap/lib/NavLink';
-import RSNavbar from 'reactstrap/lib/Navbar';
-import RSNavbarBrand from 'reactstrap/lib/NavbarBrand';
+import React, { PropTypes } from 'react';
+import classNames from 'classnames';
+import styles from  './styles.scss';
 
 export function Nav(props) {
-  return <RSNav {...props} />;
+  const {
+    children,
+    className,
+  } = props;
+  
+  const classes = classNames(className, styles.nav);
+  
+  return (
+    <nav className={classes}>
+      <ul className={styles.ul}>
+        {children}
+      </ul>
+    </nav>
+  );
 }
 
 export function NavItem(props) {
-  return <RSNavItem {...props} />;
-}
-
-export function NavLink(props) {
-  return <RSNavLink {...props} />;
-}
-
-export function Navbar(props) {
-  return <RSNavbar {...props} />;
-}
-
-export function NavbarBrand(props) {
-  return <RSNavbarBrand {...props} />;
+  const {
+    children,
+    className,
+  } = props;
+  
+  const classes = classNames(className, styles.navItem);
+  
+  return (
+    <li className={classes}>
+      {children}
+    </li>
+  );
 }

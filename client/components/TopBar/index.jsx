@@ -1,25 +1,26 @@
 
 import React, { PropTypes, Component } from 'react';
-import classNames from 'classnames';
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from '../library';
-import styles from './styles.scss';
 import { browserHistory } from 'react-router';
+import classNames from 'classnames';
+import { AppBar, Button } from '../library';
+import styles from './styles.scss';
 
 
 class TopBar extends Component {
-  constructor () {
-    super()
+  constructor(props) {
+    super(props);
+    
     this.logout = this.logout.bind(this);
   }
 
   logout() {
     localStorage.setItem('token', '');
     browserHistory.push('/login');
-    this.props.logout()
+    this.props.logout();
   }
 
-  render () {
-    const {isCollapsed, setIsCollapsed} = this.props;
+  render() {
+    const { isCollapsed, setIsCollapsed } = this.props;
     const topBarClassName = classNames(
       styles.topBarContainer,
       isCollapsed ?
@@ -28,20 +29,18 @@ class TopBar extends Component {
     );
     
     return (
-      <header className={topBarClassName}>
-        <div className="container-fluid">
-          <div
-            className={styles.collapseButton}
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            <i
-              className="fa fa-bars"
-              ariaHidden="true"
-            />
-          </div>
-          <Button onClick={this.logout} className="pull-right">Log Out</Button>
+      <AppBar className={topBarClassName}>
+        <div
+          className={styles.collapseButton}
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          <i
+            className="fa fa-bars"
+            ariaHidden="true"
+          />
         </div>
-      </header>
+        <Button onClick={this.logout}>Log Out</Button>
+      </AppBar>
     );
   }
 }
@@ -49,6 +48,7 @@ class TopBar extends Component {
 TopBar.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 export default TopBar;

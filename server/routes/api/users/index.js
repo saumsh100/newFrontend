@@ -1,34 +1,50 @@
-const { normalize, Schema, arrayOf } = require('normalizr');
+
+// const { normalize, Schema, arrayOf } = require('normalizr');
 const bcrypt = require('bcrypt');
+const zxcvbn = require('zxcvbn');
 const userRouter = require('express').Router();
 const User = require('../../../models/User');
+const loaders = require('../../util/loaders');
+const StatusError = require('../../../util/StatusError');
 
-const userSchema = new Schema('users');
+// const userSchema = new Schema('users');
 
+userRouter.param('userId', loaders('profile'));
 
-userRouter.put('/:id', (req, res, next) => {
-  const id = req.params.id;
-  const oldPassword = req.body.oldPassword;
-  const password = req.body.password;
-  const confirm = req.body.confirm;
-  if (password !== confirm) return next({ status: 401 });
-
-  return User.get(id).run().then((user) => {
-    return bcrypt.compare(oldPassword, user.password, function (err, match) {
-      if (err) return next({ status: 500 });
-
-      if (!match) return next({ status: 401 });
-
-      return bcrypt.hash(password, 10, (err, hashedPassword) => {
-        if (err) return next({ status: 500 });
-
-        return User.get(id).update({password: hashedPassword}).run().then((newUser) => {
-          return res.end();
+userRouter.put('/:userId', (req, res, next) => {
+  Promise.resolve(req.profile)
+    .then(((user) => {
+      // TODO: allow users to change more than just password here...
+      // TODO: ensure all the attributes are here before performing this logic
+      const { oldPassword, password, confirmPassword } = req.body;
+      if (password !== confirmPassword) {
+        return next(StatusError(401, 'Passwords do not match'));
+      }
+      
+      // Check if the password is valid,
+      // if so, we must set the new password, other attrs and then save
+      // if all is well, we respond with the updated user
+      return user.isValidPasswordAsync(oldPassword)
+        .then(() => {
+          // TODO: this code is duplicated on frontend, refactor for isomoprohic functions
+          const result = zxcvbn(password);
+          const { score, feedback: { warning } } = result;
+          if (score < 2) {
+            throw StatusError(401, warning || 'New password not strong enough');
+          }
+          
+          return user.setPasswordAsync(password)
+            .then((updatedUser) => {
+              // Now save and respond finally!
+              return updatedUser.save()
+                .then(savedUser => res.send(savedUser));
+            });
+        })
+        .catch((err) => {
+          throw StatusError(401, err.message || 'Invalid current password');
         });
-      })
-    });
-  })
-  .catch(err => next(err));
+    }))
+    .catch(next);
 });
 
 module.exports = userRouter;

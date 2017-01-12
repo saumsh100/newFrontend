@@ -1,0 +1,33 @@
+
+import React, { PropTypes, Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+class IntelligenceContainer extends Component {
+  render() {
+    return (
+      <div>
+        Intelligence
+      </div>
+    );
+  }
+}
+
+IntelligenceContainer.propTypes = {
+  fetchEntities: PropTypes.func,
+  openForm: PropTypes.func,
+};
+
+function mapStateToProps({ entities }) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(IntelligenceContainer);

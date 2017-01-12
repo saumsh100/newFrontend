@@ -1,14 +1,22 @@
-import { push } from 'react-router-redux';
-import axios from 'axios';
 
+import axios from 'axios';
+import { push } from 'react-router-redux';
+import { SubmissionError } from 'redux-form';
+
+// TODO: remove UX specific logic from here, just return request promise...
 export function changePassword(params) {
   return function (dispatch, getState) {
-    const id = getState().auth.toJS().user.id;
-    console.log(id);
+    const id = getState().auth.getIn(['user', 'id']);
     return axios
       .put(`/api/users/${id}`, params)
       .then(() => {
-        dispatch(push('/'));
+        // re-route?
+        // dispatch(push('/'));
+      })
+      .catch((err) => {
+        throw new SubmissionError({
+          confirmPassword: err.data,
+        });
       });
   };
 }

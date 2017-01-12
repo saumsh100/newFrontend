@@ -1,4 +1,39 @@
-.loginForm {
-  padding: 12px;
-  width: 320px;
+
+@import '../../ui.scss';
+
+.backDrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $primary-dark;
+  z-index: 199;
 }
+
+.loginForm {
+  padding: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  margin: 0px auto;
+  margin-top: 100px;
+  z-index: 200;
+  border-top: 5px solid $primary-color;
+  @media screen and (max-width: $medium-screen-width) {
+    width: 60%;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    width: 300px;
+  }
+}
+
+.logoContainer {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.loginLogo {
+  width: 100px;
+}
+

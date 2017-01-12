@@ -1,6 +1,5 @@
 
 import React, { PropTypes } from 'react';
-import { Table } from 'reactstrap';
 import PatientListItem from './PatientListItem';
 
 function PatientList({ patients, onChat }) {
@@ -8,7 +7,7 @@ function PatientList({ patients, onChat }) {
   
   console.log(patients);
   return (
-    <Table>
+    <table>
       <thead>
         <tr>
           <th>First Name</th>
@@ -28,7 +27,7 @@ function PatientList({ patients, onChat }) {
           );
         })}
       </tbody>
-    </Table>
+    </table>
   );
 }
 

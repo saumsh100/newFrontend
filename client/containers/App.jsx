@@ -12,33 +12,46 @@ import { setIsCollapsed } from '../actions/toolbar';
 import { browserHistory } from 'react-router';
 import styles from './styles.scss';
 
-class App extends React.Component {
-  render () {
-    const { location, children, isCollapsed, setIsCollapsed, user, dispatch } = this.props;
-    let overlay;
-    if (isCollapsed) {
-      overlay = null;
-    } else {
-      overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
-    }
-    const isLoginPage = location.pathname.includes('login')
-
-    return (
+function App(props) {
+  const {
+    location,
+    children,
+    isCollapsed,
+    setIsCollapsed,
+    user,
+    dispatch,
+  } = props;
+  
+  let overlay = null;
+  if (!isCollapsed) {
+    overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
+  }
+  
+  let AppContainer = (
+    <div>
+      <TopBarContainer />
+      {overlay}
+      <NavRegionContainer>
+        <NavList location={location} />
+      </NavRegionContainer>
+      <MainRegionContainer>
+        {children}
+      </MainRegionContainer>
+    </div>
+  );
+  
+  const isLoginPage = location.pathname.includes('login');
+  
+  if (isLoginPage) {
+    AppContainer = (
       <div>
-        {!isLoginPage && 
-          <div>
-            <TopBarContainer />
-            {overlay}
-            <NavRegionContainer>
-              <NavList location={location} />
-            </NavRegionContainer>
-          </div>}
-        <MainRegionContainer>
-          {children}
-        </MainRegionContainer>
+        {children}
       </div>
     );
   }
+  
+  return AppContainer;
+  
 }
 
 App.propTypes = {
