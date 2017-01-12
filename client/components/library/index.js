@@ -8,6 +8,7 @@ import Input from './Input';
 import Link from './Link';
 import Modal from './Modal';
 import RouterButton from './RouterButton';
+import Tabs, { Tab } from './Tabs';
 
 export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';
 
@@ -22,4 +23,6 @@ export {
   Link,
   Modal,
   RouterButton,
+  Tabs,
+  Tab,
 };

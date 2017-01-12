@@ -18,7 +18,7 @@
   margin: 0px auto;
   margin-top: 100px;
   z-index: 200;
-  border-top: 5px solid $primary-color;
+  border-top: $card-border-size $primary-color;
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
   }
