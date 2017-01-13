@@ -15,7 +15,7 @@
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    padding-left: $side-nav-width;
+    padding-left: 0;
   }
 }
 
@@ -31,6 +31,25 @@
   }
 }
 
+.logoWrapper {
+  // padding-left: 20px;
+  height: 100%;
+  border-bottom: 2px grey solid;
+  background-color: $primary-dark;
+  color: white;
+}
+
+.logoImage {
+  width: $side-nav-width;
+  height: 100%;
+  text-align: center;
+}
+
+.logoImageImage {
+  width: 140px;
+  margin-top: 18px;
+}
+
 .collapseButton {
   display: inline;
   cursor: pointer;
@@ -44,4 +63,16 @@
     font-size: 1.4rem;
     margin-left: 10px;
   }
+}
+
+.rightOfBar {
+  display: flex !important;
+  text-align: right;
+}
+
+.pillsList {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto !important;
+  list-style: none;
 }
