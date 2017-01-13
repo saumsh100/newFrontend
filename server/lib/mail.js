@@ -17,7 +17,7 @@ module.exports = {
  */
 function sendTemplate(config) {
   const {
-    from = 'anyone@carecru.com',
+    from = 'noreply@carecru.com',
     subject,
     toEmail,
     templateName,
@@ -26,8 +26,6 @@ function sendTemplate(config) {
   
   return new Promise((resolve, reject) => {
     mandrill.messages.sendTemplate({
-        // Same template name in the Mailchimp account
-        // IMPORTANT! When a template is updated it must be Sent to Mandrill
         template_name: templateName,
         
         // TODO: why is this needed?
