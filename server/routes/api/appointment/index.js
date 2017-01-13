@@ -2,6 +2,7 @@
 const { normalize, Schema, arrayOf } = require('normalizr');
 const appointmentsRouter = require('express').Router();
 const Appointment = require('../../../models/Appointment');
+const Token = require('../../../models/Appointment');
 
 const appointmentSchema = new Schema('appointments');
 
@@ -30,5 +31,6 @@ appointmentsRouter.get('/:patientId', (req, res, next) => {
     .then(appointments => res.send(normalize(appointments, arrayOf(appointmentSchema))))
     .catch(next);
 });
+
 
 module.exports = appointmentsRouter;

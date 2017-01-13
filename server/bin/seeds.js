@@ -35,25 +35,28 @@ const practitionerId = uuid();
 const practitionerId2 = uuid();
 const chairId = uuid();
 const serviceId = uuid();
+const serviceId2 = uuid();
+const appointmentId1 = uuid();
+const appointmentId2 = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 0, 13, 12, 30, 0, 0),
-      endTime: new Date(2017, 0, 13, 10, 30, 0, 0),
+      startTime: new Date(2017, 0, 14, 10, 30, 0, 0),
+      endTime: new Date(2017, 0, 14, 11, 30, 0, 0),
       title: 'Sooner Availability',
-      id: uuid(),
+      id: appointmentId1,
       accountId,
       patientId: alexPatientId,
-      serviceId: serviceId,
+      serviceId: serviceId2,
       practitionerId: practitionerId,
       chairId: chairId,
     },
     {
-      startTime: new Date(2017, 0, 13, 14, 30, 0, 0),
-      endTime: new Date(2017, 0, 13, 15, 30, 0, 0),
+      startTime: new Date(2017, 0, 14, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 14, 13, 30, 0, 0),
       title: 'Later Availability',
-      id: uuid(),
+      id: appointmentId2,
       accountId,
       patientId: alexPatientId,
       serviceId: serviceId,
@@ -164,6 +167,7 @@ const SEEDS = {
       lastName: 'Bashliy',
       phoneNumber: '+19782521845',
       id: alexPatientId,
+      email: 'alex.bashliy@keenethics.com',
     },
   ],
 
@@ -219,6 +223,16 @@ const SEEDS = {
       id: serviceId,
       accountId: accountId,
       name: 'Routine Checkup',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: serviceId2,
+      accountId: accountId,
+      name: 'Another service',
       practitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,
@@ -297,7 +311,21 @@ const SEEDS = {
       description: '',
     },
   ],
+
+  Token: [
+    {
+      id: uuid(),
+      appointmentId: appointmentId1,
+    },
+    {
+      id: uuid(),
+      appointmentId: appointmentId2,
+    },
+  ],
 };
+
+
+console.log(SEEDS);
 
 seedDatabase(SEEDS)
   .then(() => {

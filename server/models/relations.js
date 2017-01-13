@@ -7,6 +7,7 @@ const Practitioner = require('./Practitioner');
 const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
+const Token = require('./Token');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id')
@@ -23,6 +24,7 @@ Appointment.belongsTo(Account, 'account', 'accountId', 'id')
 Appointment.belongsTo(Service, 'service', 'serviceId', 'id')
 Appointment.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id')
 Appointment.belongsTo(Chair, 'chair', 'chairId', 'id')
+Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id')
 
 Service.belongsTo(Account, 'account', 'accountId', 'id')
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id')
