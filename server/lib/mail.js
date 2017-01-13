@@ -23,17 +23,17 @@ function sendTemplate(config) {
     templateName,
     mergeVars,
   } = config;
-  
+
   return new Promise((resolve, reject) => {
     mandrill.messages.sendTemplate({
         template_name: templateName,
-        
+
         // TODO: why is this needed?
         template_content: [{
           name: 'example name',
           content: 'example content',
         }],
-        
+
         // Message Data
         message: {
           from: from,
@@ -44,17 +44,17 @@ function sendTemplate(config) {
             email: toEmail,
             type: 'to',
           }],
-          
+
           global_merge_vars: mergeVars,
         },
       },
-      
+
       // Success Callback
       (result) => {
         console.log(`Successfully sent the ${templateName} email to ${toEmail}`);
         resolve(result);
       },
-      
+
       // Error Callback
       (err) => {
         if (err) {

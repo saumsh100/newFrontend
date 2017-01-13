@@ -9,6 +9,7 @@ const Patient = thinky.createModel('Patient', {
   lastName: type.string().required(),
   phoneNumber: type.string().required(),
   //createdAt: type.date().default(thinky.r.now()),
+  email: type.string().email(),
 });
 
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
