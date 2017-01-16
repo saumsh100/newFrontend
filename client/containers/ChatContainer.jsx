@@ -16,6 +16,7 @@ class ChatContainer extends Component {
       patientId: this.props.patient.id,
       limit: 100,
     };
+    window.socket.emit('fetchPatient', { id: this.props.patient.id });
     this.props.fetchEntities({ key: 'textMessages', params: params });
   }
   
