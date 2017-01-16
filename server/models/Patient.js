@@ -10,6 +10,7 @@ const Patient = thinky.createModel('Patient', {
   phoneNumber: type.string().required(),
   //createdAt: type.date().default(thinky.r.now()),
   email: type.string().email(),
+  appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
 });
 
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {

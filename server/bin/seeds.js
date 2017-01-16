@@ -42,8 +42,8 @@ const appointmentId2 = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 0, 14, 10, 30, 0, 0),
-      endTime: new Date(2017, 0, 14, 11, 30, 0, 0),
+      startTime: new Date(2017, 0, 17, 10, 30, 0, 0),
+      endTime: new Date(2017, 0, 17, 11, 30, 0, 0),
       title: 'Sooner Availability',
       id: appointmentId1,
       accountId,
@@ -53,8 +53,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: new Date(2017, 0, 14, 12, 30, 0, 0),
-      endTime: new Date(2017, 0, 14, 13, 30, 0, 0),
+      startTime: new Date(2017, 0, 17, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 17, 13, 30, 0, 0),
       title: 'Later Availability',
       id: appointmentId2,
       accountId,
@@ -168,6 +168,7 @@ const SEEDS = {
       phoneNumber: '+19782521845',
       id: alexPatientId,
       email: 'alex.bashliy@keenethics.com',
+      appointmentPreference: 'both',
     },
   ],
 

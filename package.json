@@ -22,8 +22,7 @@
     "test:client:watch": "karma start ./server/karma.conf.js  --autoWatch=true --singleRun=false",
     "test:server": "mocha ./server/test/test_backend.js --test",
     "postinstall": "npm run build:dist",
-    "sms:cron": "nf start -j SMS_CRON",
-    "email:cron": "nf start -j EMAIL_CRON"
+    "remind:cron": "nf start -j REMIND_CRON"
   },
   "dependencies": {
     "async": "0.2.9",
