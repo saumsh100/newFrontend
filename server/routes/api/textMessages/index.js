@@ -5,7 +5,7 @@ const TextMessage = require('../../../models/TextMessage');
 const Practitioner = require('../../../models/Practitioner');
 const twilioClient = require('../../../config/twilio');
 
-const textMessageSchema = new Schema('textMessageSchema');
+const textMessageSchema = new Schema('textMessages');
 
 // TODO: this should have default queries and limits
 textMessagesRouter.get('/', (req, res, next) => {

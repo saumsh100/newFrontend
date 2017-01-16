@@ -38,4 +38,6 @@ const TextMessage = thinky.createModel('TextMessage', {
   mediaData: type.object(),
 });
 
+TextMessage.ensureIndex("patientId")
+
 module.exports = TextMessage;

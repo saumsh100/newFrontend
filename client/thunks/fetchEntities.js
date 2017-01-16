@@ -2,11 +2,13 @@
 import axios from 'axios';
 import { receiveEntities, deleteEntity, addEntity, updateEntity } from '../actions/entities';
 
-export function fetchEntities({ key }) {
+export function fetchEntities({ key,  params }) {
   return (dispatch, getState) => {
+    console.log("params")
+    console.log(params)
     const { entities } = getState();
     const entity = entities.get(key);
-    axios.get(entity.getUrlRoot())
+    axios.get(entity.getUrlRoot(), { params })
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));

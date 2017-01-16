@@ -1,6 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
 import PatientShow from '../components/Patients/PatientShow';
+import axios from 'axios';
 
 class PatientShowContainer extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class PatientShowContainer extends Component {
     window.socket.on('receivePatient', (result) => {
       this.setState({ patient: result });
     });
-    
+
     window.socket.emit('fetchPatient', { id: this.props.params.patientId });
   }
   

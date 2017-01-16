@@ -2,7 +2,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import fetchEntities from '../thunks/fetchEntities';
+import { fetchEntities } from '../thunks/fetchEntities';
+
 import Chat from '../components/Patients/Chat';
 
 class ChatContainer extends Component {
@@ -11,7 +12,11 @@ class ChatContainer extends Component {
   }
   
   componentDidMount() {
-    this.props.fetchEntities({ key: 'textMessages' });
+    const params = {
+      patientId: this.props.patient.id,
+      limit: 100,
+    };
+    this.props.fetchEntities({ key: 'textMessages', params: params });
   }
   
   render() {
