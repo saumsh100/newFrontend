@@ -16,8 +16,9 @@ Appointment.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Appointment.belongsTo(Account, 'account', 'accountId', 'id');
 Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
 
-const protocol = 'http';
-const host = 'localhost:5000';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const protocol = NODE_ENV === 'production' ? 'https' : 'http';
+const host = NODE_ENV === 'production' ? 'carecru.com' : 'localhost:5000';
 
 // test pattern '*/2 * * * * *'
 cron.schedule('*/10 * * * * *', () => {
@@ -32,24 +33,19 @@ cron.schedule('*/10 * * * * *', () => {
       each(shouldNotifyAppointments, (a) => {
         Token.filter({ appointmentId: a.id }).run()
         .then((token) => {
+          const emailConfObject = {
+            email: a.patient.email,
+            token: token[0].id,
+            accountName: a.account.name,
+            smsPhoneNumber: a.account.smsPhoneNumber,
+            date: a.startTime,
+            patientFirstname: a.patient.firstName };
           if (a.patient.appointmentPreference === 'both') {
-            emailConfirmation(
-              a.patient.email,
-              token[0].id,
-              a.account.name,
-              a.account.smsPhoneNumber,
-              a.startTime,
-              a.patient.firstName);
+            emailConfirmation(emailConfObject);
             smsConfirmation(a);
           }
           if (a.patient.appointmentPreference === 'email') {
-            emailConfirmation(
-              a.patient.email,
-              token[0].id,
-              a.account.name,
-              a.account.smsPhoneNumber,
-              a.startTime,
-              a.patient.firstName);
+            emailConfirmation(emailConfObject);
           }
           if (a.patient.appointmentPreference === 'sms') {
             smsConfirmation(a);
@@ -61,40 +57,39 @@ cron.schedule('*/10 * * * * *', () => {
 });
 
 
-function emailConfirmation(email, token, accountName, smsPhoneNumber, date, patientFirstname) {
+function emailConfirmation(params) {
   mail.sendConfirmationReminder({
-    toEmail: email,
+    toEmail: params.email,
     mergeVars: [
       {
         name: 'CONFIRMATION_URL',
-        content: `${protocol}://${host}/confirmation/${token}`,
+        content: `${protocol}://${host}/confirmation/${params.token}`,
       },
       {
         name: 'ACCOUNT_NAME',
-        content: accountName,
+        content: params.accountName,
       },
       {
         name: 'ACCOUNT_PHONENUMBER',
-        content: smsPhoneNumber,
+        content: params.smsPhoneNumber,
       },
       {
         name: 'APPOINTMENT_DATE',
-        content: getAppointmentDate(date),
+        content: getAppointmentDate(params.date),
       },
       {
         name: 'APPOINTMENT_TIME',
-        content: getAppointmentTime(date),
+        content: getAppointmentTime(params.date),
       },
       {
         name: 'PATIENT_FIRSTNAME',
-        content: patientFirstname,
+        content: params.patientFirstname,
       },
     ],
   }).then(() => {
     console.log('Email Sent');
   }).catch((err) => {
     console.error(err);
-    process.exit(1);
   });
 }
 

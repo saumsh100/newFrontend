@@ -21,14 +21,12 @@ rootRouter.get('/confirmation/:tokenId', (req, res, next) => {
     Appointment.get(token[0].appointmentId).run().then((a) => {
       a.merge({ confirmed: true }).save().then(() => {
         res.render('confirmation-success');
-        /* token[0].delete().then((t) => {
+        token[0].delete().then((t) => {
           console.log(`Token ${t} was deleted`);
-        }); */
-      });
-    })
-    .catch(next);
-  })
-  .catch(next);
+        }).catch(next);
+      }).catch(next);
+    }).catch(next);
+  }).catch(next);
 });
 // All other traffic, just render app
 // TODO: Need to update client-side router to handle this
