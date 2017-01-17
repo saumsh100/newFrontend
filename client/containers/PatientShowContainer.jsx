@@ -13,7 +13,7 @@ class PatientShowContainer extends Component {
   componentDidMount() {
     window.socket.on('receivePatient', (result) => {
       this.setState({ patient: result });
-    });
+  });
 
     window.socket.emit('fetchPatient', { id: this.props.params.patientId });
   }

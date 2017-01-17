@@ -27,7 +27,6 @@ class Chat extends Component {
     const { patient, textMessages } = this.props;
     
     console.log(textMessages.get('models').size);
-    
     if (patient === null) return <div>Loading...</div>;
 
     return (
@@ -35,7 +34,9 @@ class Chat extends Component {
           <div style={{ padding: '0px', position: 'relative', height: '100%' }}>
             <div style={{ overflowY: 'scroll', height: '100%' }}>
               <ul className="dialogs__messages" >
-                {textMessages.get('models').map(m =>
+                {textMessages.get('models')
+                  .filter((el) => el.patientId === this.props.patient.id)
+                  .map(m =>
                     <li className="messages">
                       <img className="messages__photo" src="./img/people.png" alt="" />
                       <div className="messages__wrapper">

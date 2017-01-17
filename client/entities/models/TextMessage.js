@@ -9,6 +9,7 @@ const TextMessageSchema = {
   status: null,
   createdAt: null,
   body: null,
+  patientId: null,
 };
 
 export default class TextMessage extends createModel(TextMessageSchema) {

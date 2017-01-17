@@ -254,6 +254,13 @@ const SEEDS = {
     },
     {
       id: uuid(),
+      patientId: sergeyPatientId,
+      practitionerId,
+      body: 'sms for Sergey',
+      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+    },
+    {
+      id: uuid(),
       patientId: alexPatientId,
       practitionerId,
       body: 'from Chelsea 2',
