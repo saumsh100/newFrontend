@@ -14,6 +14,7 @@ const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
 const userRouter = require('./users');
 const textMessagesRouter = require('./textMessages');
+const availabilitiesRouter = require('./availabilities');
 const authMiddleware = require('../../middleware/auth');
 
 apiRouter.use('/appointments', authMiddleware, appointmentRouter);
@@ -22,5 +23,6 @@ apiRouter.use('/session', sessionRouter);
 apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
 apiRouter.use('/users', userRouter);
+apiRouter.use('/availabilities', availabilitiesRouter);
 
 module.exports = apiRouter;
