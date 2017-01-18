@@ -15,12 +15,13 @@ const patientsRouter = require('./patients');
 const userRouter = require('./users');
 const textMessagesRouter = require('./textMessages');
 const authMiddleware = require('../../middleware/auth');
-
+const practitionersRouter = require('./practitioners');
 apiRouter.use('/appointments', authMiddleware, appointmentRouter);
 
 apiRouter.use('/reputation', authMiddleware, reputationRouter);
 apiRouter.use('/session', sessionRouter);
 apiRouter.use('/patients', patientsRouter);
+apiRouter.use('/practitioners', practitionersRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
 apiRouter.use('/users', userRouter);
 

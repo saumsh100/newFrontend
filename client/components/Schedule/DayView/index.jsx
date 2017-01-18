@@ -66,6 +66,8 @@ class SelectedDay extends Component {
 
   componentDidMount() {
     this.props.fetchEntities({ key: 'appointments' });
+    this.props.fetchEntities({ key: 'practitioners' });
+    
   }
 
  	renderAppoinment(appointment, scale, startDay) {
@@ -145,7 +147,6 @@ class SelectedDay extends Component {
   }
 
   render() {
-    debugger;
   	const start = moment({hour: 0, minute: 0});
   	const end = moment({hour: 23, minute: 59});
   	const workingMinutes = end.diff(start, 'minutes');
@@ -178,6 +179,7 @@ class SelectedDay extends Component {
 function mapStateToProps({ entities }) {
   return {
     appointments: entities.get('appointments'),
+    practitioners: entities.get('practitioners'),
   };
 }
 
