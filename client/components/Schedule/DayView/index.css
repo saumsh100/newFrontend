@@ -8,7 +8,6 @@
 }
 .schedule__title {
     padding: 10px;
-
     min-height: 65px;
     border-bottom: 3px solid #E6E6E6;
 }
@@ -30,7 +29,6 @@
 }
 
 .schedule__date {
-    color: red;
     font-weight: 600;
 }
 .schedule__element {
