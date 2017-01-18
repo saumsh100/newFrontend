@@ -13,29 +13,29 @@ class SelectedDay extends Component {
     const appointments = [
     	{
     		name: "PAtient1",
-    		startDate: moment({hour: 12, minute: 30}),
-    		endDate: moment({hour: 13, minute: 30}),
+    		startTime: moment({hour: 12, minute: 30}),
+    		endTime: moment({hour: 13, minute: 30}),
     		doctorId: "789",
     		title: "regular check",
     	},
     	{
     		name: "PAtient2",
-    		startDate: moment({hour: 5, minute: 30}),
-    		endDate: moment({hour: 6, minute: 30}),
+    		startTime: moment({hour: 5, minute: 30}),
+    		endTime: moment({hour: 6, minute: 30}),
     		doctorId: "456",
     		title: "regular check"
     	},
     	{
     		name: "PAtient3",
-    		startDate: moment({hour: 4, minute: 3}),
-    		endDate: moment({hour: 6, minute: 30}),
+    		startTime: moment({hour: 4, minute: 3}),
+    		endTime: moment({hour: 6, minute: 30}),
     		doctorId: "123",
     		title: "regular check",
     	},
     	{
     		name: "PAtient3",
-    		startDate: moment({hour: 16, minute: 3}),
-    		endDate: moment({hour: 18, minute: 30}),
+    		startTime: moment({hour: 16, minute: 3}),
+    		endTime: moment({hour: 18, minute: 30}),
     		doctorId: "456",
     		title: "regular check",
     	},
@@ -69,8 +69,8 @@ class SelectedDay extends Component {
   }
 
  	renderAppoinment(appointment, scale, startDay) {
- 		const start = appointment.startDate;
- 		const end = appointment.endDate;
+ 		const start = appointment.startTime;
+ 		const end = appointment.endTime;
  		const minutesDuration = end.diff(start, 'minutes');
 
  		const positionTop = start.diff(startDay, 'minutes') * scale;
@@ -84,8 +84,8 @@ class SelectedDay extends Component {
  		}
 
  		const format = 'MMMM Do YYYY, h:mm:ss a';
- 		const displayStartDate = appointment.startDate.format(format);
- 		const displayEndDate = appointment.endDate.format(format);
+ 		const displayStartDate = appointment.startTime.format(format);
+ 		const displayEndDate = appointment.endTime.format(format);
 
  		return (
  			<div style={appointmentStyles} >
@@ -145,6 +145,7 @@ class SelectedDay extends Component {
   }
 
   render() {
+    debugger;
   	const start = moment({hour: 0, minute: 0});
   	const end = moment({hour: 23, minute: 59});
   	const workingMinutes = end.diff(start, 'minutes');
