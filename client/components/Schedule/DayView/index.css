@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+.schedule {
+    margin: 25px 15px;
+    background: #FAFAFA;
+    color: #DEDEDE;
+}
+.schedule__title {
+    min-height: 65px;
+    border-bottom: 3px solid #E6E6E6;
+}
+
+.schedule__date {
+    color: red;
+    font-weight: 600;
+}
+.schedule__element {
+    width: 100%;
+    border-bottom: 3px solid #E6E6E6;
+    border-right: 3px solid #E6E6E6;
+    color: #DEDEDE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.appointment{
+    width: 99%;
+    padding: 5px;
+    position: absolute;
+    background: #FE715A;
+}
+.appointment__username {
+    color: white;
+}
+.appointment__date {
+    color: #2E3845;
+}
+.appointment__title {
+    color: #434f61;
+}
