@@ -4,7 +4,7 @@ import { Card } from '../library';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import styles from './styles.scss';
-
+import Link from '../library/Link';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 BigCalendar.setLocalizer(
@@ -79,6 +79,10 @@ class Schedule extends Component {
             />
           </div>
         </Card>
+
+        <Link to='/dayview'>
+          "dayVeiw"
+        </Link>
       </div>
     );
   }

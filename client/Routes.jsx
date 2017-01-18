@@ -30,7 +30,21 @@ export default function Routes({ history }) {
               callback(null, require('./components/Schedule').default);
             });
           }}
-        />
+        >
+
+          <Route
+            path="dayview"
+            getComponent={(location, callback) => {
+              require.ensure(['./components/Schedule/DayView'], (require) => {
+                callback(null, require('./components/Schedule/DayView').default);
+              });
+            }}
+          >
+          </Route>        
+
+
+        </Route>
+
         <Route
           path="login"
           getComponent={(location, callback) => {
@@ -127,7 +141,18 @@ export default function Routes({ history }) {
             });
           }}
         />
+        <Route
+          path="dayview"
+          getComponent={(location, callback) => {
+            require.ensure(['./components/Schedule/DayView'], (require) => {
+              callback(null, require('./components/Schedule/DayView').default);
+            });
+          }}
+        >
+        </Route>
       </Route>
+
+
     </Router>
   );
 }
