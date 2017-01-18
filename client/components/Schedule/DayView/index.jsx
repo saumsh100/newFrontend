@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import { fetchEntities } from '../../../thunks/fetchEntities';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class SelectedDay extends Component {
   constructor(props) {
@@ -60,6 +63,10 @@ class SelectedDay extends Component {
    	this.doctors = doctors;
 
  	}
+
+  componentDidMount() {
+    this.props.fetchEntities({ key: 'appointments' });
+  }
 
  	renderAppoinment(appointment, scale, startDay) {
  		const start = appointment.startDate;
@@ -165,4 +172,20 @@ class SelectedDay extends Component {
   }
 }
 
-export default SelectedDay;
+
+
+function mapStateToProps({ entities }) {
+  return {
+    appointments: entities.get('appointments'),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntities,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(SelectedDay);

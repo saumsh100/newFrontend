@@ -13,6 +13,9 @@ import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
 import textMessages from '../entities/collections/textMessages';
 import TextMessage from '../entities/models/TextMessage';
+import Appointments from '../entities/models/Appointments';
+import appointments from '../entities/collections/appointments';
+
 
 
 const initialState = Map({
@@ -20,6 +23,7 @@ const initialState = Map({
   // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
   patients: new patients(),
   textMessages: new textMessages(),
+  appointments: new appointments(),
   // reviews: Reviews(), MODEL
   // listings: Listings(), MODEL
 });
@@ -27,6 +31,7 @@ const initialState = Map({
 const Models = {
   patients: Patient,
   textMessages: TextMessage,
+  appointments: Appointments,
 };
 
 export default handleActions({
