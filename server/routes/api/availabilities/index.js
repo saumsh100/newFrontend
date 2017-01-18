@@ -1,13 +1,48 @@
-
-const { normalize, Schema, arrayOf } = require('normalizr');
+import moment from 'moment';
 const availabilitiesRouter = require('express').Router();
 const Appointment = require('../../../models/Appointment');
-import moment from 'moment';
+const Service = require('../../../models/Service');
 
 availabilitiesRouter.get('/', (req, res, next) => {
-  const { serviceId, practitionerId, startDate, endDate } = req.query;
-  Appointment.filter({ practitionerId }).getJoin().run().then((appointments) => {
-    res.send(appointments);
+  const OFFICE_START_TIME = moment({ hours: 9, minutes: 0 });
+  const OFFICE_END_TIME = moment({ hours: 17, minutes: 0 });
+  const { serviceId, practitionerId, startDate } = req.query;
+  const startDateDay = moment(startDate).date();
+
+  Service.get(serviceId).execute().then((service) => {
+    Appointment
+      .filter({ practitionerId }).getJoin().orderBy('startTime').run()
+      .then((appointments) => {
+        const filteredByDayApps = appointments.filter(a =>
+          startDateDay === moment(a.startTime).date()
+        );
+        const breaks = [];
+        let startTime = OFFICE_START_TIME;
+        // let lastAppointmentEndTime = null;
+        breaks.push({
+          startTime: OFFICE_START_TIME,
+          endTime: moment(filteredByDayApps[0].startTime),
+        });
+        for (let i = 0; i < filteredByDayApps.length - 1; i += 1) {
+          startTime = moment(filteredByDayApps[i].endTime);
+          breaks.push({
+            startTime,
+            endTime: moment(filteredByDayApps[i + 1].startTime),
+          });
+        }
+
+        breaks.push({
+          startTime: filteredByDayApps[filteredByDayApps.length - 1].endTime,
+          endTime: OFFICE_END_TIME,
+        });
+
+        const availabilities = breaks.filter(b =>
+          moment(b.endTime).diff(moment(b.startTime), 'minutes') >= service.duration
+        );
+
+        res.send(availabilities);
+      })
+      .catch(next);
   });
 });
 
