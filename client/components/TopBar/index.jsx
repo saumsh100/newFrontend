@@ -36,7 +36,6 @@ class TopBar extends Component {
         >
           <i
             className="fa fa-bars"
-            ariaHidden="true"
           />
         </div>
         <Button onClick={this.logout}>Log Out</Button>

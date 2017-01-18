@@ -13,7 +13,7 @@ export default function Icon(props) {
   const fontAwesomeClass = `fa fa-${name}`;
   const classes = classNames(className, fontAwesomeClass);
   
-  return <i style={{ fontSize: `${size} em` }} className={classes} ariaHidden="true" />;
+  return <i style={{ fontSize: `${size} em` }} className={classes} />;
 }
 
 Icon.propTypes = {
