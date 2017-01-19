@@ -67,6 +67,7 @@ class SelectedDay extends Component {
         }
         const workingHour = {
             height: `${scale * 60}px`,
+            color: "white",
         }
         return (
             <div className="schedule__body" style={doctorScheduleColumn}>
@@ -81,7 +82,7 @@ class SelectedDay extends Component {
     }
     renderTimeColumn(workingHours, workingMinutes, scale, tablesCount) {
         const workingHoursColumn = {
-            width: `${tablesCount}%`,
+            width: `${tablesCount/2}%`,
             display: 'inline-block',
         };
         const workingHour = {
@@ -92,7 +93,7 @@ class SelectedDay extends Component {
                 {workingHours.map((h) => (
                     <div className="schedule__element" style={workingHour}>
                         <div className="schedule__date">
-                            {h}
+                            {moment({hour: h, minute: 0}).format("h:mm a")}
                         </div>
                     </div>
                 ))}
