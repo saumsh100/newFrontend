@@ -11,82 +11,26 @@ class SelectedDay extends Component {
         this.state = {};
         this.renderDoctrosSchedule = this.renderDoctrosSchedule.bind(this);
         this.renderTimeColumn = this.renderTimeColumn.bind(this);
-        const appointments = [
-            {
-                name: "PAtient1",
-                startDate: moment({hour: 12, minute: 30}),
-                endDate: moment({hour: 13, minute: 30}),
-                doctorId: "789",
-                title: "regular check",
-            },
-            {
-                name: "PAtient2",
-                startDate: moment({hour: 5, minute: 30}),
-                endDate: moment({hour: 6, minute: 30}),
-                doctorId: "456",
-                title: "regular check"
-            },
-            {
-                name: "PAtient3",
-                startDate: moment({hour: 4, minute: 3}),
-                endDate: moment({hour: 6, minute: 30}),
-                doctorId: "123",
-                title: "regular check",
-            },
-            {
-                name: "PAtient3",
-                startDate: moment({hour: 16, minute: 3}),
-                endDate: moment({hour: 18, minute: 30}),
-                doctorId: "456",
-                title: "regular check",
-            },
-        ];
-
-        const doctors = [
-            {
-                id: "123",
-                name: "Petrov",
-
-            },
-            {
-                id: "456",
-                name: "Strange",
-            },
-            {
-                id: "789",
-                name: "Beits",
-            }
-        ];
-        let tablesCount = ( 100 / (doctors.length + 1) );
-        const scale = 1.5; // 1 minute = scale px so that appointment which
-        //takes 30 minutes will have 300px height
-        this.appointments = appointments;
-        this.scale = scale;
-        this.doctors = doctors;
-        this.tablesCount = tablesCount;
     }
 
     componentDidMount() {
         this.props.fetchEntities({key: 'appointments'});
         this.props.fetchEntities({ key: 'practitioners' });
+        this.props.fetchEntities({ key: 'patients' });
     }
 
     renderAppoinment(appointment, scale, startDay) {
-        const start = appointment.startDate;
-        const end = appointment.endDate;
+        const start = appointment.startTime;
+        const end = appointment.endTime;
         const minutesDuration = end.diff(start, 'minutes');
-
         const positionTop = start.diff(startDay, 'minutes') * scale;
-
         const appointmentStyles = {
             height: `${minutesDuration * scale}px`,
             top: `${positionTop}px`,
         };
-
         const format = 'MMMM Do YYYY, h:mm:ss a';
-        const displayStartDate = appointment.startDate.format(format);
-        const displayEndDate = appointment.endDate.format(format);
-
+        const displayStartDate = appointment.startTime.format(format);
+        const displayEndDate = appointment.endTime.format(format);
         return (
             <div className="appointment" style={appointmentStyles}>
                 <div className="appointment__username">{appointment.name}</div>
@@ -96,17 +40,34 @@ class SelectedDay extends Component {
         );
     }
 
-    renderDoctrosSchedule(doctor, workingHours, appointments, scale, startDay) {
-        const doctorAppointments = appointments.filter(app => app.doctorId === doctor.id);
+    renderDoctrosSchedule(doctor, workingHours, scale, startDay, tablesCount) {
+        const { patients, appointments } = this.props;
+        const patientsArray = patients.get('models').toArray();
+        const appointmentsArray = appointments.get('models').toArray();
+        let apps = appointmentsArray.length && appointmentsArray
+          .filter(app => (app.practitionerId === doctor.id  && moment({hour: 23, minute: 59}) > moment(app.startTime)))
+          .map(app => {
+           const patient = patientsArray.filter(pt => pt.id === app.patientId)[0];
+           const patientName = patient && `${patient.firstName} ${patient.lastName}`;
+           const { title, startTime, endTime, practitionerId } = app;
+           const appObject = {
+            title, 
+            startTime: moment(startTime), 
+            endTime: moment(endTime), 
+            practitionerId
+           }
+           return Object.assign({}, appObject, { name: patientName });
+        })
+        if (typeof apps !== "object") apps = [];
+        const doctorAppointments = apps.filter(app => app.practitionerId === doctor.id);
         const doctorScheduleColumn = {
             display: 'inline-block',
             position: 'relative',
-            width: `${this.tablesCount}%`,
+            width: `${tablesCount}%`,
         }
         const workingHour = {
             height: `${scale * 60}px`,
         }
-
         return (
             <div className="schedule__body" style={doctorScheduleColumn}>
                 {workingHours.map((h) => (
@@ -118,13 +79,11 @@ class SelectedDay extends Component {
             </div>
         );
     }
-
-    renderTimeColumn(workingHours, workingMinutes, scale) {
+    renderTimeColumn(workingHours, workingMinutes, scale, tablesCount) {
         const workingHoursColumn = {
-            width: `${this.tablesCount}%`,
+            width: `${tablesCount}%`,
             display: 'inline-block',
         };
-
         const workingHour = {
             height: `${scale * 60}px`,
         };
@@ -139,26 +98,22 @@ class SelectedDay extends Component {
                 ))}
             </div>
         );
-
     }
-
     render() {
+        const { practitioners, patients, appointments } = this.props;
         const start = moment({hour: 0, minute: 0});
         const end = moment({hour: 23, minute: 59});
         const workingMinutes = end.diff(start, 'minutes');
-
         const startHours = start.get("hours");
         const endHours = end.get("hours");
-
         const workingHours = [];
         for (let i = startHours; i <= endHours; i++) {
             workingHours.push(i);
         }
-
-
-        const doctors = this.doctors;
-        const appointments = this.appointments;
-        const scale = this.scale;
+        const practitionersArray = practitioners.get('models').toArray();
+        let tablesCount = ( 100 / (practitionersArray.length + 1) );
+        const scale = 1.5; // 1 minute = scale px so that appointment which
+        //takes 30 minutes will have 300px height
         return (
             <div className="schedule">
                 <div className="schedule__title title">
@@ -168,20 +123,21 @@ class SelectedDay extends Component {
                     </div>
                     <div className="title__number">15</div>
                 </div>
-                {this.renderTimeColumn(workingHours, workingMinutes, scale)}
-                {doctors.map(d => (
-                    this.renderDoctrosSchedule(d, workingHours, appointments, scale, start)
+                {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}
+                {practitionersArray.map(d => (
+                    this.renderDoctrosSchedule(d, workingHours, scale, start, tablesCount)
                 ))}
             </div>
         );
     }
 }
 
-
 function mapStateToProps({entities}) {
     return {
         appointments: entities.get('appointments'),
         practitioners: entities.get('practitioners'),
+        patients: entities.get('patients'),
+        
     };
 }
 

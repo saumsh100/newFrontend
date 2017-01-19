@@ -16,7 +16,7 @@ const userRouter = require('./users');
 const textMessagesRouter = require('./textMessages');
 const authMiddleware = require('../../middleware/auth');
 const practitionersRouter = require('./practitioners');
-apiRouter.use('/appointments', authMiddleware, appointmentRouter);
+apiRouter.use('/appointments', appointmentRouter);
 
 apiRouter.use('/reputation', authMiddleware, reputationRouter);
 apiRouter.use('/session', sessionRouter);

@@ -47,6 +47,7 @@ export default handleActions({
     each(entities, (collectionMap, key) => {
       each(collectionMap, (modelData, id) => {
         // newModel will have lastUpdated populated
+
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);
       });
