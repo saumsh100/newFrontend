@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, IndexRoute, IndexRedirect } from 'react-router';
 import App from './containers/App';
 
 let counter = 0;
@@ -31,6 +31,7 @@ export default function Routes({ history }) {
             });
           }}
         >
+          <IndexRedirect to="/schedule/dayview" />
 
           <Route
             path="dayview"
@@ -40,8 +41,27 @@ export default function Routes({ history }) {
               });
             }}
           >
-          </Route>        
+          </Route>
 
+          <Route
+            path="monthview"
+            getComponent={(location, callback) => {
+              require.ensure(['./components/Schedule/MonthView'], (require) => {
+                callback(null, require('./components/Schedule/MonthView').default);
+              });
+            }}
+          >
+          </Route>       
+          
+          <Route
+            path="weekview"
+            getComponent={(location, callback) => {
+              require.ensure(['./components/Schedule/WeekView'], (require) => {
+                callback(null, require('./components/Schedule/WeekView').default);
+              });
+            }}
+          >
+          </Route>    
 
         </Route>
 

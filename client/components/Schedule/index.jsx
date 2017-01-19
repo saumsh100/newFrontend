@@ -5,7 +5,8 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import styles from './styles.scss';
 import Link from '../library/Link';
-
+import DayPicker, { DateUtils } from "react-day-picker";
+import "react-day-picker/lib/style.css";
 import './index.css';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -16,10 +17,26 @@ BigCalendar.setLocalizer(
 class Schedule extends Component {
   constructor(props) {
     super(props);
-    this.state = { availabilities: [] };
-    
+    this.state = { availabilities: [], selectedDay: new Date(), showDatePicker: false };
     this.addAvailability = this.addAvailability.bind(this);
     this.removeAvailability = this.removeAvailability.bind(this);
+    this.handleDayClick = this.handleDayClick.bind(this);
+    this.toggleCalendar = this.toggleCalendar.bind(this);
+  }
+
+  handleDayClick(e, day, { selected, disabled }) {
+    if (disabled) {
+      return;
+    }
+    if (selected) {
+      this.setState({ selectedDay: null, showDatePicker: false });
+    } else {
+      this.setState({ selectedDay: day, showDatePicker: false });
+    }
+  }
+
+  toggleCalendar() {
+    this.setState({ showDatePicker: !this.state.showDatePicker });
   }
   
   componentDidMount() {
@@ -60,31 +77,28 @@ class Schedule extends Component {
         end: new Date(avail.end),
       });
     });
-    
+    const { showDatePicker } = this.state;
     return (
-      <div className={styles.scheduleContainer}>
-        <Card className={styles.cardContainer}>
-          <h2 className="hello">Schedule</h2>
-          <div>
-            <BigCalendar
-              timeslots={1}
-              selectable={true}
-              onSelectSlot={this.addAvailability}
-              onSelectEvent={(event) => {
-                if (confirm('Do you want to remove this availability?')) {
-                  this.removeAvailability(event);
-                }
-              }}
-              min={new Date(2016, 10, 15, 7, 0, 0, 0)}
-              max={new Date(2016, 10, 15, 18, 0, 0, 0)}
-              events={events}
-            />
-          </div>
-        </Card>
-
-        <Link to='/dayview'>
-          "dayVeiw"
-        </Link>
+      <div className={`${styles.scheduleContainer} schedule`}>
+        <div className="schedule__title title">
+          <Link to="/schedule/monthview">month</Link>
+          <br/>
+          <Link to="/schedule/dayview">day</Link>
+          <br/>         
+          <Link to="/schedule/weekview">week</Link>
+        
+        <i className="styles__icon___2RuH0 fa fa-calendar"
+          onClick={this.toggleCalendar}>
+        </i>
+        {showDatePicker && 
+          <DayPicker
+            initialMonth={ new Date(2016, 1) }
+            selectedDays={ day => DateUtils.isSameDay(this.state.selectedDay, day) }
+            onDayClick={ this.handleDayClick.bind(this) }
+          />
+        }
+        </div>
+        {this.props.children}
       </div>
     );
   }

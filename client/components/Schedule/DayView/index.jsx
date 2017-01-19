@@ -4,6 +4,7 @@ import {fetchEntities} from '../../../thunks/fetchEntities';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import './index.css'
+import Link from '../../library/Link';
 
 class SelectedDay extends Component {
     constructor(props) {
