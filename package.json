@@ -138,6 +138,7 @@
     "reselect": "^2.5.3",
     "resolve-url-loader": "^1.4.3",
     "rethinkdb": "^2.3.3",
+    "rethinkdb-job-queue": "^2.1.0",
     "s3": "^4.4.0",
     "sass-loader": "^3.1.2",
     "serve-favicon": "^2.3.0",
