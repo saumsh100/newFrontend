@@ -49,13 +49,13 @@ class PatientsContainer extends React.Component {
       <div>
         <div className={styles.scheduleContainer}>
           <Card className={styles.cardContainer}>
-            <h3>{this.renderHeader()}</h3>
+            <div>{this.renderHeader()}</div>
             <div>
               {this.renderChildren(this.props)}
             </div>
           </Card>
         </div>
-        <AddPatientForm onSubmit={values => alert(JSON.stringify(values))} />
+        {/*<AddPatientForm onSubmit={values => alert(JSON.stringify(values))} />*/}
       </div>
     );
   }

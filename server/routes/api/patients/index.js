@@ -26,7 +26,7 @@ patientsRouter.get('/', (req, res, next) => {
 });
 
 patientsRouter.post('/', (req, res, next) => {
-  const { firstName, lastName, phoneNumber } = req.body;
+  const { firstName, lastName, phoneNumber, email } = req.body;
   Patient.save({
     firstName,
     lastName,
@@ -48,6 +48,7 @@ patientsRouter.put('/:patientId', (req, res, next) => {
   data.firstName = req.body.firstName;
   data.lastName = req.body.lastName;
   data.phoneNumber = req.body.phoneNumber;
+  data.email = req.body.email;
   const { patientId } = req.params;
   Patient.get(patientId).run().then((p) => {
     p.merge(data).save().then((patient) => {

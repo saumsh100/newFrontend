@@ -2,14 +2,11 @@
 import React, { PropTypes } from 'react';
 import ChatContainer from '../../containers/ChatContainer';
 
-function PatientShow({ patient }) {
+function PatientShow({ patient, patients }) {
   if (patient === null) return <div>Loading...</div>;
   return (
     <div>
-      <h5>
-        {`${patient.firstName} ${patient.lastName}`}
-      </h5><br/>
-      <ChatContainer patient={patient} />
+      <ChatContainer patient={patient} patients={patients} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ const Patient = thinky.createModel('Patient', {
   firstName: type.string().required(),
   lastName: type.string().required(),
   phoneNumber: type.string().required(),
+
   //createdAt: type.date().default(thinky.r.now()),
 });
 

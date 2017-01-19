@@ -1,37 +1,31 @@
-
-import React, { PropTypes, Component } from 'react';
+import React, {PropTypes, Component} from 'react';
 import moment from 'moment';
 
 const DialogComponent = (props) => (
-  <ul className="dialogs__messages" >
-  {props.messages.get('models')
-    .filter((el) => el.patientId === props.patientId)
-    .map(m =>
-      <li className="messages">
-        <img className="messages__photo" src="./img/people.png" alt="" />
-        <div className="messages__wrapper">
-            <div className="messages__header">
-                <div className="messages__name"></div>
-                <div className="messages__date">
-                  {moment(m.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-                </div>
-            </div>
-            <div className="messages__body">
-                <div className="messages__unread">
-                    <span></span>
-                </div>
-                <div className="messages__text">
-                  {m.body}
-                </div>
-            </div>
-        </div>
-    </li>
-  )}
-</ul>
-);
+    <div className="message-list">
+        {props.messages.get('models')
+            .filter((el) => el.patientId === props.patientId)
+            .map(m =>
+                <ul className="message left">
+                    <li className="message__item">
+                        <div className="message__wrapper">
+                            <div className="message__time">
+                                {moment(m.createdAt).fromNow()}
+                            </div>
+                            <div className="message__text">
+                                {m.body}
+                            </div>
+                            {console.log('props',props)}
+                            {console.log('props - messages',props.messages.get('models'))}
+                            <img className="message__avatar" src="https://randomuser.me/api/portraits/women/70.jpg"/>
+                        </div>
+                    </li>
+                </ul>
+            )}
+    </div>);
 
 DialogComponent.propTypes = {
-  messages: PropTypes.array,
+    messages: PropTypes.array,
 };
 
 export default DialogComponent;
