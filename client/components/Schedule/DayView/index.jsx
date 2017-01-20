@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import './index.css'
 import Link from '../../library/Link';
+import CurrentDate from '../CurrentDate';
 
 class SelectedDay extends Component {
     constructor(props) {
@@ -104,9 +105,6 @@ class SelectedDay extends Component {
     render() {
         // const currentDate = store.getState().date.toJS().scheduleDate;
         const currentDate = this.props.currentDate.toJS().scheduleDate; 
-        const dayOftheWeek = new Date(currentDate._d).toLocaleString('en-us', {  weekday: 'long' });
-        const dayOftheMonth = currentDate.date();
-        const currentMonth = currentDate.format("MMMM");
         const { practitioners, patients, appointments } = this.props;
         const start = moment({hour: 0, minute: 0});
         const end = moment({hour: 23, minute: 59});
@@ -123,13 +121,7 @@ class SelectedDay extends Component {
         //takes 30 minutes will have 300px height
         return (
             <div className="schedule">
-                <div className="schedule__title title">
-                    <div className="title__side">
-                        <div className="title__month">{currentMonth}</div>
-                        <div className="title__day">{dayOftheWeek}</div>
-                    </div>
-                    <div className="title__number">{dayOftheMonth}</div>
-                </div>
+                <CurrentDate currentDate={currentDate} />
                 {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}
                 {practitionersArray.map(d => (
                     this.renderDoctrosSchedule(d, workingHours, scale, start, tablesCount)
