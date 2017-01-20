@@ -6,8 +6,13 @@ import moment from 'moment';
 import styles from './styles.scss';
 import Link from '../library/Link';
 import DayPicker, { DateUtils } from "react-day-picker";
+import setScheduleDate from '../../thunks/date';
 import "react-day-picker/lib/style.css";
 import './index.css';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 BigCalendar.setLocalizer(
@@ -30,6 +35,8 @@ class Schedule extends Component {
     }
     if (selected) {
       this.setState({ selectedDay: null, showDatePicker: false });
+      this.props.setScheduleDate({ scheduleDate: day });
+      debugger;
     } else {
       this.setState({ selectedDay: day, showDatePicker: false });
     }
@@ -78,6 +85,7 @@ class Schedule extends Component {
       });
     });
     const { showDatePicker } = this.state;
+    debugger;
     return (
       <div className={`${styles.scheduleContainer} schedule`}>
         <div className="schedule__title title">
@@ -104,4 +112,15 @@ class Schedule extends Component {
   }
 }
 
-export default Schedule;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        setScheduleDate,
+    }, dispatch);
+}
+
+const enhance = connect(mapDispatchToProps);
+
+export default enhance(Schedule);
+
+
+
