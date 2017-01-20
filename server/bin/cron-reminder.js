@@ -1,3 +1,4 @@
+// import moment from 'moment';
 const each = require('lodash/each');
 const cron = require('node-cron');
 const Appointment = require('../models/Appointment');
@@ -16,7 +17,7 @@ Appointment.belongsTo(Account, 'account', 'accountId', 'id');
 Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const cronPattern = NODE_ENV === 'production' ? '0 */30  * * * *' : '*/10 * * * * *';
+const cronPattern = NODE_ENV === 'production' ? '0 */30  * * * *' : '*/20 * * * * *';
 // test pattern '*/2 * * * * *'
 cron.schedule(cronPattern, () => {
   const mili24hours = 86400000;
@@ -25,9 +26,10 @@ cron.schedule(cronPattern, () => {
       const shouldNotifyAppointments = appointments.filter((appointment) => {
         const now = Date.now();
         const start = appointment.startTime.getTime();
-        return (((start - now) <= mili24hours) && appointment.confirmed === false);
+        return ((((start - now) <= mili24hours) && (start - now) > 0)
+          && appointment.confirmed === false);
       });
-      each(shouldNotifyAppointments, (a) => {
+      shouldNotifyAppointments.length && each(shouldNotifyAppointments, (a) => {
         Token.filter({ appointmentId: a.id }).run()
         .then((token) => {
           const emailConfObject = {

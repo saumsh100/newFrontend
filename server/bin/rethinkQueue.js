@@ -72,16 +72,16 @@ emailConfirmationQueue.process((job, next) => {
 });
 
 function emailConfirmation(params) {
-  const job = smsConfirmationQueue.createJob();
+  const job = emailConfirmationQueue.createJob({ retryMax: 2 });
   job.params = params;
-  smsConfirmationQueue.addJob(job).then((savedJob) => {
+  emailConfirmationQueue.addJob(job).then((savedJob) => {
     console.log(`Job Added: ${savedJob[0]}`);
   }).catch(err => console.error(err));
 }
 
 
 function smsConfirmation(a) {
-  const job = smsConfirmationQueue.createJob();
+  const job = smsConfirmationQueue.createJob({ retryMax: 2 });
   job.a = a;
   smsConfirmationQueue.addJob(job).then((savedJob) => {
     console.log(`Job Added: ${savedJob[0]}`);
