@@ -13,7 +13,7 @@ const initialState = fromJS({
 export default handleActions({
   [SET_SCHEDULE_DATE](state, action) {
     return state.merge({
-      scheduleDate: action.scheduleDate,
+      scheduleDate: action.payload.scheduleDate,
     });
   }
 }, initialState);

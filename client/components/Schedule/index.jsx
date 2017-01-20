@@ -6,7 +6,7 @@ import moment from 'moment';
 import styles from './styles.scss';
 import Link from '../library/Link';
 import DayPicker, { DateUtils } from "react-day-picker";
-import setScheduleDate from '../../thunks/date';
+import setCurrentScheduleDate from '../../thunks/date';
 import "react-day-picker/lib/style.css";
 import './index.css';
 import { connect } from 'react-redux';
@@ -35,11 +35,11 @@ class Schedule extends Component {
     }
     if (selected) {
       this.setState({ selectedDay: null, showDatePicker: false });
-      this.props.setScheduleDate({ scheduleDate: day });
-      debugger;
     } else {
       this.setState({ selectedDay: day, showDatePicker: false });
     }
+    const scheduleDate = moment(day);
+    this.props.setCurrentScheduleDate(scheduleDate);
   }
 
   toggleCalendar() {
@@ -85,7 +85,6 @@ class Schedule extends Component {
       });
     });
     const { showDatePicker } = this.state;
-    debugger;
     return (
       <div className={`${styles.scheduleContainer} schedule`}>
         <div className="schedule__title title">
@@ -114,11 +113,11 @@ class Schedule extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        setScheduleDate,
+        setCurrentScheduleDate,
     }, dispatch);
 }
 
-const enhance = connect(mapDispatchToProps);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(Schedule);
 

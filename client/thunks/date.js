@@ -1,7 +1,7 @@
-import { loginSuccess } from '../actions/entities'
+import { setScheduleDate } from '../actions/date';
 
-export default function setScheduleDate(scheduleDate) {
+export default function setCurrentScheduleDate(scheduleDate) {
   return function (dispatch, getState) {
-    dispatch(loginSuccess({ scheduleDate }));
+    dispatch(setScheduleDate({ scheduleDate }));
   };
 }

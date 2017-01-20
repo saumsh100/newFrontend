@@ -102,6 +102,11 @@ class SelectedDay extends Component {
         );
     }
     render() {
+        // const currentDate = store.getState().date.toJS().scheduleDate;
+        const currentDate = this.props.currentDate.toJS().scheduleDate; 
+        const dayOftheWeek = new Date(currentDate._d).toLocaleString('en-us', {  weekday: 'long' });
+        const dayOftheMonth = currentDate.date();
+        const currentMonth = currentDate.format("MMMM");
         const { practitioners, patients, appointments } = this.props;
         const start = moment({hour: 0, minute: 0});
         const end = moment({hour: 23, minute: 59});
@@ -120,10 +125,10 @@ class SelectedDay extends Component {
             <div className="schedule">
                 <div className="schedule__title title">
                     <div className="title__side">
-                        <div className="title__month">Wednesday</div>
-                        <div className="title__day">FEBRUARY</div>
+                        <div className="title__month">{currentMonth}</div>
+                        <div className="title__day">{dayOftheWeek}</div>
                     </div>
-                    <div className="title__number">15</div>
+                    <div className="title__number">{dayOftheMonth}</div>
                 </div>
                 {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}
                 {practitionersArray.map(d => (
@@ -134,12 +139,12 @@ class SelectedDay extends Component {
     }
 }
 
-function mapStateToProps({entities}) {
+function mapStateToProps({entities, date}) {
     return {
         appointments: entities.get('appointments'),
         practitioners: entities.get('practitioners'),
         patients: entities.get('patients'),
-        
+        currentDate: date,
     };
 }
 
