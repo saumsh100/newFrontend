@@ -113,7 +113,7 @@ ul {
       margin: auto; }
 
 .chat {
-  width: 70%;
+  width: 100%;
   margin-left: 10px;
   background: #fafafa; }
   .chat::before {
@@ -151,11 +151,10 @@ ul {
         -ms-flex-direction: row;
             flex-direction: row; }
   .chat__body {
-    width: 75%;
-    border-right: 1px solid #e6e6e6; }
+    width: 100%;  }
   .chat .message-list {
-    max-height: 400px;
-    height: 100%;
+    min-height: 300px;
+    max-height: 300px;
     overflow-y: auto; }
   .chat .partner {
     display: -webkit-box;

@@ -38,19 +38,6 @@ class Chat extends Component {
         if (patient === null) return <div>Loading...</div>;
         return (
             <div className="chat__container">
-                <div className="dialogs">
-                    {console.log('patients', patients)}
-                    <div className="dialogs__search search">
-                        <label className="search__label" htmlFor="search__input">
-                            <i className="fa fa-search"></i>
-                        </label>
-                        <input id="search__input" className="search__input" placeholder="Search..."/>
-                        <div className="search__edit">
-                            <i className="fa fa-pencil"></i>
-                        </div>
-                    </div>
-                    <DialogsList patients={patients} messages={textMessages}/>
-                </div>
                 <div className="chat">
                     <div className="chat__header">
                         <div className="chat__address address">
@@ -77,49 +64,6 @@ class Chat extends Component {
                                 <div className="body-footer__">
                                 </div>
                             </div>
-                        </div>
-                        <div className="chat__partner">
-                            <div className="partner">
-                                <div className="partner__header">
-                                    <img className="partner__photo" src={patient.image}/>
-                                    <div className="partner__name">
-                                        Jenn Frye, 30
-                                    </div>
-                                    <div className="partner__birthday">
-                                        02/17/1987
-                                    </div>
-                                    <div className="partner__gender">
-                                        Female
-                                    </div>
-                                </div>
-                                <div className="partner__main">
-                                    <div className="partner__phone">
-                                        <a href={`tel: ${patient.phoneNumber}`}>
-                                            <i className="fa fa-phone"></i>
-                                            {patient.phoneNumber}
-                                        </a>
-                                    </div>
-                                    <div className="partner__email">
-                                        <a href={`mailto: ${patient.email}`}>
-                                            <i className="fa fa-envelope"></i>
-                                            {patient.email}
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="partner__footer">
-                                    <div className="appointment">
-                                        <div className="appointment__last">
-                                            <div className="appointment__last--text">Last appointment</div>
-                                            <div className="appointment__last--date">02/23/2017</div>
-                                        </div>
-                                        <div className="appointment__next">
-                                            <div className="appointment__next--text">Next appointment</div>
-                                            <div className="appointment__next--date">08/23/2017</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/*  <SendMessageInput onSend={this.sendMessage}/>*/}
                         </div>
                     </div>
                 </div>
