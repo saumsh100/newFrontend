@@ -16,5 +16,7 @@ export default class TextMessage extends createModel(TextMessageSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
-  
+   getUrlRoot() {
+     return `/api/textMessages`;
+   }
 }

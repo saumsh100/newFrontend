@@ -33,11 +33,11 @@ export function fetchDelete({ key, id }) {
   };
 }
 
-export function fetchPost({ key, patient }) {
+export function fetchPost({ key, params }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    axios.post(entity.getUrlRoot(), patient)
+    axios.post(entity.getUrlRoot(), params)
       .then((response) => {
         const { data } = response;
         dispatch(addEntity({ key, entity: data.entities }));

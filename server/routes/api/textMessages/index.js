@@ -1,5 +1,6 @@
 
 const { normalize, Schema, arrayOf } = require('normalizr');
+const uuid = require('uuid').v4;
 const textMessagesRouter = require('express').Router();
 const TextMessage = require('../../../models/TextMessage');
 const Practitioner = require('../../../models/Practitioner');
@@ -52,6 +53,23 @@ textMessagesRouter.get('/conversation', (req, res, next) => {
   .catch(next);
 
 
+});
+textMessagesRouter.post('/', (req, res, next) => {
+    const {
+        body,
+        patientId
+    } = req.body;
+    Practitioner.execute().then((practitioners) => {
+        TextMessage.save({
+                id: uuid(),
+                createdAt: new Date(),
+                practitionerId: practitioners[0].id,
+                patientId,
+                body,
+            })
+            .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
+            .catch(next);
+    });
 });
 
 module.exports = textMessagesRouter;

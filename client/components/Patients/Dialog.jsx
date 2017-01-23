@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import moment from 'moment';
 
 const DialogComponent = (props) => (
-    <div className="message-list">
+    <div className="message-wrapper">
         {props.messages.get('models')
             .filter((el) => el.patientId === props.patientId)
             .map(m =>
@@ -15,8 +15,6 @@ const DialogComponent = (props) => (
                             <div className="message__text">
                                 {m.body}
                             </div>
-                            {console.log('props',props)}
-                            {console.log('props - messages',props.messages.get('models'))}
                             <img className="message__avatar" src="https://randomuser.me/api/portraits/women/70.jpg"/>
                         </div>
                     </li>
