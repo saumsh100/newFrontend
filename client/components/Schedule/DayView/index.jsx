@@ -43,12 +43,21 @@ class SelectedDay extends Component {
     }
 
     renderDoctrosSchedule(doctor, workingHours, scale, startDay, tablesCount) {
-        const { patients, appointments, schedule } = this.props;
+        const { patients, appointments, schedule, currentDate } = this.props;
         const patientsArray = patients.get('models').toArray();
         const appointmentsArray = appointments.get('models').toArray();
         const appointmentType = schedule.toJS().appointmentType;
         let apps = appointmentsArray.length && appointmentsArray
-          .filter(app => (app.practitionerId === doctor.id  && moment({hour: 23, minute: 59}) > moment(app.startTime)))
+          .filter(app => {
+            const currentDoctorsAppointment = app.practitionerId === doctor.id;
+            const momentDate = currentDate.toJS().scheduleDate
+            const momentStartTime = moment(app.startTime);
+            const theSameDay = momentDate.date() === momentStartTime.date();
+            const theSameMonth = momentDate.month() === momentStartTime.month();
+            const theSameYear = momentDate.year() === momentStartTime.year();
+            const theSameDate = theSameDay && theSameMonth && theSameMonth;
+            return currentDoctorsAppointment && theSameDate;
+          })
           .map(app => {
            const patient = patientsArray.filter(pt => pt.id === app.patientId)[0];
            const patientName = patient && `${patient.firstName} ${patient.lastName}`;
@@ -64,6 +73,7 @@ class SelectedDay extends Component {
         if (appointmentType) {
           apps = apps.filter(app => app.title == appointmentType);
         }
+
         if (typeof apps !== "object") apps = [];
         const doctorAppointments = apps.filter(app => app.practitionerId === doctor.id);
         const doctorScheduleColumn = {
