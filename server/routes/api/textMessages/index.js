@@ -4,7 +4,8 @@ const textMessagesRouter = require('express').Router();
 const TextMessage = require('../../../models/TextMessage');
 const Practitioner = require('../../../models/Practitioner');
 const twilioClient = require('../../../config/twilio');
-
+const uuid = require('uuid').v4;
+const Patient = require('../../../models/Patient');
 const textMessageSchema = new Schema('textMessageSchema');
 
 // TODO: this should have default queries and limits
@@ -50,8 +51,22 @@ textMessagesRouter.get('/conversation', (req, res, next) => {
     .catch(next);
   })
   .catch(next);
+});
 
-
+textMessagesRouter.post('/', (req, res, next) => {
+  const { body } = req.body;
+  Patient.run().then((patients) => {
+    Practitioner.execute().then((practitioners) => {
+      TextMessage.save({
+        id: uuid(),
+        practitionerId: practitioners[0].id,
+        patientId: patients[0].id,
+        body,
+      })
+      .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
+      .catch(next);
+    });
+  });
 });
 
 module.exports = textMessagesRouter;
