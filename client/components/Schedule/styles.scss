@@ -1,7 +1,17 @@
 
 .scheduleContainer {
   padding: 20px;
+  width: 80%;
+}
+
+.scheduleSidebar {
+	width: 20%;
 }
 
 .cardContainer {
+}
+
+.scheduleContainerWrapper {
+	display: flex;
+	flex-direction: row;	
 }

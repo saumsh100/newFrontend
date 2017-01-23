@@ -8,6 +8,7 @@ import reviews from './reviews';
 import auth from './auth';
 import entities from './entities';
 import date from './date';
+import schedule from './schedule';
 
 export default combineReducers({
   routing,
@@ -20,4 +21,5 @@ export default combineReducers({
   auth,
   entities,
   date,
+  schedule,
 });

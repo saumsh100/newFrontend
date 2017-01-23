@@ -1,16 +1,18 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Card } from '../library';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import styles from './styles.scss';
 import Link from '../library/Link';
 import DayPicker, { DateUtils } from "react-day-picker";
 import setCurrentScheduleDate from '../../thunks/date';
+import { addPractitionerToFilter } from '../../thunks/schedule';
+import { removePractitionerFromFilter } from '../../thunks/schedule';
 import "react-day-picker/lib/style.css";
 import './index.css';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Filters from './Filters'
 
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -27,6 +29,17 @@ class Schedule extends Component {
     this.removeAvailability = this.removeAvailability.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
     this.toggleCalendar = this.toggleCalendar.bind(this);
+    this.handleCheckDoctor = this.handleCheckDoctor.bind(this);
+  }
+
+  componentDidMount() {
+    // this.props.fetchEntities({key: 'appointments'});
+    this.props.fetchEntities({ key: 'practitioners' });
+    // this.props.fetchEntities({ key: 'patients' });
+  }
+
+  handleCheckDoctor() {
+
   }
 
   handleDayClick(e, day, { selected, disabled }) {
@@ -85,39 +98,70 @@ class Schedule extends Component {
       });
     });
     const { showDatePicker } = this.state;
+    const {
+      practitioners,
+      patients,
+      appointments,
+      addPractitionerToFilter,
+      removePractitionerFromFilter,
+      schedule,
+    } = this.props;
     return (
-      <div className={`${styles.scheduleContainer} schedule`}>
-        <div className="schedule__title title">
-          <Link to="/schedule/monthview">month</Link>
-          <br/>
-          <Link to="/schedule/dayview">day</Link>
-          <br/>         
-          <Link to="/schedule/weekview">week</Link>
-        
-        <i className="styles__icon___2RuH0 fa fa-calendar"
-          onClick={this.toggleCalendar}>
-        </i>
-        {showDatePicker && 
-          <DayPicker
-            initialMonth={ new Date(2016, 1) }
-            selectedDays={ day => DateUtils.isSameDay(this.state.selectedDay, day) }
-            onDayClick={ this.handleDayClick.bind(this) }
-          />
-        }
+      <div className={styles.scheduleContainerWrapper}>
+        <div className={`${styles.scheduleContainer} schedule`}>
+          <div className="schedule__title title">
+            <Link to="/schedule/monthview">month</Link>
+            <br/>
+            <Link to="/schedule/dayview">day</Link>
+            <br/>         
+            <Link to="/schedule/weekview">week</Link>
+          
+          <i className="styles__icon___2RuH0 fa fa-calendar"
+            onClick={this.toggleCalendar}>
+          </i>
+          {showDatePicker && 
+            <DayPicker
+              initialMonth={ new Date(2016, 1) }
+              selectedDays={ day => DateUtils.isSameDay(this.state.selectedDay, day) }
+              onDayClick={ this.handleDayClick.bind(this) }
+            />
+          }
+          </div>
+          {this.props.children}
         </div>
-        {this.props.children}
+
+
+        <div className={styles.scheduleSidebar}>
+          <Filters 
+            practitioners={practitioners.get('models').toArray()}
+            addPractitionerToFilter={addPractitionerToFilter}
+            removePractitionerFromFilter={removePractitionerFromFilter}
+            schedule={schedule}
+          />
+        </div>
       </div>
+
     );
   }
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        setCurrentScheduleDate,
-    }, dispatch);
+function mapStateToProps({entities, date, schedule}) {
+  return {
+    practitioners: entities.get('practitioners'),
+    schedule: schedule,
+  };
 }
 
-const enhance = connect(null, mapDispatchToProps);
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    setCurrentScheduleDate,
+    addPractitionerToFilter,
+    removePractitionerFromFilter,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Schedule);
 
