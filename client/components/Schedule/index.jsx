@@ -6,8 +6,11 @@ import styles from './styles.scss';
 import Link from '../library/Link';
 import DayPicker, { DateUtils } from "react-day-picker";
 import setCurrentScheduleDate from '../../thunks/date';
-import { addPractitionerToFilter } from '../../thunks/schedule';
-import { removePractitionerFromFilter } from '../../thunks/schedule';
+import {
+  addPractitionerToFilter,
+  selectAppointmentType,
+  removePractitionerFromFilter,
+} from '../../thunks/schedule';
 import "react-day-picker/lib/style.css";
 import './index.css';
 import { connect } from 'react-redux';
@@ -33,7 +36,7 @@ class Schedule extends Component {
   }
 
   componentDidMount() {
-    // this.props.fetchEntities({key: 'appointments'});
+    this.props.fetchEntities({ key: 'appointments' });
     this.props.fetchEntities({ key: 'practitioners' });
     // this.props.fetchEntities({ key: 'patients' });
   }
@@ -104,8 +107,16 @@ class Schedule extends Component {
       appointments,
       addPractitionerToFilter,
       removePractitionerFromFilter,
+      selectAppointmentType,
       schedule,
     } = this.props;
+    const appointmentsTypes = [];
+    appointments.get('models').toArray()
+      .forEach(app => {
+        if (appointmentsTypes.indexOf(app.title) < 0) {
+          appointmentsTypes.push(app.title);
+        }
+      })
     return (
       <div className={styles.scheduleContainerWrapper}>
         <div className={`${styles.scheduleContainer} schedule`}>
@@ -137,6 +148,8 @@ class Schedule extends Component {
             addPractitionerToFilter={addPractitionerToFilter}
             removePractitionerFromFilter={removePractitionerFromFilter}
             schedule={schedule}
+            appointmentsTypes={appointmentsTypes}
+            selectAppointmentType={selectAppointmentType}
           />
         </div>
       </div>
@@ -149,6 +162,7 @@ function mapStateToProps({entities, date, schedule}) {
   return {
     practitioners: entities.get('practitioners'),
     schedule: schedule,
+    appointments: entities.get('appointments'),
   };
 }
 
@@ -158,6 +172,7 @@ function mapDispatchToProps(dispatch) {
     setCurrentScheduleDate,
     addPractitionerToFilter,
     removePractitionerFromFilter,
+    selectAppointmentType,
   }, dispatch);
 }
 

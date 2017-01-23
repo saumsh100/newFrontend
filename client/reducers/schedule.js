@@ -4,11 +4,12 @@ import { handleActions } from 'redux-actions';
 import {
   ADD_PRACTITIONER,
   REMOVE_PRACTITIONER,
-
+  SELECT_APPOINMENT_TYPE,
 } from '../constants';
 
 const initialState = fromJS({
   practitioners: [],
+  appointmentType: null,
 });
 
 export default handleActions({
@@ -24,5 +25,11 @@ export default handleActions({
     return state.merge({
       practitioners: practitioners.filter(el => el !== action.payload.practitioner),
     });
+  },
+  [SELECT_APPOINMENT_TYPE](state, action) {
+  	const type = action.payload.type === 'all' ? null : action.payload.type;
+  	return state.merge({
+  		appointmentType: type,
+  	});
   }
 }, initialState);

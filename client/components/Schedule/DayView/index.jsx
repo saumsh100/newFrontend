@@ -43,9 +43,10 @@ class SelectedDay extends Component {
     }
 
     renderDoctrosSchedule(doctor, workingHours, scale, startDay, tablesCount) {
-        const { patients, appointments } = this.props;
+        const { patients, appointments, schedule } = this.props;
         const patientsArray = patients.get('models').toArray();
         const appointmentsArray = appointments.get('models').toArray();
+        const appointmentType = schedule.toJS().appointmentType;
         let apps = appointmentsArray.length && appointmentsArray
           .filter(app => (app.practitionerId === doctor.id  && moment({hour: 23, minute: 59}) > moment(app.startTime)))
           .map(app => {
@@ -60,6 +61,9 @@ class SelectedDay extends Component {
            }
            return Object.assign({}, appObject, { name: patientName });
         })
+        if (appointmentType) {
+          apps = apps.filter(app => app.title == appointmentType);
+        }
         if (typeof apps !== "object") apps = [];
         const doctorAppointments = apps.filter(app => app.practitionerId === doctor.id);
         const doctorScheduleColumn = {
@@ -124,7 +128,7 @@ class SelectedDay extends Component {
         const checkedPractitioers = schedule.toJS().practitioners;
         if (checkedPractitioers.length) {
           practitionersArray = practitionersArray.filter(pr => checkedPractitioers.indexOf(pr.id) > -1);
-        }   
+        }
         let tablesCount = ( 100 / (practitionersArray.length + 1) );
         const scale = 1.5; // 1 minute = scale px so that appointment which
         //takes 30 minutes will have 300px height
@@ -140,7 +144,7 @@ class SelectedDay extends Component {
     }
 }
 
-function mapStateToProps({entities, date, schedule, parients, appointments }) {
+function mapStateToProps({entities, date, schedule }) {
     return {
         appointments: entities.get('appointments'),
         practitioners: entities.get('practitioners'),

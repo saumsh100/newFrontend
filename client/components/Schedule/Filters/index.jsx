@@ -5,6 +5,7 @@ import Checkbox from 'react-toolbox/lib/checkbox';
 class Filters extends Component {
   constructor(props) {
   	super(props);
+  	this.handleTypeFilter = this.handleTypeFilter.bind(this);
   }
 
   handleCheckDoctor(practitionerId, checked) {	
@@ -15,8 +16,12 @@ class Filters extends Component {
   	}
   }
 
+  handleTypeFilter(type) {
+  	this.props.selectAppointmentType(type.target.value);
+  }
+
   render() {
-  	const { practitioners, schedule } = this.props;
+  	const { practitioners, schedule, appointmentsTypes } = this.props;
   	const filterPractitioners = schedule.toJS().practitioners;
   	return (
 	    <Card style={{minHeight: '480px'}}>
@@ -35,6 +40,15 @@ class Filters extends Component {
 				      />
 			    	)
 			    })}
+			    <div>
+			    	Services:
+			    	<select onChange={this.handleTypeFilter} >
+				    	<option value="all">All</option>
+				    	{appointmentsTypes.map(app => (
+				    		<option value={app}>{app}</option>
+				    	))}
+			    	</select>
+			    </div>
 		    </div>
 	  	</Card>
   	);
