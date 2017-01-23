@@ -105,7 +105,12 @@ class SelectedDay extends Component {
     render() {
         // const currentDate = store.getState().date.toJS().scheduleDate;
         const currentDate = this.props.currentDate.toJS().scheduleDate; 
-        const { practitioners, patients, appointments } = this.props;
+        const { 
+          practitioners,
+          patients,
+          appointments,
+          schedule,
+        } = this.props;
         const start = moment({hour: 0, minute: 0});
         const end = moment({hour: 23, minute: 59});
         const workingMinutes = end.diff(start, 'minutes');
@@ -115,7 +120,11 @@ class SelectedDay extends Component {
         for (let i = startHours; i <= endHours; i++) {
             workingHours.push(i);
         }
-        const practitionersArray = practitioners.get('models').toArray();
+        let practitionersArray = practitioners.get('models').toArray();
+        const checkedPractitioers = schedule.toJS().practitioners;
+        if (checkedPractitioers.length) {
+          practitionersArray = practitionersArray.filter(pr => checkedPractitioers.indexOf(pr.id) > -1);
+        }   
         let tablesCount = ( 100 / (practitionersArray.length + 1) );
         const scale = 1.5; // 1 minute = scale px so that appointment which
         //takes 30 minutes will have 300px height
@@ -131,12 +140,13 @@ class SelectedDay extends Component {
     }
 }
 
-function mapStateToProps({entities, date}) {
+function mapStateToProps({entities, date, schedule, parients, appointments }) {
     return {
         appointments: entities.get('appointments'),
         practitioners: entities.get('practitioners'),
         patients: entities.get('patients'),
         currentDate: date,
+        schedule: schedule,
     };
 }
 
