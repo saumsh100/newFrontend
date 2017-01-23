@@ -49,6 +49,29 @@ const SEEDS = {
       practitionerId: practitionerId,
       chairId: chairId,
     },
+
+    {
+      startTime: moment({hour: 19, minute: 20})._d,
+      endTime: moment({hour: 20, minute: 0})._d,
+      title: 'Sooner Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      startTime: moment({hour: 19, minute: 20})._d,
+      endTime: moment({hour: 20, minute: 0})._d,
+      title: 'Sooner Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+    },
     {
       startTime: moment({hour: 15, minute: 30})._d,
       endTime: moment({hour: 15, minute: 30})._d,
@@ -104,6 +127,41 @@ const SEEDS = {
       title: 'Sergey\'s appointment',
       startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
       endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
+
+      patientId: sergeyPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 0, minute: 30})._d,
+      endTime: moment({hour: 2, minute: 10})._d,
+      patientId: sergeyPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+
+
+    {
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 23, minute: 10})._d,
+      endTime: moment({hour: 23, minute: 50})._d,
 
       patientId: sergeyPatientId,
       accountId: accountId,
