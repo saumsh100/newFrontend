@@ -16,6 +16,9 @@ Appointment.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Appointment.belongsTo(Account, 'account', 'accountId', 'id');
 Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
 
+// to run this file add line below to procfile
+// cron-reminder: node ./server/bin/cron-reminder.js
+
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const cronPattern = NODE_ENV === 'production' ? '0 */30  * * * *' : '*/20 * * * * *';
 // test pattern '*/2 * * * * *'
