@@ -54,18 +54,16 @@ textMessagesRouter.get('/conversation', (req, res, next) => {
 });
 
 textMessagesRouter.post('/', (req, res, next) => {
-  const { body } = req.body;
-  Patient.run().then((patients) => {
-    Practitioner.execute().then((practitioners) => {
-      TextMessage.save({
-        id: uuid(),
-        practitionerId: practitioners[0].id,
-        patientId: patients[0].id,
-        body,
-      })
-      .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
-      .catch(next);
-    });
+  const { body, patientId } = req.body;
+  Practitioner.execute().then((practitioners) => {
+    TextMessage.save({
+      id: uuid(),
+      practitionerId: practitioners[0].id,
+      patientId,
+      body,
+    })
+    .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
+    .catch(next);
   });
 });
 
