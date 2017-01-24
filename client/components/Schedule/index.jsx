@@ -11,6 +11,7 @@ import styles from './styles.scss';
 import 'react-day-picker/lib/style.css';
 import Link from '../library/Link';
 import setCurrentScheduleDate from '../../thunks/date';
+import { fetchEntities } from '../../thunks/fetchEntities';
 import {
   addPractitionerToFilter,
   selectAppointmentType,
@@ -166,6 +167,7 @@ function mapDispatchToProps(dispatch) {
     addPractitionerToFilter,
     removePractitionerFromFilter,
     selectAppointmentType,
+    fetchEntities,
   }, dispatch);
 }
 const enhance = connect(mapStateToProps, mapDispatchToProps);

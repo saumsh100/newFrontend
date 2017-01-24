@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 const CurrentDate = (props) => {
-  const { currentDate } = this.props; 
+  const { currentDate } = props; 
   const dayOftheWeek = new Date(currentDate._d).toLocaleString('en-us', {  weekday: 'long' });
   const dayOftheMonth = currentDate.date();
   const currentMonth = currentDate.format("MMMM");

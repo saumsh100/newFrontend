@@ -72,7 +72,6 @@ class SelectedDay extends Component {
     if (appointmentType) {
       apps = apps.filter(app => app.title === appointmentType);
     }
-
     if (typeof apps !== 'object') apps = [];
     const doctorAppointments = apps.filter(app => app.practitionerId === doctor.id);
     const doctorScheduleColumn = {

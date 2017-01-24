@@ -37,7 +37,7 @@ class Filters extends Component {
               <Checkbox
                 checked={checked}
                 label={pr.firstName}
-                onChange={() => { this.handleCheckDoctor(this, pr.id, checked); }}
+                onChange={() => { this.handleCheckDoctor(pr.id, checked); }}
               />
             );
           })}
