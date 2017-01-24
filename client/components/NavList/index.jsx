@@ -23,7 +23,7 @@ export default function NavList({ location }) {
     return (
       <Link to={path}>
         <NavItem className={active ? activeClass : inactiveClass}>
-          <Icon name={icon} className={styles.icon} />
+          <Icon icon={icon} className={styles.icon} />
           <div className={active ? activeLabelClass : inactiveLabelClass}>
             {label}
           </div>
