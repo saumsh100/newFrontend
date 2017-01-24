@@ -2,7 +2,6 @@
 import React, { Component, PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
-import styles from './styles.scss';
 import Link from '../library/Link';
 import DayPicker, { DateUtils } from "react-day-picker";
 import setCurrentScheduleDate from '../../thunks/date';
@@ -12,10 +11,10 @@ import {
   removePractitionerFromFilter,
 } from '../../thunks/schedule';
 import "react-day-picker/lib/style.css";
-import './index.css';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Filters from './Filters'
+import styles from './styles.scss';
 
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -23,7 +22,7 @@ import Filters from './Filters'
 BigCalendar.setLocalizer(
   BigCalendar.momentLocalizer(moment)
 );
-  
+
 class Schedule extends Component {
   constructor(props) {
     super(props);
@@ -61,26 +60,26 @@ class Schedule extends Component {
   toggleCalendar() {
     this.setState({ showDatePicker: !this.state.showDatePicker });
   }
-  
+
   componentDidMount() {
     window.socket.on('receiveAvailabilities', (results) => {
       this.setState({ availabilities: results });
     });
-  
+
     window.socket.on('availabilityAdded', (result) => {
       console.log('availabilityAdded', result);
       const availabilities = this.state.availabilities.concat(result);
       this.setState({ availabilities });
     });
-  
+
     window.socket.on('availabilityRemoved', (result) => {
       const availabilities = this.state.availabilities.filter(avail => avail.id !== result.id);
       this.setState({ availabilities });
     });
-  
+
     window.socket.emit('fetchAvailabilities');
   }
-  
+
   addAvailability({ start, end }) {
     window.socket.emit('addAvailability', {
       start,
@@ -88,11 +87,11 @@ class Schedule extends Component {
       title: 'Availability',
     });
   }
-  
+
   removeAvailability({ id }) {
     window.socket.emit('removeAvailability', { id });
   }
-  
+
   render() {
     const events = this.state.availabilities.map((avail) => {
       return Object.assign({}, avail, {
@@ -124,13 +123,13 @@ class Schedule extends Component {
             <Link to="/schedule/monthview">month</Link>
             <br/>
             <Link to="/schedule/dayview">day</Link>
-            <br/>         
+            <br/>
             <Link to="/schedule/weekview">week</Link>
-          
+
           <i className="styles__icon___2RuH0 fa fa-calendar"
             onClick={this.toggleCalendar}>
           </i>
-          {showDatePicker && 
+          {showDatePicker &&
             <DayPicker
               initialMonth={ new Date(2016, 1) }
               selectedDays={ day => DateUtils.isSameDay(this.state.selectedDay, day) }
@@ -143,7 +142,7 @@ class Schedule extends Component {
 
 
         <div className={styles.scheduleSidebar}>
-          <Filters 
+          <Filters
             practitioners={practitioners.get('models').toArray()}
             addPractitionerToFilter={addPractitionerToFilter}
             removePractitionerFromFilter={removePractitionerFromFilter}
@@ -179,6 +178,3 @@ function mapDispatchToProps(dispatch) {
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Schedule);
-
-
-

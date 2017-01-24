@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import moment from 'moment';
 import {fetchEntities} from '../../../thunks/fetchEntities';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import './index.css'
 import Link from '../../library/Link';
 import CurrentDate from '../CurrentDate';
+import styles from '../styles.scss';
 
 class SelectedDay extends Component {
     constructor(props) {
@@ -34,10 +34,10 @@ class SelectedDay extends Component {
         const displayStartDate = appointment.startTime.format(format);
         const displayEndDate = appointment.endTime.format(format);
         return (
-            <div className="appointment" style={appointmentStyles}>
-                <div className="appointment__username">{appointment.name}</div>
-                <div className="appointment__date">{`${displayStartDate} - ${displayEndDate}`}</div>
-                <div className="appointment__title">{appointment.title}</div>
+            <div className={styles.appointment} style={appointmentStyles}>
+                <div className={styles.appointment__username}>{appointment.name}</div>
+                <div className={styles.appointment__date}>{`${displayStartDate} - ${displayEndDate}`}</div>
+                <div className={styles.appointment__title}>{appointment.title}</div>
             </div>
         );
     }
@@ -63,9 +63,9 @@ class SelectedDay extends Component {
            const patientName = patient && `${patient.firstName} ${patient.lastName}`;
            const { title, startTime, endTime, practitionerId } = app;
            const appObject = {
-            title, 
-            startTime: moment(startTime), 
-            endTime: moment(endTime), 
+            title,
+            startTime: moment(startTime),
+            endTime: moment(endTime),
             practitionerId
            }
            return Object.assign({}, appObject, { name: patientName });
@@ -86,9 +86,9 @@ class SelectedDay extends Component {
             color: "white",
         }
         return (
-            <div className="schedule__body" style={doctorScheduleColumn}>
+            <div className={styles.schedule__body} style={doctorScheduleColumn}>
                 {workingHours.map((h) => (
-                    <div className="schedule__element" style={workingHour}>
+                    <div className={styles.schedule__element} style={workingHour}>
                         {h}
                     </div>
                 ))}
@@ -105,10 +105,10 @@ class SelectedDay extends Component {
             height: `${scale * 60}px`,
         };
         return (
-            <div className="schedule__header" style={workingHoursColumn}>
+            <div className={styles.schedule__header} style={workingHoursColumn}>
                 {workingHours.map((h) => (
-                    <div className="schedule__element" style={workingHour}>
-                        <div className="schedule__date">
+                    <div className={styles.schedule__element} style={workingHour}>
+                        <div className={styles.schedule__date}>
                             {moment({hour: h, minute: 0}).format("h:mm a")}
                         </div>
                     </div>
@@ -118,8 +118,8 @@ class SelectedDay extends Component {
     }
     render() {
         // const currentDate = store.getState().date.toJS().scheduleDate;
-        const currentDate = this.props.currentDate.toJS().scheduleDate; 
-        const { 
+        const currentDate = this.props.currentDate.toJS().scheduleDate;
+        const {
           practitioners,
           patients,
           appointments,
@@ -143,7 +143,7 @@ class SelectedDay extends Component {
         const scale = 1.5; // 1 minute = scale px so that appointment which
         //takes 30 minutes will have 300px height
         return (
-            <div className="schedule">
+            <div className={styles.schedule}>
                 <CurrentDate currentDate={currentDate} />
                 {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}
                 {practitionersArray.map(d => (

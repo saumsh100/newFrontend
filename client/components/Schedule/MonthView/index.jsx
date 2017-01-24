@@ -3,6 +3,7 @@ import moment from 'moment';
 import {fetchEntities} from '../../../thunks/fetchEntities';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import styles from '../styles.scss';
 
 class MonthView extends Component {
     constructor(props) {
@@ -10,14 +11,14 @@ class MonthView extends Component {
     }
     render() {
         return (
-            <div className="schedule">
-                <div className="schedule__title title">
-                    <div className="title__side">
-                        <div className="title__month">Wednesday</div>
-                        <div className="title__day">FEBRUARY</div>
-                    </div>
-                    <div className="title__number">15</div>
-                </div>
+          <div className={styles.schedule}>
+              <div className={`${styles.schedule__title} ${styles.title}`}>
+                  <div className={styles.title__side}>
+                      <div className={styles.title__month}>Wednesday</div>
+                      <div className={styles.title__day}>FEBRUARY</div>
+                  </div>
+                  <div className={styles.title__number}>15</div>
+              </div>
                 Monthly schedule
             </div>
         );
