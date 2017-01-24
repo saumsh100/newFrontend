@@ -68,11 +68,17 @@
 .rightOfBar {
   display: flex !important;
   text-align: right;
+  margin-left: auto;
 }
 
 .pillsList {
   display: flex;
   flex-direction: row;
-  margin-left: auto !important;
+  padding-left: 0;
   list-style: none;
+}
+
+.logoutPill {
+  border-left: 1.5px solid darkgrey;
+  padding: 6px;
 }

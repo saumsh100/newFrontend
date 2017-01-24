@@ -27,9 +27,10 @@ class TopBar extends Component {
         styles.topBarContainerCollapsed :
         styles.topBarContainerUnCollapsed
     );
-    
-    return (
-      <AppBar className={topBarClassName}>
+
+    let logoComponent = null;
+    if (!isCollapsed) {
+      logoComponent = (
         <div className={styles.logoWrapper}>
           <div className={styles.logoImage}>
             <img
@@ -39,20 +40,21 @@ class TopBar extends Component {
             />
           </div>
         </div>
-        <div className={styles.topBar}>
-          <div className={styles.leftOfBar}>
-            <IconButton onClick={() => setIsCollapsed(!isCollapsed)} icon="bars" />
-          </div>
-          <div className={styles.rightOfBar}>
-            <ul className={styles.pillsList}>
-              <li>
-                <IconButton onClick={this.logout} icon="power-off" />
-              </li>
-              <li>
-                <IconButton onClick={this.logout} icon="power-off" />
-              </li>
-            </ul>
-          </div>
+      );
+    }
+
+    return (
+      <AppBar className={topBarClassName}>
+        {logoComponent}
+        <div className={styles.leftOfBar}>
+          <IconButton onClick={() => setIsCollapsed(!isCollapsed)} icon="bars" />
+        </div>
+        <div className={styles.rightOfBar}>
+          <ul className={styles.pillsList}>
+            <li className={styles.logoutPill}>
+              <IconButton onClick={this.logout} icon="power-off" />
+            </li>
+          </ul>
         </div>
       </AppBar>
     );
