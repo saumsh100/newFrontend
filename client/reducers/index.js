@@ -13,8 +13,6 @@ import schedule from './schedule';
 export default combineReducers({
   routing,
   form,
-  
-  // Written by us...
   toolbar,
   reputation,
   reviews,

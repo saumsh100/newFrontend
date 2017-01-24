@@ -1,9 +1,9 @@
 
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
-import moment from 'moment'
+import moment from 'moment';
 import {
-  SET_SCHEDULE_DATE
+  SET_SCHEDULE_DATE,
 } from '../constants';
 
 const initialState = fromJS({
@@ -15,5 +15,5 @@ export default handleActions({
     return state.merge({
       scheduleDate: action.payload.scheduleDate,
     });
-  }
+  },
 }, initialState);
