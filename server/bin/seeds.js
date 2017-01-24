@@ -224,7 +224,7 @@ const SEEDS = {
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+17784012237',
+      phoneNumber: '+17808508886',
       id: justinPatientId,
     },
     {
