@@ -2,7 +2,7 @@
 @import '../../ui';
 
 .leftSectionContainer {
-  top: 0;
+  top: $top-nav-height;
   left: 0;
   width: $side-nav-width;
   position: fixed;
@@ -13,20 +13,6 @@
 
 .navHidden {
   display: none;
-}
-
-.logoWrapper {
-  // padding-left: 20px;
-  height: $top-nav-height;
-  border-bottom: 0.5px grey solid;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.logoImage {
-  width: 140px;
-  margin-left: 25px;
-  margin-top: -12px;
 }
 
 .navListWrapper {
