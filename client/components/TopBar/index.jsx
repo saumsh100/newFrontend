@@ -9,7 +9,6 @@ import styles from './styles.scss';
 class TopBar extends Component {
   constructor(props) {
     super(props);
-    
     this.logout = this.logout.bind(this);
   }
 
@@ -27,7 +26,6 @@ class TopBar extends Component {
         styles.topBarContainerCollapsed :
         styles.topBarContainerUnCollapsed
     );
-    
     return (
       <AppBar className={topBarClassName}>
         <div

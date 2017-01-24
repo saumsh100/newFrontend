@@ -1,7 +1,7 @@
 import {
-	addPractitionerFilter,
-	removePractitionerFilter,
-	selectAppointmentTypeFilter,
+  addPractitionerFilter,
+  removePractitionerFilter,
+  selectAppointmentTypeFilter,
 } from '../actions/schedule';
 
 export function addPractitionerToFilter(id) {
@@ -13,11 +13,11 @@ export function addPractitionerToFilter(id) {
 export function removePractitionerFromFilter(id) {
   return function (dispatch, getState) {
     dispatch(removePractitionerFilter({ practitioner: id }));
-  };	
+  };
 }
 
 export function selectAppointmentType(type) {
-	return function (dispatch, getState) {
+  return function (dispatch, getState) {
     dispatch(selectAppointmentTypeFilter({ type }));
-  };	 
+  };
 }
