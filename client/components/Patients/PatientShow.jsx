@@ -13,6 +13,7 @@ function PatientShow({ patient, patients }) {
 
 PatientShow.propTypes = {
   patient: PropTypes.object,
+  patients: PropTypes.object,
 };
 
 export default PatientShow;

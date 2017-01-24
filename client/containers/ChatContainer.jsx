@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {fetchEntities} from '../thunks/fetchEntities';
 
-import Chat from '../components/Patients/Chat';
+import Chat from '../components/Patients/Chat/';
 
 class ChatContainer extends Component {
     constructor(props) {

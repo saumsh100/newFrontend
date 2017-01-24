@@ -62,7 +62,7 @@ textMessagesRouter.post('/', (req, res, next) => {
     Practitioner.execute().then((practitioners) => {
         TextMessage.save({
                 id: uuid(),
-                createdAt: new Date(),
+                createdAt: Date.now(),
                 practitionerId: practitioners[0].id,
                 patientId,
                 body,
