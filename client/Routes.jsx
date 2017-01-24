@@ -32,7 +32,6 @@ export default function Routes({ history }) {
           }}
         >
           <IndexRedirect to="/schedule/dayview" />
-
           <Route
             path="dayview"
             getComponent={(location, callback) => {
@@ -40,9 +39,7 @@ export default function Routes({ history }) {
                 callback(null, require('./components/Schedule/DayView').default);
               });
             }}
-          >
-          </Route>
-
+          />
           <Route
             path="monthview"
             getComponent={(location, callback) => {
@@ -50,9 +47,7 @@ export default function Routes({ history }) {
                 callback(null, require('./components/Schedule/MonthView').default);
               });
             }}
-          >
-          </Route>       
-          
+          />
           <Route
             path="weekview"
             getComponent={(location, callback) => {
@@ -60,11 +55,8 @@ export default function Routes({ history }) {
                 callback(null, require('./components/Schedule/WeekView').default);
               });
             }}
-          >
-          </Route>    
-
+          />
         </Route>
-
         <Route
           path="login"
           getComponent={(location, callback) => {
@@ -168,8 +160,7 @@ export default function Routes({ history }) {
               callback(null, require('./components/Schedule/DayView').default);
             });
           }}
-        >
-        </Route>
+        />
       </Route>
 
 

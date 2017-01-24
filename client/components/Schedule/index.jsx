@@ -2,28 +2,26 @@
 import React, { Component, PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
+import DayPicker, { DateUtils } from 'react-day-picker';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import './index.css';
+import Filters from './Filters';
 import styles from './styles.scss';
+import 'react-day-picker/lib/style.css';
 import Link from '../library/Link';
-import DayPicker, { DateUtils } from "react-day-picker";
 import setCurrentScheduleDate from '../../thunks/date';
 import {
   addPractitionerToFilter,
   selectAppointmentType,
   removePractitionerFromFilter,
 } from '../../thunks/schedule';
-import "react-day-picker/lib/style.css";
-import './index.css';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import Filters from './Filters'
 
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
-BigCalendar.setLocalizer(
-  BigCalendar.momentLocalizer(moment)
-);
-  
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
+
 class Schedule extends Component {
   constructor(props) {
     super(props);
@@ -32,17 +30,24 @@ class Schedule extends Component {
     this.removeAvailability = this.removeAvailability.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
     this.toggleCalendar = this.toggleCalendar.bind(this);
-    this.handleCheckDoctor = this.handleCheckDoctor.bind(this);
   }
 
   componentDidMount() {
+    window.socket.on('receiveAvailabilities', (results) => {
+      this.setState({ availabilities: results });
+    });
+    window.socket.on('availabilityAdded', (result) => {
+      console.log('availabilityAdded', result);
+      const availabilities = this.state.availabilities.concat(result);
+      this.setState({ availabilities });
+    });
+    window.socket.on('availabilityRemoved', (result) => {
+      const availabilities = this.state.availabilities.filter(avail => avail.id !== result.id);
+      this.setState({ availabilities });
+    });
+    window.socket.emit('fetchAvailabilities');
     this.props.fetchEntities({ key: 'appointments' });
     this.props.fetchEntities({ key: 'practitioners' });
-    // this.props.fetchEntities({ key: 'patients' });
-  }
-
-  handleCheckDoctor() {
-
   }
 
   handleDayClick(e, day, { selected, disabled }) {
@@ -60,25 +65,6 @@ class Schedule extends Component {
 
   toggleCalendar() {
     this.setState({ showDatePicker: !this.state.showDatePicker });
-  }
-  
-  componentDidMount() {
-    window.socket.on('receiveAvailabilities', (results) => {
-      this.setState({ availabilities: results });
-    });
-  
-    window.socket.on('availabilityAdded', (result) => {
-      console.log('availabilityAdded', result);
-      const availabilities = this.state.availabilities.concat(result);
-      this.setState({ availabilities });
-    });
-  
-    window.socket.on('availabilityRemoved', (result) => {
-      const availabilities = this.state.availabilities.filter(avail => avail.id !== result.id);
-      this.setState({ availabilities });
-    });
-  
-    window.socket.emit('fetchAvailabilities');
   }
   
   addAvailability({ start, end }) {
@@ -103,7 +89,6 @@ class Schedule extends Component {
     const { showDatePicker } = this.state;
     const {
       practitioners,
-      patients,
       appointments,
       addPractitionerToFilter,
       removePractitionerFromFilter,
@@ -112,38 +97,36 @@ class Schedule extends Component {
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
-      .forEach(app => {
+      .forEach((app) => {
         if (appointmentsTypes.indexOf(app.title) < 0) {
           appointmentsTypes.push(app.title);
         }
-      })
+      });
+
     return (
       <div className={styles.scheduleContainerWrapper}>
         <div className={`${styles.scheduleContainer} schedule`}>
           <div className="schedule__title title">
             <Link to="/schedule/monthview">month</Link>
-            <br/>
+            <br />
             <Link to="/schedule/dayview">day</Link>
-            <br/>         
+            <br />
             <Link to="/schedule/weekview">week</Link>
-          
-          <i className="styles__icon___2RuH0 fa fa-calendar"
-            onClick={this.toggleCalendar}>
-          </i>
-          {showDatePicker && 
-            <DayPicker
-              initialMonth={ new Date(2016, 1) }
-              selectedDays={ day => DateUtils.isSameDay(this.state.selectedDay, day) }
-              onDayClick={ this.handleDayClick.bind(this) }
+            <i className="styles__icon___2RuH0 fa fa-calendar"
+              onClick={this.toggleCalendar}
             />
-          }
+            {showDatePicker &&
+              <DayPicker
+                initialMonth={new Date(2016, 1)}
+                selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
+                onDayClick={this.handleDayClick}
+              />
+            }
           </div>
           {this.props.children}
         </div>
-
-
         <div className={styles.scheduleSidebar}>
-          <Filters 
+          <Filters
             practitioners={practitioners.get('models').toArray()}
             addPractitionerToFilter={addPractitionerToFilter}
             removePractitionerFromFilter={removePractitionerFromFilter}
@@ -153,19 +136,29 @@ class Schedule extends Component {
           />
         </div>
       </div>
-
     );
   }
 }
 
-function mapStateToProps({entities, date, schedule}) {
+Schedule.propTypes = {
+  fetchEntities: PropTypes.func,
+  children: PropTypes.arrayOf(PropTypes.object),
+  practitioners: PropTypes.object,
+  patients: PropTypes.object,
+  appointments: PropTypes.object,
+  addPractitionerToFilter: PropTypes.func,
+  removePractitionerFromFilter: PropTypes.func,
+  selectAppointmentType: PropTypes.func,
+  schedule: PropTypes.object,
+};
+
+function mapStateToProps({ entities, schedule }) {
   return {
     practitioners: entities.get('practitioners'),
-    schedule: schedule,
+    schedule,
     appointments: entities.get('appointments'),
   };
 }
-
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
@@ -175,10 +168,5 @@ function mapDispatchToProps(dispatch) {
     selectAppointmentType,
   }, dispatch);
 }
-
 const enhance = connect(mapStateToProps, mapDispatchToProps);
-
 export default enhance(Schedule);
-
-
-
