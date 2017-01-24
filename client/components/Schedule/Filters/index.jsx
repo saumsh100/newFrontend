@@ -52,6 +52,7 @@ class Filters extends Component {
           </div>
         </div>
       </Card>
+
     );
   }
 }
