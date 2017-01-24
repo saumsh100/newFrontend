@@ -1,4 +1,3 @@
-import Checkbox from 'react-toolbox/lib/checkbox';
 import React, { Component, PropTypes } from 'react';
 import { Card } from '../../library';
 
@@ -31,14 +30,17 @@ class Filters extends Component {
         </div>
         <div>
           Practitioners:
-          {practitioners.map((pr) => {
+          {practitioners.map((pr, i) => {
             const checked = filterPractitioners.indexOf(pr.id) > -1;
             return (
-              <Checkbox
-                checked={checked}
-                label={pr.firstName}
-                onChange={() => { this.handleCheckDoctor(pr.id, checked); }}
-              />
+              <div>
+	              <label htmlFor={`checkbox-${i}`}>{pr.firstName}</label>
+	              <input type="checkbox"
+	                checked={checked}
+	                id={`checkbox-${i}`}
+	                onChange={() => { this.handleCheckDoctor(pr.id, checked); }}
+	              />
+              </div>
             );
           })}
           <div>
@@ -52,7 +54,6 @@ class Filters extends Component {
           </div>
         </div>
       </Card>
-
     );
   }
 }
