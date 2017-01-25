@@ -9,13 +9,8 @@ export const FETCH_REVIEWS = 'vendasta/fetchReviews';
 export const FETCH_REVIEWS_SUCCESS = 'vendasta/fetchReviewsSuccess';
 export const FETCH_REVIEWS_ERROR = 'vendasta/fetchReviewsError';
 
-export const LOGIN = 'auth/login';
-export const LOGIN_SUCCESS = 'auth/loginSuccess';
-export const LOGOUT = 'auth/logout';
-export const SET_USERNAME = 'auth/setUsername';
-export const SET_PASSWORD = 'auth/setPassword';
-
-export const REPUTATION_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/?apiKey=8QbTrVBOEb8XwV03GqKZOYhFyJdDnmOOTFXguZxe&apiUser=CARU';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGOUT = 'LOGOUT';
 
 export const FETCH_ENTITIES = 'FETCH_ENTITIES';
 export const RECEIVE_ENTITIES = 'RECEIVE_ENTITIES';
