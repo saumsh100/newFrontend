@@ -2,7 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
-import { AppBar, Button } from '../library';
+import { AppBar, Button, IconButton } from '../library';
 import styles from './styles.scss';
 
 
@@ -27,18 +27,35 @@ class TopBar extends Component {
         styles.topBarContainerCollapsed :
         styles.topBarContainerUnCollapsed
     );
-    
+
+    let logoComponent = null;
+    if (!isCollapsed) {
+      logoComponent = (
+        <div className={styles.logoWrapper}>
+          <div className={styles.logoImage}>
+            <img
+              className={styles.logoImageImage}
+              src="/images/carecru_logo.png"
+              alt="CareCru logo"
+            />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <AppBar className={topBarClassName}>
-        <div
-          className={styles.collapseButton}
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          <i
-            className="fa fa-bars"
-          />
+        {logoComponent}
+        <div className={styles.leftOfBar}>
+          <IconButton onClick={() => setIsCollapsed(!isCollapsed)} icon="bars" />
         </div>
-        <Button onClick={this.logout}>Log Out</Button>
+        <div className={styles.rightOfBar}>
+          <ul className={styles.pillsList}>
+            <li className={styles.logoutPill}>
+              <IconButton onClick={this.logout} icon="power-off" />
+            </li>
+          </ul>
+        </div>
       </AppBar>
     );
   }

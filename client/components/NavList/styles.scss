@@ -13,13 +13,21 @@
   text-decoration: none;
   display: flex;
   align-items: center;
-  // line-height: 65px;
-  // text-align: center;
+  &:hover {
+    background-color: #41464c;
+  }
+
+  &:active {
+    color: $primary-white !important;
+    .label {
+      font-size: 16px;
+    }
+  }
 }
 
 .activeItem {
   border-left: $selection-border $primary-color;
-  color: white !important;
+  color: $primary-white !important;
   background-color: #41464c;
 }
 
@@ -30,7 +38,7 @@
 }
 
 .label {
-  width: 85px;
+  width: 95px;
   text-align: left;
 }
 
