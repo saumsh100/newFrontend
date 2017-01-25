@@ -1,35 +1,44 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
+import { browserHistory } from 'react-router';
+import styles from './DislogsList.scss';
 
-function DialogsList({ patients }) {
-  return (
-    <ul className="dialogs__messages">
-      {patients.map((patient) => {
-        return (
-          <li className="messages">
-            <img className="messages__photo" src={patient.image} alt="avatar" />
-            <div className="messages__wrapper">
-              <div className="messages__header">
-                <div className="messages__name">{patient.firstName}</div>
-                <div className="messages__date">9:00am</div>
-              </div>
-              <div className="messages__body">
-                <div className="messages__unread">
-                  <span>
-                    2
-                  </span>
-                </div>
-                <div className="messages__text">Lourem ipsum eccodi san deserif codi san deserif. Ipsum eccoesede desdjrdccodi s Lourem ipsum...
-                </div>
-              </div>
+class DialogsList extends Component {
+  constructor(props) {
+    super(props);
+    this.goToDialogue = this.goToDialogue.bind(this);
+  }
+  goToDialogue() {
+    browserHistory.push(`/patients/${this.props.patient.id}`);
+  }
+  render() {
+    const { patient } = this.props;
+    return (
+      <li onClick={this.goToDialogue} className={styles.messages}>
+        <img className={styles.messages__photo} src={patient.image} alt="avatar" />
+        <div className={styles.messages__wrapper}>
+          <div className={styles.messages__header}>
+            <div className={styles.messages__name}>{patient.firstName}</div>
+            <div className={styles.messages__date}>9:00am</div>
+          </div>
+          <div className={styles.messages__body}>
+            <div className={styles.messages__unread}>
+              <span>
+                2
+              </span>
             </div>
-          </li>
-        );
-      })}
-    </ul>
-  );
+            <div className={styles.messages__text}>
+              Lourem ipsum eccodi san deserif codi san deserif.
+              Ipsum eccoesede desdjrdccodi s Lourem ipsum...
+            </div>
+          </div>
+        </div>
+      </li>
+    );
+  }
 }
+
 DialogsList.PropTypes = {
-  patients: PropTypes.array,
+  patient: PropTypes.object,
 };
 
 export default DialogsList;
