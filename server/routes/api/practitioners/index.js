@@ -7,7 +7,7 @@ const assign = require('lodash/assign');
 const practitionerSchema = new Schema('practitionerSchema');
 
 practitionersRouter.get('/', (req, res, next) => {
-  Practitioner.getJoin({ services: true }).run()
+  Practitioner.getJoin({ services: false })
     .then(practitioners => res.send(normalize(practitioners, arrayOf(practitionerSchema))))
     .catch(next);
 });
@@ -28,7 +28,7 @@ practitionersRouter.get('/:practitionerId', (req, res, next) => {
 
 practitionersRouter.put('/:practitionerId', (req, res, next) => {
   const { practitionerId } = req.params;
-  Practitioner.get(practitionerId).run().then(p =>
+  Practitioner.get(practitionerId).then(p =>
     p.merge(req.body).save()
   )
   .then((practitioner) => {

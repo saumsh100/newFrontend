@@ -6,7 +6,7 @@ const Practitioner = thinky.createModel('Practitioner', {
   accountId: type.string().uuid(4),
   firstName: type.string().required(),
   lastName: type.string().required(),
-  // services: [type.string().uuid(4)],
+  //services: type.string().uuid(4),
 });
 
 module.exports = Practitioner;

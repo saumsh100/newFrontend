@@ -181,6 +181,15 @@ const SEEDS = {
     },
   ],
 
+  /* forHasAndBelongsToMany: function() {
+    this.Service[0].practitioners.push(this.Practitioner[0]);
+    this.Service[1].practitioners.push(this.Practitioner[1]);
+
+    this.Practitioner[0].services.push(this.Service[0]);
+    this.Practitioner[1].services.push(this.Service[1]);
+    return this;
+  }, */
+
   Permission: [
     {
       id: uuid(),
@@ -224,7 +233,7 @@ const SEEDS = {
       id: serviceId,
       accountId: accountId,
       name: 'Routine Checkup',
-      practitioners: [ practitionerId ],
+      practitioners: [ ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -234,7 +243,7 @@ const SEEDS = {
       id: serviceId2,
       accountId: accountId,
       name: 'Another service',
-      practitioners: [ practitionerId ],
+      practitioners: [  ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -246,14 +255,14 @@ const SEEDS = {
     {
       id: practitionerId,
       accountId: accountId,
-      services: [ serviceId ],
+      services: [],
       firstName: 'Chelsea',
       lastName: 'Mansfield',
     },
     {
       id: practitionerId2,
       accountId,
-      services: [serviceId],
+      services: [],
       firstName: 'Perry',
       lastName: 'Cox',
     },
@@ -325,8 +334,21 @@ const SEEDS = {
   ],
 };
 
+// console.log(SEEDS);
 
-console.log(SEEDS);
+
+/* function forHasAndBelongsToMany(obj) {
+  obj.Service[0].practitioners = obj.Practitioner[0];
+  obj.Service[1].practitioners = obj.Practitioner[1];
+
+  obj.Practitioner[0].services = obj.Service[0];
+  obj.Practitioner[1].services = obj.Service[1];
+  console.log(console.log(obj.Service));
+  return obj;
+}
+
+const withHasAndBelongsToMany = forHasAndBelongsToMany(SEEDS);
+*/
 
 seedDatabase(SEEDS)
   .then(() => {
