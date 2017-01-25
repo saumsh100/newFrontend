@@ -3,7 +3,7 @@ const cron = require('node-cron');
 const remindersQueue = require('../config/queue/remindersQueue');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const cronPattern = NODE_ENV === 'production' ? '0 */3  * * * *' : '0 */1 * * * *';
+const cronPattern = NODE_ENV === 'production' ? '0 */3 * * * *' : '0 */1 * * * *';
 
 cron.schedule(cronPattern, () => {
   // Tell the reminders process to compute the reminders that have to be sent
