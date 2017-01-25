@@ -60,15 +60,17 @@ class Chat extends Component {
           <ul className={styles.dialogs__messages}>
             {patients.map(((user) => { 
                 const messages = textMessages.get('models')
-                .filter((el) => { return el.patientId === user.id })
+                .filter((el) => (el.patientId === user.id))
+                const unreadMessagesCount = messages.filter(el => ( !el.read && el.from === user.id)).toArray().length;
                 const lastMessage = messages
-                .sort((a,b) => { return a.createdAt < b.createdAt }).toArray()[0]
+                .sort((a,b) => (a.createdAt < b.createdAt)).toArray()[0]
                 return (<DialogsListItem
                   lastMessage={lastMessage}
                   messages={messages}
                   user={user}
                   patientList={patientList}
                   patientId={user.id}
+                  unreadMessagesCount={unreadMessagesCount}
                   />);
               }).bind(this))}
           </ul>
