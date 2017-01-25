@@ -11,12 +11,14 @@ const mail = require('../lib/mail');
 const twilio = require('../config/globals').twilio;
 const twilioClient = require('../config/twilio');
 
+// TODO: why can't we use the ones in relations.js?
 Appointment.belongsTo(Patient, 'patient', 'patientId', 'id');
 Appointment.belongsTo(Service, 'service', 'serviceId', 'id');
 Appointment.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Appointment.belongsTo(Account, 'account', 'accountId', 'id');
 Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
 
+// TODO: all of these should be hangled in globals.js
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const protocol = NODE_ENV === 'production' ? 'https' : 'http';
 const host = NODE_ENV === 'production' ? 'carecru.com' : 'localhost:5000';
@@ -32,33 +34,40 @@ remindersQueue.process((job, next) => {
         return ((((start - now) <= mili24hours) && (start - now) > 0)
           && appointment.confirmed === false);
       });
-      shouldNotifyAppointments.length && each(shouldNotifyAppointments, (a) => {
-        Token.filter({ appointmentId: a.id }).run()
-        .then((token) => {
-          const emailConfObject = {
-            email: a.patient.email,
-            token: token[0].id,
-            accountName: a.account.name,
-            smsPhoneNumber: a.account.smsPhoneNumber,
-            date: a.startTime,
-            patientFirstname: a.patient.firstName };
-          if (a.patient.appointmentPreference === 'both') {
-            Promise.all([emailConfirmation(emailConfObject), smsConfirmation(a)])
-              .then(info => next(null, info))
-              .catch(err => next(err));
-          }
-          if (a.patient.appointmentPreference === 'email') {
-            emailConfirmation(emailConfObject)
-            .then(info => next(null, info))
-            .catch(err => next(err));
-          }
-          if (a.patient.appointmentPreference === 'sms') {
-            smsConfirmation(a)
-            .then(info => next(null, info))
-            .catch(err => next(err));
-          }
+
+      if (shouldNotifyAppointments.length) {
+        each(shouldNotifyAppointments, (a) => {
+          Token.filter({ appointmentId: a.id }).run()
+            .then((token) => {
+              const emailConfObject = {
+                email: a.patient.email,
+                token: token[0].id,
+                accountName: a.account.name,
+                smsPhoneNumber: a.account.smsPhoneNumber,
+                date: a.startTime,
+                patientFirstname: a.patient.firstName,
+              };
+
+              if (a.patient.appointmentPreference === 'both') {
+                Promise.all([emailConfirmation(emailConfObject), smsConfirmation(a)])
+                  .then(info => next(null, info))
+                  .catch(err => next(err));
+              }
+
+              if (a.patient.appointmentPreference === 'email') {
+                emailConfirmation(emailConfObject)
+                  .then(info => next(null, info))
+                  .catch(err => next(err));
+              }
+
+              if (a.patient.appointmentPreference === 'sms') {
+                smsConfirmation(a)
+                  .then(info => next(null, info))
+                  .catch(err => next(err));
+              }
+            });
         });
-      });
+      }
     })
     .catch(err => console.log(err));
 });

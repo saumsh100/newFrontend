@@ -10,6 +10,8 @@ const Patient = thinky.createModel('Patient', {
   phoneNumber: type.string().required(),
   //createdAt: type.date().default(thinky.r.now()),
   email: type.string().email(),
+
+  // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
 });
 
