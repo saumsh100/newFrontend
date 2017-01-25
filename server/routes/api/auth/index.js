@@ -2,13 +2,15 @@
 const sessionRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const globals = require('../../../config/globals');
 const User = require('../../../models/User');
 const Permission = require('../../../models/Permission');
 const StatusError = require('../../../util/StatusError');
 
+// TODO: find a better way to do Model.findOne
+
 sessionRouter.post('/', (req, res, next) => {
-  console.log(req.body.username, req.body.password);
-  
+  // Get user by the unique username
   return User
     .filter({ username: req.body.username })
     .run()
@@ -16,9 +18,10 @@ sessionRouter.post('/', (req, res, next) => {
       if (!users.length) {
         return next(StatusError(500, 'No user found'));
       }
-      
-      const user = users[0];
-      return bcrypt.compare(req.body.password, user.password, (err, match) => {
+
+      // Make sure the password is a match
+      const { id, activeAccountId, password } = users[0];
+      return bcrypt.compare(req.body.password, password, (err, match) => {
         if (err) {
           return next(StatusError(500, 'Error comparing passwords'));
         }
@@ -26,24 +29,23 @@ sessionRouter.post('/', (req, res, next) => {
         if (!match) {
           return next(StatusError(401, 'Invalid credentials'));
         }
-        
+
+        // Pull the permission to add role and extra permissions to token
         return Permission
-          .filter({ userId: user.id })
+          .filter({ userId: id })
           .run()
           .then((permission) => {
             if (!permission || !permission[0]) {
               return next(StatusError(500, 'User has no account permissions'));
             }
             
-            permission = permission[0];
-            const data = {
-              user: user.toJson,
-              role: permission.role,
-              permissions: permission.permissions || {},
-            };
-            
-            return jwt.sign(data, 'notsosecret', { expiresIn: '1d' }, (err, token) => {
-              if (err) {
+            const { role, permissions = {} } = permission[0];
+            const tokenData = { role, permissions, userId: id, activeAccountId };
+
+            console.log('signing token', tokenData);
+
+            return jwt.sign(tokenData, globals.tokenSecret, { expiresIn: globals.tokenExpiry }, (error, token) => {
+              if (error) {
                 return next(StatusError(500, 'Error signing the token'));
               }
               
@@ -51,7 +53,8 @@ sessionRouter.post('/', (req, res, next) => {
             });
           });
       });
-    });
+    })
+    .catch(err => next(err));
 });
 
 module.exports = sessionRouter;

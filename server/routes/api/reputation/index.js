@@ -1,6 +1,6 @@
 const reputationRouter = require('express').Router();
 const axios = require('axios');
-const checkPermission = require('../../../middleware/permissions');
+const checkPermission = require('../../../middleware/checkPermissions');
 const globals = require('../../../config/globals');
 const Account = require('../../../models/Account');
 

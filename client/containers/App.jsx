@@ -9,7 +9,7 @@ import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
 import { setIsCollapsed } from '../actions/toolbar';
-import { browserHistory } from 'react-router';
+
 import styles from './styles.scss';
 
 function App(props) {
@@ -18,7 +18,6 @@ function App(props) {
     children,
     isCollapsed,
     setIsCollapsed,
-    user,
     dispatch,
   } = props;
   
@@ -61,10 +60,9 @@ App.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ toolbar, auth }) {
+function mapStateToProps({ toolbar }) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
-    user: auth.get('user'),
   };
 }
 

@@ -17,10 +17,10 @@ axios.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   // Log out on 401
-  if (error.status === 401) {
+  /*if (error.status === 401) {
     localStorage.setItem('token', '');
     browserHistory.push('/login');
-  }
+  }*/
   
   return Promise.reject(error);
 });

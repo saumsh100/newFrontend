@@ -18,7 +18,7 @@ export default function login() {
     };
     
     return axios
-      .post('/api/session', loginDetails)
+      .post('/api/auth', loginDetails)
       .then(({ data }) => {
         // set data in local storage
         localStorage.setItem('token', data.token);
