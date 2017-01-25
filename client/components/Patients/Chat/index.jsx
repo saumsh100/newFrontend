@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchPost } from '../../../thunks/fetchEntities';
 import Messages from './Messages';
-import DialogsList from './DialogsList';
+import DialogsListItem from './DialogsList';
 import styles from './styles.scss';
 
 class Chat extends Component {
@@ -33,14 +33,15 @@ class Chat extends Component {
       key: 'textMessages',
       params,
     });
-    window.socket.emit('sendMessage', {
-      message: message.value,
-      patient: this.props.patient,
-    });
+    // window.socket.emit('sendMessage', {
+    //   message: message.value,
+    //   patient: this.props.patient,
+    // });
     message.value = '';
   }
   render() {
-    const { patient, patients, textMessages } = this.props;
+    const { patient, patients, textMessages, patientList} = this.props;
+
     if (patient === null) {
       return <div>Loading...</div>;
     }
@@ -57,8 +58,13 @@ class Chat extends Component {
             </div>
           </div>
           <ul className={styles.dialogs__messages}>
-            {patients.map((patient) => {
-                return (<DialogsList patient={patient} />);
+            {patients.map((user) => {
+                const messages = textMessages.get('models')
+                .filter((el) => { return el.patientId === user.id })
+                const lastMessage = messages
+                .sort((a,b) => { return a.createdAt < b.createdAt })
+
+                return (<DialogsListItem lastMessage={lastMessage} messages={messages} user={user} patientList={patientList} patientId={user.patientId} />);
               })}
           </ul>
         </div>
@@ -148,5 +154,8 @@ function mapActionsToProps(dispatch) {
     fetchPost
   }, dispatch);
 }
+
+
+
 const enhance = connect(null, mapActionsToProps);
 export default enhance(Chat);

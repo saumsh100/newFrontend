@@ -17,6 +17,7 @@ class ChatContainer extends Component {
         };
         window.socket.emit('fetchPatient', {id: this.props.patient.id});
         this.props.fetchEntities({key: 'textMessages', params: params});
+        this.props.fetchEntities({key: 'patients'});
     }
 
     render() {
@@ -24,9 +25,10 @@ class ChatContainer extends Component {
             patient,
             patients,
             textMessages,
+            patientList,
         } = this.props;
         return (
-            <Chat patient={patient} patients={patients} textMessages={textMessages}/>
+            <Chat patient={patient} patients={patients} patientList={patientList} textMessages={textMessages}/>
         );
     }
 }
@@ -34,12 +36,14 @@ class ChatContainer extends Component {
 ChatContainer.propTypes = {
     patient: PropTypes.object.isRequired,
     textMessages: PropTypes.object.isRequired,
+    patientList: PropTypes.object.isRequired,
     fetchEntities: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({entities}) {
     return {
-        textMessages: entities.get('textMessages'),
+      textMessages: entities.get('textMessages'),
+      patientList: entities.get('patients'),
     };
 }
 

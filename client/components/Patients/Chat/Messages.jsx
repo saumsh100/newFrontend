@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
-import { v4 } from 'node-uuid'
+import { v4 } from 'node-uuid';
 import styles from './styles.scss';
 
 const DialogComponent = props => (
