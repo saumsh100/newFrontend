@@ -19,6 +19,7 @@ class DialogsList extends Component {
       patientId,
       lastMessage,
       unreadMessagesCount,
+      lastMessageSentTime,
     } = this.props;
     const patient = this.props.patientList.getIn(['models', user.id]);
     const patientMessages = this.props.messages.get('models')
@@ -29,7 +30,7 @@ class DialogsList extends Component {
           <div className={styles.messages__header}>
             <div className={styles.messages__name}>{patient.firstName}</div>
             <div className={styles.messages__date}>
-              {moment(patient.lastUpdated).fromNow()}
+              {lastMessageSentTime && moment(lastMessageSentTime).fromNow()}
             </div>
           </div>
           <div className={styles.messages__body}>

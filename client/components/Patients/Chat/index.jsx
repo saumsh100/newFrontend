@@ -61,9 +61,11 @@ class Chat extends Component {
             {patients.map(((user) => { 
                 const messages = textMessages.get('models')
                 .filter((el) => (el.patientId === user.id))
-                const unreadMessagesCount = messages.filter(el => ( !el.read && el.from === user.id)).toArray().length;
+                const unreadMessagesCount = messages.filter(el => ( !el.read && el.from === user.id))
+                .toArray().length;
                 const lastMessage = messages
-                .sort((a,b) => (a.createdAt < b.createdAt)).toArray()[0]
+                .sort((a,b) => (a.createdAt < b.createdAt)).toArray()[0];
+                const lastMessageSentTime = lastMessage && lastMessage.createdAt;
                 return (<DialogsListItem
                   lastMessage={lastMessage}
                   messages={messages}
@@ -71,6 +73,7 @@ class Chat extends Component {
                   patientList={patientList}
                   patientId={user.id}
                   unreadMessagesCount={unreadMessagesCount}
+                  lastMessageSentTime={lastMessageSentTime}
                   />);
               }).bind(this))}
           </ul>
