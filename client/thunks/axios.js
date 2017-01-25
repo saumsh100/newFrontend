@@ -17,6 +17,7 @@ axios.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   // Log out on 401
+  // not needed for now, we will probably remove this
   /*if (error.status === 401) {
     localStorage.setItem('token', '');
     browserHistory.push('/login');

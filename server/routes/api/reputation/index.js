@@ -12,7 +12,8 @@ const {
 } = globals.vendasta;
 
 reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, next) => {
-  return Account.get(req.user.activeAccountId).then((account) => {
+  console.log(req.token);
+  return Account.get(req.token.activeAccountId).then((account) => {
     axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
       customerIdentifier: account.vendastaId,
     }).then((response) => {
@@ -28,7 +29,7 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
 
 
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
-  return Account.get(req.user.activeAccountId).then((account) => {
+  return Account.get(req.token.activeAccountId).then((account) => {
     axios.post(`${VENDASTA_REVIEWS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
       customerIdentifier: account.vendastaId,
     }).then((response) => {
@@ -36,10 +37,7 @@ reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, nex
     }).catch((error) => {
       return next(error);
     });
-  }).catch((error) => {
-    error.status = 404;
-    return next(error);
-  });
+  }).catch(error => next(error));
 });
 
 module.exports = reputationRouter;

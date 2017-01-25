@@ -1,15 +1,15 @@
 
-const sessionRouter = require('express').Router();
+const authRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const globals = require('../../../config/globals');
-const User = require('../../../models/User');
-const Permission = require('../../../models/Permission');
-const StatusError = require('../../../util/StatusError');
+const globals = require('../../config/globals');
+const User = require('../../models/User');
+const Permission = require('../../models/Permission');
+const StatusError = require('../../util/StatusError');
 
 // TODO: find a better way to do Model.findOne
 
-sessionRouter.post('/', (req, res, next) => {
+authRouter.post('/', (req, res, next) => {
   // Get user by the unique username
   return User
     .filter({ username: req.body.username })
@@ -57,4 +57,4 @@ sessionRouter.post('/', (req, res, next) => {
     .catch(err => next(err));
 });
 
-module.exports = sessionRouter;
+module.exports = authRouter;

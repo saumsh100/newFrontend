@@ -78,7 +78,7 @@ module.exports = function authMiddleware(req, res, next) {
     }
 
     // We use this for activeAccountId and userId to allow controllers to fetch appropriate data
-    req.token = token;
+    req.token = decoded;
 
     // Pull in the role's permissions and extend the extra permissions ontop
     req.permissions = Object.assign({}, permissions[decoded.role], decoded.permissions);
