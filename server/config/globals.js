@@ -1,6 +1,9 @@
+
 const path = require('path');
 
 const root = path.normalize(__dirname + '/..');
+const tokenSecret = 'notsosecret';
+const tokenExpiry = '1d';
 
 const environmentVariables = process.env;
 const env = environmentVariables.NODE_ENV || 'development';
@@ -26,6 +29,10 @@ const twilio = {
 
 module.exports = {
   root,
+  tokenSecret,
+  tokenExpiry,
+
+  // Enivornment Variable Related
   env,
   port,
   bundlePort,

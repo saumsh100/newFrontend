@@ -4,6 +4,7 @@ import Button from './Button';
 import Card from './Card';
 import Form, { Field } from './Form';
 import Icon from './Icon';
+import IconButton from './IconButton';
 import Input from './Input';
 import Link from './Link';
 import Modal from './Modal';
@@ -19,6 +20,7 @@ export {
   Field,
   Form,
   Icon,
+  IconButton,
   Input,
   Link,
   Modal,
