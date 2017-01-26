@@ -2,14 +2,19 @@
 import React, { PropTypes, Component } from 'react';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
-import { AppBar, Button, IconButton } from '../library';
+import { AppBar, Button, IconButton, Tabs, Tab } from '../library';
+import SubTabs from './SubTabs';
 import styles from './styles.scss';
 
 
 class TopBar extends Component {
   constructor(props) {
     super(props);
-    
+
+    this.state = {
+      index: 0
+    };
+
     this.logout = this.logout.bind(this);
   }
 
@@ -48,6 +53,9 @@ class TopBar extends Component {
         {logoComponent}
         <div className={styles.leftOfBar}>
           <IconButton onClick={() => setIsCollapsed(!isCollapsed)} icon="bars" />
+        </div>
+        <div className={styles.subTabs}>
+
         </div>
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>

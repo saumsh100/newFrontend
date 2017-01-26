@@ -8,6 +8,7 @@ import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
+import SubTabs from '../components/TopBar/SubTabs';
 import { setIsCollapsed } from '../actions/toolbar';
 
 import styles from './styles.scss';
@@ -34,6 +35,9 @@ function App(props) {
         <NavList location={location} />
       </NavRegionContainer>
       <MainRegionContainer>
+        <div className={styles.subTabs}>
+          <SubTabs />
+        </div>
         {children}
       </MainRegionContainer>
     </div>

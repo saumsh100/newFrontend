@@ -4,6 +4,13 @@ import classNames from 'classnames';
 import { Nav, NavItem, Link, Icon } from '../library';
 import styles from './styles.scss';
 
+const PATHS = {
+  '/patients': [
+    {  }
+  ],
+
+};
+
 export default function NavList({ location }) {
   const {
     navItem,
@@ -32,12 +39,37 @@ export default function NavList({ location }) {
     );
   };
   
-  const MultiNavItem = ({ path, icon, label, subItems }) => {
-    const active = location.pathname.indexOf('/patients') === 0;
+  const MultiNavItem = ({ path, icon, label, children }) => {
+    const active = location.pathname.indexOf(path) === 0;
+
+    let content = null;
+    if (active) {
+      content = (
+        <ul className={styles.ulSubNav}>
+          {children}
+        </ul>
+      );
+    }
+
     return (
       <div>
         <SingleNavItem path={path} icon={icon} label={label} active={active} />
+        {content}
       </div>
+    );
+  };
+
+  const SubNavItem = ({ path, label }) => {
+    const active = location.pathname.indexOf(path) === 0;
+    const inactiveSubClass = styles.liSubNavItem;
+    const activeSubClass = classNames(inactiveSubClass, styles.activeSubNavItem);
+    const className = active ? activeSubClass : inactiveSubClass;
+    return (
+      <Link to={path}>
+        <li className={className}>
+          {label}
+        </li>
+      </Link>
     );
   };
 
@@ -47,7 +79,11 @@ export default function NavList({ location }) {
         <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
         <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" />
         <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
-        <MultiNavItem  path="/patients" icon="heart" label="Patient Management" />
+        <MultiNavItem  path="/patients" icon="heart" label="Patient Management">
+          <SubNavItem path="/patients" label="Patients" />
+          <SubNavItem path="/patients/messages" label="Messages" />
+          <SubNavItem path="/patients/phone" label="Phone Calls" />
+        </MultiNavItem>
         <SingleNavItem path="/reputation" icon="star" label="Reputation" />
         <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" />
         <SingleNavItem path="/loyalty" icon="trophy" label="Loyalty" />

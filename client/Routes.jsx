@@ -49,16 +49,24 @@ export default function Routes({ history }) {
         >
           <IndexRoute
             getComponent={(location, callback) => {
-              require.ensure(['./components/Patients'], (require) => {
-                callback(null, require('./components/Patients').default);
+              require.ensure(['./containers/PatientsListContainer'], (require) => {
+                callback(null, require('./containers/PatientsListContainer').default);
               });
             }}
           />
           <Route
-            path=":patientId"
+            path="/patients/messages"
             getComponent={(location, callback) => {
-              require.ensure(['./containers/PatientShowContainer'], (require) => {
-                callback(null, require('./containers/PatientShowContainer').default);
+              require.ensure(['./containers/PatientsMessagesContainer'], (require) => {
+                callback(null, require('./containers/PatientsMessagesContainer').default);
+              });
+            }}
+          />
+          <Route
+            path="/patients/phone"
+            getComponent={(location, callback) => {
+              require.ensure(['./containers/PatientsPhoneContainer'], (require) => {
+                callback(null, require('./containers/PatientsPhoneContainer').default);
               });
             }}
           />

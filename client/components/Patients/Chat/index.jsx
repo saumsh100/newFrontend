@@ -58,7 +58,7 @@ class Chat extends Component {
             </div>
           </div>
           <ul className={styles.dialogs__messages}>
-            {patients.map(((user) => { 
+            {patients.map(((user) => {
                 const messages = textMessages.get('models')
                 .filter((el) => { return el.patientId === user.id })
                 const lastMessage = messages

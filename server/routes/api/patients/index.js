@@ -1,6 +1,7 @@
 
 const { normalize, Schema, arrayOf } = require('normalizr');
 const patientsRouter = require('express').Router();
+const checkPermissions = require('../../../middleware/checkPermissions');
 const Patient = require('../../../models/Patient');
 
 const patientSchema = new Schema('patients');
@@ -18,7 +19,7 @@ const patientSchema = new Schema('patients');
 });*/
 
 // TODO: this should have default queries and limits
-patientsRouter.get('/', (req, res, next) => {
+patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
   // TODO: ensure that we only pull patients for activeAccount
   Patient.run()
     .then(patients => res.send(normalize(patients, arrayOf(patientSchema))))

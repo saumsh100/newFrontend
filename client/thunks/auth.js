@@ -1,4 +1,5 @@
 
+// Important that we use normal axios, not the one with the interceptors
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import { push } from 'react-router-redux';
