@@ -25,7 +25,7 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },
-  
+
   module: {
     loaders: [
       {
@@ -68,15 +68,15 @@ module.exports = {
       },
     ],
   },
-  
+
   postcss() {
     return [autoprefixer];
   },
-  
+
   resolveLoader: {
     // fallback: rootPath('node_modules'),
   },
-  
+
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({

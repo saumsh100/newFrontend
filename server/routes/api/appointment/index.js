@@ -7,7 +7,6 @@ const appointmentSchema = new Schema('appointments');
 
 appointmentsRouter.get('/', (req, res, next) => {
   Appointment.filter({
-    accountId: req.user.activeAccountId
   }).getJoin({
     patient: true,
     practitioner: {services: false},

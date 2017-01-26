@@ -13,13 +13,18 @@ import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
 import textMessages from '../entities/collections/textMessages';
 import TextMessage from '../entities/models/TextMessage';
-
+import Appointments from '../entities/models/Appointments';
+import appointments from '../entities/collections/appointments';
+import practitioners from '../entities/collections/practitioners';
+import Practitioners from '../entities/models/Practitioners';
 
 const initialState = Map({
   // KEYs must map to the response object
   // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
   patients: new patients(),
   textMessages: new textMessages(),
+  appointments: new appointments(),
+  practitioners: new practitioners(),
   // reviews: Reviews(), MODEL
   // listings: Listings(), MODEL
 });
@@ -27,6 +32,8 @@ const initialState = Map({
 const Models = {
   patients: Patient,
   textMessages: TextMessage,
+  appointments: Appointments,
+  practitioners: Practitioners,
 };
 
 export default handleActions({
@@ -40,6 +47,7 @@ export default handleActions({
     each(entities, (collectionMap, key) => {
       each(collectionMap, (modelData, id) => {
         // newModel will have lastUpdated populated
+
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);
       });
