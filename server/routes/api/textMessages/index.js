@@ -1,6 +1,7 @@
 
 const { normalize, Schema, arrayOf } = require('normalizr');
 const textMessagesRouter = require('express').Router();
+const _ = require('lodash');
 const TextMessage = require('../../../models/TextMessage');
 const Practitioner = require('../../../models/Practitioner');
 const twilioClient = require('../../../config/twilio');
@@ -51,6 +52,36 @@ textMessagesRouter.get('/conversation', (req, res, next) => {
     .catch(next);
   })
   .catch(next);
+});
+
+textMessagesRouter.get('/dialogs', (req, res, next) => {
+  Practitioner.filter({ accountId: req.user.activeAccountId }).getJoin().run()
+  .then((practitioners) => {
+    const textMessages = _.flatten(practitioners.map(p => p.textMessages)).sort((a, b) =>
+      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+    const groupedByPatientId = _.groupBy(textMessages, a => a.patientId);
+    const objKeys = Object.keys(groupedByPatientId);
+    objKeys.forEach(key => {
+      let unreadMessages = 0;
+      groupedByPatientId[key].forEach(item => {
+        if (item.read === false) unreadMessages += 1;
+      });
+      const lastMessageText = groupedByPatientId[key][groupedByPatientId[key].length - 1].body;
+      const lastMessageTime = groupedByPatientId[key][groupedByPatientId[key].length - 1].createdAt;
+      groupedByPatientId[key].push({ unreadMessages });
+      groupedByPatientId[key].push({
+        lastMessageText,
+      });
+      groupedByPatientId[key].push({
+        lastMessageTime,
+      });
+    });
+    res.send(groupedByPatientId);
+  });
+  /* .then((doctorsIds) => {
+    res.send(doctorsIds);
+  }) */
 });
 
 textMessagesRouter.post('/', (req, res, next) => {

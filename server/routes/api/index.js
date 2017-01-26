@@ -20,7 +20,7 @@ const servicesRouter = require('./services');
 const availabilitiesRouter = require('./availabilities');
 const authMiddleware = require('../../middleware/auth');
 
-apiRouter.use('/appointments', authMiddleware, appointmentRouter);
+apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/reputation', authMiddleware, reputationRouter);
 apiRouter.use('/session', sessionRouter);
 apiRouter.use('/patients', patientsRouter);

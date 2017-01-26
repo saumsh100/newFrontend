@@ -25,10 +25,8 @@ Appointment.belongsTo(Service, 'service', 'serviceId', 'id')
 Appointment.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id')
 Appointment.belongsTo(Chair, 'chair', 'chairId', 'id')
 Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id')
-
+Practitioner.hasMany(TextMessage, 'textMessages', 'id', 'practitionerId')
 Service.belongsTo(Account, 'account', 'accountId', 'id')
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id')
 Chair.belongsTo(Account, 'account', 'accountId', 'id')
-
-Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id')
-Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id')
+Service.hasMany(Practitioner, 'practitioners', 'id', 'serviceId')

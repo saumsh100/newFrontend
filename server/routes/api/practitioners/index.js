@@ -7,7 +7,7 @@ const assign = require('lodash/assign');
 const practitionerSchema = new Schema('practitionerSchema');
 
 practitionersRouter.get('/', (req, res, next) => {
-  Practitioner.getJoin({ services: false })
+  Practitioner.run()
     .then(practitioners => res.send(normalize(practitioners, arrayOf(practitionerSchema))))
     .catch(next);
 });

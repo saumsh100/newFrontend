@@ -18,7 +18,8 @@ const TextMessage = thinky.createModel('TextMessage', {
   dateUpdated: type.date(),
   apiVersion: type.string(),
   accountSid: type.string(),
-
+  read: type.boolean().default(false),
+  senderId: type.string(),
   // Depends on carrier if populated I believe
   toZip: type.string(),
   toCity: type.string(),

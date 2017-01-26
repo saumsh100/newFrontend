@@ -181,15 +181,6 @@ const SEEDS = {
     },
   ],
 
-  /* forHasAndBelongsToMany: function() {
-    this.Service[0].practitioners.push(this.Practitioner[0]);
-    this.Service[1].practitioners.push(this.Practitioner[1]);
-
-    this.Practitioner[0].services.push(this.Service[0]);
-    this.Practitioner[1].services.push(this.Service[1]);
-    return this;
-  }, */
-
   Permission: [
     {
       id: uuid(),
@@ -233,7 +224,7 @@ const SEEDS = {
       id: serviceId,
       accountId: accountId,
       name: 'Routine Checkup',
-      practitioners: [ ],
+    //  practitioners: [ ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -243,7 +234,7 @@ const SEEDS = {
       id: serviceId2,
       accountId: accountId,
       name: 'Another service',
-      practitioners: [  ],
+      // practitioners: [  ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -255,14 +246,14 @@ const SEEDS = {
     {
       id: practitionerId,
       accountId: accountId,
-      services: [],
+      serviceId: serviceId,
       firstName: 'Chelsea',
       lastName: 'Mansfield',
     },
     {
       id: practitionerId2,
       accountId,
-      services: [],
+      serviceId: serviceId,
       firstName: 'Perry',
       lastName: 'Cox',
     },
@@ -275,6 +266,7 @@ const SEEDS = {
       practitionerId,
       body: 'from Chelsea 1',
       createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+      read: true,
     },
     {
       id: uuid(),
@@ -296,6 +288,7 @@ const SEEDS = {
       practitionerId: practitionerId2,
       body: 'from Perry 1',
       createdAt: new Date(2017, 0, 3, 12, 30, 0, 0),
+      read: true,
     },
     {
       id: uuid(),
