@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, IndexRoute, IndexRedirect } from 'react-router';
 import App from './containers/App';
 
 let counter = 0;
@@ -30,7 +30,33 @@ export default function Routes({ history }) {
               callback(null, require('./components/Schedule').default);
             });
           }}
-        />
+        >
+          <IndexRedirect to="/schedule/dayview" />
+          <Route
+            path="dayview"
+            getComponent={(location, callback) => {
+              require.ensure(['./components/Schedule/DayView'], (require) => {
+                callback(null, require('./components/Schedule/DayView').default);
+              });
+            }}
+          />
+          <Route
+            path="monthview"
+            getComponent={(location, callback) => {
+              require.ensure(['./components/Schedule/MonthView'], (require) => {
+                callback(null, require('./components/Schedule/MonthView').default);
+              });
+            }}
+          />
+          <Route
+            path="weekview"
+            getComponent={(location, callback) => {
+              require.ensure(['./components/Schedule/WeekView'], (require) => {
+                callback(null, require('./components/Schedule/WeekView').default);
+              });
+            }}
+          />
+        </Route>
         <Route
           path="login"
           getComponent={(location, callback) => {
@@ -127,7 +153,17 @@ export default function Routes({ history }) {
             });
           }}
         />
+        <Route
+          path="dayview"
+          getComponent={(location, callback) => {
+            require.ensure(['./components/Schedule/DayView'], (require) => {
+              callback(null, require('./components/Schedule/DayView').default);
+            });
+          }}
+        />
       </Route>
+
+
     </Router>
   );
 }

@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
 const uuid = require('uuid').v4;
-
+const moment = require('moment');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
@@ -49,9 +49,54 @@ const SEEDS = {
       practitionerId: practitionerId,
       chairId: chairId,
     },
+
     {
-      startTime: new Date(2017, 0, 13, 14, 30, 0, 0),
-      endTime: new Date(2017, 0, 13, 15, 30, 0, 0),
+      startTime: moment({hour: 19, minute: 20})._d,
+      endTime: moment({hour: 20, minute: 0})._d,
+      title: 'Sooner Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      startTime: moment({hour: 19, minute: 20})._d,
+      endTime: moment({hour: 20, minute: 0})._d,
+      title: 'Sooner Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+    },
+    {
+      startTime: moment({hour: 15, minute: 30})._d,
+      endTime: moment({hour: 15, minute: 30})._d,
+      title: 'regular check',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      startTime: moment({hour: 12, minute: 30})._d,
+      endTime: moment({hour: 16, minute: 30})._d,
+      title: 'check',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      startTime: moment({hour: 10, minute: 38})._d,
+      endTime: moment({hour: 12, minute: 15})._d,
       title: 'Later Availability',
       id: uuid(),
       accountId,
@@ -64,12 +109,12 @@ const SEEDS = {
       accountId,
       id: uuid(),
       title: 'Justin\'s appointment',
-      startTime: new Date(2017, 1, 4, 14, 30, 0, 0),
-      endTime: new Date(2016, 1, 4, 15, 30, 0, 0),
+      startTime: moment({hour: 20, minute: 38})._d,
+      endTime: moment({hour: 22, minute: 38})._d,
 
       patientId: justinPatientId,
       serviceId: serviceId,
-      practitionerId: practitionerId,
+      practitionerId: practitionerId2,
       chairId: chairId,
 
       isClinicConfirmed: true,
@@ -82,6 +127,41 @@ const SEEDS = {
       title: 'Sergey\'s appointment',
       startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
       endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
+
+      patientId: sergeyPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 0, minute: 30})._d,
+      endTime: moment({hour: 2, minute: 10})._d,
+      patientId: sergeyPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: true,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+
+
+    {
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 23, minute: 10})._d,
+      endTime: moment({hour: 23, minute: 50})._d,
 
       patientId: sergeyPatientId,
       accountId: accountId,
@@ -144,7 +224,7 @@ const SEEDS = {
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+17784012237',
+      phoneNumber: '+17808508886',
       id: justinPatientId,
     },
     {
@@ -202,7 +282,7 @@ const SEEDS = {
       id: uuid(),
       userId: markUserId,
       accountId,
-      role: 'VIEWER',
+      role: 'OWNER',
       permissions: {},
     },
     {
