@@ -21,10 +21,10 @@ export default function NavList({ location }) {
 
   const inactiveClass = navItem;
   const activeClass = classNames(navItem, activeItem);
-  
+
   const inactiveLabelClass = label;
   const activeLabelClass = classNames(label, activeLabel);
-  
+
   const SingleNavItem = ({ path, icon, label, active }) => {
     active = active || location.pathname === path;
     return (
@@ -38,14 +38,14 @@ export default function NavList({ location }) {
       </Link>
     );
   };
-  
+
   const MultiNavItem = ({ path, icon, label, children }) => {
     const active = location.pathname.indexOf(path) === 0;
 
     let content = null;
     if (active) {
       content = (
-        <ul className={styles.ulSubNav}>
+        <ul className={styles.multiple_nav}>
           {children}
         </ul>
       );
@@ -62,14 +62,16 @@ export default function NavList({ location }) {
   const SubNavItem = ({ path, label }) => {
     const active = location.pathname.indexOf(path) === 0;
     const inactiveSubClass = styles.liSubNavItem;
-    const activeSubClass = classNames(inactiveSubClass, styles.activeSubNavItem);
+    const activeSubClass = classNames(inactiveSubClass, styles.activeSubNavItem, styles.multiple_nav__active);
     const className = active ? activeSubClass : inactiveSubClass;
     return (
-      <Link to={path}>
-        <li className={className}>
-          {label}
+        <li className={styles.multiple_nav__item}>
+          <div className={styles.multiple_nav__wrapper}>
+            <Link to={path} className={className}>
+                {label}
+            </Link>
+          </div>
         </li>
-      </Link>
     );
   };
 
