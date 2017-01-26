@@ -24,7 +24,6 @@ class SubTabs extends Component {
       <Tabs index={this.state.index} onChange={this.handleTabChange}>
         <Tab label="Patients" />
         <Tab label="Messages" />
-        <Tab label="Email" />
         <Tab label="Phone" />
       </Tabs>
     );
