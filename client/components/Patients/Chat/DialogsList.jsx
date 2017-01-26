@@ -12,7 +12,15 @@ class DialogsList extends Component {
     browserHistory.push(`/patients/${this.props.patientId}`);
   }
   render() {
-    const { user, messages, patientList, patientId, lastMessage } = this.props;
+    const {
+      user,
+      messages,
+      patientList,
+      patientId,
+      lastMessage,
+      unreadMessagesCount,
+      lastMessageSentTime,
+    } = this.props;
     const patient = this.props.patientList.getIn(['models', user.id]);
     const patientMessages = this.props.messages.get('models')
     return (
@@ -22,15 +30,17 @@ class DialogsList extends Component {
           <div className={styles.messages__header}>
             <div className={styles.messages__name}>{patient.firstName}</div>
             <div className={styles.messages__date}>
-              {moment(patient.lastUpdated).fromNow()}
+              {lastMessageSentTime && moment(lastMessageSentTime).fromNow()}
             </div>
           </div>
           <div className={styles.messages__body}>
-            <div className={styles.messages__unread}>
-              <span>
-                2
-              </span>
-            </div>
+            {!!unreadMessagesCount &&
+              <div className={styles.messages__unread}>
+                <span>
+                  {unreadMessagesCount}
+                </span>
+              </div>
+            }
             <div className={styles.messages__text}>
               {lastMessage && lastMessage.body}
             </div>
