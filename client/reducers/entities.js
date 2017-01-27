@@ -17,6 +17,8 @@ import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
 import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
+import Dialogs from '../entities/models/Dialogs'
+import dialogs from '../entities/collections/dialogs';
 
 const initialState = Map({
   // KEYs must map to the response object
@@ -25,6 +27,7 @@ const initialState = Map({
   textMessages: new textMessages(),
   appointments: new appointments(),
   practitioners: new practitioners(),
+  dialogs: new dialogs(),
   // reviews: Reviews(), MODEL
   // listings: Listings(), MODEL
 });
@@ -34,6 +37,7 @@ const Models = {
   textMessages: TextMessage,
   appointments: Appointments,
   practitioners: Practitioners,
+  dialogs: Dialogs,
 };
 
 export default handleActions({
@@ -44,10 +48,11 @@ export default handleActions({
   [RECEIVE_ENTITIES](state, { payload: { entities } }) {
     // TODO: update all appropriate entitites in state
     let newState = state;
+    debugger;
     each(entities, (collectionMap, key) => {
       each(collectionMap, (modelData, id) => {
         // newModel will have lastUpdated populated
-
+        debugger;
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);
       });

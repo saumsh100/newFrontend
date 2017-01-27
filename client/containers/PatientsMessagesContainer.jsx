@@ -1,14 +1,16 @@
 
 import React, { PropTypes, Component } from 'react';
 import PatientMessages from '../components/Patients/Messages';
-
+import { fetchEntities } from '../thunks/fetchEntities';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 class PatientsMessagesContainer extends Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    // TODO: fetchEntities for recent conversations
+    this.props.fetchEntities({ key: 'dialogs'});
   }
 
   render() {
@@ -21,4 +23,19 @@ class PatientsMessagesContainer extends Component {
 
 PatientsMessagesContainer.propTypes = {};
 
-export default PatientsMessagesContainer;
+function mapStateToProps({entities}) {
+    return {
+      dialogs: entities.get('dialogs'),
+
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        fetchEntities,
+    }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(PatientsMessagesContainer);

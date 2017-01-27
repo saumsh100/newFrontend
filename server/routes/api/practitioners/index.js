@@ -6,10 +6,8 @@ const practitionerSchema = new Schema('practitioners');
 
 
 practitionersRouter.get('/', (req, res, next) => {
-  // TODO: ensure that we only pull patients for activeAccount
-  Practitioner.execute()
+  Practitioner.run()
     .then(practitioners => res.send(normalize(practitioners, arrayOf(practitionerSchema))))
     .catch(next);
 });
-
 module.exports = practitionersRouter;
