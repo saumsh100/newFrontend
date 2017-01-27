@@ -332,7 +332,8 @@ const SEEDS = {
       accountId,
       body: 'from Chelsea 1',
       createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
-      read: true,
+      read: false,
+      senderId: alexPatientId,
     },
     {
       id: uuid(),
@@ -340,7 +341,8 @@ const SEEDS = {
       accountId,
       body: 'from Chelsea 2',
       createdAt: new Date(2017, 0, 6, 12, 30, 0, 0),
-      read: true,
+      read: false,
+      senderId: alexPatientId,
     },
     {
       id: uuid(),
@@ -348,6 +350,8 @@ const SEEDS = {
       accountId,
       body: 'from Chelsea2',
       createdAt: new Date(2017, 0, 2, 12, 30, 0, 0),
+      read: true,
+      senderId: accountId,
     },
     {
       id: uuid(),
@@ -355,6 +359,8 @@ const SEEDS = {
       accountId,
       body: 'from Perry 1',
       createdAt: new Date(2017, 0, 3, 12, 30, 0, 0),
+      read: false,
+      senderId: accountId,
     },
     {
       id: uuid(),

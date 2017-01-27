@@ -8,6 +8,7 @@ import {
   DELETE_ENTITY,
   ADD_ENTITY,
   UPDATE_ENTITY,
+  SEND_MESSAGE_ON_CLIENT,
 } from '../constants';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
@@ -48,11 +49,9 @@ export default handleActions({
   [RECEIVE_ENTITIES](state, { payload: { entities } }) {
     // TODO: update all appropriate entitites in state
     let newState = state;
-    debugger;
     each(entities, (collectionMap, key) => {
       each(collectionMap, (modelData, id) => {
         // newModel will have lastUpdated populated
-        debugger;
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);
       });
@@ -69,6 +68,7 @@ export default handleActions({
     const id = Object.keys(entity[key])[0];
     const newEntity = entity[key][id];
     const newModel = new Models[key](newEntity);
+    debugger;
     return state.setIn([key, 'models', id], newModel);
   },
 
@@ -78,6 +78,21 @@ export default handleActions({
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
   },
+
+  [SEND_MESSAGE_ON_CLIENT](state, action) {
+    const {
+      patientId,
+      body,
+      createdAt,
+    } = action.payload;
+    const dialogs = state.dialogs;
+    debugger;  
+    return state.merge({
+      currentDialog: action.payload.currentDialogId,
+    });
+  },
+
+
 }, initialState);
 
 /* function updateEntityStateWithEntities(state, key, id, modelData) {

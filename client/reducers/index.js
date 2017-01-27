@@ -9,6 +9,7 @@ import auth from './auth';
 import entities from './entities';
 import date from './date';
 import schedule from './schedule';
+import dialogs from './dialogs';
 
 export default combineReducers({
   routing,
@@ -20,4 +21,5 @@ export default combineReducers({
   entities,
   date,
   schedule,
+  currentDialog: dialogs,
 });

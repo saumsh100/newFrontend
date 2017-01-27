@@ -52,7 +52,7 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
         tempObject.messages = groupedByPatientId[key];
         let unreadCount = 0;
         groupedByPatientId[key].forEach(t => {
-          if (t.read === false) unreadCount += 1;
+          if (t.read === false && t.senderId === key) unreadCount += 1;
         });
         tempObject.unreadCount = unreadCount;
         tempObject.lastMessageText = groupedByPatientId[key][groupedByPatientId[key].length - 1].body;
@@ -76,6 +76,7 @@ textMessagesRouter.post('/', (req, res, next) => {
       practitionerId: practitioners[0].id,
       patientId,
       body,
+      accountId: req.token.activeAccountId,
     })
     .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
     .catch(next);

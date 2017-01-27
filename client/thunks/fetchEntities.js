@@ -1,6 +1,6 @@
 
 import axios from './axios';
-import { receiveEntities, deleteEntity, addEntity, updateEntity } from '../actions/entities';
+import { receiveEntities, deleteEntity, addEntity, updateEntity, sendMessageOnClientAction } from '../actions/entities';
 
 export function fetchEntities({ key,  params }) {
   return (dispatch, getState) => {
@@ -9,7 +9,6 @@ export function fetchEntities({ key,  params }) {
     axios.get(entity.getUrlRoot(), { params })
       .then((response) => {
         const { data } = response;
-        debugger;
         dispatch(receiveEntities({ key, entities: data.entities }));
       })
       .catch((err) => {
@@ -36,8 +35,10 @@ export function fetchPost({ key, params }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
+    debugger;
     axios.post(entity.getUrlRoot(), params)
       .then((response) => {
+        debugger;
         const { data } = response;
         dispatch(addEntity({ key, entity: data.entities }));
       })
@@ -55,5 +56,11 @@ export function fetchUpdate({ key, patient }) {
         dispatch(updateEntity({ key, entity: data.entities }));
       })
       .catch(err => console.log(err));
+  };
+}
+
+export function sendMessageOnClient(message) {
+  return function (dispatch, getState) {
+    dispatch(sendMessageOnClientAction(message));
   };
 }

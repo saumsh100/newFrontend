@@ -25,14 +25,18 @@ class Chat extends Component {
     if (message === '' || message.length === 0) {
       return null;
     }
+    debugger;
     const params = {
-      patientId: this.props.patient.id,
+      patientId: this.props.currentDialogId,
       body: message.value,
+      createdAt: new Date(),
     };
     this.props.fetchPost({
       key: 'textMessages',
       params,
     });
+
+    this.props.sendMessageOnClient(params);
     // window.socket.emit('sendMessage', {
     //   message: message.value,
     //   patient: this.props.patient,
@@ -40,9 +44,17 @@ class Chat extends Component {
     message.value = '';
   }
   render() {
-    const { patient, patients, textMessages, patientList} = this.props;
+    // const { patient = {}, patients, textMessages, patientList} = this.props;
+    const { dialogList = [], currentDialogId } = this.props;
+    const patient = {}
+    let currentDialog = dialogList[0] || {};
+    if (currentDialogId) {
+      currentDialog = dialogList.filter(n => (n.patientId === currentDialogId))[0];
+    }
+    debugger;
 
-    if (patient === null) {
+    const textMessages = currentDialog.messages;
+    if (!dialogList.length) {
       return <div>Loading...</div>;
     }
     return (
@@ -58,22 +70,20 @@ class Chat extends Component {
             </div>
           </div>
           <ul className={styles.dialogs__messages}>
-            {patients.map(((user) => {
-                const messages = textMessages.get('models')
-                .filter((el) => (el.patientId === user.id))
-                const unreadMessagesCount = messages.filter(el => ( !el.read && el.from === user.id))
-                .toArray().length;
-                const lastMessage = messages
-                .sort((a,b) => (a.createdAt < b.createdAt)).toArray()[0];
-                const lastMessageSentTime = lastMessage && lastMessage.createdAt;
+            {dialogList && dialogList.map(((d) => {
+                const lastMessageText = d.lastMessageText;
+                const lastMessageTime = d.lastMessageTime;
+                const unreadCount = d.unreadCount;
+                const unreadMessagesCount = null; 
+                const patientList = null;
+                const messages = dialogList.messages;
                 return (<DialogsListItem
-                  lastMessage={lastMessage}
-                  messages={messages}
-                  user={user}
+                  lastMessageText={lastMessageText}
+                  unreadCount={unreadCount}
+                  lastMessageTime={lastMessageTime}
                   patientList={patientList}
-                  patientId={user.id}
-                  unreadMessagesCount={unreadMessagesCount}
-                  lastMessageSentTime={lastMessageSentTime}
+                  patientId={d.patientId}
+                  setCurrentDialog={this.props.setCurrentDialog}
                   />);
               }).bind(this))}
           </ul>
