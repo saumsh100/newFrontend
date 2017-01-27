@@ -263,7 +263,7 @@ const SEEDS = {
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId,
+      accountId,
       body: 'from Chelsea 1',
       createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
       read: true,
@@ -271,21 +271,21 @@ const SEEDS = {
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId,
+      accountId,
       body: 'from Chelsea 2',
       createdAt: new Date(2017, 0, 6, 12, 30, 0, 0),
     },
     {
       id: uuid(),
       patientId: justinPatientId,
-      practitionerId,
+      accountId,
       body: 'from Chelsea2',
       createdAt: new Date(2017, 0, 2, 12, 30, 0, 0),
     },
     {
       id: uuid(),
       patientId: justinPatientId,
-      practitionerId: practitionerId2,
+      accountId,
       body: 'from Perry 1',
       createdAt: new Date(2017, 0, 3, 12, 30, 0, 0),
       read: true,
@@ -293,14 +293,14 @@ const SEEDS = {
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId: practitionerId2,
+      accountId,
       body: 'from Perry to alex 1',
       createdAt: new Date(2017, 0, 4, 11, 30, 0, 0),
     },
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId: practitionerId2,
+      accountId,
       body: 'from Perry to Alex 2',
       createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
     },
@@ -327,21 +327,6 @@ const SEEDS = {
   ],
 };
 
-// console.log(SEEDS);
-
-
-/* function forHasAndBelongsToMany(obj) {
-  obj.Service[0].practitioners = obj.Practitioner[0];
-  obj.Service[1].practitioners = obj.Practitioner[1];
-
-  obj.Practitioner[0].services = obj.Service[0];
-  obj.Practitioner[1].services = obj.Service[1];
-  console.log(console.log(obj.Service));
-  return obj;
-}
-
-const withHasAndBelongsToMany = forHasAndBelongsToMany(SEEDS);
-*/
 
 seedDatabase(SEEDS)
   .then(() => {

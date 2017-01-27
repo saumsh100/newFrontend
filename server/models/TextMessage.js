@@ -6,8 +6,7 @@ const TextMessage = thinky.createModel('TextMessage', {
   // Twilio MessageSID
   id: type.string().required(),
   patientId: type.string(),
-  practitionerId: type.string(),
-
+  accountId: type.string(),
   // Twilio Data
   to: type.string(),
   from: type.string(),
