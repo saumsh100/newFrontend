@@ -9,6 +9,7 @@ export function fetchEntities({ key,  params }) {
     axios.get(entity.getUrlRoot(), { params })
       .then((response) => {
         const { data } = response;
+        debugger;
         dispatch(receiveEntities({ key, entities: data.entities }));
       })
       .catch((err) => {
