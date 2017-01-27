@@ -20,6 +20,7 @@ const saltRounds = 10;
 
 
 const accountId = uuid();
+const accountId2 = uuid();
 const justinPatientId = uuid();
 const sergeyPatientId = uuid();
 const lonnyUserId = uuid();
@@ -50,8 +51,8 @@ const SEEDS = {
     },
 
     {
-      startTime: moment({hour: 19, minute: 20})._d,
-      endTime: moment({hour: 20, minute: 0})._d,
+      startTime: new Date(2017, 0, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 28, 12, 30, 0, 0),
       title: 'Sooner Availability',
       id: uuid(),
       accountId,
@@ -61,8 +62,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: moment({hour: 19, minute: 20})._d,
-      endTime: moment({hour: 20, minute: 0})._d,
+      startTime: new Date(2017, 1, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 1, 28, 12, 30, 0, 0),
       title: 'Sooner Availability',
       id: uuid(),
       accountId,
@@ -72,8 +73,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: moment({hour: 15, minute: 30})._d,
-      endTime: moment({hour: 15, minute: 30})._d,
+      startTime: new Date(2017, 2, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 2, 28, 12, 30, 0, 0),
       title: 'regular check',
       id: uuid(),
       accountId,
@@ -83,8 +84,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: moment({hour: 12, minute: 30})._d,
-      endTime: moment({hour: 16, minute: 30})._d,
+      startTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      endTime: new Date(2017, 2, 29, 12, 30, 0, 0),
       title: 'check',
       id: uuid(),
       accountId,
@@ -94,8 +95,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: moment({hour: 10, minute: 38})._d,
-      endTime: moment({hour: 12, minute: 15})._d,
+      startTime: new Date(2017, 3, 29, 12, 30, 0, 0),
+      endTime: new Date(2017, 3, 29, 12, 30, 0, 0),
       title: 'Later Availability',
       id: uuid(),
       accountId,
@@ -108,8 +109,8 @@ const SEEDS = {
       accountId,
       id: uuid(),
       title: 'Justin\'s appointment',
-      startTime: moment({hour: 20, minute: 38})._d,
-      endTime: moment({hour: 22, minute: 38})._d,
+      startTime: new Date(2016, 2, 29, 14, 30, 0, 0),
+      endTime: new Date(2016, 2, 29, 16, 30, 0, 0),
 
       patientId: justinPatientId,
       serviceId: serviceId,
@@ -141,8 +142,8 @@ const SEEDS = {
     {
       id: uuid(),
       title: 'Sergey\'s appointment',
-      startTime: moment({hour: 0, minute: 30})._d,
-      endTime: moment({hour: 2, minute: 10})._d,
+      startTime: new Date(2016, 2, 29, 18, 30, 0, 0),
+      endTime: new Date(2016, 2, 29, 20, 30, 0, 0),
       patientId: sergeyPatientId,
       accountId: accountId,
       serviceId: serviceId,
@@ -225,24 +226,28 @@ const SEEDS = {
       lastName: 'Sharp',
       phoneNumber: '+17808508886',
       id: justinPatientId,
+      accountId,
     },
     {
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       phoneNumber: '+17782422626',
       id: sergeyPatientId,
+      accountId,
     },
     {
       firstName: 'Mark',
       lastName: 'Joseph',
       phoneNumber: '+17788654451',
       id: uuid(),
+      accountId: accountId2,
     },
     {
       firstName: 'Alex',
       lastName: 'Bashliy',
       phoneNumber: '+19782521845',
       id: alexPatientId,
+      accountId,
     },
   ],
 

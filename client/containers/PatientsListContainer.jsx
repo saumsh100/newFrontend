@@ -1,6 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
-import PatientList from '../components/Patients/Patients';
+import PatientList from '../components/Patients/PatientList/';
 
 class PatientsListContainer extends Component {
   constructor(props) {
