@@ -13,7 +13,7 @@ const userRouter = require('./users');
 const textMessagesRouter = require('./textMessages');
 const authMiddleware = require('../../middleware/auth');
 
-apiRouter.all('*', authMiddleware);
+// apiRouter.all('*', authMiddleware);
 apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/reputation', reputationRouter);
 apiRouter.use('/patients', patientsRouter);
