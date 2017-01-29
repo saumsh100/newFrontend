@@ -20,6 +20,8 @@ import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
 import Dialogs from '../entities/models/Dialogs'
 import dialogs from '../entities/collections/dialogs';
+import PatientList from '../entities/models/PatientList'
+import patientList from '../entities/collections/patientList';
 
 const initialState = Map({
   // KEYs must map to the response object
@@ -29,6 +31,9 @@ const initialState = Map({
   appointments: new appointments(),
   practitioners: new practitioners(),
   dialogs: new dialogs(),
+  patientList: new patientList(),
+
+
   // reviews: Reviews(), MODEL
   // listings: Listings(), MODEL
 });
@@ -39,6 +44,7 @@ const Models = {
   appointments: Appointments,
   practitioners: Practitioners,
   dialogs: Dialogs,
+  patientList: PatientList,
 };
 
 export default handleActions({

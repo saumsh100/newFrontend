@@ -4,58 +4,8 @@ import styles from './main.scss';
 
 class PatientList extends Component {
   render() {
-    const patients = [
-      {
-        patientId: 1,
-        name: 'Claire Lacey',
-        age: 6,
-        lastAppointmentDate: 'Feb 1, 2017',
-        photo: 'https://randomuser.me/api/portraits/women/62.jpg',
-      }, {
-        patientId: 2,
-        name: 'Abraham Martin ',
-        age: 23,
-        lastAppointmentDate: 'Feb 2, 2017',
-        photo: 'https://randomuser.me/api/portraits/women/63.jpg',
-      }, {
-        patientId: 3,
-        name: 'Abraham Martin ',
-        age: 43,
-        lastAppointmentDate: 'Dec 31, 2016',
-        photo: 'https://randomuser.me/api/portraits/women/65.jpg',
-      }, {
-        patientId: 4,
-        name: 'Alice Andrews ',
-        age: 18,
-        lastAppointmentDate: 'Nov 12, 2015',
-        photo: 'https://randomuser.me/api/portraits/women/65.jpg',
-      },
-      {
-        patientId: 5,
-        name: 'Claire Lacey',
-        age: 6,
-        lastAppointmentDate: 'Feb 1, 2017',
-        photo: 'https://randomuser.me/api/portraits/women/62.jpg',
-      }, {
-        patientId: 6,
-        name: 'Abraham Martin ',
-        age: 23,
-        lastAppointmentDate: 'Feb 2, 2017',
-        photo: 'https://randomuser.me/api/portraits/women/63.jpg',
-      }, {
-        patientId: 7,
-        name: 'Abraham Martin ',
-        age: 43,
-        lastAppointmentDate: 'Dec 31, 2016',
-        photo: 'https://randomuser.me/api/portraits/women/65.jpg',
-      }, {
-        patientId: 8,
-        name: 'Alice Andrews ',
-        age: 18,
-        lastAppointmentDate: 'Nov 12, 2015',
-        photo: 'https://randomuser.me/api/portraits/women/65.jpg',
-      },
-    ];
+    const patientList = this.props.patients.models
+      .toArray().sort((a,b) => (a.nextAppointmentTime > b.nextAppointmentTime));
     return (
       <div className={styles.patients}>
         <div className={styles.patients_list}>
@@ -69,7 +19,7 @@ class PatientList extends Component {
             </div>
           </div>
           <ul className={styles.patients_list__users}>
-            {patients.map(((user) => {
+            {patientList.map(((user) => {
                 return (<PatientListItem user={user} />);
             }))}
           </ul>

@@ -10,7 +10,7 @@ import entities from './entities';
 import date from './date';
 import schedule from './schedule';
 import dialogs from './dialogs';
-
+import patientList from './patientList';
 export default combineReducers({
   routing,
   form,
@@ -22,4 +22,5 @@ export default combineReducers({
   date,
   schedule,
   currentDialog: dialogs,
+  patientList,
 });

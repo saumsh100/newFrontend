@@ -44,7 +44,7 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
           const patientAppointments = flatten.filter(a => a.patientId === p.id);
 
           // console.log(patientAppointments);
-          tempPatient.nextAppointmentTime = !_.isEmpty(patientAppointments[0]) ?
+          tempPatient.lastAppointmentDate = !_.isEmpty(patientAppointments[0]) ?
            patientAppointments[0].startTime : 'No next appointment';
 
           tempPatient.nextAppointmentTitle = !_.isEmpty(patientAppointments[0]) ?
@@ -54,13 +54,14 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
           tempPatient.age = p.age || 20;
 
           results[p.id] = tempPatient;
+          console.log("tempPatient");
+          console.log(tempPatient);
         });
 
         const resultStructure = {
           entities: { patientList: results },
           results: patientsIds,
         };
-
         return res.send(resultStructure);
       })
       .catch(next);
