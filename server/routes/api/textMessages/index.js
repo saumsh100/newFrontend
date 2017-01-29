@@ -71,7 +71,7 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
 });
 
 textMessagesRouter.post('/', (req, res, next) => {
-  const { body, patientId } = req.body;
+  const { body, patientId, createdAt } = req.body;
   Practitioner.execute().then((practitioners) => {
     TextMessage.save({
       id: uuid(),
@@ -79,6 +79,7 @@ textMessagesRouter.post('/', (req, res, next) => {
       patientId,
       body,
       accountId: req.token.activeAccountId,
+      createdAt,
     })
     .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
     .catch(next);

@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import Chat from '../components/Patients/Chat/';
 import { setCurrentDialog } from '../thunks/dialogs';
 import { sendMessageOnClient } from '../thunks/fetchEntities';
+import moment from 'moment';
 class PatientsMessagesContainer extends Component {
   constructor(props) {
     super(props);
@@ -23,8 +24,9 @@ class PatientsMessagesContainer extends Component {
       currentDialogId,
       sendMessageOnClient,
     } = this.props;
-    const dialogList = dialogs.get('models').toArray();
-    // const { patient, patients } = this.state;;
+    const dialogList = dialogs.get('models')
+      .toArray()
+      .sort((c,d) => (moment(c.lastMessageTime) < moment(d.lastMessageTime)));
     return (
       <div>
         <Chat dialogList={dialogList}

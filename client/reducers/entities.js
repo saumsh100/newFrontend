@@ -1,5 +1,5 @@
 
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import each from 'lodash/each';
 import { handleActions } from 'redux-actions';
 import {
@@ -68,7 +68,6 @@ export default handleActions({
     const id = Object.keys(entity[key])[0];
     const newEntity = entity[key][id];
     const newModel = new Models[key](newEntity);
-    debugger;
     return state.setIn([key, 'models', id], newModel);
   },
 
@@ -80,16 +79,17 @@ export default handleActions({
   },
 
   [SEND_MESSAGE_ON_CLIENT](state, action) {
-    const {
-      patientId,
-      body,
-      createdAt,
-    } = action.payload;
-    const dialogs = state.dialogs;
-    debugger;  
-    return state.merge({
-      currentDialog: action.payload.currentDialogId,
+    const { message } = action.payload;
+    const objectToMergeWith = fromJS({
+      lastMessageText: message.body,
+      lastMessageTime: message.createdAt,
     });
+    const oldDialog = fromJS(state.toJS().dialogs.models[message.patientId]);
+    const mergedDialog = oldDialog.mergeDeep(objectToMergeWith);
+    const oldMessages = state.toJS().dialogs.models[message.patientId].messages.map(m => m);
+    oldMessages.push(message);
+    const resultingDialog = mergedDialog.updateIn(['messages'], () => oldMessages).toJS();
+    return state.updateIn(['dialogs', 'models', message.patientId], () => resultingDialog);
   },
 
 

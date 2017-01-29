@@ -35,10 +35,8 @@ export function fetchPost({ key, params }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    debugger;
     axios.post(entity.getUrlRoot(), params)
       .then((response) => {
-        debugger;
         const { data } = response;
         dispatch(addEntity({ key, entity: data.entities }));
       })
@@ -61,6 +59,6 @@ export function fetchUpdate({ key, patient }) {
 
 export function sendMessageOnClient(message) {
   return function (dispatch, getState) {
-    dispatch(sendMessageOnClientAction(message));
+    dispatch(sendMessageOnClientAction({ message }));
   };
 }
