@@ -13,10 +13,10 @@ class Chat extends Component {
   }
 
   componentDidUpdate() {
-    // const messagesList = this.messagesList;
-    // if (messagesList !== null) {
-    //   messagesList.scrollTop = messagesList.scrollHeight;
-    // }
+    const messagesList = this.messagesList;
+    if (messagesList !== null) {
+      messagesList.scrollTop = messagesList.scrollHeight;
+    }
   }
 
   sendMessage(e) {
@@ -35,7 +35,6 @@ class Chat extends Component {
       key: 'textMessages',
       params,
     });
-
     this.props.sendMessageOnClient(params);
     // window.socket.emit('sendMessage', {
     //   message: message.value,
@@ -63,12 +62,12 @@ class Chat extends Component {
                 Last Seen 02/23/2017 10:00 am
               </div>
             </div>
-            <div className={styles.message_list} ref={(ref) => this.messagesList = ref}>
+            <div className={styles.message_list} ref={ref => (this.messagesList = ref)}>
               <Messages messages={textMessages} patientId={patient.id} />
             </div>
             <div className={styles.body_footer}>
               <form onSubmit={this.sendMessage}>
-                <input ref={(ref) => this.messageText = ref} className={styles.body_footer__input} type="text" placeholder="Type a message" />
+                <input ref={ref => (this.messageText = ref)} className={styles.body_footer__input} type="text" placeholder="Type a message" />
               </form>
               <div className={styles.body_footer__attach}></div>
             </div>
@@ -124,7 +123,7 @@ class Chat extends Component {
   render() {
     // const { patient = {}, patients, textMessages, patientList} = this.props;
     const { dialogList = [], currentDialogId } = this.props;
-    const patient = {}
+    const patient = {};
     let currentDialog = dialogList[0] || {};
     if (currentDialogId) {
       currentDialog = dialogList.filter(n => (n.patientId === currentDialogId))[0];

@@ -39,8 +39,6 @@ textMessagesRouter.get('/twilio', (req, res, next) => {
 textMessagesRouter.get('/dialogs', (req, res, next) => {
   Account.filter({ id: req.token.activeAccountId }).getJoin().run()
     .then((accounts) => {
-      console.log("Accounts")
-      console.log(accounts)
       const { textMessages } = accounts[0];
       const sortedMessages = textMessages.sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
