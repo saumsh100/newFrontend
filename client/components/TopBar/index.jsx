@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 import { AppBar, Button, IconButton, Tabs, Tab } from '../library';
-import SubTabs from './SubTabs';
+import SubTabs from '../SubTabs/index';
 import styles from './styles.scss';
 
 

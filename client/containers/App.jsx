@@ -8,7 +8,7 @@ import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
-import SubTabs from '../components/TopBar/SubTabs';
+import SubTabs from '../components/SubTabs';
 import { setIsCollapsed } from '../actions/toolbar';
 
 import styles from './styles.scss';
@@ -19,7 +19,6 @@ function App(props) {
     children,
     isCollapsed,
     setIsCollapsed,
-    dispatch,
   } = props;
   
   let overlay = null;
@@ -36,7 +35,7 @@ function App(props) {
       </NavRegionContainer>
       <MainRegionContainer>
         <div className={styles.subTabs}>
-          <SubTabs />
+          <SubTabs location={location} />
         </div>
         {children}
       </MainRegionContainer>

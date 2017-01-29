@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, IndexRoute, IndexRedirect } from 'react-router';
 import App from './containers/App';
 
 let counter = 0;
@@ -47,7 +47,9 @@ export default function Routes({ history }) {
             });
           }}
         >
-          <IndexRoute
+          <IndexRedirect to="list" />
+          <Route
+            path="list"
             getComponent={(location, callback) => {
               require.ensure(['./containers/PatientsListContainer'], (require) => {
                 callback(null, require('./containers/PatientsListContainer').default);
@@ -55,7 +57,7 @@ export default function Routes({ history }) {
             }}
           />
           <Route
-            path="/patients/messages"
+            path="messages"
             getComponent={(location, callback) => {
               require.ensure(['./containers/PatientsMessagesContainer'], (require) => {
                 callback(null, require('./containers/PatientsMessagesContainer').default);
@@ -63,7 +65,7 @@ export default function Routes({ history }) {
             }}
           />
           <Route
-            path="/patients/phone"
+            path="phone"
             getComponent={(location, callback) => {
               require.ensure(['./containers/PatientsPhoneContainer'], (require) => {
                 callback(null, require('./containers/PatientsPhoneContainer').default);

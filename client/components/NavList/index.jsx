@@ -80,9 +80,14 @@ export default function NavList({ location }) {
       <Nav>
         <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
         <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" />
+        {/*<MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
+          <SubNavItem path="/intelligence/overview" label="Overview" />
+          <SubNavItem path="/intelligence/business" label="Business" />
+          <SubNavItem path="/intelligence/social" label="Social" />
+        </MultiNavItem>*/}
         <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
-        <MultiNavItem  path="/patients" icon="heart" label="Patient Management">
-          <SubNavItem path="/patients" label="Patients" />
+        <MultiNavItem path="/patients" icon="heart" label="Patient Management">
+          <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
           <SubNavItem path="/patients/phone" label="Phone Calls" />
         </MultiNavItem>
