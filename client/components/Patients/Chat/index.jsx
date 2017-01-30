@@ -158,6 +158,7 @@ class Chat extends Component {
                   lastMessageTime={lastMessageTime}
                   patientList={patientList}
                   patientId={d.patientId}
+                  patientName={d.patientName}
                   setCurrentDialog={this.props.setCurrentDialog}
                   />);
               }).bind(this))}

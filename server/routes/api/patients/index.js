@@ -23,7 +23,7 @@ const patientSchema = new Schema('patients');
 patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next) => {
   // TODO: ensure that we only pull patients for activeAccount
   if (req.query.patientsList === 'true') {
-    Patient.filter({ accountId: req.query.accountId }).getJoin({
+    Patient.filter({ accountId: req.token.activeAccountId }).getJoin({
       textMessages: false, appointments: true,
     }).run()
       .then((patients) => {
