@@ -1,11 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import PatientListItem from './PatientListItem';
 import styles from './main.scss';
-
+import moment from 'moment';
 class PatientList extends Component {
   render() {
-    const patientList = this.props.patients.models
-      .toArray().sort((a,b) => (a.nextAppointmentTime > b.nextAppointmentTime));
+    const patientList = this.props.patients.models.toArray()
+    const patientListWithAppointments = 
+    patientList.filter((p) => (moment(p.lastAppointmentDate)._d
+      .toString() !== "Invalid Date"))
+      .sort((a,b) => (moment(a.toJS().lastAppointmentDate) > moment(b.toJS().lastAppointmentDate)));
+    const patientListWithoutAppointments = 
+    patientList.filter((p) => (moment(p.lastAppointmentDate)._d
+      .toString() === "Invalid Date"));
+    const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments)
     return (
       <div className={styles.patients}>
         <div className={styles.patients_list}>
@@ -19,7 +26,7 @@ class PatientList extends Component {
             </div>
           </div>
           <ul className={styles.patients_list__users}>
-            {patientList.map(((user) => {
+            {patientListSorted.map(((user) => {
                 return (<PatientListItem user={user} />);
             }))}
           </ul>
