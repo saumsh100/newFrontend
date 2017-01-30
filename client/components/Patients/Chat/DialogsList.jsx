@@ -19,6 +19,7 @@ class DialogsList extends Component {
       patientName,
       lastMessageTime,
     } = this.props;
+    debugger;
     const patient = {}
     return (
       <li onClick={this.goToDialogue} className={styles.messages}>

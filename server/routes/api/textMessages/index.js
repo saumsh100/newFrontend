@@ -57,7 +57,9 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
         groupedByPatientId[key].forEach(t => {
           if (t.read === false) unreadCount += 1;
         });
-        tempObject.patientName = `${patient.firstName} ${patient.lastName}`;
+        if (patient) {
+          tempObject.patientName = `${patient.firstName} ${patient.lastName}`;
+        }
         tempObject.unreadCount = unreadCount;
         tempObject.lastMessageText = groupedByPatientId[key][groupedByPatientId[key].length - 1].body;
         tempObject.lastMessageTime = groupedByPatientId[key][groupedByPatientId[key].length - 1].createdAt;
