@@ -5,7 +5,7 @@ import { fetchEntities } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Chat from '../components/Patients/Chat/';
-import { setCurrentDialog } from '../thunks/dialogs';
+import { setCurrentDialog, setDialogsFilter } from '../thunks/dialogs';
 import { sendMessageOnClient } from '../thunks/fetchEntities';
 import moment from 'moment';
 class PatientsMessagesContainer extends Component {
@@ -17,12 +17,22 @@ class PatientsMessagesContainer extends Component {
     this.props.fetchEntities({ key: 'dialogs'});
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { filters } = this.props;
+    const username = filters && filters.username; 
+    if (!!username) {
+      this.props.fetchEntities({ key: 'dialogs', params: { username } })
+    }
+  }
+
   render() {
     const {
       dialogs,
       setCurrentDialog,
       currentDialogId,
       sendMessageOnClient,
+      setDialogsFilter,
+      filters,
     } = this.props;
     const dialogList = dialogs.get('models')
       .toArray()
@@ -33,6 +43,8 @@ class PatientsMessagesContainer extends Component {
           setCurrentDialog={setCurrentDialog}
           currentDialogId={currentDialogId}
           sendMessageOnClient={sendMessageOnClient}
+          setDialogsFilter={setDialogsFilter}
+          filters={filters}
         />
       </div>
 
@@ -46,6 +58,7 @@ function mapStateToProps({ entities, currentDialog }) {
     return {
       dialogs: entities.get('dialogs'),
       currentDialogId: currentDialog.toJS().currentDialog,
+      filters: currentDialog.toJS().filters,
     };
 }
 
@@ -54,6 +67,7 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     setCurrentDialog,
     sendMessageOnClient,
+    setDialogsFilter,
   }, dispatch);
 }
 

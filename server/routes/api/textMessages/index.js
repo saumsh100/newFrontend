@@ -37,9 +37,11 @@ textMessagesRouter.get('/twilio', (req, res, next) => {
 });
 
 textMessagesRouter.get('/dialogs', (req, res, next) => {
-  Account.filter({ id: req.token.activeAccountId }).getJoin().run()
+  Account.filter({ id: req.token.activeAccountId }).getJoin({
+    patients: true, appointments: false, textMessages: true,
+  }).run()
     .then((accounts) => {
-      const { textMessages } = accounts[0];
+      const { textMessages, patients } = accounts[0];
       const sortedMessages = textMessages.sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
@@ -48,17 +50,36 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
       const patientIds = Object.keys(groupedByPatientId);
       patientIds.forEach((key, index) => {
         const tempObject = {};
+        const patient = patients.filter(p => p.id === key)[0];
         tempObject.patientId = key;
         tempObject.messages = groupedByPatientId[key];
         let unreadCount = 0;
         groupedByPatientId[key].forEach(t => {
-          if (t.read === false && t.senderId === key) unreadCount += 1;
+          if (t.read === false) unreadCount += 1;
         });
+        tempObject.patientName = `${patient.firstName} ${patient.lastName}`;
         tempObject.unreadCount = unreadCount;
         tempObject.lastMessageText = groupedByPatientId[key][groupedByPatientId[key].length - 1].body;
         tempObject.lastMessageTime = groupedByPatientId[key][groupedByPatientId[key].length - 1].createdAt;
         tempDialogs[key] = tempObject;
       });
+      // return res.send(tempDialogs);
+      if (req.query.username &&  req.query.username.length) {
+        const pattern = new RegExp(req.query.username, 'i');
+        const results = [];
+        const filteredDialogs = {};
+        Object.keys(tempDialogs).forEach(k => {
+          if (pattern.test(tempDialogs[k].patientName)) {
+            filteredDialogs[k] = tempDialogs[k];
+            results.push(k);
+          }
+        });
+        const resultStructure = {
+          entities: { dialogs: filteredDialogs },
+          results,
+        }
+        return res.send(resultStructure);
+      }
 
       const resultStructure = {
         entities: { dialogs: tempDialogs },
@@ -67,6 +88,7 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
       return res.send(resultStructure);
     });
 });
+
 
 textMessagesRouter.post('/', (req, res, next) => {
   const { body, patientId, createdAt } = req.body;

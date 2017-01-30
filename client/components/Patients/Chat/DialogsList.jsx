@@ -16,6 +16,7 @@ class DialogsList extends Component {
       patientId,
       lastMessageText,
       unreadCount,
+      patientName,
       lastMessageTime,
     } = this.props;
     const patient = {}
@@ -24,7 +25,7 @@ class DialogsList extends Component {
         <img className={styles.messages__photo} src={patient.image} alt="avatar" />
         <div className={styles.messages__wrapper}>
           <div className={styles.messages__header}>
-            <div className={styles.messages__name}>{patient.firstName}</div>
+            <div className={styles.messages__name}>{patientName}</div>
             <div className={styles.messages__date}>
               {lastMessageTime && moment(lastMessageTime).fromNow()}
             </div>

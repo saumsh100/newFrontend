@@ -5,11 +5,13 @@ import { fetchPost } from '../../../thunks/fetchEntities';
 import Messages from './Messages';
 import DialogsListItem from './DialogsList';
 import styles from './styles.scss';
+import { Button, Form, Field } from '../../library';
 
 class Chat extends Component {
   constructor(props) {
     super(props);
     this.sendMessage = this.sendMessage.bind(this);
+    this.handleInput = this.handleInput.bind(this);
   }
 
   componentDidUpdate() {
@@ -25,7 +27,6 @@ class Chat extends Component {
     if (message === '' || message.length === 0) {
       return null;
     }
-
     const params = {
       patientId: this.props.currentDialogId,
       body: message.value,
@@ -119,10 +120,14 @@ class Chat extends Component {
     );
   }
 
+  handleInput() {
+    const value = this.textInput.value;
+    this.props.setDialogsFilter(value);
+  }
 
   render() {
-    // const { patient = {}, patients, textMessages, patientList} = this.props;
-    const { dialogList = [], currentDialogId } = this.props;
+    const { currentDialogId, setDialogsFilter, filters } = this.props;
+    let { dialogList = [] } = this.props;
     const patient = {};
     let currentDialog = dialogList[0] || {};
     if (currentDialogId) {
@@ -132,6 +137,11 @@ class Chat extends Component {
     if (!dialogList.length) {
       return <div>Loading...</div>;
     }
+    const userNameFilterText = filters && filters.username;
+    if (userNameFilterText) {
+      const pattern = new RegExp(userNameFilterText, 'i');
+      dialogList = dialogList.filter(d => pattern.test(d.patientName));
+    }
     return (
       <div className={styles.chat__container}>
         <div className={styles.dialogs}>
@@ -139,7 +149,12 @@ class Chat extends Component {
             <label className={styles.search__label} htmlFor="search__input">
               <i className="fa fa-search"></i>
             </label>
-            <input id="search__input" className={styles.search__input} placeholder="Search..."/>
+            <input id="search__input"
+              className={styles.search__input}
+              placeholder="Search..."
+              ref={(input) => { this.textInput = input; }}
+              onChange={this.handleInput}
+            />
             <div className={styles.search__edit}>
               <i className="fa fa-pencil"></i>
             </div>
@@ -161,6 +176,7 @@ class Chat extends Component {
                   setCurrentDialog={this.props.setCurrentDialog}
                   />);
               }).bind(this))}
+
           </ul>
         </div>
         {currentDialogId && this.renderChatWindow(patient, textMessages)}

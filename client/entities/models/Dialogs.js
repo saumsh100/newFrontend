@@ -7,6 +7,7 @@ const DialogSchema = {
   lastMessageTime: null,
   messages: null,
   patientId: null,
+  patientName: null,
 };
 
 export default class Dialog extends createModel(DialogSchema) {
