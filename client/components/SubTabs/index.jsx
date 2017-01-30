@@ -1,7 +1,26 @@
 
 import React, { Component } from 'react';
-import { Tabs, Tab } from '../library';
+import { RouterTabs } from '../library';
 import styles from './styles.scss';
+
+const getRootPath = pathname => pathname;
+
+const ROUTES = {
+  '/patients': [
+    {
+      to: '/patients/list',
+      label: 'Patients',
+    },
+    {
+      to: '/patients/messages',
+      label: 'Messages',
+    },
+    {
+      to: '/patients/phone',
+      label: 'Phone',
+    },
+  ],
+};
 
 class SubTabs extends Component {
   constructor(props) {
@@ -23,16 +42,18 @@ class SubTabs extends Component {
   render() {
     const { location } = this.props;
 
+    // TODO: if we can strip off /${rootPath}/blah/blah then we can simplify below
     let subTabsComponent = null;
     if (location.pathname.indexOf('/patients') === 0) {
       subTabsComponent = (
-        <Tabs index={this.state.index} onChange={this.handleTabChange}>
-          <Tab label="Patients" />
-          <Tab label="Messages" />
-          <Tab label="Phone" />
-        </Tabs>
+        <RouterTabs
+          location={location}
+          routes={ROUTES['/patients']}
+        />
       );
-    }
+    } /* else if (add other paths) {
+
+    } */
 
     return subTabsComponent;
   }

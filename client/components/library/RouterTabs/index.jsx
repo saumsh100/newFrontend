@@ -1,5 +1,7 @@
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'recompose';
+import { withRouter } from 'react-router';
 import Tabs, { Tab } from '../Tabs';
 
 class RouterTabs extends Component {
@@ -11,25 +13,24 @@ class RouterTabs extends Component {
   }
 
   handleRouterTabChange(index) {
-    const route = this.props.route[index];
+    const { to } = this.props.routes[index];
+    this.props.router.push(to);
   }
 
   renderChildren(routes) {
-    const tabElements = routes.map((item, idx) => {
-      return React.cloneElement(item, {
-        key: idx,
-        active: this.props.index === idx,
-        tabIndex: idx,
-      });
+    return routes.map(({ label }, idx) => {
+      return (
+        <Tab
+          key={`${label}${idx}`}
+          label={label}
+        />
+      );
     });
-
-    return contentElements.filter((item, idx) => (idx === this.props.index));
   }
 
   render() {
     const { location, routes } = this.props;
-    // TODO: location should dictate index
-    const index = 0;
+    const index = routes.findIndex(route => route.to === location.pathname);
     return (
       <Tabs index={index} onChange={this.handleRouterTabChange}>
         {this.renderChildren(routes)}
@@ -40,6 +41,10 @@ class RouterTabs extends Component {
 
 RouterTabs.propTypes = {
   location: PropTypes.string.isRequired,
+  routes: PropTypes.array.isRequired,
+  router: PropTypes.func.isRequired,
 };
 
-export default RouterTabs;
+const enhance = compose(withRouter);
+
+export default enhance(RouterTabs);
