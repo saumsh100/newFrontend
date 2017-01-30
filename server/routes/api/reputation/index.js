@@ -12,31 +12,32 @@ const {
 } = globals.vendasta;
 
 reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, next) => {
-  return Account.get(req.token.activeAccountId)
-    .then((account) => {
-      axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
-        customerIdentifier: account.vendastaId,
-      }).then((response) => {
-        return res.send(response.data);
-      }).catch((error) => {
-        return next(error);
-      });
-    })
-    .catch(error => next(error));
+  console.log(req.token);
+  return Account.get(req.token.activeAccountId).then((account) => {
+    axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
+      customerIdentifier: account.vendastaId,
+    }).then((response) => {
+      return res.send(response.data);
+    }).catch((error) => {
+      return next(error);
+    });
+  }).catch((error) => {
+    error.status = 404;
+    return next(error);
+  });
 });
 
+
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
-  return Account.get(req.token.activeAccountId)
-    .then((account) => {
-      axios.post(`${VENDASTA_REVIEWS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
-        customerIdentifier: account.vendastaId,
-      }).then((response) => {
-        return res.send(response.data);
-      }).catch((error) => {
-        return next(error);
-      });
-    })
-    .catch(error => next(error));
+  return Account.get(req.token.activeAccountId).then((account) => {
+    axios.post(`${VENDASTA_REVIEWS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
+      customerIdentifier: account.vendastaId,
+    }).then((response) => {
+      return res.send(response.data);
+    }).catch((error) => {
+      return next(error);
+    });
+  }).catch(error => next(error));
 });
 
 module.exports = reputationRouter;

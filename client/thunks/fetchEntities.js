@@ -1,6 +1,6 @@
 
 import axios from './axios';
-import { receiveEntities, deleteEntity, addEntity, updateEntity } from '../actions/entities';
+import { receiveEntities, deleteEntity, addEntity, updateEntity, sendMessageOnClientAction } from '../actions/entities';
 
 export function fetchEntities({ key,  params }) {
   return (dispatch, getState) => {
@@ -54,5 +54,11 @@ export function fetchUpdate({ key, patient }) {
         dispatch(updateEntity({ key, entity: data.entities }));
       })
       .catch(err => console.log(err));
+  };
+}
+
+export function sendMessageOnClient(message) {
+  return function (dispatch, getState) {
+    dispatch(sendMessageOnClientAction({ message }));
   };
 }

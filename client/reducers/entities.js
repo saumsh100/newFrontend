@@ -1,5 +1,5 @@
 
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import each from 'lodash/each';
 import { handleActions } from 'redux-actions';
 import {
@@ -8,18 +8,32 @@ import {
   DELETE_ENTITY,
   ADD_ENTITY,
   UPDATE_ENTITY,
+  SEND_MESSAGE_ON_CLIENT,
 } from '../constants';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
 import textMessages from '../entities/collections/textMessages';
 import TextMessage from '../entities/models/TextMessage';
-
+import Appointments from '../entities/models/Appointments';
+import appointments from '../entities/collections/appointments';
+import practitioners from '../entities/collections/practitioners';
+import Practitioners from '../entities/models/Practitioners';
+import Dialogs from '../entities/models/Dialogs'
+import dialogs from '../entities/collections/dialogs';
+import PatientList from '../entities/models/PatientList'
+import patientList from '../entities/collections/patientList';
 
 const initialState = Map({
   // KEYs must map to the response object
   // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
   patients: new patients(),
   textMessages: new textMessages(),
+  appointments: new appointments(),
+  practitioners: new practitioners(),
+  dialogs: new dialogs(),
+  patientList: new patientList(),
+
+
   // reviews: Reviews(), MODEL
   // listings: Listings(), MODEL
 });
@@ -27,6 +41,10 @@ const initialState = Map({
 const Models = {
   patients: Patient,
   textMessages: TextMessage,
+  appointments: Appointments,
+  practitioners: Practitioners,
+  dialogs: Dialogs,
+  patientList: PatientList,
 };
 
 export default handleActions({
@@ -65,6 +83,22 @@ export default handleActions({
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
   },
+
+  [SEND_MESSAGE_ON_CLIENT](state, action) {
+    const { message } = action.payload;
+    const objectToMergeWith = fromJS({
+      lastMessageText: message.body,
+      lastMessageTime: message.createdAt,
+    });
+    const oldDialog = fromJS(state.toJS().dialogs.models[message.patientId]);
+    const mergedDialog = oldDialog.mergeDeep(objectToMergeWith);
+    const oldMessages = state.toJS().dialogs.models[message.patientId].messages.map(m => m);
+    oldMessages.push(message);
+    const resultingDialog = mergedDialog.updateIn(['messages'], () => oldMessages).toJS();
+    return state.updateIn(['dialogs', 'models', message.patientId], () => resultingDialog);
+  },
+
+
 }, initialState);
 
 /* function updateEntityStateWithEntities(state, key, id, modelData) {

@@ -1,4 +1,5 @@
 const thinky = require('../config/thinky');
+
 const type = thinky.type;
 
 const Practitioner = thinky.createModel('Practitioner', {
@@ -6,7 +7,8 @@ const Practitioner = thinky.createModel('Practitioner', {
   accountId: type.string().uuid(4).required(),
   firstName: type.string().required(),
   lastName: type.string().required(),
-  services: [type.string().uuid(4).required()],
+  // services: [type.string().uuid(4).required()],
+  serviceId: type.string().uuid(4)
 });
 
 module.exports = Practitioner;

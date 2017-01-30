@@ -9,20 +9,16 @@ class DialogsList extends Component {
     this.goToDialogue = this.goToDialogue.bind(this);
   }
   goToDialogue() {
-    browserHistory.push(`/patients/${this.props.patientId}`);
+    this.props.setCurrentDialog(this.props.patientId)
   }
   render() {
     const {
-      user,
-      messages,
-      patientList,
       patientId,
-      lastMessage,
-      unreadMessagesCount,
-      lastMessageSentTime,
+      lastMessageText,
+      unreadCount,
+      lastMessageTime,
     } = this.props;
-    const patient = this.props.patientList.getIn(['models', user.id]);
-    const patientMessages = this.props.messages.get('models')
+    const patient = {}
     return (
       <li onClick={this.goToDialogue} className={styles.messages}>
         <img className={styles.messages__photo} src={patient.image} alt="avatar" />
@@ -30,19 +26,19 @@ class DialogsList extends Component {
           <div className={styles.messages__header}>
             <div className={styles.messages__name}>{patient.firstName}</div>
             <div className={styles.messages__date}>
-              {lastMessageSentTime && moment(lastMessageSentTime).fromNow()}
+              {lastMessageTime && moment(lastMessageTime).fromNow()}
             </div>
           </div>
           <div className={styles.messages__body}>
-            {!!unreadMessagesCount &&
+            {!!unreadCount &&
               <div className={styles.messages__unread}>
                 <span>
-                  {unreadMessagesCount}
+                  {unreadCount}
                 </span>
               </div>
             }
             <div className={styles.messages__text}>
-              {lastMessage && lastMessage.body}
+              {lastMessageText}
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ function Messages({ patient, patients }) {
     <div>
       Messages
       {/*<ChatContainer patient={patient} patients={patients} />*/}
+
     </div>
   );
 }
@@ -17,3 +18,10 @@ Messages.propTypes = {
 };
 
 export default Messages;
+
+
+      // <Chat patient={patient}
+      // 	patients={patients}
+      // 	patientList={patientList}
+      // 	textMessages={textMessages}
+      // />
