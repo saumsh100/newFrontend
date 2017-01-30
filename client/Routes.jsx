@@ -140,3 +140,4 @@ if (module.hot) {
 Routes.propTypes = {
   history: PropTypes.object.isRequired,
 };
+
