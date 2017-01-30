@@ -1,18 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import PatientListItem from './PatientListItem';
-import styles from './main.scss';
+import PersonalData from './PersonalData'
+import EditPersonalData from './EditPersonalData'
 import moment from 'moment';
+import styles from './main.scss';
+
 class PatientList extends Component {
   render() {
     const patientList = this.props.patients.models.toArray()
-    const patientListWithAppointments = 
+    const patientListWithAppointments =
     patientList.filter((p) => (moment(p.lastAppointmentDate)._d
       .toString() !== "Invalid Date"))
       .sort((a,b) => (moment(a.toJS().lastAppointmentDate) > moment(b.toJS().lastAppointmentDate)));
-    const patientListWithoutAppointments = 
+    const patientListWithoutAppointments =
     patientList.filter((p) => (moment(p.lastAppointmentDate)._d
       .toString() === "Invalid Date"));
-    const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments)
+    const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
+
+    const patientListFiltered = patientListSorted
+    .filter(n => (n.patientId === this.props.currentPatient))[0];
+    const addNewUser = true ? <PersonalData patient={patientListFiltered} /> : <EditPersonalData />;
     return (
       <div className={styles.patients}>
         <div className={styles.patients_list}>
@@ -27,12 +34,23 @@ class PatientList extends Component {
           </div>
           <ul className={styles.patients_list__users}>
             {patientListSorted.map(((user) => {
-                return (<PatientListItem user={user} />);
+                return (<PatientListItem
+                  key={user.patientId}
+                  user={user}
+                  currentPatient={this.props.currentPatient}
+                  setCurrentPatient={this.props.setCurrentPatient}
+                />);
             }))}
           </ul>
         </div>
         <div className={styles.patients_content}>
           <div className={styles.patients_content__header}>
+            <div className={styles.patients_content__addUser}>
+              Add New Patient
+              <span>
+                <i className="fa fa-plus" />
+              </span>
+            </div>
             <div className={styles.patient_profile}>
               <div className={styles.patient_profile__photo}>
                 <img src="../img/patient-profile.png" alt="photo" />
@@ -72,34 +90,7 @@ class PatientList extends Component {
                 <li className={styles.right__item}>Insurance</li>
                 <li className={styles.right__item}>Preferences</li>
               </ul>
-              <div className={styles.right__personal}>
-                <div className={styles.personal}>
-                  <div className={`${styles.personal__name} ${styles.personal__table}`}>
-                    <i className="fa fa-user" />
-                    <span>Claire K. Lacey</span>
-                  </div>
-                  <div className={`${styles.personal__info} ${styles.personal__table}`}>
-                    <div className={styles.personal__birthday}>
-                      <i className="fa fa-calendar" />
-                      <span>05/22/2010</span>
-                    </div>
-                    <div className={styles.personal__age}>
-                      <span>6 years</span>
-                    </div>
-                    <div className={styles.personal__gender}>
-                      <span>Female</span>
-                    </div>
-                  </div>
-                  <div className={`${styles.personal__language} ${styles.personal__table}`}>
-                    <i className="fa fa-comments" />
-                    <span>English</span>
-                  </div>
-                  <div className={`${styles.personal__status} ${styles.personal__table}`}>
-                    <i className="fa fa-flag" />
-                    <span>Active</span>
-                  </div>
-                </div>
-              </div>
+              {addNewUser}
             </div>
           </div>
         </div>
@@ -110,6 +101,7 @@ class PatientList extends Component {
 
 PatientList.propTypes = {
   patients: PropTypes.array.isRequired,
+  setCurrentPatient: PropTypes.function
 };
 
 export default PatientList;

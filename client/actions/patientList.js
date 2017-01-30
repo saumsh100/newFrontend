@@ -3,4 +3,4 @@ import {
 	SET_CURRENT_PATIENT,
 } from '../constants';
 
-export const setCurrentPatientAction = createAction(SET_CURRENT_DIALOG);
+export const setCurrentPatientAction = createAction(SET_CURRENT_PATIENT);

@@ -78,6 +78,12 @@ ul {
         padding: 20px;
         border-bottom: 1px solid #e6e6e6;
 
+        &:hover {
+            background: #E7E7E7;
+        }
+        &__active {
+          background: #E7E7E7;
+        }
         &__photo {
             width: 100%;
             max-width: 50px;
@@ -126,9 +132,37 @@ ul {
 }
 
 .patients_content {
+    position: relative;
     width: 70%;
     margin-left: 10px;
     background: #fafafa;
+
+    &__addUser {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: row;
+        cursor: pointer;
+        color: #F5F5F5;
+        font-size: 12px;
+        align-items: center;
+
+        span {
+            display: flex;
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+            border: 2px solid #F5F5F5;
+            border-radius: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        i {
+            font-size: 12px;
+        }
+    }
 
     &__header {
         height: 50%;

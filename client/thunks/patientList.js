@@ -1,6 +1,6 @@
 import {
 	setCurrentPatientAction,
-} from '../actions/dialogs';
+} from '../actions/patientList';
 
 export function setCurrentPatient(currentDialogId) {
   return function (dispatch, getState) {

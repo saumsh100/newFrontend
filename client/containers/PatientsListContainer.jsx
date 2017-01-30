@@ -15,6 +15,7 @@ class PatientsListContainer extends Component {
     // TODO: fetchEntities for patients, add query for fetching patients by next appointment
     const options = { key: 'patients', params: { patientsList: true } };
     this.props.fetchEntities(options);
+
   }
 
   render() {
@@ -22,10 +23,13 @@ class PatientsListContainer extends Component {
       patients,
       setCurrentPatient,
     } = this.props;
+    {console.log('currentPatient', this.props.currentPatient.get('currentPatient'))}
+
     //const { patient, patients } = this.state;
     return (
-      <PatientList 
+      <PatientList
         setCurrentPatient={setCurrentPatient}
+        currentPatient={this.props.currentPatient.get('currentPatient')}
         patients={patients}
       />
     );
@@ -34,10 +38,11 @@ class PatientsListContainer extends Component {
 
 PatientsListContainer.propTypes = {};
 
-function mapStateToProps({ entities, currentPatient }) {
+function mapStateToProps({ entities, patientList }) {
     return {
       patients: entities.get('patientList'),
-      currentPatient,
+      currentPatient: patientList,
+      // currentPatient,
     };
 }
 

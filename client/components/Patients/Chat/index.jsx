@@ -149,7 +149,7 @@ class Chat extends Component {
                 const lastMessageText = d.lastMessageText;
                 const lastMessageTime = d.lastMessageTime;
                 const unreadCount = d.unreadCount;
-                const unreadMessagesCount = null; 
+                const unreadMessagesCount = null;
                 const patientList = null;
                 const messages = dialogList.messages;
                 return (<DialogsListItem
@@ -178,8 +178,6 @@ function mapActionsToProps(dispatch) {
     fetchPost
   }, dispatch);
 }
-
-
 
 const enhance = connect(null, mapActionsToProps);
 export default enhance(Chat);
