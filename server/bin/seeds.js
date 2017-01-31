@@ -351,11 +351,29 @@ const SEEDS = {
     },
     {
       id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: '33333 Chelsea 1',
+      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+      read: false,
+      senderId: alexPatientId,
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: '33333332231 Chelsea 2',
+      createdAt: new Date(2017, 0, 6, 12, 30, 0, 0),
+      read: false,
+      senderId: alexPatientId,
+    },
+    {
+      id: uuid(),
       patientId: justinPatientId,
       accountId,
       body: 'from Chelsea2',
       createdAt: new Date(2017, 0, 2, 12, 30, 0, 0),
-      read: true,
+      read: false,
       senderId: accountId,
     },
     {
@@ -373,6 +391,7 @@ const SEEDS = {
       accountId,
       body: 'from Perry to alex 1',
       createdAt: new Date(2017, 0, 4, 11, 30, 0, 0),
+      read: false,
     },
     {
       id: uuid(),
@@ -380,7 +399,25 @@ const SEEDS = {
       accountId,
       body: 'from Perry to Alex 2',
       createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
+      read: false,
     },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: 'from Perry to alex 1',
+      createdAt: new Date(2017, 0, 4, 11, 30, 0, 0),
+      read: false,
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: 'from Perry to Alex 2',
+      createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
+      read: false,
+    },
+
   ],
 
   Chair: [

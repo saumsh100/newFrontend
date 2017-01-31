@@ -108,4 +108,16 @@ textMessagesRouter.post('/', (req, res, next) => {
   });
 });
 
+textMessagesRouter.put('/:messageId', (req, res, next) => {
+  const data = req.body;
+  console.log("req!!!!")
+  console.log(req.body);
+  TextMessage.get(data.id).run().then((t) => {
+    t.merge(data).save().then((textMessages) => {
+      res.send(normalize(textMessages, textMessageSchema));
+    });
+  })
+  .catch(next);
+});
+
 module.exports = textMessagesRouter;
