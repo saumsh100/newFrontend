@@ -23,7 +23,7 @@ class PatientsMessagesContainer extends Component {
   componentWillReceiveProps(nextProps) {
     const { filters } = this.props;
     const username = filters && filters.username; 
-    if (!!username) {
+    if (username !== nextProps.filters.username) {
       this.props.fetchEntities({ key: 'dialogs', params: { username } })
     }
   }

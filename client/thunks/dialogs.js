@@ -10,8 +10,8 @@ export function setCurrentDialog(currentDialogId) {
   };
 }
 
-export function setDialogsFilter(patientName) {
+export function setDialogsFilter(username) {
   return function (dispatch, getState) {
-    dispatch(setDialogsFilterAction({ patientName }));
+    dispatch(setDialogsFilterAction({ username }));
   };
 }
