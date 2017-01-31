@@ -30,5 +30,5 @@ Service.belongsTo(Account, 'account', 'accountId', 'id')
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id')
 Chair.belongsTo(Account, 'account', 'accountId', 'id')
 
-Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id')
-Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id')
+//Service.hasMany(Practitioner, 'practitioners', 'id', 'serviceId')
+// Practitioner.hasMany(Service, 'services', 'id', 'id')

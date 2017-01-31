@@ -8,10 +8,12 @@ availabilitiesRouter.get('/', (req, res, next) => {
   const OFFICE_END_TIME = moment({ hours: 17, minutes: 0 });
   const { serviceId, practitionerId, startDate } = req.query;
   const startDateDay = moment(startDate).date();
-
-  Service.get(serviceId).execute().then((service) => {
+  console.log(startDateDay);
+  const plus5days = moment(startDate).add({ days: 5 });
+  console.log(plus5days.date());
+  Service.get(serviceId).run().then((service) => {
     Appointment
-      .filter({ practitionerId }).getJoin().orderBy('startTime').run()
+      .filter({ practitionerId }).getJoin({ service: false }).orderBy('startTime').run()
       .then((appointments) => {
         const filteredByDayApps = appointments.filter(a =>
           startDateDay === moment(a.startTime).date()
