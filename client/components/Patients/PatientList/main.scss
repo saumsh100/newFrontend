@@ -13,10 +13,13 @@ ul {
     list-style: none;
 }
 
+.loading {
+    text-align: center;
+}
+
 .patients {
     display: flex;
     min-width: 800px;
-    min-height: 500px;
     padding: 10px;
 }
 
@@ -81,9 +84,11 @@ ul {
         &:hover {
             background: #E7E7E7;
         }
+
         &__active {
-          background: #E7E7E7;
+            background: #E7E7E7;
         }
+
         &__photo {
             width: 100%;
             max-width: 50px;
@@ -119,7 +124,6 @@ ul {
 
         &__appointment {
             padding-top: 10px;
-            padding-right: 40px;
             padding-bottom: 10px;
             color: #969696;
             font-size: 12px;
@@ -165,7 +169,7 @@ ul {
     }
 
     &__header {
-        height: 50%;
+        height: 200px;
         padding: 50px;
         background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
         background-size: cover;
@@ -196,7 +200,7 @@ ul {
     &__wrapper {
         display: flex;
         flex-direction: row;
-        height: 50%;
+        height: 320px;
         background: #cdcaca;
 
         .left {
@@ -242,27 +246,197 @@ ul {
                     border-bottom: 2px solid #8cbcd6;
                 }
             }
+        }
+    }
+}
 
-            .personal {
-                &__table {
-                    position: relative;
-                    padding: 10px;
+.personal {
+    padding: 0 35px;
 
-                    &:not(:last-child) {
-                        border-bottom: 1px solid #acacac;
-                    }
-                }
+    &__table {
+        position: relative;
+        padding: 10px 20px;
 
-                i {
-                    position: absolute;
-                    margin-right: 5px;
-                    color: #8cbcd6;
-                }
+        &:not(:last-child) {
+            border-bottom: 1px solid #acacac;
+        }
+    }
 
-                span {
-                    padding-left: 20px;
-                }
-            }
+    &__icon {
+        position: absolute;
+        left: 0;
+        color: #8cbcd6;
+    }
+}
+
+.edit_personal {
+    outline: none;
+
+    &__icon {
+        position: absolute;
+        left: 20px;
+        color: #8cbcd6;
+    }
+
+    input,
+    select {
+        margin-bottom: 5px;
+        margin-bottom: 10px;
+        margin-left: 3px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        color: #B6B6B6;
+        border: none;
+        border-bottom: 1px solid #B6B6B6;
+        background: none;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__table {
+        position: relative;
+        padding: 0 35px;
+    }
+
+    &__name {
+        display: flex;
+        align-items: baseline;
+
+        &_first {
+            width: 37%;
+        }
+
+        &_m {
+            width: 20%;
+        }
+
+        &_last {
+            width: 37%;
+        }
+    }
+
+    &__info {
+        &_header {
+            display: flex;
+        }
+    }
+
+    &__birthday {
+        width: 50%;
+    }
+
+    &__age {
+        width: 50%;
+    }
+
+    &__gender {
+        select {
+            width: 50%;
+            margin-top: 5px;
+        }
+    }
+
+    &__language {
+        select {
+            width: 100%;
+        }
+    }
+
+    &__status {
+        select {
+            width: 100%;
+        }
+    }
+
+    &__btn {
+        display: flex;
+        margin: 25px 10px 20px auto !important;
+        cursor: pointer;
+        border: none !important;
+
+        &:hover {
+            color: #5a5656;
+        }
+    }
+}
+
+.insurance {
+    position: relative;
+    padding: 0 30px;
+
+    .icon {
+        position: absolute;
+        left: 20px;
+        color: #8cbcd6;
+    }
+
+    &__title {
+        padding-left: 10px;
+        color: #B5B5B5;
+        font-size: 10px;
+    }
+
+    &__value {
+        margin-bottom: 10px;
+        padding-left: 10px;
+        font-weight: 600;
+        color: #2E3845;
+    }
+
+    &__header {
+        border-bottom: 1px solid #e6e6e6;
+    }
+
+    &__footer {
+        margin-top: 20px;
+    }
+
+    &__name {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.edit_insurance {
+    position: relative;
+    padding: 0 35px;
+
+    .icon {
+        position: absolute;
+        left: 20px;
+        color: #8cbcd6;
+    }
+
+    &__input {
+        width: 100%;
+        margin-bottom: 5px;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        color: #B6B6B6;
+        border: none;
+        border-bottom: 1px solid #B6B6B6;
+        background: none;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__footer {
+        margin-top: 15px;
+    }
+    &__btn {
+        display: flex;
+        margin: 25px 10px 20px auto !important;
+        cursor: pointer;
+        background: none;
+        border: none !important;
+        color: #B6B6B6;
+        &:hover {
+            color: #5a5656;
         }
     }
 }

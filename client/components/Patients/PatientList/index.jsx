@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import PatientListItem from './PatientListItem';
 import PersonalData from './PersonalData'
-import EditPersonalData from './EditPersonalData'
+import EditPersonalData from './EditPersonalData';
+import InsuranceData from './InsuranceData';
+import EditInsuranceData from './EditInsuranceData';
 import moment from 'moment';
 import styles from './main.scss';
 
@@ -19,7 +21,7 @@ class PatientList extends Component {
 
     const patientListFiltered = patientListSorted
     .filter(n => (n.patientId === this.props.currentPatient))[0];
-    const addNewUser = true ? <PersonalData patient={patientListFiltered} /> : <EditPersonalData />;
+    const addNewUser = true ? <InsuranceData patient={patientListFiltered} /> : <EditInsuranceData patient={patientListFiltered}/>;
     return (
       <div className={styles.patients}>
         <div className={styles.patients_list}>

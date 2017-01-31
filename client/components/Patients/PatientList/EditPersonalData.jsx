@@ -1,47 +1,62 @@
 import React, { Component, PropTypes } from 'react';
-import styles from './main.scss';
 import moment from 'moment';
+import styles from './main.scss';
 
 class EditPersonalData extends Component {
   render() {
-    const { user } = this.props;
+    const { patient } = this.props;
+    if (!patient) {
+      return <div className={styles.loading}>Please select patient</div>;
+    }
     return (
       <div className={styles.right__personal}>
-        <div className={styles.personal}>
-          <div className={`${styles.personal__name} ${styles.personal__table}`}>
-            <i className="fa fa-user" />
-            <input type="text" placeholder="First"/>
-            <input type="text" placeholder="M"/>
-            <input type="text" placeholder="Last"/>
-          </div>
-          <div className={`${styles.personal__info} ${styles.personal__table}`}>
-            <div className={styles.personal__birthday}>
-              <i className="fa fa-calendar" />
-              <input type="text" placeholder="Birthday"/>
+        <div className={styles.edit_personal}>
+          <form>
+            <div className={`${styles.edit_personal__name} ${styles.edit_personal__table}`}>
+              <div className={styles.edit_personal__icon}>
+                <i className="fa fa-user" />
+              </div>
+              <div className={styles.edit_personal__name_wrapper}>
+                <input className={styles.edit_personal__name_first} type="text" placeholder="First" />
+                <input className={styles.edit_personal__name_m} type="text" placeholder="M" />
+                <input className={styles.edit_personal__name_last} type="text" placeholder="Last" />
+              </div>
             </div>
-            <div className={styles.personal__age}>
-              <input type="text" placeholder="Age"/>
+            <div className={`${styles.edit_personal__info} ${styles.edit_personal__table}`}>
+              <div className={styles.edit_personal__info_header}>
+                <div className={styles.edit_personal__icon}>
+                  <i className="fa fa-calendar" />
+                </div>
+                <input className={styles.edit_personal__birthday} type="date" placeholder="Birthday" />
+                <input className={styles.edit_personal__age} type="text" placeholder="Age" />
+              </div>
+              <div className={styles.edit_personal__gender}>
+                <select>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
             </div>
-            <div className={styles.personal__gender}>
-              <input type="text" placeholder="Gender"/>
+            <div className={`${styles.edit_personal__language} ${styles.edit_personal__table}`}>
+              <div className={styles.edit_personal__icon}>
+                <i className="fa fa-comments" />
+              </div>
               <select>
-                <option>Male</option>
-                <option>Female</option>
+                <option>Eng</option>
+                <option>Ukr</option>
               </select>
             </div>
-          </div>
-          <div className={`${styles.personal__language} ${styles.personal__table}`}>
-            <i className="fa fa-comments" />
-            <input type="text" placeholder="Language"/>
-            <select>
-              <option>Eng</option>
-              <option>Ua</option>
-            </select>
-          </div>
-          <div className={`${styles.personal__status} ${styles.personal__table}`}>
-            <i className="fa fa-flag" />
-            <input type="text" placeholder="Status"/>
-          </div>
+            <div className={`${styles.edit_personal__status} ${styles.edit_personal__table}`}>
+              <div className={styles.edit_personal__icon}>
+                <i className="fa fa-flag" />
+              </div>
+              <select>
+                <option>Active</option>
+                <option>Passive</option>
+              </select>
+            </div>
+            <input className={styles.edit_personal__btn} type="submit" value="Save" />
+          </form>
         </div>
       </div>
     );
