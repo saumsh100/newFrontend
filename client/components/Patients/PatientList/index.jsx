@@ -6,8 +6,27 @@ import moment from 'moment';
 import styles from './main.scss';
 
 class PatientList extends Component {
+  constructor(props) {
+    super(props);
+    this.handleInput = this.handleInput.bind(this);
+  }
+
+  handleInput() {
+    const value = this.textInput.value;
+    this.props.setPatientsFilter(value)
+  }
+
   render() {
-    const patientList = this.props.patients.models.toArray()
+    const { setPatientsFilter, filters } = this.props;
+    const patientNameFilterText = filters && filters.patientName;
+    
+    let patientList = this.props.patients.models.toArray()
+
+    if (!!patientNameFilterText) {
+      const pattern = new RegExp(patientNameFilterText, 'i');
+      patientList = patientList.filter(d => pattern.test(d.name));
+    }
+
     const patientListWithAppointments =
     patientList.filter((p) => (moment(p.lastAppointmentDate)._d
       .toString() !== "Invalid Date"))
@@ -18,7 +37,7 @@ class PatientList extends Component {
     const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
 
     const patientListFiltered = patientListSorted
-    .filter(n => (n.patientId === this.props.currentPatient))[0];
+      .filter(n => (n.patientId === this.props.currentPatient))[0];
     const addNewUser = true ? <PersonalData patient={patientListFiltered} /> : <EditPersonalData />;
     return (
       <div className={styles.patients}>
@@ -27,20 +46,25 @@ class PatientList extends Component {
             <label className="search__label" htmlFor="search__input">
               <i className="fa fa-search" />
             </label>
-            <input id="search__input" className={styles.search__input} placeholder="Search..." />
+             <input id="search__input"
+                className={styles.search__input}
+                placeholder="Search..."
+                ref={(input) => { this.textInput = input; }}
+                onChange={this.handleInput}
+              />
             <div className={styles.search__edit}>
               <i className="fa fa-pencil" />
             </div>
           </div>
           <ul className={styles.patients_list__users}>
-            {patientListSorted.map(((user) => {
-                return (<PatientListItem
-                  key={user.patientId}
-                  user={user}
-                  currentPatient={this.props.currentPatient}
-                  setCurrentPatient={this.props.setCurrentPatient}
-                />);
-            }))}
+            {patientListSorted.map(user => {
+              return (<PatientListItem
+                key={user.patientId}
+                user={user}
+                currentPatient={this.props.currentPatient}
+                setCurrentPatient={this.props.setCurrentPatient}
+              />);
+            })}
           </ul>
         </div>
         <div className={styles.patients_content}>
