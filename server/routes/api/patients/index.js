@@ -27,6 +27,12 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
       textMessages: false, appointments: true,
     }).run()
       .then((patients) => {
+        if (req.query.patientName && req.query.patientName.length) {
+          const pattern = new RegExp(req.query.patientName, 'i');
+            patients = patients.filter(p =>
+            pattern.test(`${p.firstName} ${p.lastName}`)
+          );
+        }
         const appointments = patients.map(p => p.appointments);
         const sortedAppointments = appointments.map(arr1 =>
           arr1.filter(a =>

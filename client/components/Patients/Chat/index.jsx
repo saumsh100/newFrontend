@@ -126,7 +126,12 @@ class Chat extends Component {
   }
 
   render() {
-    const { currentDialogId, setDialogsFilter, filters } = this.props;
+    const {
+      currentDialogId,
+      setDialogsFilter,
+      filters,
+      readMessagesInCurrentDialog,
+    } = this.props;
     let { dialogList = [] } = this.props;
     const patient = {};
     let currentDialog = dialogList[0] || {};
@@ -161,22 +166,23 @@ class Chat extends Component {
           </div>
           <ul className={styles.dialogs__messages}>
             {dialogList && dialogList.map(((d) => {
-                const lastMessageText = d.lastMessageText;
-                const lastMessageTime = d.lastMessageTime;
-                const unreadCount = d.unreadCount;
-                const unreadMessagesCount = null;
-                const patientList = null;
-                const messages = dialogList.messages;
-                return (<DialogsListItem
-                  lastMessageText={lastMessageText}
-                  unreadCount={unreadCount}
-                  lastMessageTime={lastMessageTime}
-                  patientList={patientList}
-                  patientId={d.patientId}
-                  setCurrentDialog={this.props.setCurrentDialog}
-                  />);
-              }).bind(this))}
-
+              const lastMessageText = d.lastMessageText;
+              const lastMessageTime = d.lastMessageTime;
+              const unreadCount = d.unreadCount;
+              const unreadMessagesCount = null;
+              const patientList = null;
+              const messages = dialogList.messages;
+              return (<DialogsListItem
+                lastMessageText={lastMessageText}
+                unreadCount={unreadCount}
+                lastMessageTime={lastMessageTime}
+                patientList={patientList}
+                patientId={d.patientId}
+                patientName={d.patientName}
+                setCurrentDialog={this.props.setCurrentDialog}
+                readMessagesInCurrentDialog={readMessagesInCurrentDialog}
+                />);
+            }).bind(this))}
           </ul>
         </div>
         {currentDialogId && this.renderChatWindow(patient, textMessages)}
@@ -191,7 +197,7 @@ Chat.propTypes = {
 };
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    fetchPost
+    fetchPost,
   }, dispatch);
 }
 

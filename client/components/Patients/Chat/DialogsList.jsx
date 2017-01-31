@@ -9,7 +9,8 @@ class DialogsList extends Component {
     this.goToDialogue = this.goToDialogue.bind(this);
   }
   goToDialogue() {
-    this.props.setCurrentDialog(this.props.patientId)
+    this.props.setCurrentDialog(this.props.patientId);
+    this.props.readMessagesInCurrentDialog(this.props.patientId);
   }
   render() {
     const {

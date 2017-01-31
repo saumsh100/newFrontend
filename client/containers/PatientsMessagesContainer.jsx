@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Chat from '../components/Patients/Chat/';
 import { setCurrentDialog, setDialogsFilter } from '../thunks/dialogs';
-import { sendMessageOnClient } from '../thunks/fetchEntities';
+import { 
+  sendMessageOnClient,
+  readMessagesInCurrentDialog,
+} from '../thunks/fetchEntities';
 import moment from 'moment';
 class PatientsMessagesContainer extends Component {
   constructor(props) {
@@ -33,6 +36,7 @@ class PatientsMessagesContainer extends Component {
       sendMessageOnClient,
       setDialogsFilter,
       filters,
+      readMessagesInCurrentDialog,
     } = this.props;
     const dialogList = dialogs.get('models')
       .toArray()
@@ -45,6 +49,7 @@ class PatientsMessagesContainer extends Component {
           sendMessageOnClient={sendMessageOnClient}
           setDialogsFilter={setDialogsFilter}
           filters={filters}
+          readMessagesInCurrentDialog={readMessagesInCurrentDialog}
         />
       </div>
 
@@ -68,6 +73,7 @@ function mapDispatchToProps(dispatch) {
     setCurrentDialog,
     sendMessageOnClient,
     setDialogsFilter,
+    readMessagesInCurrentDialog
   }, dispatch);
 }
 

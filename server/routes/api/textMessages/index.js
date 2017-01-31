@@ -57,7 +57,9 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
         groupedByPatientId[key].forEach(t => {
           if (t.read === false) unreadCount += 1;
         });
-        tempObject.patientName = `${patient.firstName} ${patient.lastName}`;
+        if (patient) {
+          tempObject.patientName = `${patient.firstName} ${patient.lastName}`;
+        }
         tempObject.unreadCount = unreadCount;
         tempObject.lastMessageText = groupedByPatientId[key][groupedByPatientId[key].length - 1].body;
         tempObject.lastMessageTime = groupedByPatientId[key][groupedByPatientId[key].length - 1].createdAt;
@@ -104,6 +106,18 @@ textMessagesRouter.post('/', (req, res, next) => {
     .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
     .catch(next);
   });
+});
+
+textMessagesRouter.put('/:messageId', (req, res, next) => {
+  const data = req.body;
+  console.log("req!!!!")
+  console.log(req.body);
+  TextMessage.get(data.id).run().then((t) => {
+    t.merge(data).save().then((textMessages) => {
+      res.send(normalize(textMessages, textMessageSchema));
+    });
+  })
+  .catch(next);
 });
 
 module.exports = textMessagesRouter;

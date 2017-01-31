@@ -9,6 +9,7 @@ import {
   ADD_ENTITY,
   UPDATE_ENTITY,
   SEND_MESSAGE_ON_CLIENT,
+  READ_MESSAGES_IN_CURRENT_DIALOG,
 } from '../constants';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
@@ -97,6 +98,20 @@ export default handleActions({
     const resultingDialog = mergedDialog.updateIn(['messages'], () => oldMessages).toJS();
     return state.updateIn(['dialogs', 'models', message.patientId], () => resultingDialog);
   },
+
+  [READ_MESSAGES_IN_CURRENT_DIALOG](state, action) {
+    const { messageId, dialogId, messageIndex = 0 } = action.payload;
+    const dialogs = state.toJS().dialogs;
+    const currentDialog = dialogs.models[dialogId]
+    const dialog = fromJS(currentDialog);
+    const dialogMessages = currentDialog.messages
+      .map(m => m)
+    const unreadCount = currentDialog.unreadCount;
+    dialogMessages[messageIndex].read = true
+    const updatedMessagesDialog = dialog.updateIn(['messages'], () => dialogMessages);
+    const updatedDialog = updatedMessagesDialog.updateIn(['unreadCount'], () => unreadCount-1).toJS();
+    return state.updateIn(['dialogs', 'models', dialogId], () => updatedDialog);
+  }
 
 
 }, initialState);
