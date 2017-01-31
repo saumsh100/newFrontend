@@ -68,7 +68,7 @@ const SEEDS = {
       id: uuid(),
       title: 'Justin\'s appointment',
       startTime: new Date(2017, 1, 4, 14, 30, 0, 0),
-      endTime: new Date(2016, 1, 4, 15, 30, 0, 0),
+      endTime: new Date(2017, 1, 4, 15, 30, 0, 0),
 
       patientId: justinPatientId,
       serviceId: serviceId,
@@ -84,7 +84,7 @@ const SEEDS = {
       id: uuid(),
       title: 'Sergey\'s appointment',
       startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
-      endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
+      endTime: new Date(2017, 1, 4, 17, 0, 0, 0),
 
       patientId: sergeyPatientId,
       accountId: accountId,
