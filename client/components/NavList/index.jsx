@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { Nav, NavItem, Link, Icon } from '../library';
+import { Nav, NavItem, Link, Icon, Tooltip } from '../library';
 import styles from './styles.scss';
 
 const PATHS = {
@@ -25,11 +25,16 @@ export default function NavList({ location }) {
   const inactiveLabelClass = label;
   const activeLabelClass = classNames(label, activeLabel);
 
-  const SingleNavItem = ({ path, icon, label, active }) => {
+  const SingleNavItem = ({ path, icon, label, active, disabled }) => {
     active = active || location.pathname === path;
+    let classes = active ? activeClass : inactiveClass;
+    if (disabled) {
+      classes = classNames(classes, styles.disabledItem);
+    }
+
     return (
-      <Link to={path}>
-        <NavItem className={active ? activeClass : inactiveClass}>
+      <Link to={path} disabled={disabled}>
+        <NavItem className={classes}>
           <Icon icon={icon} className={styles.icon} />
           <div className={active ? activeLabelClass : inactiveLabelClass}>
             {label}
@@ -75,27 +80,32 @@ export default function NavList({ location }) {
     );
   };
 
+  const overlay = (
+    <div className={styles.comingSoon}>
+      Coming<br />
+      Soon!
+    </div>
+  );
+
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
-        <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" />
-        {/*<MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
-          <SubNavItem path="/intelligence/overview" label="Overview" />
-          <SubNavItem path="/intelligence/business" label="Business" />
-          <SubNavItem path="/intelligence/social" label="Social" />
-        </MultiNavItem>*/}
-        <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
+        <SingleNavItem path="/" icon="tachometer" label="Dashboard" disabled />
+        <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" disabled />
+        <MultiNavItem path="/schedule" icon="calendar" label="Schedule">
+          <SubNavItem path="/schedule/calendar" label="Calendar View" />
+          <SubNavItem path="/schedule/appointments" label="Appointments List" />
+        </MultiNavItem>
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
           <SubNavItem path="/patients/phone" label="Phone Calls" />
         </MultiNavItem>
-        <SingleNavItem path="/reputation" icon="star" label="Reputation" />
-        <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" />
-        <SingleNavItem path="/loyalty" icon="trophy" label="Loyalty" />
-        <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" />
-        <SingleNavItem path="/website" icon="desktop" label="Website" />
+        <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />
+        <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />
+        <SingleNavItem path="/loyalty" icon="trophy" label="Loyalty" disabled />
+        <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
+        <SingleNavItem path="/website" icon="desktop" label="Website" disabled />
         <SingleNavItem path="/settings" icon="cogs" label="Account Settings" />
         <SingleNavItem path="/profile" icon="tachometer" label="Profile" />
       </Nav>

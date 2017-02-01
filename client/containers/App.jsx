@@ -37,7 +37,9 @@ function App(props) {
         <div className={styles.subTabs}>
           <SubTabs location={location} />
         </div>
-        {children}
+        <div className={styles.mainRegionChildren}>
+          {children}
+        </div>
       </MainRegionContainer>
     </div>
   );

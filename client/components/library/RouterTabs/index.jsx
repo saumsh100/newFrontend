@@ -18,11 +18,12 @@ class RouterTabs extends Component {
   }
 
   renderChildren(routes) {
-    return routes.map(({ label }, idx) => {
+    return routes.map(({ label, disabled }, idx) => {
       return (
         <Tab
           key={`${label}${idx}`}
           label={label}
+          disabled={disabled}
         />
       );
     });

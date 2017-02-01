@@ -18,6 +18,19 @@ const ROUTES = {
     {
       to: '/patients/phone',
       label: 'Phone',
+      disabled: true,
+    },
+  ],
+
+  '/schedule': [
+    {
+      to: '/schedule/calendar',
+      label: 'Calendar View',
+    },
+    {
+      to: '/schedule/appointments',
+      label: 'Appointments List',
+      disabled: true,
     },
   ],
 };
@@ -51,9 +64,14 @@ class SubTabs extends Component {
           routes={ROUTES['/patients']}
         />
       );
-    } /* else if (add other paths) {
-
-    } */
+    } else if (location.pathname.indexOf('/schedule') === 0) {
+      subTabsComponent = (
+        <RouterTabs
+          location={location}
+          routes={ROUTES['/schedule']}
+        />
+      );
+    }
 
     return subTabsComponent;
   }

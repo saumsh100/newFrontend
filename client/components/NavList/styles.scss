@@ -31,6 +31,20 @@
     background-color: #41464c;
 }
 
+.disabledItem {
+    &:hover {
+        background-color: transparent;
+    }
+
+    &:active {
+        color: $inactive-color !important;
+
+        .label {
+            font-size: 14px;
+        }
+    }
+}
+
 .icon {
     margin-right: 20px;
     margin-left: 30px;
@@ -113,4 +127,8 @@
             background: $primary-color !important;
         }
     }
+}
+
+.comingSoon {
+    fontSize: 1.2em;
 }
