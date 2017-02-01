@@ -11,6 +11,7 @@ import Modal from './Modal';
 import RouterButton from './RouterButton';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
+import Tooltip from './Tooltip';
 
 export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';
 
@@ -29,4 +30,5 @@ export {
   RouterTabs,
   Tabs,
   Tab,
+  Tooltip,
 };

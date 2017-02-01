@@ -45,8 +45,9 @@ class Tabs extends Component {
         index: idx,
         active: this.props.index === idx,
         onClick: (event, index) => {
-          this.handleTabClick(index);
           item.props.onClick && item.props.onClick(event);
+          if (item.props.disabled) return;
+          this.handleTabClick(index);
         },
       });
     });
@@ -91,6 +92,7 @@ Tabs.propTypes = {
   children: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default Tabs;

@@ -13,6 +13,11 @@
   color: black;
 }
 
+.disabledTab {
+  color: lighten($primary-darkgrey, 25%);
+  cursor: not-allowed;
+}
+
 .nav {
 
 }
