@@ -18,6 +18,8 @@ availabilitiesRouter.get('/', (req, res, next) => {
         for (let j = 0; j < diff; j += 1) {
           const startDateDay = moment(startDate).add({ days: j });
           const theStartTime = moment(startDate).add({ days: j }).format();
+          // next two lines should be taken from Practitioner working time
+          // not just hard hardcoded
           const OFFICE_START_TIME = startDateDay.set({ hours: 9, minutes: 0 }).toDate();
           const OFFICE_END_TIME = startDateDay.set({ hours: 17, minutes: 0 }).toDate();
           const filteredByDayApps = appointments.filter(a =>
@@ -47,9 +49,19 @@ availabilitiesRouter.get('/', (req, res, next) => {
               endTime: OFFICE_END_TIME,
             });
 
-            const availabilities = breaks.filter(b =>
+            const availableTimeRanges = breaks.filter(b =>
               moment(b.endTime).diff(moment(b.startTime), 'minutes') >= service.duration
             );
+
+            const availabilities = [];
+            availableTimeRanges.forEach((a) => {
+              for (let i = moment(a.startTime); moment(a.endTime) - i > 0; i = moment(i).add({
+                minutes: service.duration,
+              })) {
+                availabilities.push(i);
+              }
+            });
+
 
             results[theStartTime] = {
               date: theStartTime,
