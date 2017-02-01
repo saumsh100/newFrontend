@@ -4,7 +4,6 @@ import PatientList from '../components/Patients/PatientList/';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { 
   setCurrentPatient,
-  setPatientsFilter,
 } from '../thunks/patientList';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -21,8 +20,11 @@ class PatientsListContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { filters } = this.props;
-    const patientName = filters && filters.patientName;
-    if (patientName != nextProps.filters.patientName) {
+    const patientName = filters
+    && filters.values && filters.values.patients;
+    if (!patientName) return
+    if (patientName && !nextProps.filters.values) return;
+    if (patientName != nextProps.filters.values.patients) {
       this.props.fetchEntities({ key: 'patients', params: { patientsList: true, patientName }})
     }
   }
@@ -31,7 +33,6 @@ class PatientsListContainer extends Component {
     const {
       patients,
       setCurrentPatient,
-      setPatientsFilter,
       filters,
     } = this.props;
     {console.log('currentPatient', this.props.currentPatient.get('currentPatient'))}
@@ -40,7 +41,6 @@ class PatientsListContainer extends Component {
         setCurrentPatient={setCurrentPatient}
         currentPatient={this.props.currentPatient.get('currentPatient')}
         patients={patients}
-        setPatientsFilter={setPatientsFilter}
         filters={filters}
       />
     );
@@ -49,11 +49,12 @@ class PatientsListContainer extends Component {
 
 PatientsListContainer.propTypes = {};
 
-function mapStateToProps({ entities, patientList }) {
+function mapStateToProps({ entities, patientList, form }) {
     return {
       patients: entities.get('patientList'),
       currentPatient: patientList,
-      filters: patientList.toJS().filters,
+      // filters: patientList.toJS().filters,
+      filters: form.patientList,
     };
 }
 
@@ -61,7 +62,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     setCurrentPatient,
-    setPatientsFilter,
   }, dispatch);
 }
 
