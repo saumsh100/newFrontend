@@ -26,37 +26,11 @@ export default function Routes({ history }) {
         <Route
           path="schedule"
           getComponent={(location, callback) => {
-            require.ensure(['./components/Schedule'], (require) => {
-              callback(null, require('./components/Schedule').default);
+            require.ensure(['./containers/ScheduleContainer'], (require) => {
+              callback(null, require('./containers/ScheduleContainer').default);
             });
           }}
-        >
-          <IndexRedirect to="/schedule/dayview" />
-          <Route
-            path="dayview"
-            getComponent={(location, callback) => {
-              require.ensure(['./components/Schedule/DayView'], (require) => {
-                callback(null, require('./components/Schedule/DayView').default);
-              });
-            }}
-          />
-          <Route
-            path="monthview"
-            getComponent={(location, callback) => {
-              require.ensure(['./components/Schedule/MonthView'], (require) => {
-                callback(null, require('./components/Schedule/MonthView').default);
-              });
-            }}
-          />
-          <Route
-            path="weekview"
-            getComponent={(location, callback) => {
-              require.ensure(['./components/Schedule/WeekView'], (require) => {
-                callback(null, require('./components/Schedule/WeekView').default);
-              });
-            }}
-          />
-        </Route>
+        />
         <Route
           path="login"
           getComponent={(location, callback) => {
@@ -150,14 +124,6 @@ export default function Routes({ history }) {
           getComponent={(location, callback) => {
             require.ensure(['./components/Profile'], (require) => {
               callback(null, require('./components/Profile').default);
-            });
-          }}
-        />
-        <Route
-          path="dayview"
-          getComponent={(location, callback) => {
-            require.ensure(['./components/Schedule/DayView'], (require) => {
-              callback(null, require('./components/Schedule/DayView').default);
             });
           }}
         />
