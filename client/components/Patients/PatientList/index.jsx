@@ -1,23 +1,29 @@
 import React, { Component, PropTypes } from 'react';
-import PatientListItem from './PatientListItem';
-import PersonalData from './PersonalData'
-import EditPersonalData from './EditPersonalData';
-import InsuranceData from './InsuranceData';
-import EditInsuranceData from './EditInsuranceData';
 import moment from 'moment';
+import PatientListItem from './PatientListItem';
+import PersonalData from './PersonalData';
+import InsuranceData from './InsuranceData';
+import { Tabs, Tab } from '../../library';
 import styles from './main.scss';
 
 class PatientList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      index: 0,
+    };
+    this.handleTabChange = this.handleTabChange.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
-
+  handleTabChange(index) {
+    this.setState({
+      index,
+    });
+  }
   handleInput() {
     const value = this.textInput.value;
     this.props.setPatientsFilter(value)
   }
-
   render() {
     const { setPatientsFilter, filters } = this.props;
     const patientNameFilterText = filters && filters.patientName;
@@ -29,44 +35,42 @@ class PatientList extends Component {
       patientList = patientList.filter(d => pattern.test(d.name));
     }
 
-    const patientListWithAppointments =
-    patientList.filter((p) => (moment(p.lastAppointmentDate)._d
+    const patientListWithAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
       .toString() !== "Invalid Date"))
-      .sort((a,b) => (moment(a.toJS().lastAppointmentDate) > moment(b.toJS().lastAppointmentDate)));
-    const patientListWithoutAppointments =
-    patientList.filter((p) => (moment(p.lastAppointmentDate)._d
-      .toString() === "Invalid Date"));
+      .sort((a, b) => (moment(a.toJS().lastAppointmentDate) > moment(b.toJS().lastAppointmentDate)));
+    const patientListWithoutAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
+        .toString() === "Invalid Date"));
     const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
-
     const patientListFiltered = patientListSorted
       .filter(n => (n.patientId === this.props.currentPatient))[0];
-    const addNewUser = true ? <PersonalData patient={patientListFiltered} /> : <EditPersonalData />;
     return (
       <div className={styles.patients}>
         <div className={styles.patients_list}>
           <div className={`${styles.patients_list__search} ${styles.search}`}>
-            <label className="search__label" htmlFor="search__input">
+            <label className={styles.search__label} htmlFor="search__input">
               <i className="fa fa-search" />
             </label>
              <input id="search__input"
                 className={styles.search__input}
                 placeholder="Search..."
-                ref={(input) => { this.textInput = input; }}
+                ref={(input) => {
+                  this.textInput = input;
+                }}
                 onChange={this.handleInput}
-              />
+                    />
             <div className={styles.search__edit}>
               <i className="fa fa-pencil" />
             </div>
           </div>
           <ul className={styles.patients_list__users}>
             {patientListSorted.map(user => {
-              return (<PatientListItem
-                key={user.patientId}
-                user={user}
-                currentPatient={this.props.currentPatient}
-                setCurrentPatient={this.props.setCurrentPatient}
-              />);
-            })}
+        return (<PatientListItem
+          key={user.patientId}
+          user={user}
+          currentPatient={this.props.currentPatient}
+          setCurrentPatient={this.props.setCurrentPatient}
+          />);
+      })}
           </ul>
         </div>
         <div className={styles.patients_content}>
@@ -110,13 +114,14 @@ class PatientList extends Component {
           <div className={styles.patients_content__wrapper}>
             <div className={styles.left}></div>
             <div className={styles.right}>
-              <ul className={styles.right__header}>
-                <li className={`${styles.right__item} ${styles.right__item__active}`}>Personal</li>
-                <li className={styles.right__item}>Contact</li>
-                <li className={styles.right__item}>Insurance</li>
-                <li className={styles.right__item}>Preferences</li>
-              </ul>
-              {addNewUser}
+              <Tabs index={this.state.index} onChange={this.handleTabChange}>
+                <Tab label="Personal">
+                  <PersonalData patient={patientListFiltered} />
+                </Tab>
+                <Tab label="Insurance">
+                  <InsuranceData patient={patientListFiltered} />
+                </Tab>
+              </Tabs>
             </div>
           </div>
         </div>

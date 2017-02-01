@@ -15,6 +15,7 @@ ul {
 
 .loading {
     text-align: center;
+    color: #959596;
 }
 
 .patients {
@@ -270,6 +271,7 @@ ul {
 }
 
 .edit_personal {
+    margin-top: 10px;
     outline: none;
 
     &__icon {
@@ -364,32 +366,34 @@ ul {
 
 .insurance {
     position: relative;
+    margin-top: 10px;
     padding: 0 30px;
 
     .icon {
         position: absolute;
-        left: 20px;
+        left: 0;
         color: #8cbcd6;
     }
 
     &__title {
-        padding-left: 10px;
+        padding-left: 20px;
         color: #B5B5B5;
+        text-transform: uppercase;
         font-size: 10px;
     }
 
     &__value {
         margin-bottom: 10px;
-        padding-left: 10px;
-        font-weight: 600;
-        color: #2E3845;
+        padding-left: 20px;
     }
 
     &__header {
-        border-bottom: 1px solid #e6e6e6;
+        position: relative;
+        border-bottom: 1px solid #acacac;
     }
 
     &__footer {
+        position: relative;
         margin-top: 20px;
     }
 
@@ -401,6 +405,7 @@ ul {
 
 .edit_insurance {
     position: relative;
+    margin-top: 10px;
     padding: 0 35px;
 
     .icon {
@@ -428,13 +433,15 @@ ul {
     &__footer {
         margin-top: 15px;
     }
+
     &__btn {
         display: flex;
         margin: 25px 10px 20px auto !important;
         cursor: pointer;
-        background: none;
-        border: none !important;
         color: #B6B6B6;
+        border: none !important;
+        background: none;
+
         &:hover {
             color: #5a5656;
         }
