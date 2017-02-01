@@ -3,8 +3,9 @@ import moment from 'moment';
 import PatientListItem from './PatientListItem';
 import PersonalData from './PersonalData';
 import InsuranceData from './InsuranceData';
-import { Tabs, Tab } from '../../library';
+import { Button, Form, Field , Tabs, Tab } from '../../library';
 import styles from './main.scss';
+
 
 class PatientList extends Component {
   constructor(props) {
@@ -25,9 +26,8 @@ class PatientList extends Component {
     this.props.setPatientsFilter(value)
   }
   render() {
-    const { setPatientsFilter, filters } = this.props;
-    const patientNameFilterText = filters && filters.patientName;
-
+    const { filters } = this.props;
+    const patientNameFilterText = filters && filters.values && filters.values.patients;
     let patientList = this.props.patients.models.toArray()
 
     if (!!patientNameFilterText) {
@@ -50,14 +50,12 @@ class PatientList extends Component {
             <label className={styles.search__label} htmlFor="search__input">
               <i className="fa fa-search" />
             </label>
-             <input id="search__input"
-                className={styles.search__input}
-                placeholder="Search..."
-                ref={(input) => {
-                  this.textInput = input;
-                }}
-                onChange={this.handleInput}
-                    />
+            <Form form="patientList">
+              <Field className={styles.search__input}
+                type="text"
+                name="patients"
+              />
+            </Form>
             <div className={styles.search__edit}>
               <i className="fa fa-pencil" />
             </div>

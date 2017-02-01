@@ -19,12 +19,4 @@ export default handleActions({
       currentPatient: action.payload.currentDialogId,
     });
   },
-
-  [SET_PATIENTS_FILTER](state, action) {
-    return state.merge({
-      filters: {
-      	patientName: action.payload.patientName,
-      },
-    });
-  },
 }, initialState);

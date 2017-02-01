@@ -26,21 +26,26 @@
         align-items: center;
 
         .search {
-            &__label {
-                position: relative;
-                left: 15px;
-                cursor: pointer;
-                color: #b3b2b1;
-            }
+          &__label {
+              position: relative;
+              left: 15px;
+              top: -10px;
+              cursor: pointer;
+              color: #b3b2b1;
+          }
 
-            &__input {
-                width: 90%;
-                height: 30px;
-                padding: 0 40px;
-                border: none;
-                border-bottom: 2px solid #8cbcd6;
-                background: #f7f7f7;
-            }
+          &__input {
+              width: 90%;
+              height: 30px;
+              padding: 2px 30px;
+              font-size: 12px;
+              border: none;
+              border-bottom: 2px solid #8cbcd6;
+              background-color: inherit;
+              &:focus {
+                outline: none;
+              }
+          }
 
             &__edit {
                 margin-left: auto;
