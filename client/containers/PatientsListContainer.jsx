@@ -53,7 +53,6 @@ function mapStateToProps({ entities, patientList, form }) {
     return {
       patients: entities.get('patientList'),
       currentPatient: patientList,
-      // filters: patientList.toJS().filters,
       filters: form.patientList,
     };
 }

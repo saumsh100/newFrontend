@@ -5,7 +5,6 @@ import moment from 'moment';
 import {
   SET_CURRENT_DIALOG,
   SEND_MESSAGE_ON_CLIENT,
-  SET_DIALOGS_FILTER,
 } from '../constants';
 
 const initialState = fromJS({
@@ -21,14 +20,5 @@ export default handleActions({
       currentDialog: action.payload.currentDialogId,
     });
   },
-
-  [SET_DIALOGS_FILTER](state, action) {
-    return state.merge({
-      filters: {
-      	username: action.payload.username,
-      } ,
-    });
-  },
-
 
 }, initialState);

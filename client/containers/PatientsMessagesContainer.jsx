@@ -5,7 +5,7 @@ import { fetchEntities } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Chat from '../components/Patients/Chat/';
-import { setCurrentDialog, setDialogsFilter } from '../thunks/dialogs';
+import { setCurrentDialog } from '../thunks/dialogs';
 import { 
   sendMessageOnClient,
   readMessagesInCurrentDialog,
@@ -22,8 +22,11 @@ class PatientsMessagesContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { filters } = this.props;
-    const username = filters && filters.username; 
-    if (username !== nextProps.filters.username) {
+    const username = filters
+    && filters.values && filters.values.dialogs;
+    if (!username) return
+    if (username && !nextProps.filters.values) return;
+    if (username != nextProps.filters.values.dialogs) {
       this.props.fetchEntities({ key: 'dialogs', params: { username } })
     }
   }
@@ -34,7 +37,6 @@ class PatientsMessagesContainer extends Component {
       setCurrentDialog,
       currentDialogId,
       sendMessageOnClient,
-      setDialogsFilter,
       filters,
       readMessagesInCurrentDialog,
     } = this.props;
@@ -47,7 +49,6 @@ class PatientsMessagesContainer extends Component {
           setCurrentDialog={setCurrentDialog}
           currentDialogId={currentDialogId}
           sendMessageOnClient={sendMessageOnClient}
-          setDialogsFilter={setDialogsFilter}
           filters={filters}
           readMessagesInCurrentDialog={readMessagesInCurrentDialog}
         />
@@ -59,11 +60,11 @@ class PatientsMessagesContainer extends Component {
 
 PatientsMessagesContainer.propTypes = {};
 
-function mapStateToProps({ entities, currentDialog }) {
+function mapStateToProps({ entities, currentDialog, form }) {
     return {
       dialogs: entities.get('dialogs'),
       currentDialogId: currentDialog.toJS().currentDialog,
-      filters: currentDialog.toJS().filters,
+      filters: form.dialogs,
     };
 }
 
@@ -72,7 +73,6 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     setCurrentDialog,
     sendMessageOnClient,
-    setDialogsFilter,
     readMessagesInCurrentDialog
   }, dispatch);
 }

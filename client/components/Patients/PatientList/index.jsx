@@ -14,7 +14,6 @@ import { Button, Form, Field } from '../../library';
 class PatientList extends Component {
   render() {
     const { filters } = this.props;
-    // const patientNameFilterText = filters && filters.patientName;
     const patientNameFilterText = filters && filters.values && filters.values.patients;
     let patientList = this.props.patients.models.toArray()
 
@@ -46,12 +45,8 @@ class PatientList extends Component {
               <Field
                 type="text"
                 name="patients"
-                onChange={() => {console.log("redux form patients list")}}
               />
             </Form>
-            <div className={styles.search__edit}>
-              <i className="fa fa-pencil" />
-            </div>
           </div>
           <ul className={styles.patients_list__users}>
             {patientListSorted.map(user => {

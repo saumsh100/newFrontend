@@ -11,12 +11,6 @@ import ChatWindow from './ChatWindow';
 class Chat extends Component {
   constructor(props) {
     super(props);
-    this.handleInput = this.handleInput.bind(this);
-  }
-
-  handleInput() {
-    const value = this.textInput.value;
-    this.props.setDialogsFilter(value);
   }
 
   render() {
@@ -36,7 +30,7 @@ class Chat extends Component {
     if (!dialogList.length) {
       return <div>Loading...</div>;
     }
-    const userNameFilterText = filters && filters.username;
+    const userNameFilterText = filters && filters.values && filters.values.dialogs;
     if (userNameFilterText) {
       const pattern = new RegExp(userNameFilterText, 'i');
       dialogList = dialogList.filter(d => pattern.test(d.patientName));
@@ -48,15 +42,13 @@ class Chat extends Component {
             <label className={styles.search__label} htmlFor="search__input">
               <i className="fa fa-search"></i>
             </label>
-            <input id="search__input"
-              className={styles.search__input}
-              placeholder="Search..."
-              ref={(input) => { this.textInput = input; }}
-              onChange={this.handleInput}
-            />
-            <div className={styles.search__edit}>
-              <i className="fa fa-pencil"></i>
-            </div>
+
+            <Form form="dialogs">
+              <Field
+                type="text"
+                name="dialogs"
+              />
+            </Form>
           </div>
           <ul className={styles.dialogs__messages}>
             {dialogList && dialogList.map(((d) => {
