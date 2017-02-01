@@ -143,7 +143,6 @@ class SelectedDay extends Component {
     const scale = 1.5;
     return (
       <div className={styles.schedule}>
-          <CurrentDate currentDate={currentDate} />
           {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}
           {practitionersArray.map(d => (
               this.renderDoctrosSchedule(d, workingHours, scale, start, tablesCount)

@@ -62,7 +62,6 @@ ScheduleContainer.propTypes = {
 };
 
 function mapStateToProps({ entities, schedule }) {
-  debugger;
   return { 
     practitioners: entities.get('practitioners'),
     schedule,

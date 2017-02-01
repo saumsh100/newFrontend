@@ -17,6 +17,9 @@ import Filters from './Filters'
 import styles from './styles.scss';
 import { Card, Tabs, Tab } from '../library';
 import DayView from './DayView';
+import MonthView from './MonthView';
+import WeekView from './WeekView';
+import CurrentDate from './CurrentDate';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 
@@ -111,11 +114,30 @@ class ScheduleComponent extends Component {
           appointmentsTypes.push(app.title);
         }
       });
-
+    let content = null;
+    const params = {
+      practitioners,
+      patients,
+      appointments,
+      schedule,
+    }
+    const currentDate = moment(schedule.toJS().scheduleDate);
+    switch(this.state.index) {
+      case 0:
+        content = <DayView {...params} />
+        break;
+      case 1:
+        content = <MonthView {...params} />
+        break;
+      case 2:
+        content = <WeekView {...params} />
+        break;
+    }
     return (
       <div className={styles.scheduleContainerWrapper}>
         <div className={`${styles.scheduleContainer} schedule`}>
           <div className={`${styles.schedule__title} ${styles.title}`}>
+            <CurrentDate currentDate={currentDate} />
             <Tabs index={this.state.index} onChange={this.handleTabChange}>
               {schedule.toJS().scheduleModes.map(s => {
                 const label = s;
@@ -137,15 +159,7 @@ class ScheduleComponent extends Component {
               />
             }
           </div>
-
-          <DayView
-            practitioners={practitioners}
-            patients={patients}
-            appointments={appointments}
-            schedule={schedule}
-          />
-
-          {this.props.children}
+          {content}
         </div>
         <div className={styles.scheduleSidebar}>
           <Filters
