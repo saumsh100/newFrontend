@@ -1,80 +1,87 @@
+
 const jwt = require('jsonwebtoken');
-const merge = require('lodash/merge')
+const globals = require('../config/globals');
+const StatusError = require('../util/StatusError');
+
+const CRUD = {
+  create: true,
+  read: true,
+  update: true,
+  delete: true,
+};
+
+const OWNER = {
+  accounts: CRUD,
+  patients: CRUD,
+  appointments: CRUD,
+  textMessages: Object.assign({}, CRUD, {
+    update: false,
+  }),
+
+  listings: {
+    read: true,
+  },
+
+  reviews: {
+    read: true,
+  },
+};
+
+const ADMIN = Object.assign({}, OWNER, {
+
+});
+
+const USER = Object.assign({}, ADMIN, {
+
+});
 
 const permissions = {
-  OWNER: {
-    accounts: {
-      create: true,
-      read: true,
-      update: true,
-      delete: true,
-    },
-    listings: {
-       read: true,
-    },
-    reviews: {
-       read: true,
-    },
-  },
-  ADMIN: {
-    accounts: {
-      create: true,
-      read: true,
-      update: true,
-    },
-    listings: {
-       read: true,
-    },
-    reviews: {
-       read: true,
-    },
-  },
-  VIEWER: {
-    account: {
-      read: true,
-    }
-  }
-}
-// const authMiddleware = jwt({ secret: 'notsosecret' });
+  // Account Types
+  OWNER,
+  ADMIN,
+  USER,
+};
 
-function getTokenFromReq (req) {
+function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
     return false;
   }
-  var parts = req.headers.authorization.split(' ');
-  if (parts.length == 2) {
-    var scheme = parts[0];
-    var credentials = parts[1];
 
+  const parts = req.headers.authorization.split(' ');
+  if (parts.length === 2) {
+    const scheme = parts[0];
+    const credentials = parts[1];
     if (/^Bearer$/i.test(scheme)) {
       return credentials;
     }
   }
+
   return false;
 }
 
-module.exports = function (req, res, next) {
-  const token = getTokenFromReq(req)
+module.exports = function authMiddleware(req, res, next) {
+  const token = getTokenFromReq(req);
   if (!token) {
-    return next({status: 401})
+    return next(StatusError(401, 'Unauthorized. No valid token on header.'));
   }
 
-  var dtoken;
-
+  // Try decoding token
   try {
-    dtoken = jwt.decode(token, { complete: true }) || {};
+    jwt.decode(token, { complete: true }) || {};
   } catch (err) {
-    return next({status: 401});
+    return next(StatusError(401, 'Unauthorized. Could not decode token.'));
   }
 
-  return jwt.verify(token, 'notsosecret', {}, function(err, decoded) {
+  return jwt.verify(token, globals.tokenSecret, {}, (err, decoded) => {
     if (err) {
-      return next({status:401});
-    } 
-    req.user = decoded.user
-    req.permissions = merge({}, permissions[decoded.role], decoded.permissions)
+      return next(StatusError(401, 'Unauthorized. Error verifying token.'));
+    }
 
-    return next()
+    // We use this for activeAccountId and userId to allow controllers to fetch appropriate data
+    req.token = decoded;
+
+    // Pull in the role's permissions and extend the extra permissions ontop
+    req.permissions = Object.assign({}, permissions[decoded.role], decoded.permissions);
+    return next();
   });
-
-}
+};

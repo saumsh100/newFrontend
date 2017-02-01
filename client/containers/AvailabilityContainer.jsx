@@ -10,14 +10,24 @@ class Availability extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.fetchEntities({ key: 'availabilities' });
+    this.props.fetchEntities({ key: 'practitioners' });
+    this.props.fetchEntities({ key: 'services' });
   }
-
 
 
   render() {
     return (
       <div>
+        <ul>
+          {this.props.services.map(s =>
+            <li>{s}</li>
+          )}
+        </ul>
+        <ul>
+          {this.props.practitioners.map(p =>
+            <li>{p}</li>
+          )}
+        </ul>
         Hello
       </div>
     );
@@ -27,6 +37,8 @@ class Availability extends React.Component {
 function mapStateToProps({ entities }) {
   return {
     availabilities: entities.get('availabilities'),
+    services: entities.get('services'),
+    practitioners: entities.get('practitioners'),
   };
 }
 

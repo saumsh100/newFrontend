@@ -31,9 +31,15 @@ function submit(values) {
     });
 }
 
-export default function TestForm() {
+export default function TestForm({ patient, onSubmit }) {
+  const initialValues = {
+    firstName: patient.firstName,
+    middleName: patient.middleName,
+    lastName: patient.lastName,
+  };
+
   return (
-    <Form form="testForm" onSubmit={submit} validate={equalNames}>
+    <Form form="testForm" onSubmit={submit} validate={equalNames} initialValues={initialValues}>
       <Field
         required
         name="firstName"
@@ -54,3 +60,7 @@ export default function TestForm() {
     </Form>
   );
 }
+
+TestForm.propTypes = {
+  patient: PropTypes.object.isRequired,
+};

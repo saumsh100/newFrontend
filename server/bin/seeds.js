@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
 const uuid = require('uuid').v4;
-
+const moment = require('moment');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
@@ -52,6 +52,7 @@ const SEEDS = {
       practitionerId: practitionerId,
       chairId: chairId,
     },
+
     {
       startTime: new Date(2017, 0, 31, 12, 30, 0, 0),
       endTime: new Date(2017, 0, 31, 13, 30, 0, 0),
@@ -72,7 +73,7 @@ const SEEDS = {
 
       patientId: justinPatientId,
       serviceId: serviceId,
-      practitionerId: practitionerId,
+      practitionerId: practitionerId2,
       chairId: chairId,
 
       isClinicConfirmed: true,
@@ -147,7 +148,7 @@ const SEEDS = {
     {
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+17784012237',
+      phoneNumber: '+17808508886',
       id: justinPatientId,
     },
     {
@@ -207,7 +208,7 @@ const SEEDS = {
       id: uuid(),
       userId: markUserId,
       accountId,
-      role: 'VIEWER',
+      role: 'OWNER',
       permissions: {},
     },
     {
@@ -224,7 +225,7 @@ const SEEDS = {
       id: serviceId,
       accountId: accountId,
       name: 'Routine Checkup',
-      practitioners: [ practitionerId ],
+      practitioners: [practitionerId],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -234,7 +235,7 @@ const SEEDS = {
       id: serviceId2,
       accountId: accountId,
       name: 'Another service',
-      practitioners: [ practitionerId ],
+      practitioners: [practitionerId2],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -246,14 +247,12 @@ const SEEDS = {
     {
       id: practitionerId,
       accountId: accountId,
-      services: [ serviceId ],
       firstName: 'Chelsea',
       lastName: 'Mansfield',
     },
     {
       id: practitionerId2,
       accountId,
-      services: [serviceId],
       firstName: 'Perry',
       lastName: 'Cox',
     },

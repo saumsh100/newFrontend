@@ -2,6 +2,7 @@
 @import '../../../ui.scss';
 
 .default {
+  cursor: pointer;
   border: none;
   color: white;
   text-transform: uppercase;
@@ -9,11 +10,12 @@
   font-size: $font-size;
   font-weight: 600;
   height: 40px;
-  &:active {
-    border: none;
+  &:hover {
+    background-color: $primary-color-hover;
   }
 
-  &:hover {
-    border: none;
+  &:focus, &:active {
+    outline: none;
+    box-shadow: 0 0 0 2px lighten($primary-color, 20%);
   }
 }
