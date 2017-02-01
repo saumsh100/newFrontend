@@ -6,14 +6,16 @@ const Service = require('../../../models/Service');
 availabilitiesRouter.get('/', (req, res, next) => {
   // const OFFICE_START_TIME = moment({ hours: 9, minutes: 0 });
   // const OFFICE_END_TIME = moment({ hours: 17, minutes: 0 });
-  const { serviceId, practitionerId, startDate } = req.query;
+  const { serviceId, practitionerId, startDate, endDate } = req.query;
 
   Service.get(serviceId).run().then((service) => {
     Appointment
       .filter({ practitionerId }).getJoin({ service: false }).orderBy('startTime').run()
       .then((appointments) => {
         const results = {};
-        for (let j = 0; j < 5; j += 1) {
+        const diff = moment(endDate).diff(moment(startDate), 'days') + 1;
+        console.log(diff);
+        for (let j = 0; j < diff; j += 1) {
           const startDateDay = moment(startDate).add({ days: j });
           const theStartTime = moment(startDate).add({ days: j }).format();
           const OFFICE_START_TIME = startDateDay.set({ hours: 9, minutes: 0 }).toDate();
