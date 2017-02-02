@@ -28,7 +28,7 @@ BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 class ScheduleComponent extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       availabilities: [],
       selectedDay: new Date(),
       showDatePicker: false,
@@ -40,7 +40,7 @@ class ScheduleComponent extends Component {
     this.toggleCalendar = this.toggleCalendar.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
   }
-  
+
   componentDidMount() {
     window.socket.on('receiveAvailabilities', (results) => {
       this.setState({ availabilities: results });
@@ -89,7 +89,7 @@ class ScheduleComponent extends Component {
     this.props.setSheduleMode(index);
     this.setState({ index });
   }
-  
+
   render() {
     const events = this.state.availabilities.map((avail) => {
       return Object.assign({}, avail, {
@@ -143,8 +143,8 @@ class ScheduleComponent extends Component {
                 const label = s;
                 return (
                   <Tab label={label}>
-                    <span>{label}</span>
-                  </Tab>                
+                    {/* <span>{label}</span> */}
+                  </Tab>
                 )
               })}
             </Tabs>

@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { Card } from '../../library';
+import styles from './styles.scss';
 
 class Filters extends Component {
   constructor(props) {
     super(props);
     this.handleTypeFilter = this.handleTypeFilter.bind(this);
     this.handleCheckDoctor = this.handleCheckDoctor.bind(this);
+    this.clearAllSelectors = this.clearAllSelectors.bind(this);
   }
 
   handleCheckDoctor(practitionerId, checked) {
@@ -19,49 +20,103 @@ class Filters extends Component {
   handleTypeFilter(type) {
     this.props.selectAppointmentType(type.target.value);
   }
+  clearAllSelectors() {
+    console.log('clear all values')
+    this.props.selectAppointmentType("all");
+    this.refs.select.value = "all";
+  }
 
   render() {
-    const { practitioners, schedule, appointmentsTypes } = this.props;
+    const {practitioners, schedule, appointmentsTypes} = this.props;
     const filterPractitioners = schedule.toJS().practitioners;
     return (
-      <Card style={{ minHeight: '480px' }}>
-        <div>
-          Filters:
-        </div>
-        <div>
-          Practitioners:
-          {practitioners.map((pr, i) => {
-            const checked = filterPractitioners.indexOf(pr.id) > -1;
-            return (
-              <div>
-	              <label htmlFor={`checkbox-${i}`}>{pr.firstName}</label>
-	              <input type="checkbox"
-	                checked={checked}
-	                id={`checkbox-${i}`}
-	                onChange={() => { this.handleCheckDoctor(pr.id, checked); }}
-	              />
-              </div>
-            );
-          })}
-          <div>
-            Services:
-            <select onChange={this.handleTypeFilter} >
-              <option value="all">All</option>
-              {appointmentsTypes.map(app => (
-                <option value={app}>{app}</option>
-              ))}
-            </select>
+      <div className={styles.schedule_filter}>
+        <div className={styles.filter_header}>
+          <div className={styles.filter_header__title}>
+            Filter
           </div>
+          <div className={styles.filter_header__icon}>
+            <i className="fa fa-sliders"/>
+          </div>
+          <div onClick={this.clearAllSelectors} className={styles.filter_header__link}>Clear All</div>
         </div>
-      </Card>
+        <div className={styles.filter_practitioner}>
+          <div className={styles.filter_practitioner__title}>
+            Practitioners
+          </div>
+          <ul className={styles.filter_practitioner__wrapper}>
+            <li className={styles.filter_practitioner__user}>
+              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
+              <div className={styles.filter_practitioner__name}>Dr. Chelsea</div>
+              <div className={styles.filter_practitioner__spec}>Dentist</div>
+            </li>
+            <li className={styles.filter_practitioner__user}>
+              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
+              <div className={styles.filter_practitioner__name}>Dr. Mike</div>
+              <div className={styles.filter_practitioner__spec}>Dentist</div>
+            </li>
+            <li className={styles.filter_practitioner__user}>
+              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
+              <div className={styles.filter_practitioner__name}>Dr. Jennifer</div>
+              <div className={styles.filter_practitioner__spec}>Dentist</div>
+            </li>
+            <li className={styles.filter_practitioner__user}>
+              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
+              <div className={styles.filter_practitioner__name}>Dr. John</div>
+              <div className={styles.filter_practitioner__spec}>Dentist</div>
+            </li>
+          </ul>
+          <div className={styles.filter_options}>
+            <div className={styles.filter_options__item}>
+              <div className={styles.filter_options__title}>Services:</div>
+              <select ref="select" onChange={this.handleTypeFilter}>
+                <option  value="all">All</option>
+                {appointmentsTypes.map(app => (
+                  <option  value={app}>{app}</option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.filter_options__item}>
+              <div className={styles.filter_options__title}>Chairs:</div>
+              <select disabled="disabled">
+                <option value="all">All</option>
+              </select>
+            </div>
+            <div className={styles.filter_options__item}>
+              <div className={styles.filter_options__title}>Reminders:</div>
+              <select disabled="disabled">
+                <option value="all">All</option>
+              </select>
+            </div>
+            <div className={styles.filter_options__item}>
+              <div className={styles.filter_options__title}>Insurance:</div>
+              <select disabled="disabled">
+                <option value="all">All</option>
+              </select>
+            </div>
+          </div>
+
+                    Practitioners: {practitioners.map((pr, i) => {
+                      const checked = filterPractitioners.indexOf(pr.id) > -1;
+                      return (
+                        <div>
+                          <label htmlFor={`checkbox-${i}`}>{pr.firstName}</label>
+                          <input type="checkbox" checked={checked} id={`checkbox-${i}`} onChange={() => {
+                            this.handleCheckDoctor(pr.id, checked);
+                          }}/>
+                        </div>
+                      );
+                    })}
+        </div>
+      </div>
     );
   }
 }
 
 Filters.PropTypes = {
-	addPractitionerToFilter: PropTypes.func,
-	selectAppointmentType: PropTypes.func,
-	removePractitionerFromFilter: PropTypes.func,
+  addPractitionerToFilter: PropTypes.func,
+  selectAppointmentType: PropTypes.func,
+  removePractitionerFromFilter: PropTypes.func
 };
 
 export default Filters;

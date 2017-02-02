@@ -1,0 +1,116 @@
+.schedule_filter {
+    padding-bottom: 50px;
+    background-color: #FAFAFA;
+    font-family: sans-serif;
+}
+
+.filter_header {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 32px;
+    border-bottom: 1px solid #e6e6e6;
+    line-height: 32px;
+    justify-content: center;
+
+    &::before {
+        position: absolute;
+        display: block;
+        width: 100%;
+        top: -5px;
+        height: 5px;
+        content: '';
+        background: #FF715A;
+    }
+
+    &__title {
+        justify-content: center;
+    }
+
+    &__icon {
+        margin-left: 5px;
+    }
+
+    &__link {
+        position: absolute;
+        right: 5px;
+        cursor: pointer;
+        color: #B4B4B4;
+        font-size: 12px;
+    }
+}
+
+.filter_practitioner {
+    margin: 0 5px;
+
+    &__title {
+        margin-left: 5px;
+        text-transform: uppercase;
+        color: #B4B4B4;
+        font-size: 9px;
+        line-height: 30px;
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: row;
+        margin: 0 0 20px;
+        padding: 0;
+        list-style: none;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    &__user {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        font-size: 12px;
+        align-items: center;
+        flex: 1 0 25%;
+    }
+
+    &__photo {
+        max-width: 40px;
+        margin-bottom: 5px;
+        border-top: 3px #FF715A solid;
+        border-radius: 50%;
+    }
+
+    &__name {}
+
+    &__spec {
+        color: #B4B4B4;
+    }
+}
+
+.filter_options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    &__title {
+        margin-left: 5px;
+        text-transform: uppercase;
+        color: #B4B4B4;
+        font-size: 9px;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        width: 45%;
+        margin-bottom: 30px;
+
+        select {
+            border: none;
+            border-bottom: 1px #FF715A solid;
+            background: none;
+            font-size: inital;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+}
