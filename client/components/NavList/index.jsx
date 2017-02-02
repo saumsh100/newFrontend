@@ -64,19 +64,23 @@ export default function NavList({ location }) {
     );
   };
 
-  const SubNavItem = ({ path, label }) => {
+  const SubNavItem = ({ path, label, disabled }) => {
     const active = location.pathname.indexOf(path) === 0;
-    const inactiveSubClass = styles.liSubNavItem;
+    let inactiveSubClass = styles.liSubNavItem;
+    if (disabled) {
+      inactiveSubClass = classNames(inactiveSubClass, styles.disabledSubNavItem);
+    }
+
     const activeSubClass = classNames(inactiveSubClass, styles.activeSubNavItem, styles.multiple_nav__active);
     const className = active ? activeSubClass : inactiveSubClass;
     return (
-        <li className={styles.multiple_nav__item}>
-          <div className={styles.multiple_nav__wrapper}>
-            <Link to={path} className={className}>
-                {label}
-            </Link>
-          </div>
-        </li>
+      <li className={styles.multiple_nav__item}>
+        <div className={styles.multiple_nav__wrapper}>
+          <Link to={path} className={className} disabled={disabled}>
+            {label}
+          </Link>
+        </div>
+      </li>
     );
   };
 
@@ -94,12 +98,12 @@ export default function NavList({ location }) {
         <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" disabled />
         <MultiNavItem path="/schedule" icon="calendar" label="Schedule">
           <SubNavItem path="/schedule/calendar" label="Calendar View" />
-          <SubNavItem path="/schedule/appointments" label="Appointments List" />
+          <SubNavItem path="/schedule/appointments" label="Appointments List" disabled />
         </MultiNavItem>
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
-          <SubNavItem path="/patients/phone" label="Phone Calls" />
+          <SubNavItem path="/patients/phone" label="Phone Calls" disabled />
         </MultiNavItem>
         <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />
         <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />

@@ -2,11 +2,21 @@
 import React, { PropTypes } from 'react';
 import { Router, Route, IndexRoute, IndexRedirect } from 'react-router';
 import App from './containers/App';
+import FourZeroFour from './components/FourZeroFour';
 
 let counter = 0;
+
+function onError(error) {
+  console.log('router error', error);
+}
+
 export default function Routes({ history }) {
   return (
-    <Router history={history} key={counter}>
+    <Router
+      history={history}
+      key={counter}
+      onError={onError}
+    >
       <Route path="/" component={App}>
         <IndexRedirect to="/schedule" />
         <Route
@@ -49,14 +59,14 @@ export default function Routes({ history }) {
               });
             }}
           />
-          <Route
+          {/*<Route
             path="appointments"
             getComponent={(location, callback) => {
               require.ensure(['./components/Schedule/MonthView'], (require) => {
                 callback(null, require('./components/Schedule/MonthView').default);
               });
             }}
-          />
+          />*/}
         </Route>
         <Route
           path="patients"
@@ -83,14 +93,14 @@ export default function Routes({ history }) {
               });
             }}
           />
-          <Route
+          {/*<Route
             path="phone"
             getComponent={(location, callback) => {
               require.ensure(['./containers/PatientsPhoneContainer'], (require) => {
                 callback(null, require('./containers/PatientsPhoneContainer').default);
               });
             }}
-          />
+          />*/}
         </Route>
         {/*<Route
           path="reputation"
@@ -164,6 +174,7 @@ export default function Routes({ history }) {
             });
           }}
         />
+        <Route path="*" component={FourZeroFour} />
       </Route>
     </Router>
   );

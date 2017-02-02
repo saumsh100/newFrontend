@@ -75,6 +75,13 @@
     }
 }
 
+.disabledSubNavItem {
+    &:hover {
+        border-bottom: none;
+        color: $inactive-color;
+    }
+}
+
 .activeSubNavItem {
     color: $primary-white;
 }
