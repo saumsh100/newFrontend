@@ -57,13 +57,12 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
            patientAppointments[0].title : 'No next appointment';
 
           tempPatient.name = `${p.firstName} ${p.lastName}`;
-          // tempPatient.age = p.age || 20;
-          tempPatient.age = '12/12/88';
-          tempPatient.gender = 'Male';
+          tempPatient.birthday = p.birthday;
+          tempPatient.gender = p.gender;
           tempPatient.patientId = p.id;
-          tempPatient.language = 'English';
+          tempPatient.language = p.language;
           tempPatient.photo = `https://randomuser.me/api/portraits/men/${Math.floor((Math.random() * 80) + 1)}.jpg`;
-
+          tempPatient.id = p.id;
           results[p.id] = tempPatient;
           console.log("tempPatient");
           console.log(tempPatient);

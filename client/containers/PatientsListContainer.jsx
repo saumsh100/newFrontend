@@ -4,6 +4,7 @@ import PatientList from '../components/Patients/PatientList/';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { 
   setCurrentPatient,
+  updateEditingPatientState,
 } from '../thunks/patientList';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -34,6 +35,8 @@ class PatientsListContainer extends Component {
       patients,
       setCurrentPatient,
       filters,
+      updateEditingPatientState,
+      editingPatientState,
     } = this.props;
     {console.log('currentPatient', this.props.currentPatient.get('currentPatient'))}
     return (
@@ -42,6 +45,8 @@ class PatientsListContainer extends Component {
         currentPatient={this.props.currentPatient.get('currentPatient')}
         patients={patients}
         filters={filters}
+        updateEditingPatientState={updateEditingPatientState}
+        editingPatientState={editingPatientState}
       />
     );
   }
@@ -54,6 +59,7 @@ function mapStateToProps({ entities, patientList, form }) {
       patients: entities.get('patientList'),
       currentPatient: patientList,
       filters: form.patientList,
+      editingPatientState: patientList.toJS().editingPatientState, 
     };
 }
 
@@ -61,6 +67,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     setCurrentPatient,
+    updateEditingPatientState,
   }, dispatch);
 }
 

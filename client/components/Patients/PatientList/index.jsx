@@ -10,23 +10,42 @@ import styles from './main.scss';
 class PatientList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      index: 0,
-    };
     this.handleTabChange = this.handleTabChange.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
-  handleTabChange(index) {
-    this.setState({
-      index,
-    });
+
+  handleTabChange(index, patientListFiltered) {
+    if (!(typeof index === "number")) return
+    if (!patientListFiltered) return
+    let title = "personal";
+    switch (index) {
+      case 0:
+        title = "personal";
+        break
+      case 1: 
+        title = "insurance";
+        break;
+    }
+    const params = {
+      id: patientListFiltered.id,
+      activeTabIndex: index,
+      isEditing: false,
+      title,
+    };
+    this.props.updateEditingPatientState(params);
   }
+
   handleInput() {
     const value = this.textInput.value;
     this.props.setPatientsFilter(value)
   }
+
   render() {
-    const { filters } = this.props;
+    const { 
+      filters,
+      updateEditingPatientState,
+      editingPatientState,
+    } = this.props;
     const patientNameFilterText = filters && filters.values && filters.values.patients;
     let patientList = this.props.patients.models.toArray()
 
@@ -43,6 +62,11 @@ class PatientList extends Component {
     const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
     const patientListFiltered = patientListSorted
       .filter(n => (n.patientId === this.props.currentPatient))[0];
+    const currentPatientState = patientListFiltered && editingPatientState[patientListFiltered.id];
+    let activeTabIndex = null;
+    if (currentPatientState) {
+      activeTabIndex = currentPatientState.activeTabIndex;
+    }
     return (
       <div className={styles.patients}>
         <div className={styles.patients_list}>
@@ -62,13 +86,13 @@ class PatientList extends Component {
           </div>
           <ul className={styles.patients_list__users}>
             {patientListSorted.map(user => {
-        return (<PatientListItem
-          key={user.patientId}
-          user={user}
-          currentPatient={this.props.currentPatient}
-          setCurrentPatient={this.props.setCurrentPatient}
-          />);
-      })}
+              return (<PatientListItem
+                key={user.patientId}
+                user={user}
+                currentPatient={this.props.currentPatient}
+                setCurrentPatient={this.props.setCurrentPatient}
+              />);
+            })}
           </ul>
         </div>
         <div className={styles.patients_content}>
@@ -112,12 +136,24 @@ class PatientList extends Component {
           <div className={styles.patients_content__wrapper}>
             <div className={styles.left}></div>
             <div className={styles.right}>
-              <Tabs index={this.state.index} onChange={this.handleTabChange}>
+              <Tabs index={activeTabIndex || 0}
+                onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>
                 <Tab label="Personal">
-                  <PersonalData patient={patientListFiltered} />
+                  <PersonalData 
+                    patient={patientListFiltered}
+                    updateEditingPatientState={updateEditingPatientState}
+                    tabTitle="personal"
+                    currentPatientState={currentPatientState}
+
+                  />
                 </Tab>
                 <Tab label="Insurance">
-                  <InsuranceData patient={patientListFiltered} />
+                  <InsuranceData
+                    patient={patientListFiltered}
+                    updateEditingPatientState={updateEditingPatientState}
+                    tabTitle="insurance"
+                    currentPatientState={currentPatientState}
+                  />
                 </Tab>
               </Tabs>
             </div>

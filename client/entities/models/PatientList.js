@@ -4,11 +4,12 @@ const PatientListSchema = {
 	lastAppointmentDate: null,
 	nextAppointmentTitle: null,
 	name: null,
-  gender: null,
-	age: null,
+  	gender: null,
 	photo: null,
 	patientId: null,
 	language: null,
+	birthday: null,
+	id: null,
 };
 
 export default class PatientList extends createModel(PatientListSchema) {

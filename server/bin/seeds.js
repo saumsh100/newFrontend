@@ -227,6 +227,9 @@ const SEEDS = {
       phoneNumber: '+17808508886',
       id: justinPatientId,
       accountId,
+      birthday: moment({year: 1993, month: 6, day: 15})._d,
+      gender: 'male',
+      language: 'English',
     },
     {
       firstName: 'Sergey',
@@ -234,6 +237,9 @@ const SEEDS = {
       phoneNumber: '+17782422626',
       id: sergeyPatientId,
       accountId,
+      birthday: moment({year: 1983, month: 2, day: 6})._d,
+      gender: 'male',
+      language: 'English',
     },
     {
       firstName: 'Mark',
@@ -241,6 +247,9 @@ const SEEDS = {
       phoneNumber: '+17788654451',
       id: uuid(),
       accountId: accountId2,
+      birthday: moment({year: 1996, month: 4, day: 25})._d,
+      gender: 'male',
+      language: 'English',
     },
     {
       firstName: 'Alex',
@@ -248,6 +257,9 @@ const SEEDS = {
       phoneNumber: '+19782521845',
       id: alexPatientId,
       accountId,
+      birthday: moment({year: 1997, month: 3, day: 4})._d,
+      gender: 'male',
+      language: 'English',
     },
   ],
 
