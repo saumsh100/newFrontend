@@ -73,6 +73,7 @@
 
 .pillsList {
   display: flex;
+  align-items: center;
   flex-direction: row;
   padding-left: 0;
   list-style: none;
@@ -81,4 +82,20 @@
 .logoutPill {
   border-left: 1.5px solid darkgrey;
   padding: 6px;
+}
+
+.userMenuButton {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.userMenuGreeting {
+  padding-right: 20px;
+  font-weight: 600;
+}
+
+.userRole {
+  font-weight: 100;
+  font-size: 0.8rem;
 }

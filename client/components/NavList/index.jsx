@@ -107,11 +107,9 @@ export default function NavList({ location }) {
         </MultiNavItem>
         <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />
         <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />
-        <SingleNavItem path="/loyalty" icon="trophy" label="Loyalty" disabled />
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />
         <SingleNavItem path="/settings" icon="cogs" label="Account Settings" />
-        <SingleNavItem path="/profile" icon="tachometer" label="Profile" />
       </Nav>
     </div>
   );

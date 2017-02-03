@@ -13,8 +13,6 @@ import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
 import Tooltip from './Tooltip';
 
-export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';
-
 export {
   AppBar,
   Button,
@@ -32,3 +30,8 @@ export {
   Tab,
   Tooltip,
 };
+
+export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';
+export { Grid, Row, Col } from './Grid';
+export { List, ListItem } from './List';
+export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';

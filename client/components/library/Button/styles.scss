@@ -4,12 +4,15 @@
 .default {
   cursor: pointer;
   border: none;
-  color: white;
-  text-transform: uppercase;
-  background-color: $primary-color;
   font-size: $font-size;
   font-weight: 600;
   height: 40px;
+}
+
+.notFlat {
+  color: $primary-white;
+  background-color: $primary-color;
+  text-transform: uppercase;
   &:hover {
     background-color: $primary-color-hover;
   }
@@ -17,5 +20,18 @@
   &:focus, &:active {
     outline: none;
     box-shadow: 0 0 0 2px lighten($primary-color, 20%);
+  }
+}
+
+
+.flat {
+  background-color: transparent;
+  color: $primary-dark;
+  &:hover {
+    color: $primary-color-hover;
+  }
+
+  &:focus, &:active {
+    outline: none;
   }
 }

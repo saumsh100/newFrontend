@@ -1,0 +1,47 @@
+
+@import '../../../ui';
+
+/* react-dd-menu overrides */
+
+:global .dd-menu-items {
+  min-width: 200px;
+  z-index: 2500 !important;
+  white-space: nowrap;
+  margin-top: 14px !important;
+  background-color: $primary-white;
+}
+
+:global .separator {
+  height: 1px !important;
+  background-color: $primary-lightgrey !important;
+}
+
+.dropdownContainer {
+  text-align: left;
+}
+
+.menuItemLi {
+  cursor: pointer;
+  padding: 0 1.6rem;
+  height: 3.5rem;
+  font-size: 16px;
+  color: $primary-dark;
+
+  &:hover {
+    background-color: $primary-lightgrey !important;
+    color: $primary-dark !important;
+  }
+}
+
+.menuItemContent {
+  display: flex;
+  align-items: center;
+}
+
+.menuIcon {
+  display: inline-block;
+  width: 2.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-right: 10px;
+}
