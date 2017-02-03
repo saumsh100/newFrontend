@@ -17,3 +17,21 @@
     display: none;
   }
 }
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.selects {
+  height: 30px;
+}
+
+.ulHeader {
+  font-size: 18px;
+  float: left;
+}
+
+.listItem {
+  font-size: 15px;
+  list-style: none;
+}

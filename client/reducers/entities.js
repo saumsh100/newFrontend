@@ -82,6 +82,7 @@ export default handleActions({
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
   },
+
 }, initialState);
 
 /* function updateEntityStateWithEntities(state, key, id, modelData) {

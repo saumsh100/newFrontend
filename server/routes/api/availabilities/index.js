@@ -66,12 +66,26 @@ availabilitiesRouter.get('/', (req, res, next) => {
             results[theStartTime] = {
               date: theStartTime,
               availabilities,
+              practitionerId,
+            };
+          } else {
+            const availabilities = [];
+            for (let i = moment(OFFICE_START_TIME); moment(OFFICE_END_TIME) - i > 0; i = moment(i).add({
+              minutes: service.duration,
+            })) {
+              availabilities.push(i);
+            }
+            results[theStartTime] = {
+              date: theStartTime,
+              availabilities,
+              practitionerId,
             };
           }
         }
         const resultStructure = {
           entities: { availabilities: results },
         };
+        console.log(resultStructure);
         res.send(resultStructure);
       })
       .catch(next);

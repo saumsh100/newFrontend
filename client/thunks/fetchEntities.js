@@ -6,10 +6,8 @@ export function fetchEntities({ key, params }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-      debugger;
     axios.get(entity.getUrlRoot(), { params })
       .then((response) => {
-
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
       })

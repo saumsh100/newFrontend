@@ -8,6 +8,7 @@ const ServiceSchema = {
   bufferTime: null,
   unitCost: null,
   customCosts: null,
+  practitioners: null,
 };
 
 export default class Service extends createModel(ServiceSchema) {
