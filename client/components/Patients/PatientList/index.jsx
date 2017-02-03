@@ -45,6 +45,8 @@ class PatientList extends Component {
       filters,
       updateEditingPatientState,
       editingPatientState,
+      changePatientInfo,
+      form,
     } = this.props;
     const patientNameFilterText = filters && filters.values && filters.values.patients;
     let patientList = this.props.patients.models.toArray()
@@ -144,6 +146,9 @@ class PatientList extends Component {
                     updateEditingPatientState={updateEditingPatientState}
                     tabTitle="personal"
                     currentPatientState={currentPatientState}
+                    editingPatientState={editingPatientState}
+                    form={form}
+                    changePatientInfo={changePatientInfo}
 
                   />
                 </Tab>
@@ -153,6 +158,9 @@ class PatientList extends Component {
                     updateEditingPatientState={updateEditingPatientState}
                     tabTitle="insurance"
                     currentPatientState={currentPatientState}
+                    editingPatientState={editingPatientState}
+                    form={form}
+                    changePatientInfo={changePatientInfo}
                   />
                 </Tab>
               </Tabs>

@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from './main.scss';
 import { Button, Form, Field } from '../../library';
-
+import { Field as RField } from 'redux-form'
 class PersonalData extends Component {
   constructor(props) {
     super(props);
     this.handleClickEdit = this.handleClickEdit.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
+    this.state = { formChaned: false };
   }
   handleClickEdit() {
     const params = {
@@ -20,8 +21,40 @@ class PersonalData extends Component {
   }
 
   handleClickSave(e) {
-    console.log('save data handled');
     e.preventDefault();
+    const {
+      patient,
+      form,
+      tabTitle,
+      changePatientInfo,
+    } = this.props;
+    const formData = `${tabTitle}-${patient.id}`;
+    const values = form[formData].values;
+    values.id = patient.id
+    changePatientInfo(values);
+  }
+
+  componentWillReceiveProps(nextprops) {
+    // It`s forced way to compare form values 
+    // with previous ones in order to know if any field value was changed
+    // because redux onChange doesn't trigger for some reason
+    const { patient, form, tabTitle } = this.props;
+    if (!patient) return;
+    let formChanged = false;
+    const formData = `${tabTitle}-${patient.id}`;
+    const initialValues = form[formData] && form[formData].initial;
+    if (!initialValues) return;
+    const nextValues = nextprops.form[formData] && nextprops.form[formData].values;
+    const keys = Object.keys(initialValues);
+    keys.forEach(k => {
+      if (initialValues[k] !== nextValues[k]) {
+        formChanged = true;
+        return
+      }
+    });
+    if (formChanged !== this.state.formChanged) {
+      this.setState({ formChanged });
+    }
   }
 
   renderEditingForm(patient) {
@@ -64,6 +97,24 @@ class PersonalData extends Component {
               name="lastName"
               placeholder="Last name"
             />
+
+            <RField name="gender" 
+              component="select"
+              placeholder="gender"
+            >
+              <option value="male">Male</option>
+              <option value="famale">Famale</option>
+            </RField>
+
+            <RField name="language" 
+              component="select"
+              placeholder="language"
+            >
+              <option value="English">English</option>
+              <option value="German">German</option>
+            </RField>
+
+
           </Form>
 
           <form>
@@ -110,7 +161,14 @@ class PersonalData extends Component {
                 <option>Passive</option>
               </select>
             </div>
-            <input onClick={this.handleClickSave} className={styles.edit_personal__btn} type="submit" value="Save" />
+            <input 
+              onClick={this.handleClickSave}
+              className={styles.edit_personal__btn}
+              type="submit"
+              value="Save"
+              disabled={!this.state.formChanged ? true : false }
+
+            />
           </form>
         </div>
       </div>
