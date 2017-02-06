@@ -16,7 +16,6 @@ class Filters extends Component {
       this.props.addPractitionerToFilter(practitionerId);
     }
   }
-
   handleTypeFilter(type) {
     this.props.selectAppointmentType(type.target.value);
   }
@@ -27,7 +26,7 @@ class Filters extends Component {
   }
 
   render() {
-    const {practitioners, schedule, appointmentsTypes} = this.props;
+    const { practitioners, schedule, appointmentsTypes } = this.props;
     const filterPractitioners = schedule.toJS().practitioners;
     return (
       <div className={styles.schedule_filter}>
@@ -36,7 +35,7 @@ class Filters extends Component {
             Filter
           </div>
           <div className={styles.filter_header__icon}>
-            <i className="fa fa-sliders"/>
+            <i className="fa fa-sliders" />
           </div>
           <div onClick={this.clearAllSelectors} className={styles.filter_header__link}>Clear All</div>
         </div>
@@ -45,26 +44,24 @@ class Filters extends Component {
             Practitioners
           </div>
           <ul className={styles.filter_practitioner__wrapper}>
-            <li className={styles.filter_practitioner__user}>
-              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
-              <div className={styles.filter_practitioner__name}>Dr. Chelsea</div>
-              <div className={styles.filter_practitioner__spec}>Dentist</div>
-            </li>
-            <li className={styles.filter_practitioner__user}>
-              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
-              <div className={styles.filter_practitioner__name}>Dr. Mike</div>
-              <div className={styles.filter_practitioner__spec}>Dentist</div>
-            </li>
-            <li className={styles.filter_practitioner__user}>
-              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
-              <div className={styles.filter_practitioner__name}>Dr. Jennifer</div>
-              <div className={styles.filter_practitioner__spec}>Dentist</div>
-            </li>
-            <li className={styles.filter_practitioner__user}>
-              <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner"/>
-              <div className={styles.filter_practitioner__name}>Dr. John</div>
-              <div className={styles.filter_practitioner__spec}>Dentist</div>
-            </li>
+            {practitioners.map((pr, i) => {
+              const checked = filterPractitioners.indexOf(pr.id) > -1;
+              return (
+                <div className={styles.filter_practitioner__list}>
+                  <input className={styles.filter_practitioner__checkbox}
+                    type="checkbox" checked={checked} id={`checkbox-${i}`}
+                    onChange={() => {this.handleCheckDoctor(pr.id, checked);
+                  }} />
+                  <label className={styles.filter_practitioner__label} htmlFor={`checkbox-${i}`}>
+                    <li className={styles.filter_practitioner__item}>
+                      <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="pratiotioner" />
+                      <div className={styles.filter_practitioner__name}>{pr.firstName}</div>
+                      <div className={styles.filter_practitioner__spec}>Dentist</div>
+                    </li>
+                  </label>
+                </div>
+              );
+            })}
           </ul>
           <div className={styles.filter_options}>
             <div className={styles.filter_options__item}>
@@ -95,18 +92,6 @@ class Filters extends Component {
               </select>
             </div>
           </div>
-
-                    Practitioners: {practitioners.map((pr, i) => {
-                      const checked = filterPractitioners.indexOf(pr.id) > -1;
-                      return (
-                        <div>
-                          <label htmlFor={`checkbox-${i}`}>{pr.firstName}</label>
-                          <input type="checkbox" checked={checked} id={`checkbox-${i}`} onChange={() => {
-                            this.handleCheckDoctor(pr.id, checked);
-                          }}/>
-                        </div>
-                      );
-                    })}
         </div>
       </div>
     );
