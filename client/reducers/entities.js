@@ -115,11 +115,23 @@ export default handleActions({
   },
 
   [UPDATE_PATIENT_IN_PATIENT_LIST](state, action) {
-    const { id, firstName, lastName, gender, language, birthday } = action.payload;
-    const name = `${firstName} ${lastName}`;
-    console.log(action.payload)
+    const { title, id } = action.payload;
     const currentPatient = state.toJS().patientList.models[id];
-    const updatedPatient = fromJS(currentPatient).mergeDeep(fromJS({ name, gender, language, birthday }))
+    let objectToMergeWith = {};
+    switch (title) {
+      case 'personal':
+        const { id, firstName, lastName, gender, language, birthday } = action.payload;
+        const name = `${firstName} ${lastName}`;
+        objectToMergeWith = fromJS({ name, gender, language, birthday, id });
+      break;
+
+      case 'insurance':
+        const { insurance, memberId, contract, carrier, sin } = action.payload;
+        objectToMergeWith = fromJS({ insurance: { insurance, memberId, contract, carrier, sin, id }});
+      break;
+
+    }
+    const updatedPatient = fromJS(currentPatient).mergeDeep(objectToMergeWith)
     return state.updateIn(['patientList', 'models', id], () => updatedPatient.toJS());
   }
 

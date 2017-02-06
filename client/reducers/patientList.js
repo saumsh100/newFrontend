@@ -47,18 +47,11 @@ export default handleActions({
 
   [CHANGE_PATIENT_INFO](state, action) {
     const {
-      firstName,
-      lastName,
-      middleName,
-      birthday,
-      language,
-      gender,
       title,
       id,
     } = action.payload;
     const editingPatientState = state.toJS().editingPatientState;
     editingPatientState[id][title]["isEditing"] = false;
-    debugger;
     return state.merge({
       editingPatientState: editingPatientState,
     });

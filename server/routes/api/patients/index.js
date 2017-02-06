@@ -63,6 +63,10 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
           tempPatient.language = p.language;
           tempPatient.photo = `https://randomuser.me/api/portraits/men/${Math.floor((Math.random() * 80) + 1)}.jpg`;
           tempPatient.id = p.id;
+
+          if (p.insurance) {
+            tempPatient.insurance = p.insurance;
+          }
           results[p.id] = tempPatient;
           console.log("tempPatient");
           console.log(tempPatient);
@@ -101,13 +105,31 @@ patientsRouter.get('/:patientId', (req, res, next) => {
 
 patientsRouter.put('/:patientId', (req, res, next) => {
   const data = {};
-  data.firstName = req.body.firstName;
-  data.lastName = req.body.lastName;
-  data.phoneNumber = req.body.phoneNumber;
-  data.email = req.body.email;
-  data.gender = req.body.gender;
-  data.language = req.body.language;
-  data.birthday = req.body.birthday;
+  switch (req.body.title) {
+    case "personal":
+      data.firstName = req.body.firstName;
+      data.lastName = req.body.lastName;
+      data.phoneNumber = req.body.phoneNumber;
+      data.email = req.body.email;
+      data.gender = req.body.gender;
+      data.language = req.body.language;
+      data.birthday = req.body.birthday;      
+    break;
+
+    case "insurance":
+      data.insurance = {
+        insurance: req.body.insurance,
+        memberId: req.body.memberId,
+        contract: req.body.contract,
+        carrier: req.body.carrier,
+        sin: req.body.sin,
+      }
+
+      console.log("data insurance");
+      console.log(data.insurance);
+      
+    break;
+  }
   const { patientId } = req.params;
   Patient.get(patientId).run().then((p) => {
     p.merge(data).save().then((patient) => {

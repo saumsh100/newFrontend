@@ -8,13 +8,61 @@ class InsuranceData extends Component {
     super(props);
     this.handleClickEdit = this.handleClickEdit.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
+    this.state = {};
+  }
+
+  componentWillReceiveProps(nextprops) {
+    // It`s forced way to compare form values 
+    // with previous ones in order to know if any field value was changed
+    // because redux onChange doesn't trigger for some reason
+    const { patient, form, tabTitle } = this.props;
+    if (!patient) return;
+    let formChanged = false;
+    const formData = `${tabTitle}-${patient.id}`;
+    if (!formData) return
+    const initialValues = form[formData] && form[formData].initial;
+    // if initial values are not defined, lets check if user filled
+    // all fields and then make save btn enabled
+    const registeredFieldsLength = nextprops.form[formData]
+    && nextprops.form[formData].registeredFields.length;
+    const filledFieldsLength = nextprops.form[formData]
+    && Object.keys(nextprops.form[formData].values).length;
+    
+    const nextValues = nextprops.form[formData] && nextprops.form[formData].values;
+    const keys = Object.keys(initialValues || []);
+    if (nextValues) {
+      keys.forEach(k => {
+        if (initialValues[k] !== nextValues[k]) {
+          formChanged = true;
+          return;
+        }
+      });
+    }
+    if (!formChanged) {
+      if (registeredFieldsLength === filledFieldsLength) formChanged = true;
+    }
+    if (formChanged !== this.state.formChanged) {
+      this.setState({ formChanged });
+    }
   }
 
   handleClickSave(e) {
-    console.log('save data handled');
     e.preventDefault();
-
+    const {
+      patient,
+      form,
+      tabTitle,
+      changePatientInfo,
+    } = this.props;
+    const formData = `${tabTitle}-${patient.id}`;
+    const values = form[formData].values;
+    values.id = patient.id;
+    values.title = tabTitle;
+    changePatientInfo(values);
   }
+
+
+
 
   handleClickEdit() {
     const params = {
@@ -136,7 +184,13 @@ class InsuranceData extends Component {
                 <input className={styles.edit_insurance__input} type="text" placeholder="SIN #" />
               </div>
             </div>
-            <input onClick={this.handleClickSave} className={styles.edit_insurance__btn} type="submit" value="Save" />
+            <input
+              onClick={this.handleClickSave}
+              className={styles.edit_insurance__btn}
+              type="submit"
+              value="Save"
+              disabled={!this.state.formChanged ? true : false }
+            />
           </form>
         </div>
       </div>
