@@ -231,11 +231,11 @@ const SEEDS = {
       gender: 'male',
       language: 'English',
       insurance: {
-        insurance: "insurance"
-        memberId: "dFSDfWR@R3rfsdFSDFSER@WE"
-        contract: "4234rerwefsdfsd"
-        carrier: "sadasadsadsads"
-        sin: "dsasdasdasdadsasad"
+        insurance: 'insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
       },
     },
     {
