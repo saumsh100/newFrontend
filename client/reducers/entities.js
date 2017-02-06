@@ -115,11 +115,11 @@ export default handleActions({
   },
 
   [UPDATE_PATIENT_IN_PATIENT_LIST](state, action) {
-    const { id, firstName, lastName, gender, language } = action.payload;
+    const { id, firstName, lastName, gender, language, birthday } = action.payload;
     const name = `${firstName} ${lastName}`;
     console.log(action.payload)
     const currentPatient = state.toJS().patientList.models[id];
-    const updatedPatient = fromJS(currentPatient).mergeDeep(fromJS({ name, gender, language }))
+    const updatedPatient = fromJS(currentPatient).mergeDeep(fromJS({ name, gender, language, birthday }))
     return state.updateIn(['patientList', 'models', id], () => updatedPatient.toJS());
   }
 

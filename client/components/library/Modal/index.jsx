@@ -7,7 +7,7 @@ import styles from './styles.scss';
 class Modal extends Component {
   constructor(props) {
     super(props);
-    
+    this.state = {};
     this.handleEscKeyDown = this.handleEscKeyDown.bind(this);
     this.handleOverlayClick = this.handleOverlayClick.bind(this);
     // this.deactivate = this.deactivate.bind(this);

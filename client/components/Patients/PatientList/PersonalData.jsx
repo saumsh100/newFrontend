@@ -74,36 +74,38 @@ class PersonalData extends Component {
       lastName,
       language,
       gender,
+      birthday,
     }
     return (
       <div className={styles.right__personal}>
         <div className={styles.edit_personal}>
           <Form form={dialogId}
             initialValues={initialValues}
-            onChange={() => { console.log("Changed!!!!") } }
           >
             <Field
               className={styles.edit_personal__name_first}
               type="text"
               name="firstName"
               placeholder="First name"
-              onChange={() => { console.log("changed!!!") }}
             />
-
             <Field
               className={styles.edit_personal__name_m}
               type="text"
               name="middleName"
               placeholder="M"
             />
-
             <Field
               className={styles.edit_personal__name_last}
               type="text"
               name="lastName"
               placeholder="Last name"
             />
-
+            <Field
+              className={styles.edit_personal__name_last}
+              type="date"
+              name="birthday"
+              placeholder="birthday"
+            />
             <RField name="gender" 
               component="select"
               placeholder="gender"
@@ -119,8 +121,6 @@ class PersonalData extends Component {
               <option value="English">English</option>
               <option value="German">German</option>
             </RField>
-
-
           </Form>
 
           <form>
@@ -183,7 +183,7 @@ class PersonalData extends Component {
 
   renderPersonalInfo(patient) {
     const { birthday, gender, name } = patient;
-    const showBirthday = moment(birthday).subtract(10, 'days').calendar();
+    const showBirthday = moment(birthday).calendar();
     const age = moment().diff(patient.birthday, 'years')
     const birthdayAgeText = `${showBirthday}  ${age}`;
     return (

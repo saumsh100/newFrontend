@@ -107,6 +107,7 @@ patientsRouter.put('/:patientId', (req, res, next) => {
   data.email = req.body.email;
   data.gender = req.body.gender;
   data.language = req.body.language;
+  data.birthday = req.body.birthday;
   const { patientId } = req.params;
   Patient.get(patientId).run().then((p) => {
     p.merge(data).save().then((patient) => {
