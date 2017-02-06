@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 import {
   AppBar,
+  Avatar,
   Button,
   DropdownMenu,
   Icon,
@@ -16,6 +17,7 @@ import styles from './styles.scss';
 
 
 const UserMenu = (props) => {
+  // TODO: create a separate container for this to load in user data from 'currentUser'
   return (
     <Button flat {...props} className={styles.userMenuButton}>
       <div className={styles.userMenuGreeting}>
@@ -23,6 +25,7 @@ const UserMenu = (props) => {
         <br/>
         <span className={styles.userRole}>Office Manager</span>
       </div>
+      <Avatar className={styles.userAvatar} url="https://placeimg.com/80/80/animals" title="Cats" />
       <Icon icon="caret-down" />
     </Button>
   );

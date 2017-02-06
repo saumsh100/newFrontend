@@ -1,5 +1,6 @@
 
 import AppBar from './AppBar';
+import Avatar from './Avatar';
 import Button from './Button';
 import Card from './Card';
 import Form, { Field } from './Form';
@@ -15,6 +16,7 @@ import Tooltip from './Tooltip';
 
 export {
   AppBar,
+  Avatar,
   Button,
   Card,
   Field,

@@ -14,6 +14,7 @@
 
     &:hover {
         background-color: #41464c;
+        color: $primary-white !important;
     }
 
     &:active {
@@ -32,12 +33,14 @@
 }
 
 .disabledItem {
+    color: darken($inactive-color, 25%) !important;
     &:hover {
         background-color: transparent;
+        color: darken($inactive-color, 25%) !important;
     }
 
     &:active {
-        color: $inactive-color !important;
+        color: darken($inactive-color, 25%) !important;
 
         .label {
             font-size: 14px;
