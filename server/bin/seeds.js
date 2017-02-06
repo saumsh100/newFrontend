@@ -230,6 +230,13 @@ const SEEDS = {
       birthday: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
+      insurance: {
+        insurance: "insurance"
+        memberId: "dFSDfWR@R3rfsdFSDFSER@WE"
+        contract: "4234rerwefsdfsd"
+        carrier: "sadasadsadsads"
+        sin: "dsasdasdasdadsasad"
+      },
     },
     {
       firstName: 'Sergey',
