@@ -10,6 +10,7 @@ import {
   UPDATE_ENTITY,
   SEND_MESSAGE_ON_CLIENT,
   READ_MESSAGES_IN_CURRENT_DIALOG,
+  UPDATE_PATIENT_IN_PATIENT_LIST,
 } from '../constants';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
@@ -111,8 +112,16 @@ export default handleActions({
     const updatedMessagesDialog = dialog.updateIn(['messages'], () => dialogMessages);
     const updatedDialog = updatedMessagesDialog.updateIn(['unreadCount'], () => unreadCount-1).toJS();
     return state.updateIn(['dialogs', 'models', dialogId], () => updatedDialog);
-  }
+  },
 
+  [UPDATE_PATIENT_IN_PATIENT_LIST](state, action) {
+    const { id, firstName, lastName, gender, language } = action.payload;
+    const name = `${firstName} ${lastName}`;
+    console.log(action.payload)
+    const currentPatient = state.toJS().patientList.models[id];
+    const updatedPatient = fromJS(currentPatient).mergeDeep(fromJS({ name, gender, language }))
+    return state.updateIn(['patientList', 'models', id], () => updatedPatient.toJS());
+  }
 
 }, initialState);
 

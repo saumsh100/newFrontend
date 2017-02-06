@@ -30,7 +30,8 @@ class PersonalData extends Component {
     } = this.props;
     const formData = `${tabTitle}-${patient.id}`;
     const values = form[formData].values;
-    values.id = patient.id
+    values.id = patient.id;
+    values.title = tabTitle;
     changePatientInfo(values);
   }
 
@@ -42,16 +43,21 @@ class PersonalData extends Component {
     if (!patient) return;
     let formChanged = false;
     const formData = `${tabTitle}-${patient.id}`;
+    if (!formData) return
     const initialValues = form[formData] && form[formData].initial;
     if (!initialValues) return;
     const nextValues = nextprops.form[formData] && nextprops.form[formData].values;
     const keys = Object.keys(initialValues);
-    keys.forEach(k => {
-      if (initialValues[k] !== nextValues[k]) {
-        formChanged = true;
-        return
-      }
-    });
+    
+    if (nextValues) {
+      keys.forEach(k => {
+        if (initialValues[k] !== nextValues[k]) {
+          formChanged = true;
+          return
+        }
+      });
+    }
+
     if (formChanged !== this.state.formChanged) {
       this.setState({ formChanged });
     }
