@@ -34,7 +34,6 @@ const Appointment = thinky.createModel('Appointment', {
   isSplit: type.boolean(),
   splitAppointments: [type.string().uuid(4)],
   isParent: type.boolean(),
-
 });
 
 module.exports = Appointment;

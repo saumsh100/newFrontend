@@ -2,14 +2,43 @@
 import React, { PropTypes, Component } from 'react';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
-import { AppBar, Button, IconButton } from '../library';
+import {
+  AppBar,
+  Avatar,
+  Button,
+  DropdownMenu,
+  Icon,
+  IconButton,
+  Link,
+  MenuItem,
+  MenuSeparator,
+} from '../library';
 import styles from './styles.scss';
 
+
+const UserMenu = (props) => {
+  // TODO: create a separate container for this to load in user data from 'currentUser'
+  return (
+    <Button flat {...props} className={styles.userMenuButton}>
+      <div className={styles.userMenuGreeting}>
+        <span>Hello Corina,</span>
+        <br/>
+        <span className={styles.userRole}>Office Manager</span>
+      </div>
+      <Avatar className={styles.userAvatar} url="https://placeimg.com/80/80/animals" title="Cats" />
+      <Icon icon="caret-down" />
+    </Button>
+  );
+};
 
 class TopBar extends Component {
   constructor(props) {
     super(props);
-    
+
+    this.state = {
+      index: 0
+    };
+
     this.logout = this.logout.bind(this);
   }
 
@@ -49,8 +78,28 @@ class TopBar extends Component {
         <div className={styles.leftOfBar}>
           <IconButton onClick={() => setIsCollapsed(!isCollapsed)} icon="bars" />
         </div>
+        <div className={styles.subTabs}>
+
+        </div>
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
+            <li>
+              <IconButton icon="heart" onClick={() => alert('Implement Sharing')} />
+            </li>
+            <li>
+              <IconButton icon="bell" onClick={() => alert('Implement Notifications')} />
+            </li>
+            <li>
+              <IconButton icon="comments" onClick={() => alert('Implement Messages')} />
+            </li>
+            <li>
+              <DropdownMenu labelComponent={UserMenu}>
+                <Link to="/profile"><MenuItem icon="user">User Profile</MenuItem></Link>
+                <Link to="/settings"><MenuItem icon="cogs">Account Settings</MenuItem></Link>
+                <MenuSeparator />
+                <MenuItem icon="power-off" onClick={this.logout}>Sign Out</MenuItem>
+              </DropdownMenu>
+            </li>
             <li className={styles.logoutPill}>
               <IconButton onClick={this.logout} icon="power-off" />
             </li>

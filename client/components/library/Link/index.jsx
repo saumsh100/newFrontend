@@ -7,8 +7,20 @@ import styles from  './styles.scss';
 export default function Link(props) {
   const {
     className,
+    disabled = false,
   } = props;
   
-  const classes = classNames(className, styles.link);
-  return <RRLink {...props} className={classes} />;
+  let classes = classNames(className, styles.link);
+  let onClick = () => {};
+  if (disabled) {
+    classes = classNames(classes, styles.disabled);
+    onClick = e => e.preventDefault();
+  }
+
+  return <RRLink {...props} className={classes} onClick={onClick} />;
 }
+
+Link.propTypes = {
+  to: PropTypes.string.required,
+  disabled: PropTypes.bool,
+};

@@ -4,10 +4,11 @@ import classNames from 'classnames';
 import styles from './styles.scss';
 
 export default function Button(props) {
-  const classes = classNames(props.className, styles.default);
+  let classes = classNames(props.className, styles.default, props.flat ? styles.flat : styles.notFlat);
   return <button {...props} className={classes} />;
 }
 
 Button.propTypes = {
+  flat: PropTypes.bool,
   className: PropTypes.string,
 };

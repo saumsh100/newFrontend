@@ -19,8 +19,7 @@ function PatientListItem({ patient, onChat, fetchDelete }) {
         </RouterButton>
         <Button
           style={{ marginLeft: 10 }}
-          onClick={() => fetchDelete({ key: 'patients', id: patient.id })}
-        >
+          onClick={() => fetchDelete({ key: 'patients', id: patient.id })}>
           Delete patient
         </Button>
       </td>
