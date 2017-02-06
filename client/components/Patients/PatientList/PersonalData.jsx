@@ -8,6 +8,7 @@ class PersonalData extends Component {
     super(props);
     this.handleClickEdit = this.handleClickEdit.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.state = { formChaned: false };
   }
   handleClickEdit() {
@@ -18,6 +19,17 @@ class PersonalData extends Component {
     };
     this.props.updateEditingPatientState(params);
     console.log('double click handled');
+  }
+
+  handleClick(e) {
+    if (e.target.tagName !== 'INPUT') {  
+      const params = {
+        id: this.props.patient.id,
+        isEditing: false,
+        title: this.props.tabTitle,
+      };
+      this.props.updateEditingPatientState(params); 
+    }
   }
 
   handleClickSave(e) {
@@ -77,7 +89,7 @@ class PersonalData extends Component {
       birthday,
     }
     return (
-      <div className={styles.right__personal}>
+      <div className={styles.right__personal} onClick={this.handleClick}>
         <div className={styles.edit_personal}>
           <Form form={dialogId}
             initialValues={initialValues}

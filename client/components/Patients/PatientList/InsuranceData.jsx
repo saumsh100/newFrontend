@@ -8,6 +8,7 @@ class InsuranceData extends Component {
     super(props);
     this.handleClickEdit = this.handleClickEdit.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.state = {};
   }
 
@@ -46,6 +47,17 @@ class InsuranceData extends Component {
     }
   }
 
+  handleClick(e) {
+    if (e.target.tagName !== 'INPUT') {  
+      const params = {
+        id: this.props.patient.id,
+        isEditing: false,
+        title: this.props.tabTitle,
+      };
+      this.props.updateEditingPatientState(params); 
+    }
+  }
+
   handleClickSave(e) {
     e.preventDefault();
     const {
@@ -76,7 +88,10 @@ class InsuranceData extends Component {
   renderEnsuranceDate(patient) {
     const { insurance = {} } = patient;
     return (
-      <div onDoubleClick={this.handleClickEdit} className={styles.right__personal}>
+      <div 
+        onDoubleClick={this.handleClickEdit}
+        className={styles.right__personal}
+      >
         <div className={styles.insurance}>
           <div className={styles.insurance__header}>
             <div className={`${styles.insurance__company} ${styles.insurance__table}`}>
@@ -121,7 +136,7 @@ class InsuranceData extends Component {
       initialValues = {};
     }
     return (
-      <div className={styles.right__personal}>
+      <div className={styles.right__personal} onClick={this.handleClick}>
         <div className={styles.edit_insurance}>
 
           <Form form={dialogId}
