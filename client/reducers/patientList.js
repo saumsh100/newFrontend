@@ -6,6 +6,7 @@ import {
   SET_PATIENTS_FILTER,
   UPDATE_EDITING_PATIENT_STATE,
   CHANGE_PATIENT_INFO,
+  UPDATE_PATIENT_IN_PATIENT_LIST,
 } from '../constants';
 
 const initialState = fromJS({
@@ -46,13 +47,14 @@ export default handleActions({
 
   [CHANGE_PATIENT_INFO](state, action) {
     const {
-      firstName,
-      lastName,
-      middleName,
-      birthday,
-      language,
-      gender
+      title,
+      id,
     } = action.payload;
+    const editingPatientState = state.toJS().editingPatientState;
+    editingPatientState[id][title]["isEditing"] = false;
+    return state.merge({
+      editingPatientState: editingPatientState,
+    });
 
 
   }

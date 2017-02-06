@@ -6,6 +6,10 @@ import {
 	changePatientInfoAction,
 } from '../actions/patientList';
 
+import {
+	updatePatientInPatientListAction,
+} from '../actions/entities';
+
 export function setCurrentPatient(currentDialogId) {
   return function (dispatch, getState) {
     dispatch(setCurrentPatientAction({ currentDialogId }));
@@ -27,6 +31,7 @@ export function changePatientInfo(patientInfo) {
   	axios.put(url, patientInfo)
   		.then(result => {		
     		dispatch(changePatientInfoAction(patientInfo));
+    		dispatch(updatePatientInPatientListAction(patientInfo));
   		});
   };
 }

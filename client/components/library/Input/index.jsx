@@ -9,6 +9,7 @@ export default function Input(props) {
     value,
     error,
     icon,
+    type,
   } = props;
   
   // TODO: add support for hint attribute
@@ -33,7 +34,7 @@ export default function Input(props) {
   
   return (
     <div className={styles.group}>
-      <input type="text" className={inputClassName} {...props} />
+      <input type={type || "text"} className={inputClassName} {...props} />
       <span className={styles.bar} />
       <label className={labelClassName}>
         {label}

@@ -8,6 +8,7 @@ class PersonalData extends Component {
     super(props);
     this.handleClickEdit = this.handleClickEdit.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.state = { formChaned: false };
   }
   handleClickEdit() {
@@ -20,6 +21,17 @@ class PersonalData extends Component {
     console.log('double click handled');
   }
 
+  handleClick(e) {
+    if (e.target.tagName !== 'INPUT') {  
+      const params = {
+        id: this.props.patient.id,
+        isEditing: false,
+        title: this.props.tabTitle,
+      };
+      this.props.updateEditingPatientState(params); 
+    }
+  }
+
   handleClickSave(e) {
     e.preventDefault();
     const {
@@ -30,7 +42,8 @@ class PersonalData extends Component {
     } = this.props;
     const formData = `${tabTitle}-${patient.id}`;
     const values = form[formData].values;
-    values.id = patient.id
+    values.id = patient.id;
+    values.title = tabTitle;
     changePatientInfo(values);
   }
 
@@ -42,16 +55,21 @@ class PersonalData extends Component {
     if (!patient) return;
     let formChanged = false;
     const formData = `${tabTitle}-${patient.id}`;
+    if (!formData) return
     const initialValues = form[formData] && form[formData].initial;
     if (!initialValues) return;
     const nextValues = nextprops.form[formData] && nextprops.form[formData].values;
     const keys = Object.keys(initialValues);
-    keys.forEach(k => {
-      if (initialValues[k] !== nextValues[k]) {
-        formChanged = true;
-        return
-      }
-    });
+    
+    if (nextValues) {
+      keys.forEach(k => {
+        if (initialValues[k] !== nextValues[k]) {
+          formChanged = true;
+          return
+        }
+      });
+    }
+
     if (formChanged !== this.state.formChanged) {
       this.setState({ formChanged });
     }
@@ -68,36 +86,38 @@ class PersonalData extends Component {
       lastName,
       language,
       gender,
+      birthday,
     }
     return (
-      <div className={styles.right__personal}>
+      <div className={styles.right__personal} onClick={this.handleClick}>
         <div className={styles.edit_personal}>
           <Form form={dialogId}
             initialValues={initialValues}
-            onChange={() => { console.log("Changed!!!!") } }
           >
             <Field
               className={styles.edit_personal__name_first}
               type="text"
               name="firstName"
               placeholder="First name"
-              onChange={() => { console.log("changed!!!") }}
             />
-
             <Field
               className={styles.edit_personal__name_m}
               type="text"
               name="middleName"
               placeholder="M"
             />
-
             <Field
               className={styles.edit_personal__name_last}
               type="text"
               name="lastName"
               placeholder="Last name"
             />
-
+            <Field
+              className={styles.edit_personal__name_last}
+              type="date"
+              name="birthday"
+              placeholder="birthday"
+            />
             <RField name="gender" 
               component="select"
               placeholder="gender"
@@ -113,8 +133,6 @@ class PersonalData extends Component {
               <option value="English">English</option>
               <option value="German">German</option>
             </RField>
-
-
           </Form>
 
           <form>
@@ -177,7 +195,7 @@ class PersonalData extends Component {
 
   renderPersonalInfo(patient) {
     const { birthday, gender, name } = patient;
-    const showBirthday = moment(birthday).subtract(10, 'days').calendar();
+    const showBirthday = moment(birthday).calendar();
     const age = moment().diff(patient.birthday, 'years')
     const birthdayAgeText = `${showBirthday}  ${age}`;
     return (
