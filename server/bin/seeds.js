@@ -42,8 +42,8 @@ const appointmentId2 = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 1, 3, 10, 30, 0, 0),
-      endTime: new Date(2017, 1, 3, 11, 30, 0, 0),
+      startTime: new Date(2017, 1, 6, 10, 30, 0, 0),
+      endTime: new Date(2017, 1, 6, 11, 30, 0, 0),
       title: 'Sooner Availability',
       id: appointmentId1,
       accountId,
@@ -54,8 +54,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 3, 12, 30, 0, 0),
-      endTime: new Date(2017, 1, 3, 13, 30, 0, 0),
+      startTime: new Date(2017, 1, 6, 12, 30, 0, 0),
+      endTime: new Date(2017, 1, 6, 13, 30, 0, 0),
       title: 'Later Availability',
       id: appointmentId2,
       accountId,
@@ -68,8 +68,8 @@ const SEEDS = {
       accountId,
       id: uuid(),
       title: 'Justin\'s appointment',
-      startTime: new Date(2017, 1, 4, 14, 30, 0, 0),
-      endTime: new Date(2017, 1, 4, 15, 30, 0, 0),
+      startTime: new Date(2017, 1, 9, 14, 30, 0, 0),
+      endTime: new Date(2017, 1, 9, 15, 30, 0, 0),
 
       patientId: justinPatientId,
       serviceId: serviceId,
@@ -84,8 +84,8 @@ const SEEDS = {
     {
       id: uuid(),
       title: 'Sergey\'s appointment',
-      startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
-      endTime: new Date(2017, 1, 4, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 9, 16, 0, 0, 0),
+      endTime: new Date(2017, 1, 9, 17, 0, 0, 0),
 
       patientId: sergeyPatientId,
       accountId: accountId,

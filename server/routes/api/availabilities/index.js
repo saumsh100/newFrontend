@@ -58,7 +58,9 @@ availabilitiesRouter.get('/', (req, res, next) => {
               for (let i = moment(a.startTime); moment(a.endTime) - i > 0; i = moment(i).add({
                 minutes: service.duration,
               })) {
-                availabilities.push(i);
+                if (!i.isSame(OFFICE_END_TIME, 'hour')) {
+                  availabilities.push(i);
+                }
               }
             });
 

@@ -40,7 +40,10 @@ class Availability extends React.Component {
     }
     if (!isEqual(this.props.services.get('models').toArray(),
       nextProps.services.get('models').toArray())) {
-      this.setState({ serviceId: nextProps.services.get('models').toArray()[0].id }, () => {
+      this.setState({ serviceId: nextProps.services.get('models').toArray()
+        .filter(s =>
+          includes(s.practitioners, this.state.practitionerId)
+        )[0].id }, () => {
         this.props.fetchEntities({ key: 'availabilities',
           params: {
             practitionerId: this.state.practitionerId,
@@ -88,9 +91,6 @@ class Availability extends React.Component {
   handleStartDay(e, day) {
     this.setState({ selectedStartDay: day }, () => {
       this.setState({ selectedEndDay: moment(this.state.selectedStartDay).add(5, 'd')._d }, () => {
-        console.log(this.state.selectedStartDay, this.state.selectedEndDay);
-        console.log(moment(this.state.selectedEndDay) - moment(this.state.selectedStartDay));
-      // this.props.preventEntityDuplication({ key: 'availabilities' });
         this.props.fetchEntities({ key: 'availabilities',
           params: {
             practitionerId: this.state.practitionerId,
@@ -122,32 +122,38 @@ class Availability extends React.Component {
     const filteredByDoctor = this.props.availabilities.get('models')
       .toArray()
       .filter(a => a.practitionerId === this.state.practitionerId)
-      .filter(a => (moment(a.date) >= moment(this.state.selectedStartDay)) &&
-        (moment(a.date) <= moment(this.state.selectedEndDay)))
       .sort((a, b) => {
         if (moment(a.date) > moment(b.date)) return 1;
         if (moment(a.date) < moment(b.date)) return -1;
         return 0;
       });
 
-    console.log(filteredByDoctor);
     return (
       <div>
         <div className={styles.header}>
-          <select className={styles.selects} onChange={this.onDoctorChange}>
+          <select
+            className={styles.selects}
+            value={this.state.practitionerId}
+            onChange={this.onDoctorChange}
+            ref={(doctor) => { this.doctor = doctor; }}
+          >
             {this.props.practitioners.get('models').toArray().map(p =>
               <option value={p.id} key={p.id}>{p.getFullName()}</option>
             )}
           </select>
-          <select className={styles.selects} onChange={this.onServiceChange}>
+          <select
+            className={styles.selects}
+            onChange={this.onServiceChange}
+            ref={(service) => { this.service = service; }}
+          >
             {this.props.services.get('models').toArray().filter(s =>
               includes(s.practitioners, this.state.practitionerId)
             ).map(s =>
               <option value={s.id} key={s.id}>{s.name}</option>
             )}
           </select>
-          <div><i class="fa fa-calendar"/></div>
-          <div><i class="fa fa-calendar"/></div>
+          { /* <div><i className="fa fa-calendar"/></div> */}
+          { /* <div><i className="fa fa-calendar"/></div> */}
           <DayPicker
             onDayClick={ this.handleStartDay }
             selectedDays={ this.isStartDaySelected }
