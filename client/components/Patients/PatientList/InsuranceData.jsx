@@ -74,6 +74,7 @@ class InsuranceData extends Component {
   }
 
   renderEnsuranceDate(patient) {
+    const { insurance = {} } = patient;
     return (
       <div onDoubleClick={this.handleClickEdit} className={styles.right__personal}>
         <div className={styles.insurance}>
@@ -82,19 +83,19 @@ class InsuranceData extends Component {
               <div className={styles.icon}>
                 <i className="fa fa-medkit" />
               </div>
-              <div className={styles.insurance__value}>SunLife</div>
+              <div className={styles.insurance__value}>{insurance.insurance}</div>
             </div>
             <div className={`${styles.insurance__id} ${styles.insurance__table}`}>
-              <div className={styles.insurance__title}>MEMBER ID</div>
-              <div className={styles.insurance__value}>123-456-78</div>
+              <div className={styles.insurance__title}>Member Id</div>
+              <div className={styles.insurance__value}>{insurance.memberId}</div>
             </div>
             <div className={`${styles.insurance__contact} ${styles.insurance__table}`}>
               <div className={styles.insurance__title}>CONTRACT #</div>
-              <div className={styles.insurance__value}>9101-11213</div>
+              <div className={styles.insurance__value}>{insurance.contract}</div>
             </div>
             <div className={`${styles.insurance__carrier} ${styles.insurance__table}`}>
               <div className={styles.insurance__title}>CARRIER #</div>
-              <div className={styles.insurance__value}>16</div>
+              <div className={styles.insurance__value}>{insurance.carrier}</div>
             </div>
           </div>
           <div className={styles.insurance__footer}>
@@ -103,7 +104,7 @@ class InsuranceData extends Component {
                 <i className="fa fa-id-card-o" />
               </div>
               <div className={styles.insurance__title}>SIN</div>
-              <div className={styles.insurance__value}>123 456 789</div>
+              <div className={styles.insurance__value}>{insurance.sin}</div>
             </div>
           </div>
         </div>
