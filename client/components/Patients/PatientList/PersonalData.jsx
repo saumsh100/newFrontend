@@ -22,13 +22,13 @@ class PersonalData extends Component {
   }
 
   handleClick(e) {
-    if (e.target.tagName !== 'INPUT') {  
+    if (e.target.tagName !== 'INPUT') {
       const params = {
         id: this.props.patient.id,
         isEditing: false,
         title: this.props.tabTitle,
       };
-      this.props.updateEditingPatientState(params); 
+      this.props.updateEditingPatientState(params);
     }
   }
 
@@ -48,7 +48,7 @@ class PersonalData extends Component {
   }
 
   componentWillReceiveProps(nextprops) {
-    // It`s forced way to compare form values 
+    // It`s forced way to compare form values
     // with previous ones in order to know if any field value was changed
     // because redux onChange doesn't trigger for some reason
     const { patient, form, tabTitle } = this.props;
@@ -60,7 +60,7 @@ class PersonalData extends Component {
     if (!initialValues) return;
     const nextValues = nextprops.form[formData] && nextprops.form[formData].values;
     const keys = Object.keys(initialValues);
-    
+
     if (nextValues) {
       keys.forEach(k => {
         if (initialValues[k] !== nextValues[k]) {
@@ -92,58 +92,33 @@ class PersonalData extends Component {
       <div className={styles.right__personal} onClick={this.handleClick}>
         <div className={styles.edit_personal}>
           <Form form={dialogId}
-            initialValues={initialValues}
-          >
-            <Field
-              className={styles.edit_personal__name_first}
-              type="text"
-              name="firstName"
-              placeholder="First name"
-            />
-            <Field
-              className={styles.edit_personal__name_m}
-              type="text"
-              name="middleName"
-              placeholder="M"
-            />
-            <Field
-              className={styles.edit_personal__name_last}
-              type="text"
-              name="lastName"
-              placeholder="Last name"
-            />
-            <Field
-              className={styles.edit_personal__name_last}
-              type="date"
-              name="birthday"
-              placeholder="birthday"
-            />
-            <RField name="gender" 
-              component="select"
-              placeholder="gender"
-            >
-              <option value="male">Male</option>
-              <option value="famale">Famale</option>
-            </RField>
-
-            <RField name="language" 
-              component="select"
-              placeholder="language"
-            >
-              <option value="English">English</option>
-              <option value="German">German</option>
-            </RField>
-          </Form>
-
-          <form>
+            initialValues={initialValues}>
             <div className={`${styles.edit_personal__name} ${styles.edit_personal__table}`}>
               <div className={styles.edit_personal__icon}>
                 <i className="fa fa-user" />
               </div>
               <div className={styles.edit_personal__name_wrapper}>
-                <input className={styles.edit_personal__name_first} type="text" placeholder="First" />
-                <input className={styles.edit_personal__name_m} type="text" placeholder="M" />
-                <input className={styles.edit_personal__name_last} type="text" placeholder="Last" />
+                <Field
+                  className={styles.edit_personal__name_first}
+                  type="text"
+                  name="firstName"
+                  placeholder="First name"
+                  min
+                />
+                <Field
+                  className={styles.edit_personal__name_m}
+                  type="text"
+                  name="middleName"
+                  placeholder="M"
+                  min
+                />
+                <Field
+                  className={styles.edit_personal__name_last}
+                  type="text"
+                  name="lastName"
+                  placeholder="Last name"
+                  min
+                />
               </div>
             </div>
             <div className={`${styles.edit_personal__info} ${styles.edit_personal__table}`}>
@@ -151,24 +126,29 @@ class PersonalData extends Component {
                 <div className={styles.edit_personal__icon}>
                   <i className="fa fa-calendar" />
                 </div>
-                <input className={styles.edit_personal__birthday} type="date" placeholder="Birthday" />
-                <input className={styles.edit_personal__age} type="text" placeholder="Age" />
+                <Field
+                  className={styles.edit_personal__birthday}
+                  type="date"
+                  name="birthday"
+                  placeholder="birthday"
+                  min
+                />
               </div>
               <div className={styles.edit_personal__gender}>
-                <select>
-                  <option>Male</option>
-                  <option>Female</option>
-                </select>
+                <RField name="gender" component="select" placeholder="gender">
+                  <option value="male">Male</option>
+                  <option value="famale">Famale</option>
+                </RField>
               </div>
             </div>
             <div className={`${styles.edit_personal__language} ${styles.edit_personal__table}`}>
               <div className={styles.edit_personal__icon}>
                 <i className="fa fa-comments" />
               </div>
-              <select>
-                <option>Eng</option>
-                <option>Ukr</option>
-              </select>
+              <RField name="language" component="select" placeholder="language">
+                <option value="English">English</option>
+                <option value="German">German</option>
+              </RField>
             </div>
             <div className={`${styles.edit_personal__status} ${styles.edit_personal__table}`}>
               <div className={styles.edit_personal__icon}>
@@ -179,15 +159,13 @@ class PersonalData extends Component {
                 <option>Passive</option>
               </select>
             </div>
-            <input 
+            <input
               onClick={this.handleClickSave}
               className={styles.edit_personal__btn}
               type="submit"
               value="Save"
-              disabled={!this.state.formChanged ? true : false }
-
-            />
-          </form>
+              disabled={!this.state.formChanged ? true : false }/>
+          </Form>
         </div>
       </div>
     );
@@ -247,7 +225,7 @@ class PersonalData extends Component {
       return <div className={styles.loading}>Loading...</div>;
     }
     const isEditing = currentPatientState && currentPatientState[tabTitle].isEditing;
-    return isEditing ? 
+    return isEditing ?
     this.renderEditingForm(patient)
     : this.renderPersonalInfo(patient);
   }
