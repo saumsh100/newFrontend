@@ -22,7 +22,7 @@ class PersonalData extends Component {
   }
 
   handleClick(e) {
-    if (e.target.tagName !== 'INPUT') {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') {
       const params = {
         id: this.props.patient.id,
         isEditing: false,
@@ -224,6 +224,8 @@ class PersonalData extends Component {
     if (!patient) {
       return <div className={styles.loading}>Loading...</div>;
     }
+    console.log("currentPatientState");
+    console.log(currentPatientState);
     const isEditing = currentPatientState && currentPatientState[tabTitle].isEditing;
     return isEditing ?
     this.renderEditingForm(patient)
