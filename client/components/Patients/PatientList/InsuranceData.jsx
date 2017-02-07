@@ -131,6 +131,7 @@ class InsuranceData extends Component {
     const { tabTitle } = this.props;
     const dialogId = `${tabTitle}-${patient.id}`;
     const initialValues = patient.insurance || {};
+    const saveBtnClass = `${styles.edit_personal__btn} ${this.state.formChanged ? styles.edit_personal__btn_enabled : ''}`
 
     return (
       <div className={styles.right__personal} onClick={this.handleClick}>
@@ -194,7 +195,7 @@ class InsuranceData extends Component {
             </div>
             <input
               onClick={this.handleClickSave}
-              className={styles.edit_insurance__btn}
+              className={saveBtnClass}
               type="submit"
               value="Save"
               disabled={!this.state.formChanged ? true : false }
