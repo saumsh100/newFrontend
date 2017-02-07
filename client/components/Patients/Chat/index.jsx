@@ -80,6 +80,7 @@ class Chat extends Component {
             currentDialogId={this.props.currentDialogId}
             fetchPost={this.props.fetchPost}
             sendMessageOnClient={this.props.sendMessageOnClient}
+            readMessagesInCurrentDialog={readMessagesInCurrentDialog}
           />
         }
       </div>

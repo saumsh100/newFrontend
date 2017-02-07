@@ -25,6 +25,7 @@ export default class ChatWindow extends Component {
       patientId: this.props.currentDialogId,
       body: message.value,
       createdAt: new Date(),
+      read: true,
     };
     this.props.fetchPost({
       key: 'textMessages',
@@ -39,7 +40,12 @@ export default class ChatWindow extends Component {
   }
 
 	render() {
-		const { textMessages, sendMessage, patient } = this.props;
+		const { 
+			textMessages,
+			sendMessage,
+			patient,
+			readMessagesInCurrentDialog
+		} = this.props;
 		return (
 		  <div className={styles.chat}>
 		    <div className={styles.chat__header}>
@@ -60,7 +66,11 @@ export default class ChatWindow extends Component {
 		          </div>
 		        </div>
 		        <div className={styles.message_list} ref={ref => (this.messagesList = ref)}>
-		          <Messages messages={textMessages} patientId={patient.id} />
+		          <Messages 
+		          	messages={textMessages}
+		          	patientId={patient.id}
+		          	readMessagesInCurrentDialog={readMessagesInCurrentDialog}
+		          />
 		        </div>
 		        <div className={styles.body_footer}>
 		          <form onSubmit={this.sendMessage}>
