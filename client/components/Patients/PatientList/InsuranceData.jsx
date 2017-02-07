@@ -86,7 +86,7 @@ class InsuranceData extends Component {
   }
 
   renderEnsuranceDate(patient) {
-    const { insurance = {} } = patient;
+    const insurance = patient.insurance || {}
     return (
       <div 
         onDoubleClick={this.handleClickEdit}

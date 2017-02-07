@@ -58,7 +58,7 @@ class PatientList extends Component {
 
     const patientListWithAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
       .toString() !== "Invalid Date"))
-      .sort((a, b) => (moment(a.toJS().lastAppointmentDate) > moment(b.toJS().lastAppointmentDate)));
+      .sort((a, b) => (moment(a.toJS && a.toJS().lastAppointmentDate) > moment(b.toJS && b.toJS().lastAppointmentDate)));
     const patientListWithoutAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
         .toString() === "Invalid Date"));
     const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
