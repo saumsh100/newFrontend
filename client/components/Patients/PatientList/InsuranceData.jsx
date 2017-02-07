@@ -48,7 +48,7 @@ class InsuranceData extends Component {
   }
 
   handleClick(e) {
-    if (e.target.tagName !== 'INPUT') {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') {
       const params = {
         id: this.props.patient.id,
         isEditing: false,
@@ -130,11 +130,8 @@ class InsuranceData extends Component {
   renderEditform(patient) {
     const { tabTitle } = this.props;
     const dialogId = `${tabTitle}-${patient.id}`;
-    const { insurance } = patient;
-    let initialValues = insurance;
-    if (!insurance) {
-      initialValues = {};
-    }
+    const initialValues = patient.insurance || {};
+
     return (
       <div className={styles.right__personal} onClick={this.handleClick}>
         <div className={styles.edit_insurance}>
