@@ -42,10 +42,22 @@ const appointmentId2 = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 1, 6, 10, 30, 0, 0),
-      endTime: new Date(2017, 1, 6, 11, 30, 0, 0),
+      startTime: new Date(2017, 1, 9, 10, 30, 0, 0),
+      endTime: new Date(2017, 1, 9, 11, 30, 0, 0),
       title: 'Sooner Availability',
       id: appointmentId1,
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+    },
+
+    {
+      startTime: new Date(2017, 1, 7, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 7, 17, 0, 0, 0),
+      title: 'Full day',
+      id: uuid(),
       accountId,
       patientId: alexPatientId,
       serviceId: serviceId2,
@@ -54,8 +66,20 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 6, 12, 30, 0, 0),
-      endTime: new Date(2017, 1, 6, 13, 30, 0, 0),
+      startTime: new Date(2017, 1, 8, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 8, 17, 0, 0, 0),
+      title: 'Full day2',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+
+    {
+      startTime: new Date(2017, 1, 9, 12, 30, 0, 0),
+      endTime: new Date(2017, 1, 9, 13, 30, 0, 0),
       title: 'Later Availability',
       id: appointmentId2,
       accountId,

@@ -3,8 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import includes from 'lodash/includes';
-import DayPicker, { DateUtils } from 'react-day-picker';
-import "react-day-picker/lib/style.css";
+import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { fetchEntities } from '../thunks/fetchEntities';
@@ -15,14 +14,13 @@ class Availability extends React.Component {
     super(props);
     this.state = {
       selectedStartDay: new Date(),
-      selectedEndDay: moment().add(5, 'd')._d,
+      selectedEndDay: moment().add(6, 'd')._d,
+      shouldFetchAvailabilities: true,
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
-    this.handleStartDay = this.handleStartDay.bind(this);
-    this.handleEndDay = this.handleEndDay.bind(this);
-    this.isStartDaySelected = this.isStartDaySelected.bind(this);
-    this.isEndDaySelected = this.isEndDaySelected.bind(this);
     this.onServiceChange = this.onServiceChange.bind(this);
+    this.sixDaysBack = this.sixDaysBack.bind(this);
+    this.sixDaysForward = this.sixDaysForward.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +52,62 @@ class Availability extends React.Component {
         });
       });
     }
+    if (!isEqual(this.props.availabilities.get('models').toArray(),
+      nextProps.availabilities.get('models').toArray())) {
+      const availabilities = nextProps.availabilities.get('models').toArray()
+        .sort((a, b) => {
+          if (moment(a.date) > moment(b.date)) return 1;
+          if (moment(a.date) < moment(b.date)) return -1;
+          return 0;
+        });
+      const soonestAvailableDay = availabilities.filter(a => a.availabilities.length > 0)[0];
+      if (!isEmpty(soonestAvailableDay) && this.state.shouldFetchAvailabilities) {
+        this.setState({
+          selectedStartDay: soonestAvailableDay.date,
+          selectedEndDay: moment(soonestAvailableDay.date).add(6, 'd')._d,
+          shouldFetchAvailabilities: false,
+        }, () => {
+          this.props.fetchEntities({ key: 'availabilities',
+            params: {
+              practitionerId: this.state.practitionerId,
+              serviceId: this.state.serviceId,
+              startDate: this.state.selectedStartDay,
+              endDate: this.state.selectedEndDay,
+            },
+          });
+        });
+      }
+      if (isEmpty(soonestAvailableDay)) {
+        this.setState({
+          selectedStartDay: moment(this.state.selectedStartDay).add(6, 'd')._d,
+          selectedEndDay: moment(this.state.selectedEndDay).add(6, 'd')._d,
+        }, () => {
+          this.props.fetchEntities({ key: 'availabilities',
+            params: {
+              practitionerId: this.state.practitionerId,
+              serviceId: this.state.serviceId,
+              startDate: this.state.selectedStartDay,
+              endDate: this.state.selectedEndDay,
+            },
+          });
+        });
+      }
+    /*  this.setState({
+        selectedStartDay: soonestAvailableDay.date,
+        selectedEndDay: moment(soonestAvailableDay.date).add(6, 'd')._d,
+      }, () => {
+        this.props.fetchEntities({ key: 'availabilities',
+          params: {
+            practitionerId: this.state.practitionerId,
+            serviceId: this.state.serviceId,
+            startDate: this.state.selectedStartDay,
+            endDate: this.state.selectedEndDay,
+          },
+        });
+      });
+      */
+
+    }
     console.log('here')
   }
 
@@ -80,33 +134,27 @@ class Availability extends React.Component {
     });
   }
 
-  isStartDaySelected(day) {
-    return DateUtils.isSameDay(day, this.state.selectedStartDay);
-  }
-
-  isEndDaySelected(day) {
-    return DateUtils.isSameDay(day, this.state.selectedEndDay);
-  }
-
-  handleStartDay(e, day) {
-    this.setState({ selectedStartDay: day }, () => {
-      this.setState({ selectedEndDay: moment(this.state.selectedStartDay).add(5, 'd')._d }, () => {
-        this.props.fetchEntities({ key: 'availabilities',
-          params: {
-            practitionerId: this.state.practitionerId,
-            serviceId: this.state.serviceId,
-            startDate: this.state.selectedStartDay,
-            endDate: this.state.selectedEndDay,
-          },
-        });
+  sixDaysBack() {
+    this.setState({
+      selectedStartDay: moment(this.state.selectedStartDay).subtract(6, 'd')._d,
+      selectedEndDay: moment(this.state.selectedEndDay).subtract(6, 'd')._d,
+    }, () => {
+      this.props.fetchEntities({ key: 'availabilities',
+        params: {
+          practitionerId: this.state.practitionerId,
+          serviceId: this.state.serviceId,
+          startDate: this.state.selectedStartDay,
+          endDate: this.state.selectedEndDay,
+        },
       });
     });
   }
 
-  handleEndDay(e, day) {
-    this.setState({ selectedEndDay: day }, () => {
-      console.log(moment(this.state.selectedEndDay) - moment(this.state.selectedStartDay));
-      // this.props.preventEntityDuplication({ key: 'availabilities' });
+  sixDaysForward() {
+    this.setState({
+      selectedStartDay: moment(this.state.selectedStartDay).add(6, 'd')._d,
+      selectedEndDay: moment(this.state.selectedEndDay).add(6, 'd')._d,
+    }, () => {
       this.props.fetchEntities({ key: 'availabilities',
         params: {
           practitionerId: this.state.practitionerId,
@@ -126,11 +174,20 @@ class Availability extends React.Component {
         if (moment(a.date) > moment(b.date)) return 1;
         if (moment(a.date) < moment(b.date)) return -1;
         return 0;
+      })
+      .filter((a, i) => {
+        if (i === 0) {
+          return (moment(a.date).isSame(moment(this.state.selectedStartDay), 'd')
+          && moment(a.date) <= moment(this.state.selectedEndDay))
+        }
+        return (moment(a.date) >= moment(this.state.selectedStartDay)
+        && moment(a.date) <= moment(this.state.selectedEndDay))
       });
 
     return (
       <div>
         <div className={styles.header}>
+          <button onClick={this.sixDaysBack}>Back</button>
           <select
             className={styles.selects}
             value={this.state.practitionerId}
@@ -152,16 +209,7 @@ class Availability extends React.Component {
               <option value={s.id} key={s.id}>{s.name}</option>
             )}
           </select>
-          { /* <div><i className="fa fa-calendar"/></div> */}
-          { /* <div><i className="fa fa-calendar"/></div> */}
-          <DayPicker
-            onDayClick={ this.handleStartDay }
-            selectedDays={ this.isStartDaySelected }
-          />
-          <DayPicker
-            onDayClick={ this.handleEndDay }
-            selectedDays={this.isEndDaySelected}
-          />
+          <button onClick={this.sixDaysForward}>Forward</button>
         </div>
           {filteredByDoctor.map(av => {
             return (<ul className={styles.ulHeader} key={av.date}> {moment(av.date).format('YYYY-MM-DD')}
