@@ -13,7 +13,7 @@ class InsuranceData extends Component {
   }
 
   componentWillReceiveProps(nextprops) {
-    // It`s forced way to compare form values 
+    // It`s forced way to compare form values
     // with previous ones in order to know if any field value was changed
     // because redux onChange doesn't trigger for some reason
     const { patient, form, tabTitle } = this.props;
@@ -28,7 +28,7 @@ class InsuranceData extends Component {
     && nextprops.form[formData].registeredFields.length;
     const filledFieldsLength = nextprops.form[formData]
     && Object.keys(nextprops.form[formData].values).length;
-    
+
     const nextValues = nextprops.form[formData] && nextprops.form[formData].values;
     const keys = Object.keys(initialValues || []);
     if (nextValues) {
@@ -48,13 +48,13 @@ class InsuranceData extends Component {
   }
 
   handleClick(e) {
-    if (e.target.tagName !== 'INPUT') {  
+    if (e.target.tagName !== 'INPUT') {
       const params = {
         id: this.props.patient.id,
         isEditing: false,
         title: this.props.tabTitle,
       };
-      this.props.updateEditingPatientState(params); 
+      this.props.updateEditingPatientState(params);
     }
   }
 
@@ -88,7 +88,7 @@ class InsuranceData extends Component {
   renderEnsuranceDate(patient) {
     const insurance = patient.insurance || {}
     return (
-      <div 
+      <div
         onDoubleClick={this.handleClickEdit}
         className={styles.right__personal}
       >
@@ -138,58 +138,48 @@ class InsuranceData extends Component {
     return (
       <div className={styles.right__personal} onClick={this.handleClick}>
         <div className={styles.edit_insurance}>
-
           <Form form={dialogId}
-            initialValues={initialValues}
-          >
-            <Field
-              className={styles.edit_insurance__input}
-              type="text"
-              name="insurance"
-              placeholder="insurance"
-            />
-            <Field
-              className={styles.edit_insurance__input}
-              type="text"
-              name="memberId"
-              placeholder="memberId"
-            />
-            <Field
-              className={styles.edit_insurance__input}
-              type="text"
-              name="contract"
-              placeholder="contract"
-            />
-            <Field
-              className={styles.edit_insurance__input}
-              name="carrier"
-              placeholder="carrier"
-            />
-            <Field
-              className={styles.edit_insurance__input}
-              name="sin"
-              placeholder="sin"
-            />
-          </Form>
-
-          <form>
+            initialValues={initialValues}>
             <div className={styles.edit_insurance__header}>
               <div className={`${styles.edit_insurance__company} ${styles.edit_insurance__table}`}>
                 <div className={styles.icon}>
                   <i className="fa fa-medkit" />
                 </div>
-                <input className={styles.edit_insurance__input} type="text" placeholder="Insurance" />
+                <Field
+                  className={styles.edit_insurance__input}
+                  type="text"
+                  name="insurance"
+                  placeholder="Insurance #"
+                  min
+                />
               </div>
               <div className={`${styles.edit_insurance__id} ${styles.edit_insurance__table}`}>
-                <input className={styles.edit_insurance__input} type="text" placeholder="Member ID #" />
+                <Field
+                  className={styles.edit_insurance__input}
+                  type="text"
+                  name="memberId"
+                  placeholder="Member ID #"
+                  min
+                />
 
               </div>
               <div className={`${styles.edit_insurance__contact} ${styles.edit_insurance__table}`}>
-                <input className={styles.edit_insurance__input} type="text" placeholder="Contract #" />
+                <Field
+                  className={styles.edit_insurance__input}
+                  type="text"
+                  name="contract"
+                  placeholder="Contract #"
+                  min
+                />
 
               </div>
               <div className={`${styles.edit_insurance__carrier} ${styles.edit_insurance__table}`}>
-                <input className={styles.edit_insurance__input} type="text" placeholder="Carrier #" />
+                <Field
+                  className={styles.edit_insurance__input}
+                  name="carrier"
+                  placeholder="Carrier #"
+                  min
+                />
               </div>
             </div>
             <div className={styles.edit_insurance__footer}>
@@ -197,7 +187,12 @@ class InsuranceData extends Component {
                 <div className={styles.icon}>
                   <i className="fa fa-id-card-o" />
                 </div>
-                <input className={styles.edit_insurance__input} type="text" placeholder="SIN #" />
+                <Field
+                  className={styles.edit_insurance__input}
+                  name="sin"
+                  placeholder="SIN #"
+                  min
+                />
               </div>
             </div>
             <input
@@ -207,7 +202,7 @@ class InsuranceData extends Component {
               value="Save"
               disabled={!this.state.formChanged ? true : false }
             />
-          </form>
+          </Form>
         </div>
       </div>
     )
@@ -221,11 +216,9 @@ class InsuranceData extends Component {
     }
 
     const isEditing = currentPatientState && currentPatientState[tabTitle].isEditing;
-    return isEditing ? 
+    return isEditing ?
     this.renderEditform(patient)
     : this.renderEnsuranceDate(patient);
-
-
   }
 }
 
