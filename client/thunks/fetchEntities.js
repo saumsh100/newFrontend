@@ -90,9 +90,8 @@ export function readMessagesInCurrentDialog(dialogId, readMessageId = null) {
             // make it read: true on the client
             dispatch(readMessagesInCurrentDialogAction({ messageId, dialogId, messageIndex: i }));
           });   
+        return;
       }
-
-
 
     // otherwise
     // we need to get the last 5 messages and check if thay are read: fasle

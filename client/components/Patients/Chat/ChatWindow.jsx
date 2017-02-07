@@ -5,17 +5,22 @@ import Messages from './Messages';
 export default class ChatWindow extends Component {
 	constructor(props) {
 		super(props);
-		this.sendMessage = this.sendMessage.bind(this)
+		this.sendMessage = this.sendMessage.bind(this);
 	}
 
 	componentDidUpdate() {
+    const { allowDialogScroll } = this.props;
     const messagesList = this.messagesList;
-    if (messagesList !== null) {
+    if (messagesList !== null && allowDialogScroll) {
       messagesList.scrollTop = messagesList.scrollHeight;
     }
   }
 
   sendMessage(e) {
+  	const {
+  		setDialogScrollPermission,
+  		sendMessageOnClient
+  	} = this.props;
     e.preventDefault();
     const message = this.messageText;
     if (message === '' || message.length === 0) {
@@ -31,7 +36,8 @@ export default class ChatWindow extends Component {
       key: 'textMessages',
       params,
     });
-    this.props.sendMessageOnClient(params);
+    setDialogScrollPermission({ allowDialogScroll: true });
+    sendMessageOnClient(params);
     // window.socket.emit('sendMessage', {
     //   message: message.value,
     //   patient: this.props.patient,
@@ -44,7 +50,8 @@ export default class ChatWindow extends Component {
 			textMessages,
 			sendMessage,
 			patient,
-			readMessagesInCurrentDialog
+			readMessagesInCurrentDialog,
+			setDialogScrollPermission,
 		} = this.props;
 		return (
 		  <div className={styles.chat}>
@@ -70,6 +77,7 @@ export default class ChatWindow extends Component {
 		          	messages={textMessages}
 		          	patientId={patient.id}
 		          	readMessagesInCurrentDialog={readMessagesInCurrentDialog}
+		          	setDialogScrollPermission={setDialogScrollPermission}
 		          />
 		        </div>
 		        <div className={styles.body_footer}>
