@@ -54,6 +54,18 @@ const SEEDS = {
     },
 
     {
+      startTime: new Date(2017, 1, 9, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 9, 17, 0, 0, 0),
+      title: 'Full day',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+
+    {
       startTime: new Date(2017, 1, 8, 9, 0, 0, 0),
       endTime: new Date(2017, 1, 8, 17, 0, 0, 0),
       title: 'Full day',
@@ -66,8 +78,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 9, 12, 30, 0, 0),
-      endTime: new Date(2017, 1, 9, 13, 30, 0, 0),
+      startTime: new Date(2017, 1, 10, 12, 30, 0, 0),
+      endTime: new Date(2017, 1, 10, 13, 30, 0, 0),
       title: 'Later Availability',
       id: appointmentId2,
       accountId,
@@ -102,7 +114,7 @@ const SEEDS = {
       patientId: sergeyPatientId,
       accountId: accountId,
       serviceId: serviceId,
-      practitionerId: practitionerId,
+      practitionerId: practitionerId2,
       chairId: chairId,
 
       isClinicConfirmed: true,
