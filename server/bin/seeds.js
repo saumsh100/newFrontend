@@ -42,8 +42,8 @@ const appointmentId2 = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 1, 9, 10, 30, 0, 0),
-      endTime: new Date(2017, 1, 9, 11, 30, 0, 0),
+      startTime: new Date(2017, 1, 10, 10, 30, 0, 0),
+      endTime: new Date(2017, 1, 10, 11, 30, 0, 0),
       title: 'Sooner Availability',
       id: appointmentId1,
       accountId,
@@ -54,21 +54,9 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 7, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 7, 17, 0, 0, 0),
-      title: 'Full day',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-
-    {
       startTime: new Date(2017, 1, 8, 9, 0, 0, 0),
       endTime: new Date(2017, 1, 8, 17, 0, 0, 0),
-      title: 'Full day2',
+      title: 'Full day',
       id: uuid(),
       accountId,
       patientId: alexPatientId,

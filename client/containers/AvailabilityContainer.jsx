@@ -61,27 +61,15 @@ class Availability extends React.Component {
           return 0;
         });
       const soonestAvailableDay = availabilities.filter(a => a.availabilities.length > 0)[0];
-      if (!isEmpty(soonestAvailableDay) && this.state.shouldFetchAvailabilities) {
+      if (!(moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'd') &&
+          moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'year') &&
+          moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'month'))) {
         this.setState({
-          selectedStartDay: soonestAvailableDay.date,
+          selectedStartDay: moment(soonestAvailableDay.date)._d,
           selectedEndDay: moment(soonestAvailableDay.date).add(6, 'd')._d,
           shouldFetchAvailabilities: false,
         }, () => {
-          this.props.fetchEntities({ key: 'availabilities',
-            params: {
-              practitionerId: this.state.practitionerId,
-              serviceId: this.state.serviceId,
-              startDate: this.state.selectedStartDay,
-              endDate: this.state.selectedEndDay,
-            },
-          });
-        });
-      }
-      if (isEmpty(soonestAvailableDay)) {
-        this.setState({
-          selectedStartDay: moment(this.state.selectedStartDay).add(6, 'd')._d,
-          selectedEndDay: moment(this.state.selectedEndDay).add(6, 'd')._d,
-        }, () => {
+          console.log('test');
           this.props.fetchEntities({ key: 'availabilities',
             params: {
               practitionerId: this.state.practitionerId,
