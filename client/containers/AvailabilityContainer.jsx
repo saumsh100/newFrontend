@@ -28,17 +28,19 @@ class Availability extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!isEqual(this.props.practitioners.get('models').toArray(),
-      nextProps.practitioners.get('models').toArray())) {
-      this.setState({ practitionerId: nextProps.practitioners.get('models').toArray()[0].id }, () =>{
+    const thisPractitioners = this.props.practitioners.get('models').toArray();
+    const nextPractitioners = nextProps.practitioners.get('models').toArray();
+    if (!isEqual(thisPractitioners, nextPractitioners)) {
+      this.setState({ practitionerId: nextPractitioners[0].id }, () =>{
         this.props.fetchEntities({ key: 'services',
           params: { practitionerId: this.state.practitionerId }
         });
       });
     }
-    if (!isEqual(this.props.services.get('models').toArray(),
-      nextProps.services.get('models').toArray())) {
-      this.setState({ serviceId: nextProps.services.get('models').toArray()
+    const thisServices = this.props.services.get('models').toArray();
+    const nextServices = nextProps.services.get('models').toArray();
+    if (!isEqual(thisServices, nextServices)) {
+      this.setState({ serviceId: nextServices
         .filter(s =>
           includes(s.practitioners, this.state.practitionerId)
         )[0].id }, () => {
@@ -52,9 +54,10 @@ class Availability extends React.Component {
         });
       });
     }
-    if (!isEqual(this.props.availabilities.get('models').toArray(),
-      nextProps.availabilities.get('models').toArray())) {
-      const availabilities = nextProps.availabilities.get('models').toArray()
+    const thisAvailabilities = this.props.availabilities.get('models').toArray();
+    const nextAvailabilities = nextProps.availabilities.get('models').toArray();
+    if (!isEqual(thisAvailabilities, nextAvailabilities)) {
+      const availabilities = nextAvailabilities
         .sort((a, b) => {
           if (moment(a.date) > moment(b.date)) return 1;
           if (moment(a.date) < moment(b.date)) return -1;
@@ -63,13 +66,13 @@ class Availability extends React.Component {
       const soonestAvailableDay = availabilities.filter(a => a.availabilities.length > 0)[0];
       if (!(moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'd') &&
           moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'year') &&
-          moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'month'))) {
+          moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'month')) &&
+          this.state.shouldFetchAvailabilities) {
         this.setState({
           selectedStartDay: moment(soonestAvailableDay.date)._d,
           selectedEndDay: moment(soonestAvailableDay.date).add(6, 'd')._d,
-          shouldFetchAvailabilities: false,
         }, () => {
-          console.log('test');
+          console.log(this.state.selectedStartDay, this.state.selectedEndDay);
           this.props.fetchEntities({ key: 'availabilities',
             params: {
               practitionerId: this.state.practitionerId,
@@ -80,28 +83,15 @@ class Availability extends React.Component {
           });
         });
       }
-    /*  this.setState({
-        selectedStartDay: soonestAvailableDay.date,
-        selectedEndDay: moment(soonestAvailableDay.date).add(6, 'd')._d,
-      }, () => {
-        this.props.fetchEntities({ key: 'availabilities',
-          params: {
-            practitionerId: this.state.practitionerId,
-            serviceId: this.state.serviceId,
-            startDate: this.state.selectedStartDay,
-            endDate: this.state.selectedEndDay,
-          },
-        });
-      });
-      */
-
     }
-    console.log('here')
   }
 
   onDoctorChange(e) {
     // this.props.fetchEntities({ key: 'services' });
-    this.setState({ practitionerId: e.target.value }, () => {
+    this.setState({ 
+      practitionerId: e.target.value,
+      shouldFetchAvailabilities: true,
+      }, () => {
       this.props.fetchEntities({ key: 'services',
         params: { practitionerId: this.state.practitionerId }
       });
@@ -126,6 +116,7 @@ class Availability extends React.Component {
     this.setState({
       selectedStartDay: moment(this.state.selectedStartDay).subtract(6, 'd')._d,
       selectedEndDay: moment(this.state.selectedEndDay).subtract(6, 'd')._d,
+      shouldFetchAvailabilities: false,
     }, () => {
       this.props.fetchEntities({ key: 'availabilities',
         params: {
@@ -142,7 +133,9 @@ class Availability extends React.Component {
     this.setState({
       selectedStartDay: moment(this.state.selectedStartDay).add(6, 'd')._d,
       selectedEndDay: moment(this.state.selectedEndDay).add(6, 'd')._d,
+      shouldFetchAvailabilities: false,
     }, () => {
+      console.log(this.state.selectedStartDay, this.state.selectedEndDay)
       this.props.fetchEntities({ key: 'availabilities',
         params: {
           practitionerId: this.state.practitionerId,
@@ -171,6 +164,8 @@ class Availability extends React.Component {
         return (moment(a.date) >= moment(this.state.selectedStartDay)
         && moment(a.date) <= moment(this.state.selectedEndDay))
       });
+
+      console.log(filteredByDoctor);
 
     return (
       <div>
