@@ -5,7 +5,6 @@ import moment from 'moment';
 
 
 class RequestListItem extends Component {
-
   constructor(props) {
     super(props);
 
@@ -13,12 +12,12 @@ class RequestListItem extends Component {
   }
 
 
-  handleChange(){
+  handleChange() {
     console.log("Working Button");
   }
 
   render() {
-    const { request } = this.props;
+    const { request, patient } = this.props;
 
     const startDate = moment(request.startTime).format("MMM Do YYYY");
 
@@ -27,6 +26,7 @@ class RequestListItem extends Component {
         <List>
           <div>{startDate}</div>
           <div>{request.title}</div>
+          <div>{patient.firstName}</div>
         </List>
       </Card>
     );

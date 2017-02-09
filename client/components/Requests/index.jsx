@@ -3,18 +3,17 @@ import React, { Component, PropTypes } from 'react';
 import RequestList from './RequestList';
 
 class Requests extends Component {
-
   constructor(props) {
     super(props);
   }
 
   render() {
 
-    const { requests } = this.props;
+    const { requests, patients } = this.props;
 
     return (
       <div>
-        <RequestList requests={requests} />
+        <RequestList requests={requests} patients={patients} />
       </div>
     );
   }
@@ -23,4 +22,3 @@ class Requests extends Component {
 Request.propTypes = {};
 
 export default Requests;
-

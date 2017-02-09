@@ -4,12 +4,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../thunks/fetchEntities';
 
-
 class RequestContainer extends React.Component{
-
   constructor(props) {
     super(props);
   }
+
   componentWillMount() {
     this.props.fetchEntities({ key: 'requests' });
   }
@@ -17,7 +16,10 @@ class RequestContainer extends React.Component{
   render() {
     return (
       <div>
-        <Requests requests={this.props.requests} />
+        <Requests
+          requests={this.props.requests}
+          patients={this.props.patients}
+        />
       </div>
     );
   }
@@ -28,7 +30,16 @@ RequestContainer.propTypes = {
 };
 
 function mapStateToProps({ entities }) {
-  return { requests: entities.get('requests') };
+  const requests = entities.get('requests');
+  const patientIds = requests.map(request => request.get('patientId'));
+  const patients = entities.get('patients').filter((patient) => {
+    return patientIds.indexOf(patient.get('id')) > -1;
+  });
+
+  return {
+    requests,
+    patients,
+  };
 }
 
 function mapDispatchToProps(dispatch) {

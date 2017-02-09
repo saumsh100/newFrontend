@@ -1,19 +1,18 @@
 
-const { normalize, Schema, arrayOf } = require('normalizr');
 const appointmentsRouter = require('express').Router();
+const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 
-const appointmentSchema = new Schema('appointments');
-
 appointmentsRouter.get('/', (req, res, next) => {
-  Appointment.filter({
+  return Appointment.filter({
+
   }).getJoin({
     patient: true,
-    practitioner: {services: false},
-    service: {practitioners: false},
+    practitioner: { services: false },
+    service: { practitioners: false },
     chair: true,
   }).run()
-    .then(appointments => res.send(normalize(appointments, arrayOf(appointmentSchema))))
+    .then(appointments => res.send(normalize('appointments', appointments)))
     .catch(next);
 });
 
