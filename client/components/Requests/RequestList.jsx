@@ -21,7 +21,7 @@ class RequestList extends Component {
             <RequestListItem
               key={request.id}
               request={request}
-              patient={this.props.patients.get(request.get('patientId'))}
+             // patient={this.props.patients.get(request.get('patientId'))}
             />
           );
         })}

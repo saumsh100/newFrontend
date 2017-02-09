@@ -31,10 +31,10 @@ RequestContainer.propTypes = {
 
 function mapStateToProps({ entities }) {
   const requests = entities.get('requests');
-  const patientIds = requests.map(request => request.get('patientId'));
-  const patients = entities.get('patients').filter((patient) => {
+  /*const patients = entities.get('patients').filter((patient) => {
     return patientIds.indexOf(patient.get('id')) > -1;
   });
+  */
 
   return {
     requests,
