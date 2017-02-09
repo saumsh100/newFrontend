@@ -25,6 +25,7 @@ class PersonalForm extends Component {
       const lastName = name.split(" ")[1];
       const currentPatientfields = {firstName, lastName, language, gender, birthday, status}
       const currentPatientKeys = Object.keys(currentPatientfields);
+
       currentPatientKeys.forEach(p => {
         if (currentPatientfields[p] !== currentPatientFormFields[p]) {
           formChanged = true;
@@ -56,7 +57,8 @@ class PersonalForm extends Component {
   render() {
     const {patient} = this.props;
     const dialogId = `personal`;
-    const { name, birthday, language, gender, status } = patient;
+
+    const { name, birthday, language, gender, middleName, status } = patient;
     const fullName = patient.name.split(" ");
     const firstName = fullName[0];
     const lastName = fullName[1];
@@ -67,7 +69,9 @@ class PersonalForm extends Component {
       gender,
       birthday,
       status,
+      middleName,
     };
+
     const saveBtnClass = `${styles.edit_personal__btn} ${this.state.formChanged ? styles.edit_personal__btn_enabled : ''}`
     return (
       <div className={styles.right__personal}>
