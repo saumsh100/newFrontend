@@ -27,7 +27,7 @@ export default function Routes({ history }) {
             });
           }}
         />
-        {/*<IndexRoute
+        <IndexRoute
           getComponent={(location, callback) => {
             require.ensure(['./components/Dashboard'], (require) => {
               callback(null, require('./components/Dashboard').default);
@@ -41,7 +41,7 @@ export default function Routes({ history }) {
               callback(null, require('./containers/IntelligenceContainer').default);
             });
           }}
-        />*/}
+        />
         <Route
           path="schedule"
           getComponent={(location, callback) => {
@@ -174,6 +174,7 @@ export default function Routes({ history }) {
             });
           }}
         />
+
         <Route path="*" component={FourZeroFour} />
       </Route>
     </Router>

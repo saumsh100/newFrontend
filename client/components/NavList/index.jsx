@@ -94,7 +94,7 @@ export default function NavList({ location }) {
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <SingleNavItem path="/" icon="tachometer" label="Dashboard" disabled />
+        <SingleNavItem path="/" icon="tachometer" label="Dashboard"  />
         <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" disabled />
         <MultiNavItem path="/schedule" icon="calendar" label="Schedule">
           <SubNavItem path="/schedule/calendar" label="Calendar View" />

@@ -7,6 +7,7 @@ const twilioConfig = require('../config/globals').twilio;
 const Appointment = require('../models/Appointment');
 const Patient = require('../models/Patient');
 const TextMessage = require('../models/TextMessage');
+const Request = require('../models/Request');
 
 const server = http.createServer(app);
 
@@ -21,27 +22,27 @@ io.on('connection', (socket) => {
         socket.emit('receiveAppointments', appointments);
       });
   });
-  
+
   socket.on('fetchPatients', () => {
     Patient.run()
       .then((patients) => {
         socket.emit('receivePatients', patients);
       });
   });
-  
+
   socket.on('fetchPatient', ({ id }) => {
     Patient.get(id)
       .then((patient) => {
         socket.emit('receivePatient', patient);
       });
   });
-  
+
   socket.on('addAppointment', (data) => {
     new Appointment(data).save().then((appointment) => {
       io.sockets.emit('appointmentAdded', appointment);
     });
   });
-  
+
   socket.on('removeAppointment', (data) => {
     Appointment.get(data.id).then((appointment) => {
       appointment.delete()
@@ -50,11 +51,11 @@ io.on('connection', (socket) => {
         });
     });
   });
-  
+
   socket.on('syncClientTrigger', (data) => {
     console.log('sync client triggers!', 'data:', data);
   });
-  
+
   socket.on('sendMessage', (data) => {
     const { patient, message } = data;
     twilioClient.sendMessage({
@@ -78,7 +79,7 @@ io.on('connection', (socket) => {
       console.log(err);
     });
   });
-  
+
   /**
    * Listen to changes on texts and publish events for new
    */
@@ -87,7 +88,7 @@ io.on('connection', (socket) => {
       if (error) {
         throw new Error('Feed error');
       }
-  
+
       if (doc.isSaved() === false) {
         throw new Error('Deleting TextMessages is not implemented!');
       } else if (doc.getOldValue() == null) {

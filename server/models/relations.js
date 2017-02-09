@@ -4,6 +4,7 @@ const Chair = require('./Chair');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
+const Request = require('./Request');
 const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
@@ -23,6 +24,14 @@ Appointment.belongsTo(Account, 'account', 'accountId', 'id')
 Appointment.belongsTo(Service, 'service', 'serviceId', 'id')
 Appointment.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id')
 Appointment.belongsTo(Chair, 'chair', 'chairId', 'id')
+
+Request.belongsTo(Patient, 'patient', 'patientId', 'id')
+Request.belongsTo(Account, 'account', 'accountId', 'id')
+Request.belongsTo(Service, 'service', 'serviceId', 'id')
+Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id')
+Request.belongsTo(Chair, 'chair', 'chairId', 'id')
+
+
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId')
 Service.belongsTo(Account, 'account', 'accountId', 'id')
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id')

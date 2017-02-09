@@ -176,6 +176,43 @@ const SEEDS = {
     },
   ],
 
+Request: [
+    {
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 23, minute: 10})._d,
+      endTime: moment({hour: 23, minute: 50})._d,
+
+      patientId: sergeyPatientId,
+      accountId: accountId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      accountId,
+      id: uuid(),
+      title: 'Justin\'s appointment',
+      startTime: new Date(2016, 2, 29, 14, 30, 0, 0),
+      endTime: new Date(2016, 2, 29, 16, 30, 0, 0),
+
+      patientId: justinPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    }
+  ],
+
   User: [
     {
       username: 'lonny@carecru.com',
