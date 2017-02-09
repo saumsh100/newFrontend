@@ -6,6 +6,7 @@ const PatientSchema = {
   firstName: null,
   lastName: null,
   phoneNumber: null,
+  status: null,
   image: null,
   gender: null,
   language: null,

@@ -4,7 +4,6 @@ import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
 import Field from './Field';
 
-
 /**
  * Given the requiredFields it will generate a validate function to return errors if
  * a field is empty. Note that this is note fired if the form is pristine.
@@ -20,7 +19,7 @@ import Field from './Field';
         errors[name] = 'Required';
       }
     });
-  
+
     return errors;
   };
 };*/
@@ -30,7 +29,7 @@ function Form(props) {
     children,
     handleSubmit,
   } = props;
-  
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -67,10 +66,10 @@ const withReduxForm = (BaseComponent) => {
       !required ||
       requiredFields.indexOf(name) > -1
     ) return;
-    
+
     requiredFields.push(name);
   });
-  
+
   return {
     validate: requiredValidationGenerator(requiredFields),
   };

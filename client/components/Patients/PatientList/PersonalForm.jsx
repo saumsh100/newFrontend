@@ -1,39 +1,38 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from './main.scss';
-import { Button, Form, Field } from '../../library';
-import { Field as RField } from 'redux-form';
-import { destroy } from 'redux-form';
+import { Form, Field } from '../../library';
+import {destroy} from 'redux-form';
 class PersonalForm extends Component {
   constructor(props) {
     super(props);
     this.handleClickSave = this.handleClickSave.bind(this);
-    this.state = { formChanged: false };
+    this.state = {formChanged: false};
   }
 
   componentWillReceiveProps(nextprops) {
     if (nextprops.patient.id !== this.props.patient.id) {
-      const { patient } = this.props;
+      const {patient} = this.props;
       const dialogId = `personal`;
       store.dispatch(destroy(dialogId));
     } else {
-      const { patient, form, tabTitle } = this.props;
+      const {patient, form, tabTitle} = this.props;
       if (!patient) return;
       let formChanged = false;
       const currentPatientFormFields = nextprops.form.personal.values;
-      const { language, gender, birthday, name  } = nextprops.patient;
+      const {language, gender, birthday, status, name} = nextprops.patient;
       const firstName = name.split(" ")[0];
       const lastName = name.split(" ")[1];
-      const currentPatientfields = { firstName, lastName, language, gender, birthday } 
+      const currentPatientfields = {firstName, lastName, language, gender, birthday, status}
       const currentPatientKeys = Object.keys(currentPatientfields);
       currentPatientKeys.forEach(p => {
         if (currentPatientfields[p] !== currentPatientFormFields[p]) {
           formChanged = true;
           return;
         }
-      })
+      });
       if (formChanged !== this.state.formChanged) {
-        this.setState({ formChanged });
+        this.setState({formChanged});
       }
     }
   }
@@ -55,9 +54,9 @@ class PersonalForm extends Component {
   }
 
   render() {
-    const { patient } = this.props;
+    const {patient} = this.props;
     const dialogId = `personal`;
-    const { name, birthday, language, gender } = patient;
+    const { name, birthday, language, gender, status } = patient;
     const fullName = patient.name.split(" ");
     const firstName = fullName[0];
     const lastName = fullName[1];
@@ -67,16 +66,17 @@ class PersonalForm extends Component {
       language,
       gender,
       birthday,
-    }
+      status,
+    };
     const saveBtnClass = `${styles.edit_personal__btn} ${this.state.formChanged ? styles.edit_personal__btn_enabled : ''}`
     return (
       <div className={styles.right__personal}>
         <div className={styles.edit_personal}>
           <Form form={dialogId}
-            initialValues={initialValues}>
+                initialValues={initialValues}>
             <div className={`${styles.edit_personal__name} ${styles.edit_personal__table}`}>
               <div className={styles.edit_personal__icon}>
-                <i className="fa fa-user" />
+                <i className="fa fa-user"/>
               </div>
               <div className={styles.edit_personal__name_wrapper}>
                 <Field
@@ -105,7 +105,7 @@ class PersonalForm extends Component {
             <div className={`${styles.edit_personal__info} ${styles.edit_personal__table}`}>
               <div className={styles.edit_personal__info_header}>
                 <div className={styles.edit_personal__icon}>
-                  <i className="fa fa-calendar" />
+                  <i className="fa fa-calendar"/>
                 </div>
                 <Field
                   className={styles.edit_personal__birthday}
@@ -116,36 +116,36 @@ class PersonalForm extends Component {
                 />
               </div>
               <div className={styles.edit_personal__gender}>
-                <RField name="gender" component="select" placeholder="gender">
+                <Field name="gender" placeholder="gender" component="Select" min>
                   <option value="male">Male</option>
                   <option value="famale">Famale</option>
-                </RField>
+                </Field>
               </div>
             </div>
             <div className={`${styles.edit_personal__language} ${styles.edit_personal__table}`}>
               <div className={styles.edit_personal__icon}>
-                <i className="fa fa-comments" />
+                <i className="fa fa-comments"/>
               </div>
-              <RField name="language" component="select" placeholder="language">
+              <Field name="language" placeholder="language" component="Select" min>
                 <option value="English">English</option>
                 <option value="German">German</option>
-              </RField>
+              </Field>
             </div>
             <div className={`${styles.edit_personal__status} ${styles.edit_personal__table}`}>
               <div className={styles.edit_personal__icon}>
                 <i className="fa fa-flag" />
               </div>
-              <select>
-                <option>Active</option>
-                <option>Passive</option>
-              </select>
+              <Field name="status" placeholder="status" component="Select" min>
+                <option value="Active">Active</option>
+                <option value="Passive">Passive</option>
+              </Field>
             </div>
             <input
               onClick={this.handleClickSave}
               className={saveBtnClass}
               type="submit"
               value="Save"
-              disabled={!this.state.formChanged ? true : false }/>
+              disabled={ !this.state.formChanged ? true : false }/>
           </Form>
         </div>
       </div>

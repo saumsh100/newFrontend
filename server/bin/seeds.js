@@ -230,6 +230,7 @@ const SEEDS = {
       birthday: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
+      status: 'Active',
       insurance: {
         insurance: 'insurance',
         memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -246,6 +247,7 @@ const SEEDS = {
       accountId,
       birthday: moment({year: 1983, month: 2, day: 6})._d,
       gender: 'male',
+      status: 'Active',
       language: 'English',
     },
     {
@@ -256,6 +258,7 @@ const SEEDS = {
       accountId: accountId2,
       birthday: moment({year: 1996, month: 4, day: 25})._d,
       gender: 'male',
+      status: 'Active',
       language: 'English',
     },
     {
@@ -266,6 +269,7 @@ const SEEDS = {
       accountId,
       birthday: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
+      status: 'Active',
       language: 'English',
     },
   ],

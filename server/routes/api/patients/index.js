@@ -61,6 +61,7 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
           tempPatient.gender = p.gender;
           tempPatient.patientId = p.id;
           tempPatient.language = p.language;
+          tempPatient.status = p.status;
           tempPatient.photo = `https://randomuser.me/api/portraits/men/${Math.floor((Math.random() * 80) + 1)}.jpg`;
           tempPatient.id = p.id;
 
@@ -113,7 +114,7 @@ patientsRouter.put('/:patientId', (req, res, next) => {
       data.email = req.body.email;
       data.gender = req.body.gender;
       data.language = req.body.language;
-      data.birthday = req.body.birthday;      
+      data.birthday = req.body.birthday;
     break;
 
     case "insurance":
