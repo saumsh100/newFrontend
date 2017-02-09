@@ -30,9 +30,9 @@ RequestContainer.propTypes = {
 };
 
 function mapStateToProps({ entities }) {
-  const requests = entities.get('requests');
-  const patientIds = requests.map(request => request.get('patientId'));
-  const patients = entities.get('patients').filter((patient) => {
+  const requests = entities.getIn(['requests', 'models']);
+  const patientIds = requests.toArray().map(request => request.get('patientId'));
+  const patients = entities.getIn(['patients', 'models']).filter((patient) => {
     return patientIds.indexOf(patient.get('id')) > -1;
   });
 

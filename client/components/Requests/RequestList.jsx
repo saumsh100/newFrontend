@@ -8,7 +8,7 @@ class RequestList extends Component {
   }
 
   render() {
-    const requests = this.props.requests.get('models').toArray();
+    const requests = this.props.requests.toArray();
     requests.sort((a,b) => {
       return Date.parse(b.startTime) - Date.parse(a.startTime);
     });

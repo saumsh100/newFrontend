@@ -26,6 +26,8 @@ import Dialogs from '../entities/models/Dialogs'
 import dialogs from '../entities/collections/dialogs';
 import PatientList from '../entities/models/PatientList'
 import patientList from '../entities/collections/patientList';
+import Service from '../entities/models/Service'
+import services from '../entities/collections/services';
 
 
 const initialState = Map({
@@ -35,6 +37,7 @@ const initialState = Map({
   textMessages: new textMessages(),
   appointments: new appointments(),
   requests: new requests(),
+  service: new services(),
   practitioners: new practitioners(),
   dialogs: new dialogs(),
   patientList: new patientList(),
@@ -49,6 +52,7 @@ const Models = {
   textMessages: TextMessage,
   appointments: Appointments,
   requests: Requests,
+  services: Service,
   practitioners: Practitioners,
   dialogs: Dialogs,
   patientList: PatientList,
