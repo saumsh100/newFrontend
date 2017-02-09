@@ -20,14 +20,13 @@ class RequestListItem extends Component {
   render() {
     const { request } = this.props;
 
-    const startDate = moment().format(request.startTime);
-
+    const startDate = moment(request.startTime).format("MMM Do YYYY");
 
     return (
       <Card>
         <List>
-          <span>{startDate}</span>
-          <span>{request.title}</span>
+          <div>{startDate}</div>
+          <div>{request.title}</div>
         </List>
       </Card>
     );

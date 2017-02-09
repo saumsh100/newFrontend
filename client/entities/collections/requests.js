@@ -1,5 +1,5 @@
 import createCollection from '../createCollection';
-import Requests from '../models/Requests';
+import Requests from '../models/Request';
 
 export default class requests extends createCollection(Requests) {
 

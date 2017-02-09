@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import RequestListItem from './RequestListItem';
-
+const { normalize, Schema, arrayOf} = require('normalizr');
 
 class RequestList extends Component {
 
@@ -14,12 +14,12 @@ class RequestList extends Component {
     const requests = this.props.requests.get('models').toArray();
 
     requests.sort((a,b) =>{
-        return Date.parse(a.startTime) - Date.parse(b.startTime);
+        return Date.parse(b.startTime) - Date.parse(a.startTime);
     });
 
     return (
       <div>
-        <h1> There are {requests.length} requests</h1>
+        <h1> {requests.length} New Appointment Requests</h1>
         {requests.map((request) =>{
           return (
                 <RequestListItem

@@ -20,7 +20,7 @@ import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
 import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
-import Requests from '../entities/models/Requests';
+import Requests from '../entities/models/Request';
 import requests from '../entities/collections/requests';
 import Dialogs from '../entities/models/Dialogs'
 import dialogs from '../entities/collections/dialogs';
