@@ -1,4 +1,8 @@
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import _ from 'lodash'
+
+const moment = extendMoment(Moment);
 const availabilitiesRouter = require('express').Router();
 const Appointment = require('../../../models/Appointment');
 const Service = require('../../../models/Service');
@@ -12,83 +16,43 @@ availabilitiesRouter.get('/', (req, res, next) => {
     Appointment
       .filter({ practitionerId }).getJoin({ service: false }).orderBy('startTime').run()
       .then((appointments) => {
-        const results = {};
-        const diff = moment(endDate).diff(moment(startDate), 'days') + 1;
-        console.log(diff);
-        for (let j = 0; j < diff; j += 1) {
-          const startDateDay = moment(startDate).add({ days: j });
-          const theStartTime = moment(startDate).add({ days: j }).format();
-          // next two lines should be taken from Practitioner working time
-          // not just hard hardcoded
-          const OFFICE_START_TIME = startDateDay.set({ hours: 9, minutes: 0 }).toDate();
-          const OFFICE_END_TIME = startDateDay.set({ hours: 17, minutes: 0 }).toDate();
-          const filteredByDayApps = appointments.filter(a =>
-            moment(a.startTime).isSame(startDateDay, 'd') &&
-            moment(a.startTime).isSame(startDateDay, 'year') &&
-            moment(a.startTime).isSame(startDateDay, 'month')
-          );
+        const requiredRange = moment.range(
+          moment(startDate).startOf('day'),
+          moment(endDate).endOf('day')
+        );
 
-          if (filteredByDayApps.length) {
-            const breaks = [];
-            let startTime = OFFICE_START_TIME;
-            // let lastAppointmentEndTime = null;
-            breaks.push({
-              startTime: OFFICE_START_TIME,
-              endTime: moment(filteredByDayApps[0].startTime),
-            });
-            for (let i = 0; i < filteredByDayApps.length - 1; i += 1) {
-              startTime = moment(filteredByDayApps[i].endTime);
-              breaks.push({
-                startTime,
-                endTime: moment(filteredByDayApps[i + 1].startTime),
+        const results = _.fromPairs(
+          Array.from(requiredRange.by('day'))
+            .map(currentDay => {
+              // next two lines should be taken from Practitioner working time
+              // not just hard hardcoded
+              const OFFICE_START_TIME = currentDay.set({ hours: 9, minutes: 0 }).toDate();
+              const OFFICE_END_TIME = currentDay.set({ hours: 17, minutes: 0 }).toDate();
+
+              const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
+
+              const appointmentRanges = appointments
+                .filter(a => moment(a.startTime).startOf('day').isSame(currentDay))
+                .map(appointment => moment.range(appointment.startTime, appointment.endTime));
+
+              const hasAppointment = slotRange => _.some(appointmentRanges, appointmentRange => {
+                return appointmentRange.intersect(slotRange);
               });
-            }
 
-            breaks.push({
-              startTime: filteredByDayApps[filteredByDayApps.length - 1].endTime,
-              endTime: OFFICE_END_TIME,
-            });
+              const availabilities = Array.from(dayRange.by('minutes', { step: 30 }))
+                .map(slot => ({
+                  startsAt: slot.toDate(),
+                  isBusy: hasAppointment(moment.range(slot, slot.add(30, 'minutes'))),
+                }));
 
-            const availableTimeRanges = breaks.filter(b =>
-              moment(b.endTime).diff(moment(b.startTime), 'minutes') >= service.duration
-            );
+              return [
+                currentDay.format(),
+                { date: currentDay.format(), availabilities, practitionerId }
+              ];
+            })
+        );
 
-            const availabilities = [];
-            availableTimeRanges.forEach((a) => {
-              for (let i = moment(a.startTime); moment(a.endTime) - i > 0; i = moment(i).add({
-                minutes: service.duration,
-              })) {
-                if (!i.isSame(OFFICE_END_TIME, 'hour')) {
-                  availabilities.push(i);
-                }
-              }
-            });
-
-
-            results[theStartTime] = {
-              date: theStartTime,
-              availabilities,
-              practitionerId,
-            };
-          } else {
-            const availabilities = [];
-            for (let i = moment(OFFICE_START_TIME); moment(OFFICE_END_TIME) - i > 0; i = moment(i).add({
-              minutes: service.duration,
-            })) {
-              availabilities.push(i);
-            }
-            results[theStartTime] = {
-              date: theStartTime,
-              availabilities,
-              practitionerId,
-            };
-          }
-        }
-        const resultStructure = {
-          entities: { availabilities: results },
-        };
-        console.log(resultStructure);
-        res.send(resultStructure);
+        res.send({ entities: { availabilities: results } });
       })
       .catch(next);
   }).catch(next);

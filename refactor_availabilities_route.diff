@@ -1,0 +1,175 @@
+diff --git a/client/containers/AvailabilityContainer.jsx b/client/containers/AvailabilityContainer.jsx
+index 063433c..bd8b511 100644
+--- a/client/containers/AvailabilityContainer.jsx
++++ b/client/containers/AvailabilityContainer.jsx
+@@ -219,11 +219,11 @@ class Availability extends React.Component {
+         </div>
+           {filteredByDoctor.map(av => {
+             return (<ul className={styles.ulHeader} key={av.date}> {moment(av.date).format('YYYY-MM-DD')}
+-              {av.availabilities.map(item =>
++              {av.availabilities.map(slot =>
+                 <li className={styles.listItem}
+-                  key={item}
++                  key={slot.startsAt}
+                 >
+-                  {moment(item).format('HH:mm')}
++                  {moment(slot.startsAt).format('HH:mm')}
+                 </li>)
+               }
+             </ul>);
+diff --git a/package.json b/package.json
+index 9768fd1..ffd1d7f 100644
+--- a/package.json
++++ b/package.json
+@@ -91,6 +91,8 @@
+     "md5": "^2.2.0",
+     "method-override": "^2.3.5",
+     "mime": "~1.2.11",
++    "moment": "2.17.1",
++    "moment-range": "^3.0.1",
+     "multer": "^1.1.0",
+     "node-cron": "^1.1.2",
+     "node-sass": "^3.7.0",
+@@ -151,8 +153,7 @@
+     "url-loader": "^0.5.7",
+     "uuid": "^2.0.3",
+     "webpack": "^1.12.15",
+-    "zxcvbn": "^4.4.1",
+-    "moment": "2.17.1"
++    "zxcvbn": "^4.4.1"
+   },
+   "devDependencies": {
+     "babel-eslint": "^6.1.0",
+diff --git a/server/routes/api/availabilities/index.js b/server/routes/api/availabilities/index.js
+index 81694ea..41fa7c2 100644
+--- a/server/routes/api/availabilities/index.js
++++ b/server/routes/api/availabilities/index.js
+@@ -1,4 +1,8 @@
+-import moment from 'moment';
++import Moment from 'moment';
++import { extendMoment } from 'moment-range';
++import _ from 'lodash'
++
++const moment = extendMoment(Moment);
+ const availabilitiesRouter = require('express').Router();
+ const Appointment = require('../../../models/Appointment');
+ const Service = require('../../../models/Service');
+@@ -12,85 +16,43 @@ availabilitiesRouter.get('/', (req, res, next) => {
+     Appointment
+       .filter({ practitionerId }).getJoin({ service: false }).orderBy('startTime').run()
+       .then((appointments) => {
+-        const results = {};
+-        const diff = moment(endDate).diff(moment(startDate), 'days') + 1;
+-        console.log(diff);
+-        for (let j = 0; j < diff; j += 1) {
+-          const startDateDay = moment(startDate).add({ days: j });
+-          const theStartTime = moment(startDate).add({ days: j }).format();
+-          // next two lines should be taken from Practitioner working time
+-          // not just hard hardcoded
+-          const OFFICE_START_TIME = startDateDay.set({ hours: 9, minutes: 0 }).toDate();
+-          const OFFICE_END_TIME = startDateDay.set({ hours: 17, minutes: 0 }).toDate();
+-          const filteredByDayApps = appointments.filter(a =>
+-            moment(a.startTime).isSame(startDateDay, 'd') &&
+-            moment(a.startTime).isSame(startDateDay, 'year') &&
+-            moment(a.startTime).isSame(startDateDay, 'month')
+-          );
+-
+-          if (filteredByDayApps.length) {
+-            const breaks = [];
+-            let startTime = OFFICE_START_TIME;
+-            // let lastAppointmentEndTime = null;
+-            breaks.push({
+-              startTime: OFFICE_START_TIME,
+-              endTime: moment(filteredByDayApps[0].startTime),
+-            });
+-            for (let i = 0; i < filteredByDayApps.length - 1; i += 1) {
+-              startTime = moment(filteredByDayApps[i].endTime);
+-              breaks.push({
+-                startTime,
+-                endTime: moment(filteredByDayApps[i + 1].startTime),
++        const requiredRange = moment.range(
++          moment(startDate).startOf('day'),
++          moment(endDate).endOf('day')
++        );
++
++        const results = _.fromPairs(
++          Array.from(requiredRange.by('day'))
++            .map(currentDay => {
++              // next two lines should be taken from Practitioner working time
++              // not just hard hardcoded
++              const OFFICE_START_TIME = currentDay.set({ hours: 9, minutes: 0 }).toDate();
++              const OFFICE_END_TIME = currentDay.set({ hours: 17, minutes: 0 }).toDate();
++
++              const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
++
++              const appointmentRanges = appointments
++                .filter(a => moment(a.startTime).startOf('day').isSame(currentDay))
++                .map(appointment => moment.range(appointment.startTime, appointment.endTime));
++
++              const hasAppointment = slotRange => _.some(appointmentRanges, appointmentRange => {
++                return appointmentRange.intersect(slotRange);
+               });
+-            }
+-
+-            breaks.push({
+-              startTime: filteredByDayApps[filteredByDayApps.length - 1].endTime,
+-              endTime: OFFICE_END_TIME,
+-            });
+-
+-            console.log(breaks);
+-
+-            const availableTimeRanges = breaks.filter(b =>
+-              moment(b.endTime).diff(moment(b.startTime), 'minutes') >= service.duration
+-            );
+ 
+-            const availabilities = [];
+-            availableTimeRanges.forEach((a) => {
+-              for (let i = moment(a.startTime); moment(a.endTime) - i > 0; i = moment(i).add({
+-                minutes: service.duration,
+-              })) {
+-                if (!i.isSame(OFFICE_END_TIME, 'hour')) {
+-                  availabilities.push(i);
+-                }
+-              }
+-            });
++              const availabilities = Array.from(dayRange.by('minutes', { step: 30 }))
++                .map(slot => ({
++                  startsAt: slot.toDate(),
++                  isBusy: hasAppointment(moment.range(slot, slot.add(30, 'minutes'))),
++                }));
+ 
++              return [
++                currentDay.format(),
++                { date: currentDay.format(), availabilities, practitionerId }
++              ];
++            })
++        );
+ 
+-            results[theStartTime] = {
+-              date: theStartTime,
+-              availabilities,
+-              practitionerId,
+-            };
+-          } else {
+-            const availabilities = [];
+-            for (let i = moment(OFFICE_START_TIME); moment(OFFICE_END_TIME) - i > 0; i = moment(i).add({
+-              minutes: service.duration,
+-            })) {
+-              availabilities.push(i);
+-            }
+-            results[theStartTime] = {
+-              date: theStartTime,
+-              availabilities,
+-              practitionerId,
+-            };
+-          }
+-        }
+-        const resultStructure = {
+-          entities: { availabilities: results },
+-        };
+-        console.log(resultStructure);
+-        res.send(resultStructure);
++        res.send({ entities: { availabilities: results } });
+       })
+       .catch(next);
+   }).catch(next);

@@ -219,11 +219,11 @@ class Availability extends React.Component {
         </div>
           {filteredByDoctor.map(av => {
             return (<ul className={styles.ulHeader} key={av.date}> {moment(av.date).format('YYYY-MM-DD')}
-              {av.availabilities.map(item =>
+              {av.availabilities.map(slot =>
                 <li className={styles.listItem}
-                  key={item}
+                  key={slot.startsAt}
                 >
-                  {moment(item).format('HH:mm')}
+                  {moment(slot.startsAt).format('HH:mm')}
                 </li>)
               }
             </ul>);
