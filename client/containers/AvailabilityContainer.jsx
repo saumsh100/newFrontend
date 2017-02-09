@@ -1,9 +1,10 @@
 
 import React, { PropTypes } from 'react';
+import DayPicker, { DateUtils } from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import includes from 'lodash/includes';
-import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { fetchEntities } from '../thunks/fetchEntities';
@@ -21,6 +22,8 @@ class Availability extends React.Component {
     this.onServiceChange = this.onServiceChange.bind(this);
     this.sixDaysBack = this.sixDaysBack.bind(this);
     this.sixDaysForward = this.sixDaysForward.bind(this);
+    this.handleDayClick = this.handleDayClick.bind(this);
+    this.isDaySelected = this.isDaySelected.bind(this);
   }
 
   componentDidMount() {
@@ -68,12 +71,10 @@ class Availability extends React.Component {
           moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'year') &&
           moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'month')) &&
           this.state.shouldFetchAvailabilities) {
-            console.log('fetch');
         this.setState({
           selectedStartDay: moment(soonestAvailableDay.date)._d,
           selectedEndDay: moment(soonestAvailableDay.date).add(4, 'd')._d,
         }, () => {
-          console.log(this.state.selectedStartDay, this.state.selectedEndDay);
           this.props.fetchEntities({ key: 'availabilities',
             params: {
               practitionerId: this.state.practitionerId,
@@ -92,7 +93,7 @@ class Availability extends React.Component {
     this.setState({
       practitionerId: e.target.value,
       shouldFetchAvailabilities: true,
-      }, () => {
+    }, () => {
       this.props.fetchEntities({ key: 'services',
         params: { practitionerId: this.state.practitionerId }
       });
@@ -136,7 +137,6 @@ class Availability extends React.Component {
       selectedEndDay: moment(this.state.selectedEndDay).add(4, 'd')._d,
       shouldFetchAvailabilities: false,
     }, () => {
-      console.log(this.state.selectedStartDay, this.state.selectedEndDay)
       this.props.fetchEntities({ key: 'availabilities',
         params: {
           practitionerId: this.state.practitionerId,
@@ -148,6 +148,29 @@ class Availability extends React.Component {
     });
   }
 
+  handleDayClick(e, day) {
+    console.log(day, 'the DAY');
+    this.setState({
+      selectedStartDay: day,
+      selectedEndDay: moment(day).add(4, 'd')._d,
+      shouldFetchAvailabilities: false,
+    }, () => {
+      console.log(this.state.selectedStartDay, this.state.selectedEndDay);
+      this.props.fetchEntities({ key: 'availabilities',
+        params: {
+          practitionerId: this.state.practitionerId,
+          serviceId: this.state.serviceId,
+          startDate: this.state.selectedStartDay,
+          endDate: this.state.selectedEndDay,
+        },
+      });
+    });
+  }
+
+  isDaySelected(day) {
+    return DateUtils.isSameDay(day, this.state.selectedStartDay);
+  }
+
   render() {
     const filteredByDoctor = this.props.availabilities.get('models')
       .toArray()
@@ -157,13 +180,11 @@ class Availability extends React.Component {
         if (moment(a.date) < moment(b.date)) return -1;
         return 0;
       })
-      .filter((a) => {
-        return (
-          moment(a.date).isBetween(this.state.selectedStartDay, this.state.selectedEndDay, 'days', true)
-        );
-      });
+      .filter(a =>
+        moment(a.date).isBetween(this.state.selectedStartDay, this.state.selectedEndDay, 'days', true)
+      );
 
-      console.log(filteredByDoctor);
+      console.log(filteredByDoctor, 'filteredByDoctor');
 
     return (
       <div>
@@ -191,6 +212,10 @@ class Availability extends React.Component {
             )}
           </select>
           <button onClick={this.sixDaysForward}>Forward</button>
+          <DayPicker
+            onDayClick={ this.handleDayClick }
+            selectedDays={ this.isDaySelected }
+          />
         </div>
           {filteredByDoctor.map(av => {
             return (<ul className={styles.ulHeader} key={av.date}> {moment(av.date).format('YYYY-MM-DD')}
