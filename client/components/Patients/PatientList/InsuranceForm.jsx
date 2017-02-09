@@ -21,16 +21,30 @@ class InsuranceForm extends Component {
       if (!patient) return;
       let formChanged = false;
       const currentPatientFormFields = nextprops.form.insurance.values;
+      const currentPatientFormFieldsLength = Object.keys(currentPatientFormFields).length
+      if (nextprops.patient.insurance) {
+	      const { sin, carrier, contract, memberId, insurance } = nextprops.patient.insurance;
+	      const currentPatientfields = { sin, carrier, contract, memberId, insurance }; 
+	      const currentPatientKeys = Object.keys(currentPatientfields);
+	      currentPatientKeys.forEach(p => {
+	        if (currentPatientfields[p] !== currentPatientFormFields[p]) {
+	          formChanged = true;
+	          return;
+	        }
+	      })
+      } else if (currentPatientFormFieldsLength) {
+      	const currentPatientFormKeys = Object.keys(currentPatientFormFields);
+      	const keyLength = currentPatientFormKeys.length;
+      	const registeredFields = nextprops.form.insurance.registeredFields;
+      	const registeredFieldsLength = Object.keys(registeredFields).length;
+      	if (registeredFieldsLength == currentPatientFormFieldsLength) {
+      		formChanged = true;
+      	}
+      	currentPatientFormKeys.forEach(k => {
+      	  if(!currentPatientFormFields[k]) formChanged = false
+      	});
+      }
 
-      const { sin, carrier, contract, memberId, insurance } = nextprops.patient.insurance;
-      const currentPatientfields = { sin, carrier, contract, memberId, insurance }; 
-      const currentPatientKeys = Object.keys(currentPatientfields);
-      currentPatientKeys.forEach(p => {
-        if (currentPatientfields[p] !== currentPatientFormFields[p]) {
-          formChanged = true;
-          return;
-        }
-      })
       if (formChanged !== this.state.formChanged) {
         this.setState({ formChanged });
       }
