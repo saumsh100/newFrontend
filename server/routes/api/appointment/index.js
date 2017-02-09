@@ -4,14 +4,12 @@ const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 
 appointmentsRouter.get('/', (req, res, next) => {
-  return Appointment.filter({
+  const {
+    accountId,
+    joinObject,
+  } = req;
 
-  }).getJoin({
-    patient: true,
-    practitioner: { services: false },
-    service: { practitioners: false },
-    chair: true,
-  }).run()
+  return Appointment.filter({ accountId }).getJoin({ joinObject }).run()
     .then(appointments => res.send(normalize('appointments', appointments)))
     .catch(next);
 });

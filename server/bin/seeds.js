@@ -178,13 +178,13 @@ const SEEDS = {
 
 Request: [
     {
+      accountId,
       id: uuid(),
       title: 'Sergey\'s appointment',
       startTime: moment({hour: 23, minute: 10})._d,
       endTime: moment({hour: 23, minute: 50})._d,
 
       patientId: sergeyPatientId,
-      accountId: accountId,
       serviceId: serviceId,
       practitionerId: practitionerId,
       chairId: chairId,
