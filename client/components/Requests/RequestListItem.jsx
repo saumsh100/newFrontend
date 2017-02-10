@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import {Card, Tabs, Tab, List, ListItem} from '../library';
 import moment from 'moment';
+
 import styles from './style.scss';
 
 
@@ -9,12 +10,25 @@ class RequestListItem extends Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
+    this.monthDayComponent = this.monthDayComponent.bind(this);
   }
 
+  monthDayComponent(month, day){
 
-  handleChange() {
-    console.log("Working Button");
+    let monthDayComponent = null;
+    if (month && day) {
+      monthDayComponent = (
+        <div className={styles.monthDay}>
+          <div className={styles.monthDay__month}>
+            {month}
+          </div>
+          <div className={styles.monthDay__day}>
+            {day}
+          </div>
+        </div>
+      );
+    }
+    return monthDayComponent;
   }
 
   render() {
@@ -25,18 +39,21 @@ class RequestListItem extends Component {
     const birthday = moment(patient.birthday).year();
     const age = currentYear - birthday;
 
+    // TODO: use moment.js to format full Date string
     const startTime = moment(request.startTime);
     const month = startTime.format("MMM");
     const day = startTime.day();
     const startHourMinute = startTime.format("h:mm");
     const endHourMinute = moment(request.endTime).format("h:mm");
 
-    // <ListItem>{patient.firstName}&nbsp;{patient.lastName}</ListItem>
+    let monthDayComponent = this.monthDayComponent(month, day)
+
+
     return (
-        <List className={styles.monthDay}>
-          <ListItem className={styles.monthDay__month}>{month}</ListItem>
-          <ListItem className={styles.monthDay__day}>{day}</ListItem>
-        </List>
+      <ListItem className={styles.requestListItem}>
+        {monthDayComponent}
+        <div>{patient.firstName}&nbsp;{patient.lastName}</div>
+      </ListItem>
     );
   }
 }

@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import RequestList from './RequestList';
-import { Card} from '../library';
+import { Card, CardHeader } from '../library';
 import styles from './style.scss';
 
 class Requests extends Component {
@@ -12,9 +12,10 @@ class Requests extends Component {
   render() {
     const { requests, patients, services } = this.props;
     return (
-        <Card className={styles.requestCard}>
-          <RequestList requests={requests} patients={patients} services={services}/>
-        </Card>
+      <Card className={styles.requestCard}>
+        <CardHeader count={requests.size} title={'New Appointment Requests'}/>
+        <RequestList requests={requests} patients={patients} services={services}/>
+      </Card>
     );
   }
 }
