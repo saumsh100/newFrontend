@@ -1,6 +1,6 @@
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import _ from 'lodash'
+import _ from 'lodash';
 
 const moment = extendMoment(Moment);
 const availabilitiesRouter = require('express').Router();
@@ -20,14 +20,13 @@ availabilitiesRouter.get('/', (req, res, next) => {
           moment(startDate).startOf('day'),
           moment(endDate).endOf('day')
         );
-
         const results = _.fromPairs(
           Array.from(requiredRange.by('day'))
             .map(currentDay => {
               // next two lines should be taken from Practitioner working time
               // not just hard hardcoded
-              const OFFICE_START_TIME = currentDay.set({ hours: 9, minutes: 0 }).toDate();
-              const OFFICE_END_TIME = currentDay.set({ hours: 17, minutes: 0 }).toDate();
+              const OFFICE_START_TIME = currentDay.clone().set({ hours: 9, minutes: 0 }).toDate();
+              const OFFICE_END_TIME = currentDay.clone().set({ hours: 16, minutes: 30 }).toDate();
 
               const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
 
@@ -35,14 +34,17 @@ availabilitiesRouter.get('/', (req, res, next) => {
                 .filter(a => moment(a.startTime).startOf('day').isSame(currentDay))
                 .map(appointment => moment.range(appointment.startTime, appointment.endTime));
 
+              console.log(appointmentRanges);
+
               const hasAppointment = slotRange => _.some(appointmentRanges, appointmentRange => {
                 return appointmentRange.intersect(slotRange);
               });
 
+
               const availabilities = Array.from(dayRange.by('minutes', { step: 30 }))
                 .map(slot => ({
                   startsAt: slot.toDate(),
-                  isBusy: hasAppointment(moment.range(slot, slot.add(30, 'minutes'))),
+                  isBusy: hasAppointment(moment.range(slot, slot.add(29, 'minutes'))),
                 }));
 
               return [

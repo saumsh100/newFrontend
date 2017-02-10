@@ -66,8 +66,13 @@ class Availability extends React.Component {
           if (moment(a.date) < moment(b.date)) return -1;
           return 0;
         });
-      const soonestAvailableDay = availabilities.filter(a => a.availabilities.length > 0)[0];
-      if (!(moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'd') &&
+      const soonestAvailableDay = availabilities.filter(a =>
+        a.availabilities.some(item =>
+          item.isBusy === false
+        )
+      )[0];
+      console.log(soonestAvailableDay, 'soonest');
+    /*  if (!(moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'd') &&
           moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'year') &&
           moment(soonestAvailableDay.date).isSame(this.state.selectedStartDay, 'month')) &&
           this.state.shouldFetchAvailabilities) {
@@ -84,7 +89,7 @@ class Availability extends React.Component {
             },
           });
         });
-      }
+      } */
     }
   }
 

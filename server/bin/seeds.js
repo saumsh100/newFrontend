@@ -54,8 +54,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 9, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 9, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 10, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 10, 17, 0, 0, 0),
       title: 'Full day',
       id: uuid(),
       accountId,
@@ -66,8 +66,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 8, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 8, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 11, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 11, 17, 0, 0, 0),
       title: 'Full day',
       id: uuid(),
       accountId,
