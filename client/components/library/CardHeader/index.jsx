@@ -17,8 +17,7 @@ export default function CardHeader(props) {
     // Order is important, classNames={classes} needs to override props.className
     <div {...props} className={classes}>
       <div >
-        <div> {count} </div>
-        <div> {title} </div>
+        <div> {count} {title} </div>
       </div>
         {children}
     </div>

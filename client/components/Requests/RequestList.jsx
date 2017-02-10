@@ -10,14 +10,14 @@ class RequestList extends Component {
   }
 
   render() {
-    const requests = this.props.requests.toArray();
-    requests.sort((a,b) => {
+    const requests = this.props.requests.sort((a,b) => {
       return Date.parse(b.startTime) - Date.parse(a.startTime);
     });
 
+
     return (
       <div>
-        <CardHeader title="New Appointment Requests" count={requests.length}/>
+        <CardHeader title="New Appointment Requests" count={requests.count()}/>
         {requests.map((request) => {
           return (
             <RequestListItem

@@ -13,8 +13,9 @@ const requestRouter = require('./request');
 //const userRouter = require('./users');
 //const textMessagesRouter = require('./textMessages');
 const authMiddleware = require('../../middleware/auth');
+const createJoinObject = require('../../middleware/createJoinObject');
 
-apiRouter.all('*', authMiddleware);
+apiRouter.all('*', authMiddleware, createJoinObject);
 apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/requests', requestRouter);
 //apiRouter.use('/reputation', reputationRouter);

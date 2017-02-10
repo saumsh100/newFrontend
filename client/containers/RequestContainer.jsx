@@ -4,13 +4,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../thunks/fetchEntities';
 
-class RequestContainer extends React.Component{
+class RequestContainer extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'requests' });
+
+    this.props.fetchEntities({ key: 'requests', params: {join: "patient,service"} });
   }
 
   render() {

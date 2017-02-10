@@ -32,7 +32,7 @@ class RequestListItem extends Component {
 
     return (
         <List>
-          <ListItem>{month}&nbsp;{day}</ListItem>
+          <ListItem>{month}&nbsp;{day}&nbsp;{age}</ListItem>
           <ListItem>{patient.firstName}&nbsp;{patient.lastName}</ListItem>
         </List>
     );
