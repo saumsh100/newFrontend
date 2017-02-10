@@ -1,22 +1,38 @@
 
 @import '../../ui.scss';
 
-.requestBox {
+.requestCard {
   padding: 5px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 0px auto;
   margin-top: 10px;
   z-index: 100;
-  border-top: $card-border-size $warning-color;
+  border-top: $card-border-size #ffc45a;
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    width: 300px;
+    width: 250px;
   }
 }
+
+
+.monthDay {
+    text-align: center;
+
+    width: 20%;
+    font-size: 1em;
+
+    &__month {
+      font-size: xx-small;
+    }
+    &__day{
+      font-size: larger;
+    }
+}
+
 
 .logoContainer {
   text-align: center;

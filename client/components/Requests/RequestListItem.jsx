@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import {Card, Tabs, Tab, List, ListItem} from '../library';
 import moment from 'moment';
+import styles from './style.scss';
 
 
 class RequestListItem extends Component {
@@ -30,10 +31,11 @@ class RequestListItem extends Component {
     const startHourMinute = startTime.format("h:mm");
     const endHourMinute = moment(request.endTime).format("h:mm");
 
+    // <ListItem>{patient.firstName}&nbsp;{patient.lastName}</ListItem>
     return (
-        <List>
-          <ListItem>{month}&nbsp;{day}&nbsp;{age}</ListItem>
-          <ListItem>{patient.firstName}&nbsp;{patient.lastName}</ListItem>
+        <List className={styles.monthDay}>
+          <ListItem className={styles.monthDay__month}>{month}</ListItem>
+          <ListItem className={styles.monthDay__day}>{day}</ListItem>
         </List>
     );
   }

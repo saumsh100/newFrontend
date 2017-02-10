@@ -14,7 +14,7 @@ class Requests extends Component {
     const { requests, patients, services } = this.props;
 
     return (
-        <Card className={styles.requestBox}>
+        <Card className={styles.requestCard}>
           <RequestList requests={requests} patients={patients} services={services}/>
         </Card>
     );
