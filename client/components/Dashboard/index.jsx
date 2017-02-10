@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
-import Requests from '../../containers/RequestContainer';
+import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
 import CardHoc from './cardHoc';
@@ -41,7 +41,7 @@ class Dashboard extends React.Component {
     // TODO: for now connect Reviews card to Listings card props until its api integration
     return (
       <div >
-        <Requests />
+        <RequestsContainer />
       </div>
     );
   }

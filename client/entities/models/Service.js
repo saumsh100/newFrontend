@@ -3,6 +3,7 @@ import createModel from '../createModel';
 
 const ServicesSchema = {
   id: null,
+  name: null,
 };
 
 export default class Services extends createModel(ServicesSchema) {

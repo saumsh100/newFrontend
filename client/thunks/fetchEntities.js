@@ -1,6 +1,7 @@
 
+import _ from 'lodash';
 import axios from './axios';
-import { 
+import {
   receiveEntities,
   deleteEntity,
   addEntity,
@@ -8,9 +9,8 @@ import {
   sendMessageOnClientAction,
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
-import _ from 'lodash';
 
-export function fetchEntities({ key, params, join }) {
+export function fetchEntities({ key, join, params = {} }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);

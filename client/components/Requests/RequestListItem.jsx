@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import {Card, Tabs, Tab, List} from '../library';
+import {Card, Tabs, Tab, List, ListItem} from '../library';
 import moment from 'moment';
 
 
@@ -17,18 +17,24 @@ class RequestListItem extends Component {
   }
 
   render() {
-    const { request, patient } = this.props;
 
-    const startDate = moment(request.startTime).format("MMM Do YYYY");
+    const { request, patient, service } = this.props;
+
+    const currentYear =  new Date().getFullYear();
+    const birthday = moment(patient.birthday).year();
+    const age = currentYear - birthday;
+
+    const startTime = moment(request.startTime);
+    const month = startTime.format("MMM");
+    const day = startTime.day();
+    const startHourMinute = startTime.format("h:mm");
+    const endHourMinute = moment(request.endTime).format("h:mm");
 
     return (
-      <Card>
         <List>
-          <div>{startDate}</div>
-          <div>{request.title}</div>
-          <div>{patient.firstName}</div>
+          <ListItem>{month}&nbsp;{day}&nbsp;{age}</ListItem>
+          <ListItem>{patient.firstName}&nbsp;{patient.lastName}</ListItem>
         </List>
-      </Card>
     );
   }
 }

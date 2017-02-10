@@ -1,6 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import RequestListItem from './RequestListItem';
+import { CardHeader} from '../library';
+
 
 class RequestList extends Component {
   constructor(props) {
@@ -8,20 +10,21 @@ class RequestList extends Component {
   }
 
   render() {
-    const requests = this.props.requests.toArray();
-    requests.sort((a,b) => {
+    const requests = this.props.requests.sort((a,b) => {
       return Date.parse(b.startTime) - Date.parse(a.startTime);
     });
 
+
     return (
       <div>
-        <h1> {requests.length} New Appointment Requests</h1>
+        <CardHeader title="New Appointment Requests" count={requests.count()}/>
         {requests.map((request) => {
           return (
             <RequestListItem
               key={request.id}
               request={request}
               patient={this.props.patients.get(request.get('patientId'))}
+              service={this.props.services.get(request.get('serviceId'))}
             />
           );
         })}

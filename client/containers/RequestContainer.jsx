@@ -20,6 +20,7 @@ class RequestContainer extends React.Component {
         <Requests
           requests={this.props.requests}
           patients={this.props.patients}
+          services={this.props.services}
         />
       </div>
     );
@@ -31,6 +32,7 @@ RequestContainer.propTypes = {
 };
 
 function mapStateToProps({ entities }) {
+  const services = entities.getIn(['services', 'models']);
   const requests = entities.getIn(['requests', 'models']);
   const patientIds = requests.toArray().map(request => request.get('patientId'));
   const patients = entities.getIn(['patients', 'models']).filter((patient) => {
@@ -40,6 +42,7 @@ function mapStateToProps({ entities }) {
   return {
     requests,
     patients,
+    services,
   };
 }
 
