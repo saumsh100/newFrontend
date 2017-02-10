@@ -6,26 +6,17 @@ const Patient = require('../../../models/Patient');
 const _ = require('lodash');
 
 const patientSchema = new Schema('patients');
-/* patientsRouter.param('patientId', (req, res, next, patientId) => {
-  User.find(id, function(err, user) {
-    if (err) {
-      next(err);
-    } else if (user) {
-      req.user = user;
-      next();
-    } else {
-      next(new Error('failed to load user'));
-    }
-  });
-});*/
 
 // TODO: this should have default queries and limits
-patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next) => {
-  // TODO: ensure that we only pull patients for activeAccount
+patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
+  const {
+    accountId,
+    joinObject,
+  } = req;
+
+  // TODO: remove patientsList
   if (req.query.patientsList === 'true') {
-    Patient.filter({ accountId: req.token.activeAccountId }).getJoin({
-      textMessages: false, appointments: true,
-    }).run()
+    Patient.filter({ accountId }).getJoin(joinObject).run()
       .then((patients) => {
         if (req.query.patientName && req.query.patientName.length) {
           const pattern = new RegExp(req.query.patientName, 'i');

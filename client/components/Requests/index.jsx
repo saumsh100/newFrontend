@@ -10,9 +10,7 @@ class Requests extends Component {
   }
 
   render() {
-
     const { requests, patients, services } = this.props;
-
     return (
         <Card className={styles.requestCard}>
           <RequestList requests={requests} patients={patients} services={services}/>

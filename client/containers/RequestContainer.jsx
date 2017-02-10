@@ -10,8 +10,8 @@ class RequestContainer extends React.Component {
   }
 
   componentWillMount() {
-
-    this.props.fetchEntities({ key: 'requests', params: {join: "patient,service"} });
+    console.log('fetching entities');
+    this.props.fetchEntities({ key: 'requests', join: ['service', 'patient'] });
   }
 
   render() {
@@ -32,13 +32,12 @@ RequestContainer.propTypes = {
 };
 
 function mapStateToProps({ entities }) {
-
+  const services = entities.getIn(['services', 'models']);
   const requests = entities.getIn(['requests', 'models']);
   const patientIds = requests.toArray().map(request => request.get('patientId'));
   const patients = entities.getIn(['patients', 'models']).filter((patient) => {
     return patientIds.indexOf(patient.get('id')) > -1;
   });
-  const services = entities.getIn(['services', 'models']);
 
   return {
     requests,
