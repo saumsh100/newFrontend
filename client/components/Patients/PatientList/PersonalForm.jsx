@@ -24,9 +24,13 @@ class PersonalForm extends Component {
       const currentPatientFormFields = _.omit(nextprops.form.personal.values, 'title', 'id');
       const currentPatientFormFieldsLength = _.keys(currentPatientFormFields)
       .filter(k => (!!currentPatientFormFields[k])).length
-      const currentPatientRegisteredFields = nextprops.form.personal.registeredFields;
-      const currentPatientRegisteredFieldsLength = (currentPatientRegisteredFields &&
-      currentPatientRegisteredFields.length) || 0;
+      const currentPatientRegisteredFields = nextprops.form.personal.registeredFields
+      || nextprops.form.personal.initial;
+      const currentPatientRegisteredFieldsLength = (
+      currentPatientRegisteredFields &&
+      currentPatientRegisteredFields.length ||
+      _.keys(currentPatientRegisteredFields).length
+      ) || 0;
       const { language, gender, birthday, status, name, middleName } = nextprops.patient;
       const firstName = name.split(" ")[0];
       const lastName = name.split(" ")[1];
