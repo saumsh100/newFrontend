@@ -5,7 +5,6 @@ const Request = require('../../../models/Request');
 
 requestsRouter.get('/', (req, res, next) => {
   return Request.filter({
-
   }).getJoin({
     patient: true,
     practitioner: { services: false },

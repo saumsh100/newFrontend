@@ -1,6 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import RequestList from './RequestList';
+import { Card} from '../library';
+import styles from './style.scss';
 
 class Requests extends Component {
   constructor(props) {
@@ -9,12 +11,12 @@ class Requests extends Component {
 
   render() {
 
-    const { requests, patients } = this.props;
+    const { requests, patients, services } = this.props;
 
     return (
-      <div>
-        <RequestList requests={requests} patients={patients} />
-      </div>
+        <Card className={styles.requestBox}>
+          <RequestList requests={requests} patients={patients} services={services}/>
+        </Card>
     );
   }
 }

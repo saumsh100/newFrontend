@@ -34,7 +34,10 @@ const alexPatientId = uuid();
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const chairId = uuid();
+
 const serviceId = uuid();
+const serviceId2 = uuid();
+
 
 const SEEDS = {
   Appointment: [
@@ -198,11 +201,10 @@ Request: [
       accountId,
       id: uuid(),
       title: 'Justin\'s appointment',
-      startTime: new Date(2016, 2, 29, 14, 30, 0, 0),
-      endTime: new Date(2016, 2, 29, 16, 30, 0, 0),
-
+      startTime: moment({hour: 13, minute: 10})._d,
+      endTime: moment({hour: 13, minute: 50})._d,
       patientId: justinPatientId,
-      serviceId: serviceId,
+      serviceId: serviceId2,
       practitionerId: practitionerId2,
       chairId: chairId,
 
@@ -359,6 +361,16 @@ Request: [
       id: serviceId,
       accountId: accountId,
       name: 'Routine Checkup',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: serviceId2,
+      accountId: accountId,
+      name: 'Lost Filling',
       practitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,
