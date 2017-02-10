@@ -3,6 +3,8 @@ import moment from 'moment';
 import styles from './main.scss';
 import { Form, Field } from '../../library';
 import {destroy} from 'redux-form';
+import _ from 'lodash';
+
 class PersonalForm extends Component {
   constructor(props) {
     super(props);
@@ -16,21 +18,39 @@ class PersonalForm extends Component {
       const dialogId = `personal`;
       store.dispatch(destroy(dialogId));
     } else {
-      const {patient, form, tabTitle} = this.props;
+      const { patient, form, tabTitle } = this.props;
       if (!patient) return;
       let formChanged = false;
-      const currentPatientFormFields = nextprops.form.personal.values;
-      const {language, gender, birthday, status, name} = nextprops.patient;
+      const currentPatientFormFields = _.omit(nextprops.form.personal.values, 'title', 'id');
+      const currentPatientFormFieldsLength = _.keys(currentPatientFormFields)
+      .filter(k => (!!currentPatientFormFields[k])).length
+      const currentPatientRegisteredFields = nextprops.form.personal.registeredFields;
+      const currentPatientRegisteredFieldsLength = (currentPatientRegisteredFields &&
+      currentPatientRegisteredFields.length) || 0;
+      const { language, gender, birthday, status, name, middleName } = nextprops.patient;
       const firstName = name.split(" ")[0];
       const lastName = name.split(" ")[1];
-      const currentPatientfields = {firstName, lastName, language, gender, birthday, status}
-      const currentPatientKeys = Object.keys(currentPatientfields);
-
+      const currentPatientfields = {
+        firstName,
+        lastName,
+        language,
+        gender,
+        birthday,
+        status,
+        middleName,
+      }
+      const currentPatientKeys = _.keys(currentPatientfields);
+      if (currentPatientRegisteredFieldsLength === currentPatientFormFieldsLength)
       currentPatientKeys.forEach(p => {
         if (currentPatientfields[p] !== currentPatientFormFields[p]) {
           formChanged = true;
           return;
         }
+        if (!!currentPatientRegisteredFields[p] && !currentPatientfields[p]) {
+          formChanged = true;
+          return;
+        }
+
       });
       if (formChanged !== this.state.formChanged) {
         this.setState({formChanged});
