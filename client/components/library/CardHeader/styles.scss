@@ -1,6 +1,21 @@
 
 @import '../../../ui.scss';
 
-.card {
-  background-color: $primary-white;
+.cardHeader {
+  height: 2.5rem;
+}
+
+.displayFlex {
+  display: flex;
+  align-items: center;
+}
+
+.count {
+  display: inline-block;
+  font-weight: 700;
+}
+
+.title {
+  display: inline-block;
+  font-weight: 500;
 }

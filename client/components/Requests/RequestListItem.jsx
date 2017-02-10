@@ -24,6 +24,7 @@ class RequestListItem extends Component {
     const birthday = moment(patient.birthday).year();
     const age = currentYear - birthday;
 
+    // TODO: use moment.js to format full Date string
     const startTime = moment(request.startTime);
     const month = startTime.format("MMM");
     const day = startTime.day();
@@ -31,10 +32,10 @@ class RequestListItem extends Component {
     const endHourMinute = moment(request.endTime).format("h:mm");
 
     return (
-        <List>
-          <ListItem>{month}&nbsp;{day}&nbsp;{age}</ListItem>
-          <ListItem>{patient.firstName}&nbsp;{patient.lastName}</ListItem>
-        </List>
+      <ListItem>
+        <div>{month}&nbsp;{day}&nbsp;{age}</div>
+        <div>{patient.firstName}&nbsp;{patient.lastName}</div>
+      </ListItem>
     );
   }
 }
