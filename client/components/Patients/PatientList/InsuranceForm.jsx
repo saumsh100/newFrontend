@@ -4,6 +4,7 @@ import styles from './main.scss';
 import { Button, Form, Field } from '../../library';
 import { Field as RField } from 'redux-form';
 import { destroy } from 'redux-form';
+import _ from 'lodash';
 class InsuranceForm extends Component {
   constructor(props) {
     super(props);
@@ -20,18 +21,27 @@ class InsuranceForm extends Component {
       const { patient, form, tabTitle } = this.props;
       if (!patient) return;
       let formChanged = false;
-      const currentPatientFormFields = nextprops.form.insurance.values;
+      const currentPatientFormFields = _.omit(nextprops.form.insurance.values, 'title', 'id');
       const currentPatientFormFieldsLength = Object.keys(currentPatientFormFields).length
       if (nextprops.patient.insurance) {
 	      const { sin, carrier, contract, memberId, insurance } = nextprops.patient.insurance;
 	      const currentPatientfields = { sin, carrier, contract, memberId, insurance }; 
 	      const currentPatientKeys = Object.keys(currentPatientfields);
-	      currentPatientKeys.forEach(p => {
-	        if (currentPatientfields[p] !== currentPatientFormFields[p]) {
-	          formChanged = true;
-	          return;
-	        }
-	      })
+
+
+        const currentPatientFormfieldsLength = _.keys(currentPatientFormFields)
+          .filter(f => (!!currentPatientFormFields[f])).length;
+        const registeredFieldsLength = nextprops.form.insurance.registeredFields
+        && nextprops.form.insurance.registeredFields.length;
+
+        if (currentPatientFormfieldsLength === registeredFieldsLength) {  
+  	      currentPatientKeys.forEach(p => {
+  	        if (currentPatientfields[p] !== currentPatientFormFields[p]) {
+  	          formChanged = true;
+  	          return;
+  	        }
+  	      })
+        }
       } else if (currentPatientFormFieldsLength) {
       	const currentPatientFormKeys = Object.keys(currentPatientFormFields);
       	const keyLength = currentPatientFormKeys.length;
