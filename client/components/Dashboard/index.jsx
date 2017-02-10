@@ -20,8 +20,8 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchReputationData();
-    this.props.fetchReviewsData();
+    // this.props.fetchReputationData();
+    // this.props.fetchReviewsData();
   }
 
   renderCards() {

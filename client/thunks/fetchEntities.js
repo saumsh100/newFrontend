@@ -10,10 +10,16 @@ import {
 } from '../actions/entities';
 import _ from 'lodash';
 
-export function fetchEntities({ key,  params }) {
+export function fetchEntities({ key, params, join }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
+
+    // Add onto the query param for join if passed in
+    if (join && join.length) {
+      params.join = join.join(',');
+    }
+
     axios.get(entity.getUrlRoot(), { params })
       .then((response) => {
         const { data } = response;
