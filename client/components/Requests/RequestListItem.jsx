@@ -17,6 +17,7 @@ class RequestListItem extends Component {
 
   monthDayComponent(month, day){
 
+    let monthDayComponent = null;
     if (month && day) {
       monthDayComponent = (
         <div className={styles.monthDay}>
@@ -34,6 +35,7 @@ class RequestListItem extends Component {
 
   dataComponent(data){
 
+    let dataComponent = null;
     if (data) {
       dataComponent = (
         <div className={styles.requestData}>
