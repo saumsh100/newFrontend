@@ -1,11 +1,13 @@
 
-const { normalize, Schema, arrayOf } = require('normalizr');
+const _ = require('lodash');
 const textMessagesRouter = require('express').Router();
+const twilioClient = require('../../../config/twilio');
+const uuid = require('uuid').v4;
+const Patient = require('../../../models/Patient');
+const Account = require('../../../models/Account');
 const TextMessage = require('../../../models/TextMessage');
 const Practitioner = require('../../../models/Practitioner');
-const twilioClient = require('../../../config/twilio');
-
-const textMessageSchema = new Schema('textMessageSchema');
+const normalize = require('../normalize');
 
 // TODO: this should have default queries and limits
 textMessagesRouter.get('/', (req, res, next) => {
@@ -21,7 +23,7 @@ textMessagesRouter.get('/', (req, res, next) => {
     .limit(Math.min(limit, 100))
     .orderBy('createdAt')
     .run()
-    .then(textMessages => res.send(normalize(textMessages, arrayOf(textMessageSchema))))
+    .then(textMessages => res.send(normalize('textMessages', textMessages)))
     .catch(next);
 });
 
@@ -31,27 +33,91 @@ textMessagesRouter.get('/twilio', (req, res, next) => {
   });
 });
 
-textMessagesRouter.get('/conversation', (req, res, next) => {
-  const { patientId, practitionerId, startDate, accountId } = req.query;
-  const startDateTimestamp = new Date(startDate).getTime();
+textMessagesRouter.get('/conversations', (req, res, next) => {
+  return res.send(normalize('textMessages', []));
+});
 
-  // startDate format must be like this ->  2017-01-03T10:30:00.000Z
-
-  Practitioner.filter({ accountId }).execute().then((pr) => {
-    if (pr.length === 0) {
-      return next({ status: 403 });
-    }
-    TextMessage.filter({ patientId, practitionerId }).orderBy('createdAt').run().then((textMessages) => {
-      const smsFilteredByDate = textMessages.filter(sms =>
-        sms.createdAt.getTime() >= startDateTimestamp
+textMessagesRouter.get('/dialogs', (req, res, next) => {
+  Account.filter({ id: req.token.activeAccountId }).getJoin({
+    patients: true, appointments: false, textMessages: true,
+  }).run()
+    .then((accounts) => {
+      const { textMessages, patients } = accounts[0];
+      const sortedMessages = textMessages.sort((a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
-      res.send(normalize(smsFilteredByDate, arrayOf(textMessageSchema)));
+      const groupedByPatientId = _.groupBy(sortedMessages, a => a.patientId);
+      const tempDialogs = {};
+      const patientIds = Object.keys(groupedByPatientId);
+      patientIds.forEach((key, index) => {
+        const tempObject = {};
+        const patient = patients.filter(p => p.id === key)[0];
+        tempObject.patientId = key;
+        tempObject.messages = groupedByPatientId[key];
+        let unreadCount = 0;
+        groupedByPatientId[key].forEach(t => {
+          if (t.read === false) unreadCount += 1;
+        });
+        if (patient) {
+          tempObject.patientName = `${patient.firstName} ${patient.lastName}`;
+        }
+        tempObject.unreadCount = unreadCount;
+        tempObject.lastMessageText = groupedByPatientId[key][groupedByPatientId[key].length - 1].body;
+        tempObject.lastMessageTime = groupedByPatientId[key][groupedByPatientId[key].length - 1].createdAt;
+        tempDialogs[key] = tempObject;
+      });
+      // return res.send(tempDialogs);
+      if (req.query.username &&  req.query.username.length) {
+        const pattern = new RegExp(req.query.username, 'i');
+        const results = [];
+        const filteredDialogs = {};
+        Object.keys(tempDialogs).forEach(k => {
+          if (pattern.test(tempDialogs[k].patientName)) {
+            filteredDialogs[k] = tempDialogs[k];
+            results.push(k);
+          }
+        });
+        const resultStructure = {
+          entities: { dialogs: filteredDialogs },
+          results,
+        }
+        return res.send(resultStructure);
+      }
+
+      const resultStructure = {
+        entities: { dialogs: tempDialogs },
+        results: patientIds,
+      }
+      return res.send(resultStructure);
+    });
+});
+
+/*textMessagesRouter.post('/', (req, res, next) => {
+  const { body, patientId, createdAt } = req.body;
+  Practitioner.execute().then((practitioners) => {
+    TextMessage.save({
+      id: uuid(),
+      practitionerId: practitioners[0].id,
+      patientId,
+      body,
+      accountId: req.token.activeAccountId,
+      createdAt,
     })
+    .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
     .catch(next);
+  });
+});*/
+
+/*textMessagesRouter.put('/:messageId', (req, res, next) => {
+  const data = req.body;
+  console.log("req!!!!")
+  console.log(req.body);
+  TextMessage.get(data.id).run().then((t) => {
+    t.merge(data).save().then((textMessages) => {
+      res.send(normalize(textMessages, textMessageSchema));
+    });
   })
   .catch(next);
-
-
-});
+});*/
 
 module.exports = textMessagesRouter;

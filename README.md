@@ -31,6 +31,13 @@ Seed database with development data. In a separate tab at the top of carecru rep
 
 Can be re-run whenever a fresh DB is needed.
 
+## Environment Variables
+
+To run the application effectively, you need to acquire all of the necessary API keys.
+node-forman allows us to throw these environment variables into a `.env` file that we gitignore.
+
+Contact the repo admin to acquire the `.env` file.
+
 ## Run
 
 `rethinkdb` (if not already running)

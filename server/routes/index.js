@@ -1,9 +1,13 @@
 
 const rootRouter = require('express').Router();
+const authRouter = require('./auth');
 const apiRouter = require('./api');
 const twilioRouter = require('./twilio');
 const Token = require('../models/Token');
 const Appointment = require('../models/Appointment');
+
+// Bind auth route to generate tokens
+rootRouter.use('/auth', authRouter);
 
 // Bind REST API
 rootRouter.use('/api', apiRouter);
@@ -28,12 +32,12 @@ rootRouter.get('/confirmation/:tokenId', (req, res, next) => {
     }).catch(next);
   }).catch(next);
 });
+
 // All other traffic, just render app
 // TODO: Need to update client-side router to handle this
 rootRouter.get('(/*)?', (req, res, next) => {
   // TODO: Check if authenticated...
   return res.render('app');
 });
-
 
 module.exports = rootRouter;

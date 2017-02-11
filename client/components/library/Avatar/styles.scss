@@ -1,0 +1,17 @@
+
+@import '../../../ui.scss';
+
+.avatar {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.img {
+  max-width: 100%;
+  height: auto;
+}

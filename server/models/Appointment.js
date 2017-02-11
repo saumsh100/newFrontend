@@ -1,5 +1,6 @@
 
 const thinky = require('../config/thinky');
+
 const type = thinky.type;
 
 const Appointment = thinky.createModel('Appointment', {
@@ -31,10 +32,8 @@ const Appointment = thinky.createModel('Appointment', {
 
   // Split Appointments
   isSplit: type.boolean(),
-  splitAppointments: [ type.string().uuid(4) ],
+  splitAppointments: [type.string().uuid(4)],
   isParent: type.boolean(),
-
 });
-
 
 module.exports = Appointment;
