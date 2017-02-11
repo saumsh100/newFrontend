@@ -12,6 +12,10 @@ const Patient = thinky.createModel('Patient', {
   insurance: type.object().allowNull(),
   middleName: type.string(),
   //createdAt: type.date().default(thinky.r.now()),
+  email: type.string().email(),
+
+  // TODO: this needs to be modified to support priorities and a standard structure
+  appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
 });
 
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {

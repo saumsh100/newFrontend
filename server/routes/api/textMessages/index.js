@@ -1,16 +1,13 @@
 
-const { normalize, Schema, arrayOf } = require('normalizr');
-const textMessagesRouter = require('express').Router();
 const _ = require('lodash');
-const TextMessage = require('../../../models/TextMessage');
-const Practitioner = require('../../../models/Practitioner');
-
+const textMessagesRouter = require('express').Router();
 const twilioClient = require('../../../config/twilio');
 const uuid = require('uuid').v4;
 const Patient = require('../../../models/Patient');
 const Account = require('../../../models/Account');
-const textMessageSchema = new Schema('textMessageSchema');
-const dialogSchema = new Schema('dialogSchema');
+const TextMessage = require('../../../models/TextMessage');
+const Practitioner = require('../../../models/Practitioner');
+const normalize = require('../normalize');
 
 // TODO: this should have default queries and limits
 textMessagesRouter.get('/', (req, res, next) => {
@@ -26,7 +23,7 @@ textMessagesRouter.get('/', (req, res, next) => {
     .limit(Math.min(limit, 100))
     .orderBy('createdAt')
     .run()
-    .then(textMessages => res.send(normalize(textMessages, arrayOf(textMessageSchema))))
+    .then(textMessages => res.send(normalize('textMessages', textMessages)))
     .catch(next);
 });
 
@@ -34,6 +31,10 @@ textMessagesRouter.get('/twilio', (req, res, next) => {
   twilioClient.messages.list((err, data) => {
     res.send(data);
   });
+});
+
+textMessagesRouter.get('/conversations', (req, res, next) => {
+  return res.send(normalize('textMessages', []));
 });
 
 textMessagesRouter.get('/dialogs', (req, res, next) => {
@@ -91,8 +92,7 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
     });
 });
 
-
-textMessagesRouter.post('/', (req, res, next) => {
+/*textMessagesRouter.post('/', (req, res, next) => {
   const { body, patientId, createdAt } = req.body;
   Practitioner.execute().then((practitioners) => {
     TextMessage.save({
@@ -107,9 +107,9 @@ textMessagesRouter.post('/', (req, res, next) => {
     .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
     .catch(next);
   });
-});
+});*/
 
-textMessagesRouter.put('/:messageId', (req, res, next) => {
+/*textMessagesRouter.put('/:messageId', (req, res, next) => {
   const data = req.body;
   console.log("req!!!!")
   console.log(req.body);
@@ -119,6 +119,6 @@ textMessagesRouter.put('/:messageId', (req, res, next) => {
     });
   })
   .catch(next);
-});
+});*/
 
 module.exports = textMessagesRouter;

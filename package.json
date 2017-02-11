@@ -23,7 +23,7 @@
     "test:client:watch": "karma start ./server/karma.conf.js  --autoWatch=true --singleRun=false",
     "test:server": "mocha ./server/test/test_backend.js --test",
     "postinstall": "npm run build:dist",
-    "sms:cron": "nf start -j SMS_CRON"
+    "remind:cron": "nf start -j REMIND_CRON"
   },
   "dependencies": {
     "async": "0.2.9",
@@ -91,13 +91,14 @@
     "md5": "^2.2.0",
     "method-override": "^2.3.5",
     "mime": "~1.2.11",
-    "moment": "2.17.1",
+    "moment": "^2.17.1",
     "multer": "^1.1.0",
+    "nf": "0.0.3",
     "node-cron": "^1.1.2",
     "node-sass": "^3.7.0",
     "node-uuid": "~1.4.1",
     "normalize.css": "^5.0.0",
-    "normalizr": "^2.2.1",
+    "normalizr": "^3.1.0",
     "passport": "~0.3.0",
     "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
@@ -144,6 +145,7 @@
     "reselect": "^2.5.3",
     "resolve-url-loader": "^1.4.3",
     "rethinkdb": "^2.3.3",
+    "rethinkdb-job-queue": "^2.1.0",
     "s3": "^4.4.0",
     "sass-loader": "^3.1.2",
     "serve-favicon": "^2.3.0",

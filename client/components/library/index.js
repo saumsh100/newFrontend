@@ -3,6 +3,7 @@ import AppBar from './AppBar';
 import Avatar from './Avatar';
 import Button from './Button';
 import Card from './Card';
+import CardHeader from './CardHeader';
 import Form, { Field } from './Form';
 import Icon from './Icon';
 import IconButton from './IconButton';
@@ -19,6 +20,7 @@ export {
   Avatar,
   Button,
   Card,
+  CardHeader,
   Field,
   Form,
   Icon,

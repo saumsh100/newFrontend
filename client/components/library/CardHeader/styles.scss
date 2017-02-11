@@ -1,0 +1,22 @@
+
+@import '../../../ui.scss';
+
+.cardHeader {
+  height: 1rem;
+}
+
+.displayFlex {
+  display: flex;
+  align-items: center;
+}
+
+.count {
+  display: inline-block;
+  font-weight: 700;
+  padding-right: 10px;
+}
+
+.title {
+  display: inline-block;
+  font-weight: 500;
+}

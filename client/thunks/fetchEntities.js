@@ -1,6 +1,7 @@
 
+import _ from 'lodash';
 import axios from './axios';
-import { 
+import {
   receiveEntities,
   deleteEntity,
   addEntity,
@@ -8,12 +9,17 @@ import {
   sendMessageOnClientAction,
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
-import _ from 'lodash';
 
-export function fetchEntities({ key,  params }) {
+export function fetchEntities({ key, join, params = {} }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
+
+    // Add onto the query param for join if passed in
+    if (join && join.length) {
+      params.join = join.join(',');
+    }
+
     axios.get(entity.getUrlRoot(), { params })
       .then((response) => {
         const { data } = response;

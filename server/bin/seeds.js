@@ -1,3 +1,4 @@
+
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
 const uuid = require('uuid').v4;
@@ -34,23 +35,29 @@ const alexPatientId = uuid();
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const chairId = uuid();
+
 const serviceId = uuid();
+const serviceId2 = uuid();
+
+const appointmentId1 = uuid();
+const appointmentId2 = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 0, 13, 12, 30, 0, 0),
-      endTime: new Date(2017, 0, 13, 10, 30, 0, 0),
+      startTime: new Date(2017, 0, 26, 10, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 11, 30, 0, 0),
       title: 'Sooner Availability',
-      id: uuid(),
+      id: appointmentId1,
       accountId,
       patientId: alexPatientId,
-      serviceId: serviceId,
+      serviceId: serviceId2,
       practitionerId: practitionerId,
       chairId: chairId,
     },
-
     {
+      startTime: new Date(2017, 0, 26, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 13, 30, 0, 0),
       startTime: new Date(2017, 0, 28, 12, 30, 0, 0),
       endTime: new Date(2017, 0, 28, 12, 30, 0, 0),
       title: 'Sooner Availability',
@@ -98,7 +105,7 @@ const SEEDS = {
       startTime: new Date(2017, 3, 29, 12, 30, 0, 0),
       endTime: new Date(2017, 3, 29, 12, 30, 0, 0),
       title: 'Later Availability',
-      id: uuid(),
+      id: appointmentId2,
       accountId,
       patientId: alexPatientId,
       serviceId: serviceId,
@@ -174,6 +181,42 @@ const SEEDS = {
       isSyncedWithPMS: true,
       isCancelled: false,
     },
+  ],
+
+Request: [
+    {
+      accountId: accountId,
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 23, minute: 10})._d,
+      endTime: moment({hour: 23, minute: 50})._d,
+
+      patientId: sergeyPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      accountId: accountId,
+      id: uuid(),
+      title: 'Justin\'s appointment',
+      startTime: moment({hour: 13, minute: 10})._d,
+      endTime: moment({hour: 13, minute: 50})._d,
+      patientId: justinPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    }
   ],
 
   User: [
@@ -262,15 +305,17 @@ const SEEDS = {
       language: 'English',
     },
     {
+      id: alexPatientId,
+      accountId,
       firstName: 'Alex',
       lastName: 'Bashliy',
       phoneNumber: '+19782521845',
-      id: alexPatientId,
-      accountId,
       birthday: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
       language: 'English',
+      email: 'alex.bashliy@keenethics.com',
+      appointmentPreference: 'both',
     },
   ],
 
@@ -289,7 +334,7 @@ const SEEDS = {
       userId: lonnyUserId,
       accountId,
       role: 'OWNER',
-      permissions: { reviews: { create: true } }, // test permission
+      permissions: { requests: { read: true } }, // test permission
     },
     {
       id: uuid(),
@@ -332,22 +377,40 @@ const SEEDS = {
       unitCost: 40,
       customCosts: {},
     },
+    {
+      id: serviceId2,
+      accountId: accountId,
+      name: 'Another service',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: uuid(),
+      accountId: accountId,
+      name: 'Lost Filling',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
   ],
 
   Practitioner: [
     {
       id: practitionerId,
       accountId: accountId,
-      // services: [ serviceId ],
-      serviceId: serviceId,
+      services: [ serviceId ],
       firstName: 'Chelsea',
       lastName: 'Mansfield',
     },
     {
       id: practitionerId2,
       accountId,
-      // services: [serviceId],
-      serviceId: serviceId,
+      services: [serviceId],
       firstName: 'Perry',
       lastName: 'Cox',
     },
@@ -449,6 +512,17 @@ const SEEDS = {
       accountId: accountId,
       name: 'Chair 1',
       description: '',
+    },
+  ],
+
+  Token: [
+    {
+      id: uuid(),
+      appointmentId: appointmentId1,
+    },
+    {
+      id: uuid(),
+      appointmentId: appointmentId2,
     },
   ],
 };

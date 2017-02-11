@@ -27,6 +27,10 @@ const twilio = {
   authToken: environmentVariables.TWILIO_AUTH_TOKEN,
 };
 
+const mandrill = {
+  apiKey: environmentVariables.MANDRILL_API_KEY,
+};
+
 module.exports = {
   root,
   tokenSecret,
@@ -39,4 +43,5 @@ module.exports = {
   db,
   vendasta,
   twilio,
+  mandrill,
 };
