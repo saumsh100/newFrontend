@@ -11,11 +11,12 @@ class RequestListItem extends Component {
     super(props);
 
     this.monthDayComponent = this.monthDayComponent.bind(this);
+    this.dataComponent = this.dataComponent.bind(this);
+
   }
 
   monthDayComponent(month, day){
 
-    let monthDayComponent = null;
     if (month && day) {
       monthDayComponent = (
         <div className={styles.monthDay}>
@@ -31,6 +32,21 @@ class RequestListItem extends Component {
     return monthDayComponent;
   }
 
+  dataComponent(data){
+
+    if (data) {
+      dataComponent = (
+        <div className={styles.requestData}>
+          <div className={styles.requestData__time}>{data.time}</div>
+          <div className={styles.requestData__nameAge}>{data.nameAge}</div>
+          <div className={styles.requestData__phoneNumber}>{data.phoneNumber}</div>
+          <div className={styles.requestData__service}>{data.service}</div>
+        </div>
+      );
+    }
+    return dataComponent;
+  }
+
   render() {
 
     const { request, patient, service } = this.props;
@@ -43,16 +59,26 @@ class RequestListItem extends Component {
     const startTime = moment(request.startTime);
     const month = startTime.format("MMM");
     const day = startTime.day();
+
     const startHourMinute = startTime.format("h:mm");
     const endHourMinute = moment(request.endTime).format("h:mm");
+    const time = startHourMinute.concat('-', endHourMinute);
 
-    let monthDayComponent = this.monthDayComponent(month, day)
+    let monthDayComponent = this.monthDayComponent(month, day);
 
+    let data = {
+      time: time,
+      nameAge: patient.firstName.concat(' ', patient.lastName, ', ', age),
+      service: service.name,
+      phoneNumber: patient.phoneNumber,
+    };
+
+    let dataComponent = this.dataComponent(data);
 
     return (
       <ListItem className={styles.requestListItem}>
         {monthDayComponent}
-        <div>{patient.firstName}&nbsp;{patient.lastName}</div>
+        {dataComponent}
       </ListItem>
     );
   }
