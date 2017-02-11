@@ -12,8 +12,8 @@ class Requests extends Component {
   render() {
     const { requests, patients, services } = this.props;
     return (
-      <Card className={styles.requestBox}>
-        <CardHeader count={requests.size} title={'New Appointment Requests'} rightActions={[  ]}/>
+      <Card className={styles.requestCard}>
+        <CardHeader count={requests.size} title={'New Appointment Requests'}/>
         <RequestList requests={requests} patients={patients} services={services}/>
       </Card>
     );

@@ -2,7 +2,7 @@
 @import '../../../ui.scss';
 
 .cardHeader {
-  height: 2.5rem;
+  height: 1rem;
 }
 
 .displayFlex {
@@ -13,6 +13,7 @@
 .count {
   display: inline-block;
   font-weight: 700;
+  padding-right: 10px;
 }
 
 .title {

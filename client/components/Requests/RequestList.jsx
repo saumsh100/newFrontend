@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
+import styles from './style.scss';
 
 
 class RequestList extends Component {
@@ -15,7 +16,7 @@ class RequestList extends Component {
     });
 
     return (
-        <List>
+        <List className={styles.requestList}>
           {sortedRequests.toArray().map((request) => {
             return (
               <RequestListItem
