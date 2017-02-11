@@ -20,10 +20,15 @@ import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
 import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
+import Requests from '../entities/models/Request';
+import requests from '../entities/collections/requests';
 import Dialogs from '../entities/models/Dialogs'
 import dialogs from '../entities/collections/dialogs';
 import PatientList from '../entities/models/PatientList'
 import patientList from '../entities/collections/patientList';
+import Service from '../entities/models/Service'
+import services from '../entities/collections/services';
+
 
 const initialState = Map({
   // KEYs must map to the response object
@@ -31,6 +36,8 @@ const initialState = Map({
   patients: new patients(),
   textMessages: new textMessages(),
   appointments: new appointments(),
+  requests: new requests(),
+  service: new services(),
   practitioners: new practitioners(),
   dialogs: new dialogs(),
   patientList: new patientList(),
@@ -44,6 +51,8 @@ const Models = {
   patients: Patient,
   textMessages: TextMessage,
   appointments: Appointments,
+  requests: Requests,
+  services: Service,
   practitioners: Practitioners,
   dialogs: Dialogs,
   patientList: PatientList,

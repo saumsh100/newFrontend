@@ -34,7 +34,10 @@ const alexPatientId = uuid();
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const chairId = uuid();
+
 const serviceId = uuid();
+const serviceId2 = uuid();
+
 
 const SEEDS = {
   Appointment: [
@@ -176,6 +179,42 @@ const SEEDS = {
     },
   ],
 
+Request: [
+    {
+      accountId: accountId,
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 23, minute: 10})._d,
+      endTime: moment({hour: 23, minute: 50})._d,
+
+      patientId: sergeyPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      accountId: accountId,
+      id: uuid(),
+      title: 'Justin\'s appointment',
+      startTime: moment({hour: 13, minute: 10})._d,
+      endTime: moment({hour: 13, minute: 50})._d,
+      patientId: justinPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    }
+  ],
+
   User: [
     {
       username: 'lonny@carecru.com',
@@ -285,7 +324,7 @@ const SEEDS = {
       userId: lonnyUserId,
       accountId,
       role: 'OWNER',
-      permissions: { reviews: { create: true } }, // test permission
+      permissions: { requests: { read: true } }, // test permission
     },
     {
       id: uuid(),
@@ -322,6 +361,16 @@ const SEEDS = {
       id: serviceId,
       accountId: accountId,
       name: 'Routine Checkup',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: serviceId2,
+      accountId: accountId,
+      name: 'Lost Filling',
       practitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,

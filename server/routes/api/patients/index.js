@@ -1,35 +1,27 @@
 
-const { normalize, Schema, arrayOf } = require('normalizr');
+const _ = require('lodash');
 const patientsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
+const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
-const _ = require('lodash');
-
-const patientSchema = new Schema('patients');
-/* patientsRouter.param('patientId', (req, res, next, patientId) => {
-  User.find(id, function(err, user) {
-    if (err) {
-      next(err);
-    } else if (user) {
-      req.user = user;
-      next();
-    } else {
-      next(new Error('failed to load user'));
-    }
-  });
-});*/
 
 // TODO: this should have default queries and limits
-patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next) => {
-  // TODO: ensure that we only pull patients for activeAccount
+patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
+  const {
+    accountId,
+    joinObject,
+  } = req;
+
+  // TODO: remove patientsList check
+  // TODO: this code breaks server if there is no patientsList
   if (req.query.patientsList === 'true') {
-    Patient.filter({ accountId: req.token.activeAccountId }).getJoin({
-      textMessages: false, appointments: true,
-    }).run()
+    Patient.filter({ accountId }).getJoin(joinObject).run()
       .then((patients) => {
+        console.log('patients', patients);
+
         if (req.query.patientName && req.query.patientName.length) {
           const pattern = new RegExp(req.query.patientName, 'i');
-            patients = patients.filter(p =>
+          patients = patients.filter(p =>
             pattern.test(`${p.firstName} ${p.lastName}`)
           );
         }
@@ -51,10 +43,10 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
 
           // console.log(patientAppointments);
           tempPatient.lastAppointmentDate = !_.isEmpty(patientAppointments[0]) ?
-           patientAppointments[0].startTime : 'No next appointment';
+            patientAppointments[0].startTime : 'No next appointment';
 
           tempPatient.nextAppointmentTitle = !_.isEmpty(patientAppointments[0]) ?
-           patientAppointments[0].title : 'No next appointment';
+            patientAppointments[0].title : 'No next appointment';
 
           tempPatient.name = `${p.firstName} ${p.lastName}`;
           tempPatient.birthday = p.birthday;
@@ -81,8 +73,8 @@ patientsRouter.get('/', /* checkPermissions('patients:read'), */ (req, res, next
       .catch(next);
   }
   /* Patient.run()
-    .then(patients => res.send(normalize(patients, arrayOf(patientSchema))))
-    .catch(next); */
+   .then(patients => res.send(normalize(patients, arrayOf(patientSchema))))
+   .catch(next); */
 });
 
 patientsRouter.post('/', (req, res, next) => {
@@ -91,15 +83,14 @@ patientsRouter.post('/', (req, res, next) => {
     firstName,
     lastName,
     phoneNumber,
-  })
-  .then(patient => res.send(normalize(patient, patientSchema)))
-  .catch(next);
+  }).then(patient => res.send(normalize('patient', patient)))
+    .catch(next);
 });
 
 patientsRouter.get('/:patientId', (req, res, next) => {
   const { patientId } = req.params;
   Patient.get(patientId)
-    .then(patient => res.send(normalize(patient, patientSchema)))
+    .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });
 
@@ -113,8 +104,8 @@ patientsRouter.put('/:patientId', (req, res, next) => {
       data.email = req.body.email;
       data.gender = req.body.gender;
       data.language = req.body.language;
-      data.birthday = req.body.birthday;      
-    break;
+      data.birthday = req.body.birthday;
+      break;
 
     case "insurance":
       data.insurance = {
@@ -127,26 +118,27 @@ patientsRouter.put('/:patientId', (req, res, next) => {
 
       console.log("data insurance");
       console.log(data.insurance);
-      
-    break;
+
+      break;
   }
   const { patientId } = req.params;
   Patient.get(patientId).run().then((p) => {
     p.merge(data).save().then((patient) => {
-      res.send(normalize(patient, patientSchema));
+      res.send(normalize('patient', patient));
     });
   })
-  .catch(next);
+    .catch(next);
 });
 
 patientsRouter.delete('/:patientId', (req, res, next) => {
   const { patientId } = req.params;
   Patient.get(patientId).then((patient) => {
     patient.delete().then((result) => {
-      res.send(normalize(result, patientSchema));
+      // TODO: send down?
+      res.send();
     });
   })
-  .catch(next);
+    .catch(next);
 });
 
 module.exports = patientsRouter;

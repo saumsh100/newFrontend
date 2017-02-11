@@ -2,10 +2,23 @@
 @import '../../../ui';
 
 .list {
-  padding: 0.8rem 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .listItem {
   display: flex;
   align-items: center;
+  border-bottom: 2px solid;
+  border-bottom-color: $primary-grey;
+  padding: 5px;
+  height: 3.8rem;
+  &:hover {
+    background-color: $primary-lightgrey;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
