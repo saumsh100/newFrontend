@@ -5,7 +5,7 @@ import styles from './styles.scss';
 
 export function List(props) {
   const classes = classNames(props.className, styles.list);
-  return <li {...props} className={classes} />;
+  return <ul {...props} className={classes} />;
 }
 
 export function ListItem(props) {
