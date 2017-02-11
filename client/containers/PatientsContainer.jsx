@@ -47,15 +47,7 @@ class PatientsContainer extends React.Component {
   render() {
     return (
       <div>
-        <div className={styles.scheduleContainer}>
-          <Card className={styles.cardContainer}>
-            <h3>{this.renderHeader()}</h3>
-            <div>
-              {this.renderChildren(this.props)}
-            </div>
-          </Card>
-        </div>
-        <AddPatientForm onSubmit={values => alert(JSON.stringify(values))} />
+        {this.props.children}
       </div>
     );
   }

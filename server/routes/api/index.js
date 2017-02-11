@@ -5,24 +5,24 @@
  *
  */
 
-const axios = require('axios');
 const apiRouter = require('express').Router();
-const db = require('../../config/db');
-const sessionRouter = require('./session');
 const appointmentRouter = require('./appointment');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
 const practitionersRouter = require('./practitioners');
+const requestRouter = require('./request');
 const userRouter = require('./users');
 const textMessagesRouter = require('./textMessages');
 const chairsRouter = require('./chair');
 const servicesRouter = require('./services');
 const availabilitiesRouter = require('./availabilities');
 const authMiddleware = require('../../middleware/auth');
+const createJoinObject = require('../../middleware/createJoinObject');
 
+apiRouter.all('*', authMiddleware, createJoinObject);
 apiRouter.use('/appointments', appointmentRouter);
-apiRouter.use('/reputation', authMiddleware, reputationRouter);
-apiRouter.use('/session', sessionRouter);
+apiRouter.use('/requests', requestRouter);
+apiRouter.use('/reputation', reputationRouter);
 apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/chairs', chairsRouter);
 apiRouter.use('/services', servicesRouter);

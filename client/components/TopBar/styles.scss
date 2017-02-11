@@ -15,7 +15,7 @@
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    padding-left: $side-nav-width;
+    padding-left: 0;
   }
 }
 
@@ -31,6 +31,25 @@
   }
 }
 
+.logoWrapper {
+  // padding-left: 20px;
+  height: 100%;
+  border-bottom: 2px grey solid;
+  background-color: $primary-dark;
+  color: white;
+}
+
+.logoImage {
+  width: $side-nav-width;
+  height: 100%;
+  text-align: center;
+}
+
+.logoImageImage {
+  width: 140px;
+  margin-top: 18px;
+}
+
 .collapseButton {
   display: inline;
   cursor: pointer;
@@ -44,4 +63,47 @@
     font-size: 1.4rem;
     margin-left: 10px;
   }
+}
+
+.hamburger {
+  color: $primary-dark;
+}
+
+.rightOfBar {
+  display: flex !important;
+  text-align: right;
+  margin-left: auto;
+}
+
+.pillsList {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding-left: 0;
+  list-style: none;
+}
+
+.logoutPill {
+  border-left: 1.5px solid darkgrey;
+  padding: 6px;
+}
+
+.userMenuButton {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.userMenuGreeting {
+  padding-right: 10px;
+  font-weight: 600;
+}
+
+.userRole {
+  font-weight: 100;
+  font-size: 0.8rem;
+}
+
+.userAvatar {
+  margin-right: 10px;
 }

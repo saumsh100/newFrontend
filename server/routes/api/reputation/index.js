@@ -1,6 +1,7 @@
+
 const reputationRouter = require('express').Router();
 const axios = require('axios');
-const checkPermission = require('../../../middleware/permissions');
+const checkPermission = require('../../../middleware/checkPermissions');
 const globals = require('../../../config/globals');
 const Account = require('../../../models/Account');
 
@@ -11,35 +12,30 @@ const {
   apiUser,
 } = globals.vendasta;
 
+const fetchListingsData = (account) => {
+  const listingsUrl = `${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`;
+  return axios.post(listingsUrl, { customerIdentifier: account.vendastaId });
+};
+
+const fetchReviewsData = (account) => {
+  const reviewsUrl = `${VENDASTA_REVIEWS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`;
+  return axios.post(reviewsUrl, { customerIdentifier: account.vendastaId });
+};
+
 reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, next) => {
-  return Account.get(req.user.activeAccountId).then((account) => {
-    axios.post(`${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
-      customerIdentifier: account.vendastaId,
-    }).then((response) => {
-      return res.send(response.data);
-    }).catch((error) => {
-      return next(error);
-    });
-  }).catch((error) => {
-    error.status = 404;
-    return next(error);
-  });
+  return Account.get(req.accountId).then((account) => {
+    fetchListingsData(account)
+      .then(response => res.send(response.data))
+      .catch(error => next(error));
+  }).catch(error => next(error));
 });
 
-
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
-  return Account.get(req.user.activeAccountId).then((account) => {
-    axios.post(`${VENDASTA_REVIEWS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`, {
-      customerIdentifier: account.vendastaId,
-    }).then((response) => {
-      return res.send(response.data);
-    }).catch((error) => {
-      return next(error);
-    });
-  }).catch((error) => {
-    error.status = 404;
-    return next(error);
-  });
+  return Account.get(req.accountId).then((account) => {
+    fetchReviewsData(account)
+      .then(response => res.send(response.data))
+      .catch(error => next(error));
+  }).catch(error => next(error));
 });
 
 module.exports = reputationRouter;

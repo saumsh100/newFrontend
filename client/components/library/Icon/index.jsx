@@ -5,18 +5,18 @@ import styles from './styles.scss';
 
 export default function Icon(props) {
   const {
-    name,
+    icon,
     size = 1,
     className,
   } = props;
   
-  const fontAwesomeClass = `fa fa-${name}`;
+  const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
   
-  return <i style={{ fontSize: `${size} em` }} className={classes} ariaHidden="true" />;
+  return <i className={classes} style={{ fontSize: `${size} em` }} />;
 }
 
 Icon.propTypes = {
-  name: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired,
   size: PropTypes.number,
 };

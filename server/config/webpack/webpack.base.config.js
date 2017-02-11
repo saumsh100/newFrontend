@@ -19,13 +19,13 @@ module.exports = {
   cache: true,
   context: __dirname,
   debug: true,
-  devtool: 'cheap-eval-source-map',
+  devtool: 'cheap-module-source-map',
   entry: {},
   output: {},
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },
-  
+
   module: {
     loaders: [
       {
@@ -68,15 +68,15 @@ module.exports = {
       },
     ],
   },
-  
+
   postcss() {
     return [autoprefixer];
   },
-  
+
   resolveLoader: {
     // fallback: rootPath('node_modules'),
   },
-  
+
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({

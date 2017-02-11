@@ -10,12 +10,13 @@ export default function RFInput(props) {
     type,
     error,
     meta,
+
   } = props;
-  
+
   const { touched, asyncValidating, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
   const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
-  
+
   return (
     <Input
       {...props}

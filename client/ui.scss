@@ -3,6 +3,8 @@ $color-black: rgb(0,0,0);
 $color-white: rgb(255,255,255);
 
 $primary-color: #FF715A;
+$primary-color-hover: darken($primary-color, 5%);
+
 $secondary-color1: #CAEBF2;
 $secondary-color2: #CAEBF2;
 
@@ -10,6 +12,7 @@ $primary-dark: #2e3845;
 $inactive-color: #b4b4b5;
 $primary-darkgrey: #959596;
 $primary-grey: #efefef;
+$primary-lightgrey: #f0f0f0;
 $primary-white: #fafafa;
 // $primary-color-dark: black;
 
