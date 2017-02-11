@@ -16,6 +16,12 @@ availabilitiesRouter.get('/', (req, res, next) => {
         const filteredByDayApps = appointments.filter(a =>
           startDateDay === moment(a.startTime).date()
         );
+        if (appointments.length === 0) {
+          return res.send([{
+            startTime: OFFICE_START_TIME,
+            endTime: OFFICE_END_TIME,
+          }]);
+        }
         const breaks = [];
         let startTime = OFFICE_START_TIME;
         // let lastAppointmentEndTime = null;
@@ -40,7 +46,7 @@ availabilitiesRouter.get('/', (req, res, next) => {
           moment(b.endTime).diff(moment(b.startTime), 'minutes') >= service.duration
         );
 
-        res.send(availabilities);
+        return res.send(availabilities);
       })
       .catch(next);
   });

@@ -27,7 +27,7 @@ module.exports = function seedDatabase(seedJSON, config = { wipeTables: true }) 
         });
     });
   }
-  
+
   // Now execute the wipes first then seed
   return Promise.all(wipes).then(() => {
     config.wipeTables && console.log('Seed tables wiped.');

@@ -6,7 +6,6 @@ const TextMessage = thinky.createModel('TextMessage', {
   // Twilio MessageSID
   id: type.string().required(),
   patientId: type.string(),
-
   accountId: type.string(),
   // Twilio Data
   to: type.string(),
@@ -41,6 +40,6 @@ const TextMessage = thinky.createModel('TextMessage', {
   mediaData: type.object(),
 });
 
-TextMessage.ensureIndex("patientId")
+TextMessage.ensureIndex('patientId');
 
 module.exports = TextMessage;

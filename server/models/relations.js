@@ -1,3 +1,4 @@
+
 const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
