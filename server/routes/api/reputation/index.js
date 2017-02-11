@@ -30,7 +30,6 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
   }).catch(error => next(error));
 });
 
-
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
   return Account.get(req.accountId).then((account) => {
     fetchReviewsData(account)
