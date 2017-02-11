@@ -363,6 +363,10 @@ ul {
         cursor: pointer;
         border: none !important;
 
+        &_enabled {
+            color: red !important;
+        }
+
         &:hover {
             color: #5a5656;
         }

@@ -5,7 +5,10 @@ import { fetchEntities } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Chat from '../components/Patients/Chat/';
-import { setCurrentDialog } from '../thunks/dialogs';
+import { 
+  setCurrentDialog,
+  setDialogScrollPermission,
+} from '../thunks/dialogs';
 import { 
   sendMessageOnClient,
   readMessagesInCurrentDialog,
@@ -39,6 +42,8 @@ class PatientsMessagesContainer extends Component {
       sendMessageOnClient,
       filters,
       readMessagesInCurrentDialog,
+      setDialogScrollPermission,
+      allowDialogScroll,
     } = this.props;
     const dialogList = dialogs.get('models')
       .toArray()
@@ -51,6 +56,8 @@ class PatientsMessagesContainer extends Component {
           sendMessageOnClient={sendMessageOnClient}
           filters={filters}
           readMessagesInCurrentDialog={readMessagesInCurrentDialog}
+          setDialogScrollPermission={setDialogScrollPermission}
+          allowDialogScroll={allowDialogScroll}
         />
       </div>
 
@@ -64,6 +71,7 @@ function mapStateToProps({ entities, currentDialog, form }) {
     return {
       dialogs: entities.get('dialogs'),
       currentDialogId: currentDialog.toJS().currentDialog,
+      allowDialogScroll: currentDialog.toJS().allowDialogScroll,
       filters: form.dialogs,
     };
 }
@@ -73,7 +81,8 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     setCurrentDialog,
     sendMessageOnClient,
-    readMessagesInCurrentDialog
+    readMessagesInCurrentDialog,
+    setDialogScrollPermission,
   }, dispatch);
 }
 

@@ -102,6 +102,7 @@ textMessagesRouter.get('/dialogs', (req, res, next) => {
       body,
       accountId: req.token.activeAccountId,
       createdAt,
+      read: true,
     })
     .then(textMessages => res.send(normalize(textMessages, textMessageSchema)))
     .catch(next);

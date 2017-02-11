@@ -53,12 +53,18 @@ patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
           tempPatient.gender = p.gender;
           tempPatient.patientId = p.id;
           tempPatient.language = p.language;
+          tempPatient.status = p.status;
           tempPatient.photo = `https://randomuser.me/api/portraits/men/${Math.floor((Math.random() * 80) + 1)}.jpg`;
           tempPatient.id = p.id;
 
           if (p.insurance) {
             tempPatient.insurance = p.insurance;
           }
+
+          if (p.middleName) {
+            tempPatient.middleName = p.middleName;
+          }
+
           results[p.id] = tempPatient;
           console.log("tempPatient");
           console.log(tempPatient);
@@ -105,7 +111,9 @@ patientsRouter.put('/:patientId', (req, res, next) => {
       data.gender = req.body.gender;
       data.language = req.body.language;
       data.birthday = req.body.birthday;
-      break;
+      data.status = req.body.status;
+      data.middleName = req.body.middleName;
+    break;
 
     case "insurance":
       data.insurance = {
@@ -116,11 +124,9 @@ patientsRouter.put('/:patientId', (req, res, next) => {
         sin: req.body.sin,
       }
 
-      console.log("data insurance");
-      console.log(data.insurance);
-
-      break;
+    break;
   }
+
   const { patientId } = req.params;
   Patient.get(patientId).run().then((p) => {
     p.merge(data).save().then((patient) => {

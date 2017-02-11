@@ -1,13 +1,12 @@
 
 import React, { PropTypes } from 'react';
-import Input from '../../Input';
+import Select from '../../Select';
 
-export default function RFInput(props) {
+export default function RFSelect(props) {
   const {
     input,
     icon,
     label,
-    type,
     error,
     meta,
 
@@ -18,10 +17,9 @@ export default function RFInput(props) {
   const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
 
   return (
-    <Input
+    <Select
       {...props}
       {...input}
-      type={type}
       label={label}
       error={finalError}
       icon={finalIcon}
@@ -30,11 +28,10 @@ export default function RFInput(props) {
 }
 
 /* eslint react/forbid-prop-types: 0 */
-RFInput.propTypes = {
+RFSelect.propTypes = {
   input: PropTypes.object,
   meta: PropTypes.object,
   icon: PropTypes.node,
   label: PropTypes.node,
-  type: PropTypes.string,
   error: PropTypes.string,
 };

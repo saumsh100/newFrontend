@@ -273,6 +273,7 @@ Request: [
       birthday: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
+      status: 'Active',
       insurance: {
         insurance: 'insurance',
         memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -289,6 +290,7 @@ Request: [
       accountId,
       birthday: moment({year: 1983, month: 2, day: 6})._d,
       gender: 'male',
+      status: 'Active',
       language: 'English',
     },
     {
@@ -299,6 +301,7 @@ Request: [
       accountId: accountId2,
       birthday: moment({year: 1996, month: 4, day: 25})._d,
       gender: 'male',
+      status: 'Active',
       language: 'English',
     },
     {
@@ -309,6 +312,7 @@ Request: [
       phoneNumber: '+19782521845',
       birthday: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
+      status: 'Active',
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',

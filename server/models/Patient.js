@@ -10,6 +10,7 @@ const Patient = thinky.createModel('Patient', {
   phoneNumber: type.string(),
   accountId: type.string(),
   insurance: type.object().allowNull(),
+  middleName: type.string(),
   //createdAt: type.date().default(thinky.r.now()),
   email: type.string().email(),
 
