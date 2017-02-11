@@ -1,3 +1,4 @@
+
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
 const uuid = require('uuid').v4;
@@ -38,22 +39,25 @@ const chairId = uuid();
 const serviceId = uuid();
 const serviceId2 = uuid();
 
+const appointmentId1 = uuid();
+const appointmentId2 = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 0, 13, 12, 30, 0, 0),
-      endTime: new Date(2017, 0, 13, 10, 30, 0, 0),
+      startTime: new Date(2017, 0, 26, 10, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 11, 30, 0, 0),
       title: 'Sooner Availability',
-      id: uuid(),
+      id: appointmentId1,
       accountId,
       patientId: alexPatientId,
-      serviceId: serviceId,
+      serviceId: serviceId2,
       practitionerId: practitionerId,
       chairId: chairId,
     },
-
     {
+      startTime: new Date(2017, 0, 26, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 13, 30, 0, 0),
       startTime: new Date(2017, 0, 28, 12, 30, 0, 0),
       endTime: new Date(2017, 0, 28, 12, 30, 0, 0),
       title: 'Sooner Availability',
@@ -101,7 +105,7 @@ const SEEDS = {
       startTime: new Date(2017, 3, 29, 12, 30, 0, 0),
       endTime: new Date(2017, 3, 29, 12, 30, 0, 0),
       title: 'Later Availability',
-      id: uuid(),
+      id: appointmentId2,
       accountId,
       patientId: alexPatientId,
       serviceId: serviceId,
@@ -298,14 +302,16 @@ Request: [
       language: 'English',
     },
     {
+      id: alexPatientId,
+      accountId,
       firstName: 'Alex',
       lastName: 'Bashliy',
       phoneNumber: '+19782521845',
-      id: alexPatientId,
-      accountId,
       birthday: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       language: 'English',
+      email: 'alex.bashliy@keenethics.com',
+      appointmentPreference: 'both',
     },
   ],
 
@@ -370,6 +376,16 @@ Request: [
     {
       id: serviceId2,
       accountId: accountId,
+      name: 'Another service',
+      practitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: uuid(),
+      accountId: accountId,
       name: 'Lost Filling',
       practitioners: [ practitionerId ],
       duration: 30,
@@ -383,16 +399,14 @@ Request: [
     {
       id: practitionerId,
       accountId: accountId,
-      // services: [ serviceId ],
-      serviceId: serviceId,
+      services: [ serviceId ],
       firstName: 'Chelsea',
       lastName: 'Mansfield',
     },
     {
       id: practitionerId2,
       accountId,
-      // services: [serviceId],
-      serviceId: serviceId,
+      services: [serviceId],
       firstName: 'Perry',
       lastName: 'Cox',
     },
@@ -494,6 +508,17 @@ Request: [
       accountId: accountId,
       name: 'Chair 1',
       description: '',
+    },
+  ],
+
+  Token: [
+    {
+      id: uuid(),
+      appointmentId: appointmentId1,
+    },
+    {
+      id: uuid(),
+      appointmentId: appointmentId2,
     },
   ],
 };

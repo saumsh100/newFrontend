@@ -8,6 +8,7 @@
 const twilioRouter = require('express').Router();
 const TextMessage = require('../../models/TextMessage');
 const Appointment = require('../../models/Appointment');
+const Token = require('../../models/Token');
 const Patient = require('../../models/Patient');
 const thinky = require('../../config/thinky');
 const twilio = require('../../config/globals').twilio;
@@ -99,7 +100,13 @@ twilioRouter.post('/message', (req, res, next) => {
                 to: patient.phoneNumber,
                 body: `Thank you! We have confirmed that you will be attending your ${appArray[0].service.name} appointment with ${appArray[0].practitioner.firstName} ${appArray[0].practitioner.lastName} from ${appArray[0].account.name}`,
               })
-              .then(result => console.log(result));
+              .then(() => {
+                Token.filter({ appointmentId: confApp.id }).run().then((t) => {
+                  t[0].delete().then((deletedToken) => {
+                    console.log(`Token ${deletedToken} was deleted`);
+                  });
+                }).catch(next);
+              });
             })
             .catch(err => console.log(err));
           });

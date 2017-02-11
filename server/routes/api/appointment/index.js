@@ -3,6 +3,7 @@ const appointmentsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
+const Token = require('../../../models/Appointment');
 
 appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, next) => {
   const {
@@ -28,5 +29,6 @@ appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, ne
     .then(appointments => res.send(normalize('appointment', appointments[0])))
     .catch(next);
 });*/
+
 
 module.exports = appointmentsRouter;

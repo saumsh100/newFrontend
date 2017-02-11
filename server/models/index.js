@@ -8,6 +8,7 @@ const Request = require('./Request');
 const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
+const Token = require('./Token');
 
 
 module.exports = {
@@ -21,4 +22,5 @@ module.exports = {
   Service,
   TextMessage,
   User,
+  Token,
 };

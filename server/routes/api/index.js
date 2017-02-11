@@ -12,6 +12,7 @@ const patientsRouter = require('./patients');
 const requestRouter = require('./request');
 const userRouter = require('./users');
 const textMessagesRouter = require('./textMessages');
+const availabilitiesRouter = require('./availabilities');
 const authMiddleware = require('../../middleware/auth');
 const createJoinObject = require('../../middleware/createJoinObject');
 
@@ -22,5 +23,6 @@ apiRouter.use('/reputation', reputationRouter);
 apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
 apiRouter.use('/users', userRouter);
+apiRouter.use('/availabilities', availabilitiesRouter);
 
 module.exports = apiRouter;
