@@ -75,12 +75,11 @@ class TopBar extends Component {
     return (
       <AppBar className={topBarClassName}>
         {logoComponent}
-        <div className={styles.leftOfBar}>
-          <IconButton onClick={() => setIsCollapsed(!isCollapsed)} icon="bars" />
-        </div>
-        <div className={styles.subTabs}>
-
-        </div>
+        <IconButton
+          icon="bars"
+          className={styles.hamburger}
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        />
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
             <li>
