@@ -14,15 +14,16 @@ export default function RequestShowData({ data }) {
       <div className={styles.requestShowData__phoneNumber}>
         <Icon icon = {'phone'} className={styles.requestShowData__icons}/>
         {data.phoneNumber}
-        </div>
+      </div>
       <div className={styles.requestShowData__email}>
         <Icon icon={'envelope'} className={styles.requestShowData__icons}/>
         {data.email}
-        </div>
+      </div>
       <div className={styles.requestShowData__insurance}>
         <Icon icon={'medkit'} className={styles.requestShowData__icons}/>
         {data.insurance}
-        </div>
+      </div>
+      <div className={styles.requestShowData__comment}>{data.comment}</div>
     </div>
   );
 }

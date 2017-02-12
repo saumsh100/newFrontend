@@ -196,6 +196,8 @@ Request: [
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+
+      comment: 'Some comment from patient here....',
     },
     {
       accountId: accountId,
@@ -212,6 +214,8 @@ Request: [
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+
+      comment: 'Some comment from patient here....',
     }
   ],
 

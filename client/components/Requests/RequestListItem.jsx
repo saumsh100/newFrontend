@@ -26,6 +26,7 @@ export default function RequestListItem({ request, patient, service, practitione
     service: service.name,
     phoneNumber: patient.phoneNumber,
     insurance: patient.getInsurance().insurance,
+    comment: request.comment,
   };
 
   const showResults = true;

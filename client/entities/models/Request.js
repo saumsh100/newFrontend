@@ -11,6 +11,7 @@ const RequestsSchema = {
   serviceId: null,
   practitionerId: null,
   chairId: null,
+  comment: null,
 };
 
 export default class Requests extends createModel(RequestsSchema) {
