@@ -31,18 +31,30 @@ const serviceSchema = () => {
   return new schema.Entity('services');
 };
 
+const textMessageSchema = () => {
+  return new schema.Entity('services');
+};
+
+const userSchema = () => {
+  return new schema.Entity('users');
+};
+
 const SCHEMAS = {
   // Models (singleFetch/findOne)
   appointment: appointmentSchema(),
   patient: patientSchema(),
   request: requestSchema(),
   service: serviceSchema(),
+  textMessage: textMessageSchema(),
+  user: userSchema(),
 
   // Collections (list/find)
   appointments: [appointmentSchema()],
   patients: [patientSchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],
+  textMessages: [textMessageSchema()],
+  users: [userSchema()],
 };
 
 module.exports = function normalize(key, data) {
