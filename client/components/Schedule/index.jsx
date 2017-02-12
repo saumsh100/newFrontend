@@ -15,20 +15,30 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Filters from './Filters'
 import styles from './styles.scss';
-
+import { Card, Tabs, Tab } from '../library';
+import DayView from './DayView';
+import MonthView from './MonthView';
+import WeekView from './WeekView';
+import CurrentDate from './CurrentDate';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
-class Schedule extends Component {
+class ScheduleComponent extends Component {
   constructor(props) {
     super(props);
-    this.state = { availabilities: [], selectedDay: new Date(), showDatePicker: false };
+    this.state = {
+      availabilities: [],
+      selectedDay: new Date(),
+      showDatePicker: false,
+      index: 0,
+    };
     this.addAvailability = this.addAvailability.bind(this);
     this.removeAvailability = this.removeAvailability.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
     this.toggleCalendar = this.toggleCalendar.bind(this);
+    this.handleTabChange = this.handleTabChange.bind(this);
   }
 
   componentDidMount() {
@@ -45,8 +55,6 @@ class Schedule extends Component {
       this.setState({ availabilities });
     });
     window.socket.emit('fetchAvailabilities');
-    this.props.fetchEntities({ key: 'appointments' });
-    this.props.fetchEntities({ key: 'practitioners' });
   }
 
   handleDayClick(e, day, { selected, disabled }) {
@@ -77,6 +85,11 @@ class Schedule extends Component {
     window.socket.emit('removeAvailability', { id });
   }
 
+  handleTabChange(index) {
+    this.props.setSheduleMode(index);
+    this.setState({ index });
+  }
+
   render() {
     const events = this.state.availabilities.map((avail) => {
       return Object.assign({}, avail, {
@@ -92,6 +105,7 @@ class Schedule extends Component {
       removePractitionerFromFilter,
       selectAppointmentType,
       schedule,
+      patients,
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
@@ -100,16 +114,40 @@ class Schedule extends Component {
           appointmentsTypes.push(app.title);
         }
       });
-
+    let content = null;
+    const params = {
+      practitioners,
+      patients,
+      appointments,
+      schedule,
+    }
+    const currentDate = moment(schedule.toJS().scheduleDate);
+    switch(this.state.index) {
+      case 0:
+        content = <DayView {...params} />
+        break;
+      case 1:
+        content = <MonthView {...params} />
+        break;
+      case 2:
+        content = <WeekView {...params} />
+        break;
+    }
     return (
       <div className={styles.scheduleContainerWrapper}>
         <div className={`${styles.scheduleContainer} schedule`}>
           <div className={`${styles.schedule__title} ${styles.title}`}>
-            <Link to="/schedule/monthview">month</Link>
-            <br />
-            <Link to="/schedule/dayview">day</Link>
-            <br />
-            <Link to="/schedule/weekview">week</Link>
+            <CurrentDate currentDate={currentDate} />
+            <Tabs index={this.state.index} onChange={this.handleTabChange}>
+              {schedule.toJS().scheduleModes.map(s => {
+                const label = s;
+                return (
+                  <Tab label={label}>
+                    {/* <span>{label}</span> */}
+                  </Tab>
+                )
+              })}
+            </Tabs>
             <i className="styles__icon___2RuH0 fa fa-calendar"
               onClick={this.toggleCalendar}
             />
@@ -121,7 +159,7 @@ class Schedule extends Component {
               />
             }
           </div>
-          {this.props.children}
+          {content}
         </div>
         <div className={styles.scheduleSidebar}>
           <Filters
@@ -138,7 +176,7 @@ class Schedule extends Component {
   }
 }
 
-Schedule.propTypes = {
+ScheduleComponent.propTypes = {
   fetchEntities: PropTypes.func,
   children: PropTypes.arrayOf(PropTypes.object),
   practitioners: PropTypes.object,
@@ -150,22 +188,4 @@ Schedule.propTypes = {
   schedule: PropTypes.object,
 };
 
-function mapStateToProps({ entities, schedule }) {
-  return {
-    practitioners: entities.get('practitioners'),
-    schedule,
-    appointments: entities.get('appointments'),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setCurrentScheduleDate,
-    addPractitionerToFilter,
-    removePractitionerFromFilter,
-    selectAppointmentType,
-    fetchEntities,
-  }, dispatch);
-}
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-export default enhance(Schedule);
+export default ScheduleComponent;
