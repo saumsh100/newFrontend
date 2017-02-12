@@ -1,15 +1,16 @@
 
 const chairsRouter = require('express').Router();
-const Chair = require('../../../models/Chair');
+const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const normalize = require('../normalize');
+const Chair = require('../../../models/Chair');
 
 chairsRouter.param('chairId', loaders('chair', 'Chair'));
 
 /**
  * Create a chair
  */
-chairsRouter.post('/', (req, res, next) => {
+chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
   // Attach chair to the clinic of posting user
   const chairData = Object.assign({}, req.body, {
     accountId: req.accountId,
@@ -23,7 +24,7 @@ chairsRouter.post('/', (req, res, next) => {
 /**
  * Get all chairs under a clinic
  */
-chairsRouter.get('/', (req, res, next) => {
+chairsRouter.get('/', checkPermissions('chairs:read'), (req, res, next) => {
   const { accountId } = req;
 
   // There is no joinData for chair, no need to put...
@@ -35,7 +36,7 @@ chairsRouter.get('/', (req, res, next) => {
 /**
  * Get a chair
  */
-chairsRouter.get('/:chairId', (req, res, next) => {
+chairsRouter.get('/:chairId', checkPermissions('chairs:read'), (req, res, next) => {
   return Promise.resolve(req.chair)
     .then(chair => res.send(normalize('chair', chair)))
     .catch(next);
@@ -44,7 +45,7 @@ chairsRouter.get('/:chairId', (req, res, next) => {
 /**
  * Update a chair
  */
-chairsRouter.put('/:chairId', (req, res, next) => {
+chairsRouter.put('/:chairId', checkPermissions('chairs:update'), (req, res, next) => {
   return req.chair.merge(req.body).save()
     .then(chair => res.send(normalize('chair', chair)))
     .catch(next);
@@ -53,7 +54,7 @@ chairsRouter.put('/:chairId', (req, res, next) => {
 /**
  * Delete a chair
  */
-chairsRouter.delete('/:chairId', (req, res, next) => {
+chairsRouter.delete('/:chairId', checkPermissions('chairs:delete'), (req, res, next) => {
   // We actually delete chairs as we don't care about history
   return req.chair.delete()
     .then(() => res.send(204))
