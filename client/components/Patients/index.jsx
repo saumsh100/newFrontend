@@ -1,7 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import PatientList from './PatientList';
-import styles from './styles.scss';
 
 class Patients extends Component {
   constructor(props) {
@@ -30,7 +29,4 @@ class Patients extends Component {
 Patients.propTypes = {
   patients: PropTypes.object.isRequired,
 };
-
-
-
 export default Patients;

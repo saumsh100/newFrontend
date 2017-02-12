@@ -2,17 +2,7 @@
 @import '../../../ui.scss';
 
 .iconButton {
-  background-color: transparent;
-  color: $primary-dark;
   width: 50px;
-  font-size: 1.5em;
-  &:focus, &:active {
-    background-color: transparent;
-    box-shadow: none;
-  }
-
-  &:hover {
-    color: $primary-color-hover;
-    background-color: transparent;
-  }
+  font-size: 1.4em;
+  color: #B4B4B4;
 }

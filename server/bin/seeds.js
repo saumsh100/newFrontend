@@ -21,6 +21,7 @@ const saltRounds = 10;
 
 
 const accountId = uuid();
+const accountId2 = uuid();
 const justinPatientId = uuid();
 const sergeyPatientId = uuid();
 const lonnyUserId = uuid();
@@ -34,13 +35,31 @@ const alexPatientId = uuid();
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const chairId = uuid();
+
 const serviceId = uuid();
+const serviceId2 = uuid();
+
+const appointmentId1 = uuid();
+const appointmentId2 = uuid();
 
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 0, 13, 12, 30, 0, 0),
-      endTime: new Date(2017, 0, 13, 10, 30, 0, 0),
+      startTime: new Date(2017, 0, 26, 10, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 11, 30, 0, 0),
+      title: 'Sooner Availability',
+      id: appointmentId1,
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+    {
+      startTime: new Date(2017, 0, 26, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 13, 30, 0, 0),
+      startTime: new Date(2017, 0, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 28, 12, 30, 0, 0),
       title: 'Sooner Availability',
       id: uuid(),
       accountId,
@@ -49,21 +68,9 @@ const SEEDS = {
       practitionerId: practitionerId,
       chairId: chairId,
     },
-
     {
-      startTime: moment({hour: 19, minute: 20})._d,
-      endTime: moment({hour: 20, minute: 0})._d,
-      title: 'Sooner Availability',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-    {
-      startTime: moment({hour: 19, minute: 20})._d,
-      endTime: moment({hour: 20, minute: 0})._d,
+      startTime: new Date(2017, 1, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 1, 28, 12, 30, 0, 0),
       title: 'Sooner Availability',
       id: uuid(),
       accountId,
@@ -73,8 +80,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: moment({hour: 15, minute: 30})._d,
-      endTime: moment({hour: 15, minute: 30})._d,
+      startTime: new Date(2017, 2, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 2, 28, 12, 30, 0, 0),
       title: 'regular check',
       id: uuid(),
       accountId,
@@ -84,8 +91,8 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: moment({hour: 12, minute: 30})._d,
-      endTime: moment({hour: 16, minute: 30})._d,
+      startTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      endTime: new Date(2017, 2, 29, 12, 30, 0, 0),
       title: 'check',
       id: uuid(),
       accountId,
@@ -95,10 +102,10 @@ const SEEDS = {
       chairId: chairId,
     },
     {
-      startTime: moment({hour: 10, minute: 38})._d,
-      endTime: moment({hour: 12, minute: 15})._d,
+      startTime: new Date(2017, 3, 29, 12, 30, 0, 0),
+      endTime: new Date(2017, 3, 29, 12, 30, 0, 0),
       title: 'Later Availability',
-      id: uuid(),
+      id: appointmentId2,
       accountId,
       patientId: alexPatientId,
       serviceId: serviceId,
@@ -109,8 +116,8 @@ const SEEDS = {
       accountId,
       id: uuid(),
       title: 'Justin\'s appointment',
-      startTime: moment({hour: 20, minute: 38})._d,
-      endTime: moment({hour: 22, minute: 38})._d,
+      startTime: new Date(2016, 2, 29, 14, 30, 0, 0),
+      endTime: new Date(2016, 2, 29, 16, 30, 0, 0),
 
       patientId: justinPatientId,
       serviceId: serviceId,
@@ -142,8 +149,8 @@ const SEEDS = {
     {
       id: uuid(),
       title: 'Sergey\'s appointment',
-      startTime: moment({hour: 0, minute: 30})._d,
-      endTime: moment({hour: 2, minute: 10})._d,
+      startTime: new Date(2016, 2, 29, 18, 30, 0, 0),
+      endTime: new Date(2016, 2, 29, 20, 30, 0, 0),
       patientId: sergeyPatientId,
       accountId: accountId,
       serviceId: serviceId,
@@ -174,6 +181,42 @@ const SEEDS = {
       isSyncedWithPMS: true,
       isCancelled: false,
     },
+  ],
+
+Request: [
+    {
+      accountId: accountId,
+      id: uuid(),
+      title: 'Sergey\'s appointment',
+      startTime: moment({hour: 23, minute: 10})._d,
+      endTime: moment({hour: 23, minute: 50})._d,
+
+      patientId: sergeyPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      accountId: accountId,
+      id: uuid(),
+      title: 'Justin\'s appointment',
+      startTime: moment({hour: 13, minute: 10})._d,
+      endTime: moment({hour: 13, minute: 50})._d,
+      patientId: justinPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+
+      isClinicConfirmed: false,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    }
   ],
 
   User: [
@@ -226,24 +269,53 @@ const SEEDS = {
       lastName: 'Sharp',
       phoneNumber: '+17808508886',
       id: justinPatientId,
+      accountId,
+      birthday: moment({year: 1993, month: 6, day: 15})._d,
+      gender: 'male',
+      language: 'English',
+      status: 'Active',
+      insurance: {
+        insurance: 'insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      },
     },
     {
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       phoneNumber: '+17782422626',
       id: sergeyPatientId,
+      accountId,
+      birthday: moment({year: 1983, month: 2, day: 6})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
     },
     {
       firstName: 'Mark',
       lastName: 'Joseph',
       phoneNumber: '+17788654451',
       id: uuid(),
+      accountId: accountId2,
+      birthday: moment({year: 1996, month: 4, day: 25})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
     },
     {
+      id: alexPatientId,
+      accountId,
       firstName: 'Alex',
       lastName: 'Bashliy',
       phoneNumber: '+19782521845',
-      id: alexPatientId,
+      birthday: moment({year: 1997, month: 3, day: 4})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
+      email: 'alex.bashliy@keenethics.com',
+      appointmentPreference: 'both',
     },
   ],
 
@@ -262,7 +334,7 @@ const SEEDS = {
       userId: lonnyUserId,
       accountId,
       role: 'OWNER',
-      permissions: { reviews: { create: true } }, // test permission
+      permissions: { requests: { read: true } }, // test permission
     },
     {
       id: uuid(),
@@ -299,6 +371,26 @@ const SEEDS = {
       id: serviceId,
       accountId: accountId,
       name: 'Routine Checkup',
+    //  practitioners: [ ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: serviceId2,
+      accountId: accountId,
+      name: 'Another service',
+      // practitioners: [  ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: uuid(),
+      accountId: accountId,
+      name: 'Lost Filling',
       practitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,
@@ -328,45 +420,90 @@ const SEEDS = {
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId,
+      accountId,
       body: 'from Chelsea 1',
       createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+      read: false,
+      senderId: alexPatientId,
     },
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId,
+      accountId,
       body: 'from Chelsea 2',
       createdAt: new Date(2017, 0, 6, 12, 30, 0, 0),
+      read: false,
+      senderId: alexPatientId,
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: '33333 Chelsea 1',
+      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+      read: false,
+      senderId: alexPatientId,
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: '33333332231 Chelsea 2',
+      createdAt: new Date(2017, 0, 6, 12, 30, 0, 0),
+      read: false,
+      senderId: alexPatientId,
     },
     {
       id: uuid(),
       patientId: justinPatientId,
-      practitionerId,
+      accountId,
       body: 'from Chelsea2',
       createdAt: new Date(2017, 0, 2, 12, 30, 0, 0),
+      read: false,
+      senderId: accountId,
     },
     {
       id: uuid(),
       patientId: justinPatientId,
-      practitionerId: practitionerId2,
+      accountId,
       body: 'from Perry 1',
       createdAt: new Date(2017, 0, 3, 12, 30, 0, 0),
+      read: false,
+      senderId: accountId,
     },
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId: practitionerId2,
+      accountId,
       body: 'from Perry to alex 1',
       createdAt: new Date(2017, 0, 4, 11, 30, 0, 0),
+      read: false,
     },
     {
       id: uuid(),
       patientId: alexPatientId,
-      practitionerId: practitionerId2,
+      accountId,
       body: 'from Perry to Alex 2',
       createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
+      read: false,
     },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: 'from Perry to alex 1',
+      createdAt: new Date(2017, 0, 4, 11, 30, 0, 0),
+      read: false,
+    },
+    {
+      id: uuid(),
+      patientId: alexPatientId,
+      accountId,
+      body: 'from Perry to Alex 2',
+      createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
+      read: false,
+    },
+
   ],
 
   Chair: [
@@ -375,6 +512,17 @@ const SEEDS = {
       accountId: accountId,
       name: 'Chair 1',
       description: '',
+    },
+  ],
+
+  Token: [
+    {
+      id: uuid(),
+      appointmentId: appointmentId1,
+    },
+    {
+      id: uuid(),
+      appointmentId: appointmentId2,
     },
   ],
 };

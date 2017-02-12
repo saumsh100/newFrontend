@@ -19,7 +19,7 @@ module.exports = {
   cache: true,
   context: __dirname,
   debug: true,
-  devtool: 'cheap-eval-source-map',
+  devtool: 'cheap-module-source-map',
   entry: {},
   output: {},
   resolve: {

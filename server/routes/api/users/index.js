@@ -1,13 +1,11 @@
 
-// const { normalize, Schema, arrayOf } = require('normalizr');
 const bcrypt = require('bcrypt');
 const zxcvbn = require('zxcvbn');
 const userRouter = require('express').Router();
 const User = require('../../../models/User');
 const loaders = require('../../util/loaders');
 const StatusError = require('../../../util/StatusError');
-
-// const userSchema = new Schema('users');
+const normalize = require('../normalize');
 
 userRouter.param('userId', loaders('profile'));
 
@@ -37,7 +35,7 @@ userRouter.put('/:userId', (req, res, next) => {
             .then((updatedUser) => {
               // Now save and respond finally!
               return updatedUser.save()
-                .then(savedUser => res.send(savedUser));
+                .then(savedUser => res.send(normalize('user', savedUser)));
             });
         })
         .catch((err) => {

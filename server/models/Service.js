@@ -1,3 +1,4 @@
+
 const thinky = require('../config/thinky');
 const type = thinky.type;
 

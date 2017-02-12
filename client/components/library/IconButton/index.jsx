@@ -18,7 +18,7 @@ export default function IconButton(props) {
   const classes = classNames(className, styles.iconButton);
   const buttonProps = omit(props, ['icon', 'size']);
   return (
-    <Button {...buttonProps} className={classes}>
+    <Button {...buttonProps} className={classes} flat>
       <Icon icon={icon} size={size} />
     </Button>
   );

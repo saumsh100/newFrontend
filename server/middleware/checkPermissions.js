@@ -1,4 +1,3 @@
-
 const StatusError = require('../util/StatusError');
 
 module.exports = function checkPermission(permission) {
