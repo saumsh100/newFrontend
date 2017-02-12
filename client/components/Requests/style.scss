@@ -49,9 +49,9 @@
   &__time{
   }
   &__service  {
-    opacity: 0.5;
     border-bottom: 1px solid;
     margin-right: 1.5em;
+    opacity: 0.75;
   }
   &__phoneNumber{
     padding-top: 0.5em;
@@ -60,9 +60,11 @@
   }
   &__email{
     font-size: small;
+    opacity: 0.5;
   }
   &__insurance{
     font-size: small;
+    opacity: 0.5;
   }
   &__icons{
     color: #ffc45a;
