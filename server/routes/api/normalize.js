@@ -11,6 +11,10 @@ const appointmentSchema = () => {
   });
 };
 
+const chairSchema = () => {
+  return new schema.Entity('chairs');
+};
+
 const patientSchema = () => {
   return new schema.Entity('patients');
 };
@@ -42,6 +46,7 @@ const userSchema = () => {
 const SCHEMAS = {
   // Models (singleFetch/findOne)
   appointment: appointmentSchema(),
+  chair: chairSchema(),
   patient: patientSchema(),
   request: requestSchema(),
   service: serviceSchema(),
@@ -50,6 +55,7 @@ const SCHEMAS = {
 
   // Collections (list/find)
   appointments: [appointmentSchema()],
+  chairs: [chairSchema()],
   patients: [patientSchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],

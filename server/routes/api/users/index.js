@@ -7,7 +7,7 @@ const loaders = require('../../util/loaders');
 const StatusError = require('../../../util/StatusError');
 const normalize = require('../normalize');
 
-userRouter.param('userId', loaders('profile'));
+userRouter.param('userId', loaders('profile', 'User'));
 
 userRouter.put('/:userId', (req, res, next) => {
   Promise.resolve(req.profile)
