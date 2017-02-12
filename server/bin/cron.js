@@ -11,7 +11,7 @@ cron.schedule(cronPattern, () => {
   // Tell the reminders process to compute the reminders that have to be sent
   const job = remindersQueue.createJob({ retryMax: 2, mili24hours: 86400000 });
   remindersQueue.addJob(job)
-    .then(savedJobs => console.log('saved job')
+    .then(savedJobs => console.log('saved job'))
     .catch(err => console.error(err));
 });
 
