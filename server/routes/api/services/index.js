@@ -1,10 +1,7 @@
-const { normalize, Schema, arrayOf } = require('normalizr');
+
 const servicesRouter = require('express').Router();
 const Service = require('../../../models/Service');
-const uuid = require('uuid').v4;
-const assign = require('lodash/assign');
-
-const servicesSchema = new Schema('servicesSchema');
+const normalize = require('../normalize');
 
 servicesRouter.get('/', (req, res, next) => {
   Service.getJoin({ practitioners: true })

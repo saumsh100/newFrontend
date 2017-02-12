@@ -1,51 +1,47 @@
-const { normalize, Schema, arrayOf } = require('normalizr');
+
 const practitionersRouter = require('express').Router();
 const Practitioner = require('../../../models/Practitioner');
-const uuid = require('uuid').v4;
-const assign = require('lodash/assign');
-
-const practitionerSchema = new Schema('practitionerSchema');
+const normalize = require('../normalize');
 
 practitionersRouter.get('/', (req, res, next) => {
-  Practitioner.run()
-    .then(practitioners => res.send(normalize(practitioners, arrayOf(practitionerSchema))))
+  return Practitioner.run()
+    .then(practitioners => res.send(normalize('practitioners', practitioners)))
     .catch(next);
 });
 
 practitionersRouter.post('/', (req, res, next) => {
-  console.log(assign({ id: uuid() }, req.body));
-  Practitioner.save(assign({ id: uuid() }, req.body))
-  .then(practitioner => res.send(normalize(practitioner, practitionerSchema)))
-  .catch(next);
+  return Practitioner.save(req.body)
+    .then(practitioner => res.send(normalize('practitioner', practitioner)))
+    .catch(next);
 });
 
 practitionersRouter.get('/:practitionerId', (req, res, next) => {
   const { practitionerId } = req.params;
-  Practitioner.get(practitionerId).execute()
-    .then(practitioner => res.send(normalize(practitioner, practitionerSchema)))
+  return Practitioner.get(practitionerId).execute()
+    .then(practitioner => res.send(normalize('practitioner', practitioner)))
     .catch(next);
 });
 
 practitionersRouter.put('/:practitionerId', (req, res, next) => {
   const { practitionerId } = req.params;
-  Practitioner.get(practitionerId).then(p =>
+  return Practitioner.get(practitionerId).then(p =>
     p.merge(req.body).save()
   )
-  .then((practitioner) => {
-    res.send(normalize(practitioner, practitionerSchema));
-  })
-  .catch(next);
+    .then((practitioner) => {
+      res.send(normalize('practitioner', practitioner));
+    })
+    .catch(next);
 });
 
 practitionersRouter.delete('/:practitionerId', (req, res, next) => {
   const { practitionerId } = req.params;
-  Practitioner.get(practitionerId).then(practitioner =>
+  return Practitioner.get(practitionerId).then(practitioner =>
     practitioner.delete()
   )
-  .then((result) => {
-    res.send(normalize(result, practitionerSchema));
-  })
-  .catch(next);
+    .then((result) => {
+      res.send();
+    })
+    .catch(next);
 });
 
 module.exports = practitionersRouter;
