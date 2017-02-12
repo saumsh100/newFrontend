@@ -24,6 +24,7 @@ class RequestList extends Component {
                 request={request}
                 patient={this.props.patients.get(request.get('patientId'))}
                 service={this.props.services.get(request.get('serviceId'))}
+                practitioner={this.props.practitioners.get(request.get('practitionerId'))}
               />
             );
           })}

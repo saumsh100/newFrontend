@@ -24,7 +24,7 @@
 
 .requestData{
   text-align: left;
-  font-size: x-small;
+  font-size: small;
   &__time{
   }
   &__nameAge{
@@ -35,6 +35,38 @@
   }
   &__service  {
     opacity: 0.25;
+  }
+}
+
+.requestShowData{
+  padding-left: 1.5em;
+  text-align: left;
+  font-size: larger;
+
+  &__nameAge{
+    color: #ffc45a;
+  }
+  &__time{
+  }
+  &__service  {
+    opacity: 0.5;
+    border-bottom: 1px solid;
+    margin-right: 1.5em;
+  }
+  &__phoneNumber{
+    padding-top: 0.5em;
+    font-size: small;
+    opacity: 0.5;
+  }
+  &__email{
+    font-size: small;
+  }
+  &__insurance{
+    font-size: small;
+  }
+  &__icons{
+    color: #ffc45a;
+    padding-right: 1em;
   }
 }
 
