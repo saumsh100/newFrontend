@@ -10,7 +10,7 @@ const PatientSchema = {
   image: null,
   gender: null,
   language: null,
-  birthday: null,
+  birthDate: null,
   middleName: null,
 };
 

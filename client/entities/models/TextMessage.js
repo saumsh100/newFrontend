@@ -6,7 +6,7 @@ const TextMessageSchema = {
   chatId: null,
   to: null,
   from: null,
-  message: null,
+  smsStatus: null,
   status: null,
   createdAt: null,
   body: null,
