@@ -1,36 +1,23 @@
 
 const thinky = require('../config/thinky');
-
+const createModel = require('./createModel');
 const type = thinky.type;
 
-const Request = thinky.createModel('Request', {
-  id: type.string().uuid(4),
-  title: type.string(),
+const Request = createModel('Request', {
   startTime: type.date().required(),
   endTime: type.date().required(),
-  createdAt: type.date(),
-  confirmed: type.boolean().default(false),
-
-
   comment: type.string(),
+  appointmentId: type.string().uuid(4),
 
-  // Relations
   patientId: type.string().uuid(4).required(),
   accountId: type.string().uuid(4).required(),
   serviceId: type.string().uuid(4).required(),
   practitionerId: type.string().uuid(4).required(),
-  chairId: type.string().uuid(4),
 
-  // Lifecycle Attributes
-  isClinicConfirmed: type.boolean(),
-  isPatientConfirmed: type.boolean(),
-  isSyncedWithPMS: type.boolean(),
-  isCancelled: type.boolean(),
+  isConfirmed: type.boolean().default(false),
 
-  // Custom buffer time in minutes
   customBufferTime: type.number().integer(),
 
-  // Split Appointments
   isSplit: type.boolean(),
   splitAppointments: [type.string().uuid(4)],
   isParent: type.boolean(),

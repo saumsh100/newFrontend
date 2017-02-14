@@ -11,6 +11,14 @@ const appointmentSchema = () => {
   });
 };
 
+const chairSchema = () => {
+  return new schema.Entity('chairs');
+};
+
+const chatSchema = () => {
+  return new schema.Entity('chats');
+};
+
 const patientSchema = () => {
   return new schema.Entity('patients');
 };
@@ -32,7 +40,7 @@ const serviceSchema = () => {
 };
 
 const textMessageSchema = () => {
-  return new schema.Entity('services');
+  return new schema.Entity('textMessages');
 };
 
 const userSchema = () => {
@@ -42,6 +50,8 @@ const userSchema = () => {
 const SCHEMAS = {
   // Models (singleFetch/findOne)
   appointment: appointmentSchema(),
+  chair: chairSchema(),
+  chat: chatSchema(),
   patient: patientSchema(),
   request: requestSchema(),
   service: serviceSchema(),
@@ -50,6 +60,8 @@ const SCHEMAS = {
 
   // Collections (list/find)
   appointments: [appointmentSchema()],
+  chairs: [chairSchema()],
+  chats: [chatSchema()],
   patients: [patientSchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],

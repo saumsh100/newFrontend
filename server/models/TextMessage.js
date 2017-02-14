@@ -1,25 +1,22 @@
 
 const thinky = require('../config/thinky');
+const createModel = require('./createModel');
 const type = thinky.type;
 
-const TextMessage = thinky.createModel('TextMessage', {
+const TextMessage = createModel('TextMessage', {
   // Twilio MessageSID
-  id: type.string().required(),
-  patientId: type.string(),
-  accountId: type.string(),
+  chatId: type.string().uuid(4).required(),
+
   // Twilio Data
-  to: type.string(),
-  from: type.string(),
-  body: type.string(),
+  to: type.string().required(),
+  from: type.string().required(),
+  body: type.string().required(),
   smsStatus: type.string(),
-  createdAt: type.date(),
   dateCreated: type.date(),
   dateUpdated: type.date(),
   apiVersion: type.string(),
   accountSid: type.string(),
-
   read: type.boolean().default(false),
-  senderId: type.string(),
 
   // Depends on carrier if populated I believe
   toZip: type.string(),
@@ -39,7 +36,5 @@ const TextMessage = thinky.createModel('TextMessage', {
   // This is easier...
   mediaData: type.object(),
 });
-
-TextMessage.ensureIndex('patientId');
 
 module.exports = TextMessage;

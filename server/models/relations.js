@@ -2,14 +2,15 @@
 const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
+const Chat = require('./Chat');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
 const Request = require('./Request');
 const Service = require('./Service');
 const TextMessage = require('./TextMessage');
-const User = require('./User');
 const Token = require('./Token');
+const User = require('./User');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
@@ -44,3 +45,7 @@ Patient.belongsTo(Account, 'account', 'accountId', 'id');
 // Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id')
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Patient, 'patients', 'id', 'accountId');
+
+Chat.hasOne(Patient, 'patient', 'patientId', 'id');
+Chat.hasOne(Account, 'account', 'accountId', 'id');
+Chat.hasMany(TextMessage, 'textMessages', 'id', 'chatId');

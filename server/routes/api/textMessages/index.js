@@ -13,27 +13,38 @@ const normalize = require('../normalize');
 textMessagesRouter.get('/', (req, res, next) => {
   const {
     patientId,
-    limit,
+    limit = 100,
     offset,
   } = req.query;
 
+
+
   // TODO: needs an auth layer to see if this requesting account has access to this patient
 
-  TextMessage.getAll(patientId, { index: 'patientId' })
-    .limit(Math.min(limit, 100))
-    .orderBy('createdAt')
+  TextMessage
+    .group('patientId')
     .run()
-    .then(textMessages => res.send(normalize('textMessages', textMessages)))
+    .then(textMessages => res.send(textMessages))
     .catch(next);
 });
 
 textMessagesRouter.get('/twilio', (req, res, next) => {
   twilioClient.messages.list((err, data) => {
+    if (err) return next(err);
     res.send(data);
   });
 });
 
 textMessagesRouter.get('/conversations', (req, res, next) => {
+  // Pull textMessages and patients for the most recent conversations
+
+  // Grab 10 most recent conversations by default
+  // A conversation is all textMessages (cap at 50 unread (50+) or 25 read) between clinic and patient
+  // UNREAD_CAP = 50;
+  // READ_CAP = 25;
+
+
+
   return res.send(normalize('textMessages', []));
 });
 

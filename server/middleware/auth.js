@@ -12,6 +12,8 @@ const CRUD = {
 
 const OWNER = {
   accounts: CRUD,
+  chairs: CRUD,
+  chats: CRUD,
   patients: CRUD,
   appointments: CRUD,
   textMessages: Object.assign({}, CRUD, {

@@ -79,8 +79,8 @@ patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
       .catch(next);
   }
   /* Patient.run()
-   .then(patients => res.send(normalize(patients, arrayOf(patientSchema))))
-   .catch(next); */
+    .then(patients => res.send(normalize(patients, arrayOf(patientSchema))))
+    .catch(next); */
 });
 
 patientsRouter.post('/', (req, res, next) => {
