@@ -13,4 +13,6 @@ export default function RequestData({ data }) {
   );
 }
 
-RequestData.propTypes = {};
+RequestData.propTypes = {
+  data: PropTypes.object.isRequired
+};

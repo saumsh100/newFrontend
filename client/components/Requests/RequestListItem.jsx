@@ -14,7 +14,6 @@ class RequestListItem extends Component {
     }
     this.showAppointment = this.showAppointment.bind(this);
     this.hideAppointment = this.hideAppointment.bind(this);
-
   }
 
   showAppointment() {
@@ -46,7 +45,9 @@ class RequestListItem extends Component {
           <MonthDay month={data.month} day={data.day} />
           <RequestData data={data}/>
         </ListItem>
-        {this.state.showResults ? <AppointmentShowData data={data} /> : null }
+        <div>
+          {this.state.showResults ? <AppointmentShowData data={data} /> : null }
+        </div>
       </div>
     );
   }
