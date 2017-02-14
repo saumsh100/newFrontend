@@ -22,11 +22,13 @@ export default function AppointmentShowData({ data }) {
         <Icon icon={'medkit'} className={styles.appointmentShowData__icons}/>
         {data.insurance}
       </div>
-      <div className={styles.appointmentShowData__comment}>{data.comment}</div>
+      <div className={styles.appointmentShowData__comment}>
+        <b>Note: </b>
+        {data.comment}
+      </div>
     </div>
   );
 }
-
 
 AppointmentShowData.propTypes = {
   data: PropTypes.object.isRequired,

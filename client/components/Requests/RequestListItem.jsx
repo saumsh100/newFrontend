@@ -37,4 +37,7 @@ export default function RequestListItem({ request, patient, service, practitione
 
 
 
-RequestListItem.propTypes = {};
+RequestListItem.propTypes = {
+  patient: PropTypes.object.isRequired,
+  request: PropTypes.object.isRequired,
+};
