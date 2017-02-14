@@ -203,37 +203,25 @@ const SEEDS = {
 
   Request: [
     {
-      accountId: accountId,
-      id: uuid(),
-      title: 'Sergey\'s appointment',
+      accountId,
       startTime: moment({hour: 23, minute: 10})._d,
       endTime: moment({hour: 23, minute: 50})._d,
 
       patientId: sergeyPatientId,
-      serviceId: serviceId,
-      practitionerId: practitionerId,
-      chairId: chairId,
-
-      isClinicConfirmed: false,
-      isPatientConfirmed: true,
-      isSyncedWithPMS: true,
-      isCancelled: false,
+      serviceId,
+      practitionerId,
+      chairId,
+      isConfirmed: false,
     },
     {
-      accountId: accountId,
-      id: uuid(),
-      title: 'Justin\'s appointment',
+      accountId,
       startTime: moment({hour: 13, minute: 10})._d,
       endTime: moment({hour: 13, minute: 50})._d,
       patientId: justinPatientId,
       serviceId: serviceId2,
       practitionerId: practitionerId2,
-      chairId: chairId,
-
-      isClinicConfirmed: false,
-      isPatientConfirmed: true,
-      isSyncedWithPMS: true,
-      isCancelled: false,
+      chairId,
+      isConfirmed: false,
     }
   ],
 
@@ -327,21 +315,18 @@ const SEEDS = {
 
   Permission: [
     {
-      id: uuid(),
       userId: justinUserId,
       accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
-      id: uuid(),
       userId: alexUserId,
       accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
-      id: uuid(),
       userId: sergeyUserId,
       accountId,
       role: 'OWNER',
