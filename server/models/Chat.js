@@ -3,10 +3,10 @@ const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const type = thinky.type;
 
-const Chair = createModel('Chair', {
+const Chat = createModel('Chat', {
   accountId: type.string().uuid(4).required(),
-  name: type.string().required(),
-  description: type.string(),
+  patientId: type.string().uuid(4).required(),
+  lastTextMessageDate: type.date(),
 });
 
-module.exports = Chair;
+module.exports = Chat;

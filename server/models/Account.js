@@ -1,15 +1,13 @@
+
 const thinky = require('../config/thinky');
+const createModel = require('./createModel');
 const type = thinky.type;
 
-const Account = thinky.createModel('Account', {
-  id: type.string().uuid(4),
-  users: [type.string().uuid(4)],
-  name: type.string(),
+const Account = createModel('Account', {
+  name: type.string().required(),
   vendastaId: type.string(),
   smsPhoneNumber: type.string(),
   // users: []
-}, {
-  pk: 'id',
 });
 
 module.exports = Account;
