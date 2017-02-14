@@ -69,7 +69,7 @@ const getFirstAvailableDate = (appointments, startDate, serviceDuration) => {
 availabilitiesRouter.get('/', (req, res, next) => {
   // const OFFICE_START_TIME = moment({ hours: 9, minutes: 0 });
   // const OFFICE_END_TIME = moment({ hours: 17, minutes: 0 });
-  const { serviceId, practitionerId, startDate, endDate } = req.query;
+  const { serviceId, practitionerId, startDate, endDate, retrieveFirstTime } = req.query;
 
   Service.get(serviceId).run().then((service) => {
     Appointment
@@ -78,23 +78,19 @@ availabilitiesRouter.get('/', (req, res, next) => {
 
 
         const startDateTopass = moment(startDate).clone().startOf('day')
-        const firstAvailableDate = getFirstAvailableDate(appointments, startDateTopass, service.duration);
-        console.log("firstAvailableDate");
-        console.log(moment(firstAvailableDate).format('MMMM Do YYYY, h:mm:ss a'));
-
-        const endAvailableDateToShow = moment(firstAvailableDate).add(4, 'days')._d
-        // new code
+        
+        let firstAvailableDate = startDate;
+        let endAvailableDateToShow = endDate;
+        if (retrieveFirstTime) {
+          firstAvailableDate = getFirstAvailableDate(appointments, startDateTopass, service.duration);
+          endAvailableDateToShow = moment(firstAvailableDate).add(4, 'days')._d
+          console.log(moment(firstAvailableDate).format('MMMM Do YYYY, h:mm:ss a'));
+        }
+        
         const requiredRange = moment.range(
           moment(firstAvailableDate).startOf('day'),
           moment(endAvailableDateToShow).endOf('day')
         );
-        
-        // old code
-        /*const requiredRange = moment.range(
-          moment(startDate).startOf('day'),
-          moment(endDate).endOf('day')
-        );*/
-
 
         const results = _.fromPairs(
           Array.from(requiredRange.by('day'))

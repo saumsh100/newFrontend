@@ -17,6 +17,7 @@ class Availability extends React.Component {
       selectedStartDay: new Date(),
       selectedEndDay: moment().add(4, 'd')._d,
       shouldFetchAvailabilities: true,
+      retrieveFirstTime: true,
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
     this.onServiceChange = this.onServiceChange.bind(this);
@@ -47,14 +48,20 @@ class Availability extends React.Component {
         .filter(s =>
           includes(s.practitioners, this.state.practitionerId)
         )[0].id }, () => {
+
+        const params = {
+          practitionerId: this.state.practitionerId,
+          serviceId: this.state.serviceId,
+          startDate: this.state.selectedStartDay,
+          endDate: this.state.selectedEndDay,
+        }
+        if (this.state.retrieveFirstTime) {
+          params.retrieveFirstTime = this.state.retrieveFirstTime;
+        }
         this.props.fetchEntities({ key: 'availabilities',
-          params: {
-            practitionerId: this.state.practitionerId,
-            serviceId: this.state.serviceId,
-            startDate: this.state.selectedStartDay,
-            endDate: this.state.selectedEndDay,
-          },
+          params,
         });
+        this.setState({ retrieveFirstTime: false });
       });
     }
     const thisAvailabilities = this.props.availabilities.get('models').toArray();
