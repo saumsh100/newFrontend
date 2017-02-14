@@ -1,10 +1,21 @@
 
 import React from 'react';
-import { Grid, Row, Col, Card, DropdownMenu, Link, MenuItem, MenuSeparator } from '../library';
+import withHoverable from '../../hocs/withHoverable';
+import {
+  Grid,
+  Row,
+  Col,
+  Card,
+  DropdownMenu,
+  Link,
+  MenuItem,
+  MenuSeparator,
+} from '../library';
 
-export default function GridTest() {
+function GridTest({ isHovered }) {
   return (
     <div>
+      { isHovered ? 'ALIVE' : 'DEAD' }
       <Grid>
         <Row>
           <Col xs>
@@ -32,3 +43,5 @@ export default function GridTest() {
     </div>
   );
 }
+
+export default withHoverable(GridTest);
