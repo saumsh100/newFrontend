@@ -2,6 +2,7 @@ import {
   addPractitionerFilter,
   removePractitionerFilter,
   selectAppointmentTypeFilter,
+  setSheduleModeAction,
 } from '../actions/schedule';
 
 export function addPractitionerToFilter(id) {
@@ -20,4 +21,10 @@ export function selectAppointmentType(type) {
   return function (dispatch, getState) {
     dispatch(selectAppointmentTypeFilter({ type }));
   };
+}
+
+export function setSheduleMode(mode) {
+    return function (dispatch, getState) {
+      dispatch(setSheduleModeAction({ mode }));
+    };
 }

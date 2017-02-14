@@ -21,13 +21,13 @@ module.exports = function seedDatabase(seedJSON, config = { wipeTables: true }) 
           console.log(`Successfully wiped ${tableName} table.`);
         })
         .catch((err) => {
-          console.error(`ERROR WIPING ${tableName} TABLE!`);
+          console.error(`Error wiping ${tableName} table!`);
           console.error(err);
           process.exit(1);
         });
     });
   }
-  
+
   // Now execute the wipes first then seed
   return Promise.all(wipes).then(() => {
     config.wipeTables && console.log('Seed tables wiped.');

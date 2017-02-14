@@ -1,4 +1,3 @@
-
 const StatusError = require('../util/StatusError');
 
 module.exports = function checkPermission(permission) {
@@ -11,6 +10,6 @@ module.exports = function checkPermission(permission) {
       return next();
     }
 
-    return next(StatusError(403, `User does not have ${action} permission for ${entity}.`));
+    return next(StatusError(403, `Requesting user does not have ${action} permission for ${entity}.`));
   };
 };

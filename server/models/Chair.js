@@ -1,8 +1,9 @@
+
 const thinky = require('../config/thinky');
+const createModel = require('./createModel');
 const type = thinky.type;
 
-const Chair = thinky.createModel('Chair', {
-  id: type.string().uuid(4).required(),
+const Chair = createModel('Chair', {
   accountId: type.string().uuid(4).required(),
   name: type.string().required(),
   description: type.string(),

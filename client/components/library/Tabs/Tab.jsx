@@ -20,11 +20,16 @@ class Tab extends Component {
       label,
       active,
       onClick,
+      disabled,
     } = this.props;
     
     let classes = classNames(className, styles.tab);
     if (active) {
       classes = classNames(classes, styles.activeTab);
+    }
+
+    if (disabled) {
+      classes = classNames(classes, styles.disabledTab);
     }
     
     return (
@@ -44,6 +49,7 @@ Tab.propTypes = {
   label: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default Tab;

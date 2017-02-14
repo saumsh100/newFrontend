@@ -35,12 +35,12 @@ rootRouter.get('/confirmation/:tokenId', (req, res, next) => {
     }).catch(next);
   }).catch(next);
 });
+
 // All other traffic, just render app
 // TODO: Need to update client-side router to handle this
 rootRouter.get('(/*)?', (req, res, next) => {
   // TODO: Check if authenticated...
   return res.render('app');
 });
-
 
 module.exports = rootRouter;

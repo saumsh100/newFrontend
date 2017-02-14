@@ -21,117 +21,215 @@ const saltRounds = 10;
 
 
 const accountId = uuid();
-const justinPatientId = uuid();
-const sergeyPatientId = uuid();
-const lonnyUserId = uuid();
+const accountId2 = uuid();
+
 const justinUserId = uuid();
-const markUserId = uuid();
-const ashmeetUserId = uuid();
+const alexUserId = uuid();
 const sergeyUserId = uuid();
 
-const alexUserId = uuid();
 const alexPatientId = uuid();
+const markPatientId = uuid();
+const justinPatientId = uuid();
+const sergeyPatientId = uuid();
+
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const chairId = uuid();
+
 const serviceId = uuid();
 const serviceId2 = uuid();
+
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
+
+const alexChatId = uuid();
+const markChatId = uuid();
+const justinChatId = uuid();
+const sergeyChatId = uuid();
+
+const justinPhoneNumber = '+17808508886';
+const sergeyPhoneNumber = '+17782422626';
+const alexPhoneNumber = '+19782521845';
+const markPhoneNumber = '+17788654451';
+
+const clinicPhoneNumber = '+17786558613';
+
+// TODO: order of seeding matters...
+
+const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
+  return [
+    {
+      chatId,
+      to: patientPhone,
+      from: clinicPhone,
+      body: 'Hey! Just testing out our new messaging service.',
+      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+      read: true,
+    },
+    {
+      chatId,
+      to: clinicPhone,
+      from: patientPhone,
+      body: 'Hi there!',
+      createdAt: new Date(2017, 0, 1, 12, 45, 0, 0),
+      read: true,
+    },
+    {
+      chatId,
+      to: patientPhone,
+      from: clinicPhone,
+      body: 'How were you doing yesterday?',
+      createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
+      read: true,
+    },
+    {
+      chatId,
+      to: clinicPhone,
+      from: patientPhone,
+      body: 'I was good thanks! And you?',
+      createdAt: new Date(2017, 0, 1, 13, 45, 0, 0),
+      read: false,
+    },
+  ];
+};
 
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 1, 13, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 13, 17, 0, 0, 0),
-      title: 'alexPatientId, serviceId2, practitionerId2, Sooner Availability',
       id: appointmentId1,
       accountId,
+      startTime: new Date(2017, 0, 26, 10, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 11, 30, 0, 0),
       patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId,
+      chairId,
+    },
+    {
+      accountId,
+      startTime: new Date(2017, 0, 26, 12, 30, 0, 0),
+      endTime: new Date(2017, 0, 26, 13, 30, 0, 0),
+      patientId: alexPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+    },
+    {
+      accountId,
+      startTime: new Date(2017, 1, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 1, 28, 12, 30, 0, 0),
+      patientId: alexPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+    },
+    {
+      accountId,
+      startTime: new Date(2017, 2, 28, 12, 30, 0, 0),
+      endTime: new Date(2017, 2, 28, 12, 30, 0, 0),
+      patientId: alexPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+    },
+    {
+      accountId,
+      startTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      endTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      patientId: alexPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+    },
+    {
+      id: appointmentId2,
+      accountId,
+      startTime: new Date(2017, 3, 29, 12, 30, 0, 0),
+      endTime: new Date(2017, 3, 29, 12, 30, 0, 0),
+      patientId: alexPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+    },
+    {
+      accountId,
+      startTime: new Date(2016, 2, 29, 14, 30, 0, 0),
+      endTime: new Date(2016, 2, 29, 16, 30, 0, 0),
+      patientId: justinPatientId,
+      practitionerId: practitionerId2,
+      serviceId,
+      chairId,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      accountId,
+      startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
+      endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
+      patientId: sergeyPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      accountId,
+      startTime: new Date(2016, 2, 29, 18, 30, 0, 0),
+      endTime: new Date(2016, 2, 29, 20, 30, 0, 0),
+      patientId: sergeyPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+    {
+      accountId,
+      startTime: new Date(2016, 2, 30, 18, 30, 0, 0),
+      endTime: new Date(2016, 2, 30, 20, 30, 0, 0),
+      patientId: sergeyPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+    },
+  ],
+
+  Request: [
+    {
+      accountId,
+      startTime: moment({hour: 23, minute: 10})._d,
+      endTime: moment({hour: 23, minute: 50})._d,
+
+      patientId: sergeyPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+      isConfirmed: false,
+    },
+    {
+      accountId,
+      startTime: moment({hour: 13, minute: 10})._d,
+      endTime: moment({hour: 13, minute: 50})._d,
+      patientId: justinPatientId,
       serviceId: serviceId2,
       practitionerId: practitionerId2,
-      chairId: chairId,
-    },
-
-    {
-      startTime: new Date(2017, 1, 13, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 13, 12, 0, 0, 0),
-      title: 'alexPatientId, serviceId2, practitionerId, Full day',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-
-    {
-      startTime: new Date(2017, 1, 14, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 14, 17, 0, 0, 0),
-      title: 'alexPatientId, serviceId2, practitionerId2, Sooner Availability',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId2,
-      chairId: chairId,
-    },
-
-    {
-      startTime: new Date(2017, 1, 14, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 14, 17, 0, 0, 0),
-      title: 'alexPatientId, serviceId2, practitionerId, Full day',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-
-
-
-    {
-      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
-      title: 'Full day',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-
-
+      chairId,
+      isConfirmed: false,
+    }
   ],
 
   User: [
     {
-      username: 'lonny@carecru.com',
-      password: bcrypt.hashSync('lonny', saltRounds),
-      id: lonnyUserId,
-      activeAccountId: accountId,
-      // accounts: [accountId],
-    },
-    {
-      username: 'mark@carecru.com',
-      password: bcrypt.hashSync('mark', saltRounds),
-      id: markUserId,
-      activeAccountId: accountId,
-      // accounts: [accountId],
-    },
-    {
       username: 'justin@carecru.com',
       password: bcrypt.hashSync('justin', saltRounds),
       id: justinUserId,
-      activeAccountId: accountId,
-      // accounts: [accountId],
-    },
-    {
-      username: 'ashmeet@carecru.com',
-      password: bcrypt.hashSync('ashmeet', saltRounds),
-      id: ashmeetUserId,
       activeAccountId: accountId,
       // accounts: [accountId],
     },
@@ -152,28 +250,55 @@ const SEEDS = {
 
   Patient: [
     {
+      id: justinPatientId,
+      accountId,
       firstName: 'Justin',
       lastName: 'Sharp',
-      phoneNumber: '+17808508886',
-      id: justinPatientId,
+      phoneNumber: justinPhoneNumber,
+      birthDate: moment({year: 1993, month: 6, day: 15})._d,
+      gender: 'male',
+      language: 'English',
+      status: 'Active',
+      insurance: {
+        insurance: 'insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      },
     },
     {
+      id: sergeyPatientId,
+      accountId,
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
-      phoneNumber: '+17782422626',
-      id: sergeyPatientId,
+      phoneNumber: sergeyPhoneNumber,
+      birthDate: moment({year: 1983, month: 2, day: 6})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
     },
     {
+      id: markPatientId,
       firstName: 'Mark',
       lastName: 'Joseph',
-      phoneNumber: '+17788654451',
-      id: uuid(),
+      phoneNumber: markPhoneNumber,
+      accountId: accountId2,
+      birthDate: moment({year: 1996, month: 4, day: 25})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
     },
     {
+      id: alexPatientId,
+      accountId,
       firstName: 'Alex',
       lastName: 'Bashliy',
-      phoneNumber: '+19782521845',
-      id: alexPatientId,
+      phoneNumber: alexPhoneNumber,
+      birthDate: moment({year: 1997, month: 3, day: 4})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
     },
@@ -183,79 +308,29 @@ const SEEDS = {
     {
       name: 'Beckett Dental',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      smsPhoneNumber: '+17786558613',
+      smsPhoneNumber: clinicPhoneNumber,
       id: accountId,
     },
   ],
 
   Permission: [
     {
-      id: uuid(),
-      userId: lonnyUserId,
-      accountId,
-      role: 'OWNER',
-      permissions: { reviews: { create: true } }, // test permission
-    },
-    {
-      id: uuid(),
       userId: justinUserId,
       accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
-      id: uuid(),
-      userId: ashmeetUserId,
+      userId: alexUserId,
       accountId,
       role: 'OWNER',
       permissions: {},
     },
     {
-      id: uuid(),
-      userId: markUserId,
-      accountId,
-      role: 'OWNER',
-      permissions: {},
-    },
-    {
-      id: uuid(),
       userId: sergeyUserId,
       accountId,
-      role: 'VIEWER',
+      role: 'OWNER',
       permissions: {},
-    },
-  ],
-
-  Service: [
-    {
-      id: serviceId,
-      accountId: accountId,
-      name: 'Routine Checkup',
-      practitioners: [practitionerId],
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      customCosts: {},
-    },
-    {
-      id: serviceId2,
-      accountId: accountId,
-      name: 'Another service',
-      practitioners: [practitionerId2],
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      customCosts: {},
-    },
-    {
-      id: uuid(),
-      accountId: accountId,
-      name: 'third service',
-      practitioners: [practitionerId2],
-      duration: 50,
-      bufferTime: 0,
-      unitCost: 40,
-      customCosts: {},
     },
   ],
 
@@ -274,74 +349,87 @@ const SEEDS = {
     },
   ],
 
+  Service: [
+    {
+      id: serviceId,
+      accountId,
+      name: 'Routine Checkup',
+      allowedPractitioners: [ practitionerId ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      id: serviceId2,
+      accountId,
+      name: 'Another service',
+      allowedPractitioners: [ practitionerId2 ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+    {
+      accountId,
+      name: 'Lost Filling',
+      allowedPractitioners: [ practitionerId, practitionerId2 ],
+      duration: 30,
+      bufferTime: 0,
+      unitCost: 40,
+      customCosts: {},
+    },
+  ],
+
+  Chat: [
+    {
+      accountId,
+      patientId: alexPatientId,
+    },
+    {
+      accountId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId,
+      patientId: sergeyPatientId,
+    },
+    {
+      accountId,
+      patientId: markPatientId,
+    },
+  ],
+
   TextMessage: [
-    {
-      id: uuid(),
-      patientId: alexPatientId,
-      practitionerId,
-      body: 'from Chelsea 1',
-      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
-    },
-    {
-      id: uuid(),
-      patientId: alexPatientId,
-      practitionerId,
-      body: 'from Chelsea 2',
-      createdAt: new Date(2017, 0, 6, 12, 30, 0, 0),
-    },
-    {
-      id: uuid(),
-      patientId: justinPatientId,
-      practitionerId,
-      body: 'from Chelsea2',
-      createdAt: new Date(2017, 0, 2, 12, 30, 0, 0),
-    },
-    {
-      id: uuid(),
-      patientId: justinPatientId,
-      practitionerId: practitionerId2,
-      body: 'from Perry 1',
-      createdAt: new Date(2017, 0, 3, 12, 30, 0, 0),
-    },
-    {
-      id: uuid(),
-      patientId: alexPatientId,
-      practitionerId: practitionerId2,
-      body: 'from Perry to alex 1',
-      createdAt: new Date(2017, 0, 4, 11, 30, 0, 0),
-    },
-    {
-      id: uuid(),
-      patientId: alexPatientId,
-      practitionerId: practitionerId2,
-      body: 'from Perry to Alex 2',
-      createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
-    },
+    ...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
+    ...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    ...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
+    ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
   ],
 
   Chair: [
     {
       id: chairId,
-      accountId: accountId,
+      accountId,
       name: 'Chair 1',
+      description: '',
+    },
+    {
+      accountId,
+      name: 'Chair 2',
       description: '',
     },
   ],
 
   Token: [
     {
-      id: uuid(),
       appointmentId: appointmentId1,
     },
     {
-      id: uuid(),
       appointmentId: appointmentId2,
     },
   ],
 };
-
-
-console.log(SEEDS);
 
 seedDatabase(SEEDS)
   .then(() => {

@@ -1,17 +1,17 @@
 
 const thinky = require('../config/thinky');
+const createModel = require('./createModel');
 const type = thinky.type;
 
-const Permission = thinky.createModel('Permission', {
-  id: type.string().uuid(4),
-  userId: type.string(),
-  accountId: type.string(),
+const Permission = createModel('Permission', {
+  userId: type.string().required(),
+  accountId: type.string().required(),
 
   // maps to preset permissions
-  role: type.string().enum('OWNER', 'ADMIN', 'VIEWER'),
+  role: type.string().enum('OWNER', 'ADMIN', 'VIEWER').required(),
 
   // over rides preset for more granular access
-  permissions: type.object().allowExtra(true)
+  permissions: type.object().allowExtra(true),
 });
 
 module.exports = Permission;

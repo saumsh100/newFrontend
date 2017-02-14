@@ -6,6 +6,12 @@ const PatientSchema = {
   firstName: null,
   lastName: null,
   phoneNumber: null,
+  status: null,
+  image: null,
+  gender: null,
+  language: null,
+  birthDate: null,
+  middleName: null,
 };
 
 export default class Patient extends createModel(PatientSchema) {
@@ -15,7 +21,7 @@ export default class Patient extends createModel(PatientSchema) {
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
   }
-  
+
   getUrlRoot() {
     return `/api/patients/${this.getId()}`;
   }

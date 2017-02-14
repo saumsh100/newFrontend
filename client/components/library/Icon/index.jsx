@@ -10,7 +10,7 @@ export default function Icon(props) {
     className,
   } = props;
   
-  const fontAwesomeClass = `fa fa-${icon}`;
+  const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
   
   return <i className={classes} style={{ fontSize: `${size} em` }} />;

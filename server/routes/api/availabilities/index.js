@@ -10,7 +10,7 @@ const Service = require('../../../models/Service');
 
 
 const subtractRange = (rangeArray, busyTime) => {
-  if (_.isArray(rangeArray)) {    
+  if (_.isArray(rangeArray)) {
     const range = rangeArray.map((s) => {
       const contains = s.contains(busyTime);
       return contains ? s.subtract(busyTime) : s;
@@ -29,9 +29,9 @@ const getFirstAvailableDate = (appointments, startDate, serviceDuration) => {
     let currentDay = startDate;
     const appointmentsLenght = appointmentsByDate.length;
 
-    if (!appointmentsLenght) return moment({hour: 0, minutes: 0})._d 
+    if (!appointmentsLenght) return moment({hour: 0, minutes: 0})._d
     currentDay = moment(appointmentsByDate[0].startTime)
-    
+
     while(currentDay <= appointmentsByDate[appointmentsLenght -1].startTime) {
       const OFFICE_START_TIME = moment(currentDay).clone().set({ hours: 9, minutes: 0 }).toDate();
       const OFFICE_END_TIME = moment(currentDay).clone().set({ hours: 16, minutes: 30 }).toDate();
@@ -41,7 +41,7 @@ const getFirstAvailableDate = (appointments, startDate, serviceDuration) => {
         .map(appointment => moment.range(appointment.startTime, appointment.endTime));
 
       const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
-      
+
       let avaliableTimeRange = dayRange;
 
       appointmentRanges.forEach((appR) => {
@@ -78,7 +78,7 @@ availabilitiesRouter.get('/', (req, res, next) => {
 
 
         const startDateTopass = moment(startDate).clone().startOf('day')
-        
+
         let firstAvailableDate = startDate;
         let endAvailableDateToShow = endDate;
         if (retrieveFirstTime) {
@@ -86,7 +86,7 @@ availabilitiesRouter.get('/', (req, res, next) => {
           endAvailableDateToShow = moment(firstAvailableDate).add(4, 'days')._d
           console.log(moment(firstAvailableDate).format('MMMM Do YYYY, h:mm:ss a'));
         }
-        
+
         const requiredRange = moment.range(
           moment(firstAvailableDate).startOf('day'),
           moment(endAvailableDateToShow).endOf('day')

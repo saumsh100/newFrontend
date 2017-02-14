@@ -4,8 +4,6 @@ import PatientListItem from './PatientListItem';
 
 function PatientList({ patients, onChat }) {
   patients = patients.get('models').toArray();
-  
-  console.log(patients);
   return (
     <table>
       <thead>

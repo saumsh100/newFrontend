@@ -24,16 +24,16 @@ const token = localStorage.getItem('token');
 if (!token) {
   browserHistory.push('/login');
 } else {
-  const decodedToken = jwt(token) 
-  const hasExpired = (decodedToken.exp - Date.now()/1000) < 0
+  const decodedToken = jwt(token);
+
+  // TODO: use a different expiry calculation
+  const hasExpired = (decodedToken.exp - (Date.now() / 1000)) < 0;
   if (hasExpired) {
     browserHistory.push('/login');
   } else {
-    store.dispatch(loginSuccess(decodedToken))
-    browserHistory.push('/');
+    store.dispatch(loginSuccess(decodedToken));
   }
 }
-
 
 connectSocketToStore(socket, store);
 

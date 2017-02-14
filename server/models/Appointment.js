@@ -1,17 +1,11 @@
 
 const thinky = require('../config/thinky');
-
+const createModel = require('./createModel');
 const type = thinky.type;
 
-const Appointment = thinky.createModel('Appointment', {
-  id: type.string().uuid(4),
-  title: type.string(),
+const Appointment = createModel('Appointment', {
   startTime: type.date().required(),
   endTime: type.date().required(),
-  createdAt: type.date(),
-  confirmed: type.boolean().default(false),
-
-
   comment: type.string(),
 
   // Relations
@@ -22,7 +16,6 @@ const Appointment = thinky.createModel('Appointment', {
   chairId: type.string().uuid(4),
 
   // Lifecycle Attributes
-  isClinicConfirmed: type.boolean(),
   isPatientConfirmed: type.boolean(),
   isSyncedWithPMS: type.boolean(),
   isCancelled: type.boolean(),
@@ -34,7 +27,6 @@ const Appointment = thinky.createModel('Appointment', {
   isSplit: type.boolean(),
   splitAppointments: [type.string().uuid(4)],
   isParent: type.boolean(),
-
 });
 
 module.exports = Appointment;
