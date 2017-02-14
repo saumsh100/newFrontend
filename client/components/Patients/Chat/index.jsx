@@ -19,6 +19,8 @@ class Chat extends Component {
       setDialogsFilter,
       filters,
       readMessagesInCurrentDialog,
+      setDialogScrollPermission,
+      allowDialogScroll,
     } = this.props;
     let { dialogList = [] } = this.props;
     const patient = {};
@@ -80,6 +82,9 @@ class Chat extends Component {
             currentDialogId={this.props.currentDialogId}
             fetchPost={this.props.fetchPost}
             sendMessageOnClient={this.props.sendMessageOnClient}
+            readMessagesInCurrentDialog={readMessagesInCurrentDialog}
+            setDialogScrollPermission={setDialogScrollPermission}
+            allowDialogScroll={allowDialogScroll}
           />
         }
       </div>

@@ -45,8 +45,8 @@ export default function Routes({ history }) {
         <Route
           path="schedule"
           getComponent={(location, callback) => {
-            require.ensure(['./components/Schedule'], (require) => {
-              callback(null, require('./components/Schedule').default);
+            require.ensure(['./containers/ScheduleContainer'], (require) => {
+              callback(null, require('./containers/ScheduleContainer').default);
             });
           }}
         >

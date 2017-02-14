@@ -8,8 +8,17 @@ const DialogComponent = props => (
     {props.messages
     .map(m => 
       <ul key={v4()} 
-        className={`${styles.message} ${props.patientId === m.patientId ? styles.left : styles.right}`}>
-        <li className={styles.message__item}>
+        className={`${styles.message} ${props.patientId === m.patientId ? styles.left : styles.right}`}
+      >
+        <li className={`${styles.message__item} ${m.read? '' : styles.message__unread}`}
+          onMouseEnter={(()=> {
+            if (!m.read) {
+              props.setDialogScrollPermission({ allowDialogScroll: false });
+              props.readMessagesInCurrentDialog(m.patientId, m.id);
+            }
+          }
+          ).bind(this)} 
+        >
           <div className={styles.message__wrapper}>
             <div className={styles.message__time}>
               { moment(m.createdAt).fromNow() }

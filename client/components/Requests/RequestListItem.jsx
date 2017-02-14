@@ -30,15 +30,16 @@ class RequestListItem extends Component {
 
     const data = {
       time: request.getFormattedTime(),
-      nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthday)),
+      nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
       email: patient.email,
       service: service.name,
       phoneNumber: patient.phoneNumber,
-      insurance: patient.getInsurance().insurance,
+   // insurance: patient.getInsurance().insurance,
       comment: request.comment,
       month: request.getMonth(),
       day: request.getDay(),
     };
+
     return (
       <div>
         <ListItem onMouseOver={this.showAppointment} onMouseOut={this.hideAppointment} className={styles.requestListItem}>

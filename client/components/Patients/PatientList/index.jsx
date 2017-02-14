@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import PatientListItem from './PatientListItem';
-import PersonalData from './PersonalData';
-import InsuranceData from './InsuranceData';
+import PatientData from './PatientData';
 import { Button, Form, Field , Tabs, Tab } from '../../library';
 import styles from './main.scss';
 
@@ -58,7 +57,7 @@ class PatientList extends Component {
 
     const patientListWithAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
       .toString() !== "Invalid Date"))
-      .sort((a, b) => (moment(a.toJS().lastAppointmentDate) > moment(b.toJS().lastAppointmentDate)));
+      .sort((a, b) => (moment(a.toJS && a.toJS().lastAppointmentDate) > moment(b.toJS && b.toJS().lastAppointmentDate)));
     const patientListWithoutAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
         .toString() === "Invalid Date"));
     const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
@@ -141,24 +140,18 @@ class PatientList extends Component {
               <Tabs index={activeTabIndex || 0}
                 onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>
                 <Tab label="Personal">
-                  <PersonalData 
+                  <PatientData 
                     patient={patientListFiltered}
-                    updateEditingPatientState={updateEditingPatientState}
                     tabTitle="personal"
-                    currentPatientState={currentPatientState}
-                    editingPatientState={editingPatientState}
                     form={form}
                     changePatientInfo={changePatientInfo}
 
                   />
                 </Tab>
                 <Tab label="Insurance">
-                  <InsuranceData
+                  <PatientData
                     patient={patientListFiltered}
-                    updateEditingPatientState={updateEditingPatientState}
                     tabTitle="insurance"
-                    currentPatientState={currentPatientState}
-                    editingPatientState={editingPatientState}
                     form={form}
                     changePatientInfo={changePatientInfo}
                   />

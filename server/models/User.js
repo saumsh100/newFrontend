@@ -1,18 +1,14 @@
 
 const bcrypt = require('bcrypt');
 const thinky = require('../config/thinky');
-
+const createModel = require('./createModel');
 const type = thinky.type;
 
-const User = thinky.createModel('User', {
-  id: type.string().uuid(4),
-  accounts: [type.string().uuid(4)],
+const User = createModel('User', {
   username: type.string().email().required(),
   password: type.string().required(),
   activeAccountId: type.string().uuid(4),
-  permissionId: type.string(),
-}, {
-  pk: 'id',
+  permissionId: type.string().uuid(4),
 });
 
 User.define('isValidPasswordAsync', function(password) {
@@ -30,7 +26,6 @@ User.define('setPasswordAsync', function(password) {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, 10, (err, hashedPassword) => {
       if (err) reject(err);
-    
       this.password = hashedPassword;
       return resolve(this);
     });

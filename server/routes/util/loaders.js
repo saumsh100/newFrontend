@@ -2,20 +2,18 @@
 const models = require('../../models');
 const StatusError = require('../../util/StatusError');
 
-const { User } = models;
-
-module.exports = (reqProp) => {
+module.exports = (reqProp, modelName) => {
   return (req, res, next, param) => {
-    User.get(param).run()
-      .then((user) => {
-        if (!user) StatusError(404, 'User not found');
+    models[modelName].get(param).run()
+      .then((model) => {
+        if (!model) next(StatusError(404, `${modelName} with id=${param} not found`));
         
-        // Set req[reqProp] to the fetched user and go onto next middleware
-        req[reqProp] = user;
+        // Set req[reqProp] to the fetched model and go onto next middleware
+        req[reqProp] = model;
         next();
       })
       .catch((err) => {
-        next(StatusError(404, 'User not found'));
+        next(StatusError(404, `${modelName} with id=${param} not found`));
       });
   };
 };

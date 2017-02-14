@@ -129,9 +129,9 @@ export default handleActions({
     let objectToMergeWith = {};
     switch (title) {
       case 'personal':
-        const { id, firstName, lastName, gender, language, birthday } = action.payload;
+        const { id, firstName, lastName, gender, language, birthday, middleName, status } = action.payload;
         const name = `${firstName} ${lastName}`;
-        objectToMergeWith = fromJS({ name, gender, language, birthday, id });
+        objectToMergeWith = fromJS({ name, gender, language, birthday, id, middleName, status });
       break;
 
       case 'insurance':

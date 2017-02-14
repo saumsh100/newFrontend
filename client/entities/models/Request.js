@@ -22,7 +22,7 @@ export default class Requests extends createModel(RequestsSchema) {
    */
   getAge(patientBirthday){
     let currentYear =  new Date().getFullYear();
-    let birthday = moment(patientBirthday).year();
+    let birthday =  moment(patientBirthday).year();
     return currentYear - birthday;
   }
 

@@ -5,17 +5,22 @@ import Messages from './Messages';
 export default class ChatWindow extends Component {
 	constructor(props) {
 		super(props);
-		this.sendMessage = this.sendMessage.bind(this)
+		this.sendMessage = this.sendMessage.bind(this);
 	}
 
 	componentDidUpdate() {
+    const { allowDialogScroll } = this.props;
     const messagesList = this.messagesList;
-    if (messagesList !== null) {
+    if (messagesList !== null && allowDialogScroll) {
       messagesList.scrollTop = messagesList.scrollHeight;
     }
   }
 
   sendMessage(e) {
+  	const {
+  		setDialogScrollPermission,
+  		sendMessageOnClient
+  	} = this.props;
     e.preventDefault();
     const message = this.messageText;
     if (message === '' || message.length === 0) {
@@ -25,12 +30,14 @@ export default class ChatWindow extends Component {
       patientId: this.props.currentDialogId,
       body: message.value,
       createdAt: new Date(),
+      read: true,
     };
     this.props.fetchPost({
       key: 'textMessages',
       params,
     });
-    this.props.sendMessageOnClient(params);
+    setDialogScrollPermission({ allowDialogScroll: true });
+    sendMessageOnClient(params);
     // window.socket.emit('sendMessage', {
     //   message: message.value,
     //   patient: this.props.patient,
@@ -39,7 +46,13 @@ export default class ChatWindow extends Component {
   }
 
 	render() {
-		const { textMessages, sendMessage, patient } = this.props;
+		const { 
+			textMessages,
+			sendMessage,
+			patient,
+			readMessagesInCurrentDialog,
+			setDialogScrollPermission,
+		} = this.props;
 		return (
 		  <div className={styles.chat}>
 		    <div className={styles.chat__header}>
@@ -60,7 +73,12 @@ export default class ChatWindow extends Component {
 		          </div>
 		        </div>
 		        <div className={styles.message_list} ref={ref => (this.messagesList = ref)}>
-		          <Messages messages={textMessages} patientId={patient.id} />
+		          <Messages 
+		          	messages={textMessages}
+		          	patientId={patient.id}
+		          	readMessagesInCurrentDialog={readMessagesInCurrentDialog}
+		          	setDialogScrollPermission={setDialogScrollPermission}
+		          />
 		        </div>
 		        <div className={styles.body_footer}>
 		          <form onSubmit={this.sendMessage}>

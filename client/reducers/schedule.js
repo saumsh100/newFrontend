@@ -5,11 +5,14 @@ import {
   ADD_PRACTITIONER,
   REMOVE_PRACTITIONER,
   SELECT_APPOINMENT_TYPE,
+  SET_SCHEDULE_MODE,
 } from '../constants';
 
 const initialState = fromJS({
   practitioners: [],
   appointmentType: null,
+  currentScheduleMode: 'day',
+  scheduleModes: ['day', 'month', 'week'],
 });
 
 export default handleActions({
@@ -32,4 +35,12 @@ export default handleActions({
       appointmentType: type,
     });
   },
+
+  [SET_SCHEDULE_MODE](state, action) {
+    const { mode } = action.payload
+    return state.merge({
+      currentScheduleMode: state.toJS().scheduleModes[mode],
+    });
+  }
+
 }, initialState);

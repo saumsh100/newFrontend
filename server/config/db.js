@@ -9,15 +9,10 @@ const fs = require('fs')
 // #### Connection details
 
 // RethinkDB database settings. Defaults can be overridden using environment variables.
-var dbConfig = {
+const dbConfig = {
   host: process.env.RDB_HOST || 'localhost',
   port: parseInt(process.env.RDB_PORT) || 28015,
   db: process.env.RDB_DB || 'carecru_development',
-  tables: {
-    users: 'id',
-    cache: 'cid',
-    availabilities: 'id',
-  },
 };
 
 /**
