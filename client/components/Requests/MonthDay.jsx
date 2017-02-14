@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import styles from './style.scss';
+import styles from './styles.scss';
 
 export default function MonthDay({ month, day }) {
   return (

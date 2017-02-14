@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
-import styles from './style.scss';
+import styles from './styles.scss';
 
 
 class RequestList extends Component {

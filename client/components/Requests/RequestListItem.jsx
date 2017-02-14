@@ -4,29 +4,22 @@ import moment from 'moment';
 import { ListItem } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
-import styles from './style.scss';
-import RequestShowData from './RequestShowData';
+import styles from './styles.scss';
+import AppointmentShowData from '../Appointment/AppointmentShowData';
+
 
 export default function RequestListItem({ request, patient, service, practitioner,}) {
-  const currentYear =  new Date().getFullYear();
-  const birthday = moment(patient.birthday).year();
-  const age = currentYear - birthday;
-
-  // TODO: use moment.js to format full Date string
-  const startTime = moment(request.startTime);
-  const month = startTime.format("MMM");
-  const day = startTime.date(day);
-  const startHourMinute = startTime.format("h:mm");
-  const endHourMinute = moment(request.endTime).format("h:mm");
 
   const data = {
-    time: startHourMinute.concat('-', endHourMinute),
-    nameAge: patient.firstName.concat(' ', patient.lastName, ', ', age),
+    time: request.getFormattedTime(),
+    nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthday)),
     email: patient.email,
     service: service.name,
     phoneNumber: patient.phoneNumber,
     insurance: patient.getInsurance().insurance,
     comment: request.comment,
+    month: request.getMonth(),
+    day: request.getDay(),
   };
 
   const showResults = true;
@@ -34,12 +27,14 @@ export default function RequestListItem({ request, patient, service, practitione
   return (
     <div>
       <ListItem className={styles.requestListItem}>
-        <MonthDay month={month} day={day} />
+        <MonthDay month={data.month} day={data.day} />
         <RequestData data={data} />
       </ListItem>
-      { showResults ? <RequestShowData data={data} />: null }
+      {showResults ? <AppointmentShowData data={data} />: null }
     </div>
   );
 }
+
+
 
 RequestListItem.propTypes = {};

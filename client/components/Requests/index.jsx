@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import RequestList from './RequestList';
 import { Card, CardHeader } from '../library';
-import styles from './style.scss';
+import styles from './styles.scss';
 
 class Requests extends Component {
   constructor(props) {
