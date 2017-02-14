@@ -84,7 +84,7 @@ export function readMessagesInCurrentDialog(dialogId, readMessageId = null) {
     const currentDialog = getState().entities.get('dialogs').toJS().models[dialogId];
     const messages = currentDialog.messages
       .sort((m1,m2) => moment(m1.createdAt) > moment(m2.createdAt));
-    
+
     //user readMessageId is not null - we will update only that messages as read
     const messageToUpdate = messages.filter(m => m.id === readMessageId )[0];
     const i = _.findIndex(messages, m => m.id == readMessageId);
@@ -95,7 +95,7 @@ export function readMessagesInCurrentDialog(dialogId, readMessageId = null) {
             const messageId = response.data.result;
             // make it read: true on the client
             dispatch(readMessagesInCurrentDialogAction({ messageId, dialogId, messageIndex: i }));
-          });   
+          });
         return;
       }
 

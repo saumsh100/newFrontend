@@ -3,11 +3,14 @@ const rootRouter = require('express').Router();
 const authRouter = require('./auth');
 const apiRouter = require('./api');
 const twilioRouter = require('./twilio');
+
 const Token = require('../models/Token');
 const Appointment = require('../models/Appointment');
 
+
 // Bind auth route to generate tokens
 rootRouter.use('/auth', authRouter);
+
 
 // Bind REST API
 rootRouter.use('/api', apiRouter);

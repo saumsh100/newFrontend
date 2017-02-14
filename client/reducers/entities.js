@@ -28,6 +28,8 @@ import PatientList from '../entities/models/PatientList'
 import patientList from '../entities/collections/patientList';
 import Service from '../entities/models/Service'
 import services from '../entities/collections/services';
+import availabilities from '../entities/collections/availabilities';
+import Availability from '../entities/models/Availability';
 
 
 const initialState = Map({
@@ -39,6 +41,7 @@ const initialState = Map({
   requests: new requests(),
   service: new services(),
   practitioners: new practitioners(),
+  availabilities: new availabilities(),
   dialogs: new dialogs(),
   patientList: new patientList(),
 
@@ -56,6 +59,7 @@ const Models = {
   practitioners: Practitioners,
   dialogs: Dialogs,
   patientList: PatientList,
+  availabilities: Availability,
 };
 
 export default handleActions({
