@@ -42,9 +42,9 @@ const appointmentId2 = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 1, 10, 10, 30, 0, 0),
-      endTime: new Date(2017, 1, 10, 11, 30, 0, 0),
-      title: 'Sooner Availability',
+      startTime: new Date(2017, 1, 13, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 13, 17, 0, 0, 0),
+      title: 'alexPatientId, serviceId2, practitionerId2, Sooner Availability',
       id: appointmentId1,
       accountId,
       patientId: alexPatientId,
@@ -54,8 +54,46 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 10, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 10, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 13, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 13, 12, 0, 0, 0),
+      title: 'alexPatientId, serviceId2, practitionerId, Full day',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+
+    {
+      startTime: new Date(2017, 1, 14, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 14, 17, 0, 0, 0),
+      title: 'alexPatientId, serviceId2, practitionerId2, Sooner Availability',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+    },
+
+    {
+      startTime: new Date(2017, 1, 14, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 14, 17, 0, 0, 0),
+      title: 'alexPatientId, serviceId2, practitionerId, Full day',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId,
+      chairId: chairId,
+    },
+
+
+
+    {
+      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 15, 12, 0, 0, 0),
       title: 'Full day',
       id: uuid(),
       accountId,
@@ -66,8 +104,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 11, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 11, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 15, 15, 35, 0, 0),
+      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
       title: 'Full day',
       id: uuid(),
       accountId,
@@ -78,50 +116,17 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 10, 12, 30, 0, 0),
-      endTime: new Date(2017, 1, 10, 13, 30, 0, 0),
-      title: 'Later Availability',
-      id: appointmentId2,
+      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
+      title: '15 full time',
+      id: uuid(),
       accountId,
       patientId: alexPatientId,
-      serviceId: serviceId,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-    {
-      accountId,
-      id: uuid(),
-      title: 'Justin\'s appointment',
-      startTime: new Date(2017, 1, 9, 14, 30, 0, 0),
-      endTime: new Date(2017, 1, 9, 15, 30, 0, 0),
-
-      patientId: justinPatientId,
-      serviceId: serviceId,
+      serviceId: serviceId2,
       practitionerId: practitionerId2,
       chairId: chairId,
-
-      isClinicConfirmed: true,
-      isPatientConfirmed: true,
-      isSyncedWithPMS: true,
-      isCancelled: false,
     },
-    {
-      id: uuid(),
-      title: 'Sergey\'s appointment',
-      startTime: new Date(2017, 1, 9, 16, 0, 0, 0),
-      endTime: new Date(2017, 1, 9, 17, 0, 0, 0),
 
-      patientId: sergeyPatientId,
-      accountId: accountId,
-      serviceId: serviceId,
-      practitionerId: practitionerId2,
-      chairId: chairId,
-
-      isClinicConfirmed: true,
-      isPatientConfirmed: true,
-      isSyncedWithPMS: true,
-      isCancelled: false,
-    },
   ],
 
   User: [

@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import DayPicker, { DateUtils } from 'react-day-picker';
+import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
@@ -18,15 +18,13 @@ class Availability extends React.Component {
       selectedEndDay: moment().add(4, 'd')._d,
       shouldFetchAvailabilities: true,
       modalIsOpen: false,
+      retrieveFirstTime: true,
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
     this.onServiceChange = this.onServiceChange.bind(this);
     this.sixDaysBack = this.sixDaysBack.bind(this);
     this.sixDaysForward = this.sixDaysForward.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
-    this.isDaySelected = this.isDaySelected.bind(this);
-
-
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
@@ -52,13 +50,18 @@ class Availability extends React.Component {
         .filter(s =>
           includes(s.practitioners, this.state.practitionerId)
         )[0].id }, () => {
+
+        const params = {
+          practitionerId: this.state.practitionerId,
+          serviceId: this.state.serviceId,
+          startDate: this.state.selectedStartDay,
+          endDate: this.state.selectedEndDay,
+        };
+        if (this.state.retrieveFirstTime) {
+          params.retrieveFirstTime = this.state.retrieveFirstTime;
+        }
         this.props.fetchEntities({ key: 'availabilities',
-          params: {
-            practitionerId: this.state.practitionerId,
-            serviceId: this.state.serviceId,
-            startDate: this.state.selectedStartDay,
-            endDate: this.state.selectedEndDay,
-          },
+          params,
         });
       });
     }
@@ -103,6 +106,7 @@ class Availability extends React.Component {
     this.setState({
       practitionerId: e.target.value,
       shouldFetchAvailabilities: true,
+      retrieveFirstTime: true,
     }, () => {
       this.props.fetchEntities({ key: 'services',
         params: { practitionerId: this.state.practitionerId }
@@ -111,7 +115,7 @@ class Availability extends React.Component {
   }
 
   onServiceChange(e) {
-    this.setState({ serviceId: e.target.value }, () => {
+    this.setState({ serviceId: e.target.value, retrieveFirstTime: false, }, () => {
       // this.props.preventEntityDuplication({ key: 'availabilities' });
       this.props.fetchEntities({ key: 'availabilities',
         params: {
@@ -129,6 +133,7 @@ class Availability extends React.Component {
       selectedStartDay: moment(this.state.selectedStartDay).subtract(4, 'd')._d,
       selectedEndDay: moment(this.state.selectedEndDay).subtract(4, 'd')._d,
       shouldFetchAvailabilities: false,
+      retrieveFirstTime: false,
     }, () => {
       this.props.fetchEntities({ key: 'availabilities',
         params: {
@@ -146,6 +151,7 @@ class Availability extends React.Component {
       selectedStartDay: moment(this.state.selectedStartDay).add(4, 'd')._d,
       selectedEndDay: moment(this.state.selectedEndDay).add(4, 'd')._d,
       shouldFetchAvailabilities: false,
+      retrieveFirstTime: false,
     }, () => {
       this.props.fetchEntities({ key: 'availabilities',
         params: {
@@ -164,6 +170,7 @@ class Availability extends React.Component {
       selectedStartDay: day,
       selectedEndDay: moment(day).add(4, 'd')._d,
       shouldFetchAvailabilities: false,
+      retrieveFirstTime: false,
     }, () => {
       console.log(this.state.selectedStartDay, this.state.selectedEndDay);
       this.props.fetchEntities({ key: 'availabilities',
@@ -189,7 +196,8 @@ class Availability extends React.Component {
     this.setState({modalIsOpen: !modalIsOpen});
   }
   render() {
-    const filteredByDoctor = this.props.availabilities.get('models')
+
+    const sortedByDate = this.props.availabilities.get('models')
       .toArray()
       .filter(a => a.practitionerId === this.state.practitionerId)
       .sort((a, b) => {
@@ -197,11 +205,26 @@ class Availability extends React.Component {
         if (moment(a.date) < moment(b.date)) return -1;
         return 0;
       })
-      .filter(a =>
-        moment(a.date).isBetween(this.state.selectedStartDay, this.state.selectedEndDay, 'days', true)
-      );
 
+    let selectedStartDay = this.state.selectedStartDay
+    let selectedEndDay = this.state.selectedEndDay;
+    if (this.state.retrieveFirstTime && sortedByDate && sortedByDate.length) {
+      selectedStartDay = sortedByDate[0].date;
+      selectedEndDay = moment(selectedStartDay).add(4, 'days')._d;
+      /*this.setState({
+       selectedStartDay: sortedByDate[0].date,
+       selectedEndDay: moment(selectedStartDay).add(4, 'days')._d,
+       }); */
+    }
+    const filteredByDoctor = sortedByDate
+      .filter(a =>
+        moment(a.date).isBetween(selectedStartDay, selectedEndDay, 'days', true)
+      );
     console.log(filteredByDoctor, 'filteredByDoctor');
+    console.log(moment(this.state.selectedEndDay).format('MMMM Do YYYY, h:mm:ss a'))
+    console.log(filteredByDoctor, 'filteredByDoctor');
+
+    debugger;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
