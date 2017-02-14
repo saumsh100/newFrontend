@@ -54,6 +54,8 @@ const markPhoneNumber = '+17788654451';
 
 const clinicPhoneNumber = '+17786558613';
 
+// TODO: order of seeding matters...
+
 const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
   return [
     {
@@ -265,7 +267,7 @@ const SEEDS = {
       firstName: 'Justin',
       lastName: 'Sharp',
       phoneNumber: justinPhoneNumber,
-      birthday: moment({year: 1993, month: 6, day: 15})._d,
+      birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
       status: 'Active',
@@ -283,7 +285,7 @@ const SEEDS = {
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       phoneNumber: sergeyPhoneNumber,
-      birthday: moment({year: 1983, month: 2, day: 6})._d,
+      birthDate: moment({year: 1983, month: 2, day: 6})._d,
       gender: 'male',
       status: 'Active',
       language: 'English',
@@ -294,7 +296,7 @@ const SEEDS = {
       lastName: 'Joseph',
       phoneNumber: markPhoneNumber,
       accountId: accountId2,
-      birthday: moment({year: 1996, month: 4, day: 25})._d,
+      birthDate: moment({year: 1996, month: 4, day: 25})._d,
       gender: 'male',
       status: 'Active',
       language: 'English',
@@ -305,7 +307,7 @@ const SEEDS = {
       firstName: 'Alex',
       lastName: 'Bashliy',
       phoneNumber: alexPhoneNumber,
-      birthday: moment({year: 1997, month: 3, day: 4})._d,
+      birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
       language: 'English',

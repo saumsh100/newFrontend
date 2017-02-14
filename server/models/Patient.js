@@ -9,8 +9,9 @@ const Patient = createModel('Patient', {
   middleName: type.string(),
   lastName: type.string().required(),
   phoneNumber: type.string(),
-  insurance: type.object().allowNull(),
   email: type.string().email(),
+  birthDate: type.date().required(),
+  insurance: type.object().allowNull(),
 
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
