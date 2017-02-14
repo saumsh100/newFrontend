@@ -93,18 +93,6 @@ const SEEDS = {
 
     {
       startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 15, 12, 0, 0, 0),
-      title: 'Full day',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-
-    {
-      startTime: new Date(2017, 1, 15, 15, 35, 0, 0),
       endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
       title: 'Full day',
       id: uuid(),
@@ -115,17 +103,6 @@ const SEEDS = {
       chairId: chairId,
     },
 
-    {
-      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
-      title: '15 full time',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId2,
-      chairId: chairId,
-    },
 
   ],
 
