@@ -1,4 +1,4 @@
- 
+
 const bcrypt = require('bcrypt');
 const seedDatabase = require('../util/seedDatabase');
 const uuid = require('uuid').v4;
@@ -6,8 +6,8 @@ const moment = require('moment');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
- 
- 
+
+
 /**
  * Seeds Map is organized by:
  *
@@ -18,8 +18,8 @@ const saltRounds = 10;
  * }
  *
  */
- 
- 
+
+
 const accountId = uuid();
 const justinPatientId = uuid();
 const sergeyPatientId = uuid();
@@ -28,7 +28,7 @@ const justinUserId = uuid();
 const markUserId = uuid();
 const ashmeetUserId = uuid();
 const sergeyUserId = uuid();
- 
+
 const alexUserId = uuid();
 const alexPatientId = uuid();
 const practitionerId = uuid();
@@ -38,7 +38,7 @@ const serviceId = uuid();
 const serviceId2 = uuid();
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
- 
+
 const SEEDS = {
   Appointment: [
     {
@@ -52,7 +52,7 @@ const SEEDS = {
       practitionerId: practitionerId2,
       chairId: chairId,
     },
- 
+
     {
       startTime: new Date(2017, 1, 13, 9, 0, 0, 0),
       endTime: new Date(2017, 1, 13, 12, 0, 0, 0),
@@ -76,7 +76,7 @@ const SEEDS = {
       practitionerId: practitionerId2,
       chairId: chairId,
     },
- 
+
     {
       startTime: new Date(2017, 1, 14, 9, 0, 0, 0),
       endTime: new Date(2017, 1, 14, 17, 0, 0, 0),
@@ -90,7 +90,7 @@ const SEEDS = {
     },
 
 
- 
+
     {
       startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
       endTime: new Date(2017, 1, 15, 12, 0, 0, 0),
@@ -102,7 +102,7 @@ const SEEDS = {
       practitionerId: practitionerId,
       chairId: chairId,
     },
- 
+
     {
       startTime: new Date(2017, 1, 15, 15, 35, 0, 0),
       endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
@@ -114,9 +114,21 @@ const SEEDS = {
       practitionerId: practitionerId,
       chairId: chairId,
     },
- 
+
+    {
+      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
+      title: '15 full time',
+      id: uuid(),
+      accountId,
+      patientId: alexPatientId,
+      serviceId: serviceId2,
+      practitionerId: practitionerId2,
+      chairId: chairId,
+    },
+
   ],
- 
+
   User: [
     {
       username: 'lonny@carecru.com',
@@ -160,7 +172,7 @@ const SEEDS = {
       activeAccountId: accountId,
     },
   ],
- 
+
   Patient: [
     {
       firstName: 'Justin',
@@ -189,7 +201,7 @@ const SEEDS = {
       appointmentPreference: 'both',
     },
   ],
- 
+
   Account: [
     {
       name: 'Beckett Dental',
@@ -198,7 +210,7 @@ const SEEDS = {
       id: accountId,
     },
   ],
- 
+
   Permission: [
     {
       id: uuid(),
@@ -236,7 +248,7 @@ const SEEDS = {
       permissions: {},
     },
   ],
- 
+
   Service: [
     {
       id: serviceId,
@@ -269,7 +281,7 @@ const SEEDS = {
       customCosts: {},
     },
   ],
- 
+
   Practitioner: [
     {
       id: practitionerId,
@@ -284,7 +296,7 @@ const SEEDS = {
       lastName: 'Cox',
     },
   ],
- 
+
   TextMessage: [
     {
       id: uuid(),
@@ -329,7 +341,7 @@ const SEEDS = {
       createdAt: new Date(2017, 0, 4, 12, 30, 0, 0),
     },
   ],
- 
+
   Chair: [
     {
       id: chairId,
@@ -338,7 +350,7 @@ const SEEDS = {
       description: '',
     },
   ],
- 
+
   Token: [
     {
       id: uuid(),
@@ -350,10 +362,10 @@ const SEEDS = {
     },
   ],
 };
- 
- 
+
+
 console.log(SEEDS);
- 
+
 seedDatabase(SEEDS)
   .then(() => {
     console.log('Successfully executed bin/seeds.');

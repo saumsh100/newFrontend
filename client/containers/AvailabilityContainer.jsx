@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import DayPicker, { DateUtils } from 'react-day-picker';
+import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
@@ -24,7 +24,6 @@ class Availability extends React.Component {
     this.sixDaysBack = this.sixDaysBack.bind(this);
     this.sixDaysForward = this.sixDaysForward.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
-    this.isDaySelected = this.isDaySelected.bind(this);
   }
 
   componentDidMount() {
@@ -104,7 +103,7 @@ class Availability extends React.Component {
     this.setState({
       practitionerId: e.target.value,
       shouldFetchAvailabilities: true,
-      retrieveFirstTime: false,
+      retrieveFirstTime: true,
     }, () => {
       this.props.fetchEntities({ key: 'services',
         params: { practitionerId: this.state.practitionerId }
@@ -182,11 +181,8 @@ class Availability extends React.Component {
     });
   }
 
-  isDaySelected(day) {
-    return DateUtils.isSameDay(day, this.state.selectedStartDay);
-  }
-
   render() {
+
     const sortedByDate = this.props.availabilities.get('models')
       .toArray()
       .filter(a => a.practitionerId === this.state.practitionerId)
@@ -195,12 +191,16 @@ class Availability extends React.Component {
         if (moment(a.date) < moment(b.date)) return -1;
         return 0;
       })
-      
+
       let selectedStartDay = this.state.selectedStartDay
       let selectedEndDay = this.state.selectedEndDay;
       if (this.state.retrieveFirstTime && sortedByDate && sortedByDate.length) {
-        selectedStartDay = sortedByDate[0].date
-        selectedEndDay = moment(selectedStartDay).add(4, 'days')._d
+        selectedStartDay = sortedByDate[0].date;
+        selectedEndDay = moment(selectedStartDay).add(4, 'days')._d;
+        /*this.setState({
+          selectedStartDay: sortedByDate[0].date,
+          selectedEndDay: moment(selectedStartDay).add(4, 'days')._d,
+        }); */
       }
       const filteredByDoctor = sortedByDate
       .filter(a =>
@@ -209,6 +209,7 @@ class Availability extends React.Component {
       console.log(moment(this.state.selectedEndDay).format('MMMM Do YYYY, h:mm:ss a'))
       console.log(filteredByDoctor, 'filteredByDoctor');
 
+    debugger;
     return (
       <div>
         <div className={styles.header}>
