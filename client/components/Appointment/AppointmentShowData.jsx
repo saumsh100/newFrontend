@@ -20,7 +20,6 @@ export default function AppointmentShowData({ data }) {
       </div>
       <div className={styles.appointmentShowData__insurance}>
         <Icon icon={'medkit'} className={styles.appointmentShowData__icons}/>
-        {data.insurance}
       </div>
       <div className={styles.appointmentShowData__comment}>
         <b>Note: </b>

@@ -4,25 +4,10 @@ import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
 import AppointmentShowData from '../Appointment/AppointmentShowData';
+import withHoverable from '../../hocs/withHoverable';
+
 
 class RequestListItem extends Component {
-
-  constructor(props){
-    super(props)
-    this.state = {
-      showResults: false,
-    }
-    this.showAppointment = this.showAppointment.bind(this);
-    this.hideAppointment = this.hideAppointment.bind(this);
-  }
-
-  showAppointment() {
-    this.setState({showResults: true});
-  }
-
-  hideAppointment(){
-    this.setState({ showResults: false });
-  }
 
   render() {
     const {request, patient, service } = this.props;
@@ -33,22 +18,17 @@ class RequestListItem extends Component {
       email: patient.email,
       service: service.name,
       phoneNumber: patient.phoneNumber,
-   // insurance: patient.getInsurance().insurance,
       comment: request.comment,
       month: request.getMonth(),
       day: request.getDay(),
     };
 
     return (
-      <div>
-        <ListItem onMouseOver={this.showAppointment} onMouseOut={this.hideAppointment} className={styles.requestListItem}>
+        <ListItem className={styles.requestListItem}>
           <MonthDay month={data.month} day={data.day} />
-          <RequestData data={data}/>
+          <RequestData time={data.time} nameAge={data.nameAge} phoneNumber={data.phoneNumber} service={data.service}/>
+          {this.props.isHovered ? <AppointmentShowData data={data} /> : null }
         </ListItem>
-        <div>
-          {this.state.showResults ? <AppointmentShowData data={data} /> : null }
-        </div>
-      </div>
     );
   }
 }
@@ -56,6 +36,7 @@ class RequestListItem extends Component {
 RequestListItem.propTypes = {
   patient: PropTypes.object.isRequired,
   request: PropTypes.object.isRequired,
+  service: PropTypes.object.isRequired,
 };
 
-export default RequestListItem;
+export default withHoverable(RequestListItem);

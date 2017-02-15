@@ -80,6 +80,13 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('requestAppointment', (data) => {
+    new Request(data).save()
+      .then((request) => {
+        io.sockets.emit('receiveRequest', request);
+      });
+  });
+
   /**
    * Listen to changes on texts and publish events for new
    */
@@ -88,7 +95,6 @@ io.on('connection', (socket) => {
       if (error) {
         throw new Error('Feed error');
       }
-
       if (doc.isSaved() === false) {
         throw new Error('Deleting TextMessages is not implemented!');
       } else if (doc.getOldValue() == null) {
