@@ -106,7 +106,6 @@ io.on('connection', (socket) => {
   Request.changes().then((feed) => {
     feed.each((error, doc) => {
       if (error) throw new Error('Feed error');
-
       if (doc.getOldValue() === null) {
         console.log('feed received new request');
         socket.emit('addRequest', doc);
