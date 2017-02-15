@@ -10,6 +10,11 @@ import { bindActionCreators } from 'redux';
 import { fetchEntities } from '../thunks/fetchEntities';
 import styles from './AvailabilityContainer.scss';
 
+import {
+  sixDaysShift,
+  setDay,
+} from  '../thunks/availabilities';
+
 class Availability extends React.Component {
   constructor(props) {
     super(props);
@@ -129,13 +134,22 @@ class Availability extends React.Component {
   }
 
   sixDaysBack() {
-
+    const { sixDaysShift } = this.props;
     const { practitonersStartEndDate } = this.state;
+
+
+
     const selectedOldStartDay = practitonersStartEndDate[this.state.practitionerId].selectedStartDay;
     const newEndDay = moment(selectedOldStartDay)._d
     const newStartDay = moment(newEndDay).subtract(4, 'd')._d;
     practitonersStartEndDate[this.state.practitionerId].selectedStartDay = newStartDay;
     practitonersStartEndDate[this.state.practitionerId].selectedEndDay = newEndDay;
+
+    sixDaysShift({
+      selectedStartDay: newStartDay,
+      selectedEndDay: newEndDay,
+      practitionerId: this.state.practitionerId,
+    });
 
     this.setState({
       selectedStartDay: moment(this.state.selectedStartDay).subtract(4, 'd')._d,
@@ -156,6 +170,8 @@ class Availability extends React.Component {
   }
 
   sixDaysForward() {
+    const { sixDaysShift } = this.props;
+
     const { practitonersStartEndDate } = this.state;
 
     const selectedOldStartDay = practitonersStartEndDate[this.state.practitionerId].selectedStartDay;
@@ -164,7 +180,11 @@ class Availability extends React.Component {
     practitonersStartEndDate[this.state.practitionerId].selectedStartDay = newStartDay;
     practitonersStartEndDate[this.state.practitionerId].selectedEndDay = newEndDay;
 
-
+    sixDaysShift({
+      selectedStartDay: newStartDay,
+      selectedEndDay: newEndDay,
+      practitionerId: this.state.practitionerId,
+    });
 
     this.setState({
       selectedStartDay: moment(this.state.selectedStartDay).add(4, 'd')._d,
@@ -187,6 +207,7 @@ class Availability extends React.Component {
   handleDayClick(e, day) {
 
     const { practitonersStartEndDate } = this.state;
+    const { sixDaysShift } = this.props;
 
     const selectedOldStartDay = practitonersStartEndDate[this.state.practitionerId].selectedStartDay;
     const newStartDay = day;
@@ -194,6 +215,12 @@ class Availability extends React.Component {
     practitonersStartEndDate[this.state.practitionerId].selectedStartDay = newStartDay;
     practitonersStartEndDate[this.state.practitionerId].selectedEndDay = newEndDay;
     console.log(day, 'the DAY');
+    sixDaysShift({
+      selectedStartDay: newStartDay,
+      selectedEndDay: newEndDay,
+      practitionerId: this.state.practitionerId,      
+    });
+    
     this.setState({
       selectedStartDay: day,
       selectedEndDay: moment(day).add(4, 'd')._d,
@@ -384,17 +411,20 @@ class Availability extends React.Component {
   }
 }
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, availabilities }) {
   return {
     availabilities: entities.get('availabilities'),
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
+    practitonersStartEndDate: availabilities,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    sixDaysShift,
+    setDay,
   }, dispatch);
 }
 
