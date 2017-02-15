@@ -82,20 +82,7 @@ class Availability extends React.Component {
 
 
       if (this.state.retrieveFirstTime && availabilities && availabilities.length) {
-        // const selectedStartDay = availabilities[0].date;
-        // const selectedEndDay = moment(selectedStartDay).add(4, 'days')._d;
 
-        // console.log("selectedStartDay")
-        // console.log(selectedStartDay)
-        // console.log("selectedEndDay")
-        // console.log(selectedEndDay)
-        // console.log("availabilities")
-        // console.log(availabilities)
-
-        // this.setState({
-        //   selectedStartDay,
-        //   selectedEndDay,
-        // });
       }
 
     }
@@ -134,16 +121,10 @@ class Availability extends React.Component {
   }
 
   sixDaysBack() {
-    const { sixDaysShift } = this.props;
-    const { practitonersStartEndDate } = this.state;
-
-
-
-    const selectedOldStartDay = practitonersStartEndDate[this.state.practitionerId].selectedStartDay;
+    const { sixDaysShift, practitonersStartEndDate } = this.props;
+    const selectedOldStartDay = practitonersStartEndDate.toJS()[this.state.practitionerId].selectedStartDay;
     const newEndDay = moment(selectedOldStartDay)._d
     const newStartDay = moment(newEndDay).subtract(4, 'd')._d;
-    practitonersStartEndDate[this.state.practitionerId].selectedStartDay = newStartDay;
-    practitonersStartEndDate[this.state.practitionerId].selectedEndDay = newEndDay;
 
     sixDaysShift({
       selectedStartDay: newStartDay,
@@ -156,7 +137,6 @@ class Availability extends React.Component {
       selectedEndDay: moment(this.state.selectedEndDay).subtract(4, 'd')._d,
       shouldFetchAvailabilities: false,
       retrieveFirstTime: false,
-      practitonersStartEndDate,
     }, () => {
       this.props.fetchEntities({ key: 'availabilities',
         params: {
@@ -170,15 +150,11 @@ class Availability extends React.Component {
   }
 
   sixDaysForward() {
-    const { sixDaysShift } = this.props;
+    const { sixDaysShift, practitonersStartEndDate } = this.props;
 
-    const { practitonersStartEndDate } = this.state;
-
-    const selectedOldStartDay = practitonersStartEndDate[this.state.practitionerId].selectedStartDay;
+    const selectedOldStartDay = practitonersStartEndDate.toJS()[this.state.practitionerId].selectedStartDay;
     const newStartDay = moment(selectedOldStartDay).add(4, 'd')._d;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
-    practitonersStartEndDate[this.state.practitionerId].selectedStartDay = newStartDay;
-    practitonersStartEndDate[this.state.practitionerId].selectedEndDay = newEndDay;
 
     sixDaysShift({
       selectedStartDay: newStartDay,
@@ -191,7 +167,6 @@ class Availability extends React.Component {
       selectedEndDay: moment(this.state.selectedEndDay).add(4, 'd')._d,
       shouldFetchAvailabilities: false,
       retrieveFirstTime: false,
-      practitonersStartEndDate,
     }, () => {
       this.props.fetchEntities({ key: 'availabilities',
         params: {
@@ -206,27 +181,24 @@ class Availability extends React.Component {
 
   handleDayClick(e, day) {
 
-    const { practitonersStartEndDate } = this.state;
+    const { practitonersStartEndDate } = this.props;
     const { sixDaysShift } = this.props;
 
-    const selectedOldStartDay = practitonersStartEndDate[this.state.practitionerId].selectedStartDay;
+    const selectedOldStartDay = practitonersStartEndDate.toJS()[this.state.practitionerId].selectedStartDay;
     const newStartDay = day;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
-    practitonersStartEndDate[this.state.practitionerId].selectedStartDay = newStartDay;
-    practitonersStartEndDate[this.state.practitionerId].selectedEndDay = newEndDay;
     console.log(day, 'the DAY');
     sixDaysShift({
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
       practitionerId: this.state.practitionerId,      
     });
-    
+
     this.setState({
       selectedStartDay: day,
       selectedEndDay: moment(day).add(4, 'd')._d,
       shouldFetchAvailabilities: false,
       retrieveFirstTime: false,
-      practitonersStartEndDate,
     }, () => {
       console.log(this.state.selectedStartDay, this.state.selectedEndDay);
       this.props.fetchEntities({ key: 'availabilities',
@@ -252,7 +224,6 @@ class Availability extends React.Component {
     this.setState({modalIsOpen: !modalIsOpen});
   }
   render() {
-
     const sortedByDate = this.props.availabilities.get('models')
       .toArray()
       .filter(a => a.practitionerId === this.state.practitionerId)
@@ -262,27 +233,24 @@ class Availability extends React.Component {
         return 0;
       });
 
-
+    const { practitonersStartEndDate, sixDaysShift } = this.props;
     let selectedStartDay = this.state.selectedStartDay;
     let selectedEndDay = this.state.selectedEndDay;
 
-    const practitonersStartEndDate = this.state.practitonersStartEndDate;
+    // const practitonersStartEndDate = this.state.practitonersStartEndDate;
 
-    if (!practitonersStartEndDate[this.state.practitionerId] && sortedByDate && sortedByDate.length) {
-
+    const prStardEndDate = practitonersStartEndDate.toJS()[this.state.practitionerId]; 
+    if (!prStardEndDate && sortedByDate && sortedByDate.length) {
       selectedStartDay = sortedByDate[0].date;
       selectedEndDay = moment(selectedStartDay).add(4, 'days')._d;
-      practitonersStartEndDate[this.state.practitionerId] = {
-        selectedStartDay: sortedByDate[0].date,
-        selectedEndDay:  moment(selectedStartDay).add(4, 'days')._d,
-      };
-      this.setState({ practitonersStartEndDate });
+
+      sixDaysShift({ selectedStartDay, selectedEndDay, practitionerId: this.state.practitionerId })
 
     }
 
-    if (practitonersStartEndDate[this.state.practitionerId]) {
-      selectedStartDay = practitonersStartEndDate[this.state.practitionerId].selectedStartDay;
-      selectedEndDay = practitonersStartEndDate[this.state.practitionerId].selectedEndDay;
+    if (prStardEndDate) {
+      selectedStartDay = prStardEndDate.selectedStartDay;
+      selectedEndDay = prStardEndDate.selectedEndDay;
     }
 
     const filteredByDoctor = sortedByDate
