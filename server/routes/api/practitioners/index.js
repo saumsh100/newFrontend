@@ -5,7 +5,10 @@ const normalize = require('../normalize');
 
 practitionersRouter.get('/', (req, res, next) => {
   return Practitioner.run()
-    .then(practitioners => res.send(normalize('practitioners', practitioners)))
+    .then(practitioners => {
+      console.log(normalize('practitioners', practitioners));
+      res.send(normalize('practitioners', practitioners))
+    })
     .catch(next);
 });
 

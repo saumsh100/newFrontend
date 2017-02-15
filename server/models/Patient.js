@@ -10,7 +10,7 @@ const Patient = createModel('Patient', {
   lastName: type.string().required(),
   phoneNumber: type.string(),
   email: type.string().email(),
-  birthDate: type.date().required(),
+  birthDate: type.date(),
   insurance: type.object().allowNull(),
 
   // TODO: this needs to be modified to support priorities and a standard structure

@@ -60,6 +60,7 @@ const SCHEMAS = {
 
   // Collections (list/find)
   appointments: [appointmentSchema()],
+  practitioners: [practitionerSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
   patients: [patientSchema()],
