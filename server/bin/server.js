@@ -80,13 +80,6 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('requestAppointment', (data) => {
-    new Request(data).save()
-      .then((request) => {
-        io.sockets.emit('receiveRequest', request);
-      });
-  });
-
   /**
    * Listen to changes on texts and publish events for new
    */
@@ -106,6 +99,21 @@ io.on('connection', (socket) => {
       }
     });
   });
+
+  /**
+   * Listen to changes on the Requests table
+   */
+  Request.changes().then((feed) => {
+    feed.each((error, doc) => {
+      if (error) throw new Error('Feed error');
+
+      if (doc.getOldValue() === null) {
+        console.log('feed received new request');
+        socket.emit('addRequest', doc);
+      }
+    });
+  });
+
 });
 
 server.listen(globals.port, () => {

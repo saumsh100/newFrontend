@@ -82,9 +82,8 @@ export default handleActions({
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity[key])[0];
-    const newEntity = entity[key][id];
-    const newModel = new Models[key](newEntity);
+    const { id } = entity;
+    const newModel = new Models[key](entity);
     return state.setIn([key, 'models', id], newModel);
   },
 

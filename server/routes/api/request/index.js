@@ -5,6 +5,20 @@ const normalize = require('../normalize');
 const Request = require('../../../models/Request');
 
 /**
+ * Create a request
+ */
+requestsRouter.post('/', checkPermissions('requests:create'), (req, res, next) => {
+  // Attach request to the clinic of posting user
+  const requestData = Object.assign({}, req.body, {
+    accountId: req.accountId,
+  });
+
+  return Request.save(requestData)
+    .then(request => res.send(201, normalize('request', request)))
+    .catch(next);
+});
+
+/**
  * Get all requests
  */
 requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {

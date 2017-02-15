@@ -7,11 +7,8 @@ export default function connectSocketToStore(socket, store) {
     console.log('CONNECTED');
   });
 
-  socket.on('receiveRequest', (data) => {
-
-
-    //const modelData = {requests: data};
-    store.dispatch(addEntity({key: 'requests', entity: map} ));
+  socket.on('addRequest', (data) => {
+    store.dispatch(addEntity({ key: 'requests', entity: data }));
   });
 }
 
