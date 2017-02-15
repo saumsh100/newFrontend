@@ -41,8 +41,8 @@ const appointmentId2 = uuid();
 const SEEDS = {
   Appointment: [
     {
-      startTime: new Date(2017, 1, 13, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 13, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
       title: 'alexPatientId, serviceId2, practitionerId2, Sooner Availability',
       id: appointmentId1,
       accountId,
@@ -53,8 +53,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 13, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 13, 12, 0, 0, 0),
+      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
       title: 'alexPatientId, serviceId2, practitionerId, Full day',
       id: uuid(),
       accountId,
@@ -65,8 +65,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 14, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 14, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 16, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 16, 17, 0, 0, 0),
       title: 'alexPatientId, serviceId2, practitionerId2, Sooner Availability',
       id: uuid(),
       accountId,
@@ -77,8 +77,8 @@ const SEEDS = {
     },
 
     {
-      startTime: new Date(2017, 1, 14, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 14, 17, 0, 0, 0),
+      startTime: new Date(2017, 1, 16, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 16, 17, 0, 0, 0),
       title: 'alexPatientId, serviceId2, practitionerId, Full day',
       id: uuid(),
       accountId,
@@ -88,12 +88,10 @@ const SEEDS = {
       chairId: chairId,
     },
 
-
-
     {
-      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 15, 12, 0, 0, 0),
-      title: 'Full day',
+      startTime: new Date(2017, 1, 17, 9, 0, 0, 0),
+      endTime: new Date(2017, 1, 17, 17, 0, 0, 0),
+      title: 'alexPatientId, serviceId2, practitionerId, Full day',
       id: uuid(),
       accountId,
       patientId: alexPatientId,
@@ -101,31 +99,6 @@ const SEEDS = {
       practitionerId: practitionerId,
       chairId: chairId,
     },
-
-    {
-      startTime: new Date(2017, 1, 15, 15, 35, 0, 0),
-      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
-      title: 'Full day',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId,
-      chairId: chairId,
-    },
-
-    {
-      startTime: new Date(2017, 1, 15, 9, 0, 0, 0),
-      endTime: new Date(2017, 1, 15, 17, 0, 0, 0),
-      title: '15 full time',
-      id: uuid(),
-      accountId,
-      patientId: alexPatientId,
-      serviceId: serviceId2,
-      practitionerId: practitionerId2,
-      chairId: chairId,
-    },
-
   ],
 
   User: [
