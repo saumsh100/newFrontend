@@ -57,6 +57,7 @@ const SCHEMAS = {
   service: serviceSchema(),
   textMessage: textMessageSchema(),
   user: userSchema(),
+  practitioner: practitionerSchema(),
 
   // Collections (list/find)
   appointments: [appointmentSchema()],
@@ -67,6 +68,7 @@ const SCHEMAS = {
   services: [serviceSchema()],
   textMessages: [textMessageSchema()],
   users: [userSchema()],
+  practitioners: [practitionerSchema()],
 };
 
 module.exports = function normalize(key, data) {
