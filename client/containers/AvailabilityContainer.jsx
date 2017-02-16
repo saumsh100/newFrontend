@@ -44,19 +44,17 @@ class Availability extends React.Component {
     const { setPractitioner } = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
     const nextPractitioners = nextProps.practitioners.get('models').toArray();
-
     const { practitonersStartEndDate } = nextProps;
-    const prevPractitionerId = this.props.practitonersStartEndDate.toJS().practitionerId;
-    const nextPractitionerId = practitonersStartEndDate.toJS().practitionerId;
-    
-    if (!practitonersStartEndDate.toJS().practitionerId && nextPractitioners && nextPractitioners.length ) {
+    const practitonersStartEndDatetoJS = this.props.practitonersStartEndDate.toJS() 
+    const nextpractitonersStartEndDatetoJS = practitonersStartEndDate.toJS(); 
+    const prevPractitionerId = practitonersStartEndDatetoJS.practitionerId;
+    const nextPractitionerId = nextpractitonersStartEndDatetoJS.practitionerId;
+    if (!nextPractitionerId && nextPractitioners && nextPractitioners.length ) {
       const practitionerId = nextPractitioners[0].id
-
       setPractitioner({ practitionerId });
     }
-
     // check if end day has been changed - fetch new availabilities 
-    const selectedDays = practitonersStartEndDate.toJS()[nextPractitionerId];
+    const selectedDays = nextpractitonersStartEndDatetoJS[nextPractitionerId];
     if (!selectedDays) {
         const params = {
           practitionerId: nextPractitionerId,
@@ -71,7 +69,7 @@ class Availability extends React.Component {
         });
     }
 
-    const thisPractitionersStartEndDate = this.props.practitonersStartEndDate.toJS()[nextPractitionerId];
+    const thisPractitionersStartEndDate = practitonersStartEndDatetoJS[nextPractitionerId];
     if (selectedDays && thisPractitionersStartEndDate) {
       const { selectedEndDay, selectedStartDay } = selectedDays;
       const thisselectedEndDay = thisPractitionersStartEndDate.selectedEndDay;
