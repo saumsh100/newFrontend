@@ -23,7 +23,6 @@ class Availability extends React.Component {
     this.state = {
       selectedStartDay: new Date(),
       selectedEndDay: moment().add(4, 'd')._d,
-      shouldFetchAvailabilities: true,
       modalIsOpen: false,
       retrieveFirstTime: true,
       practitonersStartEndDate: {},
@@ -70,8 +69,6 @@ class Availability extends React.Component {
           params,
         });
     }
-
-
 
     const thisPractitionersStartEndDate = this.props.practitonersStartEndDate.toJS()[nextPractitionerId];
     if (selectedDays && thisPractitionersStartEndDate) {
@@ -126,45 +123,20 @@ class Availability extends React.Component {
         .sort((a, b) => (moment(a.date) > moment(b.date)))
         .filter(a => (a.practitionerId == this.state.practitionerId));
 
-
-      if (this.state.retrieveFirstTime && availabilities && availabilities.length) {
-
-      }
-
     }
   }
 
   onDoctorChange(e) {
-    // this.props.fetchEntities({ key: 'services' });
     const { setPractitioner } = this.props;
     setPractitioner({ practitionerId : e.target.value });
-    
-    this.setState({
-      practitionerId: e.target.value,
-      shouldFetchAvailabilities: true,
-      retrieveFirstTime: true,
-    }, () => {
-    })
+    this.setState({ retrieveFirstTime: true })
   }
 
   onServiceChange(e) {
     const { setService, practitonersStartEndDate } = this.props;
     const practitionerId = practitonersStartEndDate.toJS().practitionerId;
     setService(e.target.value)
-    this.setState({
-      serviceId: e.target.value,
-      retrieveFirstTime: false,
-    }, () => {
-      // this.props.preventEntityDuplication({ key: 'availabilities' });
-      this.props.fetchEntities({ key: 'availabilities',
-        params: {
-          serviceId: this.state.serviceId,
-          practitionerId,
-          startDate: this.state.selectedStartDay,
-          endDate: this.state.selectedEndDay,
-        },
-      });
-    });
+    this.setState({ retrieveFirstTime: false })
   }
 
   sixDaysBack() {
@@ -180,13 +152,7 @@ class Availability extends React.Component {
       practitionerId,
     });
 
-    this.setState({
-      selectedStartDay: moment(this.state.selectedStartDay).subtract(4, 'd')._d,
-      selectedEndDay: moment(this.state.selectedEndDay).subtract(4, 'd')._d,
-      shouldFetchAvailabilities: false,
-      retrieveFirstTime: false,
-    }, () => {
-    });
+    this.setState({ retrieveFirstTime: false })
   }
 
   sixDaysForward() {
@@ -202,14 +168,7 @@ class Availability extends React.Component {
       practitionerId,
     });
 
-    this.setState({
-      selectedStartDay: moment(this.state.selectedStartDay).add(4, 'd')._d,
-      selectedEndDay: moment(this.state.selectedEndDay).add(4, 'd')._d,
-      shouldFetchAvailabilities: false,
-      retrieveFirstTime: false,
-    }, () => {
-
-    });
+    this.setState({ retrieveFirstTime: false })
   }
 
   handleDayClick(e, day) {
@@ -217,24 +176,16 @@ class Availability extends React.Component {
     const { practitonersStartEndDate } = this.props;
     const { sixDaysShift } = this.props;
     const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[this.state.practitionerId].selectedStartDay;
+    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = day;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
-    console.log(day, 'the DAY');
     sixDaysShift({
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
       practitionerId,      
     });
 
-    this.setState({
-      selectedStartDay: day,
-      selectedEndDay: moment(day).add(4, 'd')._d,
-      shouldFetchAvailabilities: false,
-      retrieveFirstTime: false,
-    }, () => {
-
-    });
+    this.setState({ retrieveFirstTime: false })
   }
 
   isDaySelected(day) {
@@ -249,27 +200,24 @@ class Availability extends React.Component {
     this.setState({modalIsOpen: !modalIsOpen});
   }
   render() {
+    const { practitonersStartEndDate, sixDaysShift } = this.props;
+    let { selectedEndDay, selectedStartDay } = practitonersStartEndDate;
+    const practitionerId = practitonersStartEndDate.toJS().practitionerId
+    const prStardEndDate = practitonersStartEndDate.toJS()[practitionerId]; 
     const sortedByDate = this.props.availabilities.get('models')
       .toArray()
-      .filter(a => a.practitionerId === this.state.practitionerId)
+      .filter(a => a.practitionerId === practitionerId)
       .sort((a, b) => {
         if (moment(a.date) > moment(b.date)) return 1;
         if (moment(a.date) < moment(b.date)) return -1;
         return 0;
       });
 
-    const { practitonersStartEndDate, sixDaysShift } = this.props;
-    let selectedStartDay = this.state.selectedStartDay;
-    let selectedEndDay = this.state.selectedEndDay;
-
-    // const practitonersStartEndDate = this.state.practitonersStartEndDate;
-
-    const prStardEndDate = practitonersStartEndDate.toJS()[this.state.practitionerId]; 
     if (!prStardEndDate && sortedByDate && sortedByDate.length) {
       selectedStartDay = sortedByDate[0].date;
       selectedEndDay = moment(selectedStartDay).add(4, 'days')._d;
 
-      sixDaysShift({ selectedStartDay, selectedEndDay, practitionerId: this.state.practitionerId })
+      sixDaysShift({ selectedStartDay, selectedEndDay, practitionerId })
 
     }
 
@@ -286,9 +234,6 @@ class Availability extends React.Component {
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
           <div className={styles.appointment__sidebar}>
-            {/*<div className={styles.appointment__sidebar_title}>*/}
-            {/*Pacific Heart Dental*/}
-            {/*</div>*/}
           </div>
           <div className={styles.appointment__main}>
             <div className={styles.appointment__header}>
@@ -302,7 +247,7 @@ class Availability extends React.Component {
                 <div className={styles.appointment__select_wrapper}>
                   <select
                     className={styles.appointment__select_item}
-                    value={this.state.practitionerId}
+                    value={practitionerId || this.state.practitionerId}
                     onChange={this.onDoctorChange}
                     ref={(doctor) => { this.doctor = doctor; }}>
                     <option value="" selected>No Preference</option>
