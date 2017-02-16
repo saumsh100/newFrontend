@@ -3,10 +3,13 @@ import { handleActions } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
   SET_DAY,
+  SET_PRACTITIONER,
+  SET_SERVICE,
 } from '../constants';
 
 const initialState = fromJS({
-
+  practitionerId: null,
+  serviceId: null,
 });
 
 export default handleActions({
@@ -21,5 +24,17 @@ export default handleActions({
     return state.merge({
 
     });
-  }
+  },
+
+  [SET_PRACTITIONER](state, action) {
+    return state.merge({
+      practitionerId: action.payload.practitionerId,
+    })
+  },
+
+  [SET_SERVICE](state, action) {
+    return state.merge({
+      serviceId: action.payload.serviceId,
+    })
+  },
 }, initialState);

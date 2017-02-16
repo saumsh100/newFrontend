@@ -13,6 +13,8 @@ import styles from './AvailabilityContainer.scss';
 import {
   sixDaysShift,
   setDay,
+  setPractitioner,
+  setService,
 } from  '../thunks/availabilities';
 
 class Availability extends React.Component {
@@ -41,8 +43,52 @@ class Availability extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { setPractitioner } = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
     const nextPractitioners = nextProps.practitioners.get('models').toArray();
+
+    const { practitonersStartEndDate } = nextProps;
+    const prevPractitionerId = this.props.practitonersStartEndDate.toJS().practitionerId;
+    const nextPractitionerId = practitonersStartEndDate.toJS().practitionerId;
+    
+    if (!practitonersStartEndDate.toJS().practitionerId && nextPractitioners && nextPractitioners.length ) {
+      const practitionerId = nextPractitioners[0].id
+
+      setPractitioner({ practitionerId });
+    }
+
+    // check if end day has been changed - fetch new availabilities 
+    const selectedDays = practitonersStartEndDate.toJS()[nextPractitionerId];
+    if (!selectedDays) {
+        const params = {
+          practitionerId: nextPractitionerId,
+          serviceId: this.state.serviceId,
+          startDate: this.state.selectedStartDay,
+          endDate: this.state.selectedEndDay,
+        };
+        this.props.fetchEntities({ key: 'availabilities',
+          params,
+        });
+    }
+
+
+
+    const thisPractitionersStartEndDate = this.props.practitonersStartEndDate.toJS()[nextPractitionerId];
+    if (selectedDays && thisPractitionersStartEndDate) {
+      const { selectedEndDay, selectedStartDay } = selectedDays;
+      const thisselectedEndDay = thisPractitionersStartEndDate.selectedEndDay;
+      if (thisselectedEndDay !== selectedEndDay || nextPractitionerId !== prevPractitionerId ) {
+        const params = {
+          practitionerId: nextPractitionerId,
+          serviceId: this.state.serviceId,
+          startDate: selectedStartDay,
+          endDate: selectedEndDay,
+        };
+        this.props.fetchEntities({ key: 'availabilities',
+          params,
+        });
+      }
+    }
     if (!isEqual(thisPractitioners, nextPractitioners)) {
       this.setState({ practitionerId: nextPractitioners[0].id }, () => {
         this.props.fetchEntities({ key: 'services',
@@ -90,20 +136,21 @@ class Availability extends React.Component {
 
   onDoctorChange(e) {
     // this.props.fetchEntities({ key: 'services' });
+    const { setPractitioner } = this.props;
+    setPractitioner({ practitionerId : e.target.value });
+    
     this.setState({
       practitionerId: e.target.value,
       shouldFetchAvailabilities: true,
       retrieveFirstTime: true,
     }, () => {
-      this.props.fetchEntities({ key: 'services',
-        params: {
-        practitionerId: this.state.practitionerId
-      },
-      });
     })
   }
 
   onServiceChange(e) {
+    const { setService, practitonersStartEndDate } = this.props;
+    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
+    setService(e.target.value)
     this.setState({
       serviceId: e.target.value,
       retrieveFirstTime: false,
@@ -112,7 +159,7 @@ class Availability extends React.Component {
       this.props.fetchEntities({ key: 'availabilities',
         params: {
           serviceId: this.state.serviceId,
-          practitionerId: this.state.practitionerId,
+          practitionerId,
           startDate: this.state.selectedStartDay,
           endDate: this.state.selectedEndDay,
         },
@@ -122,14 +169,15 @@ class Availability extends React.Component {
 
   sixDaysBack() {
     const { sixDaysShift, practitonersStartEndDate } = this.props;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[this.state.practitionerId].selectedStartDay;
+    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newEndDay = moment(selectedOldStartDay)._d
     const newStartDay = moment(newEndDay).subtract(4, 'd')._d;
 
     sixDaysShift({
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
-      practitionerId: this.state.practitionerId,
+      practitionerId,
     });
 
     this.setState({
@@ -138,28 +186,20 @@ class Availability extends React.Component {
       shouldFetchAvailabilities: false,
       retrieveFirstTime: false,
     }, () => {
-      this.props.fetchEntities({ key: 'availabilities',
-        params: {
-          practitionerId: this.state.practitionerId,
-          serviceId: this.state.serviceId,
-          startDate: newStartDay,
-          endDate: newEndDay,
-        },
-      });
     });
   }
 
   sixDaysForward() {
     const { sixDaysShift, practitonersStartEndDate } = this.props;
-
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[this.state.practitionerId].selectedStartDay;
+    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = moment(selectedOldStartDay).add(4, 'd')._d;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
 
     sixDaysShift({
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
-      practitionerId: this.state.practitionerId,
+      practitionerId,
     });
 
     this.setState({
@@ -168,14 +208,7 @@ class Availability extends React.Component {
       shouldFetchAvailabilities: false,
       retrieveFirstTime: false,
     }, () => {
-      this.props.fetchEntities({ key: 'availabilities',
-        params: {
-          practitionerId: this.state.practitionerId,
-          serviceId: this.state.serviceId,
-          startDate: newStartDay,
-          endDate: newEndDay,
-        },
-      });
+
     });
   }
 
@@ -183,7 +216,7 @@ class Availability extends React.Component {
 
     const { practitonersStartEndDate } = this.props;
     const { sixDaysShift } = this.props;
-
+    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitonersStartEndDate.toJS()[this.state.practitionerId].selectedStartDay;
     const newStartDay = day;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
@@ -191,7 +224,7 @@ class Availability extends React.Component {
     sixDaysShift({
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
-      practitionerId: this.state.practitionerId,      
+      practitionerId,      
     });
 
     this.setState({
@@ -200,15 +233,7 @@ class Availability extends React.Component {
       shouldFetchAvailabilities: false,
       retrieveFirstTime: false,
     }, () => {
-      console.log(this.state.selectedStartDay, this.state.selectedEndDay);
-      this.props.fetchEntities({ key: 'availabilities',
-        params: {
-          practitionerId: this.state.practitionerId,
-          serviceId: this.state.serviceId,
-          startDate: newStartDay,
-          endDate: newEndDay,
-        },
-      });
+
     });
   }
 
@@ -257,17 +282,6 @@ class Availability extends React.Component {
       .filter(a =>
         moment(a.date).isBetween(selectedStartDay, selectedEndDay, 'days', true)
       );
-
-    console.log("selectedStartDay");
-    console.log(selectedStartDay);
-    console.log("selectedEndDay");
-    console.log(selectedEndDay);
-
-
-
-    console.log(moment(this.state.selectedEndDay).format('MMMM Do YYYY, h:mm:ss a'));
-    console.log(filteredByDoctor, 'filteredByDoctor');
-
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -393,6 +407,8 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     sixDaysShift,
     setDay,
+    setPractitioner,
+    setService,
   }, dispatch);
 }
 
