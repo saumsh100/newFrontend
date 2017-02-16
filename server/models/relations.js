@@ -46,6 +46,6 @@ Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Patient, 'patients', 'id', 'accountId');
 
-Chat.hasOne(Patient, 'patient', 'patientId', 'id');
 Chat.hasOne(Account, 'account', 'accountId', 'id');
+Chat.hasOne(Patient, 'patient', 'patientId', 'id');
 Chat.hasMany(TextMessage, 'textMessages', 'id', 'chatId');

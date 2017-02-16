@@ -32,7 +32,7 @@ if (globals.env === 'production') {
   });
 }
 
-module.exports.dropTable = function dropTable (tableName) {
+module.exports.dropTable = function dropTable(tableName) {
   return r.connect(_.clone(db)).then((connection) => {
     console.log('connected')
     return r.tableDrop(tableName).run(connection)

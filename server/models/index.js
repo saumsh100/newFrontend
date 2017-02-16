@@ -1,3 +1,4 @@
+
 const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
@@ -10,7 +11,6 @@ const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
 const Token = require('./Token');
-
 
 module.exports = {
   Account,
