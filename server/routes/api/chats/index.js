@@ -89,7 +89,7 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
 /**
  * Set all of a chat's unread textMessages to read
  */
-chatsRouter.post('/:_chatId/textMessages/read', checkPermissions('chats:read'), (req, res, next) => {
+chatsRouter.post('/:_chatId/textMessages/read', checkPermissions('textMessages:update'), (req, res, next) => {
   return TextMessage.filter({ chatId: req.params._chatId, read: false })
     .update({ read: true })
     .run()
