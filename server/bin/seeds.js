@@ -93,6 +93,28 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
   ];
 };
 
+const initiateNumbersArray = (length) => {
+  const arr = new Array(length);
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = i;
+  }
+
+  return arr;
+};
+
+const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
+  return initiateNumbersArray(100).map((index) => {
+    return {
+      chatId,
+      to: clinicPhone,
+      from: patientPhone,
+      body: index.toString(),
+      createdAt: new Date(2017, 1, 2, 12, index, 0, 0),
+      read: false,
+    };
+  });
+};
+
 const SEEDS = {
   Appointment: [
     {
@@ -383,18 +405,22 @@ const SEEDS = {
 
   Chat: [
     {
+      id: alexChatId,
       accountId,
       patientId: alexPatientId,
     },
     {
+      id: justinChatId,
       accountId,
       patientId: justinPatientId,
     },
     {
+      id: sergeyChatId,
       accountId,
       patientId: sergeyPatientId,
     },
     {
+      id: markChatId,
       accountId,
       patientId: markPatientId,
     },
@@ -405,6 +431,7 @@ const SEEDS = {
     ...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
     ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
+    ...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
   ],
 
   Chair: [
