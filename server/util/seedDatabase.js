@@ -1,7 +1,8 @@
 
 const models = require('../models');
+require('../models/relations');
 const _ = require('lodash');
-const dropTable = require('../config/db').dropTable;
+const thinky = require('../config/thinky');
 
 /**
  * seedDatabase is the full function to wipe and seed
@@ -15,10 +16,11 @@ module.exports = function seedDatabase(seedJSON, config = { wipeTables: true }) 
   if (config.wipeTables) {
     console.log('Wiping tables...');
     wipes = _.map(seedJSON, (data, tableName) => {
-      return dropTable(tableName)
+      return models[tableName].run()
         .then((results) => {
           // results.forEach(result => result.delete());
-          console.log(`Successfully wiped ${tableName} table.`);
+          return Promise.all(results.map(result => result.delete()))
+            .then(console.log(`Successfully wiped ${tableName} table.`));
         })
         .catch((err) => {
           console.error(`Error wiping ${tableName} table!`);
@@ -34,8 +36,6 @@ module.exports = function seedDatabase(seedJSON, config = { wipeTables: true }) 
     return addSeedsToDatabase(seedJSON)
       .then(() => {
         console.log('Seeding DB complete!');
-        console.log('Adding all the relations');
-        require('../models/relations')
       });
   }).catch((err) => {
     console.error('Promise.all failed for seedDatabase');

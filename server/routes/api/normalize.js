@@ -3,6 +3,10 @@ const normalizr = require('normalizr');
 
 const schema = normalizr.schema;
 
+const accountSchema = () => {
+  return new schema.Entity('accounts');
+};
+
 const appointmentSchema = () => {
   return new schema.Entity('appointments', {
     patient: patientSchema(),
@@ -16,7 +20,11 @@ const chairSchema = () => {
 };
 
 const chatSchema = () => {
-  return new schema.Entity('chats');
+  return new schema.Entity('chats', {
+    account: accountSchema(),
+    patient: patientSchema(),
+    textMessages: [textMessageSchema()],
+  });
 };
 
 const patientSchema = () => {
