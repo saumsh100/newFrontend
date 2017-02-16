@@ -6,9 +6,8 @@ import {
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
-	const { selectedStartDay, selectedEndDay, practitionerId } = dayObj;
   return function (dispatch, getState) {
-    dispatch(sixDaysShiftAction({ selectedStartDay, selectedEndDay, practitionerId }));
+    dispatch(sixDaysShiftAction(dayObj));
   };
 }
 

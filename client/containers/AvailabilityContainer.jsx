@@ -24,7 +24,6 @@ class Availability extends React.Component {
       selectedStartDay: new Date(),
       selectedEndDay: moment().add(4, 'd')._d,
       modalIsOpen: false,
-      retrieveFirstTime: true,
       practitonersStartEndDate: {},
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
@@ -65,6 +64,8 @@ class Availability extends React.Component {
           startDate: this.state.selectedStartDay,
           endDate: this.state.selectedEndDay,
         };
+        params.retrieveFirstTime = true;
+
         this.props.fetchEntities({ key: 'availabilities',
           params,
         });
@@ -81,11 +82,18 @@ class Availability extends React.Component {
           startDate: selectedStartDay,
           endDate: selectedEndDay,
         };
+
+        if (selectedDays.retrievedFirstTime) {
+          params.retrieveFirstTime = true;
+        }
+
         this.props.fetchEntities({ key: 'availabilities',
           params,
         });
       }
     }
+
+
     if (!isEqual(thisPractitioners, nextPractitioners)) {
       this.setState({ practitionerId: nextPractitioners[0].id }, () => {
         this.props.fetchEntities({ key: 'services',
@@ -95,27 +103,42 @@ class Availability extends React.Component {
     }
     const thisServices = this.props.services.get('models').toArray();
     const nextServices = nextProps.services.get('models').toArray();
+    
     if (!isEqual(thisServices, nextServices)) {
-      this.setState({ serviceId: nextServices
+        
+      const newServiceId = nextServices
         .filter(s =>
           includes(s.practitioners, this.state.practitionerId)
-        )[0].id }, () => {
+        )[0].id
+
+      this.setState({ serviceId: newServiceId })
+
+
 
         const params = {
-          practitionerId: this.state.practitionerId,
-          serviceId: this.state.serviceId,
+          practitionerId: nextPractitionerId || this.state.practitionerId,
+          serviceId: newServiceId || this.state.serviceId,
           startDate: this.state.selectedStartDay,
           endDate: this.state.selectedEndDay,
+          retrieveFirstTime: false,
         };
-        if (this.state.retrieveFirstTime) {
-          params.retrieveFirstTime = this.state.retrieveFirstTime;
 
-        }
+        if (selectedDays) {
+          const { selectedStartDay, selectedEndDay, retrievedFirstTime } = selectedDays;
+          params.startDate = selectedStartDay;
+          params.endDate = selectedEndDay;
+          if (selectedDays.retrievedFirstTime) {
+             params.retrieveFirstTime = true;
+          }
+        } else {
+          params.retrieveFirstTime = true;
+        } 
         this.props.fetchEntities({ key: 'availabilities',
           params,
         });
-      });
     }
+
+
     const thisAvailabilities = this.props.availabilities.get('models').toArray();
     const nextAvailabilities = nextProps.availabilities.get('models').toArray();
     if (!isEqual(thisAvailabilities, nextAvailabilities)) {
@@ -129,14 +152,12 @@ class Availability extends React.Component {
   onDoctorChange(e) {
     const { setPractitioner } = this.props;
     setPractitioner({ practitionerId : e.target.value });
-    this.setState({ retrieveFirstTime: true })
   }
 
   onServiceChange(e) {
     const { setService, practitonersStartEndDate } = this.props;
     const practitionerId = practitonersStartEndDate.toJS().practitionerId;
     setService(e.target.value)
-    this.setState({ retrieveFirstTime: false })
   }
 
   sixDaysBack() {
@@ -150,9 +171,9 @@ class Availability extends React.Component {
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
       practitionerId,
+      retrievedFirstTime: false,
     });
 
-    this.setState({ retrieveFirstTime: false })
   }
 
   sixDaysForward() {
@@ -166,9 +187,9 @@ class Availability extends React.Component {
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
       practitionerId,
+      retrievedFirstTime: false,
     });
 
-    this.setState({ retrieveFirstTime: false })
   }
 
   handleDayClick(e, day) {
@@ -182,10 +203,10 @@ class Availability extends React.Component {
     sixDaysShift({
       selectedStartDay: newStartDay,
       selectedEndDay: newEndDay,
-      practitionerId,      
+      practitionerId,
+      retrievedFirstTime: false,     
     });
 
-    this.setState({ retrieveFirstTime: false })
   }
 
   isDaySelected(day) {
@@ -217,7 +238,7 @@ class Availability extends React.Component {
       selectedStartDay = sortedByDate[0].date;
       selectedEndDay = moment(selectedStartDay).add(4, 'days')._d;
 
-      sixDaysShift({ selectedStartDay, selectedEndDay, practitionerId })
+      sixDaysShift({ selectedStartDay, selectedEndDay, practitionerId, retrievedFirstTime: true })
 
     }
 

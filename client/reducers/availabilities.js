@@ -14,9 +14,9 @@ const initialState = fromJS({
 
 export default handleActions({
   [SIX_DAYS_SHIFT](state, action) {
-    const { selectedStartDay, selectedEndDay, practitionerId } = action.payload;
+    const { selectedStartDay, selectedEndDay, practitionerId, retrievedFirstTime } = action.payload;
     return state.merge({
-      [practitionerId]: { selectedEndDay, selectedStartDay }
+      [practitionerId]: { selectedEndDay, selectedStartDay, retrievedFirstTime },
     });
   },
 
@@ -27,6 +27,7 @@ export default handleActions({
   },
 
   [SET_PRACTITIONER](state, action) {
+    const practitionerObj = state[action.payload.practitionerId];
     return state.merge({
       practitionerId: action.payload.practitionerId,
     })
