@@ -49,32 +49,29 @@ class Availability extends React.Component {
     const nextpractitonersStartEndDatetoJS = practitonersStartEndDate.toJS(); 
     const prevPractitionerId = practitonersStartEndDatetoJS.practitionerId;
     const nextPractitionerId = nextpractitonersStartEndDatetoJS.practitionerId;
+    let shouldAvailabilitiesBeUpdated = false;
     if (!nextPractitionerId && nextPractitioners && nextPractitioners.length ) {
       const practitionerId = nextPractitioners[0].id
       setPractitioner({ practitionerId });
     }
-    // check if end day has been changed - fetch new availabilities 
+    const thisPractitionersStartEndDate = practitonersStartEndDatetoJS[nextPractitionerId];
+    let params = {}
     const selectedDays = nextpractitonersStartEndDatetoJS[nextPractitionerId];
+    
     if (!selectedDays) {
-        const params = {
+        params = {
           practitionerId: nextPractitionerId,
           serviceId: this.state.serviceId,
           startDate: this.state.selectedStartDay,
           endDate: this.state.selectedEndDay,
         };
         params.retrieveFirstTime = true;
-
-        this.props.fetchEntities({ key: 'availabilities',
-          params,
-        });
-    }
-
-    const thisPractitionersStartEndDate = practitonersStartEndDatetoJS[nextPractitionerId];
-    if (selectedDays && thisPractitionersStartEndDate) {
+        shouldAvailabilitiesBeUpdated = true;
+    } else if (selectedDays && thisPractitionersStartEndDate) {
       const { selectedEndDay, selectedStartDay } = selectedDays;
       const thisselectedEndDay = thisPractitionersStartEndDate.selectedEndDay;
       if (thisselectedEndDay !== selectedEndDay || nextPractitionerId !== prevPractitionerId ) {
-        const params = {
+        params = {
           practitionerId: nextPractitionerId,
           serviceId: this.state.serviceId,
           startDate: selectedStartDay,
@@ -84,21 +81,10 @@ class Availability extends React.Component {
         if (selectedDays.retrievedFirstTime) {
           params.retrieveFirstTime = true;
         }
-
-        this.props.fetchEntities({ key: 'availabilities',
-          params,
-        });
       }
+      shouldAvailabilitiesBeUpdated = true;
     }
 
-
-    if (!isEqual(thisPractitioners, nextPractitioners)) {
-      this.setState({ practitionerId: nextPractitioners[0].id }, () => {
-        this.props.fetchEntities({ key: 'services',
-          params: { practitionerId: this.state.practitionerId }
-        });
-      });
-    }
     const thisServices = this.props.services.get('models').toArray();
     const nextServices = nextProps.services.get('models').toArray();
     
@@ -110,10 +96,7 @@ class Availability extends React.Component {
         )[0].id
 
       this.setState({ serviceId: newServiceId })
-
-
-
-        const params = {
+        params = {
           practitionerId: nextPractitionerId || this.state.practitionerId,
           serviceId: newServiceId || this.state.serviceId,
           startDate: this.state.selectedStartDay,
@@ -130,12 +113,24 @@ class Availability extends React.Component {
           }
         } else {
           params.retrieveFirstTime = true;
-        } 
-        this.props.fetchEntities({ key: 'availabilities',
-          params,
-        });
+        }
+        shouldAvailabilitiesBeUpdated = true; 
     }
 
+    if (shouldAvailabilitiesBeUpdated) {      
+      this.props.fetchEntities({ key: 'availabilities',
+        params,
+      });    
+    }
+
+
+    if (!isEqual(thisPractitioners, nextPractitioners)) {
+      this.setState({ practitionerId: nextPractitioners[0].id }, () => {
+        this.props.fetchEntities({ key: 'services',
+          params: { practitionerId: this.state.practitionerId }
+        });
+      });
+    }
 
     const thisAvailabilities = this.props.availabilities.get('models').toArray();
     const nextAvailabilities = nextProps.availabilities.get('models').toArray();
