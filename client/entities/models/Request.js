@@ -14,12 +14,15 @@ const RequestsSchema = {
   practitionerId: null,
   chairId: null,
   comment: null,
+  isCancelled: null,
+  isConfirmed: null,
 };
 
 export default class Requests extends createModel(RequestsSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
+
   getAge(patientBirthday){
     let currentYear =  new Date().getFullYear();
     let birthday =  moment(patientBirthday).year();

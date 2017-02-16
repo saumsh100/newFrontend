@@ -2,7 +2,10 @@
 const requestsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
+const loaders = require('../../util/loaders');
 const Request = require('../../../models/Request');
+
+requestsRouter.param('requestId', loaders('request', 'Request'));
 
 /**
  * Create a request
@@ -29,6 +32,12 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
 
   return Request.filter({ accountId }).getJoin(joinObject).run()
     .then(requests => res.send(normalize('requests', requests)))
+    .catch(next);
+});
+
+requestsRouter.put('/:requestId', checkPermissions('requests:create'), (req, res, next) =>{
+  return req.request.merge(req.body).save()
+    .then(chair => res.send(normalize('request', chair)))
     .catch(next);
 });
 

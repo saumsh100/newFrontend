@@ -29,6 +29,7 @@ class RequestContainer extends React.Component {
 
 RequestContainer.propTypes = {
   fetchEntities: PropTypes.func,
+
 };
 
 function mapStateToProps({ entities }) {

@@ -9,9 +9,8 @@
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    width: 250px;
+    width: 280px;
   }
-
 }
 
 .requestList {
@@ -26,6 +25,7 @@
 .requestData{
   text-align: left;
   font-size: small;
+  width: 160px;
   &__time{
   }
   &__nameAge{
@@ -39,11 +39,16 @@
   }
 }
 
+
+.confirmAppCheck{
+  padding-left: 1em;
+  color: #2cc4a7;
+}
 .monthDay {
   text-align: center;
   border-right: 2px solid;
   border-right-color: #bfbfbf;
-  width: 10%;
+  width: 20px;
   margin-right: 0.5em;
   &__month{
     font-size: x-small;

@@ -15,5 +15,4 @@ export default function RequestData({time, nameAge, phoneNumber, service }) {
 }
 
 RequestData.propTypes = {
-  data: PropTypes.object.isRequired
 };

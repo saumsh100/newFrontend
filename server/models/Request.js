@@ -15,6 +15,7 @@ const Request = createModel('Request', {
   practitionerId: type.string().uuid(4).required(),
 
   isConfirmed: type.boolean().default(false),
+  isCancelled: type.boolean().default(false),
 
   customBufferTime: type.number().integer(),
 
