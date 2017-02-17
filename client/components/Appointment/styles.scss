@@ -42,6 +42,7 @@
     opacity: 0.5;
   }
   &__comment{
+    word-wrap: break-word;
     padding-top: 0.5em;
     margin-right: 1.5em;
     font-size: small;

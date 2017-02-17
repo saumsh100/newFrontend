@@ -19,7 +19,21 @@
 }
 
 .requestListItem {
+  width: 280px;
+}
 
+.clickHandlers{
+  display: flex;
+  width: 30px;
+  padding-left: 10px;
+  &__confirm{
+    font-size: 15px;
+    color: #2cc4a7;
+  }
+  &__remove{
+    font-size: 15px;
+    color: #000000;
+  }
 }
 
 .requestData{
@@ -40,10 +54,7 @@
 }
 
 
-.confirmAppCheck{
-  padding-left: 1em;
-  color: #2cc4a7;
-}
+
 .monthDay {
   text-align: center;
   border-right: 2px solid;

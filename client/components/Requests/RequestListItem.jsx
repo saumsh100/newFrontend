@@ -5,8 +5,6 @@ import RequestData from './RequestData';
 import styles from './styles.scss';
 import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
-import ConfirmAppointment from '../Appointment/ConfirmAppointment';
-
 
 class RequestListItem extends Component {
 
@@ -29,18 +27,14 @@ class RequestListItem extends Component {
     };
 
     createEntityRequest({ key: 'appointments', entityData: appointment })
-      .then((resp) => {
-          console.log("it returned!!!!!!");
+      .then(() => {
+        const modifiedRequest = {
+          id: request.get('id'),
+          isCancelled: true,
+        };
+        updateEntityRequest({key: 'requests', update: modifiedRequest});
       }).catch(err => console.log(err));
-
-
-    const modifiedRequest = {
-      id: request.get('id'),
-      isCancelled: true,
-    };
-    //updateEntityRequest({key: 'requests', update: modifiedRequest});
   }
-
 
   removeRequest() {
     const { request, deleteEntityRequest } = this.props;
@@ -70,15 +64,25 @@ class RequestListItem extends Component {
     if (isHovered) {
       showHoverComponents = (
         <div>
-          <ConfirmAppointment className={styles.confirmAppCheck} />
           <AppointmentShowData data={data} />
-          <IconButton icon={'times'} onClick={this.removeRequest} />
+          <div className={styles.clickHandlers}>
+            <IconButton
+              icon={'check-circle'}
+              className={styles.clickHandlers__confirm}
+              onClick={this.confirmAppointment}
+            />
+            <IconButton
+              icon={'times'}
+              className={styles.clickHandlers__remove}
+              onClick={this.removeRequest}
+            />
+          </div>
         </div>
       );
     }
 
     return (
-      <ListItem onClick={this.confirmAppointment}>
+      <ListItem >
         <MonthDay month={data.month} day={data.day} />
         <RequestData
           time={data.time}
