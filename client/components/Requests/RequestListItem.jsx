@@ -17,7 +17,7 @@ class RequestListItem extends Component {
   }
 
   confirmAppointment() {
-    const { request, fetchUpdate, fetchPost} = this.props;
+    const { request, fetchUpdate, createEntityRequest } = this.props;
 
     const appointment = {
       startTime: request.get('startTime'),
@@ -26,9 +26,17 @@ class RequestListItem extends Component {
       serviceId: request.get('serviceId'),
       practitionerId: request.get('practitionerId'),
       chairId: request.get('chairId'),
-      comment: request.comment,
-    }
-    fetchPost({key: "appointments", params: appointment});
+      // comment: request.comment,
+    };
+
+    createEntityRequest({ key: 'appointments', entityData: appointment })
+      .then(() => {
+        return updateEntityRequest()
+          .then()
+          .catch();
+      })
+      .catch();
+
     const modifiedRequest = {
       id: request.get('id'),
       isCancelled: true,
@@ -36,14 +44,18 @@ class RequestListItem extends Component {
     //fetchUpdate({key: 'requests', update: modifiedRequest});
   }
 
-  deleteRequest(){
+  deleteRequest() {
     const { request, fetchDelete } = this.props;
-    fetchDelete({key: 'requests', id: request.get('id')});
+    fetchDelete({ key: 'requests', id: request.get('id') });
   }
 
   render() {
-
-    const {request, patient, service, isHovered} = this.props;
+    const {
+      request,
+      patient,
+      service,
+      isHovered,
+    } = this.props;
 
     const data = {
       time: request.getFormattedTime(),
@@ -58,11 +70,13 @@ class RequestListItem extends Component {
 
     let showHoverComponents = null;
     if (isHovered) {
-      showHoverComponents = (<div>
-        <ConfirmAppointment className={styles.confirmAppCheck} />
-        <AppointmentShowData data={data} />
-        <IconButton icon={'times'} onClick={this.deleteRequest} />
-      </div>);
+      showHoverComponents = (
+        <div>
+          <ConfirmAppointment className={styles.confirmAppCheck} />
+          <AppointmentShowData data={data} />
+          <IconButton icon={'times'} onClick={this.deleteRequest} />
+        </div>
+      );
     }
 
     return (
@@ -77,7 +91,6 @@ class RequestListItem extends Component {
         {showHoverComponents}
       </ListItem>
     );
-
   }
 }
 
@@ -86,7 +99,7 @@ RequestListItem.propTypes = {
   request: PropTypes.object.isRequired,
   service: PropTypes.object.isRequired,
   fetchUpdate: PropTypes.func,
-  fetchPost: PropTypes.func,
+  createEntityRequest: PropTypes.func,
   fetchDelete: PropTypes.func,
   isHovered: PropTypes.bool,
 };

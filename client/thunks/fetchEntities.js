@@ -44,15 +44,15 @@ export function fetchDelete({ key, id }) {
   };
 }
 
-export function fetchPost({ key, params }) {
+export function createEntityRequest({ key, entityData }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    console.log(params);
-    axios.post(entity.getUrlRoot(), params)
+    return axios.post(entity.getUrlRoot(), {}, entityData)
       .then((response) => {
         const { data } = response;
-        dispatch(addEntity({ key, entity: data.entities }));
+        dispatch(addEntity({ key, entity: data.entities[0] }));
+        dispatch(successNotification());
       })
       .catch(err => console.log(err));
   };
