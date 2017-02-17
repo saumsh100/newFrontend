@@ -14,6 +14,8 @@ chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
   // Attach chair to the clinic of posting user
   const chairData = Object.assign({}, req.body, {
     accountId: req.accountId,
+    name: req.body.name,
+    pmsId: req.body.pmsId,
   });
 
   return Chair.save(chairData)
