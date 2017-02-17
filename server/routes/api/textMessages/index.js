@@ -17,8 +17,6 @@ textMessagesRouter.get('/', (req, res, next) => {
     offset,
   } = req.query;
 
-
-
   // TODO: needs an auth layer to see if this requesting account has access to this patient
 
   TextMessage

@@ -16,9 +16,9 @@ const Appointment = createModel('Appointment', {
   chairId: type.string().uuid(4),
 
   // Lifecycle Attributes
-  isPatientConfirmed: type.boolean(),
-  isSyncedWithPMS: type.boolean(),
-  isCancelled: type.boolean(),
+  isPatientConfirmed: type.boolean().default(false),
+  isSyncedWithPMS: type.boolean().default(false),
+  isCancelled: type.boolean().default(false),
 
   // Custom buffer time in minutes
   customBufferTime: type.number().integer(),
