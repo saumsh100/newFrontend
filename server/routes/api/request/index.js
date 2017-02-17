@@ -12,11 +12,13 @@ requestsRouter.param('requestId', loaders('request', 'Request'));
  */
 requestsRouter.post('/', checkPermissions('requests:create'), (req, res, next) => {
 
+  /**
+   * Using postman to send in new requests
   const requestData = Object.assign({}, req.body, {
     accountId: req.accountId,
-  });
+  });*/
 
-  return Request.save(requestData)
+  return Request.save(req.body)
     .then(request => res.send(201, normalize('request', request)))
     .catch(next);
 });

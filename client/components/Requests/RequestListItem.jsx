@@ -29,6 +29,9 @@ class RequestListItem extends Component {
     };
 
     createEntityRequest({ key: 'appointments', entityData: appointment })
+      .then((resp) => {
+          console.log("it returned!!!!!!");
+      }).catch(err => console.log(err));
 
 
     const modifiedRequest = {

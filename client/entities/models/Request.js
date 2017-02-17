@@ -6,7 +6,6 @@ import moment from 'moment';
 const RequestsSchema = {
   startTime: null,
   endTime: null,
-  title: null,
   id: null,
   accountId: null,
   patientId: null,
@@ -15,7 +14,6 @@ const RequestsSchema = {
   chairId: null,
   comment: null,
   isCancelled: null,
-  isConfirmed: null,
 };
 
 export default class Requests extends createModel(RequestsSchema) {
