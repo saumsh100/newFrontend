@@ -32,7 +32,7 @@ export function fetchEntities({ key, join, params = {} }) {
   };
 }
 
-export function fetchDelete({ key, id }) {
+export function entityDelete({ key, id }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -44,7 +44,7 @@ export function fetchDelete({ key, id }) {
   };
 }
 
-export function fetchPost({ key, params }) {
+export function createEntity({ key, params }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);

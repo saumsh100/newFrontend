@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
-import { fetchUpdate, fetchDelete, fetchPost } from '../../thunks/fetchEntities';
+import { fetchUpdate, entityDelete, createEntity } from '../../thunks/fetchEntities';
 
 
 
@@ -32,8 +32,8 @@ class RequestList extends Component {
                   practitioner={this.props.practitioners.get(request.get('practitionerId'))}
                   chair={this.props.chairs.get(request.get('chairId'))}
                   fetchUpdate={this.props.fetchUpdate}
-                  fetchDelete={this.props.fetchDelete}
-                  fetchPost={this.props.fetchPost}
+                  entityDelete={this.props.entityDelete}
+                  createEntity={this.props.createEntity}
                 />
               );
             }})}
@@ -44,15 +44,15 @@ class RequestList extends Component {
 
 RequestList.propTypes = {
   fetchUpdate: PropTypes.func,
-  fetchDelete: PropTypes.func,
-  fetchPost: PropTypes.func,
+  entityDelete: PropTypes.func,
+  createEntity: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     fetchUpdate,
-    fetchDelete,
-    fetchPost,
+    entityDelete,
+    createEntity,
   }, dispatch);
 }
 const enhance = connect(null, mapActionsToProps);

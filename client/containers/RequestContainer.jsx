@@ -34,7 +34,6 @@ RequestContainer.propTypes = {
 };
 
 function mapStateToProps({ entities }) {
-
   const services = entities.getIn(['services', 'models']);
   const requests = entities.getIn(['requests', 'models']);
   const practitioners = entities.getIn(['practitioners', 'models']);

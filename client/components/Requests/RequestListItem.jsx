@@ -17,7 +17,7 @@ class RequestListItem extends Component {
   }
 
   confirmAppointment() {
-    const { request, fetchUpdate, fetchPost} = this.props;
+    const { request, fetchUpdate, createEntity} = this.props;
 
     const appointment = {
       startTime: request.get('startTime'),
@@ -28,7 +28,7 @@ class RequestListItem extends Component {
       chairId: request.get('chairId'),
       comment: request.comment,
     }
-    fetchPost({key: "appointments", params: appointment});
+    createEntity({key: "appointments", params: appointment});
     const modifiedRequest = {
       id: request.get('id'),
       isCancelled: true,
@@ -37,8 +37,8 @@ class RequestListItem extends Component {
   }
 
   deleteRequest(){
-    const { request, fetchDelete } = this.props;
-    fetchDelete({key: 'requests', id: request.get('id')});
+    const { request, entityDelete } = this.props;
+    entityDelete({key: 'requests', id: request.get('id')});
   }
 
   render() {
@@ -86,8 +86,8 @@ RequestListItem.propTypes = {
   request: PropTypes.object.isRequired,
   service: PropTypes.object.isRequired,
   fetchUpdate: PropTypes.func,
-  fetchPost: PropTypes.func,
-  fetchDelete: PropTypes.func,
+  createEntity: PropTypes.func,
+  entityDelete: PropTypes.func,
   isHovered: PropTypes.bool,
 };
 

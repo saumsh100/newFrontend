@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchPost } from '../../../thunks/fetchEntities';
+import { createEntity } from '../../../thunks/fetchEntities';
 import Messages from './Messages';
 import DialogsListItem from './DialogsList';
 import styles from './styles.scss';
@@ -80,7 +80,7 @@ class Chat extends Component {
             textMessages={textMessages}
             sendMessage={this.sendMessage}
             currentDialogId={this.props.currentDialogId}
-            fetchPost={this.props.fetchPost}
+            createEntity={this.props.createEntity}
             sendMessageOnClient={this.props.sendMessageOnClient}
             readMessagesInCurrentDialog={readMessagesInCurrentDialog}
             setDialogScrollPermission={setDialogScrollPermission}
@@ -94,11 +94,11 @@ class Chat extends Component {
 
 Chat.propTypes = {
   textMessages: PropTypes.object.isRequired,
-  fetchPost: PropTypes.object.isRequired,
+  createEntity: PropTypes.object.isRequired,
 };
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    fetchPost,
+    createEntity,
   }, dispatch);
 }
 
