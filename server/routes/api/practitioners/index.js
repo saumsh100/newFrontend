@@ -22,13 +22,7 @@ practitionersRouter.get('/', checkPermissions('practitioners:read'), (req, res, 
  * Create a practitioner
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, res, next) => {
-  const practitionerData = Object.assign({}, req.body, {
-    accountId: req.accountId,
-    pmsId: req.body.pmsId,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    type: req.body.type,
-  });
+  const practitionerData = Object.assign({}, { accountId: req.accountId }, req.body);
 
   return Practitioner.save(practitionerData)
     .then(practitioner => res.send(201, normalize('practitioner', practitioner)))
@@ -48,7 +42,6 @@ practitionersRouter.get('/:practitionerId', checkPermissions('practitioners:read
  * Update a practitioner
  */
 practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:update'), (req, res, next) => {
-  console.log('info', req.practitioner);
   return req.practitioner.merge(req.body).save()
     .then(practitioner => res.send(normalize('practitioner', practitioner)))
     .catch(next);
