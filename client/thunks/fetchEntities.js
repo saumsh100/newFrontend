@@ -37,9 +37,8 @@ export function fetchDelete({ key, id }) {
     const { entities } = getState();
     const entity = entities.get(key);
     axios.delete(`${entity.getUrlRoot()}/${id}`)
-      .then((response) => {
-        const { data } = response;
-        dispatch(deleteEntity({ key, entity: data.entities }));
+      .then(() => {
+        dispatch(deleteEntity({ key, id }));
       })
       .catch(err => console.log(err));
   };

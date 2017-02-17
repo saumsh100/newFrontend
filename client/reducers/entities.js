@@ -77,8 +77,8 @@ export default handleActions({
     return newState;
   },
 
-  [DELETE_ENTITY](state, { payload: { key, entity } }) {
-    return state.deleteIn([key, 'models', Object.keys(entity[key])[0]]);
+  [DELETE_ENTITY](state, { payload: { key, id } }) {
+    return state.deleteIn([key, 'models', id]);
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {

@@ -35,9 +35,23 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
     .catch(next);
 });
 
+/**
+ * Update a request
+ */
 requestsRouter.put('/:requestId', checkPermissions('requests:create'), (req, res, next) =>{
   return req.request.merge(req.body).save()
-    .then(chair => res.send(normalize('request', chair)))
+    .then(request => res.send(normalize('request', request)))
+    .catch(next);
+});
+
+/**
+ * Delete a request
+ */
+requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, res, next) =>{
+  return req.request.delete()
+    .then(() =>{
+        res.send(204);
+    })
     .catch(next);
 });
 

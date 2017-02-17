@@ -29,7 +29,8 @@ class RequestListItem extends Component {
   }
 
   deleteRequest(){
-
+    const { request, fetchDelete } = this.props;
+      fetchDelete({key: 'requests', id: request.get('id')});
   }
 
   render() {
@@ -52,14 +53,19 @@ class RequestListItem extends Component {
       showHoverComponents = (<div>
         <ConfirmAppointment className={styles.confirmAppCheck} />
         <AppointmentShowData data={data} />
-        <IconButton icon={'times'} />
+        <IconButton icon={'times'} onClick={this.deleteRequest} />
       </div>);
     }
 
     return (
-      <ListItem onClick={this.confirmAppointment}>
+      <ListItem >
         <MonthDay month={data.month} day={data.day} />
-        <RequestData time={data.time} nameAge={data.nameAge} phoneNumber={data.phoneNumber} service={data.service} />
+        <RequestData
+          time={data.time}
+          nameAge={data.nameAge}
+          phoneNumber={data.phoneNumber}
+          service={data.service}
+        />
         {showHoverComponents}
       </ListItem>
     );
@@ -73,6 +79,7 @@ RequestListItem.propTypes = {
   service: PropTypes.object.isRequired,
   fetchUpdate: PropTypes.func,
   isHovered: PropTypes.bool,
+  fetchDelete: PropTypes.func,
 };
 
 export default withHoverable(RequestListItem);
