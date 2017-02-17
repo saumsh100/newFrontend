@@ -16,6 +16,7 @@ const OWNER = {
   chats: CRUD,
   patients: CRUD,
   appointments: CRUD,
+  practitioners: CRUD,
   textMessages: Object.assign({}, CRUD, {
     update: false,
   }),
