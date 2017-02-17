@@ -48,6 +48,7 @@ export function fetchPost({ key, params }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
+    console.log(params);
     axios.post(entity.getUrlRoot(), params)
       .then((response) => {
         const { data } = response;
@@ -57,11 +58,11 @@ export function fetchPost({ key, params }) {
   };
 }
 
-export function fetchUpdate({ key, patient }) {
+export function fetchUpdate({ key, update }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    axios.put(`${entity.getUrlRoot()}/${patient.id}`, patient)
+    axios.put(`${entity.getUrlRoot()}/${update.id}`, update)
       .then((response) => {
         const { data } = response;
         dispatch(updateEntity({ key, entity: data.entities }));

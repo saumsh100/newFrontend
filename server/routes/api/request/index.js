@@ -11,7 +11,7 @@ requestsRouter.param('requestId', loaders('request', 'Request'));
  * Create a request
  */
 requestsRouter.post('/', checkPermissions('requests:create'), (req, res, next) => {
-  // Attach request to the clinic of posting user
+
   const requestData = Object.assign({}, req.body, {
     accountId: req.accountId,
   });
@@ -38,7 +38,7 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
 /**
  * Update a request
  */
-requestsRouter.put('/:requestId', checkPermissions('requests:create'), (req, res, next) =>{
+requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) =>{
   return req.request.merge(req.body).save()
     .then(request => res.send(normalize('request', request)))
     .catch(next);

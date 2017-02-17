@@ -17,20 +17,28 @@ class RequestListItem extends Component {
   }
 
   confirmAppointment() {
-    const { request, fetchUpdate} = this.props;
+    const { request, fetchUpdate, fetchPost} = this.props;
 
+    const appointment = {
+      startTime: request.get('startTime'),
+      endTime: request.get('endTime'),
+      patientId: request.get('patientId'),
+      serviceId: request.get('serviceId'),
+      practitionerId: request.get('practitionerId'),
+      chairId: request.get('chairId'),
+      comment: request.comment,
+    }
+    fetchPost({key: "appointments", params: appointment});
     const modifiedRequest = {
       id: request.get('id'),
-      isConfirmed: true,
-      comment: "Changed Confirmed to true",
+      isCancelled: true,
     };
-
-    fetchUpdate({key: 'requests', patient: modifiedRequest});
+    //fetchUpdate({key: 'requests', update: modifiedRequest});
   }
 
   deleteRequest(){
     const { request, fetchDelete } = this.props;
-      fetchDelete({key: 'requests', id: request.get('id')});
+    fetchDelete({key: 'requests', id: request.get('id')});
   }
 
   render() {
@@ -58,7 +66,7 @@ class RequestListItem extends Component {
     }
 
     return (
-      <ListItem >
+      <ListItem onClick={this.confirmAppointment}>
         <MonthDay month={data.month} day={data.day} />
         <RequestData
           time={data.time}
@@ -78,8 +86,9 @@ RequestListItem.propTypes = {
   request: PropTypes.object.isRequired,
   service: PropTypes.object.isRequired,
   fetchUpdate: PropTypes.func,
-  isHovered: PropTypes.bool,
+  fetchPost: PropTypes.func,
   fetchDelete: PropTypes.func,
+  isHovered: PropTypes.bool,
 };
 
 export default withHoverable(RequestListItem);

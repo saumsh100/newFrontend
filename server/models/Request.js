@@ -13,8 +13,8 @@ const Request = createModel('Request', {
   accountId: type.string().uuid(4).required(),
   serviceId: type.string().uuid(4).required(),
   practitionerId: type.string().uuid(4).required(),
+  chairId:  type.string().uuid(4).required(),
 
-  isConfirmed: type.boolean().default(false),
   isCancelled: type.boolean().default(false),
 
   customBufferTime: type.number().integer(),
