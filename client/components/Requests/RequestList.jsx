@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
-import { fetchUpdate, entityDelete, createEntity } from '../../thunks/fetchEntities';
+
+import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
+
 
 
 
@@ -22,7 +24,7 @@ class RequestList extends Component {
     return (
         <List className={styles.requestList}>
           {sortedRequests.toArray().map((request) => {
-            if(!request.get('isCancelled')){
+            if(!request.get('isCancelled')) {
               return (
                 <RequestListItem
                   key={request.id}
@@ -31,12 +33,13 @@ class RequestList extends Component {
                   service={this.props.services.get(request.get('serviceId'))}
                   practitioner={this.props.practitioners.get(request.get('practitionerId'))}
                   chair={this.props.chairs.get(request.get('chairId'))}
-                  fetchUpdate={this.props.fetchUpdate}
-                  entityDelete={this.props.entityDelete}
-                  createEntity={this.props.createEntity}
+                  updateEntityRequest={this.props.updateEntityRequest}
+                  deleteEntityRequest={this.props.deleteEntityRequest}
+                  createEntityRequest={this.props.createEntityRequest}
                 />
               );
-            }})}
+            }
+          })}
         </List>
     );
   }
@@ -44,17 +47,18 @@ class RequestList extends Component {
 
 RequestList.propTypes = {
   fetchUpdate: PropTypes.func,
-  entityDelete: PropTypes.func,
-  createEntity: PropTypes.func,
+  deleteEntityRequest: PropTypes.func,
+  createEntityRequest: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    fetchUpdate,
-    entityDelete,
-    createEntity,
+    updateEntityRequest,
+    deleteEntityRequest,
+    createEntityRequest,
   }, dispatch);
 }
+
 const enhance = connect(null, mapActionsToProps);
 
 

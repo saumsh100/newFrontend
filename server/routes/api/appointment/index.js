@@ -19,6 +19,7 @@ appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, ne
 });
 
 appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) =>{
+  console.log("server!!!!!");
   const appointmentData = Object.assign({}, req.body, {
     accountId: req.accountId,
   });

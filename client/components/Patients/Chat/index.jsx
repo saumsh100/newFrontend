@@ -80,7 +80,7 @@ class Chat extends Component {
             textMessages={textMessages}
             sendMessage={this.sendMessage}
             currentDialogId={this.props.currentDialogId}
-            createEntity={this.props.createEntity}
+            createEntityRequest={this.props.createEntityRequest}
             sendMessageOnClient={this.props.sendMessageOnClient}
             readMessagesInCurrentDialog={readMessagesInCurrentDialog}
             setDialogScrollPermission={setDialogScrollPermission}
@@ -94,11 +94,11 @@ class Chat extends Component {
 
 Chat.propTypes = {
   textMessages: PropTypes.object.isRequired,
-  createEntity: PropTypes.object.isRequired,
+  createEntityRequest: PropTypes.object.isRequired,
 };
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    createEntity,
+    createEntityRequest,
   }, dispatch);
 }
 

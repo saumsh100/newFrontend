@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import RouterButton from '../library/RouterButton';
 import Button from '../library/Button';
-import { entityDelete } from '../../thunks/fetchEntities';
+import { deleteEntityRequest } from '../../thunks/fetchEntities';
 
-function PatientListItem({ patient, onChat, entityDelete }) {
+function PatientListItem({ patient, onChat, deleteEntityRequest }) {
   return (
     <tr>
       <td>{patient.firstName}</td>
@@ -33,7 +33,7 @@ PatientListItem.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    entityDelete,
+    deleteEntityRequest,
   }, dispatch);
 }
 

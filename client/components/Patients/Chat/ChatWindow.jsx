@@ -32,7 +32,7 @@ export default class ChatWindow extends Component {
       createdAt: new Date(),
       read: true,
     };
-    this.props.createEntity({
+    this.props.createEntityRequest({
       key: 'textMessages',
       params,
     });

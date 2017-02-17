@@ -247,7 +247,7 @@ const SEEDS = {
       isConfirmed: false,
       isCancelled: false,
       comment: 'Some comment from patient here....',
-    }
+    },
   ],
 
   User: [

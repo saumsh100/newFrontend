@@ -32,7 +32,7 @@ export function fetchEntities({ key, join, params = {} }) {
   };
 }
 
-export function entityDelete({ key, id }) {
+export function deleteEntityRequest({ key, id }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -44,13 +44,13 @@ export function entityDelete({ key, id }) {
   };
 }
 
-export function createEntity({ key, params }) {
+export function createEntityRequest({ key, entityData }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    console.log(params);
-    axios.post(entity.getUrlRoot(), params)
+    axios.post(entity.getUrlRoot(), entityData)
       .then((response) => {
+        console.log("client!!!!")
         const { data } = response;
         dispatch(addEntity({ key, entity: data.entities }));
       })
@@ -58,7 +58,7 @@ export function createEntity({ key, params }) {
   };
 }
 
-export function fetchUpdate({ key, update }) {
+export function updateEntityRequest({ key, update }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);

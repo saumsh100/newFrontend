@@ -13,12 +13,11 @@ class RequestListItem extends Component {
   constructor(props) {
     super(props)
     this.confirmAppointment = this.confirmAppointment.bind(this);
-    this.deleteRequest = this.deleteRequest.bind(this);
+    this.removeRequest = this.removeRequest.bind(this);
   }
 
   confirmAppointment() {
-    const { request, fetchUpdate, createEntity} = this.props;
-
+    const { request, updateEntityRequest, createEntityRequest } = this.props;
     const appointment = {
       startTime: request.get('startTime'),
       endTime: request.get('endTime'),
@@ -27,23 +26,31 @@ class RequestListItem extends Component {
       practitionerId: request.get('practitionerId'),
       chairId: request.get('chairId'),
       comment: request.comment,
-    }
-    createEntity({key: "appointments", params: appointment});
+    };
+
+    createEntityRequest({ key: 'appointments', entityData: appointment })
+
+
     const modifiedRequest = {
       id: request.get('id'),
       isCancelled: true,
     };
-    //fetchUpdate({key: 'requests', update: modifiedRequest});
+    //updateEntityRequest({key: 'requests', update: modifiedRequest});
   }
 
-  deleteRequest(){
-    const { request, entityDelete } = this.props;
-    entityDelete({key: 'requests', id: request.get('id')});
+
+  removeRequest() {
+    const { request, deleteEntityRequest } = this.props;
+    deleteEntityRequest({ key: 'requests', id: request.get('id') });
   }
 
   render() {
-
-    const {request, patient, service, isHovered} = this.props;
+    const {
+      request,
+      patient,
+      service,
+      isHovered,
+    } = this.props;
 
     const data = {
       time: request.getFormattedTime(),
@@ -58,11 +65,13 @@ class RequestListItem extends Component {
 
     let showHoverComponents = null;
     if (isHovered) {
-      showHoverComponents = (<div>
-        <ConfirmAppointment className={styles.confirmAppCheck} />
-        <AppointmentShowData data={data} />
-        <IconButton icon={'times'} onClick={this.deleteRequest} />
-      </div>);
+      showHoverComponents = (
+        <div>
+          <ConfirmAppointment className={styles.confirmAppCheck} />
+          <AppointmentShowData data={data} />
+          <IconButton icon={'times'} onClick={this.removeRequest} />
+        </div>
+      );
     }
 
     return (
@@ -77,7 +86,6 @@ class RequestListItem extends Component {
         {showHoverComponents}
       </ListItem>
     );
-
   }
 }
 
@@ -85,9 +93,9 @@ RequestListItem.propTypes = {
   patient: PropTypes.object.isRequired,
   request: PropTypes.object.isRequired,
   service: PropTypes.object.isRequired,
-  fetchUpdate: PropTypes.func,
-  createEntity: PropTypes.func,
-  entityDelete: PropTypes.func,
+  updateEntityRequest: PropTypes.func,
+  deleteEntityRequest: PropTypes.func,
+  createEntityRequest: PropTypes.func,
   isHovered: PropTypes.bool,
 };
 
