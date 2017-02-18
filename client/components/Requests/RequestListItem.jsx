@@ -64,17 +64,24 @@ class RequestListItem extends Component {
     if (isHovered) {
       showHoverComponents = (
         <div>
-          <AppointmentShowData data={data} />
+          <AppointmentShowData
+            nameAge={data.nameAge}
+            time={data.time}
+            service={data.service}
+            phoneNumber={data.phoneNumber}
+            email={data.email}
+            comment={data.comment}
+            />
           <div className={styles.clickHandlers}>
+            <IconButton
+              icon={'times-circle-o'}
+              className={styles.clickHandlers__remove}
+              onClick={this.removeRequest}
+            />
             <IconButton
               icon={'check-circle'}
               className={styles.clickHandlers__confirm}
               onClick={this.confirmAppointment}
-            />
-            <IconButton
-              icon={'times'}
-              className={styles.clickHandlers__remove}
-              onClick={this.removeRequest}
             />
           </div>
         </div>
@@ -83,7 +90,7 @@ class RequestListItem extends Component {
 
     return (
       <ListItem >
-        <MonthDay month={data.month} day={data.day} />
+        <MonthDay isHovered = {isHovered} month={data.month} day={data.day} />
         <RequestData
           time={data.time}
           nameAge={data.nameAge}

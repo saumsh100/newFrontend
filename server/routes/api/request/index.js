@@ -13,7 +13,7 @@ requestsRouter.param('requestId', loaders('request', 'Request'));
 requestsRouter.post('/', checkPermissions('requests:create'), (req, res, next) => {
 
   /**
-   * While Using postman to send in new requests then this won't work.
+   * If you are using postman to send in new requests then this won't work.
   const requestData = Object.assign({}, req.body, {
     accountId: req.accountId,
   });*/
@@ -32,7 +32,7 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
     joinObject,
   } = req;
 
-  return Request.filter({ accountId }).getJoin(joinObject).run()
+  return Request.filter({ accountId, isCancelled: false }).getJoin(joinObject).run()
     .then(requests => res.send(normalize('requests', requests)))
     .catch(next);
 });

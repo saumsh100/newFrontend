@@ -17,14 +17,11 @@ class RequestList extends Component {
   }
 
   render() {
-    const sortedRequests = this.props.requests.sort((a, b) => {
-      return Date.parse(b.startTime) - Date.parse(a.startTime);
-    });
+    const {sortedRequests} = this.props;
 
     return (
         <List className={styles.requestList}>
-          {sortedRequests.toArray().map((request) => {
-            if(!request.get('isCancelled')) {
+          {sortedRequests.map((request) => {
               return (
                 <RequestListItem
                   key={request.id}
@@ -38,7 +35,6 @@ class RequestList extends Component {
                   createEntityRequest={this.props.createEntityRequest}
                 />
               );
-            }
           })}
         </List>
     );

@@ -9,12 +9,12 @@
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    width: 280px;
+    width: 300px;
   }
 }
 
 .requestList {
-  max-height: 300px;
+  max-height: 212px;
   overflow-y: scroll;
 }
 
@@ -32,7 +32,7 @@
   }
   &__remove{
     font-size: 15px;
-    color: #000000;
+    color: #e4e4e4;
   }
 }
 
@@ -40,6 +40,7 @@
   text-align: left;
   font-size: small;
   width: 160px;
+
   &__time{
   }
   &__nameAge{
@@ -59,13 +60,19 @@
   text-align: center;
   border-right: 2px solid;
   border-right-color: #bfbfbf;
-  width: 20px;
+  width: 40px;
   margin-right: 0.5em;
-  &__month{
+  display: flex;
+  &__month {
     font-size: x-small;
   }
-  &__day{
+  &__day {
     font-size: larger;
   }
+}
+
+.iconCaret{
+  border: 0px solid;
+  color: #ffc45a;
 }
 
