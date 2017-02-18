@@ -1,6 +1,6 @@
 
 import React, { Component }  from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
+import{ InfiniteScroll } from '../../library';
 
 function createNumbersArray(start, length) {
   const arr = new Array(length);
@@ -20,7 +20,7 @@ function fetchNumbers(start, length) {
       } catch (err) {
         reject(err);
       }
-    }, 3000);
+    }, 1000);
   });
 }
 
@@ -41,7 +41,7 @@ export default class TestInfiniteScroll extends Component {
   }
 
   componentDidMount() {
-    this.loadMore();
+     //this.loadMore();
   }
 
   loadMore() {
@@ -59,7 +59,7 @@ export default class TestInfiniteScroll extends Component {
       return (
         <div
           style={{ height: '50px', padding: '5px', border: '1px solid grey', backgroundColor: 'white' }}
-          key={Date.now() + item}
+          key={item}
         >
           {item}
         </div>
@@ -72,12 +72,11 @@ export default class TestInfiniteScroll extends Component {
         <h1>InfiniteScroll</h1>
         <div style={{ height: '400px', overflow: 'auto', border: '2px solid' }}>
           <InfiniteScroll
-            pageStart={0}
             loadMore={this.loadMore}
+            loader={<div style={{ clear: 'both' }}>Loading...</div>}
             hasMore={hasMore}
-            loader={<div>Loading ...</div>}
             useWindow={false}
-            threshold={5}
+            threshold={50}
           >
             {itemComponents}
           </InfiniteScroll>

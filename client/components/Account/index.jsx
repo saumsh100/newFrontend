@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import GridTest from '../demo/GridTest';
-import TestInfiniteScroll from '../demo/TestInfiniteScroll';
+import TestInfiniteScroll from '../demo/InfiniteScroll/TestInfiniteScroll';
 
 export default function Account(props) {
   return (

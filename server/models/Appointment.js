@@ -6,7 +6,7 @@ const type = thinky.type;
 const Appointment = createModel('Appointment', {
   startTime: type.date().required(),
   endTime: type.date().required(),
-  comment: type.string(),
+  note: type.string(),
 
   // Relations
   patientId: type.string().uuid(4).required(),
