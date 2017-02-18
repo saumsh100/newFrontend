@@ -90,7 +90,7 @@ Timer.propTypes = {
 
 Timer.defaultProps = {
   strokeWidth: 8,
-  textForPercentage: (percentage) => `${percentage}%`,
+  textForPercentage: (percentage) => `${Math.floor(percentage)}%`,
   initialAnimation: false,
 };
 

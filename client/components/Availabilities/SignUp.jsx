@@ -1,58 +1,37 @@
 import React, {PropTypes, Component} from 'react';
-import {Circle} from 'rc-progress';
-import moment from 'moment';
-import styles from './SignUp.scss';
 import Timer from './Timer'
+import styles from './SignUp.scss';
 
 class SignUp extends Component {
-  getMaxTime() {
-    return 3 * 60 * 1000;
-  }
   constructor(props) {
     super(props);
 
     this.state = {
-      time: this.getMaxTime(),
+      time: 0,
       maxtime: 3 * 60 * 1000,
     };
-    this.getTime = this.getTime.bind(this);
-    this.getMaxTime = this.getMaxTime.bind(this);
+    this.registrationTime = null;
     this.startTimer = this.startTimer.bind(this);
     this.getPercent = this.getPercent.bind(this);
   }
 
-  startTimer() {
-    window.setInterval(function () {
-      if (this.state.time > 0) {
-        console.log('hello');
-        this.setState({
-          time: this.state.time - 1000
-        });
-      }
-    }, 1000);
+  componentDidMount() {
+    this.startTimer()
   }
 
-  getTime() {
-    return moment.utc(this.state.time).format('mm.ss');
+  startTimer() {
+    this.registrationTime = setInterval(() => {
+      this.setState({
+        time: this.state.time + 1000
+      });
+      if (this.getPercent() == 100) clearInterval(this.registrationTime);
+    }, 1000);
   }
 
   getPercent() {
     return 100 - ((this.state.maxtime - this.state.time) / this.state.maxtime * 100);
   }
 
-  componentDidUpdate() {
-    if (!this.timer) {
-      this.timer = this.startTimer();
-    } else {
-      window.clearInterval(this.timer);
-      this.timer = null;
-    }
-  }
-
-  componentWillUnmount() {
-    window.clearInterval(this.timer);
-    this.timer = null;
-  }
 
   render() {
     return (
