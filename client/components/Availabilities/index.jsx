@@ -5,6 +5,7 @@ import includes from 'lodash/includes';
 import DayPicker, {DateUtils} from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import SignUp from './SignUp'
+import { Button, Form, Field } from '../library';
 
 
 class Availabilities extends React.Component {
@@ -107,7 +108,7 @@ class Availabilities extends React.Component {
     console.log('Click handled')
   }
 
-  renderFirstStep(practitionerId, services, availabilities, practitioners) {
+  renderFirstStep({ practitionerId, services, availabilities, practitioners, defaultValues }) {
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -123,6 +124,41 @@ class Availabilities extends React.Component {
               <div className={styles.appointment__body_header}>
                 <div className={styles.appointment__select_title}>Practitioner</div>
                 <div className={styles.appointment__select_wrapper}>
+
+                  <Form form="availabilities" defaultValues={defaultValues}>
+                    <Field
+                      component="Select"
+                      name="practitionerId"
+                      label="Select Practitioner"
+                      min
+                      className={styles.appointment__select_item}
+                    >
+                    {practitioners.map(p =>
+                      <option value={p.id} key={p.id}>{p.getFullName()}</option>
+                    )}
+                    </Field>
+
+                    <Field
+                      component="Select"
+                      name="serviceId"
+                      label="Select Practitioner"
+                      min
+                    >
+                    {services.filter(s =>
+                      includes(s.practitioners, this.state.practitionerId)
+                    ).map(s =>
+                      <option value={s.id} key={s.id}>{s.name}</option>
+                    )}
+                    </Field>
+
+                  </Form>
+
+
+
+
+
+
+
                   <select
                     className={styles.appointment__select_item}
                     value={practitionerId}
@@ -242,10 +278,10 @@ class Availabilities extends React.Component {
     const serviceId = services[0] && services[0].id;
     const prId =  practitioners[0] && practitioners.id;
     const defaultValues = { practitionerId: prId, serviceId };
-
+    const params = { practitionerId, services, availabilities, practitioners, defaultValues }
     switch (this.state.step) {
       case 1:
-        return this.renderFirstStep(practitionerId, services, availabilities, practitioners)
+        return this.renderFirstStep(params)
       case 2:
         return <SignUp />
     }
