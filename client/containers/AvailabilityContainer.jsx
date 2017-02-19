@@ -33,6 +33,11 @@ class Availability extends React.Component {
     const { setPractitioner } = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
     const nextPractitioners = nextProps.practitioners.get('models').toArray();
+    
+    const { availabilitiesForm } = nextProps;
+    const oldAvailabilitiesForm = this.props.availabilitiesForm;
+    debugger;
+
     const { practitonersStartEndDate } = nextProps;
     const practitonersStartEndDatetoJS = this.props.practitonersStartEndDate.toJS() 
     const nextpractitonersStartEndDatetoJS = practitonersStartEndDate.toJS(); 
@@ -42,6 +47,7 @@ class Availability extends React.Component {
     if (!nextPractitionerId && nextPractitioners && nextPractitioners.length ) {
       const practitionerId = nextPractitioners[0].id
       setPractitioner({ practitionerId });
+
     }
     const thisPractitionersStartEndDate = practitonersStartEndDatetoJS[nextPractitionerId];
     let params = {}
@@ -178,12 +184,13 @@ class Availability extends React.Component {
   }
 }
 
-function mapStateToProps({ entities, availabilities }) {
+function mapStateToProps({ entities, availabilities, form }) {
   return {
     availabilities: entities.get('availabilities'),
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
     practitonersStartEndDate: availabilities,
+    availabilitiesForm: form.availabilities,
   };
 }
 
