@@ -19,7 +19,36 @@
 }
 
 .requestListItem {
-  width: 280px;
+}
+
+.requestData{
+  text-align: left;
+  font-size: small;
+  width: 160px;
+  &__time{
+  }
+  &__nameAge{
+    opacity: 0.5;
+  }
+  &__phoneNumber{
+    opacity: 0.25;
+  }
+  &__service  {
+    opacity: 0.25;
+  }
+}
+
+.monthDay {
+  border-right: 2px solid;
+  border-right-color: #bfbfbf;
+  margin-right: 0.5em;
+  &__month {
+    font-size: 15px;
+    margin-right: 0.5em;
+  }
+  &__day {
+    font-size: 20px;
+  }
 }
 
 .clickHandlers{
@@ -36,43 +65,7 @@
   }
 }
 
-.requestData{
-  text-align: left;
-  font-size: small;
-  width: 160px;
-
-  &__time{
-  }
-  &__nameAge{
-    opacity: 0.5;
-  }
-  &__phoneNumber{
-    opacity: 0.25;
-  }
-  &__service  {
-    opacity: 0.25;
-  }
-}
-
-
-
-.monthDay {
-  text-align: center;
-  border-right: 2px solid;
-  border-right-color: #bfbfbf;
-  width: 40px;
-  margin-right: 0.5em;
-  display: flex;
-  &__month {
-    font-size: x-small;
-  }
-  &__day {
-    font-size: larger;
-  }
-}
-
 .iconCaret{
-  border: 0px solid;
-  color: #ffc45a;
+  color:#ffc45a;
+  width: 10px;
 }
-

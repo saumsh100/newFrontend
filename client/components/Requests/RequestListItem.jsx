@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { ListItem, IconButton } from '../library';
+import { ListItem, IconButton, Icon } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
@@ -71,7 +71,7 @@ class RequestListItem extends Component {
             phoneNumber={data.phoneNumber}
             email={data.email}
             comment={data.comment}
-            />
+          />
           <div className={styles.clickHandlers}>
             <IconButton
               icon={'times-circle-o'}
@@ -89,7 +89,10 @@ class RequestListItem extends Component {
     }
 
     return (
-      <ListItem >
+      <ListItem className={styles.requestListItem}>
+        <div className={styles.iconCaret}>
+          { isHovered ? <Icon icon={'caret-right'} /> : <div>&nbsp;</div> }
+        </div>
         <MonthDay isHovered = {isHovered} month={data.month} day={data.day} />
         <RequestData
           time={data.time}
