@@ -10,7 +10,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
-import PatientRoutes from '../PatientRoutes';
+import PatientRoutes from '../routes/Patient';
 import configure from '../store';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';

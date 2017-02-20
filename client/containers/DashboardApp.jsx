@@ -13,7 +13,7 @@ import { setIsCollapsed } from '../actions/toolbar';
 
 import styles from './styles.scss';
 
-function App(props) {
+function DashboardApp(props) {
   const {
     location,
     children,
@@ -58,7 +58,7 @@ function App(props) {
   
 }
 
-App.propTypes = {
+DashboardApp.propTypes = {
   children: PropTypes.node,
   location: PropTypes.object,
   isCollapsed: PropTypes.bool.isRequired,
@@ -80,4 +80,4 @@ function mapActionsToProps(dispatch) {
 
 const enhance = connect(mapStateToProps, mapActionsToProps);
 
-export default enhance(App);
+export default enhance(DashboardApp);

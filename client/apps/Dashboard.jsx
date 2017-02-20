@@ -10,7 +10,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
-import Routes from '../Routes';
+import DashboardRoutes from '../routes/Dashboard';
 import configure from '../store';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
@@ -46,7 +46,7 @@ window._ = _;
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Provider store={store}>
-      <Routes history={history} />
+      <DashboardRoutes history={history} />
     </Provider>,
     document.getElementById('root')
   );

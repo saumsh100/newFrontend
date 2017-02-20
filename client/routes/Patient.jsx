@@ -1,8 +1,8 @@
 
 import React, { PropTypes } from 'react';
 import { Router, Route, IndexRoute, IndexRedirect } from 'react-router';
-import PatientApp from './containers/PatientApp';
-import FourZeroFour from './components/FourZeroFour';
+import PatientApp from '../containers/PatientApp';
+import FourZeroFour from '../components/FourZeroFour';
 
 let counter = 0;
 
