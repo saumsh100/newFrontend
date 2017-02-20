@@ -10,6 +10,12 @@ webpackConfig.entry = {
     `webpack-hot-middleware/client?path=http://localhost:${globals.bundlePort}/__webpack_hmr`,
     '../../entries/app.js',
   ],
+
+  patient: [
+    'webpack/hot/dev-server',
+    `webpack-hot-middleware/client?path=http://localhost:${globals.bundlePort}/__webpack_hmr`,
+    '../../entries/patient.js',
+  ],
   
   embed: [
     'webpack/hot/dev-server',
@@ -27,6 +33,7 @@ webpackConfig.output = {
 webpackConfig.plugins = [
   new webpack.HotModuleReplacementPlugin(),
   new webpack.optimize.CommonsChunkPlugin('app-commons.js', ['app']),
+  new webpack.optimize.CommonsChunkPlugin('patient-commons.js', ['patient']),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify('development'),

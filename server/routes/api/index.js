@@ -1,9 +1,3 @@
-/**
- * Created by jsharp on 2016-11-22.
- *
- *      Varafy Inc.
- *
- */
 
 const apiRouter = require('express').Router();
 const appointmentRouter = require('./appointment');
