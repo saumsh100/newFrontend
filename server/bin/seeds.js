@@ -240,12 +240,13 @@ const SEEDS = {
       accountId,
       startTime: moment({hour: 23, minute: 10})._d,
       endTime: moment({hour: 23, minute: 50})._d,
-
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
       chairId,
       isConfirmed: false,
+      isCancelled: false,
+      comment: 'Some comment from patient here....',
     },
     {
       accountId,
@@ -256,7 +257,9 @@ const SEEDS = {
       practitionerId: practitionerId2,
       chairId,
       isConfirmed: false,
-    }
+      isCancelled: false,
+      comment: 'Some comment from patient here....',
+    },
   ],
 
   User: [
@@ -288,13 +291,14 @@ const SEEDS = {
       accountId,
       firstName: 'Justin',
       lastName: 'Sharp',
+      email: 'justin@carecru.com',
       phoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
       status: 'Active',
       insurance: {
-        insurance: 'insurance',
+        insurance: 'GMC Health Insurance',
         memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
         contract: '4234rerwefsdfsd',
         carrier: 'sadasadsadsads',
@@ -306,11 +310,19 @@ const SEEDS = {
       accountId,
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
+      email: 'sergey@carecru.com',
       phoneNumber: sergeyPhoneNumber,
       birthDate: moment({year: 1983, month: 2, day: 6})._d,
       gender: 'male',
       status: 'Active',
       language: 'English',
+      insurance: {
+        insurance: 'Lay Health Insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      },
     },
     {
       id: markPatientId,

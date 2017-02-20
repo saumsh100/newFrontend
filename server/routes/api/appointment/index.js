@@ -38,6 +38,15 @@ appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, ne
     .catch(next);
 });
 
+appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) =>{
+  const appointmentData = Object.assign({}, req.body, {
+    accountId: req.accountId,
+  });
+  return Appointment.save(appointmentData)
+    .then(appt => res.send(201, normalize('appointment', appt)))
+    .catch(next);
+});
+
 // TODO: this is not used
 /*appointmentsRouter.get('/:patientId', (req, res, next) => {
   const {

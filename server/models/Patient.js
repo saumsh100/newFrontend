@@ -8,6 +8,7 @@ const Patient = createModel('Patient', {
   firstName: type.string().required(),
   middleName: type.string(),
   lastName: type.string().required(),
+  email: type.string(),
   phoneNumber: type.string(),
   email: type.string().email(),
   birthDate: type.date().required(),

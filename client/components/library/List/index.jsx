@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
+import withHoverable from '../../../hocs/withHoverable';
 
 export function List(props) {
   const classes = classNames(props.className, styles.list);
