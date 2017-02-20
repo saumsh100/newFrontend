@@ -125,7 +125,8 @@ class Availabilities extends React.Component {
                 <div className={styles.appointment__select_title}>Practitioner</div>
                 <div className={styles.appointment__select_wrapper}>
 
-                  <Form form="availabilities" defaultValues={defaultValues}>
+                  {defaultValues && defaultValues.practitionerId && 
+                    <Form form="availabilities" initialValues={defaultValues}>
                     <Field
                       component="Select"
                       name="practitionerId"
@@ -151,7 +152,7 @@ class Availabilities extends React.Component {
                     )}
                     </Field>
 
-                  </Form>
+                  </Form>}
 
 
 
@@ -277,7 +278,7 @@ class Availabilities extends React.Component {
 
     const serviceId = services[0] && services[0].id;
     const prId =  practitioners[0] && practitioners.id;
-    const defaultValues = { practitionerId: prId, serviceId };
+    const defaultValues = { practitionerId, serviceId };
     const params = { practitionerId, services, availabilities, practitioners, defaultValues }
     switch (this.state.step) {
       case 1:
