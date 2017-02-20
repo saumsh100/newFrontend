@@ -21,6 +21,7 @@ const OWNER = {
   },
 
   patients: CRUD,
+  practitioners: CRUD,
   requests: CRUD,
   reviews: {
     read: true,
