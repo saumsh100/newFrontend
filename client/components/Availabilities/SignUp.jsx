@@ -2,6 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import Timer from './Timer'
 import styles from './SignUp.scss';
 
+import { Button, Form, Field } from '../library';
+
 class SignUp extends Component {
   constructor(props) {
     super(props);
@@ -49,48 +51,45 @@ class SignUp extends Component {
                      percentage={this.getPercent()}/>
             </div>
             <div className={styles.signup__body}>
-              <form className={styles.signup__body_confirm}>
-                <input
-                  className={styles.signup__body_input}
-                  type="text"
+              
+              <Form form="availabilitiesRequest" className={styles.signup__body_confirm}>
+                <Field
                   name="firstname"
                   placeholder="First Name *"
-                />
-                <input
                   className={styles.signup__body_input}
-                  type="text"
+                  min
+                />
+                <Field
                   name="lastname"
                   placeholder="Last Name *"
-                />
-                <input
                   className={styles.signup__body_input}
-                  type="text"
-                  name="phone"
+                  min
+                />
+                <Field
                   placeholder="Phone Number *"
-                />
-                <input
+                  name="phone"
                   className={styles.signup__body_input}
-                  type="email"
-                  name="email"
+                  min
+                />
+                <Field
+                  className={styles.signup__body_input}
                   placeholder="Email *"
+                  name="email"                  
+                  min
                 />
-                <input
+
+                <Field
                   className={styles.signup__body_input}
-                  type="text"
-                  name="password"
                   placeholder="Password *"
-                />
-                <input
-                  className={styles.signup__body_input}
-                  type="text"
                   name="password"
-                  placeholder="Confirm Password *"
+                  min           
                 />
-                <input onClick={this.saveAndContinue}
-                       className={styles.signup__footer_btn}
-                       type="submit"
-                       value="BOOK THIS APPOINTMENT"/>
-              </form>
+                <Field
+                  className={styles.signup__body_input}
+                  placeholder="Confirm Password *"
+                  name="confirmPassword"              
+                />
+              </Form>
             </div>
             <div className={styles.signup__footer}>
               <div className={styles.signup__footer_header}>
