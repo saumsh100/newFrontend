@@ -1,5 +1,5 @@
-import React, {PropTypes, Component} from 'react';
-import Timer from './Timer'
+import React, { Component } from 'react';
+import Timer from './Timer';
 import styles from './SignUp.scss';
 
 import { Button, Form, Field } from '../library';
@@ -18,20 +18,20 @@ class SignUp extends Component {
   }
 
   componentDidMount() {
-    this.startTimer()
+    this.startTimer();
+  }
+
+  getPercent() {
+    return 100 - ((this.state.maxtime - this.state.time) / this.state.maxtime * 100);
   }
 
   startTimer() {
     this.registrationTimer = setInterval(() => {
       this.setState({
-        time: this.state.time + 1000
+        time: this.state.time + 1000,
       });
-      if (this.getPercent() == 100) clearInterval(this.registrationTimer);
+      if (this.getPercent() === 100) clearInterval(this.registrationTimer);
     }, 1000);
-  }
-
-  getPercent() {
-    return 100 - ((this.state.maxtime - this.state.time) / this.state.maxtime * 100);
   }
 
 
@@ -40,6 +40,53 @@ class SignUp extends Component {
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>
           <div className={styles.signup__sidebar}>
+            <div className={styles.sidebar__header}>
+              <div className={styles.sidebar__header_title}>
+                You brooked
+              </div>
+            </div>
+            <div className={styles.sidebar__body}>
+              <div className={styles.sidebar__body_service}>
+                <ul>
+                  <li>SERVICE: <span>Toothache</span></li>
+                  <li>WITH: <span>Dr. Chelsea</span></li>
+                  <li>AT: <span>Feb 13 2017</span></li>
+                </ul>
+              </div>
+              <div className={styles.sidebar__body_address}>
+                <div className={styles.sidebar__address}>
+                  <div className={styles.sidebar__address_title}>
+                    PACIFIC HEART DENTAL
+                  </div>
+                  <div className={styles.sidebar__address_text}>
+                    194-105 East 3rd
+                    7 ave
+                    Vancouver, BC
+                    Canda V1B 2C3
+                  </div>
+                </div>
+              </div>
+              <div className={styles.sidebar__body_map}>
+              </div>
+              <button className={styles.sidebar__body_btn}>GO BACK</button>
+            </div>
+            <div className={styles.sidebar__footer}>
+              <div className={styles.sidebar__footer_additional}>
+                <div className={styles.sidebar__footer_title}>ADDITIONAL INFO</div>
+                <ul className={styles.sidebar__footer_list}>
+                  <li>This clinic accpets all major
+                    insuranc
+                  </li>
+                  <li>Approximate appointment
+                    length is 120 min
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.sidebar__footer_copy}>
+                <span>POWERED BY:</span>
+                <img src="/images/carecru_logo.png" alt="logo" />
+              </div>
+            </div>
           </div>
           <div className={styles.signup__main}>
             <div className={styles.signup__header}>
@@ -48,7 +95,8 @@ class SignUp extends Component {
               </div>
               <Timer className={styles.signup__header_timer}
                      seconds={this.state.time}
-                     percentage={this.getPercent()}/>
+                     percentage={this.getPercent()}
+              />
             </div>
             <div className={styles.signup__body}>
               
@@ -99,7 +147,7 @@ class SignUp extends Component {
                 <a className={styles.signup__footer_login} href="/login">Login here</a>
               </div>
               <a href="//www.facebook.com/" className={styles.signup__footer_facebook}>
-                <span className="fa fa-facebook-official"/>
+                <span className="fa fa-facebook-official" />
                 LOG IN WITH FACEBOOK
               </a>
               <div className={styles.signup__footer_pagination}>
@@ -116,7 +164,7 @@ class SignUp extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
