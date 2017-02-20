@@ -33,16 +33,47 @@ class Availability extends React.Component {
     const { setPractitioner } = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
     const nextPractitioners = nextProps.practitioners.get('models').toArray();
+    
+    const { availabilitiesForm } = nextProps;
+    const oldAvailabilitiesForm = this.props.availabilitiesForm;
+    const nextFormPractitionerId = availabilitiesForm && availabilitiesForm.values &&
+    availabilitiesForm.values.practitionerId;
+    
+    const prevFormPractitionerId = oldAvailabilitiesForm && oldAvailabilitiesForm.values &&
+    oldAvailabilitiesForm.values.practitionerId;
+
     const { practitonersStartEndDate } = nextProps;
     const practitonersStartEndDatetoJS = this.props.practitonersStartEndDate.toJS() 
     const nextpractitonersStartEndDatetoJS = practitonersStartEndDate.toJS(); 
-    const prevPractitionerId = practitonersStartEndDatetoJS.practitionerId;
-    const nextPractitionerId = nextpractitonersStartEndDatetoJS.practitionerId;
+    
+    let prevPractitionerId = practitonersStartEndDatetoJS.practitionerId;
+    let nextPractitionerId = nextpractitonersStartEndDatetoJS.practitionerId;
+   
+    if (nextFormPractitionerId && prevFormPractitionerId ) {
+      prevPractitionerId = prevFormPractitionerId;
+      nextPractitionerId = nextFormPractitionerId;
+
+      if (nextPractitionerId !== prevFormPractitionerId) {
+        setPractitioner({ practitionerId: nextPractitionerId });
+      }
+
+    }
+
     let shouldAvailabilitiesBeUpdated = false;
+
+    if ((!nextPractitionerId && !nextFormPractitionerId ) && nextPractitioners && nextPractitioners.length ) {
+      const practitionerId = nextPractitioners[0].id
+      setPractitioner({ practitionerId });
+
+    }
+
     if (!nextPractitionerId && nextPractitioners && nextPractitioners.length ) {
       const practitionerId = nextPractitioners[0].id
       setPractitioner({ practitionerId });
+
     }
+
+
     const thisPractitionersStartEndDate = practitonersStartEndDatetoJS[nextPractitionerId];
     let params = {}
     const selectedDays = nextpractitonersStartEndDatetoJS[nextPractitionerId];
@@ -123,9 +154,16 @@ class Availability extends React.Component {
   }
 
   getAppointmentsSorted() {
-    const { practitonersStartEndDate, sixDaysShift } = this.props;
+    const { practitonersStartEndDate, sixDaysShift, availabilitiesForm } = this.props;
     let { selectedEndDay, selectedStartDay } = practitonersStartEndDate;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId
+    
+    // const practitionerId = practitonersStartEndDate.toJS().practitionerId;
+
+    const practitionerId =  (availabilitiesForm
+    && availabilitiesForm.values && availabilitiesForm.values.practitionerId)
+    || practitonersStartEndDate.toJS().practitionerId
+
+
     const prStardEndDate = practitonersStartEndDate.toJS()[practitionerId]; 
     const sortedByDate = this.props.availabilities.get('models')
       .toArray()
@@ -178,12 +216,13 @@ class Availability extends React.Component {
   }
 }
 
-function mapStateToProps({ entities, availabilities }) {
+function mapStateToProps({ entities, availabilities, form }) {
   return {
     availabilities: entities.get('availabilities'),
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
     practitonersStartEndDate: availabilities,
+    availabilitiesForm: form.availabilities,
   };
 }
 
