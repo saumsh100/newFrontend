@@ -12,9 +12,7 @@ export default function IconButton(props) {
     size,
     icon,
   } = props;
-  
-  console.log('IconButton size', size);
-  
+
   const classes = classNames(className, styles.iconButton);
   const buttonProps = omit(props, ['icon', 'size']);
   return (

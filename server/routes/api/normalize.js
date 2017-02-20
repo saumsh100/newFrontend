@@ -40,6 +40,7 @@ const requestSchema = () => {
     patient: patientSchema(),
     service: serviceSchema(),
     practitioner: practitionerSchema(),
+    chair: chairSchema(),
   });
 };
 

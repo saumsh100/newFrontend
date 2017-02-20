@@ -28,8 +28,11 @@ import PatientList from '../entities/models/PatientList'
 import patientList from '../entities/collections/patientList';
 import Service from '../entities/models/Service'
 import services from '../entities/collections/services';
+import Chairs from '../entities/models/Chair';
+import chairs from '../entities/collections/chairs'
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
+
 
 
 const initialState = Map({
@@ -44,8 +47,7 @@ const initialState = Map({
   availabilities: new availabilities(),
   dialogs: new dialogs(),
   patientList: new patientList(),
-
-
+  chairs: new chairs(),
   // reviews: Reviews(), MODEL
   // listings: Listings(), MODEL
 });
@@ -59,6 +61,7 @@ const Models = {
   practitioners: Practitioners,
   dialogs: Dialogs,
   patientList: PatientList,
+  chairs: Chairs,
   availabilities: Availability,
 };
 
@@ -81,14 +84,13 @@ export default handleActions({
     return newState;
   },
 
-  [DELETE_ENTITY](state, { payload: { key, entity } }) {
-    return state.deleteIn([key, 'models', Object.keys(entity[key])[0]]);
+  [DELETE_ENTITY](state, { payload: { key, id } }) {
+    return state.deleteIn([key, 'models', id]);
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity[key])[0];
-    const newEntity = entity[key][id];
-    const newModel = new Models[key](newEntity);
+    const { id } = entity;
+    const newModel = new Models[key](entity);
     return state.setIn([key, 'models', id], newModel);
   },
 
