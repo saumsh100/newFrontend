@@ -7,6 +7,7 @@ import CardHeader from './CardHeader';
 import Form, { Field } from './Form';
 import Icon from './Icon';
 import IconButton from './IconButton';
+import InfiniteScroll from './InfiniteScroll';
 import Input from './Input';
 import Link from './Link';
 import Modal from './Modal';
@@ -25,6 +26,7 @@ export {
   Form,
   Icon,
   IconButton,
+  InfiniteScroll,
   Input,
   Link,
   Modal,

@@ -1,16 +1,20 @@
 
 const rootRouter = require('express').Router();
-const authRouter = require('./auth');
+const subdomain = require('express-subdomain');
 const apiRouter = require('./api');
+const authRouter = require('./auth');
+const myRouter = require('./my');
 const twilioRouter = require('./twilio');
 
 const Token = require('../models/Token');
 const Appointment = require('../models/Appointment');
 
+// Bind subdomain capturing
+// Will be removed once microservices are in full effect
+rootRouter.use(subdomain('my', myRouter));
 
 // Bind auth route to generate tokens
 rootRouter.use('/auth', authRouter);
-
 
 // Bind REST API
 rootRouter.use('/api', apiRouter);
@@ -34,6 +38,10 @@ rootRouter.get('/confirmation/:tokenId', (req, res, next) => {
       }).catch(next);
     }).catch(next);
   }).catch(next);
+});
+
+rootRouter.get('/patients', (req, res, next) => {
+  return res.render('patient');
 });
 
 // All other traffic, just render app
