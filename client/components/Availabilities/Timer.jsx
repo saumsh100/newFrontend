@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import moment from 'moment';
+import 'moment-duration-format';
 import styles from './Timer.scss';
 class Timer extends React.Component {
   constructor(props) {
@@ -25,6 +27,7 @@ class Timer extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       percentage: nextProps.percentage,
+      seconds: nextProps.seconds,
     });
   }
 
@@ -50,7 +53,7 @@ class Timer extends React.Component {
 
     return (
       <svg
-        className={`${styles.CircularProgressbar} ${this.props.classForPercentage ? this.props.classForPercentage(this.props.percentage) : ''}`}
+        className={styles.CircularProgressbar}
         viewBox="0 0 100 100"
       >
         <path
@@ -73,8 +76,8 @@ class Timer extends React.Component {
           x={50}
           y={50}
         >
-          {this.props.textForPercentage(this.props.percentage)}
-        </text>
+          {this.props.textForSeconds(this.props.seconds)}
+          </text>
       </svg>
     );
   }
@@ -83,15 +86,13 @@ class Timer extends React.Component {
 Timer.propTypes = {
   percentage: PropTypes.number.isRequired,
   strokeWidth: PropTypes.number,
-  initialAnimation: PropTypes.bool,
   classForPercentage: PropTypes.func,
-  textForPercentage: PropTypes.func,
+  textForSeconds: PropTypes.func,
 };
 
 Timer.defaultProps = {
   strokeWidth: 8,
-  textForPercentage: (percentage) => `${Math.floor(percentage)}%`,
-  initialAnimation: false,
+  textForSeconds: (seconds) => `${moment.duration(seconds).format("m:s")}`,
 };
 
 export default Timer;
