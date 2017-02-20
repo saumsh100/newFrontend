@@ -124,67 +124,36 @@ class Availabilities extends React.Component {
               <div className={styles.appointment__body_header}>
                 <div className={styles.appointment__select_title}>Practitioner</div>
                 <div className={styles.appointment__select_wrapper}>
-
                   {defaultValues && defaultValues.practitionerId && 
                     <Form form="availabilities" initialValues={defaultValues}>
-                    <Field
-                      component="Select"
-                      name="practitionerId"
-                      label="Select Practitioner"
-                      min
-                      className={styles.appointment__select_item}
-                    >
-                    {practitioners.map(p =>
-                      <option value={p.id} key={p.id}>{p.getFullName()}</option>
-                    )}
-                    </Field>
+                      <Field
+                        component="Select"
+                        name="practitionerId"
+                        label="Select Practitioner"
+                        min
+                        className={styles.appointment__select_item}
+                      >
+                        {practitioners.map(p =>
+                          <option value={p.id} key={p.id}>{p.getFullName()}</option>
+                        )}
+                      </Field>
 
-                    <Field
-                      component="Select"
-                      name="serviceId"
-                      label="Select Practitioner"
-                      min
-                    >
-                    {services.filter(s =>
-                      includes(s.practitioners, this.state.practitionerId)
-                    ).map(s =>
-                      <option value={s.id} key={s.id}>{s.name}</option>
-                    )}
-                    </Field>
-
+                      <Field
+                        component="Select"
+                        className={styles.appointment__select_item}
+                        name="serviceId"
+                        label="Select Service"
+                        min
+                      >
+                        <option value="" selected>Service</option>
+                        {services.filter(s =>
+                          includes(s.practitioners, this.state.practitionerId)
+                        ).map(s =>
+                          <option value={s.id} key={s.id}>{s.name}</option>
+                        )}
+                      </Field>
                   </Form>}
-
-
-
-
-
-
-
-                  <select
-                    className={styles.appointment__select_item}
-                    value={practitionerId}
-                    onChange={this.onDoctorChange}
-                    ref={(doctor) => {
-                      this.doctor = doctor;
-                    }}>
-                    <option value="" selected>No Preference</option>
-                    {practitioners.map(p =>
-                      <option value={p.id} key={p.id}>{p.getFullName()}</option>
-                    )}
-                  </select>
-                  <select
-                    className={styles.appointment__select_item}
-                    onChange={this.onServiceChange}
-                    ref={(service) => {
-                      this.service = service;
-                    }}>
-                    <option value="" selected>Service</option>
-                    {services.filter(s =>
-                      includes(s.practitioners, this.state.practitionerId)
-                    ).map(s =>
-                      <option value={s.id} key={s.id}>{s.name}</option>
-                    )}
-                  </select></div>
+                </div>
                 <div className={styles.appointment__daypicker}>
                   <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
                   <div onClick={this.openModal}
