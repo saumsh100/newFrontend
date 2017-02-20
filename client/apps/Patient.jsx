@@ -10,7 +10,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
-import DashboardRoutes from '../routes/Dashboard';
+import PatientRoutes from '../routes/Patient';
 import configure from '../store';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
@@ -19,8 +19,8 @@ const store = configure({ browserHistory });
 const history = syncHistoryWithStore(browserHistory, store);
 // loadInitialData(store);
 
-// TODO: below will call a flash with Login, perhaps fix with background color?
-const token = localStorage.getItem('token');
+
+/*const token = localStorage.getItem('token');
 if (!token) {
   browserHistory.push('/login');
 } else {
@@ -33,7 +33,7 @@ if (!token) {
   } else {
     store.dispatch(loginSuccess(decodedToken));
   }
-}
+}*/
 
 connectSocketToStore(socket, store);
 
@@ -46,7 +46,7 @@ window._ = _;
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Provider store={store}>
-      <DashboardRoutes history={history} />
+      <PatientRoutes history={history} />
     </Provider>,
     document.getElementById('root')
   );
