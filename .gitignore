@@ -37,3 +37,4 @@ server/public/assets/
 rethinkdb_data/
 *.swp
 *.swo
+*.vim
