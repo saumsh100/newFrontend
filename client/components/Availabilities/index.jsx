@@ -145,9 +145,8 @@ class Availabilities extends React.Component {
                         label="Select Service"
                         min
                       >
-                        <option value="" selected>Service</option>
                         {services.filter(s =>
-                          includes(s.practitioners, this.state.practitionerId)
+                          includes(s.allowedPractitioners, practitionerId)
                         ).map(s =>
                           <option value={s.id} key={s.id}>{s.name}</option>
                         )}

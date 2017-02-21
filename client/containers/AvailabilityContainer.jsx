@@ -27,9 +27,12 @@ class Availability extends React.Component {
 
   componentDidMount() {
     this.props.fetchEntities({ key: 'practitioners' });
+    this.props.fetchEntities({ key: 'services' });
+    
   }
 
   componentWillReceiveProps(nextProps) {
+
     const { setPractitioner } = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
     const nextPractitioners = nextProps.practitioners.get('models').toArray();
@@ -48,7 +51,7 @@ class Availability extends React.Component {
     
     let prevPractitionerId = practitonersStartEndDatetoJS.practitionerId;
     let nextPractitionerId = nextpractitonersStartEndDatetoJS.practitionerId;
-   
+    let newService = null;
     if (nextFormPractitionerId && prevFormPractitionerId ) {
       prevPractitionerId = prevFormPractitionerId;
       nextPractitionerId = nextFormPractitionerId;
@@ -110,10 +113,13 @@ class Availability extends React.Component {
     
     if (!isEqual(thisServices, nextServices)) {
         
-      const newServiceId = nextServices
+
+      const newService = nextServices
         .filter(s =>
-          includes(s.practitioners, this.state.practitionerId)
-        )[0].id
+          includes(s.allowedPractitioners, nextPractitionerId)
+        )[0];
+
+      const newServiceId = newService && newService.id;
 
       this.setState({ serviceId: newServiceId })
         params = {
@@ -137,6 +143,7 @@ class Availability extends React.Component {
         shouldAvailabilitiesBeUpdated = true; 
     }
 
+    debugger;
     if (shouldAvailabilitiesBeUpdated) {      
       this.props.fetchEntities({ key: 'availabilities',
         params,

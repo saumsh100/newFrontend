@@ -11,6 +11,7 @@ const Service = createModel('Service', {
   bufferTime: type.number().integer(),
   unitCost: type.number().required(),
   customCosts: type.object().allowNull(),
+  allowedPractitioners: [ type.string().uuid(4).required() ],
 });
 
 module.exports = Service;
