@@ -35,3 +35,6 @@ screen-256color.ti
 server/public/assets/
 .env
 rethinkdb_data/
+*.swp
+*.swo
+*.vim
