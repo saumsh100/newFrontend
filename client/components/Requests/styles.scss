@@ -4,28 +4,35 @@
 .requestCard {
   position: relative;
   border-top: $card-border-size #ffc45a;
+
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    width: 300px;
+    width: 290px;
   }
+
 }
 
 .requestList {
   max-height: 212px;
   overflow-y: scroll;
+  requestList::-webkit-scrollbar {
+    width: 12px;
+    background-color: #2cc4a7;
+  }
 }
 
 .requestListItem {
-  background-color: #ffffff
 }
 
 .requestData{
   text-align: left;
   font-size: small;
-  width: 160px;
+  width: 150px;
+  font-family: "GothamCondensed-Book";
+
   &__time{
   }
   &__nameAge{
@@ -49,6 +56,7 @@
   }
   &__day {
     font-size: 20px;
+    font-weight: 600;
   }
 }
 

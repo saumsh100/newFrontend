@@ -68,7 +68,6 @@ class RequestListItem extends Component {
         </div>
       );
     }
-
     return (
       <ListItem className={styles.requestListItem}>
         <div className={styles.iconCaret}>
