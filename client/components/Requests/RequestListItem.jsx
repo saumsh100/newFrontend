@@ -19,7 +19,6 @@ class RequestListItem extends Component {
   }
 
   onClickRemove(){
-    //testing this out
     this.props.removeRequest(this.props.request);
   }
 
