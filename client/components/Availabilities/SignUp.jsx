@@ -15,6 +15,7 @@ class SignUp extends Component {
     this.registrationTimer = null;
     this.startTimer = this.startTimer.bind(this);
     this.getPercent = this.getPercent.bind(this);
+    this.bookAnAppointment = this.bookAnAppointment.bind(this);
   }
 
   componentDidMount() {
@@ -34,8 +35,82 @@ class SignUp extends Component {
     }, 1000);
   }
 
+  bookAnAppointment(params) {
+    const { startsAt, practitionerId, serviceId } = this.props.practitonersStartEndDate.toJS();
+    const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId }, params);
+    this.props.createPatient(paramsToPass);
+
+  }
+
+  renderBookingForm() {
+    return (
+      <Form form="availabilitiesRequest"
+            className={styles.signup__body_confirm}
+            onSubmit={this.bookAnAppointment}
+      >
+        <Field
+          name="firstName"
+          placeholder="First Name *"
+          className={styles.signup__body_input}
+          min
+        />
+        <Field
+          name="lastName"
+          placeholder="Last Name *"
+          className={styles.signup__body_input}
+          min
+        />
+        <Field
+          placeholder="Phone Number *"
+          name="phone"
+          className={styles.signup__body_input}
+          min
+        />
+        <Field
+          className={styles.signup__body_input}
+          placeholder="Email *"
+          name="email"
+          min
+        />
+
+        <Field
+          className={styles.signup__body_input}
+          placeholder="Password *"
+          name="password"
+          min
+        />
+        <Field
+          className={styles.signup__body_input}
+          placeholder="Confirm Password *"
+          name="confirmPassword"
+          min
+        />
+        <Button
+          type="submit"
+          className={styles.signup__footer_btn}>
+          Book an appointment
+        </Button>
+      </Form>
+    );
+  }
+
+  renderMessages(messages) {
+    return (
+      <div>
+        {messages.map(m => (
+          <div className={styles.signup__header_title}>
+            {m}
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   render() {
+    const { practitonersStartEndDate } = this.props;
+    const { messages } = practitonersStartEndDate.toJS();
+    const contnet = messages.length ? this.renderMessages(messages)
+      : this.renderBookingForm()
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>
@@ -101,46 +176,7 @@ class SignUp extends Component {
               />
             </div>
             <div className={styles.signup__body}>
-
-              <Form form="availabilitiesRequest" className={styles.signup__body_confirm}>
-                <Field
-                  name="firstname"
-                  placeholder="First Name *"
-                  className={styles.signup__body_input}
-                  min
-                />
-                <Field
-                  name="lastname"
-                  placeholder="Last Name *"
-                  className={styles.signup__body_input}
-                  min
-                />
-                <Field
-                  placeholder="Phone Number *"
-                  name="phone"
-                  className={styles.signup__body_input}
-                  min
-                />
-                <Field
-                  className={styles.signup__body_input}
-                  placeholder="Email *"
-                  name="email"
-                  min
-                />
-
-                <Field
-                  className={styles.signup__body_input}
-                  placeholder="Password *"
-                  name="password"
-                  min
-                />
-                <Field
-                  className={styles.signup__body_input}
-                  placeholder="Confirm Password *"
-                  name="confirmPassword"
-                  min
-                />
-              </Form>
+               {contnet}
             </div>
             <div className={styles.signup__footer}>
               <div className={styles.signup__footer_header}>

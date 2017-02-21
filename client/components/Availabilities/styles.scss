@@ -157,7 +157,7 @@ body {
             border-bottom: 1px solid #dddcdc;
             padding: 0 5px;
             &:not(:last-child) {
-                margin-bottom: 35px;
+                margin-bottom: 34px;
             }
             &:focus {
                 outline: none;
@@ -308,6 +308,10 @@ body {
         &_active {
             background-color: #ff715a !important;
         }
+        &_selected {
+            color: green;
+            border: 1px solid black;
+        }
         &_item {
             width: 100%;
             box-sizing: border-box;
@@ -332,7 +336,7 @@ body {
             text-transform: uppercase;
             font-weight: 500;
             margin-bottom: 5px;
-        }
+      }
         &_select {
             display: flex;
             justify-content: center;

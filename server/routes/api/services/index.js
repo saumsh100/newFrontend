@@ -13,10 +13,6 @@ servicesRouter.get('/', (req, res, next) => {
           _.includes(s.practitioners, req.query.practitionerId)
         );
 
-        console.log("=============================")
-        console.log(normalize('services', services))
-        console.log("SERVICES")
-        console.log(services)
         res.send(normalize('services', services));
       });
     // return;

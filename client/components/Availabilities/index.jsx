@@ -1,11 +1,11 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import moment from 'moment';
 import styles from './styles.scss';
 import includes from 'lodash/includes';
-import DayPicker, {DateUtils} from 'react-day-picker';
+import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import SignUp from './SignUp'
-import {Button, Form, Field} from '../library';
+import { Button, Form, Field } from '../library';
 
 
 class Availabilities extends React.Component {
@@ -25,8 +25,9 @@ class Availabilities extends React.Component {
     this.handleDayClick = this.handleDayClick.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.isDaySelected = this.isDaySelected.bind(this)
-    this.saveAndContinue = this.saveAndContinue.bind(this)
+    this.isDaySelected = this.isDaySelected.bind(this);
+    this.saveAndContinue = this.saveAndContinue.bind(this);
+    this.selectAvailability = this.selectAvailability.bind(this);
   }
 
 
@@ -90,6 +91,13 @@ class Availabilities extends React.Component {
 
   }
 
+  selectAvailability(slot) {
+    if (!slot.isBusy) {
+      const {startsAt} = slot;
+      this.props.setStartingAppointmentTime(startsAt);
+    }
+  }
+
   isDaySelected(day) {
     return DateUtils.isSameDay(day, this.state.selectedStartDay);
   }
@@ -109,6 +117,7 @@ class Availabilities extends React.Component {
   }
 
   renderFirstStep({practitionerId, services, availabilities, practitioners, defaultValues}) {
+    const {startsAt} = this.props.practitonersStartEndDate;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -165,34 +174,35 @@ class Availabilities extends React.Component {
             <div className={styles.appointment__body}>
               <div className={styles.appointment__body_header}>
                 <div className={styles.appointment__select_title}>Practitioner</div>
-                  {defaultValues && defaultValues.practitionerId &&
-                  <Form className={styles.appointment__select_wrapper} form="availabilities" initialValues={defaultValues}>
-                    <Field
-                      component="Select"
-                      name="practitionerId"
-                      label="Select Practitioner"
-                      min
-                      className={styles.appointment__select_item}
-                    >
-                      {practitioners.map(p =>
-                        <option value={p.id} key={p.id}>{p.getFullName()}</option>
-                      )}
-                    </Field>
+                {defaultValues && defaultValues.practitionerId &&
+                <Form className={styles.appointment__select_wrapper} form="availabilities"
+                      initialValues={defaultValues}>
+                  <Field
+                    component="Select"
+                    name="practitionerId"
+                    label="Select Practitioner"
+                    min
+                    className={styles.appointment__select_item}
+                  >
+                    {practitioners.map(p =>
+                      <option value={p.id} key={p.id}>{p.getFullName()}</option>
+                    )}
+                  </Field>
 
-                    <Field
-                      component="Select"
-                      className={styles.appointment__select_item}
-                      name="serviceId"
-                      label="Select Service"
-                      min
-                    >
-                      {services.filter(s =>
-                        includes(s.allowedPractitioners, practitionerId)
-                      ).map(s =>
-                        <option value={s.id} key={s.id}>{s.name}</option>
-                      )}
-                    </Field>
-                  </Form>}
+                  <Field
+                    component="Select"
+                    className={styles.appointment__select_item}
+                    name="serviceId"
+                    label="Select Service"
+                    min
+                  >
+                    {services.filter(s =>
+                      includes(s.allowedPractitioners, practitionerId)
+                    ).map(s =>
+                      <option value={s.id} key={s.id}>{s.name}</option>
+                    )}
+                  </Field>
+                </Form>}
                 <div className={styles.appointment__daypicker}>
                   <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
                   <div onClick={this.openModal}
@@ -231,9 +241,11 @@ class Availabilities extends React.Component {
                           </div>
                         </div>
                         {av.availabilities.map(slot =>
-                          <li
-                            className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''}`}
-                            key={slot.startsAt}>
+                          <li onClick={() => {
+                            this.selectAvailability(slot)
+                          }}
+                              className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected : '' }`}
+                              key={slot.startsAt}>
                             {moment(slot.startsAt).format('HH:mm A')}
                           </li>)
                         }
@@ -282,17 +294,22 @@ class Availabilities extends React.Component {
       practitioners,
       availabilities,
       practitionerId,
+      createPatient,
+      practitonersStartEndDate,
     } = this.props;
 
-    const serviceId = services[0] && services[0].id;
+    const serviceId = this.props.serviceId || services[0] && services[0].id;
     const prId = practitioners[0] && practitioners.id;
     const defaultValues = {practitionerId, serviceId};
-    const params = {practitionerId, services, availabilities, practitioners, defaultValues}
+    const params = {practitionerId, services, availabilities, practitioners, defaultValues};
+
     switch (this.state.step) {
       case 1:
-        return this.renderFirstStep(params)
+        return this.renderFirstStep(params);
       case 2:
-        return <SignUp />
+        return <SignUp createPatient={createPatient}
+                       practitonersStartEndDate={practitonersStartEndDate}
+        />
     }
   }
 }

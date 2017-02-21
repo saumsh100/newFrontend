@@ -196,7 +196,7 @@ body {
             border-bottom: 1px solid #dddcdc;
             background: none;
             &:not(:last-child) {
-                margin-bottom: 44px;
+                margin-bottom: 34px;
             }
             &:focus {
                 outline: none;
@@ -233,6 +233,7 @@ body {
             position: relative;
             width: 100%;
             padding: 6px 20px;
+            height: inherit;
             text-transform: uppercase;
             color: #fff;
             border: none;
