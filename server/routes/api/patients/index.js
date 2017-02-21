@@ -85,10 +85,13 @@ patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
 
 patientsRouter.post('/', (req, res, next) => {
   const { firstName, lastName, phoneNumber, email } = req.body;
+  const { accountId } = req;
   Patient.save({
     firstName,
     lastName,
     phoneNumber,
+    email,
+    accountId,
   }).then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });

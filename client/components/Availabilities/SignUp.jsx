@@ -15,6 +15,7 @@ class SignUp extends Component {
     this.registrationTimer = null;
     this.startTimer = this.startTimer.bind(this);
     this.getPercent = this.getPercent.bind(this);
+    this.bookAnAppointment = this.bookAnAppointment.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +33,10 @@ class SignUp extends Component {
       });
       if (this.getPercent() === 100) clearInterval(this.registrationTimer);
     }, 1000);
+  }
+
+  bookAnAppointment(params) {
+    this.props.createPatient(params);
   }
 
 
@@ -100,15 +105,18 @@ class SignUp extends Component {
             </div>
             <div className={styles.signup__body}>
               
-              <Form form="availabilitiesRequest" className={styles.signup__body_confirm}>
+              <Form form="availabilitiesRequest"
+                className={styles.signup__body_confirm}
+                onSubmit={this.bookAnAppointment}
+              >
                 <Field
-                  name="firstname"
+                  name="firstName"
                   placeholder="First Name *"
                   className={styles.signup__body_input}
                   min
                 />
                 <Field
-                  name="lastname"
+                  name="lastName"
                   placeholder="Last Name *"
                   className={styles.signup__body_input}
                   min
@@ -137,6 +145,12 @@ class SignUp extends Component {
                   placeholder="Confirm Password *"
                   name="confirmPassword"              
                 />
+                <Button
+                  type="submit"
+                  style={{ width: '100%' }}
+                >
+                  Book an appointment
+                </Button>
               </Form>
             </div>
             <div className={styles.signup__footer}>

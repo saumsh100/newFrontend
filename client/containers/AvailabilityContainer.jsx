@@ -12,6 +12,7 @@ import {
   setDay,
   setPractitioner,
   setService,
+  createPatient,
 } from  '../thunks/availabilities';
 
 class Availability extends React.Component {
@@ -161,7 +162,12 @@ class Availability extends React.Component {
   }
 
   getAppointmentsSorted() {
-    const { practitonersStartEndDate, sixDaysShift, availabilitiesForm } = this.props;
+    const { 
+      practitonersStartEndDate,
+      sixDaysShift,
+      availabilitiesForm,
+      createPatient,
+    } = this.props;
     let { selectedEndDay, selectedStartDay } = practitonersStartEndDate;
     
     // const practitionerId = practitonersStartEndDate.toJS().practitionerId;
@@ -218,6 +224,7 @@ class Availability extends React.Component {
         setPractitioner={this.props.setPractitioner}
         setService={this.props.setService}
         practitonersStartEndDate={this.props.practitonersStartEndDate}
+        createPatient={this.props.createPatient}
       />
     );
   }
@@ -240,6 +247,7 @@ function mapDispatchToProps(dispatch) {
     setDay,
     setPractitioner,
     setService,
+    createPatient,
   }, dispatch);
 }
 

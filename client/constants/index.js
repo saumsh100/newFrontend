@@ -41,3 +41,4 @@ export const SIX_DAYS_SHIFT = 'SIX_DAYS_SHIFT';
 export const SET_DAY = 'SET_DAY';
 export const SET_PRACTITIONER = 'SET_PRACTITIONER';
 export const SET_SERVICE = 'SET_SERVICE';
+export const CREATE_PATIENT = 'CREATE_PATIENT';

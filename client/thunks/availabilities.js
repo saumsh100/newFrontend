@@ -1,8 +1,10 @@
+import axios from './axios';
 import {
 	sixDaysShiftAction,
 	setDayAction,
 	setPractitionerAction,
 	setServiceAction,
+	createPatientAction,
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
@@ -28,3 +30,14 @@ export function setService(serviceId) {
 		dispatch(setServiceAction({ serviceId }));
 	}	
 }
+
+export function createPatient(params) {
+	return function (dispatch, getState) {
+    axios.post('api/patients', params)
+      .then(() => {
+        dispatch(createPatientAction(params));
+      })
+      .catch(err => console.log(err));
+	}	
+}
+
