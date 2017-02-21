@@ -39,8 +39,7 @@ export function createPatient(params) {
 		email,
 		phone,
 
-    startTime,
-    endTime,
+    startsAt,
     patientId,
     serviceId,
     practitionerId,
@@ -54,8 +53,7 @@ export function createPatient(params) {
         const saveParams = { 
         	isConfirmed: false,
     			isCancelled: false,
-			    startTime,
-			    endTime,
+			    startTime: startsAt,
 			    patientId,
 			    serviceId,
 			    practitionerId,

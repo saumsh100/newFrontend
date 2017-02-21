@@ -218,6 +218,13 @@ body {
     &_active {
       background-color: #ff715a !important;
     }
+
+    &_selected {
+      color: green;
+      border: 1px solid black;
+    }
+
+
     &_item {
       width: 100%;
       box-sizing: border-box;

@@ -117,6 +117,7 @@ class Availabilities extends React.Component {
   }
 
   renderFirstStep({ practitionerId, services, availabilities, practitioners, defaultValues }) {
+    const { startsAt } = this.props.practitonersStartEndDate;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -200,7 +201,7 @@ class Availabilities extends React.Component {
                         </div>
                         {av.availabilities.map(slot =>
                           <li onClick={() => { this.selectAvailability(slot) }}
-                            className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''}`}
+                            className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected : '' }`}
                             key={slot.startsAt}>
                             {moment(slot.startsAt).format('HH:mm A')}
                           </li>)

@@ -36,7 +36,9 @@ class SignUp extends Component {
   }
 
   bookAnAppointment(params) {
-    this.props.createPatient(params);
+    const { startsAt, practitionerId, serviceId } = this.props.practitonersStartEndDate.toJS();
+    const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId }, params);
+    this.props.createPatient(paramsToPass);
 
   }
 

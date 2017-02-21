@@ -60,6 +60,7 @@ class Availability extends React.Component {
     
     let prevPractitionerId = practitonersStartEndDatetoJS.practitionerId;
     let nextPractitionerId = nextpractitonersStartEndDatetoJS.practitionerId;
+
     let newService = null;
     if (nextFormPractitionerId && prevFormPractitionerId ) {
       prevPractitionerId = prevFormPractitionerId;
@@ -136,6 +137,13 @@ class Availability extends React.Component {
         )[0];
 
       const newServiceId = newService && newService.id;
+
+      let nextServiceId = nextpractitonersStartEndDatetoJS.serviceId;
+
+      debugger;
+      if (!nextServiceId && nextServices && nextServices.length) {
+        setService({ serviceId: newServiceId });
+      }
 
       this.setState({ serviceId: newServiceId })
         params = {
