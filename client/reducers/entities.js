@@ -42,7 +42,7 @@ const initialState = Map({
   textMessages: new textMessages(),
   appointments: new appointments(),
   requests: new requests(),
-  service: new services(),
+  services: new services(),
   practitioners: new practitioners(),
   availabilities: new availabilities(),
   dialogs: new dialogs(),

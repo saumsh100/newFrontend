@@ -8,6 +8,7 @@ body {
   background: #4b555f !important;
 }
 .appointment {
+  height: 530px;
   padding: 20px;
   &__wrapper {
     display: flex;
@@ -52,6 +53,19 @@ body {
     &_header {
       margin-bottom: 30px;
       text-align: center;
+    }
+    &_input {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #dddcdc;
+      padding: 0 5px;
+      &:not(:last-child) {
+        margin-bottom: 35px;
+      }
+      &:focus {
+        outline: none;
+      }
     }
   }
   &__daypicker {
@@ -252,6 +266,60 @@ body {
       border: none;
       background: #f3715c;
       position: relative;
+    }
+    &_pagination {
+      margin: 10px 0 0;
+      ul {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        flex-direction: row;
+
+        justify-content: center;
+        align-items: center;
+      }
+      li {
+        position: relative;
+        display: flex;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        background: #f3715c;
+        border-radius: 50%;
+
+        justify-content: center;
+        align-items: center;
+        div {
+          z-index: 1;
+        }
+        &:first-child {
+          margin-right: 10px;
+          color: white;
+          &::before {
+            position: absolute;
+            left: 18px;
+            width: 11px;
+            height: 2px;
+            content: '';
+            background: #f3715c;
+          }
+        }
+        &:last-child {
+          margin-left: 10px;
+          color: #f3715c;
+          background: white;
+          border: 2px solid;
+          &::before {
+            position: absolute;
+            right: 18px;
+            width: 11px;
+            height: 2px;
+            content: '';
+            background: #f3715c;
+          }
+        }
+      }
     }
   }
 }

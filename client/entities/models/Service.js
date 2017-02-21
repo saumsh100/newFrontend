@@ -9,7 +9,7 @@ const ServicesSchema = {
   bufferTime: null,
   unitCost: null,
   customCosts: null,
-  allowedPractitioners: null,
+  practitioners: null,
 };
 
 export default class Services extends createModel(ServicesSchema) {
