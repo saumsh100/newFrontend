@@ -45,46 +45,48 @@ class SignUp extends Component {
                 You brooked
               </div>
             </div>
-            <div className={styles.sidebar__body}>
-              <div className={styles.sidebar__body_service}>
-                <ul>
-                  <li>SERVICE: <span>Toothache</span></li>
-                  <li>WITH: <span>Dr. Chelsea</span></li>
-                  <li>AT: <span>Feb 13 2017</span></li>
-                </ul>
-              </div>
-              <div className={styles.sidebar__body_address}>
-                <div className={styles.sidebar__address}>
-                  <div className={styles.sidebar__address_title}>
-                    PACIFIC HEART DENTAL
-                  </div>
-                  <div className={styles.sidebar__address_text}>
-                    194-105 East 3rd
-                    7 ave
-                    Vancouver, BC
-                    Canda V1B 2C3
+            <div className={styles.sidebar__main}>
+              <div className={styles.sidebar__body}>
+                <div className={styles.sidebar__body_service}>
+                  <ul>
+                    <li>SERVICE: <span>Toothache</span></li>
+                    <li>WITH: <span>Dr. Chelsea</span></li>
+                    <li>AT: <span>Feb 13 2017</span></li>
+                  </ul>
+                </div>
+                <div className={styles.sidebar__body_address}>
+                  <div className={styles.sidebar__address}>
+                    <div className={styles.sidebar__address_title}>
+                      PACIFIC HEART DENTAL
+                    </div>
+                    <div className={styles.sidebar__address_text}>
+                      194-105 East 3rd
+                      7 ave
+                      Vancouver, BC
+                      Canda V1B 2C3
+                    </div>
                   </div>
                 </div>
+                <div className={styles.sidebar__body_map}>
+                </div>
               </div>
-              <div className={styles.sidebar__body_map}>
-              </div>
-              <button className={styles.sidebar__body_btn}>GO BACK</button>
-            </div>
-            <div className={styles.sidebar__footer}>
-              <div className={styles.sidebar__footer_additional}>
-                <div className={styles.sidebar__footer_title}>ADDITIONAL INFO</div>
-                <ul className={styles.sidebar__footer_list}>
-                  <li>This clinic accpets all major
-                    insuranc
-                  </li>
-                  <li>Approximate appointment
-                    length is 120 min
-                  </li>
-                </ul>
-              </div>
-              <div className={styles.sidebar__footer_copy}>
-                <span>POWERED BY:</span>
-                <img src="/images/carecru_logo.png" alt="logo" />
+              <div className={styles.sidebar__footer}>
+                <button className={styles.sidebar__footer_btn}>GO BACK</button>
+                <div className={styles.sidebar__footer_additional}>
+                  <div className={styles.sidebar__footer_title}>ADDITIONAL INFO</div>
+                  <ul className={styles.sidebar__footer_list}>
+                    <li>This clinic accpets all major
+                      insuranc
+                    </li>
+                    <li>Approximate appointment
+                      length is 120 min
+                    </li>
+                  </ul>
+                </div>
+                <div className={styles.sidebar__footer_copy}>
+                  <span>POWERED BY:</span>
+                  <img src="/images/carecru_logo.png" alt="logo" />
+                </div>
               </div>
             </div>
           </div>
@@ -99,7 +101,7 @@ class SignUp extends Component {
               />
             </div>
             <div className={styles.signup__body}>
-              
+
               <Form form="availabilitiesRequest" className={styles.signup__body_confirm}>
                 <Field
                   name="firstname"
@@ -122,7 +124,7 @@ class SignUp extends Component {
                 <Field
                   className={styles.signup__body_input}
                   placeholder="Email *"
-                  name="email"                  
+                  name="email"
                   min
                 />
 
@@ -130,12 +132,13 @@ class SignUp extends Component {
                   className={styles.signup__body_input}
                   placeholder="Password *"
                   name="password"
-                  min           
+                  min
                 />
                 <Field
                   className={styles.signup__body_input}
                   placeholder="Confirm Password *"
-                  name="confirmPassword"              
+                  name="confirmPassword"
+                  min
                 />
               </Form>
             </div>

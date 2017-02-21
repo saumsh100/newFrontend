@@ -143,8 +143,7 @@ class Availability extends React.Component {
         shouldAvailabilitiesBeUpdated = true; 
     }
 
-    debugger;
-    if (shouldAvailabilitiesBeUpdated) {      
+    if (shouldAvailabilitiesBeUpdated) {
       this.props.fetchEntities({ key: 'availabilities',
         params,
       });    

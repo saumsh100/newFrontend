@@ -5,7 +5,7 @@ import includes from 'lodash/includes';
 import DayPicker, {DateUtils} from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import SignUp from './SignUp'
-import { Button, Form, Field } from '../library';
+import {Button, Form, Field} from '../library';
 
 
 class Availabilities extends React.Component {
@@ -108,11 +108,53 @@ class Availabilities extends React.Component {
     console.log('Click handled')
   }
 
-  renderFirstStep({ practitionerId, services, availabilities, practitioners, defaultValues }) {
+  renderFirstStep({practitionerId, services, availabilities, practitioners, defaultValues}) {
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
           <div className={styles.appointment__sidebar}>
+            <div className={styles.sidebar__header}>
+              <img className={styles.sidebar__header_logo} src="images/availabilies_sidebar_logo_2.png" alt="logo"/>
+              <div className={styles.sidebar__header_title}>
+                Pacific Heart
+                <span>Dental</span>
+              </div>
+            </div>
+            <div className={styles.sidebar__body}>
+              <div className={styles.sidebar__body_practitioner}>
+                <img className={styles.practitioner__img} src="images/practitioner_1.png" alt="doctor">
+                </img>
+                <div className={styles.practitioner__name}>
+                  Dr. Chelsea
+                </div>
+                <div className={styles.practitioner__descr}>
+                  <span>Dr. Chelsea</span>
+                  lorem Ipsum is
+                  simply dummy text of the
+                  printing and typesetting
+                  industry. Lorem
+                </div>
+              </div>
+              <div className={styles.sidebar__body_map}>
+              </div>
+            </div>
+            <div className={styles.sidebar__footer}>
+              <div className={styles.sidebar__footer_additional}>
+                <div className={styles.sidebar__footer_title}>ADDITIONAL INFO</div>
+                <ul className={styles.sidebar__footer_list}>
+                  <li>This clinic accpets all major
+                    insuranc
+                  </li>
+                  <li>Approximate appointment
+                    length is 120 min
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.sidebar__footer_copy}>
+                <span>POWERED BY:</span>
+                <img src="/images/carecru_logo.png" alt="logo"/>
+              </div>
+            </div>
           </div>
           <div className={styles.appointment__main}>
             <div className={styles.appointment__header}>
@@ -123,36 +165,34 @@ class Availabilities extends React.Component {
             <div className={styles.appointment__body}>
               <div className={styles.appointment__body_header}>
                 <div className={styles.appointment__select_title}>Practitioner</div>
-                <div className={styles.appointment__select_wrapper}>
-                  {defaultValues && defaultValues.practitionerId && 
-                    <Form form="availabilities" initialValues={defaultValues}>
-                      <Field
-                        component="Select"
-                        name="practitionerId"
-                        label="Select Practitioner"
-                        min
-                        className={styles.appointment__select_item}
-                      >
-                        {practitioners.map(p =>
-                          <option value={p.id} key={p.id}>{p.getFullName()}</option>
-                        )}
-                      </Field>
+                  {defaultValues && defaultValues.practitionerId &&
+                  <Form className={styles.appointment__select_wrapper} form="availabilities" initialValues={defaultValues}>
+                    <Field
+                      component="Select"
+                      name="practitionerId"
+                      label="Select Practitioner"
+                      min
+                      className={styles.appointment__select_item}
+                    >
+                      {practitioners.map(p =>
+                        <option value={p.id} key={p.id}>{p.getFullName()}</option>
+                      )}
+                    </Field>
 
-                      <Field
-                        component="Select"
-                        className={styles.appointment__select_item}
-                        name="serviceId"
-                        label="Select Service"
-                        min
-                      >
-                        {services.filter(s =>
-                          includes(s.allowedPractitioners, practitionerId)
-                        ).map(s =>
-                          <option value={s.id} key={s.id}>{s.name}</option>
-                        )}
-                      </Field>
+                    <Field
+                      component="Select"
+                      className={styles.appointment__select_item}
+                      name="serviceId"
+                      label="Select Service"
+                      min
+                    >
+                      {services.filter(s =>
+                        includes(s.allowedPractitioners, practitionerId)
+                      ).map(s =>
+                        <option value={s.id} key={s.id}>{s.name}</option>
+                      )}
+                    </Field>
                   </Form>}
-                </div>
                 <div className={styles.appointment__daypicker}>
                   <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
                   <div onClick={this.openModal}
@@ -245,9 +285,9 @@ class Availabilities extends React.Component {
     } = this.props;
 
     const serviceId = services[0] && services[0].id;
-    const prId =  practitioners[0] && practitioners.id;
-    const defaultValues = { practitionerId, serviceId };
-    const params = { practitionerId, services, availabilities, practitioners, defaultValues }
+    const prId = practitioners[0] && practitioners.id;
+    const defaultValues = {practitionerId, serviceId};
+    const params = {practitionerId, services, availabilities, practitioners, defaultValues}
     switch (this.state.step) {
       case 1:
         return this.renderFirstStep(params)
