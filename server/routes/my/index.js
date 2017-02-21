@@ -33,6 +33,6 @@ myRouter.get('/widgets/:accountId', (req, res, next) => {
   });
 });
 
-myRouter.use(apiRouter);
+myRouter.use('/api', apiRouter);
 
 module.exports = myRouter;
