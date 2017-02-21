@@ -27,12 +27,14 @@ import Field from './Field';
 function Form(props) {
   const {
     children,
+    className,
     handleSubmit,
   } = props;
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className={className}
+            onSubmit={handleSubmit}>
         {children}
       </form>
     </div>
