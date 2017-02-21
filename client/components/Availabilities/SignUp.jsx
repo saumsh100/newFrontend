@@ -37,6 +37,7 @@ class SignUp extends Component {
 
   bookAnAppointment(params) {
     this.props.createPatient(params);
+
   }
 
   renderBookingForm() {

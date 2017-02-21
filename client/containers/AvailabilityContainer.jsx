@@ -13,6 +13,7 @@ import {
   setPractitioner,
   setService,
   createPatient,
+  setStartingAppointmentTime,
 } from  '../thunks/availabilities';
 
 class Availability extends React.Component {
@@ -34,7 +35,7 @@ class Availability extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    const { setPractitioner } = this.props;
+    const { setPractitioner, setService } = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
     const nextPractitioners = nextProps.practitioners.get('models').toArray();
     
@@ -45,6 +46,13 @@ class Availability extends React.Component {
     
     const prevFormPractitionerId = oldAvailabilitiesForm && oldAvailabilitiesForm.values &&
     oldAvailabilitiesForm.values.practitionerId;
+
+    const prevFormServiceId = oldAvailabilitiesForm && oldAvailabilitiesForm.values &&
+    oldAvailabilitiesForm.values.serviceId
+
+    const nextFormServiceId = availabilitiesForm && availabilitiesForm.values &&
+    availabilitiesForm.values.serviceId;
+
 
     const { practitonersStartEndDate } = nextProps;
     const practitonersStartEndDatetoJS = this.props.practitonersStartEndDate.toJS() 
@@ -61,6 +69,13 @@ class Availability extends React.Component {
         setPractitioner({ practitionerId: nextPractitionerId });
       }
 
+    }
+
+    if (prevFormServiceId && nextFormServiceId ) {
+      if (prevFormServiceId !== nextFormServiceId) {
+        console.log("called!!!")
+        setService({ serviceId: nextFormServiceId })
+      }
     }
 
     let shouldAvailabilitiesBeUpdated = false;
@@ -85,7 +100,7 @@ class Availability extends React.Component {
     if (!selectedDays) {
         params = {
           practitionerId: nextPractitionerId,
-          serviceId: this.state.serviceId,
+          serviceId: nextFormServiceId || this.state.serviceId,
           startDate: this.state.selectedStartDay,
           endDate: this.state.selectedEndDay,
         };
@@ -97,7 +112,7 @@ class Availability extends React.Component {
       if (thisselectedEndDay !== selectedEndDay || nextPractitionerId !== prevPractitionerId ) {
         params = {
           practitionerId: nextPractitionerId,
-          serviceId: this.state.serviceId,
+          serviceId: nextFormServiceId || this.state.serviceId,
           startDate: selectedStartDay,
           endDate: selectedEndDay,
         };
@@ -171,9 +186,13 @@ class Availability extends React.Component {
     
     // const practitionerId = practitonersStartEndDate.toJS().practitionerId;
 
-    const practitionerId =  (availabilitiesForm
-    && availabilitiesForm.values && availabilitiesForm.values.practitionerId)
+    const availabilitiesFormValues = availabilitiesForm
+    && availabilitiesForm.values 
+
+    const practitionerId =  (availabilitiesFormValues && availabilitiesFormValues.practitionerId)
     || practitonersStartEndDate.toJS().practitionerId
+
+    const serviceId = availabilitiesFormValues && availabilitiesFormValues.serviceId;
 
 
     const prStardEndDate = practitonersStartEndDate.toJS()[practitionerId]; 
@@ -203,14 +222,20 @@ class Availability extends React.Component {
       .filter(a =>
         moment(a.date).isBetween(selectedStartDay, selectedEndDay, 'days', true)
       );
-    return { filteredByDoctor, practitionerId };
+    return { filteredByDoctor, practitionerId, serviceId };
   }
 
 
 
 
   render() {
-    const { filteredByDoctor, practitionerId } = this.getAppointmentsSorted()
+    const {
+      filteredByDoctor,
+      practitionerId,
+      serviceId,
+    } = this.getAppointmentsSorted()
+
+    const { setStartingAppointmentTime } = this.props;
 
     return (
       <Availabilities
@@ -224,6 +249,8 @@ class Availability extends React.Component {
         setService={this.props.setService}
         practitonersStartEndDate={this.props.practitonersStartEndDate}
         createPatient={this.props.createPatient}
+        serviceId={serviceId}
+        setStartingAppointmentTime={setStartingAppointmentTime}
       />
     );
   }
@@ -247,6 +274,7 @@ function mapDispatchToProps(dispatch) {
     setPractitioner,
     setService,
     createPatient,
+    setStartingAppointmentTime,
   }, dispatch);
 }
 

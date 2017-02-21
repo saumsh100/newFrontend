@@ -25,8 +25,9 @@ class Availabilities extends React.Component {
     this.handleDayClick = this.handleDayClick.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.isDaySelected = this.isDaySelected.bind(this)
-    this.saveAndContinue = this.saveAndContinue.bind(this)
+    this.isDaySelected = this.isDaySelected.bind(this);
+    this.saveAndContinue = this.saveAndContinue.bind(this);
+    this.selectAvailability = this.selectAvailability.bind(this);
   }
 
 
@@ -88,6 +89,13 @@ class Availabilities extends React.Component {
       retrievedFirstTime: false,
     });
 
+  }
+
+  selectAvailability(slot) {
+    if (!slot.isBusy) {
+      const { startsAt } = slot
+      this.props.setStartingAppointmentTime(startsAt);
+    }
   }
 
   isDaySelected(day) {
@@ -191,7 +199,7 @@ class Availabilities extends React.Component {
                           </div>
                         </div>
                         {av.availabilities.map(slot =>
-                          <li
+                          <li onClick={() => { this.selectAvailability(slot) }}
                             className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''}`}
                             key={slot.startsAt}>
                             {moment(slot.startsAt).format('HH:mm A')}
@@ -246,10 +254,11 @@ class Availabilities extends React.Component {
       practitonersStartEndDate,
     } = this.props;
 
-    const serviceId = services[0] && services[0].id;
+    let serviceId = this.props.serviceId || services[0] && services[0].id;
     const prId =  practitioners[0] && practitioners.id;
     const defaultValues = { practitionerId, serviceId };
     const params = { practitionerId, services, availabilities, practitioners, defaultValues }
+
     switch (this.state.step) {
       case 1:
         return this.renderFirstStep(params)
