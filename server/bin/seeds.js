@@ -234,7 +234,7 @@ const SEEDS = {
       chairId,
       isConfirmed: false,
       isCancelled: false,
-      comment: 'Some comment from patient here....',
+      note: 'Some note from patient here....',
     },
     {
       accountId,
@@ -246,7 +246,7 @@ const SEEDS = {
       chairId,
       isConfirmed: false,
       isCancelled: false,
-      comment: 'Some comment from patient here....',
+      note: 'testing note 2....',
     },
   ],
 

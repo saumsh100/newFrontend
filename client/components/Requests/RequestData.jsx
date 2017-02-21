@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import styles from './styles.scss';
 
-export default function RequestData({time, nameAge, phoneNumber, service }) {
+export default function RequestData({ time, nameAge, phoneNumber, service }){
 
   return (
     <div className={styles.requestData}>

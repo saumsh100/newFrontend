@@ -12,7 +12,7 @@ const RequestsSchema = {
   serviceId: null,
   practitionerId: null,
   chairId: null,
-  comment: null,
+  note: null,
   isCancelled: null,
 };
 
@@ -20,6 +20,9 @@ export default class Requests extends createModel(RequestsSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
+  getUrlRoot() {
+    return `/api/requests/${this.get('id')}`;
+  }
 
   getAge(patientBirthday){
     let currentYear =  new Date().getFullYear();
