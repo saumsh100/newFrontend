@@ -10,7 +10,8 @@ function createModel(tableName, schema) {
     enforce_extra: 'remove',
   });
 
-  // TODO: add Model helper functions
+  // TODO: add Model helper functionss
+  // Model.fetch({  })
 
   return Model;
 }
