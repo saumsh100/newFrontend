@@ -243,6 +243,7 @@ class Availabilities extends React.Component {
       availabilities,
       practitionerId,
       createPatient,
+      practitonersStartEndDate,
     } = this.props;
 
     const serviceId = services[0] && services[0].id;
@@ -253,7 +254,7 @@ class Availabilities extends React.Component {
       case 1:
         return this.renderFirstStep(params)
       case 2:
-        return <SignUp createPatient={createPatient} />
+        return <SignUp createPatient={createPatient} practitonersStartEndDate={practitonersStartEndDate} />
     }
   }
 }

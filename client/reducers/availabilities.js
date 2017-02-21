@@ -5,11 +5,13 @@ import {
   SET_DAY,
   SET_PRACTITIONER,
   SET_SERVICE,
+  CREATE_PATIENT,
 } from '../constants';
 
 const initialState = fromJS({
   practitionerId: null,
   serviceId: null,
+  messages: [],
 });
 
 export default handleActions({
@@ -38,4 +40,12 @@ export default handleActions({
       serviceId: action.payload.serviceId,
     })
   },
+
+  [CREATE_PATIENT](state, action) {
+    const { firstName, lastName } = action.payload;
+    return state.merge({
+      messages: [`Patient ${firstName} ${lastName} has been registered`]
+    })
+  }
+
 }, initialState);
