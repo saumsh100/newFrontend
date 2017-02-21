@@ -1,8 +1,8 @@
 
 import React, { PropTypes } from 'react';
 import { Router, Route, IndexRoute, IndexRedirect } from 'react-router';
-import App from './containers/App';
-import FourZeroFour from './components/FourZeroFour';
+import DashboardApp from '../containers/DashboardApp';
+import FourZeroFour from '../components/FourZeroFour';
 
 let counter = 0;
 
@@ -17,44 +17,44 @@ export default function Routes({ history }) {
       key={counter}
       onError={onError}
     >
-      <Route path="/" component={App}>
+      <Route path="/" component={DashboardApp}>
         <IndexRedirect to="/schedule" />
         <Route
           path="login"
           getComponent={(location, callback) => {
-            require.ensure(['./components/Login'], (require) => {
-              callback(null, require('./components/Login').default);
+            require.ensure(['../components/Login'], (require) => {
+              callback(null, require('../components/Login/index').default);
             });
           }}
         />
         <IndexRoute
           getComponent={(location, callback) => {
-            require.ensure(['./components/Dashboard'], (require) => {
-              callback(null, require('./components/Dashboard').default);
+            require.ensure(['../components/Dashboard'], (require) => {
+              callback(null, require('../components/Dashboard/index').default);
             });
           }}
         />
         <Route
           path="intelligence"
           getComponent={(location, callback) => {
-            require.ensure(['./containers/IntelligenceContainer'], (require) => {
-              callback(null, require('./containers/IntelligenceContainer').default);
+            require.ensure(['../containers/IntelligenceContainer'], (require) => {
+              callback(null, require('../containers/IntelligenceContainer').default);
             });
           }}
         />
         <Route
           path="availabilities"
           getComponent={(location, callback) => {
-            require.ensure(['./containers/AvailabilityContainer'], (require) => {
-              callback(null, require('./containers/AvailabilityContainer').default);
+            require.ensure(['../containers/AvailabilityContainer'], (require) => {
+              callback(null, require('../containers/AvailabilityContainer').default);
             });
           }}
         />
         <Route
           path="schedule"
           getComponent={(location, callback) => {
-            require.ensure(['./containers/ScheduleContainer'], (require) => {
-              callback(null, require('./containers/ScheduleContainer').default);
+            require.ensure(['../containers/ScheduleContainer'], (require) => {
+              callback(null, require('../containers/ScheduleContainer').default);
             });
           }}
         >
@@ -62,8 +62,8 @@ export default function Routes({ history }) {
           <Route
             path="calendar"
             getComponent={(location, callback) => {
-              require.ensure(['./components/Schedule/DayView'], (require) => {
-                callback(null, require('./components/Schedule/DayView').default);
+              require.ensure(['../components/Schedule/DayView'], (require) => {
+                callback(null, require('../components/Schedule/DayView/index').default);
               });
             }}
           />
@@ -79,8 +79,8 @@ export default function Routes({ history }) {
         <Route
           path="patients"
           getComponent={(location, callback) => {
-            require.ensure(['./containers/PatientsContainer'], (require) => {
-              callback(null, require('./containers/PatientsContainer').default);
+            require.ensure(['../containers/PatientsContainer'], (require) => {
+              callback(null, require('../containers/PatientsContainer').default);
             });
           }}
         >
@@ -88,16 +88,16 @@ export default function Routes({ history }) {
           <Route
             path="list"
             getComponent={(location, callback) => {
-              require.ensure(['./containers/PatientsListContainer'], (require) => {
-                callback(null, require('./containers/PatientsListContainer').default);
+              require.ensure(['../containers/PatientsListContainer'], (require) => {
+                callback(null, require('../containers/PatientsListContainer').default);
               });
             }}
           />
           <Route
             path="messages"
             getComponent={(location, callback) => {
-              require.ensure(['./containers/PatientsMessagesContainer'], (require) => {
-                callback(null, require('./containers/PatientsMessagesContainer').default);
+              require.ensure(['../containers/PatientsMessagesContainer'], (require) => {
+                callback(null, require('../containers/PatientsMessagesContainer').default);
               });
             }}
           />
@@ -161,24 +161,24 @@ export default function Routes({ history }) {
         <Route
           path="settings"
           getComponent={(location, callback) => {
-            require.ensure(['./containers/AccountContainer'], (require) => {
-              callback(null, require('./containers/AccountContainer').default);
+            require.ensure(['../containers/AccountContainer'], (require) => {
+              callback(null, require('../containers/AccountContainer').default);
             });
           }}
         />
         <Route
           path="profile"
           getComponent={(location, callback) => {
-            require.ensure(['./components/Profile'], (require) => {
-              callback(null, require('./components/Profile').default);
+            require.ensure(['../components/Profile'], (require) => {
+              callback(null, require('../components/Profile/index').default);
             });
           }}
         />
         <Route
           path="dayview"
           getComponent={(location, callback) => {
-            require.ensure(['./components/Schedule/DayView'], (require) => {
-              callback(null, require('./components/Schedule/DayView').default);
+            require.ensure(['../components/Schedule/DayView'], (require) => {
+              callback(null, require('../components/Schedule/DayView/index').default);
             });
           }}
         />
