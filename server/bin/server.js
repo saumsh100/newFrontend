@@ -88,7 +88,6 @@ io.on('connection', (socket) => {
       if (error) {
         throw new Error('Feed error');
       }
-
       if (doc.isSaved() === false) {
         throw new Error('Deleting TextMessages is not implemented!');
       } else if (doc.getOldValue() == null) {
@@ -100,6 +99,20 @@ io.on('connection', (socket) => {
       }
     });
   });
+
+  /**
+   * Listen to changes on the Requests table
+   */
+  Request.changes().then((feed) => {
+    feed.each((error, doc) => {
+      if (error) throw new Error('Feed error');
+      if (doc.getOldValue() === null) {
+        console.log('feed received new request');
+        socket.emit('addRequest', doc);
+      }
+    });
+  });
+
 });
 
 server.listen(globals.port, () => {

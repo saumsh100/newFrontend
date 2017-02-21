@@ -1,8 +1,9 @@
 
 const bcrypt = require('bcrypt');
-const seedDatabase = require('../util/seedDatabase');
 const uuid = require('uuid').v4;
 const moment = require('moment');
+const { r } = require('../config/thinky');
+const seedDatabase = require('../util/seedDatabase');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
@@ -19,6 +20,8 @@ const saltRounds = 10;
  *
  */
 
+const oneHour = 1 * 60 * 60;
+const recentStartTime = r.now().add(oneHour);
 
 const accountId = uuid();
 const accountId2 = uuid();
@@ -120,63 +123,59 @@ const SEEDS = {
     {
       id: appointmentId1,
       accountId,
-      startTime: new Date(2017, 0, 26, 10, 30, 0, 0),
-      endTime: new Date(2017, 0, 26, 11, 30, 0, 0),
+      startTime: recentStartTime,
+      endTime: recentStartTime.add(oneHour),
       patientId: alexPatientId,
       serviceId: serviceId2,
       practitionerId,
       chairId,
+      note: 'First',
     },
     {
       accountId,
-      startTime: new Date(2017, 0, 26, 12, 30, 0, 0),
-      endTime: new Date(2017, 0, 26, 13, 30, 0, 0),
+      startTime: recentStartTime.add(oneHour),
+      endTime: recentStartTime.add(2 * oneHour),
       patientId: alexPatientId,
       serviceId,
       practitionerId,
       chairId,
+      note: 'Second',
     },
     {
       accountId,
-      startTime: new Date(2017, 1, 28, 12, 30, 0, 0),
-      endTime: new Date(2017, 1, 28, 12, 30, 0, 0),
-      patientId: alexPatientId,
+      startTime: recentStartTime.add(23 * oneHour),
+      endTime: recentStartTime.add(24 * oneHour),
+      patientId: justinPatientId,
       serviceId,
       practitionerId,
       chairId,
+      note: 'Third',
     },
     {
       accountId,
-      startTime: new Date(2017, 2, 28, 12, 30, 0, 0),
-      endTime: new Date(2017, 2, 28, 12, 30, 0, 0),
-      patientId: alexPatientId,
+      startTime: recentStartTime.add(48 * oneHour),
+      endTime: recentStartTime.add(49 * oneHour),
+      patientId: markPatientId,
       serviceId,
       practitionerId,
       chairId,
-    },
-    {
-      accountId,
-      startTime: new Date(2017, 2, 29, 12, 30, 0, 0),
-      endTime: new Date(2017, 2, 29, 12, 30, 0, 0),
-      patientId: alexPatientId,
-      serviceId,
-      practitionerId,
-      chairId,
+      note: 'Fourth',
     },
     {
       id: appointmentId2,
       accountId,
-      startTime: new Date(2017, 3, 29, 12, 30, 0, 0),
-      endTime: new Date(2017, 3, 29, 12, 30, 0, 0),
+      startTime: recentStartTime.add(49 * oneHour),
+      endTime: recentStartTime.add(50 * oneHour),
       patientId: alexPatientId,
       serviceId,
       practitionerId,
       chairId,
+      note: 'Fifth',
     },
     {
       accountId,
-      startTime: new Date(2016, 2, 29, 14, 30, 0, 0),
-      endTime: new Date(2016, 2, 29, 16, 30, 0, 0),
+      startTime: recentStartTime.add(72 * oneHour),
+      endTime: recentStartTime.add(73 * oneHour),
       patientId: justinPatientId,
       practitionerId: practitionerId2,
       serviceId,
@@ -184,6 +183,19 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+      note: 'Sixth',
+    },
+
+    // OTHER DATES
+
+    {
+      accountId,
+      startTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      endTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      patientId: sergeyPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
     },
     {
       accountId,
@@ -228,12 +240,13 @@ const SEEDS = {
       accountId,
       startTime: moment({hour: 23, minute: 10})._d,
       endTime: moment({hour: 23, minute: 50})._d,
-
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
       chairId,
       isConfirmed: false,
+      isCancelled: false,
+      comment: 'Some comment from patient here....',
     },
     {
       accountId,
@@ -244,7 +257,9 @@ const SEEDS = {
       practitionerId: practitionerId2,
       chairId,
       isConfirmed: false,
-    }
+      isCancelled: false,
+      comment: 'Some comment from patient here....',
+    },
   ],
 
   User: [
@@ -276,13 +291,14 @@ const SEEDS = {
       accountId,
       firstName: 'Justin',
       lastName: 'Sharp',
+      email: 'justin@carecru.com',
       phoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
       status: 'Active',
       insurance: {
-        insurance: 'insurance',
+        insurance: 'GMC Health Insurance',
         memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
         contract: '4234rerwefsdfsd',
         carrier: 'sadasadsadsads',
@@ -294,11 +310,19 @@ const SEEDS = {
       accountId,
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
+      email: 'sergey@carecru.com',
       phoneNumber: sergeyPhoneNumber,
       birthDate: moment({year: 1983, month: 2, day: 6})._d,
       gender: 'male',
       status: 'Active',
       language: 'English',
+      insurance: {
+        insurance: 'Lay Health Insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      },
     },
     {
       id: markPatientId,

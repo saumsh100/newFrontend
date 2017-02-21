@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import PatientListItem from './PatientListItem';
@@ -5,6 +6,11 @@ import PatientData from './PatientData';
 import { Button, Form, Field , Tabs, Tab } from '../../library';
 import styles from './main.scss';
 
+// TODO: separate this component into:
+// - PatientList
+// - PatientDisplay
+// - PatientEventLog
+// - PatientSettings
 
 class PatientList extends Component {
   constructor(props) {

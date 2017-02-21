@@ -9,7 +9,6 @@ const Patient = createModel('Patient', {
   firstName: type.string().required(),
   middleName: type.string(),
   lastName: type.string().required(),
-  birthDate: type.date(),
   phoneNumber: type.string(),
   mobileNumber: type.string(),
   email: type.string().email(),
@@ -20,6 +19,7 @@ const Patient = createModel('Patient', {
   prefContactPhone: type.string(),
   address: type.string(),
   type: type.string(),
+  birthDate: type.date(),
   insurance: type.object().allowNull(),
 
   // TODO: this needs to be modified to support priorities and a standard structure

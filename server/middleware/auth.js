@@ -12,26 +12,25 @@ const CRUD = {
 
 const OWNER = {
   accounts: CRUD,
+  appointments: CRUD,
   chairs: CRUD,
   chats: CRUD,
-  patients: CRUD,
-  appointments: CRUD,
-  practitioners: CRUD,
-  textMessages: Object.assign({}, CRUD, {
-    update: false,
-  }),
 
   listings: {
     read: true,
   },
 
+  patients: CRUD,
+  practitioners: CRUD,
+  requests: CRUD,
   reviews: {
     read: true,
   },
 
-  requests: {
-    read: true,
-  },
+  textMessages: Object.assign({}, CRUD, {
+    update: false,
+  }),
+
 };
 
 const ADMIN = Object.assign({}, OWNER, {

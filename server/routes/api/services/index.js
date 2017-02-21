@@ -2,9 +2,22 @@
 const servicesRouter = require('express').Router();
 const Service = require('../../../models/Service');
 const normalize = require('../normalize');
+const _ = require('lodash');
 
 servicesRouter.get('/', (req, res, next) => {
-  Service.getJoin({ practitioners: true })
+  if (req.query.practitionerId) {
+    return Service.run()
+      .then((services) => {
+        console.log(services);
+        const filteredByPractitionerId = services.filter(s =>
+          _.includes(s.practitioners, req.query.practitionerId)
+        );
+        console.log(normalize('services', filteredByPractitionerId));
+        res.send(normalize('services', filteredByPractitionerId));
+      });
+    // return;
+  }
+  Service.run()
     .then(services => res.send(normalize(services, arrayOf(servicesSchema))))
     .catch(next);
 });

@@ -73,7 +73,7 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
         return sequence
           .orderBy(r.desc('createdAt'))
           .skip(parseInt(skip))
-          .limit(Math.min(limit, 100));
+          .limit(Math.min(parseInt(limit), 100));
       },
     },
   };

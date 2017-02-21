@@ -1,38 +1,119 @@
-
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
-import { ListItem } from '../library';
+import { ListItem, IconButton, Icon } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
-import styles from './style.scss';
+import styles from './styles.scss';
+import AppointmentShowData from '../Appointment/AppointmentShowData';
+import withHoverable from '../../hocs/withHoverable';
 
-export default function RequestListItem({ request, patient, service }) {
-  const currentYear =  new Date().getFullYear();
-  const birthday = moment(patient.birthDate).year();
-  const age = currentYear - birthday;
+class RequestListItem extends Component {
 
-  // TODO: use moment.js to format full Date string
-  const startTime = moment(request.startTime);
-  const month = startTime.format('MMM');
-  const day = startTime.day();
+  constructor(props) {
+    super(props)
+    this.confirmAppointment = this.confirmAppointment.bind(this);
+    this.removeRequest = this.removeRequest.bind(this);
+  }
 
-  const startHourMinute = startTime.format('h:mm');
-  const endHourMinute = moment(request.endTime).format('h:mm');
-  const time = startHourMinute.concat('-', endHourMinute);
+  confirmAppointment() {
+    const { request, updateEntityRequest, createEntityRequest } = this.props;
+    const appointment = {
+      startTime: request.get('startTime'),
+      endTime: request.get('endTime'),
+      patientId: request.get('patientId'),
+      serviceId: request.get('serviceId'),
+      practitionerId: request.get('practitionerId'),
+      chairId: request.get('chairId'),
+      comment: request.comment,
+    };
 
-  const data = {
-    time: time,
-    nameAge: patient.firstName.concat(' ', patient.lastName, ', ', age),
-    service: service.name,
-    phoneNumber: patient.phoneNumber,
-  };
+    createEntityRequest({ key: 'appointments', entityData: appointment })
+      .then(() => {
+        const modifiedRequest = {
+          id: request.get('id'),
+          isCancelled: true,
+        };
+        updateEntityRequest({key: 'requests', update: modifiedRequest});
+      }).catch(err => console.log(err));
+  }
 
-  return (
-    <ListItem className={styles.requestListItem}>
-      <MonthDay month={month} day={day} />
-      <RequestData data={data} />
-    </ListItem>
-  );
+  removeRequest() {
+    const { request, deleteEntityRequest } = this.props;
+    deleteEntityRequest({ key: 'requests', id: request.get('id') });
+  }
+
+  render() {
+    const {
+      request,
+      patient,
+      service,
+      isHovered,
+    } = this.props;
+
+    const data = {
+      time: request.getFormattedTime(),
+      nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
+      email: patient.email,
+      service: service.name,
+      phoneNumber: patient.phoneNumber,
+      comment: request.comment,
+      month: request.getMonth(),
+      day: request.getDay(),
+    };
+
+    let showHoverComponents = null;
+    if (isHovered) {
+      showHoverComponents = (
+        <div>
+          <AppointmentShowData
+            nameAge={data.nameAge}
+            time={data.time}
+            service={data.service}
+            phoneNumber={data.phoneNumber}
+            email={data.email}
+            comment={data.comment}
+          />
+          <div className={styles.clickHandlers}>
+            <IconButton
+              icon={'times-circle-o'}
+              className={styles.clickHandlers__remove}
+              onClick={this.removeRequest}
+            />
+            <IconButton
+              icon={'check-circle'}
+              className={styles.clickHandlers__confirm}
+              onClick={this.confirmAppointment}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <ListItem className={styles.requestListItem}>
+        <div className={styles.iconCaret}>
+          { isHovered ? <Icon icon={'caret-right'} /> : <div>&nbsp;</div> }
+        </div>
+        <MonthDay isHovered = {isHovered} month={data.month} day={data.day} />
+        <RequestData
+          time={data.time}
+          nameAge={data.nameAge}
+          phoneNumber={data.phoneNumber}
+          service={data.service}
+        />
+        {showHoverComponents}
+      </ListItem>
+    );
+  }
 }
 
-RequestListItem.propTypes = {};
+RequestListItem.propTypes = {
+  patient: PropTypes.object.isRequired,
+  request: PropTypes.object.isRequired,
+  service: PropTypes.object.isRequired,
+  updateEntityRequest: PropTypes.func,
+  deleteEntityRequest: PropTypes.func,
+  createEntityRequest: PropTypes.func,
+  isHovered: PropTypes.bool,
+};
+
+export default withHoverable(RequestListItem);

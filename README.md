@@ -47,3 +47,13 @@ In a separate tab at the top of carecru repo
 `npm start`
 
 http://localhost:5000
+
+Subdomain Applications
+
+add the following to `/etc/hosts`
+
+```
+127.0.0.1           carecru.dev
+127.0.0.1        my.carecru.dev
+127.0.0.1       api.carecru.dev
+```

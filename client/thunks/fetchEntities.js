@@ -32,24 +32,23 @@ export function fetchEntities({ key, join, params = {} }) {
   };
 }
 
-export function fetchDelete({ key, id }) {
+export function deleteEntityRequest({ key, id }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
     axios.delete(`${entity.getUrlRoot()}/${id}`)
-      .then((response) => {
-        const { data } = response;
-        dispatch(deleteEntity({ key, entity: data.entities }));
+      .then(() => {
+        dispatch(deleteEntity({ key, id }));
       })
       .catch(err => console.log(err));
   };
 }
 
-export function fetchPost({ key, params }) {
+export function createEntityRequest({ key, entityData }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    axios.post(entity.getUrlRoot(), params)
+    return axios.post(entity.getUrlRoot(), entityData)
       .then((response) => {
         const { data } = response;
         dispatch(addEntity({ key, entity: data.entities }));
@@ -58,11 +57,11 @@ export function fetchPost({ key, params }) {
   };
 }
 
-export function fetchUpdate({ key, patient }) {
+export function updateEntityRequest({ key, update }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    axios.put(`${entity.getUrlRoot()}/${patient.id}`, patient)
+    axios.put(`${entity.getUrlRoot()}/${update.id}`, update)
       .then((response) => {
         const { data } = response;
         dispatch(updateEntity({ key, entity: data.entities }));

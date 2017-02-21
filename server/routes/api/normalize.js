@@ -40,6 +40,7 @@ const requestSchema = () => {
     patient: patientSchema(),
     service: serviceSchema(),
     practitioner: practitionerSchema(),
+    chair: chairSchema(),
   });
 };
 
@@ -69,6 +70,7 @@ const SCHEMAS = {
 
   // Collections (list/find)
   appointments: [appointmentSchema()],
+  practitioners: [practitionerSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
   patients: [patientSchema()],

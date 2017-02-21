@@ -2,29 +2,29 @@
 @import '../../ui.scss';
 
 .requestCard {
+  position: relative;
   border-top: $card-border-size #ffc45a;
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    width: 250px;
+    width: 300px;
   }
 }
 
 .requestList {
-  /*padding-top: 0.5em;
-  margin-top: 0px;
-  padding-bottom: 0;*/
+  max-height: 212px;
+  overflow-y: scroll;
 }
 
 .requestListItem {
-
 }
 
 .requestData{
   text-align: left;
-  font-size: x-small;
+  font-size: small;
+  width: 160px;
   &__time{
   }
   &__nameAge{
@@ -39,24 +39,33 @@
 }
 
 .monthDay {
-  text-align: center;
   border-right: 2px solid;
   border-right-color: #bfbfbf;
-  width: 10%;
   margin-right: 0.5em;
-  &__month{
-    font-size: x-small;
+  &__month {
+    font-size: 15px;
+    margin-right: 0.5em;
   }
-  &__day{
-    font-size: larger;
+  &__day {
+    font-size: 20px;
   }
 }
 
-.logoContainer {
-  text-align: center;
-  margin-bottom: 30px;
+.clickHandlers{
+  display: flex;
+  width: 30px;
+  padding-left: 10px;
+  &__confirm{
+    font-size: 15px;
+    color: #2cc4a7;
+  }
+  &__remove{
+    font-size: 15px;
+    color: #e4e4e4;
+  }
 }
 
-.loginLogo {
-  width: 100px;
+.iconCaret{
+  color:#ffc45a;
+  width: 10px;
 }
