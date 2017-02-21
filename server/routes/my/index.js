@@ -11,7 +11,20 @@ myRouter.get('/', (req, res, next) => {
 });
 
 myRouter.get('/widgets/:accountId', (req, res, next) => {
-  console.log('log');
+
+  /*Service.filter({ accountId })
+    .then(services => {
+      Practitioners.filter({ account })
+        .then( practionners => {
+          return res.render('widget', {
+            accountId: req.params.accountId,
+            services,
+            practiotin
+          });
+
+        })
+    })*/
+
   return res.render('widget', {
     accountId: req.params.accountId,
   });
