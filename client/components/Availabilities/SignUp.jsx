@@ -16,6 +16,7 @@ class SignUp extends Component {
     this.startTimer = this.startTimer.bind(this);
     this.getPercent = this.getPercent.bind(this);
     this.bookAnAppointment = this.bookAnAppointment.bind(this);
+    this.handleSaveClick = this.handleSaveClick.bind(this);
   }
 
   componentDidMount() {
@@ -39,9 +40,12 @@ class SignUp extends Component {
     const { startsAt, practitionerId, serviceId } = this.props.practitonersStartEndDate.toJS();
     const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId }, params);
     this.props.createPatient(paramsToPass);
-
   }
-
+  handleSaveClick(e) {
+    e.preventDefault();
+    const { setRegistrationStep } = this.props;
+    setRegistrationStep(1);
+  }
   renderBookingForm() {
     return (
       <Form form="availabilitiesRequest"
@@ -146,7 +150,7 @@ class SignUp extends Component {
                 </div>
               </div>
               <div className={styles.sidebar__footer}>
-                <button className={styles.sidebar__footer_btn}>GO BACK</button>
+                <button onClick={this.handleSaveClick} className={styles.sidebar__footer_btn}>GO BACK</button>
                 <div className={styles.sidebar__footer_additional}>
                   <div className={styles.sidebar__footer_title}>ADDITIONAL INFO</div>
                   <ul className={styles.sidebar__footer_list}>
@@ -176,7 +180,7 @@ class SignUp extends Component {
               />
             </div>
             <div className={styles.signup__body}>
-               {contnet}
+              {contnet}
             </div>
             <div className={styles.signup__footer}>
               <div className={styles.signup__footer_header}>

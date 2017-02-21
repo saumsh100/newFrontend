@@ -7,6 +7,7 @@ import {
   SET_SERVICE,
   CREATE_PATIENT,
   SET_STARTING_APPOINTMENT_TIME,
+  SET_REGISTRATION_STEP,
 } from '../constants';
 
 const initialState = fromJS({
@@ -14,6 +15,7 @@ const initialState = fromJS({
   serviceId: null,
   messages: [],
   startsAt: null,
+  registrationStep: 1,
 });
 
 export default handleActions({
@@ -51,10 +53,17 @@ export default handleActions({
   },
 
   [SET_STARTING_APPOINTMENT_TIME](state, action) {
-    const startsAt = action.payload
+    const startsAt = action.payload;
     return state.merge({
       startsAt: startsAt,
     }) 
-  }
+  },
+
+  [SET_REGISTRATION_STEP](state, action) {
+    const registrationStep = action.payload;
+    return state.merge({
+      registrationStep,
+    })
+  },
 
 }, initialState);

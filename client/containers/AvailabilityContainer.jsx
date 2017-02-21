@@ -13,6 +13,7 @@ import {
   setService,
   createPatient,
   setStartingAppointmentTime,
+  setRegistrationStep,
 } from  '../thunks/availabilities';
 
 class Availability extends React.Component {
@@ -139,7 +140,6 @@ class Availability extends React.Component {
 
       let nextServiceId = nextpractitonersStartEndDatetoJS.serviceId;
 
-      debugger;
       if (!nextServiceId && nextServices && nextServices.length) {
         setService({serviceId: newServiceId});
       }
@@ -258,6 +258,8 @@ class Availability extends React.Component {
         createPatient={this.props.createPatient}
         serviceId={serviceId}
         setStartingAppointmentTime={setStartingAppointmentTime}
+        registrationStep={this.props.practitonersStartEndDate}
+        setRegistrationStep={this.props.setRegistrationStep}
       />
     );
   }
@@ -282,6 +284,7 @@ function mapDispatchToProps(dispatch) {
     setService,
     createPatient,
     setStartingAppointmentTime,
+    setRegistrationStep,
   }, dispatch);
 }
 

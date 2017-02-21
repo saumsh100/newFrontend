@@ -6,6 +6,7 @@ import {
 	setServiceAction,
 	createPatientAction,
 	setStartingAppointmentTimeAction,
+  setRegistrationStepAction
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
@@ -78,4 +79,9 @@ export function saveRequest(params) {
       })
       .catch(err => console.log(err));
 	}
+}
+export function setRegistrationStep(registrationStep) {
+  return function (dispatch, getState) {
+			dispatch(setRegistrationStepAction(registrationStep));
+  }
 }

@@ -28,6 +28,7 @@ class Availabilities extends React.Component {
     this.isDaySelected = this.isDaySelected.bind(this);
     this.saveAndContinue = this.saveAndContinue.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
+    this.handleSaveClick = this.handleSaveClick.bind(this);
   }
 
 
@@ -113,9 +114,12 @@ class Availabilities extends React.Component {
   saveAndContinue(e) {
     e.preventDefault();
     this.setState({step: 2});
-    console.log('Click handled')
   }
-
+  handleSaveClick(e) {
+    e.preventDefault();
+    const { setRegistrationStep } = this.props;
+    setRegistrationStep(2);
+  }
   renderFirstStep({practitionerId, services, availabilities, practitioners, defaultValues}) {
     const {startsAt} = this.props.practitonersStartEndDate;
     return (
@@ -267,7 +271,7 @@ class Availabilities extends React.Component {
                     <input type="radio" name="answer" id="no" value="no"/>
                     <label htmlFor="no">No</label>
                   </div>
-                  <input onClick={this.saveAndContinue} className={styles.appointment__footer_btn} type="submit"
+                  <input onClick={this.handleSaveClick} className={styles.appointment__footer_btn} type="submit"
                          value="Continue"/>
                 </form>
                 <div className={styles.appointment__footer_pagination}>
@@ -296,6 +300,8 @@ class Availabilities extends React.Component {
       practitionerId,
       createPatient,
       practitonersStartEndDate,
+      registrationStep,
+      setRegistrationStep,
     } = this.props;
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
@@ -303,13 +309,19 @@ class Availabilities extends React.Component {
     const defaultValues = {practitionerId, serviceId};
     const params = {practitionerId, services, availabilities, practitioners, defaultValues};
 
-    switch (this.state.step) {
+    switch (registrationStep.get('registrationStep')) {
       case 1:
         return this.renderFirstStep(params);
       case 2:
-        return <SignUp createPatient={createPatient}
-                       practitonersStartEndDate={practitonersStartEndDate}
-        />
+        return <SignUp
+          setRegistrationStep={setRegistrationStep}
+          createPatient={createPatient}
+          practitonersStartEndDate={practitonersStartEndDate}
+        />;
+      case undefined:
+        return (
+          <div>Loading..</div>
+        );
     }
   }
 }
