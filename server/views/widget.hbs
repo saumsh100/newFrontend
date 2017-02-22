@@ -3,24 +3,27 @@ function a () {
 }
 
 window.addEventListener('load', function() {
-  a();
+  // a();
     var div = document.createElement('div');
     div.setAttribute('id', 'bookOnline');
     div.style.position = 'fixed';
     div.style.top = '250px';
     div.style.right = '0px';
-    div.style.width = '300px';
-    div.style.height = '300px';
+    div.style.width = '200px';
+    div.style.height = '150px';
     div.style.border = '1px solid black';
     div.style.cursor = 'pointer';
+    div.style.backgroundColor = '#0275d8';
     //div.style.borderRight = '0px';
   var text = document.createTextNode('Book online!');
 
   div.addEventListener('click', function() {
     var modal = document.getElementById('modal');
     var cross = document.getElementById('cross');
+    var wrapper = document.getElementById('iframeWrapper');
     cross.style.visibility = 'visible';
     modal.style.visibility = 'visible';
+    wrapper.style.visibility = 'visible';
   });
 
   div.appendChild(text);
@@ -28,14 +31,18 @@ window.addEventListener('load', function() {
   var modal = document.createElement('iframe');
     modal.setAttribute('id', 'modal');
     div.style.position = 'absolute';
-    modal.src = 'http://localhost:5000/availabilities';
+    modal.src = 'http://my.carecru.dev:5000/';
     modal.style.zIndex = '999999999';
-    modal.style.width = '700px';
-    modal.style.height = '700px';
+    modal.style.position = 'fixed'
+    modal.style.width = '730px';
+    modal.style.height = '555px';
     modal.style.border = '1px solid black';
     modal.style.top = '50%';
     modal.style.left = '50%';
-    modal.style.transition = 'translateY(50%), translateX(50%)';
+    modal.style.overflow = 'hidden';
+    modal.style.background = 'rgba(0,0,0,0.8)';
+    modal.setAttribute('scrolling', 'no');
+    modal.style.transform = 'translateY(-50%) translateX(-50%)';
     // modal.style.transition = 'translateX(-50%)';
     modal.style.visibility = 'hidden';
     // modal.style.marginTop = '50px';
@@ -49,15 +56,33 @@ window.addEventListener('load', function() {
     cross.style.right = '25%';
     cross.style.visibility = 'hidden';
     cross.style.cursor = 'pointer';
+    cross.style.zIndex = '10';
+    cross.style.color = 'white';
+
 
   cross.addEventListener('click', function() {
     var modal = document.getElementById('modal');
     var cross = document.getElementById('cross');
+    var wrapper = document.getElementById('iframeWrapper');
     cross.style.visibility = 'hidden';
     modal.style.visibility = 'hidden';
+    wrapper.style.visibility = 'hidden';
   })
 
+  var wrapper = document.createElement('div');
+    wrapper.setAttribute('id', 'iframeWrapper');
+    wrapper.style.position = 'fixed';
+    wrapper.style.width = '100%';
+    wrapper.style.height = '100%';
+    wrapper.style.top = '50%';
+    wrapper.style.visibility = 'hidden';
+    wrapper.style.left = '50%';
+    wrapper.style.background = 'rgba(0,0,0,0.8)';
+    wrapper.style.transform = 'translateY(-50%) translateX(-50%)';
+
+  // document.getElementById('iframeWrapper')//.appendChild(modal)
   document.getElementsByTagName('body')[0].appendChild(cross);
   document.getElementsByTagName('body')[0].appendChild(div);
-  document.getElementsByTagName('body')[0].appendChild(modal);
+  document.getElementsByTagName('body')[0].appendChild(wrapper).appendChild(modal);
+  // document.getElementsByTagName('body')[0].appendChild(modal);
 });
