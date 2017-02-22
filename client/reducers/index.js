@@ -11,6 +11,9 @@ import date from './date';
 import schedule from './schedule';
 import dialogs from './dialogs';
 import patientList from './patientList';
+
+import availabilities from './availabilities';
+
 export default combineReducers({
   routing,
   form,
@@ -23,4 +26,5 @@ export default combineReducers({
   schedule,
   currentDialog: dialogs,
   patientList: patientList,
+  availabilities,
 });
