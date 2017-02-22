@@ -43,19 +43,19 @@ class RequestList extends Component {
 
     return (
       <List className={styles.requestList}>
-        { sortedRequests.map((request) => {
-            return (
-              <RequestListItem
-                key={request.id}
-                request={request}
-                patient={this.props.patients.get(request.get('patientId'))}
-                service={this.props.services.get(request.get('serviceId'))}
-                practitioner={this.props.practitioners.get(request.get('practitionerId'))}
-                chair={this.props.chairs.get(request.get('chairId'))}
-                confirmAppointment={this.confirmAppointment}
-                removeRequest={this.removeRequest}
-              />
-            );
+        {sortedRequests.map((request) => {
+          return (
+            <RequestListItem
+              key={request.id}
+              request={request}
+              patient={this.props.patients.get(request.get('patientId'))}
+              service={this.props.services.get(request.get('serviceId'))}
+              practitioner={this.props.practitioners.get(request.get('practitionerId'))}
+              chair={this.props.chairs.get(request.get('chairId'))}
+              confirmAppointment={this.confirmAppointment}
+              removeRequest={this.removeRequest}
+            />
+          );
         })}
       </List>
     );

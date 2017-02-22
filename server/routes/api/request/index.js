@@ -31,9 +31,16 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
   } = req;
 
   const isCancelledQuery = req.query && req.query.isCancelled;
-  const isCancelled = isCancelledQuery === 'true';
+  const filter = { accountId };
+  if (isCancelledQuery) {
+    if (isCancelledQuery === 'true') {
+      filter.isCancelled = true;
+    } else if (isCancelledQuery) {
+      filter.isCancelled = false;
+    }
+  }
 
-  return Request.filter({ accountId, isCancelled }).getJoin(joinObject).run()
+  return Request.filter(filter).getJoin(joinObject).run()
     .then(requests => res.send(normalize('requests', requests)))
     .catch(next);
 });

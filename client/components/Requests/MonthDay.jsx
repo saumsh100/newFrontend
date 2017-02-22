@@ -7,7 +7,7 @@ export default function MonthDay({ month, day }) {
   return (
     <div className={styles.monthDay}>
       <div className={styles.monthDay__month}>
-        {month}
+        {month.toUpperCase()}
       </div>
       <div className={styles.monthDay__day}>
         {day}

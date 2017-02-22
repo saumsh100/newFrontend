@@ -4,72 +4,85 @@
 .requestCard {
   position: relative;
   border-top: $card-border-size #ffc45a;
+  height: 410px;
 
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
   }
 
   @media screen and (min-width: $medium-screen-width) {
-    width: 290px;
+    width: 400px;
   }
-
 }
 
 .requestList {
-  max-height: 212px;
+  height: 410px;
+  max-height: 410px;
   overflow-y: scroll;
-  requestList::-webkit-scrollbar {
-    width: 12px;
-    background-color: #2cc4a7;
-  }
 }
 
 .requestListItem {
+  height: auto;
 }
 
 .requestData{
   text-align: left;
-  font-size: small;
-  width: 150px;
-  font-family: "GothamCondensed-Book";
-
+  width: 225px;
+  font-family: "Gotham";
+  font-size: 18px;
+  padding-left: 1em;
+  font-weight: 400;
+  border-left: 2px solid;
+  border-left-color: #bfbfbf;
   &__time{
+    font-weight: 500;
+    opacity: 0.9;
   }
   &__nameAge{
     opacity: 0.5;
+    margin-right: 0px;
+    padding-right: 0px;
+    text-overflow: ellipsis;
+
   }
   &__phoneNumber{
-    opacity: 0.25;
+    opacity: 0.3;
+    font-size: 14px;
   }
   &__service  {
-    opacity: 0.25;
+    opacity: 0.3;
+    font-size: 14px;
+    text-overflow: ellipsis;
   }
 }
 
 .monthDay {
-  border-right: 2px solid;
-  border-right-color: #bfbfbf;
-  margin-right: 0.5em;
+  text-align: center;
+
+  padding-top: 1em;
+  padding-right: 1em;
+  font-family: "Gotham";
+
   &__month {
-    font-size: 15px;
-    margin-right: 0.5em;
+    font-size: 18px;
+    font-weight: 500;
   }
   &__day {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 40px;
+    font-weight: 500;
   }
 }
 
 .clickHandlers{
   display: flex;
   width: 30px;
-  padding-left: 10px;
+  padding-left: 0px;
   &__confirm{
-    font-size: 15px;
+    font-size: 25px;
     color: #2cc4a7;
   }
   &__remove{
-    font-size: 15px;
+    font-size: 25px;
     color: #e4e4e4;
   }
 }

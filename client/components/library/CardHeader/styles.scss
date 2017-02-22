@@ -2,8 +2,9 @@
 @import '../../../ui.scss';
 
 .cardHeader {
-  padding-left: 0.5em;
-  height: 2rem;
+  padding-left: 1em;
+  height: 3.5rem;
+
 }
 
 .displayFlex {
@@ -13,12 +14,17 @@
 
 .count {
   display: inline-block;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: 700;
   padding-right: 5px;
+  font-family: "Gotham";
+
 }
 
 .title {
   display: inline-block;
+  font-size: 20px;
   font-weight: 500;
+  font-family: "Gotham";
+
 }
