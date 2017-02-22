@@ -24,7 +24,7 @@ class RequestList extends Component {
       serviceId: request.get('serviceId'),
       practitionerId: request.get('practitionerId'),
       chairId: request.get('chairId'),
-      comment: request.note,
+      note: request.note,
     };
 
     createEntityRequest({ key: 'appointments', entityData: appointment })
