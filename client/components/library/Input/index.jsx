@@ -24,8 +24,7 @@ export default function Input(props) {
     inputClassName = classNames(styles.erroredInput, inputClassName);
   }
 
-  const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
-
+  // const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
   const content = min ?
     <input type={type || "text"} className={inputClassName} {...props} />
@@ -34,10 +33,10 @@ export default function Input(props) {
       <input type={type || "text"} className={inputClassName} {...props} />
       <span className={styles.bar} />
       <label className={labelClassName}>
-        {label}
+        {error ? error : label}
       </label>
-      {errorComponent}
-    </div>
+      {/*{errorComponent}*/}
+    </div>;
   return content;
 };
 Input.propTypes = {
