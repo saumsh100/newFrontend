@@ -1,4 +1,6 @@
 import axios from './axios';
+import moment from 'moment';
+
 import {
 	sixDaysShiftAction,
 	setDayAction,
@@ -39,27 +41,33 @@ export function createPatient(params) {
 		lastName,
 		email,
 		phone,
-
     startsAt,
     patientId,
     serviceId,
     practitionerId,
-
 	} = params;
 	return function (dispatch, getState) {
-		const patientParams = { firstName, lastName, email, phone }
+		const patientParams = { firstName, lastName, email, phone };
     axios.post('api/patients', patientParams)
-      .then(() => {
+      .then((data) => {
+      	const patientId = data.data.result;
+      	const { firstName, lastName, serviceId, practitionerId, startsAt  } = params;
+	    	const reqParams = { 
+	    		firstName,
+	    		lastName,
+	    		serviceId,
+	    		practitionerId,
+	    		startTime: startsAt,
+	    		patientId,
+	    		isConfirmed: false,
+					isCancelled: false,
+	    	} 
+	    	axios.post('api/requests', reqParams)
+		      .then(() => {
+						dispatch(saveRequestAction(params));
+		      })
+      		.catch(err => console.log(err));
         dispatch(createPatientAction(params));
-        const saveParams = { 
-        	isConfirmed: false,
-    			isCancelled: false,
-			    startTime: startsAt,
-			    patientId,
-			    serviceId,
-			    practitionerId,
-        }
-        saveRequest(saveParams);
       })
       .catch(err => console.log(err));
 	}	
@@ -71,15 +79,6 @@ export function setStartingAppointmentTime(startsAt) {
 	}	
 }
 
-export function saveRequest(params) {
-	return function (dispatch, getState) {
-    axios.post('api/requests', params)
-      .then(() => {
-				dispatch(saveRequestAction(params));
-      })
-      .catch(err => console.log(err));
-	}
-}
 export function setRegistrationStep(registrationStep) {
   return function (dispatch, getState) {
 			dispatch(setRegistrationStepAction(registrationStep));
