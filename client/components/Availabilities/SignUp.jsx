@@ -2,13 +2,8 @@ import React, { Component } from 'react';
 import Timer from './Timer';
 import styles from './SignUp.scss';
 
-import { formWithCustomValidation } from '../library/Form';
-
 import { Button, Form, Field } from '../library';
 import validate from '../library/Form/validate';
-
-
-const FormWithCustomValidation = formWithCustomValidation(validate)
 
 class SignUp extends Component {
   constructor(props) {
@@ -57,10 +52,11 @@ class SignUp extends Component {
   }
   renderBookingForm() {
     return (
-      <FormWithCustomValidation
+      <Form
             form="availabilitiesRequest"
             className={styles.signup__body_confirm}
             onSubmit={this.bookAnAppointment}
+            validate={validate}
       >
         <Field
           name="firstName"
@@ -99,7 +95,7 @@ class SignUp extends Component {
           className={styles.signup__footer_btn}>
           Book an appointment
         </Button>
-      </FormWithCustomValidation>
+      </Form>
     );
   }
 

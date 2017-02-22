@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
 import Field from './Field';
-import validate from './validate';
 
 /**
  * Given the requiredFields it will generate a validate function to return errors if
@@ -48,9 +47,9 @@ Form.propTypes = {
 };
 
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
-const withReduxForm = (BaseComponent, validate) => {
+const withReduxForm = (BaseComponent) => {
   return reduxForm({
-    validate,
+
   })(BaseComponent);
 };
 
@@ -88,7 +87,3 @@ export default enhance(Form);
 export {
   Field,
 };
- 
-export const formWithCustomValidation = (customValidation ) => {
-  return enhance(Form, customValidation);  
-}
