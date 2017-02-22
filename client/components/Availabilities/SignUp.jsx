@@ -41,6 +41,7 @@ class SignUp extends Component {
     const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId }, params);
     this.props.createPatient(paramsToPass);
   }
+
   handleSaveClick(e) {
     e.preventDefault();
     const { setRegistrationStep } = this.props;
@@ -54,40 +55,35 @@ class SignUp extends Component {
       >
         <Field
           name="firstName"
-          placeholder="First Name *"
+          label="First Name *"
           className={styles.signup__body_input}
-          min
         />
         <Field
           name="lastName"
-          placeholder="Last Name *"
+          label="Last Name *"
           className={styles.signup__body_input}
-          min
         />
         <Field
-          placeholder="Phone Number *"
+          label="Phone Number *"
           name="phone"
           className={styles.signup__body_input}
-          min
         />
         <Field
           className={styles.signup__body_input}
-          placeholder="Email *"
+          label="Email *"
           name="email"
-          min
+          type="email"
         />
 
         <Field
           className={styles.signup__body_input}
-          placeholder="Password *"
+          label="Password *"
           name="password"
-          min
         />
         <Field
           className={styles.signup__body_input}
-          placeholder="Confirm Password *"
+          label="Confirm Password *"
           name="confirmPassword"
-          min
         />
         <Button
           type="submit"
