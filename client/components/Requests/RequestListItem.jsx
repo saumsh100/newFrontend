@@ -70,9 +70,6 @@ class RequestListItem extends Component {
     }
     return (
       <ListItem className={styles.requestListItem}>
-        <div className={styles.iconCaret}>
-          { isHovered ? <Icon icon={'caret-right'} /> : <div>&nbsp;</div> }
-        </div>
         <MonthDay
           month={data.month}
           day={data.day}

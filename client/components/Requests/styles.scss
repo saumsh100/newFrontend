@@ -4,7 +4,7 @@
 .requestCard {
   position: relative;
   border-top: $card-border-size #ffc45a;
-  height: 410px;
+  height: 340px;
 
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
@@ -16,24 +16,34 @@
 }
 
 .requestList {
-  height: 410px;
-  max-height: 410px;
+  height: 340px;
+  max-height: 340px;
   overflow-y: scroll;
 }
 
 .requestListItem {
   height: auto;
+  padding-left: 1em;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 
 .requestData{
-  text-align: left;
-  width: 225px;
-  font-family: "Gotham";
-  font-size: 18px;
+
+  width: 220px;
   padding-left: 1em;
+
+  font-family: $dashboard-font;
+  font-size: 18px;
   font-weight: 400;
+
   border-left: 2px solid;
   border-left-color: #bfbfbf;
+
+  text-align: left;
+
+
+
   &__time{
     font-weight: 500;
     opacity: 0.9;
@@ -42,8 +52,9 @@
     opacity: 0.5;
     margin-right: 0px;
     padding-right: 0px;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
-
   }
   &__phoneNumber{
     opacity: 0.3;
@@ -52,17 +63,17 @@
   &__service  {
     opacity: 0.3;
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
 }
 
 .monthDay {
   text-align: center;
-
   padding-top: 1em;
   padding-right: 1em;
-  font-family: "Gotham";
-
+  font-family: $dashboard-font;
   &__month {
     font-size: 18px;
     font-weight: 500;
@@ -75,19 +86,13 @@
 
 .clickHandlers{
   display: flex;
-  width: 30px;
-  padding-left: 0px;
+  width: 25px;
   &__confirm{
-    font-size: 25px;
+    font-size: 21px;
     color: #2cc4a7;
   }
   &__remove{
-    font-size: 25px;
+    font-size: 21px;
     color: #e4e4e4;
   }
-}
-
-.iconCaret{
-  color:#ffc45a;
-  width: 10px;
 }

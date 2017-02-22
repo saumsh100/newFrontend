@@ -14,14 +14,9 @@
   background-color: $primary-white;
   border-bottom: 2px solid;
   border-bottom-color: $primary-grey;
-  padding: 5px;
-  height: 3.8rem;
+
   &:hover {
     cursor: pointer;
     background-color: $primary-lightgrey;
-  }
-
-  &:last-child {
-    border-bottom: none;
   }
 }

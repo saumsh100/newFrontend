@@ -3,8 +3,8 @@
 
 .cardHeader {
   padding-left: 1em;
-  height: 3.5rem;
-
+  padding-top: 0.5em;
+  height: 2.5rem;
 }
 
 .displayFlex {
@@ -17,14 +17,12 @@
   font-size: 40px;
   font-weight: 700;
   padding-right: 5px;
-  font-family: "Gotham";
-
+  font-family: $dashboard-font
 }
 
 .title {
   display: inline-block;
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 500;
-  font-family: "Gotham";
-
+  font-family: $dashboard-font;
 }
