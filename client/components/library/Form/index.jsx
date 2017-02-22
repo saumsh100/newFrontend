@@ -48,7 +48,7 @@ Form.propTypes = {
 };
 
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
-const withReduxForm = (BaseComponent) => {
+const withReduxForm = (BaseComponent, validate) => {
   return reduxForm({
     validate,
   })(BaseComponent);
@@ -88,37 +88,7 @@ export default enhance(Form);
 export {
   Field,
 };
-
-const customValidation = (requiredFields, fieldsWithPattenrs, fieldsMustEqual) => {
-  const errors = {};
-  requiredFields.forEach((name) => {
-    if (!name) {
-      errors[name] = 'Required';
-    }
-  });
  
-  // fieldsWithPattenrs  {name: pattern }
-  const keys = Object.keys(fieldsWithPattenrs)
-  keys.forEach(k => {
-    const pattern = fieldsWithPattenrs[k];
-    if (!pattern.test(k)) {
-      errors[k] = 'invalid';
-    }
-  })
- 
-  fieldsMustEqual.forEach((fields) => {
-    if (fields[a] !== fields[b]) {
-      errors[a] = 'fields must equal';
-      errors[b] = 'fields must equal';
-    }
-  });
-  return errors;
-}
- 
-const getCustomValidation = (requiredFields, fieldsWithPattenrs, fieldsMustEqual) => {
-  return customValidation.bind(null, requiredFields, fieldsWithPattenrs, fieldsMustEqual)
-}
- 
-export const formWithCustomValidation = (requiredFields, fieldsWithPattenrs, fieldsMustEqual ) => {
-  return enhance(Form, getCustomValidation(requiredFields, fieldsWithPattenrs, fieldsMustEqual));  
+export const formWithCustomValidation = (customValidation ) => {
+  return enhance(Form, customValidation);  
 }

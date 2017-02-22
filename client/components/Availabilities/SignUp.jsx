@@ -5,19 +5,10 @@ import styles from './SignUp.scss';
 import { formWithCustomValidation } from '../library/Form';
 
 import { Button, Form, Field } from '../library';
+import validate from '../library/Form/validate';
 
-const requiredFields = ["firstName", "lastName",
-"phone", "email", "password", "confirmPassword"]
- 
-const fieldsWithPattenrs = {
-  phone: /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s.]{0,1}[0-9]{3}[-\s.]{0,1}[0-9]{4}$/i,
-  email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-}
- 
-const fieldsMustEqual = [{ a: 'password', b: 'confirmPassword' }];
- 
-const CustomValadationForm = formWithCustomValidation(requiredFields, fieldsWithPattenrs, fieldsMustEqual);
 
+const FormWithCustomValidation = formWithCustomValidation(validate)
 
 class SignUp extends Component {
   constructor(props) {
@@ -34,6 +25,7 @@ class SignUp extends Component {
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.renderBookingForm = this.renderBookingForm.bind(this);
   }
+
 
   componentDidMount() {
     this.startTimer();
@@ -64,10 +56,9 @@ class SignUp extends Component {
     setRegistrationStep(1);
   }
   renderBookingForm() {
-
-
     return (
-      <CustomValadationForm form="availabilitiesRequest"
+      <FormWithCustomValidation
+            form="availabilitiesRequest"
             className={styles.signup__body_confirm}
             onSubmit={this.bookAnAppointment}
       >
@@ -108,7 +99,7 @@ class SignUp extends Component {
           className={styles.signup__footer_btn}>
           Book an appointment
         </Button>
-      </CustomValadationForm>
+      </FormWithCustomValidation>
     );
   }
 
