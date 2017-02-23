@@ -63,16 +63,16 @@ $small-weight: 300;
 
 //Font-sizes-weights-colors
 .font-large-dark {
-  font-size: $large-size;  font-weight: $large-weight;  color: $primary-dark;
+  @extend .font-large;  color: $primary-dark;
 }
 .font-medium-dark {
-  font-size: $medium-size;  font-weight: $medium-weight;  color: $primary-dark;
+  @extend .font-medium;  color: $primary-dark;
 }
 .font-medium-grey {
-  font-size: $medium-size;  font-weight: $medium-weight;  color: $inactive-color;
+  @extend .font-medium;  color: $inactive-color;
 }
 .font-small-grey{
-  font-size: $small-size;  font-weight: $small-weight;  color: $inactive-color;
+  @extend .font-small; color: $inactive-color;
 }
 
 
