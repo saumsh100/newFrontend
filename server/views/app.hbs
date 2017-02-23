@@ -9,11 +9,16 @@
     <title>CareCru</title>
 
     <!-- favicon file <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> -->
-
+    <style>
+        @font-face {
+            font-family: Gotham-Book;
+            src: url(/fonts/Gotham-Book.ttf);
+        }
+    </style>
     {{#productionCSS}}app-commons.js{{/productionCSS}}
     {{#productionCSS}}app{{/productionCSS}}
 </head>
-<body style="font-family: Avenir Next;">
+<body style="font-family: Gotham-Book;">
 
 <!-- Regions -->
 <div id="root"></div>
