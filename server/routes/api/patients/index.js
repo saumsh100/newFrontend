@@ -1,11 +1,46 @@
 
+const _ = require('lodash');
 const patientsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
+const checkIsArray = require('../../../middleware/checkIsArray');
 const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
 const loaders = require('../../util/loaders');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
+
+/**
+ * Batch creation
+ */
+patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
+  const { patients } = req.body;
+  const cleanedPatients = patients.map((patient) => {
+    return Object.assign(
+      {},
+      _.omit(patient, ['id', 'dateCreated']),
+      { accountId: req.accountId }
+    );
+  });
+
+  return Patient.save(cleanedPatients)
+    .then(_patients => res.send(normalize('patients', _patients)))
+    .catch(next);
+});
+
+/**
+ * Batch updating
+ */
+patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
+  const { patients } = req.body;
+  const patientUpdates = patients.map((patient) => {
+    return Patient.get(patient.id).run()
+      .then(_patient => _patient.merge(patient).save());
+  });
+
+  return Promise.all(patientUpdates)
+    .then(_patients => res.send(normalize('patients', _patients)))
+    .catch(next);
+});
 
 // TODO: this should have default queries and limits
 /**
@@ -27,6 +62,24 @@ patientsRouter.post('/', checkPermissions('patients:create'), (req, res, next) =
 
   return Patient.save(patientData)
     .then(patient => res.status(201).send(normalize('patient', patient)))
+    .catch(next);
+});
+
+/**
+ * Batch creation
+ */
+patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
+  const { patients } = req.body;
+  const cleanedPatients = patients.map((patient) => {
+    return Object.assign(
+      {},
+      _.omit(patient, ['id', 'dateCreated']),
+      { accountId: req.accountId }
+    );
+  });
+
+  return Patient.save(cleanedPatients)
+    .then(_patients => res.send(normalize('patients', _patients)))
     .catch(next);
 });
 
