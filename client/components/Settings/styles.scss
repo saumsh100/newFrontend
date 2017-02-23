@@ -1,0 +1,25 @@
+
+@import '../../ui.scss';
+
+.rowContainer {
+  height: 100%;
+}
+
+.subSettingsCol {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.subSettingsCard {
+  border-top: $card-border-size $primary-blue;
+}
+
+.settingsFormsCol {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.settingsFormsCard {
+  height: 100%;
+  border-top: $card-border-size $primary-blue;
+}

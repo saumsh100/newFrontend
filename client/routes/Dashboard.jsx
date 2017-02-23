@@ -161,11 +161,39 @@ export default function Routes({ history }) {
         <Route
           path="settings"
           getComponent={(location, callback) => {
-            require.ensure(['../containers/AccountContainer'], (require) => {
-              callback(null, require('../containers/AccountContainer').default);
+            require.ensure(['../containers/SettingsContainer'], (require) => {
+              callback(null, require('../containers/SettingsContainer').default);
             });
           }}
-        />
+        >
+          <IndexRedirect to="clinic" />
+          <Route
+            path="clinic"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Settings/Clinic'], (require) => {
+                callback(null, require('../components/Settings/Clinic').default);
+              });
+            }}
+          >
+            <IndexRedirect to="basic" />
+            <Route
+              path="basic"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Clinic/BasicForm'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/BasicForm').default);
+                });
+              }}
+            />
+            <Route
+              path="address"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Clinic/AddressForm'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/AddressForm').default);
+                });
+              }}
+            />
+          </Route>
+        </Route>
         <Route
           path="profile"
           getComponent={(location, callback) => {

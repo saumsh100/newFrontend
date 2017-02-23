@@ -14,6 +14,7 @@ import DashboardRoutes from '../routes/Dashboard';
 import configure from '../store';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
+import '../styles/dashboard.scss';
 
 const store = configure({ browserHistory });
 const history = syncHistoryWithStore(browserHistory, store);
