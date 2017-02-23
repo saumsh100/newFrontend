@@ -27,8 +27,7 @@
   padding-top: 15px;
   padding-bottom: 15px;
   color: $primary-dark;
-  font-family: $dashboard-font;
-}
+ }
 
 .requestData{
   width: 220px;
@@ -36,17 +35,12 @@
   border-left: 2px solid;
   border-left-color: #bfbfbf;
   text-align: left;
-  color: $inactive-color;
-  font-weight: 300;
-
+  @extend .font-small-grey;
   &__time{
-    color: $primary-dark;
-    font-weight: 500;
-    font-size: $medium-size;
+    @extend .font-medium-dark;
   }
   &__nameAge{
-    font-size: $medium-size;
-    font-weight: 500;
+    @extend .font-medium-grey;
     margin-right: 0px;
     padding-right: 0px;
     white-space: nowrap;
@@ -54,16 +48,13 @@
     text-overflow: ellipsis;
   }
   &__phoneNumber{
-    font-size: $small-size;
   }
   &__service  {
-    font-size: $small-size;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   &__newreqText{
-    font-size: $small-size;
   }
 }
 
@@ -97,6 +88,5 @@
       color: #e6e6e6;
     }
   }
-
 
 }

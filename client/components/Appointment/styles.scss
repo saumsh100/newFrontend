@@ -12,7 +12,6 @@
   padding: 2em 2em 2em 2em;
 
   text-align: left;
-  font-family: $dashboard-font;
   color: $inactive-color;
 
   background-color: $primary-white;
@@ -25,48 +24,39 @@
   &__nameAge{
     word-wrap: break-word;
     color: #ffc45a;
-    font-size: $medium-size;
-    font-weight: 500;
+    @extend .font-medium;
     padding-bottom: 0.5em;
   }
 
   &__time{
-    color: $primary-dark;
-    font-size: $medium-size;
-    font-weight: 500;
+    @extend .font-medium-dark;
   }
   &__service  {
     color: $primary-dark;
     font-size: $medium-size;
     font-weight: 400;
-
     border-bottom: 2px solid;
     border-bottom-color: $primary-grey;
   }
   &__phoneNumber{
-    font-size: $small-size;
+    @extend .font-small;
     padding-top: 1em;
     padding-bottom: 0.5em;
-    font-weight: 300;
   }
   &__email{
-    font-size: $small-size;
+    @extend .font-small;
     padding-bottom: 0.5em;
-    font-weight: 300;
-
   }
   &__insurance{
-    font-size: $small-size;
+    @extend .font-small;
     padding-bottom: 2em;
-    font-weight: 300;
   }
   &__note{
+    @extend .font-small;
     word-wrap: break-word;
     margin-right: 1em;
-    font-size: $small-size;
     height: 80px;
     overflow-y: scroll;
-    font-weight: 300;
   }
   &__icons{
     color: #ffc45a;

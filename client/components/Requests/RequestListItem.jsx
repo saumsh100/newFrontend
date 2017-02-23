@@ -6,6 +6,8 @@ import styles from './styles.scss';
 import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
 
+import ReactPopover from 'react-popover';
+
 class RequestListItem extends Component {
 
   constructor(props) {
@@ -41,8 +43,8 @@ class RequestListItem extends Component {
       day: request.getDay(),
     };
 
-    let showHoverComponents = (<div className={styles.requestData__newreqText}>New</div>);
 
+    let showHoverComponents = (<div className={styles.requestData__newreqText}>New</div>);
     if (isHovered) {
       showHoverComponents = (
         <div>

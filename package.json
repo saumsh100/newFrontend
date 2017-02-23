@@ -131,6 +131,7 @@
     "react-immutable-proptypes": "^1.7.1",
     "react-infinite-scroller": "^1.0.6",
     "react-inline-css": "^2.3.0",
+    "react-popover": "^0.4.4",
     "react-portal": "^2.1.0",
     "react-redux": "^4.4.5",
     "react-redux-custom-store": "^1.0.0",
