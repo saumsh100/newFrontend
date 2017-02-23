@@ -175,12 +175,12 @@ export default function Routes({ history }) {
               });
             }}
           >
-            <IndexRedirect to="basic" />
+            <IndexRedirect to="general" />
             <Route
-              path="basic"
+              path="general"
               getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Clinic/BasicForm'], (require) => {
-                  callback(null, require('../components/Settings/Clinic/BasicForm').default);
+                require.ensure(['../components/Settings/Clinic/GeneralForm'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/GeneralForm').default);
                 });
               }}
             />
@@ -189,6 +189,32 @@ export default function Routes({ history }) {
               getComponent={(location, callback) => {
                 require.ensure(['../components/Settings/Clinic/AddressForm'], (require) => {
                   callback(null, require('../components/Settings/Clinic/AddressForm').default);
+                });
+              }}
+            />
+          </Route>
+          <Route
+            path="schedule"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Settings/Schedule'], (require) => {
+                callback(null, require('../components/Settings/Schedule').default);
+              });
+            }}
+          >
+            <IndexRedirect to="widget" />
+            <Route
+              path="widget"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Schedule/GeneralForm'], (require) => {
+                  callback(null, require('../components/Settings/Schedule/GeneralForm').default);
+                });
+              }}
+            />
+            <Route
+              path="test"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Schedule/AddressForm'], (require) => {
+                  callback(null, require('../components/Settings/Schedule/AddressForm').default);
                 });
               }}
             />

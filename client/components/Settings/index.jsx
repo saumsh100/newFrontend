@@ -16,7 +16,7 @@ export default function Account(props) {
         </Col>
         <Col xs={9} className={styles.settingsFormsCol}>
           <Card className={styles.settingsFormsCard}>
-            <CardHeader title="Basic Settings" />
+            <CardHeader title="General Settings" />
             {props.children}
           </Card>
         </Col>

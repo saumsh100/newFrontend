@@ -6,8 +6,8 @@ import { RouterList } from '../library';
 const PATHS = {
   '/settings/clinic': [
     {
-      to: '/settings/clinic/basic',
-      label: 'Basic',
+      to: '/settings/clinic/general',
+      label: 'General',
     },
     {
       to: '/settings/clinic/address',
