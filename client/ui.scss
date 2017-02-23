@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Gotham-Book;
+  src: url(/server/public/fonts/gotham/Gotham-Book.ttf);
+}
+
 
 $color-black: rgb(0,0,0);
 $color-white: rgb(255,255,255);
@@ -32,3 +37,47 @@ $warning-color: yellow;
 
 $card-border-size: 5px solid;
 $selection-border: 3px solid;
+
+$dashboard-font: "Gotham";
+
+//Font-sizes
+$large-size: 40px;
+$medium-size: 18px;
+$small-size: 14px;
+
+//Font-weights
+$large-weight: 500;
+$medium-weight: 500;
+$small-weight: 300;
+
+//Font-sizes-weights
+.font-large{
+  font-size: $large-size;  font-weight: $large-weight;
+}
+.font-medium{
+  font-size: $medium-size;  font-weight: $medium-weight;
+}
+.font-small{
+  font-size: $small-size;  font-weight: $small-weight;
+}
+
+//Font-sizes-weights-colors
+.font-large-dark {
+  @extend .font-large;  color: $primary-dark;
+}
+.font-medium-dark {
+  @extend .font-medium;  color: $primary-dark;
+}
+.font-medium-grey {
+  @extend .font-medium;  color: $inactive-color;
+}
+.font-small-grey{
+  @extend .font-small; color: $inactive-color;
+}
+
+
+
+
+
+
+

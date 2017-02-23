@@ -5,21 +5,17 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  background-color: $primary-grey;
 }
 
 .listItem {
   display: flex;
   align-items: center;
+  background-color: $primary-white;
   border-bottom: 2px solid;
   border-bottom-color: $primary-grey;
-  padding: 5px;
-  height: 3.8rem;
-  &:hover {
-    cursor: pointer;
-    background-color: $primary-lightgrey;
-  }
 
-  &:last-child {
-    border-bottom: none;
+  &:hover {
+    background-color: $primary-lightgrey;
   }
 }

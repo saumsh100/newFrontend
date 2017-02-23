@@ -6,39 +6,22 @@ import styles from './styles.scss';
 import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
 
+import ReactPopover from 'react-popover';
+
 class RequestListItem extends Component {
 
   constructor(props) {
     super(props)
-    this.confirmAppointment = this.confirmAppointment.bind(this);
-    this.removeRequest = this.removeRequest.bind(this);
+    this.onClickConfirm = this.onClickConfirm.bind(this);
+    this.onClickRemove = this.onClickRemove.bind(this);
   }
 
-  confirmAppointment() {
-    const { request, updateEntityRequest, createEntityRequest } = this.props;
-    const appointment = {
-      startTime: request.get('startTime'),
-      endTime: request.get('endTime'),
-      patientId: request.get('patientId'),
-      serviceId: request.get('serviceId'),
-      practitionerId: request.get('practitionerId'),
-      chairId: request.get('chairId'),
-      comment: request.comment,
-    };
-
-    createEntityRequest({ key: 'appointments', entityData: appointment })
-      .then(() => {
-        const modifiedRequest = {
-          id: request.get('id'),
-          isCancelled: true,
-        };
-        updateEntityRequest({key: 'requests', update: modifiedRequest});
-      }).catch(err => console.log(err));
+  onClickConfirm(){
+    this.props.confirmAppointment(this.props.request);
   }
 
-  removeRequest() {
-    const { request, deleteEntityRequest } = this.props;
-    deleteEntityRequest({ key: 'requests', id: request.get('id') });
+  onClickRemove(){
+    this.props.removeRequest(this.props.request);
   }
 
   render() {
@@ -55,12 +38,13 @@ class RequestListItem extends Component {
       email: patient.email,
       service: service.name,
       phoneNumber: patient.phoneNumber,
-      comment: request.comment,
+      note: request.note,
       month: request.getMonth(),
       day: request.getDay(),
     };
 
-    let showHoverComponents = null;
+
+    let showHoverComponents = (<div className={styles.requestData__newreqText}>New</div>);
     if (isHovered) {
       showHoverComponents = (
         <div>
@@ -70,30 +54,29 @@ class RequestListItem extends Component {
             service={data.service}
             phoneNumber={data.phoneNumber}
             email={data.email}
-            comment={data.comment}
+            note={data.note}
           />
           <div className={styles.clickHandlers}>
             <IconButton
               icon={'times-circle-o'}
               className={styles.clickHandlers__remove}
-              onClick={this.removeRequest}
+              onClick={this.onClickRemove}
             />
             <IconButton
               icon={'check-circle'}
               className={styles.clickHandlers__confirm}
-              onClick={this.confirmAppointment}
+              onClick={this.onClickConfirm}
             />
           </div>
         </div>
       );
     }
-
     return (
       <ListItem className={styles.requestListItem}>
-        <div className={styles.iconCaret}>
-          { isHovered ? <Icon icon={'caret-right'} /> : <div>&nbsp;</div> }
-        </div>
-        <MonthDay isHovered = {isHovered} month={data.month} day={data.day} />
+        <MonthDay
+          month={data.month}
+          day={data.day}
+        />
         <RequestData
           time={data.time}
           nameAge={data.nameAge}
