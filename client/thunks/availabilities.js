@@ -1,8 +1,12 @@
+import axios from './axios';
 import {
 	sixDaysShiftAction,
 	setDayAction,
 	setPractitionerAction,
 	setServiceAction,
+	createPatientAction,
+	setStartingAppointmentTimeAction,
+  setRegistrationStepAction
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
@@ -25,6 +29,59 @@ export function setPractitioner(practitionerId) {
 
 export function setService(serviceId) {
 	return function (dispatch, getState) {
-		dispatch(setServiceAction({ serviceId }));
+		dispatch(setServiceAction(serviceId));
 	}	
+}
+
+export function createPatient(params) {
+	const {
+		firstName,
+		lastName,
+		email,
+		phone,
+
+    startsAt,
+    patientId,
+    serviceId,
+    practitionerId,
+
+	} = params;
+	return function (dispatch, getState) {
+		const patientParams = { firstName, lastName, email, phone }
+    axios.post('api/patients', patientParams)
+      .then(() => {
+        dispatch(createPatientAction(params));
+        const saveParams = { 
+        	isConfirmed: false,
+    			isCancelled: false,
+			    startTime: startsAt,
+			    patientId,
+			    serviceId,
+			    practitionerId,
+        }
+        saveRequest(saveParams);
+      })
+      .catch(err => console.log(err));
+	}	
+}
+
+export function setStartingAppointmentTime(startsAt) {
+	return function (dispatch, getState) {
+		dispatch(setStartingAppointmentTimeAction(startsAt));
+	}	
+}
+
+export function saveRequest(params) {
+	return function (dispatch, getState) {
+    axios.post('api/requests', params)
+      .then(() => {
+				dispatch(saveRequestAction(params));
+      })
+      .catch(err => console.log(err));
+	}
+}
+export function setRegistrationStep(registrationStep) {
+  return function (dispatch, getState) {
+			dispatch(setRegistrationStepAction(registrationStep));
+  }
 }

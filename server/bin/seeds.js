@@ -326,10 +326,10 @@ const SEEDS = {
     },
     {
       id: markPatientId,
+      accountId,
       firstName: 'Mark',
       lastName: 'Joseph',
       phoneNumber: markPhoneNumber,
-      accountId: accountId2,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
       gender: 'male',
       status: 'Active',

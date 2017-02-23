@@ -13,11 +13,12 @@ patientsRouter.param('patientId', loaders('patient', 'Patient'));
  */
 patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
   const { accountId } = req;
-  
+
   return Patient.filter({ accountId }).run()
     .then(patients => res.send(normalize('patients', patients)))
     .catch(next);
 });
+
 
 /**
  * Create a patient

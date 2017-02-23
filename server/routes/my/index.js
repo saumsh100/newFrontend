@@ -5,13 +5,14 @@ const practitionersRouter = require('../api/practitioners');
 
 apiRouter.use('/practitioners', practitionersRouter);
 
-myRouter.get('/', (req, res, next) => {
-  console.log('loggg');
-  return res.render('patient');
+myRouter.get('/:accountId', (req, res, next) => {
+  console.log(req.params.accountId);
+  return res.render('patient', {
+    accountId: req.params.accountId,
+  });
 });
 
 myRouter.get('/widgets/:accountId', (req, res, next) => {
-  console.log('log');
   return res.render('widget', {
     accountId: req.params.accountId,
   });

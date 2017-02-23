@@ -11,7 +11,9 @@ practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitione
  * Get all practitioners under a clinic
  */
 practitionersRouter.get('/', checkPermissions('practitioners:read'), (req, res, next) => {
-  const { accountId } = req;
+  console.log(req.query, 'the query');
+  const accountId = req.query.accountId || req.accountId;
+  // const { accountId } = req;
 
   return Practitioner.filter({ accountId }).run()
     .then(practitioners => res.send(normalize('practitioners', practitioners)))

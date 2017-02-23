@@ -66,6 +66,10 @@ function getTokenFromReq(req) {
 }
 
 module.exports = function authMiddleware(req, res, next) {
+  const hostname = req.hostname;
+  if (hostname.match('^my')) {
+    return next();
+  }
   const token = getTokenFromReq(req);
   if (!token) {
     return next(StatusError(401, 'Unauthorized. No valid token on header.'));

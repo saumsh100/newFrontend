@@ -12,13 +12,13 @@ servicesRouter.get('/', (req, res, next) => {
         const filteredByPractitionerId = services.filter(s =>
           _.includes(s.practitioners, req.query.practitionerId)
         );
-        console.log(normalize('services', filteredByPractitionerId));
-        res.send(normalize('services', filteredByPractitionerId));
+
+        res.send(normalize('services', services));
       });
-    // return;
+    
   }
   Service.run()
-    .then(services => res.send(normalize(services, arrayOf(servicesSchema))))
+    .then(services => res.send(normalize('services', services)))
     .catch(next);
 });
 
