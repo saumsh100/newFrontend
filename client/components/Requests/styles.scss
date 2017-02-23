@@ -78,14 +78,14 @@
     font-size: 22px;
     color: #2cc4a7;
     &:hover {
-      color: #e6e6e6;
+      color: $inactive-color;
     }
   }
   &__remove{
     font-size: 22px;
-    color: #e6e6e6;
+    color: $inactive-color;
     &:hover {
-      color: #e6e6e6;
+      color: $inactive-color;
     }
   }
 
