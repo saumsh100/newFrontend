@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import includes from 'lodash/includes';
@@ -16,14 +16,14 @@ import {
   setRegistrationStep,
 } from  '../thunks/availabilities';
 
-class Availability extends React.Component {
+class Availability extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedStartDay: new Date(),
       selectedEndDay: moment().add(4, 'd')._d,
       modalIsOpen: false,
-      practitonersStartEndDate: {},
+      practitionersStartEndDate: {},
     };
   }
 
@@ -54,12 +54,12 @@ class Availability extends React.Component {
       availabilitiesForm.values.serviceId;
 
 
-    const {practitonersStartEndDate} = nextProps;
-    const practitonersStartEndDatetoJS = this.props.practitonersStartEndDate.toJS();
-    const nextpractitonersStartEndDatetoJS = practitonersStartEndDate.toJS();
+    const {practitionersStartEndDate} = nextProps;
+    const practitionersStartEndDatetoJS = this.props.practitionersStartEndDate.toJS();
+    const nextpractitionersStartEndDatetoJS = practitionersStartEndDate.toJS();
 
-    let prevPractitionerId = practitonersStartEndDatetoJS.practitionerId;
-    let nextPractitionerId = nextpractitonersStartEndDatetoJS.practitionerId;
+    let prevPractitionerId = practitionersStartEndDatetoJS.practitionerId;
+    let nextPractitionerId = nextpractitionersStartEndDatetoJS.practitionerId;
 
     let newService = null;
     if (nextFormPractitionerId && prevFormPractitionerId) {
@@ -94,9 +94,9 @@ class Availability extends React.Component {
     }
 
 
-    const thisPractitionersStartEndDate = practitonersStartEndDatetoJS[nextPractitionerId];
-    let params = {}
-    const selectedDays = nextpractitonersStartEndDatetoJS[nextPractitionerId];
+    const thisPractitionersStartEndDate = practitionersStartEndDatetoJS[nextPractitionerId];
+    let params = {};
+    const selectedDays = nextpractitionersStartEndDatetoJS[nextPractitionerId];
 
     if (!selectedDays) {
       params = {
@@ -138,7 +138,7 @@ class Availability extends React.Component {
 
       const newServiceId = newService && newService.id;
 
-      let nextServiceId = nextpractitonersStartEndDatetoJS.serviceId;
+      let nextServiceId = nextpractitionersStartEndDatetoJS.serviceId;
 
       if (!nextServiceId && nextServices && nextServices.length) {
         setService({serviceId: newServiceId});
@@ -186,25 +186,25 @@ class Availability extends React.Component {
 
   getAppointmentsSorted() {
     const {
-      practitonersStartEndDate,
+      practitionersStartEndDate,
       sixDaysShift,
       availabilitiesForm,
       createPatient,
     } = this.props;
-    let {selectedEndDay, selectedStartDay} = practitonersStartEndDate;
+    let {selectedEndDay, selectedStartDay} = practitionersStartEndDate;
 
-    // const practitionerId = practitonersStartEndDate.toJS().practitionerId;
+    // const practitionerId = practitionersStartEndDate.toJS().practitionerId;
 
     const availabilitiesFormValues = availabilitiesForm
       && availabilitiesForm.values;
 
     const practitionerId = (availabilitiesFormValues && availabilitiesFormValues.practitionerId)
-      || practitonersStartEndDate.toJS().practitionerId;
+      || practitionersStartEndDate.toJS().practitionerId;
 
     const serviceId = availabilitiesFormValues && availabilitiesFormValues.serviceId;
 
 
-    const prStardEndDate = practitonersStartEndDate.toJS()[practitionerId];
+    const prStardEndDate = practitionersStartEndDate.toJS()[practitionerId];
     const sortedByDate = this.props.availabilities.get('models')
       .toArray()
       .filter(a => a.practitionerId === practitionerId)
@@ -254,11 +254,11 @@ class Availability extends React.Component {
         setDay={this.props.setDay}
         setPractitioner={this.props.setPractitioner}
         setService={this.props.setService}
-        practitonersStartEndDate={this.props.practitonersStartEndDate}
+        practitionersStartEndDate={this.props.practitionersStartEndDate}
         createPatient={this.props.createPatient}
         serviceId={serviceId}
         setStartingAppointmentTime={setStartingAppointmentTime}
-        registrationStep={this.props.practitonersStartEndDate}
+        registrationStep={this.props.practitionersStartEndDate}
         setRegistrationStep={this.props.setRegistrationStep}
       />
     );
@@ -270,7 +270,7 @@ function mapStateToProps({entities, availabilities, form}) {
     availabilities: entities.get('availabilities'),
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
-    practitonersStartEndDate: availabilities,
+    practitionersStartEndDate: availabilities,
     availabilitiesForm: form.availabilities,
   };
 }

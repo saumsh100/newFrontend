@@ -40,7 +40,7 @@ class SignUp extends Component {
   }
 
   bookAnAppointment(params) {
-    const { startsAt, practitionerId, serviceId } = this.props.practitonersStartEndDate.toJS();
+    const { startsAt, practitionerId, serviceId } = this.props.practitionersStartEndDate.toJS();
     const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId }, params);
     this.props.createPatient(paramsToPass);
   }
@@ -112,10 +112,10 @@ class SignUp extends Component {
   }
 
   render() {
-    const { practitonersStartEndDate } = this.props;
-    const { messages } = practitonersStartEndDate.toJS();
+    const { practitionersStartEndDate } = this.props;
+    const { messages } = practitionersStartEndDate.toJS();
     const contnet = messages.length ? this.renderMessages(messages)
-      : this.renderBookingForm()
+      : this.renderBookingForm();
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>

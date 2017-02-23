@@ -15,7 +15,7 @@ class Availabilities extends React.Component {
       selectedStartDay: new Date(),
       selectedEndDay: moment().add(4, 'd')._d,
       modalIsOpen: false,
-      practitonersStartEndDate: {},
+      practitionersStartEndDate: {},
       step: 1,
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
@@ -38,15 +38,15 @@ class Availabilities extends React.Component {
   }
 
   onServiceChange(e) {
-    const {setService, practitonersStartEndDate} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
+    const {setService, practitionersStartEndDate} = this.props;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     setService(e.target.value)
   }
 
   sixDaysBack() {
-    const {sixDaysShift, practitonersStartEndDate} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
+    const {sixDaysShift, practitionersStartEndDate} = this.props;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newEndDay = moment(selectedOldStartDay)._d
     const newStartDay = moment(newEndDay).subtract(4, 'd')._d;
 
@@ -60,9 +60,9 @@ class Availabilities extends React.Component {
   }
 
   sixDaysForward() {
-    const {sixDaysShift, practitonersStartEndDate} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
+    const {sixDaysShift, practitionersStartEndDate} = this.props;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = moment(selectedOldStartDay).add(4, 'd')._d;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
 
@@ -77,10 +77,10 @@ class Availabilities extends React.Component {
 
   handleDayClick(e, day) {
 
-    const {practitonersStartEndDate} = this.props;
+    const {practitionersStartEndDate} = this.props;
     const {sixDaysShift} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = day;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
     sixDaysShift({
@@ -121,7 +121,7 @@ class Availabilities extends React.Component {
     setRegistrationStep(2);
   }
   renderFirstStep({practitionerId, services, availabilities, practitioners, defaultValues}) {
-    const {startsAt} = this.props.practitonersStartEndDate;
+    const startsAt = this.props.practitionersStartEndDate.get('startsAt');
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -248,7 +248,7 @@ class Availabilities extends React.Component {
                           <li onClick={() => {
                             this.selectAvailability(slot)
                           }}
-                              className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected : '' }`}
+                              className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected: '' }`}
                               key={slot.startsAt}>
                             {moment(slot.startsAt).format('HH:mm A')}
                           </li>)
@@ -271,8 +271,7 @@ class Availabilities extends React.Component {
                     <input type="radio" name="answer" id="no" value="no"/>
                     <label htmlFor="no">No</label>
                   </div>
-                  <input onClick={this.handleSaveClick} className={styles.appointment__footer_btn} type="submit"
-                         value="Continue"/>
+                  <button disabled={!startsAt} onClick={this.handleSaveClick} className={styles.appointment__footer_btn} type="submit">Continue</button>
                 </form>
                 <div className={styles.appointment__footer_pagination}>
                   <ul>
@@ -299,8 +298,7 @@ class Availabilities extends React.Component {
       availabilities,
       practitionerId,
       createPatient,
-      practitonersStartEndDate,
-      registrationStep,
+      practitionersStartEndDate,
       setRegistrationStep,
     } = this.props;
 
@@ -309,14 +307,14 @@ class Availabilities extends React.Component {
     const defaultValues = {practitionerId, serviceId};
     const params = {practitionerId, services, availabilities, practitioners, defaultValues};
 
-    switch (registrationStep.get('registrationStep')) {
+    switch (practitionersStartEndDate.get('registrationStep')) {
       case 1:
         return this.renderFirstStep(params);
       case 2:
         return <SignUp
           setRegistrationStep={setRegistrationStep}
           createPatient={createPatient}
-          practitonersStartEndDate={practitonersStartEndDate}
+          practitionersStartEndDate={practitionersStartEndDate}
         />;
       case undefined:
         return (

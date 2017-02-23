@@ -282,7 +282,7 @@ body {
             width: 100%;
             height: 200px;
             margin: 0 auto 30px;
-            overflow-y: hidden;
+            overflow-y: auto;
         }
     }
     &__list {
@@ -306,13 +306,13 @@ body {
             }
         }
         &_active {
-            background-color: #ff715a !important;
+            background-color: #e6e6e6 !important;
         }
         &_selected {
-            color: green;
-            border: 1px solid black;
+            background-color: #b82a14 !important;
         }
         &_item {
+            cursor: pointer;
             width: 100%;
             box-sizing: border-box;
             padding: 10px 0;
@@ -322,7 +322,7 @@ body {
             text-align: center;
             text-transform: lowercase;
             list-style: none;
-            background-color: #e6e6e6;
+            background-color: #ff715a;
             flex-grow: 1;
         }
     }
@@ -358,7 +358,12 @@ body {
             padding: 6px 20px;
             border: none;
             background: #f3715c;
+            cursor: pointer;
             position: relative;
+            &:disabled {
+                cursor: not-allowed;
+                opacity: .65;
+            }
         }
         &_pagination {
             margin: 10px 0 0;
@@ -376,7 +381,6 @@ body {
                 display: flex;
                 width: 20px;
                 height: 20px;
-                cursor: pointer;
                 background: #f3715c;
                 border-radius: 50%;
                 justify-content: center;
