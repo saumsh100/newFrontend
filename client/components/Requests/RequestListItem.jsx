@@ -41,7 +41,8 @@ class RequestListItem extends Component {
       day: request.getDay(),
     };
 
-    let showHoverComponents = null;
+    let showHoverComponents = (<div className={styles.requestData__newreqText}>New</div>);
+
     if (isHovered) {
       showHoverComponents = (
         <div>

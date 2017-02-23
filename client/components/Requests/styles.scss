@@ -4,7 +4,7 @@
 .requestCard {
   position: relative;
   border-top: $card-border-size #ffc45a;
-  height: 340px;
+  height: 330px;
 
   @media screen and (max-width: $medium-screen-width) {
     width: 60%;
@@ -16,40 +16,37 @@
 }
 
 .requestList {
-  height: 340px;
-  max-height: 340px;
+  height: 330px;
+  max-height: 330px;
   overflow-y: scroll;
 }
 
 .requestListItem {
   height: auto;
   padding-left: 1em;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: $primary-dark;
+  font-family: $dashboard-font;
 }
 
 .requestData{
-
   width: 220px;
   padding-left: 1em;
-
-  font-family: $dashboard-font;
-  font-size: 18px;
-  font-weight: 400;
-
   border-left: 2px solid;
   border-left-color: #bfbfbf;
-
   text-align: left;
-
-
+  color: $inactive-color;
+  font-weight: 300;
 
   &__time{
+    color: $primary-dark;
     font-weight: 500;
-    opacity: 0.9;
+    font-size: $medium-size;
   }
   &__nameAge{
-    opacity: 0.5;
+    font-size: $medium-size;
+    font-weight: 500;
     margin-right: 0px;
     padding-right: 0px;
     white-space: nowrap;
@@ -57,15 +54,16 @@
     text-overflow: ellipsis;
   }
   &__phoneNumber{
-    opacity: 0.3;
-    font-size: 14px;
+    font-size: $small-size;
   }
   &__service  {
-    opacity: 0.3;
-    font-size: 14px;
+    font-size: $small-size;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  &__newreqText{
+    font-size: $small-size;
   }
 }
 
@@ -73,14 +71,12 @@
   text-align: center;
   padding-top: 1em;
   padding-right: 1em;
-  font-family: $dashboard-font;
+  font-weight: 500;
   &__month {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: $medium-size
   }
   &__day {
-    font-size: 40px;
-    font-weight: 500;
+    font-size: $large-size;
   }
 }
 
@@ -88,11 +84,19 @@
   display: flex;
   width: 25px;
   &__confirm{
-    font-size: 21px;
+    font-size: 22px;
     color: #2cc4a7;
+    &:hover {
+      color: #e6e6e6;
+    }
   }
   &__remove{
-    font-size: 21px;
-    color: #e4e4e4;
+    font-size: 22px;
+    color: #e6e6e6;
+    &:hover {
+      color: #e6e6e6;
+    }
   }
+
+
 }
