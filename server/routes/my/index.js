@@ -2,6 +2,7 @@
 const apiRouter = require('express').Router();
 const myRouter = require('express').Router();
 const practitionersRouter = require('../api/practitioners');
+const loaders = require('../util/loaders');
 
 apiRouter.use('/practitioners', practitionersRouter);
 
@@ -12,12 +13,15 @@ myRouter.get('/:accountId', (req, res, next) => {
   });
 });
 
+// myRouter.param('accountId', loaders('account', 'Account'));
+
 myRouter.get('/widgets/:accountId', (req, res, next) => {
+
   return res.render('widget', {
     accountId: req.params.accountId,
   });
 });
 
-myRouter.use(apiRouter);
+myRouter.use('/api', apiRouter);
 
 module.exports = myRouter;
