@@ -1,8 +1,12 @@
 
 @import '../../ui.scss';
 
+
+.requestPopover > :global(svg.Popover-tip) {
+  fill: #ffc45a;
+}
+
 .requestCard {
-  position: relative;
   border-top: $card-border-size #ffc45a;
   height: 330px;
 
@@ -62,7 +66,7 @@
   text-align: center;
   padding-top: 1em;
   padding-right: 1em;
-  font-weight: 500;
+  font-weight: $medium-weight;
   &__month {
     font-size: $medium-size
   }
@@ -88,5 +92,6 @@
       color: $inactive-color;
     }
   }
-
 }
+
+

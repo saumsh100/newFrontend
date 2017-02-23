@@ -3,9 +3,7 @@
 
 .appointmentShowData{
 
-  position: absolute;
-  right:400px;
-  top: 30px;
+  margin-top: -200px;
   width: 390px;
   height: 260px;
   max-height: 280px;
@@ -17,9 +15,10 @@
   background-color: $primary-white;
   border-radius: 10px;
 
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.10);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.10);
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.10);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(255,197,90,1);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(255,197,90,1);
+  box-shadow: 0px 0px 5px 0px rgba(255,197,90,1);
+  border: 1px solid #ffc45a;
 
   &__nameAge{
     word-wrap: break-word;
@@ -58,9 +57,13 @@
     height: 80px;
     overflow-y: scroll;
   }
+
   &__icons{
     color: #ffc45a;
     padding-right: 1em;
   }
 }
 
+.noteText{
+  @extend .font-small-dark;
+}

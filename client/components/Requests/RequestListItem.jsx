@@ -1,12 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes } from 'react';
 import { ListItem, IconButton, Icon } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
 import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
+import Popover from 'react-popover';
 
-import ReactPopover from 'react-popover';
+
 
 class RequestListItem extends Component {
 
@@ -43,19 +44,11 @@ class RequestListItem extends Component {
       day: request.getDay(),
     };
 
-
     let showHoverComponents = (<div className={styles.requestData__newreqText}>New</div>);
+
     if (isHovered) {
       showHoverComponents = (
         <div>
-          <AppointmentShowData
-            nameAge={data.nameAge}
-            time={data.time}
-            service={data.service}
-            phoneNumber={data.phoneNumber}
-            email={data.email}
-            note={data.note}
-          />
           <div className={styles.clickHandlers}>
             <IconButton
               icon={'times-circle-o'}
@@ -72,19 +65,39 @@ class RequestListItem extends Component {
       );
     }
     return (
-      <ListItem className={styles.requestListItem}>
-        <MonthDay
-          month={data.month}
-          day={data.day}
-        />
-        <RequestData
-          time={data.time}
-          nameAge={data.nameAge}
-          phoneNumber={data.phoneNumber}
-          service={data.service}
-        />
-        {showHoverComponents}
-      </ListItem>
+
+        <ListItem className={styles.requestListItem}>
+          <Popover
+            className={styles.requestPopover}
+            isOpen={isHovered}
+            body={[(
+              <div>
+                <AppointmentShowData
+                  nameAge={data.nameAge}
+                  time={data.time}
+                  service={data.service}
+                  phoneNumber={data.phoneNumber}
+                  email={data.email}
+                  note={data.note}
+                />
+              </div>
+            )]}
+            preferPlace="left"
+          >
+            <MonthDay
+              month={data.month}
+              day={data.day}
+            />
+          </Popover>
+          <RequestData
+            time={data.time}
+            nameAge={data.nameAge}
+            phoneNumber={data.phoneNumber}
+            service={data.service}
+          />
+          {showHoverComponents}
+        </ListItem>
+
     );
   }
 }

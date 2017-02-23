@@ -44,8 +44,8 @@ $medium-size: 18px;
 $small-size: 14px;
 
 //Font-weights
-$large-weight: 500;
-$medium-weight: 500;
+$large-weight: 700;
+$medium-weight: 600;
 $small-weight: 400;
 
 //Font-sizes-weights
@@ -72,6 +72,11 @@ $small-weight: 400;
 
 .font-medium-dark {
   @extend .font-medium;
+  color: $primary-dark;
+}
+
+.font-small-dark{
+  @extend .font-small;
   color: $primary-dark;
 }
 
