@@ -10,7 +10,6 @@ import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
 import SubTabs from '../components/SubTabs';
 import { setIsCollapsed } from '../actions/toolbar';
-
 import styles from './styles.scss';
 
 function DashboardApp(props) {
