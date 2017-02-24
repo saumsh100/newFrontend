@@ -111,8 +111,8 @@ export default function NavList({ location }) {
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">
           <SubNavItem path="/settings/clinic" label="Clinic" />
-          <SubNavItem path="/settings/booking" label="Online Booking" />
-          <SubNavItem path="/settings/treatments" label="Treatments" />
+          <SubNavItem path="/settings/schedule" label="Schedule" />
+          <SubNavItem path="/settings/services" label="Services" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
         </MultiNavItem>
       </Nav>

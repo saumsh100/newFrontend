@@ -40,12 +40,12 @@ const ROUTES = {
       label: 'Clinic',
     },
     {
-      to: '/settings/booking',
-      label: 'Online Booking',
+      to: '/settings/schedule',
+      label: 'Schedule',
     },
     {
-      to: '/settings/treatments',
-      label: 'Treatments',
+      to: '/settings/services',
+      label: 'Services',
     },
     {
       to: '/settings/practitioners',
