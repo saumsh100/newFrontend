@@ -165,7 +165,7 @@ class Availability extends React.Component {
       shouldAvailabilitiesBeUpdated = true;
     }
 
-    if (shouldAvailabilitiesBeUpdated) {
+    if (shouldAvailabilitiesBeUpdated && params.serviceId) {
       this.props.fetchEntities({
         key: 'availabilities',
         params,
