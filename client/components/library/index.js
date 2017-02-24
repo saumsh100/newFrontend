@@ -4,7 +4,7 @@ import Avatar from './Avatar';
 import Button from './Button';
 import Card from './Card';
 import CardHeader from './CardHeader';
-import Form, { Field } from './Form';
+import Form, { FormSection, Field } from './Form';
 import Icon from './Icon';
 import IconButton from './IconButton';
 import InfiniteScroll from './InfiniteScroll';
@@ -15,6 +15,7 @@ import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
+import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 
 export {
@@ -25,6 +26,7 @@ export {
   CardHeader,
   Field,
   Form,
+  FormSection,
   Icon,
   IconButton,
   InfiniteScroll,
@@ -36,6 +38,7 @@ export {
   RouterTabs,
   Tabs,
   Tab,
+  Toggle,
   Tooltip,
 };
 

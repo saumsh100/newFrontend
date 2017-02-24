@@ -10,7 +10,6 @@ export default function RFInput(props) {
     type,
     error,
     meta,
-
   } = props;
 
   const { touched, asyncValidating, dirty } = meta;

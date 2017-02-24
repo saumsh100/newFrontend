@@ -192,6 +192,14 @@ export default function Routes({ history }) {
                 });
               }}
             />
+            <Route
+              path="hours"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Clinic/OfficeHoursForm'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/OfficeHoursForm').default);
+                });
+              }}
+            />
           </Route>
           <Route
             path="schedule"

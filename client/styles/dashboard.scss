@@ -11,9 +11,29 @@ body {
   font-size: 14px;
 }
 
-:global(#root) {
-  height: 100%;
-  > div {
+:global {
+  #root {
     height: 100%;
+    > div {
+      height: 100%;
+    }
+  }
+
+  .CareCruToggle.react-toggle--checked {
+    &:hover {
+      .react-toggle-track {
+        background-color: $primary-color;
+      }
+    }
+
+    .react-toggle-track {
+      background-color: $primary-color;
+    }
+  }
+
+  .CareCruToggle.react-toggle--focus {
+    .react-toggle-thumb {
+      box-shadow: none;
+    }
   }
 }

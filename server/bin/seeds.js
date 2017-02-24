@@ -380,6 +380,19 @@ const SEEDS = {
     },
   ],
 
+  OperationalHours: [
+    {
+      isClosed: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      isClosed: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+  ],
+
   Practitioner: [
     {
       id: practitionerId,
