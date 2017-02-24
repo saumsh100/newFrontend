@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
-import styles from './styles.scss';
 import includes from 'lodash/includes';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
-import SignUp from './SignUp'
 import { Button, Form, Field } from '../library';
-
+import SignUp from './SignUp';
+import Preferences from './Preferences';
+import 'react-day-picker/lib/style.css';
+import styles from './styles.scss';
 
 class Availabilities extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Availabilities extends React.Component {
       selectedEndDay: moment().add(4, 'd')._d,
       modalIsOpen: false,
       practitionersStartEndDate: {},
-      step: 1,
+      checked: false,
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
     this.onServiceChange = this.onServiceChange.bind(this);
@@ -26,9 +26,8 @@ class Availabilities extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.isDaySelected = this.isDaySelected.bind(this);
-    this.saveAndContinue = this.saveAndContinue.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
-    this.handleSaveClick = this.handleSaveClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
 
@@ -47,7 +46,7 @@ class Availabilities extends React.Component {
     const {sixDaysShift, practitionersStartEndDate} = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
-    const newEndDay = moment(selectedOldStartDay)._d
+    const newEndDay = moment(selectedOldStartDay)._d;
     const newStartDay = moment(newEndDay).subtract(4, 'd')._d;
 
     sixDaysShift({
@@ -111,17 +110,18 @@ class Availabilities extends React.Component {
     this.setState({modalIsOpen: !modalIsOpen});
   }
 
-  saveAndContinue(e) {
-    e.preventDefault();
-    this.setState({step: 2});
+  handleChange() {
+    this.setState({
+      checked: !this.state.checked
+    })
   }
-  handleSaveClick(e) {
-    e.preventDefault();
-    const { setRegistrationStep } = this.props;
-    setRegistrationStep(2);
-  }
+
   renderFirstStep({practitionerId, services, availabilities, practitioners, defaultValues}) {
     const startsAt = this.props.practitionersStartEndDate.get('startsAt');
+    const preferences = this.state.checked
+      ?
+      <Preferences startsAt={startsAt } setRegistrationStep={this.props.setRegistrationStep}/>
+      : null;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -134,38 +134,24 @@ class Availabilities extends React.Component {
               </div>
             </div>
             <div className={styles.sidebar__body}>
-              <div className={styles.sidebar__body_practitioner}>
-                <img className={styles.practitioner__img} src="images/practitioner_1.png" alt="doctor">
-                </img>
-                <div className={styles.practitioner__name}>
-                  Dr. Chelsea
+              <div className={styles.sidebar__body_address}>
+                <div className={styles.sidebar__address}>
+                  <div className={styles.sidebar__address_title}>
+                    PACIFIC HEART DENTAL
+                  </div>
+                  <div className={styles.sidebar__address_text}>
+                    194-105 East 3rd
+                    7 ave
+                    Vancouver, BC
+                    Canda V1B 2C3
+                  </div>
                 </div>
-                <div className={styles.practitioner__descr}>
-                  <span>Dr. Chelsea</span>
-                  lorem Ipsum is
-                  simply dummy text of the
-                  printing and typesetting
-                  industry. Lorem
-                </div>
-              </div>
-              <div className={styles.sidebar__body_map}>
               </div>
             </div>
             <div className={styles.sidebar__footer}>
-              <div className={styles.sidebar__footer_additional}>
-                <div className={styles.sidebar__footer_title}>ADDITIONAL INFO</div>
-                <ul className={styles.sidebar__footer_list}>
-                  <li>This clinic accpets all major
-                    insuranc
-                  </li>
-                  <li>Approximate appointment
-                    length is 120 min
-                  </li>
-                </ul>
-              </div>
               <div className={styles.sidebar__footer_copy}>
-                <span>POWERED BY:</span>
-                <img src="/images/carecru_logo.png" alt="logo"/>
+                <div>POWERED BY:</div>
+                <img src="/images/logo_black.png" alt="logo"/>
               </div>
             </div>
           </div>
@@ -261,28 +247,27 @@ class Availabilities extends React.Component {
                 </button>
               </div>
               <div className={styles.appointment__footer}>
-                <div className={styles.appointment__footer_title}>
-                  would you like to be informed if an earlier time becomes available?
-                </div>
-                <form className={styles.appointment__footer_confirm}>
-                  <div className={styles.appointment__footer_select}>
-                    <input type="radio" name="answer" id="yes" value="yes"/>
-                    <label htmlFor="yes">Yes</label>
-                    <input type="radio" name="answer" id="no" value="no"/>
-                    <label htmlFor="no">No</label>
+                <div className={styles.appointment__footer_wrapper}>
+                  <div className={styles.appointment__footer_title}>
+                    BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
                   </div>
-                  <button disabled={!startsAt} onClick={this.handleSaveClick} className={styles.appointment__footer_btn} type="submit">Continue</button>
-                </form>
-                <div className={styles.appointment__footer_pagination}>
-                  <ul>
-                    <li>
-                      <div>1</div>
-                    </li>
-                    <li>
-                      <div>2</div>
-                    </li>
-                  </ul>
+                  <form className={styles.appointment__footer_confirm}>
+                    <div className={styles.appointment__footer_select}>
+                      <input type="checkbox"
+                             name="answer"
+                             id="yes"
+                             value="yes"
+                             checked={ this.state.checked }
+                             onChange={ this.handleChange } />
+                      <label htmlFor="yes">Yes</label>
+                    </div>
+                    <button disabled={!startsAt}
+                            onClick={this.handleSaveClick}
+                            className={this.state.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn }
+                            type="submit">Continue</button>
+                  </form>
                 </div>
+                {preferences}
               </div>
             </div>
           </div>

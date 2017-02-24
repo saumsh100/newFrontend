@@ -60,68 +60,35 @@ body {
             }
         }
         &__body {
+            padding-top: 25px;
             margin-bottom: auto;
-
-            &_practitioner {
-                margin: 30px 0 20px;
-            }
-            .practitioner {
-                &__img {
-                    width: 125px;
-                    border-radius: 50%;
-                    display: block;
-                    margin: 0 auto;
-                }
-                &__name {
-                    margin-top: 10px;
-                    color: #fff;
-                    text-align: center;
-                }
-                &__descr {
-                    margin-top: 20px;
-                    line-height: 1.5;
-                    color: #fff;
-                    font-size: 9px;
-                    span {
-                        font-weight: 500;
-                    }
-                }
+        }
+        &__address {
+            font-size: 10px;
+            text-align: center;
+            line-height: 1.25;
+            color: #fff;
+            &_title {
+                font-size: 11px;
+                padding: 2px;
+                font-weight: 500;
+                text-transform: uppercase;
             }
         }
         &__footer {
             padding: 10px 0 20px;
-            border-top: 1px solid #fff;
-            &_title {
-                margin-bottom: 5px;
-                font-size: 9px;
-                font-weight: 500;
-                color: #fff;
-                text-transform: uppercase;
-            }
-            &_list {
-                padding: 0;
-                margin: 0;
-                list-style: none;
-                li {
-                    font-size: 9px;
-                    color: #fff;
-                    &::before {
-                        padding-right: 5px;
-                        content: "-";
-                    }
-                }
-            }
             &_copy {
                 display: flex;
                 margin-top: 18px;
-                align-items: flex-end;
-                span {
+                align-items: center;
+                flex-direction: column;
+                div {
                     margin-right: 2px;
                     font-size: 8px;
                     color: #fff;
                 }
                 img {
-                    height: 12px;
+                    height: 40px;
                 }
             }
         }
@@ -330,19 +297,26 @@ body {
         margin-top: 10px;
         font-size: 10px;
         text-align: center;
+        &_wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
         &_title {
             font-size: 8px;
             color: #2e3945;
             text-transform: uppercase;
             font-weight: 500;
-            margin-bottom: 5px;
-      }
+        }
+        &_confirm {
+            display: flex;
+        }
         &_select {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto;
-            width: 100px;
+            margin-left: 5px;
             input {
                 margin-right: 5px;
             }
@@ -350,8 +324,10 @@ body {
                 margin-right: 5px;
             }
         }
+        &_btndisabled {
+            display: none !important;
+        }
         &_btn {
-            margin-top: 20px;
             color: #fff;
             text-transform: uppercase;
             font-size: 8px;
@@ -363,57 +339,6 @@ body {
             &:disabled {
                 cursor: not-allowed;
                 opacity: .65;
-            }
-        }
-        &_pagination {
-            margin: 10px 0 0;
-            ul {
-                display: flex;
-                padding: 0;
-                margin: 0;
-                list-style: none;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-            }
-            li {
-                position: relative;
-                display: flex;
-                width: 20px;
-                height: 20px;
-                background: #f3715c;
-                border-radius: 50%;
-                justify-content: center;
-                align-items: center;
-                div {
-                    z-index: 1;
-                }
-                &:first-child {
-                    margin-right: 10px;
-                    color: white;
-                    &::before {
-                        position: absolute;
-                        left: 18px;
-                        width: 11px;
-                        height: 2px;
-                        content: "";
-                        background: #f3715c;
-                    }
-                }
-                &:last-child {
-                    margin-left: 10px;
-                    color: #f3715c;
-                    background: white;
-                    border: 2px solid;
-                    &::before {
-                        position: absolute;
-                        right: 18px;
-                        width: 11px;
-                        height: 2px;
-                        content: "";
-                        background: #f3715c;
-                    }
-                }
             }
         }
     }
