@@ -7,8 +7,6 @@ import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
 import Popover from 'react-popover';
 
-
-
 class RequestListItem extends Component {
 
   constructor(props) {

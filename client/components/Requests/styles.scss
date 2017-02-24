@@ -32,7 +32,7 @@
   color: $primary-dark;
  }
 
-.requestData{
+.requestData {
   width: 160px;
   padding-left: 1em;
   border-left: 2px solid;
@@ -43,9 +43,11 @@
   &__time{
     @extend .font-medium-dark;
   }
+
   &__nameAge{
     display: flex;
   }
+
   &__name{
     @extend .font-medium-grey;
     width: auto;
@@ -79,12 +81,13 @@
   &__month {
     font-size: $medium-size
   }
+
   &__day {
     font-size: $large-size;
   }
 }
 
-.clickHandlers{
+.clickHandlers {
   display: flex;
   width: 44px;
   padding-left: 5px;
@@ -92,17 +95,19 @@
     @extend .font-small-dark;
     padding-left: 10px;
   }
+
   &__remove{
     padding: 5;
     font-size: 22px;
     color: $inactive-color;
   }
+
   &__confirm{
     padding: 5;
     font-size: 22px;
-    color: #2cc4a7;
+    color: $primary-green;
     &:hover {
-      color: springgreen;
+      color: darken($primary-green, 10%);
     }
   }
 }
