@@ -15,7 +15,6 @@ class RequestListItem extends Component {
     super(props)
     this.onClickConfirm = this.onClickConfirm.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
-    this.setId = this.setId.bind(this);
   }
 
   onClickConfirm(){
@@ -26,10 +25,12 @@ class RequestListItem extends Component {
     this.props.removeRequest(this.props.request);
   }
 
+  /*
+  //set clicked handler on listitem
   setId(){
     const { setClickedId, request } = this.props;
     setClickedId({id: request.get('id')});
-  }
+  }*/
 
   render() {
     const {
@@ -42,6 +43,8 @@ class RequestListItem extends Component {
 
     const data = {
       time: request.getFormattedTime(),
+      age: request.getAge(patient.birthDate),
+      name: patient.getFullName(),
       nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
       email: patient.email,
       service: service.name,
@@ -51,7 +54,7 @@ class RequestListItem extends Component {
       day: request.getDay(),
     };
 
-    let showHoverComponents = (<div className={styles.requestData__newreqText}>New</div>);
+    let showHoverComponents = (<div className={styles.clickHandlers__newreqText}>New</div>);
 
     if (isHovered) {
       showHoverComponents = (
@@ -72,28 +75,23 @@ class RequestListItem extends Component {
       );
     }
 
-
-
     return (
-        <ListItem
-          className={styles.requestListItem}
-          onClick={this.setId}>
+        <ListItem className={styles.requestListItem}>
           <Popover
             className={styles.requestPopover}
-            isOpen={active}
+            isOpen={isHovered}
             body={[(
-              <div>
-                <AppointmentShowData
-                  nameAge={data.nameAge}
-                  time={data.time}
-                  service={data.service}
-                  phoneNumber={data.phoneNumber}
-                  email={data.email}
-                  note={data.note}
-                />
-              </div>
+              <AppointmentShowData
+                nameAge={data.nameAge}
+                time={data.time}
+                service={data.service}
+                phoneNumber={data.phoneNumber}
+                email={data.email}
+                note={data.note}
+              />
             )]}
             preferPlace="left"
+            tipSize={12}
           >
             <MonthDay
               month={data.month}
@@ -102,6 +100,8 @@ class RequestListItem extends Component {
           </Popover>
           <RequestData
             time={data.time}
+            name={data.name}
+            age={data.age}
             nameAge={data.nameAge}
             phoneNumber={data.phoneNumber}
             service={data.service}
