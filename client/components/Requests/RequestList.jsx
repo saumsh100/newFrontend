@@ -11,8 +11,21 @@ import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '.
 class RequestList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      clickedId: null,
+    }
+
     this.confirmAppointment = this.confirmAppointment.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
+    this.setClickedId = this.setClickedId.bind(this);
+  }
+
+  setClickedId(id) {
+    if(id === this.state.clickedId){
+      this.setState({ clickedId: null });
+    }else {
+      this.setState({clickedId: id });
+    }
   }
 
   confirmAppointment(request) {
@@ -54,6 +67,8 @@ class RequestList extends Component {
               chair={this.props.chairs.get(request.get('chairId'))}
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
+              clickedId={this.state.clickedId}
+              setClickedId={this.setClickedId}
             />
           );
         })}

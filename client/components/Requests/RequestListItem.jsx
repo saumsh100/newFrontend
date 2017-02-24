@@ -15,6 +15,7 @@ class RequestListItem extends Component {
     super(props)
     this.onClickConfirm = this.onClickConfirm.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
+    this.setId = this.setId.bind(this);
   }
 
   onClickConfirm(){
@@ -25,12 +26,18 @@ class RequestListItem extends Component {
     this.props.removeRequest(this.props.request);
   }
 
+  setId(){
+    const { setClickedId, request } = this.props;
+    setClickedId(request.get('id'));
+  }
+
   render() {
     const {
       request,
       patient,
       service,
       isHovered,
+      clickedId,
     } = this.props;
 
     const data = {
@@ -64,12 +71,18 @@ class RequestListItem extends Component {
         </div>
       );
     }
-    return (
 
-        <ListItem className={styles.requestListItem}>
+    let showPopover = false;
+    if(clickedId === request.get('id')){
+      showPopover = true;
+    }
+    return (
+        <ListItem
+          className={styles.requestListItem}
+          onClick={this.setId}>
           <Popover
             className={styles.requestPopover}
-            isOpen={isHovered}
+            isOpen={showPopover}
             body={[(
               <div>
                 <AppointmentShowData
@@ -97,7 +110,6 @@ class RequestListItem extends Component {
           />
           {showHoverComponents}
         </ListItem>
-
     );
   }
 }
