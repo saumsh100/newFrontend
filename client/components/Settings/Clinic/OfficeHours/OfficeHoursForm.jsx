@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Button, Form, FormSection, Field } from '../../library';
+import { Button, Form, FormSection, Field } from '../../../library';
 
 function submit(values) {
   alert(JSON.stringify(values));

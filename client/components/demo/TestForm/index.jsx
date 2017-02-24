@@ -39,7 +39,7 @@ export default function TestForm({ patient, onSubmit }) {
   };
 
   return (
-    <Form form="testForm" onSubmit={submit} validate={equalNames} initialValues={initialValues}>
+    <Form form="testForm" onSubmit={onSubmit} validate={equalNames} initialValues={initialValues}>
       <Field
         required
         name="firstName"
