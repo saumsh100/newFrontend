@@ -291,7 +291,7 @@ const SEEDS = {
       accountId,
       firstName: 'Justin',
       lastName: 'Sharp',
-      email: 'justin@carecru.com',
+      email: 'justin2@carecru.com',
       phoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',

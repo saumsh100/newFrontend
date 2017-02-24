@@ -48,7 +48,10 @@ patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('
  */
 patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
   const { accountId } = req;
-  
+  const { email } = req.query;
+  if (email) return Patient.filter({ email }).run()
+    .then(p => res.send({length: p.length }));
+
   return Patient.filter({ accountId }).run()
     .then(patients => res.send(normalize('patients', patients)))
     .catch(next);

@@ -3,7 +3,7 @@ import Timer from './Timer';
 import styles from './SignUp.scss';
 
 import { Button, Form, Field } from '../library';
-import validate from '../library/Form/validate';
+import { validate } from '../library/Form/validate';
 
 class SignUp extends Component {
   constructor(props) {

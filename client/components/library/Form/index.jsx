@@ -4,6 +4,7 @@ import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
 import Field from './Field';
 
+import { asyncEmailValidate } from './validate'
 /**
  * Given the requiredFields it will generate a validate function to return errors if
  * a field is empty. Note that this is note fired if the form is pristine.
@@ -49,7 +50,8 @@ Form.propTypes = {
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
 const withReduxForm = (BaseComponent) => {
   return reduxForm({
-
+    asyncValidate: asyncEmailValidate,
+    asyncBlurFields: ['email'],
   })(BaseComponent);
 };
 

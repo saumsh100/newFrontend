@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const validate = values => {
   const errors = {};
   if (!values.firstName) {
@@ -37,4 +39,16 @@ const validate = values => {
   return errors
 };
 
-export default validate
+const asyncEmailValidate = (values) => {
+  return axios.get('api/patients/', { params: { email: values.email }})
+    .then((response) => {
+      if (response.data.length) {
+       throw { email: `patient with ${values.email} already exists... ` }
+      }
+    })
+}
+
+export {
+  validate,
+  asyncEmailValidate,
+};
