@@ -41,3 +41,7 @@ export const SIX_DAYS_SHIFT = 'SIX_DAYS_SHIFT';
 export const SET_DAY = 'SET_DAY';
 export const SET_PRACTITIONER = 'SET_PRACTITIONER';
 export const SET_SERVICE = 'SET_SERVICE';
+
+export const SET_POPOVER_ID = 'SET_POPOVER_ID';
+export const READ_POPOVER_ID = 'READ_POPOVER_ID';
+

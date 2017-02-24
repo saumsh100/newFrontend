@@ -28,7 +28,7 @@ class RequestListItem extends Component {
 
   setId(){
     const { setClickedId, request } = this.props;
-    setClickedId(request.get('id'));
+    setClickedId({id: request.get('id')});
   }
 
   render() {
@@ -37,7 +37,7 @@ class RequestListItem extends Component {
       patient,
       service,
       isHovered,
-      clickedId,
+      active,
     } = this.props;
 
     const data = {
@@ -72,17 +72,15 @@ class RequestListItem extends Component {
       );
     }
 
-    let showPopover = false;
-    if(clickedId === request.get('id')){
-      showPopover = true;
-    }
+
+
     return (
         <ListItem
           className={styles.requestListItem}
           onClick={this.setId}>
           <Popover
             className={styles.requestPopover}
-            isOpen={showPopover}
+            isOpen={active}
             body={[(
               <div>
                 <AppointmentShowData

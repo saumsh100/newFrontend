@@ -7,25 +7,13 @@ import { List } from '../library';
 import styles from './styles.scss';
 
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
+import { setPopoverId } from '../../thunks/requests';
 
 class RequestList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      clickedId: null,
-    }
-
     this.confirmAppointment = this.confirmAppointment.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
-    this.setClickedId = this.setClickedId.bind(this);
-  }
-
-  setClickedId(id) {
-    if(id === this.state.clickedId){
-      this.setState({ clickedId: null });
-    }else {
-      this.setState({clickedId: id });
-    }
   }
 
   confirmAppointment(request) {
@@ -57,6 +45,7 @@ class RequestList extends Component {
     return (
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
+          const active = request.get('id') === this.props.clickedId;
           return (
             <RequestListItem
               key={request.id}
@@ -67,11 +56,11 @@ class RequestList extends Component {
               chair={this.props.chairs.get(request.get('chairId'))}
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
-              clickedId={this.state.clickedId}
-              setClickedId={this.setClickedId}
+              setClickedId={this.props.setPopoverId}
+              active={active}
             />
           );
-        })}
+        })}es
       </List>
     );
   }
@@ -81,6 +70,7 @@ RequestList.propTypes = {
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
+  setPopoverId: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
@@ -88,10 +78,16 @@ function mapActionsToProps(dispatch) {
     updateEntityRequest,
     deleteEntityRequest,
     createEntityRequest,
+    setPopoverId,
   }, dispatch);
 }
 
-const enhance = connect(null, mapActionsToProps);
+function mapStateToProps({requests}){
+  return {
+    clickedId: requests.get('clickedId'),
+  }
+}
 
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(RequestList);
