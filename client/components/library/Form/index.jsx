@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
 import Field from './Field';
+import FormSection from './FormSection';
 
 /**
  * Given the requiredFields it will generate a validate function to return errors if
@@ -84,4 +85,5 @@ export default enhance(Form);
 
 export {
   Field,
+  FormSection,
 };
