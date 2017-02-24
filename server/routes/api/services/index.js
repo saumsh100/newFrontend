@@ -5,6 +5,7 @@ const normalize = require('../normalize');
 const _ = require('lodash');
 
 servicesRouter.get('/', (req, res, next) => {
+  // TODO: add query to filter({  }) !!!
   if (req.query.practitionerId) {
     return Service.run()
       .then((services) => {
@@ -17,8 +18,9 @@ servicesRouter.get('/', (req, res, next) => {
       });
     // return;
   }
+
   Service.run()
-    .then(services => res.send(normalize(services, arrayOf(servicesSchema))))
+    .then(services => res.send(normalize(services, arrayOf(services))))
     .catch(next);
 });
 

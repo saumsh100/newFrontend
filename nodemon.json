@@ -3,7 +3,7 @@
     "server/public/",
     "server/test/",
     "server/node_modules/",
-    "server/app/views/",
+    "server/app/templates/",
     "server/app/assets/",
     "server/.idea/"
   ],

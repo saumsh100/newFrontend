@@ -1,4 +1,4 @@
-
+const _ = require('lodash');
 const requestsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
@@ -36,7 +36,17 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
     joinObject,
   } = req;
 
-  return Request.filter({ accountId, isCancelled: false }).getJoin(joinObject).run()
+  const isCancelledQuery = req.query && req.query.isCancelled;
+  const filter = { accountId };
+  if (isCancelledQuery) {
+    if (isCancelledQuery === 'true') {
+      filter.isCancelled = true;
+    } else if (isCancelledQuery) {
+      filter.isCancelled = false;
+    }
+  }
+
+  return Request.filter(filter).getJoin(joinObject).run()
     .then(requests => res.send(normalize('requests', requests)))
     .catch(next);
 });
@@ -44,8 +54,9 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
 /**
  * Update a request
  */
-requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) =>{
-  return req.request.merge(req.body).save()
+requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) => {
+  const updatedReq = _.omit(req.body, ['id', 'createdAt']);
+  return req.request.merge(updatedReq).save()
     .then(request => res.send(normalize('request', request)))
     .catch(next);
 });
@@ -53,10 +64,10 @@ requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res
 /**
  * Delete a request
  */
-requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, res, next) =>{
+requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, res, next) => {
   return req.request.delete()
-    .then(() =>{
-        res.send(204);
+    .then(() => {
+      res.send(204);
     })
     .catch(next);
 });

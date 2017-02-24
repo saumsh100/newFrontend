@@ -18,11 +18,11 @@ export default function withHoverable(BasicComponent) {
         isHovered: false,
       };
 
-      this.handleMouseEnter = this.handleMouseEnter.bind(this);
+      this.handleMouseOver = this.handleMouseOver.bind(this);
       this.handleMouseLeave = this.handleMouseLeave.bind(this);
     }
 
-    handleMouseEnter(e) {
+    handleMouseOver(e) {
       if (!this.state.isHovered) {
         this.setState({ isHovered: true });
       }
@@ -38,7 +38,7 @@ export default function withHoverable(BasicComponent) {
       const { isHovered } = this.state;
       return (
         <div
-          onMouseEnter={this.handleMouseEnter}
+          onMouseOver={this.handleMouseOver}
           onMouseLeave={this.handleMouseLeave}
         >
           <BasicComponent

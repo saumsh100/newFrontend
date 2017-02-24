@@ -33,6 +33,25 @@ const ROUTES = {
       disabled: true,
     },
   ],
+
+  '/settings': [
+    {
+      to: '/settings/clinic',
+      label: 'Clinic',
+    },
+    {
+      to: '/settings/schedule',
+      label: 'Schedule',
+    },
+    {
+      to: '/settings/services',
+      label: 'Services',
+    },
+    {
+      to: '/settings/practitioners',
+      label: 'Practitioners',
+    },
+  ],
 };
 
 class SubTabs extends Component {
@@ -69,6 +88,13 @@ class SubTabs extends Component {
         <RouterTabs
           location={location}
           routes={ROUTES['/schedule']}
+        />
+      );
+    } else if (location.pathname.indexOf('/settings') === 0) {
+      subTabsComponent = (
+        <RouterTabs
+          location={location}
+          routes={ROUTES['/settings']}
         />
       );
     }

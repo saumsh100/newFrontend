@@ -3,15 +3,14 @@ import React, { PropTypes } from 'react';
 import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import AvailabilityContainer from './AvailabilityContainer';
 
 import styles from './styles.scss';
 
 function PatientApp(props) {
   return (
     <div>
-      <h2>
-        Insert Online Booking Widget Here
-      </h2>
+      <AvailabilityContainer />
     </div>
   );
 }

@@ -1,0 +1,19 @@
+
+@import '../ui.scss';
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background-color: $primary-grey;
+  font-size: 14px;
+}
+
+:global(#root) {
+  height: 100%;
+  > div {
+    height: 100%;
+  }
+}
