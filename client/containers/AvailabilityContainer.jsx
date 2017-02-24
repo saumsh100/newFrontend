@@ -28,23 +28,8 @@ class Availability extends React.Component {
   }
 
   componentDidMount() {
-    console.log(window.accountId, 'windowwwww');
-    if (window.accountId) {
-      const params = {
-        accountId: window.accountId
-      };
-      this.props.fetchEntities({
-        key: 'practitioners',
-        params,
-      });
-      this.props.fetchEntities({
-        key: 'services',
-        params,
-      })
-    } else {
-      this.props.fetchEntities({key: 'practitioners'});
-      this.props.fetchEntities({key: 'services'});
-    }
+    this.props.fetchEntities({key: 'practitioners'});
+    this.props.fetchEntities({key: 'services'});
   }
 
   componentWillReceiveProps(nextProps) {

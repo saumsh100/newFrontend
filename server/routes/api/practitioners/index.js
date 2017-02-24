@@ -1,5 +1,6 @@
 
 const practitionersRouter = require('express').Router();
+const authMiddleware = require('../../../middleware/auth');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
@@ -10,7 +11,7 @@ practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitione
 /**
  * Get all practitioners under a clinic
  */
-practitionersRouter.get('/', checkPermissions('practitioners:read'), (req, res, next) => {
+practitionersRouter.get('/', authMiddleware, checkPermissions('practitioners:read'), (req, res, next) => {
   console.log(req.query, 'the query');
   const accountId = req.query.accountId || req.accountId;
   // const { accountId } = req;
