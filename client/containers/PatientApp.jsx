@@ -8,6 +8,7 @@ import AvailabilityContainer from './AvailabilityContainer';
 import styles from './styles.scss';
 
 function PatientApp(props) {
+  debugger;
   return (
     <div>
       <AvailabilityContainer />

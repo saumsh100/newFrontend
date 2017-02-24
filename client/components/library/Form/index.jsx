@@ -50,8 +50,7 @@ Form.propTypes = {
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
 const withReduxForm = (BaseComponent) => {
   return reduxForm({
-    asyncValidate: asyncEmailValidate,
-    asyncBlurFields: ['email'],
+    
   })(BaseComponent);
 };
 

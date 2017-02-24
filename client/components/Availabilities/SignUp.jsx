@@ -3,7 +3,7 @@ import Timer from './Timer';
 import styles from './SignUp.scss';
 
 import { Button, Form, Field } from '../library';
-import { validate } from '../library/Form/validate';
+import { validate, asyncEmailValidate } from '../library/Form/validate';
 
 class SignUp extends Component {
   constructor(props) {
@@ -57,6 +57,8 @@ class SignUp extends Component {
             className={styles.signup__body_confirm}
             onSubmit={this.bookAnAppointment}
             validate={validate}
+            asyncValidate={asyncEmailValidate}
+            asyncBlurFields={['email']}
       >
         <Field
           name="firstName"
