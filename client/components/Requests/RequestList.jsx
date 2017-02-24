@@ -7,6 +7,7 @@ import { List } from '../library';
 import styles from './styles.scss';
 
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
+import { setHoverRequestId } from '../../actions/requests';
 
 class RequestList extends Component {
   constructor(props) {
@@ -39,21 +40,20 @@ class RequestList extends Component {
   }
 
   render() {
-    const { sortedRequests } = this.props;
-
+    const { sortedRequests, patients, services, setHoverRequestId } = this.props;
     return (
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
+          //const active = request.get('id') === this.props.setHoverRequestId;
           return (
             <RequestListItem
               key={request.id}
               request={request}
-              patient={this.props.patients.get(request.get('patientId'))}
-              service={this.props.services.get(request.get('serviceId'))}
-              practitioner={this.props.practitioners.get(request.get('practitionerId'))}
-              chair={this.props.chairs.get(request.get('chairId'))}
+              patient={patients.get(request.get('patientId'))}
+              service={services.get(request.get('serviceId'))}
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
+              setClickedId={setHoverRequestId}
             />
           );
         })}
@@ -66,6 +66,7 @@ RequestList.propTypes = {
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
+  setPopoverId: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
@@ -73,10 +74,19 @@ function mapActionsToProps(dispatch) {
     updateEntityRequest,
     deleteEntityRequest,
     createEntityRequest,
+    setHoverRequestId,
   }, dispatch);
 }
 
-const enhance = connect(null, mapActionsToProps);
+/*
+function mapStateToProps({requests}){
+  return {
+    clickedId: requests.get('clickedId'),
+  }
+}*/
 
+
+
+const enhance = connect(null, mapActionsToProps);
 
 export default enhance(RequestList);

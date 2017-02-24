@@ -11,6 +11,7 @@ import date from './date';
 import schedule from './schedule';
 import dialogs from './dialogs';
 import patientList from './patientList';
+import requests from './requests'
 
 import availabilities from './availabilities';
 
@@ -24,6 +25,7 @@ export default combineReducers({
   entities,
   date,
   schedule,
+  requests,
   currentDialog: dialogs,
   patientList: patientList,
   availabilities,
