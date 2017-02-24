@@ -2,7 +2,7 @@
 @import '../../ui.scss';
 
 .requestPopover > :global(svg.Popover-tip) {
-  fill: #ffc45a;
+  fill: $primary-darkgrey;
 }
 
 .requestCard {
