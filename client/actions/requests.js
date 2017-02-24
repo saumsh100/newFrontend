@@ -1,8 +1,8 @@
 
 import { createAction } from 'redux-actions';
 import {
-  SET_POPOVER_ID,
+  SET_HOVER_REQUEST_ID,
 } from '../constants';
 
-export const setPopOverId = createAction(SET_POPOVER_ID);
+export const setHoverRequestId = createAction(SET_HOVER_REQUEST_ID);
 

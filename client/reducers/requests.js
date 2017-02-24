@@ -1,19 +1,19 @@
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
-  SET_POPOVER_ID,
+  SET_HOVER_REQUEST_ID,
 } from '../constants';
 
 const initialState = fromJS({
-  clickedId: null,
+  hoverRequestId: null,
 });
 
 export default handleActions({
 
-  [SET_POPOVER_ID](state, action){
+  [SET_HOVER_REQUEST_ID](state, action){
     const newId = action.payload.id === state.toJS().clickedId ? null : action.payload.id;
     return state.merge({
-      clickedId: newId,
+      hoverRequestId: newId,
     });
   },
 

@@ -7,7 +7,7 @@ import { List } from '../library';
 import styles from './styles.scss';
 
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
-import { setPopoverId } from '../../thunks/requests';
+import { setHoverRequestId } from '../../actions/requests';
 
 class RequestList extends Component {
   constructor(props) {
@@ -40,11 +40,11 @@ class RequestList extends Component {
   }
 
   render() {
-    const { sortedRequests, patients, services } = this.props;
+    const { sortedRequests, patients, services, setHoverRequestId } = this.props;
     return (
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
-          //const active = request.get('id') === this.props.clickedId;
+          //const active = request.get('id') === this.props.setHoverRequestId;
           return (
             <RequestListItem
               key={request.id}
@@ -53,7 +53,7 @@ class RequestList extends Component {
               service={services.get(request.get('serviceId'))}
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
-              setClickedId={this.props.setPopoverId}
+              setClickedId={setHoverRequestId}
             />
           );
         })}
@@ -74,7 +74,7 @@ function mapActionsToProps(dispatch) {
     updateEntityRequest,
     deleteEntityRequest,
     createEntityRequest,
-    setPopoverId,
+    setHoverRequestId,
   }, dispatch);
 }
 
