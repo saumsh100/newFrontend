@@ -1,5 +1,6 @@
 
 const apiRouter = require('express').Router();
+
 const appointmentRouter = require('./appointment');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
