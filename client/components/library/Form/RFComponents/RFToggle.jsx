@@ -5,6 +5,7 @@ import Toggle from '../../Toggle';
 export default function RFToggle(props) {
   const {
     input,
+    flipped,
     label,
     error,
     meta,
@@ -14,8 +15,8 @@ export default function RFToggle(props) {
 
   return (
     <Toggle
-      defaultChecked={input.value}
-      onChange={(e) => input.onChange(e.target.checked)}
+      defaultChecked={flipped ? !input.value : input.value}
+      onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
     />
   );
 }

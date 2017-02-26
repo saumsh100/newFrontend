@@ -36,6 +36,7 @@ export default function TestForm({ patient, onSubmit }) {
     firstName: patient.firstName,
     middleName: patient.middleName,
     lastName: patient.lastName,
+    city: 'Vancouver',
   };
 
   return (
@@ -55,6 +56,16 @@ export default function TestForm({ patient, onSubmit }) {
         name="lastName"
         label="Last Name"
         validate={[ containsLetter('c') ]}
+      />
+      <Field
+        required
+        component="DropdownSelect"
+        name="city"
+        options={[
+          { value: 'Edmonton' },
+          { value: 'Calgary' },
+          { value: 'Vancouver' },
+        ]}
       />
       <Button type="submit">Form Submit</Button>
     </Form>

@@ -36,5 +36,18 @@ body {
       box-shadow: none;
     }
   }
+
+  .dd-menu-items {
+    min-width: 200px;
+    z-index: 2500 !important;
+    white-space: nowrap;
+    margin-top: 12px !important;
+    background-color: $primary-white;
+  }
+
+  .separator {
+    height: 2px !important;
+    background-color: $primary-lightgrey !important;
+  }
 }
 

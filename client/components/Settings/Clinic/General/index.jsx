@@ -18,10 +18,14 @@ function submit(values) {
     });
 }
 
+function submit2(values) {
+  alert(JSON.stringify(values));
+}
+
 export default function General() {
   return (
     <div>
-      <GeneralForm onSubmit={submit} />
+      <GeneralForm onSubmit={submit2} />
     </div>
   );
 }
