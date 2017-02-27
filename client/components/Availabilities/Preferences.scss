@@ -1,3 +1,4 @@
+
 .appointment {
     &__daypicker {
         display: flex;
@@ -5,7 +6,6 @@
         align-items: center;
         &_title {
             font-size: 8px;
-            font-weight: 500;
             color: #2e3945;
             text-align: start;
             text-transform: uppercase;
@@ -14,8 +14,12 @@
             display: flex;
             cursor: pointer;
             flex-direction: row;
+            font-size: 16px;
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
             i {
-                margin-left: 5px;
                 color: #ff715a;
             }
         }
@@ -51,18 +55,34 @@
         display: flex;
         flex-direction: row;
         &_title {
+            font-size: 8px;
             text-transform: uppercase;
+            position: relative;
+            &:first-child {
+                text-align: left;
+            }
         }
+
         &_checkbox {
-            margin-top: 15px;
+            margin-top: 10px;
             display: flex;
             flex-wrap: wrap;
+            input[type="checkbox"] {
+                margin-right: 2px;
+            }
+            div {
+                &:first-child {
+                    margin-right: 5px;
+                }
+                label {
+                    margin: 2px;
+                }
+            }
         }
         label {
             display: flex;
             flex-direction: row;
             align-items: center;
-            margin: 0 10px 2px;
         }
         &_left {
             width: 50%;

@@ -34,29 +34,35 @@ class Preferences extends Component {
               PREFERENCES
             </div>
             <div className={styles.appointment__preferences_checkbox}>
-              <label>
-                <input type="checkbox" name="day" id="morning" value="morning"/>Morning
-              </label>
-              <label>
-                <input type="checkbox" name="day" id="afternoon" value="afternoon"/>Afternoon
-              </label>
-              <label>
-                <input type="checkbox" name="day" id="evenings" value="evenings"/>Evenings
-              </label>
-              <label>
-                <input type="checkbox" name="day" id="weekdays" value="weekdays"/>Weekdays
-              </label>
-              <label>
-                <input type="checkbox" name="day" id="weekends" value="weekends"/>Weekends
-              </label>
+              <div>
+                <label>
+                  <input type="checkbox" name="day" id="morning" value="morning"/>Morning
+                </label>
+                <label>
+                  <input type="checkbox" name="day" id="afternoon" value="afternoon"/>Afternoon
+                </label>
+                <label>
+                  <input type="checkbox" name="day" id="evenings" value="evenings"/>Evenings
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input type="checkbox" name="day" id="weekdays" value="weekdays"/>Weekdays
+                </label>
+                <label>
+                  <input type="checkbox" name="day" id="weekends" value="weekends"/>Weekends
+                </label>
+              </div>
             </div>
           </div>
           <div className={styles.appointment__preferences_right}>
             <div className={styles.appointment__daypicker}>
-              <div className={styles.appointment__preferences_title}>Appointment scheduler</div>
-              <div onClick={this.openModal}
-                   className={styles.appointment__daypicker_icon}>
-                <i className="fa fa-calendar"/>
+              <div className={styles.appointment__preferences_title}>
+                Appointment scheduler
+                <div onClick={this.openModal}
+                     className={styles.appointment__daypicker_icon}>
+                  <i className="fa fa-calendar"/>
+                </div>
               </div>
               {this.state.modalIsOpen ?
                 (
