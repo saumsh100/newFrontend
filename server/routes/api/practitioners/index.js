@@ -6,14 +6,18 @@ const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
 const normalize = require('../normalize');
 
-practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
+// practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
 /**
  * Get all practitioners under a clinic
  */
-practitionersRouter.get('/', authMiddleware, checkPermissions('practitioners:read'), (req, res, next) => {
-  console.log(req.query, 'the query');
+practitionersRouter.get('/', (req, res, next) => {
+  console.log('the query')
+  console.log(req.query);
+  
   const accountId = req.query.accountId || req.accountId;
+  console.log("accountId");
+  console.log(accountId);
   // const { accountId } = req;
 
   return Practitioner.filter({ accountId }).run()

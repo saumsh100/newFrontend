@@ -1,10 +1,10 @@
-
-const apiRouter = require('express').Router();
 const myRouter = require('express').Router();
 const practitionersRouter = require('../api/practitioners');
 const loaders = require('../util/loaders');
+const createJoinObject = require('../../middleware/createJoinObject');
 
-apiRouter.use('/practitioners', practitionersRouter);
+
+myRouter.use('/practitioners', practitionersRouter);
 
 myRouter.get('/:accountId', (req, res, next) => {
   console.log(req.params.accountId);
@@ -22,6 +22,6 @@ myRouter.get('/widgets/:accountId', (req, res, next) => {
   });
 });
 
-myRouter.use('/api', apiRouter);
+// myRouter.use('/api', apiRouter);
 
 module.exports = myRouter;
