@@ -28,11 +28,13 @@ class Availability extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEntities({key: 'practitioners'});
-    this.props.fetchEntities({key: 'services'});
+    const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
+    this.props.fetchEntities({key: 'practitioners', domen});
+    this.props.fetchEntities({key: 'services', domen});
   }
 
   componentWillReceiveProps(nextProps) {
+    const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
 
     const {setPractitioner, setService} = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
@@ -169,6 +171,7 @@ class Availability extends React.Component {
       this.props.fetchEntities({
         key: 'availabilities',
         params,
+        domen,
       });
     }
 
@@ -177,7 +180,8 @@ class Availability extends React.Component {
       this.setState({practitionerId: nextPractitioners[0].id}, () => {
         this.props.fetchEntities({
           key: 'services',
-          params: {practitionerId: this.state.practitionerId}
+          params: {practitionerId: this.state.practitionerId},
+          domen,
         });
       });
     }

@@ -44,22 +44,31 @@ export function createPatient(params) {
     patientId,
     serviceId,
     practitionerId,
-
+    domen,
+    accountId,
 	} = params;
 	return function (dispatch, getState) {
-		const patientParams = { firstName, lastName, email, phone }
-    axios.post('api/patients', patientParams)
-      .then(() => {
+		const patientParams = { firstName, lastName, email, phone, accountId }
+    const url = domen ? '/patients' : 'api/patients'; 
+    axios.post(url, patientParams)
+      .then((result) => {
         dispatch(createPatientAction(params));
         const saveParams = { 
         	isConfirmed: false,
     			isCancelled: false,
 			    startTime: startsAt,
-			    patientId,
+			    patientId: result.data.result,
 			    serviceId,
 			    practitionerId,
+			    domen,
+			    accountId,
         }
-        saveRequest(saveParams);
+				const requestUrl = domen ? '/requests' : 'api/requests'; 
+		    axios.post(requestUrl, saveParams)
+		      .then(() => {
+						dispatch(saveRequestAction(params));
+		      })
+		      .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
 	}	
@@ -71,15 +80,6 @@ export function setStartingAppointmentTime(startsAt) {
 	}	
 }
 
-export function saveRequest(params) {
-	return function (dispatch, getState) {
-    axios.post('api/requests', params)
-      .then(() => {
-				dispatch(saveRequestAction(params));
-      })
-      .catch(err => console.log(err));
-	}
-}
 export function setRegistrationStep(registrationStep) {
   return function (dispatch, getState) {
 			dispatch(setRegistrationStepAction(registrationStep));

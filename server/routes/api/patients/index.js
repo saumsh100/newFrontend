@@ -23,8 +23,8 @@ patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
 /**
  * Create a patient
  */
-patientsRouter.post('/', checkPermissions('patients:create'), (req, res, next) => {
-  const patientData = Object.assign({}, req.body, { accountId: req.accountId });
+patientsRouter.post('/', (req, res, next) => {
+  const patientData = Object.assign({}, req.body, { accountId: req.accountId || req.body.accountId });
 
   return Patient.save(patientData)
     .then(patient => res.status(201).send(normalize('patient', patient)))

@@ -46,7 +46,10 @@ class SignUp extends Component {
 
   bookAnAppointment(params) {
     const { startsAt, practitionerId, serviceId } = this.props.practitonersStartEndDate.toJS();
-    const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId }, params);
+    const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
+    const array = location.pathname.split('/')
+    const accountId = array[array.length-1]
+    const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId, accountId }, params, { domen });
     this.props.createPatient(paramsToPass);
   }
 

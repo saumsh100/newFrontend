@@ -10,7 +10,7 @@ import {
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
 
-export function fetchEntities({ key, join, params = {} }) {
+export function fetchEntities({ key, join, params = {}, domen }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -20,7 +20,8 @@ export function fetchEntities({ key, join, params = {} }) {
       params.join = join.join(',');
     }
 
-    axios.get(entity.getUrlRoot(), { params })
+    const url = domen ? `/${key}` : entity.getUrlRoot();
+    axios.get(url, { params })
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
