@@ -4,6 +4,7 @@ import Avatar from './Avatar';
 import Button from './Button';
 import Card from './Card';
 import CardHeader from './CardHeader';
+import Checkbox from './Checkbox';
 import Form, { Field } from './Form';
 import Icon from './Icon';
 import IconButton from './IconButton';
@@ -23,6 +24,7 @@ export {
   Button,
   Card,
   CardHeader,
+  Checkbox,
   Field,
   Form,
   Icon,

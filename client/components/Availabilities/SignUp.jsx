@@ -56,12 +56,12 @@ class SignUp extends Component {
   renderBookingForm() {
     return (
       <Form
-            form="availabilitiesRequest"
-            className={styles.signup__body_confirm}
-            onSubmit={this.bookAnAppointment}
-            validate={validate}
-            asyncValidate={asyncEmailValidate}
-            asyncBlurFields={['email']}
+        form="availabilitiesRequest"
+        className={styles.signup__body_confirm}
+        onSubmit={this.bookAnAppointment}
+        validate={validate}
+        asyncValidate={asyncEmailValidate}
+        asyncBlurFields={['email']}
       >
         <Field
           name="firstName"
@@ -126,52 +126,44 @@ class SignUp extends Component {
         <div className={styles.signup__wrapper}>
           <div className={styles.signup__sidebar}>
             <div className={styles.sidebar__header}>
+              <img className={styles.sidebar__header_logo} src="images/availabilies_sidebar_logo_2.png" alt="logo"/>
               <div className={styles.sidebar__header_title}>
-                You brooked
+                Pacific Heart
+                <span>Dental</span>
               </div>
             </div>
-            <div className={styles.sidebar__main}>
-              <div className={styles.sidebar__body}>
-                <div className={styles.sidebar__body_service}>
-                  <ul>
-                    <li>SERVICE: <span>Toothache</span></li>
-                    <li>WITH: <span>Dr. Chelsea</span></li>
-                    <li>AT: <span>Feb 13 2017</span></li>
-                  </ul>
-                </div>
-                <div className={styles.sidebar__body_address}>
-                  <div className={styles.sidebar__address}>
-                    <div className={styles.sidebar__address_title}>
-                      PACIFIC HEART DENTAL
-                    </div>
-                    <div className={styles.sidebar__address_text}>
-                      194-105 East 3rd
-                      7 ave
-                      Vancouver, BC
-                      Canda V1B 2C3
-                    </div>
+            <div className={styles.sidebar__body}>
+              <div className={styles.sidebar__body_information}>
+                <div className={styles.sidebar__information}>
+                  <div className={styles.sidebar__information_title}>
+                    PACIFIC HEART DENTAL
+                  </div>
+                  <div className={styles.sidebar__information_text}>
+                    194-105 East 3rd
+                    7 ave
+                    Vancouver, BC
+                    Canda V1B 2C3
                   </div>
                 </div>
-                <div className={styles.sidebar__body_map}>
+              </div>
+              <div className={styles.sidebar__body_information}>
+                <div className={styles.sidebar__information}>
+                  <div className={styles.sidebar__information_title}>
+                    YOUR APPOINTMENT
+                  </div>
+                  <div className={styles.sidebar__information_text}>
+                    Toothache
+                    Dr. Chelsea
+                    Feb 13 2017
+                    4pm - 5pm
+                  </div>
                 </div>
               </div>
-              <div className={styles.sidebar__footer}>
-                <button onClick={this.handleSaveClick} className={styles.sidebar__footer_btn}>GO BACK</button>
-                <div className={styles.sidebar__footer_additional}>
-                  <div className={styles.sidebar__footer_title}>ADDITIONAL INFO</div>
-                  <ul className={styles.sidebar__footer_list}>
-                    <li>This clinic accpets all major
-                      insuranc
-                    </li>
-                    <li>Approximate appointment
-                      length is 120 min
-                    </li>
-                  </ul>
-                </div>
-                <div className={styles.sidebar__footer_copy}>
-                  <span>POWERED BY:</span>
-                  <img src="/images/carecru_logo.png" alt="logo" />
-                </div>
+            </div>
+            <div className={styles.sidebar__footer}>
+              <div className={styles.sidebar__footer_copy}>
+                <div>POWERED BY:</div>
+                <img src="/images/logo_black.png" alt="logo"/>
               </div>
             </div>
           </div>
@@ -199,16 +191,6 @@ class SignUp extends Component {
                 <span className="fa fa-facebook-official" />
                 LOG IN WITH FACEBOOK
               </a>
-              <div className={styles.signup__footer_pagination}>
-                <ul>
-                  <li>
-                    <div>1</div>
-                  </li>
-                  <li>
-                    <div>2</div>
-                  </li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>

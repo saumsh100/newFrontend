@@ -9,6 +9,7 @@ body {
 }
 .appointment {
     height: 560px;
+    position: relative;
     padding: 20px;
     &__wrapper {
         display: flex;
@@ -137,7 +138,7 @@ body {
         flex-direction: row;
         align-items: center;
         &_title {
-            margin-right: 30px;
+            margin-right: 10px;
             font-size: 8px;
             font-weight: 500;
             color: #2e3945;
@@ -149,16 +150,8 @@ body {
             cursor: pointer;
             flex-direction: row;
             i {
-                margin-left: 5px;
                 color: #ff715a;
             }
-        }
-        &_date {
-            height: 20px;
-            margin-right: 5px;
-            font-size: 12px;
-            color: #dddcdc;
-            border-bottom: 1px solid #dddcdc;
         }
         &_modal {
             position: fixed;
@@ -207,11 +200,10 @@ body {
             option {
                 background: #fff;
                 &:focus {
-                    background: darkturquoise;
                     outline: none;
                 }
                 &:checked {
-                    background: darkturquoise;
+                    outline: none;
                 }
             }
         }
@@ -298,6 +290,7 @@ body {
         font-size: 10px;
         text-align: center;
         &_wrapper {
+            position: relative;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -336,7 +329,10 @@ body {
             border: none;
             background: #f3715c;
             cursor: pointer;
-            position: relative;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            position: absolute;
             &:disabled {
                 cursor: not-allowed;
                 opacity: .65;

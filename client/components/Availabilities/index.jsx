@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import includes from 'lodash/includes';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import { Button, Form, Field } from '../library';
+import { Button, Form, Field, Checkbox } from '../library';
 import SignUp from './SignUp';
 import Preferences from './Preferences';
 import 'react-day-picker/lib/style.css';
@@ -28,6 +28,7 @@ class Availabilities extends React.Component {
     this.isDaySelected = this.isDaySelected.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleSaveClick = this.handleSaveClick.bind(this);
   }
 
 
@@ -115,7 +116,11 @@ class Availabilities extends React.Component {
       checked: !this.state.checked
     })
   }
-
+  handleSaveClick(e) {
+    e.preventDefault();
+    const { setRegistrationStep } = this.props;
+    setRegistrationStep(2);
+  }
   renderFirstStep({practitionerId, services, availabilities, practitioners, defaultValues}) {
     const startsAt = this.props.practitionersStartEndDate.get('startsAt');
     const preferences = this.state.checked
@@ -197,9 +202,6 @@ class Availabilities extends React.Component {
                   <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
                   <div onClick={this.openModal}
                        className={styles.appointment__daypicker_icon}>
-                    <div className={styles.appointment__daypicker_date}>
-                      {moment(this.state.selectedStartDay).format('DD MM YYYY')}
-                    </div>
                     <i className="fa fa-calendar"/>
                   </div>
                   {this.state.modalIsOpen ?
@@ -253,13 +255,10 @@ class Availabilities extends React.Component {
                   </div>
                   <form className={styles.appointment__footer_confirm}>
                     <div className={styles.appointment__footer_select}>
-                      <input type="checkbox"
-                             name="answer"
-                             id="yes"
-                             value="yes"
-                             checked={ this.state.checked }
-                             onChange={ this.handleChange } />
-                      <label htmlFor="yes">Yes</label>
+                      <Checkbox id="yes"
+                                value="yes"
+                                checked={ this.state.checked }
+                                onChange={ this.handleChange }/>
                     </div>
                     <button disabled={!startsAt}
                             onClick={this.handleSaveClick}

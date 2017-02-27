@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DayPicker, { DateUtils } from 'react-day-picker';
+import { Checkbox } from '../library';
 import 'react-day-picker/lib/style.css';
 import styles from './Preferences.scss';
 
@@ -35,23 +36,13 @@ class Preferences extends Component {
             </div>
             <div className={styles.appointment__preferences_checkbox}>
               <div>
-                <label>
-                  <input type="checkbox" name="day" id="morning" value="morning"/>Morning
-                </label>
-                <label>
-                  <input type="checkbox" name="day" id="afternoon" value="afternoon"/>Afternoon
-                </label>
-                <label>
-                  <input type="checkbox" name="day" id="evenings" value="evenings"/>Evenings
-                </label>
+                <Checkbox id="morning" value="morning" label="Morning"/>
+                <Checkbox id="afternoon" value="afternoon" label="Afternoon"/>
+                <Checkbox id="evenings" value="evenings" label="Evenings"/>
               </div>
               <div>
-                <label>
-                  <input type="checkbox" name="day" id="weekdays" value="weekdays"/>Weekdays
-                </label>
-                <label>
-                  <input type="checkbox" name="day" id="weekends" value="weekends"/>Weekends
-                </label>
+                <Checkbox id="weekdays" value="weekdays" label="Weekdays"/>
+                <Checkbox id="weekends" value="weekends" label="Weekends"/>
               </div>
             </div>
           </div>
