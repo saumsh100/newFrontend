@@ -12,6 +12,7 @@ import Input from './Input';
 import Link from './Link';
 import Modal from './Modal';
 import RouterButton from './RouterButton';
+import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
 import Tooltip from './Tooltip';
@@ -31,6 +32,7 @@ export {
   Link,
   Modal,
   RouterButton,
+  RouterList,
   RouterTabs,
   Tabs,
   Tab,

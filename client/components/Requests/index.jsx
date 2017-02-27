@@ -12,7 +12,7 @@ class Requests extends Component {
   render() {
     const { requests, patients, services, practitioners, chairs } = this.props;
 
-    const filteredRequests= requests.toArray().filter((req) =>{
+    const filteredRequests = requests.toArray().filter((req) => {
       return !req.get('isCancelled');
     })
 
@@ -22,7 +22,7 @@ class Requests extends Component {
 
     return (
       <Card className={styles.requestCard}>
-        <CardHeader count={sortedRequests.length} title={'New Appointment Requests'}/>
+        <CardHeader count={sortedRequests.length} title={'New Appointment Requests'} />
         <RequestList
           sortedRequests={sortedRequests}
           patients={patients}

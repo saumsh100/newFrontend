@@ -31,7 +31,7 @@ class RouterTabs extends Component {
 
   render() {
     const { location, routes } = this.props;
-    const index = routes.findIndex(route => route.to === location.pathname);
+    const index = routes.findIndex(route => location.pathname.indexOf(route.to) === 0);
     return (
       <Tabs index={index} onChange={this.handleRouterTabChange}>
         {this.renderChildren(routes)}

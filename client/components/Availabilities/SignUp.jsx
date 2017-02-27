@@ -2,13 +2,8 @@ import React, { Component } from 'react';
 import Timer from './Timer';
 import styles from './SignUp.scss';
 
-import { formWithCustomValidation } from '../library/Form';
-
 import { Button, Form, Field } from '../library';
-import validate from '../library/Form/validate';
-
-
-const FormWithCustomValidation = formWithCustomValidation(validate)
+import { validate, asyncEmailValidate } from '../library/Form/validate';
 
 class SignUp extends Component {
   constructor(props) {
@@ -45,7 +40,7 @@ class SignUp extends Component {
   }
 
   bookAnAppointment(params) {
-    const { startsAt, practitionerId, serviceId } = this.props.practitonersStartEndDate.toJS();
+    const { startsAt, practitionerId, serviceId } = this.props.practitionersStartEndDate.toJS();
     const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
     const array = location.pathname.split('/')
     const accountId = array[array.length-1]
@@ -60,10 +55,13 @@ class SignUp extends Component {
   }
   renderBookingForm() {
     return (
-      <FormWithCustomValidation
+      <Form
             form="availabilitiesRequest"
             className={styles.signup__body_confirm}
             onSubmit={this.bookAnAppointment}
+            validate={validate}
+            asyncValidate={asyncEmailValidate}
+            asyncBlurFields={['email']}
       >
         <Field
           name="firstName"
@@ -102,7 +100,7 @@ class SignUp extends Component {
           className={styles.signup__footer_btn}>
           Book an appointment
         </Button>
-      </FormWithCustomValidation>
+      </Form>
     );
   }
 
@@ -119,10 +117,10 @@ class SignUp extends Component {
   }
 
   render() {
-    const { practitonersStartEndDate } = this.props;
-    const { messages } = practitonersStartEndDate.toJS();
+    const { practitionersStartEndDate } = this.props;
+    const { messages } = practitionersStartEndDate.toJS();
     const contnet = messages.length ? this.renderMessages(messages)
-      : this.renderBookingForm()
+      : this.renderBookingForm();
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>

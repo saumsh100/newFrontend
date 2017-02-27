@@ -2,8 +2,11 @@
 @import '../../../ui.scss';
 
 .cardHeader {
-  padding-left: 0.5em;
-  height: 1rem;
+  padding-left: 1em;
+  padding-top: 0.5em;
+  height: 2.5rem;
+  border-bottom: 2px solid;
+  border-bottom-color: $primary-grey;
 }
 
 .displayFlex {
@@ -13,11 +16,17 @@
 
 .count {
   display: inline-block;
+  font-size: 40px;
   font-weight: 700;
-  padding-right: 10px;
+  padding-right: 5px;
+  font-family: $dashboard-font;
+  color: $primary-dark;
 }
 
 .title {
   display: inline-block;
+  font-size: 21px;
   font-weight: 500;
+  font-family: $dashboard-font;
+  color: $primary-dark;
 }

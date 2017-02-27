@@ -41,7 +41,7 @@ class Dashboard extends React.Component {
     // TODO: for now connect Reviews card to Listings card props until its api integration
     return (
     <div style={{display: 'flex', width: '100%'}}>
-      <div style={{width: '500px'}}>
+      <div style={{width: '1000px'}}>
         &nbsp;
       </div>
       <div className={styles.requestContainer}>

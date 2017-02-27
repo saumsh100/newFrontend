@@ -246,7 +246,7 @@ const SEEDS = {
       chairId,
       isConfirmed: false,
       isCancelled: false,
-      comment: 'Some comment from patient here....',
+      note: 'Some note from patient here....',
     },
     {
       accountId,
@@ -258,7 +258,7 @@ const SEEDS = {
       chairId,
       isConfirmed: false,
       isCancelled: false,
-      comment: 'Some comment from patient here....',
+      note: 'testing note 2....',
     },
   ],
 
@@ -291,7 +291,7 @@ const SEEDS = {
       accountId,
       firstName: 'Justin',
       lastName: 'Sharp',
-      email: 'justin@carecru.com',
+      email: 'justin2@carecru.com',
       phoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',

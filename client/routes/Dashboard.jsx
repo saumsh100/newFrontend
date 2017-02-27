@@ -161,11 +161,65 @@ export default function Routes({ history }) {
         <Route
           path="settings"
           getComponent={(location, callback) => {
-            require.ensure(['../containers/AccountContainer'], (require) => {
-              callback(null, require('../containers/AccountContainer').default);
+            require.ensure(['../containers/SettingsContainer'], (require) => {
+              callback(null, require('../containers/SettingsContainer').default);
             });
           }}
-        />
+        >
+          <IndexRedirect to="clinic" />
+          <Route
+            path="clinic"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Settings/Clinic'], (require) => {
+                callback(null, require('../components/Settings/Clinic').default);
+              });
+            }}
+          >
+            <IndexRedirect to="general" />
+            <Route
+              path="general"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Clinic/GeneralForm'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/GeneralForm').default);
+                });
+              }}
+            />
+            <Route
+              path="address"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Clinic/AddressForm'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/AddressForm').default);
+                });
+              }}
+            />
+          </Route>
+          <Route
+            path="schedule"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Settings/Schedule'], (require) => {
+                callback(null, require('../components/Settings/Schedule').default);
+              });
+            }}
+          >
+            <IndexRedirect to="widget" />
+            <Route
+              path="widget"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Schedule/GeneralForm'], (require) => {
+                  callback(null, require('../components/Settings/Schedule/GeneralForm').default);
+                });
+              }}
+            />
+            <Route
+              path="test"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Schedule/AddressForm'], (require) => {
+                  callback(null, require('../components/Settings/Schedule/AddressForm').default);
+                });
+              }}
+            />
+          </Route>
+        </Route>
         <Route
           path="profile"
           getComponent={(location, callback) => {

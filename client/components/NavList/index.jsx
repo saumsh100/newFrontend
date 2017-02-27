@@ -109,7 +109,12 @@ export default function NavList({ location }) {
         <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />
-        <SingleNavItem path="/settings" icon="cogs" label="Account Settings" />
+        <MultiNavItem path="/settings" icon="cogs" label="Account Settings">
+          <SubNavItem path="/settings/clinic" label="Clinic" />
+          <SubNavItem path="/settings/schedule" label="Schedule" />
+          <SubNavItem path="/settings/services" label="Services" />
+          <SubNavItem path="/settings/practitioners" label="Practitioners" />
+        </MultiNavItem>
       </Nav>
     </div>
   );

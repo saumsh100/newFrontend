@@ -58,11 +58,9 @@ export function createEntityRequest({ key, entityData }) {
   };
 }
 
-export function updateEntityRequest({ key, update }) {
-  return (dispatch, getState) => {
-    const { entities } = getState();
-    const entity = entities.get(key);
-    axios.put(`${entity.getUrlRoot()}/${update.id}`, update)
+export function updateEntityRequest({ key, model }) {
+  return (dispatch) => {
+    axios.put(model.getUrlRoot(), model.toJSON())
       .then((response) => {
         const { data } = response;
         dispatch(updateEntity({ key, entity: data.entities }));
