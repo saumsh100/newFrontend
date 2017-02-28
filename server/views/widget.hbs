@@ -37,12 +37,13 @@ window.addEventListener('load', function() {
     modal.style.zIndex = '999999999';
     modal.style.position = 'fixed'
     modal.style.width = '730px';
-    modal.style.height = '555px';
-    modal.style.border = '1px solid black';
+    modal.style.height = '610px';
+    modal.style.border = 'none';
+    modal.style.borderRadius = '5px';
     modal.style.top = '50%';
     modal.style.left = '50%';
     modal.style.overflow = 'hidden';
-    modal.style.background = 'rgba(0,0,0,0.8)';
+    modal.style.boxShadow = '0 0 10px #fafafa';
     modal.setAttribute('scrolling', 'no');
     modal.style.transform = 'translateY(-50%) translateX(-50%)';
     // modal.style.transition = 'translateX(-50%)';
@@ -51,15 +52,16 @@ window.addEventListener('load', function() {
 
   var cross = document.createElement('div');
     cross.setAttribute('id', 'cross');
-    cross.innerHTML = 'x';
-    cross.style.fontSize = '80px';
+    cross.innerHTML = '&times;';
+    cross.style.fontSize = '90px';
     cross.style.position = 'fixed';
-    cross.style.top = '100px';
+    cross.style.top = '5%';
     cross.style.right = '25%';
     cross.style.visibility = 'hidden';
     cross.style.cursor = 'pointer';
     cross.style.zIndex = '10';
     cross.style.color = 'white';
+    cross.style.lineHeight = '1rem';
 
 
   cross.addEventListener('click', function() {

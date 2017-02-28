@@ -4,23 +4,18 @@
     box-sizing: border-box;
     font-family: "Montserrat", sans-serif;
 }
-body {
-    background: #4b555f !important;
-}
+
 .appointment {
-    height: 560px;
+    height: 610px;
     position: relative;
-    padding: 20px;
     &__wrapper {
         display: flex;
-        width: 700px;
+        width: 730px;
         min-height: 100%;
-        margin: 0 auto;
         overflow: hidden;
         flex-direction: column;
         background: #fafafa;
         border-radius: 5px;
-        box-shadow: 0 0 10px #fafafa;
     }
     > div {
         display: flex;
