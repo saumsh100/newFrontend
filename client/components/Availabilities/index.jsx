@@ -127,12 +127,13 @@ class Availabilities extends React.Component {
       ?
       <Preferences startsAt={startsAt } setRegistrationStep={this.props.setRegistrationStep}/>
       : null;
+    const { logo } = this.props;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
           <div className={styles.appointment__sidebar}>
             <div className={styles.sidebar__header}>
-              <img className={styles.sidebar__header_logo} src="images/availabilies_sidebar_logo_2.png" alt="logo"/>
+              <img className={styles.sidebar__header_logo} src={logo} alt="logo"/>
               <div className={styles.sidebar__header_title}>
                 Pacific Heart
                 <span>Dental</span>

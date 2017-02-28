@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
 const { r } = require('../config/thinky');
+const fs = require("fs");
 const seedDatabase = require('../util/seedDatabase');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
@@ -492,3 +493,14 @@ seedDatabase(SEEDS)
     console.error(err);
     process.exit(1);
   });
+
+
+
+fs.readFile('server/public/images/logo.png', function (err, data) {
+  if (err) console.log(err)
+  if (!err) {
+    SEEDS.Account[0].logo = data;
+    console.log("DAAAAAAATAAAAAAAAAAaa")
+    console.log(data)
+  }
+})

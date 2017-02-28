@@ -5,6 +5,8 @@ const availabilitiesRouter = require('../api/availabilities');
 const requestRouter = require('../api/request');
 const patientsRouter = require('../api/patients');
 
+const Account = require('../../models/Account');
+
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
 
@@ -31,5 +33,18 @@ myRouter.get('/widgets/:accountId', (req, res, next) => {
 });
 
 // myRouter.use('/api', apiRouter);
+
+myRouter.get('/logo/:accountId', (req, res, next) => {
+	console.log("accountID")
+	console.log("======================================")
+	console.log("======================================")
+	console.log("======================================")
+	console.log("======================================")
+	console.log("======================================")
+	const { accountId } = req.params;
+	Account.get(accountId).run().then(account => {
+		res.send({ logo: account.logo });
+	})	
+});
 
 module.exports = myRouter;

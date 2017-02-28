@@ -7,6 +7,7 @@ const Account = createModel('Account', {
   name: type.string().required(),
   vendastaId: type.string(),
   smsPhoneNumber: type.string(),
+  logo: type.buffer(),
   // users: []
 });
 
