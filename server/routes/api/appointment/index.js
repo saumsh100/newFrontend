@@ -1,5 +1,7 @@
 
+const _ = require('lodash');
 const appointmentsRouter = require('express').Router();
+const checkIsArray = require('../../../middleware/checkIsArray');
 const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
@@ -44,6 +46,25 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   });
   return Appointment.save(appointmentData)
     .then(appt => res.send(201, normalize('appointment', appt)))
+    .catch(next);
+});
+
+/**
+ * Batch create appointment
+ */
+appointmentsRouter.post('/batch', checkPermissions('appointments:create'), checkIsArray('appointments'), (req, res, next) => {
+  const { appointments } = req.body;
+  const cleanedAppointments = appointments.map((appointment) => {
+    return Object.assign(
+      {},
+      _.omit(appointment, ['id', 'dateCreated']),
+      { accountId: req.accountId }
+    );
+  });
+  console.log('creating>>>>>> ', cleanedAppointments);
+
+  return Appointment.save(cleanedAppointments)
+    .then(_appointments => res.send(normalize('appointments', _appointments)))
     .catch(next);
 });
 
