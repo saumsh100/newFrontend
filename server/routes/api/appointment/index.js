@@ -61,9 +61,23 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
       { accountId: req.accountId }
     );
   });
-  console.log('creating>>>>>> ', cleanedAppointments);
 
   return Appointment.save(cleanedAppointments)
+    .then(_appointments => res.send(normalize('appointments', _appointments)))
+    .catch(next);
+});
+
+/**
+ * Batch updating
+ */
+appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkIsArray('appointments'), (req, res, next) => {
+  const { appointments } = req.body;
+  const appointmentUpdates = appointments.map((appointment) => {
+    return Appointment.get(appointment.id).run()
+      .then(_appointment => _appointment.merge(appointment).save());
+  });
+
+  return Promise.all(appointmentUpdates)
     .then(_appointments => res.send(normalize('appointments', _appointments)))
     .catch(next);
 });
