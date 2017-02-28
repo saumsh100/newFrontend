@@ -58,6 +58,7 @@ const userSchema = () => {
 
 const SCHEMAS = {
   // Models (singleFetch/findOne)
+  account: accountSchema(),
   appointment: appointmentSchema(),
   chair: chairSchema(),
   chat: chatSchema(),
@@ -69,6 +70,7 @@ const SCHEMAS = {
   practitioner: practitionerSchema(),
 
   // Collections (list/find)
+  accounts: [accountSchema()],
   appointments: [appointmentSchema()],
   practitioners: [practitionerSchema()],
   chairs: [chairSchema()],

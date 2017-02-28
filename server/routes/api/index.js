@@ -1,6 +1,8 @@
 
 const apiRouter = require('express').Router();
 
+
+const accountsRouter = require('./accounts');
 const appointmentRouter = require('./appointment');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
@@ -16,6 +18,7 @@ const authMiddleware = require('../../middleware/auth');
 const createJoinObject = require('../../middleware/createJoinObject');
 
 apiRouter.all('*', authMiddleware, createJoinObject);
+apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/requests', requestRouter);
 apiRouter.use('/reputation', reputationRouter);

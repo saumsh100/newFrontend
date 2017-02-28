@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, {PropTypes, Component} from 'react';
 import { SubmissionError } from 'redux-form';
 import GeneralForm from './GeneralForm';
+
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -18,10 +19,14 @@ function submit(values) {
     });
 }
 
-export default function General() {
+export default function General(props) {
   return (
     <div>
-      <GeneralForm onSubmit={submit} />
+      {props.accounts.map((account) => {
+        return( <GeneralForm onSubmit={submit} accountInfo={account} />);
+      })}
     </div>
   );
 }
+
+

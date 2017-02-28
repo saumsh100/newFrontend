@@ -3,13 +3,14 @@ import React from 'react';
 import TestForm from '../../../demo/TestForm';
 import { Form, Field, Button } from '../../../library';
 
-export default function GeneralForm({ onSubmit }) {
+export default function GeneralForm({onSubmit, accountInfo, }) {
+
   return (
-    <Form form="generalSettings Form" onSubmit={onSubmit}  >
+    <Form form="generalSettingsForm" onSubmit={onSubmit} >
       <Field
         required
         name="Name"
-        label="Name"
+        label={accountInfo.get('name')}
       />
       <Button type="submit">Form Submit</Button>
     </Form>
