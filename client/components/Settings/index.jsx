@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col, Card, CardHeader } from '../library';
 import SettingsSubNav from './SettingsSubNav';
-import General from './Clinic/General'
+import General from './Clinic/General';
 import styles from './styles.scss';
 
 export default function Account(props) {
@@ -18,10 +18,15 @@ export default function Account(props) {
         <Col xs={9} className={styles.settingsFormsCol}>
           <Card className={styles.settingsFormsCard}>
             <CardHeader title="General Settings" />
-           <General {...props} />
+            <General activeAccount={props.activeAccount} />
           </Card>
         </Col>
       </Row>
     </Grid>
   );
+}
+
+Account.propTypes = {
+  activeAccount: PropTypes.props,
+  location: PropTypes.props,
 }

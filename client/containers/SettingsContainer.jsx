@@ -11,26 +11,25 @@ class SettingsContainer extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'activeAccount' });
+    this.props.fetchEntities({ key: 'accounts' });
   }
 
   render() {
     return (
       <div>
-        <Settings {...this.props} />;
-        </div>
+        <Settings {...this.props} />
+      </div>
     );
   }
-
-
 }
 
-SettingsContainer.propTypes = {};
-
+SettingsContainer.propTypes = {
+  fetchEntities: PropTypes.func,
+};
 
 function mapStateToProps({ entities }) {
   return {
-    accounts: entities.get('activeAccount'),
+    activeAccount: entities.getIn(['accounts', 'models']).first(),
   };
 }
 function mapDispatchToProps(dispatch) {

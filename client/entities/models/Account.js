@@ -9,4 +9,7 @@ const AccountSchema = {
 
 export default class Account extends createModel(AccountSchema) {
 
+  getName(){
+    return this.getName('name');
+  }
 }

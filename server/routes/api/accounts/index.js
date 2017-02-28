@@ -14,8 +14,14 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .then(account => res.send(normalize('account', account)))
     .catch(next);
   }
-
   res.send(404);
+});
+
+
+accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
+  return req.account.merge(req.body).save()
+    .then(account => res.send(normalize('account', account)))
+    .catch(next);
 });
 
 module.exports = accountsRouter;

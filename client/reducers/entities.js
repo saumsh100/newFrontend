@@ -4,6 +4,7 @@ import each from 'lodash/each';
 import { handleActions } from 'redux-actions';
 import {
   FETCH_ENTITIES,
+  FETCH_MODEL,
   RECEIVE_ENTITIES,
   DELETE_ENTITY,
   ADD_ENTITY,
@@ -14,8 +15,7 @@ import {
 } from '../constants';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
-import ActiveAccount from '../entities/models/ActiveAccount'
-
+import ActiveAccount from '../entities/models/ActiveAccount';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
 import textMessages from '../entities/collections/textMessages';
@@ -42,7 +42,7 @@ import Availability from '../entities/models/Availability';
 const initialState = Map({
   // KEYs must map to the response object
   // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
-  activeAccount: new ActiveAccount(),
+  accounts: new accounts(),
   patients: new patients(),
   textMessages: new textMessages(),
   appointments: new appointments(),
@@ -58,7 +58,7 @@ const initialState = Map({
 });
 
 const Models = {
-  activeAccount: ActiveAccount,
+  accounts: ActiveAccount,
   patients: Patient,
   textMessages: TextMessage,
   appointments: Appointments,
@@ -89,7 +89,7 @@ export default handleActions({
 
     return newState;
   },
-  
+
   [DELETE_ENTITY](state, { payload: { key, id } }) {
     return state.deleteIn([key, 'models', id]);
   },

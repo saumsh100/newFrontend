@@ -13,6 +13,7 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGOUT = 'LOGOUT';
 
 export const FETCH_ENTITIES = 'FETCH_ENTITIES';
+export const FETCH_MODEL = 'FETCH_MODEL';
 export const RECEIVE_ENTITIES = 'RECEIVE_ENTITIES';
 export const CREATE_ENTITY = 'CREATE_ENTITY';
 export const UPDATE_ENTITY = 'UPDATE_ENTITY';

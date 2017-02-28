@@ -9,4 +9,6 @@ export default class ActiveAccount extends Account {
     const decodedToken = jwt(token);
     return `/api/accounts/${decodedToken.activeAccountId}`;
   }
+
+
 }
