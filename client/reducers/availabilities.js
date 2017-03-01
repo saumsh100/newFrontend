@@ -19,6 +19,7 @@ const initialState = fromJS({
   registrationStep: 1,
   logo: null,
   address: null,
+  clinicName: null,
 });
 
 export default handleActions({
@@ -70,10 +71,11 @@ export default handleActions({
   },
 
   [SET_CLINIC_INFO](state, action) {
-    const { address, logo } = action.payload;
+    const { address, logo, clinicName } = action.payload;
     return state.merge({
       logo,
       address,
+      clinicName,
     });
   }
 

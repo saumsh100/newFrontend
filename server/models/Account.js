@@ -9,6 +9,7 @@ const Account = createModel('Account', {
   smsPhoneNumber: type.string(),
   logo: type.string(),
   address: type.string(),
+  clinicName: type.string(),
   // users: []
 });
 

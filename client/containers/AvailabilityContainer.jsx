@@ -252,7 +252,7 @@ class Availability extends Component {
     } = this.getAppointmentsSorted();
 
     const {setStartingAppointmentTime} = this.props;
-    const { logo, address } = this.props.practitionersStartEndDate.toJS();
+    const { logo, address, clinicName } = this.props.practitionersStartEndDate.toJS();
 
     return (
       <Availabilities
@@ -272,6 +272,7 @@ class Availability extends Component {
         setRegistrationStep={this.props.setRegistrationStep}
         logo={logo}
         address={address}
+        clinicName={clinicName}
       />
     );
   }

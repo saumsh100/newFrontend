@@ -127,7 +127,7 @@ class Availabilities extends React.Component {
       ?
       <Preferences startsAt={startsAt } setRegistrationStep={this.props.setRegistrationStep}/>
       : null;
-    const { logo } = this.props;
+    const { logo, address, clinicName } = this.props;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -143,13 +143,10 @@ class Availabilities extends React.Component {
               <div className={styles.sidebar__body_address}>
                 <div className={styles.sidebar__address}>
                   <div className={styles.sidebar__address_title}>
-                    PACIFIC HEART DENTAL
+                    {clinicName}
                   </div>
                   <div className={styles.sidebar__address_text}>
-                    194-105 East 3rd
-                    7 ave
-                    Vancouver, BC
-                    Canda V1B 2C3
+                    {address}
                   </div>
                 </div>
               </div>
