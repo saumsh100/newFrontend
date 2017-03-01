@@ -48,7 +48,7 @@ class SignUp extends Component {
     this.props.createPatient(paramsToPass);
   }
 
-  handleSaveClick(e) {
+  setRegistrationStep(e) {
     e.preventDefault();
     const { setRegistrationStep } = this.props;
     setRegistrationStep(1);
@@ -159,6 +159,7 @@ class SignUp extends Component {
                   </div>
                 </div>
               </div>
+              <button onClick={this.setRegistrationStep} className={styles.sidebar__body_btn}>GO BACK</button>
             </div>
             <div className={styles.sidebar__footer}>
               <div className={styles.sidebar__footer_copy}>
