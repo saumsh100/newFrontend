@@ -18,7 +18,6 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .catch(next);
 });
 
-
 accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
   return req.account.merge(req.body).save()
     .then(account => res.send(normalize('account', account)))
