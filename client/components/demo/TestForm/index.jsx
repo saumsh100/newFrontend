@@ -1,6 +1,8 @@
 
 import React, { PropTypes } from 'react';
-import { SubmissionError } from 'redux-form';
+import { SubmissionError, change } from 'redux-form';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Form, Field, Button } from '../../library';
 
 const containsLetter = (letter) => (value) => {
@@ -31,7 +33,7 @@ function submit(values) {
     });
 }
 
-export default function TestForm({ patient, onSubmit }) {
+function TestForm({ patient, onSubmit, change }) {
   const initialValues = {
     firstName: patient.firstName,
     middleName: patient.middleName,
@@ -45,6 +47,11 @@ export default function TestForm({ patient, onSubmit }) {
         required
         name="firstName"
         label="First Name"
+        onChange={(event, newValue, previousValue) => {
+          if (newValue === 'cat') {
+            change('testForm', 'middleName', 'DOG');
+          }
+        }}
       />
       <Field
         name="middleName"
@@ -75,3 +82,11 @@ export default function TestForm({ patient, onSubmit }) {
 TestForm.propTypes = {
   patient: PropTypes.object.isRequired,
 };
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    change,
+  }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(TestForm);

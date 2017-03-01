@@ -27,8 +27,10 @@
 .flat {
   background-color: transparent;
   color: $primary-dark;
-  &:hover {
-    color: $primary-color-hover;
+  &:not(.disabled) {
+    &:hover {
+      color: $primary-color-hover;
+    }
   }
 
   &:focus, &:active {
@@ -37,6 +39,6 @@
 }
 
 .disabled {
-  color: $primary-darkgrey;
+  color: $disabled-color;
   cursor: not-allowed;
 }

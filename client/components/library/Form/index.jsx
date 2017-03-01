@@ -5,6 +5,7 @@ import { compose, withProps } from 'recompose';
 import Button from '../Button';
 import Field from './Field';
 import FormSection from './FormSection';
+import styles from './styles.scss';
 
 /**
  * Given the requiredFields it will generate a validate function to return errors if
@@ -37,13 +38,18 @@ function Form(props) {
     <div>
       <form onSubmit={handleSubmit}>
         {children}
-        <Button
-          flat
-          disabled={pristine}
-          type="submit"
-        >
-          Save
-        </Button>
+        <div className={styles.formActionsWrapper}>
+          <div className={styles.formActionsPull}>
+            <Button
+              flat
+              disabled={pristine}
+              type="submit"
+              className={styles.submitButton}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
       </form>
     </div>
   );

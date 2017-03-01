@@ -50,6 +50,17 @@ const markChatId = uuid();
 const justinChatId = uuid();
 const sergeyChatId = uuid();
 
+const mondayHoursId = uuid();
+const tuesdayHoursId = uuid();
+const wednesdayHoursId = uuid();
+const thursdayHoursId = uuid();
+const fridayHoursId = uuid();
+const saturdayHoursId = uuid();
+const sundayHoursId = uuid();
+
+const hour8 = new Date(1970, 1, 1, 8, 0);
+const hour5 = new Date(1970, 1, 1, 17, 0);
+
 const justinPhoneNumber = '+17808508886';
 const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
@@ -359,6 +370,63 @@ const SEEDS = {
     },
   ],
 
+  OfficeHours: [
+    {
+      monday: mondayHoursId,
+      tuesday: tuesdayHoursId,
+      wednesday: wednesdayHoursId,
+      thursday: thursdayHoursId,
+      friday: fridayHoursId,
+      saturday: saturdayHoursId,
+      sunday: sundayHoursId,
+    },
+  ],
+
+  OperationalHours: [
+    {
+      id: mondayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: tuesdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: wednesdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: thursdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: fridayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: saturdayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: sundayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+  ],
+
   Permission: [
     {
       userId: justinUserId,
@@ -377,19 +445,6 @@ const SEEDS = {
       accountId,
       role: 'OWNER',
       permissions: {},
-    },
-  ],
-
-  OperationalHours: [
-    {
-      isClosed: true,
-      startTime: new Date(),
-      endTime: new Date(),
-    },
-    {
-      isClosed: true,
-      startTime: new Date(),
-      endTime: new Date(),
     },
   ],
 
