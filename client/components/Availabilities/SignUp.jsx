@@ -10,7 +10,7 @@ class SignUp extends Component {
     super(props);
 
     this.state = {
-      time: 0,
+      time: 3 * 60 * 1000,
       maxtime: 3 * 60 * 1000,
     };
     this.registrationTimer = null;
@@ -33,9 +33,9 @@ class SignUp extends Component {
   startTimer() {
     this.registrationTimer = setInterval(() => {
       this.setState({
-        time: this.state.time + 1000,
+        time: this.state.time - 1000,
       });
-      if (this.getPercent() === 100) clearInterval(this.registrationTimer);
+      if (this.getPercent() === 0) clearInterval(this.registrationTimer);
     }, 1000);
   }
 
