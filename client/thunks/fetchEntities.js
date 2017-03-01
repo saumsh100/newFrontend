@@ -3,6 +3,7 @@ import _ from 'lodash';
 import axios from './axios';
 import {
   receiveEntities,
+  fetchModel,
   deleteEntity,
   addEntity,
   updateEntity,

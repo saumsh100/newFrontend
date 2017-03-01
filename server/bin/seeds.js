@@ -364,6 +364,11 @@ const SEEDS = {
   Account: [
     {
       name: 'Beckett Dental',
+      street: '354 Beach Ave',
+      country: 'United States',
+      state: 'California',
+      city: 'Riverside',
+      zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
       id: accountId,
