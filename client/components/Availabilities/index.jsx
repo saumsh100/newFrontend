@@ -285,6 +285,7 @@ class Availabilities extends React.Component {
       createPatient,
       practitionersStartEndDate,
       setRegistrationStep,
+      logo,
     } = this.props;
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
@@ -300,6 +301,7 @@ class Availabilities extends React.Component {
           setRegistrationStep={setRegistrationStep}
           createPatient={createPatient}
           practitionersStartEndDate={practitionersStartEndDate}
+          logo={logo}
         />;
       case undefined:
         return (

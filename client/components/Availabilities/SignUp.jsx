@@ -117,7 +117,7 @@ class SignUp extends Component {
   }
 
   render() {
-    const { practitionersStartEndDate } = this.props;
+    const { practitionersStartEndDate, logo } = this.props;
     const { messages } = practitionersStartEndDate.toJS();
     const contnet = messages.length ? this.renderMessages(messages)
       : this.renderBookingForm();
@@ -126,7 +126,7 @@ class SignUp extends Component {
         <div className={styles.signup__wrapper}>
           <div className={styles.signup__sidebar}>
             <div className={styles.sidebar__header}>
-              <img className={styles.sidebar__header_logo} src="images/availabilies_sidebar_logo_2.png" alt="logo"/>
+              <img className={styles.sidebar__header_logo} src={logo} alt="logo"/>
               <div className={styles.sidebar__header_title}>
                 Pacific Heart
                 <span>Dental</span>

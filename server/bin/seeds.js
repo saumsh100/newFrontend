@@ -357,6 +357,7 @@ const SEEDS = {
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
       id: accountId,
+      logo: 'images/availabilies_sidebar_logo_2.png',
     },
   ],
 
@@ -493,14 +494,3 @@ seedDatabase(SEEDS)
     console.error(err);
     process.exit(1);
   });
-
-
-
-fs.readFile('server/public/images/logo.png', function (err, data) {
-  if (err) console.log(err)
-  if (!err) {
-    SEEDS.Account[0].logo = data;
-    console.log("DAAAAAAATAAAAAAAAAAaa")
-    console.log(data)
-  }
-})
