@@ -35,3 +35,8 @@
     outline: none;
   }
 }
+
+.disabled {
+  color: $primary-darkgrey;
+  cursor: not-allowed;
+}

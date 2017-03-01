@@ -1,4 +1,34 @@
 
+@import '../../../../ui';
+
 .day {
   text-transform: capitalize;
+}
+
+.disabledDay {
+  @extend .day;
+  color: lighten($primary-darkgrey, 25%);
+}
+
+.flexCentered {
+  display: flex;
+  align-items: center;
+}
+
+.inlineBlock {
+  display: inline-block;
+}
+
+.toDiv {
+  width: 50px;
+  text-align: center;
+}
+
+.toDivDisabled {
+  @extend .toDiv;
+  color: lighten($primary-darkgrey, 25%);
+}
+
+.dayRow {
+  height: 40px;
 }

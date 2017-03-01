@@ -61,13 +61,13 @@ export default function TestForm({ patient, onSubmit }) {
         required
         component="DropdownSelect"
         name="city"
+        label="City"
         options={[
           { value: 'Edmonton' },
           { value: 'Calgary' },
           { value: 'Vancouver' },
         ]}
       />
-      <Button type="submit">Form Submit</Button>
     </Form>
   );
 }

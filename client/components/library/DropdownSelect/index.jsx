@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import RDropdownMenu from 'react-dd-menu';
+import classNames from 'classnames';
 import Icon from '../Icon';
 import { List, ListItem } from '../List';
 import styles from './styles.scss';
@@ -40,15 +41,26 @@ export default class DropdownSelect extends Component {
       template,
       options,
       onChange,
+      value,
     } = this.props;
 
     const OptionTemplate = template || DefaultOption;
 
     return (
-      <List>
+      <List className={styles.dropDownList}>
         {options.map((option, i) => {
+          const isSelected = value === option.value;
+          let className = styles.optionListItem;
+          if (isSelected) {
+            className = classNames(className, styles.selectedListItem);
+          }
+
           return (
-            <ListItem key={option.value + i} onClick={() => onChange(option.value)}>
+            <ListItem
+              key={option.value + i}
+              className={className}
+              onClick={() => onChange(option.value)}
+            >
               <div className={styles.optionDiv}>
                 <OptionTemplate option={option} />
               </div>
@@ -60,14 +72,30 @@ export default class DropdownSelect extends Component {
   }
 
   renderToggle() {
-    const { value } = this.props;
+    const {
+      value,
+      disabled,
+      options,
+      label,
+      template,
+    } = this.props;
+
+    const defaultTemplate = ({ option }) => (<div>{option.value}</div>);
+    const ToggleTemplate = template || defaultTemplate;
+
+    let toggleDiv = label;
+    const option = options.find(opt => opt.value === value);
+    if (option) {
+      toggleDiv = <ToggleTemplate option={option} />;
+    }
+
     return (
       <div
-        className={styles.toggleDiv}
-        onClick={this.toggle}
+        className={disabled ? styles.toggleDivDisabled : styles.toggleDiv}
+        onClick={disabled ? false : this.toggle}
       >
         <div className={styles.toggleValueDiv}>
-          {value}
+          {toggleDiv}
         </div>
         <Icon className={styles.caretIcon} icon="caret-down" />
       </div>
@@ -96,4 +124,5 @@ DropdownSelect.propTypes = {
   options: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };

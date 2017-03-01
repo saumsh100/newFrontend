@@ -29,6 +29,10 @@ body {
     .react-toggle-track {
       background-color: $primary-color;
     }
+
+    .react-toggle-thumb {
+      border-color: $primary-color;
+    }
   }
 
   .CareCruToggle.react-toggle--focus {

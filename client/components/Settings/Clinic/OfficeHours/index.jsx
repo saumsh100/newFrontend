@@ -7,7 +7,6 @@ export default function OfficeHours() {
   return (
     <div>
       <OfficeHoursForm onSubmit={() => {}} />
-      <TestSelect />
     </div>
   );
 }
