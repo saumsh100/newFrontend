@@ -82,6 +82,25 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
     .catch(next);
 });
 
+
+/**
+ * Batch deletion
+ */
+appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (req, res, next) => {
+  const appointmentIds = req.query.ids.split(',');
+
+  const appointmentsToDelete = appointmentIds.map((id) => {
+    return Appointment.get(id).run()
+      .then(_appointment => _appointment.delete());
+  });
+
+  return Promise.all(appointmentsToDelete)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(next);
+});
+
 // TODO: this is not used
 /*appointmentsRouter.get('/:patientId', (req, res, next) => {
   const {
