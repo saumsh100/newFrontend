@@ -8,7 +8,7 @@ import {
   CREATE_PATIENT,
   SET_STARTING_APPOINTMENT_TIME,
   SET_REGISTRATION_STEP,
-  SET_LOGO_ACTION,
+  SET_CLINIC_INFO,
 } from '../constants';
 
 const initialState = fromJS({
@@ -18,6 +18,7 @@ const initialState = fromJS({
   startsAt: null,
   registrationStep: 1,
   logo: null,
+  address: null,
 });
 
 export default handleActions({
@@ -68,10 +69,11 @@ export default handleActions({
     });
   },
 
-  [SET_LOGO_ACTION](state, action) {
-    const logo = action.payload;
+  [SET_CLINIC_INFO](state, action) {
+    const { address, logo } = action.payload;
     return state.merge({
       logo,
+      address,
     });
   }
 

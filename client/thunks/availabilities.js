@@ -7,7 +7,7 @@ import {
 	createPatientAction,
 	setStartingAppointmentTimeAction,
   setRegistrationStepAction,
-  setLogoAction,
+  setClinicInfoAction,
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
@@ -87,12 +87,11 @@ export function setRegistrationStep(registrationStep) {
   }
 }
 
-export function getLogo(accountId) {
+export function getClinicInfo(accountId) {
   return function (dispatch, getState) {
 	  axios.get(`/logo/${accountId}`).then( (data => {	
-	  	const logo = data.data.logo;
-	  	dispatch(setLogoAction(logo))
+	  	const { logo, address } = data.data;
+	  	dispatch(setClinicInfoAction({ logo, address }))
 	  }).bind(this) )
   }
-
 }

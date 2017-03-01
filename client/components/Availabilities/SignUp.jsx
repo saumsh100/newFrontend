@@ -117,7 +117,7 @@ class SignUp extends Component {
   }
 
   render() {
-    const { practitionersStartEndDate, logo, appointmentInfo } = this.props;
+    const { practitionersStartEndDate, logo, address, appointmentInfo } = this.props;
     const { messages } = practitionersStartEndDate.toJS();
     const contnet = messages.length ? this.renderMessages(messages)
       : this.renderBookingForm();
@@ -139,10 +139,7 @@ class SignUp extends Component {
                     PACIFIC HEART DENTAL
                   </div>
                   <div className={styles.sidebar__information_text}>
-                    194-105 East 3rd
-                    7 ave
-                    Vancouver, BC
-                    Canda V1B 2C3
+                    {address}
                   </div>
                 </div>
               </div>

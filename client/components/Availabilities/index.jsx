@@ -299,6 +299,7 @@ class Availabilities extends React.Component {
       practitionersStartEndDate,
       setRegistrationStep,
       logo,
+      address,
     } = this.props;
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
@@ -317,6 +318,7 @@ class Availabilities extends React.Component {
           createPatient={createPatient}
           practitionersStartEndDate={practitionersStartEndDate}
           logo={logo}
+          address={address}
           appointmentInfo={appointmentInfo}
         />;
       case undefined:

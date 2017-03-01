@@ -14,7 +14,7 @@ import {
   createPatient,
   setStartingAppointmentTime,
   setRegistrationStep,
-  getLogo,
+  getClinicInfo,
 } from  '../thunks/availabilities';
 
 class Availability extends Component {
@@ -35,7 +35,7 @@ class Availability extends Component {
 
     const array = location.pathname.split('/');
     const accountId = array[array.length-1];
-    this.props.getLogo(accountId);
+    this.props.getClinicInfo(accountId);
     
   }
 
@@ -252,7 +252,7 @@ class Availability extends Component {
     } = this.getAppointmentsSorted();
 
     const {setStartingAppointmentTime} = this.props;
-    const { logo } = this.props.practitionersStartEndDate.toJS();
+    const { logo, address } = this.props.practitionersStartEndDate.toJS();
 
     return (
       <Availabilities
@@ -271,6 +271,7 @@ class Availability extends Component {
         registrationStep={this.props.practitionersStartEndDate}
         setRegistrationStep={this.props.setRegistrationStep}
         logo={logo}
+        address={address}
       />
     );
   }
@@ -294,7 +295,7 @@ function mapDispatchToProps(dispatch) {
     setPractitioner,
     setService,
     createPatient,
-    getLogo,
+    getClinicInfo,
     setStartingAppointmentTime,
     setRegistrationStep,
   }, dispatch);
