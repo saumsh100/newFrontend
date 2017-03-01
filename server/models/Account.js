@@ -8,6 +8,8 @@ const Account = createModel('Account', {
   vendastaId: type.string(),
   smsPhoneNumber: type.string(),
   logo: type.string(),
+  address: type.string(),
+  clinicName: type.string(),
   // users: []
 });
 

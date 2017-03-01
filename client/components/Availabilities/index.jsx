@@ -33,18 +33,18 @@ class Availabilities extends React.Component {
 
 
   onDoctorChange(e) {
-    const {setPractitioner} = this.props;
-    setPractitioner({practitionerId: e.target.value});
+    const { setPractitioner } = this.props;
+    setPractitioner({ practitionerId: e.target.value });
   }
 
   onServiceChange(e) {
-    const {setService, practitionersStartEndDate} = this.props;
+    const { setService, practitionersStartEndDate } = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
-    setService(e.target.value)
+    setService(e.target.value);
   }
 
   sixDaysBack() {
-    const {sixDaysShift, practitionersStartEndDate} = this.props;
+    const { sixDaysShift, practitionersStartEndDate } = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newEndDay = moment(selectedOldStartDay)._d;
@@ -56,11 +56,10 @@ class Availabilities extends React.Component {
       practitionerId,
       retrievedFirstTime: false,
     });
-
   }
 
   sixDaysForward() {
-    const {sixDaysShift, practitionersStartEndDate} = this.props;
+    const { sixDaysShift, practitionersStartEndDate } = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = moment(selectedOldStartDay).add(4, 'd')._d;
@@ -72,13 +71,11 @@ class Availabilities extends React.Component {
       practitionerId,
       retrievedFirstTime: false,
     });
-
   }
 
   handleDayClick(e, day) {
-
-    const {practitionersStartEndDate} = this.props;
-    const {sixDaysShift} = this.props;
+    const { practitionersStartEndDate } = this.props;
+    const { sixDaysShift } = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = day;
@@ -89,12 +86,11 @@ class Availabilities extends React.Component {
       practitionerId,
       retrievedFirstTime: false,
     });
-
   }
 
   selectAvailability(slot) {
     if (!slot.isBusy) {
-      const {startsAt} = slot;
+      const { startsAt } = slot;
       this.props.setStartingAppointmentTime(startsAt);
     }
   }
@@ -104,36 +100,36 @@ class Availabilities extends React.Component {
   }
 
   openModal() {
-    this.setState({modalIsOpen: !this.state.modalIsOpen});
+    this.setState({ modalIsOpen: !this.state.modalIsOpen });
   }
 
   closeModal() {
-    this.setState({modalIsOpen: !modalIsOpen});
+    this.setState({ modalIsOpen: !modalIsOpen });
   }
 
   handleChange() {
     this.setState({
-      checked: !this.state.checked
-    })
+      checked: !this.state.checked,
+    });
   }
   handleSaveClick(e) {
     e.preventDefault();
     const { setRegistrationStep } = this.props;
     setRegistrationStep(2);
   }
-  renderFirstStep({practitionerId, services, availabilities, practitioners, defaultValues}) {
+  renderFirstStep({ practitionerId, services, availabilities, practitioners, defaultValues }) {
     const startsAt = this.props.practitionersStartEndDate.get('startsAt');
     const preferences = this.state.checked
       ?
-      <Preferences startsAt={startsAt } setRegistrationStep={this.props.setRegistrationStep}/>
+        <Preferences startsAt={startsAt} setRegistrationStep={this.props.setRegistrationStep} />
       : null;
-    const { logo } = this.props;
+    const { logo, address, clinicName } = this.props;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
           <div className={styles.appointment__sidebar}>
             <div className={styles.sidebar__header}>
-              <img className={styles.sidebar__header_logo} src={logo} alt="logo"/>
+              <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
               <div className={styles.sidebar__header_title}>
                 Pacific Heart
                 <span>Dental</span>
@@ -143,13 +139,10 @@ class Availabilities extends React.Component {
               <div className={styles.sidebar__body_address}>
                 <div className={styles.sidebar__address}>
                   <div className={styles.sidebar__address_title}>
-                    PACIFIC HEART DENTAL
+                    {clinicName}
                   </div>
                   <div className={styles.sidebar__address_text}>
-                    194-105 East 3rd
-                    7 ave
-                    Vancouver, BC
-                    Canda V1B 2C3
+                    {address}
                   </div>
                 </div>
               </div>
@@ -157,7 +150,7 @@ class Availabilities extends React.Component {
             <div className={styles.sidebar__footer}>
               <div className={styles.sidebar__footer_copy}>
                 <div>POWERED BY:</div>
-                <img src="/images/logo_black.png" alt="logo"/>
+                <img src="/images/logo_black.png" alt="logo" />
               </div>
             </div>
           </div>
@@ -171,8 +164,10 @@ class Availabilities extends React.Component {
               <div className={styles.appointment__body_header}>
                 <div className={styles.appointment__select_title}>Practitioner</div>
                 {defaultValues && defaultValues.practitionerId &&
-                <Form className={styles.appointment__select_wrapper} form="availabilities"
-                      initialValues={defaultValues}>
+                <Form
+                  className={styles.appointment__select_wrapper} form="availabilities"
+                  initialValues={defaultValues}
+                >
                   <Field
                     component="Select"
                     name="practitionerId"
@@ -201,17 +196,20 @@ class Availabilities extends React.Component {
                 </Form>}
                 <div className={styles.appointment__daypicker}>
                   <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
-                  <div onClick={this.openModal}
-                       className={styles.appointment__daypicker_icon}>
-                    <i className="fa fa-calendar"/>
+                  <div
+                    onClick={this.openModal}
+                    className={styles.appointment__daypicker_icon}
+                  >
+                    <i className="fa fa-calendar" />
                   </div>
                   {this.state.modalIsOpen ?
                     (
                       <div onClick={this.openModal} className={styles.appointment__daypicker_modal}>
                         <DayPicker
                           className={styles.appointment__daypicker_select}
-                          onDayClick={ this.handleDayClick }
-                          selectedDays={ this.isDaySelected }/>
+                          onDayClick={this.handleDayClick}
+                          selectedDays={this.isDaySelected}
+                        />
                       </div>
                     ) : null
                   }
@@ -219,34 +217,34 @@ class Availabilities extends React.Component {
               </div>
               <div className={styles.appointment__table}>
                 <button className={styles.appointment__table_btn} onClick={this.sixDaysBack}>
-                  <i className="fa fa-arrow-circle-o-left"/>
+                  <i className="fa fa-arrow-circle-o-left" />
                 </button>
                 <div className={styles.appointment__table_elements}>
-                  {availabilities.map(av => {
-                    return (
-                      <ul className={styles.appointment__list} key={av.date}>
-                        <div className={styles.appointment__list_header}>
-                          <div className={styles.list__header_day}>
-                            {moment(av.date).format('ddd')}
-                          </div>
-                          <div className={styles.list__header_number}>
-                            {moment(av.date).format('DD/MM/YYYY')}
-                          </div>
+                  {availabilities.map(av => (
+                    <ul className={styles.appointment__list} key={av.date}>
+                      <div className={styles.appointment__list_header}>
+                        <div className={styles.list__header_day}>
+                          {moment(av.date).format('ddd')}
                         </div>
-                        {av.availabilities.map(slot =>
-                          <li onClick={() => {
-                            this.selectAvailability(slot)
+                        <div className={styles.list__header_number}>
+                          {moment(av.date).format('DD/MM/YYYY')}
+                        </div>
+                      </div>
+                      {av.availabilities.map(slot =>
+                        <li
+                          onClick={() => {
+                            this.selectAvailability(slot);
                           }}
-                              className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected: '' }`}
-                              key={slot.startsAt}>
-                            {moment(slot.startsAt).format('HH:mm A')}
-                          </li>)
+                          className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected : ''}`}
+                          key={slot.startsAt}
+                        >
+                          {moment(slot.startsAt).format('HH:mm A')}
+                        </li>)
                         }
-                      </ul>);
-                  })}
+                    </ul>))}
                 </div>
                 <button className={styles.appointment__table_btn} onClick={this.sixDaysForward}>
-                  <i className="fa fa-arrow-circle-o-right"/>
+                  <i className="fa fa-arrow-circle-o-right" />
                 </button>
               </div>
               <div className={styles.appointment__footer}>
@@ -256,15 +254,19 @@ class Availabilities extends React.Component {
                   </div>
                   <form className={styles.appointment__footer_confirm}>
                     <div className={styles.appointment__footer_select}>
-                      <Checkbox id="yes"
-                                value="yes"
-                                checked={ this.state.checked }
-                                onChange={ this.handleChange }/>
+                      <Checkbox
+                        id="yes"
+                        value="yes"
+                        checked={this.state.checked}
+                        onChange={this.handleChange}
+                      />
                     </div>
-                    <button disabled={!startsAt}
-                            onClick={this.handleSaveClick}
-                            className={this.state.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn }
-                            type="submit">Continue</button>
+                    <button
+                      disabled={!startsAt}
+                      onClick={this.handleSaveClick}
+                      className={this.state.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn}
+                      type="submit"
+                    >Continue</button>
                   </form>
                 </div>
                 {preferences}
@@ -274,6 +276,19 @@ class Availabilities extends React.Component {
         </div>
       </div>
     );
+  }
+
+  getAppointmentInfo(serviceId) {
+    const { practitionersStartEndDate, practitioners, services, practitionerId } = this.props;
+    const selectedService = services.filter(s => s.id === serviceId)[0];
+    const selectedPractitioner = practitioners.filter(p => p.id === practitionerId)[0];
+    if (selectedPractitioner && selectedService) {
+      const { firstName, lastName } = selectedPractitioner;
+      const { name } = selectedService;
+      const date = moment(practitionersStartEndDate.toJS().startsAt).format('LLLL');
+      return `${name} Dr ${lastName} ${date} `;
+    }
+    return null;
   }
 
   render() {
@@ -286,23 +301,26 @@ class Availabilities extends React.Component {
       practitionersStartEndDate,
       setRegistrationStep,
       logo,
+      address,
     } = this.props;
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
     const prId = practitioners[0] && practitioners.id;
-    const defaultValues = {practitionerId, serviceId};
-    const params = {practitionerId, services, availabilities, practitioners, defaultValues};
-
+    const defaultValues = { practitionerId, serviceId };
+    const params = { practitionerId, services, availabilities, practitioners, defaultValues };
+    const appointmentInfo = this.getAppointmentInfo(serviceId);
     switch (practitionersStartEndDate.get('registrationStep')) {
       case 1:
         return this.renderFirstStep(params);
       case 2:
-        return <SignUp
+        return (<SignUp
           setRegistrationStep={setRegistrationStep}
           createPatient={createPatient}
           practitionersStartEndDate={practitionersStartEndDate}
           logo={logo}
-        />;
+          address={address}
+          appointmentInfo={appointmentInfo}
+        />);
       case undefined:
         return (
           <div>Loading..</div>

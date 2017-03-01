@@ -35,7 +35,8 @@ myRouter.get('/widgets/:accountId', (req, res, next) => {
 myRouter.get('/logo/:accountId', (req, res, next) => {
 	const { accountId } = req.params;
 	Account.get(accountId).run().then(account => {
-		res.send({ logo: account.logo });
+		const { logo, address, clinicName } = account;
+		res.send({ logo, address, clinicName });
 	})	
 });
 
