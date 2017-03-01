@@ -14,7 +14,7 @@ class General extends React.Component {
   }
 
   updateName(values) {
-    const {activeAccount, updateEntityRequest} = this.props;
+    const { activeAccount, updateEntityRequest } = this.props;
     const modifiedAccount = activeAccount.set('name', values.name);
     updateEntityRequest({ key: 'accounts', model: modifiedAccount });
   }
