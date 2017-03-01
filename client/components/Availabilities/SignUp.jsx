@@ -117,7 +117,7 @@ class SignUp extends Component {
   }
 
   render() {
-    const { practitionersStartEndDate, logo } = this.props;
+    const { practitionersStartEndDate, logo, appointmentInfo } = this.props;
     const { messages } = practitionersStartEndDate.toJS();
     const contnet = messages.length ? this.renderMessages(messages)
       : this.renderBookingForm();
@@ -152,10 +152,7 @@ class SignUp extends Component {
                     YOUR APPOINTMENT
                   </div>
                   <div className={styles.sidebar__information_text}>
-                    Toothache
-                    Dr. Chelsea
-                    Feb 13 2017
-                    4pm - 5pm
+                    {appointmentInfo}
                   </div>
                 </div>
               </div>

@@ -276,6 +276,19 @@ class Availabilities extends React.Component {
     );
   }
 
+  getAppointmentInfo(serviceId) {
+    const { practitionersStartEndDate, practitioners, services, practitionerId } = this.props;
+    const selectedService = services.filter(s => s.id === serviceId)[0];
+    const selectedPractitioner = practitioners.filter(p => p.id === practitionerId)[0];
+    if (selectedPractitioner && selectedService) {
+      const { firstName, lastName } = selectedPractitioner;
+      const { name } = selectedService; 
+      const date = moment(practitionersStartEndDate.toJS().startsAt).format('LLLL');
+      return `${name} Dr ${lastName} ${date} ` 
+    }
+    return null
+  }
+
   render() {
     const {
       services,
@@ -290,8 +303,10 @@ class Availabilities extends React.Component {
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
     const prId = practitioners[0] && practitioners.id;
-    const defaultValues = {practitionerId, serviceId};
-    const params = {practitionerId, services, availabilities, practitioners, defaultValues};
+    const defaultValues = { practitionerId, serviceId };
+    const params = { practitionerId, services, availabilities, practitioners, defaultValues };
+
+    const appointmentInfo = this.getAppointmentInfo(serviceId);
 
     switch (practitionersStartEndDate.get('registrationStep')) {
       case 1:
@@ -302,6 +317,7 @@ class Availabilities extends React.Component {
           createPatient={createPatient}
           practitionersStartEndDate={practitionersStartEndDate}
           logo={logo}
+          appointmentInfo={appointmentInfo}
         />;
       case undefined:
         return (
