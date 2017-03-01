@@ -11,12 +11,16 @@
     &__wrapper {
         display: flex;
         width: 730px;
+        border-radius: 5px;
         height: 610px;
         margin: 0 auto;
         flex-direction: column;
         background: #fafafa;
-        border-radius: 5px;
         position: relative;
+        @media screen and (max-width: 600px) {
+            width: auto;
+            overflow: scroll;
+        }
     }
     > div {
         display: flex;
@@ -32,9 +36,22 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        //@media screen and (max-width: 600px) {
-        //    display: none;
-        //}
+        @media screen and (max-width: 600px) {
+            display: none;
+            transform: translateX(-200px);
+        }
+    }
+    &__sidebarActive {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        transform: translateX(0px);
+        width: 200px;
+        position: absolute;
+        height: 100%;
+        z-index: 1;
+        left: 0;
+        transition: transform .5s;
     }
     .sidebar {
         &__header {
@@ -95,13 +112,17 @@
     }
     &__main {
         width: 75%;
-        //@media screen and (max-width: 600px) {
-        //    width: 100%;
-        //}
+        @media screen and (max-width: 600px) {
+            width: 100%;
+        }
     }
     &__header {
         background: #fff;
         border-radius: 5px;
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: space-around;
         &_title {
             height: 70px;
             display: flex;
@@ -111,6 +132,16 @@
             color: #db6653;
             text-align: center;
             text-transform: uppercase;
+        }
+        &_btn {
+            height: 25px;
+            position: absolute;
+            left: 10px;
+            background: none;
+            border: none;
+            &:hover {
+                color: #db6653;
+            }
         }
     }
     &__body {
@@ -301,6 +332,9 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 15px;
+            @media screen and (max-width: 600px) {
+                flex-direction: column;
+            }
         }
         &_title {
             font-size: 8px;
@@ -310,6 +344,9 @@
         }
         &_confirm {
             display: flex;
+            @media screen and (max-width: 600px) {
+                flex-direction: column;
+            }
         }
         &_select {
             display: flex;
@@ -338,6 +375,11 @@
             top: 50%;
             transform: translateY(-50%);
             position: absolute;
+            @media screen and (max-width: 600px) {
+                position: inherit;
+                flex-direction: column;
+                margin-top: 10px;
+            }
             &:disabled {
                 cursor: not-allowed;
                 opacity: .65;

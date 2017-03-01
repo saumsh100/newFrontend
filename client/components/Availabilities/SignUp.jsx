@@ -12,6 +12,7 @@ class SignUp extends Component {
     this.state = {
       time: 0,
       maxtime: 3 * 60 * 1000,
+      collapseMenu: false,
     };
     this.registrationTimer = null;
     this.startTimer = this.startTimer.bind(this);
@@ -19,6 +20,8 @@ class SignUp extends Component {
     this.bookAnAppointment = this.bookAnAppointment.bind(this);
     this.setRegistrationStep = this.setRegistrationStep.bind(this);
     this.renderBookingForm = this.renderBookingForm.bind(this);
+    this.collapseMenuOpen = this.collapseMenuOpen.bind(this);
+    this.collapseMenuClose = this.collapseMenuClose.bind(this);
   }
 
 
@@ -52,6 +55,16 @@ class SignUp extends Component {
     e.preventDefault();
     const { setRegistrationStep } = this.props;
     setRegistrationStep(1);
+  }
+  collapseMenuOpen() {
+    this.setState({
+      collapseMenu: true,
+    });
+  }
+  collapseMenuClose() {
+    this.setState({
+      collapseMenu: false,
+    });
   }
   renderBookingForm() {
     return (
@@ -116,7 +129,6 @@ class SignUp extends Component {
       </div>
     );
   }
-
   render() {
     const { practitionersStartEndDate, logo, address, appointmentInfo } = this.props;
     const { messages } = practitionersStartEndDate.toJS();
@@ -125,7 +137,7 @@ class SignUp extends Component {
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>
-          <div className={styles.signup__sidebar}>
+          <div className={`${styles.signup__sidebar} ${this.state.collapseMenu ? styles.signup__sidebarActive : ''}`}>
             <div className={styles.sidebar__header}>
               <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
               <div className={styles.sidebar__header_title}>
@@ -165,6 +177,10 @@ class SignUp extends Component {
           </div>
           <div className={styles.signup__main}>
             <div className={styles.signup__header}>
+              <button className={styles.signup__header_btn}
+                      onClick={this.collapseMenuOpen}>
+                <i className="fa fa-bars" />
+              </button>
               <div className={styles.signup__header_title}>
                 SIGN UP
               </div>
@@ -174,7 +190,7 @@ class SignUp extends Component {
                 percentage={this.getPercent()}
               />
             </div>
-            <div className={styles.signup__body}>
+            <div onClick={this.collapseMenuClose} className={styles.signup__body}>
               {contnet}
             </div>
             <div className={styles.signup__footer}>

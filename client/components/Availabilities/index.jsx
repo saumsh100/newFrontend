@@ -17,6 +17,7 @@ class Availabilities extends React.Component {
       modalIsOpen: false,
       practitionersStartEndDate: {},
       checked: false,
+      collapseMenu: false,
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
     this.onServiceChange = this.onServiceChange.bind(this);
@@ -29,22 +30,24 @@ class Availabilities extends React.Component {
     this.selectAvailability = this.selectAvailability.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
+    this.collapseMenuOpen = this.collapseMenuOpen.bind(this);
+    this.collapseMenuClose = this.collapseMenuClose.bind(this);
   }
 
 
   onDoctorChange(e) {
-    const { setPractitioner } = this.props;
-    setPractitioner({ practitionerId: e.target.value });
+    const {setPractitioner} = this.props;
+    setPractitioner({practitionerId: e.target.value});
   }
 
   onServiceChange(e) {
-    const { setService, practitionersStartEndDate } = this.props;
+    const {setService, practitionersStartEndDate} = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     setService(e.target.value);
   }
 
   sixDaysBack() {
-    const { sixDaysShift, practitionersStartEndDate } = this.props;
+    const {sixDaysShift, practitionersStartEndDate} = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newEndDay = moment(selectedOldStartDay)._d;
@@ -59,7 +62,7 @@ class Availabilities extends React.Component {
   }
 
   sixDaysForward() {
-    const { sixDaysShift, practitionersStartEndDate } = this.props;
+    const {sixDaysShift, practitionersStartEndDate} = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = moment(selectedOldStartDay).add(4, 'd')._d;
@@ -74,8 +77,8 @@ class Availabilities extends React.Component {
   }
 
   handleDayClick(e, day) {
-    const { practitionersStartEndDate } = this.props;
-    const { sixDaysShift } = this.props;
+    const {practitionersStartEndDate} = this.props;
+    const {sixDaysShift} = this.props;
     const practitionerId = practitionersStartEndDate.toJS().practitionerId;
     const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = day;
@@ -90,7 +93,7 @@ class Availabilities extends React.Component {
 
   selectAvailability(slot) {
     if (!slot.isBusy) {
-      const { startsAt } = slot;
+      const {startsAt} = slot;
       this.props.setStartingAppointmentTime(startsAt);
     }
   }
@@ -100,11 +103,11 @@ class Availabilities extends React.Component {
   }
 
   openModal() {
-    this.setState({ modalIsOpen: !this.state.modalIsOpen });
+    this.setState({modalIsOpen: !this.state.modalIsOpen});
   }
 
   closeModal() {
-    this.setState({ modalIsOpen: !modalIsOpen });
+    this.setState({modalIsOpen: !modalIsOpen});
   }
 
   handleChange() {
@@ -112,22 +115,35 @@ class Availabilities extends React.Component {
       checked: !this.state.checked,
     });
   }
+
   handleSaveClick(e) {
     e.preventDefault();
-    const { setRegistrationStep } = this.props;
+    const {setRegistrationStep} = this.props;
     setRegistrationStep(2);
+  }
+
+  collapseMenuOpen() {
+    console.log('ss')
+    this.setState({
+      collapseMenu: true,
+    });
+  }
+  collapseMenuClose() {
+    this.setState({
+      collapseMenu: false,
+    });
   }
   renderFirstStep({ practitionerId, services, availabilities, practitioners, defaultValues }) {
     const startsAt = this.props.practitionersStartEndDate.get('startsAt');
     const preferences = this.state.checked
       ?
-        <Preferences startsAt={startsAt} setRegistrationStep={this.props.setRegistrationStep} />
+      <Preferences startsAt={startsAt} setRegistrationStep={this.props.setRegistrationStep} />
       : null;
     const { logo, address, clinicName } = this.props;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
-          <div className={styles.appointment__sidebar}>
+          <div className={`${styles.appointment__sidebar} ${this.state.collapseMenu ? styles.appointment__sidebarActive : 'aaaaaa'}`}>
             <div className={styles.sidebar__header}>
               <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
               <div className={styles.sidebar__header_title}>
@@ -154,13 +170,17 @@ class Availabilities extends React.Component {
               </div>
             </div>
           </div>
-          <div className={styles.appointment__main}>
+          <div  className={styles.appointment__main}  >
             <div className={styles.appointment__header}>
+              <button className={styles.appointment__header_btn}
+                      onClick={this.collapseMenuOpen}>
+                <i className="fa fa-bars" />
+              </button>
               <div className={styles.appointment__header_title}>
                 BOOK APPOINTMENT
               </div>
             </div>
-            <div className={styles.appointment__body}>
+            <div onClick={this.collapseMenuClose} className={styles.appointment__body}>
               <div className={styles.appointment__body_header}>
                 <div className={styles.appointment__select_title}>Practitioner</div>
                 {defaultValues && defaultValues.practitionerId &&
@@ -240,7 +260,7 @@ class Availabilities extends React.Component {
                         >
                           {moment(slot.startsAt).format('HH:mm A')}
                         </li>)
-                        }
+                      }
                     </ul>))}
                 </div>
                 <button className={styles.appointment__table_btn} onClick={this.sixDaysForward}>

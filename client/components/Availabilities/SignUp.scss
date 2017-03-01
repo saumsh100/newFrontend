@@ -18,6 +18,9 @@
         flex-direction: column;
         background: #fafafa;
         border-radius: 5px;
+        @media screen and (max-width: 600px) {
+            width: auto;
+        }
     }
     > div {
         display: flex;
@@ -33,6 +36,22 @@
         border-radius: 5px;
         background-color: #ff715a;
         position: relative;
+        @media screen and (max-width: 600px) {
+            display: none;
+            transform: translateX(-200px);
+        }
+    }
+    &__sidebarActive {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        transform: translateX(0px);
+        width: 200px;
+        position: absolute;
+        height: 100%;
+        z-index: 1;
+        left: 0;
+        transition: transform 0.5s;
     }
     .sidebar {
         &__header {
@@ -117,6 +136,9 @@
     }
     &__main {
         width: 75%;
+        @media screen and (max-width: 600px) {
+            width: 100%;
+        }
     }
     &__header {
         position: relative;
@@ -126,6 +148,16 @@
         background: #fff;
         justify-content: center;
         align-items: center;
+        &_btn {
+            height: 25px;
+            position: absolute;
+            left: 10px;
+            background: none;
+            border: none;
+            &:hover {
+                color: #db6653;
+            }
+        }
         &_title {
             font-size: 12px;
             text-align: center;
@@ -140,6 +172,9 @@
     &__body {
         padding: 20px 150px;
         border-radius: 5px;
+        @media screen and (max-width: 600px) {
+            padding: 20px 30px;
+        }
         &_header {
             margin-bottom: 30px;
             text-align: center;
