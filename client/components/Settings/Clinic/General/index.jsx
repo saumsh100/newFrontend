@@ -44,6 +44,7 @@ General.propTypes = {
   updateEntityRequest: PropTypes.func,
 }
 
+
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     updateEntityRequest,

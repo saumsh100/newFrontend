@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
+import Button from '../Button';
 import Field from './Field';
 import FormSection from './FormSection';
 
@@ -29,12 +30,20 @@ function Form(props) {
   const {
     children,
     handleSubmit,
+    pristine,
   } = props;
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         {children}
+        <Button
+          flat
+          disabled={pristine}
+          type="submit"
+        >
+          Save
+        </Button>
       </form>
     </div>
   );

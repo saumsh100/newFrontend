@@ -29,12 +29,29 @@ body {
     .react-toggle-track {
       background-color: $primary-color;
     }
+
+    .react-toggle-thumb {
+      border-color: $primary-color;
+    }
   }
 
   .CareCruToggle.react-toggle--focus {
     .react-toggle-thumb {
       box-shadow: none;
     }
+  }
+
+  .dd-menu-items {
+    min-width: 200px;
+    z-index: 2500 !important;
+    white-space: nowrap;
+    margin-top: 12px !important;
+    background-color: $primary-white;
+  }
+
+  .separator {
+    height: 2px !important;
+    background-color: $primary-lightgrey !important;
   }
 }
 
