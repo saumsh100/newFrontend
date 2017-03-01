@@ -5,9 +5,13 @@ const type = thinky.type;
 
 const Account = createModel('Account', {
   name: type.string().required(),
+  street: type.string(),
+  country: type.string(),
+  state: type.string(),
+  city: type.string(),
+  zipCode: type.string(),
   vendastaId: type.string(),
   smsPhoneNumber: type.string(),
-  // users: []
 });
 
 module.exports = Account;

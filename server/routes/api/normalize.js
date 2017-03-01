@@ -4,7 +4,9 @@ const normalizr = require('normalizr');
 const schema = normalizr.schema;
 
 const accountSchema = () => {
-  return new schema.Entity('accounts');
+  return new schema.Entity('accounts', {
+    users: [userSchema()],
+  });
 };
 
 const appointmentSchema = () => {
@@ -58,6 +60,7 @@ const userSchema = () => {
 
 const SCHEMAS = {
   // Models (singleFetch/findOne)
+  account: accountSchema(),
   appointment: appointmentSchema(),
   chair: chairSchema(),
   chat: chatSchema(),
@@ -69,6 +72,7 @@ const SCHEMAS = {
   practitioner: practitionerSchema(),
 
   // Collections (list/find)
+  accounts: [accountSchema()],
   appointments: [appointmentSchema()],
   practitioners: [practitionerSchema()],
   chairs: [chairSchema()],
