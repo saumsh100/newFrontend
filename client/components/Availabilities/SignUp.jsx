@@ -17,7 +17,7 @@ class SignUp extends Component {
     this.startTimer = this.startTimer.bind(this);
     this.getPercent = this.getPercent.bind(this);
     this.bookAnAppointment = this.bookAnAppointment.bind(this);
-    this.handleSaveClick = this.handleSaveClick.bind(this);
+    this.setRegistrationStep = this.setRegistrationStep.bind(this);
     this.renderBookingForm = this.renderBookingForm.bind(this);
   }
 
@@ -42,8 +42,8 @@ class SignUp extends Component {
   bookAnAppointment(params) {
     const { startsAt, practitionerId, serviceId } = this.props.practitionersStartEndDate.toJS();
     const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
-    const array = location.pathname.split('/')
-    const accountId = array[array.length-1]
+    const array = location.pathname.split('/');
+    const accountId = array[array.length - 1];
     const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId, accountId }, params, { domen });
     this.props.createPatient(paramsToPass);
   }
@@ -97,7 +97,8 @@ class SignUp extends Component {
         />
         <Button
           type="submit"
-          className={styles.signup__footer_btn}>
+          className={styles.signup__footer_btn}
+        >
           Book an appointment
         </Button>
       </Form>
@@ -117,7 +118,7 @@ class SignUp extends Component {
   }
 
   render() {
-    const { practitionersStartEndDate } = this.props;
+    const { practitionersStartEndDate, logo, address, appointmentInfo } = this.props;
     const { messages } = practitionersStartEndDate.toJS();
     const contnet = messages.length ? this.renderMessages(messages)
       : this.renderBookingForm();
@@ -126,7 +127,7 @@ class SignUp extends Component {
         <div className={styles.signup__wrapper}>
           <div className={styles.signup__sidebar}>
             <div className={styles.sidebar__header}>
-              <img className={styles.sidebar__header_logo} src="images/availabilies_sidebar_logo_2.png" alt="logo"/>
+              <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
               <div className={styles.sidebar__header_title}>
                 Pacific Heart
                 <span>Dental</span>
@@ -139,10 +140,7 @@ class SignUp extends Component {
                     PACIFIC HEART DENTAL
                   </div>
                   <div className={styles.sidebar__information_text}>
-                    194-105 East 3rd
-                    7 ave
-                    Vancouver, BC
-                    Canda V1B 2C3
+                    {address}
                   </div>
                 </div>
               </div>
@@ -152,10 +150,7 @@ class SignUp extends Component {
                     YOUR APPOINTMENT
                   </div>
                   <div className={styles.sidebar__information_text}>
-                    Toothache
-                    Dr. Chelsea
-                    Feb 13 2017
-                    4pm - 5pm
+                    {appointmentInfo}
                   </div>
                 </div>
               </div>
@@ -164,7 +159,7 @@ class SignUp extends Component {
             <div className={styles.sidebar__footer}>
               <div className={styles.sidebar__footer_copy}>
                 <div>POWERED BY:</div>
-                <img src="/images/logo_black.png" alt="logo"/>
+                <img src="/images/logo_black.png" alt="logo" />
               </div>
             </div>
           </div>
@@ -173,9 +168,10 @@ class SignUp extends Component {
               <div className={styles.signup__header_title}>
                 SIGN UP
               </div>
-              <Timer className={styles.signup__header_timer}
-                     seconds={this.state.time}
-                     percentage={this.getPercent()}
+              <Timer
+                className={styles.signup__header_timer}
+                seconds={this.state.time}
+                percentage={this.getPercent()}
               />
             </div>
             <div className={styles.signup__body}>

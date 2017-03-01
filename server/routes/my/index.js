@@ -32,18 +32,11 @@ myRouter.get('/widgets/:accountId', (req, res, next) => {
   });
 });
 
-// myRouter.use('/api', apiRouter);
-
 myRouter.get('/logo/:accountId', (req, res, next) => {
-	console.log("accountID")
-	console.log("======================================")
-	console.log("======================================")
-	console.log("======================================")
-	console.log("======================================")
-	console.log("======================================")
 	const { accountId } = req.params;
 	Account.get(accountId).run().then(account => {
-		res.send({ logo: account.logo });
+		const { logo, address, clinicName } = account;
+		res.send({ logo, address, clinicName });
 	})	
 });
 

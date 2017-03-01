@@ -123,7 +123,7 @@ class Availabilities extends React.Component {
       ?
         <Preferences startsAt={startsAt} setRegistrationStep={this.props.setRegistrationStep} />
       : null;
-    const { logo } = this.props;
+    const { logo, address, clinicName } = this.props;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
@@ -139,13 +139,10 @@ class Availabilities extends React.Component {
               <div className={styles.sidebar__body_address}>
                 <div className={styles.sidebar__address}>
                   <div className={styles.sidebar__address_title}>
-                    PACIFIC HEART DENTAL
+                    {clinicName}
                   </div>
                   <div className={styles.sidebar__address_text}>
-                    194-105 East 3rd
-                    7 ave
-                    Vancouver, BC
-                    Canda V1B 2C3
+                    {address}
                   </div>
                 </div>
               </div>
@@ -281,6 +278,19 @@ class Availabilities extends React.Component {
     );
   }
 
+  getAppointmentInfo(serviceId) {
+    const { practitionersStartEndDate, practitioners, services, practitionerId } = this.props;
+    const selectedService = services.filter(s => s.id === serviceId)[0];
+    const selectedPractitioner = practitioners.filter(p => p.id === practitionerId)[0];
+    if (selectedPractitioner && selectedService) {
+      const { firstName, lastName } = selectedPractitioner;
+      const { name } = selectedService;
+      const date = moment(practitionersStartEndDate.toJS().startsAt).format('LLLL');
+      return `${name} Dr ${lastName} ${date} `;
+    }
+    return null;
+  }
+
   render() {
     const {
       services,
@@ -290,13 +300,15 @@ class Availabilities extends React.Component {
       createPatient,
       practitionersStartEndDate,
       setRegistrationStep,
+      logo,
+      address,
     } = this.props;
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
     const prId = practitioners[0] && practitioners.id;
     const defaultValues = { practitionerId, serviceId };
     const params = { practitionerId, services, availabilities, practitioners, defaultValues };
-
+    const appointmentInfo = this.getAppointmentInfo(serviceId);
     switch (practitionersStartEndDate.get('registrationStep')) {
       case 1:
         return this.renderFirstStep(params);
@@ -305,6 +317,9 @@ class Availabilities extends React.Component {
           setRegistrationStep={setRegistrationStep}
           createPatient={createPatient}
           practitionersStartEndDate={practitionersStartEndDate}
+          logo={logo}
+          address={address}
+          appointmentInfo={appointmentInfo}
         />);
       case undefined:
         return (
