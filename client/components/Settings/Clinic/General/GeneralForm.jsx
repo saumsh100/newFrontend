@@ -3,10 +3,9 @@ import React, { PropTypes } from 'react';
 import { Form, Field, Button } from '../../../library';
 
 export default function GeneralForm({ onSubmit, accountInfo }) {
-
   const initialValues = {
     name: accountInfo.get('name'),
-  }
+  };
 
   return (
     <Form form="generalSettingsForm" onSubmit={onSubmit} initialValues={initialValues}>

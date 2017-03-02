@@ -1,6 +1,9 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import moment from 'moment';
+import pick from 'lodash/pick';
+import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
 import {
   Button,
@@ -13,37 +16,48 @@ import {
 } from '../../../library';
 import styles from './styles.scss';
 
-function submit(values) {
-  alert(JSON.stringify(values));
-}
-
 const generateTimeOptions = () => {
   const timeOptions = [];
-  const increments = 12 * 12;
+  const totalHours = 24;
+  const increment = 5;
+  const increments = 60 / increment;
 
   let i;
-  for (i = 0; i < increments; i++) {
-    timeOptions.push({ value: i + 'AM' });
+  for (i = 0; i < totalHours; i++) {
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 1, i, j * increment));
+      const value = time.toISOString();
+      const label = time.format('LT');
+      timeOptions.push({ value, label });
+    }
   }
 
   return timeOptions;
 };
 
-function OfficeHoursForm({ values }) {
-  const initialValues = {
-    monday: { isClosed: false },
-    tuesday: { isClosed: false },
-    wednesday: { isClosed: false },
-    thursday: { isClosed: false },
-    friday: { isClosed: false },
-    saturday: { isClosed: true },
-    sunday: { isClosed: true },
-  };
+function OfficeHoursForm({ values, account, onSubmit }) {
+  // TODO: finish fetchEntitiesHOC so we dont have to do this...
+  if (!account) return null;
+
+  const officeHours = pick(account.get('officeHours'), [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ]);
+
+  const initialValues = mapValues(officeHours, (day) => {
+    return day;
+  });
 
   const DayHoursForm = ({ day }) => {
+    // Hacky way of letting internal form values control component state
     const dayValues = values[day];
     const isDisabled = dayValues && dayValues.isClosed;
-
     return (
       <FormSection name={day}>
         <Grid>
@@ -91,7 +105,7 @@ function OfficeHoursForm({ values }) {
   };
 
   return (
-    <Form form="officeHours" onSubmit={submit} initialValues={initialValues}>
+    <Form form="officeHours" onSubmit={onSubmit} initialValues={initialValues}>
       <DayHoursForm day="monday" />
       <DayHoursForm day="tuesday" />
       <DayHoursForm day="wednesday" />

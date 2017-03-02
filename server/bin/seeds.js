@@ -50,6 +50,8 @@ const markChatId = uuid();
 const justinChatId = uuid();
 const sergeyChatId = uuid();
 
+const officeHoursId = uuid();
+
 const mondayHoursId = uuid();
 const tuesdayHoursId = uuid();
 const wednesdayHoursId = uuid();
@@ -361,36 +363,10 @@ const SEEDS = {
     },
   ],
 
-  Account: [
-    {
-      name: 'Beckett Dental',
-      street: '354 Beach Ave',
-      country: 'United States',
-      state: 'California',
-      city: 'Riverside',
-      zipCode: '92509',
-      vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      smsPhoneNumber: clinicPhoneNumber,
-      id: accountId,
-    },
-  ],
-
-  OfficeHours: [
-    {
-      monday: mondayHoursId,
-      tuesday: tuesdayHoursId,
-      wednesday: wednesdayHoursId,
-      thursday: thursdayHoursId,
-      friday: fridayHoursId,
-      saturday: saturdayHoursId,
-      sunday: sundayHoursId,
-    },
-  ],
-
   OperationalHours: [
     {
       id: mondayHoursId,
-      isClosed: false,
+      isClosed: true,
       startTime: hour8,
       endTime: hour5,
     },
@@ -429,6 +405,34 @@ const SEEDS = {
       isClosed: true,
       startTime: hour8,
       endTime: hour5,
+    },
+  ],
+
+  OfficeHours: [
+    {
+      id: officeHoursId,
+      mondayId: mondayHoursId,
+      tuesdayId: tuesdayHoursId,
+      wednesdayId: wednesdayHoursId,
+      thursdayId: thursdayHoursId,
+      fridayId: fridayHoursId,
+      saturdayId: saturdayHoursId,
+      sundayId: sundayHoursId,
+    },
+  ],
+
+  Account: [
+    {
+      id: accountId,
+      officeHoursId,
+      name: 'Beckett Dental',
+      street: '354 Beach Ave',
+      country: 'United States',
+      state: 'California',
+      city: 'Riverside',
+      zipCode: '92509',
+      vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      smsPhoneNumber: clinicPhoneNumber,
     },
   ],
 

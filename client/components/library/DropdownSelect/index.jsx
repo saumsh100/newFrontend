@@ -9,7 +9,7 @@ import styles from './styles.scss';
 function DefaultOption({ option }) {
   return (
     <div>
-      {option.value}
+      {option.label || option.value}
     </div>
   );
 }
@@ -80,7 +80,7 @@ export default class DropdownSelect extends Component {
       template,
     } = this.props;
 
-    const defaultTemplate = ({ option }) => (<div>{option.value}</div>);
+    const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
     const ToggleTemplate = template || defaultTemplate;
 
     let toggleDiv = label;

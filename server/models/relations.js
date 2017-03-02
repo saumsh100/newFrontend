@@ -54,10 +54,10 @@ Chat.hasOne(Account, 'account', 'accountId', 'id');
 Chat.hasOne(Patient, 'patient', 'patientId', 'id');
 Chat.hasMany(TextMessage, 'textMessages', 'id', 'chatId');
 
-OfficeHours.hasOne(OperationalHours, 'monday', 'monday', 'id');
-OfficeHours.hasOne(OperationalHours, 'tuesday', 'tuesday', 'id');
-OfficeHours.hasOne(OperationalHours, 'wednesday', 'wednesday', 'id');
-OfficeHours.hasOne(OperationalHours, 'thursday', 'thursday', 'id');
-OfficeHours.hasOne(OperationalHours, 'friday', 'friday', 'id');
-OfficeHours.hasOne(OperationalHours, 'saturday', 'saturday', 'id');
-OfficeHours.hasOne(OperationalHours, 'sunday', 'sunday', 'id');
+OfficeHours.hasOne(OperationalHours, 'monday', 'mondayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'tuesday', 'tuesdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'wednesday', 'wednesdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'thursday', 'thursdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'friday', 'fridayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'saturday', 'saturdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'sunday', 'sundayId', 'id');

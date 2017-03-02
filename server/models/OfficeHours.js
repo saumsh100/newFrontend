@@ -5,13 +5,13 @@ const type = thinky.type;
 
 const OfficeHours = createModel('OfficeHours', {
   // All operationalHoursIds
-  monday: type.string().uuid(4),
-  tuesday: type.string().uuid(4),
-  wednesday: type.string().uuid(4),
-  thursday: type.string().uuid(4),
-  friday: type.string().uuid(4),
-  saturday: type.string().uuid(4),
-  sunday: type.string().uuid(4),
+  mondayId: type.string().uuid(4),
+  tuesdayId: type.string().uuid(4),
+  wednesdayId: type.string().uuid(4),
+  thursdayId: type.string().uuid(4),
+  fridayId: type.string().uuid(4),
+  saturdayId: type.string().uuid(4),
+  sundayId: type.string().uuid(4),
 });
 
 module.exports = OfficeHours;

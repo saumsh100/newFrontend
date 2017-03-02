@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import Settings from '../components/Settings';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Settings from '../components/Settings';
 import { fetchEntities } from '../thunks/fetchEntities';
 
 // TODO: fetch current Settings and user (should already be in Redux)
@@ -11,15 +11,11 @@ class SettingsContainer extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'accounts' });
+    this.props.fetchEntities({ key: 'accounts', join: ['officeHours'] });
   }
 
   render() {
-    return (
-      <div>
-        <Settings {...this.props} />
-      </div>
-    );
+    return <Settings {...this.props} />;
   }
 }
 
@@ -32,6 +28,7 @@ function mapStateToProps({ entities }) {
     activeAccount: entities.getIn(['accounts', 'models']).first(),
   };
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,

@@ -58,7 +58,7 @@ const initialState = Map({
 });
 
 const Models = {
-  accounts: ActiveAccount,
+  accounts: Account,
   patients: Patient,
   textMessages: TextMessage,
   appointments: Appointments,

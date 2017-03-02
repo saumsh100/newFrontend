@@ -13,7 +13,29 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     next(StatusError(404, 'req.accountId does not match URL account id'));
   }
 
-  return Promise.resolve(req.account)
+  const {
+    joinObject,
+  } = req;
+
+  // Some default code to ensure we don't pull the entire conversation for each chat
+  if (joinObject.officeHours) {
+    joinObject.officeHours = {
+      _apply: (sequence) => {
+        return sequence
+          .getJoin({
+            monday: true,
+            tuesday: true,
+            wednesday: true,
+            thursday: true,
+            friday: true,
+            saturday: true,
+            sunday: true,
+          });
+      },
+    };
+  }
+
+  return Account.get(req.account.id).getJoin(joinObject)
     .then(account => res.send(normalize('account', account)))
     .catch(next);
 });
