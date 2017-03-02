@@ -76,16 +76,18 @@ class SignUp extends Component {
         asyncValidate={asyncEmailValidate}
         asyncBlurFields={['email']}
       >
-        <Field
-          name="firstName"
-          label="First Name *"
-          className={styles.signup__body_input}
-        />
-        <Field
-          name="lastName"
-          label="Last Name *"
-          className={styles.signup__body_input}
-        />
+        <div>
+          <Field
+            name="firstName"
+            label="First Name *"
+            className={styles.signup__body_input}
+          />
+          <Field
+            name="lastName"
+            label="Last Name *"
+            className={styles.signup__body_input}
+          />
+        </div>
         <Field
           label="Phone Number *"
           name="phone"

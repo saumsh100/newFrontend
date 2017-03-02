@@ -11,15 +11,15 @@
     &__wrapper {
         display: flex;
         width: 730px;
-        height: 610px;
-        min-height: 100%;
+        min-height: 610px;
         margin: 0 auto;
         overflow: hidden;
         flex-direction: column;
         background: #fafafa;
         border-radius: 5px;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             width: auto;
+            overflow: scroll;
         }
     }
     > div {
@@ -33,25 +33,22 @@
         flex-direction: column;
         width: 25%;
         padding: 0 20px;
-        border-radius: 5px;
         background-color: #ff715a;
         position: relative;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             display: none;
             transform: translateX(-200px);
         }
     }
     &__sidebarActive {
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
         transform: translateX(0px);
         width: 200px;
         position: absolute;
         height: 100%;
         z-index: 1;
         left: 0;
-        transition: transform 0.5s;
+        transition: transform .5s;
     }
     .sidebar {
         &__header {
@@ -72,6 +69,20 @@
                 font-weight: 500;
                 span {
                     font-weight: 200;
+                }
+            }
+            &_btn {
+                height: 25px;
+                position: absolute;
+                background: none;
+                border: none;
+                display: none;
+                left: 10px;
+                @media screen and (max-width: 1000px) {
+                    display: block;
+                }
+                &:hover {
+                    color: #db6653;
                 }
             }
         }
@@ -136,7 +147,7 @@
     }
     &__main {
         width: 75%;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             width: 100%;
         }
     }
@@ -154,6 +165,10 @@
             left: 10px;
             background: none;
             border: none;
+            display: none;
+            @media screen and (max-width: 800px) {
+                display: block;
+            }
             &:hover {
                 color: #db6653;
             }
@@ -172,7 +187,7 @@
     &__body {
         padding: 20px 150px;
         border-radius: 5px;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             padding: 20px 30px;
         }
         &_header {

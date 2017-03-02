@@ -32,6 +32,7 @@ class Availabilities extends React.Component {
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.collapseMenuOpen = this.collapseMenuOpen.bind(this);
     this.collapseMenuClose = this.collapseMenuClose.bind(this);
+    this.closeIframe = this.closeIframe.bind(this);
   }
 
 
@@ -123,7 +124,6 @@ class Availabilities extends React.Component {
   }
 
   collapseMenuOpen() {
-    console.log('ss')
     this.setState({
       collapseMenu: true,
     });
@@ -132,6 +132,9 @@ class Availabilities extends React.Component {
     this.setState({
       collapseMenu: false,
     });
+  }
+  closeIframe() {
+    window.parent.postMessage('message', '*');
   }
   renderFirstStep({ practitionerId, services, availabilities, practitioners, defaultValues }) {
     const startsAt = this.props.practitionersStartEndDate.get('startsAt');
@@ -143,7 +146,7 @@ class Availabilities extends React.Component {
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
-          <div className={`${styles.appointment__sidebar} ${this.state.collapseMenu ? styles.appointment__sidebarActive : 'aaaaaa'}`}>
+          <div className={`${styles.appointment__sidebar} ${this.state.collapseMenu ? styles.appointment__sidebarActive : ''}`}>
             <div className={styles.sidebar__header}>
               <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
               <div className={styles.sidebar__header_title}>
@@ -179,6 +182,10 @@ class Availabilities extends React.Component {
               <div className={styles.appointment__header_title}>
                 BOOK APPOINTMENT
               </div>
+              <button className={styles.appointment__header_btn}
+                      onClick={this.closeIframe}>
+                <i className="fa fa-times" />
+              </button>
             </div>
             <div onClick={this.collapseMenuClose} className={styles.appointment__body}>
               <div className={styles.appointment__body_header}>

@@ -12,12 +12,12 @@
         display: flex;
         width: 730px;
         border-radius: 5px;
-        height: 610px;
+        min-height: 610px;
         margin: 0 auto;
         flex-direction: column;
         background: #fafafa;
         position: relative;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             width: auto;
             overflow: scroll;
         }
@@ -36,7 +36,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             display: none;
             transform: translateX(-200px);
         }
@@ -112,7 +112,7 @@
     }
     &__main {
         width: 75%;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             width: 100%;
         }
     }
@@ -134,11 +134,20 @@
             text-transform: uppercase;
         }
         &_btn {
+            display: none;
             height: 25px;
             position: absolute;
-            left: 10px;
             background: none;
             border: none;
+            &:first-of-type {
+                left: 10px;
+            }
+            &:last-of-type {
+                right: 10px;
+            }
+            @media screen and (max-width: 800px) {
+                display: block;
+            }
             &:hover {
                 color: #db6653;
             }
@@ -146,13 +155,16 @@
     }
     &__body {
         padding: 20px 50px;
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 800px) {
             padding: 20px 30px;
         }
         border-radius: 5px;
         &_header {
             margin-bottom: 30px;
             text-align: center;
+            @media screen and (max-width: 800px) {
+                margin-bottom: 15px;
+            }
         }
         &_input {
             width: 100%;
@@ -173,6 +185,9 @@
         margin-top: 30px;
         flex-direction: row;
         align-items: center;
+        @media screen and (max-width: 800px) {
+            margin-top: 15px;
+        }
         &_title {
             margin-right: 10px;
             font-size: 8px;
@@ -271,6 +286,23 @@
                 top: 0;
                 right: -30px;
             }
+
+            @media screen and (max-width: 860px) {
+                &:first-child {
+                    left: -20px;
+                }
+                &:last-child {
+                    right: -20px;
+                }
+            }
+            @media screen and (max-width: 600px) {
+                &:first-child {
+                    left: -25px;
+                }
+                &:last-child {
+                    right: -25px;
+                }
+            }
         }
         &_elements {
             display: flex;
@@ -278,6 +310,12 @@
             height: 200px;
             margin: 0 auto 30px;
             overflow-y: scroll;
+            @media screen and (max-width: 600px) {
+                margin: 0 auto 5px;
+            }
+            @media screen and (max-width: 800px) {
+                margin: 0 20px 20px;
+            }
         }
     }
     &__list {
@@ -286,6 +324,9 @@
         margin: 0 5px;
         font-size: 18px;
         flex-grow: 1;
+        @media screen and (max-width: 800px) {
+            margin: 0 2px;
+        }
         .list__header {
             margin-top: 5px;
             &_day {
@@ -332,7 +373,7 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 15px;
-            @media screen and (max-width: 600px) {
+            @media screen and (max-width: 800px) {
                 flex-direction: column;
             }
         }
@@ -344,7 +385,7 @@
         }
         &_confirm {
             display: flex;
-            @media screen and (max-width: 600px) {
+            @media screen and (max-width: 800px) {
                 flex-direction: column;
             }
         }
@@ -375,7 +416,7 @@
             top: 50%;
             transform: translateY(-50%);
             position: absolute;
-            @media screen and (max-width: 600px) {
+            @media screen and (max-width: 800px) {
                 position: inherit;
                 flex-direction: column;
                 margin-top: 10px;
