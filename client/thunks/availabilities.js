@@ -90,8 +90,8 @@ export function setRegistrationStep(registrationStep) {
 export function getClinicInfo(accountId) {
   return function (dispatch, getState) {
 	  axios.get(`/logo/${accountId}`).then( (data => {	
-	  	const { logo, address, clinicName } = data.data;
-	  	dispatch(setClinicInfoAction({ logo, address, clinicName }))
+	  	const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
+	  	dispatch(setClinicInfoAction({ logo, address, clinicName, bookingWidgetPrimaryColor }))
 	  }).bind(this) )
   }
 }
