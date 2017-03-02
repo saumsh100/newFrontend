@@ -12,6 +12,11 @@ const Account = createModel('Account', {
   zipCode: type.string(),
   vendastaId: type.string(),
   smsPhoneNumber: type.string(),
+  logo: type.string(),
+  address: type.string(),
+  clinicName: type.string(),
+  officeHoursId: type.string().uuid(4),
+  // users: []
 });
 
 module.exports = Account;

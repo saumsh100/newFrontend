@@ -60,6 +60,7 @@ function addSeedsToDatabase(seedJSON) {
         console.log(`Successfully seeded ${tableName} table.`);
       })
       .catch((err) => {
+        console.log(tableName, 'data', data);
         console.error(`ERROR SEEDING ${tableName} TABLE!`);
         console.error(err);
         process.exit(1);

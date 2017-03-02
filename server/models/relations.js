@@ -3,6 +3,8 @@ const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
+const OfficeHours = require('./OfficeHours');
+const OperationalHours = require('./OperationalHours');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
@@ -43,6 +45,7 @@ Chair.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
 // Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id')
 // Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id')
+Account.hasOne(OfficeHours, 'officeHours', 'officeHoursId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Patient, 'patients', 'id', 'accountId');
 //Account.hasMany(User, 'users', 'id', 'activeAccountId');
@@ -50,3 +53,11 @@ Account.hasMany(Patient, 'patients', 'id', 'accountId');
 Chat.hasOne(Account, 'account', 'accountId', 'id');
 Chat.hasOne(Patient, 'patient', 'patientId', 'id');
 Chat.hasMany(TextMessage, 'textMessages', 'id', 'chatId');
+
+OfficeHours.hasOne(OperationalHours, 'monday', 'mondayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'tuesday', 'tuesdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'wednesday', 'wednesdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'thursday', 'thursdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'friday', 'fridayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'saturday', 'saturdayId', 'id');
+OfficeHours.hasOne(OperationalHours, 'sunday', 'sundayId', 'id');

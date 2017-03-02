@@ -5,7 +5,9 @@ import { compose, withProps } from 'recompose';
 import Button from '../Button';
 import Field from './Field';
 import FormSection from './FormSection';
+import styles from './styles.scss';
 
+import { asyncEmailValidate } from './validate'
 /**
  * Given the requiredFields it will generate a validate function to return errors if
  * a field is empty. Note that this is note fired if the form is pristine.
@@ -29,21 +31,28 @@ import FormSection from './FormSection';
 function Form(props) {
   const {
     children,
+    className,
     handleSubmit,
     pristine,
   } = props;
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className={className}
+            onSubmit={handleSubmit}>
         {children}
-        <Button
-          flat
-          disabled={pristine}
-          type="submit"
-        >
-          Save
-        </Button>
+        <div className={styles.formActionsWrapper}>
+          <div className={styles.formActionsPull}>
+            <Button
+              flat
+              disabled={pristine}
+              type="submit"
+              className={styles.submitButton}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
       </form>
     </div>
   );
@@ -57,7 +66,7 @@ Form.propTypes = {
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
 const withReduxForm = (BaseComponent) => {
   return reduxForm({
-    // validate,
+    
   })(BaseComponent);
 };
 

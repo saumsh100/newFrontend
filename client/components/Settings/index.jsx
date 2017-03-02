@@ -6,7 +6,9 @@ import General from './Clinic/General';
 import Address from './Clinic/Address'
 import styles from './styles.scss';
 
-export default function Account(props) {
+export default function Settings(props) {
+  console.log('activeAccount', props.activeAccount);
+  const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
   return (
     <Grid>
       <Row className={styles.rowContainer}>
@@ -18,8 +20,7 @@ export default function Account(props) {
         </Col>
         <Col xs={9} className={styles.settingsFormsCol}>
           <Card className={styles.settingsFormsCard}>
-            <CardHeader title="General Settings" />
-            <Address activeAccount={props.activeAccount} />
+            {children}
           </Card>
         </Col>
       </Row>
@@ -27,7 +28,8 @@ export default function Account(props) {
   );
 }
 
-Account.propTypes = {
+Settings.propTypes = {
   activeAccount: PropTypes.props,
   location: PropTypes.props,
-}
+  children: PropTypes.element.isRequired,
+};
