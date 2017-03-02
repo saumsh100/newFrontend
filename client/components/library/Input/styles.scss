@@ -13,7 +13,8 @@ $empty-grey: $primary-darkgrey;
 
 .input {
   font-size: 16px;
-  padding: 10px 10px 10px 5px;
+  font-family: $dashboard-font;
+  padding: 10px 0px 10px 0px;
   display: block;
   width: 100%;
   border: none;

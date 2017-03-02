@@ -1,11 +1,11 @@
 
 import React, { Component } from 'react';
-import { Grid, Row, Col, Form, Field, Button, Select } from '../../../library';
+import { Grid, Row, Col, Form, FormSection, Field, Button, Select } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './statesProvinces';
-import { SubmissionError, change, }  from 'redux-form';
+import { change, destroy, }  from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import styles from './styles.scss';
 
 class AddressForm extends React.Component {
 
@@ -13,9 +13,15 @@ class AddressForm extends React.Component {
     super(props);
     this.state = {
       country: '',
+      street: '',
+      city: '',
+      zipCode: '',
+      state: '',
     }
     this.changeCountry = this.changeCountry.bind(this);
     this.zipPostalVal = this.zipPostalVal.bind(this)
+    this.clearForm = this.clearForm.bind(this)
+
   }
 
   changeCountry(event, newValue, previousValue) {
@@ -28,52 +34,65 @@ class AddressForm extends React.Component {
 
   zipPostalVal(value) {
     const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
-    if(this.state.country === 'United States'){
+    if(this.state.country === 'United States') {
       return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
-    }else if (!regex.test(value)) {
+    } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
     }
     return undefined;
+  }
+
+  clearForm(){
+    this.props.destroy('addressSettingsForm');
+    this.setState({
+      country: '',
+      street: '',
+      city: '',
+      zipCode: '',
+      state: '',
+    });
   }
 
   componentWillMount() {
     const { accountInfo } = this.props;
     this.setState({
       country: accountInfo.get('country'),
+      street: accountInfo.get('street'),
+      city: accountInfo.get('city'),
+      zipCode: accountInfo.get('zipCode'),
+      state: accountInfo.get('state'),
     });
   }
 
   render() {
 
-    const { onSubmit, accountInfo } = this.props;
+    const { onSubmit } = this.props;
 
     let stateProv = (this.state.country === 'United States' ? usStates : caProvinces);
     let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
 
-    const initialValues = {
-      street: accountInfo.get('street'),
-      city: accountInfo.get('city'),
-      zipCode: accountInfo.get('zipCode'),
-      country: this.state.country,
-      state: accountInfo.get('state')
-    }
-
     return (
-      <Form form="addressSettingsForm" onSubmit={onSubmit}  initialValues={initialValues} >
-        <Field
-          required
-          name="street"
-          label="Street"
-        />
-        <Row>
-          <Col xs={6}>
+        <Grid className={styles.addressGrid}>
+        <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
+        <Row className={styles.addressRow}>
+          <Col xs={12}>
+            <Field
+              required
+              name="street"
+              label="Street"
+            />
+          </Col>
+        </Row>
+        <Row className={styles.addressRow}>
+          <Col xs={5}>
             <Field
               required
               name="city"
               label="City"
             />
           </Col>
-          <Col xs={6}>
+          <Col xs={2} />
+          <Col xs={5} className={styles.addressCol__select}>
             <Field
               required
               name="state"
@@ -83,8 +102,8 @@ class AddressForm extends React.Component {
             />
           </Col>
         </Row>
-        <Row>
-          <Col xs={6}>
+        <Row className={styles.addressRow}>
+          <Col xs={5}>
             <Field
               required
               name="zipCode"
@@ -92,7 +111,8 @@ class AddressForm extends React.Component {
               validate={[this.zipPostalVal]}
             />
           </Col>
-          <Col xs={6}>
+          <Col xs={2} />
+          <Col xs={5} className={styles.addressCol__select}>
             <Field
               name="country"
               label="Country"
@@ -103,14 +123,17 @@ class AddressForm extends React.Component {
           </Col>
         </Row>
       </Form>
-    );
+        <Button onClick={this.clearForm} className={styles.addressButton}>Clear</Button>
+        </Grid>
+
+  );
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     change,
-    focus,
+    destroy,
   }, dispatch);
 }
 

@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
+import styles from './styles.scss';
 
 
 class Address extends React.Component {
@@ -27,10 +28,12 @@ class Address extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-        <AddressForm
-          onSubmit={this.submit}
-          accountInfo={activeAccount}
-        />
+        <div className={styles.addressForm}>
+          <AddressForm
+            onSubmit={this.submit}
+            accountInfo={activeAccount}
+          />
+        </div>
       );
     }
     return (
