@@ -7,6 +7,7 @@ import Field from './Field';
 import FormSection from './FormSection';
 import styles from './styles.scss';
 
+import { asyncEmailValidate } from './validate'
 /**
  * Given the requiredFields it will generate a validate function to return errors if
  * a field is empty. Note that this is note fired if the form is pristine.
@@ -30,13 +31,15 @@ import styles from './styles.scss';
 function Form(props) {
   const {
     children,
+    className,
     handleSubmit,
     pristine,
   } = props;
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className={className}
+            onSubmit={handleSubmit}>
         {children}
         <div className={styles.formActionsWrapper}>
           <div className={styles.formActionsPull}>
@@ -63,7 +66,7 @@ Form.propTypes = {
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
 const withReduxForm = (BaseComponent) => {
   return reduxForm({
-    // validate,
+    
   })(BaseComponent);
 };
 

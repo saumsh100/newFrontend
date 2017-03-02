@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
 const { r } = require('../config/thinky');
+const fs = require('fs');
 const seedDatabase = require('../util/seedDatabase');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
@@ -339,10 +340,10 @@ const SEEDS = {
     },
     {
       id: markPatientId,
+      accountId,
       firstName: 'Mark',
       lastName: 'Joseph',
       phoneNumber: markPhoneNumber,
-      accountId: accountId2,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
       gender: 'male',
       status: 'Active',
@@ -433,6 +434,9 @@ const SEEDS = {
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
+      logo: 'images/availabilies_sidebar_logo_2.png',
+      address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
+      clinicName: 'PACIFIC HEART DENTAL',
     },
   ],
 

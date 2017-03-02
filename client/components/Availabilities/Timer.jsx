@@ -92,7 +92,7 @@ Timer.propTypes = {
 
 Timer.defaultProps = {
   strokeWidth: 8,
-  textForSeconds: (seconds) => `${moment.duration(seconds).format("m:s")}`,
+  textForSeconds: (seconds) => `${moment.duration(seconds).format("m:ss")}`,
 };
 
 export default Timer;

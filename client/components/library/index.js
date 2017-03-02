@@ -4,6 +4,7 @@ import Avatar from './Avatar';
 import Button from './Button';
 import Card from './Card';
 import CardHeader from './CardHeader';
+import Checkbox from './Checkbox';
 import DropdownSelect from './DropdownSelect';
 import Form, { FormSection, Field } from './Form';
 import Icon from './Icon';
@@ -25,6 +26,7 @@ export {
   Button,
   Card,
   CardHeader,
+  Checkbox,
   DropdownSelect,
   Field,
   Form,

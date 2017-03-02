@@ -5,11 +5,21 @@ import {
   SET_DAY,
   SET_PRACTITIONER,
   SET_SERVICE,
+  CREATE_PATIENT,
+  SET_STARTING_APPOINTMENT_TIME,
+  SET_REGISTRATION_STEP,
+  SET_CLINIC_INFO,
 } from '../constants';
 
 const initialState = fromJS({
   practitionerId: null,
   serviceId: null,
+  messages: [],
+  startsAt: null,
+  registrationStep: 1,
+  logo: null,
+  address: null,
+  clinicName: null,
 });
 
 export default handleActions({
@@ -38,4 +48,35 @@ export default handleActions({
       serviceId: action.payload.serviceId,
     })
   },
+
+  [CREATE_PATIENT](state, action) {
+    const { firstName, lastName } = action.payload;
+    return state.merge({
+      messages: [`Patient ${firstName} ${lastName} has been registered`]
+    });
+  },
+
+  [SET_STARTING_APPOINTMENT_TIME](state, action) {
+    const startsAt = action.payload;
+    return state.merge({
+      startsAt: startsAt,
+    });
+  },
+
+  [SET_REGISTRATION_STEP](state, action) {
+    const registrationStep = action.payload;
+    return state.merge({
+      registrationStep,
+    });
+  },
+
+  [SET_CLINIC_INFO](state, action) {
+    const { address, logo, clinicName } = action.payload;
+    return state.merge({
+      logo,
+      address,
+      clinicName,
+    });
+  }
+
 }, initialState);

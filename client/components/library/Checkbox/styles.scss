@@ -1,0 +1,32 @@
+.checkbox {
+  input[type="checkbox"] {
+    display: none;
+  }
+  input[type=checkbox]:checked + label::before {
+    content: "\2713";
+    font-size: 13px;
+    background: #f3715c;
+    color: white;
+  }
+  label {
+    float: left;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    line-height: 13px;
+    margin: 5px;
+    &:before {
+      content: "";
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      margin-right: 3px;
+      vertical-align: middle;
+      background-color: inherit;
+      color: #f3f3f3;
+      text-align: center;
+      border: 1px solid #f7d1ca;
+      border-radius: 3px;
+    }
+  }
+}
