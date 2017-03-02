@@ -17,30 +17,27 @@ const RequestsSchema = {
 };
 
 export default class Requests extends createModel(RequestsSchema) {
-  /**
-   * Add all TextMessage specific member functions here
-   */
   getUrlRoot() {
     return `/api/requests/${this.get('id')}`;
   }
 
-  getAge(patientBirthday){
-    let currentYear =  new Date().getFullYear();
-    let birthday =  moment(patientBirthday).year();
+  getAge(patientBirthday) {
+    const currentYear = new Date().getFullYear();
+    const birthday = moment(patientBirthday).year();
     return currentYear - birthday;
   }
 
-  getFormattedTime(){
-    let startHourMinute = moment(this.get('startTime')).format("h:mm");
-    let endHourMinute = moment(this.get('endTime')).format("h:mm");
+  getFormattedTime() {
+    const startHourMinute = moment(this.get('startTime')).format("h:mm");
+    const endHourMinute = moment(this.get('endTime')).format("h:mm");
     return startHourMinute.concat('-', endHourMinute);
   }
 
-  getMonth(){
+  getMonth() {
     return moment(this.get('startTime')).format("MMM");
   }
 
-  getDay(){
+  getDay() {
     return moment(this.get('startTime')).date();
   }
 }

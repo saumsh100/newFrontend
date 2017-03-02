@@ -13,6 +13,10 @@ const PATHS = {
       to: '/settings/clinic/address',
       label: 'Address',
     },
+    {
+      to: '/settings/clinic/hours',
+      label: 'Office Hours',
+    },
   ],
 
   '/settings/booking': [

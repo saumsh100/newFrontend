@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
 const { r } = require('../config/thinky');
-const fs = require("fs");
+const fs = require('fs');
 const seedDatabase = require('../util/seedDatabase');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
@@ -50,6 +50,19 @@ const alexChatId = uuid();
 const markChatId = uuid();
 const justinChatId = uuid();
 const sergeyChatId = uuid();
+
+const officeHoursId = uuid();
+
+const mondayHoursId = uuid();
+const tuesdayHoursId = uuid();
+const wednesdayHoursId = uuid();
+const thursdayHoursId = uuid();
+const fridayHoursId = uuid();
+const saturdayHoursId = uuid();
+const sundayHoursId = uuid();
+
+const hour8 = new Date(1970, 1, 1, 8, 0);
+const hour5 = new Date(1970, 1, 1, 17, 0);
 
 const justinPhoneNumber = '+17808508886';
 const sergeyPhoneNumber = '+17782422626';
@@ -292,7 +305,7 @@ const SEEDS = {
       accountId,
       firstName: 'Justin',
       lastName: 'Sharp',
-      email: 'justin2@carecru.com',
+      email: 'justin@carecru.com',
       phoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
@@ -351,12 +364,76 @@ const SEEDS = {
     },
   ],
 
+  OperationalHours: [
+    {
+      id: mondayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: tuesdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: wednesdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: thursdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: fridayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: saturdayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: sundayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+  ],
+
+  OfficeHours: [
+    {
+      id: officeHoursId,
+      mondayId: mondayHoursId,
+      tuesdayId: tuesdayHoursId,
+      wednesdayId: wednesdayHoursId,
+      thursdayId: thursdayHoursId,
+      fridayId: fridayHoursId,
+      saturdayId: saturdayHoursId,
+      sundayId: sundayHoursId,
+    },
+  ],
+
   Account: [
     {
+      id: accountId,
+      officeHoursId,
       name: 'Beckett Dental',
+      street: '354 Beach Ave',
+      country: 'United States',
+      state: 'California',
+      city: 'Riverside',
+      zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
-      id: accountId,
       logo: 'images/availabilies_sidebar_logo_2.png',
       address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
       clinicName: 'PACIFIC HEART DENTAL',

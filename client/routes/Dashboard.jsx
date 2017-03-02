@@ -179,16 +179,24 @@ export default function Routes({ history }) {
             <Route
               path="general"
               getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Clinic/GeneralForm'], (require) => {
-                  callback(null, require('../components/Settings/Clinic/GeneralForm').default);
+                require.ensure(['../components/Settings/Clinic/General'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/General').default);
                 });
               }}
             />
             <Route
               path="address"
               getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Clinic/AddressForm'], (require) => {
-                  callback(null, require('../components/Settings/Clinic/AddressForm').default);
+                require.ensure(['../components/Settings/Clinic/Address'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/Address').default);
+                });
+              }}
+            />
+            <Route
+              path="hours"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Clinic/OfficeHours'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/OfficeHours').default);
                 });
               }}
             />

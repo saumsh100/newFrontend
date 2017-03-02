@@ -10,7 +10,7 @@ class Requests extends Component {
   }
 
   render() {
-    const { requests, patients, services, practitioners, chairs } = this.props;
+    const { requests, patients, services } = this.props;
 
     const filteredRequests = requests.toArray().filter((req) => {
       return !req.get('isCancelled');
@@ -27,8 +27,6 @@ class Requests extends Component {
           sortedRequests={sortedRequests}
           patients={patients}
           services={services}
-          practitioners={practitioners}
-          chairs={chairs}
         />
       </Card>
     );

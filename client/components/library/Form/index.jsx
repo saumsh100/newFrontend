@@ -2,7 +2,10 @@
 import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
+import Button from '../Button';
 import Field from './Field';
+import FormSection from './FormSection';
+import styles from './styles.scss';
 
 import { asyncEmailValidate } from './validate'
 /**
@@ -30,6 +33,7 @@ function Form(props) {
     children,
     className,
     handleSubmit,
+    pristine,
   } = props;
 
   return (
@@ -37,6 +41,18 @@ function Form(props) {
       <form className={className}
             onSubmit={handleSubmit}>
         {children}
+        <div className={styles.formActionsWrapper}>
+          <div className={styles.formActionsPull}>
+            <Button
+              flat
+              disabled={pristine}
+              type="submit"
+              className={styles.submitButton}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
       </form>
     </div>
   );
@@ -87,4 +103,5 @@ export default enhance(Form);
 
 export {
   Field,
+  FormSection,
 };
