@@ -79,6 +79,7 @@ const SCHEMAS = {
   textMessage: textMessageSchema(),
   user: userSchema(),
   practitioner: practitionerSchema(),
+  reservation: reservationSchema(),
   weeklySchedule: weeklyScheduleSchema(),
 
   // Collections (list/find)

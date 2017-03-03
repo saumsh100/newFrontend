@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700");
 
+:root {
+    --bookingWidgetPrimaryColor: #f3715c;
+}
 * {
     font-family: "Montserrat", sans-serif;
     box-sizing: border-box;
@@ -19,6 +22,7 @@
         border-radius: 5px;
         @media screen and (max-width: 800px) {
             width: auto;
+            position: relative;
             overflow: scroll;
         }
     }
@@ -33,7 +37,7 @@
         flex-direction: column;
         width: 25%;
         padding: 0 20px;
-        background-color: #ff715a;
+        background-color: var(--bookingWidgetPrimaryColor);
         position: relative;
         @media screen and (max-width: 800px) {
             display: none;
@@ -49,6 +53,7 @@
         z-index: 1;
         left: 0;
         transition: transform .5s;
+
     }
     .sidebar {
         &__header {
@@ -78,11 +83,8 @@
                 border: none;
                 display: none;
                 left: 10px;
-                @media screen and (max-width: 1000px) {
-                    display: block;
-                }
                 &:hover {
-                    color: #db6653;
+                    color: var(--bookingWidgetPrimaryColor);
                 }
             }
         }
@@ -96,7 +98,7 @@
                 margin-top: 61px;
                 margin-bottom: 20px;
                 font-size: 10px;
-                color: #f3715c;
+                color: var(--bookingWidgetPrimaryColor);
                 text-transform: uppercase;
                 cursor: pointer;
                 background: #fff;
@@ -170,14 +172,14 @@
                 display: block;
             }
             &:hover {
-                color: #db6653;
+                color: var(--bookingWidgetPrimaryColor);
             }
         }
         &_title {
             font-size: 12px;
             text-align: center;
             text-transform: uppercase;
-            color: #db6653;
+            color: var(--bookingWidgetPrimaryColor);
         }
         &_timer {
             position: absolute;
@@ -231,7 +233,7 @@
             margin: 0 5px;
             text-decoration: none;
             text-transform: uppercase;
-            color: #f3715c;
+            color: var(--bookingWidgetPrimaryColor);
         }
         &_btn {
             font-size: 10px;
@@ -242,7 +244,10 @@
             text-transform: uppercase;
             color: #fff;
             border: none;
-            background: #f3715c;
+            background: var(--bookingWidgetPrimaryColor);
+            &:hover {
+                background: var(--bookingWidgetPrimaryColor);
+            }
         }
         &_facebook {
             font-size: 8px;

@@ -14,26 +14,27 @@ reservationsRouter.get('/', (req, res, next) => {
     .catch(next);
 });
 
-
 reservationsRouter.post('/', (req, res, next) => {
   const accountId = req.query.accountId || req.accountId;
   const { practitionerId, serviceId, startsAt } = req.body;
-  console.log("reservation")
-  console.log("reg.body")
-  console.log(req.body)
   Service.get(serviceId).run().then((service) => {
   	const endTime = moment(startsAt).add(service.duraction, 'minutes')._d; 
-	  console.log("endTime");
-	  console.log(endTime);
 	  return Reservation.save({
 			practitionerId,
 			serviceId,
 			startTime: startsAt,
 			endTime,
 			accountId,  	
-	  }).then(reservation => res.send(normalize('reservations', reservation)))
+	  }).then(reservation => res.send(normalize('reservation', reservation)))
 	    .catch(next);
   })
+});
+
+reservationsRouter.delete('/:reservationId', (req, res, next) => {
+	const { reservationId } = req.params;
+	Reservation.get(reservationId).then(r => {
+		r.delete();
+	});
 });
 
 module.exports = reservationsRouter;

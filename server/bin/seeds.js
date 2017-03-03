@@ -449,7 +449,7 @@ const SEEDS = {
       logo: 'images/availabilies_sidebar_logo_2.png',
       address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
       clinicName: 'PACIFIC HEART DENTAL',
-      bookingWidgetPrimaryColor: '#ffffff',
+      bookingWidgetPrimaryColor: '#0597d8',
     },
   ],
 

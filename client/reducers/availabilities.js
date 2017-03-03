@@ -9,6 +9,8 @@ import {
   SET_STARTING_APPOINTMENT_TIME,
   SET_REGISTRATION_STEP,
   SET_CLINIC_INFO,
+  REMOVE_RESERVATION,
+  SET_RESERVATION,
 } from '../constants';
 
 const initialState = fromJS({
@@ -21,6 +23,7 @@ const initialState = fromJS({
   address: null,
   clinicName: null,
   bookingWidgetPrimaryColor: null,
+  reservationId: null,
 });
 
 export default handleActions({
@@ -79,6 +82,19 @@ export default handleActions({
       clinicName,
       bookingWidgetPrimaryColor,
     });
-  }
+  },
+
+  [SET_RESERVATION](state, action) {
+    const reservationId = action.payload;
+    return state.merge({
+      reservationId,
+    })
+  },
+
+  [REMOVE_RESERVATION](state, action) {
+    return state.merge({
+      reservationId: null
+    })
+  },
 
 }, initialState);

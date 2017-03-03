@@ -15,6 +15,7 @@ import {
   setStartingAppointmentTime,
   setRegistrationStep,
   getClinicInfo,
+  removeReservation,
 } from  '../thunks/availabilities';
 
 class Availability extends Component {
@@ -252,7 +253,7 @@ class Availability extends Component {
     } = this.getAppointmentsSorted();
 
     const {setStartingAppointmentTime} = this.props;
-    const { logo, address, clinicName } = this.props.practitionersStartEndDate.toJS();
+    const { logo, address, clinicName, bookingWidgetPrimaryColor } = this.props.practitionersStartEndDate.toJS();
 
     return (
       <Availabilities
@@ -273,6 +274,8 @@ class Availability extends Component {
         logo={logo}
         address={address}
         clinicName={clinicName}
+        removeReservation={this.props.removeReservation}
+        bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
       />
     );
   }
@@ -299,6 +302,7 @@ function mapDispatchToProps(dispatch) {
     getClinicInfo,
     setStartingAppointmentTime,
     setRegistrationStep,
+    removeReservation,
   }, dispatch);
 }
 
