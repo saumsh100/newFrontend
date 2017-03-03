@@ -38,9 +38,9 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-function OfficeHoursForm({ values, account, weeklySchedule, onSubmit }) {
+function OfficeHoursForm({ values, weeklySchedule, onSubmit }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
-  if (!account || !weeklySchedule) return null;
+  if (!weeklySchedule) return null;
 
   const parsedWeeklySchedule = pick(weeklySchedule, [
     'monday',

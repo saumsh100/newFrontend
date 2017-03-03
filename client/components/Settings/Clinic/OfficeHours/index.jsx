@@ -6,11 +6,10 @@ import OfficeHoursForm from './OfficeHoursForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 
 function OfficeHours(props) {
-  const { account, weeklySchedule } = props;
+  const { weeklySchedule } = props;
   return (
     <div>
       <OfficeHoursForm
-        account={account}
         weeklySchedule={weeklySchedule}
         onSubmit={(values) => {
           const newWeeklySchedule = weeklySchedule.merge(values);
@@ -22,17 +21,17 @@ function OfficeHours(props) {
 }
 
 OfficeHours.propTypes = {
-  account: PropTypes.object,
+  activeAccount: PropTypes.object,
   weeklySchedule: PropTypes.object,
   updateEntityRequest: PropTypes.func,
 };
 
-function mapStateToProps({ entities }, { account }) {
-  if (!account) return {};
+function mapStateToProps({ entities }, { activeAccount }) {
+  if (!activeAccount) return {};
   const weeklySchedule = entities.getIn([
     'weeklySchedules',
     'models',
-    account.get('weeklyScheduleId'),
+    activeAccount.get('weeklyScheduleId'),
   ]);
 
   return {
