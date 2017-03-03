@@ -346,7 +346,6 @@ class Availabilities extends React.Component {
       removeReservation,
       bookingWidgetPrimaryColor,
     } = this.props;
-
     const serviceId = this.props.serviceId || services[0] && services[0].id;
     const prId = practitioners[0] && practitioners.id;
     const defaultValues = { practitionerId, serviceId };

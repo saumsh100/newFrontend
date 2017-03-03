@@ -93,7 +93,8 @@ export default handleActions({
 
   [REMOVE_RESERVATION](state, action) {
     return state.merge({
-      reservationId: null
+      reservationId: null,
+      messages: [`Reserved time for this practitioner has been expired...`]
     })
   },
 

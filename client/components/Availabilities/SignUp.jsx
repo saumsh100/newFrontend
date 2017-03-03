@@ -56,8 +56,12 @@ class SignUp extends Component {
 
   setRegistrationStep(e) {
     e.preventDefault();
-    const { setRegistrationStep } = this.props;
-    setRegistrationStep(1);
+    const { setRegistrationStep, removeReservation } = this.props;
+    const { reservationId } = this.props.practitionersStartEndDate.toJS();
+    const array = location.pathname.split('/');
+    const accountId = array[array.length - 1];
+    setRegistrationStep(1, accountId);
+    removeReservation(reservationId)
   }
   collapseMenu(open) {
     if(open) {

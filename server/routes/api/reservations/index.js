@@ -31,7 +31,7 @@ reservationsRouter.post('/', (req, res, next) => {
 });
 
 reservationsRouter.delete('/:reservationId', (req, res, next) => {
-	const { reservationId } = req.params;
+	const { reservationId } = req.params;	
 	Reservation.get(reservationId).then(r => {
 		r.delete();
 	});
