@@ -8,6 +8,8 @@ import {
   SET_STARTING_APPOINTMENT_TIME,
   SET_REGISTRATION_STEP,
   SET_CLINIC_INFO,
+  SET_RESERVATION,
+  REMOVE_RESERVATION,
 } from '../constants';
 
 export const sixDaysShiftAction  = createAction(SIX_DAYS_SHIFT);
@@ -18,3 +20,5 @@ export const createPatientAction = createAction(CREATE_PATIENT);
 export const setStartingAppointmentTimeAction = createAction(SET_STARTING_APPOINTMENT_TIME);
 export const setRegistrationStepAction = createAction(SET_REGISTRATION_STEP);
 export const setClinicInfoAction = createAction(SET_CLINIC_INFO);
+export const setTemporaryReservationAction = createAction(SET_RESERVATION);
+export const removeReservationAction = createAction(REMOVE_RESERVATION);

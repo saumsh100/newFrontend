@@ -15,6 +15,7 @@ import {
   setStartingAppointmentTime,
   setRegistrationStep,
   getClinicInfo,
+  removeReservation,
 } from  '../thunks/availabilities';
 
 class Availability extends Component {
@@ -273,6 +274,7 @@ class Availability extends Component {
         logo={logo}
         address={address}
         clinicName={clinicName}
+        removeReservation={this.props.removeReservation}
       />
     );
   }
@@ -299,6 +301,7 @@ function mapDispatchToProps(dispatch) {
     getClinicInfo,
     setStartingAppointmentTime,
     setRegistrationStep,
+    removeReservation,
   }, dispatch);
 }
 

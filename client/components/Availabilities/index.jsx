@@ -331,6 +331,7 @@ class Availabilities extends React.Component {
       setRegistrationStep,
       logo,
       address,
+      removeReservation,
     } = this.props;
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
@@ -349,6 +350,7 @@ class Availabilities extends React.Component {
           logo={logo}
           address={address}
           appointmentInfo={appointmentInfo}
+          removeReservation={removeReservation}
         />);
       case undefined:
         return (

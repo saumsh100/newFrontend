@@ -8,6 +8,8 @@ import {
 	setStartingAppointmentTimeAction,
   setRegistrationStepAction,
   setClinicInfoAction,
+  setTemporaryReservationAction,
+  removeReservationAction,
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
@@ -87,6 +89,7 @@ export function setRegistrationStep(registrationStep, accountId) {
   			const { practitionerId, serviceId, startsAt } = getState().availabilities.toJS();
   			axios.post('/reservations', { practitionerId, serviceId, startsAt, accountId })
 					.then((reservation) => {
+						dispatch(setTemporaryReservationAction(reservation.data.result))
 						dispatch(setRegistrationStepAction(registrationStep));
 					})
   		}
@@ -100,4 +103,13 @@ export function getClinicInfo(accountId) {
 	  	dispatch(setClinicInfoAction({ logo, address, clinicName, bookingWidgetPrimaryColor }))
 	  }).bind(this) )
   }
+}
+
+export function removeReservation(reservationId) {
+	return function(dispatch, getState) {
+		axios.delete(`/reservations/${reservationId}`)
+			.then(r => {
+				dispatch(removeReservationAction());
+			})
+	}
 }

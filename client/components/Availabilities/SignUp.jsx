@@ -34,12 +34,16 @@ class SignUp extends Component {
   }
 
   startTimer() {
-    this.registrationTimer = setInterval(() => {
+    this.registrationTimer = setInterval((() => {
       this.setState({
         time: this.state.time - 1000,
       });
-      if (this.getPercent() === 0) clearInterval(this.registrationTimer);
-    }, 1000);
+      if (this.getPercent() === 0) {
+        const { reservationId } = this.props.practitionersStartEndDate.toJS();
+        this.props.removeReservation(reservationId);
+        clearInterval(this.registrationTimer);
+      }
+    }).bind(this), 1000);
   }
 
   bookAnAppointment(params) {
