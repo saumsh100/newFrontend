@@ -3,7 +3,7 @@ const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const type = thinky.type;
 
-const Request = createModel('Reservation', {
+const Reservation = createModel('Reservation', {
   startTime: type.date().required(),
   endTime: type.date(),
   accountId: type.string().uuid(4),
@@ -11,4 +11,4 @@ const Request = createModel('Reservation', {
   practitionerId: type.string().uuid(4).required(),
 });
 
-module.exports = Request;
+module.exports = Reservation;
