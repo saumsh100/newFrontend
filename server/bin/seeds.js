@@ -51,7 +51,7 @@ const markChatId = uuid();
 const justinChatId = uuid();
 const sergeyChatId = uuid();
 
-const officeHoursId = uuid();
+const weeklyScheduleId = uuid();
 
 const mondayHoursId = uuid();
 const tuesdayHoursId = uuid();
@@ -364,7 +364,7 @@ const SEEDS = {
     },
   ],
 
-  OperationalHours: [
+  /*DailySchedule: [
     {
       id: mondayHoursId,
       isClosed: true,
@@ -407,25 +407,29 @@ const SEEDS = {
       startTime: hour8,
       endTime: hour5,
     },
-  ],
+  ],*/
 
-  OfficeHours: [
+  WeeklySchedule: [
     {
-      id: officeHoursId,
-      mondayId: mondayHoursId,
-      tuesdayId: tuesdayHoursId,
-      wednesdayId: wednesdayHoursId,
-      thursdayId: thursdayHoursId,
-      fridayId: fridayHoursId,
-      saturdayId: saturdayHoursId,
-      sundayId: sundayHoursId,
+      id: weeklyScheduleId,
+      monday: {
+        isClosed: true,
+      },
+
+      saturday: {
+        isClosed: true,
+      },
+
+      sunday: {
+        isClosed: true,
+      },
     },
   ],
 
   Account: [
     {
       id: accountId,
-      officeHoursId,
+      weeklyScheduleId,
       name: 'Beckett Dental',
       street: '354 Beach Ave',
       country: 'United States',

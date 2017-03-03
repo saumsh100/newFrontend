@@ -64,7 +64,7 @@ export function updateEntityRequest({ key, model }) {
     axios.put(model.getUrlRoot(), model.toJSON())
       .then((response) => {
         const { data } = response;
-        dispatch(updateEntity({ key, entity: data.entities }));
+        dispatch(receiveEntities({ key, entities: data.entities }));
       })
       .catch(err => console.log(err));
   };
