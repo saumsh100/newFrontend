@@ -1,5 +1,6 @@
 
 const apiRouter = require('express').Router();
+const accountsRouter = require('./accounts');
 const appointmentRouter = require('./appointment');
 const reputationRouter = require('./reputation');
 const patientsRouter = require('./patients');
@@ -11,10 +12,12 @@ const chairsRouter = require('./chair');
 const chatsRouter = require('./chats');
 const servicesRouter = require('./services');
 const availabilitiesRouter = require('./availabilities');
+const weeklySchedulesRouter = require('./weeklySchedules');
 const authMiddleware = require('../../middleware/auth');
 const createJoinObject = require('../../middleware/createJoinObject');
 
 apiRouter.all('*', authMiddleware, createJoinObject);
+apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/requests', requestRouter);
 apiRouter.use('/reputation', reputationRouter);
@@ -26,5 +29,6 @@ apiRouter.use('/practitioners', practitionersRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
 apiRouter.use('/users', userRouter);
 apiRouter.use('/availabilities', availabilitiesRouter);
+apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 
 module.exports = apiRouter;

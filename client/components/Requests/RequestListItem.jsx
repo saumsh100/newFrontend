@@ -1,12 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes } from 'react';
 import { ListItem, IconButton, Icon } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
 import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
-
-import ReactPopover from 'react-popover';
+import Popover from 'react-popover';
 
 class RequestListItem extends Component {
 
@@ -24,16 +23,26 @@ class RequestListItem extends Component {
     this.props.removeRequest(this.props.request);
   }
 
+  /*
+  //set clicked handler on listitem
+  setId(){
+    const { setClickedId, request } = this.props;
+    setClickedId({id: request.get('id')});
+  }*/
+
   render() {
     const {
       request,
       patient,
       service,
       isHovered,
+      active,
     } = this.props;
 
     const data = {
       time: request.getFormattedTime(),
+      age: request.getAge(patient.birthDate),
+      name: patient.getFullName(),
       nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
       email: patient.email,
       service: service.name,
@@ -43,19 +52,11 @@ class RequestListItem extends Component {
       day: request.getDay(),
     };
 
+    let showHoverComponents = (<div className={styles.clickHandlers__newreqText}>New</div>);
 
-    let showHoverComponents = (<div className={styles.requestData__newreqText}>New</div>);
     if (isHovered) {
       showHoverComponents = (
         <div>
-          <AppointmentShowData
-            nameAge={data.nameAge}
-            time={data.time}
-            service={data.service}
-            phoneNumber={data.phoneNumber}
-            email={data.email}
-            note={data.note}
-          />
           <div className={styles.clickHandlers}>
             <IconButton
               icon={'times-circle-o'}
@@ -71,20 +72,40 @@ class RequestListItem extends Component {
         </div>
       );
     }
+
     return (
-      <ListItem className={styles.requestListItem}>
-        <MonthDay
-          month={data.month}
-          day={data.day}
-        />
-        <RequestData
-          time={data.time}
-          nameAge={data.nameAge}
-          phoneNumber={data.phoneNumber}
-          service={data.service}
-        />
-        {showHoverComponents}
-      </ListItem>
+        <ListItem className={styles.requestListItem}>
+          <Popover
+            className={styles.requestPopover}
+            isOpen={isHovered}
+            body={[(
+              <AppointmentShowData
+                nameAge={data.nameAge}
+                time={data.time}
+                service={data.service}
+                phoneNumber={data.phoneNumber}
+                email={data.email}
+                note={data.note}
+              />
+            )]}
+            preferPlace="left"
+            tipSize={12}
+          >
+            <MonthDay
+              month={data.month}
+              day={data.day}
+            />
+          </Popover>
+          <RequestData
+            time={data.time}
+            name={data.name}
+            age={data.age}
+            nameAge={data.nameAge}
+            phoneNumber={data.phoneNumber}
+            service={data.service}
+          />
+          {showHoverComponents}
+        </ListItem>
     );
   }
 }

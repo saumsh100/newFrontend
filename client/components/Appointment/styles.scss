@@ -3,28 +3,30 @@
 
 .appointmentShowData{
 
-  position: absolute;
-  right:400px;
-  top: 30px;
-  width: 390px;
+  margin-top: -200px;
+  width: 350px;
   height: 260px;
-  max-height: 280px;
+  max-width: 350px;
+  max-height: 260px;
+
   padding: 2em 2em 2em 2em;
 
   text-align: left;
   color: $inactive-color;
 
-  background-color: $primary-white;
+  background-color: #ffffff;
   border-radius: 10px;
 
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.10);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.10);
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.10);
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(149,149,150,1);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(149,149,150,1);
+  box-shadow: 0px 0px 3px 0px rgba(149,149,150,1);
+  border: 0.5px solid $primary-darkgrey;
 
   &__nameAge{
     word-wrap: break-word;
-    color: #ffc45a;
-    @extend .font-medium;
+    color: $primary-darkgrey;
+    font-size: 20px;
+    font-weight: 600;
     padding-bottom: 0.5em;
   }
 
@@ -34,7 +36,7 @@
   &__service  {
     color: $primary-dark;
     font-size: $medium-size;
-    font-weight: 400;
+    font-weight: $small-weight;
     border-bottom: 2px solid;
     border-bottom-color: $primary-grey;
   }
@@ -53,14 +55,18 @@
   }
   &__note{
     @extend .font-small;
-    word-wrap: break-word;
     margin-right: 1em;
-    height: 80px;
-    overflow-y: scroll;
+    height: 105px;
+    overflow-y: auto;
   }
+
   &__icons{
-    color: #ffc45a;
+    color: $primary-darkgrey;;
     padding-right: 1em;
+    font-size: 14px
   }
 }
 
+.noteText{
+  @extend .font-small-dark;
+}

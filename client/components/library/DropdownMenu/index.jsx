@@ -72,7 +72,8 @@ export function NestedDropdownMenu(props) {
 }
 
 DropdownMenu.propTypes = {
-  labelComponent: PropTypes.element.isRequired,
+
+
 };
 
 MenuItem.propTypes = {

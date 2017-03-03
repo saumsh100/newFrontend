@@ -2,9 +2,10 @@
 import React from 'react';
 
 export default function Clinic(props) {
+  const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
   return (
     <div>
-      {props.children}
+      {children}
     </div>
   );
 }

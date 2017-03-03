@@ -48,9 +48,9 @@ function mapStateToProps({entities}) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        fetchEntities,
-    }, dispatch);
+  return bindActionCreators({
+    fetchEntities,
+  }, dispatch);
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

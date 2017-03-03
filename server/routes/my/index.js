@@ -4,7 +4,7 @@ const servicesRouter = require('../api/services');
 const availabilitiesRouter = require('../api/availabilities');
 const requestRouter = require('../api/request');
 const patientsRouter = require('../api/patients');
-
+const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
 
 const loaders = require('../util/loaders');
@@ -15,6 +15,7 @@ myRouter.use('/services', servicesRouter);
 myRouter.use('/availabilities', availabilitiesRouter);
 myRouter.use('/requests', requestRouter);
 myRouter.use('/patients', patientsRouter);
+myRouter.use('/reservations', reservationsRouter);
 
 myRouter.get('/:accountId', (req, res, next) => {
   console.log(req.params.accountId);

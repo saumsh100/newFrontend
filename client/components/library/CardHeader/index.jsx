@@ -1,6 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
+import omit from 'lodash/omit';
 import styles from './styles.scss';
 
 export default function CardHeader(props) {
@@ -16,7 +17,7 @@ export default function CardHeader(props) {
   let countComponent = null;
   if (count || count === 0) {
     countComponent = (
-      <div className={styles.count}>
+      <div className={styles.cardCount}>
         {count}
       </div>
     );
@@ -31,9 +32,11 @@ export default function CardHeader(props) {
     );
   }
 
+  const newProps = omit(props, ['count']);
+
   return (
     // Order is important, classNames={classes} needs to override props.className
-    <div {...props} className={classes}>
+    <div {...newProps} className={classes}>
       <div className={styles.displayFlex}>
         {countComponent}
         {titleComponent}
@@ -46,4 +49,5 @@ export default function CardHeader(props) {
 }
 
 CardHeader.propTypes = {
+  count: React.PropTypes.number,
 };

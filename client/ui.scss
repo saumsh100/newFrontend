@@ -9,6 +9,7 @@ $secondary-color1: #CAEBF2;
 $secondary-color2: #CAEBF2;
 
 $primary-blue: #8CBCD6;
+$primary-green: #2CC4A7;
 
 $primary-dark: #2e3845;
 $inactive-color: #b4b4b5;
@@ -19,6 +20,13 @@ $primary-white: #fafafa;
 $background-color: #E6E6E6;
 // $primary-color-dark: black;
 
+$disabled-color: lighten($primary-darkgrey, 25%);
+
+// Feedback Colors
+$danger-color: red;
+$info-color: blue;
+$warning-color: yellow;
+
 $font-size: 14px;
 
 $top-nav-height: 65px;
@@ -28,25 +36,20 @@ $small-screen-width: 400px;
 $medium-screen-width: 700px;
 $large-screen-width: 1000px;
 
-// Feedback Colors
-$danger-color: red;
-$info-color: blue;
-$warning-color: yellow;
-
 $card-border-size: 5px solid;
 $selection-border: 3px solid;
 
 $dashboard-font: Gotham-Book;
 
 //Font-sizes
-$large-size: 40px;
-$medium-size: 18px;
-$small-size: 14px;
+$large-size: 30px;
+$medium-size: 14px;
+$small-size: 12px;
 
 //Font-weights
-$large-weight: 500;
-$medium-weight: 500;
-$small-weight: 300;
+$large-weight: 700;
+$medium-weight: 600;
+$small-weight: 400;
 
 //Font-sizes-weights
 .font-large{
@@ -72,6 +75,11 @@ $small-weight: 300;
 
 .font-medium-dark {
   @extend .font-medium;
+  color: $primary-dark;
+}
+
+.font-small-dark{
+  @extend .font-small;
   color: $primary-dark;
 }
 

@@ -3,6 +3,8 @@ const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
+const WeeklySchedule = require('./WeeklySchedule');
+const DailySchedule = require('./DailySchedule');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
@@ -11,6 +13,7 @@ const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const Token = require('./Token');
 const User = require('./User');
+const Reservation = require('./Reservation')
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
@@ -43,9 +46,21 @@ Chair.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
 // Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id')
 // Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id')
+Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Patient, 'patients', 'id', 'accountId');
+//Account.hasMany(User, 'users', 'id', 'activeAccountId');
 
 Chat.hasOne(Account, 'account', 'accountId', 'id');
 Chat.hasOne(Patient, 'patient', 'patientId', 'id');
 Chat.hasMany(TextMessage, 'textMessages', 'id', 'chatId');
+
+/*WeeklySchedule.hasOne(DailySchedule, 'monday', 'mondayId', 'id');
+WeeklySchedule.hasOne(DailySchedule, 'tuesday', 'tuesdayId', 'id');
+WeeklySchedule.hasOne(DailySchedule, 'wednesday', 'wednesdayId', 'id');
+WeeklySchedule.hasOne(DailySchedule, 'thursday', 'thursdayId', 'id');
+WeeklySchedule.hasOne(DailySchedule, 'friday', 'fridayId', 'id');
+WeeklySchedule.hasOne(DailySchedule, 'saturday', 'saturdayId', 'id');
+WeeklySchedule.hasOne(DailySchedule, 'sunday', 'sundayId', 'id');*/
+
+Practitioner.hasMany(Reservation, "reservations", "id", "practitionerId");
