@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
+import omit from 'lodash/omit';
 
 const cx = classNames.bind(styles);
 
@@ -15,7 +16,8 @@ export default function Button(props) {
     })
   );
 
-  return <button {...props} className={classes} />;
+  const newProps = omit(props, ['flat']);
+  return <button {...newProps} className={classes} />;
 }
 
 Button.propTypes = {

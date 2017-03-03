@@ -28,12 +28,10 @@ class Address extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-        <div className={styles.addressForm}>
           <AddressForm
             onSubmit={this.submit}
             accountInfo={activeAccount}
           />
-        </div>
       );
     }
     return (
@@ -46,7 +44,7 @@ class Address extends React.Component {
 }
 
 Address.propTypes = {
-  activeAccount: PropTypes.props,
+  activeAccount: PropTypes.object,
   updateEntityRequest: PropTypes.func,
 }
 

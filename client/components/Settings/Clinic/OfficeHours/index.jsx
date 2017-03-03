@@ -6,11 +6,11 @@ import OfficeHoursForm from './OfficeHoursForm';
 
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 
-function OfficeHours({ account, updateEntityRequest }) {
+function OfficeHours({ activeAccount, updateEntityRequest }) {
   return (
     <div>
       <OfficeHoursForm
-        account={account}
+        account={activeAccount}
         onSubmit={(values) => {
           const modifiedAccount = account.update('officeHours', (oh) => {
             return oh;

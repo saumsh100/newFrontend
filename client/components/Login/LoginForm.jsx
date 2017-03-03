@@ -4,7 +4,7 @@ import { Button, Form, Field } from '../library';
 
 export default function Login({ onSubmit }) {
   return (
-    <Form form="login" onSubmit={onSubmit}>
+    <Form form="login" onSubmit={onSubmit} ignoreSaveButton={true}>
       <Field
         type="email"
         name="email"

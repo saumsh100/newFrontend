@@ -1,6 +1,7 @@
 
 import React, { PropTypes, Component, Children } from 'react';
 import Tab from './Tab';
+import omit from 'lodash/omit';
 import TabContent from './TabContent';
 import classNames from 'classnames';
 import styles from './styles.scss';
@@ -70,13 +71,15 @@ class Tabs extends Component {
       children,
       className,
     } = this.props;
+
+    const newProps = omit(this.props,['index']);
   
     const classes = classNames(className, styles.tabs);
     const { headers, contents } = this.parseChildren(children);
   
     return (
       // Order is important, classNames={classes} needs to override props.className
-      <div {...this.props} className={classes}>
+      <div {...newProps} className={classes}>
         <nav className={styles.nav}>
           {this.renderHeaders(headers)}
         </nav>
@@ -89,7 +92,7 @@ class Tabs extends Component {
 }
 
 Tabs.propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.array.isRequired,
   index: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

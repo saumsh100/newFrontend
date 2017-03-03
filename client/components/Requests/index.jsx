@@ -33,6 +33,10 @@ class Requests extends Component {
   }
 }
 
-Request.propTypes = {};
+Requests.propTypes = {
+  requests: PropTypes.object,
+  patients: PropTypes.object,
+  services: PropTypes.object,
+};
 
 export default Requests;

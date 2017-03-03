@@ -27,7 +27,7 @@ class General extends React.Component {
       showComponent = (
         <GeneralForm
           onSubmit={this.updateName}
-          accountInfo={activeAccount}
+          activeAccount={activeAccount}
         />);
     }
 
@@ -40,7 +40,6 @@ class General extends React.Component {
 }
 
 General.propTypes = {
-  activeAccount: PropTypes.props,
   updateEntityRequest: PropTypes.func,
 }
 

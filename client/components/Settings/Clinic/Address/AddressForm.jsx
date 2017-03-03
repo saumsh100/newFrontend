@@ -1,11 +1,13 @@
 
 import React, { Component } from 'react';
-import { Grid, Row, Col, Form, FormSection, Field, Button, Select } from '../../../library';
-import { usStates, caProvinces, countrySelector } from './statesProvinces';
-import { change, destroy, }  from 'redux-form';
+import { Grid, Row, Col, Form, SaveButton, Field, Button, Select, } from '../../../library';
+import { usStates, caProvinces, countrySelector } from './selectConstants';
+import { change, }  from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
+
+
 
 class AddressForm extends React.Component {
 
@@ -20,8 +22,6 @@ class AddressForm extends React.Component {
     }
     this.changeCountry = this.changeCountry.bind(this);
     this.zipPostalVal = this.zipPostalVal.bind(this)
-    this.clearForm = this.clearForm.bind(this)
-
   }
 
   changeCountry(event, newValue, previousValue) {
@@ -42,17 +42,6 @@ class AddressForm extends React.Component {
     return undefined;
   }
 
-  clearForm(){
-    this.props.destroy('addressSettingsForm');
-    this.setState({
-      country: '',
-      street: '',
-      city: '',
-      zipCode: '',
-      state: '',
-    });
-  }
-
   componentWillMount() {
     const { accountInfo } = this.props;
     this.setState({
@@ -65,67 +54,66 @@ class AddressForm extends React.Component {
   }
 
   render() {
-
     const { onSubmit } = this.props;
 
     let stateProv = (this.state.country === 'United States' ? usStates : caProvinces);
     let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
 
     return (
-        <Grid className={styles.addressGrid}>
+      <div className={styles.addressForm}>
         <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
-        <Row className={styles.addressRow}>
-          <Col xs={12}>
-            <Field
-              required
-              name="street"
-              label="Street"
-            />
-          </Col>
-        </Row>
-        <Row className={styles.addressRow}>
-          <Col xs={5}>
-            <Field
-              required
-              name="city"
-              label="City"
-            />
-          </Col>
-          <Col xs={2} />
-          <Col xs={5} className={styles.addressCol__select}>
-            <Field
-              required
-              name="state"
-              label="State"
-              component="DropdownSelect"
-              options={stateProv}
-            />
-          </Col>
-        </Row>
-        <Row className={styles.addressRow}>
-          <Col xs={5}>
-            <Field
-              required
-              name="zipCode"
-              label={zipPostal}
-              validate={[this.zipPostalVal]}
-            />
-          </Col>
-          <Col xs={2} />
-          <Col xs={5} className={styles.addressCol__select}>
-            <Field
-              name="country"
-              label="Country"
-              component="DropdownSelect"
-              options={countrySelector}
-              onChange={this.changeCountry}
-            />
-          </Col>
-        </Row>
-      </Form>
-        <Button onClick={this.clearForm} className={styles.addressButton}>Clear</Button>
-        </Grid>
-
+          <Grid className={styles.addressGrid}>
+            <Row className={styles.addressRow}>
+              <Col xs={12}>
+                <Field
+                  required
+                  name="street"
+                  label="Street"
+                />
+              </Col>
+            </Row>
+            <Row className={styles.addressRow}>
+              <Col xs={5}>
+                <Field
+                  required
+                  name="city"
+                  label="City"
+                />
+              </Col>
+              <Col xs={2} />
+              <Col xs={5} className={styles.addressCol__select}>
+                <Field
+                  required
+                  name="state"
+                  label="State"
+                  component="DropdownSelect"
+                  options={stateProv}
+                />
+              </Col>
+            </Row>
+            <Row className={styles.addressRow}>
+              <Col xs={5}>
+                <Field
+                  required
+                  name="zipCode"
+                  label={zipPostal}
+                  validate={[this.zipPostalVal]}
+                />
+              </Col>
+              <Col xs={2} />
+              <Col xs={5} className={styles.addressCol__select}>
+                <Field
+                  name="country"
+                  label="Country"
+                  component="DropdownSelect"
+                  options={countrySelector}
+                  onChange={this.changeCountry}
+                />
+              </Col>
+            </Row>
+          </Grid>
+        </Form>
+      </div>
   );
   }
 }
@@ -133,7 +121,6 @@ class AddressForm extends React.Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     change,
-    destroy,
   }, dispatch);
 }
 

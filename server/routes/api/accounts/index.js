@@ -10,7 +10,7 @@ accountsRouter.param('accountId', loaders('account', 'Account'));
 
 accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, next) => {
   if (req.account.id !== req.accountId) {
-    next(StatusError(404, 'req.accountId does not match URL account id'));
+    next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
   const {
