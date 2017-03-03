@@ -1,26 +1,43 @@
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import OfficeHoursForm from './OfficeHoursForm';
-
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 
-function OfficeHours({ account, updateEntityRequest }) {
+function OfficeHours(props) {
+  const { account, weeklySchedule } = props;
   return (
     <div>
       <OfficeHoursForm
         account={account}
+        weeklySchedule={weeklySchedule}
         onSubmit={(values) => {
-          const modifiedAccount = account.update('officeHours', (oh) => {
-            return oh;
-          });
-
-          updateEntityRequest({ key: 'accounts', model: modifiedAccount });
+          const newWeeklySchedule = weeklySchedule.merge(values);
+          props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
         }}
       />
     </div>
   );
+}
+
+OfficeHours.propTypes = {
+  account: PropTypes.object,
+  weeklySchedule: PropTypes.object,
+  updateEntityRequest: PropTypes.func,
+};
+
+function mapStateToProps({ entities }, { account }) {
+  if (!account) return {};
+  const weeklySchedule = entities.getIn([
+    'weeklySchedules',
+    'models',
+    account.get('weeklyScheduleId'),
+  ]);
+
+  return {
+    weeklySchedule,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -30,7 +47,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const enhance = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 );
 

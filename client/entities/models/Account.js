@@ -24,7 +24,7 @@ const AccountSchema = {
   zipCode: null,
   vendastaId: null,
   smsPhoneNumber: null,
-  officeHours: null, //new OfficeHoursRecord(),
+  weeklyScheduleId: null, //new OfficeHoursRecord(),
 };
 
 export default class Account extends createModel(AccountSchema) {
