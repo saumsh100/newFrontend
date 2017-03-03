@@ -31,6 +31,7 @@ const OWNER = {
     update: false,
   }),
 
+  weeklySchedules: CRUD,
 };
 
 const ADMIN = Object.assign({}, OWNER, {

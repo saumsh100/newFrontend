@@ -36,8 +36,8 @@ import Chairs from '../entities/models/Chair';
 import chairs from '../entities/collections/chairs'
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
-
-
+import weeklySchedules from '../entities/collections/weeklySchedules';
+import WeeklySchedule from '../entities/models/WeeklySchedule';
 
 const initialState = Map({
   // KEYs must map to the response object
@@ -53,6 +53,7 @@ const initialState = Map({
   dialogs: new dialogs(),
   patientList: new patientList(),
   chairs: new chairs(),
+  weeklySchedules: new weeklySchedules(),
   // reviews: Reviews(), MODEL
   // listings: Listings(),
 });
@@ -69,6 +70,7 @@ const Models = {
   patientList: PatientList,
   chairs: Chairs,
   availabilities: Availability,
+  weeklySchedules: WeeklySchedule,
 };
 
 export default handleActions({

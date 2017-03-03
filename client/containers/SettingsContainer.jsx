@@ -11,7 +11,7 @@ class SettingsContainer extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'accounts', join: ['officeHours'] });
+    this.props.fetchEntities({ key: 'accounts', join: ['weeklySchedule'] });
   }
 
   render() {

@@ -15,7 +15,7 @@ const Account = createModel('Account', {
   logo: type.string(),
   address: type.string(),
   clinicName: type.string(),
-  officeHoursId: type.string().uuid(4),
+  weeklyScheduleId: type.string().uuid(4),
   // users: []
 });
 

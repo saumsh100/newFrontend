@@ -26,7 +26,7 @@ const generateTimeOptions = () => {
   for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(1970, 1, 1, i, j * increment));
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
       const value = time.toISOString();
       const label = time.format('LT');
       timeOptions.push({ value, label });
@@ -36,11 +36,13 @@ const generateTimeOptions = () => {
   return timeOptions;
 };
 
-function OfficeHoursForm({ values, account, onSubmit }) {
-  // TODO: finish fetchEntitiesHOC so we dont have to do this...
-  if (!account) return null;
+const timeOptions = generateTimeOptions();
 
-  const officeHours = pick(account.get('officeHours'), [
+function OfficeHoursForm({ values, account, weeklySchedule, onSubmit }) {
+  // TODO: finish fetchEntitiesHOC so we dont have to do this...
+  if (!account || !weeklySchedule) return null;
+
+  const parsedWeeklySchedule = pick(weeklySchedule, [
     'monday',
     'tuesday',
     'wednesday',
@@ -50,7 +52,7 @@ function OfficeHoursForm({ values, account, onSubmit }) {
     'sunday',
   ]);
 
-  const initialValues = mapValues(officeHours, (day) => {
+  const initialValues = mapValues(parsedWeeklySchedule, (day) => {
     return day;
   });
 
@@ -80,7 +82,7 @@ function OfficeHoursForm({ values, account, onSubmit }) {
             >
               <Field
                 component="DropdownSelect"
-                options={generateTimeOptions()}
+                options={timeOptions}
                 name="startTime"
                 className={styles.inlineBlock}
                 disabled={isDisabled}
@@ -92,7 +94,7 @@ function OfficeHoursForm({ values, account, onSubmit }) {
               <Field
                 className={styles.inlineBlock}
                 component="DropdownSelect"
-                options={generateTimeOptions()}
+                options={timeOptions}
                 name="endTime"
                 disabled={isDisabled}
                 label="End Time"

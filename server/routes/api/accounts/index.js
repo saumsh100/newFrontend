@@ -17,9 +17,9 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     joinObject,
   } = req;
 
-  // Some default code to ensure we don't pull the entire conversation for each chat
-  if (joinObject.officeHours) {
-    joinObject.officeHours = {
+  /*// Some default code to ensure we don't pull the entire conversation for each chat
+  if (joinObject.weeklySchedule) {
+    joinObject.weeklySchedule = {
       _apply: (sequence) => {
         return sequence
           .getJoin({
@@ -33,7 +33,7 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
           });
       },
     };
-  }
+  }*/
 
   return Account.get(req.account.id).getJoin(joinObject)
     .then(account => res.send(normalize('account', account)))
