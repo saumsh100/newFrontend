@@ -253,7 +253,7 @@ class Availability extends Component {
     } = this.getAppointmentsSorted();
 
     const {setStartingAppointmentTime} = this.props;
-    const { logo, address, clinicName } = this.props.practitionersStartEndDate.toJS();
+    const { logo, address, clinicName, bookingWidgetPrimaryColor } = this.props.practitionersStartEndDate.toJS();
 
     return (
       <Availabilities
@@ -275,6 +275,7 @@ class Availability extends Component {
         address={address}
         clinicName={clinicName}
         removeReservation={this.props.removeReservation}
+        bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
       />
     );
   }
