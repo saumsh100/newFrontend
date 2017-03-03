@@ -119,8 +119,10 @@ class Availabilities extends React.Component {
 
   handleSaveClick(e) {
     e.preventDefault();
-    const {setRegistrationStep} = this.props;
-    setRegistrationStep(2);
+    const { setRegistrationStep } = this.props;
+    const array = location.pathname.split('/');
+    const accountId = array[array.length - 1];
+    setRegistrationStep(2, accountId);
   }
 
   collapseMenuOpen() {

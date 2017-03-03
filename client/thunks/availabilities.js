@@ -81,9 +81,15 @@ export function setStartingAppointmentTime(startsAt) {
 	}	
 }
 
-export function setRegistrationStep(registrationStep) {
+export function setRegistrationStep(registrationStep, accountId) {
   return function (dispatch, getState) {
-			dispatch(setRegistrationStepAction(registrationStep));
+  		if (registrationStep == 2) {
+  			const { practitionerId, serviceId, startsAt } = getState().availabilities.toJS();
+  			axios.post('/reservations', { practitionerId, serviceId, startsAt, accountId })
+					.then((reservation) => {
+						dispatch(setRegistrationStepAction(registrationStep));
+					})
+  		}
   }
 }
 

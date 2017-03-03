@@ -13,6 +13,7 @@ const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const Token = require('./Token');
 const User = require('./User');
+const Reservation = require('./Reservation')
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
@@ -61,3 +62,5 @@ WeeklySchedule.hasOne(DailySchedule, 'thursday', 'thursdayId', 'id');
 WeeklySchedule.hasOne(DailySchedule, 'friday', 'fridayId', 'id');
 WeeklySchedule.hasOne(DailySchedule, 'saturday', 'saturdayId', 'id');
 WeeklySchedule.hasOne(DailySchedule, 'sunday', 'sundayId', 'id');*/
+
+Practitioner.hasMany(Reservation, "reservations", "id", "practitionerId");

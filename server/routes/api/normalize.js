@@ -63,6 +63,10 @@ const weeklyScheduleSchema = () => {
   return new schema.Entity('weeklySchedules');
 };
 
+const reservationSchema = () => {
+  return new schema.Entity('reservations');
+}
+
 const SCHEMAS = {
   // Models (singleFetch/findOne)
   account: accountSchema(),
@@ -89,6 +93,7 @@ const SCHEMAS = {
   users: [userSchema()],
   practitioners: [practitionerSchema()],
   weeklySchedules: [weeklyScheduleSchema()],
+  reservations: [reservationSchema()],
 };
 
 module.exports = function normalize(key, data) {
