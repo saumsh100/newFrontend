@@ -4,7 +4,10 @@ const normalizr = require('normalizr');
 const schema = normalizr.schema;
 
 const accountSchema = () => {
-  return new schema.Entity('accounts');
+  return new schema.Entity('accounts', {
+    users: [userSchema()],
+    weeklySchedule: weeklyScheduleSchema(),
+  });
 };
 
 const appointmentSchema = () => {
@@ -56,8 +59,13 @@ const userSchema = () => {
   return new schema.Entity('users');
 };
 
+const weeklyScheduleSchema = () => {
+  return new schema.Entity('weeklySchedules');
+};
+
 const SCHEMAS = {
   // Models (singleFetch/findOne)
+  account: accountSchema(),
   appointment: appointmentSchema(),
   chair: chairSchema(),
   chat: chatSchema(),
@@ -67,10 +75,11 @@ const SCHEMAS = {
   textMessage: textMessageSchema(),
   user: userSchema(),
   practitioner: practitionerSchema(),
+  weeklySchedule: weeklyScheduleSchema(),
 
   // Collections (list/find)
+  accounts: [accountSchema()],
   appointments: [appointmentSchema()],
-  practitioners: [practitionerSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
   patients: [patientSchema()],
@@ -79,6 +88,7 @@ const SCHEMAS = {
   textMessages: [textMessageSchema()],
   users: [userSchema()],
   practitioners: [practitionerSchema()],
+  weeklySchedules: [weeklyScheduleSchema()],
 };
 
 module.exports = function normalize(key, data) {

@@ -1,6 +1,8 @@
 
 import React, { PropTypes } from 'react';
-import { SubmissionError } from 'redux-form';
+import { SubmissionError, change } from 'redux-form';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Form, Field, Button } from '../../library';
 
 const containsLetter = (letter) => (value) => {
@@ -31,19 +33,25 @@ function submit(values) {
     });
 }
 
-export default function TestForm({ patient, onSubmit }) {
+function TestForm({ patient, onSubmit, change }) {
   const initialValues = {
     firstName: patient.firstName,
     middleName: patient.middleName,
     lastName: patient.lastName,
+    city: 'Vancouver',
   };
 
   return (
-    <Form form="testForm" onSubmit={submit} validate={equalNames} initialValues={initialValues}>
+    <Form form="testForm" onSubmit={onSubmit} validate={equalNames} initialValues={initialValues}>
       <Field
         required
         name="firstName"
         label="First Name"
+        onChange={(event, newValue, previousValue) => {
+          if (newValue === 'cat') {
+            change('testForm', 'middleName', 'DOG');
+          }
+        }}
       />
       <Field
         name="middleName"
@@ -56,7 +64,17 @@ export default function TestForm({ patient, onSubmit }) {
         label="Last Name"
         validate={[ containsLetter('c') ]}
       />
-      <Button type="submit">Form Submit</Button>
+      <Field
+        required
+        component="DropdownSelect"
+        name="city"
+        label="City"
+        options={[
+          { value: 'Edmonton' },
+          { value: 'Calgary' },
+          { value: 'Vancouver' },
+        ]}
+      />
     </Form>
   );
 }
@@ -64,3 +82,11 @@ export default function TestForm({ patient, onSubmit }) {
 TestForm.propTypes = {
   patient: PropTypes.object.isRequired,
 };
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    change,
+  }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(TestForm);

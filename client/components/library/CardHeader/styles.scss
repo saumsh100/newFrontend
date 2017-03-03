@@ -2,9 +2,11 @@
 @import '../../../ui.scss';
 
 .cardHeader {
-  padding-left: 1em;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
   padding-top: 0.5em;
-  height: 2.5rem;
+  padding-left: 1em;
   border-bottom: 2px solid;
   border-bottom-color: $primary-grey;
 }
@@ -14,19 +16,17 @@
   align-items: center;
 }
 
-.count {
+.cardCount {
   display: inline-block;
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 36px;
+  font-weight: 900;
   padding-right: 5px;
-  font-family: $dashboard-font;
   color: $primary-dark;
 }
 
 .title {
   display: inline-block;
-  font-size: 21px;
-  font-weight: 500;
-  font-family: $dashboard-font;
+  font-size: 16px;
+  font-weight: 600;
   color: $primary-dark;
 }

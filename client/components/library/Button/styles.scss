@@ -27,11 +27,18 @@
 .flat {
   background-color: transparent;
   color: $primary-dark;
-  &:hover {
-    color: $primary-color-hover;
+  &:not(.disabled) {
+    &:hover {
+      color: $primary-color-hover;
+    }
   }
 
   &:focus, &:active {
     outline: none;
   }
+}
+
+.disabled {
+  color: $disabled-color;
+  cursor: not-allowed;
 }

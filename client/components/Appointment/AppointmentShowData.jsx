@@ -27,7 +27,7 @@ export default function AppointmentShowData({ time, nameAge, phoneNumber, servic
         <Icon icon={'medkit'} className={styles.appointmentShowData__icons} />
       </div>
       <div className={styles.appointmentShowData__note}>
-        <b>Note: </b>
+        <span className={styles.noteText}><b>Note: </b></span>
         {note}
       </div>
     </div>

@@ -7,12 +7,15 @@ function joinNumber(str){
   const insertStr = " ";
   return [newStr.slice(0, 3), insertStr, newStr.slice(3,6), insertStr, newStr.slice(6)].join('');
 }
-export default function RequestData({ time, nameAge, phoneNumber, service }){
+export default function RequestData({ time, phoneNumber, service, name, age }){
 
   return (
     <div className={styles.requestData}>
       <div className={styles.requestData__time}>{time}</div>
-      <div className={styles.requestData__nameAge}>{nameAge}</div>
+      <div className={styles.requestData__nameAge}>
+        <div className={styles.requestData__name}>{name}</div>
+        <div className={styles.requestData__age}>,&nbsp;{age}</div>
+      </div>
       <div className={styles.requestData__phoneNumber}>{joinNumber(phoneNumber)}</div>
       <div className={styles.requestData__service}>{service}</div>
     </div>
