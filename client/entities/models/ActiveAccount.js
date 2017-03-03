@@ -10,5 +10,4 @@ export default class ActiveAccount extends Account {
     return `/api/accounts/${decodedToken.activeAccountId}`;
   }
 
-
 }

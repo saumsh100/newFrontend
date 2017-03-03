@@ -29,4 +29,8 @@ const AccountSchema = {
 
 export default class Account extends createModel(AccountSchema) {
 
+  getUrlRoot() {
+    return `/api/accounts/${this.getId()}`;
+  }
+
 }

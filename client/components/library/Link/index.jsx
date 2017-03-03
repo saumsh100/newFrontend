@@ -21,6 +21,5 @@ export default function Link(props) {
 }
 
 Link.propTypes = {
-  to: PropTypes.string.required,
   disabled: PropTypes.bool,
 };

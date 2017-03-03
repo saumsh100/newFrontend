@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import omit from 'lodash/omit';
 import Input from '../../Input';
 
 export default function RFInput(props) {
@@ -12,13 +13,15 @@ export default function RFInput(props) {
     meta,
   } = props;
 
+  const newProps = omit(props, ['input', 'meta']);
   const { touched, asyncValidating, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
   const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
 
+
   return (
     <Input
-      {...props}
+      {...newProps}
       {...input}
       type={type}
       label={label}
@@ -35,5 +38,5 @@ RFInput.propTypes = {
   icon: PropTypes.node,
   label: PropTypes.node,
   type: PropTypes.string,
-  error: PropTypes.string,
+  error: PropTypes.func,
 };

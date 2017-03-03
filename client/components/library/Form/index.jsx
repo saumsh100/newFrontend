@@ -5,7 +5,9 @@ import { compose, withProps } from 'recompose';
 import Button from '../Button';
 import Field from './Field';
 import FormSection from './FormSection';
+import SaveButton from './SaveButton';
 import styles from './styles.scss';
+
 
 import { asyncEmailValidate } from './validate'
 /**
@@ -34,25 +36,17 @@ function Form(props) {
     className,
     handleSubmit,
     pristine,
+    ignoreSaveButton,
   } = props;
+
+  let showSubmitButton = ignoreSaveButton ? null : (<SaveButton pristine={pristine}/>);
 
   return (
     <div>
       <form className={className}
             onSubmit={handleSubmit}>
-        {children}
-        <div className={styles.formActionsWrapper}>
-          <div className={styles.formActionsPull}>
-            <Button
-              flat
-              disabled={pristine}
-              type="submit"
-              className={styles.submitButton}
-            >
-              Save
-            </Button>
-          </div>
-        </div>
+        { children }
+        { showSubmitButton }
       </form>
     </div>
   );
@@ -104,4 +98,5 @@ export default enhance(Form);
 export {
   Field,
   FormSection,
+  SaveButton,
 };

@@ -7,7 +7,6 @@ import Address from './Clinic/Address'
 import styles from './styles.scss';
 
 export default function Settings(props) {
-  console.log('activeAccount', props.activeAccount);
   const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
   return (
     <Grid>
@@ -29,7 +28,6 @@ export default function Settings(props) {
 }
 
 Settings.propTypes = {
-  activeAccount: PropTypes.props,
-  location: PropTypes.props,
+  location: PropTypes.object,
   children: PropTypes.element.isRequired,
 };

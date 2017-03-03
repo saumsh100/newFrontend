@@ -41,9 +41,9 @@ class RouterTabs extends Component {
 }
 
 RouterTabs.propTypes = {
-  location: PropTypes.string.isRequired,
+  location: PropTypes.object,
   routes: PropTypes.array.isRequired,
-  router: PropTypes.func.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
 const enhance = compose(withRouter);
