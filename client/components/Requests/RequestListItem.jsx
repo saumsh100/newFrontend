@@ -74,38 +74,38 @@ class RequestListItem extends Component {
     }
 
     return (
-        <ListItem className={styles.requestListItem}>
-          <Popover
-            className={styles.requestPopover}
-            isOpen={isHovered}
-            body={[(
-              <AppointmentShowData
-                nameAge={data.nameAge}
-                time={data.time}
-                service={data.service}
-                phoneNumber={data.phoneNumber}
-                email={data.email}
-                note={data.note}
-              />
-            )]}
-            preferPlace="left"
-            tipSize={12}
-          >
-            <MonthDay
-              month={data.month}
-              day={data.day}
+      <ListItem className={styles.requestListItem}>
+        <Popover
+          className={styles.requestPopover}
+          isOpen={isHovered}
+          body={[(
+            <AppointmentShowData
+              nameAge={data.nameAge}
+              time={data.time}
+              service={data.service}
+              phoneNumber={data.phoneNumber}
+              email={data.email}
+              note={data.note}
             />
-          </Popover>
-          <RequestData
-            time={data.time}
-            name={data.name}
-            age={data.age}
-            nameAge={data.nameAge}
-            phoneNumber={data.phoneNumber}
-            service={data.service}
+          )]}
+          preferPlace="left"
+          tipSize={12}
+        >
+          <MonthDay
+            month={data.month}
+            day={data.day}
           />
-          {showHoverComponents}
-        </ListItem>
+        </Popover>
+        <RequestData
+          time={data.time}
+          name={data.name}
+          age={data.age}
+          nameAge={data.nameAge}
+          phoneNumber={data.phoneNumber}
+          service={data.service}
+        />
+        {showHoverComponents}
+      </ListItem>
     );
   }
 }

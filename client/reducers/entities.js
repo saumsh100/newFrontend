@@ -4,7 +4,6 @@ import each from 'lodash/each';
 import { handleActions } from 'redux-actions';
 import {
   FETCH_ENTITIES,
-  FETCH_MODEL,
   RECEIVE_ENTITIES,
   DELETE_ENTITY,
   ADD_ENTITY,
@@ -15,7 +14,6 @@ import {
 } from '../constants';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
-import ActiveAccount from '../entities/models/ActiveAccount';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
 import textMessages from '../entities/collections/textMessages';
@@ -38,6 +36,8 @@ import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
 import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
+import User from '../entities/models/User';;
+import users from '../entities/collections/users';
 
 const initialState = Map({
   // KEYs must map to the response object
@@ -54,6 +54,7 @@ const initialState = Map({
   patientList: new patientList(),
   chairs: new chairs(),
   weeklySchedules: new weeklySchedules(),
+  users: new users(),
   // reviews: Reviews(), MODEL
   // listings: Listings(),
 });
@@ -71,6 +72,7 @@ const Models = {
   chairs: Chairs,
   availabilities: Availability,
   weeklySchedules: WeeklySchedule,
+  users: User,
 };
 
 export default handleActions({

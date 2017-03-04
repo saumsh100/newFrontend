@@ -10,18 +10,27 @@ const PATHS = {
       label: 'General',
     },
     {
-      to: '/settings/clinic/address',
-      label: 'Address',
+      to: '/settings/clinic/users',
+      label: 'Users',
     },
     {
-      to: '/settings/clinic/hours',
-      label: 'Office Hours',
+      to: 's',
+      label: 'Social Media',
+    },
+    {
+      to: '',
+      label: 'Reputation',
+    },
+    {
+      to: '',
+      label: 'Notifications',
     },
   ],
 
-  '/settings/booking': [
+  '/settings/schedule': [
     {
-
+      to: '/settings/schedule/hours',
+      label: 'Office Hours',
     },
     {
 

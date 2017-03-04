@@ -2,8 +2,6 @@
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col, Card, CardHeader } from '../library';
 import SettingsSubNav from './SettingsSubNav';
-import General from './Clinic/General';
-import Address from './Clinic/Address'
 import styles from './styles.scss';
 
 export default function Settings(props) {
@@ -13,7 +11,6 @@ export default function Settings(props) {
       <Row className={styles.rowContainer}>
         <Col xs={3} className={styles.subSettingsCol}>
           <Card className={styles.subSettingsCard}>
-            <CardHeader title="Clinic Settings" />
             <SettingsSubNav location={props.location} />
           </Card>
         </Col>

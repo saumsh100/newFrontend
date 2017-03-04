@@ -185,21 +185,16 @@ export default function Routes({ history }) {
               }}
             />
             <Route
-              path="address"
+              path="users"
               getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Clinic/Address'], (require) => {
-                  callback(null, require('../components/Settings/Clinic/Address').default);
+                require.ensure(['../components/Settings/Clinic/CareCruUsers'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/CareCruUsers').default);
                 });
               }}
             />
-            <Route
-              path="hours"
-              getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Clinic/OfficeHours'], (require) => {
-                  callback(null, require('../components/Settings/Clinic/OfficeHours').default);
-                });
-              }}
-            />
+
+
+
           </Route>
           <Route
             path="schedule"
@@ -209,20 +204,12 @@ export default function Routes({ history }) {
               });
             }}
           >
-            <IndexRedirect to="widget" />
+            <IndexRedirect to="hours" />
             <Route
-              path="widget"
+              path="hours"
               getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Schedule/GeneralForm'], (require) => {
-                  callback(null, require('../components/Settings/Schedule/GeneralForm').default);
-                });
-              }}
-            />
-            <Route
-              path="test"
-              getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Schedule/AddressForm'], (require) => {
-                  callback(null, require('../components/Settings/Schedule/AddressForm').default);
+                require.ensure(['../components/Settings/Schedule/OfficeHours'], (require) => {
+                  callback(null, require('../components/Settings/Schedule/OfficeHours').default);
                 });
               }}
             />

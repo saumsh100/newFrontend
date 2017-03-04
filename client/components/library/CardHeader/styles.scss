@@ -6,8 +6,7 @@
   display: flex;
   align-items: center;
   padding-top: 0.5em;
-  padding-left: 1em;
-  border-bottom: 2px solid;
+  border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
 }
 
@@ -21,6 +20,7 @@
   font-size: 36px;
   font-weight: 900;
   padding-right: 5px;
+  padding-left: 15px;
   color: $primary-dark;
 }
 
