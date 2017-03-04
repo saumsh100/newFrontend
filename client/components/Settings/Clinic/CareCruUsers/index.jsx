@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
 import { Grid, CardHeader, Row } from '../../../library';
-import CareCruUser from './CareCruUser'
+import CareCruUser from './CareCruUser';
 
 
 class CareCruUsers extends Component{

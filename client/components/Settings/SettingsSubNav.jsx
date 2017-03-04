@@ -14,7 +14,7 @@ const PATHS = {
       label: 'Users',
     },
     {
-      to: 's',
+      to: '',
       label: 'Social Media',
     },
     {
@@ -33,7 +33,23 @@ const PATHS = {
       label: 'Office Hours',
     },
     {
+      to: '',
+      label: 'Online Booking',
+    },
+    {
+      to: '',
+      label: 'Reminders',
+    },
+    {
+      to: '',
+      label: 'Waitlist',
+    },
+  ],
 
+  '/settings/services': [
+    {
+      to: '/settings/services/serviceslist',
+      label: 'Services List',
     },
   ],
 };

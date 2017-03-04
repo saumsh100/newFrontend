@@ -15,9 +15,7 @@ const OWNER = {
   appointments: CRUD,
   chairs: CRUD,
   chats: CRUD,
-  users: {
-    read: true,
-  },
+  users: CRUD,
 
   listings: {
     read: true,

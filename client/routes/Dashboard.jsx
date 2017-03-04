@@ -192,9 +192,6 @@ export default function Routes({ history }) {
                 });
               }}
             />
-
-
-
           </Route>
           <Route
             path="schedule"
@@ -210,6 +207,24 @@ export default function Routes({ history }) {
               getComponent={(location, callback) => {
                 require.ensure(['../components/Settings/Schedule/OfficeHours'], (require) => {
                   callback(null, require('../components/Settings/Schedule/OfficeHours').default);
+                });
+              }}
+            />
+          </Route>
+          <Route
+            path="services"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Settings/Schedule'], (require) => {
+                callback(null, require('../components/Settings/Schedule').default);
+              });
+            }}
+          >
+            <IndexRedirect to="serviceslist" />
+            <Route
+              path="serviceslist"
+              getComponent={(location, callback) => {
+                require.ensure(['../components/Settings/Services/ServicesList'], (require) =>{
+                  callback(null, require('../components/Settings/Services/ServicesList').default);
                 });
               }}
             />
