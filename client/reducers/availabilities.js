@@ -9,6 +9,8 @@ import {
   SET_STARTING_APPOINTMENT_TIME,
   SET_REGISTRATION_STEP,
   SET_CLINIC_INFO,
+  REMOVE_RESERVATION,
+  SET_RESERVATION,
 } from '../constants';
 
 const initialState = fromJS({
@@ -20,6 +22,8 @@ const initialState = fromJS({
   logo: null,
   address: null,
   clinicName: null,
+  bookingWidgetPrimaryColor: null,
+  reservationId: null,
 });
 
 export default handleActions({
@@ -71,12 +75,27 @@ export default handleActions({
   },
 
   [SET_CLINIC_INFO](state, action) {
-    const { address, logo, clinicName } = action.payload;
+    const { address, logo, clinicName, bookingWidgetPrimaryColor } = action.payload;
     return state.merge({
       logo,
       address,
       clinicName,
+      bookingWidgetPrimaryColor,
     });
-  }
+  },
+
+  [SET_RESERVATION](state, action) {
+    const reservationId = action.payload;
+    return state.merge({
+      reservationId,
+    })
+  },
+
+  [REMOVE_RESERVATION](state, action) {
+    return state.merge({
+      reservationId: null,
+      messages: [`Reserved time for this practitioner has been expired...`]
+    })
+  },
 
 }, initialState);

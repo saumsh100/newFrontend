@@ -15,6 +15,7 @@ const Account = createModel('Account', {
   logo: type.string(),
   address: type.string(),
   clinicName: type.string(),
+  bookingWidgetPrimaryColor: type.string(),
   weeklyScheduleId: type.string().uuid(4),
   // users: []
 });

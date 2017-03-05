@@ -3,7 +3,14 @@ function a () {
 }
 
 // window.SERVICES = {{{ services }}};
-
+window.addEventListener('message', function(e) {
+    var modal = document.getElementById('modal');
+    var cross = document.getElementById('cross');
+    var wrapper = document.getElementById('iframeWrapper');
+    cross.style.visibility = 'hidden';
+    modal.style.visibility = 'hidden';
+    wrapper.style.visibility = 'hidden';
+})
 window.addEventListener('load', function() {
   // a();
     var div = document.createElement('div');
@@ -11,13 +18,21 @@ window.addEventListener('load', function() {
     div.style.position = 'fixed';
     div.style.top = '250px';
     div.style.right = '0px';
-    div.style.width = '200px';
-    div.style.height = '150px';
-    div.style.border = '1px solid black';
+    div.style.width = '6rem';
+    div.style.height = '5rem';
+    div.style.border = 'none';
     div.style.cursor = 'pointer';
+    div.style.fontSize = '1em';
+    div.style.display = 'flex';
+    div.style.alignItems = 'center';
     div.style.backgroundColor = '#0275d8';
-    //div.style.borderRight = '0px';
-  var text = document.createTextNode('Book online!');
+    div.style.textAlign = 'center';
+    div.style.textTransform = 'uppercase';
+    div.style.padding = '10px';
+    div.style.color = '#fff';
+
+    document.querySelector('style').textContent += "@media screen and (max-width : 610px) { #bookOnline {font-size:1em!important;position:fixed!important;bottom:0!important;top:auto!important;right:0!important;left:0!important;width:100%!important;height:3em!important;text-align:!important;border-radius:0!important; justify-content: center !important;}}";
+     var text = document.createTextNode('Book online');
 
   div.addEventListener('click', function() {
     var modal = document.getElementById('modal');
@@ -43,11 +58,12 @@ window.addEventListener('load', function() {
     modal.style.top = '50%';
     modal.style.left = '50%';
     modal.style.overflow = 'hidden';
-    modal.setAttribute('scrolling', 'no');
+    modal.setAttribute('scrolling', 'yes');
     modal.style.transform = 'translateY(-50%) translateX(-50%)';
     // modal.style.transition = 'translateX(-50%)';
     modal.style.visibility = 'hidden';
     // modal.style.marginTop = '50px';
+    document.querySelector('style').textContent += "@media screen and (max-height : 610px) { #modal {height: 90% !important}}";
 
   var cross = document.createElement('div');
     cross.setAttribute('id', 'cross');
@@ -61,7 +77,7 @@ window.addEventListener('load', function() {
     cross.style.zIndex = '10';
     cross.style.color = 'white';
     cross.style.lineHeight = '1rem';
-
+    document.querySelector('style').textContent += "@media screen and (max-width : 1000px) { #cross {display: none !important}}";
 
 
   cross.addEventListener('click', function() {

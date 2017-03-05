@@ -20,8 +20,7 @@ class SignUp extends Component {
     this.bookAnAppointment = this.bookAnAppointment.bind(this);
     this.setRegistrationStep = this.setRegistrationStep.bind(this);
     this.renderBookingForm = this.renderBookingForm.bind(this);
-    this.collapseMenuOpen = this.collapseMenuOpen.bind(this);
-    this.collapseMenuClose = this.collapseMenuClose.bind(this);
+    this.collapseMenu = this.collapseMenu.bind(this);
   }
 
 
@@ -34,12 +33,16 @@ class SignUp extends Component {
   }
 
   startTimer() {
-    this.registrationTimer = setInterval(() => {
+    this.registrationTimer = setInterval((() => {
       this.setState({
         time: this.state.time - 1000,
       });
-      if (this.getPercent() === 0) clearInterval(this.registrationTimer);
-    }, 1000);
+      if (this.getPercent() === 0) {
+        const { reservationId } = this.props.practitionersStartEndDate.toJS();
+        this.props.removeReservation(reservationId);
+        clearInterval(this.registrationTimer);
+      }
+    }).bind(this), 1000);
   }
 
   bookAnAppointment(params) {
@@ -53,18 +56,23 @@ class SignUp extends Component {
 
   setRegistrationStep(e) {
     e.preventDefault();
-    const { setRegistrationStep } = this.props;
-    setRegistrationStep(1);
+    const { setRegistrationStep, removeReservation } = this.props;
+    const { reservationId } = this.props.practitionersStartEndDate.toJS();
+    const array = location.pathname.split('/');
+    const accountId = array[array.length - 1];
+    setRegistrationStep(1, accountId);
+    removeReservation(reservationId)
   }
-  collapseMenuOpen() {
-    this.setState({
-      collapseMenu: true,
-    });
-  }
-  collapseMenuClose() {
-    this.setState({
-      collapseMenu: false,
-    });
+  collapseMenu(open) {
+    if(open) {
+      this.setState({
+        collapseMenu: true,
+      });
+    } else {
+      this.setState({
+        collapseMenu: false,
+      });
+    }
   }
   renderBookingForm() {
     return (
@@ -76,16 +84,18 @@ class SignUp extends Component {
         asyncValidate={asyncEmailValidate}
         asyncBlurFields={['email']}
       >
-        <Field
-          name="firstName"
-          label="First Name *"
-          className={styles.signup__body_input}
-        />
-        <Field
-          name="lastName"
-          label="Last Name *"
-          className={styles.signup__body_input}
-        />
+        <div>
+          <Field
+            name="firstName"
+            label="First Name *"
+            className={styles.signup__body_input}
+          />
+          <Field
+            name="lastName"
+            label="Last Name *"
+            className={styles.signup__body_input}
+          />
+        </div>
         <Field
           label="Phone Number *"
           name="phone"
@@ -178,7 +188,7 @@ class SignUp extends Component {
           <div className={styles.signup__main}>
             <div className={styles.signup__header}>
               <button className={styles.signup__header_btn}
-                      onClick={this.collapseMenuOpen}>
+                      onClick={() => this.collapseMenu(true)}>
                 <i className="fa fa-bars" />
               </button>
               <div className={styles.signup__header_title}>
@@ -188,9 +198,10 @@ class SignUp extends Component {
                 className={styles.signup__header_timer}
                 seconds={this.state.time}
                 percentage={this.getPercent()}
+                color={this.props.bookingWidgetPrimaryColor}
               />
             </div>
-            <div onClick={this.collapseMenuClose} className={styles.signup__body}>
+            <div onClick={() => this.collapseMenu(false)} className={styles.signup__body}>
               {contnet}
             </div>
             <div className={styles.signup__footer}>

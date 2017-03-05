@@ -13,7 +13,7 @@ const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
 const Token = require('./Token');
-
+const Reservation = require('./Reservation');
 module.exports = {
   Account,
   Appointment,
@@ -25,6 +25,7 @@ module.exports = {
   Permission,
   Practitioner,
   Request,
+  Reservation,
   Service,
   TextMessage,
   User,

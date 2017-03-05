@@ -157,6 +157,7 @@
     "serve-favicon": "^2.3.0",
     "socket.io": "^1.5.1",
     "style-loader": "^0.13.0",
+    "styled-components": "^1.4.4",
     "supertest": "^1.2.0",
     "thinky": "^2.3.8",
     "twilio": "^2.11.1",
