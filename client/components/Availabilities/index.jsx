@@ -5,7 +5,7 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import { Button, Form, Field, Checkbox } from '../library';
 import SignUp from './SignUp';
 import Preferences from './Preferences';
-import 'react-day-picker/lib/style.css';
+import DayPickerStyles from '../library/DayPicker/styles.css';
 import styles from './styles.scss';
 
 class Availabilities extends React.Component {
@@ -25,7 +25,6 @@ class Availabilities extends React.Component {
     this.sixDaysForward = this.sixDaysForward.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
     this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.isDaySelected = this.isDaySelected.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -108,10 +107,6 @@ class Availabilities extends React.Component {
     this.setState({ modalIsOpen: !this.state.modalIsOpen });
   }
 
-  closeModal() {
-    this.setState({ modalIsOpen: !modalIsOpen });
-  }
-
   handleChange() {
     this.setState({
       checked: !this.state.checked,
@@ -146,11 +141,11 @@ class Availabilities extends React.Component {
     const startsAt = this.props.practitionersStartEndDate.get('startsAt');
     const preferences = this.state.checked
       ?
-        (<Preferences
-          startsAt={startsAt}
-          setRegistrationStep={this.props.setRegistrationStep}
-          color={this.props.bookingWidgetPrimaryColor}
-        />)
+      (<Preferences
+        startsAt={startsAt}
+        setRegistrationStep={this.props.setRegistrationStep}
+        color={this.props.bookingWidgetPrimaryColor}
+      />)
       : null;
     const { logo, address, clinicName } = this.props;
     return (
@@ -245,8 +240,11 @@ class Availabilities extends React.Component {
                   </div>
                   {this.state.modalIsOpen ?
                     (
-                      <div onClick={this.openModal} className={styles.appointment__daypicker_modal}>
+                      <div>
+                        <div onClick={this.openModal} className={styles.appointment__daypicker_modal}>
+                        </div>
                         <DayPicker
+                          styles={DayPickerStyles}
                           className={styles.appointment__daypicker_select}
                           onDayClick={this.handleDayClick}
                           selectedDays={this.isDaySelected}
