@@ -121,7 +121,11 @@ availabilitiesRouter.get('/', (req, res, next) => {
                   .filter(r => moment(r.startTime).startOf('day').isSame(currentDay))
                   .map(reservation => moment.range(reservation.startTime, reservation.endTime));
 
-                const allRanges = reservationRanges.concat(appointmentRanges)
+                const requestRanges = requests
+                  .filter(r => moment(r.startTime).startOf('day').isSame(currentDay))
+                  .map(request => moment.range(request.startTime, request.endTime));
+
+                const allRanges = reservationRanges.concat(appointmentRanges).concat(requestRanges);
                 const hasAppointment = slotRange => _.some(allRanges, appointmentRange => {
                   return appointmentRange.overlaps(slotRange);
                 });
