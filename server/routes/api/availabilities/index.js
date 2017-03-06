@@ -116,14 +116,19 @@ availabilitiesRouter.get('/', (req, res, next) => {
                   .filter(a => moment(a.startTime).startOf('day').isSame(currentDay))
                   .map(appointment => moment.range(appointment.startTime, appointment.endTime));
 
-                const hasAppointment = slotRange => _.some(appointmentRanges, appointmentRange => {
-                  return appointmentRange.intersect(slotRange);
-                });
 
+                const reservationRanges = reservations
+                  .filter(r => moment(r.startTime).startOf('day').isSame(currentDay))
+                  .map(reservation => moment.range(reservation.startTime, reservation.endTime));
+
+                const allRanges = reservationRanges.concat(appointmentRanges)
+                const hasAppointment = slotRange => _.some(allRanges, appointmentRange => {
+                  return appointmentRange.overlaps(slotRange);
+                });
                 const availabilities = Array.from(dayRange.by('minutes', { step: 30 }))
                   .map(slot => ({
                     startsAt: slot.toDate(),
-                    isBusy: hasAppointment(moment.range(slot, slot.add(29, 'minutes'))),
+                    isBusy: hasAppointment(moment.range(slot, slot.clone().add(29, 'minutes'))),
                   }));
 
                 return [
