@@ -214,20 +214,12 @@ export default function Routes({ history }) {
           <Route
             path="services"
             getComponent={(location, callback) => {
-              require.ensure(['../components/Settings/Schedule'], (require) => {
-                callback(null, require('../components/Settings/Schedule').default);
+              require.ensure(['../components/Settings/Services/ServicesList'], (require) =>{
+                callback(null, require('../components/Settings/Services/ServicesList').default);
               });
             }}
           >
-            <IndexRedirect to="serviceslist" />
-            <Route
-              path="serviceslist"
-              getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Services/ServicesList'], (require) =>{
-                  callback(null, require('../components/Settings/Services/ServicesList').default);
-                });
-              }}
-            />
+
           </Route>
         </Route>
         <Route

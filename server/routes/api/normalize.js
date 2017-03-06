@@ -48,7 +48,9 @@ const requestSchema = () => {
 };
 
 const serviceSchema = () => {
-  return new schema.Entity('services');
+  return new schema.Entity('services', {
+    practitioner: practitionerSchema(),
+  });
 };
 
 const textMessageSchema = () => {

@@ -12,18 +12,22 @@ const PATHS = {
     {
       to: '/settings/clinic/users',
       label: 'Users',
+      disabled: true,
     },
     {
       to: '',
       label: 'Social Media',
+      disabled: true,
     },
     {
       to: '',
       label: 'Reputation',
+      disabled: true,
     },
     {
       to: '',
       label: 'Notifications',
+      disabled: true,
     },
   ],
 
@@ -35,14 +39,17 @@ const PATHS = {
     {
       to: '',
       label: 'Online Booking',
+      disabled: true,
     },
     {
       to: '',
       label: 'Reminders',
+      disabled: true,
     },
     {
       to: '',
       label: 'Waitlist',
+      disabled: true,
     },
   ],
 

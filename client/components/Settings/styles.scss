@@ -3,6 +3,7 @@
 
 .rowContainer {
   height: 100%;
+  background-color: $primary-white;
 }
 
 .subSettingsCol {
@@ -11,7 +12,6 @@
 }
 
 .subSettingsCard {
- // border-top: $card-border-size $primary-blue;
 }
 
 .settingsFormsCol {
@@ -23,4 +23,3 @@
   height: 100%;
   //border-top: $card-border-size $primary-blue;
 }
-

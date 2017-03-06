@@ -26,6 +26,7 @@ class ServicesList extends Component {
         {services.toArray().map((service) => {
           return(
             <ServiceItem
+              key={service.get('id')}
               service={service}
             />
           );
