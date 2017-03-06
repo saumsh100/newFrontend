@@ -52,7 +52,8 @@ class SignUp extends Component {
     const accountId = array[array.length - 1];
     const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId, accountId }, params, { domen });
     this.props.createPatient(paramsToPass);
-    this.props.removeReservation(reservationId)
+    this.props.removeReservation(reservationId);
+    clearInterval(this.registrationTimer);
   }
 
   setRegistrationStep(e) {
@@ -62,7 +63,8 @@ class SignUp extends Component {
     const array = location.pathname.split('/');
     const accountId = array[array.length - 1];
     setRegistrationStep(1, accountId);
-    removeReservation(reservationId)
+    removeReservation(reservationId);
+    clearInterval(this.registrationTimer);
   }
   collapseMenu(open) {
     if(open) {
