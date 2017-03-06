@@ -10,7 +10,9 @@ import {
   selectAppointmentType,
   removePractitionerFromFilter,
 } from '../../thunks/schedule';
-import "react-day-picker/lib/style.css";
+import DayPicker, { DateUtils } from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
+import DayPickerStyles from "../library/DayPicker/styles.css";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Filters from './Filters'
@@ -138,6 +140,9 @@ class ScheduleComponent extends Component {
         <div className={`${styles.scheduleContainer} schedule`}>
           <div className={`${styles.schedule__title} ${styles.title}`}>
             <CurrentDate currentDate={currentDate} />
+            <i className="fa fa-calendar"
+               onClick={this.toggleCalendar}
+            />
             <Tabs index={this.state.index} onChange={this.handleTabChange}>
               {schedule.toJS().scheduleModes.map(s => {
                 const label = s;
@@ -148,15 +153,18 @@ class ScheduleComponent extends Component {
                 )
               })}
             </Tabs>
-            <i className="styles__icon___2RuH0 fa fa-calendar"
-              onClick={this.toggleCalendar}
-            />
-            {showDatePicker &&
+            {this.state.showDatePicker &&
+            <div className={styles.schedule__daypicker}>
+              <div onClick={this.toggleCalendar} className={styles.schedule__daypicker_wrapper}>
+              </div>
               <DayPicker
+                className={styles.schedule__daypicker_select}
+                styles={DayPickerStyles}
                 initialMonth={new Date(2016, 1)}
                 selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
                 onDayClick={this.handleDayClick}
               />
+            </div>
             }
           </div>
           {content}
@@ -169,6 +177,13 @@ class ScheduleComponent extends Component {
             schedule={schedule}
             appointmentsTypes={appointmentsTypes}
             selectAppointmentType={selectAppointmentType}
+          />
+          <DayPicker
+            className={styles.scheduleSidebar__calendar}
+            styles={DayPickerStyles}
+            initialMonth={new Date(2016, 1)}
+            selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
+            onDayClick={this.handleDayClick}
           />
         </div>
       </div>

@@ -1,0 +1,13 @@
+.DayPicker-Month {
+    width: 560px;
+    min-height: 200px;
+}
+.DayPicker-Day {
+    border: none;
+}
+@media screen and (max-width: 800px) {
+    .DayPicker-Month {
+        width: auto;
+        height: auto;
+    }
+}
