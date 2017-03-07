@@ -21,6 +21,7 @@ import DayView from './DayView';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
 import CurrentDate from './CurrentDate';
+import NewRequests from './NewRequests';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 
@@ -177,6 +178,7 @@ class ScheduleComponent extends Component {
             appointmentsTypes={appointmentsTypes}
             selectAppointmentType={selectAppointmentType}
           />
+          <NewRequests />
           <DayPicker
             className={styles.schedule__sidebar_calendar}
             styles={DayPickerStyles}
