@@ -1,6 +1,7 @@
 .schedule_appointment {
     background-color: #fafafa;
-    font-family: sans-serif;
+    margin-top: 10px;
+    font-family: Gotham-Book sans-serif;
 }
 
 .appointment_header {
@@ -31,7 +32,6 @@
         color: #b4b4b5;
         margin-left: 5px;
     }
-
 }
 
 .appointment_practitioner {
@@ -47,14 +47,40 @@
     &__wrapper {
         display: flex;
         flex-direction: column;
-        margin: 0 0 20px;
+        margin: 0;
         padding: 0;
         list-style: none;
-        justify-content: center;
-        flex-wrap: wrap;
+        justify-content: flex-start;
+        overflow-y: auto;
         height: 280px;
     }
-
+    &__item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e6e6e6;
+    }
+    .item {
+        &__day {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #b5b5b5;
+            &_month {
+                font-size: 10px;
+                font-weight: 500;
+            }
+            &_number {
+                font-size: 20px;
+                font-weight: 500;
+            }
+        }
+        &__information {
+            padding: 15px;
+            &_title {
+                font-weight: 500;
+            }
+        }
+    }
     &__list {
         display: flex;
         flex-direction: column;
@@ -63,5 +89,4 @@
         align-items: center;
         flex: 1 0 25%;
     }
-
 }
