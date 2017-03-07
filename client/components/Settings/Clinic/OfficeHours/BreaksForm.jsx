@@ -13,6 +13,7 @@ import {
   Form,
   FormSection,
   Field,
+  FieldArray,
 } from '../../../library';
 import styles from './styles.scss';
 
@@ -36,7 +37,12 @@ const generateTimeOptions = () => {
   return timeOptions;
 };
 
+const defaultStartTime = moment(new Date(1970, 1, 0, 12, 0)).toISOString();
+const defaultEndTime = moment(new Date(1970, 1, 0, 13, 0)).toISOString();
+
 const timeOptions = generateTimeOptions();
+
+console.log('found?', timeOptions.find(to => to.value === defaultStartTime));
 
 function BreaksForm({ values, weeklySchedule, onSubmit }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
@@ -53,62 +59,92 @@ function BreaksForm({ values, weeklySchedule, onSubmit }) {
   ]);
 
   const initialValues = mapValues(parsedWeeklySchedule, (day) => {
-    return day;
+    const breaks = day.breaks || [];
+    return { breaks };
   });
 
-  const DayBreaksForm = ({ day }) => {
-    // Hacky way of letting internal form values control component state
-    const dayValues = values[day];
-    // const isDisabled = dayValues && dayValues.isClosed;
-    const breaks = 123; // TODO: how to deal with fields that are arrays?
-    return (
-      <FormSection name={day}>
+  const renderBreaks = (day) => {
+    return ({ fields, meta: { touched, error }}) => {
+      return (
         <Grid>
-          <Row className={styles.dayRow}>
+          <Row>
             <Col
               xs={3}
-              className={classNames(styles.day, styles.flexCentered)}
+              className={styles.day}
             >
               {day}
             </Col>
             <Col
               xs={2}
-              className={styles.flexCentered}
+              //className={styles.flexCentered}
             >
-              <Button onClick={() => alert('added break ' + day)}>
+              <Button
+                type="button"
+                onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
+              >
                 Add Break
               </Button>
             </Col>
             <Col
               xs={7}
-              className={styles.flexCentered}
+              //className={styles.flexCentered}
             >
-              <Field
-                component="DropdownSelect"
-                options={timeOptions}
-                name="startTime"
-                className={styles.inlineBlock}
-                // disabled={isDisabled}
-                label="Start Time"
-              />
-              <div className={classNames(styles.inlineBlock, styles.toDiv)}>
-                to
-              </div>
-              <Field
-                className={styles.inlineBlock}
-                component="DropdownSelect"
-                options={timeOptions}
-                name="endTime"
-                // disabled={isDisabled}
-                label="End Time"
-              />
+              <Grid>
+                {fields.map((field, index) => {
+                  return (
+                    <Row key={index}>
+                      <Col xs={4}>
+                        <Field
+                          component="DropdownSelect"
+                          options={timeOptions}
+                          name={`${field}.startTime`}
+                          className={styles.inlineBlock}
+                          label="Start Time"
+                        />
+                      </Col>
+                      <Col xs={1}>
+                        <div className={classNames(styles.inlineBlock, styles.toDiv)}>
+                          to
+                        </div>
+                      </Col>
+                      <Col xs={4}>
+                        <Field
+                          className={styles.inlineBlock}
+                          component="DropdownSelect"
+                          options={timeOptions}
+                          name={`${field}.endTime`}
+                          label="End Time"
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Button type="button" onClick={() => fields.remove(index)}>
+                          Remove
+                        </Button>
+                      </Col>
+                    </Row>
+                  );
+                })}
+              </Grid>
             </Col>
           </Row>
         </Grid>
+      );
+    };
+  };
+
+  const DayBreaksForm = ({ day }) => {
+    // Hacky way of letting internal form values control component state
+    const dayValues = values[day];
+    // const isDisabled = dayValues && dayValues.isClosed;
+    return (
+      <FormSection name={day}>
+        <FieldArray
+          name="breaks"
+          component={renderBreaks(day)}
+        />
       </FormSection>
     );
   };
-
   return (
     <Form form="clinicBreaks" onSubmit={onSubmit} initialValues={initialValues}>
       <DayBreaksForm day="monday" />
@@ -120,6 +156,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit }) {
       <DayBreaksForm day="sunday" />
     </Form>
   );
+
 }
 
 function mapStateToProps({ form }) {

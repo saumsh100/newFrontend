@@ -52,8 +52,13 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit }) {
     'sunday',
   ]);
 
-  const initialValues = mapValues(parsedWeeklySchedule, (day) => {
-    return day;
+  // Need to do this so editing breaks does not screw up initialValues here
+  const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => {
+    return {
+      isClosed,
+      startTime,
+      endTime,
+    };
   });
 
   const DayHoursForm = ({ day }) => {
