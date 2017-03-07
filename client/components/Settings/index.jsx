@@ -3,7 +3,9 @@ import React, { PropTypes } from 'react';
 import { Grid, Row, Col, Card, CardHeader } from '../library';
 import SettingsSubNav from './SettingsSubNav';
 import styles from './styles.scss';
-import ServicesList from './Services/ServicesList';
+import Services from './Services/';
+
+
 
 export default function Settings(props) {
   const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
@@ -14,9 +16,9 @@ export default function Settings(props) {
   if (location.pathname === '/settings/services') {
     showNav = (
       <Row className={styles.rowContainer}>
-        <Col xs={3} className={styles.subSettingsCol}>
+        <Col xs={12} className={styles.subSettingsCol}>
           <Card className={styles.subSettingsCard}>
-            <ServicesList />
+            <Services />
           </Card>
         </Col>
       </Row>

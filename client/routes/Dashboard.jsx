@@ -214,8 +214,8 @@ export default function Routes({ history }) {
           <Route
             path="services"
             getComponent={(location, callback) => {
-              require.ensure(['../components/Settings/Services/ServicesList'], (require) =>{
-                callback(null, require('../components/Settings/Services/ServicesList').default);
+              require.ensure(['../components/Settings/Services/'], (require) =>{
+                callback(null, require('../components/Settings/Services/').default);
               });
             }}
           >
