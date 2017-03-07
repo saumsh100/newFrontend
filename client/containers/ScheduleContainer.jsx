@@ -23,6 +23,8 @@ class ScheduleContainer extends React.Component {
     this.props.fetchEntities({ key: 'appointments' });
     this.props.fetchEntities({ key: 'practitioners' });
     this.props.fetchEntities({ key: 'requests' });
+    this.props.fetchEntities({ key: 'services' });
+    
     
   }
 
@@ -38,6 +40,8 @@ class ScheduleContainer extends React.Component {
       fetchEntities,
       setSheduleMode,
       requests,
+      services,
+      patients,
     } = this.props;  
     return (
       <ScheduleComponent
@@ -51,6 +55,8 @@ class ScheduleContainer extends React.Component {
         fetchEntities={selectAppointmentType}
         setSheduleMode={setSheduleMode}
         requests={requests}
+        services={services}
+        patients={patients}
       />
     );
   }
@@ -70,7 +76,10 @@ function mapStateToProps({ entities, schedule }) {
     practitioners: entities.get('practitioners'),
     schedule,
     appointments: entities.get('appointments'),
-    requests: entities.get('requests')
+    requests: entities.get('requests'),
+    patients: entities.get('patients'),
+    services: entities.get('services'),
+    
   };
 }
 
