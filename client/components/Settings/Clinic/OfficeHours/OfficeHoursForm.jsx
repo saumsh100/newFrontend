@@ -67,7 +67,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit }) {
     const isDisabled = dayValues && dayValues.isClosed;
     return (
       <FormSection name={day}>
-        <Grid>
+        <Grid className={styles.dayGrid}>
           <Row className={styles.dayRow}>
             <Col
               xs={3}
@@ -85,25 +85,36 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit }) {
               xs={7}
               className={styles.flexCentered}
             >
-              <Field
-                component="DropdownSelect"
-                options={timeOptions}
-                name="startTime"
-                className={styles.inlineBlock}
-                disabled={isDisabled}
-                label="Start Time"
-              />
-              <div className={classNames(styles.inlineBlock, isDisabled ? styles.toDivDisabled : styles.toDiv)}>
-                to
-              </div>
-              <Field
-                className={styles.inlineBlock}
-                component="DropdownSelect"
-                options={timeOptions}
-                name="endTime"
-                disabled={isDisabled}
-                label="End Time"
-              />
+              <Grid>
+                <Row>
+                  <Col xs={4} className={styles.flexCentered}>
+                    <Field
+                      component="DropdownSelect"
+                      options={timeOptions}
+                      name="startTime"
+                      className={styles.inlineBlock}
+                      disabled={isDisabled}
+                      label="Start Time"
+                    />
+                  </Col>
+                  <Col xs={1} className={styles.flexCentered}>
+                    <div className={classNames(styles.inlineBlock, isDisabled ? styles.toDivDisabled : styles.toDiv)}>
+                      to
+                    </div>
+                  </Col>
+                  <Col xs={4} className={styles.flexCentered}>
+                    <Field
+                      className={styles.inlineBlock}
+                      component="DropdownSelect"
+                      options={timeOptions}
+                      name="endTime"
+                      disabled={isDisabled}
+                      label="End Time"
+                    />
+                  </Col>
+                  <Col xs={3} />
+                </Row>
+              </Grid>
             </Col>
           </Row>
         </Grid>

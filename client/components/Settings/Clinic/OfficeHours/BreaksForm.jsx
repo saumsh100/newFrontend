@@ -7,6 +7,7 @@ import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
 import {
   Button,
+  IconButton,
   Grid,
   Row,
   Col,
@@ -66,11 +67,11 @@ function BreaksForm({ values, weeklySchedule, onSubmit }) {
   const renderBreaks = (day) => {
     return ({ fields, meta: { touched, error }}) => {
       return (
-        <Grid>
+        <Grid className={styles.dayGrid}>
           <Row>
             <Col
               xs={3}
-              className={styles.day}
+              className={styles.breaksDay}
             >
               {day}
             </Col>
@@ -93,7 +94,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit }) {
                 {fields.map((field, index) => {
                   return (
                     <Row key={index}>
-                      <Col xs={4}>
+                      <Col xs={4} className={styles.flexCentered}>
                         <Field
                           component="DropdownSelect"
                           options={timeOptions}
@@ -102,12 +103,12 @@ function BreaksForm({ values, weeklySchedule, onSubmit }) {
                           label="Start Time"
                         />
                       </Col>
-                      <Col xs={1}>
+                      <Col xs={1} className={styles.flexCentered}>
                         <div className={classNames(styles.inlineBlock, styles.toDiv)}>
                           to
                         </div>
                       </Col>
-                      <Col xs={4}>
+                      <Col xs={4} className={styles.flexCentered}>
                         <Field
                           className={styles.inlineBlock}
                           component="DropdownSelect"
@@ -116,10 +117,13 @@ function BreaksForm({ values, weeklySchedule, onSubmit }) {
                           label="End Time"
                         />
                       </Col>
-                      <Col xs={3}>
-                        <Button type="button" onClick={() => fields.remove(index)}>
-                          Remove
-                        </Button>
+                      <Col xs={3} className={styles.flexCentered}>
+                        <IconButton
+                          type="button"
+                          icon="trash"
+                          className={styles.trashButton}
+                          onClick={() => fields.remove(index)}
+                        />
                       </Col>
                     </Row>
                   );
