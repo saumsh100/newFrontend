@@ -11,7 +11,6 @@ import {
   removePractitionerFromFilter,
 } from '../../thunks/schedule';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
 import DayPickerStyles from "../library/DayPicker/styles.css";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -22,6 +21,7 @@ import DayView from './DayView';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
 import CurrentDate from './CurrentDate';
+import NewRequests from './NewRequests';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 
@@ -126,23 +126,23 @@ class ScheduleComponent extends Component {
     const currentDate = moment(schedule.toJS().scheduleDate);
     switch(this.state.index) {
       case 0:
-        content = <DayView {...params} />
+        content = <DayView {...params} />;
         break;
       case 1:
-        content = <MonthView {...params} />
+        content = <MonthView {...params} />;
         break;
       case 2:
-        content = <WeekView {...params} />
+        content = <WeekView {...params} />;
         break;
     }
     return (
-      <div className={styles.scheduleContainerWrapper}>
-        <div className={`${styles.scheduleContainer} schedule`}>
+      <div className={styles.schedule}>
+        <div className={styles.schedule__container}>
           <div className={`${styles.schedule__title} ${styles.title}`}>
-            <CurrentDate currentDate={currentDate} />
-            <i className="fa fa-calendar"
-               onClick={this.toggleCalendar}
-            />
+              <CurrentDate currentDate={currentDate} />
+              <i className="fa fa-calendar"
+                 onClick={this.toggleCalendar}
+              />
             <Tabs index={this.state.index} onChange={this.handleTabChange}>
               {schedule.toJS().scheduleModes.map(s => {
                 const label = s;
@@ -159,8 +159,8 @@ class ScheduleComponent extends Component {
               </div>
               <DayPicker
                 className={styles.schedule__daypicker_select}
-                styles={DayPickerStyles}
                 initialMonth={new Date(2016, 1)}
+                styles={`${styles.calendar}${DayPickerStyles}`}
                 selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
                 onDayClick={this.handleDayClick}
               />
@@ -169,7 +169,7 @@ class ScheduleComponent extends Component {
           </div>
           {content}
         </div>
-        <div className={styles.scheduleSidebar}>
+        <div className={styles.schedule__sidebar}>
           <Filters
             practitioners={practitioners.get('models').toArray()}
             addPractitionerToFilter={addPractitionerToFilter}
@@ -178,8 +178,9 @@ class ScheduleComponent extends Component {
             appointmentsTypes={appointmentsTypes}
             selectAppointmentType={selectAppointmentType}
           />
+          <NewRequests />
           <DayPicker
-            className={styles.scheduleSidebar__calendar}
+            className={styles.schedule__sidebar_calendar}
             styles={DayPickerStyles}
             initialMonth={new Date(2016, 1)}
             selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
