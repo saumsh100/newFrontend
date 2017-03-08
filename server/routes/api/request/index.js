@@ -49,7 +49,6 @@ requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
  * Update a request
  */
 requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) =>{
-  console.log(req.body);
   return req.request.merge(req.body).save()
     .then(request => res.send(normalize('request', request)))
     .catch(next);

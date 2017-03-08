@@ -3,13 +3,15 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import Card from '../Card';
 import styles from './styles.scss';
+import IconButton   from '../IconButton';
+
 
 class Modal extends Component {
   constructor(props) {
     super(props);
     this.handleEscKeyDown = this.handleEscKeyDown.bind(this);
     this.handleOverlayClick = this.handleOverlayClick.bind(this);
-    // this.deactivate = this.deactivate.bind(this);
+    this.deactivate = this.deactivate.bind(this);
   }
   
   componentDidMount() {
@@ -25,7 +27,11 @@ class Modal extends Component {
       document.body.removeEventListener('keydown', this.handleEscKeyDown);
     }
   }
-  
+
+  deactivate(e){
+    this.props.onOverlayClick && this.props.onOverlayClick(e);
+  }
+
   
   handleEscKeyDown(e) {
     this.props.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
@@ -40,9 +46,7 @@ class Modal extends Component {
       children,
       active
     } = this.props;
-    
 
-  
     let modalContainerClassName = styles.modalContainer;
     if (active) {
       modalContainerClassName = classNames(styles.active, modalContainerClassName);
@@ -57,6 +61,11 @@ class Modal extends Component {
           className={backDropClassName}
         />
         <Card className={styles.modalBody}>
+          <IconButton
+            icon="window-close"
+            className={styles.modalCloseIcon}
+            onClick={this.deactivate}
+          />
           {children}
         </Card>
       </div>

@@ -24,19 +24,19 @@ import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
 import Requests from '../entities/models/Request';
 import requests from '../entities/collections/requests';
-import Dialogs from '../entities/models/Dialogs'
+import Dialogs from '../entities/models/Dialogs';
 import dialogs from '../entities/collections/dialogs';
-import PatientList from '../entities/models/PatientList'
+import PatientList from '../entities/models/PatientList';
 import patientList from '../entities/collections/patientList';
-import Service from '../entities/models/Service'
+import Service from '../entities/models/Service';
 import services from '../entities/collections/services';
 import Chairs from '../entities/models/Chair';
-import chairs from '../entities/collections/chairs'
+import chairs from '../entities/collections/chairs';
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
 import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
-import User from '../entities/models/User';;
+import User from '../entities/models/User';
 import users from '../entities/collections/users';
 
 const initialState = Map({
@@ -99,8 +99,9 @@ export default handleActions({
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const { id } = entity;
-    const newModel = new Models[key](entity);
+    const id = Object.keys(entity[key])[0];
+    const addEntity = entity[key][id];
+    const newModel = new Models[key](addEntity);
     return state.setIn([key, 'models', id], newModel);
   },
 

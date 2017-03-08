@@ -31,16 +31,22 @@ class General extends React.Component {
     if (activeAccount) {
       showComponent = (
         <Grid>
-          <CardHeader title="Basic" />
+          <CardHeader title="Basic"/>
           <Row>
-            <GeneralForm
-              onSubmit={this.updateName}
-              activeAccount={activeAccount}
-            />
+            <Col xs={6}>
+              <GeneralForm
+                onSubmit={this.updateName}
+                activeAccount={activeAccount}
+              />
+            </Col>
           </Row>
           <CardHeader title="Address" />
           <Row>
-            <Address activeAccount={activeAccount} />
+            <Col xs={6}>
+              <Address
+                activeAccount={activeAccount}
+              />
+            </Col>
           </Row>
         </Grid>
       );

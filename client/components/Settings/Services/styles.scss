@@ -1,5 +1,5 @@
 .servicesForm {
-  width: 200px;
+  width: 50%;
 }
 .servicesFormGrid{
   padding-top: 1em;
@@ -8,6 +8,16 @@
 .servicesFormRow{
   padding: 15px;
 }
+
+serviceFormContainer{
+  display: flex;
+}
+.trashIcon{
+  float: right;
+}
+
+
+
 
 
 

@@ -32,6 +32,7 @@ const OWNER = {
     update: false,
   }),
 
+  services: CRUD,
   weeklySchedules: CRUD,
 };
 

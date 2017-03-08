@@ -17,7 +17,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
     >
       <Grid>
         <Row className={styles.generalRow}>
-          <Col>
+          <Col xs={12}>
             <Field
               required
               name="name"
@@ -26,7 +26,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col xs={12}>
             <Field
               required
               name="smsPhoneNumber"
