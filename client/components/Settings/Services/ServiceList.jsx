@@ -9,14 +9,14 @@ import CreateServiceForm from './CreateServiceForm';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import styles from './styles.scss';
 
-class ServiceList extends Component{
-
-  constructor(props){
+class ServiceList extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       index: null,
       active: false,
     };
+
     this.showService = this.showService.bind(this)
     this.updateService = this.updateService.bind(this);
     this.setActive = this.setActive.bind(this);
@@ -24,7 +24,7 @@ class ServiceList extends Component{
     this.deleteService = this.deleteService.bind(this);
   }
 
-  createService(values){
+  createService(values) {
     values.customCosts = {};
     this.props.createEntityRequest({ key: 'services', entityData: values });
     this.setState({ active: false });
@@ -34,8 +34,9 @@ class ServiceList extends Component{
     this.props.updateEntityRequest({ key: 'services', model: modifiedService });
   }
 
-  deleteService(id){
+  deleteService(id) {
     this.props.deleteEntityRequest({ key: 'services', id });
+    this.setState({ index: null });
   }
 
   showService(index) {
@@ -49,6 +50,11 @@ class ServiceList extends Component{
 
   render() {
     const { services } = this.props;
+    const { index } = this.state;
+
+    const selectedService = index ? services.get(index) : services.first();
+    const selectedServiceId = selectedService ? selectedService.get('id') : null;
+
     return(
       <Row className={styles.servicesMainContainer} >
         <Col xs={3} className={styles.servicesListContainer}>
@@ -70,7 +76,7 @@ class ServiceList extends Component{
           </Row>
           <Row>
             <Col xs={12}>
-              {services.toArray().map((service, index) => {
+              {services.toArray().map((service) => {
                 return (
                   <ServiceItem
                     key={service.get('id')}
@@ -84,20 +90,12 @@ class ServiceList extends Component{
           </Row>
         </Col>
         <Col xs={9} className={styles.servicesDataContainer}>
-          {services.toArray().map((service, index) => {
-            if(service.get('id') === this.state.index) {
-              return (
-                <ServiceItemData
-                  key={service.get('id')}
-                  index={index}
-                  service={service}
-                  onSubmit={this.updateService}
-                  deleteService={this.deleteService}
-                />
-              );
-            }
-            return null;
-          })}
+          <ServiceItemData
+            key={selectedServiceId}
+            service={selectedService}
+            onSubmit={this.updateService}
+            deleteService={this.deleteService}
+          />
         </Col>
       </Row>
     );

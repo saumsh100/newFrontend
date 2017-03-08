@@ -5,10 +5,13 @@ import { fetchEntities, } from '../../../thunks/fetchEntities';
 import { Grid } from '../../library';
 import ServiceList from './ServiceList';
 
+const sortServicesAlphabetical = (a, b) => {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+  return 0;
+};
+
 class Services extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'services' });
@@ -16,11 +19,13 @@ class Services extends Component {
 
   render() {
     const { services } = this.props;
+
     let showComponent = null;
     if (services) {
+      const filteredServices = services.sort(sortServicesAlphabetical);
       showComponent = (
         <ServiceList
-          services={services}
+          services={filteredServices}
         />
       );
     }

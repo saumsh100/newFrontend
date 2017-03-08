@@ -1,7 +1,5 @@
-import React, {Proptypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import { ListItem } from '../../library';
-
-
 
 class ServiceItem extends Component {
 

@@ -9,7 +9,7 @@ const Service = createModel('Service', {
   practitioners: [ type.string().uuid(4) ],
   duration: type.number().integer().required(),
   bufferTime: type.number().integer(),
-  unitCost: type.number().required(),
+  unitCost: type.number(),
   customCosts: type.object().allowNull(),
   allowedPractitioners: [ type.string().uuid(4) ],
 });

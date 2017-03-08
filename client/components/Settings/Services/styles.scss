@@ -21,9 +21,15 @@
 
 .servicesFormRow{
   padding: 15px 0px 15px 15px;
+
+  &__createRow{
+    padding: 15px 15px 15px 15px;
+  }
 }
 
-.trashIcon{
+
+
+.trashButton{
   float: left;
   width: 20px;
 }
