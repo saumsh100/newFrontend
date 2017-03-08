@@ -31,9 +31,9 @@ class Services extends Component {
     }
 
     return (
-      <Grid>
+      <div>
         {showComponent}
-      </Grid>
+      </div>
     );
   }
 }

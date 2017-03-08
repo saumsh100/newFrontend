@@ -2,7 +2,7 @@ import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ServiceItem from './ServiceItem';
-import { Row, Col, IconButton} from '../../library';
+import { IconButton} from '../../library';
 import Modal  from '../../library/Modal';
 import ServiceItemData from './ServiceItemData';
 import CreateServiceForm from './CreateServiceForm';
@@ -50,9 +50,9 @@ class ServiceList extends Component {
     const selectedServiceId = selectedService ? selectedService.get('id') : null;
 
     return(
-      <Row className={styles.servicesMainContainer} >
-        <Col xs={3} className={styles.servicesListContainer}>
-          <Row className={styles.modalContainer}>
+      <div className={styles.servicesMainContainer} >
+        <div className={styles.servicesListContainer}>
+          <div className={styles.modalContainer}>
             <IconButton
               icon="plus"
               onClick={this.setActive}
@@ -67,31 +67,29 @@ class ServiceList extends Component {
                 onSubmit={this.createService}
               />
             </Modal>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              {services.toArray().map((service) => {
-                return (
-                  <ServiceItem
-                    key={service.get('id')}
-                    index={service.get('id')}
-                    service={service.get('name')}
-                    setServiceId={this.props.setServiceId}
-                  />
-                );
-              })}
-            </Col>
-          </Row>
-        </Col>
-        <Col xs={9} className={styles.servicesDataContainer}>
+          </div>
+          <div>
+            {services.toArray().map((service) => {
+              return (
+                <ServiceItem
+                  key={service.get('id')}
+                  index={service.get('id')}
+                  service={service.get('name')}
+                  setServiceId={this.props.setServiceId}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <div className={styles.servicesDataContainer}>
           <ServiceItemData
             key={selectedServiceId}
             service={selectedService}
             onSubmit={this.updateService}
             deleteService={this.deleteService}
           />
-        </Col>
-      </Row>
+        </div>
+      </div>
     );
   }
 }

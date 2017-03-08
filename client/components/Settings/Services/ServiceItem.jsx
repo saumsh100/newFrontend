@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { ListItem } from '../../library';
 
 class ServiceItem extends Component {
-
   constructor(props) {
     super(props);
     this.showItem = this.showItem.bind(this);
@@ -20,7 +19,6 @@ class ServiceItem extends Component {
       </ListItem>
     );
   }
-
 }
 
 export default ServiceItem;

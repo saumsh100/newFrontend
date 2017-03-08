@@ -1,5 +1,5 @@
 import React, {Component, PropTypes } from 'react';
-import { Row, Col, Form, Grid, Field, IconButton } from '../../library';
+import {  Form, Field, IconButton } from '../../library';
 import styles from './styles.scss';
 import { Map } from 'immutable';
 
@@ -40,51 +40,44 @@ class ServiceItemData extends Component {
     };
 
     return (
-      <Row>
-        <Col xs={6}>
+      <div className={styles.formContainer}>
+        <div className={styles.servicesForm}>
           <Form
             form={`${service.get('id')}Form`}
             onSubmit={this.updateService}
             initialValues={initialValues}
-            className={styles.servicesForm}
           >
-            <Grid className={styles.servicesFormGrid}>
-              <Row className={styles.servicesFormRow}>
-                <Col xs={12}>
-                  <Field
-                    required
-                    name="name"
-                    label="Name"
-                  />
-                </Col>
-              </Row>
-              <Row className={styles.servicesFormRow}>
-                <Col xs={12}>
-                  <Field
-                    required
-                    name="duration"
-                    label="Duration"
-                    validate={[isNumber]}
-                  />
-                </Col>
-              </Row>
-              <Row className={styles.servicesFormRow}>
-                <Col xs={12}>
-                  <Field
-                    required
-                    name="bufferTime"
-                    label="Buffer Time"
-                    validate={[isNumber]}
-                  />
-                </Col>
-              </Row>
-            </Grid>
+            <div className={styles.servicesFormRow}>
+              <div className={styles.servicesFormField}>
+                <Field
+                  required
+                  name="name"
+                  label="Name"
+                />
+              </div>
+              <div className={styles.servicesFormField}>
+                <Field
+                  required
+                  name="duration"
+                  label="Duration"
+                  validate={[isNumber]}
+                />
+              </div>
+              <div className={styles.servicesFormField}>
+                <Field
+                  required
+                  name="bufferTime"
+                  label="Buffer Time"
+                  validate={[isNumber]}
+                />
+              </div>
+            </div>
           </Form>
-        </Col>
-        <Col xs={6}>
-          <IconButton icon="trash-o" className={styles.trashButton} onClick={this.deleteService} />
-        </Col>
-      </Row>
+        </div>
+        <div className={styles.trashButton}>
+          <IconButton icon="trash-o" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
+        </div>
+      </div>
     );
   }
 }
