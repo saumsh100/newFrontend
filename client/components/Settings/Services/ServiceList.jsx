@@ -7,14 +7,14 @@ import Modal  from '../../library/Modal';
 import ServiceItemData from './ServiceItemData';
 import CreateServiceForm from './CreateServiceForm';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
-
+import styles from './styles.scss';
 
 class ServiceList extends Component{
 
   constructor(props){
     super(props);
     this.state = {
-      index: 0,
+      index: null,
       active: false,
     };
     this.showService = this.showService.bind(this)
@@ -24,22 +24,22 @@ class ServiceList extends Component{
     this.deleteService = this.deleteService.bind(this);
   }
 
-  showService(index) {
-    this.setState({ index });
-  }
-
-  updateService(modifiedService) {
-    this.props.updateEntityRequest({ key: 'services', model: modifiedService });
-  }
-
   createService(values){
     values.customCosts = {};
     this.props.createEntityRequest({ key: 'services', entityData: values });
     this.setState({ active: false });
   }
 
+  updateService(modifiedService) {
+    this.props.updateEntityRequest({ key: 'services', model: modifiedService });
+  }
+
   deleteService(id){
     this.props.deleteEntityRequest({ key: 'services', id });
+  }
+
+  showService(index) {
+    this.setState({ index });
   }
 
   setActive() {
@@ -47,16 +47,17 @@ class ServiceList extends Component{
     this.setState({ active });
   }
 
-
   render() {
     const { services } = this.props;
     return(
-      <Row>
-        <Col xs={3}>
-          <Row>
-            <Col xs={2}>
-              <IconButton icon="plus" onClick={this.setActive} />
-            </Col>
+      <Row className={styles.servicesMainContainer} >
+        <Col xs={3} className={styles.servicesListContainer}>
+          <Row className={styles.modalContainer}>
+            <IconButton
+              icon="plus"
+              onClick={this.setActive}
+              className={styles.addServiceButton}
+            />
             <Modal
               active={this.state.active}
               onEscKeyDown={this.setActive}
@@ -73,7 +74,7 @@ class ServiceList extends Component{
                 return (
                   <ServiceItem
                     key={service.get('id')}
-                    index={index}
+                    index={service.get('id')}
                     service={service.get('name')}
                     showService={this.showService}
                   />
@@ -82,9 +83,9 @@ class ServiceList extends Component{
             </Col>
           </Row>
         </Col>
-        <Col xs={9}>
+        <Col xs={9} className={styles.servicesDataContainer}>
           {services.toArray().map((service, index) => {
-            if(index === this.state.index) {
+            if(service.get('id') === this.state.index) {
               return (
                 <ServiceItemData
                   key={service.get('id')}

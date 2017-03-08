@@ -39,56 +39,60 @@ class ServiceItemData extends Component {
     };
 
     return (
-      <div className={styles.serviceFormContainer}>
-        <Form form={`${index}Form`}
-              onSubmit={this.updateService}
-              initialValues={initialValues}
-              className={styles.servicesForm}
-        >
-          <Grid className={styles.servicesFormGrid}>
-            <Row className={styles.servicesFormRow}>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="name"
-                  label="Name"
-                />
-              </Col>
-            </Row>
-            <Row className={styles.servicesFormRow}>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="duration"
-                  label="Duration"
-                  validate={[this.isNumber]}
-                />
-              </Col>
-            </Row>
-            <Row className={styles.servicesFormRow}>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="unitCost"
-                  label="Unit Costs"
-                  validate={[this.isNumber]}
-                />
-              </Col>
-            </Row>
-            <Row className={styles.servicesFormRow}>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="bufferTime"
-                  label="Buffer Time"
-                  validate={[this.isNumber]}
-                />
-              </Col>
-            </Row>
-          </Grid>
-        </Form>
-        <IconButton icon="trash-o" className={styles.trashIcon} onClick={this.deleteService} />
-      </div>
+      <Row>
+        <Col xs={6}>
+          <Form form={`${index}Form`}
+                onSubmit={this.updateService}
+                initialValues={initialValues}
+                className={styles.servicesForm}
+          >
+            <Grid className={styles.servicesFormGrid}>
+              <Row className={styles.servicesFormRow}>
+                <Col xs={12}>
+                  <Field
+                    required
+                    name="name"
+                    label="Name"
+                  />
+                </Col>
+              </Row>
+              <Row className={styles.servicesFormRow}>
+                <Col xs={12}>
+                  <Field
+                    required
+                    name="duration"
+                    label="Duration"
+                    validate={[this.isNumber]}
+                  />
+                </Col>
+              </Row>
+              <Row className={styles.servicesFormRow}>
+                <Col xs={12}>
+                  <Field
+                    required
+                    name="unitCost"
+                    label="Unit Costs"
+                    validate={[this.isNumber]}
+                  />
+                </Col>
+              </Row>
+              <Row className={styles.servicesFormRow}>
+                <Col xs={12}>
+                  <Field
+                    required
+                    name="bufferTime"
+                    label="Buffer Time"
+                    validate={[this.isNumber]}
+                  />
+                </Col>
+              </Row>
+            </Grid>
+          </Form>
+        </Col>
+        <Col xs={6}>
+          <IconButton icon="trash-o" className={styles.trashIcon} onClick={this.deleteService} />
+        </Col>
+      </Row>
     );
   }
 }

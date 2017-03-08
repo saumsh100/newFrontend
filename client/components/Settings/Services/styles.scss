@@ -1,20 +1,41 @@
+.servicesMainContainer{
+  display: flex;
+}
+.servicesListContainer{
+  width: 100%;
+  display: inline-block;
+}
+
+.servicesDataContainer{
+  width: 100%;
+  display: inline-block;
+}
+
+
 .servicesForm {
-  width: 50%;
+  width: 100%;
 }
 .servicesFormGrid{
   padding-top: 1em;
 }
 
 .servicesFormRow{
-  padding: 15px;
+  padding: 15px 0px 15px 15px;
 }
 
-serviceFormContainer{
-  display: flex;
-}
 .trashIcon{
-  float: right;
+  float: left;
+  width: 20px;
 }
+.modalContainer{
+  padding-left: 95%;
+}
+
+.addServiceButton {
+  width: 20px;
+}
+
+
 
 
 
