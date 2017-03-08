@@ -7,20 +7,19 @@ import Modal  from '../../library/Modal';
 import ServiceItemData from './ServiceItemData';
 import CreateServiceForm from './CreateServiceForm';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
+import { setServiceId } from '../../../actions/accountSettings';
 import styles from './styles.scss';
 
 class ServiceList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      index: null,
       active: false,
     };
 
-    this.showService = this.showService.bind(this)
-    this.updateService = this.updateService.bind(this);
     this.setActive = this.setActive.bind(this);
     this.createService = this.createService.bind(this);
+    this.updateService = this.updateService.bind(this);
     this.deleteService = this.deleteService.bind(this);
   }
 
@@ -36,11 +35,7 @@ class ServiceList extends Component {
 
   deleteService(id) {
     this.props.deleteEntityRequest({ key: 'services', id });
-    this.setState({ index: null });
-  }
-
-  showService(index) {
-    this.setState({ index });
+    this.props.setServiceId({ id: null });
   }
 
   setActive() {
@@ -49,10 +44,9 @@ class ServiceList extends Component {
   }
 
   render() {
-    const { services } = this.props;
-    const { index } = this.state;
+    const { services, serviceId } = this.props;
 
-    const selectedService = index ? services.get(index) : services.first();
+    const selectedService = serviceId ? services.get(serviceId) : services.first();
     const selectedServiceId = selectedService ? selectedService.get('id') : null;
 
     return(
@@ -82,7 +76,7 @@ class ServiceList extends Component {
                     key={service.get('id')}
                     index={service.get('id')}
                     service={service.get('name')}
-                    showService={this.showService}
+                    setServiceId={this.props.setServiceId}
                   />
                 );
               })}
@@ -102,15 +96,19 @@ class ServiceList extends Component {
   }
 }
 
+function mapStateToProps({ accountSettings }) {
+  return ({
+    serviceId: accountSettings.get('serviceId'),
+  });
+}
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     updateEntityRequest,
     deleteEntityRequest,
     createEntityRequest,
+    setServiceId,
   }, dispatch);
 }
 
-const enhance = connect(null, mapActionsToProps);
-
-
+const enhance = connect(mapStateToProps, mapActionsToProps);
 export default enhance(ServiceList);

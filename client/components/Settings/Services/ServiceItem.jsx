@@ -9,7 +9,7 @@ class ServiceItem extends Component {
   }
 
   showItem() {
-    this.props.showService(this.props.index);
+    this.props.setServiceId({id: this.props.index});
   }
 
   render() {

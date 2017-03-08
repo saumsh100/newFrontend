@@ -49,3 +49,4 @@ export const SET_CLINIC_INFO = 'SET_CLINIC_INFO';
 
 export const SET_HOVER_REQUEST_ID = 'SET_HOVER_REQUEST_ID';
 
+export const SET_SERVICE_ID = 'SET_SERVICE_ID';

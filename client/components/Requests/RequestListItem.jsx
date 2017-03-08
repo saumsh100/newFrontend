@@ -1,11 +1,11 @@
 import React, {Component, PropTypes } from 'react';
-import { ListItem, IconButton, Icon } from '../library';
+import Popover from 'react-popover';
+import { ListItem, IconButton } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
 import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
-import Popover from 'react-popover';
 
 class RequestListItem extends Component {
 
