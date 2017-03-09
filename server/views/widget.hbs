@@ -68,16 +68,16 @@ window.addEventListener('load', function() {
   var cross = document.createElement('div');
     cross.setAttribute('id', 'cross');
     cross.innerHTML = '&times;';
-    cross.style.fontSize = '90px';
+    cross.style.fontSize = '60px';
     cross.style.position = 'fixed';
     cross.style.top = '2%';
-    cross.style.right = '5%';
+    cross.style.right = '1%';
     cross.style.visibility = 'hidden';
     cross.style.cursor = 'pointer';
     cross.style.zIndex = '10';
     cross.style.color = 'white';
     cross.style.lineHeight = '1rem';
-    document.querySelector('style').textContent += "@media screen and (max-width : 1000px) { #cross {display: none !important}}";
+    document.querySelector('style').textContent += "@media screen and (max-width : 800px) { #cross {display: none !important}}";
 
 
   cross.addEventListener('click', function() {
