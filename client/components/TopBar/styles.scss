@@ -39,15 +39,32 @@
   color: white;
 }
 
+.logoWrapperCollapsed {
+  @extend .logoWrapper;
+  @media screen and (max-width: $medium-screen-width) {
+    display: none;
+  }
+}
+
 .logoImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: $side-nav-width;
   height: 100%;
   text-align: center;
 }
 
+.logoImageCollapsed {
+  @extend .logoImage;
+  @media screen and (min-width: $medium-screen-width) {
+    width: $mini-side-nav-width;
+    // background-color: green;
+  }
+}
+
 .logoImageImage {
   width: 140px;
-  margin-top: 18px;
 }
 
 .collapseButton {
