@@ -1,47 +1,32 @@
+@import "../../ui.scss";
+
 * {
     box-sizing: border-box;
 }
 
-
 .schedule {
-    display: flex;
-    flex-direction: row;
     &__container {
         position: relative;
-        width: 72%;
-        margin-right: 5px;
-        background: #FAFAFA;
-        &::before {
-            position: absolute;
-            top: -5px;
-            display: block;
-            width: 100%;
-            height: 5px;
-            content: '';
-            background: #8CBCD6;
-        }
+        padding-right: 5px;
+        padding-left: 5px;
     }
     &__sidebar {
-        width: 28%;
+        padding-right: 5px;
+        padding-left: 5px;
+        &_request {
+            margin-top: 10px;
+        }
         &_calendar {
+            border-top: $card-border-size $primary-dark-blue;
             margin-top: 10px;
             background-color: #fafafa;
-            &::before {
-                position: absolute;
-                top: -5px;
-                display: block;
-                width: 100%;
-                height: 5px;
-                content: '';
-                background: #8CBCD6;
-            }
         }
     }
     &__title {
         min-height: 65px;
         padding: 10px;
-        border-bottom: 3px solid #E6E6E6;
-
+        border-top: $card-border-size $primary-blue;
+        border-bottom: $selection-border $background-color;
     }
 
     &__date {
@@ -51,9 +36,9 @@
     &__element {
         display: flex;
         width: 100%;
-        color: #DEDEDE;
-        border-right: 3px solid #E6E6E6;
-        border-bottom: 3px solid #E6E6E6;
+        color: #dedede;
+        border-right: 3px solid $background-color;
+        border-bottom: 3px solid $background-color;
         justify-content: center;
         align-items: center;
     }
@@ -74,7 +59,7 @@
             z-index: 9999;
             background-color: #fff;
             border-radius: 5px;
-            border: 3px solid #E6E6E6;
+            border: 3px solid $background-color;
             transform: translateX(-50%) translateY(-50%);
             > div:last-child {
                 width: 430px;
@@ -93,35 +78,34 @@
     }
 
     &__month {
-        color: #2E3845;
+        color: #2e3845;
         font-size: 18px;
     }
 
     &__day {
-        color: #2E3845;
+        color: #2e3845;
         font-size: 18px;
     }
 
     &__number {
-        color: #8CBCD6;
+        color: #8cbcd6;
         font-size: 2.5rem;
         font-weight: 600;
     }
-
 }
 
 .appointment {
     position: absolute;
     width: 99%;
     padding: 5px;
-    background: #FE715A;
+    background: $primary-color;
 
     &__username {
         color: white;
     }
 
     &__date {
-        color: #2E3845;
+        color: #2e3845;
     }
 
     &__title {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Icon
+  Icon, Card
 } from '../../library';
 import styles from './styles.scss';
 
@@ -23,7 +23,6 @@ class Filters extends Component {
     this.props.selectAppointmentType(type.target.value);
   }
   clearAllSelectors() {
-    console.log('clear all values')
     this.props.selectAppointmentType("all");
     this.refs.select.value = "all";
   }
@@ -32,7 +31,7 @@ class Filters extends Component {
     const { practitioners, schedule, appointmentsTypes } = this.props;
     const filterPractitioners = schedule.toJS().practitioners;
     return (
-      <div className={styles.schedule_filter}>
+      <Card className={styles.schedule_filter}>
         <div className={styles.filter_header}>
           <div className={styles.filter_header__title}>
             Filter
@@ -96,7 +95,7 @@ class Filters extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     );
   }
 }

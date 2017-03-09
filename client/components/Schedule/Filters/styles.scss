@@ -1,6 +1,8 @@
+@import "../../../ui.scss";
+
 .schedule_filter {
+    border-top: $card-border-size $primary-color;
     padding-bottom: 50px;
-    background-color: #fafafa;
     font-family: sans-serif;
 }
 
@@ -13,17 +15,6 @@
     border-bottom: 1px solid #e6e6e6;
     line-height: 40px;
     justify-content: center;
-
-    &::before {
-        position: absolute;
-        display: block;
-        width: 100%;
-        top: -5px;
-        height: 5px;
-        content: "";
-        background: #ff715a;
-    }
-
     &__title {
         justify-content: center;
     }

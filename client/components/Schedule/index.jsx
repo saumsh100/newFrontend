@@ -16,12 +16,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Filters from './Filters'
 import styles from './styles.scss';
-import { Card, Tabs, Tab } from '../library';
+import { Grid, Row, Col, Card, Tabs, Tab } from '../library';
+import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
 import CurrentDate from './CurrentDate';
-import NewRequests from './NewRequests';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 
@@ -138,63 +138,62 @@ class ScheduleComponent extends Component {
         break;
     }
     return (
-      <div className={styles.schedule}>
-        <div className={styles.schedule__container}>
-          <div className={`${styles.schedule__title} ${styles.title}`}>
-              <CurrentDate currentDate={currentDate} />
-              <i className="fa fa-calendar"
-                 onClick={this.toggleCalendar}
-              />
-            <Tabs index={this.state.index} onChange={this.handleTabChange}>
-              {schedule.toJS().scheduleModes.map(s => {
-                const label = s;
-                return (
-                  <Tab label={label}>
-                    {/* <span>{label}</span> */}
-                  </Tab>
-                )
-              })}
-            </Tabs>
-            {this.state.showDatePicker &&
-            <div className={styles.schedule__daypicker}>
-              <div onClick={this.toggleCalendar} className={styles.schedule__daypicker_wrapper}>
+      <Grid className={styles.schedule}>
+        <Row>
+          <Col xs={9} className={styles.schedule__container}>
+            <Card>
+              <div className={`${styles.schedule__title} ${styles.title}`}>
+                <CurrentDate currentDate={currentDate} />
+                <i className="fa fa-calendar"
+                   onClick={this.toggleCalendar}
+                />
+                <Tabs index={this.state.index} onChange={this.handleTabChange}>
+                  {schedule.toJS().scheduleModes.map(s => {
+                    const label = s;
+                    return (
+                      <Tab label={label}>
+                        {/* <span>{label}</span> */}
+                      </Tab>
+                    )
+                  })}
+                </Tabs>
+                {this.state.showDatePicker &&
+                <div className={styles.schedule__daypicker}>
+                  <div onClick={this.toggleCalendar} className={styles.schedule__daypicker_wrapper}>
+                  </div>
+                  <DayPicker
+                    className={styles.schedule__daypicker_select}
+                    initialMonth={new Date(2016, 1)}
+                    styles={`${styles.calendar}${DayPickerStyles}`}
+                    selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
+                    onDayClick={this.handleDayClick}
+                  />
+                </div>
+                }
               </div>
-              <DayPicker
-                className={styles.schedule__daypicker_select}
-                initialMonth={new Date(2016, 1)}
-                styles={`${styles.calendar}${DayPickerStyles}`}
-                selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
-                onDayClick={this.handleDayClick}
-              />
-            </div>
-            }
-          </div>
-          {content}
-        </div>
-        <div className={styles.schedule__sidebar}>
-          <Filters
-            practitioners={practitioners.get('models').toArray()}
-            addPractitionerToFilter={addPractitionerToFilter}
-            removePractitionerFromFilter={removePractitionerFromFilter}
-            schedule={schedule}
-            appointmentsTypes={appointmentsTypes}
-            selectAppointmentType={selectAppointmentType}
-          />
-          <NewRequests
-            patients={patients}
-            appointments={appointments}
-            requests={requests}
-            services={services}
-          />
-          <DayPicker
-            className={styles.schedule__sidebar_calendar}
-            styles={DayPickerStyles}
-            initialMonth={new Date(2016, 1)}
-            selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
-            onDayClick={this.handleDayClick}
-          />
-        </div>
-      </div>
+              {content}
+            </Card>
+          </Col>
+          <Col xs={3} className={styles.schedule__sidebar}>
+            <Filters
+              practitioners={practitioners.get('models').toArray()}
+              addPractitionerToFilter={addPractitionerToFilter}
+              removePractitionerFromFilter={removePractitionerFromFilter}
+              schedule={schedule}
+              appointmentsTypes={appointmentsTypes}
+              selectAppointmentType={selectAppointmentType}
+            />
+            <RequestsContainer className={styles.schedule__sidebar_request}/>
+            <DayPicker
+              className={styles.schedule__sidebar_calendar}
+              styles={DayPickerStyles}
+              initialMonth={new Date(2016, 1)}
+              selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
+              onDayClick={this.handleDayClick}
+            />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
