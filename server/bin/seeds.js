@@ -24,7 +24,7 @@ const saltRounds = 10;
 const oneHour = 1 * 60 * 60;
 const recentStartTime = r.now().add(oneHour);
 
-const accountId = uuid();
+const accountId = "2aeab035-b72c-4f7a-ad73-09465cbf5654";
 const accountId2 = uuid();
 
 const justinUserId = uuid();
@@ -422,15 +422,46 @@ const SEEDS = {
       id: weeklyScheduleId,
       monday: {
         isClosed: true,
+        startTime: { h: 9, m: 30 },
+        endTime: { h: 17, m: 30 },
       },
 
       saturday: {
         isClosed: true,
+        startTime: { h: 12, m: 30 },
+        endTime: { h: 17, m: 30 },
       },
 
       sunday: {
         isClosed: true,
+        startTime: { h: 9, m: 30 },
+        endTime: { h: 15, m: 30 },
       },
+
+      tuesday: {
+        isClosed: false,
+        startTime: { h: 9, m: 30 },
+        endTime: { h: 17, m: 30 },
+      },
+
+      wednesday: {
+        isClosed: false,
+        startTime: { h: 12, m: 30 },
+        endTime: { h: 14, m: 30 },
+      },
+
+      thursday: {
+        isClosed: false,
+        startTime: { h: 9, m: 30 },
+        endTime: { h: 17, m: 30 },
+      },
+
+      friday: {
+        isClosed: false,
+        startTime: { h: 9, m: 30 },
+        endTime: { h: 17, m: 30 },
+      },
+
     },
   ],
 

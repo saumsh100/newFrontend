@@ -27,9 +27,11 @@ myRouter.get('/:accountId', (req, res, next) => {
 // myRouter.param('accountId', loaders('account', 'Account'));
 
 myRouter.get('/widgets/:accountId', (req, res, next) => {
-
-  return res.render('widget', {
-    accountId: req.params.accountId,
+  Account.get(req.params.accountId).run().then(account => {
+    return res.render('widget', {
+      accountId: req.params.accountId,
+      bookingWidgetPrimaryColor: account.bookingWidgetPrimaryColor,
+    });
   });
 });
 
@@ -38,7 +40,7 @@ myRouter.get('/logo/:accountId', (req, res, next) => {
 	Account.get(accountId).run().then(account => {
 		const { logo, address, clinicName, bookingWidgetPrimaryColor } = account;
 		res.send({ logo, address, clinicName, bookingWidgetPrimaryColor });
-	})	
+	})
 });
 
 module.exports = myRouter;
