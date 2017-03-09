@@ -3,6 +3,7 @@ import _ from 'lodash';
 import axios from './axios';
 import {
   receiveEntities,
+  fetchModel,
   deleteEntity,
   addEntity,
   updateEntity,
@@ -10,7 +11,7 @@ import {
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
 
-export function fetchEntities({ key, join, params = {} }) {
+export function fetchEntities({ key, join, params = {}, domen }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -20,7 +21,8 @@ export function fetchEntities({ key, join, params = {} }) {
       params.join = join.join(',');
     }
 
-    axios.get(entity.getUrlRoot(), { params })
+    const url = domen ? `/${key}` : entity.getUrlRoot();
+    axios.get(url, { params })
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
@@ -62,7 +64,7 @@ export function updateEntityRequest({ key, model }) {
     axios.put(model.getUrlRoot(), model.toJSON())
       .then((response) => {
         const { data } = response;
-        dispatch(updateEntity({ key, entity: data.entities }));
+        dispatch(receiveEntities({ key, entities: data.entities }));
       })
       .catch(err => console.log(err));
   };

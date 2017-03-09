@@ -4,7 +4,10 @@ const normalizr = require('normalizr');
 const schema = normalizr.schema;
 
 const accountSchema = () => {
-  return new schema.Entity('accounts');
+  return new schema.Entity('accounts', {
+    users: [userSchema()],
+    weeklySchedule: weeklyScheduleSchema(),
+  });
 };
 
 const appointmentSchema = () => {
@@ -60,8 +63,17 @@ const syncErrorSchema = () => {
   return new schema.Entity('syncErrors');
 };
 
+const weeklyScheduleSchema = () => {
+  return new schema.Entity('weeklySchedules');
+};
+
+const reservationSchema = () => {
+  return new schema.Entity('reservations');
+}
+
 const SCHEMAS = {
   // Models (singleFetch/findOne)
+  account: accountSchema(),
   appointment: appointmentSchema(),
   chair: chairSchema(),
   chat: chatSchema(),
@@ -72,10 +84,12 @@ const SCHEMAS = {
   user: userSchema(),
   practitioner: practitionerSchema(),
   syncError: syncErrorSchema(),
+  reservation: reservationSchema(),
+  weeklySchedule: weeklyScheduleSchema(),
 
   // Collections (list/find)
+  accounts: [accountSchema()],
   appointments: [appointmentSchema()],
-  practitioners: [practitionerSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
   patients: [patientSchema()],
@@ -84,6 +98,9 @@ const SCHEMAS = {
   textMessages: [textMessageSchema()],
   users: [userSchema()],
   syncErrors: [syncErrorSchema()],
+  practitioners: [practitionerSchema()],
+  weeklySchedules: [weeklyScheduleSchema()],
+  reservations: [reservationSchema()],
 };
 
 module.exports = function normalize(key, data) {

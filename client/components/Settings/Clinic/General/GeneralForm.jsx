@@ -1,12 +1,28 @@
 
-import React from 'react';
-import TestForm from '../../../demo/TestForm';
+import React, { PropTypes } from 'react';
+import { Form, Field, Button } from '../../../library';
+import styles from './styles.scss';
 
-export default function GeneralForm({ onSubmit }) {
+export default function GeneralForm({ onSubmit, activeAccount }) {
+  const initialValues = {
+    name: activeAccount.get('name'),
+  };
+
   return (
-    <TestForm
-      onSubmit={onSubmit}
-      patient={{ firstName: 'Beckett', middleName: 'Jean', lastName: 'Dental' }}
-    />
+    <Form form="generalSettingsForm"
+          onSubmit={onSubmit}
+          initialValues={initialValues}
+          className={styles.generalForm}
+    >
+      <Field
+        required
+        name="name"
+        label="Name"
+      />
+    </Form>
   );
+}
+
+GeneralForm.propTypes = {
+  onSubmit: PropTypes.func,
 }

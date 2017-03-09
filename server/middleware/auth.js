@@ -36,6 +36,7 @@ const OWNER = {
     create: true,
   },
 
+  weeklySchedules: CRUD,
 };
 
 const ADMIN = Object.assign({}, OWNER, {
@@ -71,6 +72,7 @@ function getTokenFromReq(req) {
 }
 
 module.exports = function authMiddleware(req, res, next) {
+  const hostname = req.hostname;
   const token = getTokenFromReq(req);
   if (!token) {
     return next(StatusError(401, 'Unauthorized. No valid token on header.'));

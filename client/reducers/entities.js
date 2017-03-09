@@ -4,6 +4,7 @@ import each from 'lodash/each';
 import { handleActions } from 'redux-actions';
 import {
   FETCH_ENTITIES,
+  FETCH_MODEL,
   RECEIVE_ENTITIES,
   DELETE_ENTITY,
   ADD_ENTITY,
@@ -12,6 +13,9 @@ import {
   READ_MESSAGES_IN_CURRENT_DIALOG,
   UPDATE_PATIENT_IN_PATIENT_LIST,
 } from '../constants';
+import Account from '../entities/models/Account';
+import accounts from '../entities/collections/accounts';
+import ActiveAccount from '../entities/models/ActiveAccount';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
 import textMessages from '../entities/collections/textMessages';
@@ -32,12 +36,13 @@ import Chairs from '../entities/models/Chair';
 import chairs from '../entities/collections/chairs'
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
-
-
+import weeklySchedules from '../entities/collections/weeklySchedules';
+import WeeklySchedule from '../entities/models/WeeklySchedule';
 
 const initialState = Map({
   // KEYs must map to the response object
   // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
+  accounts: new accounts(),
   patients: new patients(),
   textMessages: new textMessages(),
   appointments: new appointments(),
@@ -48,11 +53,13 @@ const initialState = Map({
   dialogs: new dialogs(),
   patientList: new patientList(),
   chairs: new chairs(),
+  weeklySchedules: new weeklySchedules(),
   // reviews: Reviews(), MODEL
-  // listings: Listings(), MODEL
+  // listings: Listings(),
 });
 
 const Models = {
+  accounts: Account,
   patients: Patient,
   textMessages: TextMessage,
   appointments: Appointments,
@@ -63,6 +70,7 @@ const Models = {
   patientList: PatientList,
   chairs: Chairs,
   availabilities: Availability,
+  weeklySchedules: WeeklySchedule,
 };
 
 export default handleActions({

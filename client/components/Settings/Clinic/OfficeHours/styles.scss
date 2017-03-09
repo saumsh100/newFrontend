@@ -1,0 +1,50 @@
+
+@import '../../../../ui';
+
+.day {
+  text-transform: capitalize;
+}
+
+.breaksDay {
+  @extend .day;
+  padding-top: 12px;
+}
+
+.disabledDay {
+  @extend .day;
+  color: lighten($primary-darkgrey, 25%);
+}
+
+.flexCentered {
+  display: flex;
+  align-items: center;
+}
+
+.inlineBlock {
+  display: inline-block;
+}
+
+.toDiv {
+  width: 50px;
+  text-align: center;
+}
+
+.toDivDisabled {
+  @extend .toDiv;
+  color: lighten($primary-darkgrey, 25%);
+}
+
+.dayGrid {
+  padding: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.dayRow {
+  height: 40px;
+}
+
+.trashButton {
+  margin: 0 auto;
+}

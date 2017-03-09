@@ -66,7 +66,7 @@ RequestList.propTypes = {
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
-  setPopoverId: PropTypes.func,
+  setHoverRequestId: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {

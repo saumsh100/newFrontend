@@ -2,9 +2,15 @@
 import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
+import Button from '../Button';
 import Field from './Field';
+import FieldArray from './FieldArray';
 import FormSection from './FormSection';
+import SaveButton from './SaveButton';
+import styles from './styles.scss';
 
+
+import { asyncEmailValidate } from './validate'
 /**
  * Given the requiredFields it will generate a validate function to return errors if
  * a field is empty. Note that this is note fired if the form is pristine.
@@ -28,13 +34,20 @@ import FormSection from './FormSection';
 function Form(props) {
   const {
     children,
+    className,
     handleSubmit,
+    pristine,
+    ignoreSaveButton,
   } = props;
+
+  let showSubmitButton = ignoreSaveButton ? null : (<SaveButton pristine={pristine}/>);
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        {children}
+      <form className={className}
+            onSubmit={handleSubmit}>
+        { children }
+        { showSubmitButton }
       </form>
     </div>
   );
@@ -48,7 +61,7 @@ Form.propTypes = {
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
 const withReduxForm = (BaseComponent) => {
   return reduxForm({
-    // validate,
+    
   })(BaseComponent);
 };
 
@@ -85,5 +98,7 @@ export default enhance(Form);
 
 export {
   Field,
+  FieldArray,
   FormSection,
+  SaveButton,
 };

@@ -68,6 +68,7 @@ class Timer extends React.Component {
           d={pathDescription}
           strokeWidth={this.props.strokeWidth}
           fillOpacity={0}
+          stroke={this.props.color}
           style={progressStyle}
         />
 
@@ -75,6 +76,7 @@ class Timer extends React.Component {
           className={styles.CircularProgressbar_text}
           x={50}
           y={50}
+          fill={this.props.color}
         >
           {this.props.textForSeconds(this.props.seconds)}
           </text>
@@ -92,7 +94,7 @@ Timer.propTypes = {
 
 Timer.defaultProps = {
   strokeWidth: 8,
-  textForSeconds: (seconds) => `${moment.duration(seconds).format("m:s")}`,
+  textForSeconds: (seconds) => `${moment.duration(seconds).format("m:ss")}`,
 };
 
 export default Timer;

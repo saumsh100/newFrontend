@@ -1,27 +1,55 @@
 
-import React from 'react';
-import { SubmissionError } from 'redux-form';
+import React, {PropTypes, Component} from 'react';
 import GeneralForm from './GeneralForm';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-function submit(values) {
-  return sleep(1000) // simulate server latency
-    .then(() => {
-      if (![ 'john', 'paul', 'george', 'ringo' ].includes(values.firstName)) {
-        throw new SubmissionError({ firstName: 'First name is wrong', _error: 'General Error' });
-      } else if (values.middleName !== 'TestForm') {
-        throw new SubmissionError({ middleName: 'Middle name is incorrect', _error: 'General Error' });
-      } else {
-        window.alert(`You submitted:\n\n${JSON.stringify(values, null, 2)}`);
-      }
-    });
+class General extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.updateName = this.updateName.bind(this);
+  }
+
+  updateName(values) {
+    const { activeAccount, updateEntityRequest } = this.props;
+    const modifiedAccount = activeAccount.set('name', values.name);
+    updateEntityRequest({ key: 'accounts', model: modifiedAccount });
+  }
+
+  render() {
+    const { activeAccount } = this.props;
+
+    let showComponent = null;
+    if (activeAccount) {
+      showComponent = (
+        <GeneralForm
+          onSubmit={this.updateName}
+          activeAccount={activeAccount}
+        />);
+    }
+
+    return (
+      <div>
+        {showComponent}
+      </div>
+    );
+  }
 }
 
-export default function General() {
-  return (
-    <div>
-      <GeneralForm onSubmit={submit} />
-    </div>
-  );
+General.propTypes = {
+  updateEntityRequest: PropTypes.func,
 }
+
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+    updateEntityRequest,
+  }, dispatch);
+}
+
+const enhance = connect(null, mapDispatchToProps);
+
+export default enhance(General);

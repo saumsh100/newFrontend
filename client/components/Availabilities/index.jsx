@@ -1,12 +1,12 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import moment from 'moment';
-import styles from './styles.scss';
 import includes from 'lodash/includes';
-import DayPicker, {DateUtils} from 'react-day-picker';
+import DayPicker, { DateUtils } from 'react-day-picker';
+import { Button, Form, Field, Checkbox } from '../library';
+import SignUp from './SignUp';
+import Preferences from './Preferences';
 import 'react-day-picker/lib/style.css';
-import SignUp from './SignUp'
-import { Button, Form, Field } from '../library';
-
+import styles from './styles.scss';
 
 class Availabilities extends React.Component {
   constructor(props) {
@@ -15,8 +15,9 @@ class Availabilities extends React.Component {
       selectedStartDay: new Date(),
       selectedEndDay: moment().add(4, 'd')._d,
       modalIsOpen: false,
-      practitonersStartEndDate: {},
-      step: 1,
+      practitionersStartEndDate: {},
+      checked: false,
+      collapseMenu: false,
     };
     this.onDoctorChange = this.onDoctorChange.bind(this);
     this.onServiceChange = this.onServiceChange.bind(this);
@@ -25,27 +26,33 @@ class Availabilities extends React.Component {
     this.handleDayClick = this.handleDayClick.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.isDaySelected = this.isDaySelected.bind(this)
-    this.saveAndContinue = this.saveAndContinue.bind(this)
+    this.isDaySelected = this.isDaySelected.bind(this);
+    this.selectAvailability = this.selectAvailability.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSaveClick = this.handleSaveClick.bind(this);
+    this.collapseMenu = this.collapseMenu.bind(this);
+    this.closeIframe = this.closeIframe.bind(this);
+  }
+  componentWillReceiveProps() {
+    document.body.style.setProperty('--bookingWidgetPrimaryColor', this.props.bookingWidgetPrimaryColor);
   }
 
-
   onDoctorChange(e) {
-    const {setPractitioner} = this.props;
-    setPractitioner({practitionerId: e.target.value});
+    const { setPractitioner } = this.props;
+    setPractitioner({ practitionerId: e.target.value });
   }
 
   onServiceChange(e) {
-    const {setService, practitonersStartEndDate} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    setService(e.target.value)
+    const { setService, practitionersStartEndDate } = this.props;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
+    setService(e.target.value);
   }
 
   sixDaysBack() {
-    const {sixDaysShift, practitonersStartEndDate} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
-    const newEndDay = moment(selectedOldStartDay)._d
+    const { sixDaysShift, practitionersStartEndDate } = this.props;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
+    const newEndDay = moment(selectedOldStartDay)._d;
     const newStartDay = moment(newEndDay).subtract(4, 'd')._d;
 
     sixDaysShift({
@@ -54,13 +61,12 @@ class Availabilities extends React.Component {
       practitionerId,
       retrievedFirstTime: false,
     });
-
   }
 
   sixDaysForward() {
-    const {sixDaysShift, practitonersStartEndDate} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
+    const { sixDaysShift, practitionersStartEndDate } = this.props;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = moment(selectedOldStartDay).add(4, 'd')._d;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
 
@@ -70,15 +76,13 @@ class Availabilities extends React.Component {
       practitionerId,
       retrievedFirstTime: false,
     });
-
   }
 
   handleDayClick(e, day) {
-
-    const {practitonersStartEndDate} = this.props;
-    const {sixDaysShift} = this.props;
-    const practitionerId = practitonersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitonersStartEndDate.toJS()[practitionerId].selectedStartDay;
+    const { practitionersStartEndDate } = this.props;
+    const { sixDaysShift } = this.props;
+    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
+    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
     const newStartDay = day;
     const newEndDay = moment(newStartDay).add(4, 'd')._d;
     sixDaysShift({
@@ -87,7 +91,13 @@ class Availabilities extends React.Component {
       practitionerId,
       retrievedFirstTime: false,
     });
+  }
 
+  selectAvailability(slot) {
+    if (!slot.isBusy) {
+      const { startsAt } = slot;
+      this.props.setStartingAppointmentTime(startsAt);
+    }
   }
 
   isDaySelected(day) {
@@ -95,81 +105,152 @@ class Availabilities extends React.Component {
   }
 
   openModal() {
-    this.setState({modalIsOpen: !this.state.modalIsOpen});
+    this.setState({ modalIsOpen: !this.state.modalIsOpen });
   }
 
   closeModal() {
-    this.setState({modalIsOpen: !modalIsOpen});
+    this.setState({ modalIsOpen: !modalIsOpen });
   }
 
-  saveAndContinue(e) {
+  handleChange() {
+    this.setState({
+      checked: !this.state.checked,
+    });
+  }
+
+  handleSaveClick(e) {
     e.preventDefault();
-    this.setState({step: 2});
-    console.log('Click handled')
+    const { setRegistrationStep } = this.props;
+    const array = location.pathname.split('/');
+    const accountId = array[array.length - 1];
+    setRegistrationStep(2, accountId);
+  }
+
+  collapseMenu(open) {
+    if (open) {
+      this.setState({
+        collapseMenu: true,
+      });
+    } else {
+      this.setState({
+        collapseMenu: false,
+      });
+    }
+  }
+
+  closeIframe() {
+    window.parent.postMessage('message', '*');
   }
 
   renderFirstStep({ practitionerId, services, availabilities, practitioners, defaultValues }) {
+    const startsAt = this.props.practitionersStartEndDate.get('startsAt');
+    const preferences = this.state.checked
+      ?
+        (<Preferences
+          startsAt={startsAt}
+          setRegistrationStep={this.props.setRegistrationStep}
+          color={this.props.bookingWidgetPrimaryColor}
+        />)
+      : null;
+    const { logo, address, clinicName } = this.props;
     return (
       <div className={styles.appointment}>
         <div className={styles.appointment__wrapper}>
-          <div className={styles.appointment__sidebar}>
+          <div className={`${styles.appointment__sidebar} ${this.state.collapseMenu ? styles.appointment__sidebarActive : ''}`} >
+            <div className={styles.sidebar__header}>
+              <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
+              <div className={styles.sidebar__header_title}>
+                Pacific Heart
+                <span>Dental</span>
+              </div>
+            </div>
+            <div className={styles.sidebar__body}>
+              <div className={styles.sidebar__body_address}>
+                <div className={styles.sidebar__address}>
+                  <div className={styles.sidebar__address_title}>
+                    {clinicName}
+                  </div>
+                  <div className={styles.sidebar__address_text}>
+                    {address}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.sidebar__footer}>
+              <div className={styles.sidebar__footer_copy}>
+                <div>POWERED BY:</div>
+                <img src="/images/logo_black.png" alt="logo" />
+              </div>
+            </div>
           </div>
-          <div className={styles.appointment__main}>
+          <div className={styles.appointment__main} >
             <div className={styles.appointment__header}>
+              <button
+                className={styles.appointment__header_btn}
+                onClick={() => this.collapseMenu(true)}
+              >
+                <i className="fa fa-bars" />
+              </button>
               <div className={styles.appointment__header_title}>
                 BOOK APPOINTMENT
               </div>
+              <button
+                className={styles.appointment__header_btn}
+                onClick={this.closeIframe}
+              >
+                <i className="fa fa-times" />
+              </button>
             </div>
-            <div className={styles.appointment__body}>
+            <div onClick={() => this.collapseMenu(false)} className={styles.appointment__body}>
               <div className={styles.appointment__body_header}>
                 <div className={styles.appointment__select_title}>Practitioner</div>
-                <div className={styles.appointment__select_wrapper}>
-                  {defaultValues && defaultValues.practitionerId && 
-                    <Form form="availabilities" initialValues={defaultValues}>
-                      <Field
-                        component="Select"
-                        name="practitionerId"
-                        label="Select Practitioner"
-                        min
-                        className={styles.appointment__select_item}
-                      >
-                        {practitioners.map(p =>
-                          <option value={p.id} key={p.id}>{p.getFullName()}</option>
-                        )}
-                      </Field>
+                {defaultValues && defaultValues.practitionerId &&
+                <Form
+                  className={styles.appointment__select_wrapper} form="availabilities"
+                  initialValues={defaultValues}
+                >
+                  <Field
+                    component="Select"
+                    name="practitionerId"
+                    label="Select Practitioner"
+                    min
+                    className={styles.appointment__select_item}
+                  >
+                    {practitioners.map(p =>
+                      <option value={p.id} key={p.id}>{p.getFullName()}</option>
+                    )}
+                  </Field>
 
-                      <Field
-                        component="Select"
-                        className={styles.appointment__select_item}
-                        name="serviceId"
-                        label="Select Service"
-                        min
-                      >
-                        <option value="" selected>Service</option>
-                        {services.filter(s =>
-                          includes(s.practitioners, this.state.practitionerId)
-                        ).map(s =>
-                          <option value={s.id} key={s.id}>{s.name}</option>
-                        )}
-                      </Field>
-                  </Form>}
-                </div>
+                  <Field
+                    component="Select"
+                    className={styles.appointment__select_item}
+                    name="serviceId"
+                    label="Select Service"
+                    min
+                  >
+                    {services.filter(s =>
+                      includes(s.allowedPractitioners, practitionerId)
+                    ).map(s =>
+                      <option value={s.id} key={s.id}>{s.name}</option>
+                    )}
+                  </Field>
+                </Form>}
                 <div className={styles.appointment__daypicker}>
                   <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
-                  <div onClick={this.openModal}
-                       className={styles.appointment__daypicker_icon}>
-                    <div className={styles.appointment__daypicker_date}>
-                      {moment(this.state.selectedStartDay).format('DD MM YYYY')}
-                    </div>
-                    <i className="fa fa-calendar"/>
+                  <div
+                    onClick={this.openModal}
+                    className={styles.appointment__daypicker_icon}
+                  >
+                    <i className="fa fa-calendar" />
                   </div>
                   {this.state.modalIsOpen ?
                     (
                       <div onClick={this.openModal} className={styles.appointment__daypicker_modal}>
                         <DayPicker
                           className={styles.appointment__daypicker_select}
-                          onDayClick={ this.handleDayClick }
-                          selectedDays={ this.isDaySelected }/>
+                          onDayClick={this.handleDayClick}
+                          selectedDays={this.isDaySelected}
+                        />
                       </div>
                     ) : null
                   }
@@ -177,58 +258,59 @@ class Availabilities extends React.Component {
               </div>
               <div className={styles.appointment__table}>
                 <button className={styles.appointment__table_btn} onClick={this.sixDaysBack}>
-                  <i className="fa fa-arrow-circle-o-left"/>
+                  <i className="fa fa-arrow-circle-o-left" />
                 </button>
                 <div className={styles.appointment__table_elements}>
-                  {availabilities.map(av => {
-                    return (
-                      <ul className={styles.appointment__list} key={av.date}>
-                        <div className={styles.appointment__list_header}>
-                          <div className={styles.list__header_day}>
-                            {moment(av.date).format('ddd')}
-                          </div>
-                          <div className={styles.list__header_number}>
-                            {moment(av.date).format('DD/MM/YYYY')}
-                          </div>
+                  {availabilities.map(av => (
+                    <ul className={styles.appointment__list} key={av.date}>
+                      <div className={styles.appointment__list_header}>
+                        <div className={styles.list__header_day}>
+                          {moment(av.date).format('ddd')}
                         </div>
-                        {av.availabilities.map(slot =>
-                          <li
-                            className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''}`}
-                            key={slot.startsAt}>
-                            {moment(slot.startsAt).format('HH:mm A')}
-                          </li>)
-                        }
-                      </ul>);
-                  })}
+                        <div className={styles.list__header_number}>
+                          {moment(av.date).format('DD/MM/YYYY')}
+                        </div>
+                      </div>
+                      {av.availabilities.map(slot =>
+                        <li
+                          onClick={() => {
+                            this.selectAvailability(slot);
+                          }}
+                          className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected : ''}`}
+                          key={slot.startsAt}
+                        >
+                          {moment(slot.startsAt).format('HH:mm A')}
+                        </li>)
+                      }
+                    </ul>))}
                 </div>
                 <button className={styles.appointment__table_btn} onClick={this.sixDaysForward}>
-                  <i className="fa fa-arrow-circle-o-right"/>
+                  <i className="fa fa-arrow-circle-o-right" />
                 </button>
               </div>
               <div className={styles.appointment__footer}>
-                <div className={styles.appointment__footer_title}>
-                  would you like to be informed if an earlier time becomes available?
-                </div>
-                <form className={styles.appointment__footer_confirm}>
-                  <div className={styles.appointment__footer_select}>
-                    <input type="radio" name="answer" id="yes" value="yes"/>
-                    <label htmlFor="yes">Yes</label>
-                    <input type="radio" name="answer" id="no" value="no"/>
-                    <label htmlFor="no">No</label>
+                <div className={styles.appointment__footer_wrapper}>
+                  <div className={styles.appointment__footer_title}>
+                    BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
                   </div>
-                  <input onClick={this.saveAndContinue} className={styles.appointment__footer_btn} type="submit"
-                         value="Continue"/>
-                </form>
-                <div className={styles.appointment__footer_pagination}>
-                  <ul>
-                    <li>
-                      <div>1</div>
-                    </li>
-                    <li>
-                      <div>2</div>
-                    </li>
-                  </ul>
+                  <form className={styles.appointment__footer_confirm}>
+                    <div className={styles.appointment__footer_select}>
+                      <Checkbox
+                        id="yes"
+                        value="yes"
+                        checked={this.state.checked}
+                        onChange={this.handleChange}
+                      />
+                    </div>
+                    <button
+                      disabled={!startsAt}
+                      onClick={this.handleSaveClick}
+                      className={this.state.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn}
+                      type="submit"
+                    >Continue</button>
+                  </form>
                 </div>
+                {preferences}
               </div>
             </div>
           </div>
@@ -237,26 +319,61 @@ class Availabilities extends React.Component {
     );
   }
 
+  getAppointmentInfo(serviceId) {
+    const { practitionersStartEndDate, practitioners, services, practitionerId } = this.props;
+    const selectedService = services.filter(s => s.id === serviceId)[0];
+    const selectedPractitioner = practitioners.filter(p => p.id === practitionerId)[0];
+    if (selectedPractitioner && selectedService) {
+      const { firstName, lastName } = selectedPractitioner;
+      const { name } = selectedService;
+      const date = moment(practitionersStartEndDate.toJS().startsAt).format('LLLL');
+      return `${name} Dr ${lastName} ${date} `;
+    }
+    return null;
+  }
+
   render() {
     const {
       services,
       practitioners,
       availabilities,
       practitionerId,
+      createPatient,
+      practitionersStartEndDate,
+      setRegistrationStep,
+      logo,
+      address,
+      removeReservation,
+      bookingWidgetPrimaryColor,
     } = this.props;
-
-    const serviceId = services[0] && services[0].id;
-    const prId =  practitioners[0] && practitioners.id;
+    const serviceId = this.props.serviceId || services[0] && services[0].id;
+    const prId = practitioners[0] && practitioners.id;
     const defaultValues = { practitionerId, serviceId };
-    const params = { practitionerId, services, availabilities, practitioners, defaultValues }
-    switch (this.state.step) {
+    const params = { practitionerId, services, availabilities, practitioners, defaultValues };
+    const appointmentInfo = this.getAppointmentInfo(serviceId);
+    switch (practitionersStartEndDate.get('registrationStep')) {
       case 1:
-        return this.renderFirstStep(params)
+        return this.renderFirstStep(params);
       case 2:
-        return <SignUp />
+        return (<SignUp
+          setRegistrationStep={setRegistrationStep}
+          createPatient={createPatient}
+          practitionersStartEndDate={practitionersStartEndDate}
+          logo={logo}
+          address={address}
+          appointmentInfo={appointmentInfo}
+          removeReservation={removeReservation}
+          bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
+        />);
+      case undefined:
+        return (
+          <div>Loading..</div>
+        );
     }
   }
 }
 
-
+Availabilities.defaultProps = {
+  bookingWidgetPrimaryColor: '#ff715a',
+};
 export default Availabilities;

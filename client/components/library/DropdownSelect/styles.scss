@@ -1,0 +1,60 @@
+
+@import '../../../ui.scss';
+
+.wrapper {
+  width: 100%;
+}
+
+.toggleDiv {
+  height: 30px;
+  box-sizing: border-box;
+  min-width: 100px;
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+  border-bottom: 1px solid $primary-dark;
+  display: flex;
+  align-items: center;
+}
+
+.toggleDivDisabled {
+  @extend .toggleDiv;
+  color: $disabled-color;
+  cursor: not-allowed;
+  border-bottom: 1px solid $disabled-color;
+
+  .caretIcon {
+    color: $disabled-color;
+  }
+}
+
+.optionDiv {
+  padding: 0px !important;
+}
+
+.optionListItem {
+  cursor: pointer;
+  &:hover {
+    background-color: $primary-lightgrey !important;
+    color: $primary-dark !important;
+  }
+}
+
+.dropDownList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.selectedListItem {
+  border-left: $primary-color $selection-border;
+}
+
+.toggleValueDiv {
+  margin-right: 10px;
+  user-select: none;
+}
+
+.caretIcon {
+  margin-left: auto;
+  color: $primary-dark;
+}

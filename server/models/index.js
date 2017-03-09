@@ -3,7 +3,8 @@ const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
-const OperationalHours = require('./OperationalHours');
+const DailySchedule = require('./DailySchedule');
+const WeeklySchedule = require('./WeeklySchedule');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
@@ -13,17 +14,19 @@ const SyncError = require('./SyncError');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
 const Token = require('./Token');
-
+const Reservation = require('./Reservation');
 module.exports = {
   Account,
   Appointment,
   Chair,
   Chat,
-  OperationalHours,
+  DailySchedule,
+  WeeklySchedule,
   Patient,
   Permission,
   Practitioner,
   Request,
+  Reservation,
   Service,
   TextMessage,
   User,

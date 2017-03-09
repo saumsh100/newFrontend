@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
 const { r } = require('../config/thinky');
+const fs = require('fs');
 const seedDatabase = require('../util/seedDatabase');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
@@ -49,6 +50,19 @@ const alexChatId = uuid();
 const markChatId = uuid();
 const justinChatId = uuid();
 const sergeyChatId = uuid();
+
+const weeklyScheduleId = uuid();
+
+const mondayHoursId = uuid();
+const tuesdayHoursId = uuid();
+const wednesdayHoursId = uuid();
+const thursdayHoursId = uuid();
+const fridayHoursId = uuid();
+const saturdayHoursId = uuid();
+const sundayHoursId = uuid();
+
+const hour8 = new Date(1970, 1, 1, 8, 0);
+const hour5 = new Date(1970, 1, 1, 17, 0);
 
 const justinPhoneNumber = '+17808508886';
 const sergeyPhoneNumber = '+17782422626';
@@ -119,6 +133,14 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 };
 
 const SEEDS = {
+  Reservation: [
+    {
+      practitionerId,
+      startTime: new Date(2017, 2, 4, 17, 30, 0),
+      endTime: new Date(2017, 2, 4, 19, 30, 0),
+      serviceId,
+    }
+  ],
   Appointment: [
     {
       id: appointmentId1,
@@ -238,8 +260,8 @@ const SEEDS = {
   Request: [
     {
       accountId,
-      startTime: moment({hour: 23, minute: 10})._d,
-      endTime: moment({hour: 23, minute: 50})._d,
+      startTime: moment({hour: 11, minute: 10})._d,
+      endTime: moment({hour: 22, minute: 50})._d,
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -326,10 +348,10 @@ const SEEDS = {
     },
     {
       id: markPatientId,
+      accountId,
       firstName: 'Mark',
       lastName: 'Joseph',
       phoneNumber: markPhoneNumber,
-      accountId: accountId2,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
       gender: 'male',
       status: 'Active',
@@ -350,12 +372,84 @@ const SEEDS = {
     },
   ],
 
+  /*DailySchedule: [
+    {
+      id: mondayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: tuesdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: wednesdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: thursdayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: fridayHoursId,
+      isClosed: false,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: saturdayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+    {
+      id: sundayHoursId,
+      isClosed: true,
+      startTime: hour8,
+      endTime: hour5,
+    },
+  ],*/
+
+  WeeklySchedule: [
+    {
+      id: weeklyScheduleId,
+      monday: {
+        isClosed: true,
+      },
+
+      saturday: {
+        isClosed: true,
+      },
+
+      sunday: {
+        isClosed: true,
+      },
+    },
+  ],
+
   Account: [
     {
+      id: accountId,
+      weeklyScheduleId,
       name: 'Beckett Dental',
+      street: '354 Beach Ave',
+      country: 'United States',
+      state: 'California',
+      city: 'Riverside',
+      zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
-      id: accountId,
+      logo: 'images/availabilies_sidebar_logo_2.png',
+      address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
+      clinicName: 'PACIFIC HEART DENTAL',
+      bookingWidgetPrimaryColor: '#0597d8',
     },
   ],
 
@@ -377,19 +471,6 @@ const SEEDS = {
       accountId,
       role: 'OWNER',
       permissions: {},
-    },
-  ],
-
-  OperationalHours: [
-    {
-      isClosed: true,
-      startTime: new Date(),
-      endTime: new Date(),
-    },
-    {
-      isClosed: true,
-      startTime: new Date(),
-      endTime: new Date(),
     },
   ],
 

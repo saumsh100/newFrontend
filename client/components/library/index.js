@@ -4,7 +4,9 @@ import Avatar from './Avatar';
 import Button from './Button';
 import Card from './Card';
 import CardHeader from './CardHeader';
-import Form, { FormSection, Field } from './Form';
+import Checkbox from './Checkbox';
+import DropdownSelect from './DropdownSelect';
+import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
 import Icon from './Icon';
 import IconButton from './IconButton';
 import InfiniteScroll from './InfiniteScroll';
@@ -24,7 +26,10 @@ export {
   Button,
   Card,
   CardHeader,
+  Checkbox,
+  DropdownSelect,
   Field,
+  FieldArray,
   Form,
   FormSection,
   Icon,
@@ -36,6 +41,7 @@ export {
   RouterButton,
   RouterList,
   RouterTabs,
+  SaveButton,
   Tabs,
   Tab,
   Toggle,
