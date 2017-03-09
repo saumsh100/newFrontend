@@ -47,6 +47,7 @@ const getFirstAvailableDate = (appointments, startDate, serviceDuration) => {
 
       let avaliableTimeRange = dayRange;
 
+
       appointmentRanges.forEach((appR) => {
         avaliableTimeRange = subtractRange(avaliableTimeRange, appR);
       });
@@ -113,8 +114,13 @@ availabilitiesRouter.get('/', (req, res, next) => {
                 .map(currentDay => {
                   // next two lines should be taken from Practitioner working time
                   // not just hard hardcoded
-                  const OFFICE_START_TIME = currentDay.clone().set({ hours: 9, minutes: 0 }).toDate();
-                  const OFFICE_END_TIME = currentDay.clone().set({ hours: 16, minutes: 30 }).toDate();
+                  const dayName =  currentDay._d.toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
+                  const daySchedule = weeklySchedule[dayName];
+                  const { startTime, endTime } = daySchedule;
+                  const sTime = { hours: startTime.h, minutes: startTime.m };
+                  const eTime = { hours: endTime.h, minutes: endTime.m };
+                  const OFFICE_START_TIME = currentDay.clone().set(sTime).toDate();
+                  const OFFICE_END_TIME = currentDay.clone().set(eTime).toDate();
 
                   const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
 

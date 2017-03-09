@@ -8,8 +8,14 @@ const five = time(17, 0);
 
 const DailyScheduleSchema = type.object().schema({
   isClosed: type.boolean().required().default(false),
-  startTime: type.date().required().default(eight),
-  endTime: type.date().required().default(five),
+  startTime: type.object().required().schema({
+  	h: type.number(),
+  	m: type.number(),
+  }).default({ h: 9, m: 30 }),
+  endTime: type.object().required().schema({
+  	h: type.number(),
+  	m: type.number(),
+  }).default({ h: 9, m:30 }),
   breaks: type.array(),
 }).default({
   isClosed: false,
