@@ -103,6 +103,11 @@
 .logoutPill {
   border-left: 1.5px solid darkgrey;
   padding: 6px;
+  @media screen and (max-width: $medium-screen-width) {
+    font-size: 1.2rem;
+    margin-left: 5px;
+    display: none;
+  }
 }
 
 .userMenuButton {
@@ -114,6 +119,9 @@
 .userMenuGreeting {
   padding-right: 10px;
   font-weight: 600;
+  @media screen and (max-width: $medium-screen-width) {
+    display: none;
+  }
 }
 
 .userRole {
