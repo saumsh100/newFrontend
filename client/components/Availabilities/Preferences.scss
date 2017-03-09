@@ -20,7 +20,7 @@
             top: 50%;
             transform: translateY(-50%);
             i {
-                color: #ff715a;
+                color: var(--bookingWidgetPrimaryColor);
             }
         }
         &_date {
@@ -85,7 +85,7 @@
             font-size: 8px;
             padding: 6px 20px;
             border: none;
-            background: #f3715c;
+            background: var(--bookingWidgetPrimaryColor);
             cursor: pointer;
             &:disabled {
                 cursor: not-allowed;

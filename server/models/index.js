@@ -10,10 +10,11 @@ const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
 const Request = require('./Request');
 const Service = require('./Service');
+const SyncError = require('./SyncError');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
 const Token = require('./Token');
-
+const Reservation = require('./Reservation');
 module.exports = {
   Account,
   Appointment,
@@ -25,8 +26,10 @@ module.exports = {
   Permission,
   Practitioner,
   Request,
+  Reservation,
   Service,
   TextMessage,
   User,
   Token,
+  SyncError,
 };

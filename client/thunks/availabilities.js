@@ -8,6 +8,8 @@ import {
 	setStartingAppointmentTimeAction,
   setRegistrationStepAction,
   setClinicInfoAction,
+  setTemporaryReservationAction,
+  removeReservationAction,
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
@@ -81,17 +83,33 @@ export function setStartingAppointmentTime(startsAt) {
 	}	
 }
 
-export function setRegistrationStep(registrationStep) {
+export function setRegistrationStep(registrationStep, accountId) {
   return function (dispatch, getState) {
-			dispatch(setRegistrationStepAction(registrationStep));
+		if (registrationStep == 2) {
+			const { practitionerId, serviceId, startsAt } = getState().availabilities.toJS();
+			axios.post('/reservations', { practitionerId, serviceId, startsAt, accountId })
+				.then((reservation) => {
+					dispatch(setTemporaryReservationAction(reservation.data.result))
+				})
+		}
+		dispatch(setRegistrationStepAction(registrationStep));
   }
 }
 
 export function getClinicInfo(accountId) {
   return function (dispatch, getState) {
 	  axios.get(`/logo/${accountId}`).then( (data => {	
-	  	const { logo, address, clinicName } = data.data;
-	  	dispatch(setClinicInfoAction({ logo, address, clinicName }))
+	  	const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
+	  	dispatch(setClinicInfoAction({ logo, address, clinicName, bookingWidgetPrimaryColor }))
 	  }).bind(this) )
   }
+}
+
+export function removeReservation(reservationId) {
+	return function(dispatch, getState) {
+		axios.delete(`/reservations/${reservationId}`)
+			.then(r => {
+				dispatch(removeReservationAction());
+			})
+	}
 }

@@ -4,6 +4,7 @@ import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
 import Button from '../Button';
 import Field from './Field';
+import FieldArray from './FieldArray';
 import FormSection from './FormSection';
 import SaveButton from './SaveButton';
 import styles from './styles.scss';
@@ -97,6 +98,7 @@ export default enhance(Form);
 
 export {
   Field,
+  FieldArray,
   FormSection,
   SaveButton,
 };

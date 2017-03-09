@@ -133,6 +133,14 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 };
 
 const SEEDS = {
+  Reservation: [
+    {
+      practitionerId,
+      startTime: new Date(2017, 2, 4, 17, 30, 0),
+      endTime: new Date(2017, 2, 4, 19, 30, 0),
+      serviceId,
+    }
+  ],
   Appointment: [
     {
       id: appointmentId1,
@@ -252,8 +260,8 @@ const SEEDS = {
   Request: [
     {
       accountId,
-      startTime: moment({hour: 23, minute: 10})._d,
-      endTime: moment({hour: 23, minute: 50})._d,
+      startTime: moment({hour: 11, minute: 10})._d,
+      endTime: moment({hour: 22, minute: 50})._d,
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -441,6 +449,7 @@ const SEEDS = {
       logo: 'images/availabilies_sidebar_logo_2.png',
       address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
       clinicName: 'PACIFIC HEART DENTAL',
+      bookingWidgetPrimaryColor: '#0597d8',
     },
   ],
 

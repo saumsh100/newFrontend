@@ -6,8 +6,6 @@
   right: 30px;
   &_path {
     transition: stroke-dashoffset .5s ease 0s;
-
-    stroke: #f3715c;
     stroke-linecap: round;
   }
   &_trail {
@@ -16,7 +14,6 @@
   &_text {
     font-size: 20px;
     font-weight: 500;
-    fill: #f3715c;
     dominant-baseline: middle;
     text-anchor: middle;
   }

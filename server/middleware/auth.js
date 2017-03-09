@@ -33,6 +33,12 @@ const OWNER = {
   }),
 
   services: CRUD,
+
+  syncErrors: {
+    read: true,
+    create: true,
+  },
+
   weeklySchedules: CRUD,
 };
 

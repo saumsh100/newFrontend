@@ -10,7 +10,7 @@ React, Redux, Sass
 
 ## Install
 
-Install RethinkDB (https://www.rethinkdb.com/docs/install/). 
+Install RethinkDB (https://www.rethinkdb.com/docs/install/).
 Use node and npm versions in package.json file, install them if not already installed.
 
 `git clone git@github.com:carecru/carecru.git`
@@ -57,3 +57,7 @@ add the following to `/etc/hosts`
 127.0.0.1        my.carecru.dev
 127.0.0.1       api.carecru.dev
 ```
+## View on Heroku
+
+To view pull-request app on Heroku domain for it is created as follows:
+https://carecru-staging-pr-[PR_NUMBER].herokuapp.com
