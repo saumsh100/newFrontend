@@ -1,5 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import {
+  IconButton,
+  Card
+} from '../../library';
 import styles from './styles.scss';
 
 class NewRequests extends Component {
@@ -12,7 +16,8 @@ class NewRequests extends Component {
         patientName: 'Perla Frye',
         patientAge: 23,
         patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation'
+        services: 'Teeth Whitening Consultation',
+        status: 'New'
       },
       {
         day: moment().format(),
@@ -21,7 +26,8 @@ class NewRequests extends Component {
         patientName: 'Perla Frye',
         patientAge: 23,
         patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation'
+        services: 'Teeth Whitening Consultation',
+        status: 'Waitlist'
       },
       {
         day: moment().format(),
@@ -30,7 +36,8 @@ class NewRequests extends Component {
         patientName: 'Perla Frye',
         patientAge: 23,
         patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation'
+        services: 'Teeth Whitening Consultation',
+        status: 'New'
       },
       {
         day: moment().format(),
@@ -39,17 +46,18 @@ class NewRequests extends Component {
         patientName: 'Perla Frye',
         patientAge: 23,
         patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation'
+        services: 'Teeth Whitening Consultation',
+        status: 'Waitlist'
       }
     ];
     return (
-      <div className={styles.schedule_appointment}>
+      <Card className={styles.schedule_appointment}>
         <div className={styles.appointment_header}>
           <div className={styles.appointment_header__title}>
             New Appointment Requests
           </div>
           <div className={styles.appointment_header__icon}>
-            <i className="fa fa-bell" />
+            <IconButton icon="bell" onClick={() => alert('Implement Notifications')} />
           </div>
         </div>
         <div className={styles.appointment_practitioner}>
@@ -66,13 +74,14 @@ class NewRequests extends Component {
                     <div className={styles.item__information_patient}>{`${h.patientName},${h.patientAge}`}</div>
                     <div className={styles.item__information_phone}>{h.patientPhone}</div>
                     <div className={styles.item__information_services}>{h.services}</div>
+                    <div className={styles.item__information_status}>{h.status}</div>
                   </div>
                 </li>
               );
             })}
           </ul>
         </div>
-      </div>
+      </Card>
     );
   }
 }

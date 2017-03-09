@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import {
+  Icon
+} from '../../library';
 import styles from './styles.scss';
 
 class Filters extends Component {
@@ -35,7 +38,7 @@ class Filters extends Component {
             Filter
           </div>
           <div className={styles.filter_header__icon}>
-            <i className="fa fa-sliders" />
+            <Icon icon="sliders" />
           </div>
           <div onClick={this.clearAllSelectors} className={styles.filter_header__link}>Clear All</div>
         </div>

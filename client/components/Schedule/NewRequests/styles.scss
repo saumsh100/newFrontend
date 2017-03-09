@@ -1,19 +1,20 @@
+* {
+    box-sizing: border-box;
+}
 .schedule_appointment {
     background-color: #fafafa;
     margin-top: 10px;
-    font-family: Gotham-Book sans-serif;
 }
 
 .appointment_header {
     position: relative;
     display: flex;
     flex-direction: row;
-    height: 32px;
+    height: 40px;
     padding: 0 5px;
     border-bottom: 1px solid #e6e6e6;
-    line-height: 32px;
+    line-height: 40px;
     justify-content: center;
-
     &::before {
         position: absolute;
         display: block;
@@ -30,7 +31,8 @@
 
     &__icon {
         color: #b4b4b5;
-        margin-left: 5px;
+        position: absolute;
+        right: 20px;
     }
 }
 
@@ -45,39 +47,70 @@
     }
 
     &__wrapper {
-        display: flex;
-        flex-direction: column;
         margin: 0;
         padding: 0;
         list-style: none;
-        justify-content: flex-start;
-        overflow-y: auto;
         height: 280px;
+        overflow: hidden;
+        overflow-y: scroll;
     }
     &__item {
         display: flex;
         align-items: center;
         border-bottom: 1px solid #e6e6e6;
+        padding: 10px;
+        position: relative;
+        height: 90px;
     }
     .item {
         &__day {
-            padding: 15px;
+            padding: 0 15px;
             display: flex;
             flex-direction: column;
             border-right: 2px solid #b5b5b5;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
             &_month {
-                font-size: 10px;
+                color: #2e3845;
+                font-size: 12px;
                 font-weight: 500;
             }
             &_number {
-                font-size: 20px;
+                color: #2e3845;
+                font-size: 22px;
                 font-weight: 500;
             }
         }
         &__information {
-            padding: 15px;
+            padding: 0 15px;
             &_title {
+                color: #2e3845;
                 font-weight: 500;
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+            &_patient {
+                font-weight: 500;
+                color: #b5b5b5;
+                line-height: 1.2;
+                font-size: .9rem;
+            }
+            &_phone {
+                color: #b5b5b5;
+                font-size: .7rem;
+            }
+            &_services {
+                color: #b5b5b5;
+                font-size: .7rem;
+            }
+            &_status {
+                position: absolute;
+                color: #b5b5b5;
+                font-size: .9rem;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 20px;
             }
         }
     }
