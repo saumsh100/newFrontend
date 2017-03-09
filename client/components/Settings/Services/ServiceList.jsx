@@ -73,7 +73,7 @@ class ServiceList extends Component {
               return (
                 <ServiceItem
                   key={service.get('id')}
-                  index={service.get('id')}
+                  id={service.get('id')}
                   service={service.get('name')}
                   setServiceId={this.props.setServiceId}
                 />

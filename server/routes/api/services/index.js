@@ -51,7 +51,7 @@ servicesRouter.put('/:serviceId', checkPermissions('services:update'), (req, res
 servicesRouter.delete('/:serviceId',checkPermissions('services:delete'), (req, res, next) => {
   return req.service.delete()
     .then(() => {
-      res.send(204);
+      res.sendStatus(204);
     })
     .catch(next);
 });

@@ -218,9 +218,15 @@ export default function Routes({ history }) {
                 callback(null, require('../components/Settings/Services/').default);
               });
             }}
-          >
-
-          </Route>
+          />
+          <Route
+            path="practitioners"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Settings/Practitioners/'], (require) =>{
+                callback(null, require('../components/Settings/Practitioners/').default);
+              });
+            }}
+          />
         </Route>
         <Route
           path="profile"

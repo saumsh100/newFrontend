@@ -4,6 +4,7 @@ import { Grid, Row, Col, Card, CardHeader } from '../library';
 import SettingsSubNav from './SettingsSubNav';
 import styles from './styles.scss';
 import Services from './Services/';
+import Practitioners from './Practitioners';
 
 
 
@@ -19,6 +20,17 @@ export default function Settings(props) {
         <Col xs={12} className={styles.subSettingsCol}>
           <Card className={styles.subSettingsCard}>
             <Services />
+          </Card>
+        </Col>
+      </Row>
+    );
+
+  } else if (location.pathname === '/settings/practitioners'){
+    showNav = (
+      <Row className={styles.rowContainer}>
+        <Col xs={12} className={styles.subSettingsCol}>
+          <Card className={styles.subSettingsCard}>
+            <Practitioners />
           </Card>
         </Col>
       </Row>

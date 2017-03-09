@@ -1,36 +1,37 @@
-.servicesMainContainer{
+.practMainContainer{
   display: flex;
 }
-.servicesListContainer{
+.practListContainer{
   display: inline-block;
   width: 25%;
 }
 
-.servicesDataContainer{
+.practDataContainer{
   display: inline-block;
   width: 75%;
 }
 
-.addServiceButton {
+.addPractitionerButton{
 }
 
 
-.formContainer{
+.practFormContainer{
   display: flex;
   width: 100%;
 }
-.servicesForm {
+.practForm{
   width: 50%;
   padding-top: 15px;
 }
-.servicesFormRow{
+
+.practFormRow{
   width: 100%;
   display: inline-block;
   &__createRow{
     padding: 15px 15px 15px 15px;
   }
 }
-.servicesFormField{
+.practFormField{
   padding: 15px 0px 15px 15px;
 }
 

@@ -6,18 +6,15 @@ const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
 const normalize = require('../normalize');
 
-// practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
+practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
 /**
  * Get all practitioners under a clinic
  */
 practitionersRouter.get('/', (req, res, next) => {
-  console.log('the query')
-  console.log(req.query);
-  
+
   const accountId = req.query.accountId || req.accountId;
-  console.log("accountId");
-  console.log(accountId);
+
   // const { accountId } = req;
 
   return Practitioner.filter({ accountId }).run()
@@ -59,8 +56,10 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
  */
 practitionersRouter.delete('/:practitionerId', checkPermissions('practitioners:delete'), (req, res, next) => {
   return req.practitioner.delete()
-    .then(() => res.send(204))
+    .then(() => res.sendStatus(204))
     .catch(next);
 });
+
+
 
 module.exports = practitionersRouter;

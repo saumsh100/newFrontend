@@ -1,14 +1,14 @@
 import React, {Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 import {  Form, Field, IconButton } from '../../library';
 import styles from './styles.scss';
-import { Map } from 'immutable';
 
 function isNumber(value){
   return value && !/\D/.test(value) ? undefined : 'Please enter a number.';
 }
 
 class ServiceItemData extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.updateService = this.updateService.bind(this);
     this.deleteService = this.deleteService.bind(this);
@@ -75,7 +75,11 @@ class ServiceItemData extends Component {
           </Form>
         </div>
         <div className={styles.trashButton}>
-          <IconButton icon="trash-o" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
+          <IconButton
+            icon="trash-o"
+            className={styles.trashButton__trashIcon}
+            onClick={this.deleteService}
+          />
         </div>
       </div>
     );

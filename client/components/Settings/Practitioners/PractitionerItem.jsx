@@ -1,24 +1,24 @@
 import React, { PropTypes, Component } from 'react';
 import { ListItem } from '../../library';
 
-class ServiceItem extends Component {
+class PractitionerItem extends Component {
   constructor(props) {
     super(props);
     this.showItem = this.showItem.bind(this);
   }
 
   showItem() {
-    this.props.setServiceId({ id: this.props.id });
+    this.props.setPractitionerId({ id: this.props.id });
   }
 
   render() {
-    const { service } = this.props;
+    const { fullname } = this.props;
     return(
       <ListItem onClick={this.showItem}>
-        {service}
+        {fullname}
       </ListItem>
     );
   }
 }
 
-export default ServiceItem;
+export default PractitionerItem;

@@ -6,12 +6,12 @@ function isNumber(value){
   return value && !/\D/.test(value) ? undefined : 'Please enter a number.';
 }
 
-export default function CreateServiceForm(props){
+export default function CreateServiceForm(props) {
   const { onSubmit } = props;
   return (
   <div>
     <Form
-      form="modalForm"
+      form="modalServiceForm"
       onSubmit={onSubmit}
     >
       <Grid >

@@ -59,6 +59,13 @@ const PATHS = {
       label: 'Services List',
     },
   ],
+
+  '/settings/practitioners': [
+    {
+      to: '/settings/practitioners/practitionerslist',
+      label: 'Practitioners List',
+    },
+  ],
 };
 
 export default function SettingsSubNav({ location }) {
