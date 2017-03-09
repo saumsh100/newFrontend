@@ -31,6 +31,11 @@ const OWNER = {
     update: false,
   }),
 
+  syncErrors: {
+    read: true,
+    create: true,
+  },
+
   weeklySchedules: CRUD,
 };
 

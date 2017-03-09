@@ -16,6 +16,10 @@ rootRouter.use(subdomain('my', myRouter));
 // Bind auth route to generate tokens
 rootRouter.use('/auth', authRouter);
 
+rootRouter.get('/atoms', (req, res, next) => {
+  res.send('ATOMS');
+});
+
 // Bind REST API
 rootRouter.use('/api', apiRouter);
 
