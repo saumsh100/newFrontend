@@ -23,7 +23,7 @@ requestsRouter.post('/', (req, res, next) => {
     });
 
   return Request.save(requestData)
-    .then(request => res.send(201, normalize('request', request)))
+    .then(request => res.status(201).send(normalize('request', request)))
     .catch(next);
   })
 });

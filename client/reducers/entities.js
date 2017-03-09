@@ -11,6 +11,7 @@ import {
   SEND_MESSAGE_ON_CLIENT,
   READ_MESSAGES_IN_CURRENT_DIALOG,
   UPDATE_PATIENT_IN_PATIENT_LIST,
+  ADD_SOCKET_ENTITY,
 } from '../constants';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
@@ -110,6 +111,12 @@ export default handleActions({
     const updatedEntity = entity[key][id];
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
+  },
+
+  [ADD_SOCKET_ENTITY](state, { payload: {key, entity } }){
+    const id = entity.id;
+    const newModel = new Models[key](entity);
+    return state.setIn([key, 'models', id], newModel);
   },
 
   [SEND_MESSAGE_ON_CLIENT](state, action) {
