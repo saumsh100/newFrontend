@@ -1,6 +1,7 @@
 
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
+
 const type = thinky.type;
 
 const Appointment = createModel('Appointment', {
@@ -14,6 +15,8 @@ const Appointment = createModel('Appointment', {
   serviceId: type.string().uuid(4).required(),
   practitionerId: type.string().uuid(4).required(),
   chairId: type.string().uuid(4),
+
+  pmsId: type.string(),
 
   // Lifecycle Attributes
   isPatientConfirmed: type.boolean().default(false),

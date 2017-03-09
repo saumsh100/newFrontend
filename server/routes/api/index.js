@@ -12,6 +12,7 @@ const chairsRouter = require('./chair');
 const chatsRouter = require('./chats');
 const servicesRouter = require('./services');
 const availabilitiesRouter = require('./availabilities');
+const syncErrorRouter = require('./syncError');
 const weeklySchedulesRouter = require('./weeklySchedules');
 const authMiddleware = require('../../middleware/auth');
 const createJoinObject = require('../../middleware/createJoinObject');
@@ -29,6 +30,7 @@ apiRouter.use('/practitioners', practitionersRouter);
 apiRouter.use('/textMessages', textMessagesRouter);
 apiRouter.use('/users', userRouter);
 apiRouter.use('/availabilities', availabilitiesRouter);
+apiRouter.use('/syncError', syncErrorRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 
 module.exports = apiRouter;
