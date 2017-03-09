@@ -16,7 +16,7 @@ const weeklySchedulesRouter = require('./weeklySchedules');
 const authMiddleware = require('../../middleware/auth');
 const createJoinObject = require('../../middleware/createJoinObject');
 
-// apiRouter.all('*', authMiddleware, createJoinObject);
+apiRouter.all('*', authMiddleware, createJoinObject);
 apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/requests', requestRouter);
