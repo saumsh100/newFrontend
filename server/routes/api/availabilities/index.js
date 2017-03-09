@@ -8,6 +8,7 @@ const Appointment = require('../../../models/Appointment');
 const Service = require('../../../models/Service');
 const Request = require('../../../models/Request');
 const Practitioner = require('../../../models/Practitioner');
+const Account = require('../../../models/Account');
 
 
 
@@ -75,76 +76,83 @@ availabilitiesRouter.get('/', (req, res, next) => {
 
   Practitioner.filter({ id: practitionerId }).getJoin().run()
     .then((stuff) => {
-      Service.get(serviceId).run().then((service) => {
-        // return res.send({ stuff: stuff[0] });
-        const unsortedAppointments = stuff[0].appointment;
-        const unsortedReservations = stuff[0].reservations;
-        const unsortedRequests = stuff[0].requests;
-        const appointments = unsortedAppointments
-          .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
-        const reservations = unsortedReservations
-          .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
-        const requests = unsortedRequests
-          .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+      Account.get(stuff[0].accountId).getJoin({ weeklySchedule: true }).run().then(account => {
+        Service.get(serviceId).run().then((service) => {
+          // return res.send({ stuff: stuff[0] });
+          const unsortedAppointments = stuff[0].appointment;
+          const unsortedReservations = stuff[0].reservations;
+          const unsortedRequests = stuff[0].requests;
+          const appointments = unsortedAppointments
+            .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+          const reservations = unsortedReservations
+            .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+          const requests = unsortedRequests
+            .sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
 
-          const startDateTopass = moment(startDate).clone().startOf('day')
+            const startDateTopass = moment(startDate).clone().startOf('day')
 
-          let firstAvailableDate = startDate;
-          let endAvailableDateToShow = endDate;
-          if (retrieveFirstTime) {
-            firstAvailableDate = getFirstAvailableDate(appointments, startDateTopass, service.duration);
-            endAvailableDateToShow = moment(firstAvailableDate).add(4, 'days')._d
-            console.log(moment(firstAvailableDate).format('MMMM Do YYYY, h:mm:ss a'));
-          }
+            let firstAvailableDate = startDate;
+            let endAvailableDateToShow = endDate;
+            if (retrieveFirstTime) {
+              firstAvailableDate = getFirstAvailableDate(appointments, startDateTopass, service.duration);
+              endAvailableDateToShow = moment(firstAvailableDate).add(4, 'days')._d
+              console.log(moment(firstAvailableDate).format('MMMM Do YYYY, h:mm:ss a'));
+            }
 
-          const requiredRange = moment.range(
-            moment(firstAvailableDate).startOf('day'),
-            moment(endAvailableDateToShow).endOf('day')
-          );
+            const requiredRange = moment.range(
+              moment(firstAvailableDate).startOf('day'),
+              moment(endAvailableDateToShow).endOf('day')
+            );
 
-          const results = _.fromPairs(
-            Array.from(requiredRange.by('day'))
-              .map(currentDay => {
-                // next two lines should be taken from Practitioner working time
-                // not just hard hardcoded
-                const OFFICE_START_TIME = currentDay.clone().set({ hours: 9, minutes: 0 }).toDate();
-                const OFFICE_END_TIME = currentDay.clone().set({ hours: 16, minutes: 30 }).toDate();
+            const { weeklySchedule } = account;
+            const closedDays = Object.keys(weeklySchedule)
+            .filter(k => (typeof weeklySchedule[k] == "object" && weeklySchedule[k].isClosed === true))
 
-                const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
+            const results = _.fromPairs(
+              Array.from(requiredRange.by('day'))
+                .map(currentDay => {
+                  // next two lines should be taken from Practitioner working time
+                  // not just hard hardcoded
+                  const OFFICE_START_TIME = currentDay.clone().set({ hours: 9, minutes: 0 }).toDate();
+                  const OFFICE_END_TIME = currentDay.clone().set({ hours: 16, minutes: 30 }).toDate();
 
-                const appointmentRanges = appointments
-                  .filter(a => moment(a.startTime).startOf('day').isSame(currentDay))
-                  .map(appointment => moment.range(appointment.startTime, appointment.endTime));
+                  const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
+
+                  const appointmentRanges = appointments
+                    .filter(a => moment(a.startTime).startOf('day').isSame(currentDay))
+                    .map(appointment => moment.range(appointment.startTime, appointment.endTime));
 
 
-                const reservationRanges = reservations
-                  .filter(r => moment(r.startTime).startOf('day').isSame(currentDay))
-                  .map(reservation => moment.range(reservation.startTime, reservation.endTime));
+                  const reservationRanges = reservations
+                    .filter(r => moment(r.startTime).startOf('day').isSame(currentDay))
+                    .map(reservation => moment.range(reservation.startTime, reservation.endTime));
 
-                const requestRanges = requests
-                  .filter(r => moment(r.startTime).startOf('day').isSame(currentDay))
-                  .map(request => moment.range(request.startTime, request.endTime));
+                  const requestRanges = requests
+                    .filter(r => moment(r.startTime).startOf('day').isSame(currentDay))
+                    .map(request => moment.range(request.startTime, request.endTime));
 
-                const allRanges = reservationRanges.concat(appointmentRanges).concat(requestRanges);
-                const hasAppointment = slotRange => _.some(allRanges, appointmentRange => {
-                  return appointmentRange.overlaps(slotRange);
-                });
-                const availabilities = Array.from(dayRange.by('minutes', { step: 30 }))
-                  .map(slot => ({
-                    startsAt: slot.toDate(),
-                    isBusy: hasAppointment(moment.range(slot, slot.clone().add(29, 'minutes'))),
-                  }));
+                  const allRanges = reservationRanges.concat(appointmentRanges).concat(requestRanges);
+                  const hasAppointment = slotRange => _.some(allRanges, appointmentRange => {
+                    return appointmentRange.overlaps(slotRange);
+                  });
+                  const availabilities = Array.from(dayRange.by('minutes', { step: 30 }))
+                    .map(slot => ({
+                      startsAt: slot.toDate(),
+                      isBusy: hasAppointment(moment.range(slot, slot.clone().add(29, 'minutes')))
+                      || closedDays.indexOf(slot.toDate().toLocaleString('en-us', { weekday: 'long' }).toLowerCase()) > -1,
+                      
+                    }));
 
-                return [
-                  currentDay.format(),
-                  { date: currentDay.format(), availabilities, practitionerId }
-                ];
-              })
-          );
+                  return [
+                    currentDay.format(),
+                    { date: currentDay.format(), availabilities, practitionerId }
+                  ];
+                })
+            );
 
-          res.send({ entities: { availabilities: results } });
-      })
-
+            res.send({ entities: { availabilities: results } });
+        })
+      });
     })
 
 
