@@ -8,48 +8,29 @@ import styles from './styles.scss';
 
 class NewRequests extends Component {
   render() {
-    const hardcodeData = [
-      {
-        day: moment().format(),
-        start: moment({ hour: 15, minute: 0 }),
-        end: moment({ hour: 16, minute: 59 }),
-        patientName: 'Perla Frye',
-        patientAge: 23,
-        patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation',
-        status: 'New'
-      },
-      {
-        day: moment().format(),
-        start: moment({ hour: 15, minute: 0 }),
-        end: moment({ hour: 16, minute: 59 }),
-        patientName: 'Perla Frye',
-        patientAge: 23,
-        patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation',
-        status: 'Waitlist'
-      },
-      {
-        day: moment().format(),
-        start: moment({ hour: 15, minute: 0 }),
-        end: moment({ hour: 16, minute: 59 }),
-        patientName: 'Perla Frye',
-        patientAge: 23,
-        patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation',
-        status: 'New'
-      },
-      {
-        day: moment().format(),
-        start: moment({ hour: 15, minute: 0 }),
-        end: moment({ hour: 16, minute: 59 }),
-        patientName: 'Perla Frye',
-        patientAge: 23,
-        patientPhone: '(123) 456 7898',
-        services: 'Teeth Whitening Consultation',
-        status: 'Waitlist'
+    const { requests, services, appointments, patients } = this.props;
+    const day = moment().format();
+    const data = requests.models.toArray().map(r => {
+      const patient = patients.models.toJS()[r.patientId];
+      const service = services && services.models.toJS()[r.serviceId];
+      const serviceName = service && service.name; 
+      const { firstName, lastName, birthDate, phoneNumber } = patient;
+      const patientName = `${firstName} ${lastName}`;
+      const patientAge = birthDate && moment().diff(birthDate, 'years');
+      const patientPhone = phoneNumber;
+      const start = moment(r.startTime);
+      const end = moment(r.endTime);
+      return {
+        day,
+        start,
+        end,
+        patientName,
+        patientAge,
+        patientPhone,
+        services: serviceName,
       }
-    ];
+    });
+
     return (
       <Card className={styles.schedule_appointment}>
         <div className={styles.appointment_header}>
@@ -62,7 +43,7 @@ class NewRequests extends Component {
         </div>
         <div className={styles.appointment_practitioner}>
           <ul className={styles.appointment_practitioner__wrapper}>
-            {hardcodeData.map((h) => {
+            {data.map((h) => {
               return (
                 <li className={styles.appointment_practitioner__item}>
                   <div className={styles.item__day}>
@@ -85,6 +66,5 @@ class NewRequests extends Component {
     );
   }
 }
-
 
 export default NewRequests;

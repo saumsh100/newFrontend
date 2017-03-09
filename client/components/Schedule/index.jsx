@@ -108,6 +108,8 @@ class ScheduleComponent extends Component {
       selectAppointmentType,
       schedule,
       patients,
+      requests,
+      services,
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
@@ -178,7 +180,12 @@ class ScheduleComponent extends Component {
             appointmentsTypes={appointmentsTypes}
             selectAppointmentType={selectAppointmentType}
           />
-          <NewRequests />
+          <NewRequests
+            patients={patients}
+            appointments={appointments}
+            requests={requests}
+            services={services}
+          />
           <DayPicker
             className={styles.schedule__sidebar_calendar}
             styles={DayPickerStyles}
