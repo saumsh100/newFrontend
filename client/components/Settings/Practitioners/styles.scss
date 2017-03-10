@@ -1,3 +1,5 @@
+@import '../../../ui.scss';
+
 .practMainContainer{
   display: flex;
 }
@@ -12,12 +14,16 @@
 }
 
 .addPractitionerButton{
+  margin-left: auto;
 }
 
 
 .practFormContainer{
   display: flex;
   width: 100%;
+  &__createForm{
+    padding: 0px 15px 0px 15px;
+  }
 }
 .practForm{
   width: 50%;
@@ -28,7 +34,7 @@
   width: 100%;
   display: inline-block;
   &__createRow{
-    padding: 15px 15px 15px 15px;
+    padding: 15px 0px 15px 0px;
   }
 }
 .practFormField{
@@ -45,6 +51,9 @@
 
 .modalContainer{
   display: flex;
+  align-items: center;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
 }
 
 

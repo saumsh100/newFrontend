@@ -22,7 +22,9 @@ class Requests extends Component {
 
     return (
       <Card className={styles.requestCard}>
-        <CardHeader count={sortedRequests.length} title={'New Appointment Requests'} />
+        <div className={styles.requestHeader}>
+          <CardHeader count={sortedRequests.length} title={'New Appointment Requests'} />
+        </div>
         <RequestList
           sortedRequests={sortedRequests}
           patients={patients}

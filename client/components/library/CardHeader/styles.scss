@@ -1,13 +1,10 @@
 
 @import '../../../ui.scss';
-
 .cardHeader {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   padding-top: 0.5em;
-  border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
 }
 
 .displayFlex {
@@ -20,7 +17,6 @@
   font-size: 36px;
   font-weight: 900;
   padding-right: 5px;
-  padding-left: 15px;
   color: $primary-dark;
 }
 

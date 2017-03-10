@@ -9,47 +9,37 @@ function isNumber(value){
 export default function CreateServiceForm(props) {
   const { onSubmit } = props;
   return (
-  <div>
+  <div className={styles.formContainer__createForm}>
     <Form
       form="modalServiceForm"
       onSubmit={onSubmit}
     >
-      <Grid >
-        <Row className={styles.servicesFormRow__createRow}>
-          <Col xs={12}>
-            <CardHeader title="Create New Service" />
-          </Col>
-        </Row>
-        <Row className={styles.servicesFormRow__createRow}>
-          <Col xs={12}>
-            <Field
-              required
-              name="name"
-              label="Name"
-            />
-          </Col>
-        </Row>
-        <Row className={styles.servicesFormRow__createRow}>
-          <Col xs={12}>
-            <Field
-              required
-              name="duration"
-              label="Duration"
-              validate={[isNumber]}
-            />
-          </Col>
-        </Row>
-        <Row className={styles.servicesFormRow__createRow}>
-          <Col xs={12}>
-            <Field
-              required
-              name="bufferTime"
-              label="Buffer Time"
-              validate={[isNumber]}
-            />
-          </Col>
-        </Row>
-      </Grid>
+      <div className={styles.servicesFormRow__createRow}>
+        <CardHeader title="Create New Service" />
+      </div>
+      <div className={styles.servicesFormRow__createRow}>
+        <Field
+          required
+          name="name"
+          label="Name"
+        />
+      </div>
+      <div className={styles.servicesFormRow__createRow}>
+        <Field
+          required
+          name="duration"
+          label="Duration"
+          validate={[isNumber]}
+        />
+      </div>
+      <div className={styles.servicesFormRow__createRow}>
+        <Field
+          required
+          name="bufferTime"
+          label="Buffer Time"
+          validate={[isNumber]}
+        />
+      </div>
     </Form>
   </div>
   );

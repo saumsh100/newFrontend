@@ -7,7 +7,7 @@ import CreatePractitionerForm from './CreatePractitionerForm';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
 import styles from './styles.scss';
-import { IconButton} from '../../library';
+import { IconButton, CardHeader, } from '../../library';
 import Modal  from '../../library/Modal';
 
 class PractitionerList extends Component {
@@ -54,6 +54,7 @@ class PractitionerList extends Component {
       <div className={styles.practMainContainer} >
         <div className={styles.practListContainer}>
           <div className={styles.modalContainer}>
+            <CardHeader count={practitioners.size} title="Practitioners" />
             <IconButton
               icon="plus"
               onClick={this.setActive}

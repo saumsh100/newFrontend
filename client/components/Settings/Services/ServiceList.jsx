@@ -2,7 +2,7 @@ import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ServiceItem from './ServiceItem';
-import { IconButton} from '../../library';
+import { IconButton, CardHeader, } from '../../library';
 import Modal  from '../../library/Modal';
 import ServiceItemData from './ServiceItemData';
 import CreateServiceForm from './CreateServiceForm';
@@ -53,6 +53,7 @@ class ServiceList extends Component {
       <div className={styles.servicesMainContainer} >
         <div className={styles.servicesListContainer}>
           <div className={styles.modalContainer}>
+            <CardHeader count={services.size} title="Services" />
             <IconButton
               icon="plus"
               onClick={this.setActive}
