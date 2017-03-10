@@ -2,8 +2,6 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, Card, RouterButton } from '../components/library';
-import styles from '../components/Patients/styles.scss';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import setCurrentScheduleDate from '../thunks/date';
