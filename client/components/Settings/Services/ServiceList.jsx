@@ -23,10 +23,9 @@ class ServiceList extends Component {
     this.deleteService = this.deleteService.bind(this);
   }
 
-  createService(values) {
-    values.customCosts = {};
-    this.props.createEntityRequest({ key: 'services', entityData: values });
-    this.setState({ active: false });
+  setActive() {
+    const active = (this.state.active !== true);
+    this.setState({ active });
   }
 
   updateService(modifiedService) {
@@ -38,9 +37,10 @@ class ServiceList extends Component {
     this.props.setServiceId({ id: null });
   }
 
-  setActive() {
-    const active = (this.state.active !== true);
-    this.setState({ active });
+  createService(values) {
+    values.customCosts = {};
+    this.props.createEntityRequest({ key: 'services', entityData: values });
+    this.setState({ active: false });
   }
 
   render() {
@@ -49,7 +49,7 @@ class ServiceList extends Component {
     const selectedService = serviceId ? services.get(serviceId) : services.first();
     const selectedServiceId = selectedService ? selectedService.get('id') : null;
 
-    return(
+    return (
       <div className={styles.servicesMainContainer} >
         <div className={styles.servicesListContainer}>
           <div className={styles.modalContainer}>
@@ -94,6 +94,15 @@ class ServiceList extends Component {
     );
   }
 }
+
+ServiceList.propTypes = {
+  services: PropTypes.object,
+  serviceId: PropTypes.string,
+  updateEntityRequest: PropTypes.func,
+  deleteEntityRequest: PropTypes.func,
+  createEntityRequest: PropTypes.func,
+  setServiceId: PropTypes.func,
+};
 
 function mapStateToProps({ accountSettings }) {
   return ({

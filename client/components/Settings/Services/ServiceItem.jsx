@@ -21,4 +21,10 @@ class ServiceItem extends Component {
   }
 }
 
+ServiceItem.propTypes = {
+  setServiceId: PropTypes.func,
+  service: PropTypes.string,
+};
+
+
 export default ServiceItem;

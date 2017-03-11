@@ -13,11 +13,14 @@ practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitione
  */
 practitionersRouter.get('/', (req, res, next) => {
 
-  const accountId = req.query.accountId || req.accountId;
-
+  //const accountId = req.query.accountId || req.accountId;
+  const {
+    accountId,
+    joinObject,
+  } = req;
   // const { accountId } = req;
 
-  return Practitioner.filter({ accountId }).run()
+  return Practitioner.filter({ accountId }).getJoin(joinObject).run()
     .then(practitioners => res.send(normalize('practitioners', practitioners)))
     .catch(next);
 });

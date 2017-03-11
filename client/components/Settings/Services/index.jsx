@@ -2,7 +2,6 @@ import React, {Component, PropTypes,} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities, } from '../../../thunks/fetchEntities';
-import { Grid } from '../../library';
 import ServiceList from './ServiceList';
 
 const sortServicesAlphabetical = (a, b) => {
@@ -14,7 +13,7 @@ const sortServicesAlphabetical = (a, b) => {
 class Services extends Component {
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'services' });
+    this.props.fetchEntities({key: 'services'});
   }
 
   render() {
@@ -37,6 +36,11 @@ class Services extends Component {
     );
   }
 }
+
+Services.propTypes = {
+  services: PropTypes.object,
+  fetchEntities: PropTypes.func,
+};
 
 function mapStateToProps({ entities }) {
   return {

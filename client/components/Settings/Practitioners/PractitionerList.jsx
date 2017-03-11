@@ -43,12 +43,16 @@ class PractitionerList extends Component {
   }
 
   render() {
-    const { practitioners, practitionerId } = this.props;
+    const { practitioners, practitionerId, weeklySchedules } = this.props;
+
+
 
     const selectedPractitioner = (
       practitionerId ? practitioners.get(practitionerId) : practitioners.first());
 
     const selectedPractitionerId = selectedPractitioner ? selectedPractitioner.get('id') : null;
+    const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
+    const weeklySchedule = weeklyScheduleId? weeklySchedules.get(weeklyScheduleId) : null;
 
     return(
       <div className={styles.practMainContainer} >
@@ -89,6 +93,7 @@ class PractitionerList extends Component {
             practitioner={selectedPractitioner}
             onSubmit={this.updatePractitioner}
             deletePractitioner={this.deletePractitioner}
+            weeklySchedule={weeklySchedule}
           />
         </div>
       </div>
@@ -97,9 +102,13 @@ class PractitionerList extends Component {
 }
 
 function mapStateToProps({ accountSettings }) {
-  return ({
-    practitionerId: accountSettings.get('practitionerId'),
-  });
+  const practitionerId = accountSettings.get('practitionerId');
+  if(!practitionerId) {
+    return {};
+  }
+  return {
+    practitionerId,
+  };
 }
 function mapActionsToProps(dispatch) {
   return bindActionCreators({

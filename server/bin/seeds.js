@@ -480,12 +480,14 @@ const SEEDS = {
       accountId: accountId,
       firstName: 'Chelsea',
       lastName: 'Mansfield',
+      weeklyScheduleId: weeklyScheduleId,
     },
     {
       id: practitionerId2,
       accountId,
       firstName: 'Perry',
       lastName: 'Cox',
+      weeklyScheduleId: weeklyScheduleId,
     },
   ],
 

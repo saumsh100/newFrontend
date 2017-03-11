@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, IconButton } from '../../library';
+import {  Form, Field, IconButton, CardHeader } from '../../library';
 import styles from './styles.scss';
 
 function isNumber(value){

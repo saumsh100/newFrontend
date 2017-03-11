@@ -1,8 +1,10 @@
 import React, {Component, PropTypes,} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchEntities, } from '../../../thunks/fetchEntities';
+import { fetchEntities } from '../../../thunks/fetchEntities';
 import PractitionerList from './PractitionerList';
+
+
 
 const sortPractitionersAlphabetical = (a, b) => {
   if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
@@ -13,11 +15,11 @@ const sortPractitionersAlphabetical = (a, b) => {
 class Practitioners extends Component {
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'practitioners' });
+    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule'] });
   }
 
   render() {
-    const { practitioners } = this.props;
+    const { practitioners, weeklySchedules } = this.props;
 
     let showComponent = null;
     if (practitioners) {
@@ -25,6 +27,7 @@ class Practitioners extends Component {
       showComponent = (
         <PractitionerList
           practitioners={filteredPractitioners}
+          weeklySchedules={weeklySchedules}
         />
       );
     }
@@ -38,8 +41,18 @@ class Practitioners extends Component {
 }
 
 function mapStateToProps({ entities }) {
+
+  const practitioners = entities.getIn(['practitioners', 'models']);
+
+  const weeklyScheduleIds = practitioners.toArray().map(practitioner => practitioner.get('weeklyScheduleId'));
+
+  const weeklySchedules = entities.getIn(['weeklySchedules', 'models']).filter((schedule) => {
+    return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
+  });
+
   return {
-    practitioners: entities.getIn(['practitioners', 'models']),
+    practitioners,
+    weeklySchedules,
   };
 }
 

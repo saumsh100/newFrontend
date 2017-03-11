@@ -66,7 +66,6 @@ class AddressForm extends React.Component {
     return (
       <div className={styles.addressForm}>
         <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
-          <Grid className={styles.addressGrid}>
             <Row className={styles.addressRow}>
               <Col xs={12}>
                 <Field
@@ -115,7 +114,6 @@ class AddressForm extends React.Component {
                 />
               </Col>
             </Row>
-          </Grid>
         </Form>
       </div>
     );

@@ -45,3 +45,7 @@ export default function CreateServiceForm(props) {
   );
 }
 
+CreateServiceForm.propTypes = {
+  onSubmit: PropTypes.func,
+};
+
