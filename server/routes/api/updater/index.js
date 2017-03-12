@@ -4,44 +4,50 @@ const fs = require('fs');
 const LATEST = 2.1;
 
 /**
+ * Object to send back to the sync client on update inquiry
+ */
+const updaterResponse = {
+  available: false,
+  url: '',
+};
+
+/**
  * Return the link to the latest version of the sync client
  */
-updaterRouter.get('/latest', (req, res, next) => {
-  const response = {
-    latest: 'http://carecru.dev:8080/updater/download',
-  };
-  res.send(response);
+updaterRouter.get('/latest', (req, res) => {
+  const msg = Object.assign({},
+    updaterResponse,
+    { available: true },
+    { url: 'http://carecru.dev:8080/updater/download'.concat('/', LATEST) },
+  );
+  res.send(msg);
 });
 
 /**
  * Compare the version of the sync client in the URL params and return JSON
  * saying whether the new version is available or not.
+ * TODO add '?' case for if the sync client can't read the version
  */
 updaterRouter.get('/available', (req, res) => {
-  // TODO throw error if can't parse this string and sent error back - or don't reply?
-  // TODO add '?' case for if the sync client can't read the version
   const reqVersion = parseFloat(req.query.version);
   if (isNaN(reqVersion)) {
     res.sendStatus(400);
+    console.log('Invalid version number sent by the sync client. Update cancelled.');
     return;
   }
 
-  // TODO don't hardcode the link - make it computed so we can control it without server reboot
   console.log(`SyncClient version=${reqVersion}; latest=${LATEST}.`);
   if (LATEST > reqVersion) {
-    const u = {
-      available: true,
-      url: 'http://carecru.dev:8080/api/updater/download',
-    };
-    res.send(u);
+    const msg = Object.assign(
+      {},
+      updaterResponse,
+      { available: true },
+      { url: 'http://carecru.dev:8080/api/updater/download' },
+    );
+    res.send(msg);
   } else {
-    const u = {
-      available: false,
-      url: '',
-    };
-    res.send(u);
+    res.send(updaterResponse);
   }
-
 });
 
 /**
@@ -49,17 +55,17 @@ updaterRouter.get('/available', (req, res) => {
  */
 updaterRouter.get('/download', (req, res) => {
   const filename = 'carecru_setup.exe';
-  const fileStream = fs.createReadStream(filename);
-  fileStream.pipe(res);
+  try {
+    if (fs.existsSync()) {
+      const fileStream = fs.createReadStream(filename);
+      fileStream.pipe(res);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    console.log('[ERROR]', err);
+    res.sendStatus(404);
+  }
 });
-
-/**
- * Send back the link to the requested version
- */
-updaterRouter.get('/', (req, res) => {
-  const reqVersion = req.query.ver;
-  // TODO send the link to the version requested
-});
-
 
 module.exports = updaterRouter;
