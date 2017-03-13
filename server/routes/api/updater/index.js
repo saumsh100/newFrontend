@@ -1,7 +1,12 @@
+const SyncClientVersion = require('../../../models/SyncClientVersion');
 const updaterRouter = require('express').Router();
+const loaders = require('../../util/loaders');
+const checkPermissions = require('../../../middleware/checkPermissions');
 const fs = require('fs');
 
 const LATEST = 2.1;
+
+updaterRouter.param('syncClientVersionId', loaders('syncClientVersion', 'SyncClientVersion'));
 
 /**
  * Object to send back to the sync client on update inquiry
@@ -66,6 +71,47 @@ updaterRouter.get('/download', (req, res) => {
     console.log('[ERROR]', err);
     res.sendStatus(404);
   }
+});
+
+/* CRUD on release */
+
+/**
+ * Get the latest sync client release info.
+ */
+updaterRouter.get('/release', checkPermissions('syncClientVersion:read'), (req, res, next) => {
+  return SyncClientVersion.filter({ latest: true }).run()
+    .then(release => res.send(release[0]))
+    .catch(next);
+});
+
+/**
+ * Update current version of the sync client.
+ */
+updaterRouter.put('/release', checkPermissions('syncClientVersion:create'), (req, res, next) => {
+  const newVersion = Object.assign({}, req.body);
+  console.log('updating sc version', req.body);
+  console.log('updating sc version', newVersion);
+
+  const dbVersion = SyncClientVersion.filter({ latest: true }).run()
+    .then(_dbVersion => _dbVersion[0].merge(newVersion).save());
+
+  return Promise.resolve(dbVersion)
+    .then(_dbv => res.send(_dbv))
+    .catch(next);
+});
+
+/**
+ * Set current version of the sync client.
+ * TODO this method should be removed/modified to always have one entry for release
+ * in the db.
+ */
+updaterRouter.post('/release', (req, res, next) => {
+  const newVersion = Object.assign({}, req.body);
+  console.log('received new version', req.body);
+
+  return SyncClientVersion.save(newVersion)
+    .then(version => res.sendStatus(201, version))
+    .catch(next);
 });
 
 module.exports = updaterRouter;

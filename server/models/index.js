@@ -11,10 +11,12 @@ const Practitioner = require('./Practitioner');
 const Request = require('./Request');
 const Service = require('./Service');
 const SyncError = require('./SyncError');
+const SyncClientVersion = require('./SyncClientVersion');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
 const Token = require('./Token');
 const Reservation = require('./Reservation');
+
 module.exports = {
   Account,
   Appointment,
@@ -32,4 +34,5 @@ module.exports = {
   User,
   Token,
   SyncError,
+  SyncClientVersion,
 };
