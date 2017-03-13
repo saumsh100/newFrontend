@@ -2,17 +2,10 @@ const SyncClientVersion = require('../../../models/SyncClientVersion');
 const updaterRouter = require('express').Router();
 const loaders = require('../../util/loaders');
 const checkPermissions = require('../../../middleware/checkPermissions');
+const _ = require('lodash');
 const fs = require('fs');
 
 updaterRouter.param('syncClientVersionId', loaders('syncClientVersion', 'SyncClientVersion'));
-
-/**
- * Object to send back to the sync client on update inquiry
- */
-const updaterResponse = {
-  available: false,
-  url: '',
-};
 
 /**
  * Return the link to the latest version of the sync client
@@ -22,9 +15,7 @@ updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, r
     .then((release) => {
       const msg = Object.assign(
         {},
-        updaterResponse,
-        { available: true },
-        { url: release.url.concat('/', release.version) },
+        _.pick(release, ['url']),
       );
       res.send(msg);
     }));
@@ -48,13 +39,15 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
       if (release.version > reqVersion) {
         const msg = Object.assign(
           {},
-          updaterResponse,
+          _.pick(release, ['url']),
           { available: true },
-          { url: release.url },
         );
         res.send(msg);
       } else {
-        res.send(updaterResponse);
+        res.send({
+          available: false,
+          url: '',
+        });
       }
     })
     .catch(next));
@@ -77,8 +70,6 @@ updaterRouter.get('/download', checkPermissions('syncClientVersion:read'), (req,
     res.sendStatus(404);
   }
 });
-
-/* CRUD on release */
 
 /**
  * Get the latest sync client release info.
