@@ -4,8 +4,6 @@ const loaders = require('../../util/loaders');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const fs = require('fs');
 
-const LATEST = 2.1;
-
 updaterRouter.param('syncClientVersionId', loaders('syncClientVersion', 'SyncClientVersion'));
 
 /**
@@ -16,16 +14,24 @@ const updaterResponse = {
   url: '',
 };
 
+const DOWNLOAD_LINK = 'http://carecru.dev:8080/api/updater/download';
+
 /**
  * Return the link to the latest version of the sync client
  */
-updaterRouter.get('/latest', (req, res) => {
-  const msg = Object.assign({},
-    updaterResponse,
-    { available: true },
-    { url: 'http://carecru.dev:8080/updater/download'.concat('/', LATEST) },
-  );
-  res.send(msg);
+updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, res) => {
+  Promise.resolve(SyncClientVersion.filter({ latest: true }).run()
+    .then((_release) => {
+      const release = _release[0];
+
+      const msg = Object.assign(
+        {},
+        updaterResponse,
+        { available: true },
+        { url: DOWNLOAD_LINK.concat('/', release.major) },
+      );
+      res.send(msg);
+    }));
 });
 
 /**
@@ -33,32 +39,37 @@ updaterRouter.get('/latest', (req, res) => {
  * saying whether the new version is available or not.
  * TODO add '?' case for if the sync client can't read the version
  */
-updaterRouter.get('/available', (req, res) => {
+updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req, res) => {
   const reqVersion = parseFloat(req.query.version);
+
   if (isNaN(reqVersion)) {
     res.sendStatus(400);
     console.log('Invalid version number sent by the sync client. Update cancelled.');
     return;
   }
 
-  console.log(`SyncClient version=${reqVersion}; latest=${LATEST}.`);
-  if (LATEST > reqVersion) {
-    const msg = Object.assign(
-      {},
-      updaterResponse,
-      { available: true },
-      { url: 'http://carecru.dev:8080/api/updater/download' },
-    );
-    res.send(msg);
-  } else {
-    res.send(updaterResponse);
-  }
+  Promise.resolve(SyncClientVersion.filter({ latest: true }).run()
+    .then((_release) => {
+      const release = _release[0];
+
+      if (release.major > reqVersion) {
+        const msg = Object.assign(
+          {},
+          updaterResponse,
+          { available: true },
+          { url: DOWNLOAD_LINK },
+        );
+        res.send(msg);
+      } else {
+        res.send(updaterResponse);
+      }
+    }));
 });
 
 /**
  * Temporary. Will be replaced with S3 bucket.
  */
-updaterRouter.get('/download', (req, res) => {
+updaterRouter.get('/download', checkPermissions('syncClientVersion:read'), (req, res) => {
   const filename = 'carecru_setup.exe';
   try {
     if (fs.existsSync()) {
@@ -113,5 +124,6 @@ updaterRouter.post('/release', (req, res, next) => {
     .then(version => res.sendStatus(201, version))
     .catch(next);
 });
+
 
 module.exports = updaterRouter;
