@@ -10,7 +10,7 @@ weeklySchedulesRouter.param('weeklyScheduleId', loaders('weeklySchedule', 'Weekl
 /**
  * Create a weeklySchedule
  */
-/*weeklySchedulesRouter.post('/', checkPermissions('weeklySchedules:create'), (req, res, next) => {
+weeklySchedulesRouter.post('/', checkPermissions('weeklySchedules:create'), (req, res, next) => {
   // Attach weeklySchedule to the clinic of posting user
   const weeklyScheduleData = Object.assign({}, req.body, {
     accountId: req.accountId,
@@ -21,19 +21,19 @@ weeklySchedulesRouter.param('weeklyScheduleId', loaders('weeklySchedule', 'Weekl
   return WeeklySchedule.save(weeklyScheduleData)
     .then(weeklySchedule => res.send(201, normalize('weeklySchedule', weeklySchedule)))
     .catch(next);
-});*/
+});
 
 /**
  * Get all weeklySchedules under a clinic
  */
-/*weeklySchedulesRouter.get('/', checkPermissions('weeklySchedules:read'), (req, res, next) => {
+weeklySchedulesRouter.get('/', checkPermissions('weeklySchedules:read'), (req, res, next) => {
   const { accountId } = req;
-
   // There is no joinData for weeklySchedule, no need to put...
   return WeeklySchedule.filter({ accountId }).run()
-    .then(weeklySchedules => res.send(normalize('weeklySchedules', weeklySchedules)))
-    .catch(next);
-});*/
+    .then((weeklySchedules) =>{
+        res.send(normalize('weeklySchedules', weeklySchedules))
+    }).catch(next);
+});
 
 /**
  * Get a weeklySchedule

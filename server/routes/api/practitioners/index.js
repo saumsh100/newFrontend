@@ -32,7 +32,7 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, re
   const practitionerData = Object.assign({}, { accountId: req.accountId }, req.body);
 
   return Practitioner.save(practitionerData)
-    .then(practitioner => res.send(201, normalize('practitioner', practitioner)))
+    .then(practitioner => res.status(201).send(normalize('practitioner', practitioner)))
     .catch(next);
 });
 

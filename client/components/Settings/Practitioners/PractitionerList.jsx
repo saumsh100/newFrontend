@@ -94,6 +94,7 @@ class PractitionerList extends Component {
             onSubmit={this.updatePractitioner}
             deletePractitioner={this.deletePractitioner}
             weeklySchedule={weeklySchedule}
+            updateEntityRequest={this.props.updateEntityRequest}
           />
         </div>
       </div>
@@ -102,6 +103,7 @@ class PractitionerList extends Component {
 }
 
 function mapStateToProps({ accountSettings }) {
+
   const practitionerId = accountSettings.get('practitionerId');
   if(!practitionerId) {
     return {};

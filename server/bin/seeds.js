@@ -420,6 +420,7 @@ const SEEDS = {
   WeeklySchedule: [
     {
       id: weeklyScheduleId,
+      accountId,
       monday: {
         isClosed: true,
       },

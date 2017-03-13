@@ -14,7 +14,9 @@ class PractitionerItemData extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values);
+    const { weeklySchedule, updateEntityRequest } = this.props;
+    const newWeeklySchedule = weeklySchedule.merge(values);
+    updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
   }
 
   updatePractitioner(values) {
@@ -32,11 +34,19 @@ class PractitionerItemData extends Component {
   render() {
     const { practitioner, weeklySchedule } = this.props;
 
-    if(!practitioner || !weeklySchedule) {
+    if (!practitioner) {
       return null;
     }
 
+    let showOfficeHours = null;
 
+    if (weeklySchedule) {
+      showOfficeHours = (<OfficeHoursForm
+        weeklySchedule={weeklySchedule}
+        onSubmit={this.handleSubmit}
+        formName={practitioner.get('id')}
+      />);
+    }
     const initialValues = {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
@@ -77,18 +87,7 @@ class PractitionerItemData extends Component {
             />
           </div>
         </div>
-        <div>
-          <OfficeHoursForm
-            weeklySchedule={weeklySchedule}
-            onSubmit={this.handleSubmit}
-            formName="officeHours"
-          />
-          <BreaksForm
-            weeklySchedule={weeklySchedule}
-            onSubmit={this.handleSubmit}
-            formName="clinicBreaks"
-          />
-        </div>
+        {showOfficeHours}
       </div>
     );
   }
