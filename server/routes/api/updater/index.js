@@ -14,21 +14,17 @@ const updaterResponse = {
   url: '',
 };
 
-const DOWNLOAD_LINK = 'http://carecru.dev:8080/api/updater/download';
-
 /**
  * Return the link to the latest version of the sync client
  */
 updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, res) => {
-  Promise.resolve(SyncClientVersion.filter({ latest: true }).run()
-    .then((_release) => {
-      const release = _release[0];
-
+  Promise.resolve(SyncClientVersion.nth(0).run()
+    .then((release) => {
       const msg = Object.assign(
         {},
         updaterResponse,
         { available: true },
-        { url: DOWNLOAD_LINK.concat('/', release.major) },
+        { url: release.url.concat('/', release.version) },
       );
       res.send(msg);
     }));
@@ -37,9 +33,8 @@ updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, r
 /**
  * Compare the version of the sync client in the URL params and return JSON
  * saying whether the new version is available or not.
- * TODO add '?' case for if the sync client can't read the version
  */
-updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req, res) => {
+updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req, res, next) => {
   const reqVersion = parseFloat(req.query.version);
 
   if (isNaN(reqVersion)) {
@@ -48,22 +43,21 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
     return;
   }
 
-  Promise.resolve(SyncClientVersion.filter({ latest: true }).run()
-    .then((_release) => {
-      const release = _release[0];
-
-      if (release.major > reqVersion) {
+  Promise.resolve(SyncClientVersion.nth(0).run()
+    .then((release) => {
+      if (release.version > reqVersion) {
         const msg = Object.assign(
           {},
           updaterResponse,
           { available: true },
-          { url: DOWNLOAD_LINK },
+          { url: release.url },
         );
         res.send(msg);
       } else {
         res.send(updaterResponse);
       }
-    }));
+    })
+    .catch(next));
 });
 
 /**
@@ -90,8 +84,8 @@ updaterRouter.get('/download', checkPermissions('syncClientVersion:read'), (req,
  * Get the latest sync client release info.
  */
 updaterRouter.get('/release', checkPermissions('syncClientVersion:read'), (req, res, next) => {
-  return SyncClientVersion.filter({ latest: true }).run()
-    .then(release => res.send(release[0]))
+  return SyncClientVersion.nth(0).run()
+    .then(release => res.send(release))
     .catch(next);
 });
 
@@ -100,30 +94,13 @@ updaterRouter.get('/release', checkPermissions('syncClientVersion:read'), (req, 
  */
 updaterRouter.put('/release', checkPermissions('syncClientVersion:create'), (req, res, next) => {
   const newVersion = Object.assign({}, req.body);
-  console.log('updating sc version', req.body);
-  console.log('updating sc version', newVersion);
 
-  const dbVersion = SyncClientVersion.filter({ latest: true }).run()
-    .then(_dbVersion => _dbVersion[0].merge(newVersion).save());
-
-  return Promise.resolve(dbVersion)
-    .then(_dbv => res.send(_dbv))
-    .catch(next);
+  return Promise.resolve(
+    SyncClientVersion.nth(0).run()
+        .then(_dbVersion => _dbVersion.merge(newVersion).save())
+        .catch(next))
+      .then(_dbv => res.send(_dbv))
+      .catch(next);
 });
-
-/**
- * Set current version of the sync client.
- * TODO this method should be removed/modified to always have one entry for release
- * in the db.
- */
-updaterRouter.post('/release', (req, res, next) => {
-  const newVersion = Object.assign({}, req.body);
-  console.log('received new version', req.body);
-
-  return SyncClientVersion.save(newVersion)
-    .then(version => res.sendStatus(201, version))
-    .catch(next);
-});
-
 
 module.exports = updaterRouter;

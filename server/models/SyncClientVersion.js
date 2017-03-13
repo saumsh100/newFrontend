@@ -5,8 +5,9 @@ const type = thinky.type;
 
 const SyncClientVersion = createModel('SyncClientVersion', {
   latest: type.boolean(),
-  major: type.number().required(),
-  minor: type.number(),
+  version: type.number().required(),
+  build: type.number(),
+  url: type.string(),
 });
 
 module.exports = SyncClientVersion;
