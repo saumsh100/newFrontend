@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Grid, Row, Col, Card, Icon } from '../library';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
 import RequestsContainer from '../../containers/RequestContainer';
@@ -37,24 +38,27 @@ class Dashboard extends React.Component {
       fetchReviewsData,
       ratingCounts,
     } = this.props;
-    
+
     // TODO: for now connect Reviews card to Listings card props until its api integration
     return (
-    <div style={{display: 'flex', width: '100%'}}>
-      <div style={{width: '1000px'}}>
-        &nbsp;
-      </div>
-      <div className={styles.requestContainer}>
-        <RequestsContainer />
-      </div>
-    </div>
-
+      <Grid className={styles.dashboard}>
+        <Row>
+          <div className={styles.dashboard__header}>
+            Welcome Back, <b>Corina</b>
+          </div>
+        </Row>
+        <Row>
+          <div className={styles.dashboard__requestContainer}>
+            <RequestsContainer />
+          </div>
+        </Row>
+      </Grid>
     );
   }
 
   render() {
     return (
-      <div style={{ padding: '20px' }}>
+      <div>
         {this.renderCards()}
       </div>
     );
