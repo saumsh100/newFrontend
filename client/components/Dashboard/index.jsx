@@ -39,7 +39,8 @@ class Dashboard extends React.Component {
       ratingCounts,
     } = this.props;
 
-    // TODO: for now connect Reviews card to Listings card props until its api integration
+    // TODO: separate the 4 IconCards into their own component
+    // TODO: Welcome Back should be in a Card, anything with white backdrop is a Card
     return (
       <Grid className={styles.dashboard}>
         <Row>

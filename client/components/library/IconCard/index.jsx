@@ -14,6 +14,8 @@ export default function IconCard(props) {
   } = props;
 
   const classes = classNames(className, styles.iconCard);
+  // TODO: Remove Col wrapper, this component does not care if it is in a Grid!
+  // TODO: Make Icon a light grey to match title text, just like in mockups
   return (
     <Col {...props}>
       <Card className={classes}>
