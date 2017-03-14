@@ -18,7 +18,7 @@ export default function SideBySideCard(props) {
         </Row>
         <Row className={styles.sideByside__body}  >
           {items.map(i => (
-          <Col xs={6} className={styles.sideByside__leftCol}  >
+          <Col xs={6} className={`${styles.sideByside__leftCol} ${i.first ? styles.sideByside__first : '' }`}  >
             <div className={styles.sideByside__icon} >
               <i className={`fa fa-${i.icon}`} />
             </div>

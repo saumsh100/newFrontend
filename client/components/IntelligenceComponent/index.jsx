@@ -9,8 +9,8 @@ class IntelligenceComponent extends Component {
 	      <Grid>
 	      		<Col xs={12}>
 			      	<Row>	
-			        	<SideBySideCard items={[{count: 106, details: 'via phone', icon: 'phone'}, {count: 206, details: 'via ...', icon: 'phone'} ]} title={"some title"} />
-			        	<SideBySideCard items={[{count: 206, details: 'via facebook', icon: 'phone'}, {count: 406, details: '...phone', icon: 'phone'}]} title={"another title"} />
+			        	<SideBySideCard items={[{count: 106, details: 'via phone', icon: 'phone', first: true}, {count: 206, details: 'via ...', icon: 'phone'} ]} title={"Appoinment Types"} />
+			        	<SideBySideCard items={[{count: 206, details: 'via facebook', icon: 'phone', first: true}, {count: 406, details: '...phone', icon: 'phone'}]} title={"Appoinment Types"} />
 			      	</Row>
 	      		</Col>
 	    
