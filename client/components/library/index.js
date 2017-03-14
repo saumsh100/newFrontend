@@ -17,6 +17,7 @@ import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
+import IconCard from './IconCard';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 
@@ -33,6 +34,7 @@ export {
   Form,
   FormSection,
   Icon,
+  IconCard,
   IconButton,
   InfiniteScroll,
   Input,

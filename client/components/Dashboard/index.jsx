@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Grid, Row, Col, Card, Icon } from '../library';
+import { Grid, Row, Col, IconCard } from '../library';
 import Listings from '../Listings';
 import Reviews from '../Reviews';
 import RequestsContainer from '../../containers/RequestContainer';
@@ -43,14 +43,24 @@ class Dashboard extends React.Component {
     return (
       <Grid className={styles.dashboard}>
         <Row>
-          <div className={styles.dashboard__header}>
-            Welcome Back, <b>Corina</b>
-          </div>
+          <Col className={styles.dashboard__header} xs={12}>
+            <div className={styles.dashboard__header_title}>
+              Welcome Back, <b>Corina</b>
+            </div>
+            <Row className={styles.dashboard__header_cards}>
+                <IconCard className={styles.primaryColor} xs={12} sm={3} count="12" title="Appointment Booked" icon="calendar" size={10} />
+                <IconCard className={styles.primaryBlue} xs={12} sm={3} count="64" title="Appointment Booked" icon="user" size={10} />
+                <IconCard className={styles.primaryGreen} xs={12} sm={3} count="16" title="Appointment Booked" icon="bullhorn" size={10} />
+                <IconCard className={styles.primaryYellow} xs={12} sm={3} count="23" title="Appointment Booked" icon="star" size={10} />
+            </Row>
+          </Col>
         </Row>
         <Row>
-          <div className={styles.dashboard__requestContainer}>
+          <Col xs={10}>
+          </Col>
+          <Col xs={2} className={styles.dashboard__requestContainer}>
             <RequestsContainer />
-          </div>
+          </Col>
         </Row>
       </Grid>
     );
