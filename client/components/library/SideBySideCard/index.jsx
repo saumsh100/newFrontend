@@ -1,23 +1,23 @@
 
 import React, { PropTypes } from 'react';
 import styles from './styles.scss';
-import Card from '../Card';
-import CardHeader from '../CardHeader';
 import { Col, Row } from '../Grid';
+
+// TODO: call this component FlexGrid
+// TODO: it's purpose is to appropriately size and place these next to eachother and add border styling
 export default function SideBySideCard(props) {
   const {
-    title,
     items
   } = props;
-  
+
+  // TODO: make this component dynamic to include more than 2 items
+  // TODO: this component should work with children prop, not items
+  // TODO: make the Icon and the Count separate components, call them "BigIcon" and "BigCount"
+
   return (
     <Col xs={12} md={6} className={styles.settingsFormsCol}>
-      <Card className={styles.sideByside} >
-        <Row>
-          <Col xs={12} className={styles.sideByside__title}>{title}</Col>
-        </Row>
-        <Row className={styles.sideByside__body}  >
-          {items.map(i => (
+      <Row className={styles.sideByside__body}>
+        {items.map(i => (
           <Col xs={6} className={`${styles.sideByside__leftCol} ${i.first ? styles.sideByside__first : '' }`}  >
             <div className={styles.sideByside__icon} >
               <i className={`fa fa-${i.icon}`} />
@@ -27,9 +27,8 @@ export default function SideBySideCard(props) {
               <div className={styles.sideByside__small}>{i.details}</div>
             </div>
           </Col>
-          ))}
-        </Row>
-      </Card>
+        ))}
+      </Row>
     </Col>
   );
 }
