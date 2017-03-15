@@ -17,7 +17,7 @@ export default function IconCard(props) {
   // TODO: Remove Col wrapper, this component does not care if it is in a Grid!
   // TODO: Make Icon a light grey to match title text, just like in mockups
   return (
-    <Col {...props}>
+    <div>
       <Card className={classes}>
         <div className={styles.iconCard__wrapper}>
           <div className={styles.iconCard__count}>{count}</div>
@@ -27,7 +27,7 @@ export default function IconCard(props) {
               icon={icon}
               size={size} />
       </Card>
-    </Col>
+    </div>
   );
 }
 

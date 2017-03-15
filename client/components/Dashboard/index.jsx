@@ -6,6 +6,7 @@ import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
 import GuageTest from '../demo/GuageTest';
+import DashboardStats from './DashboardStats'
 import styles from "./styles.scss";
 
 
@@ -33,8 +34,6 @@ class Dashboard extends React.Component {
       ratingCounts,
     } = this.props;
 
-    // TODO: separate the 4 IconCards into their own component
-    // TODO: Welcome Back should be in a Card, anything with white backdrop is a Card
     return (
       <Grid className={styles.dashboard}>
         <Row>
@@ -42,12 +41,7 @@ class Dashboard extends React.Component {
             <Card className={styles.dashboard__header_title}>
               Welcome Back, <b>Corina</b>
             </Card>
-            <Row className={styles.dashboard__header_cards}>
-              <IconCard className={styles.primaryColor} xs={12} sm={3} count="12" title="Appointment Booked" icon="calendar" size={10} />
-              <IconCard className={styles.primaryBlue} xs={12} sm={3} count="64" title="Appointment Booked" icon="user" size={10} />
-              <IconCard className={styles.primaryGreen} xs={12} sm={3} count="16" title="Appointment Booked" icon="bullhorn" size={10} />
-              <IconCard className={styles.primaryYellow} xs={12} sm={3} count="23" title="Appointment Booked" icon="star" size={10} />
-            </Row>
+            <DashboardStats/>
           </Col>
         </Row>
         <Row>
