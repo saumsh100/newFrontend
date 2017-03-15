@@ -14,6 +14,7 @@ import InfiniteScroll from './InfiniteScroll';
 import Input from './Input';
 import Link from './Link';
 import Modal from './Modal';
+import DoughnutChart from './DoughnutChart';
 import PieChart from './PieChart';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
@@ -42,6 +43,7 @@ export {
   Link,
   Modal,
   PieChart,
+  DoughnutChart,
   RouterButton,
   RouterList,
   RouterTabs,
