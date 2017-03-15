@@ -7,6 +7,7 @@ import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
 import DropdownSelect from './DropdownSelect';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
+import Guage from './Guage';
 import Icon from './Icon';
 import IconButton from './IconButton';
 import InfiniteScroll from './InfiniteScroll';
@@ -32,6 +33,7 @@ export {
   FieldArray,
   Form,
   FormSection,
+  Guage,
   Icon,
   IconButton,
   InfiniteScroll,
