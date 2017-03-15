@@ -1,0 +1,50 @@
+@import "../../../ui.scss";
+
+.reminders {
+    padding: 0 45px 0 15px;
+    border-top: 5px solid $primary-blue;
+    margin-bottom: 20px;
+    max-height: 650px;
+}
+.patients {
+    border-top: 1px solid $primary-grey;
+    padding: 0;
+    margin: 0;
+    &__item {
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 110px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border-bottom: 1px solid $primary-lightgrey;
+
+        &_icon:nth-child(1) {
+            color: red;
+        }
+        &_wrapper {
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            color: $primary-darkgrey;
+        }
+        &_right {
+            text-align: right;
+        }
+        &_img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        &_icon {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            transform: translateY(-50%);
+        }
+    }
+}

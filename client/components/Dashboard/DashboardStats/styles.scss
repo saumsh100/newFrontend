@@ -1,0 +1,21 @@
+@import "../../../ui.scss";
+.dashboardStats {
+    cursor: pointer;
+    margin-bottom: 20px;
+    div:not(:last-child) {
+        margin-right: 10px;
+        flex: 1;
+    }
+}
+.primaryColor {
+    background: $primary-color;
+}
+.primaryBlue {
+    background: $primary-blue;
+}
+.primaryGreen {
+    background: $primary-green;
+}
+.primaryYellow {
+    background: $primary-yellow;
+}

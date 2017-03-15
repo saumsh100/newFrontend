@@ -1,12 +1,13 @@
-
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from "react";
+import { Grid, Row, Col, Card, IconCard } from "../library";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
-import GuageTest from '../demo/GuageTest';
-import styles from './styles.scss';
+import DashboardStats from './DashboardStats'
+import RemindersList from './RemindersList'
+import styles from "./styles.scss";
 
 
 class Dashboard extends React.Component {
@@ -32,22 +33,35 @@ class Dashboard extends React.Component {
       fetchReviewsData,
       ratingCounts,
     } = this.props;
-    
-    // TODO: for now connect Reviews card to Listings card props until its api integration
+
     return (
-    <div style={{display: 'flex', width: '100%'}}>
-      <div className={styles.requestContainer}>
-        <RequestsContainer />
-      </div>
-    </div>
+      <Grid className={styles.dashboard}>
+        <Row>
+          <Col className={styles.dashboard__header} xs={12}>
+            <Card className={styles.dashboard__header_title}>
+              Welcome Back, <b>Corina</b>
+            </Card>
+            <DashboardStats/>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={10}>
+            <Col xs={3}>
+              <RemindersList />
+            </Col>
+          </Col>
+          <Col xs={2} className={styles.dashboard__requestContainer}>
+            <RequestsContainer />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 
   render() {
     return (
-      <div style={{ padding: '20px' }}>
+      <div>
         {this.renderCards()}
-        <GuageTest />
       </div>
     );
   }

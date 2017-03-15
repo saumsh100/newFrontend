@@ -19,6 +19,7 @@ import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import FlexGrid from './FlexGrid';
 import Tabs, { Tab } from './Tabs';
+import IconCard from './IconCard';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 
@@ -36,6 +37,7 @@ export {
   FormSection,
   Guage,
   Icon,
+  IconCard,
   IconButton,
   InfiniteScroll,
   Input,
