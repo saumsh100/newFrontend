@@ -20,6 +20,7 @@
             top: 50%;
             transform: translateY(-50%);
             i {
+                color: #f3715c;
                 color: var(--bookingWidgetPrimaryColor);
             }
         }
@@ -85,7 +86,8 @@
             font-size: 8px;
             padding: 6px 20px;
             border: none;
-            background: var(--bookingWidgetPrimaryColor);
+            background-color: #f3715c;
+            background-color: var(--bookingWidgetPrimaryColor);
             cursor: pointer;
             &:disabled {
                 cursor: not-allowed;

@@ -46,12 +46,14 @@ class SignUp extends Component {
   }
 
   bookAnAppointment(params) {
-    const { startsAt, practitionerId, serviceId } = this.props.practitionersStartEndDate.toJS();
+    const { startsAt, practitionerId, serviceId, reservationId } = this.props.practitionersStartEndDate.toJS();
     const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
     const array = location.pathname.split('/');
     const accountId = array[array.length - 1];
     const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId, accountId }, params, { domen });
     this.props.createPatient(paramsToPass);
+    this.props.removeReservation(reservationId);
+    clearInterval(this.registrationTimer);
   }
 
   setRegistrationStep(e) {
@@ -61,7 +63,8 @@ class SignUp extends Component {
     const array = location.pathname.split('/');
     const accountId = array[array.length - 1];
     setRegistrationStep(1, accountId);
-    removeReservation(reservationId)
+    removeReservation(reservationId);
+    clearInterval(this.registrationTimer);
   }
   collapseMenu(open) {
     if(open) {

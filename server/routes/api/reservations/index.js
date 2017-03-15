@@ -18,7 +18,7 @@ reservationsRouter.post('/', (req, res, next) => {
   const accountId = req.query.accountId || req.accountId;
   const { practitionerId, serviceId, startsAt } = req.body;
   Service.get(serviceId).run().then((service) => {
-  	const endTime = moment(startsAt).add(service.duraction, 'minutes')._d; 
+  	const endTime = moment(startsAt).clone().add(service.duration, 'minutes')._d;
 	  return Reservation.save({
 			practitionerId,
 			serviceId,

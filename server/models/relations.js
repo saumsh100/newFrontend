@@ -40,7 +40,7 @@ Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Request.belongsTo(Chair, 'chair', 'chairId', 'id');
 
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
-Practitioner.hasMany(Appointment, 'appointment', 'id', 'practitionerId')
+Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId')
 Service.belongsTo(Account, 'account', 'accountId', 'id');
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
 Chair.belongsTo(Account, 'account', 'accountId', 'id');

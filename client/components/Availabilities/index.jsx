@@ -1,3 +1,4 @@
+
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import includes from 'lodash/includes';
@@ -6,7 +7,7 @@ import { Button, Form, Field, Checkbox } from '../library';
 import SignUp from './SignUp';
 import RenderFirstStep from './RenderFirstStep';
 import Preferences from './Preferences';
-import 'react-day-picker/lib/style.css';
+import DayPickerStyles from '../library/DayPicker/styles.css';
 import styles from './styles.scss';
 
 class Availabilities extends React.Component {
@@ -20,6 +21,7 @@ class Availabilities extends React.Component {
       checked: false,
       collapseMenu: false,
     };
+
     this.onDoctorChange = this.onDoctorChange.bind(this);
     this.onServiceChange = this.onServiceChange.bind(this);
     this.sixDaysBack = this.sixDaysBack.bind(this);
