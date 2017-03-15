@@ -6,7 +6,6 @@ import Button from './Button';
 import Card from './Card';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
-import DoughnutChart from './DoughnutChart';
 import DropdownSelect from './DropdownSelect';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
 import Guage from './Guage';
@@ -33,7 +32,6 @@ export {
   Card,
   CardHeader,
   Checkbox,
-  DoughnutChart,
   DropdownSelect,
   Field,
   FieldArray,

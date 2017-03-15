@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, HorizontalBar } from 'react-chartjs-2';
 
 const COLOR_MAP = {
   red: '#FF715C',
@@ -11,11 +11,14 @@ const COLOR_MAP = {
 
 export default function BarChart(props) {
   const {
+    type,
     dataSets = [],
     labels = [],
     displayLegend,
     displayTooltips,
   } = props;
+
+  const BarChartComponent = type === 'horizontal' ? HorizontalBar : Bar;
 
   const legend = {
     display: !!displayLegend,
@@ -62,7 +65,7 @@ export default function BarChart(props) {
   };
 
   return (
-    <Bar
+    <BarChartComponent
       data={newData}
       options={options}
     />

@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Pie, Doughnut } from 'react-chartjs-2';
 
 const COLOR_MAP = {
   red: '#FF715C',
@@ -11,10 +11,13 @@ const COLOR_MAP = {
 
 export default function PieChart(props) {
   const {
+    type,
     data,
     displayLegend,
     displayTooltips,
   } = props;
+
+  const PieChartComponent = type === 'doughnut' ? Doughnut : Pie;
 
   const values = data.map(d => d.value);
   const colors = data.map(d => COLOR_MAP[d.color]);
@@ -47,7 +50,7 @@ export default function PieChart(props) {
   };
 
   return (
-    <Pie
+    <PieChartComponent
       data={newData}
       options={options}
     />
