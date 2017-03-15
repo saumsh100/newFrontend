@@ -1,13 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { Line } from 'react-chartjs-2';
-
-const COLOR_MAP = {
-  red: '#FF715C',
-  blue: '#8FBBD6',
-  green: '#2EC4A7',
-  yellow: '#FFC55B',
-};
+import colorMap from '../util/colorMap';
 
 export default function LineChart(props) {
   const {
@@ -38,18 +32,18 @@ export default function LineChart(props) {
         // DEFAULT STYLES, we will adapt this as we go
         lineTension: 0,
         fill: false,
-        backgroundColor: COLOR_MAP[color],
-        borderColor: COLOR_MAP[color],
+        backgroundColor: colorMap[color],
+        borderColor: colorMap[color],
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0,
         borderJoinStyle: 'miter',
-        pointBorderColor: COLOR_MAP[color],
+        pointBorderColor: colorMap[color],
         pointBackgroundColor: '#fff',
         pointBorderWidth: 1,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: COLOR_MAP[color],
-        pointHoverBorderColor: COLOR_MAP[color],
+        pointHoverBackgroundColor: colorMap[color],
+        pointHoverBorderColor: colorMap[color],
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,

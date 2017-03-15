@@ -1,13 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { Bar, HorizontalBar } from 'react-chartjs-2';
-
-const COLOR_MAP = {
-  red: '#FF715C',
-  blue: '#8FBBD6',
-  green: '#2EC4A7',
-  yellow: '#FFC55B',
-};
+import colorMap from '../util/colorMap';
 
 export default function BarChart(props) {
   const {
@@ -42,11 +36,11 @@ export default function BarChart(props) {
       let backgroundColor;
       let borderColor;
       if (typeof color === 'string') {
-        backgroundColor = COLOR_MAP[color];
-        borderColor = COLOR_MAP[color];
+        backgroundColor = colorMap[color];
+        borderColor = colorMap[color];
       } else {
-        backgroundColor = color.map(c => COLOR_MAP[c]);
-        borderColor = color.map(c => COLOR_MAP[c]);
+        backgroundColor = color.map(c => colorMap[c]);
+        borderColor = color.map(c => colorMap[c]);
       }
 
       return Object.assign({ data, label }, {
