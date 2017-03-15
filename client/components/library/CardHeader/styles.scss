@@ -1,14 +1,10 @@
 
 @import '../../../ui.scss';
-
 .cardHeader {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   padding-top: 0.5em;
-  padding-left: 1em;
-  border-bottom: 2px solid;
-  border-bottom-color: $primary-grey;
 }
 
 .displayFlex {

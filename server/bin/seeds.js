@@ -52,6 +52,8 @@ const justinChatId = uuid();
 const sergeyChatId = uuid();
 
 const weeklyScheduleId = uuid();
+const weeklyScheduleId2 = uuid();
+const weeklyScheduleId3 = uuid();
 
 const mondayHoursId = uuid();
 const tuesdayHoursId = uuid();
@@ -420,6 +422,37 @@ const SEEDS = {
   WeeklySchedule: [
     {
       id: weeklyScheduleId,
+      accountId,
+      monday: {
+        isClosed: true,
+      },
+
+      saturday: {
+        isClosed: true,
+      },
+
+      sunday: {
+        isClosed: true,
+      },
+    },
+    {
+      id: weeklyScheduleId2,
+      accountId,
+      monday: {
+        isClosed: true,
+      },
+
+      saturday: {
+        isClosed: true,
+      },
+
+      sunday: {
+        isClosed: true,
+      },
+    },
+    {
+      id: weeklyScheduleId3,
+      accountId,
       monday: {
         isClosed: true,
       },
@@ -480,12 +513,16 @@ const SEEDS = {
       accountId: accountId,
       firstName: 'Chelsea',
       lastName: 'Mansfield',
+      weeklyScheduleId: weeklyScheduleId2,
+      isCustomSchedule: true,
     },
     {
       id: practitionerId2,
       accountId,
       firstName: 'Perry',
       lastName: 'Cox',
+      weeklyScheduleId: weeklyScheduleId3,
+      isCustomSchedule: true,
     },
   ],
 

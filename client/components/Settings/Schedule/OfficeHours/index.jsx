@@ -18,6 +18,7 @@ function OfficeHours(props) {
       <OfficeHoursForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}
+        formName="officeHours"
       />
       <BreaksForm
         weeklySchedule={weeklySchedule}

@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 
 import Button from '../Button';
 import styles from './styles.scss';
+import Icon from '../Icon';
 
 export default function SaveButton(props) {
   const {
@@ -13,7 +14,7 @@ export default function SaveButton(props) {
     <div className={styles.formActionsWrapper}>
       <div className={styles.formActionsPull}>
         <Button flat disabled={pristine} type="submit" className={styles.submitButton} >
-          Save
+          <Icon icon="floppy-o" />
         </Button>
       </div>
     </div>

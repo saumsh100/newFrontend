@@ -3,11 +3,25 @@ const bcrypt = require('bcrypt');
 const zxcvbn = require('zxcvbn');
 const userRouter = require('express').Router();
 const User = require('../../../models/User');
+const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const StatusError = require('../../../util/StatusError');
 const normalize = require('../normalize');
 
 userRouter.param('userId', loaders('profile', 'User'));
+
+
+userRouter.get('/',checkPermissions('users:read'), (req, res, next) => {
+  const {
+    accountId,
+    joinObject,
+  } = req;
+
+  console.log(accountId);
+  return User.filter({ activeAccountId: accountId }).getJoin(joinObject).run()
+    .then(users => res.send(normalize('users', users)))
+    .catch(next);
+});
 
 userRouter.put('/:userId', (req, res, next) => {
   Promise.resolve(req.profile)
