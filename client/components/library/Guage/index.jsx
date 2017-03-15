@@ -13,6 +13,8 @@ export default function Guage(props) {
   const {
     percentage,
     color = 'red',
+    width,
+    height,
   } = props;
 
   const legend = {
@@ -57,6 +59,8 @@ export default function Guage(props) {
     <Doughnut
       data={data}
       options={options}
+      width={width}
+      height={height}
     />
   );
 }

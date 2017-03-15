@@ -4,7 +4,7 @@ import styles from './styles.scss';
 import Card from '../Card';
 import CardHeader from '../CardHeader';
 import { Col, Row } from '../Grid';
-
+import Guage from '../Guage'
 
 const SideBySideCard = function (props) {
   const {
@@ -84,7 +84,7 @@ const ChartGrid = function (props) {
                 </div>
             </div>
             <div>
-              
+              <Guage percentage={80} width={100} height={50} />
             </div>
           </div>
         </div>
