@@ -12,6 +12,7 @@ export default function Button(props) {
     cx({
       default: true,
       flat: props.flat,
+      notFlat: !props.flat,
       disabled: props.disabled,
     })
   );

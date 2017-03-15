@@ -10,7 +10,7 @@ React, Redux, Sass
 
 ## Install
 
-Install RethinkDB (https://www.rethinkdb.com/docs/install/). 
+Install RethinkDB (https://www.rethinkdb.com/docs/install/).
 Use node and npm versions in package.json file, install them if not already installed.
 
 `git clone git@github.com:carecru/carecru.git`
@@ -57,3 +57,23 @@ add the following to `/etc/hosts`
 127.0.0.1        my.carecru.dev
 127.0.0.1       api.carecru.dev
 ```
+## View on Heroku
+
+To view pull-request app on Heroku domain for it is created as follows:
+https://carecru-staging-pr-[PR_NUMBER].herokuapp.com
+
+
+## Useful notes
+### Rethink
+It is also possible to run rethinkdb as a daemon from any directory hidden in the background:
+```
+rethinkdb --daemon -d <CARECRU_CODE_DIR>
+```
+CARECRU_CODE_DIR is the directory where you want the `rethinkdb_data` to reside. Change accordingly.
+
+On Linux (and alike) system you can alias this command for quicker access to it:
+```
+echo alias rundb='rethinkdb --daemon -d <CARECRU_CODE_DIR>' >> ~/.profile
+```
+
+This will run it in the background as daemon process so you won't need to keep a terminal window for it. To kill it use your systems task manager or run `pkill rethinkdb` and then check that it's killed `ps -ef | grep rethinkdb`. However, you should not need to do this often.

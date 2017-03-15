@@ -49,27 +49,25 @@ patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('
 patientsRouter.get('/', (req, res, next) => {
   const { accountId } = req;
   const { email } = req.query;
-  if (email) return Patient.filter({ email }).run()
-    .then(p => res.send({length: p.length }));
-
-  return Patient.filter({ accountId }).run()
-    .then(patients => res.send(normalize('patients', patients)))
-    .catch(next);
+  if (email) {
+    return Patient.filter({ email }).run()
+    .then(p => res.send({ length: p.length }));
+  } else {
+    return Patient.filter({ accountId }).run()
+      .then(patients => res.send(normalize('patients', patients)))
+      .catch(next);
+  }
 });
 
 /**
  * Create a patient
  */
 patientsRouter.post('/', (req, res, next) => {
-  const { firstName, lastName, phoneNumber, email } = req.body;
   const accountId = req.accountId || req.body.accountId;
-  return Patient.save({
-    firstName,
-    lastName,
-    phoneNumber,
-    email,
-    accountId,
-  }).then(patient => res.status(201).send(normalize('patient', patient)))
+  const patientData = Object.assign({}, req.body, { accountId: accountId });
+
+  return Patient.save(patientData)
+    .then(patient => res.status(201).send(normalize('patient', patient)))
     .catch(next);
 });
 

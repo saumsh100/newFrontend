@@ -42,4 +42,4 @@ const enhance = compose(
   withValidate,
 );
 
-export default enhance(ReduxField);
+export default  enhance(ReduxField);

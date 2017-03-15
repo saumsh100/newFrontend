@@ -11,7 +11,7 @@ const initialState = fromJS({
 export default handleActions({
 
   [SET_HOVER_REQUEST_ID](state, action){
-    const newId = action.payload.id === state.toJS().clickedId ? null : action.payload.id;
+    const newId = action.payload.id === state.toJS().hoverRequestId ? null : action.payload.id;
     return state.merge({
       hoverRequestId: newId,
     });

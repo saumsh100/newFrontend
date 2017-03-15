@@ -53,7 +53,8 @@ export function createEntityRequest({ key, entityData }) {
     return axios.post(entity.getUrlRoot(), entityData)
       .then((response) => {
         const { data } = response;
-        dispatch(addEntity({ key, entity: data.entities }));
+        dispatch(receiveEntities({ key, entities: data.entities }));
+        return data.entities;
       })
       .catch(err => console.log(err));
   };

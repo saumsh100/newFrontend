@@ -11,7 +11,7 @@ const PATHS = {
 
 };
 
-export default function NavList({ location }) {
+export default function NavList({ location, isCollapsed }) {
   const {
     navItem,
     activeItem,
@@ -32,13 +32,20 @@ export default function NavList({ location }) {
       classes = classNames(classes, styles.disabledItem);
     }
 
+    let labelComponent = null;
+    if (!isCollapsed) {
+      labelComponent = (
+        <div className={active ? activeLabelClass : inactiveLabelClass}>
+          {label}
+        </div>
+      );
+    }
+
     return (
       <Link to={path} disabled={disabled}>
         <NavItem className={classes}>
           <Icon icon={icon} className={styles.icon} />
-          <div className={active ? activeLabelClass : inactiveLabelClass}>
-            {label}
-          </div>
+          {labelComponent}
         </NavItem>
       </Link>
     );
@@ -48,7 +55,7 @@ export default function NavList({ location }) {
     const active = location.pathname.indexOf(path) === 0;
 
     let content = null;
-    if (active) {
+    if (active && !isCollapsed) {
       content = (
         <ul className={styles.multiple_nav}>
           {children}

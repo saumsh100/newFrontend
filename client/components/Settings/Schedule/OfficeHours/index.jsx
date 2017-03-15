@@ -3,18 +3,26 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import OfficeHoursForm from './OfficeHoursForm';
+import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 
 function OfficeHours(props) {
   const { weeklySchedule } = props;
+  const handleSubmit = (values) => {
+    const newWeeklySchedule = weeklySchedule.merge(values);
+    props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
+  };
+
   return (
     <div>
       <OfficeHoursForm
         weeklySchedule={weeklySchedule}
-        onSubmit={(values) => {
-          const newWeeklySchedule = weeklySchedule.merge(values);
-          props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
-        }}
+        onSubmit={handleSubmit}
+        formName="officeHours"
+      />
+      <BreaksForm
+        weeklySchedule={weeklySchedule}
+        onSubmit={handleSubmit}
       />
     </div>
   );

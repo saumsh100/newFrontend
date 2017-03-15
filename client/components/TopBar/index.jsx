@@ -36,7 +36,7 @@ class TopBar extends Component {
     super(props);
 
     this.state = {
-      index: 0
+      index: 0,
     };
 
     this.logout = this.logout.bind(this);
@@ -57,20 +57,31 @@ class TopBar extends Component {
         styles.topBarContainerUnCollapsed
     );
 
-    let logoComponent = null;
-    if (!isCollapsed) {
-      logoComponent = (
-        <div className={styles.logoWrapper}>
-          <div className={styles.logoImage}>
-            <img
-              className={styles.logoImageImage}
-              src="/images/carecru_logo.png"
-              alt="CareCru logo"
-            />
-          </div>
+    // Conditionally change the image render ifCollapsed, media queries will decide to hide or not
+    let logoImage = (
+      <img
+        className={styles.logoImageImage}
+        src="/images/carecru_logo.png"
+        alt="CareCru logo"
+      />
+    );
+
+    if (isCollapsed) {
+      logoImage = (
+        <div>
+          C
         </div>
       );
     }
+
+    const logoComponent = (
+      <div className={!isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed}>
+        <div className={!isCollapsed ? styles.logoImage : styles.logoImageCollapsed}>
+          {logoImage}
+        </div>
+      </div>
+    );
+
 
     return (
       <AppBar className={topBarClassName}>

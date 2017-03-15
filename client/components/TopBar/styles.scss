@@ -39,15 +39,32 @@
   color: white;
 }
 
+.logoWrapperCollapsed {
+  @extend .logoWrapper;
+  @media screen and (max-width: $medium-screen-width) {
+    display: none;
+  }
+}
+
 .logoImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: $side-nav-width;
   height: 100%;
   text-align: center;
 }
 
+.logoImageCollapsed {
+  @extend .logoImage;
+  @media screen and (min-width: $medium-screen-width) {
+    width: $mini-side-nav-width;
+    // background-color: green;
+  }
+}
+
 .logoImageImage {
   width: 140px;
-  margin-top: 18px;
 }
 
 .collapseButton {
@@ -86,6 +103,11 @@
 .logoutPill {
   border-left: 1.5px solid darkgrey;
   padding: 6px;
+  @media screen and (max-width: $medium-screen-width) {
+    font-size: 1.2rem;
+    margin-left: 5px;
+    display: none;
+  }
 }
 
 .userMenuButton {
@@ -97,6 +119,9 @@
 .userMenuGreeting {
   padding-right: 10px;
   font-weight: 600;
+  @media screen and (max-width: $medium-screen-width) {
+    display: none;
+  }
 }
 
 .userRole {
