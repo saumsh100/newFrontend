@@ -1,6 +1,7 @@
 
 import AppBar from './AppBar';
 import Avatar from './Avatar';
+import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
 import CardHeader from './CardHeader';
@@ -27,6 +28,7 @@ import Tooltip from './Tooltip';
 export {
   AppBar,
   Avatar,
+  BarChart,
   Button,
   Card,
   CardHeader,

@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Card, Guage, PieChart, DoughnutChart, LineChart } from '../library';
+import { Card, Guage, PieChart, DoughnutChart, LineChart, BarChart } from '../library';
 
 export default function GuageTest() {
   return (
@@ -37,6 +37,17 @@ export default function GuageTest() {
             label: 'Appointments Cancelled',
             color: 'red',
             data: [10, 12, 13, 3, 2, 1, 0],
+          },
+        ]}
+      />
+      <BarChart
+        displayTooltips={true}
+        labels={['January', 'February', 'March', 'April']}
+        dataSets={[
+          {
+            label: 'Appointments Booked',
+            color: ['yellow', 'red', 'green', 'blue'],
+            data: [65, 59, 80, 81],
           },
         ]}
       />
