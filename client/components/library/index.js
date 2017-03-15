@@ -5,6 +5,7 @@ import Button from './Button';
 import Card from './Card';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
+import DoughnutChart from './DoughnutChart';
 import DropdownSelect from './DropdownSelect';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
 import Guage from './Guage';
@@ -13,8 +14,8 @@ import IconButton from './IconButton';
 import InfiniteScroll from './InfiniteScroll';
 import Input from './Input';
 import Link from './Link';
+import LineChart from './LineChart';
 import Modal from './Modal';
-import DoughnutChart from './DoughnutChart';
 import PieChart from './PieChart';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
@@ -30,6 +31,7 @@ export {
   Card,
   CardHeader,
   Checkbox,
+  DoughnutChart,
   DropdownSelect,
   Field,
   FieldArray,
@@ -41,9 +43,9 @@ export {
   InfiniteScroll,
   Input,
   Link,
+  LineChart,
   Modal,
   PieChart,
-  DoughnutChart,
   RouterButton,
   RouterList,
   RouterTabs,
