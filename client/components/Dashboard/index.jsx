@@ -5,8 +5,8 @@ import { bindActionCreators } from 'redux';
 import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
-import GuageTest from '../demo/GuageTest';
 import DashboardStats from './DashboardStats'
+import RemindersList from './RemindersList'
 import styles from "./styles.scss";
 
 
@@ -46,6 +46,9 @@ class Dashboard extends React.Component {
         </Row>
         <Row>
           <Col xs={10}>
+            <Col xs={3}>
+              <RemindersList />
+            </Col>
           </Col>
           <Col xs={2} className={styles.dashboard__requestContainer}>
             <RequestsContainer />
@@ -59,7 +62,6 @@ class Dashboard extends React.Component {
     return (
       <div>
         {this.renderCards()}
-        <GuageTest />
       </div>
     );
   }
