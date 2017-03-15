@@ -1,3 +1,4 @@
+
 @import '../../ui.scss';
 
 .requestPopover > :global(svg.Popover-tip) {
@@ -28,14 +29,15 @@
 
 .requestListItem {
   height: auto;
+  min-width: 320px;
   padding-left: 1em;
   padding-top: 15px;
   padding-bottom: 15px;
   color: $primary-dark;
- }
+  position: relative;
+}
 
 .requestData {
-  width: 160px;
   padding-left: 1em;
   border-left: 2px solid;
   border-left-color: #bfbfbf;
@@ -92,20 +94,28 @@
 .clickHandlers {
   display: flex;
   width: 44px;
-  padding-left: 5px;
+  position: absolute;
+  color: #b5b5b5;
+  font-size: .9rem;
+  top: 50%;
+  transform: translateY(-50%);    right: 20px;
   &__newreqText{
     @extend .font-small-dark;
-    padding-left: 20px;
+    position: absolute;
+    color: #b5b5b5;
+    font-size: .9rem;
+    top: 50%;
+    transform: translateY(-50%);    right: 20px;
   }
 
   &__remove{
-    padding: 5;
+    padding: 5px;
     font-size: 22px;
     color: $inactive-color;
   }
 
   &__confirm{
-    padding: 5;
+    padding: 5px;
     font-size: 22px;
     color: $primary-green;
     &:hover {

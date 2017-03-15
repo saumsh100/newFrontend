@@ -2,8 +2,6 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, Card, RouterButton } from '../components/library';
-import styles from '../components/Patients/styles.scss';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import setCurrentScheduleDate from '../thunks/date';
@@ -22,6 +20,10 @@ class ScheduleContainer extends React.Component {
   componentDidMount() {
     this.props.fetchEntities({ key: 'appointments' });
     this.props.fetchEntities({ key: 'practitioners' });
+    this.props.fetchEntities({ key: 'requests' });
+    this.props.fetchEntities({ key: 'services' });
+    
+    
   }
 
   render() {
@@ -35,6 +37,9 @@ class ScheduleContainer extends React.Component {
       selectAppointmentType,
       fetchEntities,
       setSheduleMode,
+      requests,
+      services,
+      patients,
     } = this.props;  
     return (
       <ScheduleComponent
@@ -47,6 +52,9 @@ class ScheduleContainer extends React.Component {
         selectAppointmentType={selectAppointmentType}
         fetchEntities={selectAppointmentType}
         setSheduleMode={setSheduleMode}
+        requests={requests}
+        services={services}
+        patients={patients}
       />
     );
   }
@@ -66,6 +74,10 @@ function mapStateToProps({ entities, schedule }) {
     practitioners: entities.get('practitioners'),
     schedule,
     appointments: entities.get('appointments'),
+    requests: entities.get('requests'),
+    patients: entities.get('patients'),
+    services: entities.get('services'),
+    
   };
 }
 

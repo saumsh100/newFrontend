@@ -31,7 +31,7 @@ requestsRouter.post('/', (req, res, next) => {
 /**
  * Get all requests
  */
-requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
+requestsRouter.get('/', (req, res, next) => {
   const {
     accountId,
     joinObject,
