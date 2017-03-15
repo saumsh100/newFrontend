@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import { SideBySideCard, ChartGrid } from '../library/SideBySideCard'
-import { Col, Grid, Row } from '../library/Grid';
+import { Card, CardHeader, Col, Grid, Row, FlexGrid } from '../library';
+import ChartGrid from '../library/ChartGrid'
 
 class IntelligenceComponent extends Component {
   render() {
@@ -9,7 +9,7 @@ class IntelligenceComponent extends Component {
 	      <Grid>
 			      <Row>
 	      			<Col xs={12} md={6} >
-			        	<SideBySideCard 
+			        	<FlexGrid 
 			        		items={[
 			        			{count: 106, details: 'via phone', icon: 'phone', first: true},
 			        			{count: 206, details: 'via ...', icon: 'phone'},
@@ -19,7 +19,7 @@ class IntelligenceComponent extends Component {
 			        	/>
 	      			</Col>
 	      			<Col xs={12} md={6} >
-			        	<SideBySideCard 
+			        	<FlexGrid 
 			        		items={[
 			        			{count: 206, details: 'via facebook', icon: 'phone', first: true},
 			        			{count: 406, details: '...phone', icon: 'phone'}
@@ -38,12 +38,7 @@ class IntelligenceComponent extends Component {
 			        		icon="star"
 			        	/>
 			      	</Col>
-
-
-
-
 			      </Row>
-	    
 	      </Grid>
       </div>
     );

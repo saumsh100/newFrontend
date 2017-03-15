@@ -1,48 +1,7 @@
 
 import React, { PropTypes } from 'react';
-import styles from './styles.scss';
-import Card from '../Card';
-import CardHeader from '../CardHeader';
-import { Col, Row } from '../Grid';
 import Guage from '../Guage'
-
-const SideBySideCard = function (props) {
-  const {
-    title,
-    items
-  } = props;
-  
-
-  const itemWidth = `${100 / items.length}%`;
-  const itemStyle = { width: itemWidth };
-  const gridStyle = { width: '100%' }; 
-  return (
-    <div style={gridStyle} className={styles.settingsFormsCol}>
-      <div className={styles.sideByside} >
-        <div className={styles.sideByside__title}>{title}</div>
-        <div className={styles.sideByside__body}  >
-          {items.map(i => (
-          <div style={itemStyle} className={`${styles.sideByside__leftCol} ${i.first ? styles.sideByside__first : '' }`}  >
-            <div className={styles.sideByside__icon} >
-              <i className={`fa fa-${i.icon}`} />
-            </div>
-            <div className={styles.sideByside__count}>
-              <div>{i.count}</div>
-              <div className={styles.sideByside__small}>{i.details}</div>
-            </div>
-          </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-}
-
-SideBySideCard.propTypes = {
-  // children: PropTypes.object.isRequired,
-};
-
+import styles from '../FlexGrid/styles.scss';
 
 const ChartGrid = function (props) {
   const { positive, negative, icon, text, stars, title } = props;
@@ -93,4 +52,4 @@ const ChartGrid = function (props) {
   )
 }
 
-export { SideBySideCard, ChartGrid };
+export default ChartGrid;

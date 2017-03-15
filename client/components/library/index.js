@@ -17,6 +17,7 @@ import Modal from './Modal';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
+import FlexGrid from './FlexGrid';
 import Tabs, { Tab } from './Tabs';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
@@ -44,6 +45,7 @@ export {
   RouterList,
   RouterTabs,
   SaveButton,
+  FlexGrid,
   Tabs,
   Tab,
   Toggle,
