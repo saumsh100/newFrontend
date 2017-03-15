@@ -44,8 +44,11 @@ function Form(props) {
 
   return (
     <div>
-      <form className={className}
-            onSubmit={handleSubmit}>
+      <form
+        className={className}
+        onSubmit={handleSubmit}
+        onChange={e => e.stopPropagation()}
+      >
         { children }
         { showSubmitButton }
       </form>

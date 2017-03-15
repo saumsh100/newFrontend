@@ -43,8 +43,11 @@ class Practitioners extends Component {
 function mapStateToProps({ entities }) {
 
   const practitioners = entities.getIn(['practitioners', 'models']);
-
-  const weeklyScheduleIds = practitioners.toArray().map(practitioner => practitioner.get('weeklyScheduleId'));
+  const weeklyScheduleIds = practitioners.toArray().map((practitioner) => {
+    if (practitioner.get('isCustomSchedule')) {
+      return practitioner.get('weeklyScheduleId');
+    }
+  });
 
   const weeklySchedules = entities.getIn(['weeklySchedules', 'models']).filter((schedule) => {
     return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;

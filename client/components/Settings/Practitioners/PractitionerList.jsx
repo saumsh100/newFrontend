@@ -1,14 +1,14 @@
 import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import PractitionerItem from './PractitionerItem';
-import PractitionerItemData from './PractitionerItemData';
-import CreatePractitionerForm from './CreatePractitionerForm';
-import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
+import { createEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
-import styles from './styles.scss';
 import { IconButton, CardHeader, } from '../../library';
+import PractitionerTabs from './PractitionerTabs';
+import PractitionerItem from './PractitionerItem';
+import CreatePractitionerForm from './CreatePractitionerForm';
 import Modal  from '../../library/Modal';
+import styles from './styles.scss';
 
 class PractitionerList extends Component {
   constructor(props) {
@@ -19,22 +19,16 @@ class PractitionerList extends Component {
 
     this.setActive = this.setActive.bind(this);
     this.createPractitioner = this.createPractitioner.bind(this);
-    this.updatePractitioner = this.updatePractitioner.bind(this);
-    this.deletePractitioner = this.deletePractitioner.bind(this);
   }
 
   createPractitioner(values) {
-    this.props.createEntityRequest({ key: 'practitioners', entityData: values });
+    const key = 'practitioners';
+    this.props.createEntityRequest({ key, entityData: values })
+      .then((entities) => {
+        const id = Object.keys(entities[key])[0];
+        this.props.setPractitionerId({ id });
+    });
     this.setState({ active: false });
-  }
-
-  updatePractitioner(modifiedPractitioner) {
-    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner });
-  }
-
-  deletePractitioner(id) {
-    this.props.deleteEntityRequest({ key: 'practitioners', id });
-    this.props.setPractitionerId({ id: null });
   }
 
   setActive() {
@@ -45,16 +39,12 @@ class PractitionerList extends Component {
   render() {
     const { practitioners, practitionerId, weeklySchedules } = this.props;
 
-
-
     const selectedPractitioner = (
       practitionerId ? practitioners.get(practitionerId) : practitioners.first());
-
-    const selectedPractitionerId = selectedPractitioner ? selectedPractitioner.get('id') : null;
     const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
-    const weeklySchedule = weeklyScheduleId? weeklySchedules.get(weeklyScheduleId) : null;
+    const weeklySchedule = weeklyScheduleId ? weeklySchedules.get(weeklyScheduleId) : null;
 
-    return(
+    return (
       <div className={styles.practMainContainer} >
         <div className={styles.practListContainer}>
           <div className={styles.modalContainer}>
@@ -88,13 +78,10 @@ class PractitionerList extends Component {
           </div>
         </div>
         <div className={styles.practDataContainer}>
-          <PractitionerItemData
-            key={selectedPractitionerId}
+          <PractitionerTabs
             practitioner={selectedPractitioner}
-            onSubmit={this.updatePractitioner}
-            deletePractitioner={this.deletePractitioner}
             weeklySchedule={weeklySchedule}
-            updateEntityRequest={this.props.updateEntityRequest}
+            setPractitionerId={this.props.setPractitionerId}
           />
         </div>
       </div>
@@ -103,7 +90,6 @@ class PractitionerList extends Component {
 }
 
 function mapStateToProps({ accountSettings }) {
-
   const practitionerId = accountSettings.get('practitionerId');
   if(!practitionerId) {
     return {};
@@ -114,8 +100,6 @@ function mapStateToProps({ accountSettings }) {
 }
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    updateEntityRequest,
-    deleteEntityRequest,
     createEntityRequest,
     setPractitionerId,
   }, dispatch);

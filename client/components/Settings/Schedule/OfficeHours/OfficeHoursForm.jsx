@@ -135,7 +135,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
   );
 }
 
-function mapStateToProps({ form },{ formName }) {
+function mapStateToProps({ form }, { formName }) {
 
   // form data is populated when component renders
   if (!form[formName]) {

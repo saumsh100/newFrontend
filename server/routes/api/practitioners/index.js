@@ -4,6 +4,7 @@ const authMiddleware = require('../../../middleware/auth');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
+const WeeklySchedule = require('../../../models/WeeklySchedule');
 const normalize = require('../normalize');
 
 practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
@@ -29,11 +30,25 @@ practitionersRouter.get('/', (req, res, next) => {
  * Create a practitioner
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, res, next) => {
-  const practitionerData = Object.assign({}, { accountId: req.accountId }, req.body);
 
-  return Practitioner.save(practitionerData)
-    .then(practitioner => res.status(201).send(normalize('practitioner', practitioner)))
-    .catch(next);
+  const weeklyScheduleData = Object.assign({}, { accountId: req.accountId });
+
+  return WeeklySchedule.save(weeklyScheduleData)
+    .then((weeklySchedule) => {
+      const practitionerData = Object.assign({},
+        { accountId: req.accountId,
+          weeklyScheduleId: weeklySchedule.id,
+        },
+        req.body);
+
+      Practitioner.save(practitionerData)
+        .then(practitioner => {
+          practitioner.weeklySchedule = weeklySchedule;
+          res.status(201).send(normalize('practitioner', practitioner))
+        })
+        .catch(next);
+    }).catch(next);
+
 });
 
 /**

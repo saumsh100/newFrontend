@@ -6,6 +6,7 @@ const PractitionerSchema = {
   // services: null,
   firstName: null,
   lastName: null,
+  isCustomSchedule: null,
   weeklyScheduleId: null,
 };
 

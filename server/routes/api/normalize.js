@@ -35,7 +35,7 @@ const patientSchema = () => {
 };
 
 const practitionerSchema = () => {
-  return new schema.Entity('practitioners',{
+  return new schema.Entity('practitioners', {
     weeklySchedule: weeklyScheduleSchema(),
   });
 };

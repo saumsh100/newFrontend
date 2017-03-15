@@ -1,56 +1,37 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, IconButton } from '../../library';
-import styles from './styles.scss';
-import OfficeHoursForm from '../Schedule/OfficeHours/OfficeHoursForm';
-import BreaksForm from '../Schedule/OfficeHours/BreaksForm';
+import {  Form, Field, IconButton } from '../../../library';
+import styles from '../styles.scss';
 
-class PractitionerItemData extends Component {
+class PractitionerBasicData extends Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.updatePractitioner = this.updatePractitioner.bind(this);
     this.deletePractitioner = this.deletePractitioner.bind(this);
-  }
-
-  handleSubmit(values) {
-    const { weeklySchedule, updateEntityRequest } = this.props;
-    const newWeeklySchedule = weeklySchedule.merge(values);
-    updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
   }
 
   updatePractitioner(values) {
     const { practitioner } = this.props;
     const valuesMap = Map(values);
     const modifiedPractitioner = practitioner.merge(valuesMap);
-    this.props.onSubmit(modifiedPractitioner);
+    this.props.updatePractitioner(modifiedPractitioner);
   }
 
   deletePractitioner() {
-    const { practitioner } = this.props;
-    this.props.deletePractitioner(practitioner.get('id'));
+    this.props.deletePractitioner(this.props.practitioner.get('id'));
   }
 
   render() {
-    const { practitioner, weeklySchedule } = this.props;
+    const { practitioner } = this.props;
 
     if (!practitioner) {
       return null;
     }
 
-    let showOfficeHours = null;
-
-    if (weeklySchedule) {
-      showOfficeHours = (<OfficeHoursForm
-        weeklySchedule={weeklySchedule}
-        onSubmit={this.handleSubmit}
-        formName={practitioner.get('id')}
-      />);
-    }
     const initialValues = {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
-    };
+    }
 
     return (
       <div>
@@ -87,10 +68,11 @@ class PractitionerItemData extends Component {
             />
           </div>
         </div>
-        {showOfficeHours}
       </div>
     );
   }
 }
 
-export default PractitionerItemData;
+
+
+export default PractitionerBasicData;

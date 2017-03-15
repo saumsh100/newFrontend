@@ -39,7 +39,12 @@ class ServiceList extends Component {
 
   createService(values) {
     values.customCosts = {};
-    this.props.createEntityRequest({ key: 'services', entityData: values });
+    const key = 'services';
+    this.props.createEntityRequest({ key , entityData: values })
+      .then((entities) => {
+        const id = Object.keys(entities[key])[0];
+        this.props.setServiceId({ id });
+      });
     this.setState({ active: false });
   }
 
