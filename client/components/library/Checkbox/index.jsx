@@ -7,17 +7,19 @@ export default function Checkbox(props) {
     value,
     label,
     checked,
-    onChange
+    onChange,
   } = props;
 
   return (
     <div className={styles.checkbox}>
-      <input className={styles.checkbox__input}
-             type="checkbox"
-             id={id}
-             checked={checked}
-             onChange={onChange}
-             value={value}/>
+      <input
+        className={styles.checkbox__input}
+        type="checkbox"
+        id={id}
+        checked={checked}
+        onChange={onChange}
+        value={value}
+      />
       <label htmlFor={id} className={styles.checkbox__label}>
         {label}
       </label>
@@ -26,9 +28,9 @@ export default function Checkbox(props) {
 }
 
 Checkbox.propTypes = {
-  id:       PropTypes.string,
-  value:    PropTypes.string,
-  label:    PropTypes.string,
+  id: PropTypes.string,
+  value: PropTypes.string,
+  label: PropTypes.string,
   onChange: PropTypes.func,
 };
 

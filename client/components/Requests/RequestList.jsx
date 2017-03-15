@@ -85,8 +85,6 @@ function mapStateToProps({requests}){
   }
 }*/
 
-
-
 const enhance = connect(null, mapActionsToProps);
 
 export default enhance(RequestList);

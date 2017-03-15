@@ -1,0 +1,65 @@
+@import '../../../ui.scss';
+
+.servicesMainContainer{
+  display: flex;
+}
+.servicesListContainer{
+  display: inline-block;
+  width: 25%;
+}
+
+.servicesDataContainer{
+  display: inline-block;
+  width: 75%;
+}
+
+.addServiceButton {
+  margin-left: auto;
+}
+
+.formContainer{
+  display: flex;
+  width: 100%;
+  &__createForm{
+    padding: 0px 15px 0px 15px;
+  }
+}
+.servicesForm {
+  width: 50%;
+  padding-top: 15px;
+}
+.servicesFormRow{
+  width: 100%;
+  display: inline-block;
+  &__createRow{
+    padding: 15px 0px 15px 0px;
+  }
+}
+.servicesFormField{
+  padding: 15px 0px 15px 15px;
+}
+
+.trashButton{
+  float: right;
+  &__trashIcon {
+    width: 0px;
+    padding: 0px;
+  }
+}
+
+.modalContainer{
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+}
+
+
+
+
+
+
+
+
+
+

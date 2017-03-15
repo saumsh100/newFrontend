@@ -3,6 +3,7 @@ import RFInput from './RFInput';
 import RFSelect from './RFSelect';
 import RFDropdownSelect from './RFDropdownSelect';
 import RFToggle from './RFToggle';
+import RFCheckbox from './RFCheckbox';
 
 export default {
   Input: RFInput,
@@ -10,5 +11,5 @@ export default {
   Toggle: RFToggle,
   DropdownSelect: RFDropdownSelect,
   // DropDown: RFDropDown.
-  // CheckBox: RFCheckBox,
+  Checkbox: RFCheckbox,
 };

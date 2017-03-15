@@ -10,6 +10,13 @@ export function List(props) {
 }
 
 export function ListItem(props) {
-  const classes = classNames(props.className, styles.listItem);
+  let classes = props.className;
+
+  if(props.disabled){
+    classes = classNames(classes, styles.disabledListItem);
+  }else{
+    classes = classNames(props.className, styles.listItem);
+  }
+
   return <li {...props} className={classes} />;
 }
