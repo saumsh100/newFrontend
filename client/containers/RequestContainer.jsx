@@ -17,6 +17,7 @@ class RequestContainer extends React.Component {
     return (
       <div>
         <Requests
+          className={this.props.className}
           requests={this.props.requests}
           patients={this.props.patients}
           services={this.props.services}

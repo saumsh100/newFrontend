@@ -13,11 +13,26 @@
   align-items: center;
   height: 2.5rem;
   background-color: $primary-white;
-  border-bottom: 2px solid;
+  border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
 
   &:hover {
     cursor: pointer;
     background-color: $primary-lightgrey;
+  }
+
+}
+
+.disabledListItem{
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  background-color: $primary-white;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+  color: $disabled-color;
+
+  &:hover {
+    cursor: not-allowed;
   }
 }

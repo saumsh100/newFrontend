@@ -4,7 +4,6 @@ import each from 'lodash/each';
 import { handleActions } from 'redux-actions';
 import {
   FETCH_ENTITIES,
-  FETCH_MODEL,
   RECEIVE_ENTITIES,
   DELETE_ENTITY,
   ADD_ENTITY,
@@ -12,10 +11,10 @@ import {
   SEND_MESSAGE_ON_CLIENT,
   READ_MESSAGES_IN_CURRENT_DIALOG,
   UPDATE_PATIENT_IN_PATIENT_LIST,
+  ADD_SOCKET_ENTITY,
 } from '../constants';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
-import ActiveAccount from '../entities/models/ActiveAccount';
 import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
 import textMessages from '../entities/collections/textMessages';
@@ -26,18 +25,20 @@ import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
 import Requests from '../entities/models/Request';
 import requests from '../entities/collections/requests';
-import Dialogs from '../entities/models/Dialogs'
+import Dialogs from '../entities/models/Dialogs';
 import dialogs from '../entities/collections/dialogs';
-import PatientList from '../entities/models/PatientList'
+import PatientList from '../entities/models/PatientList';
 import patientList from '../entities/collections/patientList';
-import Service from '../entities/models/Service'
+import Service from '../entities/models/Service';
 import services from '../entities/collections/services';
 import Chairs from '../entities/models/Chair';
-import chairs from '../entities/collections/chairs'
+import chairs from '../entities/collections/chairs';
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
 import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
+import User from '../entities/models/User';
+import users from '../entities/collections/users';
 
 const initialState = Map({
   // KEYs must map to the response object
@@ -54,6 +55,7 @@ const initialState = Map({
   patientList: new patientList(),
   chairs: new chairs(),
   weeklySchedules: new weeklySchedules(),
+  users: new users(),
   // reviews: Reviews(), MODEL
   // listings: Listings(),
 });
@@ -71,6 +73,7 @@ const Models = {
   chairs: Chairs,
   availabilities: Availability,
   weeklySchedules: WeeklySchedule,
+  users: User,
 };
 
 export default handleActions({
@@ -97,8 +100,9 @@ export default handleActions({
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const { id } = entity;
-    const newModel = new Models[key](entity);
+    const id = Object.keys(entity[key])[0];
+    const addEntity = entity[key][id];
+    const newModel = new Models[key](addEntity);
     return state.setIn([key, 'models', id], newModel);
   },
 
@@ -107,6 +111,12 @@ export default handleActions({
     const updatedEntity = entity[key][id];
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
+  },
+
+  [ADD_SOCKET_ENTITY](state, { payload: {key, entity } }){
+    const id = entity.id;
+    const newModel = new Models[key](entity);
+    return state.setIn([key, 'models', id], newModel);
   },
 
   [SEND_MESSAGE_ON_CLIENT](state, action) {

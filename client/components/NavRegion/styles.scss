@@ -9,10 +9,23 @@
   height: 100%;
   background-color: $primary-dark;
   z-index: 20;
+  overflow-y: auto;
 }
 
 .navHidden {
-  display: none;
+  @extend .leftSectionContainer;
+  @media screen and (max-width: $medium-screen-width) {
+    display: none;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    width: $mini-side-nav-width;
+    // background-color: green;
+  }
+}
+
+.mainRegionContainer {
+
 }
 
 .navListWrapper {

@@ -27,7 +27,7 @@ export default function Input(props) {
     labelClassName = classNames(styles.erroredLabel, labelClassName);
     inputClassName = classNames(styles.erroredInput, inputClassName);
   }
-  
+
   // const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
   const content = min ?

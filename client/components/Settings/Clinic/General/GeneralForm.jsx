@@ -1,11 +1,12 @@
 
 import React, { PropTypes } from 'react';
-import { Form, Field, Button } from '../../../library';
+import { Form, Field, Button, Grid, Row, Col } from '../../../library';
 import styles from './styles.scss';
 
 export default function GeneralForm({ onSubmit, activeAccount }) {
   const initialValues = {
     name: activeAccount.get('name'),
+    smsPhoneNumber: activeAccount.get('smsPhoneNumber'),
   };
 
   return (
@@ -14,11 +15,26 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
           initialValues={initialValues}
           className={styles.generalForm}
     >
-      <Field
-        required
-        name="name"
-        label="Name"
-      />
+      <Grid>
+        <Row className={styles.generalRow}>
+          <Col xs={12}>
+            <Field
+              required
+              name="name"
+              label="Name"
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <Field
+              required
+              name="smsPhoneNumber"
+              label="SMS Phone Number"
+            />
+          </Col>
+        </Row>
+      </Grid>
     </Form>
   );
 }

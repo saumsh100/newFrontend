@@ -1,9 +1,13 @@
 
 import React, {PropTypes, Component} from 'react';
-import GeneralForm from './GeneralForm';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import GeneralForm from './GeneralForm';
+import Address from '../Address';
+import { Map } from 'immutable';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
+import { Grid, Row, Col, CardHeader} from '../../../library';
+
 
 
 class General extends React.Component {
@@ -15,7 +19,8 @@ class General extends React.Component {
 
   updateName(values) {
     const { activeAccount, updateEntityRequest } = this.props;
-    const modifiedAccount = activeAccount.set('name', values.name);
+    const valuesMap = Map(values);
+    const modifiedAccount =activeAccount.merge(valuesMap);
     updateEntityRequest({ key: 'accounts', model: modifiedAccount });
   }
 
@@ -25,10 +30,26 @@ class General extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-        <GeneralForm
-          onSubmit={this.updateName}
-          activeAccount={activeAccount}
-        />);
+        <Grid>
+          <CardHeader title="Basic"/>
+          <Row>
+            <Col xs={6}>
+              <GeneralForm
+                onSubmit={this.updateName}
+                activeAccount={activeAccount}
+              />
+            </Col>
+          </Row>
+          <CardHeader title="Address" />
+          <Row>
+            <Col xs={6}>
+              <Address
+                activeAccount={activeAccount}
+              />
+            </Col>
+          </Row>
+        </Grid>
+      );
     }
 
     return (
@@ -42,7 +63,6 @@ class General extends React.Component {
 General.propTypes = {
   updateEntityRequest: PropTypes.func,
 }
-
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({

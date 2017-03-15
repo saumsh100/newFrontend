@@ -1,11 +1,13 @@
 
+const _ = require('lodash');
 const appointmentsRouter = require('express').Router();
+const checkIsArray = require('../../../middleware/checkIsArray');
 const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 
-appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, next) => {
+appointmentsRouter.get('/', (req, res, next) => {
   const {
     accountId,
     joinObject,
@@ -39,11 +41,64 @@ appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, ne
 });
 
 appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) =>{
+
   const appointmentData = Object.assign({}, req.body, {
     accountId: req.accountId,
   });
   return Appointment.save(appointmentData)
     .then(appt => res.send(201, normalize('appointment', appt)))
+    .catch(next);
+});
+
+/**
+ * Batch create appointment
+ */
+appointmentsRouter.post('/batch', checkPermissions('appointments:create'), checkIsArray('appointments'), (req, res, next) => {
+  const { appointments } = req.body;
+  const cleanedAppointments = appointments.map((appointment) => {
+    return Object.assign(
+      {},
+      _.omit(appointment, ['id', 'dateCreated']),
+      { accountId: req.accountId }
+    );
+  });
+
+  return Appointment.save(cleanedAppointments)
+    .then(_appointments => res.send(normalize('appointments', _appointments)))
+    .catch(next);
+});
+
+/**
+ * Batch updating
+ */
+appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkIsArray('appointments'), (req, res, next) => {
+  const { appointments } = req.body;
+  const appointmentUpdates = appointments.map((appointment) => {
+    return Appointment.get(appointment.id).run()
+      .then(_appointment => _appointment.merge(appointment).save());
+  });
+
+  return Promise.all(appointmentUpdates)
+    .then(_appointments => res.send(normalize('appointments', _appointments)))
+    .catch(next);
+});
+
+
+/**
+ * Batch deletion
+ */
+appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (req, res, next) => {
+  const appointmentIds = req.query.ids.split(',');
+
+  const appointmentsToDelete = appointmentIds.map((id) => {
+    return Appointment.get(id).run()
+      .then(_appointment => _appointment.delete());
+  });
+
+  return Promise.all(appointmentsToDelete)
+    .then(() => {
+      res.sendStatus(204);
+    })
     .catch(next);
 });
 

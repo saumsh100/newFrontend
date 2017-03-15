@@ -22,11 +22,8 @@ requestsRouter.post('/', (req, res, next) => {
       endTime,
     });
 
-  console.log("requestData");
-  console.log(requestData);
-
   return Request.save(requestData)
-    .then(request => res.send(201, normalize('request', request)))
+    .then(request => res.status(201).send(normalize('request', request)))
     .catch(next);
   })
 });
@@ -34,13 +31,16 @@ requestsRouter.post('/', (req, res, next) => {
 /**
  * Get all requests
  */
-requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
+requestsRouter.get('/', (req, res, next) => {
   const {
     accountId,
     joinObject,
   } = req;
 
-  return Request.filter({ accountId, isCancelled: false }).getJoin(joinObject).run()
+ const { isCancelled } = req.query;
+ let filter = isCancelled? { accountId, isCancelled: true } : { accountId, isCancelled: false }
+
+  return Request.filter(filter).getJoin(joinObject).run()
     .then(requests => res.send(normalize('requests', requests)))
     .catch(next);
 });

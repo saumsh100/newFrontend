@@ -1,6 +1,7 @@
 import {
-  addEntity,
+  addSocketEntity,
 } from '../actions/entities';
+
 
 export default function connectSocketToStore(socket, store) {
   socket.on('connect', (args) => {
@@ -8,7 +9,7 @@ export default function connectSocketToStore(socket, store) {
   });
 
   socket.on('addRequest', (data) => {
-    store.dispatch(addEntity({ key: 'requests', entity: data }));
+    store.dispatch(addSocketEntity({ key: 'requests', entity: data }));
   });
 }
 

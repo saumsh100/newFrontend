@@ -30,7 +30,7 @@ function DashboardApp(props) {
       <TopBarContainer />
       {overlay}
       <NavRegionContainer>
-        <NavList location={location} />
+        <NavList location={location} isCollapsed={isCollapsed} />
       </NavRegionContainer>
       <MainRegionContainer>
         <div className={styles.subTabs}>

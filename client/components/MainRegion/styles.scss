@@ -20,7 +20,13 @@
 }
 
 .mainRegionContainerCollapsed {
-  padding-left: 0px;
+  @media screen and (max-width: $medium-screen-width) {
+    padding-left: 0;
+  }
+
+  @media screen and (min-width: $medium-screen-width) {
+    padding-left: $mini-side-nav-width;
+  }
 }
 
 .mainRegionContainer {

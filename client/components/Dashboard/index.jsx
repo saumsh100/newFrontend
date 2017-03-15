@@ -2,16 +2,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Listings from '../Listings';
-import Reviews from '../Reviews';
 import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
-import CardHoc from './cardHoc';
+import GuageTest from '../demo/GuageTest';
 import styles from './styles.scss';
-// wrap components with hoc's
-const ListingsCard = CardHoc(Listings);
-const ReviewsCard = CardHoc(Reviews);
 
 
 class Dashboard extends React.Component {
@@ -41,14 +36,10 @@ class Dashboard extends React.Component {
     // TODO: for now connect Reviews card to Listings card props until its api integration
     return (
     <div style={{display: 'flex', width: '100%'}}>
-      <div style={{width: '1000px'}}>
-        &nbsp;
-      </div>
       <div className={styles.requestContainer}>
         <RequestsContainer />
       </div>
     </div>
-
     );
   }
 
@@ -56,6 +47,7 @@ class Dashboard extends React.Component {
     return (
       <div style={{ padding: '20px' }}>
         {this.renderCards()}
+        <GuageTest />
       </div>
     );
   }

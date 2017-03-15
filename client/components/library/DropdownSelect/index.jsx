@@ -112,6 +112,7 @@ export default class DropdownSelect extends Component {
       align: 'right',
       isOpen: this.state.isOpen,
       close: this.close,
+      className: classNames(this.props.className, styles.wrapper),
     };
 
     return <RDropdownMenu {...menuOptions} />;
@@ -122,6 +123,7 @@ DropdownSelect.propTypes = {
   label: PropTypes.string,
   template: PropTypes.func,
   options: PropTypes.array.isRequired,
+  className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
