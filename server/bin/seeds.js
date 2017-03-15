@@ -583,6 +583,14 @@ const SEEDS = {
       appointmentId: appointmentId2,
     },
   ],
+
+  SyncClientVersion: [
+    {
+      version: 2.0,
+      build: 1,
+      url: 'http://carecru.dev:8080/api/updater/download',
+    },
+  ],
 };
 
 seedDatabase(SEEDS)
