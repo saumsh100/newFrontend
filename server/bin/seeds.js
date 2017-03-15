@@ -374,51 +374,6 @@ const SEEDS = {
     },
   ],
 
-  /*DailySchedule: [
-    {
-      id: mondayHoursId,
-      isClosed: true,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: tuesdayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: wednesdayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: thursdayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: fridayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: saturdayHoursId,
-      isClosed: true,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: sundayHoursId,
-      isClosed: true,
-      startTime: hour8,
-      endTime: hour5,
-    },
-  ],*/
-
   WeeklySchedule: [
     {
       id: weeklyScheduleId,
@@ -455,44 +410,30 @@ const SEEDS = {
       accountId,
       monday: {
         isClosed: true,
-        startTime: { h: 9, m: 30 },
-        endTime: { h: 17, m: 30 },
       },
 
       saturday: {
         isClosed: true,
-        startTime: { h: 12, m: 30 },
-        endTime: { h: 17, m: 30 },
       },
 
       sunday: {
         isClosed: true,
-        startTime: { h: 9, m: 30 },
-        endTime: { h: 15, m: 30 },
       },
 
       tuesday: {
         isClosed: false,
-        startTime: { h: 9, m: 30 },
-        endTime: { h: 17, m: 30 },
       },
 
       wednesday: {
         isClosed: false,
-        startTime: { h: 12, m: 30 },
-        endTime: { h: 14, m: 30 },
       },
 
       thursday: {
         isClosed: false,
-        startTime: { h: 9, m: 30 },
-        endTime: { h: 17, m: 30 },
       },
 
       friday: {
         isClosed: false,
-        startTime: { h: 9, m: 30 },
-        endTime: { h: 17, m: 30 },
       },
 
     },
