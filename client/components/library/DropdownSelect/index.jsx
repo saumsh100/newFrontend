@@ -123,7 +123,7 @@ DropdownSelect.propTypes = {
   label: PropTypes.string,
   template: PropTypes.func,
   options: PropTypes.array.isRequired,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   disabled: PropTypes.bool,

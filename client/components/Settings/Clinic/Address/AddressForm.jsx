@@ -7,8 +7,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 
-
-
 class AddressForm extends React.Component {
 
   constructor(props){
@@ -27,6 +25,7 @@ class AddressForm extends React.Component {
   changeCountry(event, newValue, previousValue) {
     this.props.change('addressSettingsForm', 'zipCode', '');
     this.props.change('addressSettingsForm', 'state', '');
+
     this.setState({
       country: newValue,
     });
@@ -34,23 +33,28 @@ class AddressForm extends React.Component {
 
   zipPostalVal(value) {
     const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+
     if(this.state.country === 'United States') {
       return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
     } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
     }
+
     return undefined;
   }
 
   componentWillMount() {
     const { accountInfo } = this.props;
-    this.setState({
-      country: accountInfo.get('country'),
-      street: accountInfo.get('street'),
-      city: accountInfo.get('city'),
-      zipCode: accountInfo.get('zipCode'),
-      state: accountInfo.get('state'),
-    });
+
+    if (accountInfo) {
+      this.setState({
+        country: accountInfo.get('country'),
+        street: accountInfo.get('street'),
+        city: accountInfo.get('city'),
+        zipCode: accountInfo.get('zipCode'),
+        state: accountInfo.get('state'),
+      });
+    }
   }
 
   render() {
@@ -62,7 +66,6 @@ class AddressForm extends React.Component {
     return (
       <div className={styles.addressForm}>
         <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
-          <Grid className={styles.addressGrid}>
             <Row className={styles.addressRow}>
               <Col xs={12}>
                 <Field
@@ -111,10 +114,9 @@ class AddressForm extends React.Component {
                 />
               </Col>
             </Row>
-          </Grid>
         </Form>
       </div>
-  );
+    );
   }
 }
 

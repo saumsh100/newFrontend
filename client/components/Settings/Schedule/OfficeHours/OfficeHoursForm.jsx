@@ -38,7 +38,7 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-function OfficeHoursForm({ values, weeklySchedule, onSubmit }) {
+function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 
@@ -123,7 +123,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit }) {
   };
 
   return (
-    <Form form="officeHours" onSubmit={onSubmit} initialValues={initialValues}>
+    <Form form={formName} onSubmit={onSubmit} initialValues={initialValues}>
       <DayHoursForm day="monday" />
       <DayHoursForm day="tuesday" />
       <DayHoursForm day="wednesday" />
@@ -135,16 +135,17 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit }) {
   );
 }
 
-function mapStateToProps({ form }) {
+function mapStateToProps({ form }, { formName }) {
+
   // form data is populated when component renders
-  if (!form.officeHours) {
+  if (!form[formName]) {
     return {
       values: {},
     };
   }
 
   return {
-    values: form.officeHours.values,
+    values: form[formName].values,
   };
 }
 

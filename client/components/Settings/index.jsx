@@ -2,27 +2,48 @@
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col, Card, CardHeader } from '../library';
 import SettingsSubNav from './SettingsSubNav';
-import General from './Clinic/General';
-import Address from './Clinic/Address'
 import styles from './styles.scss';
+import Services from './Services/';
+import Practitioners from './Practitioners';
+
+
 
 export default function Settings(props) {
   const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
-  return (
-    <Grid>
+  const { location } = props;
+
+  let showNav = null;
+
+  if (location.pathname === '/settings/services' || location.pathname === '/settings/practitioners') {
+    showNav = (
       <Row className={styles.rowContainer}>
-        <Col xs={3} className={styles.subSettingsCol}>
+        <Col xs={12} className={styles.subSettingsCol}>
           <Card className={styles.subSettingsCard}>
-            <CardHeader title="Clinic Settings" />
-            <SettingsSubNav location={props.location} />
-          </Card>
-        </Col>
-        <Col xs={9} className={styles.settingsFormsCol}>
-          <Card className={styles.settingsFormsCard}>
             {children}
           </Card>
         </Col>
       </Row>
+    );
+  } else {
+    showNav = (
+      <Row className={styles.rowContainer}>
+        <Col xs={3} className={styles.subSettingsCol}>
+          <Card className={styles.subSettingsCard}>
+            <SettingsSubNav location={props.location} />
+          </Card>
+        </Col>
+        <Col xs={9} className={styles.settingsFormsCol} >
+          <Card className={styles.settingsFormsCard} >
+            {children}
+          </Card>
+        </Col>
+      </Row>
+    );
+  }
+
+  return (
+    <Grid>
+        {showNav}
     </Grid>
   );
 }

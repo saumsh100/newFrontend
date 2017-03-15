@@ -4,23 +4,24 @@ const authMiddleware = require('../../../middleware/auth');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
+const WeeklySchedule = require('../../../models/WeeklySchedule');
 const normalize = require('../normalize');
 
-// practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
+practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
 /**
  * Get all practitioners under a clinic
  */
 practitionersRouter.get('/', (req, res, next) => {
-  console.log('the query')
-  console.log(req.query);
-  
-  const accountId = req.query.accountId || req.accountId;
-  console.log("accountId");
-  console.log(accountId);
+
+  //const accountId = req.query.accountId || req.accountId;
+  const {
+    accountId,
+    joinObject,
+  } = req;
   // const { accountId } = req;
 
-  return Practitioner.filter({ accountId }).run()
+  return Practitioner.filter({ accountId }).getJoin(joinObject).run()
     .then(practitioners => res.send(normalize('practitioners', practitioners)))
     .catch(next);
 });
@@ -29,11 +30,25 @@ practitionersRouter.get('/', (req, res, next) => {
  * Create a practitioner
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, res, next) => {
-  const practitionerData = Object.assign({}, { accountId: req.accountId }, req.body);
 
-  return Practitioner.save(practitionerData)
-    .then(practitioner => res.send(201, normalize('practitioner', practitioner)))
-    .catch(next);
+  const weeklyScheduleData = Object.assign({}, { accountId: req.accountId });
+
+  return WeeklySchedule.save(weeklyScheduleData)
+    .then((weeklySchedule) => {
+      const practitionerData = Object.assign({},
+        { accountId: req.accountId,
+          weeklyScheduleId: weeklySchedule.id,
+        },
+        req.body);
+
+      Practitioner.save(practitionerData)
+        .then(practitioner => {
+          practitioner.weeklySchedule = weeklySchedule;
+          res.status(201).send(normalize('practitioner', practitioner))
+        })
+        .catch(next);
+    }).catch(next);
+
 });
 
 /**
@@ -59,8 +74,10 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
  */
 practitionersRouter.delete('/:practitionerId', checkPermissions('practitioners:delete'), (req, res, next) => {
   return req.practitioner.delete()
-    .then(() => res.send(204))
+    .then(() => res.sendStatus(204))
     .catch(next);
 });
+
+
 
 module.exports = practitionersRouter;

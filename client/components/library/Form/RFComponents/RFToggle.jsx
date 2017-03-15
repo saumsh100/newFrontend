@@ -22,7 +22,7 @@ export default function RFToggle(props) {
 }
 
 /* eslint react/forbid-prop-types: 0 */
-Toggle.propTypes = {
+RFToggle.propTypes = {
   toggle: PropTypes.object,
   meta: PropTypes.object,
   icon: PropTypes.node,

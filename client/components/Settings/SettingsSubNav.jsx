@@ -10,21 +10,60 @@ const PATHS = {
       label: 'General',
     },
     {
-      to: '/settings/clinic/address',
-      label: 'Address',
+      to: '/settings/clinic/users',
+      label: 'Users',
+      disabled: true,
     },
     {
-      to: '/settings/clinic/hours',
-      label: 'Office Hours',
+      to: '',
+      label: 'Social Media',
+      disabled: true,
+    },
+    {
+      to: '',
+      label: 'Reputation',
+      disabled: true,
+    },
+    {
+      to: '',
+      label: 'Notifications',
+      disabled: true,
     },
   ],
 
-  '/settings/booking': [
+  '/settings/schedule': [
     {
-
+      to: '/settings/schedule/hours',
+      label: 'Office Hours',
     },
     {
+      to: '',
+      label: 'Online Booking',
+      disabled: true,
+    },
+    {
+      to: '',
+      label: 'Reminders',
+      disabled: true,
+    },
+    {
+      to: '',
+      label: 'Waitlist',
+      disabled: true,
+    },
+  ],
 
+  '/settings/services': [
+    {
+      to: '/settings/services/serviceslist',
+      label: 'Services List',
+    },
+  ],
+
+  '/settings/practitioners': [
+    {
+      to: '/settings/practitioners/practitionerslist',
+      label: 'Practitioners List',
     },
   ],
 };

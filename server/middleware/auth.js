@@ -15,6 +15,7 @@ const OWNER = {
   appointments: CRUD,
   chairs: CRUD,
   chats: CRUD,
+  users: CRUD,
 
   listings: {
     read: true,
@@ -30,6 +31,8 @@ const OWNER = {
   textMessages: Object.assign({}, CRUD, {
     update: false,
   }),
+
+  services: CRUD,
 
   syncErrors: {
     read: true,

@@ -1,18 +1,12 @@
-
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from "react";
+import { Grid, Row, Col, Card, IconCard } from "../library";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Grid, Row, Col, IconCard } from '../library';
-import Listings from '../Listings';
-import Reviews from '../Reviews';
 import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
-import CardHoc from './cardHoc';
-import styles from './styles.scss';
-// wrap components with hoc's
-const ListingsCard = CardHoc(Listings);
-const ReviewsCard = CardHoc(Reviews);
+import GuageTest from '../demo/GuageTest';
+import styles from "./styles.scss";
 
 
 class Dashboard extends React.Component {
@@ -45,14 +39,14 @@ class Dashboard extends React.Component {
       <Grid className={styles.dashboard}>
         <Row>
           <Col className={styles.dashboard__header} xs={12}>
-            <div className={styles.dashboard__header_title}>
+            <Card className={styles.dashboard__header_title}>
               Welcome Back, <b>Corina</b>
-            </div>
+            </Card>
             <Row className={styles.dashboard__header_cards}>
-                <IconCard className={styles.primaryColor} xs={12} sm={3} count="12" title="Appointment Booked" icon="calendar" size={10} />
-                <IconCard className={styles.primaryBlue} xs={12} sm={3} count="64" title="Appointment Booked" icon="user" size={10} />
-                <IconCard className={styles.primaryGreen} xs={12} sm={3} count="16" title="Appointment Booked" icon="bullhorn" size={10} />
-                <IconCard className={styles.primaryYellow} xs={12} sm={3} count="23" title="Appointment Booked" icon="star" size={10} />
+              <IconCard className={styles.primaryColor} xs={12} sm={3} count="12" title="Appointment Booked" icon="calendar" size={10} />
+              <IconCard className={styles.primaryBlue} xs={12} sm={3} count="64" title="Appointment Booked" icon="user" size={10} />
+              <IconCard className={styles.primaryGreen} xs={12} sm={3} count="16" title="Appointment Booked" icon="bullhorn" size={10} />
+              <IconCard className={styles.primaryYellow} xs={12} sm={3} count="23" title="Appointment Booked" icon="star" size={10} />
             </Row>
           </Col>
         </Row>
@@ -71,6 +65,7 @@ class Dashboard extends React.Component {
     return (
       <div>
         {this.renderCards()}
+        <GuageTest />
       </div>
     );
   }

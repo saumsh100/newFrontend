@@ -45,7 +45,7 @@ const timeOptions = generateTimeOptions();
 
 console.log('found?', timeOptions.find(to => to.value === defaultStartTime));
 
-function BreaksForm({ values, weeklySchedule, onSubmit }) {
+function BreaksForm({ values, weeklySchedule, onSubmit, formName }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 

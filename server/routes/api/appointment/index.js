@@ -41,6 +41,7 @@ appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, ne
 });
 
 appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) =>{
+
   const appointmentData = Object.assign({}, req.body, {
     accountId: req.accountId,
   });

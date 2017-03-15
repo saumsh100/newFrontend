@@ -35,7 +35,9 @@ const patientSchema = () => {
 };
 
 const practitionerSchema = () => {
-  return new schema.Entity('practitioners');
+  return new schema.Entity('practitioners', {
+    weeklySchedule: weeklyScheduleSchema(),
+  });
 };
 
 const requestSchema = () => {
@@ -48,7 +50,9 @@ const requestSchema = () => {
 };
 
 const serviceSchema = () => {
-  return new schema.Entity('services');
+  return new schema.Entity('services', {
+    practitioner: practitionerSchema(),
+  });
 };
 
 const textMessageSchema = () => {
