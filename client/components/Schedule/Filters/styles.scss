@@ -1,6 +1,8 @@
+@import "../../../ui.scss";
+
 .schedule_filter {
+    border-top: $card-border-size $primary-color;
     padding-bottom: 50px;
-    background-color: #FAFAFA;
     font-family: sans-serif;
 }
 
@@ -8,21 +10,11 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    height: 32px;
+    height: 40px;
+    padding: 0 5px;
     border-bottom: 1px solid #e6e6e6;
-    line-height: 32px;
+    line-height: 40px;
     justify-content: center;
-
-    &::before {
-        position: absolute;
-        display: block;
-        width: 100%;
-        top: -5px;
-        height: 5px;
-        content: '';
-        background: #FF715A;
-    }
-
     &__title {
         justify-content: center;
     }
@@ -33,25 +25,26 @@
 
     &__link {
         position: absolute;
-        right: 5px;
+        right: 20px;
         cursor: pointer;
-        color: #B4B4B4;
+        color: #b4b4b4;
         font-size: 12px;
     }
 }
 
+
 .filter_practitioner {
     margin: 0 5px;
     input[type=checkbox] {
-      display: none;
-      &:checked + label {
-        box-shadow: 0px 0px 16px 1px #FF715A;
-      }
+        display: none;
+        &:checked + label li img {
+            box-shadow: 0 0 16px 2px #ff715a;
+        }
     }
     &__title {
         margin-left: 5px;
         text-transform: uppercase;
-        color: #B4B4B4;
+        color: #b4b4b4;
         font-size: 9px;
         line-height: 30px;
     }
@@ -81,7 +74,7 @@
         border-radius: 50%;
     }
     &__spec {
-        color: #B4B4B4;
+        color: #b4b4b4;
     }
 }
 
@@ -93,7 +86,7 @@
     &__title {
         margin-left: 5px;
         text-transform: uppercase;
-        color: #B4B4B4;
+        color: #b4b4b4;
         font-size: 9px;
     }
 
@@ -105,7 +98,7 @@
 
         select {
             border: none;
-            border-bottom: 1px #FF715A solid;
+            border-bottom: 1px #ff715a solid;
             background: none;
             font-size: inital;
 

@@ -1,8 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700");
 
-:root {
-    --bookingWidgetPrimaryColor: #f3715c;
-}
 * {
     font-family: "Montserrat", sans-serif;
     box-sizing: border-box;
@@ -37,6 +34,7 @@
         flex-direction: column;
         width: 25%;
         padding: 0 20px;
+        background-color: #f3715c;
         background-color: var(--bookingWidgetPrimaryColor);
         position: relative;
         @media screen and (max-width: 800px) {
@@ -84,6 +82,7 @@
                 display: none;
                 left: 10px;
                 &:hover {
+                    color: #f3715c;
                     color: var(--bookingWidgetPrimaryColor);
                 }
             }
@@ -98,6 +97,7 @@
                 margin-top: 61px;
                 margin-bottom: 20px;
                 font-size: 10px;
+                color: #f3715c;
                 color: var(--bookingWidgetPrimaryColor);
                 text-transform: uppercase;
                 cursor: pointer;
@@ -172,6 +172,7 @@
                 display: block;
             }
             &:hover {
+                color: #f3715c;
                 color: var(--bookingWidgetPrimaryColor);
             }
         }
@@ -179,6 +180,7 @@
             font-size: 12px;
             text-align: center;
             text-transform: uppercase;
+            color: #f3715c;
             color: var(--bookingWidgetPrimaryColor);
         }
         &_timer {
@@ -233,6 +235,7 @@
             margin: 0 5px;
             text-decoration: none;
             text-transform: uppercase;
+            color: #f3715c;
             color: var(--bookingWidgetPrimaryColor);
         }
         &_btn {
@@ -244,8 +247,10 @@
             text-transform: uppercase;
             color: #fff;
             border: none;
+            background-color: #f3715c;
             background: var(--bookingWidgetPrimaryColor);
             &:hover {
+                background-color: #f3715c;
                 background: var(--bookingWidgetPrimaryColor);
             }
         }

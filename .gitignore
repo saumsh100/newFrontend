@@ -38,3 +38,4 @@ rethinkdb_data/
 *.swp
 *.swo
 *.vim
+*.exe

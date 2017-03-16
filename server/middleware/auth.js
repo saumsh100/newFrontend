@@ -39,6 +39,11 @@ const OWNER = {
     create: true,
   },
 
+  syncClientVersion: {
+    read: true,
+    create: true,
+  },
+
   weeklySchedules: CRUD,
 };
 
