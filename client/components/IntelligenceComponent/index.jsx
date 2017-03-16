@@ -9,84 +9,81 @@ class IntelligenceComponent extends Component {
       <div>
 	      <Grid>
 		      <Row>
-      			<Col xs={12} md={6} >
-		        	<FlexGrid title="Appoinment Types" > 
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="phone"
-        					border
-        				/>
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="phone"
-        					border
-        				/>
-		        	</FlexGrid>
+	        	<FlexGrid title="Appoinment Types" > 
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+	        	</FlexGrid>
 
-		        	<FlexGrid title="Appoinment Types" > 
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="phone"
-        					border
-        				/>
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="phone"
-        					border
-        				/>
-        				<Stats
-        					count={306}
-        					details="phone"
-        					icon="phone"
-        					border
-        				/>
-		        	</FlexGrid>
+	        	<FlexGrid title="Appoinment Types" > 
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<Stats
+      					count={306}
+      					details="phone"
+      					icon="phone"
+      					border
+      				/>
+	        	</FlexGrid>
 
-		        	<FlexGrid title="Appoinment Types" > 
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="phone"
-        					border
-        				/>
-        				<ChartStats
-        					positive={80}
-        					negative={20}
-        					percantage={80}
-        				/>
-		        	</FlexGrid>
+	        	<FlexGrid title="Appoinment Types" > 
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<ChartStats
+      					positive={80}
+      					negative={20}
+      					percantage={80}
+      				/>
+	        	</FlexGrid>
 
-		        	<FlexGrid title="Appoinment Types" > 
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="telegram"
-        					border
-        				/>
-        				<ChartStats
-        					positive={50}
-        					negative={50}
-        					percantage={50}
-        				/>
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="phone"
-        					border
-        				/>
-        				<Stats
-        					count={106}
-        					details="via phone"
-        					icon="phone"
-        					border
-        				/>
-		        	</FlexGrid>
-
-		        </Col>
+	        	<FlexGrid title="Appoinment Types" > 
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="telegram"
+      					border
+      				/>
+      				<ChartStats
+      					positive={50}
+      					negative={50}
+      					percantage={50}
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+	        	</FlexGrid>
 		      </Row>
 	      </Grid>
       </div>

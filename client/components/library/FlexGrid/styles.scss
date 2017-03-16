@@ -12,6 +12,7 @@
 		padding: 30px 0;
 		display: flex;
 		align-items: center;
+    	flex-wrap: wrap;
 
 	}
 
@@ -57,6 +58,11 @@
 	&__vote_icons_text {
 		color: #000000;
 		margin-left: 10px;
+	}
+
+	&__split {
+	  width: 100%;
+      display: flex;
 	}
 
 }
