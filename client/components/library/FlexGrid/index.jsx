@@ -12,10 +12,6 @@ const FlexGrid = function (props) {
   } = props;
   const width = Math.floor( 12/ children.length);
   const gridStyle = { width: '100%' };
-  console.log("item length")
-  console.log(children.length)
-  console.log("children")
-  console.log(children)
   return (
     <div style={gridStyle} className={styles.settingsFormsCol}>
       <div className={styles.sideByside} >
