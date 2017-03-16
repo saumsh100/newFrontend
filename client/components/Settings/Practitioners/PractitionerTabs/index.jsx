@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Card, Tab } from '../../../library';
+import { Tabs, Card, Tab, IconButton } from '../../../library';
 import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
@@ -24,8 +24,9 @@ class PractitionerTabs extends Component {
     this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner });
   }
 
-  deletePractitioner(id) {
-    this.props.deleteEntityRequest({ key: 'practitioners', id });
+  deletePractitioner() {
+    const { practitioner } = this.props;
+    this.props.deleteEntityRequest({ key: 'practitioners', id: practitioner.get('id') });
     this.props.setPractitionerId({ id: null });
   }
 
@@ -41,24 +42,35 @@ class PractitionerTabs extends Component {
     }
 
     return (
-      <Tabs index={this.state.index} onChange={this.handleTabChange}>
-        <Tab label="Basic">
-          <PractitionerBasicData
-            key={practitioner.get('id')}
-            practitioner={practitioner}
-            updatePractitioner={this.updatePractitioner}
-            deletePractitioner={this.deletePractitioner}
+      <div>
+        <div className={styles.pracHeaderContainer}>
+          <div className={styles.practHeader}>
+            {practitioner.getFullName()}
+          </div>
+          <IconButton
+            icon="trash"
+            className={styles.trashButton__trashIcon}
+            onClick={this.deletePractitioner}
           />
-        </Tab>
-        <Tab label="Office Hours">
-          <PractitionerOfficeHours
-            key={practitioner.get('id')}
-            weeklySchedule={weeklySchedule}
-            practitioner={practitioner}
-            updateEntityRequest={this.props.updateEntityRequest}
-          />
-        </Tab>
-      </Tabs>
+        </div>
+        <Tabs index={this.state.index} onChange={this.handleTabChange} >
+          <Tab label="Basic">
+            <PractitionerBasicData
+              key={practitioner.get('id')}
+              practitioner={practitioner}
+              updatePractitioner={this.updatePractitioner}
+            />
+          </Tab>
+          <Tab label="Office Hours">
+            <PractitionerOfficeHours
+              key={practitioner.get('id')}
+              weeklySchedule={weeklySchedule}
+              practitioner={practitioner}
+              updateEntityRequest={this.props.updateEntityRequest}
+            />
+          </Tab>
+        </Tabs>
+      </div>
     );
   }
 }

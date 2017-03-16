@@ -25,7 +25,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
             />
           </Col>
         </Row>
-        <Row>
+        <Row className={styles.generalRow}>
           <Col xs={12}>
             <Field
               required

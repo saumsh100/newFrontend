@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import OfficeHoursForm from '../../Schedule/OfficeHours/OfficeHoursForm';
+import BreaksForm from '../../Schedule/OfficeHours/BreaksForm';
 import { Toggle } from '../../../library';
 import { createEntityRequest, } from '../../../../thunks/fetchEntities';
 
@@ -50,12 +51,19 @@ class PractitionerOfficeHours extends Component{
 
     if (weeklySchedule) {
       showComponent = (
-        <OfficeHoursForm
-          key={weeklySchedule.get('id')}
-          weeklySchedule={weeklySchedule}
-          onSubmit={this.handleFormUpdate}
-          formName={`${weeklySchedule.get('id')}OfficeHours`}
-        />
+        <div>
+          <OfficeHoursForm
+            weeklySchedule={weeklySchedule}
+            onSubmit={this.handleFormUpdate}
+            formName={`${weeklySchedule.get('id')}officeHours`}
+          />
+          <BreaksForm
+            weeklySchedule={weeklySchedule}
+            onSubmit={this.handleFormUpdate}
+            formName={`${weeklySchedule.get('id')}officeHours`}
+            breaksName={`${weeklySchedule.get('id')}clinicBreaks`}
+          />
+        </div>
       );
 
     } else if (!practitioner.get('isCustomSchedule')) {
@@ -72,6 +80,7 @@ class PractitionerOfficeHours extends Component{
         <div>
           <Toggle
             defaultChecked={practitioner.get('isCustomSchedule')}
+            icons={false}
             value={this.state.value}
             onChange={this.handleToggle}
           />

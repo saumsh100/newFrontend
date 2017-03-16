@@ -23,6 +23,8 @@ function OfficeHours(props) {
       <BreaksForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}
+        formName="officeHours"
+        breaksName="clinicBreaks"
       />
     </div>
   );

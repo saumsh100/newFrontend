@@ -1,15 +1,32 @@
 @import '../../../ui.scss';
 
+
+.practOuterContainer{
+  height: 100%;
+}
 .practMainContainer{
   display: flex;
+  height: 100%;
 }
 .practListContainer{
   display: inline-block;
   width: 25%;
+  border-right: 1px solid;
+  border-right-color: $primary-dark;
 }
+
+.practListItem{
+  height: 65px;
+  padding-left: 5px;
+  font-size: $medium-size;
+  text-transform: capitalize;
+}
+
+
 
 .practDataContainer{
   display: inline-block;
+  padding-left: 15px;
   width: 75%;
 }
 
@@ -17,10 +34,32 @@
   margin-left: auto;
 }
 
+.pracHeaderContainer{
+  display: flex;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-lightgrey;
+}
+.practHeader{
+  font-size: $large-size;
+  font-weight: $medium-weight;
+  padding: 10px 5px 10px 0px;
+  text-transform: capitalize;
+  width: 50%;
+}
+
+.trashButton{
+  float: right;
+  &__trashIcon{
+    width: 0px;
+    padding: 0px;
+  }
+}
+
 
 .practFormContainer{
   display: flex;
   width: 100%;
+  padding-top: 5px;
   &__createForm{
     padding: 0px 15px 0px 15px;
   }
@@ -38,29 +77,21 @@
   }
 }
 .practFormField{
-  padding: 15px 0px 15px 15px;
+  padding: 15px 0px 15px 0px;
 }
 
-.trashButton{
-  float: right;
-  &__trashIcon{
-    width: 0px;
-    padding: 0px;
-  }
-}
 
 .modalContainer{
   display: flex;
   align-items: center;
+  padding-left: 5px;
   border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
+  border-bottom-color: $primary-lightgrey;
 }
 
 
 .practTabsContainer{
-  display: flex;
-  margin-left: auto;
-  width: 100%
+  color: red;
 }
 .practTabs {
   color: red;

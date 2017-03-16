@@ -3,9 +3,11 @@ import { Map } from 'immutable';
 import {  Form, Field, IconButton, CardHeader } from '../../library';
 import styles from './styles.scss';
 
-function isNumber(value){
-  return value && !/\D/.test(value) ? undefined : 'Please enter a number.';
-}
+const parseNum = value => value && parseInt(value);
+
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
 
 class ServiceItemData extends Component {
   constructor(props) {
@@ -16,8 +18,11 @@ class ServiceItemData extends Component {
 
   updateService(values) {
     const { service } = this.props;
+    values.name = values.name.trim();
+
     const valuesMap = Map(values);
     const modifiedService = service.merge(valuesMap);
+
     this.props.onSubmit(modifiedService);
   }
 
@@ -40,46 +45,57 @@ class ServiceItemData extends Component {
     };
 
     return (
-      <div className={styles.formContainer}>
-        <div className={styles.servicesForm}>
-          <Form
-            form={`${service.get('id')}Form`}
-            onSubmit={this.updateService}
-            initialValues={initialValues}
-          >
-            <div className={styles.servicesFormRow}>
-              <div className={styles.servicesFormField}>
-                <Field
-                  required
-                  name="name"
-                  label="Name"
-                />
-              </div>
-              <div className={styles.servicesFormField}>
-                <Field
-                  required
-                  name="duration"
-                  label="Duration"
-                  validate={[isNumber]}
-                />
-              </div>
-              <div className={styles.servicesFormField}>
-                <Field
-                  required
-                  name="bufferTime"
-                  label="Buffer Time"
-                  validate={[isNumber]}
-                />
-              </div>
-            </div>
-          </Form>
+      <div>
+        <div className={styles.serviceHeaderContainer}>
+          <div className={styles.serviceHeader}>
+            {service.get('name')}
+          </div>
+          <div className={styles.trashButton}>
+            <IconButton
+              icon="trash"
+              className={styles.trashButton__trashIcon}
+              onClick={this.deleteService}
+            />
+          </div>
         </div>
-        <div className={styles.trashButton}>
-          <IconButton
-            icon="trash-o"
-            className={styles.trashButton__trashIcon}
-            onClick={this.deleteService}
-          />
+        <div className={styles.formContainer}>
+          <div className={styles.servicesForm}>
+            <Form
+              form={`${service.get('id')}Form`}
+              onSubmit={this.updateService}
+              initialValues={initialValues}
+            >
+              <div className={styles.servicesFormRow}>
+                <div className={styles.servicesFormField}>
+                  <Field
+                    required
+                    name="name"
+                    label="Name"
+                    validate={[maxLength25]}
+                  />
+                </div>
+                <div className={styles.servicesFormField}>
+                  <Field
+                    required
+                    name="duration"
+                    label="Duration"
+                    type="number"
+                    normalize={parseNum}
+                  />
+                </div>
+                <div className={styles.servicesFormField}>
+                  <Field
+                    required
+                    name="bufferTime"
+                    label="Buffer Time"
+                    type="number"
+                    normalize={parseNum}
+                  />
+                </div>
+              </div>
+            </Form>
+          </div>
+
         </div>
       </div>
     );

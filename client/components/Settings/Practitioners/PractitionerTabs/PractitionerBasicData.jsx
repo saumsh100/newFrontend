@@ -7,7 +7,6 @@ class PractitionerBasicData extends Component {
   constructor(props) {
     super(props);
     this.updatePractitioner = this.updatePractitioner.bind(this);
-    this.deletePractitioner = this.deletePractitioner.bind(this);
   }
 
   updatePractitioner(values) {
@@ -15,10 +14,6 @@ class PractitionerBasicData extends Component {
     const valuesMap = Map(values);
     const modifiedPractitioner = practitioner.merge(valuesMap);
     this.props.updatePractitioner(modifiedPractitioner);
-  }
-
-  deletePractitioner() {
-    this.props.deletePractitioner(this.props.practitioner.get('id'));
   }
 
   render() {
@@ -59,13 +54,6 @@ class PractitionerBasicData extends Component {
                 </div>
               </div>
             </Form>
-          </div>
-          <div className={styles.trashButton}>
-            <IconButton
-              icon="trash-o"
-              className={styles.trashButton__trashIcon}
-              onClick={this.deletePractitioner}
-            />
           </div>
         </div>
       </div>

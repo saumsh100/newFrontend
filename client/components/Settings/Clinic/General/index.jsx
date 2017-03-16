@@ -7,6 +7,7 @@ import Address from '../Address';
 import { Map } from 'immutable';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { Grid, Row, Col, CardHeader} from '../../../library';
+import styles from './styles.scss';
 
 
 
@@ -30,8 +31,10 @@ class General extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-        <Grid>
-          <CardHeader title="Basic"/>
+        <Grid className={styles.generalGrid}>
+          <div className={styles.generalHeader}>
+            Basic
+          </div>
           <Row>
             <Col xs={6}>
               <GeneralForm
@@ -40,7 +43,9 @@ class General extends React.Component {
               />
             </Col>
           </Row>
-          <CardHeader title="Address" />
+          <div className={styles.generalHeader}>
+            Address
+          </div>
           <Row>
             <Col xs={6}>
               <Address
