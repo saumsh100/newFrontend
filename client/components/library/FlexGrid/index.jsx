@@ -25,7 +25,7 @@ const FlexGrid = function (props) {
             {renderChilden.map(child => (
               <Col className={styles.sideByside__split} xs={12} >
                 {React.Children.map(child, (ch) => (
-                  <Col xs={width} >
+                  <Col className={styles.sideByside__item} xs={width} >
                     {React.cloneElement(ch)}
                   </Col>
                 ))} 
@@ -51,7 +51,7 @@ const Stats = function (props) {
     details,
   } = props;
   return (
-      <div className={`${styles.sideByside__leftCol} ${border ? styles.sideByside__first : '' }`}  >
+      <div className={styles.sideByside__leftCol}  >
         <div className={styles.sideByside__icon} >
           <i className={`fa fa-${icon}`} />
         </div>

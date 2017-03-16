@@ -14,13 +14,11 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<Stats
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
 	        	</FlexGrid>
 
@@ -29,19 +27,16 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<Stats
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<Stats
       					count={306}
       					details="phone"
       					icon="phone"
-      					border
       				/>
 	        	</FlexGrid>
 
@@ -50,7 +45,6 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<ChartStats
       					positive={80}
@@ -64,7 +58,6 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="telegram"
-      					border
       				/>
       				<ChartStats
       					positive={50}
@@ -75,13 +68,11 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<Stats
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
 	        	</FlexGrid>
 
@@ -90,7 +81,6 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="telegram"
-      					border
       				/>
       				<ChartStats
       					positive={50}
@@ -101,19 +91,16 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<Stats
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<Stats
       					count={106}
       					details="via phone"
       					icon="telegram"
-      					border
       				/>
       				<ChartStats
       					positive={50}
@@ -124,13 +111,11 @@ class IntelligenceComponent extends Component {
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
       				<Stats
       					count={106}
       					details="via phone"
       					icon="phone"
-      					border
       				/>
 	        	</FlexGrid>
 

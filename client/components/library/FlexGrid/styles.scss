@@ -44,6 +44,9 @@
 	&__first {
 		border-right: 1px solid #606060; 
 	}
+	&__item {
+		
+	}
 
 	&__vote_icons_block {
 		margin: 0px 10px 10px 0px;
@@ -64,6 +67,9 @@
 	  width: 100%;
       display: flex;
       margin-bottom: 20px;
+      .sideByside__item:not(:last-child) {
+			border-right: 1px solid #606060; 
+		}
 	}
 
 }
