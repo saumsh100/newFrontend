@@ -11,7 +11,8 @@ const FlexGrid = function (props) {
     title,
     children,
   } = props;
-  const n = children.length > 3 ? 2 : 3;
+  let n = 2;
+  if (children.length === 3) n = 3;
   const width = Math.floor( 12 / n);
   const gridStyle = { width: '100%' };
   const renderChilden = chunk(children, n); 
