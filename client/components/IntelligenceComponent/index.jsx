@@ -84,6 +84,57 @@ class IntelligenceComponent extends Component {
       					border
       				/>
 	        	</FlexGrid>
+
+	        	<FlexGrid title="Appoinment Types" > 
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="telegram"
+      					border
+      				/>
+      				<ChartStats
+      					positive={50}
+      					negative={50}
+      					percantage={50}
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="telegram"
+      					border
+      				/>
+      				<ChartStats
+      					positive={50}
+      					negative={50}
+      					percantage={50}
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+      				<Stats
+      					count={106}
+      					details="via phone"
+      					icon="phone"
+      					border
+      				/>
+	        	</FlexGrid>
+
+
 		      </Row>
 	      </Grid>
       </div>
