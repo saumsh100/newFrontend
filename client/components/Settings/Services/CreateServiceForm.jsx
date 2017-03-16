@@ -2,9 +2,14 @@ import React, {Component, PropTypes} from 'react';
 import { CardHeader,Row, Col, Form, Grid, Field } from '../../library';
 import styles from './styles.scss';
 
-function isNumber(value){
-  return value && !/\D/.test(value) ? undefined : 'Please enter a number.';
-}
+
+const parseNum = value => value && parseInt(value);
+
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
+
+const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 
 export default function CreateServiceForm(props) {
   const { onSubmit } = props;
@@ -22,6 +27,7 @@ export default function CreateServiceForm(props) {
           required
           name="name"
           label="Name"
+          validate={[maxLength25]}
         />
       </div>
       <div className={styles.servicesFormRow__createRow}>
@@ -29,7 +35,9 @@ export default function CreateServiceForm(props) {
           required
           name="duration"
           label="Duration"
-          validate={[isNumber]}
+          type="number"
+          validate={[notNegative]}
+          normalize={parseNum}
         />
       </div>
       <div className={styles.servicesFormRow__createRow}>
@@ -37,7 +45,9 @@ export default function CreateServiceForm(props) {
           required
           name="bufferTime"
           label="Buffer Time"
-          validate={[isNumber]}
+          type="number"
+          validate={[notNegative]}
+          normalize={parseNum}
         />
       </div>
     </Form>

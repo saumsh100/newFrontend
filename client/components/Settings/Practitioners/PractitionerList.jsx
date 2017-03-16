@@ -22,6 +22,8 @@ class PractitionerList extends Component {
   }
 
   createPractitioner(values) {
+    values.firstName = values.firstName.trim();
+    values.lastName = values.lastName.trim();
     const key = 'practitioners';
     this.props.createEntityRequest({ key, entityData: values })
       .then((entities) => {

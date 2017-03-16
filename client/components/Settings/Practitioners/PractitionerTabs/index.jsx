@@ -11,7 +11,6 @@ import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fet
 class PractitionerTabs extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       index: 0,
     };

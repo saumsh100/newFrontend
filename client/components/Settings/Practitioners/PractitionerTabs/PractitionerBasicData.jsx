@@ -3,6 +3,10 @@ import { Map } from 'immutable';
 import {  Form, Field, IconButton } from '../../../library';
 import styles from '../styles.scss';
 
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
+
 class PractitionerBasicData extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +15,8 @@ class PractitionerBasicData extends Component {
 
   updatePractitioner(values) {
     const { practitioner } = this.props;
+    values.firstName = values.firstName.trim();
+    values.lastName = values.lastName.trim();
     const valuesMap = Map(values);
     const modifiedPractitioner = practitioner.merge(valuesMap);
     this.props.updatePractitioner(modifiedPractitioner);
@@ -43,6 +49,7 @@ class PractitionerBasicData extends Component {
                     required
                     name="firstName"
                     label="First Name"
+                    validate={[maxLength25]}
                   />
                 </div>
                 <div className={styles.practFormField}>
@@ -50,6 +57,7 @@ class PractitionerBasicData extends Component {
                     required
                     name="lastName"
                     label="Last Name"
+                    validate={[maxLength25]}
                   />
                 </div>
               </div>

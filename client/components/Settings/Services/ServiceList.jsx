@@ -38,6 +38,7 @@ class ServiceList extends Component {
   }
 
   createService(values) {
+    values.name = values.name.trim();
     values.customCosts = {};
     const key = 'services';
     this.props.createEntityRequest({ key , entityData: values })

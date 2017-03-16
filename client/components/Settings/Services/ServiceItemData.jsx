@@ -9,6 +9,9 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength25 = maxLength(25);
 
+const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
+
+
 class ServiceItemData extends Component {
   constructor(props) {
     super(props)
@@ -81,6 +84,7 @@ class ServiceItemData extends Component {
                     label="Duration"
                     type="number"
                     normalize={parseNum}
+                    validate={[notNegative]}
                   />
                 </div>
                 <div className={styles.servicesFormField}>
@@ -90,6 +94,7 @@ class ServiceItemData extends Component {
                     label="Buffer Time"
                     type="number"
                     normalize={parseNum}
+                    validate={[notNegative]}
                   />
                 </div>
               </div>
