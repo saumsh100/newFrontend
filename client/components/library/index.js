@@ -8,6 +8,7 @@ import Checkbox from './Checkbox';
 import DropdownSelect from './DropdownSelect';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
 import Guage from './Guage';
+import Header from './Header';
 import Icon from './Icon';
 import IconButton from './IconButton';
 import InfiniteScroll from './InfiniteScroll';
@@ -34,6 +35,7 @@ export {
   Form,
   FormSection,
   Guage,
+  Header,
   Icon,
   IconButton,
   InfiniteScroll,

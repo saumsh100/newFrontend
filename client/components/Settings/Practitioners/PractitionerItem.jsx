@@ -13,13 +13,19 @@ class PractitionerItem extends Component {
   }
 
   render() {
-    const { fullname } = this.props;
+    const { fullName } = this.props;
     return(
       <ListItem onClick={this.showItem} className={styles.practListItem}>
-        {fullname}
+        {fullName}
       </ListItem>
     );
   }
 }
+
+
+PractitionerItem.propTypes = {
+  setPractitionerId: PropTypes.func,
+  fullName: PropTypes.props,
+};
 
 export default PractitionerItem;

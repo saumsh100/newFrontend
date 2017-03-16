@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Card, Tab, IconButton } from '../../../library';
+import { Tabs, Card, Tab, IconButton, Header } from '../../../library';
 import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
@@ -25,8 +25,13 @@ class PractitionerTabs extends Component {
 
   deletePractitioner() {
     const { practitioner } = this.props;
-    this.props.deleteEntityRequest({ key: 'practitioners', id: practitioner.get('id') });
-    this.props.setPractitionerId({ id: null });
+
+    let deletePrac = confirm('Delete Practitioner?');
+
+    if (deletePrac) {
+      this.props.deleteEntityRequest({ key: 'practitioners', id: practitioner.get('id') });
+      this.props.setPractitionerId({ id: null });
+    }
   }
 
   handleTabChange(index) {
@@ -43,9 +48,7 @@ class PractitionerTabs extends Component {
     return (
       <div>
         <div className={styles.pracHeaderContainer}>
-          <div className={styles.practHeader}>
-            {practitioner.getFullName()}
-          </div>
+          <Header title={practitioner.getFullName()} className={styles.practHeader} />
           <IconButton
             icon="trash"
             className={styles.trashButton__trashIcon}
@@ -60,7 +63,7 @@ class PractitionerTabs extends Component {
               updatePractitioner={this.updatePractitioner}
             />
           </Tab>
-          <Tab label="Office Hours">
+          <Tab label="Practitioner Schedule">
             <PractitionerOfficeHours
               key={practitioner.get('id')}
               weeklySchedule={weeklySchedule}

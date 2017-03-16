@@ -17,6 +17,8 @@ class Address extends React.Component {
 
   submit(values) {
     const { activeAccount, updateEntityRequest } = this.props;
+    values.city = values.city.trim();
+    values.street = values.street.trim();
     const valuesMap = Map(values);
     const modifiedAccount =activeAccount.merge(valuesMap);
     updateEntityRequest({ key: 'accounts', model: modifiedAccount });

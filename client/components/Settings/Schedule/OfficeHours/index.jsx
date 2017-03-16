@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import OfficeHoursForm from './OfficeHoursForm';
 import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
+import { Header } from '../../../library';
+
+
 
 function OfficeHours(props) {
   const { weeklySchedule } = props;
@@ -15,11 +18,13 @@ function OfficeHours(props) {
 
   return (
     <div>
+      <Header title="Weekly Schedule"/>
       <OfficeHoursForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}
         formName="officeHours"
       />
+      <Header title="Breaks"/>
       <BreaksForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}

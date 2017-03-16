@@ -40,6 +40,12 @@ class Practitioners extends Component {
   }
 }
 
+Practitioners.propTypes = {
+  practitioners: PropTypes.object,
+  weeklySchedules: PropTypes.object,
+  fetchEntities: PropTypes.func,
+};
+
 function mapStateToProps({ entities }) {
 
   const practitioners = entities.getIn(['practitioners', 'models']);

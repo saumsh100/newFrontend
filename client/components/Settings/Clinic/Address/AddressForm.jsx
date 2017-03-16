@@ -1,11 +1,15 @@
 
-import React, { Component } from 'react';
-import { Grid, Row, Col, Form, SaveButton, Field, Button, Select, } from '../../../library';
+import React, { Component, PropTypes, } from 'react';
+import { Row, Col, Form, Field, Select, } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
 import { change, }  from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
+
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
 
 class AddressForm extends React.Component {
 
@@ -72,6 +76,7 @@ class AddressForm extends React.Component {
                   required
                   name="street"
                   label="Street"
+                  validate={[maxLength25]}
                 />
               </Col>
             </Row>
@@ -81,6 +86,7 @@ class AddressForm extends React.Component {
                   required
                   name="city"
                   label="City"
+                  validate={[maxLength25]}
                 />
               </Col>
               <Col xs={2} />
@@ -118,6 +124,11 @@ class AddressForm extends React.Component {
       </div>
     );
   }
+}
+
+AddressForm.propTypes = {
+  change: PropTypes.func,
+  onSubmit: PropTypes.func,
 }
 
 function mapDispatchToProps(dispatch) {

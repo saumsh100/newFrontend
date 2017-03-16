@@ -27,7 +27,7 @@ export default function Settings(props) {
   } else {
     showNav = (
       <Row className={styles.rowContainer}>
-        <Col xs={3} className={styles.subSettingsCol}>
+        <Col xs={2} className={styles.subSettingsCol}>
           <Card className={styles.subSettingsCard}>
             <SettingsSubNav
               location={props.location}
@@ -35,7 +35,7 @@ export default function Settings(props) {
             />
           </Card>
         </Col>
-        <Col xs={9} className={styles.settingsFormsCol} >
+        <Col xs={10} className={styles.settingsFormsCol} >
           <Card className={styles.settingsFormsCard} >
             {children}
           </Card>

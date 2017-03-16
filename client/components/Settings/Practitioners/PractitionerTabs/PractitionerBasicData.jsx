@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, IconButton } from '../../../library';
+import {  Form, Field, } from '../../../library';
 import styles from '../styles.scss';
 
 const maxLength = max => value =>
@@ -15,8 +15,10 @@ class PractitionerBasicData extends Component {
 
   updatePractitioner(values) {
     const { practitioner } = this.props;
+
     values.firstName = values.firstName.trim();
     values.lastName = values.lastName.trim();
+
     const valuesMap = Map(values);
     const modifiedPractitioner = practitioner.merge(valuesMap);
     this.props.updatePractitioner(modifiedPractitioner);
@@ -68,7 +70,5 @@ class PractitionerBasicData extends Component {
     );
   }
 }
-
-
 
 export default PractitionerBasicData;

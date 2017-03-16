@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, IconButton, CardHeader } from '../../library';
+import {  Form, Field, IconButton, Header, Grid, Row, Col } from '../../library';
 import styles from './styles.scss';
 
 const parseNum = value => value && parseInt(value);
@@ -31,7 +31,12 @@ class ServiceItemData extends Component {
 
   deleteService() {
     const { service } = this.props;
-    this.props.deleteService(service.get('id'));
+
+    let deleteService = confirm('Are you sure you want to delete this service?');
+
+    if (deleteService) {
+      this.props.deleteService(service.get('id'));
+    }
   }
 
   render() {
@@ -48,11 +53,9 @@ class ServiceItemData extends Component {
     };
 
     return (
-      <div>
-        <div className={styles.serviceHeaderContainer}>
-          <div className={styles.serviceHeader}>
-            {service.get('name')}
-          </div>
+      <Grid>
+        <Row className={styles.serviceHeaderContainer}>
+          <Header title={service.get('name')} className={styles.serviceHeader} />
           <div className={styles.trashButton}>
             <IconButton
               icon="trash"
@@ -60,24 +63,24 @@ class ServiceItemData extends Component {
               onClick={this.deleteService}
             />
           </div>
-        </div>
-        <div className={styles.formContainer}>
-          <div className={styles.servicesForm}>
+        </Row>
+        <Row className={styles.formContainer}>
+          <Col xs={6} className={styles.servicesForm}>
             <Form
               form={`${service.get('id')}Form`}
               onSubmit={this.updateService}
               initialValues={initialValues}
             >
-              <div className={styles.servicesFormRow}>
-                <div className={styles.servicesFormField}>
+              <Row className={styles.servicesFormRow}>
+                <Col xs={12} className={styles.servicesFormField}>
                   <Field
                     required
                     name="name"
                     label="Name"
                     validate={[maxLength25]}
                   />
-                </div>
-                <div className={styles.servicesFormField}>
+                </Col>
+                <Col xs={12} className={styles.servicesFormField}>
                   <Field
                     required
                     name="duration"
@@ -86,8 +89,8 @@ class ServiceItemData extends Component {
                     normalize={parseNum}
                     validate={[notNegative]}
                   />
-                </div>
-                <div className={styles.servicesFormField}>
+                </Col>
+                <Col xs={12} className={styles.servicesFormField}>
                   <Field
                     required
                     name="bufferTime"
@@ -96,13 +99,12 @@ class ServiceItemData extends Component {
                     normalize={parseNum}
                     validate={[notNegative]}
                   />
-                </div>
-              </div>
+                </Col>
+              </Row>
             </Form>
-          </div>
-
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

@@ -24,12 +24,15 @@ class PractitionerList extends Component {
   createPractitioner(values) {
     values.firstName = values.firstName.trim();
     values.lastName = values.lastName.trim();
+
     const key = 'practitioners';
+
     this.props.createEntityRequest({ key, entityData: values })
       .then((entities) => {
         const id = Object.keys(entities[key])[0];
         this.props.setPractitionerId({ id });
     });
+
     this.setState({ active: false });
   }
 
@@ -43,7 +46,9 @@ class PractitionerList extends Component {
 
     const selectedPractitioner = (
       practitionerId ? practitioners.get(practitionerId) : practitioners.first());
+
     const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
+
     const weeklySchedule = weeklyScheduleId ? weeklySchedules.get(weeklyScheduleId) : null;
 
     return (
@@ -72,7 +77,7 @@ class PractitionerList extends Component {
                 <PractitionerItem
                   key={practitioner.get('id')}
                   id={practitioner.get('id')}
-                  fullname={practitioner.getFullName()}
+                  fullName={practitioner.getFullName()}
                   setPractitionerId={this.props.setPractitionerId}
                 />
               );
