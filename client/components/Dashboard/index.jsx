@@ -7,6 +7,7 @@ import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
 import DashboardStats from './DashboardStats'
 import RemindersList from './RemindersList'
+import PractitionersList from './PractitionersList'
 import styles from "./styles.scss";
 
 
@@ -47,18 +48,21 @@ class Dashboard extends React.Component {
         <Row>
           <Col xs={12} sm={12} >
             <Row center="xs" around="sm" className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={3} lg={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
                 <RemindersList cardCount="8" cardTitle="Reminders"/>
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={3} lg={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
                 <RemindersList cardCount="2" cardTitle="Recalls"/>
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={3} lg={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
                 <RemindersList cardCount="5" cardTitle="Digital Waitlist"/>
               </Col>
             </Row>
           </Col>
-          <Col xs={12} sm={2} className={styles.dashboard__requestContainer}>
+          <Col xs={12}>
+            <PractitionersList/>
+          </Col>
+          <Col xs={12} sm={4} className={styles.dashboard__requestContainer}>
             <RequestsContainer />
           </Col>
         </Row>
