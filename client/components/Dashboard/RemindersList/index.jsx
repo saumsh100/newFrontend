@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { List, ListItem, Card, CardHeader, Icon } from '../../library';
 import styles from './styles.scss';
-import { Card, CardHeader, Icon } from '../../library';
+
 
 class RemindersList extends Component {
   render() {
@@ -44,8 +45,7 @@ class RemindersList extends Component {
       date: "01/13/1988",
       time: "6:32pm",
       icon: "envelope"
-    }
-      ,{
+    },{
         img: "images/practitioner_1.png",
         name: "Issac Item",
         age: "19",
@@ -54,18 +54,22 @@ class RemindersList extends Component {
         status: "Seminder Sent",
         date: "01/13/1988",
         time: "6:32pm",
-        icon: "envelope"
+        icon: "phone"
       }];
+    const {
+      cardCount,
+      cardTitle,
+    } = this.props;
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
-          <CardHeader count={3} title={'Reminders'} />
+          <CardHeader count={cardCount} title={cardTitle} />
         </div>
         <div className={styles.reminders__body}>
-          <ul className={styles.patients}>
+          <List className={styles.patients}>
             {hardcodeData.map(obj => {
               return (
-                <li className={styles.patients__item}>
+                <ListItem className={styles.patients__item}>
                   <img className={styles.patients__item_img} src={obj.img} alt=""/>
                   <div className={styles.patients__item_wrapper}>
                     <div className={styles.patients__item_left}>
@@ -89,15 +93,15 @@ class RemindersList extends Component {
                       <div className={styles.patients__item_time}>
                         {obj.time}
                       </div>
-                      <div className={styles.patients__item_icon}>
-                        <Icon icon={obj.icon} size={1.5}/>
-                      </div>
+                    </div>
+                    <div className={styles.patients__item_icon}>
+                      <Icon className={obj.icon} icon={obj.icon} size={1.5}/>
                     </div>
                   </div>
-                </li>
+                </ListItem>
               )
             })}
-          </ul>
+          </List>
         </div>
       </Card>
     );

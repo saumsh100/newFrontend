@@ -45,12 +45,20 @@ class Dashboard extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={10}>
-            <Col xs={3}>
-              <RemindersList />
-            </Col>
+          <Col xs={12} sm={12} >
+            <Row center="xs" around="sm" className={styles.dashboard__patientList}>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={3} lg={4}>
+                <RemindersList cardCount="8" cardTitle="Reminders"/>
+              </Col>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={3} lg={4}>
+                <RemindersList cardCount="2" cardTitle="Recalls"/>
+              </Col>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={3} lg={4}>
+                <RemindersList cardCount="5" cardTitle="Digital Waitlist"/>
+              </Col>
+            </Row>
           </Col>
-          <Col xs={2} className={styles.dashboard__requestContainer}>
+          <Col xs={12} sm={2} className={styles.dashboard__requestContainer}>
             <RequestsContainer />
           </Col>
         </Row>

@@ -27,6 +27,11 @@
       }
     }
   }
+  &__patientList {
+    &_item {
+      padding: 5px;
+    }
+  }
 }
 .primaryColor {
   background: $primary-color;
