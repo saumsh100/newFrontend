@@ -2,9 +2,8 @@
 .dashboardStats {
     cursor: pointer;
     margin-bottom: 20px;
-    div:not(:last-child) {
-        margin-right: 10px;
-        flex: 1;
+    &__item {
+        padding: 5px;
     }
 }
 .primaryColor {
