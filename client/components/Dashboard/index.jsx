@@ -8,6 +8,8 @@ import fetchReviewsData from '../../thunks/fetchReviewsData';
 import DashboardStats from './DashboardStats'
 import RemindersList from './RemindersList'
 import PractitionersList from './PractitionersList'
+
+import TopServices from './TopServices';
 import styles from "./styles.scss";
 
 
@@ -43,6 +45,11 @@ class Dashboard extends React.Component {
               Welcome Back, <b>Corina</b>
             </Card>
             <DashboardStats/>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={6}>
+            <TopServices cardTitle="Top Services by Hours"/>
           </Col>
         </Row>
         <Row>
