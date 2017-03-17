@@ -210,4 +210,5 @@ class Availabilities extends React.Component {
 Availabilities.defaultProps = {
   bookingWidgetPrimaryColor: '#ff715a',
 };
+
 export default Availabilities;

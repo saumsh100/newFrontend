@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
@@ -31,16 +32,18 @@ class Availability extends Component {
 
   componentDidMount() {
     const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
-    this.props.fetchEntities({key: 'practitioners', domen});
-    this.props.fetchEntities({key: 'services', domen});
+
+    // TODO: put these into their separate containers
+    this.props.fetchEntities({ key: 'practitioners', domen });
+    this.props.fetchEntities({ key: 'services', domen });
 
     const array = location.pathname.split('/');
-    const accountId = array[array.length-1];
+    const accountId = array[array.length - 1];
     this.props.getClinicInfo(accountId);
-    
   }
 
   componentWillReceiveProps(nextProps) {
+    // TODO: KILL THIS domen usage
     const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
 
     const {setPractitioner, setService} = this.props;
@@ -175,6 +178,7 @@ class Availability extends Component {
     }
 
     if (shouldAvailabilitiesBeUpdated && params.serviceId) {
+      // TODO: put on componentWilLReceiveProps for availabilities container
       this.props.fetchEntities({
         key: 'availabilities',
         params,
@@ -184,7 +188,8 @@ class Availability extends Component {
 
 
     if (!isEqual(thisPractitioners, nextPractitioners)) {
-      this.setState({practitionerId: nextPractitioners[0].id}, () => {
+      // TODO: move selected practitioner to Redux state
+      this.setState({ practitionerId: nextPractitioners[0].id }, () => {
         this.props.fetchEntities({
           key: 'services',
           params: {practitionerId: this.state.practitionerId},
@@ -252,7 +257,7 @@ class Availability extends Component {
       serviceId,
     } = this.getAppointmentsSorted();
 
-    const {setStartingAppointmentTime} = this.props;
+    const { setStartingAppointmentTime } = this.props;
     const { logo, address, clinicName, bookingWidgetPrimaryColor } = this.props.practitionersStartEndDate.toJS();
 
     return (
