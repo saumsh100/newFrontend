@@ -18,7 +18,7 @@ function OfficeHours(props) {
 
   return (
     <div>
-      <Header title="Weekly Schedule"/>
+      <Header title="Weekly Schedule" />
       <OfficeHoursForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}

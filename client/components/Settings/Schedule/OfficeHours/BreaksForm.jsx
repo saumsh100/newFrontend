@@ -81,6 +81,8 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
             >
               <Button
                 type="button"
+                raised
+                icon="plus"
                 onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
               >
                 Add Break

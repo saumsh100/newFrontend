@@ -39,16 +39,8 @@
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
 }
-.serviceHeader {
-  width: 50%;
-}
-
 .trashButton {
-  float: right;
-  &__trashIcon {
-    width: 0px;
-    padding: 0px;
-  }
+  margin-left: auto;
 }
 
 .formContainer {
@@ -59,20 +51,15 @@
     height: 100%;
   }
 }
-.servicesForm {
-  padding-top: 15px;
-}
+
 .servicesFormRow {
   width: 100%;
   display: inline-block;
+
   &__createRow {
     padding: 15px 0px 15px 0px;
   }
 }
-.servicesFormField {
-  padding: 15px 0px 15px 0px;
-}
-
 
 .modalContainer {
   display: flex;

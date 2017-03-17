@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, IconButton, Header, Grid, Row, Col } from '../../library';
+import {  Form, Field, Button, Header, Grid, Row, Col } from '../../library';
 import styles from './styles.scss';
 
 const parseNum = value => value && parseInt(value);
@@ -55,13 +55,11 @@ class ServiceItemData extends Component {
     return (
       <Grid>
         <Row className={styles.serviceHeaderContainer}>
-          <Header title={service.get('name')} className={styles.serviceHeader} />
+          <Header title={service.get('name')} />
           <div className={styles.trashButton}>
-            <IconButton
-              icon="trash"
-              className={styles.trashButton__trashIcon}
-              onClick={this.deleteService}
-            />
+            <Button icon="trash" raised className={styles.trashButton__trashIcon} onClick={this.deleteService}>
+              Delete
+            </Button>
           </div>
         </Row>
         <Row className={styles.formContainer}>

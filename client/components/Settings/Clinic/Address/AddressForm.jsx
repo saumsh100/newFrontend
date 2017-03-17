@@ -68,9 +68,10 @@ class AddressForm extends React.Component {
     let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
 
     return (
-      <div className={styles.addressForm}>
-        <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
-            <Row className={styles.addressRow}>
+      <Row className={styles.addressRow}>
+        <Col xs={12}>
+          <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
+            <Row>
               <Col xs={12}>
                 <Field
                   required
@@ -80,7 +81,7 @@ class AddressForm extends React.Component {
                 />
               </Col>
             </Row>
-            <Row className={styles.addressRow}>
+            <Row>
               <Col xs={5}>
                 <Field
                   required
@@ -89,7 +90,6 @@ class AddressForm extends React.Component {
                   validate={[maxLength25]}
                 />
               </Col>
-              <Col xs={2} />
               <Col xs={5} className={styles.addressCol__select}>
                 <Field
                   required
@@ -100,7 +100,7 @@ class AddressForm extends React.Component {
                 />
               </Col>
             </Row>
-            <Row className={styles.addressRow}>
+            <Row>
               <Col xs={5}>
                 <Field
                   required
@@ -109,7 +109,6 @@ class AddressForm extends React.Component {
                   validate={[this.zipPostalVal]}
                 />
               </Col>
-              <Col xs={2} />
               <Col xs={5} className={styles.addressCol__select}>
                 <Field
                   name="country"
@@ -120,8 +119,9 @@ class AddressForm extends React.Component {
                 />
               </Col>
             </Row>
-        </Form>
-      </div>
+          </Form>
+        </Col>
+      </Row>
     );
   }
 }

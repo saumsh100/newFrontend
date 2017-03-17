@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, } from '../../../library';
+import {  Form, Field, Grid, Row, Col } from '../../../library';
 import styles from '../styles.scss';
 
 const maxLength = max => value =>
@@ -37,36 +37,34 @@ class PractitionerBasicData extends Component {
     }
 
     return (
-      <div>
-        <div className={styles.practFormContainer}>
-          <div className={styles.practForm}>
-            <Form
-              form={`${practitioner.get('id')}Form`}
-              onSubmit={this.updatePractitioner}
-              initialValues={initialValues}
-            >
-              <div className={styles.practFormRow}>
-                <div className={styles.practFormField}>
-                  <Field
-                    required
-                    name="firstName"
-                    label="First Name"
-                    validate={[maxLength25]}
-                  />
-                </div>
-                <div className={styles.practFormField}>
-                  <Field
-                    required
-                    name="lastName"
-                    label="Last Name"
-                    validate={[maxLength25]}
-                  />
-                </div>
-              </div>
-            </Form>
-          </div>
-        </div>
-      </div>
+      <Row className={styles.practFormContainer}>
+        <Col xs={6} className={styles.practForm}>
+          <Form
+            form={`${practitioner.get('id')}Form`}
+            onSubmit={this.updatePractitioner}
+            initialValues={initialValues}
+          >
+            <Row className={styles.practFormRow}>
+              <Col xs={12}>
+                <Field
+                  required
+                  name="firstName"
+                  label="First Name"
+                  validate={[maxLength25]}
+                />
+              </Col>
+              <Col xs={12}>
+                <Field
+                  required
+                  name="lastName"
+                  label="Last Name"
+                  validate={[maxLength25]}
+                />
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
     );
   }
 }

@@ -10,20 +10,6 @@
 
 .submitButton {
   margin-left: 50%;
-  background-color: $primary-color;
-  text-align: center;
-  color: $primary-white;
-
-  -webkit-box-shadow: 0px 0px 1px 0px rgba(149,149,150,1);
-  -moz-box-shadow: 0px 0px 1px 0px rgba(149,149,150,1);
-  box-shadow: 0px 0px 1px 0px rgba(149,149,150,1);
-
-  &__icon {
-    padding-right: 5px;
-  }
-
-  &:disabled{
-    background-color: $primary-lightgrey;
-    color: $primary-darkgrey;
-  }
 }
+
+

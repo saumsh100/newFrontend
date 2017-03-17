@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import styles from './styles.scss';
+import { Grid } from '../../../library';
 
 
 class Address extends React.Component {

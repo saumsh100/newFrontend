@@ -1,17 +1,21 @@
-.addressForm{
-  padding-top: 30px;
+.addressForm {
+  width: 100%;
 }
-.addressGrid{
 
-}
+
+
 .addressRow {
-  padding-bottom: 30px;
+  height: 100%;
 }
 
 .addressCol{
   padding-bottom: 0px;
+  display: flex;
+  height: 100%;
+
   &__select{
-    display: flex;
+    margin-left: auto;
+    padding-top: 39px;
   }
 }
 

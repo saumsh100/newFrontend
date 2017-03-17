@@ -38,13 +38,12 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
   };
 
   return (
-    <Form form="generalSettingsForm"
-          onSubmit={onSubmit}
-          initialValues={initialValues}
-          className={styles.generalForm}
-    >
-      <Grid>
-        <Row className={styles.generalRow}>
+    <Row className={styles.generalRow}>
+      <Col xs={12}>
+        <Form form="generalSettingsForm"
+              onSubmit={onSubmit}
+              initialValues={initialValues}
+        >
           <Col xs={12}>
             <Field
               required
@@ -53,8 +52,6 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
               validate={[maxLength25]}
             />
           </Col>
-        </Row>
-        <Row className={styles.generalRow}>
           <Col xs={12}>
             <Field
               required
@@ -63,9 +60,9 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
               normalize={normalizePhone}
             />
           </Col>
-        </Row>
-      </Grid>
-    </Form>
+        </Form>
+      </Col>
+    </Row>
   );
 }
 

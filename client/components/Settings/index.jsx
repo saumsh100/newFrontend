@@ -17,7 +17,7 @@ export default function Settings(props) {
   if (location.pathname === '/settings/services' || location.pathname === '/settings/practitioners') {
     showNav = (
       <Row className={styles.rowContainer}>
-        <Col xs={12} >
+        <Col xs={12}>
           <Card className={styles.subSettingsCard}>
             {children}
           </Card>
