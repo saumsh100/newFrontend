@@ -68,60 +68,54 @@ class AddressForm extends React.Component {
     let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
 
     return (
-      <Row className={styles.addressRow}>
-        <Col xs={12}>
-          <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
-            <Row>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="street"
-                  label="Street"
-                  validate={[maxLength25]}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={5}>
-                <Field
-                  required
-                  name="city"
-                  label="City"
-                  validate={[maxLength25]}
-                />
-              </Col>
-              <Col xs={5} className={styles.addressCol__select}>
-                <Field
-                  required
-                  name="state"
-                  label="State"
-                  component="DropdownSelect"
-                  options={stateProv}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={5}>
-                <Field
-                  required
-                  name="zipCode"
-                  label={zipPostal}
-                  validate={[this.zipPostalVal]}
-                />
-              </Col>
-              <Col xs={5} className={styles.addressCol__select}>
-                <Field
-                  name="country"
-                  label="Country"
-                  component="DropdownSelect"
-                  options={countrySelector}
-                  onChange={this.changeCountry}
-                />
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
+      <div className={styles.addressRow}>
+        <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
+          <Field
+            required
+            name="street"
+            label="Street"
+            validate={[maxLength25]}
+          />
+          <div className={styles.addressCol}>
+          <div className={styles.addressColPlain}>
+            <Field
+              required
+              name="city"
+              label="City"
+              validate={[maxLength25]}
+            />
+          </div>
+            <div className={styles.addressColSelect}>
+              <Field
+                required
+                name="state"
+                label="State"
+                component="DropdownSelect"
+                options={stateProv}
+              />
+            </div>
+          </div>
+          <div className={styles.addressCol}>
+          <div className={styles.addressColPlain}>
+            <Field
+              required
+              name="zipCode"
+              label={zipPostal}
+              validate={[this.zipPostalVal]}
+            />
+          </div>
+            <div className={styles.addressColSelect}>
+              <Field
+                name="country"
+                label="Country"
+                component="DropdownSelect"
+                options={countrySelector}
+                onChange={this.changeCountry}
+              />
+            </div>
+          </div>
+        </Form>
+      </div>
     );
   }
 }

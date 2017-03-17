@@ -76,7 +76,7 @@ class PractitionerOfficeHours extends Component{
       );
     }
     return (
-      <div>
+      <div className={styles.practScheduleContainer}>
         <div className={styles.toggleContainer}>
           <div> Set Custom </div>
           <div className={styles.toggleContainer__toggle}>

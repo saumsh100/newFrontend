@@ -54,7 +54,7 @@ class PractitionerList extends Component {
     return (
       <Row className={styles.practMainContainer} >
         <Col xs={2} className={styles.practListContainer}>
-          <Row className={styles.modalContainer}>
+          <div className={styles.modalContainer}>
             <CardHeader count={practitioners.size} title="Practitioners" />
             <IconButton
               icon="plus"
@@ -70,23 +70,19 @@ class PractitionerList extends Component {
                 onSubmit={this.createPractitioner}
               />
             </Modal>
-          </Row>
-          <Row>
-            <Col xs={12} >
-              {practitioners.toArray().map((practitioner) => {
-                return (
-                  <PractitionerItem
-                    key={practitioner.get('id')}
-                    id={practitioner.get('id')}
-                    fullName={practitioner.getFullName()}
-                    setPractitionerId={this.props.setPractitionerId}
-                  />
-                );
-              })}
-            </Col>
-          </Row>
+          </div>
+            {practitioners.toArray().map((practitioner) => {
+              return (
+                <PractitionerItem
+                  key={practitioner.get('id')}
+                  id={practitioner.get('id')}
+                  fullName={practitioner.getFullName()}
+                  setPractitionerId={this.props.setPractitionerId}
+                />
+              );
+            })}
         </Col>
-        <Col xs={10} className={styles.practOuterContainer}>
+        <Col xs={10} className={styles.practDataContainer}>
           <PractitionerTabs
             practitioner={selectedPractitioner}
             weeklySchedule={weeklySchedule}

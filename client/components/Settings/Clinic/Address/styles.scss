@@ -1,22 +1,25 @@
 .addressForm {
   width: 100%;
 }
-
-
-
 .addressRow {
-  height: 100%;
+  display: inline-block;
+  width: 50%;
 }
 
 .addressCol{
-  padding-bottom: 0px;
   display: flex;
-  height: 100%;
-
-  &__select{
-    margin-left: auto;
-    padding-top: 39px;
-  }
+  align-items: center;
+  width: 100%;
+  padding-top: 0px;
+  height: 50px;
+  padding-bottom: 30px;
 }
 
+.addressColPlain{
+  width: 40%;
+}
 
+.addressColSelect{
+    width: 40%;
+    margin-left: auto;
+}

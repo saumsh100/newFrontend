@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 import PractitionerList from './PractitionerList';
+import { Col } from '../../library';
 import styles from './styles.scss';
 
 
@@ -33,9 +34,9 @@ class Practitioners extends Component {
     }
 
     return (
-      <div className={styles.practOuterContainer}>
+      <Col xs={12}>
         {showComponent}
-      </div>
+      </Col>
     );
   }
 }

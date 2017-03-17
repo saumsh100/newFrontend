@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities, } from '../../../thunks/fetchEntities';
 import ServiceList from './ServiceList';
+import { Col } from '../../library';
 import styles from './styles.scss';
 
 const sortServicesAlphabetical = (a, b) => {
@@ -31,9 +32,9 @@ class Services extends Component {
     }
 
     return (
-      <div className={styles.outerContainer}>
+      <Col xs={12}>
         {showComponent}
-      </div>
+      </Col>
     );
   }
 }

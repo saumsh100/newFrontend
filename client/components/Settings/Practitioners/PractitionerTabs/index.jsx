@@ -46,35 +46,33 @@ class PractitionerTabs extends Component {
     }
 
     return (
-      <Row className={styles.practDataContainer}>
-        <Col xs={12} className={styles.pracHeaderContainer}>
+      <div>
+        <div className={styles.pracHeaderContainer}>
           <Header title={practitioner.getFullName()} />
           <div className={styles.trashButton}>
             <Button icon="trash" raised onClick={this.deletePractitioner}>
               Delete
             </Button>
           </div>
-        </Col>
-        <Col xs={12}>
-          <Tabs index={this.state.index} onChange={this.handleTabChange} >
-            <Tab label="Basic">
-              <PractitionerBasicData
-                key={practitioner.get('id')}
-                practitioner={practitioner}
-                updatePractitioner={this.updatePractitioner}
-              />
-            </Tab>
-            <Tab label="Practitioner Schedule">
-              <PractitionerOfficeHours
-                key={practitioner.get('id')}
-                weeklySchedule={weeklySchedule}
-                practitioner={practitioner}
-                updateEntityRequest={this.props.updateEntityRequest}
-              />
-            </Tab>
-          </Tabs>
-        </Col>
-      </Row>
+        </div>
+        <Tabs index={this.state.index} onChange={this.handleTabChange} >
+          <Tab label="Basic">
+            <PractitionerBasicData
+              key={practitioner.get('id')}
+              practitioner={practitioner}
+              updatePractitioner={this.updatePractitioner}
+            />
+          </Tab>
+          <Tab label="Practitioner Schedule">
+            <PractitionerOfficeHours
+              key={practitioner.get('id')}
+              weeklySchedule={weeklySchedule}
+              practitioner={practitioner}
+              updateEntityRequest={this.props.updateEntityRequest}
+            />
+          </Tab>
+        </Tabs>
+      </div>
     );
   }
 }
