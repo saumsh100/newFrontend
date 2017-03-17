@@ -24,7 +24,7 @@ const saltRounds = 10;
 const oneHour = 1 * 60 * 60;
 const recentStartTime = r.now().add(oneHour);
 
-const accountId = uuid();
+const accountId = "2aeab035-b72c-4f7a-ad73-09465cbf5654";
 const accountId2 = uuid();
 
 const justinUserId = uuid();
@@ -374,51 +374,6 @@ const SEEDS = {
     },
   ],
 
-  /*DailySchedule: [
-    {
-      id: mondayHoursId,
-      isClosed: true,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: tuesdayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: wednesdayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: thursdayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: fridayHoursId,
-      isClosed: false,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: saturdayHoursId,
-      isClosed: true,
-      startTime: hour8,
-      endTime: hour5,
-    },
-    {
-      id: sundayHoursId,
-      isClosed: true,
-      startTime: hour8,
-      endTime: hour5,
-    },
-  ],*/
-
   WeeklySchedule: [
     {
       id: weeklyScheduleId,
@@ -464,6 +419,23 @@ const SEEDS = {
       sunday: {
         isClosed: true,
       },
+
+      tuesday: {
+        isClosed: false,
+      },
+
+      wednesday: {
+        isClosed: false,
+      },
+
+      thursday: {
+        isClosed: false,
+      },
+
+      friday: {
+        isClosed: false,
+      },
+
     },
   ],
 
@@ -609,6 +581,14 @@ const SEEDS = {
     },
     {
       appointmentId: appointmentId2,
+    },
+  ],
+
+  SyncClientVersion: [
+    {
+      version: 2.0,
+      build: 1,
+      url: 'http://carecru.dev:8080/api/updater/download',
     },
   ],
 };

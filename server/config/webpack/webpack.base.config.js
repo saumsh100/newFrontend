@@ -2,6 +2,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
+const cssnext = require('postcss-cssnext');
+
 
 // Babel Config Stuff.
 const babelQuery = {
@@ -70,7 +72,11 @@ module.exports = {
   },
 
   postcss() {
-    return [autoprefixer];
+    return [cssnext({
+      features: {
+        customProperties: false
+      }
+    })];
   },
 
   resolveLoader: {

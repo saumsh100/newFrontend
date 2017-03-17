@@ -1,13 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-
-const COLOR_MAP = {
-  red: '#FF715C',
-  blue: '#8FBBD6',
-  green: '#2EC4A7',
-  yellow: '#FFC55B',
-};
+import colorMap from '../util/colorMap';
 
 export default function Guage(props) {
   const {
@@ -30,8 +24,8 @@ export default function Guage(props) {
     tooltips,
   };
 
-  const hexColor = COLOR_MAP[color];
-  const greyColor = '#DCDCDC';
+  const hexColor = colorMap[color];
+  const greyColor = colorMap.lightgrey;
 
   const data = {
     labels: [

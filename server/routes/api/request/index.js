@@ -16,7 +16,7 @@ requestsRouter.post('/', (req, res, next) => {
   const { serviceId, startTime, accountId } = req.body;
   Service.get(serviceId).run().then((service) => {
     const serviceDuration = service.duration;
-    const endTime = moment(startTime).add(serviceDuration ,'minutes')._d;
+    const endTime = moment(startTime).clone().add(serviceDuration ,'minutes')._d;
     const requestData = Object.assign({}, req.body, {
       accountId: req.accountId || accountId,
       endTime,
@@ -31,7 +31,7 @@ requestsRouter.post('/', (req, res, next) => {
 /**
  * Get all requests
  */
-requestsRouter.get('/', checkPermissions('requests:read'), (req, res, next) => {
+requestsRouter.get('/', (req, res, next) => {
   const {
     accountId,
     joinObject,

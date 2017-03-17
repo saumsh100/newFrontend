@@ -1,8 +1,10 @@
 
 import AppBar from './AppBar';
 import Avatar from './Avatar';
+import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
+import Calendar from './Calendar';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
 import DropdownSelect from './DropdownSelect';
@@ -14,7 +16,9 @@ import IconButton from './IconButton';
 import InfiniteScroll from './InfiniteScroll';
 import Input from './Input';
 import Link from './Link';
+import LineChart from './LineChart';
 import Modal from './Modal';
+import PieChart from './PieChart';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
@@ -25,8 +29,10 @@ import Tooltip from './Tooltip';
 export {
   AppBar,
   Avatar,
+  BarChart,
   Button,
   Card,
+  Calendar,
   CardHeader,
   Checkbox,
   DropdownSelect,
@@ -41,7 +47,9 @@ export {
   InfiniteScroll,
   Input,
   Link,
+  LineChart,
   Modal,
+  PieChart,
   RouterButton,
   RouterList,
   RouterTabs,
