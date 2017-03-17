@@ -1,0 +1,52 @@
+@import "../../../ui.scss";
+
+.appointmentFilled {
+    border-top: 5px solid $primary-color;
+    margin: 0 5px 20px 5px;
+    padding: 0;
+    min-width: 250px;
+    height: 450px;
+    position: relative;
+    &__wrapper {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        margin-top: 20px;
+        margin-left: 15px;
+        &_number {
+            font-size: 40px;
+        }
+        &_title {
+            font-size: 16px;
+        }
+        &_date {
+            font-size: 14px;
+            color: #b5b5b5;
+        }
+        @media screen and (max-width: 800px){
+            align-items: center;
+        }
+    }
+    &__body {
+        display: table;
+        width: 100%;
+    }
+    canvas {
+        max-width: 420px !important;
+        position: absolute;
+        max-height: 310px !important;
+        margin: 0 auto;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        @media screen and (max-width: 800px) {
+            bottom: 50% !important;
+            left: 50%;
+            transform: translateX(-50%) translateY(50%) !important;
+        }
+    }
+}

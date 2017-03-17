@@ -11,6 +11,7 @@ import PractitionersList from './PractitionersList'
 
 import TopServices from './TopServices';
 import MostLoyal from './MostLoyal';
+import AppointmentFilled from './AppointmentFilled';
 import styles from "./styles.scss";
 
 
@@ -54,11 +55,11 @@ class Dashboard extends React.Component {
           </Col>
         </Row>
         <Row>
-{/*          <Col xs={6}>
-            <Chart/>
-          </Col>*/}
-          <Col xs={6}>
-            <TopServices cardTitle="Top Services by Hours"/>
+          <Col xs={12} xs={6}>
+            <AppointmentFilled />
+          </Col>
+          <Col xs={12} xs={6}>
+            <TopServices  cardTitle="Top Services by Hours"/>
           </Col>
         </Row>
         <Row>

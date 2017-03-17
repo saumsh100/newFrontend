@@ -2,9 +2,9 @@
 
 .topServices {
     border-top: 5px solid $primary-blue;
-    margin-bottom: 20px;
+    margin:0 5px 20px;
     min-width: 250px;
-    max-height: 650px;
+    height: 450px;
     &__header {
         display: flex;
         align-items: center;
