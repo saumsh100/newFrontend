@@ -1,0 +1,22 @@
+.search {
+	display: flex;
+  position: absolute;
+  align-items: center;
+  right: 0;
+  color: #959596;
+
+	&__searchInput {
+		border: 0;
+    background: none;
+    margin: 0px 5px 0px 5px;
+	}
+
+	&__searchInput input:focus {
+		border: 0;
+	}
+
+	&__text {
+		margin: 0px 5px 0px 5px;
+	}
+
+}
