@@ -7,7 +7,7 @@ const ChartStats = function (props) {
   const { positive, negative, percentage } = props;
 
   return (
-    <div className={styles.sideByside__leftCol}>
+    <div className={`${styles.sideByside__leftCol} ${styles.sideByside__chartLeftCol}`}>
       <div>
           <div className={styles.sideByside__vote_icons}>
             <div className={styles.sideByside__vote_icons_block} >

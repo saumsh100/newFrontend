@@ -19,7 +19,7 @@
 	&__leftCol {
 		display: flex;
 		align-items: flex-start;
-    justify-content: center;
+    	justify-content: center;
 
 	}
 
@@ -85,3 +85,22 @@
 		}
 	}
 }
+
+
+@media (max-width: 320px) {
+	.sideByside {
+		&__chartLeftCol {
+			flex-direction: column;
+		}
+
+		&__leftCol {
+			align-items: center;
+		}
+
+		&__vote_icons {
+			display: flex;
+			width: 100%;
+			justify-content: center;
+		}
+	}
+} 
