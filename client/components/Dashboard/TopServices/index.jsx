@@ -26,23 +26,25 @@ class TopServices extends Component {
       cardTitle,
     } = this.props;
     return (
-      <Card className={styles.reminders}>
-        <div className={styles.reminders__header}>
+      <Card className={styles.topServices}>
+        <div className={styles.topServices__header}>
           <CardHeader title={cardTitle} />
         </div>
-        <div className={styles.reminders__body}>
-          <List className={styles.patients}>
+        <div className={styles.topServices__body}>
+          <List className={styles.data}>
             {hardcodeData.map(obj => {
               return (
-                <ListItem className={styles.patients__item}>
-                  <div className={styles.patients__item_wrapper}>
-                    <div className={styles.patients__item_left}>
-                      <div className={styles.patients__item_name}>
+                <ListItem className={styles.data__item}>
+                  <div className={styles.data__item_wrapper}>
+                    <div className={styles.data__item_left}>
+                      <div className={styles.data__item_title}>
                         <spam>{obj.title}</spam>
                       </div>
                     </div>
-                    <div className={styles.patients__item_right}>
-                      <span>{obj.hours + " h"}</span>
+                    <div className={styles.data__item_right}>
+                      <div className={styles.data__item_hours}>
+                        <span>{obj.hours + " h"}</span>
+                      </div>
                     </div>
                   </div>
                 </ListItem>

@@ -1,0 +1,110 @@
+@import "../../../ui.scss";
+
+.mostLoyal {
+    border-top: 5px solid $primary-color;
+    margin-bottom: 20px;
+    min-width: 250px;
+    max-height: 650px;
+    &__header {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        margin-left: 15px;
+    }
+    &__body {
+        display:table;
+        width: 100%;
+    }
+}
+.data {
+    display: table-cell;
+    border-top: 1px solid $primary-grey;
+    padding: 0;
+    margin: 0;
+    color: $primary-dark;
+    &__item {
+        min-width: 250px;
+        padding: 0 40px 0 15px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 110px;
+        list-style: none;
+        margin: 0;
+        border-bottom: 1px solid $primary-lightgrey;
+        @media screen and (max-width: 800px) {
+            height: 85px;
+        }
+        &_wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        &_left {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            height: 100%;
+        }
+        &_right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            text-align: right;
+            height: 100%;
+            width: 100%;
+            justify-content: space-around;
+
+        }
+        &_loyal {
+            text-align: center;
+            padding: 0 50px;
+        }
+        .loyal {
+            &__number {
+                font-size: 24px;
+                color: $primary-color;
+            }
+            &__text {
+                text-transform: uppercase;
+            }
+        }
+
+        &_table {
+            text-align: center;
+            padding: 0 50px;
+            @media screen and (min-width: 800px) {
+                padding: 0 15px;
+            }
+        }
+        .table {
+            &__number {
+                font-size: 16px;
+            }
+            &__text {
+                font-size: 12px;
+                text-transform: uppercase;
+                color: $primary-darkgrey;
+            }
+        }
+        &_img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        &_icon {
+            cursor: pointer;
+            display: flex;
+            position: relative;
+            align-items: center;
+            right: -20px;
+            &:hover {
+                color: #ff715a;
+            }
+        }
+    }
+}
