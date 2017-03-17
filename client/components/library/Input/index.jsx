@@ -6,12 +6,12 @@ import omit from 'lodash/omit';
 import styles from './styles.scss';
 
 export default function Input(props) {
-  const { label, value, error, icon, type, min } = props;
+  const { label, value, error, icon, type = 'text' } = props;
 
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
 
-  const inputProps = omit(props, ['error'])
+  const inputProps = omit(props, ['error']);
 
   const valuePresent = value !== null && value !== undefined && value !== '' &&
     !(typeof value === 'number' && isNaN(value));
@@ -28,20 +28,20 @@ export default function Input(props) {
     inputClassName = classNames(styles.erroredInput, inputClassName);
   }
 
-  // const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
+  const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
-  const content = min ?
-    <input type={type || "text"} className={inputClassName} {...inputProps} />
-    :
+
+  return (
     <div className={styles.group}>
-      <input type={type || "text"} className={inputClassName} {...inputProps} />
+      <input type={type} className={inputClassName} {...inputProps} />
       <span className={styles.bar} />
       <label className={labelClassName}>
-        {error ? error : label}
+        {label}
       </label>
-      {/*{errorComponent}*/}
-    </div>;
-  return content;
+      {errorComponent}
+    </div>
+  );
+
 };
 
 Input.propTypes = {

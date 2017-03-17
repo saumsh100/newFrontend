@@ -4,8 +4,11 @@
 .link {
   text-decoration: none;
   cursor: pointer;
+  color: $primary-dark;
+
 }
 
 .disabled {
   cursor: not-allowed;
+  text-color: $primary-grey;
 }

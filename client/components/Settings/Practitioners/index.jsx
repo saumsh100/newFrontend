@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 import PractitionerList from './PractitionerList';
-
+import styles from './styles.scss';
 
 
 const sortPractitionersAlphabetical = (a, b) => {
@@ -33,12 +33,18 @@ class Practitioners extends Component {
     }
 
     return (
-      <div>
+      <div className={styles.practOuterContainer}>
         {showComponent}
       </div>
     );
   }
 }
+
+Practitioners.propTypes = {
+  practitioners: PropTypes.object,
+  weeklySchedules: PropTypes.object,
+  fetchEntities: PropTypes.func,
+};
 
 function mapStateToProps({ entities }) {
 

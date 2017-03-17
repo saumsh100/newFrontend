@@ -2,46 +2,64 @@ import React, {Component, PropTypes} from 'react';
 import { CardHeader,Row, Col, Form, Grid, Field } from '../../library';
 import styles from './styles.scss';
 
-function isNumber(value){
-  return value && !/\D/.test(value) ? undefined : 'Please enter a number.';
-}
+
+const parseNum = value => value && parseInt(value);
+
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
+
+const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 
 export default function CreateServiceForm(props) {
   const { onSubmit } = props;
   return (
-  <div className={styles.formContainer__createForm}>
-    <Form
-      form="modalServiceForm"
-      onSubmit={onSubmit}
-    >
-      <div className={styles.servicesFormRow__createRow}>
-        <CardHeader title="Create New Service" />
-      </div>
-      <div className={styles.servicesFormRow__createRow}>
-        <Field
-          required
-          name="name"
-          label="Name"
-        />
-      </div>
-      <div className={styles.servicesFormRow__createRow}>
-        <Field
-          required
-          name="duration"
-          label="Duration"
-          validate={[isNumber]}
-        />
-      </div>
-      <div className={styles.servicesFormRow__createRow}>
-        <Field
-          required
-          name="bufferTime"
-          label="Buffer Time"
-          validate={[isNumber]}
-        />
-      </div>
-    </Form>
-  </div>
+  <Row className={styles.formContainer__createForm}>
+    <Col xs={12}>
+    <Row className={styles.servicesFormRow__createRow}>
+      <CardHeader title="Create New Service" />
+    </Row>
+      <Form
+        form="modalServiceForm"
+        onSubmit={onSubmit}
+      >
+        <Row className={styles.servicesFormRow__createRow}>
+          <Col xs={12}>
+            <Field
+              required
+              name="name"
+              label="Name"
+              validate={[maxLength25]}
+            />
+          </Col>
+        </Row>
+        <Row className={styles.servicesFormRow__createRow}>
+          <Col xs={12}>
+            <Field
+              required
+              name="duration"
+              label="Duration"
+              type="number"
+              validate={[notNegative]}
+              normalize={parseNum}
+            />
+          </Col>
+        </Row>
+        <Row className={styles.servicesFormRow__createRow}>
+          <Col xs={12}>
+              <Field
+              required
+              name="bufferTime"
+              label="Buffer Time"
+              type="number"
+              validate={[notNegative]}
+              normalize={parseNum}
+            />
+          </Col>
+        </Row>
+      </Form>
+    </Col>
+  </Row>
   );
 }
 

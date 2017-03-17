@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities, } from '../../../thunks/fetchEntities';
 import ServiceList from './ServiceList';
+import styles from './styles.scss';
 
 const sortServicesAlphabetical = (a, b) => {
   if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
@@ -30,7 +31,7 @@ class Services extends Component {
     }
 
     return (
-      <div>
+      <div className={styles.outerContainer}>
         {showComponent}
       </div>
     );

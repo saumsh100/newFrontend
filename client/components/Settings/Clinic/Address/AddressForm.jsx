@@ -1,11 +1,15 @@
 
-import React, { Component } from 'react';
-import { Grid, Row, Col, Form, SaveButton, Field, Button, Select, } from '../../../library';
+import React, { Component, PropTypes, } from 'react';
+import { Row, Col, Form, Field, Select, } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
 import { change, }  from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
+
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
 
 class AddressForm extends React.Component {
 
@@ -64,26 +68,28 @@ class AddressForm extends React.Component {
     let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
 
     return (
-      <div className={styles.addressForm}>
-        <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
-            <Row className={styles.addressRow}>
+      <Row className={styles.addressRow}>
+        <Col xs={12}>
+          <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
+            <Row>
               <Col xs={12}>
                 <Field
                   required
                   name="street"
                   label="Street"
+                  validate={[maxLength25]}
                 />
               </Col>
             </Row>
-            <Row className={styles.addressRow}>
+            <Row>
               <Col xs={5}>
                 <Field
                   required
                   name="city"
                   label="City"
+                  validate={[maxLength25]}
                 />
               </Col>
-              <Col xs={2} />
               <Col xs={5} className={styles.addressCol__select}>
                 <Field
                   required
@@ -94,7 +100,7 @@ class AddressForm extends React.Component {
                 />
               </Col>
             </Row>
-            <Row className={styles.addressRow}>
+            <Row>
               <Col xs={5}>
                 <Field
                   required
@@ -103,7 +109,6 @@ class AddressForm extends React.Component {
                   validate={[this.zipPostalVal]}
                 />
               </Col>
-              <Col xs={2} />
               <Col xs={5} className={styles.addressCol__select}>
                 <Field
                   name="country"
@@ -114,10 +119,16 @@ class AddressForm extends React.Component {
                 />
               </Col>
             </Row>
-        </Form>
-      </div>
+          </Form>
+        </Col>
+      </Row>
     );
   }
+}
+
+AddressForm.propTypes = {
+  change: PropTypes.func,
+  onSubmit: PropTypes.func,
 }
 
 function mapDispatchToProps(dispatch) {

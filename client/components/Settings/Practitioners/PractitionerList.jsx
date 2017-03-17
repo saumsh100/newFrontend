@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
-import { IconButton, CardHeader, } from '../../library';
+import { IconButton, CardHeader, Row, Col } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
@@ -22,12 +22,17 @@ class PractitionerList extends Component {
   }
 
   createPractitioner(values) {
+    values.firstName = values.firstName.trim();
+    values.lastName = values.lastName.trim();
+
     const key = 'practitioners';
+
     this.props.createEntityRequest({ key, entityData: values })
       .then((entities) => {
         const id = Object.keys(entities[key])[0];
         this.props.setPractitionerId({ id });
     });
+
     this.setState({ active: false });
   }
 
@@ -41,13 +46,15 @@ class PractitionerList extends Component {
 
     const selectedPractitioner = (
       practitionerId ? practitioners.get(practitionerId) : practitioners.first());
+
     const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
+
     const weeklySchedule = weeklyScheduleId ? weeklySchedules.get(weeklyScheduleId) : null;
 
     return (
-      <div className={styles.practMainContainer} >
-        <div className={styles.practListContainer}>
-          <div className={styles.modalContainer}>
+      <Row className={styles.practMainContainer} >
+        <Col xs={2} className={styles.practListContainer}>
+          <Row className={styles.modalContainer}>
             <CardHeader count={practitioners.size} title="Practitioners" />
             <IconButton
               icon="plus"
@@ -63,28 +70,30 @@ class PractitionerList extends Component {
                 onSubmit={this.createPractitioner}
               />
             </Modal>
-          </div>
-          <div>
-            {practitioners.toArray().map((practitioner) => {
-              return (
-                <PractitionerItem
-                  key={practitioner.get('id')}
-                  id={practitioner.get('id')}
-                  fullname={practitioner.getFullName()}
-                  setPractitionerId={this.props.setPractitionerId}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div className={styles.practDataContainer}>
+          </Row>
+          <Row>
+            <Col xs={12} >
+              {practitioners.toArray().map((practitioner) => {
+                return (
+                  <PractitionerItem
+                    key={practitioner.get('id')}
+                    id={practitioner.get('id')}
+                    fullName={practitioner.getFullName()}
+                    setPractitionerId={this.props.setPractitionerId}
+                  />
+                );
+              })}
+            </Col>
+          </Row>
+        </Col>
+        <Col xs={10} className={styles.practOuterContainer}>
           <PractitionerTabs
             practitioner={selectedPractitioner}
             weeklySchedule={weeklySchedule}
             setPractitionerId={this.props.setPractitionerId}
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

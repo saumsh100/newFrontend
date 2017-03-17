@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import OfficeHoursForm from '../../Schedule/OfficeHours/OfficeHoursForm';
-import { Toggle } from '../../../library';
-import { createEntityRequest, } from '../../../../thunks/fetchEntities';
+import BreaksForm from '../../Schedule/OfficeHours/BreaksForm';
+import { Toggle, Header, Row, Col  } from '../../../library';
+import styles from '../styles.scss';
 
 class PractitionerOfficeHours extends Component{
 
@@ -50,17 +49,26 @@ class PractitionerOfficeHours extends Component{
 
     if (weeklySchedule) {
       showComponent = (
-        <OfficeHoursForm
-          key={weeklySchedule.get('id')}
-          weeklySchedule={weeklySchedule}
-          onSubmit={this.handleFormUpdate}
-          formName={`${weeklySchedule.get('id')}OfficeHours`}
-        />
+        <div >
+          <Header title="Weekly Schedule"/>
+          <OfficeHoursForm
+            weeklySchedule={weeklySchedule}
+            onSubmit={this.handleFormUpdate}
+            formName={`${weeklySchedule.get('id')}officeHours`}
+          />
+          <Header title="Breaks"/>
+          <BreaksForm
+            weeklySchedule={weeklySchedule}
+            onSubmit={this.handleFormUpdate}
+            formName={`${weeklySchedule.get('id')}officeHours`}
+            breaksName={`${weeklySchedule.get('id')}clinicBreaks`}
+          />
+        </div>
       );
 
     } else if (!practitioner.get('isCustomSchedule')) {
       showComponent = (
-        <div>
+        <div className={styles.notCustom}>
           Currently, { practitioner.getFullName() } is inheriting the same weekly
           schedule as the clinic's office hours,
           to make it custom, click the toggle above.
@@ -69,12 +77,15 @@ class PractitionerOfficeHours extends Component{
     }
     return (
       <div>
-        <div>
-          <Toggle
-            defaultChecked={practitioner.get('isCustomSchedule')}
-            value={this.state.value}
-            onChange={this.handleToggle}
-          />
+        <div className={styles.toggleContainer}>
+          <div> Set Custom </div>
+          <div className={styles.toggleContainer__toggle}>
+            <Toggle
+              defaultChecked={practitioner.get('isCustomSchedule')}
+              value={this.state.value}
+              onChange={this.handleToggle}
+            />
+          </div>
         </div>
         {showComponent}
       </div>

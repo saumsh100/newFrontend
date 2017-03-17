@@ -1,73 +1,96 @@
 @import '../../../ui.scss';
 
-.practMainContainer{
+
+.practOuterContainer {
+  height: 100%;
+  overflow: hidden;
+}
+.practMainContainer {
   display: flex;
+  height: 100%;
 }
-.practListContainer{
+.practListContainer {
   display: inline-block;
-  width: 25%;
+
 }
 
-.practDataContainer{
-  display: inline-block;
-  width: 75%;
+.practListItem {
+  height: 65px;
+  padding-left: 5px;
+  font-size: $medium-size;
+  text-transform: capitalize;
 }
 
-.addPractitionerButton{
+.addPractitionerButton {
   margin-left: auto;
 }
 
 
-.practFormContainer{
-  display: flex;
-  width: 100%;
-  &__createForm{
-    padding: 0px 15px 0px 15px;
-  }
-}
-.practForm{
-  width: 50%;
-  padding-top: 15px;
-}
-
-.practFormRow{
-  width: 100%;
+.practDataContainer {
   display: inline-block;
-  &__createRow{
-    padding: 15px 0px 15px 0px;
-  }
-}
-.practFormField{
-  padding: 15px 0px 15px 15px;
+  border-left: 1px solid;
+  border-left-color: $primary-dark;
+  padding-left: 15px;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+
 }
 
-.trashButton{
-  float: right;
-  &__trashIcon{
-    width: 0px;
-    padding: 0px;
+
+
+.toggleContainer {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding-top: 15px;
+  &__toggle{
+    padding-left: 5px;
   }
 }
 
-.modalContainer{
+.notCustom {
+  padding-top: 10px;
+}
+.pracHeaderContainer {
   display: flex;
   align-items: center;
   border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
+  border-bottom-color: $primary-lightgrey;
 }
 
-
-.practTabsContainer{
-  display: flex;
+.trashButton {
   margin-left: auto;
-  width: 100%
-}
-.practTabs {
-  color: red;
-  width: 100px;
 }
 
 
+
+
+.practFormContainer {
+  padding-top: 5px;
+  &__createForm{
+    padding: 0px 15px 5px 15px;
+    height: 100%;
+  }
+}
+
+
+.practFormRow {
+  width: 100%;
+  display: inline-block;
+  &__createRow {
+    padding: 15px 0px 15px 0px;
+  }
+}
+
+.modalContainer {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-lightgrey;
+}
 
 
 
