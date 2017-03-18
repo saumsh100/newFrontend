@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Card, CardHeader, Col, Grid, Row } from '../library';
+import { Card, CardHeader, Col, Grid, Row, PieChart } from '../library';
 import ChartStats from '../library/ChartGrid'
 import { FlexGrid, Stats } from '../library/FlexGrid';
 import { AtomTextBlock, AtomText, AtomTextBlockWrapper } from '../library/AtomText';
@@ -158,35 +158,28 @@ class IntelligenceComponent extends Component {
             
             <Col xs={12} md={6}>
               <Card>
-                <CardHeader count={3} title={'Vebsite Visitor Conversions'} />
-                  <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <AtomTextBlock styles={{ justifyContent: 'center' }} >
-                      <AtomText styles={{color: "#27EDF5", fontSize: 48 }}>11086</AtomText>
-                      <AtomText styles={{color: "#3AB116", fontSize: 24 }} >Visits</AtomText>
-                    </AtomTextBlock>
+                <CardHeader count={3} title={'New vs Returning visitors'} />
+                  <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', height: '400px'}}>
 
-                    <AtomTextBlock styles={{ justifyContent: 'center' }} >
-                      <AtomText styles={{color: "#27EDF5", fontSize: 48 }}>388</AtomText>
-                      <AtomText styles={{color: "#3AB116", fontSize: 24 }} >Appoinments</AtomText>
-                    </AtomTextBlock>
+                    <AtomTextBlockWrapper styles={{flexDirection: 'column'}}>
+                      <AtomTextBlock styles={{ justifyContent: 'center', width: 220 }} >
+                        <AtomText styles={{color: "#2EC4A7", fontSize: 82, fontWeight: 800  }}>68%</AtomText>
+                        <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>New Visitors</AtomText>
+                      </AtomTextBlock>
 
-                    <AtomTextBlock styles={{ justifyContent: 'center' }} >
-                      <AtomText styles={{color: "#27EDF5", fontSize: 48 }}>388</AtomText>
-                      <AtomText styles={{color: "#3AB116", fontSize: 24 }} >Appoinments</AtomText>
-                    </AtomTextBlock>
-                  </AtomTextBlockWrapper>
+                      <AtomTextBlock styles={{ justifyContent: 'center', width: 220 }} >
+                        <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800  }}>32%</AtomText>
+                        <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>Returning Visitors</AtomText>
+                      </AtomTextBlock>
+                    </AtomTextBlockWrapper>
 
-
-                  <AtomTextBlockWrapper styles={{flexDirection: 'row'}}>
-                    <AtomTextBlock styles={{ justifyContent: 'center' }}  >
-                      <AtomText styles={{color: "#27EDF5", fontSize: 48 }} icon="calendar"></AtomText>
-                      <AtomText styles={{color: "#3AB116", fontSize: 24 }} >11221</AtomText>
-                    </AtomTextBlock>
-
-                    <AtomTextBlock styles={{ justifyContent: 'center' }}  >
-                      <AtomText styles={{color: "#27EDF5", fontSize: 48 }} icon="calendar"></AtomText>
-                      <AtomText styles={{color: "#3AB116", fontSize: 24 }} >11221</AtomText>
-                    </AtomTextBlock>
+                    <div style={{width: '200px'}} >    
+                      <PieChart
+                        width={171}
+                        height={85}
+                        data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
+                      />
+                    </div>
                   </AtomTextBlockWrapper>
 
               </Card>
