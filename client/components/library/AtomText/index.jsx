@@ -22,7 +22,7 @@ const AtomTextBlock = function (props) {
 const AtomText = function (props) {
 	const { styles, children, icon } = props;
 	const defaultStyles = { 
-		margin: '10px 0px 10px 0px',
+		
 	}
 
 	const customStyle = Object.assign(defaultStyles, styles);
