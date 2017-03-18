@@ -6,8 +6,6 @@ import styles from './styles.scss';
 import Services from './Services/';
 import Practitioners from './Practitioners';
 
-
-
 export default function Settings(props) {
   const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
   const { location } = props;
@@ -17,11 +15,7 @@ export default function Settings(props) {
   if (location.pathname === '/settings/services' || location.pathname === '/settings/practitioners') {
     showNav = (
       <Row className={styles.rowContainer}>
-        <Col xs={12}>
-          <Card className={styles.subSettingsCard}>
-            {children}
-          </Card>
-        </Col>
+        {children}
       </Row>
     );
   } else {

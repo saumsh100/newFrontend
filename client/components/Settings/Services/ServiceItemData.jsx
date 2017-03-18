@@ -53,56 +53,48 @@ class ServiceItemData extends Component {
     };
 
     return (
-      <Grid>
-        <Row className={styles.serviceHeaderContainer}>
+      <div>
+        <div className={styles.serviceHeaderContainer}>
           <Header title={service.get('name')} />
           <div className={styles.trashButton}>
-            <Button icon="trash" raised className={styles.trashButton__trashIcon} onClick={this.deleteService}>
+            <Button icon="trash" notflat raised className={styles.trashButton__trashIcon} onClick={this.deleteService}>
               Delete
             </Button>
           </div>
-        </Row>
-        <Row className={styles.formContainer}>
-          <Col xs={6} className={styles.servicesForm}>
+        </div>
+        <div>
+          <div className={styles.servicesFormRow}>
             <Form
               form={`${service.get('id')}Form`}
               onSubmit={this.updateService}
               initialValues={initialValues}
             >
-              <Row className={styles.servicesFormRow}>
-                <Col xs={12} className={styles.servicesFormField}>
-                  <Field
-                    required
-                    name="name"
-                    label="Name"
-                    validate={[maxLength25]}
-                  />
-                </Col>
-                <Col xs={12} className={styles.servicesFormField}>
-                  <Field
-                    required
-                    name="duration"
-                    label="Duration"
-                    type="number"
-                    normalize={parseNum}
-                    validate={[notNegative]}
-                  />
-                </Col>
-                <Col xs={12} className={styles.servicesFormField}>
-                  <Field
-                    required
-                    name="bufferTime"
-                    label="Buffer Time"
-                    type="number"
-                    normalize={parseNum}
-                    validate={[notNegative]}
-                  />
-                </Col>
-              </Row>
+              <Field
+                required
+                name="name"
+                label="Name"
+                validate={[maxLength25]}
+              />
+              <Field
+                required
+                name="duration"
+                label="Duration"
+                type="number"
+                normalize={parseNum}
+                validate={[notNegative]}
+              />
+              <Field
+                required
+                name="bufferTime"
+                label="Buffer Time"
+                type="number"
+                normalize={parseNum}
+                validate={[notNegative]}
+              />
             </Form>
-          </Col>
-        </Row>
-      </Grid>
+          </div>
+        </div>
+      </div>
     );
   }
 }

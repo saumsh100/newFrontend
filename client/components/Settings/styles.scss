@@ -4,12 +4,15 @@
 .rowContainer {
   height: 100%;
   background-color: $primary-white;
-  padding: 15px 15px 0px 15px;
+  box-sizing: border-box;
 }
+
 
 .subSettingsCol {
   border-right: 1px solid;
   border-right-color: $primary-dark;
+  padding-top: 15px;
+  padding-left: 15px;
 }
 
 .subSettingsCard {
@@ -23,6 +26,7 @@
 }
 
 .settingsFormsCol {
+  padding-top: 15px;
   padding-left: 15px;
 }
 

@@ -38,31 +38,25 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
   };
 
   return (
-    <Row className={styles.generalRow}>
-      <Col xs={12}>
+    <div className={styles.generalRow}>
         <Form form="generalSettingsForm"
               onSubmit={onSubmit}
               initialValues={initialValues}
         >
-          <Col xs={12}>
             <Field
               required
               name="name"
               label="Name"
               validate={[maxLength25]}
             />
-          </Col>
-          <Col xs={12}>
             <Field
               required
               name="smsPhoneNumber"
               label="SMS Phone Number"
               normalize={normalizePhone}
             />
-          </Col>
         </Form>
-      </Col>
-    </Row>
+    </div>
   );
 }
 

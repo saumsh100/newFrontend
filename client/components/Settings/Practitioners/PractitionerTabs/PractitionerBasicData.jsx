@@ -37,34 +37,26 @@ class PractitionerBasicData extends Component {
     }
 
     return (
-      <Row className={styles.practFormContainer}>
-        <Col xs={6} className={styles.practForm}>
+      <div className={styles.practFormContainer}>
           <Form
             form={`${practitioner.get('id')}Form`}
             onSubmit={this.updatePractitioner}
             initialValues={initialValues}
           >
-            <Row className={styles.practFormRow}>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="firstName"
-                  label="First Name"
-                  validate={[maxLength25]}
-                />
-              </Col>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="lastName"
-                  label="Last Name"
-                  validate={[maxLength25]}
-                />
-              </Col>
-            </Row>
+            <Field
+              required
+              name="firstName"
+              label="First Name"
+              validate={[maxLength25]}
+            />
+            <Field
+              required
+              name="lastName"
+              label="Last Name"
+              validate={[maxLength25]}
+            />
           </Form>
-        </Col>
-      </Row>
+      </div>
     );
   }
 }

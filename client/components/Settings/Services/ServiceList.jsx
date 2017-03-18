@@ -58,7 +58,7 @@ class ServiceList extends Component {
     return (
       <Row className={styles.servicesMainContainer} >
         <Col xs={2} className={styles.servicesListContainer}>
-          <Row className={styles.modalContainer}>
+          <div className={styles.modalContainer}>
             <CardHeader count={services.size} title="Services" />
             <IconButton
               icon="plus"
@@ -74,9 +74,7 @@ class ServiceList extends Component {
                 onSubmit={this.createService}
               />
             </Modal>
-          </Row>
-          <Row>
-            <Col xs={12}>
+          </div>
               {services.toArray().map((service) => {
                 return (
                   <ServiceItem
@@ -87,8 +85,6 @@ class ServiceList extends Component {
                   />
                 );
               })}
-            </Col>
-          </Row>
         </Col>
         <Col xs={10} className={styles.servicesDataContainer}>
           <ServiceItemData
