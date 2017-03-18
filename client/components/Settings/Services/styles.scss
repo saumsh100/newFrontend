@@ -1,57 +1,72 @@
 @import '../../../ui.scss';
 
-.servicesMainContainer{
+.servicesMainContainer {
   display: flex;
-}
-.servicesListContainer{
-  display: inline-block;
-  width: 25%;
+  height: 100%;
 }
 
-.servicesDataContainer{
+.servicesListContainer {
   display: inline-block;
-  width: 75%;
+  border-right: 1px solid;
+  border-right-color: $primary-dark;
+  padding-top: 15px;
+  padding-left: 15px;
+}
+
+.modalContainer {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
 }
 
 .addServiceButton {
   margin-left: auto;
 }
 
-.formContainer{
-  display: flex;
-  width: 100%;
-  &__createForm{
-    padding: 0px 15px 0px 15px;
-  }
+.servicesListItem{
+  height: 65px;
+  padding-left: 5px;
+  font-size: $medium-size;
+  text-transform: capitalize;
 }
-.servicesForm {
-  width: 50%;
-  padding-top: 15px;
-}
-.servicesFormRow{
-  width: 100%;
+
+
+.servicesDataContainer {
   display: inline-block;
-  &__createRow{
-    padding: 15px 0px 15px 0px;
-  }
-}
-.servicesFormField{
-  padding: 15px 0px 15px 15px;
+  padding-left: 15px;
+  padding-top: 15px;
+  padding-right: 15px;
 }
 
-.trashButton{
-  float: right;
-  &__trashIcon {
-    width: 0px;
-    padding: 0px;
-  }
-}
 
-.modalContainer{
+
+.serviceHeaderContainer{
   display: flex;
   align-items: center;
   border-bottom: 1px solid;
-  border-bottom-color: $primary-grey;
+  border-bottom-color: $primary-lightgrey;
+}
+
+.trashButton {
+  margin-left: auto;
+}
+
+.formContainer {
+  display: flex;
+  &__createForm{
+    padding: 0px 15px 5px 15px;
+    height: 100%;
+  }
+}
+
+.servicesFormRow {
+  width: 50%;
+  min-width: 100px;
+  display: inline-block;
+  &__createRow {
+    padding: 15px 0px 15px 0px;
+  }
 }
 
 

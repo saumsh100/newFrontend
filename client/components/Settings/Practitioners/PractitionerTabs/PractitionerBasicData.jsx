@@ -1,24 +1,27 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, IconButton } from '../../../library';
+import {  Form, Field, Grid, Row, Col } from '../../../library';
 import styles from '../styles.scss';
+
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
 
 class PractitionerBasicData extends Component {
   constructor(props) {
     super(props);
     this.updatePractitioner = this.updatePractitioner.bind(this);
-    this.deletePractitioner = this.deletePractitioner.bind(this);
   }
 
   updatePractitioner(values) {
     const { practitioner } = this.props;
+
+    values.firstName = values.firstName.trim();
+    values.lastName = values.lastName.trim();
+
     const valuesMap = Map(values);
     const modifiedPractitioner = practitioner.merge(valuesMap);
     this.props.updatePractitioner(modifiedPractitioner);
-  }
-
-  deletePractitioner() {
-    this.props.deletePractitioner(this.props.practitioner.get('id'));
   }
 
   render() {
@@ -34,45 +37,28 @@ class PractitionerBasicData extends Component {
     }
 
     return (
-      <div>
-        <div className={styles.practFormContainer}>
-          <div className={styles.practForm}>
-            <Form
-              form={`${practitioner.get('id')}Form`}
-              onSubmit={this.updatePractitioner}
-              initialValues={initialValues}
-            >
-              <div className={styles.practFormRow}>
-                <div className={styles.practFormField}>
-                  <Field
-                    required
-                    name="firstName"
-                    label="First Name"
-                  />
-                </div>
-                <div className={styles.practFormField}>
-                  <Field
-                    required
-                    name="lastName"
-                    label="Last Name"
-                  />
-                </div>
-              </div>
-            </Form>
-          </div>
-          <div className={styles.trashButton}>
-            <IconButton
-              icon="trash-o"
-              className={styles.trashButton__trashIcon}
-              onClick={this.deletePractitioner}
+      <div className={styles.practFormContainer}>
+          <Form
+            form={`${practitioner.get('id')}Form`}
+            onSubmit={this.updatePractitioner}
+            initialValues={initialValues}
+          >
+            <Field
+              required
+              name="firstName"
+              label="First Name"
+              validate={[maxLength25]}
             />
-          </div>
-        </div>
+            <Field
+              required
+              name="lastName"
+              label="Last Name"
+              validate={[maxLength25]}
+            />
+          </Form>
       </div>
     );
   }
 }
-
-
 
 export default PractitionerBasicData;

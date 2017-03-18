@@ -8,11 +8,7 @@ import AvailabilityContainer from './AvailabilityContainer';
 import styles from './styles.scss';
 
 function PatientApp(props) {
-  return (
-    <div>
-      <AvailabilityContainer />
-    </div>
-  );
+  return <AvailabilityContainer />;
 }
 
 PatientApp.propTypes = {

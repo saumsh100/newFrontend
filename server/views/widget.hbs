@@ -1,5 +1,5 @@
 function a () {
-  alert('{{{ accountId }}}')
+  alert('{{ account.id }}')
 }
 
 // window.SERVICES = {{{ services }}};
@@ -25,7 +25,7 @@ window.addEventListener('load', function() {
     div.style.fontSize = '1em';
     div.style.display = 'flex';
     div.style.alignItems = 'center';
-    div.style.backgroundColor = '#0275d8';
+    div.style.backgroundColor = '{{account.bookingWidgetPrimaryColor}}';
     div.style.textAlign = 'center';
     div.style.textTransform = 'uppercase';
     div.style.padding = '10px';
@@ -48,10 +48,10 @@ window.addEventListener('load', function() {
   var modal = document.createElement('iframe');
     modal.setAttribute('id', 'modal');
     div.style.position = 'absolute';
-    modal.src = 'http://my.carecru.dev:5000/{{{accountId}}}';
+    modal.src = '{{host}}/embeds/{{account.id}}';
     modal.style.zIndex = '999999999';
     modal.style.position = 'fixed'
-    modal.style.width = '90%';
+    modal.style.width = '100%';
     modal.style.height = '610px';
     modal.style.border = 'none';
     modal.style.borderRadius = '5px';
@@ -68,16 +68,16 @@ window.addEventListener('load', function() {
   var cross = document.createElement('div');
     cross.setAttribute('id', 'cross');
     cross.innerHTML = '&times;';
-    cross.style.fontSize = '90px';
+    cross.style.fontSize = '60px';
     cross.style.position = 'fixed';
     cross.style.top = '2%';
-    cross.style.right = '5%';
+    cross.style.right = '1%';
     cross.style.visibility = 'hidden';
     cross.style.cursor = 'pointer';
     cross.style.zIndex = '10';
     cross.style.color = 'white';
     cross.style.lineHeight = '1rem';
-    document.querySelector('style').textContent += "@media screen and (max-width : 1000px) { #cross {display: none !important}}";
+    document.querySelector('style').textContent += "@media screen and (max-width : 800px) { #cross {display: none !important}}";
 
 
   cross.addEventListener('click', function() {

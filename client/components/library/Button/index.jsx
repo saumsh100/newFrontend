@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
 import omit from 'lodash/omit';
+import Icon from '../Icon';
 
 const cx = classNames.bind(styles);
 
@@ -14,11 +15,22 @@ export default function Button(props) {
       flat: props.flat,
       notFlat: !props.flat,
       disabled: props.disabled,
+      raised: props.raised,
+      icon: props.icon
     })
   );
+  let showComponent = null;
+  if (props.icon) {
+    showComponent = (<Icon icon={props.icon} className={styles.icon}/>);
+  }
 
   const newProps = omit(props, ['flat']);
-  return <button {...newProps} className={classes} />;
+  return (<button {...newProps} className={classes}>
+            <div className={styles.displayFlex}>
+              {showComponent}
+              {props.children}
+            </div>
+          </button>);
 }
 
 Button.propTypes = {

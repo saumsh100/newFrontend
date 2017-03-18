@@ -1,25 +1,15 @@
-
 import React, { Component, PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
-import Link from '../library/Link';
-import setCurrentScheduleDate from '../../thunks/date';
-import { fetchEntities } from '../../thunks/fetchEntities';
-import {
-  addPractitionerToFilter,
-  selectAppointmentType,
-  removePractitionerFromFilter,
-} from '../../thunks/schedule';
-import "react-day-picker/lib/style.css";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { DateUtils } from 'react-day-picker';
+import { Grid, Row, Col, Card, Icon, Calendar, Tabs, Tab } from '../library';
+import RequestsContainer from '../../containers/RequestContainer';
 import Filters from './Filters'
-import styles from './styles.scss';
-import { Card, Tabs, Tab } from '../library';
 import DayView from './DayView';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
 import CurrentDate from './CurrentDate';
+import styles from './styles.scss';
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 
@@ -43,37 +33,38 @@ class ScheduleComponent extends Component {
 
   componentDidMount() {
     window.socket.on('receiveAvailabilities', (results) => {
-      this.setState({ availabilities: results });
+      this.setState({availabilities: results});
     });
     window.socket.on('availabilityAdded', (result) => {
       console.log('availabilityAdded', result);
       const availabilities = this.state.availabilities.concat(result);
-      this.setState({ availabilities });
+      this.setState({availabilities});
     });
     window.socket.on('availabilityRemoved', (result) => {
       const availabilities = this.state.availabilities.filter(avail => avail.id !== result.id);
-      this.setState({ availabilities });
+      this.setState({availabilities});
     });
     window.socket.emit('fetchAvailabilities');
   }
 
-  handleDayClick(e, day, { selected, disabled }) {
+  handleDayClick(e, day, {selected, disabled}) {
     if (disabled) {
       return;
     }
     if (selected) {
-      this.setState({ selectedDay: null, showDatePicker: false });
+      this.setState({selectedDay: null, showDatePicker: false});
     } else {
-      this.setState({ selectedDay: day, showDatePicker: false });
+      this.setState({selectedDay: day, showDatePicker: false});
     }
     const scheduleDate = moment(day);
     this.props.setCurrentScheduleDate(scheduleDate);
   }
 
   toggleCalendar() {
-    this.setState({ showDatePicker: !this.state.showDatePicker });
+    this.setState({showDatePicker: !this.state.showDatePicker});
   }
-  addAvailability({ start, end }) {
+
+  addAvailability({start, end}) {
     window.socket.emit('addAvailability', {
       start,
       end,
@@ -81,13 +72,13 @@ class ScheduleComponent extends Component {
     });
   }
 
-  removeAvailability({ id }) {
-    window.socket.emit('removeAvailability', { id });
+  removeAvailability({id}) {
+    window.socket.emit('removeAvailability', {id});
   }
 
   handleTabChange(index) {
     this.props.setSheduleMode(index);
-    this.setState({ index });
+    this.setState({index});
   }
 
   render() {
@@ -97,7 +88,7 @@ class ScheduleComponent extends Component {
         end: new Date(avail.end),
       });
     });
-    const { showDatePicker } = this.state;
+    const {showDatePicker} = this.state;
     const {
       practitioners,
       appointments,
@@ -106,6 +97,8 @@ class ScheduleComponent extends Component {
       selectAppointmentType,
       schedule,
       patients,
+      requests,
+      services,
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
@@ -120,58 +113,74 @@ class ScheduleComponent extends Component {
       patients,
       appointments,
       schedule,
-    }
+    };
     const currentDate = moment(schedule.toJS().scheduleDate);
-    switch(this.state.index) {
+    switch (this.state.index) {
       case 0:
-        content = <DayView {...params} />
+        content = <DayView {...params} />;
         break;
       case 1:
-        content = <MonthView {...params} />
+        content = <MonthView {...params} />;
         break;
       case 2:
-        content = <WeekView {...params} />
+        content = <WeekView {...params} />;
         break;
     }
     return (
-      <div className={styles.scheduleContainerWrapper}>
-        <div className={`${styles.scheduleContainer} schedule`}>
-          <div className={`${styles.schedule__title} ${styles.title}`}>
-            <CurrentDate currentDate={currentDate} />
-            <Tabs index={this.state.index} onChange={this.handleTabChange}>
-              {schedule.toJS().scheduleModes.map(s => {
-                const label = s;
-                return (
-                  <Tab label={label}>
-                    {/* <span>{label}</span> */}
-                  </Tab>
-                )
-              })}
-            </Tabs>
-            <i className="styles__icon___2RuH0 fa fa-calendar"
-              onClick={this.toggleCalendar}
+      <Grid className={styles.schedule}>
+        <Row>
+          <Col xs={9} className={styles.schedule__container}>
+            <Card>
+              <div className={`${styles.schedule__title} ${styles.title}`}>
+                <CurrentDate currentDate={currentDate}/>
+                <Icon icon="calendar"
+                      onClick={this.toggleCalendar}
+                />
+                <Tabs index={this.state.index} onChange={this.handleTabChange}>
+                  {schedule.toJS().scheduleModes.map(s => {
+                    const label = s;
+                    return (
+                      <Tab label={label}>
+                        {/* <span>{label}</span> */}
+                      </Tab>
+                    )
+                  })}
+                </Tabs>
+                {this.state.showDatePicker &&
+                <div className={styles.schedule__daypicker}>
+                  <div onClick={this.toggleCalendar} className={styles.schedule__daypicker_wrapper}>
+                  </div>
+                  <Calendar
+                    className={styles.schedule__daypicker_select}
+                    initialMonth={new Date(2016, 1)}
+                    selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
+                    onDayClick={this.handleDayClick}
+                  />
+                </div>
+                }
+              </div>
+              {content}
+            </Card>
+          </Col>
+          <Col xs={3} className={styles.schedule__sidebar}>
+            <Filters
+              practitioners={practitioners.get('models').toArray()}
+              addPractitionerToFilter={addPractitionerToFilter}
+              removePractitionerFromFilter={removePractitionerFromFilter}
+              schedule={schedule}
+              appointmentsTypes={appointmentsTypes}
+              selectAppointmentType={selectAppointmentType}
             />
-            {showDatePicker &&
-              <DayPicker
-                initialMonth={new Date(2016, 1)}
-                selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
-                onDayClick={this.handleDayClick}
-              />
-            }
-          </div>
-          {content}
-        </div>
-        <div className={styles.scheduleSidebar}>
-          <Filters
-            practitioners={practitioners.get('models').toArray()}
-            addPractitionerToFilter={addPractitionerToFilter}
-            removePractitionerFromFilter={removePractitionerFromFilter}
-            schedule={schedule}
-            appointmentsTypes={appointmentsTypes}
-            selectAppointmentType={selectAppointmentType}
-          />
-        </div>
-      </div>
+            <RequestsContainer className={styles.schedule__sidebar_request}/>
+            <Calendar
+              className={styles.schedule__sidebar_calendar}
+              initialMonth={new Date(2016, 1)}
+              selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
+              onDayClick={this.handleDayClick}
+            />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

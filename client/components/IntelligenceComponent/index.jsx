@@ -206,7 +206,7 @@ class IntelligenceComponent extends Component {
                     <AtomTextBlock styles={{ justifyContent: 'center' }} >
                       <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
                       <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
-                      <AtomText styles={{color: "#000000", fontSize: 24 }} >Famale</AtomText>
+                      <AtomText styles={{color: "#000000", fontSize: 24 }} >Male</AtomText>
                     </AtomTextBlock>
                   </AtomTextBlockWrapper>
                 </AtomTextBlockWrapper>

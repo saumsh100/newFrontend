@@ -1,6 +1,18 @@
+@import '../../../../ui.scss';
+.generalHeader {
+  padding: 10px 5px 10px 0px;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-lightgrey;
+
+}
+.generalGrid {
+  height: 100%;
+  width: 50%;
+}
 .generalForm{
-  padding-top: 30px;
 }
 .generalRow {
-  padding-bottom: 30px;
+  display: inline-block;
+  height: 100%;
+  width: 50%;
 }

@@ -4,19 +4,30 @@
 .rowContainer {
   height: 100%;
   background-color: $primary-white;
+  box-sizing: border-box;
 }
 
+
 .subSettingsCol {
-  padding-right: 5px;
-  padding-left: 5px;
+  border-right: 1px solid;
+  border-right-color: $primary-dark;
+  padding-top: 15px;
+  padding-left: 15px;
 }
 
 .subSettingsCard {
+  height: 100%;
+}
+
+.subSettingsListItem {
+  height: 65px;
+  padding-left: 5px;
+  font-size: $medium-size;
 }
 
 .settingsFormsCol {
-  padding-right: 5px;
-  padding-left: 5px;
+  padding-top: 15px;
+  padding-left: 15px;
 }
 
 .settingsFormsCard {

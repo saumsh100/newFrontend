@@ -7,7 +7,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 
-appointmentsRouter.get('/', checkPermissions('appointments:read'), (req, res, next) => {
+appointmentsRouter.get('/', (req, res, next) => {
   const {
     accountId,
     joinObject,
