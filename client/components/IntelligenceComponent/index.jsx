@@ -242,6 +242,35 @@ class IntelligenceComponent extends Component {
               </Card>
             </Col>
 
+
+
+            <Col className={styles.padding} xs={12} md={6}>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
+                  <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', height: '400px'}}>
+
+                    <div style={{width: '200px'}} >    
+                      <PieChart
+                        width={171}
+                        height={85}
+                        data={[{ value: 25, color: "green" }, { value: 75, color: "grey" }]}
+                      />
+                    </div>
+
+                    <AtomTextBlockWrapper styles={{flexDirection: 'column', justifyContent: 'space-around' }}>
+                      <AtomTextBlock styles={{ alignItems: 'flex-end', width: 220 }} >
+                        <AtomText styles={{color: "#2EC4A7", fontSize: 64, fontWeight: 800  }}>Tuesday</AtomText>
+                        <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>12pm - 3px</AtomText>
+                      </AtomTextBlock>
+                    </AtomTextBlockWrapper>
+
+                  </AtomTextBlockWrapper>
+
+              </Card>
+            </Col>
+
+
+
           </Row>  
 	      </Grid>
       </div>
