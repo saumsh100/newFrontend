@@ -20,7 +20,7 @@ const FlexGrid = function (props) {
     <Col xs={12} md={6} >
       <div style={gridStyle} className={styles.settingsFormsCol}>
         <div className={styles.sideByside} >
-          <div className={styles.sideByside__title}>{title}</div>
+          {title && <div className={styles.sideByside__title}>{title}</div>}
           <div className={styles.sideByside__body}  >
             {renderChilden.map(child => (
               <Col className={styles.sideByside__split} xs={12} >
