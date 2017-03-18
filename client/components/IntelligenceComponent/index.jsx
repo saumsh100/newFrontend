@@ -124,9 +124,9 @@ class IntelligenceComponent extends Component {
 
 
           <Row>
-            <Col xs={12} md={6}>
-              <Card>
-                <CardHeader title={'Vebsite Visitor Conversions'} />
+            <Col className={styles.padding} xs={12} md={6}>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader} title={'Vebsite Visitor Conversions'} />
 
                   <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                     
@@ -156,19 +156,19 @@ class IntelligenceComponent extends Component {
               </Card>
             </Col>
             
-            <Col xs={12} md={6}>
-              <Card>
-                <CardHeader count={3} title={'New vs Returning visitors'} />
+            <Col className={styles.padding} xs={12} md={6}>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader} title={'New vs Returning visitors'} />
                   <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', height: '400px'}}>
 
-                    <AtomTextBlockWrapper styles={{flexDirection: 'column'}}>
-                      <AtomTextBlock styles={{ justifyContent: 'center', width: 220 }} >
-                        <AtomText styles={{color: "#2EC4A7", fontSize: 82, fontWeight: 800  }}>68%</AtomText>
+                    <AtomTextBlockWrapper styles={{flexDirection: 'column', justifyContent: 'space-around' }}>
+                      <AtomTextBlock styles={{ alignItems: 'flex-end', width: 220 }} >
+                        <AtomText styles={{color: "#2EC4A7", fontSize: 64, fontWeight: 800  }}>68%</AtomText>
                         <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>New Visitors</AtomText>
                       </AtomTextBlock>
 
-                      <AtomTextBlock styles={{ justifyContent: 'center', width: 220 }} >
-                        <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800  }}>32%</AtomText>
+                      <AtomTextBlock styles={{ alignItems: 'flex-end', width: 220 }} >
+                        <AtomText styles={{color: "#8FBBD6", fontSize: 64, fontWeight: 800  }}>32%</AtomText>
                         <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>Returning Visitors</AtomText>
                       </AtomTextBlock>
                     </AtomTextBlockWrapper>
@@ -185,9 +185,9 @@ class IntelligenceComponent extends Component {
               </Card>
             </Col>
 
-            <Col xs={12} md={6}>
-              <Card>
-                <CardHeader title="Male vs Famale" />  
+            <Col className={styles.padding} xs={12} md={6}>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader} title="Male vs Famale" />  
                 <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                   <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
                     <AtomTextBlock styles={{ justifyContent: 'center' }} >
@@ -206,9 +206,9 @@ class IntelligenceComponent extends Component {
               </Card>
             </Col>
 
-            <Col xs={12} md={6}>
-              <Card>
-                <CardHeader title="Age Range" />  
+            <Col className={styles.padding} xs={12} md={6}>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader} title="Age Range" />  
                 <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                   <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
 
@@ -217,9 +217,9 @@ class IntelligenceComponent extends Component {
               </Card>
             </Col>
 
-            <Col xs={12} md={6}>
-              <Card>
-                <CardHeader title="Visitors by device" />
+            <Col className={styles.padding} xs={12} md={6}>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader} title="Visitors by device" />
                   <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>  
                     <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end'}}>
                       <AtomTextBlock styles={{ justifyContent: 'center' }} >
