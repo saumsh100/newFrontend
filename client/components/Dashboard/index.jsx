@@ -13,6 +13,7 @@ import TopServices from './TopServices';
 import MostLoyal from './MostLoyal';
 import AppointmentFilled from './AppointmentFilled';
 import TopReference from './TopReference';
+import AppointmentsBooked from './AppointmentsBooked';
 import styles from "./styles.scss";
 
 
@@ -55,14 +56,17 @@ class Dashboard extends React.Component {
             <MostLoyal cardTitle="Most Loyal"/>
           </Col>
           <Col xs={12}>
+            <AppointmentsBooked cardTitle="Appointments Booked Last 12 Months"/>
+          </Col>
+          <Col xs={12}>
             <TopReference />
           </Col>
         </Row>
         <Row>
-          <Col xs={12} xs={6}>
+          <Col xs={12} sm={6}>
             <AppointmentFilled />
           </Col>
-          <Col xs={12} xs={6}>
+          <Col xs={12} sm={6}>
             <TopServices cardTitle="Top Services by Hours"/>
           </Col>
         </Row>
