@@ -22,13 +22,8 @@ class AppointmentsBooked extends Component {
                     {
                         label: 'Appointments Booked',
                         color: 'yellow',
-                        data: [65, 59, 80, 81, 56, 55, 40],
-                    },
-                    {
-                        label: 'Appointments Cancelled',
-                        color: 'red',
-                        data: [10, 12, 13, 3, 2, 1, 0],
-                    },
+                        data: [125, 150, 143, 200, 180, 220, 300 ],
+                    }
                 ]}
             />
         </div>

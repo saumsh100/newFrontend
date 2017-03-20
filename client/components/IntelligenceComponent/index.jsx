@@ -1,18 +1,51 @@
-import React, { PropTypes, Component } from 'react';
-import { Card, CardHeader, Col, Grid, Row, PieChart, DashboardStats, ContainerList } from '../library';
-import ChartStats from '../library/ChartGrid'
-import { FlexGrid, Stats } from '../library/FlexGrid';
-import { AtomTextBlock, AtomText, AtomTextBlockWrapper } from '../library/AtomText';
-import colorMap from '../library/util/colorMap';
-import PractitionersList from './PractitionersList';
-import AppointmentsBooked from './AppointmentsBooked';
-import MostLoyal from './MostLoyal';
-import TopReference from './TopReference';
-import AppointmentFilled from './AppointmentFilled';
-import styles from './styles.scss';
+import React, { PropTypes, Component } from "react";
+import { Card, CardHeader, Col, Grid, Row, PieChart, DashboardStats, ContainerList } from "../library";
+import ChartStats from "../library/ChartGrid";
+import { FlexGrid, Stats } from "../library/FlexGrid";
+import { AtomTextBlock, AtomText, AtomTextBlockWrapper } from "../library/AtomText";
+import colorMap from "../library/util/colorMap";
+import PractitionersList from "./PractitionersList";
+import AppointmentsBooked from "./AppointmentsBooked";
+import MostLoyal from "./MostLoyal";
+import TopReference from "./TopReference";
+import AppointmentFilled from "./AppointmentFilled";
+import styles from "./styles.scss";
 
 class IntelligenceComponent extends Component {
   render() {
+    const hardcodeData = [{
+      img: "images/practitioner_1.png",
+      name: "Dr. Chelsea",
+      profession: "Hygienist",
+      appointmentBooked: 77,
+      appointmentNotFiltred: 83,
+      newPatients: 12,
+      percentage: 80,
+    },{
+      img: "images/practitioner_1.png",
+      name: "Dr. Chelsea",
+      profession: "Hygienist",
+      appointmentBooked: 77,
+      appointmentNotFiltred: 83,
+      newPatients: 12,
+      percentage: 46,
+    },{
+      img: "images/practitioner_1.png",
+      name: "Dr. Chelsea",
+      profession: "Hygienist",
+      appointmentBooked: 77,
+      appointmentNotFiltred: 83,
+      newPatients: 12,
+      percentage: 21,
+    },{
+      img: "images/practitioner_1.png",
+      name: "Dr. Chelsea",
+      profession: "Hygienist",
+      appointmentBooked: 77,
+      appointmentNotFiltred: 83,
+      newPatients: 12,
+      percentage: 10,
+    }];
     return (
       <Grid className={styles.intelligence}>
         <Row>
@@ -49,9 +82,40 @@ class IntelligenceComponent extends Component {
               </Col>
             </Row>
           </Col>
-          <Col xs={12}>
-            <PractitionersList borderColor={colorMap.red} />
-          </Col>
+          <FlexGrid borderColor={colorMap.blue}>
+            <PractitionersList img="images/practitioner_1.png"
+                               name="Dr. Chelsea"
+                               profession="Hygienist"
+                               appointmentBooked="77"
+                               appointmentNotFiltred="83"
+                               newPatients="12"
+                               percentage="10"
+            />
+            <PractitionersList img="images/practitioner_1.png"
+                               name="Dr. Chelsea"
+                               profession="Hygienist"
+                               appointmentBooked="77"
+                               appointmentNotFiltred="83"
+                               newPatients="12"
+                               percentage="10"/>
+          </FlexGrid>
+          <FlexGrid borderColor={colorMap.blue}>
+            <PractitionersList img="images/practitioner_1.png"
+                               name="Dr. Chelsea"
+                               profession="Hygienist"
+                               appointmentBooked="77"
+                               appointmentNotFiltred="83"
+                               newPatients="12"
+                               percentage="10"
+            />
+            <PractitionersList img="images/practitioner_1.png"
+                               name="Dr. Chelsea"
+                               profession="Hygienist"
+                               appointmentBooked="77"
+                               appointmentNotFiltred="83"
+                               newPatients="12"
+                               percentage="10"/>
+          </FlexGrid>
           <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
               count={106}
@@ -179,8 +243,8 @@ class IntelligenceComponent extends Component {
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
                   <AtomTextBlock styles={{ justifyContent: 'center' }} >
-                    <AtomText styles={{color: "#27EDF5", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
-                    <AtomText styles={{color: "#27EDF5", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
+                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
+                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24 }} >Famale</AtomText>
                   </AtomTextBlock>
 
@@ -240,7 +304,7 @@ class IntelligenceComponent extends Component {
                 </div>
                 <AtomTextBlockWrapper styles={{flexDirection: 'column', justifyContent: 'space-around' }}>
                   <AtomTextBlock styles={{ alignItems: 'flex-end', width: 220 }} >
-                    <AtomText styles={{color: "#2EC4A7", fontSize: 64, fontWeight: 800  }}>Tuesday</AtomText>
+                    <AtomText styles={{color: "#2e3845", fontSize: 82, fontWeight: 800, zIndex: 1  }}>Tuesday</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>12pm - 3px</AtomText>
                   </AtomTextBlock>
                 </AtomTextBlockWrapper>
@@ -295,4 +359,4 @@ class IntelligenceComponent extends Component {
   }
 }
 
-export default IntelligenceComponent; 
+export default IntelligenceComponent;
