@@ -1,28 +1,11 @@
 import React, { PropTypes, Component } from 'react';
-import { Card, CardHeader, Col, Grid, Row, PieChart, BarChart } from '../library';
-import ChartStats from '../library/ChartGrid'
-import { FlexGrid, Stats } from '../library/FlexGrid';
+import { Card, CardHeader, Col, Grid, Row, PieChart, BarChart, BigCommentBubble , ChartStats, FlexGrid,
+Stats } from '../library';
 import { AtomTextBlock, AtomText, AtomTextBlockWrapper } from '../library/AtomText';
 import styles from './styles.scss';
 
 class IntelligenceComponent extends Component {
   render() {
-
-
-  const data = (canvas) => {
-    const ctx = canvas.getContext("2d")
-    const gradient = ctx.createLinearGradient(0,0,10,0);
-    return {
-      backgroundColor: gradient
-    }
-  }
-
-
-
-
-
-
-
     return (
       <div>
 	      <Grid>
@@ -227,12 +210,9 @@ class IntelligenceComponent extends Component {
                 <CardHeader className={styles.cardHeader} title="Age Range" />  
                 <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                   <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-
-
                   <BarChart 
                     type="horizontal"
                     displayTooltips={true}
-                    data={data}
                     labels={["18-24", "25-34", "35-44", "45-54", "55+"]} 
                     dataSets={[
                       { label: 'Appointments Booked',
@@ -242,8 +222,6 @@ class IntelligenceComponent extends Component {
                     ]
                     }
                   />
-
-
                   </AtomTextBlockWrapper>
                 </AtomTextBlockWrapper>
               </Card>
@@ -301,6 +279,10 @@ class IntelligenceComponent extends Component {
               </Card>
             </Col>
 
+
+            <Col xs={12} md={12}>
+              <BigCommentBubble />
+            </Col>
 
 
           </Row>  
