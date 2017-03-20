@@ -38,9 +38,9 @@ class PractitionersList extends Component {
       newPatients: 12,
       percentage: 10,
     }];
-
+    const { borderColor } = this.props;
     return (
-      <Card className={styles.practitionerList}>
+      <Card className={styles.practitionerList} borderColor={borderColor}>
         <div className={styles.practitionerList__body}>
           <ul className={styles.practitioner}>
             <div className={styles.practitioner__wrapper}>

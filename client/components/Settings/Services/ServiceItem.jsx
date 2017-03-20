@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { ListItem } from '../../library';
+import styles from './styles.scss';
 
 class ServiceItem extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class ServiceItem extends Component {
   render() {
     const { service } = this.props;
     return(
-      <ListItem onClick={this.showItem}>
+      <ListItem onClick={this.showItem}  className={styles.servicesListItem}>
         {service}
       </ListItem>
     );

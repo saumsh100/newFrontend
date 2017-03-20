@@ -39,7 +39,8 @@ export class Search extends Component {
     const classes = classNames(styles.search, searchClassName);    
     return (
       <div className={classes}>
-        <Icon size={1.4} icon="search" onClick={this.toggleModal} />
+        {!searchModeActive && <Icon size={1.4} icon="search" onClick={this.toggleModal} />}
+        
         { searchModeActive ?
           <Input 
             placeholder="Search..."
@@ -49,10 +50,11 @@ export class Search extends Component {
             refCallback={(input) => { input && input.focus(); }} 
           />
         : <span className={styles.search__text} onClick={this.toggleSearchMode}>Search... </span>  }
-        <Icon size={1.4} icon="calendar" />
+        <Icon size={1.4} icon="calendar" onClick={this.toggleModal} />
           <Modal
             active={this.state.displayModal}
             onEscKeyDown={this.toggleModal}
+            onOverlayClick={this.toggleModal}
           >
             <Calendar
             />

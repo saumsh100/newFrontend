@@ -1,13 +1,13 @@
 import React, { PropTypes } from "react";
-import { Grid, Row, Col, Card, IconCard } from "../library";
+import { Grid, Row, Col, Card, ContainerList, DashboardStats} from "../library";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
-import DashboardStats from './DashboardStats'
-import RemindersList from './RemindersList'
-import PractitionersList from './PractitionersList'
+import RemindersList from './RemindersList';
+
+import colorMap from '../library/util/colorMap';
 import styles from "./styles.scss";
 
 
@@ -49,19 +49,17 @@ class Dashboard extends React.Component {
           <Col xs={12} sm={12} >
             <Row center="xs" around="sm" className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList cardCount="8" cardTitle="Reminders"/>
+                <RemindersList borderColor={colorMap.blue} cardCount="8" cardTitle="Reminders" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList cardCount="2" cardTitle="Recalls"/>
+                <RemindersList borderColor={colorMap.blue} cardCount="2" cardTitle="Recalls" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList cardCount="5" cardTitle="Digital Waitlist"/>
+                <RemindersList borderColor={colorMap.blue} cardCount="5" cardTitle="Digital Waitlist" />
               </Col>
             </Row>
           </Col>
-          <Col xs={12}>
-            <PractitionersList/>
-          </Col>
+
           <Col xs={12} sm={4} className={styles.dashboard__requestContainer}>
             <RequestsContainer />
           </Col>

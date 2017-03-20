@@ -1,0 +1,106 @@
+@import "../../../ui.scss";
+
+.sideByside {
+	margin-left: 5px;
+	margin-bottom: 5px;
+	padding: 10px;
+	&__title {
+		font-size: 14px;
+	}
+
+	&__body {
+		height: 180px;
+		display: flex;
+		align-items: center;
+    	flex-wrap: wrap;
+
+	}
+
+	&__leftCol {
+		display: flex;
+		align-items: flex-start;
+    	justify-content: center;
+
+	}
+
+	&__icon {
+		margin-right: 10px;
+
+		font-size: 40px;
+		color: #8CBCD6;
+	}
+
+	&__count {
+		font-size: 40px;
+		text-align: center;
+		font-weight: 600;
+	}
+
+	&__small {
+		font-size: 10px;
+		color: #606060;
+	}
+
+	&__first {
+		border-right: 1px solid #606060; 
+	}
+	&__item {
+		
+	}
+
+	&__vote_icons_block {
+		margin: 0px 10px 10px 0px;
+	}
+
+	&__vote_icons {
+		margin-right: 20px;
+		font-size: 20px;
+		color: #8CBCD6;
+	}
+
+	&__vote_icons_text {
+		color: #000000;
+		margin-left: 10px;
+	}
+
+	&__split {
+	  width: 100%;
+      display: flex;
+      margin-bottom: 20px;
+      .sideByside__item:not(:last-child) {
+			border-right: 1px solid #606060; 
+		}
+	}
+
+}
+
+@media (max-width: 450px) {
+	.sideByside {
+		&__icon {
+			font-size: 20px;
+		}
+		&__count {
+			font-size: 20px;
+			font-weight: 300;			
+		}
+	}
+}
+
+
+@media (max-width: 320px) {
+	.sideByside {
+		&__chartLeftCol {
+			flex-direction: column;
+		}
+
+		&__leftCol {
+			align-items: center;
+		}
+
+		&__vote_icons {
+			display: flex;
+			width: 100%;
+			justify-content: center;
+		}
+	}
+} 

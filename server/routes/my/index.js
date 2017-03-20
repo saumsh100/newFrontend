@@ -6,7 +6,6 @@ const requestRouter = require('../api/request');
 const patientsRouter = require('../api/patients');
 const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
-
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
 
@@ -17,22 +16,25 @@ myRouter.use('/requests', requestRouter);
 myRouter.use('/patients', patientsRouter);
 myRouter.use('/reservations', reservationsRouter);
 
-myRouter.get('/:accountId', (req, res, next) => {
-  console.log(req.params.accountId);
-  return res.render('patient', {
-    accountId: req.params.accountId,
-  });
+myRouter.param('accountId', loaders('account', 'Account'));
+
+myRouter.get('/embeds/:accountId', (req, res, next) => {
+  try {
+    return res.render('patient', { account: req.account });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// myRouter.param('accountId', loaders('account', 'Account'));
-
 myRouter.get('/widgets/:accountId', (req, res, next) => {
-  Account.get(req.params.accountId).run().then(account => {
+  try {
     return res.render('widget', {
-      accountId: req.params.accountId,
-      bookingWidgetPrimaryColor: account.bookingWidgetPrimaryColor,
+      host: `${req.protocol}://${req.headers.host}`,
+      account: req.account,
     });
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 myRouter.get('/logo/:accountId', (req, res, next) => {
@@ -41,6 +43,12 @@ myRouter.get('/logo/:accountId', (req, res, next) => {
 		const { logo, address, clinicName, bookingWidgetPrimaryColor } = account;
 		res.send({ logo, address, clinicName, bookingWidgetPrimaryColor });
 	})
+});
+
+// Very important we catch all other endpoints,
+// or else express-subdomain continues to the other middlewares
+myRouter.use('(/*)?', (req, res, next) => {
+  return res.status(404).end();
 });
 
 module.exports = myRouter;

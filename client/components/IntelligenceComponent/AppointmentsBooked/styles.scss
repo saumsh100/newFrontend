@@ -1,0 +1,21 @@
+@import "../../../ui";
+
+.booked {
+    margin:0 5px 20px;
+    min-width: 250px;
+    height: 450px;
+    &__header {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        margin-left: 15px;
+    }
+    &__body {
+        position: relative;
+        @media screen and (max-width: 900px){
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}

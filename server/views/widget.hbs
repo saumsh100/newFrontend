@@ -1,5 +1,5 @@
 function a () {
-  alert('{{{ accountId }}}')
+  alert('{{ account.id }}')
 }
 
 // window.SERVICES = {{{ services }}};
@@ -25,7 +25,7 @@ window.addEventListener('load', function() {
     div.style.fontSize = '1em';
     div.style.display = 'flex';
     div.style.alignItems = 'center';
-    div.style.backgroundColor = '{{bookingWidgetPrimaryColor}}';
+    div.style.backgroundColor = '{{account.bookingWidgetPrimaryColor}}';
     div.style.textAlign = 'center';
     div.style.textTransform = 'uppercase';
     div.style.padding = '10px';
@@ -48,7 +48,7 @@ window.addEventListener('load', function() {
   var modal = document.createElement('iframe');
     modal.setAttribute('id', 'modal');
     div.style.position = 'absolute';
-    modal.src = 'http://my.carecru.dev:5000/{{{accountId}}}';
+    modal.src = '{{host}}/embeds/{{account.id}}';
     modal.style.zIndex = '999999999';
     modal.style.position = 'fixed'
     modal.style.width = '100%';
