@@ -6,11 +6,11 @@ import styles from './styles.scss';
 class AppointmentsBooked extends Component {
   render() {
     const {
-      cardCount,
+      borderColor,
       cardTitle,
     } = this.props;
     return (
-      <Card className={styles.booked}>
+      <Card className={styles.booked} borderColor={borderColor}>
         <div className={styles.booked__header}>
           <CardHeader title={cardTitle} />
         </div>

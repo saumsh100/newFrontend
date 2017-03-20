@@ -5,6 +5,7 @@ import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
 import Calendar from './Calendar';
+import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
 import DropdownSelect from './DropdownSelect';
@@ -33,6 +34,7 @@ export {
   Button,
   Card,
   Calendar,
+  ContainerList,
   CardHeader,
   Checkbox,
   DropdownSelect,

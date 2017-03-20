@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react";
-import { Grid, Row, Col, Card, IconCard } from "../library";
+import { Grid, Row, Col, Card, ContainerList } from "../library";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import RequestsContainer from '../../containers/RequestContainer';
@@ -9,11 +9,11 @@ import DashboardStats from './DashboardStats'
 import RemindersList from './RemindersList'
 import PractitionersList from './PractitionersList'
 
-import TopServices from './TopServices';
 import MostLoyal from './MostLoyal';
 import AppointmentFilled from './AppointmentFilled';
 import TopReference from './TopReference';
 import AppointmentsBooked from './AppointmentsBooked';
+import colorMap from '../library/util/colorMap';
 import styles from "./styles.scss";
 
 
@@ -53,39 +53,58 @@ class Dashboard extends React.Component {
         </Row>
         <Row>
           <Col xs={12}>
-            <MostLoyal cardTitle="Most Loyal"/>
+            <MostLoyal borderColor={colorMap.red}
+                       cardTitle="Most Loyal" />
           </Col>
           <Col xs={12}>
-            <AppointmentsBooked cardTitle="Appointments Booked Last 12 Months"/>
+            <AppointmentsBooked borderColor={colorMap.yellow}
+                                cardTitle="Appointments Booked Last 12 Months" />
           </Col>
           <Col xs={12}>
-            <TopReference />
+            <TopReference borderColor={colorMap.red} />
           </Col>
         </Row>
         <Row>
           <Col xs={12} sm={6}>
-            <AppointmentFilled />
+            <AppointmentFilled borderColor={colorMap.grey}/>
           </Col>
           <Col xs={12} sm={6}>
-            <TopServices cardTitle="Top Services by Hours"/>
+            <ContainerList borderColor={colorMap.red}
+                           cardTitle="Top Services by Hours"
+                           data={[{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           }]} />
           </Col>
         </Row>
         <Row>
           <Col xs={12} sm={12} >
             <Row center="xs" around="sm" className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList cardCount="8" cardTitle="Reminders"/>
+                <RemindersList borderColor={colorMap.blue} cardCount="8" cardTitle="Reminders" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList cardCount="2" cardTitle="Recalls"/>
+                <RemindersList borderColor={colorMap.blue} cardCount="2" cardTitle="Recalls" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList cardCount="5" cardTitle="Digital Waitlist"/>
+                <RemindersList borderColor={colorMap.blue} cardCount="5" cardTitle="Digital Waitlist" />
               </Col>
             </Row>
           </Col>
           <Col xs={12}>
-            <PractitionersList/>
+            <PractitionersList borderColor={colorMap.blue} />
           </Col>
           <Col xs={12} sm={4} className={styles.dashboard__requestContainer}>
             <RequestsContainer />

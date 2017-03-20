@@ -1,35 +1,36 @@
 @import "../../../ui.scss";
 
-.reminders {
-    margin-bottom: 20px;
-    max-height: 650px;
+.containerList {
+    margin: 0 5px 20px;
+    min-width: 250px;
+    height: 450px;
     &__header {
-        padding: 0 45px 0 15px;
+        display: flex;
+        align-items: center;
+        height: 40px;
+        margin-left: 15px;
     }
 }
-.patients {
+.data {
     border-top: 1px solid $primary-grey;
     padding: 0;
     margin: 0;
+    color: $primary-dark;
     &__item {
+        min-width: 250px;
         padding: 0 40px 0 15px;
         display: flex;
         align-items: center;
         position: relative;
-        height: 110px;
+        height: 80px;
         list-style: none;
         margin: 0;
         border-bottom: 1px solid $primary-lightgrey;
-
-        &_icon:nth-child(1) {
-            color: red;
-        }
         &_wrapper {
             display: flex;
             width: 100%;
             flex-direction: row;
             justify-content: space-between;
-            color: $primary-darkgrey;
         }
         &_left {
             text-align: left;
@@ -37,22 +38,6 @@
         &_right {
             margin-left: auto;
             text-align: right;
-        }
-        &_img {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        &_icon {
-            cursor: pointer;
-            display: flex;
-            position: relative;
-            align-items: center;
-            right: -20px;
-            &:hover {
-                color: #ff715a;
-            }
         }
     }
 }

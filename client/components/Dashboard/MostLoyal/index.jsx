@@ -47,11 +47,11 @@ class MostLoyal extends Component {
       appointmentNumber: 13,
     }];
     const {
-      cardCount,
+      borderColor,
       cardTitle,
     } = this.props;
     return (
-      <Card className={styles.mostLoyal}>
+      <Card className={styles.mostLoyal} borderColor={borderColor}>
         <div className={styles.mostLoyal__header}>
           <CardHeader title={cardTitle} />
         </div>

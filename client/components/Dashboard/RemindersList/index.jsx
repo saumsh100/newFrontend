@@ -57,11 +57,12 @@ class RemindersList extends Component {
         icon: "phone"
       }];
     const {
+      borderColor,
       cardCount,
       cardTitle,
     } = this.props;
     return (
-      <Card className={styles.reminders}>
+      <Card className={styles.reminders} borderColor={borderColor}>
         <div className={styles.reminders__header}>
           <CardHeader count={cardCount} title={cardTitle} />
         </div>

@@ -5,8 +5,9 @@ import styles from './styles.scss';
 
 class AppointmentFilled extends Component {
   render() {
+    const { borderColor } = this.props;
     return (
-      <Card className={styles.appointmentFilled}>
+      <Card className={styles.appointmentFilled} borderColor={borderColor}>
         <div className={styles.appointmentFilled__wrapper}>
         <div className={styles.appointmentFilled__header}>
           <div className={styles.appointmentFilled__header_number}>
