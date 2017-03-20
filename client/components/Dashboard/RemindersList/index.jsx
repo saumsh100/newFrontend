@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { List, ListItem, Card, CardHeader, Icon } from '../../library';
+import Search from '../../library/Search';
 import styles from './styles.scss';
 
 
@@ -64,7 +65,9 @@ class RemindersList extends Component {
     return (
       <Card className={styles.reminders} borderColor={borderColor}>
         <div className={styles.reminders__header}>
-          <CardHeader count={cardCount} title={cardTitle} />
+          <CardHeader count={cardCount} title={cardTitle}>
+            <Search />
+          </CardHeader>
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
