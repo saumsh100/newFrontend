@@ -50,9 +50,9 @@ class IntelligenceComponent extends Component {
             </Row>
           </Col>
           <Col xs={12}>
-            <PractitionersList borderColor={colorMap.blue} />
+            <PractitionersList borderColor={colorMap.red} />
           </Col>
-          <FlexGrid borderColor={colorMap.red} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
               count={106}
               details="via phone"
@@ -64,7 +64,7 @@ class IntelligenceComponent extends Component {
               icon="phone"
             />
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.red} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
               count={106}
               details="via phone"
@@ -76,7 +76,7 @@ class IntelligenceComponent extends Component {
               icon="phone"
             />
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.red} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
               count={106}
               details="via phone"
@@ -88,7 +88,7 @@ class IntelligenceComponent extends Component {
               percantage={80}
             />
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.red} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
               count={106}
               details="via phone"
@@ -126,7 +126,7 @@ class IntelligenceComponent extends Component {
         </Col>
         <Row>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card className={styles.card}>
+            <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Vebsite Visitor Conversions'} />
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', margin: '60px 0px 60px 0px'}}>
@@ -149,7 +149,7 @@ class IntelligenceComponent extends Component {
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card className={styles.card}>
+            <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'New vs Returning visitors'} />
               <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', height: '400px'}}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'column', justifyContent: 'space-around' }}>
@@ -174,7 +174,7 @@ class IntelligenceComponent extends Component {
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card className={styles.card}>
+            <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Male vs Famale" />
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -194,7 +194,7 @@ class IntelligenceComponent extends Component {
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card className={styles.card}>
+            <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Age Range" />
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -204,7 +204,7 @@ class IntelligenceComponent extends Component {
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card className={styles.card}>
+            <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Visitors by device" />
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end'}}>
@@ -228,7 +228,7 @@ class IntelligenceComponent extends Component {
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card className={styles.card}>
+            <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
               <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', height: '400px'}}>
                 <div style={{width: '200px'}} >
@@ -246,6 +246,48 @@ class IntelligenceComponent extends Component {
                 </AtomTextBlockWrapper>
               </AtomTextBlockWrapper>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} sm={6}>
+            <ContainerList borderColor={colorMap.green}
+                           cardTitle="Pages with Most Visits"
+                           data={[{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           }]} />
+          </Col>
+          <Col xs={12} sm={6}>
+            <ContainerList borderColor={colorMap.green}
+                           cardTitle="Website Engagement"
+                           data={[{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           },{
+                             title: "Invisalign",
+                             hours: 42
+                           }]} />
           </Col>
         </Row>
       </Grid>

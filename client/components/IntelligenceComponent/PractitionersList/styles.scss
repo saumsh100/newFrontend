@@ -80,8 +80,8 @@
             }
         }
         canvas {
-            width: 220px !important;
-            height: 110px !important;
+            max-width: 220px !important;
+            max-height: 110px !important;
             margin: 0 auto;
         }
     }

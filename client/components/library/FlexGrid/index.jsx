@@ -18,9 +18,9 @@ const FlexGrid = function (props) {
   const gridStyle = { width: '100%' };
   const renderChilden = chunk(children, n); 
   return (
-    <Col xs={12} md={6} borderColor={borderColor} >
+    <Col xs={12} md={6}>
       <div className={styles.settingsFormsCol}>
-        <Card className={styles.sideByside} >
+        <Card className={styles.sideByside} borderColor={borderColor} >
           {title && <div className={styles.sideByside__title}>{title}</div>}
           <div className={styles.sideByside__body}  >
             {renderChilden.map(child => (
