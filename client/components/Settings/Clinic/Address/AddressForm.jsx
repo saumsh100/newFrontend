@@ -1,11 +1,15 @@
 
-import React, { Component } from 'react';
-import { Grid, Row, Col, Form, SaveButton, Field, Button, Select, } from '../../../library';
+import React, { Component, PropTypes, } from 'react';
+import { Row, Col, Form, Field, Select, } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
 import { change, }  from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
+
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength25 = maxLength(25);
 
 class AddressForm extends React.Component {
 
@@ -64,60 +68,61 @@ class AddressForm extends React.Component {
     let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
 
     return (
-      <div className={styles.addressForm}>
+      <div className={styles.addressRow}>
         <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
-            <Row className={styles.addressRow}>
-              <Col xs={12}>
-                <Field
-                  required
-                  name="street"
-                  label="Street"
-                />
-              </Col>
-            </Row>
-            <Row className={styles.addressRow}>
-              <Col xs={5}>
-                <Field
-                  required
-                  name="city"
-                  label="City"
-                />
-              </Col>
-              <Col xs={2} />
-              <Col xs={5} className={styles.addressCol__select}>
-                <Field
-                  required
-                  name="state"
-                  label="State"
-                  component="DropdownSelect"
-                  options={stateProv}
-                />
-              </Col>
-            </Row>
-            <Row className={styles.addressRow}>
-              <Col xs={5}>
-                <Field
-                  required
-                  name="zipCode"
-                  label={zipPostal}
-                  validate={[this.zipPostalVal]}
-                />
-              </Col>
-              <Col xs={2} />
-              <Col xs={5} className={styles.addressCol__select}>
-                <Field
-                  name="country"
-                  label="Country"
-                  component="DropdownSelect"
-                  options={countrySelector}
-                  onChange={this.changeCountry}
-                />
-              </Col>
-            </Row>
+          <Field
+            required
+            name="street"
+            label="Street"
+            validate={[maxLength25]}
+          />
+          <div className={styles.addressCol}>
+          <div className={styles.addressColPlain}>
+            <Field
+              required
+              name="city"
+              label="City"
+              validate={[maxLength25]}
+            />
+          </div>
+            <div className={styles.addressColSelect}>
+              <Field
+                required
+                name="state"
+                label="State"
+                component="DropdownSelect"
+                options={stateProv}
+              />
+            </div>
+          </div>
+          <div className={styles.addressCol}>
+          <div className={styles.addressColPlain}>
+            <Field
+              required
+              name="zipCode"
+              label={zipPostal}
+              validate={[this.zipPostalVal]}
+            />
+          </div>
+            <div className={styles.addressColSelect}>
+              <Field
+                name="country"
+                label="Country"
+                component="DropdownSelect"
+                options={countrySelector}
+                onChange={this.changeCountry}
+              />
+            </div>
+          </div>
         </Form>
       </div>
     );
   }
+}
+
+AddressForm.propTypes = {
+  change: PropTypes.func,
+  onSubmit: PropTypes.func,
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,18 +1,12 @@
 import React, { PropTypes } from "react";
-import { Grid, Row, Col, Card, ContainerList } from "../library";
+import { Grid, Row, Col, Card, ContainerList, DashboardStats} from "../library";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
 import fetchReviewsData from '../../thunks/fetchReviewsData';
-import DashboardStats from './DashboardStats'
-import RemindersList from './RemindersList'
-import PractitionersList from './PractitionersList'
+import RemindersList from './RemindersList';
 
-import MostLoyal from './MostLoyal';
-import AppointmentFilled from './AppointmentFilled';
-import TopReference from './TopReference';
-import AppointmentsBooked from './AppointmentsBooked';
 import colorMap from '../library/util/colorMap';
 import styles from "./styles.scss";
 
@@ -52,44 +46,6 @@ class Dashboard extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={12}>
-            <MostLoyal borderColor={colorMap.red}
-                       cardTitle="Most Loyal" />
-          </Col>
-          <Col xs={12}>
-            <AppointmentsBooked borderColor={colorMap.yellow}
-                                cardTitle="Appointments Booked Last 12 Months" />
-          </Col>
-          <Col xs={12}>
-            <TopReference borderColor={colorMap.red} />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={6}>
-            <AppointmentFilled borderColor={colorMap.grey}/>
-          </Col>
-          <Col xs={12} sm={6}>
-            <ContainerList borderColor={colorMap.red}
-                           cardTitle="Top Services by Hours"
-                           data={[{
-                             title: "Invisalign",
-                             hours: 42
-                           },{
-                             title: "Invisalign",
-                             hours: 42
-                           },{
-                             title: "Invisalign",
-                             hours: 42
-                           },{
-                             title: "Invisalign",
-                             hours: 42
-                           },{
-                             title: "Invisalign",
-                             hours: 42
-                           }]} />
-          </Col>
-        </Row>
-        <Row>
           <Col xs={12} sm={12} >
             <Row center="xs" around="sm" className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
@@ -103,9 +59,7 @@ class Dashboard extends React.Component {
               </Col>
             </Row>
           </Col>
-          <Col xs={12}>
-            <PractitionersList borderColor={colorMap.blue} />
-          </Col>
+
           <Col xs={12} sm={4} className={styles.dashboard__requestContainer}>
             <RequestsContainer />
           </Col>

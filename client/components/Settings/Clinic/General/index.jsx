@@ -6,7 +6,8 @@ import GeneralForm from './GeneralForm';
 import Address from '../Address';
 import { Map } from 'immutable';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
-import { Grid, Row, Col, CardHeader} from '../../../library';
+import { Grid, Row, Col, Header} from '../../../library';
+import styles from './styles.scss';
 
 
 
@@ -30,25 +31,27 @@ class General extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-        <Grid>
-          <CardHeader title="Basic"/>
-          <Row>
-            <Col xs={6}>
-              <GeneralForm
-                onSubmit={this.updateName}
-                activeAccount={activeAccount}
-              />
-            </Col>
-          </Row>
-          <CardHeader title="Address" />
-          <Row>
-            <Col xs={6}>
-              <Address
-                activeAccount={activeAccount}
-              />
-            </Col>
-          </Row>
-        </Grid>
+        <div>
+          <Header
+            title="Basic"
+            className={styles.generalHeader}
+          />
+          <div>
+            <GeneralForm
+              onSubmit={this.updateName}
+              activeAccount={activeAccount}
+            />
+          </div>
+          <Header
+            title="Address"
+            className={styles.generalHeader}
+          />
+          <div>
+            <Address
+              activeAccount={activeAccount}
+            />
+          </div>
+        </div>
       );
     }
 

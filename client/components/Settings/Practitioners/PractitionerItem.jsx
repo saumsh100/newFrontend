@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { ListItem } from '../../library';
+import styles from './styles.scss';
 
 class PractitionerItem extends Component {
   constructor(props) {
@@ -12,13 +13,19 @@ class PractitionerItem extends Component {
   }
 
   render() {
-    const { fullname } = this.props;
+    const { fullName } = this.props;
     return(
-      <ListItem onClick={this.showItem}>
-        {fullname}
+      <ListItem onClick={this.showItem} className={styles.practListItem}>
+        {fullName}
       </ListItem>
     );
   }
 }
+
+
+PractitionerItem.propTypes = {
+  setPractitionerId: PropTypes.func,
+  fullName: PropTypes.func,
+};
 
 export default PractitionerItem;

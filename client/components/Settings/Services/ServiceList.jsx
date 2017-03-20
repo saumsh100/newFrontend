@@ -2,7 +2,7 @@ import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ServiceItem from './ServiceItem';
-import { IconButton, CardHeader, } from '../../library';
+import { IconButton, CardHeader, Grid, Row, Col  } from '../../library';
 import Modal  from '../../library/Modal';
 import ServiceItemData from './ServiceItemData';
 import CreateServiceForm from './CreateServiceForm';
@@ -38,6 +38,7 @@ class ServiceList extends Component {
   }
 
   createService(values) {
+    values.name = values.name.trim();
     values.customCosts = {};
     const key = 'services';
     this.props.createEntityRequest({ key , entityData: values })
@@ -55,8 +56,8 @@ class ServiceList extends Component {
     const selectedServiceId = selectedService ? selectedService.get('id') : null;
 
     return (
-      <div className={styles.servicesMainContainer} >
-        <div className={styles.servicesListContainer}>
+      <Row className={styles.servicesMainContainer} >
+        <Col xs={2} className={styles.servicesListContainer}>
           <div className={styles.modalContainer}>
             <CardHeader count={services.size} title="Services" />
             <IconButton
@@ -74,28 +75,26 @@ class ServiceList extends Component {
               />
             </Modal>
           </div>
-          <div>
-            {services.toArray().map((service) => {
-              return (
-                <ServiceItem
-                  key={service.get('id')}
-                  id={service.get('id')}
-                  service={service.get('name')}
-                  setServiceId={this.props.setServiceId}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div className={styles.servicesDataContainer}>
+              {services.toArray().map((service) => {
+                return (
+                  <ServiceItem
+                    key={service.get('id')}
+                    id={service.get('id')}
+                    service={service.get('name')}
+                    setServiceId={this.props.setServiceId}
+                  />
+                );
+              })}
+        </Col>
+        <Col xs={10} className={styles.servicesDataContainer}>
           <ServiceItemData
             key={selectedServiceId}
             service={selectedService}
             onSubmit={this.updateService}
             deleteService={this.deleteService}
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

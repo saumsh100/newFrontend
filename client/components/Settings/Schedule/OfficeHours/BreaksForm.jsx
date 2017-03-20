@@ -45,7 +45,7 @@ const timeOptions = generateTimeOptions();
 
 console.log('found?', timeOptions.find(to => to.value === defaultStartTime));
 
-function BreaksForm({ values, weeklySchedule, onSubmit, formName }) {
+function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 
@@ -81,6 +81,8 @@ function BreaksForm({ values, weeklySchedule, onSubmit, formName }) {
             >
               <Button
                 type="button"
+                raised
+                icon="plus"
                 onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
               >
                 Add Break
@@ -150,7 +152,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, formName }) {
     );
   };
   return (
-    <Form form="clinicBreaks" onSubmit={onSubmit} initialValues={initialValues}>
+    <Form form={breaksName} onSubmit={onSubmit} initialValues={initialValues}>
       <DayBreaksForm day="monday" />
       <DayBreaksForm day="tuesday" />
       <DayBreaksForm day="wednesday" />
@@ -163,16 +165,16 @@ function BreaksForm({ values, weeklySchedule, onSubmit, formName }) {
 
 }
 
-function mapStateToProps({ form }) {
+function mapStateToProps({ form }, {formName}) {
   // form data is populated when component renders
-  if (!form.officeHours) {
+  if (!form[formName]) {
     return {
       values: {},
     };
   }
 
   return {
-    values: form.officeHours.values,
+    values: form[formName].values,
   };
 }
 
