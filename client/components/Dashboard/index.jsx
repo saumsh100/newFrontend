@@ -5,8 +5,7 @@ import moment from 'moment';
 import RequestsContainer from "../../containers/RequestContainer";
 import fetchReputationData from "../../thunks/fetchReputationData";
 import fetchReviewsData from "../../thunks/fetchReviewsData";
-import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble } from "../library";
-import { AtomTextBlockWrapper } from "../library/AtomText";
+import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble  } from "../library";
 import RemindersList from "./RemindersList";
 import colorMap from "../library/util/colorMap";
 import styles from "./styles.scss";
@@ -204,7 +203,7 @@ class Dashboard extends React.Component {
         </Row>
         <Row>
           <Col xs={12} sm={12} >
-            <Row center="xs" around="center" className={styles.dashboard__patientList}>
+            <Row center="xs"  className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
                 <RemindersList data={DataRemindersList}
                                borderColor={colorMap.blue}
@@ -228,8 +227,8 @@ class Dashboard extends React.Component {
           <Col className={styles.padding} xs={12} md={8}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <div styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
+                <div styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
                   <Col xs={12} md={12}>
                     {DataBigComment.map(obj => {
                       return (
@@ -247,8 +246,8 @@ class Dashboard extends React.Component {
                       )
                     })}
                   </Col>
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
+                </div>
+              </div>
             </Card>
           </Col>
           <Col xs={12} sm={4} className={styles.dashboard__requestContainer}>
