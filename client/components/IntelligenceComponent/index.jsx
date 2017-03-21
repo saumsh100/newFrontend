@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from "react";
 import { Card, CardHeader, Col, Grid, Row, PieChart, DashboardStats, ContainerList,  BarChart, BigCommentBubble , ChartStats, FlexGrid,
   Stats} from "../library";
-import { AtomText } from "../library/AtomText";
 import colorMap from "../library/util/colorMap";
 import PractitionersList from "./PractitionersList";
 import AppointmentsBooked from "./AppointmentsBooked";
