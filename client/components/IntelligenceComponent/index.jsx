@@ -237,7 +237,26 @@ class IntelligenceComponent extends Component {
               </AtomTextBlockWrapper>
             </Card>
           </Col>
+          <Col className={styles.padding} xs={12} md={6}>
+            <Card borderColor={colorMap.green}>
+              <CardHeader className={styles.cardHeader} title="Male vs Famale" />
+              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
+                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
+                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
+                    <AtomText styles={{color: "#000000", fontSize: 24 }} >Famale</AtomText>
+                  </AtomTextBlock>
 
+                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+                    <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
+                    <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
+                    <AtomText styles={{color: "#000000", fontSize: 24 }} >Male</AtomText>
+                  </AtomTextBlock>
+                </AtomTextBlockWrapper>
+              </AtomTextBlockWrapper>
+            </Card>
+          </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="Age Range" />
@@ -255,26 +274,6 @@ class IntelligenceComponent extends Component {
                     ]
                     }
                   />
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
-            </Card>
-          </Col>
-          <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title="Male vs Famale" />
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
-                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
-                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24 }} >Famale</AtomText>
-                  </AtomTextBlock>
-
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
-                    <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
-                    <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24 }} >Male</AtomText>
-                  </AtomTextBlock>
                 </AtomTextBlockWrapper>
               </AtomTextBlockWrapper>
             </Card>
@@ -377,6 +376,26 @@ class IntelligenceComponent extends Component {
                              title: "Invisalign",
                              hours: 42
                            }]} />
+          </Col>
+          <Col className={styles.padding} xs={12}>
+            <Card borderColor={colorMap.green}>
+              <CardHeader className={styles.cardHeader} title="Website Traffice Sources" />
+              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
+                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <BarChart
+                    displayTooltips={true}
+                    labels={["Direct", "Referrals", "Search", "Social", "Mail", "Display"]}
+                    dataSets={[
+                      { label: 'Appointments Booked',
+                        color: ['yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
+                        data: [18, 25, 35, 45, 55 , 4] ,
+                      },
+                    ]
+                    }
+                  />
+                </AtomTextBlockWrapper>
+              </AtomTextBlockWrapper>
+            </Card>
           </Col>
         </Row>
       </Grid>
