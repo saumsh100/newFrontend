@@ -1,3 +1,4 @@
+
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
@@ -78,20 +79,20 @@ availabilitiesRouter.get('/', (req, res, next) => {
   const appointmentJoin = {
     appointments: {
       _apply: function (sequence) {
-        return sequence.orderBy("startTime");
-      }
+        return sequence.orderBy('startTime');
+      },
     },
     reservations: {
       _apply: function (sequence) {
-        return sequence.orderBy("startTime");
-      }
+        return sequence.orderBy('startTime');
+      },
     },
     requests: {
       _apply: function (sequence) {
-        return sequence.orderBy("startTime");
-      }
+        return sequence.orderBy('startTime');
+      },
     },
-  }
+  };
 
   Practitioner.filter({ id: practitionerId }).getJoin(appointmentJoin).run()
     .then((stuff) => {
@@ -108,6 +109,8 @@ availabilitiesRouter.get('/', (req, res, next) => {
 
           const daySchedule = weeklySchedule[moment(firstAvailableDate)._d.toLocaleString('en-us', { weekday: 'long' }).toLowerCase() ];
           const { startTime, endTime } = daySchedule;
+
+          // TODO: should be "if startDate is not defined"
           if (retrieveFirstTime) {
             // if this is invoded for the first time - calculate the fisrt available day of selected practitoner
             firstAvailableDate = getFirstAvailableDate(appointments, startDateTopass, service.duration, startTime, endTime);

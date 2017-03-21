@@ -1,7 +1,9 @@
+
 const myRouter = require('express').Router();
 const practitionersRouter = require('../api/practitioners');
 const servicesRouter = require('../api/services');
 const availabilitiesRouter = require('../api/availabilities');
+const newAvailabilitiesRouter = require('./newAvailabilitiesRouter');
 const requestRouter = require('../api/request');
 const patientsRouter = require('../api/patients');
 const reservationsRouter = require('../api/reservations');
@@ -9,6 +11,7 @@ const Account = require('../../models/Account');
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
 
+myRouter.use('/', newAvailabilitiesRouter);
 myRouter.use('/practitioners', practitionersRouter);
 myRouter.use('/services', servicesRouter);
 myRouter.use('/availabilities', availabilitiesRouter);

@@ -74,7 +74,7 @@ const serviceSchema = () => {
 
 const reservationSchema = () => {
   return new schema.Entity('reservations');
-}
+};
 
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
