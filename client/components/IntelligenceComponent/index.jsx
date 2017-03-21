@@ -201,12 +201,12 @@ class IntelligenceComponent extends Component {
                 </div>
                 <div className={classNames(styles.websiteVisitorConversions__containerBottom, styles.spaceAround)}>
                   <div className={classNames(styles.columnContainer, styles.alignItemsCenter)} >
-                    <i className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >11086</i>
-                    <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }} >Visits</AtomText>
+                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >11086</span>
+                    <span className={classNames(styles.colorBlack, styles.font24)} >Visits</span>
                   </div>
                   <div className={classNames(styles.columnContainer, styles.width200, styles.justifyCenter)} >
-                    <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800 }}>388</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }}>Appoinments</AtomText>
+                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >388</span>
+                    <span className={classNames(styles.colorBlack, styles.font24)} >Appoinments</span>
                   </div>
                 </div>
               </div>
@@ -218,12 +218,13 @@ class IntelligenceComponent extends Component {
               <div className={classNames(styles.rowContainer, styles.spaceAround, styles.height400)}>
                 <div className={classNames(styles.columnContainer, styles.spaceAround)}>
                   <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd)} >
-                    <AtomText styles={{color: "#2EC4A7", fontSize: 64, fontWeight: 800  }}>68%</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>New Visitors</AtomText>
+                    <span className={classNames(styles.colorGreen, styles.font64, styles.fontWeight800)} >68%</span>
+                    <span className={classNames(styles.colorBlack, styles.font24, styles.textAlignRight)} >New Visitors</span>
                   </div>
+
                   <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd)} >
-                    <AtomText styles={{color: "#8FBBD6", fontSize: 64, fontWeight: 800  }}>32%</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>Returning Visitors</AtomText>
+                    <span className={classNames(styles.colorBlue, styles.font64, styles.fontWeight800)} >32%</span>
+                    <span className={classNames(styles.colorBlack, styles.font24, styles.textAlignRight)} >Returning Visitors</span>
                   </div>
                 </div>
 
@@ -266,15 +267,15 @@ class IntelligenceComponent extends Component {
               <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
                 <div className={classNames(styles.rowContainer, styles.spaceAround, styles.width100p)}>
                   <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
-                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
-                    <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24 }} >Famale</AtomText>
+                    <span className={classNames(styles.colorWoman, styles.font82, styles.fontWeight800, "fa fa-user-o")}></span>
+                    <span className={classNames(styles.colorWoman, styles.font82, styles.fontWeight800, styles.textAlignRight, styles.marginTop30)}>55%</span>
+                    <span className={classNames(styles.colorBlack, styles.font24)} >Famale</span>
                   </div>
 
                   <div className={classNames(styles.columnContainer, styles.justifyCenter)}>
-                    <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
-                    <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24 }} >Male</AtomText>
+                    <span className={classNames(styles.colorMan, styles.font82, styles.fontWeight800, "fa fa-user-o")}></span>
+                    <span className={classNames(styles.colorMan, styles.font82, styles.fontWeight800, styles.textAlignRight, styles.marginTop30)}>45%</span>
+                    <span className={classNames(styles.colorBlack, styles.font24)} >Male</span>
                   </div>
                 </div>
               </div>
@@ -287,19 +288,19 @@ class IntelligenceComponent extends Component {
               <div className={classNames(styles.columnContainer, styles.spaceAround, styles.width100p, styles.height400)}>
                 <div className={classNames(styles.rowContainer, styles.alignFlexEnd, styles.width100p, styles.spaceAround)} >
                   <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
-                    <AtomText styles={{color: "#FF705A", fontSize: 56, fontWeight: 800 }} icon="mobile-phone"></AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800, margin: "30px 0px 0px 0px" }} >5844</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }} >Mobile</AtomText>
+                    <span className={classNames(styles.colorMobile, styles.font56, styles.fontWeight800, "fa fa-mobile-phone")}></span>
+                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>5844</span>
+                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Mobile</span>
                   </div>
                   <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
-                    <AtomText styles={{color: "#8FBBD6", fontSize: 64, fontWeight: 800 }} icon="tablet"></AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800, margin: "30px 0px 0px 0px" }}>579</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }}>Tablet</AtomText>
+                    <span className={classNames(styles.colorTablet, styles.font64, styles.fontWeight800, "fa fa-tablet")}></span>
+                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>759</span>
+                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Tablet</span>
                   </div>
                   <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
-                    <AtomText styles={{color: "#2EC4A7", fontSize: 82, fontWeight: 800 }} icon="television"></AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800, margin: "30px 0px 0px 0px" }}>4663</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }}>Website</AtomText>
+                    <span className={classNames(styles.colorTablet, styles.font82, styles.fontWeight800, "fa fa-television")}></span>
+                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>4663</span>
+                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Website</span>
                   </div>
                 </div>
               </div>
@@ -318,8 +319,8 @@ class IntelligenceComponent extends Component {
                 </div>
                 <div className={classNames(styles.columnContainer, styles.spaceAround)}>
                   <div className={classNames(styles.columnContainer, styles.alignFlexEnd, styles.width200)} >
-                    <AtomText styles={{color: "#2e3845", fontSize: 54, fontWeight: 800, zIndex: 1  }}>Tuesday</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 20, textAlign: 'right' }}>12pm - 3px</AtomText>
+                    <span className={classNames(styles.colorGreen, styles.font54, styles.fontWeight800)}>Tuesday</span>
+                    <span className={classNames(styles.colorBlack, styles.font20, styles.textAlignRight)}>12pm - 3pm</span>
                   </div>
                 </div>
               </div>
