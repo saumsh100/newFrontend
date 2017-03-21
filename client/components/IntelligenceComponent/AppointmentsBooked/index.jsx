@@ -15,17 +15,17 @@ class AppointmentsBooked extends Component {
           <CardHeader title={cardTitle} />
         </div>
         <div className={styles.booked__body}>
-            <LineChart
-                displayTooltips={true}
-                labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
-                dataSets={[
-                    {
-                        label: 'Appointments Booked',
-                        color: 'yellow',
-                        data: [125, 150, 143, 200, 180, 220, 300 ],
-                    }
-                ]}
-            />
+          <LineChart
+            displayTooltips={true}
+            labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+            dataSets={[
+              {
+                label: 'Appointments Booked',
+                color: 'yellow',
+                data: [125, 150, 143, 200, 180, 220, 300 ],
+              }
+            ]}
+          />
         </div>
       </Card>
     );

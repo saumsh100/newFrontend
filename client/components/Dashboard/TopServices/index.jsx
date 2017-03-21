@@ -23,7 +23,6 @@ class TopServices extends Component {
       hours: 42
     }];
     const {
-
       cardTitle,
     } = this.props;
     return (

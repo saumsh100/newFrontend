@@ -5,8 +5,8 @@ import styles from './styles.scss';
 
 class PractitionersList extends Component {
   render() {
-
-    const { img,
+    const {
+      img,
       name,
       profession,
       appointmentBooked,

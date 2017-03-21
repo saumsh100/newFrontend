@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react";
-import { Grid, Row, Col, Card, ContainerList, DashboardStats} from "../library";
+import { Grid, Row, Col, Card, DashboardStats} from "../library";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import RequestsContainer from '../../containers/RequestContainer';

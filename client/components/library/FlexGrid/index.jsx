@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import styles from './styles.scss';
 import { Col, Card } from '../';
-import Guage from '../Guage'
+import Guage from '../Guage';
 import chunk from 'lodash/chunk';
 
 const FlexGrid = function (props) {
@@ -15,8 +15,7 @@ const FlexGrid = function (props) {
   let n = 2;
   if (children.length === 3) n = 3;
   const width = Math.floor( 12 / n);
-  const gridStyle = { width: '100%' };
-  const renderChilden = chunk(children, n); 
+  const renderChilden = chunk(children, n);
   return (
     <Col xs={12} md={6}>
       <div className={styles.settingsFormsCol}>
@@ -29,7 +28,7 @@ const FlexGrid = function (props) {
                   <Col className={styles.sideByside__item} xs={12} sm={width} >
                     {React.cloneElement(ch)}
                   </Col>
-                ))} 
+                ))}
               </Col>
             ))}
           </div>
@@ -37,15 +36,14 @@ const FlexGrid = function (props) {
       </div>
     </Col>
   );
-
-}
+};
 
 FlexGrid.propTypes = {
 
 };
 
 const Stats = function (props) {
-  const { 
+  const {
     border,
     icon,
     count,
@@ -62,10 +60,10 @@ const Stats = function (props) {
         </div>
       </div>
   );
-}
+};
 
 Stats.propTypes = {
-  
+
 };
 
 export { FlexGrid, Stats };

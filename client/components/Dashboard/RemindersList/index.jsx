@@ -47,16 +47,16 @@ class RemindersList extends Component {
       time: "6:32pm",
       icon: "envelope"
     },{
-        img: "images/practitioner_1.png",
-        name: "Issac Item",
-        age: "19",
-        phone: "123 456 7890",
-        email: "eeeeeeee@gmail.com",
-        status: "Seminder Sent",
-        date: "01/13/1988",
-        time: "6:32pm",
-        icon: "phone"
-      }];
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "19",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "01/13/1988",
+      time: "6:32pm",
+      icon: "phone"
+    }];
     const {
       borderColor,
       cardCount,
