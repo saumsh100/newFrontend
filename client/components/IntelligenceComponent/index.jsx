@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from "react";
-import { Card, CardHeader, Col, Grid, Row, PieChart, DashboardStats, ContainerList } from "../library";
-import ChartStats from "../library/ChartGrid";
-import { FlexGrid, Stats } from "../library/FlexGrid";
+import { Card, CardHeader, Col, Grid, Row, PieChart, DashboardStats, ContainerList,  BarChart, BigCommentBubble , ChartStats, FlexGrid,
+  Stats} from "../library";
 import { AtomTextBlock, AtomText, AtomTextBlockWrapper } from "../library/AtomText";
 import colorMap from "../library/util/colorMap";
 import PractitionersList from "./PractitionersList";
@@ -10,6 +9,7 @@ import MostLoyal from "./MostLoyal";
 import TopReference from "./TopReference";
 import AppointmentFilled from "./AppointmentFilled";
 import styles from "./styles.scss";
+
 
 class IntelligenceComponent extends Component {
   render() {
@@ -227,13 +227,35 @@ class IntelligenceComponent extends Component {
                   </AtomTextBlock>
                 </AtomTextBlockWrapper>
 
-                <div style={{width: '200px'}} >
+                <div style={{width: '200px'}}>
                   <PieChart
-                    width={171}
-                    height={85}
-                    data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
-                  />
+                  width={171}
+                  height={85}
+                  data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
+                />
                 </div>
+              </AtomTextBlockWrapper>
+            </Card>
+          </Col>
+
+          <Col className={styles.padding} xs={12} md={6}>
+            <Card borderColor={colorMap.green} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title="Age Range" />
+              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
+                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <BarChart
+                    type="horizontal"
+                    displayTooltips={true}
+                    labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+                    dataSets={[
+                      { label: 'Appointments Booked',
+                        color: ['yellow', 'red', 'green', 'blue'],
+                        data: [18, 25, 35, 45, 55 ] ,
+                      },
+                    ]
+                    }
+                  />
+                </AtomTextBlockWrapper>
               </AtomTextBlockWrapper>
             </Card>
           </Col>
@@ -262,6 +284,9 @@ class IntelligenceComponent extends Component {
               <CardHeader className={styles.cardHeader} title="Age Range" />
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <Col xs={12} md={12}>
+                    <BigCommentBubble />
+                  </Col>
 
                 </AtomTextBlockWrapper>
               </AtomTextBlockWrapper>

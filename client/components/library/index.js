@@ -24,22 +24,27 @@ import PieChart from './PieChart';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
-import FlexGrid from './FlexGrid';
 import Tabs, { Tab } from './Tabs';
 import IconCard from './IconCard';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
+import { BigCommentBubble } from './BigCommentBubble';
+
+import ChartStats from './ChartGrid';
+import { FlexGrid, Stats } from './FlexGrid';
 
 export {
   AppBar,
   Avatar,
   BarChart,
   Button,
+  BigCommentBubble,
   Card,
   Calendar,
   ContainerList,
   CardHeader,
   Checkbox,
+  ChartStats,
   DropdownSelect,
   DashboardStats,
   Field,
@@ -61,6 +66,7 @@ export {
   RouterList,
   RouterTabs,
   SaveButton,
+  Stats,
   FlexGrid,
   Tabs,
   Tab,
