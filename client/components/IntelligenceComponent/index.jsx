@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from "react";
 import { Card, CardHeader, Col, Grid, Row, PieChart, DashboardStats, ContainerList,  BarChart, BigCommentBubble , ChartStats, FlexGrid,
   Stats} from "../library";
-import { AtomTextBlock, AtomText, AtomTextBlockWrapper } from "../library/AtomText";
+import { AtomText } from "../library/AtomText";
 import colorMap from "../library/util/colorMap";
 import PractitionersList from "./PractitionersList";
 import AppointmentsBooked from "./AppointmentsBooked";
@@ -9,7 +9,7 @@ import MostLoyal from "./MostLoyal";
 import TopReference from "./TopReference";
 import AppointmentFilled from "./AppointmentFilled";
 import styles from "./styles.scss";
-
+import classNames from 'classnames'; 
 
 class IntelligenceComponent extends Component {
   render() {
@@ -189,60 +189,60 @@ class IntelligenceComponent extends Component {
           <TopReference borderColor={colorMap.red} />
         </Col>
         <Row>
-          <Col className={styles.padding} xs={12} md={6}>
+          <Col className={styles.websiteVisitorConversions} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Vebsite Visitor Conversions'} />
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', margin: '60px 0px 60px 0px'}}>
-                  <AtomTextBlock styles={{ justifyContent: 'center', width: 220 }} >
-                    <AtomText styles={{color: "#2EC4A7", fontSize: 82, fontWeight: 800  }}>3.5%</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 800, textAlign: 'center' }} >Conversions Rate</AtomText>
-                  </AtomTextBlock>
-                </AtomTextBlockWrapper>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
-                    <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800 }}>11086</AtomText>
+              <div className={styles.websiteVisitorConversions__mainContainer}>
+                <div className={styles.websiteVisitorConversions__rowContainer}>
+                  <div className={classNames(styles.columnContainer, styles.alignItemsCenter)} >
+                    <span className={styles.websiteVisitorConversions__row1}>3.5%</span>
+                    <span className={styles.websiteVisitorConversions__row2} >Conversions Rate</span>
+                  </div>
+                </div>
+                <div className={classNames(styles.websiteVisitorConversions__containerBottom, styles.spaceAround)}>
+                  <div className={classNames(styles.columnContainer, styles.alignItemsCenter)} >
+                    <i className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >11086</i>
                     <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }} >Visits</AtomText>
-                  </AtomTextBlock>
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+                  </div>
+                  <div className={classNames(styles.columnContainer, styles.width200, styles.justifyCenter)} >
                     <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800 }}>388</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }}>Appoinments</AtomText>
-                  </AtomTextBlock>
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
+                  </div>
+                </div>
+              </div>
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'New vs Returning visitors'} />
-              <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', height: '400px'}}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'column', justifyContent: 'space-around' }}>
-                  <AtomTextBlock styles={{ alignItems: 'flex-end', width: 220 }} >
+              <div className={classNames(styles.rowContainer, styles.spaceAround, styles.height400)}>
+                <div className={classNames(styles.columnContainer, styles.spaceAround)}>
+                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd)} >
                     <AtomText styles={{color: "#2EC4A7", fontSize: 64, fontWeight: 800  }}>68%</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>New Visitors</AtomText>
-                  </AtomTextBlock>
-                  <AtomTextBlock styles={{ alignItems: 'flex-end', width: 220 }} >
+                  </div>
+                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd)} >
                     <AtomText styles={{color: "#8FBBD6", fontSize: 64, fontWeight: 800  }}>32%</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>Returning Visitors</AtomText>
-                  </AtomTextBlock>
-                </AtomTextBlockWrapper>
+                  </div>
+                </div>
 
-                <div style={{width: '200px'}}>
+                <div className={styles.width200}>
                   <PieChart
                   width={171}
                   height={85}
                   data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
                 />
                 </div>
-              </AtomTextBlockWrapper>
+              </div>
             </Card>
           </Col>
 
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="Age Range" />
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
+                <div className={classNames(styles.rowContainer, styles.width100p)}>
                   <BarChart
                     type="horizontal"
                     displayTooltips={true}
@@ -255,71 +255,71 @@ class IntelligenceComponent extends Component {
                     ]
                     }
                   />
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
+                </div>
+              </div>
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Male vs Famale" />
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
+                <div className={classNames(styles.rowContainer, styles.spaceAround, styles.width100p)}>
+                  <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
                     <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
                     <AtomText styles={{color: "#2CC4A7", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24 }} >Famale</AtomText>
-                  </AtomTextBlock>
+                  </div>
 
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+                  <div className={classNames(styles.columnContainer, styles.justifyCenter)}>
                     <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800 }} icon="user-o"></AtomText>
                     <AtomText styles={{color: "#8FBBD6", fontSize: 82, fontWeight: 800, margin: "30px 0px 0px 0px" }}>55%</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24 }} >Male</AtomText>
-                  </AtomTextBlock>
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
+                  </div>
+                </div>
+              </div>
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Age Range" />
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <div className={classNames(styles.columnContainer, styles.justifyCenter)}>
+                <div classNames={classNames(styles.rowContainer, styles.justifyCenter)}>
                   <Col xs={12} md={12}>
                     <BigCommentBubble />
                   </Col>
 
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
+                </div>
+              </div>
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Visitors by device" />
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end'}}>
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+              <div className={classNames(styles.columnContainer, styles.spaceAround, styles.width100p, styles.height400)}>
+                <div className={classNames(styles.rowContainer, styles.alignFlexEnd, styles.width100p, styles.spaceAround)} >
+                  <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
                     <AtomText styles={{color: "#FF705A", fontSize: 56, fontWeight: 800 }} icon="mobile-phone"></AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800, margin: "30px 0px 0px 0px" }} >5844</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }} >Mobile</AtomText>
-                  </AtomTextBlock>
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+                  </div>
+                  <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
                     <AtomText styles={{color: "#8FBBD6", fontSize: 64, fontWeight: 800 }} icon="tablet"></AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800, margin: "30px 0px 0px 0px" }}>579</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }}>Tablet</AtomText>
-                  </AtomTextBlock>
-                  <AtomTextBlock styles={{ justifyContent: 'center' }} >
+                  </div>
+                  <div className={classNames(styles.columnContainer, styles.justifyCenter)} >
                     <AtomText styles={{color: "#2EC4A7", fontSize: 82, fontWeight: 800 }} icon="television"></AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 48, fontWeight: 800, margin: "30px 0px 0px 0px" }}>4663</AtomText>
                     <AtomText styles={{color: "#000000", fontSize: 24, fontWeight: 200 }}>Website</AtomText>
-                  </AtomTextBlock>
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
+                  </div>
+                </div>
+              </div>
             </Card>
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
-              <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', height: '400px'}}>
+              <div className={classNames(styles.rowContainer, styles.height400, styles.spaceAround)}>
                 <div style={{width: '200px'}} >
                   <PieChart
                     width={171}
@@ -327,13 +327,13 @@ class IntelligenceComponent extends Component {
                     data={[{ value: 25, color: "green" }, { value: 75, color: "grey" }]}
                   />
                 </div>
-                <AtomTextBlockWrapper styles={{flexDirection: 'column', justifyContent: 'space-around' }}>
-                  <AtomTextBlock styles={{ alignItems: 'flex-end', width: 220 }} >
-                    <AtomText styles={{color: "#2e3845", fontSize: 82, fontWeight: 800, zIndex: 1  }}>Tuesday</AtomText>
-                    <AtomText styles={{color: "#000000", fontSize: 24, textAlign: 'right' }}>12pm - 3px</AtomText>
-                  </AtomTextBlock>
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
+                <div className={classNames(styles.columnContainer, styles.spaceAround)}>
+                  <div className={classNames(styles.columnContainer, styles.alignFlexEnd, styles.width200)} >
+                    <AtomText styles={{color: "#2e3845", fontSize: 54, fontWeight: 800, zIndex: 1  }}>Tuesday</AtomText>
+                    <AtomText styles={{color: "#000000", fontSize: 20, textAlign: 'right' }}>12pm - 3px</AtomText>
+                  </div>
+                </div>
+              </div>
             </Card>
           </Col>
         </Row>
