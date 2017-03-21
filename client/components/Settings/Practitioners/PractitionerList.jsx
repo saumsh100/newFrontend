@@ -42,7 +42,7 @@ class PractitionerList extends Component {
   }
 
   render() {
-    const { practitioners, practitionerId, weeklySchedules } = this.props;
+    const { practitioners, practitionerId, weeklySchedules, services } = this.props;
 
     const selectedPractitioner = (
       practitionerId ? practitioners.get(practitionerId) : practitioners.first());
@@ -87,6 +87,7 @@ class PractitionerList extends Component {
             practitioner={selectedPractitioner}
             weeklySchedule={weeklySchedule}
             setPractitionerId={this.props.setPractitionerId}
+            services={services}
           />
         </Col>
       </Row>

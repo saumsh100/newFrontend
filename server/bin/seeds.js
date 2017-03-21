@@ -42,6 +42,7 @@ const chairId = uuid();
 
 const serviceId = uuid();
 const serviceId2 = uuid();
+const serviceId3 = uuid();
 
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
@@ -503,7 +504,6 @@ const SEEDS = {
       id: serviceId,
       accountId,
       name: 'Routine Checkup',
-      allowedPractitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -513,7 +513,6 @@ const SEEDS = {
       id: serviceId2,
       accountId,
       name: 'Another service',
-      allowedPractitioners: [ practitionerId2 ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
@@ -522,7 +521,6 @@ const SEEDS = {
     {
       accountId,
       name: 'Lost Filling',
-      allowedPractitioners: [ practitionerId, practitionerId2 ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,

@@ -5,6 +5,7 @@ import { Tabs, Card, Tab, Button, Header, Grid, Row, Col } from '../../../librar
 import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
+import PractitionerServices from './PractitionerServices';
 import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 
 
@@ -39,10 +40,19 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule } = this.props;
+    const { practitioner, weeklySchedule, services } = this.props;
 
     if (!practitioner && !weeklySchedule) {
       return null;
+    }
+
+    let servicesProvided = null;
+    if(services) {
+      const serviceIds = practitioner.get('services');
+
+      servicesProvided = services.filter((service) => {
+        return serviceIds.indexOf(service.get('id')) > -1;
+      });
     }
 
     return (
@@ -70,6 +80,15 @@ class PractitionerTabs extends Component {
               practitioner={practitioner}
               updateEntityRequest={this.props.updateEntityRequest}
             />
+          </Tab>
+          <Tab label="Services" >
+            {servicesProvided.toArray().map((service) => {
+             return (
+               <PractitionerServices
+                 service={service}
+               />
+             );
+            })}
           </Tab>
         </Tabs>
       </div>
