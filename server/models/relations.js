@@ -68,3 +68,6 @@ WeeklySchedule.hasOne(DailySchedule, 'sunday', 'sundayId', 'id');*/
 Practitioner.hasMany(Reservation, "reservations", "id", "practitionerId");
 Practitioner.hasMany(Request, "requests", "id", "practitionerId");
 Practitioner.belongsTo(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
+
+Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
+Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
