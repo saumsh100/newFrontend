@@ -42,10 +42,14 @@ class PractitionerList extends Component {
   }
 
   render() {
-    const { practitioners, practitionerId, weeklySchedules, services } = this.props;
+    const {
+      practitioners,
+      practitionerId,
+      weeklySchedules,
+      services, } = this.props;
 
-    const selectedPractitioner = (
-      practitionerId ? practitioners.get(practitionerId) : practitioners.first());
+    const selectedPractitioner = (practitionerId ?
+      practitioners.get(practitionerId) : practitioners.first());
 
     const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
 

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Card, Tab, Button, Header, Grid, Row, Col } from '../../../library';
+import { Tabs, Tab, Button, Header, } from '../../../library';
 import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
@@ -46,14 +46,11 @@ class PractitionerTabs extends Component {
       return null;
     }
 
-    let servicesProvided = null;
+    let serviceIds = null;
     if(services) {
-      const serviceIds = practitioner.get('services');
-
-      servicesProvided = services.filter((service) => {
-        return serviceIds.indexOf(service.get('id')) > -1;
-      });
+      serviceIds = practitioner.get('services');
     }
+
 
     return (
       <div>
@@ -82,13 +79,12 @@ class PractitionerTabs extends Component {
             />
           </Tab>
           <Tab label="Services" >
-            {servicesProvided.toArray().map((service) => {
-             return (
-               <PractitionerServices
-                 service={service}
-               />
-             );
-            })}
+            <PractitionerServices
+              key={practitioner.get('id')}
+              serviceIds={serviceIds}
+              practitioner={practitioner}
+              updateEntityRequest={this.props.updateEntityRequest}
+            />
           </Tab>
         </Tabs>
       </div>

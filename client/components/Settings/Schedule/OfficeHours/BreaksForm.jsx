@@ -65,7 +65,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
   });
 
   const renderBreaks = (day) => {
-    return ({ fields, meta: { touched, error }}) => {
+    return ({ fields, meta: { touched, error } }) => {
       return (
         <Grid className={styles.dayGrid}>
           <Row>
