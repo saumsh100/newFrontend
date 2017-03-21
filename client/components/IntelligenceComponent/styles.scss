@@ -37,3 +37,147 @@
 .cardHeader {
   padding: 20px;
 }
+
+.websiteVisitorConversions {
+  padding: 10px;
+
+  &__mainContainer {
+    flex-direction: column;
+    display: flex;
+    height: 400px;
+    justify-content: center;
+  }
+
+  &__rowContainer {
+    flex-direction: row;
+    margin: 60px 0px 60px 0px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__row {
+    justify-content: center;
+    flex-direction: column;
+    width: 220px;
+    display: flex;
+  }
+
+  &__row1 {
+    color: #2EC4A7;
+    font-size: 82px;
+    font-weight: 800;
+  }
+
+  &__row2 {
+    color: #000000;
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+
+  &__containerBottom {
+    display: flex;
+    flexDirection: row;
+    justifyContent: space-around;
+  }
+
+  &__columnContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200;
+  }
+
+}
+
+.columnContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+  
+.alignItemsCenter {
+  alignItems: center;
+}
+
+.alignFlexEnd {
+  align-items: flex-end;
+}
+
+
+.rowContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.width100p {
+  width: 100%;
+}
+
+.width200 {
+  width: 200px;
+}
+
+.height400 {
+  height: 400px;
+}
+
+.spaceAround {
+  justify-content: space-around;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+
+font24 {
+  font-size: 24;
+}
+
+font48  {
+  font-size: 48px;
+}
+
+font64 {
+  font-size: 64px;
+}
+
+font48 {
+  font-size: 48px;
+}
+
+
+font54 {
+  font-size: 54px;
+}
+
+font56 {
+  font-size: 56px;
+}
+
+font82 {
+  font-size: 82px;
+}
+
+fontWeight200 {
+  fontWeight: 200px;
+}
+
+fontWeight800 {
+  fontWeight: 800px;
+}
+
+marginTop30 {
+  margin: 30px 0px 0px 0px;
+}
+
+colorBlack {
+  color: #000000;
+}
+
+colorGreen {
+  color: #000000;
+}
