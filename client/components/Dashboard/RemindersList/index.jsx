@@ -2,61 +2,10 @@ import React, { Component } from 'react';
 import { List, ListItem, Card, CardHeader, Icon } from '../../library';
 import Search from '../../library/Search';
 import styles from './styles.scss';
-
+import moment from 'moment';
 
 class RemindersList extends Component {
   render() {
-    const hardcodeData = [{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
-      phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      status: "Seminder Sent",
-      date: "22/11/1988",
-      time: "4:00pm",
-      icon: "comment"
-    },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "24",
-      phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      status: "Seminder Sent",
-      date: "22/11/2000",
-      time: "18:00pm",
-      icon: "phone"
-    },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "19",
-      phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      status: "Seminder Sent",
-      date: "01/13/1988",
-      time: "6:32pm",
-      icon: "envelope"
-    },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "19",
-      phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      status: "Seminder Sent",
-      date: "01/13/1988",
-      time: "6:32pm",
-      icon: "envelope"
-    },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "19",
-      phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      status: "Seminder Sent",
-      date: "01/13/1988",
-      time: "6:32pm",
-      icon: "phone"
-    }];
     const {
       borderColor,
       cardCount,
@@ -71,7 +20,37 @@ class RemindersList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {hardcodeData.map(obj => {
+            {this.props.data.map(obj => {
+              const rightContent = obj.appointment && typeof obj.appointment === "object" ?
+                <div className={styles.patients__item_right}>
+                  <div className={styles.availability}>
+                    Availability
+                  </div>
+                  <div className={styles.patients__item_days}>
+                    {obj.appointment.days.map(d => (<span>{d}</span>))}
+                  </div>
+                  Except
+                  <div className={styles.patients__item_days}>
+                    {obj.appointment.except.map(e => (
+                      <span>{moment(e).format("m/d")}</span>))}
+                  </div>
+                </div>
+                :
+                <div className={styles.patients__item_right}>
+                  <div className={styles.patients__item_status}>
+                    {obj.status}
+                  </div>
+                  <div className={styles.patients__item_date}>
+                    {obj.date}
+                  </div>
+                  <div className={styles.patients__item_time}>
+                    {obj.time}
+                  </div>
+                </div>
+
+
+
+
               return (
                 <ListItem className={styles.patients__item}>
                   <img className={styles.patients__item_img} src={obj.img} alt=""/>
@@ -87,20 +66,10 @@ class RemindersList extends Component {
                         {obj.email}
                       </div>
                     </div>
-                    <div className={styles.patients__item_right}>
-                      <div className={styles.patients__item_status}>
-                        {obj.status}
-                      </div>
-                      <div className={styles.patients__item_date}>
-                        {obj.date}
-                      </div>
-                      <div className={styles.patients__item_time}>
-                        {obj.time}
-                      </div>
-                    </div>
-                    <div className={styles.patients__item_icon}>
-                      <Icon className={obj.icon} icon={obj.icon} size={1.5}/>
-                    </div>
+                    {rightContent}
+                  </div>
+                  <div className={styles.patients__item_icon}>
+                    <Icon className={obj.icon} icon={obj.icon} size={1.5}/>
                   </div>
                 </ListItem>
               )

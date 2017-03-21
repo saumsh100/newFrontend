@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
   }
 
   renderCards() {
-    const hardcodeData = [{
+    const DataBigComment = [{
       icon: "facebook",
       iconColor: '#ffffff',
       background: '#395998',
@@ -57,6 +57,128 @@ class Dashboard extends React.Component {
       sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
       createdAt: moment().subtract(10, 'days').fromNow()
     }];
+    const DataRemindersList = [{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "2",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/1988",
+      time: "4:00pm",
+      icon: "comment"
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "24",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/2000",
+      time: "18:00pm",
+      icon: "phone"
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "19",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "01/13/1988",
+      time: "6:32pm",
+      icon: "envelope"
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "19",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "01/13/1988",
+      time: "6:32pm",
+      icon: "envelope"
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "19",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "01/13/1988",
+      time: "6:32pm",
+      icon: "phone"
+    }];
+    const DataRemindersList2 = [{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "2",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/1988",
+      time: "4:00pm",
+      icon: "comment",
+      appointment: {
+        days: [ "Morning weekdays", "Arternoon"  ],
+        except: [ moment()._d, moment()._d ]
+      }
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "2",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/1988",
+      time: "4:00pm",
+      icon: "comment",
+      appointment: {
+        days: [ "Morning weekdays", "Arternoon"  ],
+        except: [ moment()._d, moment()._d ]
+      }
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "2",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/1988",
+      time: "4:00pm",
+      icon: "comment",
+      appointment: {
+        days: [ "Morning weekdays", "Arternoon"  ],
+        except: [ moment()._d, moment()._d ]
+      }
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "2",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/1988",
+      time: "4:00pm",
+      icon: "comment",
+      appointment: {
+        days: [ "Morning weekdays", "Arternoon"  ],
+        except: [ moment()._d, moment()._d ]
+      }
+    },{
+      img: "images/practitioner_1.png",
+      name: "Issac Item",
+      age: "2",
+      phone: "123 456 7890",
+      email: "eeeeeeee@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/1988",
+      time: "4:00pm",
+      icon: "comment",
+      appointment: {
+        days: [ "Morning weekdays", "Arternoon"  ],
+        except: [ moment()._d, moment()._d ]
+      }
+    }];
     const {
       listingCount,
       errorCount,
@@ -82,15 +204,24 @@ class Dashboard extends React.Component {
         </Row>
         <Row>
           <Col xs={12} sm={12} >
-            <Row center="xs" around="sm" className={styles.dashboard__patientList}>
+            <Row center="xs" around="center" className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList borderColor={colorMap.blue} cardCount="8" cardTitle="Reminders" />
+                <RemindersList data={DataRemindersList}
+                               borderColor={colorMap.blue}
+                               cardCount="8"
+                               cardTitle="Reminders" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList borderColor={colorMap.blue} cardCount="2" cardTitle="Recalls" />
+                <RemindersList data={DataRemindersList}
+                               borderColor={colorMap.blue}
+                               cardCount="2"
+                               cardTitle="Recalls" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList borderColor={colorMap.blue} cardCount="5" cardTitle="Digital Waitlist" />
+                <RemindersList data={DataRemindersList2}
+                               borderColor={colorMap.blue}
+                               cardCount="5"
+                               cardTitle="Digital Waitlist" />
               </Col>
             </Row>
           </Col>
@@ -100,7 +231,7 @@ class Dashboard extends React.Component {
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
                   <Col xs={12} md={12}>
-                    {hardcodeData.map(obj => {
+                    {DataBigComment.map(obj => {
                       return (
                         <BigCommentBubble
                           icon={obj.icon}
