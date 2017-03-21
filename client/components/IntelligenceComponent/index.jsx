@@ -280,19 +280,6 @@ class IntelligenceComponent extends Component {
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title="Age Range" />
-              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                  <Col xs={12} md={12}>
-                    <BigCommentBubble />
-                  </Col>
-
-                </AtomTextBlockWrapper>
-              </AtomTextBlockWrapper>
-            </Card>
-          </Col>
-          <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Visitors by device" />
               <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end'}}>
