@@ -308,8 +308,8 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
-              <div className={classNames(styles.rowContainer, styles.height400, styles.spaceAround)}>
-                <div style={{width: '200px'}} >
+              <div className={classNames(styles.rowContainer, styles.height400, styles.spaceAround, styles.bussiestTimeOfWeekWrapper)}>
+                <div className={classNames(styles.pieChartWrapper)}  style={{width: '200px'}} >
                   <PieChart
                     width={171}
                     height={85}

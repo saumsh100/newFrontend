@@ -209,3 +209,18 @@
 .textAlignRight {
   text-align: right;
 }
+
+@media(max-width: 474px) {
+  .pieChartWrapper {
+    width: 90px !important;
+    height: 175px !important;
+
+  }
+
+  .bussiestTimeOfWeekWrapper {
+    flex-direction: column !important;
+    align-items: center;
+    margin-top: -100px !important;
+    justify-content: center;
+  }
+}
