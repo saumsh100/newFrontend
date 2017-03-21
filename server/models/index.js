@@ -8,6 +8,7 @@ const WeeklySchedule = require('./WeeklySchedule');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
+const Practitioner_Service = require('./Practitioner_Service');
 const Request = require('./Request');
 const Service = require('./Service');
 const SyncError = require('./SyncError');
@@ -27,6 +28,7 @@ module.exports = {
   Patient,
   Permission,
   Practitioner,
+  Practitioner_Service,
   Request,
   Reservation,
   Service,
