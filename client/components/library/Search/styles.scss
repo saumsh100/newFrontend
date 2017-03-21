@@ -4,20 +4,16 @@
   align-items: center;
   right: -30px;
   color: #959596;
-
 	&__searchInput {
 		border: 0;
-    background: none;
-    margin: 0px 15px 0px 15px;
+    margin: 0 15px 0 15px;
 	    &:focus {
-	    	border: 0;
+	    	border-bottom: 1px solid #959596;
 	    	outline: none;
-	    }
+        box-shadow: 0 0 5px #959596;
+      }
 	}
-
-
 	&__text {
-		margin: 0px 15px 0px 15px;
+		margin: 0 15px 0 15px;
 	}
-
 }

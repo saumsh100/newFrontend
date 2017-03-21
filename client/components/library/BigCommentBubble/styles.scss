@@ -1,3 +1,5 @@
+@import "../../../ui";
+
 .bigComment {
   width: 44px;
   height: 44px;
@@ -9,6 +11,9 @@
 .bigCommentBubble {
   display: flex;
   padding: 20px;
+  @media screen and (max-width: 500px) {
+    padding: 10px;
+  }
   &__commentBody {
     width: 75%;
     margin-left: 20px;
@@ -24,7 +29,7 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     &__header {
-      color: black;
+      color: $primary-dark;
       font-size: 14px;
       &__link {
         color: #8cbcd6;
@@ -64,6 +69,7 @@
       margin: 10px 0 10px 0;
     }
     &__preview {
+      color: $primary-dark;
       &__toggleButton {
         color: #8cbcd6;
         cursor: pointer;
