@@ -259,6 +259,7 @@ class IntelligenceComponent extends Component {
               </div>
             </Card>
           </Col>
+
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Male vs Famale" />
@@ -279,19 +280,7 @@ class IntelligenceComponent extends Component {
               </div>
             </Card>
           </Col>
-          <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title="Age Range" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter)}>
-                <div classNames={classNames(styles.rowContainer, styles.justifyCenter)}>
-                  <Col xs={12} md={12}>
-                    <BigCommentBubble />
-                  </Col>
 
-                </div>
-              </div>
-            </Card>
-          </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Visitors by device" />
@@ -377,6 +366,26 @@ class IntelligenceComponent extends Component {
                              title: "Invisalign",
                              hours: 42
                            }]} />
+          </Col>
+          <Col className={styles.padding} xs={12}>
+            <Card borderColor={colorMap.green}>
+              <CardHeader className={styles.cardHeader} title="Website Traffice Sources" />
+              <div className={classNames(styles.columnContainer, styles.justifyCenter)}>
+                <div className={classNames(styles.rowContainer, styles.width100p)}>
+                  <BarChart
+                    displayTooltips={true}
+                    labels={["Direct", "Referrals", "Search", "Social", "Mail", "Display"]}
+                    dataSets={[
+                      { label: 'Appointments Booked',
+                        color: ['yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
+                        data: [18, 25, 35, 45, 55 , 4] ,
+                      },
+                    ]
+                    }
+                  />
+                </div>
+              </div>
+            </Card>
           </Col>
         </Row>
       </Grid>

@@ -32,6 +32,9 @@
       padding: 5px;
     }
   }
+  &__requestContainer {
+    padding: 5px;
+  }
 }
 .primaryColor {
   background: $primary-color;
@@ -51,7 +54,7 @@
   height: 100%;
   width: 100% ;
   background-color: white;
-  opacity: 0.4;
+  opacity: .4;
   display: flex;
 }
 
@@ -60,4 +63,7 @@
   justify-content: center;
   display: flex;
   width: 100%;
+}
+.padding {
+  padding: 5px;
 }

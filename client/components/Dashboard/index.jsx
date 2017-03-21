@@ -1,13 +1,14 @@
 import React, { PropTypes } from "react";
-import { Grid, Row, Col, Card, DashboardStats} from "../library";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import RequestsContainer from '../../containers/RequestContainer';
-import fetchReputationData from '../../thunks/fetchReputationData';
-import fetchReviewsData from '../../thunks/fetchReviewsData';
-import RemindersList from './RemindersList';
-
-import colorMap from '../library/util/colorMap';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import moment from 'moment';
+import RequestsContainer from "../../containers/RequestContainer";
+import fetchReputationData from "../../thunks/fetchReputationData";
+import fetchReviewsData from "../../thunks/fetchReviewsData";
+import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble } from "../library";
+import { AtomTextBlockWrapper } from "../library/AtomText";
+import RemindersList from "./RemindersList";
+import colorMap from "../library/util/colorMap";
 import styles from "./styles.scss";
 
 
@@ -22,6 +23,40 @@ class Dashboard extends React.Component {
   }
 
   renderCards() {
+    const hardcodeData = [{
+      icon: "facebook",
+      iconColor: '#ffffff',
+      background: '#395998',
+      iconAlign: 'flex-end',
+      headerLinkName: "S. Lalala",
+      headerLinkSite: "yelp.ca",
+      siteStars: 4,
+      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
+      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      createdAt: moment().subtract(10, 'days').fromNow()
+    },{
+      icon: "bitcoin",
+      iconColor: '#ffffff',
+      background: '#ffc55b',
+      iconAlign: 'center',
+      headerLinkName: "L. Linda",
+      headerLinkSite: "yelp.ca",
+      siteStars: 6,
+      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
+      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      createdAt: moment().subtract(10, 'days').fromNow()
+    },{
+      icon: "twitter",
+      iconColor: '#ffffff',
+      background: '#FF715A',
+      iconAlign: 'center',
+      headerLinkName: "N. Blabla",
+      headerLinkSite: "yelp.ca",
+      siteStars: 3,
+      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
+      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      createdAt: moment().subtract(10, 'days').fromNow()
+    }];
     const {
       listingCount,
       errorCount,
@@ -59,7 +94,32 @@ class Dashboard extends React.Component {
               </Col>
             </Row>
           </Col>
-
+          <Col className={styles.padding} xs={12} md={8}>
+            <Card borderColor={colorMap.green}>
+              <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
+              <AtomTextBlockWrapper styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
+                <AtomTextBlockWrapper styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <Col xs={12} md={12}>
+                    {hardcodeData.map(obj => {
+                      return (
+                        <BigCommentBubble
+                          icon={obj.icon}
+                          iconColor={obj.iconColor}
+                          background={obj.background}
+                          iconAlign={obj.iconAlign}
+                          headerLinkName={obj.headerLinkName}
+                          headerLinkSite={obj.headerLinkSite}
+                          siteStars={obj.siteStars}
+                          siteTitle={obj.siteTitle}
+                          sitePreview={obj.sitePreview}
+                          createdAt={obj.createdAt}/>
+                      )
+                    })}
+                  </Col>
+                </AtomTextBlockWrapper>
+              </AtomTextBlockWrapper>
+            </Card>
+          </Col>
           <Col xs={12} sm={4} className={styles.dashboard__requestContainer}>
             <RequestsContainer />
           </Col>
