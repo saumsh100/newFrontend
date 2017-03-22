@@ -1,6 +1,6 @@
 @import "../../../ui.scss";
 
-.intelligence {
+.social {
   &__header {
     &_title {
       display: flex;
@@ -29,4 +29,10 @@
       padding: 5px;
     }
   }
+  &__body {
+    &_arrows {
+      padding-right: 50px;
+    }
+  }
 }
+
