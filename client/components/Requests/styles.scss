@@ -8,6 +8,11 @@
 .requestCard {
   border-top: $card-border-size #ffc45a;
   max-height: 335px;
+  display: table;
+  width: 100%;
+  @media screen and (min-width: 760px){
+    min-width: 320px;
+  }
 }
 
 .requestHeader{
@@ -36,7 +41,9 @@
   border-left-color: #bfbfbf;
   text-align: left;
   @extend .font-small-grey;
-
+  @media screen and (max-width: 350px){
+    max-width: 170px;
+  }
   &__time{
     @extend .font-medium-dark;
   }
