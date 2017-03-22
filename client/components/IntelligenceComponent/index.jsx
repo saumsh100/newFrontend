@@ -81,7 +81,7 @@ class IntelligenceComponent extends Component {
               </Col>
             </Row>
           </Col>
-          <FlexGrid borderColor={colorMap.blue}>
+          <FlexGrid borderColor={colorMap.blue} columnCount="4">
             <PractitionersList img="images/practitioner_1.png"
                                name="Dr. Chelsea"
                                profession="Hygienist"
@@ -97,8 +97,6 @@ class IntelligenceComponent extends Component {
                                appointmentNotFiltred="83"
                                newPatients="12"
                                percentage="10"/>
-          </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue}>
             <PractitionersList img="images/practitioner_1.png"
                                name="Dr. Chelsea"
                                profession="Hygienist"

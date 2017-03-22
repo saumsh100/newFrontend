@@ -11,13 +11,14 @@ const FlexGrid = function (props) {
     title,
     children,
     borderColor,
+    columnCount,
   } = props;
-  let n = 2;
+  let n = columnCount;
   if (children.length === 3) n = 3;
   const width = Math.floor( 12 / n);
   const renderChilden = chunk(children, n);
   return (
-    <Col xs={12} md={6}>
+    <Col xs={12}>
       <div className={styles.settingsFormsCol}>
         <Card className={styles.sideByside} borderColor={borderColor} >
           {title && <div className={styles.sideByside__title}>{title}</div>}
@@ -37,7 +38,9 @@ const FlexGrid = function (props) {
     </Col>
   );
 };
-
+FlexGrid.defaultProps = {
+  columnCount: 2,
+};
 FlexGrid.propTypes = {
 
 };
