@@ -8,7 +8,7 @@ class IntelligenceContainer extends Component {
   render() {
     return (
       <div>
-        <IntelligenceComponent />
+        <IntelligenceComponent {...this.props}/>
       </div>
     );
   }
@@ -25,7 +25,7 @@ function mapStateToProps({ entities }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    
+
   }, dispatch);
 }
 

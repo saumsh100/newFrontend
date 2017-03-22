@@ -34,14 +34,48 @@ export default function Routes({ history }) {
             });
           }}
         />
+
+
         <Route
           path="intelligence"
           getComponent={(location, callback) => {
             require.ensure(['../containers/IntelligenceContainer'], (require) => {
               callback(null, require('../containers/IntelligenceContainer').default);
             });
-          }}
-        />
+          }}>
+          <Route
+            path="overview"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/IntelligenceComponent'], (require) => {
+                callback(null, require('../components/IntelligenceComponent').default);
+              });
+            }}
+          />
+          <Route
+            path="business"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/IntelligenceComponent/Business'], (require) => {
+                callback(null, require('../components/IntelligenceComponent/Business').default);
+              });
+            }}
+          />
+          <Route
+            path="social"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/IntelligenceComponent/Social'], (require) => {
+                callback(null, require('../components/IntelligenceComponent/Social').default);
+              });
+            }}
+          />
+        </Route>
+        <Route
+          path="business"
+          getComponent={(location, callback) => {
+            require.ensure(['../components/IntelligenceComponent/Business'], (require) => {
+              callback(null, require('../components/IntelligenceComponent/Business').default);
+            });
+          }} />
+
         <Route
           path="availabilities"
           getComponent={(location, callback) => {
@@ -68,13 +102,13 @@ export default function Routes({ history }) {
             }}
           />
           {/*<Route
-            path="appointments"
-            getComponent={(location, callback) => {
-              require.ensure(['./components/Schedule/MonthView'], (require) => {
-                callback(null, require('./components/Schedule/MonthView').default);
-              });
-            }}
-          />*/}
+           path="appointments"
+           getComponent={(location, callback) => {
+           require.ensure(['./components/Schedule/MonthView'], (require) => {
+           callback(null, require('./components/Schedule/MonthView').default);
+           });
+           }}
+           />*/}
         </Route>
         <Route
           path="patients"
@@ -102,62 +136,62 @@ export default function Routes({ history }) {
             }}
           />
           {/*<Route
-            path="phone"
-            getComponent={(location, callback) => {
-              require.ensure(['./containers/PatientsPhoneContainer'], (require) => {
-                callback(null, require('./containers/PatientsPhoneContainer').default);
-              });
-            }}
-          />*/}
+           path="phone"
+           getComponent={(location, callback) => {
+           require.ensure(['./containers/PatientsPhoneContainer'], (require) => {
+           callback(null, require('./containers/PatientsPhoneContainer').default);
+           });
+           }}
+           />*/}
         </Route>
         {/*<Route
-          path="reputation"
-          getComponent={(location, callback) => {
-            require.ensure(['./components/Vendasta'], (require) => {
-              callback(null, require('./components/Vendasta').default);
-            });
-          }}
-        />
-        <Route
-          path="social"
-          getComponent={(location, callback) => {
-            require.ensure(['./containers/AccountContainer'], (require) => {
-              callback(null, require('./containers/AccountContainer').default);
-            });
-          }}
-        />
-        <Route
-          path="loyalty"
-          getComponent={(location, callback) => {
-            require.ensure(['./containers/AccountContainer'], (require) => {
-              callback(null, require('./containers/AccountContainer').default);
-            });
-          }}
-        />
-        <Route
-          path="newsletters"
-          getComponent={(location, callback) => {
-            require.ensure(['./containers/AccountContainer'], (require) => {
-              callback(null, require('./containers/AccountContainer').default);
-            });
-          }}
-        />
-        <Route
-          path="website"
-          getComponent={(location, callback) => {
-            require.ensure(['./containers/AccountContainer'], (require) => {
-              callback(null, require('./containers/AccountContainer').default);
-            });
-          }}
-        />
-        <Route
-          path="roadmap"
-          getComponent={(location, callback) => {
-            require.ensure(['./containers/AccountContainer'], (require) => {
-              callback(null, require('./containers/AccountContainer').default);
-            });
-          }}
-        />*/}
+         path="reputation"
+         getComponent={(location, callback) => {
+         require.ensure(['./components/Vendasta'], (require) => {
+         callback(null, require('./components/Vendasta').default);
+         });
+         }}
+         />
+         <Route
+         path="social"
+         getComponent={(location, callback) => {
+         require.ensure(['./containers/AccountContainer'], (require) => {
+         callback(null, require('./containers/AccountContainer').default);
+         });
+         }}
+         />
+         <Route
+         path="loyalty"
+         getComponent={(location, callback) => {
+         require.ensure(['./containers/AccountContainer'], (require) => {
+         callback(null, require('./containers/AccountContainer').default);
+         });
+         }}
+         />
+         <Route
+         path="newsletters"
+         getComponent={(location, callback) => {
+         require.ensure(['./containers/AccountContainer'], (require) => {
+         callback(null, require('./containers/AccountContainer').default);
+         });
+         }}
+         />
+         <Route
+         path="website"
+         getComponent={(location, callback) => {
+         require.ensure(['./containers/AccountContainer'], (require) => {
+         callback(null, require('./containers/AccountContainer').default);
+         });
+         }}
+         />
+         <Route
+         path="roadmap"
+         getComponent={(location, callback) => {
+         require.ensure(['./containers/AccountContainer'], (require) => {
+         callback(null, require('./containers/AccountContainer').default);
+         });
+         }}
+         />*/}
         <Route
           path="settings"
           getComponent={(location, callback) => {
@@ -249,13 +283,13 @@ export default function Routes({ history }) {
       </Route>
     </Router>
   );
-}
+  }
 
-if (module.hot) {
-  counter++;
-  module.hot.accept();
-}
+  if (module.hot) {
+    counter++;
+    module.hot.accept();
+  }
 
-Routes.propTypes = {
-  history: PropTypes.object.isRequired,
-};
+  Routes.propTypes = {
+    history: PropTypes.object.isRequired,
+  };

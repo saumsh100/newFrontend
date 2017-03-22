@@ -52,6 +52,7 @@ class IntelligenceComponent extends Component {
             <Card className={styles.intelligence__header_title}>
               <b>Overview</b>
             </Card>
+
             <DashboardStats/>
           </Col>
           <Col xs={12}>
@@ -390,5 +391,7 @@ class IntelligenceComponent extends Component {
     );
   }
 }
-
+IntelligenceComponent.propTypes = {
+  location: PropTypes.object
+}
 export default IntelligenceComponent;
