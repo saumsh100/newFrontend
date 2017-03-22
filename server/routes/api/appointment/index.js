@@ -6,6 +6,9 @@ const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
+const loaders = require('../../util/loaders');
+
+appointmentsRouter.param('appointmentId', loaders('appointment', 'Appointment'));
 
 appointmentsRouter.get('/', (req, res, next) => {
   const {
@@ -99,6 +102,15 @@ appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (re
     .then(() => {
       res.sendStatus(204);
     })
+    .catch(next);
+});
+
+/**
+ * Update a single appointment
+ */
+appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
+  return req.appointment.merge(req.body).save()
+    .then(appointment => res.send(normalize('appointment', appointment)))
     .catch(next);
 });
 
