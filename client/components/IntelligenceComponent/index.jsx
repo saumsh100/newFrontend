@@ -45,6 +45,15 @@ class IntelligenceComponent extends Component {
       newPatients: 12,
       percentage: 10,
     }];
+
+    const data = [
+      {count: 388, title: "Appointment Booked", icon: "calendar", size: 10, color: 'primaryColor' },
+      {count: "116k", title: "Estimated Revenue", icon: "user", size: 10, color: 'primaryBlue' },
+      {count: 39, title: "New Patients", icon: "bullhorn", size: 10, color: 'primaryGreen' },
+      {count: 311, title: "Confirmed Appointments", icon: "star", size: 10, color: 'primaryYellow' },
+    ];
+
+
     return (
       <Grid className={styles.intelligence}>
         <Row>
@@ -53,7 +62,7 @@ class IntelligenceComponent extends Component {
               <b>Overview</b>
             </Card>
 
-            <DashboardStats/>
+            <DashboardStats data={data} />
           </Col>
           <Col xs={12}>
             <Row>
