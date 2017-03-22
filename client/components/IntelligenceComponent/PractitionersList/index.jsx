@@ -17,7 +17,9 @@ class PractitionersList extends Component {
       <li className={styles.practitioner__item}>
         <div className={styles.practitioner__item_wrapper}>
           <div className={styles.practitioner__item_header}>
-            <img className={styles.practitioner__item_img} src={img} alt=""/>
+            <div className={styles.practitioner__item_img}>
+              <img src={img} alt=""/>
+            </div>
             <div className={styles.practitioner__item_about}>
               <div className={styles.practitioner__item_name}>
                 <b>{name}</b>
