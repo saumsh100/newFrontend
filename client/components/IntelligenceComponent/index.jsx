@@ -213,20 +213,20 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'New vs Returning visitors'} />
-              <div className={classNames(styles.rowContainer, styles.spaceAround, styles.height400)}>
-                <div className={classNames(styles.columnContainer, styles.spaceAround)}>
-                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd)} >
+              <div className={classNames(styles.rowContainer, styles.spaceAround, styles.height400, styles.visitorsContainer)}>
+                <div className={classNames(styles.columnContainer, styles.spaceAround, styles.visitorsMainContent)}>
+                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd, styles.voteText)} >
                     <span className={classNames(styles.colorGreen, styles.font64, styles.fontWeight800)} >68%</span>
                     <span className={classNames(styles.colorBlack, styles.font24, styles.textAlignRight)} >New Visitors</span>
                   </div>
 
-                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd)} >
+                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd, styles.voteText)} >
                     <span className={classNames(styles.colorBlue, styles.font64, styles.fontWeight800)} >32%</span>
                     <span className={classNames(styles.colorBlack, styles.font24, styles.textAlignRight)} >Returning Visitors</span>
                   </div>
                 </div>
 
-                <div className={styles.width200}>
+                <div className={styles.width200, styles.pieChart}>
                   <PieChart
                   width={171}
                   height={85}
