@@ -46,9 +46,6 @@ Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
 Chair.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
 
-Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
-//Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
-
 Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Patient, 'patients', 'id', 'accountId');

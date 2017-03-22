@@ -8,6 +8,7 @@ import ServiceItemData from './ServiceItemData';
 import CreateServiceForm from './CreateServiceForm';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import { setServiceId } from '../../../actions/accountSettings';
+import ServicePractitioners from './ServicePractitioners';
 import styles from './styles.scss';
 
 class ServiceList extends Component {
@@ -50,7 +51,7 @@ class ServiceList extends Component {
   }
 
   render() {
-    const { services, serviceId } = this.props;
+    const { services, serviceId, practitioners } = this.props;
 
     const selectedService = serviceId ? services.get(serviceId) : services.first();
     const selectedServiceId = selectedService ? selectedService.get('id') : null;
@@ -87,12 +88,22 @@ class ServiceList extends Component {
               })}
         </Col>
         <Col xs={10} className={styles.servicesDataContainer}>
-          <ServiceItemData
-            key={selectedServiceId}
-            service={selectedService}
-            onSubmit={this.updateService}
-            deleteService={this.deleteService}
-          />
+          <div>
+            <ServiceItemData
+              key={selectedServiceId}
+              service={selectedService}
+              onSubmit={this.updateService}
+              deleteService={this.deleteService}
+            />
+          </div>
+          <div>
+            <ServicePractitioners
+              key={`${selectedServiceId}selectedPractitioners`}
+              service={selectedService}
+              practitioners={practitioners}
+              updateService={this.updateService}
+            />
+          </div>
         </Col>
       </Row>
     );

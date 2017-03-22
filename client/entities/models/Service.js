@@ -8,8 +8,8 @@ const ServicesSchema = {
   duration: null,
   bufferTime: null,
   unitCost: null,
-  customCosts: null,
-  practitioners: null,
+  customCosts: {},
+  practitioners: [],
   allowedPractitioners: null,
 };
 

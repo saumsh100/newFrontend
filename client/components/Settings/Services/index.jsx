@@ -12,21 +12,31 @@ const sortServicesAlphabetical = (a, b) => {
   return 0;
 };
 
+const sortPractitionersAlphabetical = (a, b) => {
+  if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+  if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
+  return 0;
+};
+
+
 class Services extends Component {
 
   componentWillMount() {
-    this.props.fetchEntities({key: 'services'});
+    this.props.fetchEntities({ key: 'services', join: ['practitioners'] });
+    this.props.fetchEntities({ key: 'practitioners' });
   }
 
   render() {
-    const { services } = this.props;
+    const { services, practitioners } = this.props;
 
     let showComponent = null;
-    if (services) {
+    if (services && practitioners) {
       const filteredServices = services.sort(sortServicesAlphabetical);
+      const filteredPractitioners = practitioners.sort(sortPractitionersAlphabetical);
       showComponent = (
         <ServiceList
           services={filteredServices}
+          practitioners={filteredPractitioners}
         />
       );
     }
@@ -41,12 +51,14 @@ class Services extends Component {
 
 Services.propTypes = {
   services: PropTypes.object,
+  practitioners: PropTypes.object,
   fetchEntities: PropTypes.func,
 };
 
 function mapStateToProps({ entities }) {
   return {
     services: entities.getIn(['services', 'models']),
+    practitioners: entities.getIn(['practitioners', 'models']),
   };
 }
 

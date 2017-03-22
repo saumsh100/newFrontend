@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, Button, Header, Grid, Row, Col } from '../../library';
+import {  Form, Field, Button, Header, } from '../../library';
 import styles from './styles.scss';
 
 const parseNum = value => value && parseInt(value);
@@ -52,6 +52,8 @@ class ServiceItemData extends Component {
       bufferTime: service.get('bufferTime'),
     };
 
+    const practitionerIds = service.get('practitioners');
+
     return (
       <div>
         <div className={styles.serviceHeaderContainer}>
@@ -62,37 +64,35 @@ class ServiceItemData extends Component {
             </Button>
           </div>
         </div>
-        <div>
-          <div className={styles.servicesFormRow}>
-            <Form
-              form={`${service.get('id')}Form`}
-              onSubmit={this.updateService}
-              initialValues={initialValues}
-            >
-              <Field
-                required
-                name="name"
-                label="Name"
-                validate={[maxLength25]}
-              />
-              <Field
-                required
-                name="duration"
-                label="Duration"
-                type="number"
-                normalize={parseNum}
-                validate={[notNegative]}
-              />
-              <Field
-                required
-                name="bufferTime"
-                label="Buffer Time"
-                type="number"
-                normalize={parseNum}
-                validate={[notNegative]}
-              />
-            </Form>
-          </div>
+        <div className={styles.servicesFormRow}>
+          <Form
+            form={`${service.get('id')}Form`}
+            onSubmit={this.updateService}
+            initialValues={initialValues}
+          >
+            <Field
+              required
+              name="name"
+              label="Name"
+              validate={[maxLength25]}
+            />
+            <Field
+              required
+              name="duration"
+              label="Duration"
+              type="number"
+              normalize={parseNum}
+              validate={[notNegative]}
+            />
+            <Field
+              required
+              name="bufferTime"
+              label="Buffer Time"
+              type="number"
+              normalize={parseNum}
+              validate={[notNegative]}
+            />
+          </Form>
         </div>
       </div>
     );
