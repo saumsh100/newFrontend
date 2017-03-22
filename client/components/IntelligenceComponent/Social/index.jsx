@@ -7,16 +7,25 @@ import styles from "./styles.scss";
 class Social extends Component {
   render() {
     return (
-      <Grid className={styles.intelligence}>
+      <Grid className={styles.social}>
         <Row>
-          <Col className={styles.intelligence__header} xs={12}>
-            <Card className={styles.intelligence__header_title}>
+          <Col className={styles.business__header} xs={12}>
+            <Card className={styles.business__header_title}>
               <b>Social</b>
             </Card>
-            <DashboardStats/>
           </Col>
-          <Col xs={12}>
+          <Col className={styles.social__body} xs={12}>
             <Row>
+              <Col className={styles.social__body_arrows} xs={4}>
+
+              </Col>
+              <Col className={styles.social__body_arrows} xs={4}>
+
+              </Col>
+              <Col className={styles.social__body_arrows} xs={4}>
+
+
+              </Col>
             </Row>
           </Col>
         </Row>

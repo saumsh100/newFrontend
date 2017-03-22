@@ -191,6 +191,15 @@ class Dashboard extends React.Component {
       ratingCounts,
     } = this.props;
 
+
+    const data = [
+      {count: 12, title: "Appointment Booked", icon: "calendar", size: 10, color: 'primaryColor' },
+      {count: 64, title: "Appointment Booked", icon: "user", size: 10, color: 'primaryBlue' },
+      {count: 16, title: "Appointment Booked", icon: "bullhorn", size: 10, color: 'primaryGreen' },
+      {count: 23, title: "Appointment Booked", icon: "star", size: 10, color: 'primaryYellow' },
+    ];
+
+
     return (
       <Grid className={styles.dashboard}>
         <Row>
@@ -198,7 +207,7 @@ class Dashboard extends React.Component {
             <Card className={styles.dashboard__header_title}>
               Welcome Back, <b>Corina</b>
             </Card>
-            <DashboardStats/>
+            <DashboardStats data={data} />
           </Col>
         </Row>
         <Row>

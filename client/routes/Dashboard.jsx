@@ -77,6 +77,15 @@ export default function Routes({ history }) {
           }} />
 
         <Route
+          path="social"
+          getComponent={(location, callback) => {
+            require.ensure(['../components/IntelligenceComponent/Social'], (require) => {
+              callback(null, require('../components/IntelligenceComponent/Social').default);
+            });
+          }}
+          />
+
+        <Route
           path="availabilities"
           getComponent={(location, callback) => {
             require.ensure(['../containers/AvailabilityContainer'], (require) => {
