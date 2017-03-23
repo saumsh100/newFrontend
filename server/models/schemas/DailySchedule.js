@@ -6,15 +6,21 @@ const type = thinky.type;
 const eight = time(8, 0);
 const five = time(17, 0);
 
-const DailyScheduleSchema = type.object().schema({
-  isClosed: type.boolean().required().default(false),
-  startTime: type.date().required().default(eight),
-  endTime: type.date().required().default(five),
-  breaks: type.array(),
-}).default({
-  isClosed: false,
-  startTime: eight,
-  endTime: five,
-}).removeExtra();
+const generateDailyScheduleSchema = (options = {}) => {
+  const { isClosed = false, startTime = eight, endTime = five, breaks } = options;
+  return type.object().schema({
+    isClosed: type.boolean().required().default(isClosed),
+    startTime: type.date().required().default(startTime),
+    endTime: type.date().required().default(endTime),
+    breaks: type.array().default(breaks),
+  }).default({
+    isClosed: isClosed,
+    startTime: startTime,
+    endTime: endTime,
+  }).removeExtra();
+};
 
+const DailyScheduleSchema = generateDailyScheduleSchema();
+
+module.exports.generateDailyScheduleSchema = generateDailyScheduleSchema;
 module.exports = DailyScheduleSchema;
