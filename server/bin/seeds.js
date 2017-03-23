@@ -300,6 +300,13 @@ const SEEDS = {
       // accounts: [accountId],
     },
     {
+      username: 'sergey@carecru.io',
+      password: bcrypt.hashSync('sergey', saltRounds),
+      id: sergeyUserId,
+      activeAccountId: accountId2,
+      // accounts: [accountId],
+    },
+    {
       username: 'alex@carecru.com',
       password: bcrypt.hashSync('alex', saltRounds),
       id: alexUserId,
