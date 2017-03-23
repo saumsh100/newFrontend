@@ -8,24 +8,23 @@ module.exports = function setupDashNsp(io) {
   dashNsp
     .on('connection', socketIoJwt.authorize({
       secret: globals.tokenSecret,
-      timeout: 15000,
+      //timeout: 15000,
     }))
     .on('authenticated', (socket) => {
       const roomName = socket.decoded_token.activeAccountId;
       console.log(`dashNsp connection. roomName=${roomName}`);
       
-      // Message format is JSON
-      // roomName is accountId
       socket.join(roomName);
       console.log('active rooms', io.sockets.adapter.rooms);
       console.log(`Opening room: ${roomName}`);
       socket.to(roomName).emit('newJoin', 'dash board joined');
 
       socket.on('sendToRoom', (data) => {
-        console.log('active rooms', io.sockets.adapter.rooms);
+        const room = io.nsps['/dash'].adapter.rooms[roomName];
+        console.log('clients in this room: ', room.length);
         console.log(`Sending to all in the room ${roomName}: data=${data.msg}`);
 
-        socket.to(roomName).emit('roomMessage', `${data.msg} ${roomName}`);
+        io.nsps['/dash'].in(roomName).emit('roomMessage', `${data.msg} ${roomName}`);
       });
     })
     .on('unauthorized', (socket) => {
