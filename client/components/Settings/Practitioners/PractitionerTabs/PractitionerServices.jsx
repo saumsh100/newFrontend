@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react';
+import { change } from 'redux-form';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
 import PractServicesList from './PractServicesList';
-import { Form, Row, Col, Button } from '../../../library';
+import { Form, Field, Button } from '../../../library';
 
 
 const sortServicesAlphabetical = (a, b) => {
@@ -23,11 +24,24 @@ class PractitionerServices extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      allServices: false,
+    }
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setAllServices = this.setAllServices.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'services' });
+  }
+
+  setAllServices(event, newValue, previousValue) {
+    const { services, change, practitioner } = this.props;
+    if(newValue===true) {
+       services.toArray().map((service) => {
+         change(`${practitioner.get('id')}services`, 'allServices', previousValue)
+       })
+    }
   }
 
   handleSubmit(values) {
@@ -57,8 +71,18 @@ class PractitionerServices extends Component {
       const filteredServices = services.sort(sortServicesAlphabetical);
       const initialValues = createInitialValues(serviceIds, services);
 
+      initialValues.allServices = services.size === serviceIds.length;
+
       showComponent = (
         <Form form={`${practitioner.get('id')}services`} onSubmit={this.handleSubmit} initialValues={initialValues}>
+          <div>
+            All Services
+            <Field
+              component="Toggle"
+              name="allServices"
+              onChange={this.setAllServices}
+            />
+          </div>
           {filteredServices.toArray().map((service, index) => {
             return (
               <PractServicesList
@@ -89,6 +113,7 @@ function mapStateToProps({ entities }){
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     fetchEntities,
+    change,
   }, dispatch);
 }
 

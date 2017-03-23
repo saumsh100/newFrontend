@@ -42,58 +42,62 @@ class ServiceItemData extends Component {
   render() {
     const { service } = this.props;
 
-    if(!service) {
-      return null;
+    let showComponent = null;
+
+    if (service) {
+      const initialValues = {
+        name: service.get('name'),
+        duration: service.get('duration'),
+        bufferTime: service.get('bufferTime'),
+      };
+
+      showComponent = (
+        <div>
+          <div className={styles.serviceHeaderContainer}>
+            <Header title={service.get('name')} />
+            <div className={styles.trashButton}>
+              <Button icon="trash" notflat raised className={styles.trashButton__trashIcon} onClick={this.deleteService}>
+                Delete
+              </Button>
+            </div>
+          </div>
+          <div className={styles.servicesFormRow}>
+            <Form
+              form={`${service.get('id')}Form`}
+              onSubmit={this.updateService}
+              initialValues={initialValues}
+            >
+              <Field
+                required
+                name="name"
+                label="Name"
+                validate={[maxLength25]}
+              />
+              <Field
+                required
+                name="duration"
+                label="Duration"
+                type="number"
+                normalize={parseNum}
+                validate={[notNegative]}
+              />
+              <Field
+                required
+                name="bufferTime"
+                label="Buffer Time"
+                type="number"
+                normalize={parseNum}
+                validate={[notNegative]}
+              />
+            </Form>
+          </div>
+        </div>
+      );
     }
-
-    const initialValues = {
-      name: service.get('name'),
-      duration: service.get('duration'),
-      bufferTime: service.get('bufferTime'),
-    };
-
-    const practitionerIds = service.get('practitioners');
 
     return (
       <div>
-        <div className={styles.serviceHeaderContainer}>
-          <Header title={service.get('name')} />
-          <div className={styles.trashButton}>
-            <Button icon="trash" notflat raised className={styles.trashButton__trashIcon} onClick={this.deleteService}>
-              Delete
-            </Button>
-          </div>
-        </div>
-        <div className={styles.servicesFormRow}>
-          <Form
-            form={`${service.get('id')}Form`}
-            onSubmit={this.updateService}
-            initialValues={initialValues}
-          >
-            <Field
-              required
-              name="name"
-              label="Name"
-              validate={[maxLength25]}
-            />
-            <Field
-              required
-              name="duration"
-              label="Duration"
-              type="number"
-              normalize={parseNum}
-              validate={[notNegative]}
-            />
-            <Field
-              required
-              name="bufferTime"
-              label="Buffer Time"
-              type="number"
-              normalize={parseNum}
-              validate={[notNegative]}
-            />
-          </Form>
-        </div>
+        {showComponent}
       </div>
     );
   }

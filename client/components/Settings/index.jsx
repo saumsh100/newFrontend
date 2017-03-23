@@ -38,6 +38,8 @@ export default function Settings(props) {
     );
   }
 
+  // TODO: Remove reliance on Grid Col for separating nav from children (use min-width)
+
   return (
     <Grid>
         {showNav}

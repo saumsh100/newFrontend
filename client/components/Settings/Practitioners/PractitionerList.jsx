@@ -21,6 +21,9 @@ class PractitionerList extends Component {
     this.createPractitioner = this.createPractitioner.bind(this);
   }
 
+  componentWillMount() {
+    this.props.setPractitionerId({ id: null })
+  }
   createPractitioner(values) {
     values.firstName = values.firstName.trim();
     values.lastName = values.lastName.trim();

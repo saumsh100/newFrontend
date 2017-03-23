@@ -24,6 +24,10 @@ class ServiceList extends Component {
     this.deleteService = this.deleteService.bind(this);
   }
 
+  componentWillMount() {
+    this.props.setServiceId({ id: null });
+  }
+
   setActive() {
     const active = (this.state.active !== true);
     this.setState({ active });
@@ -51,8 +55,15 @@ class ServiceList extends Component {
   }
 
   render() {
-    console.log("RENDERING SERVICES TAB");
     const { services, serviceId, practitioners } = this.props;
+
+    if (!services) {
+      return null;
+    }
+
+    if (!practitioners) {
+      return null;
+    }
 
     const selectedService = serviceId ? services.get(serviceId) : services.first();
     const selectedServiceId = selectedService ? selectedService.get('id') : null;
@@ -89,22 +100,18 @@ class ServiceList extends Component {
               })}
         </Col>
         <Col xs={10} className={styles.servicesDataContainer}>
-          <div>
             <ServiceItemData
-              key={selectedServiceId}
+              key={`${selectedServiceId}basicdata`}
               service={selectedService}
               onSubmit={this.updateService}
               deleteService={this.deleteService}
             />
-          </div>
-          <div>
             <ServicePractitioners
               key={`${selectedServiceId}selectedPractitioners`}
               service={selectedService}
               practitioners={practitioners}
               updateService={this.updateService}
             />
-          </div>
         </Col>
       </Row>
     );

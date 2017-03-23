@@ -22,13 +22,11 @@ const sortPractitionersAlphabetical = (a, b) => {
 class Services extends Component {
 
   componentWillMount() {
-    console.log("RENDERING WILLMOUNT");
     this.props.fetchEntities({ key: 'services', join: ['practitioners'] });
     this.props.fetchEntities({ key: 'practitioners' });
   }
 
   render() {
-    console.log("RENDERING CONTAINER!!!!!!!!!!!!!!!!!!!");
 
     const { services, practitioners } = this.props;
 
