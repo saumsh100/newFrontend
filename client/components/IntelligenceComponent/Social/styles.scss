@@ -131,3 +131,152 @@
 .width100p {
   width: 100%;
 }
+
+.backgroundPowderBlue {
+  color: #9EB9D4;
+}
+
+
+.byGender {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 400px;
+
+  &__stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    
+    &__percentage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 200px;
+      align-items: flex-end;
+
+      &_left {
+        text-align: right
+      }
+
+      &_left:first-child {
+        color: #2EC4A7;
+        font-size: 64px;
+        font-weight: 800;
+        
+      }
+
+      &_left:last-child {
+        color: #000000;
+        font-size: 24px;
+      }
+
+      &_right {
+        text-align: right;
+      }
+
+      &_right:first-child {
+        color: #8FBBD6;
+        font-size: 64px;
+        font-weight: 800; 
+      }
+
+      &_right:last-child {
+        font-size: 24px;
+        color: #000000;
+      }
+    }
+  }
+
+}
+
+.facebookActivity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+    &__container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-around;
+    }
+
+}
+
+.iconsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+}
+
+
+
+.pieChartWrapper {
+  width: 50%;
+  hegith: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+@media(max-width: 474px) {
+  .pieChartWrapper {
+    width: 100%
+  }
+
+  .facebookActivity {
+    flex-direction: column;
+    &__container {
+      flex-direction: column;
+    }
+    
+  }
+
+  .iconsContainer {
+    width: 100%;
+    margin: 5px 0 5px 0;
+  }
+
+
+  .byGender {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+    
+    &__stats {
+      flex-direction: row;
+      align-items: initial;
+      width: 100%;
+
+      &__percentage {
+        width: auto;
+        align-items: center;
+        margin-bottom: -100px;
+        width: auto;
+
+      &_left:first-child {
+        font-size: 42px;
+        margin-left: 10px;
+      }
+      &_left:last-child {
+        font-size: 24px;
+        text-align: center
+      }
+
+        &_right:first-child {
+          font-size: 42px;
+        }
+        &_right:last-child {
+          font-size: 24px;
+          text-align: center
+        }
+      }
+    }
+  }
+}

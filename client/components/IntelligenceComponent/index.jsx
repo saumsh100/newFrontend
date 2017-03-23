@@ -219,26 +219,23 @@ class IntelligenceComponent extends Component {
               </div>
             </Card>
           </Col>
+
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'New vs Returning visitors'} />
-              <div className={classNames(styles.rowContainer, styles.spaceAround, styles.height400, styles.visitorsContainer)}>
-                <div className={classNames(styles.columnContainer, styles.spaceAround, styles.visitorsMainContent)}>
-                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd, styles.voteText)} >
-                    <span className={classNames(styles.colorGreen, styles.font64, styles.fontWeight800)} >68%</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.textAlignRight)} >New Visitors</span>
+              <div className={styles.byGender}>
+                <div className={styles.byGender__stats}>
+                  <div className={styles.byGender__stats__percentage} >
+                    <span className={styles.byGender__stats__percentage_left} >68%</span>
+                    <span className={styles.byGender__stats__percentage_left} >New Visitors</span>
                   </div>
-
-                  <div className={classNames(styles.columnContainer, styles.width200, styles.alignFlexEnd, styles.voteText)} >
-                    <span className={classNames(styles.colorBlue, styles.font64, styles.fontWeight800)} >32%</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.textAlignRight)} >Returning Visitors</span>
+                  <div className={styles.byGender__stats__percentage} >
+                    <span className={styles.byGender__stats__percentage_right} >32%</span>
+                    <span className={styles.byGender__stats__percentage_right} >Returning Visitors</span>
                   </div>
                 </div>
-
-                <div className={styles.width200, styles.pieChart}>
+                <div className={styles.pieChartWrapper}>
                   <PieChart
-                  width={171}
-                  height={85}
                   data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
                 />
                 </div>
