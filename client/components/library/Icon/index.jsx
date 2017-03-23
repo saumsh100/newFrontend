@@ -6,7 +6,7 @@ import styles from './styles.scss';
 export default function Icon(props) {
   const {
     icon,
-    size = 1,
+    size,
     className,
     onClick,
   } = props;
@@ -14,9 +14,11 @@ export default function Icon(props) {
   const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
   
-  return <i className={classes} style={{ fontSize: `${size} em` }} onClick={onClick}/>;
+  return <i className={classes} style={{fontSize: size + 'em'}} onClick={onClick} />;
 }
-
+Icon.defaultProps = {
+  size: 1
+};
 Icon.propTypes = {
   icon: PropTypes.string.isRequired,
   size: PropTypes.number,

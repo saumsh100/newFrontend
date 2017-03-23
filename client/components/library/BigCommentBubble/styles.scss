@@ -1,0 +1,96 @@
+@import "../../../ui";
+
+.bigComment {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  font-size: 25px;
+}
+.bigCommentBubble {
+  display: flex;
+  padding: 20px;
+  @media screen and (max-width: 500px) {
+    padding: 10px;
+  }
+  &__commentBody {
+    width: 75%;
+    margin-left: 20px;
+  }
+  &__mainContent {
+    position: relative;
+    padding: 10px 20px 10px 20px;
+    background-color: #fff;
+    font-size: 14px;
+    border-top: 2px solid #8cbcd6;
+    border-left: 2px solid #8cbcd6;
+    border-right: 2px solid #8cbcd6;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    &__header {
+      color: $primary-dark;
+      font-size: 14px;
+      &__link {
+        color: #8cbcd6;
+        cursor: pointer;
+        margin-right: 5px;
+      }
+      &__site {
+        color: #8cbcd6;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+    }
+    &::before {
+      position: absolute;
+      width: 0;
+      height: 0;
+      left: -16px;
+      border-top: 8px solid transparent;
+      border-right: 16px solid #8cbcd6;
+      border-bottom: 8px solid transparent;
+      display: block;
+      content: "";
+    }
+    &__requirements {
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #ff7761;
+      margin: 10px 0 10px 0;
+    }
+    &__title {
+      color: #8cbcd6;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    &__rating {
+      color: #ede27d;
+      margin: 10px 0 10px 0;
+    }
+    &__preview {
+      color: $primary-dark;
+      &__toggleButton {
+        color: #8cbcd6;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+    }
+    &__createdAt {
+      color: #fafafa;
+      font-size: 14px;
+    }
+  }
+  &__respondBlock {
+    padding: 10px 20px 10px 20px;
+    background-color: #8cbcd6;
+    color: #fff;
+    border-bottom: 2px solid #8cbcd6;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    &__respondButton {
+      text-align: right;
+      font-size: 14px;
+    }
+  }
+}
