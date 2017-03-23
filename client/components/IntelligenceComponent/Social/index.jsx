@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from "react";
-import { Card, Col, Grid, Row, DashboardStats, CardHeader } from "../../library";
+import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart } from "../../library";
 import BackgroundIcon from "../../library/BackgroundIcon";
 import colorMap from "../../library/util/colorMap";
 import classNames from 'classnames';
@@ -41,7 +41,7 @@ class Social extends Component {
               <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
                 <div className={classNames(styles.rowContainer, styles.width100p, styles.spaceAround)}>
                   <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
-                    <BackgroundIcon icon="facebook" backgroundClassName="backgroundColorGrey" />
+                    <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
                     <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
                     <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Impressions</span>
                   </div>
@@ -60,6 +60,82 @@ class Social extends Component {
               </div>
             </Card>
           </Col>
+
+
+          <Col className={styles.padding} xs={12} md={12}>
+            <Card borderColor={colorMap.darkblue} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title="Twitter activity overview" />
+              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
+                <div className={classNames(styles.rowContainer, styles.width100p, styles.spaceAround)}>
+                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                    <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
+                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
+                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Impressions</span>
+                  </div>
+                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                    <BackgroundIcon icon="heart" backgroundClassName="backgroundPowderBlue" />
+                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
+                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Engagements</span>
+                  </div>
+                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                    <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
+                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
+                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Clicks</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </Col>
+
+          <Col className={styles.padding} xs={12} md={6}>
+            <Card borderColor={colorMap.green}>
+              <CardHeader className={styles.cardHeader} title={'By gender'} />
+              <div className={styles.byGender}>
+                <div className={styles.byGender__stats}>
+                  <div className={styles.byGender__stats__percentage} >
+                    <span className={styles.byGender__stats__percentage_left} >62.3%</span>
+                    <span className={styles.byGender__stats__percentage_left} >Famale</span>
+                  </div>
+                  <div className={styles.byGender__stats__percentage} >
+                    <span className={styles.byGender__stats__percentage_right} >62.3%</span>
+                    <span className={styles.byGender__stats__percentage_right} >Male</span>
+                  </div>
+                </div>
+                <div className={styles.width200, styles.pieChart}>
+                  <PieChart
+                  width={171}
+                  height={85}
+                  data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
+                />
+                </div>
+              </div>
+            </Card>
+          </Col>
+
+
+          <Col className={styles.padding} xs={12} md={6}>
+            <Card borderColor={colorMap.green} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title="Age Range" />
+              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
+                <div className={classNames(styles.rowContainer, styles.width100p)}>
+                  <BarChart
+                    type="horizontal"
+                    displayTooltips={true}
+                    labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+                    dataSets={[
+                      { label: 'Appointments Booked',
+                        color: ['yellow', 'red', 'green', 'blue'],
+                        data: [18, 25, 35, 45, 55 ] ,
+                      },
+                    ]
+                    }
+                  />
+                </div>
+              </div>
+            </Card>
+          </Col>
+
+
 
         </Row>
       </Grid>
