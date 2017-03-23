@@ -2,7 +2,7 @@
 const http = require('http');
 const globals = require('../config/globals');
 const app = require('./app');
-const setupSocketIO = require('./sockets');
+const setupSocketIO = require('../sockets');
 
 const server = http.createServer(app);
 
