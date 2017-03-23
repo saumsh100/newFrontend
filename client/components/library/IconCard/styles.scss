@@ -1,0 +1,33 @@
+
+@import "../../../ui.scss";
+
+.iconCard {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    height: 220px;
+    color: $color-white;
+    overflow: hidden;
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    &__count {
+        font-size: 6rem;
+        font-weight: 900;
+    }
+    &__title {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    &__icon {
+        position: absolute;
+        bottom: -25%;
+        transform: translateY(-25%);
+        right: -5%;
+        color: rgba($primary-lightgrey, .5);
+    }
+}

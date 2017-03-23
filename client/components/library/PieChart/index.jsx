@@ -9,6 +9,8 @@ export default function PieChart(props) {
     data,
     displayLegend,
     displayTooltips,
+    width,
+    height,
   } = props;
 
   const PieChartComponent = type === 'doughnut' ? Doughnut : Pie;
@@ -32,6 +34,10 @@ export default function PieChart(props) {
     tooltips,
   };
 
+  if (width && height) {
+    options.maintainAspectRatio = false;
+  }
+
   const newData = {
     labels,
     datasets: [
@@ -47,6 +53,8 @@ export default function PieChart(props) {
     <PieChartComponent
       data={newData}
       options={options}
+      width={width}
+      height={height}
     />
   );
 }

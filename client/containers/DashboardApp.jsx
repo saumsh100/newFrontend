@@ -19,7 +19,6 @@ function DashboardApp(props) {
     isCollapsed,
     setIsCollapsed,
   } = props;
-  
   let overlay = null;
   if (!isCollapsed) {
     overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
