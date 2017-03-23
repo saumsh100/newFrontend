@@ -51,6 +51,7 @@ class ServiceList extends Component {
   }
 
   render() {
+    console.log("RENDERING SERVICES TAB");
     const { services, serviceId, practitioners } = this.props;
 
     const selectedService = serviceId ? services.get(serviceId) : services.first();

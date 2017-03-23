@@ -10,6 +10,7 @@ function createInitialValues(practitionerIds, practitioners) {
 }
 
 export default function ServicePractitioners(props) {
+  console.log("RENDERING SERVICEPRACTITIONERS ");
 
   // TODO: in case of no practitioners render placeholder instead of the form
   // TODO: put Form in its own component

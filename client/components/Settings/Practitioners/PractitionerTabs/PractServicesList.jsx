@@ -1,47 +1,22 @@
 import React, {Component, PropTypes} from 'react';
-import { Form, Row, Col, Field, Toggle } from '../../../library';
-
-
+import { Field } from '../../../library';
 
 class PractServicesList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
-
-    this.state = {
-      defaultChecked: false,
-      value: '',
-    }
-    this.handleToggle = this.handleToggle.bind(this);
-  }
-
-  componentWillMount() {
-    const { service, setAllServices, serviceIds } = this.props;
-
-    let defaultChecked = !!((serviceIds.indexOf(service.get('id')) > -1 ) || setAllServices)
-
-    let value = defaultChecked ? 'add' : 'remove';
-
-    this.setState({ defaultChecked, value });
-  }
-
-  handleToggle(e) {
-    e.stopPropagation();
-    let value = this.state.value === 'add' ? 'remove' : 'add';
-    this.props.updateServiceIds(this.props.service.get('id'), value);
-    this.setState({ value });
   }
 
   render() {
     const { service } = this.props;
 
+    if (!service) {
+      return null;
+    }
+
     return (
-      <div style={{ display: 'flex' }}>
+      <div>
         {service.get('name')}
-        <Toggle
-          defaultChecked={this.state.defaultChecked}
-          value={this.state.value}
-          onChange={this.handleToggle}
-        />
+        <Field component="Toggle" name={service.get('id')} />
       </div>
     );
   }

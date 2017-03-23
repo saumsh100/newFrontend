@@ -83,7 +83,7 @@ class PractitionerTabs extends Component {
               key={practitioner.get('id')}
               serviceIds={serviceIds}
               practitioner={practitioner}
-              updateEntityRequest={this.props.updateEntityRequest}
+              updatePractitioner={this.updatePractitioner}
             />
           </Tab>
         </Tabs>

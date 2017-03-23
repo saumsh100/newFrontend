@@ -13,87 +13,67 @@ const sortServicesAlphabetical = (a, b) => {
   return 0;
 };
 
-
-const arraysEqual = (arr1, arr2) => {
-  if(arr1.length !== arr2.length)
-    return false;
-  for(let i = arr1.length; i--;) {
-    if(arr1[i] !== arr2[i])
-      return false;
-  }
-  return true;
+function createInitialValues(serviceIds, services) {
+  return services.map(s => {
+    return serviceIds.indexOf(s.get('id')) > -1;
+  }).toJS();
 }
 
 class PractitionerServices extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      setAllServices: false,
-      serviceIds: [],
-    }
-    this.updateServiceIds = this.updateServiceIds.bind(this);
-    this.setServices = this.setServices.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'services' });
-    this.setState({ serviceIds: this.props.serviceIds });
   }
 
-  updateServiceIds(id, option) {
+  handleSubmit(values) {
+    const { practitioner, updatePractitioner } = this.props;
+    const storeServiceIds = [];
 
-    const tempArr = this.state.serviceIds;
-    if (option === 'add') {
-      this.setState({ serviceIds: tempArr.concat(id) });
-    } else {
-      const index = _.without(tempArr, id);
-      this.setState({ serviceIds: index });
+    for (let id in values) {
+      if (values[id]) {
+        storeServiceIds.push(id);
+      }
     }
+    const modifiedPractitioner = practitioner.set('services', storeServiceIds);
+    updatePractitioner(modifiedPractitioner);
 
-  }
-
-  setServices() {
-    const {updateEntityRequest, practitioner} = this.props;
-    const modifiedPractitioner = practitioner.set('services', this.state.serviceIds);
-    updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner });
   }
 
   render() {
-    const { services, practitioner } = this.props;
+    const { serviceIds, services, practitioner } = this.props;
+
+    if (!practitioner) {
+      return null;
+    }
 
     let showComponent = null;
-    let disabled = arraysEqual(this.props.serviceIds, this.state.serviceIds);
 
     if (services) {
       const filteredServices = services.sort(sortServicesAlphabetical);
+      const initialValues = createInitialValues(serviceIds, services);
+
       showComponent = (
-        filteredServices.toArray().map((service) => {
-          return (
-            <div>
-                <PractServicesList
-                  key={practitioner.get('id')}
-                  service={service}
-                  serviceIds={this.state.serviceIds}
-                  setAllServices={this.state.setAllServices}
-                  updateServiceIds={this.updateServiceIds}
-                />
-            </div>
-          );
-        }));
+        <Form form={`${practitioner.get('id')}services`} onSubmit={this.handleSubmit} initialValues={initialValues}>
+          {filteredServices.toArray().map((service, index) => {
+            return (
+              <PractServicesList
+                key={`${practitioner.get('id')}${index}`}
+                service={service}
+              />
+            );
+          })}
+        </Form>
+      );
     }
 
     return (
       <div>
         {showComponent}
-        <Button
-          disabled={disabled}
-          raised
-          icon="floppy-o"
-          onClick={this.setServices}
-        >
-          Save
-        </Button>
       </div>
     );
   }
