@@ -101,10 +101,9 @@ class Social extends Component {
                     <span className={styles.byGender__stats__percentage_right} >Male</span>
                   </div>
                 </div>
-                <div className={styles.width200, styles.pieChart}>
+                <div className={styles.pieChartWrapper}>
                   <PieChart
-                  width={171}
-                  height={85}
+
                   data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
                 />
                 </div>

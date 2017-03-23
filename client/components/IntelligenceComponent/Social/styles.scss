@@ -137,7 +137,6 @@
 }
 
 
-
 .byGender {
   display: flex;
   flex-direction: row;
@@ -193,4 +192,57 @@
     }
   }
 
+}
+
+.pieChartWrapper {
+  width: 50%;
+  hegith: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+@media(max-width: 474px) {
+  .pieChartWrapper {
+    width: 100%
+  }
+
+
+  .byGender {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+    
+    &__stats {
+      flex-direction: row;
+      align-items: initial;
+      width: 100%;
+
+      &__percentage {
+        width: auto;
+        align-items: center;
+        margin-bottom: -100px;
+        width: auto;
+
+      &_left:first-child {
+        font-size: 42px;
+        margin-left: 10px;
+      }
+      &_left:last-child {
+        font-size: 24px;
+        text-align: center
+      }
+
+        &_right:first-child {
+          font-size: 42px;
+        }
+        &_right:last-child {
+          font-size: 24px;
+          text-align: center
+        }
+      }
+    }
+  }
 }
