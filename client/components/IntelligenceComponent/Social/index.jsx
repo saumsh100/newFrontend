@@ -1,8 +1,13 @@
 import React, { PropTypes, Component } from "react";
-import { Card, Col, Grid, Row, DashboardStats} from "../../library";
+import { Card, Col, Grid, Row, DashboardStats, CardHeader } from "../../library";
+import BackgroundIcon from "../../library/BackgroundIcon";
 import colorMap from "../../library/util/colorMap";
 import classNames from 'classnames';
 import styles from "./styles.scss";
+
+
+console.log("BackgroundIcon")
+console.log(BackgroundIcon)
 
 class Social extends Component {
   render() {
@@ -28,6 +33,34 @@ class Social extends Component {
             <DashboardStats data={data} />
           </Col>
           </Col>
+
+
+          <Col className={styles.padding} xs={12} md={12}>
+            <Card borderColor={colorMap.darkblue} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title="Facebook activity overview" />
+              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
+                <div className={classNames(styles.rowContainer, styles.width100p, styles.spaceAround)}>
+                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                    <BackgroundIcon icon="facebook" backgroundClassName="backgroundColorGrey" />
+                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
+                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Impressions</span>
+                  </div>
+                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                    <BackgroundIcon icon="heart" backgroundClassName="backgroundColorDarkBlue" />
+                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
+                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Engagements</span>
+                  </div>
+                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                    <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
+                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
+                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Clicks</span>
+                  </div>
+                  
+                </div>
+              </div>
+            </Card>
+          </Col>
+
         </Row>
       </Grid>
     );

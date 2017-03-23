@@ -29,6 +29,7 @@ import IconCard from './IconCard';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 import { BigCommentBubble } from './BigCommentBubble';
+import BackgroundIcon from './BackgroundIcon';
 
 import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
@@ -37,6 +38,7 @@ export {
   AppBar,
   Avatar,
   BarChart,
+  BackgroundIcon,
   Button,
   BigCommentBubble,
   Card,

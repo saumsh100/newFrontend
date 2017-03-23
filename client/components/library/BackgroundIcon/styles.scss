@@ -1,0 +1,30 @@
+.bckGround {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  background: yellow;
+  border-radius: 20px;
+  width: 100px;
+  height: 100px;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.icon {
+  font-size: 6em;
+  margin-top: 20px;
+  color: white;
+}
+
+.backgroundColorGrey {
+  background-color: #B4B4B4;
+}
+
+.backgroundColorDarkBlue {
+  background-color: #3A5199;
+}
+
+.backgroundColorDarkGrey {
+  background-color: #2E3845;
+}
