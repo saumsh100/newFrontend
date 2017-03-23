@@ -118,7 +118,6 @@ class Dashboard extends React.Component {
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
-      icon: "envelope",
       appointment: {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
@@ -132,7 +131,6 @@ class Dashboard extends React.Component {
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
-      icon: "comment",
       appointment: {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
@@ -146,7 +144,6 @@ class Dashboard extends React.Component {
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
-      icon: "phone",
       appointment: {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
@@ -160,7 +157,6 @@ class Dashboard extends React.Component {
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
-      icon: "envelope",
       appointment: {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
@@ -174,7 +170,6 @@ class Dashboard extends React.Component {
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
-      icon: "comment",
       appointment: {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
@@ -259,24 +254,24 @@ class Dashboard extends React.Component {
                xs={12} md={4}>
             <TopServices className={styles.dashboard__body_table}
                          borderColor={colorMap.blue}
-                         cardCount="7"
+                         cardCount="13"
                          cardTitle="Unconfirmed Referrals"/>
           </Col>
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
                 <RemindersList data={DataRemindersList}
                                borderColor={colorMap.blue}
                                cardCount="8"
                                cardTitle="Reminders" />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
                 <RemindersList data={DataRemindersList}
                                borderColor={colorMap.blue}
                                cardCount="2"
                                cardTitle="Recalls" />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
                 <RemindersList data={DataRemindersList2}
                                borderColor={colorMap.blue}
                                cardCount="5"

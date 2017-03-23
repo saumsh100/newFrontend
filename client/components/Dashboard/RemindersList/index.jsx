@@ -48,9 +48,6 @@ class RemindersList extends Component {
                   </div>
                 </div>
 
-
-
-
               return (
                 <ListItem className={styles.patients__item}>
                   <img className={styles.patients__item_img} src={obj.img} alt=""/>

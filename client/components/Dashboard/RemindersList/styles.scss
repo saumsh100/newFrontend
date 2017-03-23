@@ -81,7 +81,6 @@
       }
     }
     &_right {
-      margin-left: 15px;
       text-align: right;
       @media screen and (max-width: 450px) {
         text-align: center;
@@ -107,13 +106,13 @@
     }
     &_icon {
       cursor: pointer;
-      display: flex;
-      position: relative;
       color: $primary-darkgrey;
-      align-items: center;
-      right: -20px;
+      display: flex;
+      position: absolute;
+      right: 10px;
       @media screen and (max-width: 450px) {
         margin-top: 5px;
+        position: relative;
         right: 0;
       }
       &:hover {
