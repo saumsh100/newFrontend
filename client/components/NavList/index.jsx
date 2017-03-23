@@ -102,7 +102,7 @@ export default function NavList({ location, isCollapsed }) {
     <div className={styles.navListWrapper}>
       <Nav>
         <SingleNavItem path="/" icon="tachometer" label="Dashboard"  />
-        <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" disabled />
+        <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" />
         <MultiNavItem path="/schedule" icon="calendar" label="Schedule">
           <SubNavItem path="/schedule/calendar" label="Calendar View" />
           <SubNavItem path="/schedule/appointments" label="Appointments List" disabled />

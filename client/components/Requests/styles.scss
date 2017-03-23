@@ -6,14 +6,13 @@
 }
 
 .requestCard {
-  border-top: $card-border-size #ffc45a;
   max-height: 335px;
-  @media screen and (max-width: $medium-screen-width) {
-    width: 60%;
+  display: table;
+  width: 100%;
+  &__wrapper {
   }
-
-  @media screen and (min-width: $medium-screen-width) {
-    width: 330px;
+  @media screen and (min-width: 760px){
+    min-width: 320px;
   }
 }
 
@@ -22,7 +21,6 @@
 }
 
 .requestList {
-  height: 285px;
   border-top: 1px solid;
   border-top-color: $primary-grey;
 }
@@ -43,7 +41,9 @@
   border-left-color: #bfbfbf;
   text-align: left;
   @extend .font-small-grey;
-
+  @media screen and (max-width: 350px){
+    max-width: 170px;
+  }
   &__time{
     @extend .font-medium-dark;
   }

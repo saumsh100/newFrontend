@@ -1,0 +1,378 @@
+@import "../../ui.scss";
+
+.intelligence {
+  &__header {
+    &_title {
+      display: flex;
+      align-items: center;
+      height: 60px;
+      background: $primary-white;
+      padding-left: 30px;
+      margin-bottom: 30px;
+      font-size: $medium-size;
+      b {
+        padding-left: 5px;
+      }
+    }
+    &_cards {
+      cursor: pointer;
+      margin-bottom: 20px;
+      div:not(:last-child) {
+        margin-right: 10px;
+        flex: 1;
+      }
+    }
+  }
+  &__patientList {
+    &_item {
+      padding: 5px;
+    }
+  }
+}
+.padding {
+  padding: 5px;
+}
+
+.cardHeader {
+  padding: 20px;
+}
+.menContainer {
+  &__item {
+    &_text {
+      font-size: 50px !important;
+    }
+    @media screen and (max-width: 450px) {
+      margin-top: 15px;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    display: flex;
+    flex-direction: column !important;
+  }
+}
+.visitors {
+  &__container {
+    @media screen and (max-width: 450px){
+      display: flex;
+      flex-direction: column !important;
+      align-items: center !important;
+    }
+  }
+  &__text {
+    @media screen and (max-width: 450px){
+      margin-top: 5px!important;
+      font-size: 32px!important;
+    }
+  }
+}
+.websiteVisitorConversions {
+  padding: 10px;
+
+  &__mainContainer {
+    flex-direction: column;
+    display: flex;
+    height: 400px;
+    justify-content: center;
+  }
+
+  &__rowContainer {
+    flex-direction: row;
+    margin: 60px 0px 60px 0px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__row {
+    justify-content: center;
+    flex-direction: column;
+    width: 220px;
+    display: flex;
+  }
+
+  &__row1 {
+    color: #2EC4A7;
+    font-size: 82px;
+    font-weight: 800;
+  }
+
+  &__row2 {
+    color: #000000;
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+
+  &__containerBottom {
+    display: flex;
+    flexDirection: row;
+    justifyContent: space-around;
+  }
+
+  &__columnContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200;
+  }
+
+}
+
+.columnContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.alignItemsCenter {
+  alignItems: center;
+}
+
+.alignFlexEnd {
+  align-items: flex-end;
+}
+
+
+.rowContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.width100p {
+  width: 100%;
+}
+
+.width200 {
+  width: 200px;
+}
+
+.height400 {
+  height: 400px;
+}
+
+.spaceAround {
+  justify-content: space-around;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+
+.font24 {
+  font-size: 24;
+}
+
+.font48  {
+  font-size: 48px;
+}
+
+.font64 {
+  font-size: 64px;
+}
+
+.font48 {
+  font-size: 48px;
+}
+
+
+.font54 {
+  font-size: 54px;
+}
+
+.font56 {
+  font-size: 56px;
+}
+
+.font82 {
+  font-size: 82px;
+}
+
+.fontWeight200 {
+  font-weight: 200;
+}
+
+.fontWeight800 {
+  font-weight: 800;
+}
+
+.marginTop30 {
+  margin: 30px 0px 0px 0px;
+}
+
+.colorBlack {
+  color: #000000;
+}
+
+.colorGreen {
+  color: #2EC4A7;
+}
+
+.colorBlue {
+  color: #8FBBD6;
+}
+
+.colorMan {
+  color: #2CC4A7;
+}
+
+.colorWoman {
+  color: #8FBBD6;
+}
+
+.colorTablet {
+  color: #8FBBD6;
+}
+
+.colorMobile {
+  color: #FF705A;
+}
+
+.colorDesktop {
+  color: #2EC4A7;
+}
+
+.textAlignRight {
+  text-align: right;
+}
+
+.byGender {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 400px;
+
+  &__stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    
+    &__percentage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 200px;
+      align-items: flex-end;
+
+      &_left {
+        text-align: right
+      }
+
+      &_left:first-child {
+        color: #2EC4A7;
+        font-size: 64px;
+        font-weight: 800;
+        
+      }
+
+      &_left:last-child {
+        color: #000000;
+        font-size: 24px;
+      }
+
+      &_right {
+        text-align: right;
+      }
+
+      &_right:first-child {
+        color: #8FBBD6;
+        font-size: 64px;
+        font-weight: 800; 
+      }
+
+      &_right:last-child {
+        font-size: 24px;
+        color: #000000;
+      }
+
+
+
+    }
+  }
+
+}
+
+.pieChartWrapper {
+  width: 50%;
+  hegith: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+@media(max-width: 474px) {
+  .pieChartWrapper {
+    width: 100%
+  }
+
+
+  .byGender {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+    
+    &__stats {
+      flex-direction: row;
+      align-items: initial;
+      width: 100%;
+
+      &__percentage {
+        width: auto;
+        align-items: center;
+        margin-bottom: -100px;
+        width: auto;
+
+      &_left:first-child {
+        font-size: 42px;
+        margin-left: 10px;
+      }
+      &_left:last-child {
+        font-size: 24px;
+        text-align: center
+      }
+
+        &_right:first-child {
+          font-size: 42px;
+        }
+        &_right:last-child {
+          font-size: 24px;
+          text-align: center
+        }
+      }
+    }
+  }
+
+
+  .bussiestTimeOfWeekWrapper {
+    flex-direction: column !important;
+    align-items: center;
+    margin-top: -100px !important;
+    justify-content: center;
+  }
+
+  .visitorsContainer {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .visitorsMainContent {
+    flex-direction: row;
+    margin-top: 50px;
+  }
+
+  .voteText {
+    width: auto;
+  }
+
+  ul li {
+    max-width: none !important;
+  }
+
+
+}
