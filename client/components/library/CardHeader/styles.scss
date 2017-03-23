@@ -6,6 +6,9 @@
   align-items: center;
   padding-top: 0.5em;
   position: relative;
+  @media screen and (max-width: 450px){
+    flex-direction: column;
+  }
 }
 
 .displayFlex {

@@ -6,10 +6,11 @@
 }
 
 .requestCard {
-  border-top: $card-border-size #ffc45a;
   max-height: 335px;
   display: table;
   width: 100%;
+  &__wrapper {
+  }
   @media screen and (min-width: 760px){
     min-width: 320px;
   }
@@ -20,7 +21,6 @@
 }
 
 .requestList {
-  height: 285px;
   border-top: 1px solid;
   border-top-color: $primary-grey;
 }

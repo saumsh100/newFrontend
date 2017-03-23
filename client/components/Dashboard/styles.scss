@@ -5,14 +5,18 @@
 .dashboard {
   width: 100%;
   &__header {
+    padding: 5px 20px 0;
+    @media screen and (max-width: 450px) {
+      padding: 5px 10px 0;
+    }
     &_title {
       display: flex;
       align-items: center;
-      height: 60px;
+      height: 35px;
       background: $primary-white;
       width: 100%;
       padding-left: 30px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-size: $medium-size;
       b {
         padding-left: 5px;
@@ -27,14 +31,30 @@
       }
     }
   }
+  &__body {
+    padding: 0 15px 45px 15px;
+    &_table {
+      height: 640px;
+    }
+    &_comments {
+      height: 640px;
+    }
+    &_request {
+      overflow: auto;
+      min-height: 635px;
+    }
+    @media screen and (max-width: 450px) {
+      padding: 0 5px 45px 5px;
+    }
+  }
   &__patientList {
     &_item {
       min-width: 400px;
-      padding: 5px;
-      @media screen and (max-width: 400px){
-        min-width: 320px;
+      padding: 0 5px;
+      @media screen and (max-width: 400px) {
+        min-width: 300px;
       }
-      @media screen and (max-width: 300px){
+      @media screen and (max-width: 300px) {
         min-width: auto;
       }
     }
@@ -43,16 +63,16 @@
     padding: 5px;
   }
 }
-.primaryColor {
+.primaryColor, .fa-phone {
   background: $primary-color;
 }
-.primaryBlue {
+.primaryBlue, .fa-phone {
   background: $primary-blue;
 }
-.primaryGreen {
+.primaryGreen, .fa-phone {
   background: $primary-green;
 }
-.primaryYellow {
+.primaryYellow, .fa-phone {
   background: $primary-yellow;
 }
 
@@ -72,5 +92,9 @@
   width: 100%;
 }
 .padding {
-  padding: 5px;
+  padding: 0 5px;
+  margin-bottom: 30px;
+  @media screen and (max-width: 900px) {
+    margin-bottom: 15px;
+  }
 }

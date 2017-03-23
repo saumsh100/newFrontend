@@ -7,6 +7,8 @@ import fetchReputationData from "../../thunks/fetchReputationData";
 import fetchReviewsData from "../../thunks/fetchReviewsData";
 import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble  } from "../library";
 import RemindersList from "./RemindersList";
+import Table from './Table';
+import TopServices from './TopServices';
 import colorMap from "../library/util/colorMap";
 import styles from "./styles.scss";
 
@@ -57,62 +59,76 @@ class Dashboard extends React.Component {
       createdAt: moment().subtract(10, 'days').fromNow()
     }];
     const DataRemindersList = [{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
+      img: "images/patient_1.png",
+      name: "Bobby Okelley",
+      age: "53",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Monroe_Jacobs@gmail.com",
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
       icon: "comment"
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
+      img: "images/patient_2.png",
+      name: "Tesha Ferrer",
       age: "24",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Darrel_Rodriguez29@hotmail.com",
       status: "Seminder Sent",
       date: "22/11/2000",
       time: "18:00pm",
       icon: "phone"
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
+      img: "images/patient_3.png",
+      name: "Ernestina Munsterman",
       age: "19",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Ressie30@hotmail.com",
       status: "Seminder Sent",
       date: "01/13/1988",
       time: "6:32pm",
       icon: "envelope"
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "19",
+      img: "images/patient_4.png",
+      name: "Bryan Simek",
+      age: "33",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Amya.Turner63@hotmail.com",
       status: "Seminder Sent",
       date: "01/13/1988",
       time: "6:32pm",
-      icon: "envelope"
+      icon: "comment"
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
+      img: "images/patient_5.png",
+      name: "Astrid Spady",
       age: "19",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Kaia81@gmail.com",
       status: "Seminder Sent",
       date: "01/13/1988",
       time: "6:32pm",
       icon: "phone"
     }];
     const DataRemindersList2 = [{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
+      img: "images/patient_6.png",
+      name: "Isabel Stapleton",
+      age: "11",
+      phone: "123 456 7890",
+      email: "Maria_Predovic@gmail.com",
+      status: "Seminder Sent",
+      date: "22/11/1988",
+      time: "4:00pm",
+      icon: "envelope",
+      appointment: {
+        days: [ "Morning weekdays", "Arternoon"  ],
+        except: [ moment()._d, moment()._d ]
+      }
+    },{
+      img: "images/patient_7.png",
+      name: "Mathilde Heft",
       age: "2",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Asia.Nikolaus@gmail.com",
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
@@ -122,53 +138,39 @@ class Dashboard extends React.Component {
         except: [ moment()._d, moment()._d ]
       }
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
+      img: "images/patient_8.png",
+      name: "Brock Lundblad",
+      age: "26",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Macie4@hotmail.com",
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
-      icon: "comment",
+      icon: "phone",
       appointment: {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
       }
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
+      img: "images/patient_9.png",
+      name: "Candie Shubert",
+      age: "27",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Ayla.Heller68@gmail.com",
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
-      icon: "comment",
+      icon: "envelope",
       appointment: {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
       }
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
+      img: "images/patient_10.png",
+      name: "Diana Shisler",
+      age: "10",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      status: "Seminder Sent",
-      date: "22/11/1988",
-      time: "4:00pm",
-      icon: "comment",
-      appointment: {
-        days: [ "Morning weekdays", "Arternoon"  ],
-        except: [ moment()._d, moment()._d ]
-      }
-    },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
-      phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
+      email: "Narciso.Will@hotmail.com",
       status: "Seminder Sent",
       date: "22/11/1988",
       time: "4:00pm",
@@ -193,48 +195,42 @@ class Dashboard extends React.Component {
 
 
     const data = [
-      {count: 12, title: "Appointment Booked", icon: "calendar", size: 10, color: 'primaryColor' },
-      {count: 64, title: "Appointment Booked", icon: "user", size: 10, color: 'primaryBlue' },
-      {count: 16, title: "Appointment Booked", icon: "bullhorn", size: 10, color: 'primaryGreen' },
-      {count: 23, title: "Appointment Booked", icon: "star", size: 10, color: 'primaryYellow' },
+      {count: 10, title: "Appointment Booked", icon: "calendar", size: 6, color: 'primaryColor' },
+      {count: 12, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
+      {count: 13, title: "Unconfirmed Refferals", icon: "bullhorn", size: 6, color: 'primaryGreen' },
+      {count: 16, title: "Unresponded Reviews", icon: "star", size: 6, color: 'primaryYellow' },
     ];
 
 
     return (
       <Grid className={styles.dashboard}>
-        <Row>
-          <Col className={styles.dashboard__header} xs={12}>
+        <Row className={styles.dashboard__header}>
+          <Col xs={12}>
             <Card className={styles.dashboard__header_title}>
               Welcome Back, <b>Corina</b>
             </Card>
-            <DashboardStats data={data} />
           </Col>
         </Row>
-        <Row>
-          <Col xs={12} sm={12} >
-            <Row center="xs"  className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList data={DataRemindersList}
-                               borderColor={colorMap.blue}
-                               cardCount="8"
-                               cardTitle="Reminders" />
-              </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList data={DataRemindersList}
-                               borderColor={colorMap.blue}
-                               cardCount="2"
-                               cardTitle="Recalls" />
-              </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
-                <RemindersList data={DataRemindersList2}
-                               borderColor={colorMap.blue}
-                               cardCount="5"
-                               cardTitle="Digital Waitlist" />
-              </Col>
-            </Row>
+        <Row className={styles.dashboard__body}>
+          <Col xs={12}>
+            <DashboardStats data={data} />
           </Col>
-          <Col className={styles.padding} xs={12} md={8}>
-            <Card borderColor={colorMap.green}>
+          <Col className={styles.padding}
+               xs={12} md={8}>
+            <Table className={styles.dashboard__body_table}
+                   borderColor={colorMap.blue}
+                   cardCount="7"
+                   cardTitle="Phone / SMS / Email"/>
+          </Col>
+          <Col className={styles.padding}
+               xs={12} sm={5} md={4}>
+            <RequestsContainer className={styles.dashboard__body_request}
+                               borderColor={colorMap.yellow}/>
+          </Col>
+          <Col className={styles.padding}
+               xs={12} md={8}>
+            <Card className={styles.dashboard__body_comments}
+                  borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
               <div styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
                 <div styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -259,8 +255,34 @@ class Dashboard extends React.Component {
               </div>
             </Card>
           </Col>
-          <Col xs={12} sm={4} className={styles.dashboard__requestContainer}>
-            <RequestsContainer />
+          <Col className={styles.padding}
+               xs={12} md={4}>
+            <TopServices className={styles.dashboard__body_table}
+                         borderColor={colorMap.blue}
+                         cardCount="7"
+                         cardTitle="Unconfirmed Referrals"/>
+          </Col>
+          <Col xs={12}>
+            <Row center="xs" className={styles.dashboard__patientList}>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
+                <RemindersList data={DataRemindersList}
+                               borderColor={colorMap.blue}
+                               cardCount="8"
+                               cardTitle="Reminders" />
+              </Col>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
+                <RemindersList data={DataRemindersList}
+                               borderColor={colorMap.blue}
+                               cardCount="2"
+                               cardTitle="Recalls" />
+              </Col>
+              <Col className={styles.dashboard__patientList_item} xs={12} sm={6} md={4}>
+                <RemindersList data={DataRemindersList2}
+                               borderColor={colorMap.blue}
+                               cardCount="5"
+                               cardTitle="Digital Waitlist" />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Grid>
