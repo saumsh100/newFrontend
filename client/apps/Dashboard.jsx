@@ -12,6 +12,7 @@ import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
 import DashboardRoutes from '../routes/Dashboard';
 import configure from '../store';
+import time from '../../server/util/time';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
 import '../styles/dashboard.scss';
@@ -42,6 +43,7 @@ window.store = store;
 window.browserHistory = history;
 window.socket = socket;
 window.moment = moment;
+window.time = time;
 window._ = _;
 
 document.addEventListener('DOMContentLoaded', () => {

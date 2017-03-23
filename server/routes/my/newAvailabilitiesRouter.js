@@ -2,7 +2,7 @@
 const availabilitiesRouter = require('express').Router();
 const isEmpty = require('lodash/isEmpty');
 const Service = require('../../models/Service');
-// const Practitioner = require('../../models/Practitioner');
+const Practitioner = require('../../models/Practitioner');
 const StatusError = require('../../util/StatusError');
 const loaders = require('../util/loaders');
 
