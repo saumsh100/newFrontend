@@ -1,6 +1,28 @@
 @import "../../../ui";
 
+:global {
+  .fa-envelope {
+    color: $primary-blue;
+    &:hover {
+      color: darken($primary-blue, 5%);
+    }
+  }
+  .fa-phone {
+    color: $primary-yellow;
+    &:hover {
+      color: darken($primary-yellow, 5%);
+    }
+  }
+  .fa-comment {
+    color: $primary-color;
+    &:hover {
+      color: darken($primary-color, 5%);
+    }
+  }
+}
+
 .reminders {
+  height: 610px;
   margin-bottom: 20px;
   &__header {
     padding: 0 45px 0 15px;
@@ -44,14 +66,21 @@
       }
     }
     &_left {
-      text-align: left;
       @media screen and (max-width: 450px) {
-        text-align: center;
         margin-top: 10px;
+      }
+      div {
+        max-width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        text-overflow: ellipsis;
+        @media screen and (max-width: 450px) {
+          text-align: center;
+        }
       }
     }
     &_right {
-      margin-left: 15px;
       text-align: right;
       @media screen and (max-width: 450px) {
         text-align: center;
@@ -72,19 +101,18 @@
     }
     &_img {
       width: 44px;
-      height: 44px;
       border-radius: 50%;
       margin-right: 10px;
     }
     &_icon {
       cursor: pointer;
-      display: flex;
-      position: relative;
       color: $primary-darkgrey;
-      align-items: center;
-      right: -20px;
+      display: flex;
+      position: absolute;
+      right: 10px;
       @media screen and (max-width: 450px) {
         margin-top: 5px;
+        position: relative;
         right: 0;
       }
       &:hover {

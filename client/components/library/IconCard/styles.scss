@@ -6,7 +6,7 @@
     position: relative;
     align-items: center;
     justify-content: center;
-    height: 220px;
+    height: 130px;
     color: $color-white;
     overflow: hidden;
     &__wrapper {
@@ -16,11 +16,11 @@
         flex-direction: column;
     }
     &__count {
-        font-size: 6rem;
+        font-size: 40px;
         font-weight: 900;
     }
     &__title {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 600;
     }
     &__icon {

@@ -476,6 +476,14 @@ const SEEDS = {
     },
   ],
 
+  PractitionerTimeOff: [
+    {
+      practitionerId,
+      startDate: new Date(2017, 2, 23, 0, 0),
+      endDate: new Date(2017, 2, 23, 0, 0),
+    },
+  ],
+
   Practitioner: [
     {
       id: practitionerId,
