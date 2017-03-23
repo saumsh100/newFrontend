@@ -38,19 +38,19 @@ class Social extends Component {
           <Col className={styles.padding} xs={12} md={12}>
             <Card borderColor={colorMap.darkblue} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="Facebook activity overview" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
-                <div className={classNames(styles.rowContainer, styles.width100p, styles.spaceAround)}>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+              <div className={styles.facebookActivity} >
+                <div className={styles.facebookActivity__container} >
+                  <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
                     <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
                     <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Impressions</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                  <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="heart" backgroundClassName="backgroundColorDarkBlue" />
                     <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
                     <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Engagements</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                  <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
                     <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
                     <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Clicks</span>
@@ -65,9 +65,9 @@ class Social extends Component {
           <Col className={styles.padding} xs={12} md={12}>
             <Card borderColor={colorMap.darkblue} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="Twitter activity overview" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
-                <div className={classNames(styles.rowContainer, styles.width100p, styles.spaceAround)}>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+              <div className={styles.facebookActivity} >
+                <div className={styles.facebookActivity__container} >
+                  <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
                     <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
                     <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Impressions</span>
