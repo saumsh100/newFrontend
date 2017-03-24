@@ -34,42 +34,44 @@ export class Search extends Component {
     const {
       className,
       searchClassName,
+      calendar,
     } = this.props;
     const { searchModeActive } = this.state;
-    const classes = classNames(styles.search, searchClassName);    
+    const classes = classNames(styles.search, searchClassName);
     return (
       <div className={classes}>
         {!searchModeActive && <Icon size={1.4} icon="search" onClick={this.toggleModal} />}
-        
+
         { searchModeActive ?
-          <Input 
+          <Input
             placeholder="Search..."
             className={styles.search__searchInput}
             autofocus
             min
-            refCallback={(input) => { input && input.focus(); }} 
+            refCallback={(input) => { input && input.focus(); }}
           />
-        : <span className={styles.search__text} onClick={this.toggleSearchMode}>Search... </span>  }
-        <Icon size={1.4} icon="calendar" onClick={this.toggleModal} />
-          <Modal
-            active={this.state.displayModal}
-            onEscKeyDown={this.toggleModal}
-            onOverlayClick={this.toggleModal}
-          >
-            <Calendar
-            />
-
-          </Modal>
+          : <span className={styles.search__text} onClick={this.toggleSearchMode}>Search... </span>  }
+        {!calendar ?
+          <div>
+            <Icon size={1.4} icon="calendar" onClick={this.toggleModal} />
+            <Modal
+              active={this.state.displayModal}
+              onEscKeyDown={this.toggleModal}
+              onOverlayClick={this.toggleModal}>
+              <Calendar/>
+            </Modal>
+          </div>
+          : ''
+        }
       </div>
-      
     );
-  }  
+  }
 
 }
-Icon.defaultProps = {
-  size: 1
+Search.defaultProps = {
+  size: 1,
 };
-Icon.propTypes = {
+Search.propTypes = {
   icon: PropTypes.string.isRequired,
   size: PropTypes.number,
 };
