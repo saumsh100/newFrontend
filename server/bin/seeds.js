@@ -25,7 +25,7 @@ const saltRounds = 10;
 const oneHour = 1 * 60 * 60;
 const recentStartTime = r.now().add(oneHour);
 
-const accountId = "2aeab035-b72c-4f7a-ad73-09465cbf5654";
+const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
 const accountId2 = uuid();
 
 const justinUserId = uuid();
@@ -40,7 +40,7 @@ const sergeyPatientId = uuid();
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const practitionerId3 = uuid();
-const practitionerId4 = uuid();
+const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
 
 const chairId = uuid();
 
@@ -58,7 +58,7 @@ const sergeyChatId = uuid();
 
 const weeklyScheduleId = uuid();
 const weeklyScheduleId2 = uuid();
-const weeklyScheduleId3 = uuid();
+const weeklyScheduleId3 = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 
 const hour8 = new Date(1970, 1, 1, 8, 0);
 const hour5 = new Date(1970, 1, 1, 17, 0);
@@ -477,10 +477,26 @@ const SEEDS = {
   ],
 
   PractitionerTimeOff: [
+    // For tests!
     {
-      practitionerId,
-      startDate: new Date(2017, 2, 23, 0, 0),
-      endDate: new Date(2017, 2, 23, 0, 0),
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 19, 0, 0), // sunday (2 days)
+      endDate: new Date(2017, 2, 20, 23, 59), // monday
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 22, 0, 0), // wednesday (1 day)
+      endDate: new Date(2017, 2, 22, 23, 59), // wednesday
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 24, 0, 0), // friday (3 days)
+      endDate: new Date(2017, 2, 26, 23, 59), // sunday
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 28, 0, 0), // tuesday (1 day)
+      endDate: new Date(2017, 2, 28, 23, 59), // tuesday
     },
   ],
 

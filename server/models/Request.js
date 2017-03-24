@@ -11,13 +11,13 @@ const Request = createModel('Request', {
   patientId: type.string().uuid(4).required(),
   accountId: type.string().uuid(4).required(),
   serviceId: type.string().uuid(4).required(),
-  practitionerId: type.string().uuid(4).required(),
+  practitionerId: type.string().uuid(4),
   chairId:  type.string().uuid(4),
   isCancelled: type.boolean().default(false),
-  customBufferTime: type.number().integer(),
-  isSplit: type.boolean(),
-  splitAppointments: [type.string().uuid(4)],
-  isParent: type.boolean(),
+  // customBufferTime: type.number().integer(),
+  // isSplit: type.boolean(),
+  // splitAppointments: [type.string().uuid(4)],
+  // isParent: type.boolean(),
 });
 
 module.exports = Request;

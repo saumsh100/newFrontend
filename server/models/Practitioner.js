@@ -1,10 +1,9 @@
 
 const moment = require('moment');
-const thinky = require('../config/thinky');
+const { type, r } = require('../config/thinky');
 const createModel = require('./createModel');
 const Account = require('./Account');
 const WeeklySchedule = require('./WeeklySchedule');
-const type = thinky.type;
 
 const Practitioner = createModel('Practitioner', {
   accountId: type.string().uuid(4).required(),
@@ -39,6 +38,27 @@ Practitioner.define('getWeeklySchedule', function () {
 /**
  *
  */
+Practitioner.define('getTimeOff', function (startDate, endDate) {
+  const self = this;
+  return new Promise((resolve, reject) => {
+    return Practitioner.get(self.id).getJoin({
+      timeOff: {
+        _apply: (sequence) => {
+          return sequence
+            .filter((t) => {
+              return t('startDate').during(startDate, endDate).or(
+                t('endDate').during(startDate, endDate)
+              );
+            });
+        },
+      },
+    }).then(p => resolve(p.timeOff));
+  });
+});
+
+/**
+ *
+ */
 Practitioner.define('getAvailableTimeIntervals', function (startDate, endDate) {
   const self = this;
   return new Promise((resolve, reject) => {
@@ -50,7 +70,6 @@ Practitioner.define('getAvailableTimeIntervals', function (startDate, endDate) {
       });
   });
 });
-
 
 
 module.exports = Practitioner;
