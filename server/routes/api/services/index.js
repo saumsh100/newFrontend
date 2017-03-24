@@ -20,6 +20,7 @@ servicesRouter.get('/', checkPermissions('services:read'), (req, res, next) => {
       });
     
   }
+
   Service.run()
     .then(services => res.send(normalize('services', services)))
     .catch(next);
@@ -38,7 +39,7 @@ servicesRouter.post('/', checkPermissions('services:create'), (req, res, next) =
 servicesRouter.get('/:serviceId', (req, res, next) => {
   const { serviceId } = req.params;
   Service.get(serviceId).run()
-    .then(service => res.send(normalize(service, servicesSchema)))
+    .then(service => res.send(normalize('service', service)))
     .catch(next);
 });
 
@@ -48,7 +49,7 @@ servicesRouter.put('/:serviceId', checkPermissions('services:update'), (req, res
     .catch(next);
 });
 
-servicesRouter.delete('/:serviceId',checkPermissions('services:delete'), (req, res, next) => {
+servicesRouter.delete('/:serviceId', checkPermissions('services:delete'), (req, res, next) => {
   return req.service.delete()
     .then(() => {
       res.sendStatus(204);

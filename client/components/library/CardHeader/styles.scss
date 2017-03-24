@@ -1,5 +1,7 @@
 
-@import '../../../ui.scss';
+//@import '../../../ui.scss';
+@import '../../../styles/dashboard.scss';
+
 .cardHeader {
   box-sizing: border-box;
   display: flex;
@@ -19,15 +21,15 @@
 
 .cardCount {
   display: inline-block;
+  font-family: "Gotham Medium";
   font-size: 36px;
-  font-weight: 900;
+  font-weight: 800;
   padding-right: 5px;
   color: $primary-dark;
 }
 
 .title {
   display: inline-block;
-  font-size: 16px;
-  font-weight: 200;
-  color: $primary-dark;
+  @extend .font-header-title;
+
 }

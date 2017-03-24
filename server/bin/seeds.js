@@ -5,6 +5,7 @@ const moment = require('moment');
 const { r } = require('../config/thinky');
 const fs = require('fs');
 const seedDatabase = require('../util/seedDatabase');
+const { time } = require('../util/time');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
@@ -38,10 +39,14 @@ const sergeyPatientId = uuid();
 
 const practitionerId = uuid();
 const practitionerId2 = uuid();
+const practitionerId3 = uuid();
+const practitionerId4 = uuid();
+
 const chairId = uuid();
 
 const serviceId = uuid();
 const serviceId2 = uuid();
+const cleanupServiceId = uuid();
 
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
@@ -54,14 +59,6 @@ const sergeyChatId = uuid();
 const weeklyScheduleId = uuid();
 const weeklyScheduleId2 = uuid();
 const weeklyScheduleId3 = uuid();
-
-const mondayHoursId = uuid();
-const tuesdayHoursId = uuid();
-const wednesdayHoursId = uuid();
-const thursdayHoursId = uuid();
-const fridayHoursId = uuid();
-const saturdayHoursId = uuid();
-const sundayHoursId = uuid();
 
 const hour8 = new Date(1970, 1, 1, 8, 0);
 const hour5 = new Date(1970, 1, 1, 17, 0);
@@ -137,11 +134,12 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 const SEEDS = {
   Reservation: [
     {
+      accountId,
       practitionerId,
       startTime: new Date(2017, 2, 4, 17, 30, 0),
       endTime: new Date(2017, 2, 4, 19, 30, 0),
       serviceId,
-    }
+    },
   ],
   Appointment: [
     {
@@ -393,8 +391,8 @@ const SEEDS = {
     {
       id: weeklyScheduleId2,
       accountId,
-      monday: {
-        isClosed: true,
+      thursday: {
+        endTime: time(14, 30),
       },
 
       saturday: {
@@ -419,23 +417,6 @@ const SEEDS = {
       sunday: {
         isClosed: true,
       },
-
-      tuesday: {
-        isClosed: false,
-      },
-
-      wednesday: {
-        isClosed: false,
-      },
-
-      thursday: {
-        isClosed: false,
-      },
-
-      friday: {
-        isClosed: false,
-      },
-
     },
   ],
 
@@ -455,6 +436,22 @@ const SEEDS = {
       address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
       clinicName: 'PACIFIC HEART DENTAL',
       bookingWidgetPrimaryColor: '#0597d8',
+    },
+    {
+      id: accountId2,
+      weeklyScheduleId: weeklyScheduleId2,
+      name: 'Liberty Dental',
+      street: 'Street Adress',
+      country: 'US',
+      state: 'CA',
+      city: 'Los Angeles',
+      zipCode: '90210',
+      // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      // smsPhoneNumber: clinicPhoneNumber,
+      // logo: 'images/availabilies_sidebar_logo_2.png',
+      // address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
+      // clinicName: 'PACIFIC HEART DENTAL',
+      // bookingWidgetPrimaryColor: '#0597d8',
     },
   ],
 
@@ -479,14 +476,23 @@ const SEEDS = {
     },
   ],
 
+  PractitionerTimeOff: [
+    {
+      practitionerId,
+      startDate: new Date(2017, 2, 23, 0, 0),
+      endDate: new Date(2017, 2, 23, 0, 0),
+    },
+  ],
+
   Practitioner: [
     {
       id: practitionerId,
-      accountId: accountId,
+      accountId,
       firstName: 'Chelsea',
       lastName: 'Mansfield',
       weeklyScheduleId: weeklyScheduleId2,
       isCustomSchedule: true,
+      // services: [],
     },
     {
       id: practitionerId2,
@@ -495,6 +501,48 @@ const SEEDS = {
       lastName: 'Cox',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
+      // services: [],
+    },
+    {
+      id: practitionerId3,
+      accountId: accountId2,
+      firstName: 'Mark',
+      lastName: 'Joseph',
+      // weeklyScheduleId: weeklyScheduleId2,
+      isCustomSchedule: false,
+      // services: [],
+    },
+    {
+      id: practitionerId4,
+      accountId: accountId2,
+      firstName: 'Justin',
+      lastName: 'Sharp',
+      weeklyScheduleId: weeklyScheduleId3,
+      isCustomSchedule: true,
+      // services: [],
+    },
+  ],
+
+  Practitioner_Service: [
+    // Chelsea's services
+    {
+      Practitioner_id: practitionerId,
+      Service_id: serviceId,
+    },
+    // Perry's services
+    {
+      Practitioner_id: practitionerId2,
+      Service_id: serviceId2,
+    },
+    // Mark's services
+    {
+      Practitioner_id: practitionerId3,
+      Service_id: cleanupServiceId,
+    },
+    // Justin's services
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: cleanupServiceId,
     },
   ],
 
@@ -503,30 +551,36 @@ const SEEDS = {
       id: serviceId,
       accountId,
       name: 'Routine Checkup',
-      allowedPractitioners: [ practitionerId ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
-      customCosts: {},
+      // See Practitioner_Service, but essentially it is this...
+      // practitioners: [ practitionerId ],
     },
     {
       id: serviceId2,
       accountId,
       name: 'Another service',
-      allowedPractitioners: [ practitionerId2 ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
-      customCosts: {},
+      // See Practitioner_Service, but essentially it is this...
+      // practitioners: [ practitionerId2 ],
     },
     {
       accountId,
       name: 'Lost Filling',
-      allowedPractitioners: [ practitionerId, practitionerId2 ],
       duration: 30,
       bufferTime: 0,
       unitCost: 40,
-      customCosts: {},
+    },
+    {
+      id: cleanupServiceId,
+      accountId: accountId2,
+      name: 'Cleanup',
+      duration: 60,
+      bufferTime: 0,
+      unitCost: 40,
     },
   ],
 

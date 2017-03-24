@@ -4,10 +4,10 @@ const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
 const WeeklySchedule = require('./WeeklySchedule');
-const DailySchedule = require('./DailySchedule');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
+const PractitionerTimeOff = require('./PractitionerTimeOff');
 const Request = require('./Request');
 const Service = require('./Service');
 const TextMessage = require('./TextMessage');
@@ -57,14 +57,10 @@ Chat.hasOne(Account, 'account', 'accountId', 'id');
 Chat.hasOne(Patient, 'patient', 'patientId', 'id');
 Chat.hasMany(TextMessage, 'textMessages', 'id', 'chatId');
 
-/*WeeklySchedule.hasOne(DailySchedule, 'monday', 'mondayId', 'id');
-WeeklySchedule.hasOne(DailySchedule, 'tuesday', 'tuesdayId', 'id');
-WeeklySchedule.hasOne(DailySchedule, 'wednesday', 'wednesdayId', 'id');
-WeeklySchedule.hasOne(DailySchedule, 'thursday', 'thursdayId', 'id');
-WeeklySchedule.hasOne(DailySchedule, 'friday', 'fridayId', 'id');
-WeeklySchedule.hasOne(DailySchedule, 'saturday', 'saturdayId', 'id');
-WeeklySchedule.hasOne(DailySchedule, 'sunday', 'sundayId', 'id');*/
+Practitioner.hasMany(Reservation, 'reservations', 'id', 'practitionerId');
+Practitioner.hasMany(Request, 'requests', 'id', 'practitionerId');
+Practitioner.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
+Practitioner.hasMany(PractitionerTimeOff, 'timeOff', 'id', 'practitionerId');
 
-Practitioner.hasMany(Reservation, "reservations", "id", "practitionerId");
-Practitioner.hasMany(Request, "requests", "id", "practitionerId");
-Practitioner.belongsTo(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
+Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
+Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
