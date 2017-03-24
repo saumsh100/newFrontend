@@ -51,7 +51,7 @@
     &_item {
       min-width: 500px;
       padding: 0 5px;
-      @media screen and (max-width: 400px) {
+      @media screen and (max-width: 650px) {
         min-width: 300px;
       }
       @media screen and (max-width: 300px) {
@@ -63,16 +63,16 @@
     padding: 5px;
   }
 }
-.primaryColor, .fa-phone {
+.primaryColor {
   background: $primary-color;
 }
-.primaryBlue, .fa-phone {
+.primaryBlue {
   background: $primary-blue;
 }
-.primaryGreen, .fa-phone {
+.primaryGreen {
   background: $primary-green;
 }
-.primaryYellow, .fa-phone {
+.primaryYellow {
   background: $primary-yellow;
 }
 
