@@ -40,7 +40,7 @@ export class Search extends Component {
     const classes = classNames(styles.search, searchClassName);
     return (
       <div className={classes}>
-        {!searchModeActive && <Icon size={1.4} icon="search" onClick={this.toggleModal} />}
+        {!searchModeActive && <Icon size={1.4} icon="search"  onClick={this.toggleSearchMode} />}
 
         { searchModeActive ?
           <Input

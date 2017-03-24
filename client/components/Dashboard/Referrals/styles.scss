@@ -79,27 +79,34 @@
 .clickHandlers {
   display: flex;
   width: 44px;
-  position: absolute;
+  position: relative;
   color: #b5b5b5;
   font-size: .9rem;
-  top: 50%;
-  transform: translateY(-50%);    right: 20px;
-  &__newreqText{
-    @extend .font-small-dark;
-    position: absolute;
-    color: #b5b5b5;
-    font-size: .9rem;
-    top: 50%;
-    transform: translateY(-50%);    right: 20px;
+  justify-content: center;
+  right: -20px;
+  @media screen and (max-width: 450px) {
+    right: 0;
   }
 
-  &__remove{
+  &__newreqText {
+    @extend .font-small-dark;
+    position: relative;
+    color: #b5b5b5;
+    padding: 5px;
+    font-size: .9rem;
+    right: -20px;
+    @media screen and (max-width: 450px) {
+      right: 0;
+    }
+  }
+
+  &__remove {
     padding: 5px;
     font-size: 22px;
     color: $inactive-color;
   }
 
-  &__confirm{
+  &__confirm {
     padding: 5px;
     font-size: 22px;
     color: $primary-green;
