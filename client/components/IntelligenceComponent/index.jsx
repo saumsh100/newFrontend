@@ -47,10 +47,10 @@ class IntelligenceComponent extends Component {
     }];
 
     const data = [
-      {count: 388, title: "Appointment Booked", icon: "calendar", size: 10, color: 'primaryColor' },
-      {count: "116k", title: "Estimated Revenue", icon: "user", size: 10, color: 'primaryBlue' },
-      {count: 39, title: "New Patients", icon: "bullhorn", size: 10, color: 'primaryGreen' },
-      {count: 311, title: "Confirmed Appointments", icon: "star", size: 10, color: 'primaryYellow' },
+      {count: 388, title: "Appointment Booked", icon: "calendar", size: 6, color: 'primaryColor' },
+      {count: "116k", title: "Estimated Revenue", icon: "user", size: 6, color: 'primaryBlue' },
+      {count: 39, title: "New Patients", icon: "bullhorn", size: 6, color: 'primaryGreen' },
+      {count: 311, title: "Confirmed Appointments", icon: "star", size: 6, color: 'primaryYellow' },
     ];
 
     return (
