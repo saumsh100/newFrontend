@@ -18,10 +18,10 @@
     margin-top: 20px;
     margin-left: 15px;
     &_number {
-      font-size: 40px;
+      @extend .font-jumbo;
     }
     &_title {
-      font-size: 16px;
+      @extend .font-header-title;
     }
     &_date {
       font-size: 14px;

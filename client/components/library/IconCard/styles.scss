@@ -16,12 +16,10 @@
         flex-direction: column;
     }
     &__count {
-        font-size: 40px;
-        font-weight: 900;
+      @extend .font-jumbo;
     }
     &__title {
-        font-size: 14px;
-        font-weight: 600;
+        @extend .font-header-title-white;
     }
     &__icon {
         position: absolute;

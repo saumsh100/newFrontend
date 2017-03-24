@@ -42,24 +42,49 @@ $card-border-size: 5px solid;
 $selection-border: 3px solid;
 
 $dashboard-font: Gotham-Book;
+$jumbo-font: "Gotham Condensed";
+$medium-font: "Gotham Medium";
+
+//header-sizes
+$count-size: 36px;
+$title-size: 16px;
 
 //Font-sizes
-$large-size: 30px;
+$jumbo-size: 55px;
+$large-size: 34px;
 $medium-size: 14px;
 $small-size: 12px;
 
 //Font-weights
+$jumbo-weight: 600;
 $large-weight: 700;
-$medium-weight: 600;
+$medium-weight: 500;
 $small-weight: 400;
 
 //Font-sizes-weights
+ .font-header-title{
+   font-family: $medium-font;
+   font-size: $title-size;
+   color: $primary-dark;
+ }
+ .font-header-title-white{
+   font-size: $title-size;
+   color: $primary-white;
+ }
+
+.font-jumbo{
+  font-family: $jumbo-font;
+  font-size: $jumbo-size;
+  font-weight: $jumbo-weight;
+  letter-spacing: 2px;
+}
 .font-large{
   font-size: $large-size;
   font-weight: $large-weight;
 }
 
 .font-medium{
+  font-family: $medium-font;
   font-size: $medium-size;
   font-weight: $medium-weight;
 }
@@ -94,10 +119,3 @@ $small-weight: 400;
   @extend .font-small;
   color: $inactive-color;
 }
-
-
-
-
-
-
-

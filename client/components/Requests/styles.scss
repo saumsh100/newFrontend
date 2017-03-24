@@ -45,15 +45,19 @@
     max-width: 170px;
   }
   &__time{
+    font-family: "Gotham Medium";
     @extend .font-medium-dark;
   }
 
   &__nameAge{
+    font-family: "Gotham Medium";
     display: flex;
   }
 
   &__name{
     @extend .font-medium-grey;
+    font-family: "Gotham Medium";
+
     width: auto;
     white-space: nowrap;
     overflow: hidden;
@@ -81,12 +85,13 @@
   text-align: center;
   padding-top: 1em;
   padding-right: 1em;
-  font-weight: $medium-weight;
+  font-family: "Gotham Medium";
   &__month {
     font-size: $medium-size
   }
 
   &__day {
+    font-weight: $medium-weight;
     font-size: $large-size;
   }
 }
@@ -123,5 +128,3 @@
     }
   }
 }
-
-
