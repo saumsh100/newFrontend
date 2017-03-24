@@ -36,9 +36,10 @@ class PractServicesForm extends Component {
   render() {
     const { services, practitioner, initialValues } = this.props;
 
-    if(!services) {
+    if (!services) {
       return null;
     }
+
     return (
       <Form form={`${practitioner.get('id')}service`} onSubmit={this.handleSubmit} initialValues={initialValues}>
           All Services
