@@ -329,39 +329,36 @@ class IntelligenceComponent extends Component {
                            cardTitle="Pages with Most Visits"
                            data={[{
                              title: "Invisalign",
-                             hours: 42
+                             hours: 243
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Teeth Whitening",
+                             hours: 199
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Regular Checkup",
+                             hours: 183
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Lost Fillings",
+                             hours: 146
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Emergency Appointments",
+                             hours: 122
                            }]} />
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList borderColor={colorMap.green}
                            cardTitle="Website Engagement"
                            data={[{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Total Visits",
+                             hours: 11086
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Avg Visit Duration",
+                             hours: "3.38"
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Pages per Visit",
+                             hours: "3.8"
                            },{
-                             title: "Invisalign",
-                             hours: 42
-                           },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Bounce Rate",
+                             hours: "47%"
                            }]} />
           </Col>
           <Col className={styles.padding} xs={12}>
