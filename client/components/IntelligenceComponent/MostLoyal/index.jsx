@@ -65,7 +65,7 @@ class MostLoyal extends Component {
                       <img className={styles.data__item_img} src={obj.img} alt=""/>
                       <div className={styles.data__item_personal}>
                         <div className={styles.data__item_name}>
-                          <b>{obj.name}, <span>{obj.age}</span></b>
+                          {obj.name}, <span>{obj.age}</span>
                         </div>
                         <div className={styles.data__item_phone}>
                           {obj.phone}
