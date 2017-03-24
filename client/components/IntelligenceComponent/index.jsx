@@ -76,16 +76,16 @@ class IntelligenceComponent extends Component {
                                  title: "Invisalign",
                                  hours: 42
                                },{
-                                 title: "Invisalign",
+                                 title: "Teeth Whitening",
                                  hours: 42
                                },{
-                                 title: "Invisalign",
+                                 title: "Regular Checkup",
                                  hours: 42
                                },{
-                                 title: "Invisalign",
+                                 title: "Lost Fillings",
                                  hours: 42
                                },{
-                                 title: "Invisalign",
+                                 title: "Emergency Appointments",
                                  hours: 42
                                }]} />
               </Col>
@@ -94,34 +94,34 @@ class IntelligenceComponent extends Component {
           <FlexGrid borderColor={colorMap.red} columnCount="4">
             <PractitionersList img="images/practitioner_1.png"
                                name="Dr. Chelsea"
-                               profession="Hygienist"
-                               appointmentBooked="77"
-                               appointmentNotFiltred="83"
+                               profession="Dentist"
+                               appointmentBooked="118"
+                               appointmentNotFiltred="42"
                                newPatients="12"
-                               percentage="10"
+                               percentage="70"
             />
             <PractitionersList img="images/practitioner_1.png"
-                               name="Dr. Chelsea"
-                               profession="Hygienist"
-                               appointmentBooked="77"
-                               appointmentNotFiltred="83"
-                               newPatients="12"
-                               percentage="10"/>
+                               name="Dr. Mike"
+                               profession="Dentist"
+                               appointmentBooked="142"
+                               appointmentNotFiltred="18"
+                               newPatients="14"
+                               percentage="85"/>
             <PractitionersList img="images/practitioner_1.png"
-                               name="Dr. Chelsea"
-                               profession="Hygienist"
+                               name="Dr. Jennifer"
+                               profession="CDA"
                                appointmentBooked="77"
                                appointmentNotFiltred="83"
-                               newPatients="12"
-                               percentage="10"
+                               newPatients="8"
+                               percentage="45"
             />
             <PractitionersList img="images/practitioner_1.png"
-                               name="Dr. Chelsea"
+                               name="John"
                                profession="Hygienist"
-                               appointmentBooked="77"
-                               appointmentNotFiltred="83"
-                               newPatients="12"
-                               percentage="10"/>
+                               appointmentBooked="40"
+                               appointmentNotFiltred="110"
+                               newPatients="14"
+                               percentage="15"/>
           </FlexGrid>
           <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
