@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import { Field } from '../../../library';
+import { Field } from '../../../../library';
 
 class PractServicesList extends Component {
   constructor(props) {

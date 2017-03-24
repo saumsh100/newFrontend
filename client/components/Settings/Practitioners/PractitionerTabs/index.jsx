@@ -1,13 +1,12 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Tab, Button, Header, } from '../../../library';
+import { Tabs, Tab, Button, Header } from '../../../library';
 import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
 import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
-
 
 class PractitionerTabs extends Component {
   constructor(props) {
