@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Icon, IconButton} from '../../library';
+import { List, ListItem, Card, CardHeader, Search, IconButton} from '../../library';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 
@@ -83,11 +83,13 @@ class Referrals extends Component {
     return (
       <Card className={styles.referrals} borderColor={colorMap.red}>
         <div className={styles.referrals__header}>
-          <CardHeader title={cardTitle} count={cardCount}/>
+          <CardHeader title={cardTitle} count={cardCount}>
+            <Search min  />
+          </CardHeader>
         </div>
         <div className={styles.referrals__body}>
           <List className={styles.data}>
-              {hardcodeData.map(obj => {
+            {hardcodeData.map(obj => {
               return (
                 <ListItem className={styles.referrals__item}>
                   <img className={styles.referrals__item_img} src={obj.img} alt=""/>
