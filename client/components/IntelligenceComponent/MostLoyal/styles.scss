@@ -4,7 +4,7 @@
   border-top: 5px solid $primary-color;
   margin-bottom: 20px;
   min-width: 250px;
-  max-height: 650px;
+  max-height: 450px;
   &__header {
     display: flex;
     align-items: center;
@@ -28,7 +28,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    height: 110px;
+    height: 140px;
     list-style: none;
     margin: 0;
     border-bottom: 1px solid $primary-lightgrey;
@@ -38,7 +38,7 @@
     }
 
     &_email {
-      color: #b5b5b5; 
+      color: #b5b5b5;
     }
 
     @media screen and (max-width: 800px) {

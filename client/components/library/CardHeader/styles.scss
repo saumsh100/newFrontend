@@ -6,17 +6,15 @@
   align-items: center;
   padding-top: 0.5em;
   position: relative;
-  @media screen and (max-width: 450px){
-    height: 60px;
-    flex-direction: column;
-  }
 }
 
 .displayFlex {
   display: flex;
   align-items: center;
-  min-width: 100px;
   max-width: 300px;
+  @media screen and (min-width: 1000px){
+    min-width: 100px;
+  }
 }
 
 .cardCount {
