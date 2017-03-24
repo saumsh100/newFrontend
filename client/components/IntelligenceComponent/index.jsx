@@ -53,7 +53,6 @@ class IntelligenceComponent extends Component {
       {count: 311, title: "Confirmed Appointments", icon: "star", size: 10, color: 'primaryYellow' },
     ];
 
-
     return (
       <Grid className={styles.intelligence}>
         <Row>
@@ -61,35 +60,34 @@ class IntelligenceComponent extends Component {
             <Card className={styles.intelligence__header_title}>
               <b>Overview</b>
             </Card>
-
+          </Col>
+        </Row>
+        <Row className={styles.intelligence__body}>
+          <Col xs={12}>
             <DashboardStats data={data} />
           </Col>
-          <Col xs={12}>
-            <Row>
-              <Col xs={12} sm={6}>
-                <AppointmentFilled borderColor={colorMap.grey}/>
-              </Col>
-              <Col xs={12} sm={6}>
-                <ContainerList borderColor={colorMap.red}
-                               cardTitle="Top Services by Hours"
-                               data={[{
-                                 title: "Invisalign",
-                                 hours: 35
-                               },{
-                                 title: "Teeth Whitening",
-                                 hours: 28
-                               },{
-                                 title: "Regular Checkup",
-                                 hours: 19.5
-                               },{
-                                 title: "Lost Fillings",
-                                 hours: 11
-                               },{
-                                 title: "Emergency Appointments",
-                                 hours: 5
-                               }]} />
-              </Col>
-            </Row>
+          <Col xs={12} sm={6}>
+            <AppointmentFilled borderColor={colorMap.grey}/>
+          </Col>
+          <Col xs={12} sm={6}>
+            <ContainerList borderColor={colorMap.red}
+               cardTitle="Top Services by Hours"
+               data={[{
+                 title: "Invisalign",
+                 hours: 35
+               },{
+                 title: "Teeth Whitening",
+                 hours: 28
+               },{
+                 title: "Regular Checkup",
+                 hours: 19.5
+               },{
+                 title: "Lost Fillings",
+                 hours: 11
+               },{
+                 title: "Emergency Appointments",
+                 hours: 5
+               }]} />
           </Col>
           <FlexGrid borderColor={colorMap.red} columnCount="4">
             <PractitionersList img="images/practitioner_1.png"
@@ -173,21 +171,18 @@ class IntelligenceComponent extends Component {
               percantage={80}
             />
           </FlexGrid>
-        </Row>
-        <Row>
-        </Row>
-        <Col xs={12}>
-          <AppointmentsBooked borderColor={colorMap.yellow}
-                              cardTitle="Appointments Booked Last 12 Months" />
-        </Col>
-        <Col xs={12}>
-          <MostLoyal borderColor={colorMap.red}
-                     cardTitle="Most Loyal" />
-        </Col>
-        <Col xs={12}>
-          <TopReference borderColor={colorMap.red} />
-        </Col>
-        <Row>
+          <Col xs={12}>
+            <AppointmentsBooked borderColor={colorMap.yellow}
+                                cardTitle="Appointments Booked Last 12 Months" />
+          </Col>
+          <Col styles={styles.padding5} xs={12}>
+            <MostLoyal borderColor={colorMap.red}
+                       cardTitle="Most Loyal" />
+          </Col>
+          <Col xs={12}>
+            <TopReference borderColor={colorMap.red} />
+          </Col>
+
           <Col className={styles.websiteVisitorConversions} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Vebsite Visitor Conversions'} />
@@ -322,8 +317,6 @@ class IntelligenceComponent extends Component {
               </div>
             </Card>
           </Col>
-        </Row>
-        <Row>
           <Col xs={12} sm={6}>
             <ContainerList borderColor={colorMap.green}
                            cardTitle="Pages with Most Visits"
