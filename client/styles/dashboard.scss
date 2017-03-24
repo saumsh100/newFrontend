@@ -1,5 +1,6 @@
 
 @import '../ui.scss';
+@import '../fonts.scss';
 
 html {
   height: 100%;
@@ -53,5 +54,5 @@ body {
     height: 2px !important;
     background-color: $primary-lightgrey !important;
   }
-}
 
+}

@@ -1,9 +1,11 @@
 @import "../../../ui.scss";
+@import "../../../fonts.scss";
 
 .topServices {
   border-top: 5px solid $primary-blue;
   min-width: 250px;
   height: 640px;
+  @extend .font-medium-dark;
   &__header {
     display: flex;
     align-items: center;
