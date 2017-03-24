@@ -8,7 +8,7 @@ import fetchReviewsData from "../../thunks/fetchReviewsData";
 import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble  } from "../library";
 import RemindersList from "./RemindersList";
 import Table from './Table';
-import TopServices from './TopServices';
+import Referrals from './Referrals';
 import colorMap from "../library/util/colorMap";
 import styles from "./styles.scss";
 
@@ -252,7 +252,7 @@ class Dashboard extends React.Component {
           </Col>
           <Col className={styles.padding}
                xs={12} md={4}>
-            <TopServices className={styles.dashboard__body_table}
+            <Referrals className={styles.dashboard__body_table}
                          borderColor={colorMap.blue}
                          cardCount="13"
                          cardTitle="Unconfirmed Referrals"/>
