@@ -74,19 +74,19 @@ class IntelligenceComponent extends Component {
                                cardTitle="Top Services by Hours"
                                data={[{
                                  title: "Invisalign",
-                                 hours: 42
+                                 hours: 35
                                },{
-                                 title: "Invisalign",
-                                 hours: 42
+                                 title: "Teeth Whitening",
+                                 hours: 28
                                },{
-                                 title: "Invisalign",
-                                 hours: 42
+                                 title: "Regular Checkup",
+                                 hours: 19.5
                                },{
-                                 title: "Invisalign",
-                                 hours: 42
+                                 title: "Lost Fillings",
+                                 hours: 11
                                },{
-                                 title: "Invisalign",
-                                 hours: 42
+                                 title: "Emergency Appointments",
+                                 hours: 5
                                }]} />
               </Col>
             </Row>
@@ -94,91 +94,83 @@ class IntelligenceComponent extends Component {
           <FlexGrid borderColor={colorMap.red} columnCount="4">
             <PractitionersList img="images/practitioner_1.png"
                                name="Dr. Chelsea"
-                               profession="Hygienist"
-                               appointmentBooked="77"
-                               appointmentNotFiltred="83"
+                               profession="Dentist"
+                               appointmentBooked="118"
+                               appointmentNotFiltred="42"
                                newPatients="12"
-                               percentage="10"
+                               percentage="70"
             />
             <PractitionersList img="images/practitioner_1.png"
-                               name="Dr. Chelsea"
-                               profession="Hygienist"
-                               appointmentBooked="77"
-                               appointmentNotFiltred="83"
-                               newPatients="12"
-                               percentage="10"/>
+                               name="Dr. Mike"
+                               profession="Dentist"
+                               appointmentBooked="142"
+                               appointmentNotFiltred="18"
+                               newPatients="14"
+                               percentage="85"/>
             <PractitionersList img="images/practitioner_1.png"
-                               name="Dr. Chelsea"
-                               profession="Hygienist"
+                               name="Dr. Jennifer"
+                               profession="CDA"
                                appointmentBooked="77"
                                appointmentNotFiltred="83"
-                               newPatients="12"
-                               percentage="10"
+                               newPatients="8"
+                               percentage="45"
             />
             <PractitionersList img="images/practitioner_1.png"
-                               name="Dr. Chelsea"
+                               name="John"
                                profession="Hygienist"
-                               appointmentBooked="77"
-                               appointmentNotFiltred="83"
-                               newPatients="12"
-                               percentage="10"/>
+                               appointmentBooked="40"
+                               appointmentNotFiltred="110"
+                               newPatients="14"
+                               percentage="15"/>
           </FlexGrid>
           <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
-              count={106}
+              count={107}
               details="via phone"
               icon="phone"
             />
             <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
-            />
-          </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
-            <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
-            />
-            <Stats
-              count={106}
-              details="via phone"
+              count={281}
+              details="via Online Schedule"
               icon="phone"
             />
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.blue} title="New vs Returning Patients" >
             <Stats
-              count={106}
-              details="via phone"
+              count={39}
+              details="new"
+              icon="phone"
+            />
+            <Stats
+              count={349}
+              details="returning"
+              icon="phone"
+            />
+          </FlexGrid>
+
+          <FlexGrid borderColor={colorMap.blue} title="Website Appts vs Web Profile Appts" >
+            <Stats
+              count={204}
+              details="via Website"
+              icon="phone"
+            />
+            <Stats
+              count={184}
+              details="via Web Profiles"
+              icon="phone"
+            />
+          </FlexGrid>
+
+          <FlexGrid borderColor={colorMap.blue} title="Online Reputation" >
+            <Stats
+              count={"48.5"}
+              details="stars"
               icon="phone"
             />
             <ChartStats
-              positive={80}
-              negative={20}
+              positive={88}
+              negative={12}
               percantage={80}
-            />
-          </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
-            <Stats
-              count={106}
-              details="via phone"
-              icon="telegram"
-            />
-            <ChartStats
-              positive={50}
-              negative={50}
-              percantage={50}
-            />
-            <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
-            />
-            <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
             />
           </FlexGrid>
         </Row>
@@ -337,39 +329,36 @@ class IntelligenceComponent extends Component {
                            cardTitle="Pages with Most Visits"
                            data={[{
                              title: "Invisalign",
-                             hours: 42
+                             hours: 243
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Teeth Whitening",
+                             hours: 199
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Regular Checkup",
+                             hours: 183
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Lost Fillings",
+                             hours: 146
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Emergency Appointments",
+                             hours: 122
                            }]} />
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList borderColor={colorMap.green}
                            cardTitle="Website Engagement"
                            data={[{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Total Visits",
+                             hours: 11086
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Avg Visit Duration",
+                             hours: "3.38"
                            },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Pages per Visit",
+                             hours: "3.8"
                            },{
-                             title: "Invisalign",
-                             hours: 42
-                           },{
-                             title: "Invisalign",
-                             hours: 42
+                             title: "Bounce Rate",
+                             hours: "47%"
                            }]} />
           </Col>
           <Col className={styles.padding} xs={12}>
