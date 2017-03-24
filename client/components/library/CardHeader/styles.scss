@@ -1,6 +1,6 @@
 
-//@import '../../../ui.scss';
-@import '../../../styles/dashboard.scss';
+@import '../../../ui.scss';
+@import '../../../fonts.scss';
 
 .cardHeader {
   box-sizing: border-box;
@@ -21,7 +21,7 @@
 
 .cardCount {
   display: inline-block;
-  font-family: "Gotham Medium";
+  font-family: $medium-font;
   font-size: 36px;
   font-weight: 800;
   padding-right: 5px;
