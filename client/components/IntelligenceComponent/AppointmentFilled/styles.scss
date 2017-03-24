@@ -1,4 +1,4 @@
-@import "../../../ui";
+@import '../../../styles/dashboard.scss';
 
 .appointmentFilled {
   border-top: 5px solid $primary-color;
@@ -18,7 +18,7 @@
     margin-top: 20px;
     margin-left: 15px;
     &_number {
-      @extend .font-jumbo;
+      @extend .font-jumbo-dark;
     }
     &_title {
       @extend .font-header-title;

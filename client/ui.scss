@@ -42,6 +42,7 @@ $card-border-size: 5px solid;
 $selection-border: 3px solid;
 
 $dashboard-font: Gotham-Book;
+
 $jumbo-font: "Gotham Condensed";
 $medium-font: "Gotham Medium";
 
@@ -60,62 +61,3 @@ $jumbo-weight: 600;
 $large-weight: 700;
 $medium-weight: 500;
 $small-weight: 400;
-
-//Font-sizes-weights
- .font-header-title{
-   font-family: $medium-font;
-   font-size: $title-size;
-   color: $primary-dark;
- }
- .font-header-title-white{
-   font-size: $title-size;
-   color: $primary-white;
- }
-
-.font-jumbo{
-  font-family: $jumbo-font;
-  font-size: $jumbo-size;
-  font-weight: $jumbo-weight;
-  letter-spacing: 2px;
-}
-.font-large{
-  font-size: $large-size;
-  font-weight: $large-weight;
-}
-
-.font-medium{
-  font-family: $medium-font;
-  font-size: $medium-size;
-  font-weight: $medium-weight;
-}
-
-.font-small{
-  font-size: $small-size;
-  font-weight: $small-weight;
-}
-
-//Font-sizes-weights-colors
-.font-large-dark {
-  @extend .font-large;
-  color: $primary-dark;
-}
-
-.font-medium-dark {
-  @extend .font-medium;
-  color: $primary-dark;
-}
-
-.font-small-dark{
-  @extend .font-small;
-  color: $primary-dark;
-}
-
-.font-medium-grey {
-  @extend .font-medium;
-  color: $inactive-color;
-}
-
-.font-small-grey{
-  @extend .font-small;
-  color: $inactive-color;
-}

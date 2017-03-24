@@ -1,5 +1,6 @@
 
-@import '../../ui.scss';
+//@import '../../ui.scss';
+@import '../../styles/dashboard.scss';
 
 .requestPopover > :global(svg.Popover-tip) {
   fill: $primary-darkgrey;
@@ -45,7 +46,6 @@
     max-width: 170px;
   }
   &__time{
-    font-family: "Gotham Medium";
     @extend .font-medium-dark;
   }
 
@@ -56,7 +56,6 @@
 
   &__name{
     @extend .font-medium-grey;
-    font-family: "Gotham Medium";
 
     width: auto;
     white-space: nowrap;
