@@ -89,7 +89,7 @@ class IntelligenceComponent extends Component {
                  hours: 5
                }]} />
           </Col>
-          <FlexGrid borderColor={colorMap.red} columnCount="4">
+          <FlexGrid borderColor={colorMap.red} columnCount="4" columnWidth={12}>
             <PractitionersList img="images/practitioner_1.png"
                                name="Dr. Chelsea"
                                profession="Dentist"
