@@ -74,19 +74,19 @@ class IntelligenceComponent extends Component {
                                cardTitle="Top Services by Hours"
                                data={[{
                                  title: "Invisalign",
-                                 hours: 42
+                                 hours: 35
                                },{
                                  title: "Teeth Whitening",
-                                 hours: 42
+                                 hours: 28
                                },{
                                  title: "Regular Checkup",
-                                 hours: 42
+                                 hours: 19.5
                                },{
                                  title: "Lost Fillings",
-                                 hours: 42
+                                 hours: 11
                                },{
                                  title: "Emergency Appointments",
-                                 hours: 42
+                                 hours: 5
                                }]} />
               </Col>
             </Row>
@@ -125,60 +125,52 @@ class IntelligenceComponent extends Component {
           </FlexGrid>
           <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
-              count={106}
+              count={107}
               details="via phone"
               icon="phone"
             />
             <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
-            />
-          </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
-            <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
-            />
-            <Stats
-              count={106}
-              details="via phone"
+              count={281}
+              details="via Online Schedule"
               icon="phone"
             />
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.blue} title="New vs Returning Patients" >
             <Stats
-              count={106}
-              details="via phone"
+              count={39}
+              details="new"
+              icon="phone"
+            />
+            <Stats
+              count={349}
+              details="returning"
+              icon="phone"
+            />
+          </FlexGrid>
+
+          <FlexGrid borderColor={colorMap.blue} title="Website Appts vs Web Profile Appts" >
+            <Stats
+              count={204}
+              details="via Website"
+              icon="phone"
+            />
+            <Stats
+              count={184}
+              details="via Web Profiles"
+              icon="phone"
+            />
+          </FlexGrid>
+
+          <FlexGrid borderColor={colorMap.blue} title="Online Reputation" >
+            <Stats
+              count={"48.5"}
+              details="stars"
               icon="phone"
             />
             <ChartStats
-              positive={80}
-              negative={20}
+              positive={88}
+              negative={12}
               percantage={80}
-            />
-          </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
-            <Stats
-              count={106}
-              details="via phone"
-              icon="telegram"
-            />
-            <ChartStats
-              positive={50}
-              negative={50}
-              percantage={50}
-            />
-            <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
-            />
-            <Stats
-              count={106}
-              details="via phone"
-              icon="phone"
             />
           </FlexGrid>
         </Row>
