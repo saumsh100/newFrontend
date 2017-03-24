@@ -25,15 +25,12 @@ class Social extends Component {
               <b>Social</b>
             </Card>
           </Col>
-          <Col className={styles.social__body} xs={12}>
-            <Col className={styles.social__header} xs={12}>
-              <Card className={styles.social__header_title}>
-                <b>Overview</b>
-              </Card>
+        </Row>
+
+        <Row className={styles.social__body}>
+          <Col xs={12} md={12}>
             <DashboardStats data={data} />
           </Col>
-          </Col>
-
 
           <Col className={styles.padding} xs={12} md={12}>
             <Card borderColor={colorMap.darkblue} className={styles.card}>
