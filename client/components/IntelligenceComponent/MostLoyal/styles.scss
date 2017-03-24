@@ -32,6 +32,15 @@
     list-style: none;
     margin: 0;
     border-bottom: 1px solid $primary-lightgrey;
+
+    &_phone {
+      color: #b5b5b5;
+    }
+
+    &_email {
+      color: #b5b5b5; 
+    }
+
     @media screen and (max-width: 800px) {
       height: 85px;
     }
