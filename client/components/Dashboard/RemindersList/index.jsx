@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, ListItem, Card, CardHeader, Icon } from '../../library';
 import Search from '../../library/Search';
 import styles from './styles.scss';
+import classNames from 'classnames';
 import moment from 'moment';
 
 class RemindersList extends Component {
@@ -66,7 +67,7 @@ class RemindersList extends Component {
                     {rightContent}
                   </div>
                   <div className={styles.patients__item_icon}>
-                    <Icon className={obj.icon} icon={obj.icon} size={1.5}/>
+                    <Icon className={styles[`fa-${obj.icon}`]} icon={obj.icon} size={1.5}/>
                   </div>
                 </ListItem>
               )

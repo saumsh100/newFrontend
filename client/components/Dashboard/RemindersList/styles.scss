@@ -1,26 +1,23 @@
 @import "../../../ui";
 
-:global {
-  .fa-envelope {
-    color: $primary-blue;
-    &:hover {
-      color: darken($primary-blue, 5%);
-    }
-  }
-  .fa-phone {
-    color: $primary-yellow;
-    &:hover {
-      color: darken($primary-yellow, 5%);
-    }
-  }
-  .fa-comment {
-    color: $primary-color;
-    &:hover {
-      color: darken($primary-color, 5%);
-    }
+.fa-envelope {
+  color: $primary-blue;
+  &:hover {
+    color: darken($primary-blue, 5%);
   }
 }
-
+.fa-phone {
+  color: $primary-yellow;
+  &:hover {
+    color: darken($primary-yellow, 5%);
+  }
+}
+.fa-comment {
+  color: $primary-color;
+  &:hover {
+    color: darken($primary-color, 5%);
+  }
+}
 .reminders {
   height: 610px;
   margin-bottom: 20px;
@@ -114,6 +111,24 @@
         margin-top: 5px;
         position: relative;
         right: 0;
+      }
+      .fa-envelope {
+        color: $primary-blue;
+        &:hover {
+          color: darken($primary-blue, 5%);
+        }
+      }
+      .fa-phone {
+        color: $primary-yellow;
+        &:hover {
+          color: darken($primary-yellow, 5%);
+        }
+      }
+      .fa-comment {
+        color: $primary-color;
+        &:hover {
+          color: darken($primary-color, 5%);
+        }
       }
       &:hover {
         color: #ff715a;
