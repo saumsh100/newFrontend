@@ -1,6 +1,6 @@
 
 export default {
-  red: '#FF715C',
+  red: '#FF715A',
   blue: '#8FBBD6',
   green: '#2EC4A7',
   yellow: '#FFC55B',

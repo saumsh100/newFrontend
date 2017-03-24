@@ -91,7 +91,7 @@ class IntelligenceComponent extends Component {
               </Col>
             </Row>
           </Col>
-          <FlexGrid borderColor={colorMap.blue} columnCount="4">
+          <FlexGrid borderColor={colorMap.red} columnCount="4">
             <PractitionersList img="images/practitioner_1.png"
                                name="Dr. Chelsea"
                                profession="Hygienist"
