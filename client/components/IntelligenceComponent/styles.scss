@@ -2,30 +2,52 @@
 
 .intelligence {
   &__header {
+    padding: 5px 20px 0;
+    @media screen and (max-width: 450px) {
+      padding: 5px 10px 0;
+    }
     &_title {
       display: flex;
       align-items: center;
-      height: 60px;
+      height: 35px;
       background: $primary-white;
+      width: 100%;
       padding-left: 30px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-size: $medium-size;
       b {
         padding-left: 5px;
       }
+      &_cards {
+        cursor: pointer;
+        margin-bottom: 20px;
+        div:not(:last-child) {
+          margin-right: 10px;
+          flex: 1;
+        }
+      } 
     }
-    &_cards {
-      cursor: pointer;
-      margin-bottom: 20px;
-      div:not(:last-child) {
-        margin-right: 10px;
-        flex: 1;
+    &__patientList {
+      &_item {
+        padding: 5px;
       }
     }
   }
-  &__patientList {
-    &_item {
-      padding: 5px;
+
+  &__body {
+    padding: 0 15px 45px 15px;
+    &_table {
+      height: 640px;
+    }
+    &_comments {
+      height: 640px;
+    }
+    &_request {
+      overflow: auto;
+      min-height: 635px;
+    }
+    @media screen and (max-width: 450px) {
+      padding: 0 5px 45px 5px;
     }
   }
 }
@@ -376,4 +398,8 @@
   }
 
 
+}
+
+.padding5 {
+  padding: 5px;
 }
