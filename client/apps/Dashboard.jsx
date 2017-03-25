@@ -8,6 +8,8 @@ import moment from 'moment';
 import _ from 'lodash';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
+
+// TODO: improve this to only create socket when use is logged in, JWT is undefined when not...
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
 import DashboardRoutes from '../routes/Dashboard';

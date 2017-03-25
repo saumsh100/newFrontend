@@ -5,6 +5,6 @@ import io from 'socket.io-client';
 
 // IMPORTANT because the app is served via iframe do not need to connect by URL
 
-const socket = io.connect();
+const socket = io.connect('/dash');
 
 export default socket;
