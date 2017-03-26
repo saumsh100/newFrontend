@@ -7,10 +7,12 @@ class PractServicesForm extends Component {
     super(props);
     this.state = {
       allServices: null,
+      toastIsReady: false,
     }
     this.setAllServices = this.setAllServices.bind(this);
     this.handleFieldToggle = this.handleFieldToggle.bind(this);
     this.setAllToggles = this.setAllToggles.bind(this);
+    this.handleTestToggle = this.handleTestToggle.bind(this);
   }
 
   componentWillMount(){
@@ -25,7 +27,7 @@ class PractServicesForm extends Component {
     this.setState({ allServices: test })
   }
 
-  setAllServices(event) {
+  setAllServices() {
     event.stopPropagation();
     const { allServices } = this.state;
 
@@ -40,10 +42,18 @@ class PractServicesForm extends Component {
 
   handleFieldToggle(event, newValue, previousValue) {
     const { allServices } = this.state;
+
     if(!newValue && allServices){
       this.setState({ allServices: false });
+    }else if(newValue && !allServices){
+      this.setState({ allServices: true });
     }
   }
+
+  handleTestToggle(event) {
+    event.stopPropagation();
+  }
+
   setAllToggles(value) {
     const { services, change, practitioner } = this.props;
     services.map((s) => {
@@ -56,13 +66,15 @@ class PractServicesForm extends Component {
 
     let showComponent = null;
 
-    if (services && this.state.allServices !== null) {
+    if (services ) {
       showComponent = (
         <div>
           <Toggle
-            defaultChecked={this.state.allServices}
-            value={this.state.allServices}
+            checked={this.state.allServices}
+            name='burritoIsReady'
+            value='yes'
             onChange={this.setAllServices}
+
           />
           <Form
             form={`${practitioner.get('id')}service`}
