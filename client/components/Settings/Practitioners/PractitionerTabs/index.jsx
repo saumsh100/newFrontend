@@ -46,7 +46,7 @@ class PractitionerTabs extends Component {
     }
 
     let serviceIds = null;
-    if(services) {
+    if (services) {
       serviceIds = practitioner.get('services');
     }
 

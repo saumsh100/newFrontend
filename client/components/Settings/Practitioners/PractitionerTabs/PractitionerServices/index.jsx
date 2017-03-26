@@ -23,20 +23,31 @@ class PractitionerServices extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      allServices: false,
-    }
+    this.handleSubmit = this.handleSubmit.bind(this);
+
   }
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'services' });
   }
 
+  handleSubmit(values) {
+    const { practitioner, updatePractitioner } = this.props;
+    const storeServiceIds = [];
+
+    for (let id in values) {
+        if (values[id]) {
+          storeServiceIds.push(id);
+        }
+    }
+    const modifiedPractitioner = practitioner.set('services', storeServiceIds);
+    updatePractitioner(modifiedPractitioner);
+  }
 
   render() {
     const { serviceIds, services, practitioner } = this.props;
 
-    if (!practitioner) {
+    if (!practitioner || !services) {
       return null;
     }
 
@@ -46,17 +57,18 @@ class PractitionerServices extends Component {
       const filteredServices = services.sort(sortServicesAlphabetical);
       const initialValues = createInitialValues(serviceIds, services);
 
-      initialValues.allServices = this.state.allServices;
-
-      showComponent = (
-        <PractServicesForm
-          services={filteredServices}
-          initialValues={initialValues}
-          change={this.props.change}
-          practitioner={practitioner}
-          updatePractitioner={this.props.updatePractitioner}
-        />
-      );
+      if (Object.keys(initialValues).length) {
+        showComponent = (
+          <PractServicesForm
+            key={practitioner.get('id')}
+            services={filteredServices}
+            initialValues={initialValues}
+            change={this.props.change}
+            practitioner={practitioner}
+            handleSubmit={this.handleSubmit}
+          />
+        );
+      }
     }
 
     return (
