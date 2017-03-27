@@ -9,15 +9,31 @@ export default function RFToggle(props) {
     label,
     error,
     meta,
+    checked,
   } = props;
 
   const newProps = Object.assign({} , props, { defaultChecked: input.value });
+  let showComponent = null;
+  if(checked != null) {
+    showComponent = (
+      <Toggle
+        checked={checked}
+        onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
+      />
+    )
+  } else {
+    showComponent = (
+      <Toggle
+        defaultChecked={flipped ? !input.value : input.value}
+        onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
+      />
+    )
+  }
 
   return (
-    <Toggle
-      defaultChecked={flipped ? !input.value : input.value}
-      onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
-    />
+    <div>
+      {showComponent}
+    </div>
   );
 }
 
