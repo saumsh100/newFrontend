@@ -138,24 +138,6 @@ class MostLoyal extends Component {
                           <div>APPOINTMENTS</div>
                         </div>
                       </div>
-                      <div className={styles.data__item_table}>
-                        <div className={styles.table__number}>
-                          {obj.appointmentNumber}
-                        </div>
-                        <div className={styles.table__text}>
-                          <div>TOTAL</div>
-                          <div>APPOINTMENTS</div>
-                        </div>
-                      </div>
-                      <div className={styles.data__item_table}>
-                        <div className={styles.table__number}>
-                          {obj.appointmentNumber}
-                        </div>
-                        <div className={styles.table__text}>
-                          <div>TOTAL</div>
-                          <div>APPOINTMENTS</div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </ListItem>
