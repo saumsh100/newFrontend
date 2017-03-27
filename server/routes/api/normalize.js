@@ -73,7 +73,7 @@ const weeklyScheduleSchema = () => {
 
 const reservationSchema = () => {
   return new schema.Entity('reservations');
-}
+};
 
 const SCHEMAS = {
   // Models (singleFetch/findOne)

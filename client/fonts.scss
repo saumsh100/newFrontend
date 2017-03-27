@@ -1,0 +1,71 @@
+
+//font-headers
+.font-header-title {
+  font-family: $medium-font;
+  font-size: $title-size;
+  color: $primary-dark;
+}
+.font-header-title-white{
+  font-size: $title-size;
+  color: $primary-white;
+}
+
+//Font-sizes-weights
+.font-jumbo {
+  font-family: $jumbo-font;
+  font-size: $jumbo-size;
+  font-weight: $jumbo-weight;
+  letter-spacing: 2px;
+}
+
+.font-large {
+  font-size: $large-size;
+  font-weight: $large-weight;
+}
+
+.font-medium {
+  font-family: $medium-font;
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+}
+
+.font-small {
+  font-size: $small-size;
+  font-weight: $small-weight;
+}
+
+//Font-sizes-weights-colors
+.font-jumbo-dark {
+  @extend .font-jumbo;
+  color: $primary-dark;
+}
+
+.font-jumbo-white {
+  @extend .font-jumbo;
+  color: $primary-white;
+}
+
+.font-large-dark {
+  @extend .font-large;
+  color: $primary-dark;
+}
+
+.font-medium-dark {
+  @extend .font-medium;
+  color: $primary-dark;
+}
+
+.font-small-dark {
+  @extend .font-small;
+  color: $primary-dark;
+}
+
+.font-medium-grey {
+  @extend .font-medium;
+  color: $inactive-color;
+}
+
+.font-small-grey {
+  @extend .font-small;
+  color: $inactive-color;
+}
