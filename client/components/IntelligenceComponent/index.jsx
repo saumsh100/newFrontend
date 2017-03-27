@@ -183,7 +183,7 @@ class IntelligenceComponent extends Component {
             <TopReference borderColor={colorMap.red} />
           </Col>
 
-          <Col className={styles.websiteVisitorConversions} xs={12} md={6}>
+          <Col className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Vebsite Visitor Conversions'} />
               <div className={styles.websiteVisitorConversions__mainContainer}>
@@ -233,8 +233,8 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="Age Range" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
-                <div className={classNames(styles.rowContainer, styles.width100p)}>
+              <div className={styles.ageRange}>
+                <div className={styles.ageRange__content}>
                   <BarChart
                     type="horizontal"
                     displayTooltips={true}
