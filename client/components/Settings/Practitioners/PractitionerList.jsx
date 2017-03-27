@@ -49,7 +49,8 @@ class PractitionerList extends Component {
       practitioners,
       practitionerId,
       weeklySchedules,
-      services, } = this.props;
+      services,
+      } = this.props;
 
     const selectedPractitioner = (practitionerId ?
       practitioners.get(practitionerId) : practitioners.first());
@@ -91,6 +92,7 @@ class PractitionerList extends Component {
         </Col>
         <Col xs={10} className={styles.practDataContainer}>
           <PractitionerTabs
+            key={this.props.practitionerId}
             practitioner={selectedPractitioner}
             weeklySchedule={weeklySchedule}
             setPractitionerId={this.props.setPractitionerId}

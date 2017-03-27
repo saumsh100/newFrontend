@@ -51,6 +51,7 @@ export default function ServicePractitioners(props) {
   if (practitioners) {
     const practitionerIds = service.get('practitioners');
     const initialValues = createInitialValues(practitionerIds, practitioners);
+
     showComponent = (
       <Form form={`${service.get('id')}practitioners`} onSubmit={handleSubmit} initialValues={initialValues} >
         {practitioners.toArray().map((practitioner, index) => {

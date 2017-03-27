@@ -13,13 +13,14 @@ class PractServicesList extends Component {
   }
 
   render() {
-    const { service, fieldValue} = this.props;
+    const { service, fieldValue, } = this.props;
+
     let showComponent = null;
 
-    if(fieldValue == null){
+    if (fieldValue == null) {
       return null;
     }
-    
+
     if (service) {
       showComponent = (
         <div>

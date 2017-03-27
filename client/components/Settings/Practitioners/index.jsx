@@ -17,10 +17,11 @@ class Practitioners extends Component {
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services'] });
+    this.props.fetchEntities({ key: 'services' });
   }
 
   render() {
-    const { practitioners, weeklySchedules, services } = this.props;
+    const { practitioners, weeklySchedules} = this.props;
 
     let showComponent = null;
     if (practitioners) {
@@ -29,7 +30,7 @@ class Practitioners extends Component {
         <PractitionerList
           practitioners={filteredPractitioners}
           weeklySchedules={weeklySchedules}
-          services={services}
+
         />
       );
     }
@@ -51,7 +52,6 @@ Practitioners.propTypes = {
 function mapStateToProps({ entities }) {
 
   const practitioners = entities.getIn(['practitioners', 'models']);
-  const services = entities.getIn(['services', 'models']);
 
   const weeklyScheduleIds = practitioners.toArray().map((practitioner) => {
     if (practitioner.get('isCustomSchedule')) {
@@ -63,10 +63,10 @@ function mapStateToProps({ entities }) {
     return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
   });
 
+
   return {
     practitioners,
     weeklySchedules,
-    services,
   };
 }
 

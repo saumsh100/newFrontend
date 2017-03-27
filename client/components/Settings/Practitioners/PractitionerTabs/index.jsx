@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Tab, Button, Header } from '../../../library';
+import { Tabs, Tab, IconButton, Header } from '../../../library';
 import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
@@ -17,6 +17,10 @@ class PractitionerTabs extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
     this.updatePractitioner = this.updatePractitioner.bind(this);
     this.deletePractitioner = this.deletePractitioner.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ index: 0 });
   }
 
   updatePractitioner(modifiedPractitioner) {
@@ -39,16 +43,17 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule, services } = this.props;
+    const { practitioner, weeklySchedule, } = this.props;
 
-    if (!practitioner && !weeklySchedule) {
+    if (!practitioner && !weeklySchedule ) {
       return null;
     }
 
     let serviceIds = null;
-    if (services) {
-      serviceIds = practitioner.get('services');
-    }
+
+
+    serviceIds = practitioner.get('services');
+
 
 
     return (
@@ -56,9 +61,7 @@ class PractitionerTabs extends Component {
         <div className={styles.pracHeaderContainer}>
           <Header title={practitioner.getFullName()} />
           <div className={styles.trashButton}>
-            <Button icon="trash" raised onClick={this.deletePractitioner}>
-              Delete
-            </Button>
+            <IconButton icon="trash" onClick={this.deletePractitioner} />
           </div>
         </div>
         <Tabs index={this.state.index} onChange={this.handleTabChange} >

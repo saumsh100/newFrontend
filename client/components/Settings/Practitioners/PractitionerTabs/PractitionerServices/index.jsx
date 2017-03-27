@@ -66,6 +66,7 @@ class PractitionerServices extends Component {
             change={this.props.change}
             practitioner={practitioner}
             handleSubmit={this.handleSubmit}
+            formName={`${practitioner.get('id')}service`}
           />
         );
       }
