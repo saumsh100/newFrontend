@@ -171,7 +171,7 @@ class IntelligenceComponent extends Component {
               percantage={80}
             />
           </FlexGrid>
-          <Col xs={12}>
+          <Col styles={styles.padding5} xs={12}>
             <AppointmentsBooked borderColor={colorMap.yellow}
                                 cardTitle="Appointments Booked Last 12 Months" />
           </Col>
