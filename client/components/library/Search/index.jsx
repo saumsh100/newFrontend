@@ -51,7 +51,7 @@ export class Search extends Component {
             refCallback={(input) => { input && input.focus(); }}
           />
           : <span className={styles.search__text} onClick={this.toggleSearchMode}>Search... </span>  }
-        {!calendar ?
+        {calendar ?
           <div>
             <Icon size={1.4} icon="calendar" onClick={this.toggleModal} />
             <Modal
