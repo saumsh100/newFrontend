@@ -64,6 +64,7 @@ module.exports = function setupDashNsp(io) {
 
       /**
        * Listen to changes on texts and publish events for new
+       * TODO this may break due to rooms and namespaces.
        */
       TextMessage.changes().then((feed) => {
         feed.each((error, doc) => {
@@ -74,10 +75,10 @@ module.exports = function setupDashNsp(io) {
             throw new Error('Deleting TextMessages is not implemented!');
           } else if (doc.getOldValue() == null) {
             console.log('feed received new message');
-            socket.emit('newTextMessage', doc);
+            dashNsp.in(doc.accountId).emit('newTextMessage', doc);
           } else {
             console.log('feed received updated message:', doc.status);
-            socket.emit('updatedTextMessage', doc);
+            dashNsp.in(doc.accountId).emit('updatedTextMessage', doc);
           }
         });
       });
@@ -96,6 +97,33 @@ module.exports = function setupDashNsp(io) {
             if (doc.getOldValue() === null) {
               console.log('[[INFO]] sending', doc);
               dashNsp.in(doc.accountId).emit('addRequest', doc);
+            }
+          });
+        });
+
+      /**
+       * Listen to changes on appointments and send events to sync client
+       */
+      Appointment
+        .filter({ accountId: accountIdFromSocket })
+        .changes({ squash: true })
+        .then((feed) => {
+          feed.each((error, doc) => {
+            if (error) throw new Error('Feed error');
+
+            if (doc.getOldValue() === null) {
+              if (doc.isSyncedWithPMS) {
+                // Created
+                console.log('[[INFO]] creating', doc);
+                dashNsp.in(doc.accountId).emit('add:Appointment', doc);
+              } else if (doc.isSyncedWithDash) {
+                // send to syncNsp to the
+                // syncNsp.in(doc.accountId).emit('add:Appointment', doc);
+              }
+            } else {
+              // Updated
+              console.log('[[INFO]] updating', doc);
+              dashNsp.in(doc.accountId).emit('add:Appointment', doc);
             }
           });
         });
