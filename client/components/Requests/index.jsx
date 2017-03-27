@@ -32,6 +32,21 @@ class Requests extends Component {
             patients={patients}
             services={services}
           />
+          <RequestList
+            sortedRequests={sortedRequests}
+            patients={patients}
+            services={services}
+          />
+          <RequestList
+            sortedRequests={sortedRequests}
+            patients={patients}
+            services={services}
+          />
+          <RequestList
+            sortedRequests={sortedRequests}
+            patients={patients}
+            services={services}
+          />
         </div>
       </Card>
     );
