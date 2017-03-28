@@ -27,8 +27,8 @@
   &__item {
     min-width: 250px;
     padding: 0 40px 0 15px;
-    display: flex;
-    align-items: center;
+    display: table;
+    width: 100%;
     position: relative;
     height: 140px;
     list-style: none;
@@ -98,10 +98,8 @@
 
     &_table {
       text-align: center;
-      padding: 0 50px;
-      @media screen and (min-width: 800px) {
-        padding: 0 15px;
-      }
+      width: 100px;
+      padding: 0 15px;
     }
     .table {
       &__number {

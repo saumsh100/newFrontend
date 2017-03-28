@@ -11,7 +11,6 @@
       align-items: center;
       height: 35px;
       background: $primary-white;
-      width: 100%;
       padding-left: 30px;
       margin-bottom: 20px;
       font-size: $medium-size;
@@ -25,7 +24,7 @@
           margin-right: 10px;
           flex: 1;
         }
-      } 
+      }
     }
     &__patientList {
       &_item {
@@ -270,7 +269,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    
+
     &__percentage {
       display: flex;
       flex-direction: column;
@@ -286,7 +285,7 @@
         color: #2CC4A7;
         font-size: 64px;
         font-weight: 800;
-        
+
       }
 
       &_left:last-child {
@@ -302,7 +301,7 @@
       &_right:first-child {
         color: #8FBBD6;
         font-size: 64px;
-        font-weight: 800; 
+        font-weight: 800;
       }
 
       &_right:last-child {
@@ -351,7 +350,7 @@
     justify-content: space-around;
     align-items: center;
     overflow: hidden;
-    
+
     &__stats {
       flex-direction: row;
       align-items: initial;
