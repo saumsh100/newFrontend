@@ -2,6 +2,7 @@
 @import "../../../../fonts";
 
 .dataStats {
+  display: flex;
   justify-content: center;
   height: 330px;
   width: 100%;
@@ -25,7 +26,6 @@
     color: $primary-color;
     @extend .font-large;
     margin-bottom: 10px;
-
   }
   &__wrapper {
     margin-top: 50px;
@@ -34,6 +34,62 @@
     justify-content: center;
     align-items: center;
   }
+}
+.right {
+  &__list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    width: 50%;
+    &_item {
+      position: relative;
+      margin-bottom: 20px;
+      height: 0;
+      border-left: 40px solid transparent;
+      border-right: 40px solid transparent;
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border: 0 solid transparent;
+        border-left-width: 15px;
+        border-right-width: 15px;
+      }
+      &:nth-child(1) {
+        border-top: 80px solid $primary-color;
+        width: 100%;
+        &::after {
+          border-top: 15px solid $primary-color;
+        }
+      }
+      &:nth-child(2) {
+        border-top: 80px solid $primary-blue;
+        width: 75%;
+        &::after {
+          border-top: 15px solid $primary-blue;
+        }
+      }
+      &:nth-child(3) {
+        border-top: 80px solid $primary-green;
+        width: 50%;
+        &::after {
+          border-top: 15px solid $primary-green;
+        }
+      }
+    }
+  }
+}
+.data {
+  position: absolute;
+  bottom: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  left: 50%;
 }
 .primaryColor {
   background: $primary-color;

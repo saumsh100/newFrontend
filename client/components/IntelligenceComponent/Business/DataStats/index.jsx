@@ -18,10 +18,11 @@ class DataStats extends Component{
   }
   render() {
     const {
-      data
+      borderColor,
+    data
     } = this.props;
     return (
-      <Card className={styles.dataStats}>
+      <Card  borderColor={borderColor} className={styles.dataStats}>
         <Col className={styles.dataStats__left} sm={12} md={4}>
           <div className={styles.left}>
             <Tabs index={this.state.index} onChange={this.handleTabChange}>
@@ -45,6 +46,17 @@ class DataStats extends Component{
         </Col>
         <Col className={styles.dataStats__right} sm={12} md={8}>
           <div className={styles.right}>
+            <ul className={styles.right__list}>
+              <li className={styles.right__list_item}>
+                <div className={styles.data}></div>
+              </li>
+              <li className={styles.right__list_item}>
+                <div className={styles.data}></div>
+              </li>
+              <li className={styles.right__list_item}>
+                <div className={styles.data}></div>
+              </li>
+            </ul>
           </div>
         </Col>
       </Card>

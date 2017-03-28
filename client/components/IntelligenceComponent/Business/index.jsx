@@ -29,7 +29,7 @@ class Business extends Component {
                 <BusinessStats data={data} className={styles.business__body_arrows} />
               </Col>
               <Col xs={12}>
-                <DataStats data={tabStep} className={styles.business__body_call} />
+                <DataStats data={tabStep} borderColor={colorMap.red} className={styles.business__body_call} />
               </Col>
             </Row>
           </Col>
