@@ -1,14 +1,14 @@
+import jwt from 'jwt-decode';
 import {
   addSocketEntity,
 } from '../actions/entities';
-import jwt from 'jwt-decode';
-
-const jwtToken = localStorage.getItem('token');
-const decodedToken = jwt(jwtToken);
-console.log(`[INFO] account=${decodedToken.activeAccountId}`);
-console.log('[INFO] jwt token: ', jwtToken);
 
 export default function connectSocketToStore(socket, store) {
+  const jwtToken = localStorage.getItem('token');
+  const decodedToken = jwt(jwtToken); // <<<< BREAKS HERE
+  console.log(`[INFO] account=${decodedToken.activeAccountId}`);
+  console.log('[INFO] jwt token: ', jwtToken);
+
   socket.on('connect', () => {
     socket
       .emit('authenticate', { token: jwtToken })
@@ -29,3 +29,4 @@ export default function connectSocketToStore(socket, store) {
     console.log('>>>> new join');
   });
 }
+

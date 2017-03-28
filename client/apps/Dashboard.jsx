@@ -35,10 +35,10 @@ if (!token) {
     browserHistory.push('/login');
   } else {
     store.dispatch(loginSuccess(decodedToken));
+    connectSocketToStore(socket, store);
   }
 }
 
-connectSocketToStore(socket, store);
 
 window.store = store;
 window.browserHistory = history;

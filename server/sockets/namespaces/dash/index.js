@@ -1,10 +1,8 @@
 const socketIoJwt = require('socketio-jwt');
 const globals = require('../../../config/globals');
-const normalize = require('../../../routes/api/normalize');
 const twilioClient = require('../../../config/twilio');
 const twilioConfig = require('../../../config/globals').twilio;
 const Appointment = require('../../../models/Appointment');
-const Patient = require('../../../models/Patient');
 const TextMessage = require('../../../models/TextMessage');
 const Request = require('../../../models/Request');
 
@@ -92,10 +90,10 @@ module.exports = function setupDashNsp(io) {
         .changes({ squash: true })
         .then((feed) => {
           feed.each((error, doc) => {
-            console.log('[[INFO]] accountId', accountIdFromSocket);
+            // console.log('[[INFO]] accountId', accountIdFromSocket);
             if (error) throw new Error('Feed error');
             if (doc.getOldValue() === null) {
-              console.log('[[INFO]] sending', doc);
+              // console.log('[[INFO]] sending', doc);
               dashNsp.in(doc.accountId).emit('addRequest', doc);
             }
           });
@@ -127,6 +125,10 @@ module.exports = function setupDashNsp(io) {
             }
           });
         });
+    })
+    .on('unauthorized', (msg) => {
+      console.err('unauthorized: ', JSON.stringify(msg.data));
+      throw new Error(msg.data.type);
     });
 
   return dashNsp;
