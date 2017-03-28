@@ -188,17 +188,17 @@ class IntelligenceComponent extends Component {
               <CardHeader className={styles.cardHeader} title={'Vebsite Visitor Conversions'} />
               <div className={styles.websiteVisitorConversions__mainContainer}>
                 <div className={styles.websiteVisitorConversions__rowContainer}>
-                  <div className={classNames(styles.columnContainer, styles.alignItemsCenter)} >
+                  <div className={styles.websiteVisitorConversions__conversionCount} >
                     <span className={styles.websiteVisitorConversions__row1}>3.5%</span>
                     <span className={styles.websiteVisitorConversions__row2} >Conversions Rate</span>
                   </div>
                 </div>
-                <div className={classNames(styles.websiteVisitorConversions__containerBottom, styles.spaceAround)}>
-                  <div className={classNames(styles.columnContainer, styles.alignItemsCenter)} >
+                <div className={styles.websiteVisitorConversions__containerBottom}>
+                  <div className={styles.websiteVisitorConversions__stats} >
                     <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >11086</span>
                     <span className={classNames(styles.colorBlack, styles.font24)} >Visits</span>
                   </div>
-                  <div className={classNames(styles.columnContainer, styles.width200, styles.justifyCenter)} >
+                  <div className={styles.websiteVisitorConversions__stats} >
                     <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >388</span>
                     <span className={classNames(styles.colorBlack, styles.font24)} >Appoinments</span>
                   </div>
