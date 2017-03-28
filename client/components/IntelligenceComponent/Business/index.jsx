@@ -3,6 +3,7 @@ import { Card, Col, Grid, Row,} from "../../library";
 import colorMap from "../../library/util/colorMap";
 import classNames from 'classnames';
 import BusinessStats from './BusinessStats';
+import DataStats from './DataStats';
 import styles from "./styles.scss";
 
 class Business extends Component {
@@ -12,6 +13,8 @@ class Business extends Component {
       {percentage: 12, question: true, count: 243, title: "Pickups", icon: "user", color: 'primaryBlue' },
       {percentage: 12, question: true, count: 102, title: "Bookings", icon: "calendar-o", color: 'primaryGreen' },
     ];
+    const tabStep = [{label: "Online Booking", data: {count: 353, title: "Website Visits", icon: "television", color: 'primaryColor' }},
+      {label: "Calls From Website", data: {count: 102, title: "Online Booking", icon: "users", color: 'primaryColor' }}, ];
     return (
       <Grid className={styles.business}>
         <Row>
@@ -24,6 +27,9 @@ class Business extends Component {
             <Row>
               <Col xs={12}>
                 <BusinessStats data={data} className={styles.business__body_arrows} />
+              </Col>
+              <Col xs={12}>
+                <DataStats data={tabStep} className={styles.business__body_call} />
               </Col>
             </Row>
           </Col>

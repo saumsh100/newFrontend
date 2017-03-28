@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Col, Row, Icon} from "../../../library";
+import classNames from 'classnames';
 import styles from "./styles.scss";
 
 class Arrow extends Component {
   render() {
-    const {percentage, question, count, title, icon} = this.props;
+    const {className, percentage, question, count, title, icon} = this.props;
     return (
-      <div className={styles.arrow}>
+      <div className={classNames(styles.arrow, className)}>
         <Row>
           <Col className={styles.arrow__header} xs={12}>
             <div className={styles.arrow__header_wrapper}>

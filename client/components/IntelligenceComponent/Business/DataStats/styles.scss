@@ -1,0 +1,49 @@
+@import "../../../../ui";
+@import "../../../../fonts";
+
+.dataStats {
+  justify-content: center;
+  height: 330px;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 20px;
+  &__left {
+    height: 100%;
+    max-height: 100%;
+    border-right: $selection-border $background-color;
+  }
+  &__right {
+  }
+}
+.left {
+  padding: 10px;
+  &__icon {
+    color: $primary-color;
+    margin-bottom: 20px;
+  }
+  &__count {
+    color: $primary-color;
+    @extend .font-large;
+    margin-bottom: 10px;
+
+  }
+  &__wrapper {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.primaryColor {
+  background: $primary-color;
+}
+.primaryBlue {
+  background: $primary-blue;
+}
+.primaryGreen {
+  background: $primary-green;
+}
+.primaryYellow {
+  background: $primary-yellow;
+}

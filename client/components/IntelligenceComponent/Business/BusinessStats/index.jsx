@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import { Row, Col,   } from '../../../library'
 import Arrow from '../Arrow';
+import classNames from 'classnames';
 import styles from './styles.scss';
 
 export default function BusinessStats(props) {
@@ -13,7 +14,7 @@ export default function BusinessStats(props) {
     <Row className={styles.businessStats}>
       {data.map(d => (
         <Col className={styles.businessStats__item} xs={12} md={4}>
-            <Arrow className={d.className} percentage={d.percentage} count={d.count} title={d.title} icon={d.icon} size={d.size} />
+            <Arrow className={classNames(d.className, styles[d.color])} percentage={d.percentage} count={d.count} title={d.title} icon={d.icon} size={d.size} />
         </Col>
       ))}
     </Row>
