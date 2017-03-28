@@ -255,18 +255,18 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Male vs Famale" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
-                <div className={classNames(styles.menContainer, styles.rowContainer, styles.spaceAround, styles.width100p)}>
-                  <div className={classNames(styles.menContainer__item, styles.columnContainer, styles.justifyCenter)}>
-                    <span className={classNames(styles.menContainer__item_text, styles.colorMan, styles.font82, styles.fontWeight800, "fa fa-user-o")}></span>
-                    <span className={classNames(styles.menContainer__item_text, styles.colorMan, styles.font82, styles.fontWeight800, styles.textAlignRight, styles.marginTop30)}>45%</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Male</span>
+              <div className={styles.maleVsFamale}>
+                <div className={styles.maleVsFamale__menContainer}>
+                  <div className={styles.maleVsFamale__menContainer__item}>
+                    <span className={classNames(styles.maleVsFamale__menContainer__item_man ,"fa fa-user-o")}></span>
+                    <span className={styles.maleVsFamale__menContainer__item_man}>45%</span>
+                    <span className={styles.maleVsFamale__menContainer__item_smallText} >Male</span>
                   </div>
 
-                  <div className={classNames(styles.menContainer__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.menContainer__item_text, styles.colorWoman, styles.font82, styles.fontWeight800, "fa fa-user-o")}></span>
-                    <span className={classNames(styles.menContainer__item_text, styles.colorMan, styles.font82, styles.fontWeight800, styles.textAlignRight, styles.marginTop30)}>55%</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Famale</span>
+                  <div className={styles.maleVsFamale__menContainer__item} >
+                    <span className={classNames(styles.maleVsFamale__menContainer__item_famale, "fa fa-user-o")}></span>
+                    <span className={styles.maleVsFamale__menContainer__item_famale}>55%</span>
+                    <span className={styles.maleVsFamale__menContainer__item_smallText} >Famale</span>
                   </div>
                 </div>
               </div>
