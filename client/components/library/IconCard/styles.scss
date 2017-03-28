@@ -1,0 +1,31 @@
+
+@import '../../../styles/dashboard.scss';
+
+.iconCard {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    height: 130px;
+    color: $color-white;
+    overflow: hidden;
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    &__count {
+      @extend .font-jumbo;
+    }
+    &__title {
+        @extend .font-header-title-white;
+    }
+    &__icon {
+        position: absolute;
+        bottom: -25%;
+        transform: translateY(-25%);
+        right: -5%;
+        color: rgba($primary-lightgrey, .5);
+    }
+}

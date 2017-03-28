@@ -1,10 +1,16 @@
 
-@import '../../../ui.scss';
+//@import '../../../ui.scss';
+@import '../../../styles/dashboard.scss';
+
 .cardHeader {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   padding-top: 0.5em;
+  position: relative;
+  @media screen and (max-width: 450px){
+    flex-direction: column;
+  }
 }
 
 .displayFlex {
@@ -14,15 +20,15 @@
 
 .cardCount {
   display: inline-block;
+  font-family: "Gotham Medium";
   font-size: 36px;
-  font-weight: 900;
+  font-weight: 800;
   padding-right: 5px;
   color: $primary-dark;
 }
 
 .title {
   display: inline-block;
-  font-size: 16px;
-  font-weight: 600;
-  color: $primary-dark;
+  @extend .font-header-title;
+
 }

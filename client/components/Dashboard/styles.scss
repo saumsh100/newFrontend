@@ -1,19 +1,88 @@
+@import "../../styles/dashboard.scss";
 
-.cardContainer {
+* {
+  box-sizing: border-box;
 }
-
-.requestContainer{
-  display: flex;
-  margin-left: auto;
+.dashboard {
+  width: 100%;
+  &__header {
+    padding: 5px 20px 0;
+    @media screen and (max-width: 450px) {
+      padding: 5px 10px 0;
+    }
+    &_title {
+      display: flex;
+      align-items: center;
+      height: 35px;
+      background: $primary-white;
+      width: 100%;
+      padding-left: 30px;
+      margin-bottom: 20px;
+      font-size: $medium-size;
+      b {
+        padding-left: 5px;
+      }
+    }
+    &_cards {
+      cursor: pointer;
+      margin-bottom: 20px;
+      div:not(:last-child) {
+        margin-right: 10px;
+        flex: 1;
+      }
+    }
+  }
+  &__body {
+    padding: 0 15px 45px 15px;
+    &_table {
+      height: 640px;
+    }
+    &_comments {
+      height: 640px;
+    }
+    &_request {
+      overflow: auto;
+      min-height: 635px;
+    }
+    @media screen and (max-width: 450px) {
+      padding: 0 5px 45px 5px;
+    }
+  }
+  &__patientList {
+    &_item {
+      min-width: 500px;
+      padding: 0 5px;
+      @media screen and (max-width: 400px) {
+        min-width: 300px;
+      }
+      @media screen and (max-width: 300px) {
+        min-width: auto;
+      }
+    }
+  }
+  &__requestContainer {
+    padding: 5px;
+  }
 }
-
+.primaryColor, .fa-phone {
+  background: $primary-color;
+}
+.primaryBlue, .fa-phone {
+  background: $primary-blue;
+}
+.primaryGreen, .fa-phone {
+  background: $primary-green;
+}
+.primaryYellow, .fa-phone {
+  background: $primary-yellow;
+}
 
 .loadingOuter {
   position: absolute;
   height: 100%;
   width: 100% ;
   background-color: white;
-  opacity: 0.4;
+  opacity: .4;
   display: flex;
 }
 
@@ -22,4 +91,11 @@
   justify-content: center;
   display: flex;
   width: 100%;
+}
+.padding {
+  padding: 0 5px;
+  margin-bottom: 30px;
+  @media screen and (max-width: 900px) {
+    margin-bottom: 15px;
+  }
 }

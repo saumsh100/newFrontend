@@ -52,6 +52,20 @@ const ROUTES = {
       label: 'Practitioners',
     },
   ],
+  '/intelligence': [
+    {
+      to: '/intelligence/overview',
+      label: 'Overview',
+    },
+    {
+      to: '/intelligence/business',
+      label: 'Business',
+    },
+    {
+      to: '/intelligence/social',
+      label: 'Social',
+    },
+  ],
 };
 
 class SubTabs extends Component {
@@ -95,6 +109,13 @@ class SubTabs extends Component {
         <RouterTabs
           location={location}
           routes={ROUTES['/settings']}
+        />
+      );
+    } else if (location.pathname.indexOf('/intelligence') === 0) {
+      subTabsComponent = (
+        <RouterTabs
+          location={location}
+          routes={ROUTES['/intelligence']}
         />
       );
     }

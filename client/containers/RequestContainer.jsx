@@ -15,12 +15,13 @@ class RequestContainer extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={this.props.className}>
         <Requests
           className={this.props.className}
           requests={this.props.requests}
           patients={this.props.patients}
           services={this.props.services}
+          borderColor={this.props.borderColor}
         />
       </div>
     );
