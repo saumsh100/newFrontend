@@ -60,7 +60,7 @@
 .menContainer {
   &__item {
     &_text {
-      font-size: 50px !important;
+      font-size: $jumbo-size !important;
     }
     @media screen and (max-width: 450px) {
       margin-top: 15px;
@@ -82,7 +82,7 @@
   &__text {
     @media screen and (max-width: 450px){
       margin-top: 5px!important;
-      font-size: 32px!important;
+      font-size: $large-size!important;
     }
   }
 }
@@ -111,15 +111,15 @@
   }
 
   &__row1 {
-    color: #2CC4A7;
-    font-size: 82px;
-    font-weight: 800;
+    color: $primary-green;
+    font-size: $extra-large-size;
+    font-weight: $large-weight;
   }
 
   &__row2 {
     color: $primary-dark;
-    font-size: 24px;
-    font-weight: 800;
+    font-size: $extra-medium-size;
+    font-weight: $large-weight;
     text-align: center;
   }
 
@@ -282,15 +282,15 @@
       }
 
       &_left:first-child {
-        color: #2CC4A7;
-        font-size: 64px;
-        font-weight: 800;
+        color: $primary-green;
+        font-size: $jumbo-size;
+        font-weight: $large-weight;
 
       }
 
       &_left:last-child {
         color: $primary-dark;
-        font-size: 24px;
+        font-size: $extra-medium-size;
 
       }
 
@@ -299,13 +299,13 @@
       }
 
       &_right:first-child {
-        color: #8FBBD6;
-        font-size: 64px;
-        font-weight: 800;
+        color: $primary-blue;
+        font-size: $jumbo-size;
+        font-weight: $large-weight;
       }
 
       &_right:last-child {
-        font-size: 24px;
+        font-size: $extra-medium-size;
         color: $primary-dark;
       }
 
@@ -363,19 +363,19 @@
         width: auto;
 
       &_left:first-child {
-        font-size: 42px;
+        font-size: $large-size;
         margin-left: 10px;
       }
       &_left:last-child {
-        font-size: 24px;
+        font-size: $extra-medium-size;
         text-align: center
       }
 
         &_right:first-child {
-          font-size: 42px;
+          font-size: $large-size;
         }
         &_right:last-child {
-          font-size: 24px;
+          font-size: $extra-medium-size;
           text-align: center
         }
       }
