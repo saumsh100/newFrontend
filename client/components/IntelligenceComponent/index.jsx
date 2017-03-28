@@ -276,22 +276,22 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Visitors by device" />
-              <div className={classNames(styles.visitors, styles.columnContainer, styles.spaceAround, styles.width100p, styles.height400)}>
-                <div className={classNames(styles.visitors__container, styles.rowContainer, styles.alignFlexEnd, styles.width100p, styles.spaceAround)} >
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.colorMobile, styles.font56, styles.fontWeight800, "fa fa-mobile-phone")}></span>
-                    <span className={classNames(styles.visitors__text, styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>5844</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Mobile</span>
+              <div className={styles.visitors}>
+                <div className={styles.visitors__container} >
+                  <div className={styles.visitors__item} >
+                    <span className={classNames(styles.visitors__item_mobile, "fa fa-mobile-phone")}></span>
+                    <span className={styles.visitors__item__text}>5844</span>
+                    <span className={styles.visitors__item__smallText}>Mobile</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.colorTablet, styles.font64, styles.fontWeight800, "fa fa-tablet")}></span>
-                    <span className={classNames(styles.visitors__text, styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>759</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Tablet</span>
+                  <div className={styles.visitors__item} >
+                    <span className={classNames(styles.visitors__item_tablet, "fa fa-tablet")}></span>
+                    <span className={styles.visitors__item__text}>759</span>
+                    <span className={styles.visitors__item__smallText}>Tablet</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.colorTablet, styles.font82, styles.fontWeight800, "fa fa-television")}></span>
-                    <span className={classNames(styles.visitors__text, styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>4663</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Website</span>
+                  <div className={styles.visitors__item} >
+                    <span className={classNames(styles.visitors__item_computer, "fa fa-television")}></span>
+                    <span className={styles.visitors__item__text}>4663</span>
+                    <span className={styles.visitors__item__smallText}>Website</span>
                   </div>
                 </div>
               </div>
