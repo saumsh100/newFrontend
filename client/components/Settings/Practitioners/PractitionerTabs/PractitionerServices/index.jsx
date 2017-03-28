@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import { change } from 'redux-form';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -63,7 +62,6 @@ class PractitionerServices extends Component {
             key={practitioner.get('id')}
             services={filteredServices}
             initialValues={initialValues}
-            change={this.props.change}
             practitioner={practitioner}
             handleSubmit={this.handleSubmit}
             formName={`${practitioner.get('id')}service`}
@@ -90,7 +88,6 @@ function mapStateToProps({ entities }){
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     fetchEntities,
-    change,
   }, dispatch);
 }
 

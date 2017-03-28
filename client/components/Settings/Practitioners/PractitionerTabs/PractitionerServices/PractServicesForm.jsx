@@ -1,78 +1,41 @@
 import React, {Component, PropTypes} from 'react';
 import PractServicesList from './PractServicesList';
 import { Form, Field, Toggle} from '../../../../library';
+import { change } from 'redux-form';
+import _ from 'lodash';
+import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 
 function checkValues(obj) {
-  let value = true;
-  for (const key of Object.keys(obj)) {
-        if (!obj[key]) {
-          value = false;
-          break;
-        }
-  }
-  return value;
+  const allTrue = Object.keys(obj).every((key) =>
+  { return obj[key] });
+  return allTrue;
 }
 
 class PractServicesForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      allServices: null,
-    }
     this.setAllServices = this.setAllServices.bind(this);
-    this.handleFieldToggle = this.handleFieldToggle.bind(this);
-    this.setFieldValues = this.setFieldValues.bind(this);
-  }
-
-  componentWillMount() {
-    const { initialValues } = this.props;
-    const value = checkValues(initialValues);
-    this.setState({
-      allServices: value,
-      fieldValues: initialValues,
-    });
-  }
-
-
-  handleFieldToggle(serviceId, newValue) {
-    const { allServices } = this.state;
-    const { values } = this.props;
-
-    values[serviceId] = newValue;
-
-    if (!newValue && allServices) {
-      this.setState({ allServices: false });
-    } else if (newValue && !allServices) {
-      const value = checkValues(values);
-      this.setState({ allServices: value });
-    }
+    this.setCheck = this.setCheck.bind(this);
   }
 
   setAllServices(e) {
     e.stopPropagation();
-    const { allServices, values } = this.state;
+    const { formName, values, allServices } = this.props;
 
-    this.setFieldValues(!allServices)
-      this.setState({
-        allServices: !allServices,
-      });
+    const actions = Object.keys(values).map((key) => {
+        return change(formName, key, !allServices);
+    });
+
+    this.props.dispatch(batchActions(actions));
   }
 
-  setFieldValues(value) {
-    const { values } = this.props;
-    let tempObj = values;
-    for (const key of Object.keys(tempObj)) {
-      if(key !== "allServices"){
-        tempObj[key] = value;
-      }
-    }
-    return tempObj;
+  setCheck(e) {
+    e.stopPropagation;
+    this.props.allServices = checkValues(this.props.values);
   }
-
   render() {
     const { services, practitioner, initialValues, formName, values } = this.props;
-    const { fieldValues } = this.state;
 
     let showComponent = null;
 
@@ -82,9 +45,8 @@ class PractServicesForm extends Component {
           <div>All Services</div>
             <Toggle
               name="allServices"
-              value={this.state.allServices}
               onChange={this.setAllServices}
-              checked={this.state.allServices}
+              checked={this.props.allServices}
             />
           <Form
             form={formName}
@@ -96,7 +58,6 @@ class PractServicesForm extends Component {
                 <PractServicesList
                   key={`${practitioner.get('id')}${index}`}
                   service={service}
-                  handleFieldToggle={this.handleFieldToggle}
                   fieldValue={values[service.get('id')]}
                 />
               );
@@ -119,12 +80,15 @@ function mapStateToProps({ form }, { formName }) {
   // form data is populated when component renders
   if (!form[formName]) {
     return {
-      values: {},
+      allServices: null,
+      values: {}
     };
   }
+  console.log(form[formName].values);
 
   return {
-    values: form[formName].values,
+    allServices: checkValues(form[formName].values),
+    values: form[formName].values
   };
 }
 
