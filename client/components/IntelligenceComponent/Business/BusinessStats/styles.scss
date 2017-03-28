@@ -1,0 +1,62 @@
+@import "../../../../ui";
+.businessStats {
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 20px;
+  &__item {
+    padding: 10px 0 25px;
+    position: relative;
+    @media screen and (max-width: 1020px) {
+      &::after {
+        content: "";
+        position: absolute;
+        right: 50%;
+        transform: translateX(50%);
+        border-left: 45px solid transparent;
+        border-top: 30px solid #FF715A;
+        border-right: 45px solid transparent;
+      }
+    }
+    @media screen and (min-width: 1020px) {
+      padding: 0 20px;
+      &:not(:first-child)::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 20px;
+        z-index: 1;
+        border-top: 65px solid transparent;
+        border-left: 30px solid $background-color;
+        border-bottom: 65px solid transparent;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: -10px;
+        border-top: 65px solid transparent;
+        border-left: 30px solid $primary-color;
+        border-bottom: 65px solid transparent;
+      }
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 20px;
+      }
+    }
+  }
+}
+.primaryColor {
+  background: $primary-color;
+}
+.primaryBlue {
+  background: $primary-blue;
+}
+.primaryGreen {
+  background: $primary-green;
+}
+.primaryYellow {
+  background: $primary-yellow;
+}
