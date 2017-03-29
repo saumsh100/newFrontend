@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from "react";
-import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart, ContainerList } from "../../library";
+import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart, ContainerList, LineChart } from "../../library";
 import BackgroundIcon from "../../library/BackgroundIcon";
 import colorMap from "../../library/util/colorMap";
 import classNames from 'classnames';
@@ -57,30 +57,6 @@ class Social extends Component {
             </Card>
           </Col>
 
-          <Col className={styles.padding} xs={12} md={12}>
-            <Card borderColor={colorMap.darkblue} className={styles.card}>
-              <CardHeader className={styles.cardHeader} title="Twitter activity overview" />
-              <div className={styles.facebookActivity} >
-                <div className={styles.facebookActivity__container} >
-                  <div className={styles.iconsContainer} >
-                    <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
-                    <span className={styles.iconsContainer__first}>2,493,840</span>
-                    <span className={styles.iconsContainer__last}>Impressions</span>
-                  </div>
-                  <div className={styles.iconsContainer} >
-                    <BackgroundIcon icon="heart" backgroundClassName="backgroundPowderBlue" />
-                    <span className={styles.iconsContainer__first}>2,493,840</span>
-                    <span className={styles.iconsContainer__last}>Engagements</span>
-                  </div>
-                  <div className={styles.iconsContainer} >
-                    <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
-                    <span className={styles.iconsContainer__first}>2,493,840</span>
-                    <span className={styles.iconsContainer__last}>Clicks</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </Col>
 
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
@@ -129,6 +105,84 @@ class Social extends Component {
           </Col>
 
 
+          <Col className={styles.padding} xs={12} md={12}>
+            <Card borderColor={colorMap.darkblue} className={styles.fans}>
+              <span className={styles.fans__between}>Woman</span> between age of
+              <span className={styles.fans__between}>35-44</span>
+              appear to be the leader force among your fans
+            </Card>
+          </Col>
+
+
+          <Col xs={12} sm={6}>
+            <Card className={styles.booked} borderColor={colorMap.darkblue}>
+              <div className={styles.booked__header}>
+                <CardHeader title={"Facebook audience"} />
+              </div>
+            <div className={styles.booked__body}>
+              <LineChart
+                displayTooltips={true}
+                labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+                dataSets={[
+                  {
+                    label: 'Appointments Booked',
+                    color: 'yellow',
+                    data: [125, 150, 143, 200, 180, 220, 300 ],
+                  }
+                ]}
+              />
+            </div>
+            </Card>
+          </Col>
+
+          <Col xs={12} sm={6}>
+            <ContainerList borderColor={colorMap.darkblue}
+               cardTitle="Top Cities"
+               data={[{
+                 title: "Vancouver, BC, Canada",
+                 hours: 160
+               },{
+                 title: "Calgary, AB, Canada",
+                 hours: 153
+               },{
+                 title: "Toronto, ON, Canada",
+                 hours: 111
+               },{
+                 title: "Winnipeg, MB, Canada",
+                 hours: 97
+               },{
+                 title: "Surrey, BC, Canada",
+                 hours: 62
+               }]} 
+            />
+          </Col>
+
+
+
+          <Col className={styles.padding} xs={12} md={12}>
+            <Card borderColor={colorMap.darkblue} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title="Twitter activity overview" />
+              <div className={styles.facebookActivity} >
+                <div className={styles.facebookActivity__container} >
+                  <div className={styles.iconsContainer} >
+                    <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Impressions</span>
+                  </div>
+                  <div className={styles.iconsContainer} >
+                    <BackgroundIcon icon="heart" backgroundClassName="backgroundPowderBlue" />
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Engagements</span>
+                  </div>
+                  <div className={styles.iconsContainer} >
+                    <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Clicks</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </Col>
 
           <Col xs={12} sm={6}>
             <ContainerList borderColor={colorMap.darkblue}
