@@ -19,8 +19,8 @@ $primary-grey: #efefef;
 $primary-lightgrey: #f0f0f0;
 $primary-white: #fafafa;
 $background-color: #E6E6E6;
+$primary-red: #FF715C;
 // $primary-color-dark: black;
-
 $disabled-color: lighten($primary-darkgrey, 25%);
 
 // Feedback Colors
@@ -51,13 +51,19 @@ $count-size: 36px;
 $title-size: 16px;
 
 //Font-sizes
+$extra-large-size: 82px;
 $jumbo-size: 55px;
+$x-large-size: 48px;
 $large-size: 34px;
+
+$extra-medium-size: 24px;
 $medium-size: 14px;
 $small-size: 12px;
+$extra-small-size: 10px;
 
 //Font-weights
 $jumbo-weight: 600;
 $large-weight: 700;
 $medium-weight: 500;
 $small-weight: 400;
+$normall-weight: 200;

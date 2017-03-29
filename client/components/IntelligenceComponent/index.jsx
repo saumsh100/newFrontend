@@ -188,19 +188,19 @@ class IntelligenceComponent extends Component {
               <CardHeader className={styles.cardHeader} title={'Vebsite Visitor Conversions'} />
               <div className={styles.websiteVisitorConversions__mainContainer}>
                 <div className={styles.websiteVisitorConversions__rowContainer}>
-                  <div className={classNames(styles.columnContainer, styles.alignItemsCenter)} >
+                  <div className={styles.websiteVisitorConversions__conversionCount} >
                     <span className={styles.websiteVisitorConversions__row1}>3.5%</span>
                     <span className={styles.websiteVisitorConversions__row2} >Conversions Rate</span>
                   </div>
                 </div>
-                <div className={classNames(styles.websiteVisitorConversions__containerBottom, styles.spaceAround)}>
-                  <div className={classNames(styles.columnContainer, styles.alignItemsCenter)} >
-                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >11086</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Visits</span>
+                <div className={styles.websiteVisitorConversions__containerBottom}>
+                  <div className={styles.websiteVisitorConversions__stats} >
+                    <span>11086</span>
+                    <span>Visits</span>
                   </div>
-                  <div className={classNames(styles.columnContainer, styles.width200, styles.justifyCenter)} >
-                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >388</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Appoinments</span>
+                  <div className={styles.websiteVisitorConversions__stats} >
+                    <span>388</span>
+                    <span>Appoinments</span>
                   </div>
                 </div>
               </div>
@@ -255,18 +255,18 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Male vs Famale" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
-                <div className={classNames(styles.menContainer, styles.rowContainer, styles.spaceAround, styles.width100p)}>
-                  <div className={classNames(styles.menContainer__item, styles.columnContainer, styles.justifyCenter)}>
-                    <span className={classNames(styles.menContainer__item_text, styles.colorMan, styles.font82, styles.fontWeight800, "fa fa-user-o")}></span>
-                    <span className={classNames(styles.menContainer__item_text, styles.colorMan, styles.font82, styles.fontWeight800, styles.textAlignRight, styles.marginTop30)}>45%</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Male</span>
+              <div className={styles.maleVsFamale}>
+                <div className={styles.maleVsFamale__menContainer}>
+                  <div className={styles.maleVsFamale__menContainer__item}>
+                    <span className={classNames(styles.maleVsFamale__menContainer__item_man ,"fa fa-user-o")}></span>
+                    <span className={styles.maleVsFamale__menContainer__item_man}>45%</span>
+                    <span className={styles.maleVsFamale__menContainer__item_smallText} >Male</span>
                   </div>
 
-                  <div className={classNames(styles.menContainer__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.menContainer__item_text, styles.colorWoman, styles.font82, styles.fontWeight800, "fa fa-user-o")}></span>
-                    <span className={classNames(styles.menContainer__item_text, styles.colorMan, styles.font82, styles.fontWeight800, styles.textAlignRight, styles.marginTop30)}>55%</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Famale</span>
+                  <div className={styles.maleVsFamale__menContainer__item} >
+                    <span className={classNames(styles.maleVsFamale__menContainer__item_famale, "fa fa-user-o")}></span>
+                    <span className={styles.maleVsFamale__menContainer__item_famale}>55%</span>
+                    <span className={styles.maleVsFamale__menContainer__item_smallText} >Famale</span>
                   </div>
                 </div>
               </div>
@@ -276,22 +276,22 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Visitors by device" />
-              <div className={classNames(styles.visitors, styles.columnContainer, styles.spaceAround, styles.width100p, styles.height400)}>
-                <div className={classNames(styles.visitors__container, styles.rowContainer, styles.alignFlexEnd, styles.width100p, styles.spaceAround)} >
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.colorMobile, styles.font56, styles.fontWeight800, "fa fa-mobile-phone")}></span>
-                    <span className={classNames(styles.visitors__text, styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>5844</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Mobile</span>
+              <div className={styles.visitors}>
+                <div className={styles.visitors__container} >
+                  <div className={styles.visitors__item} >
+                    <span className={classNames(styles.visitors__item_mobile, "fa fa-mobile-phone")}></span>
+                    <span className={styles.visitors__item__text}>5844</span>
+                    <span className={styles.visitors__item__smallText}>Mobile</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.colorTablet, styles.font64, styles.fontWeight800, "fa fa-tablet")}></span>
-                    <span className={classNames(styles.visitors__text, styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>759</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Tablet</span>
+                  <div className={styles.visitors__item} >
+                    <span className={classNames(styles.visitors__item_tablet, "fa fa-tablet")}></span>
+                    <span className={styles.visitors__item__text}>759</span>
+                    <span className={styles.visitors__item__smallText}>Tablet</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
-                    <span className={classNames(styles.colorTablet, styles.font82, styles.fontWeight800, "fa fa-television")}></span>
-                    <span className={classNames(styles.visitors__text, styles.colorBlack, styles.font48, styles.fontWeight800, styles.marginTop30)}>4663</span>
-                    <span className={classNames(styles.colorBlack, styles.font24, styles.fontWeight200)}>Website</span>
+                  <div className={styles.visitors__item} >
+                    <span className={classNames(styles.visitors__item_computer, "fa fa-television")}></span>
+                    <span className={styles.visitors__item__text}>4663</span>
+                    <span className={styles.visitors__item__smallText}>Website</span>
                   </div>
                 </div>
               </div>
@@ -300,7 +300,7 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
-              <div className={classNames(styles.rowContainer, styles.height400, styles.spaceAround, styles.bussiestTimeOfWeekWrapper)}>
+              <div className={styles.bussiestTimeOfWeekWrapper}>
                 <div className={classNames(styles.pieChartWrapper)}  style={{width: '200px'}} >
                   <PieChart
                     width={171}
@@ -308,10 +308,10 @@ class IntelligenceComponent extends Component {
                     data={[{ value: 25, color: "green" }, { value: 75, color: "grey" }]}
                   />
                 </div>
-                <div className={classNames(styles.columnContainer, styles.spaceAround)}>
-                  <div className={classNames(styles.columnContainer, styles.alignFlexEnd, styles.width200)} >
-                    <span className={classNames(styles.colorGreen, styles.font54, styles.fontWeight800)}>Tuesday</span>
-                    <span className={classNames(styles.colorBlack, styles.font20, styles.textAlignRight)}>12pm - 3pm</span>
+                <div className={styles.bussiestTimeOfWeekWrapper__day}>
+                  <div className={styles.bussiestTimeOfWeekWrapper__day__dayContent} >
+                    <span>Tuesday</span>
+                    <span>12pm - 3pm</span>
                   </div>
                 </div>
               </div>
@@ -357,8 +357,8 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Website Traffice Sources" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter)}>
-                <div className={classNames(styles.rowContainer, styles.width100p)}>
+              <div className={styles.websiteTrafikSources}>
+                <div className={styles.websiteTrafikSources__mainContent}>
                   <BarChart
                     displayTooltips={true}
                     labels={["Direct", "Referrals", "Search", "Social", "Mail", "Display"]}
