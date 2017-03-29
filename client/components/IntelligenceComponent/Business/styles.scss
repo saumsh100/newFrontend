@@ -1,5 +1,7 @@
 @import "../../../ui.scss";
-
+* {
+  box-sizing: border-box;
+}
 .business {
   &__header {
     &_title {
