@@ -66,93 +66,6 @@
   padding: 20px;
 }
 
-.columnContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.rowContainer {
-  display: flex;
-  flex-direction: row;
-}
-
-.alignItemsCenter {
-  alignItems: center;
-}
-
-.alignFlexEnd {
-  align-items: flex-end;
-}
-
-.spaceAround {
-  justify-content: space-around;
-}
-
-.justifyCenter {
-  justify-content: center;
-}
-
-.font24 {
-  font-size: 24;
-}
-
-.font48  {
-  font-size: 48px;
-}
-
-.font64 {
-  font-size: 64px;
-}
-
-.font48 {
-  font-size: 48px;
-}
-
-
-.font54 {
-  font-size: 54px;
-}
-
-.font56 {
-  font-size: 56px;
-}
-
-.font82 {
-  font-size: 82px;
-}
-
-.fontWeight200 {
-  font-weight: 200;
-}
-
-.fontWeight800 {
-  font-weight: 800;
-}
-
-.marginTop30 {
-  margin: 30px 0px 0px 0px;
-}
-
-.colorBlack {
-  color: #000000;
-}
-
-.colorGrey {
-  color: #B4B4B4;
-}
-
-.marginTop20 {
-  margin-top: 20px;
-}
-
-.marginBottom10 {
-  margin-bottom: 10px;
-}
-
-.width100p {
-  width: 100%;
-}
 
 .backgroundPowderBlue {
   color: $primary-blue;
@@ -223,6 +136,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
     &__container {
       display: flex;
       flex-direction: row;
@@ -517,7 +431,7 @@
   }
   &__body {
     position: relative;
-    overflow: auto;
+    overflow: hidden;
     max-height: 450px;
     margin-top: 50px;
     margin-bottom: -50px;

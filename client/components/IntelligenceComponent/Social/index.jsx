@@ -12,10 +12,10 @@ console.log(BackgroundIcon)
 class Social extends Component {
   render() {
     const data = [
-      {count: 388, title: "Facebook likes", icon: "facebook", size: 10, color: 'primaryBlue' },
-      {count: "11k", title: "Twitter followers", icon: "twitter", size: 10, color: 'primaryBlue' },
-      {count: 143, title: "Google +", icon: "bullhorn", size: 10, color: 'primaryGreen' },
-      {count: 671, title: "Instagram followers", icon: "star", size: 10, color: 'primaryYellow' },
+      {count: 388, title: "Facebook likes", icon: "facebook", size: 6, color: 'darkblue' },
+      {count: "11k", title: "Twitter followers", icon: "twitter", size: 6, color: 'primaryBlue' },
+      {count: 143, title: "Google +", icon: "bullhorn", size: 6, color: 'primaryRed' },
+      {count: 671, title: "Instagram followers", icon: "star", size: 6, color: 'primaryYellow' },
     ];
     return (
       <Grid className={styles.social}>
@@ -58,7 +58,7 @@ class Social extends Component {
           </Col>
 
           <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
+            <Card borderColor={colorMap.darkblue}>
               <CardHeader className={styles.cardHeader} title={'By Gender'} />
               <div className={styles.byGender}>
                 <div className={styles.byGender__stats}>
@@ -81,7 +81,7 @@ class Social extends Component {
           </Col>
 
           <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
-            <Card borderColor={colorMap.green} className={styles.card}>
+            <Card borderColor={colorMap.darkblue} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="By Age" />
               <div className={styles.ageRange}>
                 <div className={styles.ageRange__content}>
