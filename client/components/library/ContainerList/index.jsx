@@ -29,7 +29,8 @@ class ContainerList extends Component {
                     </div>
                     <div className={styles.data__item_right}>
                       <div className={styles.data__item_hours}>
-                        <span>{obj.hours + " h"}</span>
+                        {obj.hours && <span>{obj.hours}h</span>}
+                        {obj.data && <span>${obj.data}</span>}
                       </div>
                     </div>
                   </div>
