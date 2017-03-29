@@ -50,35 +50,65 @@ class DataStats extends Component{
               <Col className={styles.right__item} sm={12} md={7}>
                 <ul className={styles.right__list}>
                   <li className={styles.right__list_item}>
-                    <div className={styles.data}>22</div>
+                    <div className={styles.data}>
+                      <div className={styles.data__wrapper}>
+                        <div className={styles.data__count}>12</div>
+                        <Icon className={styles.data__icon} icon="user" size={3.5}/>
+                      </div>
+                    </div>
+                    <div className={styles.arrow}></div>
                   </li>
                   <li className={styles.right__list_item}>
-                    <div className={styles.data}>22</div>
+                    <div className={styles.data}>
+                      <div className={styles.data__wrapper}>
+                        <div className={styles.data__count}>12</div>
+                        <Icon className={styles.data__icon} icon="user" size={3.5}/>
+                      </div>
+                    </div>
+                    <div className={styles.arrow}></div>
                   </li>
                   <li className={styles.right__list_item}>
-                    <div className={styles.data}>22</div>
+                    <div className={styles.data}>
+                      <div className={styles.data__wrapper}>
+                        <div className={styles.data__count}>12</div>
+                        <Icon className={styles.data__icon} icon="user" size={3.5}/>
+                      </div>
+                    </div>
+                    <div className={styles.arrow}></div>
                   </li>
                 </ul>
               </Col>
               <Col className={styles.right__item} sm={12} md={5}>
                 <ul className={styles.right__percentage}>
                   <li className={styles.right__percentage_item}>
-                    <div className={styles.data}>
-                      <div className={styles.data__icon}>
+                    <div className={styles.information}>
+                      <div className={styles.information__count}>12%</div>
+                      <div className={styles.information__subtitle}>
+                        Subtitle
+                      </div>
+                      <div className={styles.information__question}>
                         <Icon icon="question-circle" size={1.5} />
                       </div>
                     </div>
                   </li>
                   <li className={styles.right__percentage_item}>
-                    <div className={styles.data}>
-                      <div className={styles.data__icon}>
+                    <div className={styles.information}>
+                      <div className={styles.information__count}>12%</div>
+                      <div className={styles.information__subtitle}>
+                        Subtitle
+                      </div>
+                      <div className={styles.information__question}>
                         <Icon icon="question-circle" size={1.5} />
                       </div>
                     </div>
                   </li>
                   <li className={styles.right__percentage_item}>
-                    <div className={styles.data}>
-                      <div className={styles.data__icon}>
+                    <div className={styles.information}>
+                      <div className={styles.information__count}>12%</div>
+                      <div className={styles.information__subtitle}>
+                        Subtitle
+                      </div>
+                      <div className={styles.information__question}>
                         <Icon icon="question-circle" size={1.5} />
                       </div>
                     </div>
