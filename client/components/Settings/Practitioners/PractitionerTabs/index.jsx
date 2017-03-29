@@ -50,11 +50,7 @@ class PractitionerTabs extends Component {
     }
 
     let serviceIds = null;
-
-
     serviceIds = practitioner.get('services');
-
-
 
     return (
       <div>

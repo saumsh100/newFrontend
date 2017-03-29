@@ -1,75 +1,51 @@
+import React, {Component, PropTypes} from 'react';
+import ServicesPractForm from './ServicesPractForm';
 
-import { Map } from 'immutable';
-import React, { Component, PropTypes } from 'react';
-import {  Form, Field, Button, FormSection, Header } from '../../../library';
+class ServicePractitioners extends Component {
 
-function createInitialValues(practitionerIds, practitioners) {
-  return practitioners.map(p => {
-    return practitionerIds.indexOf(p.get('id')) > -1;
-  }).toJS();
-}
-
-export default function ServicePractitioners(props) {
-
-  // TODO: in case of no practitioners render placeholder instead of the form
-  // TODO: put Form in its own component
-
-  const { service, practitioners, updateService } = props;
-
-  let showComponent = null;
-
-  if (!service) {
-    return null;
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  const handleSubmit = (values) => {
+  handleSubmit(values) {
+    const { service, updateService } = this.props;
     const storePractitionerIds = [];
 
-    for (const id in values) {
-      if (values[id]) {
-        storePractitionerIds.push(id);
-      }
+    for (let id in values) {
+        if (values[id]) {
+          storePractitionerIds.push(id);
+        }
     }
     const modifiedService = service.set('practitioners', storePractitionerIds);
     updateService(modifiedService);
-  };
-
-  const RenderPractitioners = ({ practitioner }) => {
-    if (!practitioner) {
-      return null;
-    }
-    const practitionerId = practitioner.get('id');
-
-    return (
-      <div>
-        {practitioner.getFullName()}
-        <Field component="Toggle" name={practitionerId} />
-      </div>
-    );
-  };
-
-  if (practitioners) {
-    const practitionerIds = service.get('practitioners');
-    const initialValues = createInitialValues(practitionerIds, practitioners);
-
-    showComponent = (
-      <Form form={`${service.get('id')}practitioners`} onSubmit={handleSubmit} initialValues={initialValues} >
-        {practitioners.toArray().map((practitioner, index) => {
-          return (
-            <RenderPractitioners
-              key={`${service.get('id')}${index}`}
-              practitioner={practitioner}
-            />
-          );
-        })}
-      </Form>
-    );
   }
 
-  return (
-    <div>
-      <Header title="Practitioners" />
-      {showComponent}
-    </div>
-  )
+  render() {
+    const { service, practitioners, practitionerIds } = this.props;
+
+    let showComponent = null;
+
+    if (service) {
+      showComponent = (
+        <ServicesPractForm
+          key={`${service.get('id')}PractForm`}
+          service={service}
+          practitioners={practitioners}
+          handleSubmit={this.handleSubmit}
+          practitionerIds={practitionerIds}
+          formName={`${service.get('id')}practitioners`}
+        />
+      );
+    }
+    
+    return (
+      <div>
+        {showComponent}
+      </div>
+    );
+  }
 }
+
+
+export default ServicePractitioners;

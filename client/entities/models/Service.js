@@ -9,7 +9,7 @@ const ServicesSchema = {
   bufferTime: null,
   unitCost: null,
   customCosts: {},
-  practitioners: [],
+  practitioners: null,
   allowedPractitioners: null,
 };
 

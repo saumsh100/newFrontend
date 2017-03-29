@@ -30,7 +30,6 @@ class Practitioners extends Component {
         <PractitionerList
           practitioners={filteredPractitioners}
           weeklySchedules={weeklySchedules}
-
         />
       );
     }

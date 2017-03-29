@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, Button, Header, } from '../../library';
+import {  Form, Field, IconButton, Header, } from '../../library';
 import styles from './styles.scss';
 
 const parseNum = value => value && parseInt(value);
@@ -12,7 +12,7 @@ const maxLength25 = maxLength(25);
 const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 
 
-class ServiceItemData extends Component {
+class ServiceDataItem extends Component {
   constructor(props) {
     super(props)
     this.updateService = this.updateService.bind(this);
@@ -56,9 +56,7 @@ class ServiceItemData extends Component {
           <div className={styles.serviceHeaderContainer}>
             <Header title={service.get('name')} />
             <div className={styles.trashButton}>
-              <Button icon="trash" notflat raised className={styles.trashButton__trashIcon} onClick={this.deleteService}>
-                Delete
-              </Button>
+              <IconButton icon="trash" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
             </div>
           </div>
           <div className={styles.servicesFormRow}>
@@ -103,4 +101,4 @@ class ServiceItemData extends Component {
   }
 }
 
-export default ServiceItemData;
+export default ServiceDataItem;

@@ -1,16 +1,12 @@
-import React, {Component, PropTypes,} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchEntities, } from '../../../thunks/fetchEntities';
-import ServiceList from './ServiceList';
+import { fetchEntities } from '../../../thunks/fetchEntities';
+import { setServiceId } from '../../../actions/accountSettings';
+import ServiceListContainer from './ServiceListContainer';
+import ServiceDataContainer from './ServiceDataContainer';
 import { Col } from '../../library';
 import styles from './styles.scss';
-
-const sortServicesAlphabetical = (a, b) => {
-  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-  return 0;
-};
 
 const sortPractitionersAlphabetical = (a, b) => {
   if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
@@ -18,34 +14,43 @@ const sortPractitionersAlphabetical = (a, b) => {
   return 0;
 };
 
+const sortServicesAlphabetical = (a, b) => {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+  if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+  return 0;
+};
 
 class Services extends Component {
+  constructor(props) {
+    super(props)
+  }
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'services', join: ['practitioners'] });
     this.props.fetchEntities({ key: 'practitioners' });
+    this.props.setServiceId({ id: null });
   }
 
   render() {
+    const { services, serviceId, practitioners } = this.props;
 
-    const { services, practitioners } = this.props;
-
-    let showComponent = null;
-    if (services && practitioners) {
-      const filteredServices = services.sort(sortServicesAlphabetical);
-      const filteredPractitioners = practitioners.sort(sortPractitionersAlphabetical);
-      showComponent = (
-        <ServiceList
-          services={filteredServices}
-          practitioners={filteredPractitioners}
-        />
-      );
+    if (!services || !practitioners) {
+      return null;
     }
 
     return (
-      <Col xs={12}>
-        {showComponent}
-      </Col>
+      <div className={styles.servicesMainContainer} >
+        <ServiceListContainer
+          services={services}
+          setServiceId={this.props.setServiceId}
+        />
+        <ServiceDataContainer
+          services={services}
+          setServiceId={this.props.setServiceId}
+          serviceId={serviceId}
+          practitioners={practitioners}
+        />
+      </div>
     );
   }
 }
@@ -56,16 +61,30 @@ Services.propTypes = {
   fetchEntities: PropTypes.func,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, accountSettings }) {
+  const services = entities.getIn(['services', 'models']);
+  const practitioners = entities.getIn(['practitioners', 'models']);
+
+  let serviceId = accountSettings.get('serviceId');
+
+  const filteredPractitioners = practitioners.sort(sortPractitionersAlphabetical);
+  const filteredServices = services.sort(sortServicesAlphabetical);
+
+  if (!serviceId) {
+    serviceId = null;
+  }
+
   return {
-    services: entities.getIn(['services', 'models']),
-    practitioners: entities.getIn(['practitioners', 'models']),
+    services: filteredServices,
+    practitioners: filteredPractitioners,
+    serviceId
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    setServiceId,
   }, dispatch);
 }
 

@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { ListItem } from '../../library';
 import styles from './styles.scss';
 
-class ServiceItem extends Component {
+class ServiceListItem extends Component {
   constructor(props) {
     super(props);
     this.showItem = this.showItem.bind(this);
@@ -22,10 +22,10 @@ class ServiceItem extends Component {
   }
 }
 
-ServiceItem.propTypes = {
+ServiceListItem.propTypes = {
   setServiceId: PropTypes.func,
   service: PropTypes.string,
 };
 
 
-export default ServiceItem;
+export default ServiceListItem;
