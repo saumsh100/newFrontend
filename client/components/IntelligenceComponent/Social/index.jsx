@@ -39,25 +39,23 @@ class Social extends Component {
                 <div className={styles.facebookActivity__container} >
                   <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
-                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
-                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Impressions</span>
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Impressions</span>
                   </div>
                   <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="heart" backgroundClassName="backgroundColorDarkBlue" />
-                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
-                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Engagements</span>
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Engagements</span>
                   </div>
                   <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
-                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
-                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Clicks</span>
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Clicks</span>
                   </div>
-                  
                 </div>
               </div>
             </Card>
           </Col>
-
 
           <Col className={styles.padding} xs={12} md={12}>
             <Card borderColor={colorMap.darkblue} className={styles.card}>
@@ -66,18 +64,18 @@ class Social extends Component {
                 <div className={styles.facebookActivity__container} >
                   <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
-                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
-                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Impressions</span>
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Impressions</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                  <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="heart" backgroundClassName="backgroundPowderBlue" />
-                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
-                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Engagements</span>
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Engagements</span>
                   </div>
-                  <div className={classNames(styles.visitors__item, styles.columnContainer, styles.justifyCenter)} >
+                  <div className={styles.iconsContainer} >
                     <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
-                    <span className={classNames(styles.visitors__text, styles.font24, styles.fontWeight800, styles.marginTop20, styles.marginBottom10)}>2,493,840</span>
-                    <span className={classNames(styles.colorGrey, styles.font24, styles.fontWeight200)}>Clicks</span>
+                    <span className={styles.iconsContainer__first}>2,493,840</span>
+                    <span className={styles.iconsContainer__last}>Clicks</span>
                   </div>
                 </div>
               </div>
@@ -85,22 +83,21 @@ class Social extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.darkblue}>
-              <CardHeader className={styles.cardHeader} title={'By gender'} />
+            <Card borderColor={colorMap.green}>
+              <CardHeader className={styles.cardHeader} title={'By Gender'} />
               <div className={styles.byGender}>
                 <div className={styles.byGender__stats}>
                   <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_left} >62.3%</span>
-                    <span className={styles.byGender__stats__percentage_left} >Famale</span>
+                    <span className={styles.byGender__stats__percentage_left} >68%</span>
+                    <span className={styles.byGender__stats__percentage_left} >Male</span>
                   </div>
                   <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_right} >62.3%</span>
-                    <span className={styles.byGender__stats__percentage_right} >Male</span>
+                    <span className={styles.byGender__stats__percentage_right} >32%</span>
+                    <span className={styles.byGender__stats__percentage_right} >Famale</span>
                   </div>
                 </div>
                 <div className={styles.pieChartWrapper}>
                   <PieChart
-
                   data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
                 />
                 </div>
@@ -110,10 +107,10 @@ class Social extends Component {
 
 
           <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.darkblue} className={styles.card}>
-              <CardHeader className={styles.cardHeader} title="Age Range" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter, styles.height400)}>
-                <div className={classNames(styles.rowContainer, styles.width100p)}>
+            <Card borderColor={colorMap.green} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title="By Age" />
+              <div className={styles.ageRange}>
+                <div className={styles.ageRange__content}>
                   <BarChart
                     type="horizontal"
                     displayTooltips={true}
@@ -130,6 +127,7 @@ class Social extends Component {
               </div>
             </Card>
           </Col>
+
 
 
           <Col xs={12} sm={6}>
