@@ -4,7 +4,7 @@
   margin: 0 5px 10px 5px;
   padding: 10px;
   &__title {
-    font-size: 14px;
+    font-size: $medium-size;
   }
 
   &__body {
@@ -25,20 +25,21 @@
   &__icon {
     margin-right: 10px;
 
-    font-size: 40px;
+    font-size: $large-size;
     color: #8CBCD6;
   }
 
   &__count {
-    font-size: 40px;
+    font-size: $large-size;
     text-align: center;
     font-weight: 600;
     color: #2e3845;
   }
 
   &__small {
-    font-size: 10px;
+    font-size: $small-size;
     color: #2e3845;
+    font-weight: $normall-weight;
   }
 
   &__first {
@@ -54,12 +55,12 @@
 
   &__vote_icons {
     margin-right: 20px;
-    font-size: 20px;
-    color: #8CBCD6;
+    font-size: $extra-medium-size;
+    color: $primary-blue;
   }
 
   &__vote_icons_text {
-    color: #2e3845;
+    color: $primary-dark;
     margin-left: 10px;
   }
 
@@ -90,11 +91,11 @@
 @media (max-width: 450px) {
   .sideByside {
     &__icon {
-      font-size: 20px;
+      font-size: $extra-medium-size;
     }
     &__count {
-      font-size: 20px;
-      font-weight: 300;
+      font-size: $extra-medium-size;
+      font-weight: $small-weight;
     }
   }
 }
