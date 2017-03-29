@@ -517,7 +517,7 @@
   }
   &__body {
     position: relative;
-    overflow: auto;
+    overflow: hidden;
     max-height: 450px;
     margin-top: 50px;
     margin-bottom: -50px;
