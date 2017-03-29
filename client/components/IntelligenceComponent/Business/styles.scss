@@ -1,13 +1,15 @@
 @import "../../../ui.scss";
-
+* {
+  box-sizing: border-box;
+}
 .business {
+  padding: 0 15px 45px 15px;
   &__header {
     &_title {
       display: flex;
       align-items: center;
       height: 60px;
       background: $primary-white;
-      width: 100%;
       padding-left: 30px;
       margin-bottom: 30px;
       font-size: $medium-size;
@@ -32,6 +34,9 @@
   &__body {
     &_arrows {
       padding-right: 50px;
+    }
+    &_call {
+      margin-bottom: 20px;
     }
   }
 }

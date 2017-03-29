@@ -2,9 +2,9 @@
 
 .mostLoyal {
   border-top: 5px solid $primary-color;
-  margin-bottom: 20px;
+  margin: 0 5px 20px;
   min-width: 250px;
-  max-height: 450px;
+  overflow: hidden;
   &__header {
     display: flex;
     align-items: center;
@@ -12,12 +12,14 @@
     margin-left: 15px;
   }
   &__body {
-    display:table;
+    display: block;
     width: 100%;
+    max-height: 450px;
+    overflow: auto;
   }
 }
 .data {
-  display: table-cell;
+  display: block;
   border-top: 1px solid $primary-grey;
   padding: 0;
   margin: 0;
@@ -25,8 +27,8 @@
   &__item {
     min-width: 250px;
     padding: 0 40px 0 15px;
-    display: flex;
-    align-items: center;
+    display: table;
+    width: 100%;
     position: relative;
     height: 140px;
     list-style: none;
@@ -73,13 +75,20 @@
       justify-content: space-around;
 
     }
+    @media(max-width: 864px) {
+      &_right {
+        width: auto;
+      }
+    }
+
+
     &_loyal {
       text-align: center;
       padding: 0 50px;
     }
     .loyal {
       &__number {
-        font-size: 24px;
+        font-size: $extra-medium-size;
         color: $primary-color;
       }
       &__text {
@@ -89,17 +98,15 @@
 
     &_table {
       text-align: center;
-      padding: 0 50px;
-      @media screen and (min-width: 800px) {
-        padding: 0 15px;
-      }
+      width: 100px;
+      padding: 0 15px;
     }
     .table {
       &__number {
-        font-size: 16px;
+        font-size: $medium-size;
       }
       &__text {
-        font-size: 12px;
+        font-size: $small-size;
         text-transform: uppercase;
         color: $primary-darkgrey;
       }

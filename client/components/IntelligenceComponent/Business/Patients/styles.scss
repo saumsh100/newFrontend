@@ -1,0 +1,53 @@
+@import "../../../../ui";
+@import "../../../../fonts";
+
+.patients {
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+  &__wrapper {
+    padding: 5px;
+    height: 130px;
+    @media screen and (max-width: 1020px){
+      padding: 5px 0;
+    }
+  }
+  &__item {
+    position: relative;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    &_count {
+      color: $primary-green;
+      @extend .font-large;
+    }
+    &_subtitle {
+      text-align: center;
+      @extend .font-medium;
+    }
+    &_date {
+      @extend .font-small;
+    }
+    &_icon {
+      position: absolute;
+      z-index: 1;
+      top: 2px;
+      right: 5px;
+      color: $inactive-color;
+    }
+  }
+}
+.primaryColor {
+  background: $primary-color;
+}
+.primaryBlue {
+  background: $primary-blue;
+}
+.primaryGreen {
+  background: $primary-green;
+}
+.primaryYellow {
+  background: $primary-yellow;
+}

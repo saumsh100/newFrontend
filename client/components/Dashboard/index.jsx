@@ -227,9 +227,9 @@ class Dashboard extends React.Component {
             <Card className={styles.dashboard__body_comments}
                   borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
-              <div styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <div styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                  <Col xs={12} md={12}>
+              <div className={styles.underspondedReviews}>
+                <div className={styles.underspondedReviews__mainContainer}>
+                  <Col xs={12} md={12} className={styles.underspondedReviews__comment} >
                     {DataBigComment.map(obj => {
                       return (
                         <BigCommentBubble

@@ -8,6 +8,12 @@
   align-items: center;
   padding-top: 0.5em;
   position: relative;
+
+  @media(max-width: 496px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
 }
 
 .displayFlex {
