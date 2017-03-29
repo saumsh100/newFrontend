@@ -39,3 +39,4 @@ rethinkdb_data/
 *.swo
 *.vim
 *.exe
+zz_*

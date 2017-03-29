@@ -10,6 +10,6 @@ const redisOptions = {
 
 module.exports = function (server) {
   const io = new Server(server);
-  io.adapter(redis(redisOptions));
+  // io.adapter(redis(redisOptions));
   setupDashNsp(io);
 };
