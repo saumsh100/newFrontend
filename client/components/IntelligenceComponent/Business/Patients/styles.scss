@@ -21,6 +21,7 @@
       @extend .font-large;
     }
     &_subtitle {
+      text-align: center;
       @extend .font-medium;
     }
     &_date {

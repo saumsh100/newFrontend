@@ -14,7 +14,12 @@ export default function BusinessStats(props) {
     <Row className={styles.businessStats}>
       {data.map(d => (
         <Col className={styles.businessStats__item} xs={12} md={4}>
-            <Arrow className={classNames(d.className, styles[d.color])} percentage={d.percentage} count={d.count} title={d.title} icon={d.icon} size={d.size} />
+            <Arrow className={classNames(d.className, styles[d.color])}
+                   percentage={d.percentage}
+                   count={d.count}
+                   title={d.title}
+                   icon={d.icon}
+                   size={d.size} />
         </Col>
       ))}
     </Row>

@@ -18,11 +18,16 @@ class Business extends Component {
     const tabStep = [{label: "Online Booking", data: {count: 353, title: "Website Visits", icon: "television", color: 'primaryColor' }},
       {label: "Calls From Website", data: {count: 102, title: "Online Booking", icon: "users", color: 'primaryColor' }}, ];
 
-    const patientsData = [
+    const patientsData1 = [
       {count: 5433, title: "Active Patients", date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
       {count: 39, title: "New Patients", date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
       {count: 1746, title: "Patients with Hygiene Appts", date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
       {count: "$288", title: "Average Hourly Production", date:  moment({year: 2015, month: 6, day: 15}).fromNow(), color: 'primaryGreen' },];
+    const patientsData2 = [
+      {count: 160, title: "Unflled Hours", date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
+      {count: 480, title: "Schedule Hours", date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
+      {count: 13, title: "Broken Appts Not Filled", date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
+      {count: "$1300", title: "Revenue Lost From Broken Appts", date:  moment({year: 2015, month: 6, day: 15}).fromNow(), color: 'primaryGreen' },];
     return (
       <Grid className={styles.business}>
         <Row>
@@ -40,26 +45,26 @@ class Business extends Component {
                 <DataStats data={tabStep} borderColor={colorMap.red} className={styles.business__body_call} />
               </Col>
               <Col xs={12}>
-                <Patients data={patientsData} borderColor={colorMap.green} className={styles.business__body_call} />
+                <Patients data={patientsData1} borderColor={colorMap.green} className={styles.business__body_call} />
               </Col>
               <Col xs={12} sm={6}>
                 <ContainerList borderColor={colorMap.darkblue}
                                cardTitle="Procedure by Hours"
                                data={[{
                                  title: "Invisalign",
-                                 data: 123,
+                                 hours: "33,487"
                                },{
                                  title: "Teeth Whitening",
-                                 data: 123,
+                                 hours: "3,617"
                                },{
                                  title: "Regular Checkup",
-                                 data: 123,
+                                 hours: "1,901"
                                },{
                                  title: "Lost Fillings",
-                                 data: 123,
+                                 hours: "13,717"
                                },{
                                  title: "Emergency Appointments",
-                                 data: 123,
+                                 hours: "33,487"
                                }]} />
               </Col>
               <Col xs={12} sm={6}>
@@ -83,7 +88,7 @@ class Business extends Component {
                                }]} />
               </Col>
               <Col xs={12}>
-                <Patients data={patientsData} borderColor={colorMap.blue} className={styles.business__body_call} />
+                <Patients data={patientsData2} borderColor={colorMap.blue} className={styles.business__body_call} />
               </Col>
             </Row>
           </Col>
