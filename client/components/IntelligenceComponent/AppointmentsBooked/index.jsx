@@ -8,6 +8,9 @@ class AppointmentsBooked extends Component {
     const {
       borderColor,
       cardTitle,
+      labels,
+      dataSets,
+
     } = this.props;
     return (
       <Card className={styles.booked} borderColor={borderColor}>
@@ -17,14 +20,8 @@ class AppointmentsBooked extends Component {
         <div className={styles.booked__body}>
           <LineChart
             displayTooltips={true}
-            labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
-            dataSets={[
-              {
-                label: 'Appointments Booked',
-                color: 'yellow',
-                data: [125, 150, 143, 200, 180, 220, 300 ],
-              }
-            ]}
+            labels={labels}
+            dataSets={dataSets}
           />
         </div>
       </Card>

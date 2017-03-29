@@ -172,8 +172,18 @@ class IntelligenceComponent extends Component {
             />
           </FlexGrid>
           <Col styles={styles.padding5} xs={12}>
-            <AppointmentsBooked borderColor={colorMap.yellow}
-                                cardTitle="Appointments Booked Last 12 Months" />
+            <AppointmentsBooked 
+              borderColor={colorMap.yellow}
+              cardTitle="Appointments Booked Last 12 Months"
+              labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+              dataSets={[
+                {
+                  label: 'Appointments Booked',
+                  color: 'yellow',
+                  data: [125, 150, 143, 200, 180, 220, 300 ],
+                }
+              ]}
+            />
           </Col>
           <Col styles={styles.padding5} xs={12}>
             <MostLoyal borderColor={colorMap.red}

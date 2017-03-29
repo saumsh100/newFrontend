@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from "react";
-import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart, ContainerList } from "../../library";
+import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart, ContainerList, LineChart } from "../../library";
 import BackgroundIcon from "../../library/BackgroundIcon";
 import colorMap from "../../library/util/colorMap";
 import classNames from 'classnames';
@@ -57,8 +57,104 @@ class Social extends Component {
             </Card>
           </Col>
 
-          <Col className={styles.padding} xs={12} md={12}>
-            <Card borderColor={colorMap.darkblue} className={styles.card}>
+          <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
+            <Card borderColor={colorMap.green}>
+              <CardHeader className={styles.cardHeader} title={'By Gender'} />
+              <div className={styles.byGender}>
+                <div className={styles.byGender__stats}>
+                  <div className={styles.byGender__stats__percentage} >
+                    <span className={styles.byGender__stats__percentage_left} >68%</span>
+                    <span className={styles.byGender__stats__percentage_left} >Male</span>
+                  </div>
+                  <div className={styles.byGender__stats__percentage} >
+                    <span className={styles.byGender__stats__percentage_right} >32%</span>
+                    <span className={styles.byGender__stats__percentage_right} >Famale</span>
+                  </div>
+                </div>
+                <div className={styles.pieChartWrapper}>
+                  <PieChart
+                  data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
+                />
+                </div>
+              </div>
+            </Card>
+          </Col>
+
+          <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
+            <Card borderColor={colorMap.green} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title="By Age" />
+              <div className={styles.ageRange}>
+                <div className={styles.ageRange__content}>
+                  <BarChart
+                    type="horizontal"
+                    displayTooltips={true}
+                    labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+                    dataSets={[
+                      { label: 'Appointments Booked',
+                        color: ['yellow', 'red', 'green', 'blue'],
+                        data: [18, 25, 35, 45, 55 ] ,
+                      },
+                    ]
+                    }
+                  />
+                </div>
+              </div>
+            </Card>
+          </Col>
+
+          <Col className={classNames(styles.padding, styles.margin)} xs={12} md={12}>
+            <Card borderColor={colorMap.darkblue} className={styles.fans}>
+              <span className={styles.fans__between}>Woman</span> between age of
+              <span className={styles.fans__between}>35-44</span>
+              appear to be the leader force among your fans
+            </Card>
+          </Col>
+
+          <Col className={styles.margin} xs={12} sm={6}>
+            <Card className={styles.booked} borderColor={colorMap.darkblue}>
+              <div className={styles.booked__header}>
+                <CardHeader title={"Facebook audience"} />
+              </div>
+            <div className={styles.booked__body}>
+              <LineChart
+                displayTooltips={true}
+                labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+                dataSets={[
+                  {
+                    label: 'Appointments Booked',
+                    color: 'yellow',
+                    data: [125, 150, 143, 200, 180, 220, 300 ],
+                  }
+                ]}
+              />
+            </div>
+            </Card>
+          </Col>
+
+          <Col className={styles.margin} xs={12} sm={6}>
+            <ContainerList borderColor={colorMap.darkblue}
+               cardTitle="Top Cities"
+               data={[{
+                 title: "Vancouver, BC, Canada",
+                 hours: 160
+               },{
+                 title: "Calgary, AB, Canada",
+                 hours: 153
+               },{
+                 title: "Toronto, ON, Canada",
+                 hours: 111
+               },{
+                 title: "Winnipeg, MB, Canada",
+                 hours: 97
+               },{
+                 title: "Surrey, BC, Canada",
+                 hours: 62
+               }]} 
+            />
+          </Col>
+
+          <Col className={classNames(styles.padding, styles.margin)} xs={12} md={12}>
+            <Card borderColor={colorMap.primaryBlue} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="Twitter activity overview" />
               <div className={styles.facebookActivity} >
                 <div className={styles.facebookActivity__container} >
@@ -82,8 +178,8 @@ class Social extends Component {
             </Card>
           </Col>
 
-          <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
+          <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
+            <Card borderColor={colorMap.primaryBlue}>
               <CardHeader className={styles.cardHeader} title={'By Gender'} />
               <div className={styles.byGender}>
                 <div className={styles.byGender__stats}>
@@ -105,9 +201,8 @@ class Social extends Component {
             </Card>
           </Col>
 
-
-          <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green} className={styles.card}>
+          <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
+            <Card borderColor={colorMap.primaryBlue} className={styles.card}>
               <CardHeader className={styles.cardHeader} title="By Age" />
               <div className={styles.ageRange}>
                 <div className={styles.ageRange__content}>
@@ -128,31 +223,56 @@ class Social extends Component {
             </Card>
           </Col>
 
-
-
-          <Col xs={12} sm={6}>
-            <ContainerList borderColor={colorMap.darkblue}
-              cardTitle="Top Cities"
-              data={[{
-               title: "Invisalign",
-               hours: 42
-              },{
-               title: "Invisalign",
-               hours: 42
-              },{
-               title: "Invisalign",
-               hours: 42
-              },{
-               title: "Invisalign",
-               hours: 42
-              },{
-               title: "Invisalign",
-               hours: 42
-              }]} />
+          <Col className={classNames(styles.padding, styles.margin)} xs={12} md={12}>
+            <Card borderColor={colorMap.primaryBlue} className={styles.fans}>
+              <span className={styles.fans__primaryBlue}>Woman</span> between age of
+              <span className={styles.fans__primaryBlue}>35-44</span>
+              appear to be the leader force among your fans
+            </Card>
           </Col>
 
+          <Col className={styles.margin} xs={12} sm={6}>
+            <Card className={styles.booked} borderColor={colorMap.primaryBlue}>
+              <div className={styles.booked__header}>
+                <CardHeader title={"Twitter audience"} />
+              </div>
+            <div className={styles.booked__body}>
+              <LineChart
+                displayTooltips={true}
+                labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+                dataSets={[
+                  {
+                    label: 'Appointments Booked',
+                    color: 'yellow',
+                    data: [125, 150, 143, 200, 180, 220, 300 ],
+                  }
+                ]}
+              />
+            </div>
+            </Card>
+          </Col>
 
-
+          <Col className={styles.margin} xs={12} sm={6}>
+            <ContainerList borderColor={colorMap.primaryBlue}
+               cardTitle="Top Cities"
+               data={[{
+                 title: "Vancouver, BC, Canada",
+                 hours: 160
+               },{
+                 title: "Calgary, AB, Canada",
+                 hours: 153
+               },{
+                 title: "Toronto, ON, Canada",
+                 hours: 111
+               },{
+                 title: "Winnipeg, MB, Canada",
+                 hours: 97
+               },{
+                 title: "Surrey, BC, Canada",
+                 hours: 62
+               }]} 
+            />
+          </Col>
         </Row>
       </Grid>
     );
