@@ -9,8 +9,13 @@
     font-weight: $large-weight;
     margin: 0 10px 0 10px;
   }
-}
 
+  &__primaryBlue {
+    color: $primary-blue;
+    font-weight: $large-weight;
+    margin: 0 10px 0 10px; 
+  }
+}
 
 .social {
   &__header {
@@ -206,6 +211,11 @@
     }
   }
 
+}
+
+
+.margin {
+  margin-top: 10px;
 }
 
 .facebookActivity {
