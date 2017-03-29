@@ -24,7 +24,7 @@
       @extend .font-header-title;
     }
     &_date {
-      font-size: 14px;
+      font-size: $medium-size;
       color: #b5b5b5;
     }
     @media screen and (max-width: 800px){

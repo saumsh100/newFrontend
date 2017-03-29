@@ -88,7 +88,7 @@
     }
     .loyal {
       &__number {
-        font-size: 24px;
+        font-size: $extra-medium-size;
         color: $primary-color;
       }
       &__text {
@@ -103,10 +103,10 @@
     }
     .table {
       &__number {
-        font-size: 16px;
+        font-size: $medium-size;
       }
       &__text {
-        font-size: 12px;
+        font-size: $small-size;
         text-transform: uppercase;
         color: $primary-darkgrey;
       }
