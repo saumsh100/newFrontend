@@ -8,6 +8,9 @@
   &__wrapper {
     padding: 5px;
     height: 130px;
+    @media screen and (max-width: 1020px){
+      padding: 5px 0;
+    }
   }
   &__item {
     position: relative;

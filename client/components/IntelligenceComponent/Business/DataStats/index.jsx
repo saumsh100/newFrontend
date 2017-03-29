@@ -21,6 +21,15 @@ class DataStats extends Component{
       borderColor,
       data
     } = this.props;
+    const hardcodeData1 = [
+      {count: 202, icon: "phone"},
+      {count: 141, icon: "user"},
+      {count: 71, icon: "calendar-o"},];
+    const hardcodeData2 = [
+      {percentage: 2, subtitle: "Calls From Website"},
+      {percentage: 70, subtitle: "Pickups"},
+      {percentage: 53, subtitle: "Booking"},];
+
     return (
       <Card  borderColor={borderColor} className={styles.dataStats}>
         <Row className={styles.dataStats__wrapper}>
@@ -49,70 +58,38 @@ class DataStats extends Component{
             <div className={styles.right}>
               <Col className={styles.right__item} sm={12} md={7}>
                 <ul className={styles.right__list}>
-                  <li className={styles.right__list_item}>
-                    <div className={styles.data}>
-                      <div className={styles.data__wrapper}>
-                        <div className={styles.data__count}>12</div>
-                        <Icon className={styles.data__icon} icon="user" size={3.5}/>
-                      </div>
-                    </div>
-                    <div className={styles.arrow}></div>
-                  </li>
-                  <li className={styles.right__list_item}>
-                    <div className={styles.data}>
-                      <div className={styles.data__wrapper}>
-                        <div className={styles.data__count}>12</div>
-                        <Icon className={styles.data__icon} icon="user" size={3.5}/>
-                      </div>
-                    </div>
-                    <div className={styles.arrow}></div>
-                  </li>
-                  <li className={styles.right__list_item}>
-                    <div className={styles.data}>
-                      <div className={styles.data__wrapper}>
-                        <div className={styles.data__count}>12</div>
-                        <Icon className={styles.data__icon} icon="user" size={3.5}/>
-                      </div>
-                    </div>
-                    <div className={styles.arrow}></div>
-                  </li>
+                  {hardcodeData1.map((d) => {
+                    return (
+                      <li className={styles.right__list_item}>
+                        <div className={styles.data}>
+                          <div className={styles.data__wrapper}>
+                            <span className={styles.data__count}>{d.count}</span>
+                            <Icon className={styles.data__icon} icon={d.icon} size={2}/>
+                          </div>
+                        </div>
+                        <div className={styles.arrow}></div>
+                      </li>
+                    )
+                  })}
                 </ul>
               </Col>
               <Col className={styles.right__item} sm={12} md={5}>
                 <ul className={styles.right__percentage}>
-                  <li className={styles.right__percentage_item}>
-                    <div className={styles.information}>
-                      <div className={styles.information__count}>12%</div>
-                      <div className={styles.information__subtitle}>
-                        Subtitle
-                      </div>
-                      <div className={styles.information__question}>
-                        <Icon icon="question-circle" size={1.5} />
-                      </div>
-                    </div>
-                  </li>
-                  <li className={styles.right__percentage_item}>
-                    <div className={styles.information}>
-                      <div className={styles.information__count}>12%</div>
-                      <div className={styles.information__subtitle}>
-                        Subtitle
-                      </div>
-                      <div className={styles.information__question}>
-                        <Icon icon="question-circle" size={1.5} />
-                      </div>
-                    </div>
-                  </li>
-                  <li className={styles.right__percentage_item}>
-                    <div className={styles.information}>
-                      <div className={styles.information__count}>12%</div>
-                      <div className={styles.information__subtitle}>
-                        Subtitle
-                      </div>
-                      <div className={styles.information__question}>
-                        <Icon icon="question-circle" size={1.5} />
-                      </div>
-                    </div>
-                  </li>
+                  {hardcodeData2.map((d) => {
+                    return (
+                      <li className={styles.right__percentage_item}>
+                        <div className={styles.information}>
+                          <div className={styles.information__count}>{d.percentage}%</div>
+                          <div className={styles.information__subtitle}>
+                            {d.subtitle}
+                          </div>
+                        </div>
+                        <div className={styles.information__question}>
+                          <Icon icon="question-circle" size={1.5} />
+                        </div>
+                      </li>
+                    )
+                  })}
                 </ul>
               </Col>
             </div>

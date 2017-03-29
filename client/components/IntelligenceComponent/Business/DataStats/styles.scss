@@ -18,6 +18,7 @@
     border-right: $selection-border $background-color;
     @media screen and (max-width: 1020px) {
       height: auto;
+      border-right: none;
     }
   }
   &__right {
@@ -197,7 +198,7 @@
     align-items: flex-end;
     list-style: none;
     padding: 0;
-    width: 50%;
+    width: 70%;
     margin-left: auto;
     margin-right: 50px;
     @media screen and (max-width: 1020px) {
@@ -265,15 +266,15 @@
 }
 .data {
   &__wrapper {
-    display: inline-flex;
-    vertical-align: middle;
-    align-items: center;
   }
   &__count {
+    padding-right: 5px;
+    vertical-align: sub;
     color: $color-white;
     @extend .font-large
   }
   &__icon {
+    vertical-align: sub;
     color: rgba($primary-lightgrey, .8);
   }
   &__question {
@@ -289,7 +290,6 @@
   justify-content: center;
   flex-direction: column;
   height: 100%;
-  width: 100%;
   z-index: 1;
   position: absolute;
   top: 50%;
@@ -307,8 +307,11 @@
     position: absolute;
     z-index: 1;
     top: 2px;
-    right: 0;
+    right: -20px;
     color: rgba($primary-lightgrey, .8);
+    @media screen and (max-width: 1020px) {
+      right: 2px;
+    }
   }
 }
 .primaryColor {
