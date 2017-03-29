@@ -10,7 +10,6 @@ import styles from './styles.scss';
 class ServiceDataContainer extends Component {
   constructor(props) {
     super(props);
-
     this.updateService = this.updateService.bind(this);
     this.deleteService = this.deleteService.bind(this);
   }
@@ -34,6 +33,7 @@ class ServiceDataContainer extends Component {
 
     let showComponent1 = null;
     let showComponent2 = null;
+    
     const practitionerIds = (
       selectedService ? selectedService.get('practitioners') : null);
 

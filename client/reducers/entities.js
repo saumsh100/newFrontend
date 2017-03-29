@@ -86,9 +86,14 @@ export default handleActions({
     let newState = state;
     each(entities, (collectionMap, key) => {
       each(collectionMap, (modelData, id) => {
-        // newModel will have lastUpdated populated
-        const newModel = new Models[key](modelData);
-        newState = newState.setIn([key, 'models', id], newModel);
+        const model = newState.getIn([key, 'models', id]);
+        if (!model) {
+          // newModel will have lastUpdated populated
+          const newModel = new Models[key](modelData);
+          newState = newState.setIn([key, 'models', id], newModel);
+        } else {
+          newState = newState.mergeIn([key, 'models', id], modelData);
+        }
       });
     });
 

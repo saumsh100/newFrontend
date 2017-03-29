@@ -2,8 +2,9 @@ import createModel from '../createModel';
 
 const PractitionerSchema = {
   id: null,
+  createdAt: null,
   accountId: null,
-  services: null,
+  services: [],
   firstName: null,
   lastName: null,
   isCustomSchedule: null,

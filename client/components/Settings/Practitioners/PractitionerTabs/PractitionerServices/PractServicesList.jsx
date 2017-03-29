@@ -9,11 +9,7 @@ class PractServicesList extends Component {
     const { service, fieldValue, } = this.props;
 
     let showComponent = null;
-
-    if (fieldValue == null) {
-      return null;
-    }
-
+    
     if (service) {
       showComponent = (
         <div>
@@ -21,7 +17,6 @@ class PractServicesList extends Component {
           <Field
             component="Toggle"
             name={service.get('id')}
-            checked={fieldValue}
           />
         </div>
       );

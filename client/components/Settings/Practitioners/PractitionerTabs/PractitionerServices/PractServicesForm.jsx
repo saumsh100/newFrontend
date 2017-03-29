@@ -52,13 +52,15 @@ class PractServicesForm extends Component {
             form={formName}
             onSubmit={this.props.handleSubmit}
             initialValues={initialValues}
+            enableReinitialize
+            keepDirtyOnReinitialize
+            destroyOnUnmount={false}
           >
             {services.toArray().map((service, index) => {
               return (
                 <PractServicesList
                   key={`${practitioner.get('id')}${index}`}
                   service={service}
-                  fieldValue={values[service.get('id')]}
                 />
               );
             })}
@@ -76,7 +78,6 @@ class PractServicesForm extends Component {
 }
 
 function mapStateToProps({ form }, { formName }) {
-
   // form data is populated when component renders
   if (!form[formName]) {
     return {
@@ -84,7 +85,6 @@ function mapStateToProps({ form }, { formName }) {
       values: {}
     };
   }
-  console.log(form[formName].values);
 
   return {
     allServices: checkValues(form[formName].values),

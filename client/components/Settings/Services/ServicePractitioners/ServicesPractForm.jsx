@@ -16,6 +16,7 @@ function checkValues(obj) {
 }
 
 function createInitialValues(practitionerIds, practitioners) {
+  console.log(practitionerIds);
   return practitioners.map(p => {
     return practitionerIds.indexOf(p.get('id')) > -1;
   }).toJS();
@@ -38,6 +39,7 @@ class ServicesPractForm extends Component {
 
     this.props.dispatch(batchActions(actions));
   }
+
 
   setCheck(e) {
     e.stopPropagation;
@@ -62,14 +64,15 @@ class ServicesPractForm extends Component {
           form={formName}
           onSubmit={this.props.handleSubmit}
           initialValues={initialValues}
+          enableReinitialize
+          keepDirtyOnReinitialize
+          destroyOnUnmount={false}
         >
           {practitioners.toArray().map((practitioner, index) => {
-            console.log(values[practitioner.get('id')])
             return (
               <ServicesPractList
                 key={`${practitioner.get('id')}${index}`}
                 practitioner={practitioner}
-                fieldValue={values[practitioner.get('id')]}
               />
             );
           })}
@@ -92,14 +95,12 @@ class ServicesPractForm extends Component {
 }
 
 function mapStateToProps({ form }, { formName }) {
-  // form data is populated when component renders
   if (!form[formName]) {
     return {
       allPractitioners: null,
       values: {}
     };
   }
-
 
   return {
     allPractitioners: checkValues(form[formName].values),
