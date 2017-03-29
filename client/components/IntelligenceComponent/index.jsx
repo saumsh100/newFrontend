@@ -195,12 +195,12 @@ class IntelligenceComponent extends Component {
                 </div>
                 <div className={styles.websiteVisitorConversions__containerBottom}>
                   <div className={styles.websiteVisitorConversions__stats} >
-                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >11086</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Visits</span>
+                    <span>11086</span>
+                    <span>Visits</span>
                   </div>
                   <div className={styles.websiteVisitorConversions__stats} >
-                    <span className={classNames(styles.colorBlack, styles.font48, styles.fontWeight800)} >388</span>
-                    <span className={classNames(styles.colorBlack, styles.font24)} >Appoinments</span>
+                    <span>388</span>
+                    <span>Appoinments</span>
                   </div>
                 </div>
               </div>
@@ -300,7 +300,7 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
-              <div className={classNames(styles.rowContainer, styles.height400, styles.spaceAround, styles.bussiestTimeOfWeekWrapper)}>
+              <div className={styles.bussiestTimeOfWeekWrapper}>
                 <div className={classNames(styles.pieChartWrapper)}  style={{width: '200px'}} >
                   <PieChart
                     width={171}
@@ -308,10 +308,10 @@ class IntelligenceComponent extends Component {
                     data={[{ value: 25, color: "green" }, { value: 75, color: "grey" }]}
                   />
                 </div>
-                <div className={classNames(styles.columnContainer, styles.spaceAround)}>
-                  <div className={classNames(styles.columnContainer, styles.alignFlexEnd, styles.width200)} >
-                    <span className={classNames(styles.colorGreen, styles.font54, styles.fontWeight800)}>Tuesday</span>
-                    <span className={classNames(styles.colorBlack, styles.font20, styles.textAlignRight)}>12pm - 3pm</span>
+                <div className={styles.bussiestTimeOfWeekWrapper__day}>
+                  <div className={styles.bussiestTimeOfWeekWrapper__day__dayContent} >
+                    <span>Tuesday</span>
+                    <span>12pm - 3pm</span>
                   </div>
                 </div>
               </div>
@@ -357,8 +357,8 @@ class IntelligenceComponent extends Component {
           <Col className={styles.padding} xs={12}>
             <Card borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Website Traffice Sources" />
-              <div className={classNames(styles.columnContainer, styles.justifyCenter)}>
-                <div className={classNames(styles.rowContainer, styles.width100p)}>
+              <div className={styles.websiteTrafikSources}>
+                <div className={styles.websiteTrafikSources__mainContent}>
                   <BarChart
                     displayTooltips={true}
                     labels={["Direct", "Referrals", "Search", "Social", "Mail", "Display"]}

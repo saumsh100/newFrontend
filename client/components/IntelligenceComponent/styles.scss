@@ -1,5 +1,44 @@
 @import "../../ui.scss";
 
+
+
+.bussiestTimeOfWeekWrapper {
+  display: flex;
+  flex-direction: row;
+  height: 400px;
+  justify-content: space-around;
+
+  &__day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around; 
+    
+    &__dayContent {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 200px;
+
+      span:first-child {
+        color: $primary-green;
+        font-size: $jumbo-size;
+        font-weight: $large-weight;
+      }
+
+      span:last-child {
+        color: $primary-dark;
+        font-size: $extra-medium-size;
+        text-align: right;
+      }
+    }
+  }
+
+}
+
+
+
+
 .intelligence {
   &__header {
     padding: 5px 20px 0;
@@ -313,7 +352,7 @@
   justify-content: center;
 }
 
-
+/*
 .font24 {
   font-size: 24;
 }
@@ -341,7 +380,7 @@
 
 .font82 {
   font-size: 82px;
-}
+}*/
 
 .fontWeight200 {
   font-weight: 200;
@@ -523,6 +562,10 @@
     justify-content: center;
   }
 
+  .pieChartWrapper {
+    margin-top: 40px;
+  }
+
   .visitorsContainer {
     flex-direction: column;
     justify-content: space-between;
@@ -549,3 +592,20 @@
 .padding5 {
   padding: 5px;
 }
+
+
+.websiteTrafikSources {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__mainContent {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+}
+
+
