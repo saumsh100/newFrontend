@@ -83,9 +83,10 @@ class Referrals extends Component {
     return (
       <Card className={styles.referrals} borderColor={colorMap.red}>
         <div className={styles.referrals__header}>
-          <CardHeader title={cardTitle} count={cardCount}>
-            <Search min calendar />
-          </CardHeader>
+          <CardHeader title={cardTitle} count={cardCount} />
+        </div>
+        <div className={styles.referrals__searchContainer}>
+          <Search min calendar className={styles.referrals__search} />
         </div>
         <div className={styles.referrals__body}>
           <List className={styles.data}>
