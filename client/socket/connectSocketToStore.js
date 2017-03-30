@@ -5,7 +5,7 @@ import {
 
 export default function connectSocketToStore(socket, store) {
   const jwtToken = localStorage.getItem('token');
-  const decodedToken = jwt(jwtToken); // <<<< BREAKS HERE
+  const decodedToken = jwt(jwtToken);
   console.log(`[INFO] account=${decodedToken.activeAccountId}`);
   console.log('[INFO] jwt token: ', jwtToken);
 
@@ -25,7 +25,7 @@ export default function connectSocketToStore(socket, store) {
     store.dispatch(addSocketEntity({ key: 'requests', entity: data }));
   });
 
-  socket.on('addAppointment', (data) => {
+  socket.on('add:Appointment', (data) => {
     console.log('EVENT:addAppointment: data=', data);
   });
 }

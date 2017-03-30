@@ -3,15 +3,15 @@ const socketIoJwt = require('socketio-jwt');
 const globals = require('../../../config/globals');
 const sharedChangeFeeds = require('../../sharedChangeFeeds');
 
+const nsps = globals.namespaces;
+
 const socketIoOptions = {
   secret: globals.tokenSecret,
   timeout: 15000,
 };
 
 module.exports = function setupSyncNsp(io) {
-  const syncNsp = io.of('/sync');
-
-  syncNsp
+  io.of(nsps.sync)
     .on('connection', socketIoJwt.authorize(socketIoOptions))
     .on('authenticated', (socket) => {
       const accountIdFromSocket = socket.decoded_token.activeAccountId;
@@ -22,7 +22,9 @@ module.exports = function setupSyncNsp(io) {
       console.log('active rooms', io.sockets.adapter.rooms);
       socket.join(roomName);
 
-      sharedChangeFeeds(io, accountIdFromSocket);
+      // true means that this change feed will feed the dashboard only
+      const isSyncedWithPMS = true;
+      sharedChangeFeeds(io.of(nsps.dash), accountIdFromSocket, isSyncedWithPMS);
     })
     .on('unauthorized', (msg) => {
       console.err('unauthorized: ', JSON.stringify(msg.data));

@@ -40,3 +40,4 @@ rethinkdb_data/
 *.vim
 *.exe
 zz_*
+tags
