@@ -38,6 +38,21 @@
     &_call {
       margin-bottom: 20px;
     }
+    &_select {
+      display: flex;
+      div:first-child {
+        padding-left: 0;
+        padding-right: 5px;
+      }
+      div:last-child {
+        padding-right: 0;
+        padding-left: 5px;
+      }
+
+    }
+    &_list {
+      margin: 0 0 20px !important;
+    }
   }
 }
 

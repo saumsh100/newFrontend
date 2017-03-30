@@ -7,6 +7,7 @@ import styles from './styles.scss';
 
 export default function Patients(props) {
   const {
+    fontColor,
     borderColor,
     data,
   } = props;
@@ -16,7 +17,7 @@ export default function Patients(props) {
       {data.map((d, items, array) => {
         return (
           <Col className={styles.patients__wrapper} xs={12} sm={Math.floor(12 / array)}>
-            <Card className={styles.patients__item} borderColor={borderColor}>
+            <Card className={styles.patients__item} borderColor={borderColor} fontColor={fontColor}>
               <div className={styles.patients__item_count}>{d.count}</div>
               <div className={styles.patients__item_subtitle}>{d.title}</div>
               <div className={styles.patients__item_date}>{d.date}</div>

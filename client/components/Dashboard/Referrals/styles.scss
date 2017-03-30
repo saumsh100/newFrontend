@@ -7,6 +7,10 @@
   &__header {
     padding: 0 45px 0 15px;
   }
+  &__body {
+    max-height: 560px;
+    overflow: auto;
+  }
 }
 .referrals {
   border-top: 1px solid $primary-grey;
@@ -14,13 +18,8 @@
   margin: 0;
 
   &__searchContainer {
-    position: relative;
+    margin-left: 15px;
     height: 30px;
-  }
-
-  div:first-child {
-    position: relative !important;
-    margin: 0 auto !important;
   }
 
   &__item {
@@ -33,6 +32,7 @@
     margin: 0;
     flex-direction: row;
     border-bottom: 1px solid $primary-lightgrey;
+
     @media screen and (max-width: 400px) {
       padding: 0 5px;
     }

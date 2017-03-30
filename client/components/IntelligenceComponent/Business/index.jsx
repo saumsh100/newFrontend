@@ -45,50 +45,60 @@ class Business extends Component {
                 <DataStats data={tabStep} borderColor={colorMap.red} className={styles.business__body_call} />
               </Col>
               <Col xs={12}>
-                <Patients data={patientsData1} borderColor={colorMap.green} className={styles.business__body_call} />
+                <Patients className={styles.business__body_call}
+                          data={patientsData1}
+                          borderColor={colorMap.green}
+                          fontColor={colorMap.green}  />
               </Col>
-              <Col xs={12} sm={6}>
-                <ContainerList borderColor={colorMap.darkblue}
-                               cardTitle="Procedure by Hours"
-                               data={[{
-                                 title: "Invisalign",
-                                 hours: "33,487"
-                               },{
-                                 title: "Teeth Whitening",
-                                 hours: "3,617"
-                               },{
-                                 title: "Regular Checkup",
-                                 hours: "1,901"
-                               },{
-                                 title: "Lost Fillings",
-                                 hours: "13,717"
-                               },{
-                                 title: "Emergency Appointments",
-                                 hours: "33,487"
-                               }]} />
-              </Col>
-              <Col xs={12} sm={6}>
-                <ContainerList borderColor={colorMap.darkblue}
-                               cardTitle="Procedure by Production"
-                               data={[{
-                                 title: "Invisalign",
-                                 hours: "33,487"
-                               },{
-                                 title: "Teeth Whitening",
-                                 hours: "3,617"
-                               },{
-                                 title: "Regular Checkup",
-                                 hours: "1,901"
-                               },{
-                                 title: "Lost Fillings",
-                                 hours: "13,717"
-                               },{
-                                 title: "Emergency Appointments",
-                                 hours: "33,487"
-                               }]} />
+              <Col xs={12} className={styles.business__body_select}>
+                <Col xs={12} sm={6}>
+                  <ContainerList className={styles.business__body_list}
+                                 borderColor={colorMap.darkblue}
+                                 cardTitle="Procedure by Hours"
+                                 data={[{
+                                   title: "Invisalign",
+                                   hours: "33,487"
+                                 },{
+                                   title: "Teeth Whitening",
+                                   hours: "3,617"
+                                 },{
+                                   title: "Regular Checkup",
+                                   hours: "1,901"
+                                 },{
+                                   title: "Lost Fillings",
+                                   hours: "13,717"
+                                 },{
+                                   title: "Emergency Appointments",
+                                   hours: "33,487"
+                                 }]} />
+                </Col>
+                <Col xs={12} sm={6}>
+                  <ContainerList className={styles.business__body_list}
+                                 borderColor={colorMap.darkblue}
+                                 cardTitle="Procedure by Production"
+                                 data={[{
+                                   title: "Invisalign",
+                                   hours: "33,487"
+                                 },{
+                                   title: "Teeth Whitening",
+                                   hours: "3,617"
+                                 },{
+                                   title: "Regular Checkup",
+                                   hours: "1,901"
+                                 },{
+                                   title: "Lost Fillings",
+                                   hours: "13,717"
+                                 },{
+                                   title: "Emergency Appointments",
+                                   hours: "33,487"
+                                 }]} />
+                </Col>
               </Col>
               <Col xs={12}>
-                <Patients data={patientsData2} borderColor={colorMap.blue} className={styles.business__body_call} />
+                <Patients className={styles.business__body_call}
+                          data={patientsData2}
+                          borderColor={colorMap.blue}
+                          fontColor={colorMap.blue} />
               </Col>
             </Row>
           </Col>
