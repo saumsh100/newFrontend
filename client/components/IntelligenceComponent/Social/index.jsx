@@ -185,7 +185,7 @@ class Social extends Component {
           </Col>
 
           <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
-            <Card borderColor={colorMap.primaryBlue}>
+            <Card borderColor={colorMap.darkblue}>
               <CardHeader className={styles.cardHeader} title={'By Gender'} />
               <div className={styles.byGender}>
                 <div className={styles.byGender__stats}>
@@ -194,14 +194,14 @@ class Social extends Component {
                       <Icon icon="user-o" />
                       <span className={styles.byGender__stats__percentage__count}>68%</span>
                     </div>
-                    <span className={styles.byGender__stats__percentage_left} >Male</span>
+                    <span className={styles.byGender__gender}>Male</span>
                   </div>
                   <div className={styles.byGender__stats__percentage} >
                     <div className={styles.byGender__stats__percentage_right}>
                       <Icon icon="user-o" />
                       <span>32%</span>
                     </div>
-                    <span className={styles.byGender__stats__percentage_right} >Famale</span>
+                    <span className={styles.byGender__gender}>Famale</span>
                   </div>
                 </div>
                 <div className={styles.pieChartWrapper}>
