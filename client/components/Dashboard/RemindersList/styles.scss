@@ -24,6 +24,10 @@
   &__header {
     padding: 0 45px 0 15px;
   }
+  &__body {
+    overflow: auto;
+    max-height: 560px;
+  }
 }
 .patients {
   border-top: 1px solid $primary-grey;

@@ -41,8 +41,8 @@
       height: 640px;
     }
     &_request {
-      overflow: auto;
-      min-height: 635px;
+      overflow-x: auto;
+      height: 640px;
     }
     @media screen and (max-width: 450px) {
       padding: 0 5px 45px 5px;
