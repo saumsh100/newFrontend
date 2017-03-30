@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from "react";
-import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart, ContainerList, LineChart } from "../../library";
+import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart, ContainerList, LineChart, Icon } from "../../library";
 import BackgroundIcon from "../../library/BackgroundIcon";
 import colorMap from "../../library/util/colorMap";
 import classNames from 'classnames';
@@ -63,12 +63,18 @@ class Social extends Component {
               <div className={styles.byGender}>
                 <div className={styles.byGender__stats}>
                   <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_left} >68%</span>
-                    <span className={styles.byGender__stats__percentage_left} >Male</span>
+                    <div className={styles.byGender__stats__percentage_left}>
+                      <Icon icon="user-o" />
+                      <span className={styles.byGender__stats__percentage__count}>68%</span>
+                    </div>
+                    <span className={styles.byGender__gender}>Male</span>
                   </div>
                   <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_right} >32%</span>
-                    <span className={styles.byGender__stats__percentage_right} >Famale</span>
+                    <div className={styles.byGender__stats__percentage_right}>
+                      <Icon icon="user-o" />
+                      <span>32%</span>
+                    </div>
+                    <span className={styles.byGender__gender}>Famale</span>
                   </div>
                 </div>
                 <div className={styles.pieChartWrapper}>
@@ -184,11 +190,17 @@ class Social extends Component {
               <div className={styles.byGender}>
                 <div className={styles.byGender__stats}>
                   <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_left} >68%</span>
+                    <div className={styles.byGender__stats__percentage_left}>
+                      <Icon icon="user-o" />
+                      <span className={styles.byGender__stats__percentage__count}>68%</span>
+                    </div>
                     <span className={styles.byGender__stats__percentage_left} >Male</span>
                   </div>
                   <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_right} >32%</span>
+                    <div className={styles.byGender__stats__percentage_right}>
+                      <Icon icon="user-o" />
+                      <span>32%</span>
+                    </div>
                     <span className={styles.byGender__stats__percentage_right} >Famale</span>
                   </div>
                 </div>

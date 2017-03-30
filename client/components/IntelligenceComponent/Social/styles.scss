@@ -75,8 +75,15 @@
 .byGender {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-end;
   height: 400px;
+
+  &__gender {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: $extra-medium-size;
+  }
 
   &__stats {
     display: flex;
@@ -92,7 +99,15 @@
       align-items: flex-end;
 
       &_left {
-        text-align: right
+        text-align: right;
+
+        span {
+          vertical-align: sub;
+        }
+        i {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
       }
 
       &_left:first-child {
@@ -109,6 +124,17 @@
 
       &_right {
         text-align: right;
+
+        span {
+          vertical-align: sub;
+        }
+
+        i {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
+
+
       }
 
       &_right:first-child {
@@ -215,6 +241,27 @@
         align-items: center;
         margin-bottom: -100px;
         width: auto;
+
+        &__count {
+          margin-right: 10px;
+        }
+
+      &_left {
+        text-align: center;
+        span {
+          vertical-align: sub;
+        }
+        
+        i {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
+      }
+
+      &__wrapper {
+        display: table-cell;
+        vertical-align: bottom;
+      }
 
       &_left:first-child {
         font-size: 42px;
