@@ -21,7 +21,6 @@ const Appointment = createModel('Appointment', {
   // Lifecycle Attributes
   isPatientConfirmed: type.boolean().default(false),
   isSyncedWithPMS: type.boolean().default(false).required(),
-  isSyncedWithDash: type.boolean().default(false).required(),
   isCancelled: type.boolean().default(false),
 
   // Custom buffer time in minutes

@@ -21,6 +21,11 @@ const redis = {
   port: environmentVariables.REDIS_PORT || '6379',
 };
 
+const namespaces = {
+  dash: '/dash',
+  sync: '/sync',
+};
+
 const vendasta = {
   apiKey: environmentVariables.VENDASTA_API_KEY,
   apiUser: environmentVariables.VENDASTA_API_USER,
@@ -50,4 +55,5 @@ module.exports = {
   vendasta,
   twilio,
   mandrill,
+  namespaces,
 };

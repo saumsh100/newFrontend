@@ -2,14 +2,14 @@ const socketIoJwt = require('socketio-jwt');
 const globals = require('../../../config/globals');
 const twilioClient = require('../../../config/twilio');
 const twilioConfig = require('../../../config/globals').twilio;
-const Appointment = require('../../../models/Appointment');
+// const Appointment = require('../../../models/Appointment');
 const TextMessage = require('../../../models/TextMessage');
 const Request = require('../../../models/Request');
+const sharedChangeFeeds = require('../../sharedChangeFeeds');
 
 const socketIoOptions = {
   secret: globals.tokenSecret,
-  // TODO change this to a more reasonable value
-  timeout: 30000,
+  timeout: 5000,
 };
 
 module.exports = function setupDashNsp(io) {
@@ -22,8 +22,8 @@ module.exports = function setupDashNsp(io) {
       const roomName = accountIdFromSocket;
 
       // TODO JWT token verification
-      console.log('active rooms', io.sockets.adapter.rooms);
       console.log(`dashNsp connection. Joining client to roomName=${roomName}`);
+      console.log('active rooms', io.sockets.adapter.rooms);
       socket.join(roomName);
 
       dashNsp.in(roomName).emit('newJoin', 'dash board joined'); // notify everyone that someone joined
@@ -99,32 +99,9 @@ module.exports = function setupDashNsp(io) {
           });
         });
 
-      /**
-       * Listen to changes on appointments and send events to sync client
-       */
-      Appointment
-        .filter({ accountId: accountIdFromSocket })
-        .changes({ squash: true })
-        .then((feed) => {
-          feed.each((error, doc) => {
-            if (error) throw new Error('Feed error');
 
-            if (doc.getOldValue() === null) {
-              if (doc.isSyncedWithPMS) {
-                // Created
-                console.log('[[INFO]] creating', doc);
-                dashNsp.in(doc.accountId).emit('add:Appointment', doc);
-              } else if (doc.isSyncedWithDash) {
-                // send to syncNsp to the
-                // syncNsp.in(doc.accountId).emit('add:Appointment', doc);
-              }
-            } else {
-              // Updated
-              console.log('[[INFO]] updating', doc);
-              dashNsp.in(doc.accountId).emit('add:Appointment', doc);
-            }
-          });
-        });
+      sharedChangeFeeds(io, accountIdFromSocket);
+
     })
     .on('unauthorized', (msg) => {
       console.err('unauthorized: ', JSON.stringify(msg.data));

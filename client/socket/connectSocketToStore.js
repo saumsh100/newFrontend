@@ -25,8 +25,8 @@ export default function connectSocketToStore(socket, store) {
     store.dispatch(addSocketEntity({ key: 'requests', entity: data }));
   });
 
-  socket.on('newJoin', () => {
-    console.log('>>>> new join');
+  socket.on('addAppointment', (data) => {
+    console.log('EVENT:addAppointment: data=', data);
   });
 }
 
