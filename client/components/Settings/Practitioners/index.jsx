@@ -21,7 +21,7 @@ class Practitioners extends Component {
   }
 
   render() {
-    const { practitioners, weeklySchedules} = this.props;
+    const { practitioners, weeklySchedules } = this.props;
 
     let showComponent = null;
     if (practitioners) {

@@ -123,7 +123,11 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
   };
 
   return (
-    <Form form={formName} onSubmit={onSubmit} initialValues={initialValues}>
+    <Form
+      form={formName}
+      onSubmit={onSubmit}
+      initialValues={initialValues}
+    >
       <DayHoursForm day="monday" />
       <DayHoursForm day="tuesday" />
       <DayHoursForm day="wednesday" />

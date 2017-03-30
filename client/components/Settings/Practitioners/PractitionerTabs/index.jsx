@@ -14,6 +14,7 @@ class PractitionerTabs extends Component {
     this.state = {
       index: 0,
     };
+
     this.handleTabChange = this.handleTabChange.bind(this);
     this.updatePractitioner = this.updatePractitioner.bind(this);
     this.deletePractitioner = this.deletePractitioner.bind(this);
@@ -51,7 +52,8 @@ class PractitionerTabs extends Component {
 
     let serviceIds = null;
     serviceIds = practitioner.get('services');
-
+    console.log(weeklySchedule);
+    
     return (
       <div>
         <div className={styles.pracHeaderContainer}>
