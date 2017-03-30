@@ -14,13 +14,8 @@
   margin: 0;
 
   &__searchContainer {
-    position: relative;
+    margin-left: 15px;
     height: 30px;
-  }
-
-  div:first-child {
-    position: relative !important;
-    margin: 0 auto !important;
   }
 
   &__item {
@@ -33,6 +28,7 @@
     margin: 0;
     flex-direction: row;
     border-bottom: 1px solid $primary-lightgrey;
+
     @media screen and (max-width: 400px) {
       padding: 0 5px;
     }
