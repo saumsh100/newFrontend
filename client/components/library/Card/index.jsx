@@ -7,13 +7,14 @@ export default function Card(props) {
   const {
     children,
     className,
-    borderColor
+    borderColor,
+    fontColor,
   } = props;
   const classes = classNames(className, styles.card);
-  
+
   return (
     // Order is important, classNames={classes} needs to override props.className
-    <div {...props} style={{borderTop: '5px solid ' + borderColor}} className={classes}>
+    <div {...props} style={{borderTop: '5px solid ' + borderColor, color: fontColor}} className={classes}>
       {children}
     </div>
   );

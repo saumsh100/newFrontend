@@ -45,7 +45,10 @@ class Business extends Component {
                 <DataStats data={tabStep} borderColor={colorMap.red} className={styles.business__body_call} />
               </Col>
               <Col xs={12}>
-                <Patients data={patientsData1} borderColor={colorMap.green} className={styles.business__body_call} />
+                <Patients className={styles.business__body_call}
+                          data={patientsData1}
+                          borderColor={colorMap.green}
+                          fontColor={colorMap.green}  />
               </Col>
               <Col xs={12} className={styles.business__body_select}>
                 <Col xs={12} sm={6}>
@@ -92,7 +95,10 @@ class Business extends Component {
                 </Col>
               </Col>
               <Col xs={12}>
-                <Patients data={patientsData2} borderColor={colorMap.blue} className={styles.business__body_call} />
+                <Patients className={styles.business__body_call}
+                          data={patientsData2}
+                          borderColor={colorMap.blue}
+                          fontColor={colorMap.blue} />
               </Col>
             </Row>
           </Col>

@@ -35,14 +35,15 @@
     align-items: center;
     flex-direction: column;
     &_count {
-      color: $primary-green;
       @extend .font-large;
     }
     &_subtitle {
+      color: $primary-dark;
       text-align: center;
       @extend .font-medium;
     }
     &_date {
+      color: $primary-darkgrey;
       @extend .font-small;
     }
     &_icon {
