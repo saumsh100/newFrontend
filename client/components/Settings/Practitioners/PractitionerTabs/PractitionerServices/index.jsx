@@ -71,7 +71,7 @@ class PractitionerServices extends Component {
     }
 
     return (
-      <div>
+      <div style={{width: '25%'}}>
         {showComponent}
       </div>
     );

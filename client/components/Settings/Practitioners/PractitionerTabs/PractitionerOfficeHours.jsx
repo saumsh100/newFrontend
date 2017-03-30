@@ -17,8 +17,8 @@ class PractitionerOfficeHours extends Component{
 
   componentWillMount() {
     const { practitioner } = this.props;
-    let customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null
-    let value = customScheduleValue ? 'on' : 'off';
+    const customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null
+    const value = customScheduleValue ? 'on' : 'off';
     this.setState({ value });
   }
 
