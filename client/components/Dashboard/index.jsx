@@ -202,7 +202,7 @@ class Dashboard extends React.Component {
         <Row className={styles.dashboard__header}>
           <Col xs={12}>
             <Card className={styles.dashboard__header_title}>
-              Welcome Back, <b>Corina</b>
+              Welcome Back, <b>Justin</b>
             </Card>
           </Col>
         </Row>

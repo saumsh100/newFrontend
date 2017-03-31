@@ -5,9 +5,12 @@
 const { expect } = require('chai');
 const {
   time,
+  breakdownTimeSlot,
+  createPossibleTimeSlots,
   createIntervalsFromDailySchedule,
   getDailySchedules,
   createIntervalsFromWeeklySchedule,
+  isDuringEachother,
 } = require('../server/util/time');
 
 
@@ -275,7 +278,215 @@ describe('util/time', () => {
       expect(createIntervalsFromWeeklySchedule).to.be.a('function');
     });
 
+    // TODO: write Unit Tests for this!!!!!!!
 
+  });
+
+  describe('#breakdownTimeSlot', () => {
+    it('should be a function', () => {
+      expect(breakdownTimeSlot).to.be.a('function');
+    });
+
+    it('should return 0 timeSlots', () => {
+      const intervalLength = 61;
+      const minimumLength = 30;
+      const startDate = new Date(2017, 2, 30, 9, 0);
+      const endDate = new Date(2017, 2, 30, 10, 0);
+      const timeSlot = {
+        startDate,
+        endDate,
+      };
+
+      const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
+      expect(timeSlots).to.be.an('array');
+      expect(timeSlots.length).to.equal(0);
+    });
+
+    it('should return 1 timeSlot from startDate to endDate - no remainder', () => {
+      const intervalLength = 60;
+      const minimumLength = 30;
+      const startDate = new Date(2017, 2, 30, 9, 0);
+      const endDate = new Date(2017, 2, 30, 10, 0);
+      const timeSlot = {
+        startDate,
+        endDate,
+      };
+
+      const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
+      expect(timeSlots).to.be.an('array');
+      expect(timeSlots.length).to.equal(1);
+      expect(timeSlots[0]).to.deep.equal({
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      });
+    });
+
+    it('should return 1 timeSlot from startDate to endDate - timeSlot has remainder', () => {
+      const intervalLength = 60;
+      const minimumLength = 30;
+      const startDate = new Date(2017, 2, 30, 9, 0);
+      const endDate = new Date(2017, 2, 30, 10, 30);
+      const timeSlot = {
+        startDate,
+        endDate,
+      };
+
+      const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
+      expect(timeSlots).to.be.an('array');
+      expect(timeSlots.length).to.equal(1);
+      expect(timeSlots[0]).to.deep.equal({
+        startDate: startDate.toISOString(),
+        endDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
+      });
+    });
+
+    it('should return 1 timeSlot from startDate to endDate - timeSlot has remainder', () => {
+      const intervalLength = 60;
+      const minimumLength = 30;
+      const startDate = new Date(2017, 2, 30, 9, 0);
+      const endDate = new Date(2017, 2, 30, 11, 30);
+      const timeSlot = {
+        startDate,
+        endDate,
+      };
+
+      const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
+      expect(timeSlots).to.be.an('array');
+      expect(timeSlots.length).to.equal(2);
+      expect(timeSlots[0]).to.deep.equal({
+        startDate: startDate.toISOString(),
+        endDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
+      });
+
+      expect(timeSlots[1]).to.deep.equal({
+        startDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
+        endDate: (new Date(2017, 2, 30, 11, 0)).toISOString(),
+      });
+    });
+  });
+
+  describe('#createPossibleTimeSlots', () => {
+    it('should be a function', () => {
+      expect(createPossibleTimeSlots).to.be.a('function');
+    });
+
+    it('should return 4 time slots', () => {
+      const intervalLength = 60;
+      const minimumLength = 30;
+      const timeSlots = [
+        {
+          startDate: new Date(2017, 2, 30, 9, 0),
+          endDate: new Date(2017, 2, 30, 11, 30),
+        },
+        {
+          startDate: new Date(2017, 2, 30, 14, 30),
+          endDate: new Date(2017, 2, 30, 16, 30),
+        },
+      ];
+
+      const newTimeSlots = createPossibleTimeSlots(timeSlots, intervalLength, minimumLength);
+      expect(newTimeSlots).to.be.an('array');
+      expect(newTimeSlots.length).to.equal(4);
+      expect(newTimeSlots[0]).to.deep.equal({
+        startDate: (new Date(2017, 2, 30, 9, 0)).toISOString(),
+        endDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
+      });
+
+      expect(newTimeSlots[3]).to.deep.equal({
+        startDate: (new Date(2017, 2, 30, 15, 30)).toISOString(),
+        endDate: (new Date(2017, 2, 30, 16, 30)).toISOString(),
+      });
+    });
+  });
+
+  describe('#isDuringEachother', () => {
+    it('should be a function', () => {
+      expect(isDuringEachother).to.be.a('function');
+    });
+
+    it('should return false for completely outside', () => {
+      const a = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 9, 0),
+      };
+
+      const b = {
+        startDate: new Date(2017, 2, 1, 8, 0),
+        endDate: new Date(2017, 2, 1, 9, 0),
+      };
+
+      expect(isDuringEachother(a, b)).to.equal(false);
+    });
+
+    it('should return false for just before', () => {
+      const a = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 9, 0),
+      };
+
+      const b = {
+        startDate: new Date(2017, 1, 1, 7, 0),
+        endDate: new Date(2017, 1, 1, 8, 0),
+      };
+
+      expect(isDuringEachother(a, b)).to.equal(false);
+    });
+
+    it('should return false for just after', () => {
+      const a = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 9, 0),
+      };
+
+      const b = {
+        startDate: new Date(2017, 1, 1, 9, 0),
+        endDate: new Date(2017, 1, 1, 10, 0),
+      };
+
+      expect(isDuringEachother(a, b)).to.equal(false);
+    });
+
+    it('should return true for equal', () => {
+      const a = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 9, 0),
+      };
+
+      const b = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 9, 0),
+      };
+
+      expect(isDuringEachother(a, b)).to.equal(true);
+    });
+
+    it('should return true for during before', () => {
+      const a = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 9, 0),
+      };
+
+      const b = {
+        startDate: new Date(2017, 1, 1, 7, 30),
+        endDate: new Date(2017, 1, 1, 8, 30),
+      };
+
+      expect(isDuringEachother(a, b)).to.equal(true);
+    });
+
+    it('should return true for during after', () => {
+      const a = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 9, 0),
+      };
+
+      const b = {
+        startDate: new Date(2017, 1, 1, 8, 30),
+        endDate: new Date(2017, 1, 1, 9, 30),
+      };
+
+      expect(isDuringEachother(a, b)).to.equal(true);
+    });
   });
 });
 

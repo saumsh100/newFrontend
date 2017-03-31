@@ -44,13 +44,11 @@ Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId')
 Service.belongsTo(Account, 'account', 'accountId', 'id');
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
 Chair.belongsTo(Account, 'account', 'accountId', 'id');
-Patient.belongsTo(Account, 'account', 'accountId', 'id');
 
 //Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
 
 Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
-Account.hasMany(Patient, 'patients', 'id', 'accountId');
 //Account.hasMany(User, 'users', 'id', 'activeAccountId');
 
 Chat.hasOne(Account, 'account', 'accountId', 'id');
@@ -64,3 +62,9 @@ Practitioner.hasMany(PractitionerTimeOff, 'timeOff', 'id', 'practitionerId');
 
 Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
 Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
+
+Account.hasAndBelongsToMany(Patient, 'patients', 'id', 'id');
+Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
+
+Service.hasMany(Reservation, 'reservations', 'id', 'serviceId');
+Service.hasMany(Request, 'requests', 'id', 'serviceId');

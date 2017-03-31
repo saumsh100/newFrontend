@@ -8,6 +8,69 @@ const Time = {
     return new Date(1970, 1, 0, hours, minutes);
   },
 
+  combineDateAndTime: (date, time) => {
+    return moment(date).hours(moment(time).hours()).toISOString();
+  },
+
+  combineDateAndTimeSlot: (date, timeSlot) => {
+    // combine day from date and time from timeSlot into a new timeSlot
+    return Object.assign({}, timeSlot, {
+      startDate: Time.combineDateAndTime(date, timeSlot.startTime),
+      endDate: Time.combineDateAndTime(date, timeSlot.endTime),
+    });
+  },
+
+  isDuringEachother: (a, b) => {
+    const startTimeDuring = moment(a.startDate).isBetween(b.startDate, b.endDate);
+    const startTimeEqual = moment(a.startDate).isSame(b.startDate);
+    const endTimeDuring = moment(a.endDate).isBetween(b.startDate, b.endDate);
+    const endTimeEqual = moment(a.endDate).isSame(b.endDate);
+    return startTimeDuring || startTimeEqual || endTimeDuring || endTimeEqual;
+  },
+
+  /**
+   *
+   * @param timeSlots
+   * @param intervalLength
+   * @param minimumLength
+   */
+  createPossibleTimeSlots: (timeSlots, intervalLength, minimumLength) => {
+    const len = timeSlots.length;
+
+    let i;
+    let possibleTimeSlots = [];
+    for (i = 0; i < len; i++) {
+      possibleTimeSlots = [
+        ...possibleTimeSlots,
+        ...Time.breakdownTimeSlot(timeSlots[i], intervalLength, minimumLength),
+      ];
+    }
+
+    return possibleTimeSlots;
+  },
+
+  breakdownTimeSlot: (timeSlot, intervalLength, minimumLength) => {
+    const {
+      startDate,
+      endDate,
+    } = timeSlot;
+
+    const timeSlots = [];
+    const start = moment(startDate);
+    const end = start.clone().add(intervalLength, 'minutes');
+    while (moment(end).isSameOrBefore(endDate)) {
+      timeSlots.push({
+        startDate: start.toISOString(),
+        endDate: end.toISOString(),
+      });
+
+      start.add(intervalLength, 'minutes');
+      end.add(intervalLength, 'minutes');
+    }
+
+    return timeSlots;
+  },
+
   /**
    * createIntervalsFromDailySchedule will take in a single day's dailySchedule
    * and spit out the operational intervals (time ranges where the clinic/practitioner is open/working)
@@ -100,7 +163,12 @@ const Time = {
     let i;
     let timeIntervals = [];
     for (i = 0; i < dailySchedules.length; i++) {
-      const newTimeIntervals = Time.createIntervalsFromDailySchedule(dailySchedules[i]);
+      // TODO: add conversion of
+      const newTimeIntervals = Time.createIntervalsFromDailySchedule(dailySchedules[i]).map((i) => {
+        const date = moment(startDate).add(i, 'days');
+        return Time.combineDateAndTimeSlot(date, i);
+      });
+
       timeIntervals = [...timeIntervals, ...newTimeIntervals];
     }
 

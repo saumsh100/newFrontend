@@ -4,7 +4,6 @@ const createModel = require('./createModel');
 const type = thinky.type;
 
 const Patient = createModel('Patient', {
-  accountId: type.string().required(),
   pmsId: type.string(),
   firstName: type.string().required(),
   middleName: type.string(),

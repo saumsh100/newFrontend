@@ -26,7 +26,7 @@ const oneHour = 1 * 60 * 60;
 const recentStartTime = r.now().add(oneHour);
 
 const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
-const accountId2 = uuid();
+const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
 
 const justinUserId = uuid();
 const alexUserId = uuid();
@@ -46,7 +46,7 @@ const chairId = uuid();
 
 const serviceId = uuid();
 const serviceId2 = uuid();
-const cleanupServiceId = uuid();
+const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
@@ -134,19 +134,20 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 const SEEDS = {
   Reservation: [
     {
-      accountId,
-      practitionerId,
-      startTime: new Date(2017, 2, 4, 17, 30, 0),
-      endTime: new Date(2017, 2, 4, 19, 30, 0),
-      serviceId,
+      // TODO: make a reservation in a certain timeslot
+      accountId: accountId2,
+      serviceId: cleanupServiceId,
+      startDate: new Date(2017, 2, 4, 17, 30, 0),
+      endDate: new Date(2017, 2, 4, 19, 30, 0),
     },
   ],
+
   Appointment: [
     {
       id: appointmentId1,
       accountId,
-      startTime: recentStartTime,
-      endTime: recentStartTime.add(oneHour),
+      startDate: recentStartTime,
+      endDate: recentStartTime.add(oneHour),
       patientId: alexPatientId,
       serviceId: serviceId2,
       practitionerId,
@@ -155,8 +156,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(oneHour),
-      endTime: recentStartTime.add(2 * oneHour),
+      startDate: recentStartTime.add(oneHour),
+      endDate: recentStartTime.add(2 * oneHour),
       patientId: alexPatientId,
       serviceId,
       practitionerId,
@@ -165,8 +166,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(23 * oneHour),
-      endTime: recentStartTime.add(24 * oneHour),
+      startDate: recentStartTime.add(23 * oneHour),
+      endDate: recentStartTime.add(24 * oneHour),
       patientId: justinPatientId,
       serviceId,
       practitionerId,
@@ -175,8 +176,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(48 * oneHour),
-      endTime: recentStartTime.add(49 * oneHour),
+      startDate: recentStartTime.add(48 * oneHour),
+      endDate: recentStartTime.add(49 * oneHour),
       patientId: markPatientId,
       serviceId,
       practitionerId,
@@ -186,8 +187,8 @@ const SEEDS = {
     {
       id: appointmentId2,
       accountId,
-      startTime: recentStartTime.add(49 * oneHour),
-      endTime: recentStartTime.add(50 * oneHour),
+      startDate: recentStartTime.add(49 * oneHour),
+      endDate: recentStartTime.add(50 * oneHour),
       patientId: alexPatientId,
       serviceId,
       practitionerId,
@@ -196,8 +197,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(72 * oneHour),
-      endTime: recentStartTime.add(73 * oneHour),
+      startDate: recentStartTime.add(72 * oneHour),
+      endDate: recentStartTime.add(73 * oneHour),
       patientId: justinPatientId,
       practitionerId: practitionerId2,
       serviceId,
@@ -212,8 +213,8 @@ const SEEDS = {
 
     {
       accountId,
-      startTime: new Date(2017, 2, 29, 12, 30, 0, 0),
-      endTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      startDate: new Date(2017, 2, 29, 12, 30, 0, 0),
+      endDate: new Date(2017, 2, 29, 12, 30, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -221,8 +222,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
-      endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
+      startDate: new Date(2017, 1, 4, 16, 0, 0, 0),
+      endDate: new Date(2016, 1, 4, 17, 0, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -233,8 +234,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: new Date(2016, 2, 29, 18, 30, 0, 0),
-      endTime: new Date(2016, 2, 29, 20, 30, 0, 0),
+      startDate: new Date(2016, 2, 29, 18, 30, 0, 0),
+      endDate: new Date(2016, 2, 29, 20, 30, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -245,8 +246,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: new Date(2016, 2, 30, 18, 30, 0, 0),
-      endTime: new Date(2016, 2, 30, 20, 30, 0, 0),
+      startDate: new Date(2016, 2, 30, 18, 30, 0, 0),
+      endDate: new Date(2016, 2, 30, 20, 30, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -254,14 +255,40 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+    },
+
+    // Availabilities Test
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 8, 0),
+      endDate: new Date(2017, 3, 3, 9, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 9, 0),
+      endDate: new Date(2017, 3, 3, 10, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 10, 0),
+      endDate: new Date(2017, 3, 3, 11, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
     },
   ],
 
   Request: [
     {
       accountId,
-      startTime: moment({hour: 11, minute: 10})._d,
-      endTime: moment({hour: 22, minute: 50})._d,
+      startDate: moment({ hour: 11, minute: 10 })._d,
+      endDate: moment({ hour: 22, minute: 50 })._d,
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -272,8 +299,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: moment({hour: 13, minute: 10})._d,
-      endTime: moment({hour: 13, minute: 50})._d,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
       patientId: justinPatientId,
       serviceId: serviceId2,
       practitionerId: practitionerId2,
@@ -281,6 +308,24 @@ const SEEDS = {
       isConfirmed: false,
       isCancelled: false,
       note: 'testing note 2....',
+    },
+
+    // Availabilities Test
+    {
+      accountId: accountId2,
+      // practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 13, 0),
+      endDate: new Date(2017, 3, 3, 14, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      // practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 14, 0),
+      endDate: new Date(2017, 3, 3, 15, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
     },
   ],
 
@@ -407,7 +452,14 @@ const SEEDS = {
       id: weeklyScheduleId3,
       accountId,
       monday: {
-        isClosed: true,
+        startTime: time(8, 0),
+        endTime: time(17, 0),
+        breaks: [
+          {
+            startTime: time(12, 0),
+            endTime: time(13, 0),
+          },
+        ],
       },
 
       saturday: {

@@ -25,13 +25,14 @@ Practitioner.define('getWeeklySchedule', function () {
   const self = this;
   return new Promise((resolve, reject) => {
     if (self.isCustomSchedule) {
-      WeeklySchedule.get(self.weeklyScheduleId).then(ws => resolve(ws));
-    } else {
-      Account.get(self.accountId).getJoin({ weeklySchedule: true })
-        .then((account) => {
-          return resolve(account.weeklySchedule);
-        });
+      return WeeklySchedule.get(self.weeklyScheduleId)
+        .then(ws => resolve(ws))
+        .catch(err => reject(err));
     }
+
+    return Account.get(self.accountId).getJoin({ weeklySchedule: true })
+      .then((account) => resolve(account.weeklySchedule))
+      .catch(err => reject(err));
   });
 });
 
