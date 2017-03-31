@@ -206,33 +206,27 @@ class Overview extends Component {
 
           <Col className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}>
             <VisitorConversions
-              conversionrate="3.5%"
-              visits="11086"
-              appointments="388"
+              conversionrate={3.5}
+              visits={11086}
+              appointments={388}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <NewVsReturning
-              newVisitors="68%"
-              returningVisitors="32%"
+              newVisitors={68}
+              returningVisitors={32}
               chartData={[{ value: 32, color: "blue" }, { value: 68, color: "green" }]}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <MaleVsFemale
-              male="45%"
-              female="55%"
+              male={45}
+              female={55}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <AgeRange
-              labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
-              dataSets={[
-                { label: 'Appointments Booked',
-                  color: ['yellow', 'red', 'green', 'blue'],
-                  data: [18, 25, 35, 45, 55 ] ,
-                },
-              ]}
+              chartData={[18, 25, 35, 45, 55 ]}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
@@ -291,7 +285,7 @@ class Overview extends Component {
               chartData={[
                 { label: 'Appointments Booked',
                   color: ['yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
-                  data: [18, 25, 35, 45, 55 , 4] ,
+                  data: [18, 25, 35, 45, 55 , 4],
                 },
               ]}
             />

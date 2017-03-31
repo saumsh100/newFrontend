@@ -5,8 +5,7 @@ import styles from '../styles.scss';
 
 export default function AgeRange(props) {
   const {
-    labels,
-    dataSets,
+    chartData,
   } = props;
 
   return (
@@ -17,8 +16,12 @@ export default function AgeRange(props) {
           <BarChart
             type="horizontal"
             displayTooltips
-            labels={labels}
-            dataSets={dataSets}
+            labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+            dataSets={[{
+              label: 'Appointments Booked',
+              color: ['yellow', 'red', 'green', 'blue'],
+              data: chartData
+            }]}
           />
         </div>
       </div>
@@ -27,6 +30,5 @@ export default function AgeRange(props) {
 }
 
 AgeRange.propTypes = {
-  labels: PropTypes.arrayOf(String),
-  dataSets: PropTypes.arrayOf(Object)
+  chartData: PropTypes.arrayOf(Number)
 };

@@ -16,7 +16,7 @@ export default function VisitorConversions(props) {
       <div className={styles.websiteVisitorConversions__mainContainer}>
         <div className={styles.websiteVisitorConversions__rowContainer}>
           <div className={styles.websiteVisitorConversions__conversionCount} >
-            <span className={styles.websiteVisitorConversions__row1}>{conversionrate}</span>
+            <span className={styles.websiteVisitorConversions__row1}>{conversionrate}%</span>
             <span className={styles.websiteVisitorConversions__row2} >Conversions Rate</span>
           </div>
         </div>
@@ -36,7 +36,7 @@ export default function VisitorConversions(props) {
 }
 
 VisitorConversions.propTypes = {
-  conversionrate: PropTypes.string,
-  visits: PropTypes.string,
-  appointments: PropTypes.string,
+  conversionrate: PropTypes.number,
+  visits: PropTypes.number,
+  appointments: PropTypes.number,
 };

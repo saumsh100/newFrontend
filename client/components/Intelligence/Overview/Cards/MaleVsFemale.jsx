@@ -17,12 +17,12 @@ export default function MaleVsFemale(props) {
         <div className={styles.maleVsFamale__menContainer}>
           <div className={styles.maleVsFamale__menContainer__item}>
             <span className={classNames(styles.maleVsFamale__menContainer__item_iconMale, 'fa fa-male')} />
-            <span className={styles.maleVsFamale__menContainer__item_man}>{male}</span>
+            <span className={styles.maleVsFamale__menContainer__item_man}>{male}%</span>
             <span className={styles.maleVsFamale__menContainer__item_smallText} >Male</span>
           </div>
           <div className={styles.maleVsFamale__menContainer__item} >
             <span className={classNames(styles.maleVsFamale__menContainer__item_iconFemale, 'fa fa-female')} />
-            <span className={styles.maleVsFamale__menContainer__item_famale}>{female}</span>
+            <span className={styles.maleVsFamale__menContainer__item_famale}>{female}%</span>
             <span className={styles.maleVsFamale__menContainer__item_smallText} >Female</span>
           </div>
         </div>
@@ -32,6 +32,6 @@ export default function MaleVsFemale(props) {
 }
 
 MaleVsFemale.propTypes = {
-  male: PropTypes.string,
-  female: PropTypes.string,
+  male: PropTypes.number,
+  female: PropTypes.number,
 };

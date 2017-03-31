@@ -16,11 +16,11 @@ export default function NewVsReturning(props) {
       <div className={styles.byGender}>
         <div className={styles.byGender__stats}>
           <div className={styles.byGender__stats__percentage} >
-            <span className={styles.byGender__stats__percentage_left} >{newVisitors}</span>
+            <span className={styles.byGender__stats__percentage_left} >{newVisitors}%</span>
             <span className={styles.byGender__stats__percentage_left} >New Visitors</span>
           </div>
           <div className={styles.byGender__stats__percentage} >
-            <span className={styles.byGender__stats__percentage_right} >{returningVisitors}</span>
+            <span className={styles.byGender__stats__percentage_right} >{returningVisitors}%</span>
             <span className={styles.byGender__stats__percentage_right} >Returning Visitors</span>
           </div>
         </div>
@@ -36,7 +36,7 @@ export default function NewVsReturning(props) {
 }
 
 NewVsReturning.propTypes = {
-  newVisitors:  PropTypes.string,
-  returningVisitors:  PropTypes.string,
+  newVisitors:  PropTypes.number,
+  returningVisitors:  PropTypes.number,
   chartData: PropTypes.array,
 };
