@@ -1,10 +1,11 @@
 @import "../../../ui.scss";
+@import "../../../fonts.scss";
 
 .sideByside {
   margin: 0 5px 10px 5px;
   padding: 10px;
   &__title {
-    font-size: $medium-size;
+    @extend .font-medium
   }
 
   &__body {
@@ -24,13 +25,12 @@
 
   &__icon {
     margin-right: 10px;
-
-    font-size: $large-size;
+    font-size: $jumbo-size;
     color: #8CBCD6;
   }
 
   &__count {
-    font-size: $large-size;
+    @extend .font-jumbo;
     text-align: center;
     font-weight: 600;
     color: #2e3845;
@@ -61,6 +61,7 @@
 
   &__vote_icons_text {
     color: $primary-dark;
+    font-family: "Gotham-Book";
     margin-left: 10px;
   }
 

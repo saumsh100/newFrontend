@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { List, ListItem, Card, CardHeader, Icon } from '../../library';
 import styles from './styles.scss';
@@ -6,7 +7,7 @@ import styles from './styles.scss';
 class MostLoyal extends Component {
   render() {
     const hardcodeData = [{
-      img: "images/practitioner_1.png",
+      img: "/images/practitioner_1.png",
       name: "Syndee Hart",
       age: "34",
       phone: "123 456 7890",
@@ -14,7 +15,7 @@ class MostLoyal extends Component {
       loyalNumber: 98,
       appointmentNumber: 17,
     },{
-      img: "images/practitioner_1.png",
+      img: "/images/practitioner_1.png",
       name: "Emily Paris",
       age: "7",
       phone: "123 456 7890",
@@ -22,7 +23,7 @@ class MostLoyal extends Component {
       loyalNumber: 83,
       appointmentNumber: 26,
     },{
-      img: "images/practitioner_1.png",
+      img: "/images/practitioner_1.png",
       name: "Regan Barlet",
       age: "67",
       phone: "123 456 7890",
@@ -30,7 +31,7 @@ class MostLoyal extends Component {
       loyalNumber: 78,
       appointmentNumber: 54,
     },{
-      img: "images/practitioner_1.png",
+      img: "/images/practitioner_1.png",
       name: "Syndee Hart",
       age: "34",
       phone: "123 456 7890",
@@ -38,7 +39,7 @@ class MostLoyal extends Component {
       loyalNumber: 98,
       appointmentNumber: 17,
     },{
-      img: "images/practitioner_1.png",
+      img: "/images/practitioner_1.png",
       name: "Emily Paris",
       age: "7",
       phone: "123 456 7890",
@@ -46,7 +47,7 @@ class MostLoyal extends Component {
       loyalNumber: 83,
       appointmentNumber: 26,
     },{
-      img: "images/practitioner_1.png",
+      img: "/images/practitioner_1.png",
       name: "Regan Barlet",
       age: "67",
       phone: "123 456 7890",

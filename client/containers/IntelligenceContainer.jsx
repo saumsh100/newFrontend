@@ -8,7 +8,7 @@ class IntelligenceContainer extends Component {
   render() {
     return (
       <div>
-        <IntelligenceComponent {...this.props}/>
+        <IntelligenceComponent {...this.props} />
       </div>
     );
   }

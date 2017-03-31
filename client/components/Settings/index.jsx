@@ -1,10 +1,8 @@
 
 import React, { PropTypes } from 'react';
-import { Grid, Row, Col, Card, CardHeader } from '../library';
+import { Grid, Row, Col, Card, } from '../library';
 import SettingsSubNav from './SettingsSubNav';
 import styles from './styles.scss';
-import Services from './Services/';
-import Practitioners from './Practitioners';
 
 export default function Settings(props) {
   const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });

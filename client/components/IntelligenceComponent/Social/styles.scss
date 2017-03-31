@@ -1,4 +1,5 @@
 @import "../../../ui.scss";
+@import "../styles.scss";
 
 .fans {
   padding: 30px 0 30px;
@@ -13,45 +14,26 @@
   &__primaryBlue {
     color: $primary-blue;
     font-weight: $large-weight;
-    margin: 0 10px 0 10px; 
+    margin: 0 10px 0 10px;
   }
 }
 
 .social {
   &__header {
-    padding: 5px 20px 0;
-    @media screen and (max-width: 450px) {
-      padding: 5px 10px 0;
-    }
+    @extend .header;
     &_title {
-      display: flex;
-      align-items: center;
-      height: 35px;
-      background: $primary-white;
-      width: 100%;
-      padding-left: 30px;
-      margin-bottom: 20px;
-      font-size: $medium-size;
-      b {
-        padding-left: 5px;
-      }
+      @extend .title;
       &_cards {
-        cursor: pointer;
-        margin-bottom: 20px;
-        div:not(:last-child) {
-          margin-right: 10px;
-          flex: 1;
-        }
-      } 
+        @extend .cards
+      }
     }
     &__patientList {
       &_item {
-        padding: 5px;
+        padding: 5px 0px 5px 0px;
       }
     }
   }
   &__body {
-    padding: 0 15px 45px 15px;
     &_arrows {
       padding-right: 50px;
     }
@@ -59,7 +41,7 @@
 }
 
 .padding {
-  padding: 5px;  
+  padding: 5px;
 }
 
 .cardHeader {
@@ -90,7 +72,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    
+
     &__percentage {
       display: flex;
       flex-direction: column;
@@ -114,7 +96,7 @@
         color: #2EC4A7;
         font-size: 64px;
         font-weight: 800;
-        
+
       }
 
       &_left:last-child {
@@ -140,7 +122,7 @@
       &_right:first-child {
         color: #8FBBD6;
         font-size: 64px;
-        font-weight: 800; 
+        font-weight: 800;
       }
 
       &_right:last-child {
@@ -184,7 +166,7 @@
     font-size: $extra-medium-size;
     margin-top: 20px;
     margin-bottom: 10px;
-    
+
   }
 
   &__last {
@@ -216,7 +198,7 @@
     &__container {
       flex-direction: column;
     }
-    
+
   }
 
   .iconsContainer {
@@ -230,7 +212,7 @@
     justify-content: space-around;
     align-items: center;
     overflow: hidden;
-    
+
     &__stats {
       flex-direction: row;
       align-items: initial;
@@ -251,7 +233,7 @@
         span {
           vertical-align: sub;
         }
-        
+
         i {
           vertical-align: middle;
           margin-right: 10px;
@@ -330,7 +312,7 @@
     &_computer {
       font-size: $extra-large-size;
       color: $primary-green;
-      font-weight: $large-weight;      
+      font-weight: $large-weight;
     }
 
   }
@@ -456,8 +438,7 @@
   ul li {
     max-width: none !important;
   }
-
-
+  
 }
 
 .padding5 {

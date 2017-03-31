@@ -31,14 +31,11 @@
     width: 100px;
     &_title {
       text-align: center;
-      @extend .font-large;
-      b {
-        color: $color-white;
-      }
+      @extend .font-jumbo-white;
     }
     &_subtitle {
       color: $color-white;
-      @extend .font-medium;
+      font-size: $title-size;
     }
     &_icon {
       position: absolute;

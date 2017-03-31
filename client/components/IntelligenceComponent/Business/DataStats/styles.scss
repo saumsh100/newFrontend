@@ -32,10 +32,11 @@
   &__icon {
     color: $primary-color;
     margin-bottom: 20px;
+    font-size: $large-size
   }
   &__count {
     color: $primary-color;
-    @extend .font-large;
+    @extend .font-jumbo-thin;
     margin-bottom: 10px;
   }
   &__wrapper {
@@ -271,10 +272,12 @@
     padding-right: 5px;
     vertical-align: sub;
     color: $color-white;
-    @extend .font-large
+    @extend .font-jumbo-thin;
   }
+
   &__icon {
     vertical-align: sub;
+    font-size: 50px;
     color: rgba($primary-lightgrey, .8);
   }
   &__question {
@@ -301,7 +304,7 @@
   }
   &__subtitle {
     color: $color-white;
-    @extend .font-medium;
+    @extend .font-medium-noFont;
   }
   &__question {
     position: absolute;

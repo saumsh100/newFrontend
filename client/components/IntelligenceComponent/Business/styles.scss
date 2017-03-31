@@ -1,29 +1,17 @@
 @import "../../../ui.scss";
+@import "../styles.scss";
+
 * {
   box-sizing: border-box;
 }
 .business {
-  padding: 0 15px 45px 15px;
   &__header {
+    @extend .header;
     &_title {
-      display: flex;
-      align-items: center;
-      height: 60px;
-      background: $primary-white;
-      padding-left: 30px;
-      margin-bottom: 30px;
-      font-size: $medium-size;
-      b {
-        padding-left: 5px;
-      }
+      @extend .title;
     }
     &_cards {
-      cursor: pointer;
-      margin-bottom: 20px;
-      div:not(:last-child) {
-        margin-right: 10px;
-        flex: 1;
-      }
+      @extend .cards;
     }
   }
   &__patientList {
@@ -32,6 +20,8 @@
     }
   }
   &__body {
+    @extend .padding;
+
     &_arrows {
       padding-right: 50px;
     }
@@ -56,4 +46,3 @@
     }
   }
 }
-

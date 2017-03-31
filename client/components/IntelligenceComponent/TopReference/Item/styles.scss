@@ -30,6 +30,8 @@
             justify-content: space-between;
             color: $primary-dark;
             align-items: center;
+            font-weight: $large-weight;
+
         }
         &_left {
             text-align: left;
@@ -51,5 +53,9 @@
     }
 }
 .padding {
-    padding: 5px;
+    padding: 5px 15px 5px 5px;
+
+    span:last-child {
+      padding: 5px 0px 5px 0px;
+    }
 }

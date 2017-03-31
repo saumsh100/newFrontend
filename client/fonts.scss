@@ -18,6 +18,12 @@
   letter-spacing: 2px;
 }
 
+.font-jumbo-thin {
+  font-size: $jumbo-size;
+  font-weight: $jumbo-weight;
+  letter-spacing: 2px;
+}
+
 .font-large {
   font-size: $large-size;
   font-weight: $large-weight;
@@ -29,6 +35,10 @@
   font-weight: $medium-weight;
 }
 
+.font-medium-noFont{
+  font-size: $medium-size;
+  font-weight: $medium-weight;
+}
 .font-small {
   font-size: $small-size;
   font-weight: $small-weight;

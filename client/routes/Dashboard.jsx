@@ -18,7 +18,7 @@ export default function Routes({ history }) {
       onError={onError}
     >
       <Route path="/" component={DashboardApp}>
-        <IndexRedirect to="/schedule" />
+        <IndexRedirect to="/schedule"/>
         <Route
           path="login"
           getComponent={(location, callback) => {
@@ -34,20 +34,20 @@ export default function Routes({ history }) {
             });
           }}
         />
-
-
         <Route
           path="intelligence"
           getComponent={(location, callback) => {
             require.ensure(['../containers/IntelligenceContainer'], (require) => {
               callback(null, require('../containers/IntelligenceContainer').default);
             });
-          }}>
+          }}
+        >
+          <IndexRedirect to="overview" />
           <Route
             path="overview"
             getComponent={(location, callback) => {
-              require.ensure(['../components/IntelligenceComponent'], (require) => {
-                callback(null, require('../components/IntelligenceComponent').default);
+              require.ensure(['../components/IntelligenceComponent/Overview'], (require) => {
+                callback(null, require('../components/IntelligenceComponent/Overview').default);
               });
             }}
           />
@@ -74,22 +74,13 @@ export default function Routes({ history }) {
             require.ensure(['../components/IntelligenceComponent/Business'], (require) => {
               callback(null, require('../components/IntelligenceComponent/Business').default);
             });
-          }} />
-
+          }}
+        />
         <Route
           path="social"
           getComponent={(location, callback) => {
             require.ensure(['../components/IntelligenceComponent/Social'], (require) => {
               callback(null, require('../components/IntelligenceComponent/Social').default);
-            });
-          }}
-          />
-
-        <Route
-          path="availabilities"
-          getComponent={(location, callback) => {
-            require.ensure(['../containers/AvailabilityContainer'], (require) => {
-              callback(null, require('../containers/AvailabilityContainer').default);
             });
           }}
         />
@@ -209,7 +200,7 @@ export default function Routes({ history }) {
             });
           }}
         >
-          <IndexRedirect to="clinic" />
+          <IndexRedirect to="clinic"/>
           <Route
             path="clinic"
             getComponent={(location, callback) => {
@@ -218,7 +209,7 @@ export default function Routes({ history }) {
               });
             }}
           >
-            <IndexRedirect to="general" />
+            <IndexRedirect to="general"/>
             <Route
               path="general"
               getComponent={(location, callback) => {
@@ -244,7 +235,7 @@ export default function Routes({ history }) {
               });
             }}
           >
-            <IndexRedirect to="hours" />
+            <IndexRedirect to="hours"/>
             <Route
               path="hours"
               getComponent={(location, callback) => {
@@ -257,7 +248,7 @@ export default function Routes({ history }) {
           <Route
             path="services"
             getComponent={(location, callback) => {
-              require.ensure(['../components/Settings/Services/'], (require) =>{
+              require.ensure(['../components/Settings/Services/'], (require) => {
                 callback(null, require('../components/Settings/Services/').default);
               });
             }}
@@ -265,7 +256,7 @@ export default function Routes({ history }) {
           <Route
             path="practitioners"
             getComponent={(location, callback) => {
-              require.ensure(['../components/Settings/Practitioners/'], (require) =>{
+              require.ensure(['../components/Settings/Practitioners/'], (require) => {
                 callback(null, require('../components/Settings/Practitioners/').default);
               });
             }}
@@ -288,17 +279,17 @@ export default function Routes({ history }) {
           }}
         />
 
-        <Route path="*" component={FourZeroFour} />
+        <Route path="*" component={FourZeroFour}/>
       </Route>
     </Router>
   );
-  }
+}
 
-  if (module.hot) {
-    counter++;
-    module.hot.accept();
-  }
+if (module.hot) {
+  counter++;
+  module.hot.accept();
+}
 
-  Routes.propTypes = {
-    history: PropTypes.object.isRequired,
-  };
+Routes.propTypes = {
+  history: PropTypes.object.isRequired,
+};
