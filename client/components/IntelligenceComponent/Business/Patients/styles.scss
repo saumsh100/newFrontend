@@ -35,7 +35,7 @@
     align-items: center;
     flex-direction: column;
     &_count {
-      @extend .font-large;
+      @extend .font-jumbo;
     }
     &_subtitle {
       color: $primary-dark;
@@ -55,4 +55,3 @@
     }
   }
 }
-

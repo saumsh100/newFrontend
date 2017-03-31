@@ -40,7 +40,7 @@ class DataStats extends Component{
                   return (
                     <Tab label={obj.label}>
                       <div className={styles.left__wrapper}>
-                        <Icon className={styles.left__icon} icon={obj.data.icon} size={4.1}/>
+                        <Icon className={styles.left__icon} icon={obj.data.icon} size={5}/>
                         <div className={styles.left__count}>
                           {obj.data.count}
                         </div>
@@ -64,7 +64,7 @@ class DataStats extends Component{
                         <div className={styles.data}>
                           <div className={styles.data__wrapper}>
                             <span className={styles.data__count}>{d.count}</span>
-                            <Icon className={styles.data__icon} icon={d.icon} size={2}/>
+                            <Icon className={styles.data__icon} icon={d.icon} size={2.5}/>
                           </div>
                         </div>
                         <div className={styles.arrow}></div>

@@ -181,7 +181,7 @@
 
 .pieChartWrapper {
   width: 50%;
-  hegith: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -347,7 +347,7 @@
   align-items: center;
   justify-content: center;
   height: 400px;
-  overflow: hidden;
+  overflow: auto;
     &__content {
       display: flex;
       flex-direction: row;
@@ -357,7 +357,7 @@
 
 .pieChartWrapper {
   width: 50%;
-  hegith: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -438,7 +438,7 @@
   ul li {
     max-width: none !important;
   }
-  
+
 }
 
 .padding5 {
@@ -449,8 +449,8 @@
 .booked {
   margin:0 5px 20px;
   min-width: 250px;
-  height: 450px;
   overflow: hidden;
+  height: 450px;
   &__header {
     display: flex;
     align-items: center;
@@ -459,15 +459,12 @@
   }
   &__body {
     position: relative;
-    overflow: hidden;
+    overflow: auto;
     max-height: 450px;
-    margin-top: 50px;
-    margin-bottom: -50px;
     @media screen and (max-width: 900px){
       position: relative;
       top: 50%;
       transform: translateY(-50%);
-      margin: 0;
     }
   }
 }

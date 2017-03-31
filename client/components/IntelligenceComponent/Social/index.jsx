@@ -64,21 +64,22 @@ class Social extends Component {
                 <div className={styles.byGender__stats}>
                   <div className={styles.byGender__stats__percentage} >
                     <div className={styles.byGender__stats__percentage_left}>
-                      <Icon icon="user-o" />
-                      <span className={styles.byGender__stats__percentage__count}>68%</span>
+                      <Icon icon="male" />
+                      <span className={styles.byGender__stats__percentage__count}>32%</span>
                     </div>
                     <span className={styles.byGender__gender}>Male</span>
                   </div>
                   <div className={styles.byGender__stats__percentage} >
                     <div className={styles.byGender__stats__percentage_right}>
-                      <Icon icon="user-o" />
-                      <span>32%</span>
+                      <Icon icon="female" />
+                      <span>68%</span>
                     </div>
-                    <span className={styles.byGender__gender}>Famale</span>
+                    <span className={styles.byGender__gender}>Female</span>
                   </div>
                 </div>
                 <div className={styles.pieChartWrapper}>
                   <PieChart
+                    type="doughnut"
                   data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
                 />
                 </div>
@@ -155,7 +156,7 @@ class Social extends Component {
                },{
                  title: "Surrey, BC, Canada",
                  hours: 62
-               }]} 
+               }]}
             />
           </Col>
 
@@ -191,14 +192,14 @@ class Social extends Component {
                 <div className={styles.byGender__stats}>
                   <div className={styles.byGender__stats__percentage} >
                     <div className={styles.byGender__stats__percentage_left}>
-                      <Icon icon="user-o" />
+                      <Icon icon="male" />
                       <span className={styles.byGender__stats__percentage__count}>68%</span>
                     </div>
                     <span className={styles.byGender__gender}>Male</span>
                   </div>
                   <div className={styles.byGender__stats__percentage} >
                     <div className={styles.byGender__stats__percentage_right}>
-                      <Icon icon="user-o" />
+                      <Icon icon="female" />
                       <span>32%</span>
                     </div>
                     <span className={styles.byGender__gender}>Famale</span>
@@ -282,7 +283,7 @@ class Social extends Component {
                },{
                  title: "Surrey, BC, Canada",
                  hours: 62
-               }]} 
+               }]}
             />
           </Col>
         </Row>

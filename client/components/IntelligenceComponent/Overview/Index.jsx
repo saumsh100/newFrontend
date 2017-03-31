@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
-import MostLoyal from '../MostLoyal';
+import MostLoyal from './MostLoyal';
 import TopReference from '../TopReference';
 import {
   Card, CardHeader, Col, Grid, Row, PieChart,
@@ -9,9 +9,9 @@ import {
   Stats
 } from '../../library';
 import colorMap from '../../library/util/colorMap';
-import PractitionersList from '../PractitionersList';
-import AppointmentsBooked from '../AppointmentsBooked';
-import AppointmentFilled from '../AppointmentFilled';
+import PractitionersList from './PractitionersList';
+import AppointmentsBooked from './AppointmentsBooked';
+import AppointmentFilled from './AppointmentFilled';
 import styles from './styles.scss';
 
 class Overview extends Component {
@@ -238,7 +238,7 @@ class Overview extends Component {
                 <div className={styles.pieChartWrapper}>
                   <PieChart
                     type="doughnut"
-                  data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
+                  data={[{ value: 32, color: "blue" }, { value: 68, color: "green" }]}
                 />
                 </div>
               </div>
@@ -250,13 +250,13 @@ class Overview extends Component {
               <div className={styles.maleVsFamale}>
                 <div className={styles.maleVsFamale__menContainer}>
                   <div className={styles.maleVsFamale__menContainer__item}>
-                    <span className={classNames(styles.maleVsFamale__menContainer__item_iconMale ,"fa fa-user-o")}></span>
+                    <span className={classNames(styles.maleVsFamale__menContainer__item_iconMale ,"fa fa-male")}></span>
                     <span className={styles.maleVsFamale__menContainer__item_man}>45%</span>
                     <span className={styles.maleVsFamale__menContainer__item_smallText} >Male</span>
                   </div>
 
                   <div className={styles.maleVsFamale__menContainer__item} >
-                    <span className={classNames(styles.maleVsFamale__menContainer__item_iconFemale, "fa fa-user-o")}></span>
+                    <span className={classNames(styles.maleVsFamale__menContainer__item_iconFemale, "fa fa-female")}></span>
                     <span className={styles.maleVsFamale__menContainer__item_famale}>55%</span>
                     <span className={styles.maleVsFamale__menContainer__item_smallText} >Female</span>
                   </div>
@@ -285,8 +285,6 @@ class Overview extends Component {
               </div>
             </Card>
           </Col>
-
-
 
           <Col className={styles.padding} xs={12} md={6}>
             <Card borderColor={colorMap.green}>
