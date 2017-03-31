@@ -12,6 +12,13 @@ import colorMap from '../../library/util/colorMap';
 import PractitionersList from './PractitionersList';
 import AppointmentsBooked from './AppointmentsBooked';
 import AppointmentFilled from './AppointmentFilled';
+import VisitorConversions  from './Cards/VisitorConversions';
+import NewVsReturning from './Cards/NewVsReturning';
+import MaleVsFemale from './Cards/MaleVsFemale';
+import AgeRange from './Cards/AgeRange';
+import VisitorsByDevice from './Cards/VisitorsByDevice';
+import BusiestTimeOfWeek from './Cards/BusiestTimeOfWeek';
+import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
 
 class Overview extends Component {
@@ -198,137 +205,49 @@ class Overview extends Component {
           </Col>
 
           <Col className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title={'Website Visitor Conversions'} />
-              <div className={styles.websiteVisitorConversions__mainContainer}>
-                <div className={styles.websiteVisitorConversions__rowContainer}>
-                  <div className={styles.websiteVisitorConversions__conversionCount} >
-                    <span className={styles.websiteVisitorConversions__row1}>3.5%</span>
-                    <span className={styles.websiteVisitorConversions__row2} >Conversions Rate</span>
-                  </div>
-                </div>
-                <div className={styles.websiteVisitorConversions__containerBottom}>
-                  <div className={styles.websiteVisitorConversions__stats} >
-                    <span>11086</span>
-                    <span>Visits</span>
-                  </div>
-                  <div className={styles.websiteVisitorConversions__stats} >
-                    <span>388</span>
-                    <span>Appoinments</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </Col>
-
-          <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title={'New vs Returning Visitors'} />
-              <div className={styles.byGender}>
-                <div className={styles.byGender__stats}>
-                  <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_left} >68%</span>
-                    <span className={styles.byGender__stats__percentage_left} >New Visitors</span>
-                  </div>
-                  <div className={styles.byGender__stats__percentage} >
-                    <span className={styles.byGender__stats__percentage_right} >32%</span>
-                    <span className={styles.byGender__stats__percentage_right} >Returning Visitors</span>
-                  </div>
-                </div>
-                <div className={styles.pieChartWrapper}>
-                  <PieChart
-                    type="doughnut"
-                  data={[{ value: 32, color: "blue" }, { value: 68, color: "green" }]}
-                />
-                </div>
-              </div>
-            </Card>
+            <VisitorConversions
+              conversionrate="3.5%"
+              visits="11086"
+              appointments="388"
+            />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title="Male vs Famale" />
-              <div className={styles.maleVsFamale}>
-                <div className={styles.maleVsFamale__menContainer}>
-                  <div className={styles.maleVsFamale__menContainer__item}>
-                    <span className={classNames(styles.maleVsFamale__menContainer__item_iconMale ,"fa fa-male")}></span>
-                    <span className={styles.maleVsFamale__menContainer__item_man}>45%</span>
-                    <span className={styles.maleVsFamale__menContainer__item_smallText} >Male</span>
-                  </div>
-
-                  <div className={styles.maleVsFamale__menContainer__item} >
-                    <span className={classNames(styles.maleVsFamale__menContainer__item_iconFemale, "fa fa-female")}></span>
-                    <span className={styles.maleVsFamale__menContainer__item_famale}>55%</span>
-                    <span className={styles.maleVsFamale__menContainer__item_smallText} >Female</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <NewVsReturning
+              newVisitors="68%"
+              returningVisitors="32%"
+              chartData={[{ value: 32, color: "blue" }, { value: 68, color: "green" }]}
+            />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green} className={styles.card}>
-              <CardHeader className={styles.cardHeader} title="Age Range" />
-              <div className={styles.ageRange}>
-                <div className={styles.ageRange__content}>
-                  <BarChart
-                    type="horizontal"
-                    displayTooltips={true}
-                    labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
-                    dataSets={[
-                      { label: 'Appointments Booked',
-                        color: ['yellow', 'red', 'green', 'blue'],
-                        data: [18, 25, 35, 45, 55 ] ,
-                      },
-                    ]
-                    }
-                  />
-                </div>
-              </div>
-            </Card>
-          </Col>
-
-          <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title="Visitors by device" />
-              <div className={styles.visitors}>
-                <div className={styles.visitors__container} >
-                  <div className={styles.visitors__item} >
-                    <span className={classNames(styles.visitors__item_mobile, "fa fa-mobile-phone")}></span>
-                    <span className={styles.visitors__item__text}>5844</span>
-                    <span className={styles.visitors__item__smallText}>Mobile</span>
-                  </div>
-                  <div className={styles.visitors__item} >
-                    <span className={classNames(styles.visitors__item_tablet, "fa fa-tablet")}></span>
-                    <span className={styles.visitors__item__text}>759</span>
-                    <span className={styles.visitors__item__smallText}>Tablet</span>
-                  </div>
-                  <div className={styles.visitors__item} >
-                    <span className={classNames(styles.visitors__item_computer, "fa fa-television")}></span>
-                    <span className={styles.visitors__item__text}>4663</span>
-                    <span className={styles.visitors__item__smallText}>Website</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <MaleVsFemale
+              male="45%"
+              female="55%"
+            />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
-              <div className={styles.bussiestTimeOfWeekWrapper}>
-                <div className={classNames(styles.pieChartWrapper)}  style={{width: '200px'}} >
-                  <PieChart
-                    width={171}
-                    height={85}
-                    data={[{ value: 25, color: "green" }, { value: 75, color: "grey" }]}
-                  />
-                </div>
-                <div className={styles.bussiestTimeOfWeekWrapper__day}>
-                  <div className={styles.bussiestTimeOfWeekWrapper__day__dayContent} >
-                    <span>Tuesday</span>
-                    <span>12pm - 3pm</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <AgeRange
+              labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+              dataSets={[
+                { label: 'Appointments Booked',
+                  color: ['yellow', 'red', 'green', 'blue'],
+                  data: [18, 25, 35, 45, 55 ] ,
+                },
+              ]}
+            />
+          </Col>
+          <Col className={styles.padding} xs={12} md={6}>
+            <VisitorsByDevice
+              mobile={5844}
+              tablet={759}
+              website={4663}
+            />
+          </Col>
+          <Col className={styles.padding} xs={12} md={6}>
+            <BusiestTimeOfWeek
+              time={'12pm - 3pm'}
+              day={'Tuesday'}
+              chartData={[{ value: 25, color: "green" }, { value: 75, color: "grey" }]}
+            />
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList borderColor={colorMap.green}
@@ -368,24 +287,14 @@ class Overview extends Component {
                            }]} />
           </Col>
           <Col className={styles.padding} xs={12}>
-            <Card borderColor={colorMap.green}>
-              <CardHeader className={styles.cardHeader} title="Website Traffice Sources" />
-              <div className={styles.websiteTrafikSources}>
-                <div className={styles.websiteTrafikSources__mainContent}>
-                  <BarChart
-                    displayTooltips={true}
-                    labels={["Direct", "Referrals", "Search", "Social", "Mail", "Display"]}
-                    dataSets={[
-                      { label: 'Appointments Booked',
-                        color: ['yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
-                        data: [18, 25, 35, 45, 55 , 4] ,
-                      },
-                    ]
-                    }
-                  />
-                </div>
-              </div>
-            </Card>
+            <WebsiteTrafficSources
+              chartData={[
+                { label: 'Appointments Booked',
+                  color: ['yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
+                  data: [18, 25, 35, 45, 55 , 4] ,
+                },
+              ]}
+            />
           </Col>
         </Row>
       </Grid>
