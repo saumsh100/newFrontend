@@ -116,7 +116,10 @@ export default function NavList({ location, isCollapsed }) {
           <SubNavItem path="/patients/messages" label="Messages" />
           <SubNavItem path="/patients/phone" label="Phone Calls" disabled />
         </MultiNavItem>
-        <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />
+        <MultiNavItem path="/reputation" icon="star" label="Reputation">
+          <SubNavItem path="/reputation/reviews" label="Reviews" />
+          <SubNavItem path="/reputation/listings" label="Listings" />
+        </MultiNavItem>
         <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />

@@ -66,6 +66,16 @@ const ROUTES = {
       label: 'Social',
     },
   ],
+  '/reputation': [
+    {
+      to: '/reputation/reviews',
+      label: 'Review',
+    },
+    {
+      to: '/reputation/listings',
+      label: 'Listing',
+    },
+  ],
 };
 
 class SubTabs extends Component {
@@ -116,6 +126,13 @@ class SubTabs extends Component {
         <RouterTabs
           location={location}
           routes={ROUTES['/intelligence']}
+        />
+      );
+    } else if (location.pathname.indexOf('/reputation') === 0) {
+      subTabsComponent = (
+        <RouterTabs
+          location={location}
+          routes={ROUTES['/reputation']}
         />
       );
     }

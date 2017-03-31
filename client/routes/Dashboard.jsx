@@ -73,7 +73,7 @@ export default function Routes({ history }) {
           getComponent={(location, callback) => {
             require.ensure(['../components/IntelligenceComponent/Business'], (require) => {
               callback(null, require('../components/IntelligenceComponent/Business').default);
-            });
+             });
           }}
         />
         <Route
@@ -109,6 +109,32 @@ export default function Routes({ history }) {
            });
            }}
            />*/}
+        </Route>
+        <Route
+          path="reputation"
+          getComponent={(location, callback) => {
+            require.ensure(['../containers/ReputationContainer'], (require) => {
+              callback(null, require('../containers/ReputationContainer').default);
+            });
+          }}
+        >
+          <IndexRedirect to="reviews" />
+          <Route
+            path="reviews"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/ReputationComponent/Reviews'], (require) => {
+                callback(null, require('../components/ReputationComponent/Reviews').default);
+              });
+            }}
+          />
+          <Route
+            path="listings"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/ReputationComponent/Listings'], (require) => {
+                callback(null, require('../components/ReputationComponent/Listings').default);
+              });
+            }}
+          />
         </Route>
         <Route
           path="patients"
