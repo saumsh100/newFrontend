@@ -1,50 +1,59 @@
+
 import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../library';
+import { List, ListItem, Card, CardHeader, Icon } from '../../../library';
 import styles from './styles.scss';
 
 
 class MostLoyal extends Component {
   render() {
     const hardcodeData = [{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
+      img: "/images/practitioner_1.png",
+      name: "Syndee Hart",
+      age: "34",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      loyalNumber: 25,
-      appointmentNumber: 10,
+      email: "lwater12@gmail.com",
+      loyalNumber: 98,
+      appointmentNumber: 17,
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "24",
+      img: "/images/practitioner_1.png",
+      name: "Emily Paris",
+      age: "7",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      loyalNumber: 4,
+      email: "emilee1@gmail.com",
+      loyalNumber: 83,
       appointmentNumber: 26,
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "19",
+      img: "/images/practitioner_1.png",
+      name: "Regan Barlet",
+      age: "67",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      loyalNumber: 18,
+      email: "barlet@gmail.com",
+      loyalNumber: 78,
       appointmentNumber: 54,
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "19",
+      img: "/images/practitioner_1.png",
+      name: "Syndee Hart",
+      age: "34",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      loyalNumber: 75,
-      appointmentNumber: 41,
+      email: "lwater12@gmail.com",
+      loyalNumber: 98,
+      appointmentNumber: 17,
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "19",
+      img: "/images/practitioner_1.png",
+      name: "Emily Paris",
+      age: "7",
       phone: "123 456 7890",
-      email: "eeeeeeee@gmail.com",
-      loyalNumber: 43,
-      appointmentNumber: 13,
+      email: "emilee1@gmail.com",
+      loyalNumber: 83,
+      appointmentNumber: 26,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Regan Barlet",
+      age: "67",
+      phone: "123 456 7890",
+      email: "barlet@gmail.com",
+      loyalNumber: 78,
+      appointmentNumber: 54,
     }];
     const {
       borderColor,
@@ -65,7 +74,7 @@ class MostLoyal extends Component {
                       <img className={styles.data__item_img} src={obj.img} alt=""/>
                       <div className={styles.data__item_personal}>
                         <div className={styles.data__item_name}>
-                          <b>{obj.name}, <span>{obj.age}</span></b>
+                          {obj.name}, <span>{obj.age}</span>
                         </div>
                         <div className={styles.data__item_phone}>
                           {obj.phone}
@@ -85,24 +94,6 @@ class MostLoyal extends Component {
                       </div>
                     </div>
                     <div className={styles.data__item_right}>
-                      <div className={styles.data__item_table}>
-                        <div className={styles.table__number}>
-                          {obj.appointmentNumber}
-                        </div>
-                        <div className={styles.table__text}>
-                          <div>TOTAL</div>
-                          <div>APPOINTMENTS</div>
-                        </div>
-                      </div>
-                      <div className={styles.data__item_table}>
-                        <div className={styles.table__number}>
-                          {obj.appointmentNumber}
-                        </div>
-                        <div className={styles.table__text}>
-                          <div>TOTAL</div>
-                          <div>APPOINTMENTS</div>
-                        </div>
-                      </div>
                       <div className={styles.data__item_table}>
                         <div className={styles.table__number}>
                           {obj.appointmentNumber}

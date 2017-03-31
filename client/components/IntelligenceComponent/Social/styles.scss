@@ -1,32 +1,36 @@
 @import "../../../ui.scss";
+@import "../styles.scss";
+
+.fans {
+  padding: 30px 0 30px;
+  text-align: center;
+  color: $primary-darkgrey;
+  &__between {
+    color: $primary-dark-blue;
+    font-weight: $large-weight;
+    margin: 0 10px 0 10px;
+  }
+
+  &__primaryBlue {
+    color: $primary-blue;
+    font-weight: $large-weight;
+    margin: 0 10px 0 10px;
+  }
+}
 
 .social {
   &__header {
+    @extend .header;
     &_title {
-      display: flex;
-      align-items: center;
-      height: 60px;
-      background: $primary-white;
-      width: 100%;
-      padding-left: 30px;
-      margin-bottom: 30px;
-      font-size: $medium-size;
-      b {
-        padding-left: 5px;
+      @extend .title;
+      &_cards {
+        @extend .cards
       }
     }
-    &_cards {
-      cursor: pointer;
-      margin-bottom: 20px;
-      div:not(:last-child) {
-        margin-right: 10px;
-        flex: 1;
+    &__patientList {
+      &_item {
+        padding: 5px 0px 5px 0px;
       }
-    }
-  }
-  &__patientList {
-    &_item {
-      padding: 5px;
     }
   }
   &__body {
@@ -37,118 +41,38 @@
 }
 
 .padding {
-  padding: 5px;  
+  padding: 5px;
 }
 
 .cardHeader {
   padding: 20px;
 }
 
-.columnContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.rowContainer {
-  display: flex;
-  flex-direction: row;
-}
-
-.alignItemsCenter {
-  alignItems: center;
-}
-
-.alignFlexEnd {
-  align-items: flex-end;
-}
-
-.spaceAround {
-  justify-content: space-around;
-}
-
-.justifyCenter {
-  justify-content: center;
-}
-
-.font24 {
-  font-size: 24;
-}
-
-.font48  {
-  font-size: 48px;
-}
-
-.font64 {
-  font-size: 64px;
-}
-
-.font48 {
-  font-size: 48px;
-}
-
-
-.font54 {
-  font-size: 54px;
-}
-
-.font56 {
-  font-size: 56px;
-}
-
-.font82 {
-  font-size: 82px;
-}
-
-.fontWeight200 {
-  font-weight: 200;
-}
-
-.fontWeight800 {
-  font-weight: 800;
-}
-
-.marginTop30 {
-  margin: 30px 0px 0px 0px;
-}
-
-.colorBlack {
-  color: #000000;
-}
-
-.colorGrey {
-  color: #B4B4B4;
-}
-
-.marginTop20 {
-  margin-top: 20px;
-}
-
-.marginBottom10 {
-  margin-bottom: 10px;
-}
-
-.width100p {
-  width: 100%;
-}
 
 .backgroundPowderBlue {
-  color: #9EB9D4;
+  color: $primary-blue;
 }
 
 
 .byGender {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-end;
   height: 400px;
+
+  &__gender {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: $extra-medium-size;
+  }
 
   &__stats {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    
+
     &__percentage {
       display: flex;
       flex-direction: column;
@@ -157,14 +81,22 @@
       align-items: flex-end;
 
       &_left {
-        text-align: right
+        text-align: right;
+
+        span {
+          vertical-align: sub;
+        }
+        i {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
       }
 
       &_left:first-child {
         color: #2EC4A7;
         font-size: 64px;
         font-weight: 800;
-        
+
       }
 
       &_left:last-child {
@@ -174,12 +106,23 @@
 
       &_right {
         text-align: right;
+
+        span {
+          vertical-align: sub;
+        }
+
+        i {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
+
+
       }
 
       &_right:first-child {
         color: #8FBBD6;
         font-size: 64px;
-        font-weight: 800; 
+        font-weight: 800;
       }
 
       &_right:last-child {
@@ -191,11 +134,17 @@
 
 }
 
+
+.margin {
+  margin-top: 10px;
+}
+
 .facebookActivity {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
     &__container {
       display: flex;
       flex-direction: row;
@@ -211,13 +160,28 @@
   align-items: center;
   justify-content: center;
   width: 200px;
+
+  &__first {
+    font-weight: $large-weight;
+    font-size: $extra-medium-size;
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+  }
+
+  &__last {
+    color: $primary-darkgrey;
+    font-size: $medium-size;
+    font-weight: $normall-weight;
+  }
+
 }
 
 
 
 .pieChartWrapper {
   width: 50%;
-  hegith: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -234,7 +198,7 @@
     &__container {
       flex-direction: column;
     }
-    
+
   }
 
   .iconsContainer {
@@ -248,7 +212,7 @@
     justify-content: space-around;
     align-items: center;
     overflow: hidden;
-    
+
     &__stats {
       flex-direction: row;
       align-items: initial;
@@ -259,6 +223,27 @@
         align-items: center;
         margin-bottom: -100px;
         width: auto;
+
+        &__count {
+          margin-right: 10px;
+        }
+
+      &_left {
+        text-align: center;
+        span {
+          vertical-align: sub;
+        }
+
+        i {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
+      }
+
+      &__wrapper {
+        display: table-cell;
+        vertical-align: bottom;
+      }
 
       &_left:first-child {
         font-size: 42px;
@@ -277,6 +262,209 @@
           text-align: center
         }
       }
+    }
+  }
+}
+
+
+
+.visitors {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 400px;
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &__text {
+      color: $primary-dark;
+      font-size: $x-large-size;
+      font-weight: $large-weight;
+      margin-top: 30px;
+      @media screen and (max-width: 450px){
+        margin-top: 5px!important;
+        font-size: $large-size!important;
+      }
+    }
+
+    &__smallText {
+      color: $primary-dark;
+      font-size: $small-size;
+    }
+
+    &_tablet {
+      color: $primary-blue;
+      font-size: $top-nav-height;
+      font-weight: $large-weight;
+    }
+
+    &_mobile {
+      font-size: $jumbo-size;
+      color: $primary-red;
+      font-weight: $large-weight;
+    }
+
+    &_computer {
+      font-size: $extra-large-size;
+      color: $primary-green;
+      font-weight: $large-weight;
+    }
+
+  }
+
+  &__container {
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    width: 100%;
+    justify-content: space-around;
+
+    @media screen and (max-width: 450px){
+      display: flex;
+      flex-direction: column !important;
+      align-items: center !important;
+    }
+  }
+  &__text {
+    @media screen and (max-width: 450px){
+      margin-top: 5px!important;
+      font-size: $large-size!important;
+    }
+  }
+}
+
+
+
+.ageRange {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  overflow: auto;
+    &__content {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+}
+
+.pieChartWrapper {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+@media(max-width: 474px) {
+  .pieChartWrapper {
+    width: 100%
+  }
+
+
+  .byGender {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+
+    &__stats {
+      flex-direction: row;
+      align-items: initial;
+      width: 100%;
+
+      &__percentage {
+        width: auto;
+        align-items: center;
+        margin-bottom: -100px;
+        width: auto;
+
+      &_left:first-child {
+        font-size: $large-size;
+        margin-left: 10px;
+      }
+      &_left:last-child {
+        font-size: $extra-medium-size;
+        text-align: center
+      }
+
+        &_right:first-child {
+          font-size: $large-size;
+        }
+        &_right:last-child {
+          font-size: $extra-medium-size;
+          text-align: center
+        }
+      }
+    }
+  }
+
+
+  .bussiestTimeOfWeekWrapper {
+    flex-direction: column !important;
+    align-items: center;
+    margin-top: -100px !important;
+    justify-content: center;
+  }
+
+  .pieChartWrapper {
+    margin-top: 40px;
+  }
+
+  .visitorsContainer {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .visitorsMainContent {
+    flex-direction: row;
+    margin-top: 50px;
+  }
+
+  .voteText {
+    width: auto;
+  }
+
+  ul li {
+    max-width: none !important;
+  }
+
+}
+
+.padding5 {
+  padding: 5px;
+}
+
+
+.booked {
+  margin:0 5px 20px;
+  min-width: 250px;
+  overflow: hidden;
+  height: 450px;
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin-left: 15px;
+  }
+  &__body {
+    position: relative;
+    overflow: auto;
+    max-height: 450px;
+    @media screen and (max-width: 900px){
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 }

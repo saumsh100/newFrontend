@@ -1,4 +1,4 @@
-@import "../../../ui";
+@import "../../../../ui";
 
 .practitionerList {
   margin-bottom: 20px;
@@ -73,6 +73,7 @@
     }
     &_name {
       margin-right: 20px;
+      color: #2e3845;
     }
     &_profession {
       font-size: 12px;

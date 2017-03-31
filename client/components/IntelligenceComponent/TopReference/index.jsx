@@ -5,24 +5,24 @@ import styles from './styles.scss';
 class TopReference extends Component {
   render() {
     const hardcodeData = [{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
-      number: 4,
+      img: "/images/practitioner_1.png",
+      name: "Jehn Frue",
+      age: "30",
+      number: 7,
     },{
-      img: "images/practitioner_1.png",
-      name: "Konner Beck",
-      age: "2",
-      number: 4,
+      img: "/images/practitioner_1.png",
+      name: "Liz Mcmahon",
+      age: "21",
+      number: 5,
     },{
-      img: "images/practitioner_1.png",
-      name: "Issac Item",
-      age: "2",
-      number: 4,
+      img: "/images/practitioner_1.png",
+      name: "Issac Brune",
+      age: "47",
+      number: 5,
     },{
-      img: "images/practitioner_1.png",
-      name: "Konner Beck",
-      age: "2",
+      img: "/images/practitioner_1.png",
+      name: "Monica Lee",
+      age: "54",
       number: 4,
     }];
     const { borderColor } = this.props;

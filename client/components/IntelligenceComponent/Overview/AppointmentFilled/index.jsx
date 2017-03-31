@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Guage, Card } from '../../library';
+import { Guage, Card } from '../../../library';
 import styles from './styles.scss';
 
 

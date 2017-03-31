@@ -24,7 +24,7 @@ class Item extends Component {
                     <div className={styles.patients__item_wrapper}>
                       <div className={styles.patients__item_left}>
                         <div className={styles.patients__item_name}>
-                          <b>{obj.name}, <span>{obj.age}</span></b>
+                          {obj.name}, <span>{obj.age}</span>
                         </div>
                       </div>
                       <div className={styles.patients__item_right}>

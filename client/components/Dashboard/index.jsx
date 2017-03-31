@@ -8,7 +8,7 @@ import fetchReviewsData from "../../thunks/fetchReviewsData";
 import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble  } from "../library";
 import RemindersList from "./RemindersList";
 import Table from './Table';
-import TopServices from './TopServices';
+import Referrals from './Referrals';
 import colorMap from "../library/util/colorMap";
 import styles from "./styles.scss";
 
@@ -227,9 +227,9 @@ class Dashboard extends React.Component {
             <Card className={styles.dashboard__body_comments}
                   borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
-              <div styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <div styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                  <Col xs={12} md={12}>
+              <div className={styles.underspondedReviews}>
+                <div className={styles.underspondedReviews__mainContainer}>
+                  <Col xs={12} md={12} className={styles.underspondedReviews__comment} >
                     {DataBigComment.map(obj => {
                       return (
                         <BigCommentBubble
@@ -252,7 +252,7 @@ class Dashboard extends React.Component {
           </Col>
           <Col className={styles.padding}
                xs={12} md={4}>
-            <TopServices className={styles.dashboard__body_table}
+            <Referrals className={styles.dashboard__body_table}
                          borderColor={colorMap.blue}
                          cardCount="13"
                          cardTitle="Unconfirmed Referrals"/>
