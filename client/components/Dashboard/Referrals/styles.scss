@@ -69,6 +69,8 @@
           text-align: center;
         }
       }
+
+
     }
     &_days {
       color: $primary-dark;
@@ -81,6 +83,15 @@
         margin: 0 2px;
       }
     }
+
+    &_name {
+      color: $primary-dark;
+    }
+
+    &_from{
+      color: $primary-dark;
+    }
+
     &_img {
       width: 44px;
       border-radius: 50%;

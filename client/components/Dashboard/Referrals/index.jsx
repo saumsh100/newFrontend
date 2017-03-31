@@ -100,7 +100,7 @@ class Referrals extends Component {
                       <div className={styles.referrals__item_name}>
                         <b>{obj.name}, <span>{obj.age}</span></b>
                       </div>
-                      <div className={styles.referrals__item_phone}>
+                      <div className={styles.referrals__item_from}>
                         From: {obj.from} on {obj.date}
                       </div>
                       <div className={styles.referrals__item_phone}>
