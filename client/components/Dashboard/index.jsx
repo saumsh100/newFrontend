@@ -218,7 +218,7 @@ class Dashboard extends React.Component {
                    cardTitle="Phone / SMS / Email"/>
           </Col>
           <Col className={styles.padding}
-               xs={12} sm={5} md={4}>
+               xs={12}  md={4}>
             <RequestsContainer className={styles.dashboard__body_request}
                                borderColor={colorMap.yellow}/>
           </Col>
@@ -259,19 +259,19 @@ class Dashboard extends React.Component {
           </Col>
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RemindersList data={DataRemindersList}
                                borderColor={colorMap.blue}
                                cardCount="8"
                                cardTitle="Reminders" />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RemindersList data={DataRemindersList}
                                borderColor={colorMap.blue}
                                cardCount="2"
                                cardTitle="Recalls" />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
                 <RemindersList data={DataRemindersList2}
                                borderColor={colorMap.blue}
                                cardCount="5"

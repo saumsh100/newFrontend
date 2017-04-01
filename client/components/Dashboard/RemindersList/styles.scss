@@ -19,14 +19,14 @@
   }
 }
 .reminders {
-  height: 610px;
+  height: 604px;
   margin-bottom: 20px;
   &__header {
     padding: 0 45px 0 15px;
   }
   &__body {
     overflow: auto;
-    max-height: 560px;
+    max-height: 604px;
   }
 }
 .patients {
@@ -104,6 +104,10 @@
       width: 44px;
       border-radius: 50%;
       margin-right: 10px;
+    }
+
+    &_name {
+      color: $primary-dark;
     }
     &_icon {
       cursor: pointer;

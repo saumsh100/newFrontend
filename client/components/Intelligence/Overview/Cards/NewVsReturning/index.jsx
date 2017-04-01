@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Card, CardHeader, PieChart } from '../../../library';
-import colorMap from '../../../library/util/colorMap';
-import styles from '../styles.scss';
+import { Card, CardHeader, PieChart } from '../../../../library';
+import colorMap from '../../../../library/util/colorMap';
+import styles from '../../styles.scss';
 
 export default function NewVsReturning(props) {
   const {

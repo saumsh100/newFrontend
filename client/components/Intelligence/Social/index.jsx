@@ -47,13 +47,15 @@ class Social extends Component {
             <ByGender
               maleCount={32}
               femaleCount={68}
-              chartData={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
+              labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+              data={[{ value: 68, color: "blue" }, { value: 32, color: "green" }]}
             />
           </Col>
 
           <Col className={classNames(styles.padding, styles.margin)} xs={12} md={6}>
             <ByAge
-              chartData={[18, 25, 35, 45, 55 ]}
+              labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+              data={[18, 25, 35, 45, 55 ]}
             />
           </Col>
 
@@ -68,7 +70,8 @@ class Social extends Component {
           <Col className={styles.margin} xs={12} sm={6}>
             <Audience
               title="Facebook Audience"
-              chartData={[125, 150, 143, 200, 180, 220, 300 ]}
+              labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+              data={[125, 150, 143, 200, 180, 220, 300 ]}
             />
           </Col>
 
@@ -114,7 +117,8 @@ class Social extends Component {
           <Col className={styles.margin} xs={12} sm={6}>
             <Audience
               title="Twitter Audience"
-              chartData={[125, 150, 143, 200, 180, 220, 300 ]}
+              labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+              data={[125, 150, 143, 200, 180, 220, 300 ]}
             />
           </Col>
 

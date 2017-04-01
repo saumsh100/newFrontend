@@ -7,23 +7,8 @@ import styles from './styles.scss';
 class Referrals extends Component {
   constructor() {
     super();
-    this.state = {
-      isHovered: false
-    };
-    this.onMouseOver = this.onMouseOver.bind(this);
-    this.onMouseOut = this.onMouseOut.bind(this);
+  }
 
-  }
-  onMouseOver(){
-    this.setState({
-      isHovered: true,
-    })
-  }
-  onMouseOut(){
-    this.setState({
-      isHovered: false,
-    })
-  }
   render() {
     const hardcodeData = [{
       img: "images/patient_1.png",
@@ -60,7 +45,7 @@ class Referrals extends Component {
     },];
 
     let showHoverComponents = (<div className={styles.clickHandlers__newreqText}>New</div>);
-    if(this.state.isHovered) {
+
       showHoverComponents = (
         <div>
           <div className={styles.clickHandlers}>
@@ -75,7 +60,7 @@ class Referrals extends Component {
           </div>
         </div>
       )
-    }
+
     const {
       cardCount,
       cardTitle,
@@ -83,7 +68,7 @@ class Referrals extends Component {
     return (
       <Card className={styles.referrals} borderColor={colorMap.red}>
         <div className={styles.referrals__header}>
-          <CardHeader title={cardTitle} count={cardCount}>
+          <CardHeader title={cardTitle} count={hardcodeData.length}>
             <Search min calendar className={styles.referrals__search} />
           </CardHeader>
         </div>
@@ -93,9 +78,7 @@ class Referrals extends Component {
               return (
                 <ListItem className={styles.referrals__item}>
                   <img className={styles.referrals__item_img} src={obj.img} alt=""/>
-                  <div onMouseOver={this.onMouseOver}
-                       onMouseOut={this.onMouseOut}
-                       className={styles.referrals__item_wrapper}>
+                  <div className={styles.referrals__item_wrapper}>
                     <div className={styles.referrals__item_left}>
                       <div className={styles.referrals__item_name}>
                         <b>{obj.name}, <span>{obj.age}</span></b>

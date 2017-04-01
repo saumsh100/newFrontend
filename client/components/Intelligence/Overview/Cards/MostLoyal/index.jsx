@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../../library';
+import { List, ListItem, Card, CardHeader, Icon } from '../../../../library';
 import styles from './styles.scss';
 
 

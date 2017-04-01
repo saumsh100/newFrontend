@@ -15,7 +15,7 @@ class RemindersList extends Component {
     return (
       <Card className={styles.reminders} borderColor={borderColor}>
         <div className={styles.reminders__header}>
-          <CardHeader count={cardCount} title={cardTitle}>
+          <CardHeader count={this.props.data.length} title={cardTitle}>
             <Search />
           </CardHeader>
         </div>

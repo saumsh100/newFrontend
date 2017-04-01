@@ -5,7 +5,8 @@ import styles from '../styles.scss';
 
 export default function ByAge(props) {
   const {
-    chartData
+    labels,
+    data
   } = props;
 
   return (
@@ -16,11 +17,11 @@ export default function ByAge(props) {
           <BarChart
             type="horizontal"
             displayTooltips
-            labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+            labels={labels}
             dataSets={[
               { label: 'Appointments Booked',
                 color: ['yellow', 'red', 'green', 'blue'],
-                data: chartData,
+                data: data,
               },
             ]}
           />
@@ -31,5 +32,6 @@ export default function ByAge(props) {
 }
 
 ByAge.propTypes = {
-  chartData: PropTypes.arrayOf(Array)
+  data: PropTypes.arrayOf(PropTypes.array),
+  labels:PropTypes.arrayOf(PropTypes.string)
 };

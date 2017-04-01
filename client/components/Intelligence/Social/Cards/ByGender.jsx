@@ -7,7 +7,8 @@ export default function ByGender(props) {
   const {
     maleCount,
     femaleCount,
-    chartData,
+    data,
+    labels,
   } = props;
 
   return (
@@ -33,7 +34,8 @@ export default function ByGender(props) {
         <div className={styles.pieChartWrapper}>
           <PieChart
             type="doughnut"
-            data={chartData}
+            labels={labels}
+            data={data}
           />
         </div>
       </div>
@@ -44,5 +46,5 @@ export default function ByGender(props) {
 ByGender.propTypes = {
   maleCount: PropTypes.number,
   femaleCount: PropTypes.number,
-  chartData: PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.string),
 };

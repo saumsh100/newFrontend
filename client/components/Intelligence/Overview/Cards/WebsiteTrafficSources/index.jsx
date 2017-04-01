@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
-import { Card, CardHeader, BarChart } from '../../../library';
-import colorMap from '../../../library/util/colorMap';
-import styles from '../styles.scss';
+import { Card, CardHeader, BarChart } from '../../../../library';
+import colorMap from '../../../../library/util/colorMap';
+import styles from '../../styles.scss';
 
 export default function WebsiteTrafficSources(props) {
   const {

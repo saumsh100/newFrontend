@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
-import MostLoyal from './MostLoyal';
+import MostLoyal from './Cards/MostLoyal';
 import TopReference from '../TopReference';
 import {
   Card, CardHeader, Col, Grid, Row, PieChart,
@@ -9,10 +9,10 @@ import {
   Stats
 } from '../../library';
 import colorMap from '../../library/util/colorMap';
-import PractitionersList from './PractitionersList';
-import AppointmentsBooked from './AppointmentsBooked';
-import AppointmentFilled from './AppointmentFilled';
-import VisitorConversions  from './Cards/VisitorConversions';
+import PractitionersList from './Cards/PractitionersList';
+import AppointmentsBooked from './Cards/AppointmentsBooked';
+import AppointmentFilled from './Cards/AppointmentFilled';
+import VisitorConversions from './Cards/VisitorConversions';
 import NewVsReturning from './Cards/NewVsReturning';
 import MaleVsFemale from './Cards/MaleVsFemale';
 import AgeRange from './Cards/AgeRange';

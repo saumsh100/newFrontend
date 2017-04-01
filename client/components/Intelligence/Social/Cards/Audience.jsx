@@ -6,7 +6,8 @@ import styles from '../styles.scss';
 export default function Audience(props) {
   const {
     title,
-    chartData,
+    labels,
+    data,
   } = props;
 
   return (
@@ -16,13 +17,13 @@ export default function Audience(props) {
       </div>
       <div className={styles.booked__body}>
         <LineChart
-          displayTooltips={true}
-          labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+          displayTooltips
+          labels={labels}
           dataSets={[
             {
               label: 'Appointments Booked',
               color: 'yellow',
-              data: chartData,
+              data: data,
             }
           ]}
         />
@@ -33,5 +34,6 @@ export default function Audience(props) {
 
 Audience.propTypes = {
   title: PropTypes.string,
-  chartData: PropTypes.arrayOf(Number)
+  labels: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.number)
 };

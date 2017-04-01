@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
-import { Card, CardHeader, PieChart } from '../../../library';
-import colorMap from '../../../library/util/colorMap';
-import styles from '../styles.scss';
+import { Card, CardHeader, PieChart } from '../../../../library';
+import colorMap from '../../../../library/util/colorMap';
+import styles from '../../styles.scss';
 
 export default function BusiestTimeOfWeek(props) {
   const {
@@ -15,7 +15,7 @@ export default function BusiestTimeOfWeek(props) {
     <Card borderColor={colorMap.green}>
       <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
       <div className={styles.bussiestTimeOfWeekWrapper}>
-        <div className={classNames(styles.pieChartWrapper)} style={{width: '200px'}} >
+        <div className={classNames(styles.pieChartWrapper)} style={{ width: '200px' }} >
           <PieChart
             width={171}
             height={85}

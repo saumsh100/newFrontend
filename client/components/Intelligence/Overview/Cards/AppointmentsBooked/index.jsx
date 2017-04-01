@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardHeader, LineChart } from '../../../library';
+import { Card, CardHeader, LineChart } from '../../../../library';
 import styles from './styles.scss';
 
 
