@@ -3,9 +3,9 @@ import { Card, Col, Grid, Row, ContainerList} from "../../library";
 import colorMap from "../../library/util/colorMap";
 import classNames from 'classnames';
 import moment from 'moment';
-import BusinessStats from './BusinessStats';
-import DataStats from './DataStats';
-import Patients from './Patients';
+import BusinessStats from './Cards/BusinessStats';
+import DataStats from './Cards/DataStats';
+import Patients from './Cards/Patients';
 import styles from "./styles.scss";
 
 class Business extends Component {

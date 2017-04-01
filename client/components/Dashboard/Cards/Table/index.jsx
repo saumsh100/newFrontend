@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardHeader } from '../../library';
-import Search from '../../library/Search';
+import { Card, CardHeader } from '../../../library';
+import Search from '../../../library/Search';
 import styles from './styles.scss';
 
 class Table extends Component {

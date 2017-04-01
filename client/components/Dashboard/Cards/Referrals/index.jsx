@@ -1,80 +1,48 @@
 import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Search, IconButton} from '../../library';
-import colorMap from '../../library/util/colorMap';
+import { List, ListItem, Card, CardHeader, Search, IconButton} from '../../../library';
+import colorMap from '../../../library/util/colorMap';
 import styles from './styles.scss';
 
 
 class Referrals extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   render() {
-    const hardcodeData = [{
-      img: "images/patient_1.png",
-      name: "Bobby Okelley",
-      age: "53",
-      phone: "123 456 7890",
-      email: "Monroe_Jacobs@gmail.com",
-      from: "Seminder Sent",
-      date: "22/11",
-    },{
-      img: "images/patient_2.png",
-      name: "Bobby Okelley",
-      age: "53",
-      phone: "123 456 7890",
-      email: "Monroe_Jacobs@gmail.com",
-      from: "Seminder Sent",
-      date: "22/11",
-    },{
-      img: "images/patient_3.png",
-      name: "Bobby Okelley",
-      age: "53",
-      phone: "123 456 7890",
-      email: "Monroe_Jacobs@gmail.com",
-      from: "Seminder Sent",
-      date: "22/11",
-    },{
-      img: "images/patient_4.png",
-      name: "Bobby Okelley",
-      age: "53",
-      phone: "123 456 7890",
-      email: "Monroe_Jacobs@gmail.com",
-      from: "Seminder Sent",
-      date: "22/11",
-    },];
 
     let showHoverComponents = (<div className={styles.clickHandlers__newreqText}>New</div>);
-
-      showHoverComponents = (
-        <div>
-          <div className={styles.clickHandlers}>
-            <IconButton
-              icon={'times-circle-o'}
-              className={styles.clickHandlers__remove}
-            />
-            <IconButton
-              icon={'check-circle'}
-              className={styles.clickHandlers__confirm}
-            />
-          </div>
+    showHoverComponents = (
+      <div>
+        <div className={styles.clickHandlers}>
+          <IconButton
+            icon={'times-circle-o'}
+            className={styles.clickHandlers__remove}
+          />
+          <IconButton
+            icon={'check-circle'}
+            className={styles.clickHandlers__confirm}
+          />
         </div>
-      )
+      </div>
+    )
 
     const {
       cardCount,
       cardTitle,
+      data,
     } = this.props;
+
     return (
       <Card className={styles.referrals} borderColor={colorMap.red}>
         <div className={styles.referrals__header}>
-          <CardHeader title={cardTitle} count={hardcodeData.length}>
+          <CardHeader title={cardTitle} count={data.length}>
             <Search min calendar className={styles.referrals__search} />
           </CardHeader>
         </div>
         <div className={styles.referrals__body}>
           <List className={styles.data}>
-            {hardcodeData.map(obj => {
+            {data.map(obj => {
               return (
                 <ListItem className={styles.referrals__item}>
                   <img className={styles.referrals__item_img} src={obj.img} alt=""/>

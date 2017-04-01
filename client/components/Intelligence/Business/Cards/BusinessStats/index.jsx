@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Row, Col,   } from '../../../library'
+import { Row, Col,   } from '../../../../library'
 import Arrow from '../Arrow';
 import classNames from 'classnames';
 import styles from './styles.scss';

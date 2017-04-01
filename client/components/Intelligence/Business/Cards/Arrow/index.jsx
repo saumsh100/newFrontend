@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Col, Row, Icon} from "../../../library";
+import { Col, Row, Icon} from "../../../../library";
 import classNames from 'classnames';
 import styles from "./styles.scss";
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../library';
-import Search from '../../library/Search';
+import { List, ListItem, Card, CardHeader, Icon } from '../../../library';
+import Search from '../../../library/Search';
 import styles from './styles.scss';
 import classNames from 'classnames';
 import moment from 'moment';
@@ -9,19 +9,19 @@ class RemindersList extends Component {
   render() {
     const {
       borderColor,
-      cardCount,
       cardTitle,
+      data,
     } = this.props;
     return (
       <Card className={styles.reminders} borderColor={borderColor}>
         <div className={styles.reminders__header}>
-          <CardHeader count={this.props.data.length} title={cardTitle}>
+          <CardHeader count={data.length} title={cardTitle}>
             <Search />
           </CardHeader>
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {this.props.data.map(obj => {
+            {data.map(obj => {
               const rightContent = obj.appointment && typeof obj.appointment === "object" ?
                 <div className={styles.patients__item_right}>
                   <div className={styles.availability}>
