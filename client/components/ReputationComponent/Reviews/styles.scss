@@ -83,3 +83,30 @@
 		font-size: $medium-size;
 	}
 }
+
+.content {
+	width: 100%;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	&__stars {
+		width: 50%;
+		text-align: right;
+		display: inline-block;
+	}
+
+	&__bar {
+		width: 50%;
+		text-align: left;
+    display: flex;
+    align-items: center;
+		color: $primary-blue;
+		&__percent {
+			height: 16px;
+			margin-right: 4px;
+			background-color: $primary-blue;
+			display: inline-block;
+		}
+	}
+}
