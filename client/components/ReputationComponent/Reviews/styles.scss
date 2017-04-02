@@ -13,3 +13,35 @@
     margin-bottom: 15px;
   }
 }
+
+
+.googleMapsRespond {
+	display: flex;
+	flex-direction: row;
+	height: 168px;
+	align-items: center;
+	padding-left: 20px;
+
+	&__video {
+		width: 20%;
+		height: 120px;
+		margin-right: 40px;
+		min-width: 250px;
+	}
+
+	&__descr {
+		width: 80%;
+		height: 120px;
+		display: flex;
+		flex-direction: column;
+		align-items: space-around;
+		justify-content: center;
+		div:first-child {
+			font-weight: $large-weight;
+			margin-bottom: 20px;
+		}
+		div:last-child {
+			color: $primary-darkgrey;
+		}
+	}
+}

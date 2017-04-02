@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Card, Col, Grid, Row } from '../../library';
+import { Card, Col, Grid, Row, CardHeader } from '../../library';
 import Score from './Score';
 import Total from './Total';
 import colorMap from '../../library/util/colorMap';
@@ -25,6 +25,27 @@ class Reviews extends Component {
               title="Listing Score"
             />
           </Col>
+
+          <Col className={styles.padding} xs={12} md={12}>
+            <Card borderColor={colorMap.red} className={styles.card}>
+              <div className={styles.googleMapsRespond}>
+                <div className={styles.googleMapsRespond__video}>
+                  <iframe width="250" height="120"
+                  src="https://www.youtube.com/watch?v=t13DULDt01k">
+                  </iframe>
+                </div>
+                <div className={styles.googleMapsRespond__descr}>
+                  <div> Respond to google maps review </div>
+                  <div> You can respond from here! Connect your Google My Busyness account to get started </div>
+                </div>
+                
+
+              </div>
+            </Card>
+          </Col>
+
+
+
         </Row>
       </Grid>
     );
