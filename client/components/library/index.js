@@ -32,7 +32,7 @@ import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 import { BigCommentBubble } from './BigCommentBubble';
 import BackgroundIcon from './BackgroundIcon';
-
+import Tag from './Tag';
 import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
 
@@ -76,6 +76,7 @@ export {
   FlexGrid,
   Tabs,
   Tab,
+  Tag,
   Toggle,
   Tooltip,
 };

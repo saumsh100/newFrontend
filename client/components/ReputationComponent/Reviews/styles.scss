@@ -110,3 +110,19 @@
 		}
 	}
 }
+
+
+.tags {
+	width: 100%;
+	height: 168px;
+	&__left {
+		width: 25%;
+		min-width: 250px;
+		height: 168px;
+		position: relative;
+		display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+	}
+}

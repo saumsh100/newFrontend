@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Card, Col, Grid, Row, CardHeader, Star } from '../../library';
+import { Card, Col, Grid, Row, CardHeader, Star, Tag } from '../../library';
 import Score from './Score';
 import Total from './Total';
 import colorMap from '../../library/util/colorMap';
@@ -19,8 +19,6 @@ class Reviews extends Component {
 
     const ratingStars = _.keys(rating).sort((a,b) => a > b);
     const maxValue = _.max(_.values(rating));
-
-
 
     return (
       <Grid className={styles.reviews}>
@@ -91,11 +89,8 @@ class Reviews extends Component {
                     for(let i = 1; i <= r; i++ ) {
                       rows.push(<Star size={1.3} />);
                     }
-
                     const width = rating[r] ? (Math.floor((rating[r] / maxValue) * 80)) : 5;
                     const style = { width: `${width}%` };
-                    console.log("style");
-                    console.log(style);
                     return (
                       <div className={styles.content}>
                         <div className={styles.content__stars}>
@@ -116,6 +111,23 @@ class Reviews extends Component {
             </Card>
           </Col>
           
+
+          <Col className={styles.padding} xs={12} md={12}>
+            <Card borderColor={colorMap.yellow} className={styles.card}>
+              <div className={styles.tags}>
+                <div className={styles.tags__left}>
+                  <Tag label="dentist" color={colorMap.blue}  />
+                  <Tag label="dentist vancouver" color={colorMap.red} />
+                  <Tag label="dentist kitsilano" color={colorMap.yellow} />
+                  <Tag label="dentist hygienist" color={colorMap.green} />
+                  
+                </div>
+
+              </div>
+            </Card>
+          </Col>
+
+
 
 
         </Row>
