@@ -1,0 +1,140 @@
+@import "../../../../ui.scss";
+@import "../../../../fonts.scss";
+
+.referrals {
+  height: 640px;
+  margin-bottom: 20px;
+  &__header {
+    padding: 0 45px 0 15px;
+  }
+  &__body {
+    max-height: 560px;
+    overflow: auto;
+  }
+}
+.referrals {
+  border-top: 1px solid $primary-grey;
+  padding: 0;
+  margin: 0;
+
+  &__searchContainer {
+    margin-left: 15px;
+    height: 30px;
+  }
+
+  &__item {
+    padding: 0 40px 0 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 110px;
+    list-style: none;
+    margin: 0;
+    flex-direction: row;
+    border-bottom: 1px solid $primary-lightgrey;
+
+    @media screen and (max-width: 400px) {
+      padding: 0 5px;
+    }
+    @media screen and (max-width: 450px) {
+      padding: 10px;
+      height: 100%;
+      flex-direction: column;
+    }
+    &_wrapper {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      color: $primary-darkgrey;
+      @media screen and (max-width: 450px) {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    &_left {
+      @media screen and (max-width: 450px) {
+        margin-top: 10px;
+      }
+      div {
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        text-overflow: ellipsis;
+        @media screen and (max-width: 450px) {
+          text-align: center;
+        }
+      }
+
+
+    }
+    &_days {
+      color: $primary-dark;
+      padding: 2px 0;
+      white-space: pre-line;
+      @media screen and (max-width: 450px) {
+        color: $primary-darkgrey;
+      }
+      span {
+        margin: 0 2px;
+      }
+    }
+
+    &_name {
+      color: $primary-dark;
+    }
+
+    &_from{
+      color: $primary-dark;
+    }
+
+    &_img {
+      width: 44px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  }
+}
+.clickHandlers {
+  display: flex;
+  width: 44px;
+  position: relative;
+  color: #b5b5b5;
+  font-size: .9rem;
+  justify-content: center;
+  right: -20px;
+  @media screen and (max-width: 450px) {
+    right: 0;
+  }
+
+  &__newreqText {
+    @extend .font-small-dark;
+    position: relative;
+    color: #b5b5b5;
+    padding: 5px;
+    font-size: .9rem;
+    right: -20px;
+    @media screen and (max-width: 450px) {
+      right: 0;
+    }
+  }
+
+  &__remove {
+    padding: 5px;
+    font-size: 22px;
+    color: $inactive-color;
+  }
+
+  &__confirm {
+    padding: 5px;
+    font-size: 22px;
+    color: $primary-green;
+    &:hover {
+      color: darken($primary-green, 10%);
+    }
+  }
+}

@@ -2,13 +2,13 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import IntelligenceComponent from '../components/IntelligenceComponent';
+import Intelligence from '../components/Intelligence';
 
 class IntelligenceContainer extends Component {
   render() {
     return (
       <div>
-        <IntelligenceComponent {...this.props} />
+        <Intelligence {...this.props} />
       </div>
     );
   }
