@@ -1,0 +1,65 @@
+@import "../../../../ui";
+@import "../../../../fonts";
+
+* {
+  box-sizing: border-box;
+}
+
+.total {
+  height: 200px;
+  &__header {
+    display: flex;
+    padding: 10px 20px;
+  }
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 20px;
+    @media screen and (max-width: 400px){
+      padding: 0 20px;
+    }
+  }
+  &__item {
+    display: flex;
+    width: 100%;
+    &_wrapper {
+      width: 40%;
+      margin-right: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      @media screen and (max-width: 1300px) {
+        width: 50%;
+        &:first-child {
+          text-align: left;
+        }
+        &:last-child {
+          text-align: right;
+        }
+      }
+    }
+  }
+  &__body {
+    display: flex;
+    flex-direction: column;
+    &_item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    &_text {
+      color: $primary-dark;
+    }
+    &_data {
+      color: $primary-darkgrey;
+    }
+  }
+  &__body {
+    &_total {
+      display: flex;
+      justify-content: space-between;
+      color: $primary-blue;
+    }
+  }
+}

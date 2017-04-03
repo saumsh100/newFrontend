@@ -1,7 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { Card, Col, Grid, Row, CardHeader, Star, Tag } from '../../library';
-import Score from './Score';
-import Total from './Total';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 import _ from 'lodash';
@@ -23,21 +21,6 @@ class Reviews extends Component {
     return (
       <Grid className={styles.reviews}>
         <Row>
-          <Col className={styles.padding} xs={12} md={3}>
-            <Score
-              borderColor={colorMap.blue}
-              count="232"
-              title="Listing Score"
-            />
-          </Col>
-          <Col className={styles.padding} xs={12} md={4}>
-            <Total
-              borderColor={colorMap.blue}
-              count="232"
-              title="Listing Score"
-            />
-          </Col>
-
           <Col className={styles.padding} xs={12} md={12}>
             <Card borderColor={colorMap.red} className={styles.card}>
               <div className={styles.googleMapsRespond}>
@@ -53,7 +36,7 @@ class Reviews extends Component {
               </div>
             </Card>
           </Col>
-          
+
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
             <Card borderColor={colorMap.blue} className={styles.card}>
               <div className={styles.stats}>
@@ -80,7 +63,7 @@ class Reviews extends Component {
               </div>
             </Card>
           </Col>
-          
+
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
             <Card borderColor={colorMap.blue} className={styles.card}>
               <div className={styles.stats}>
@@ -103,14 +86,14 @@ class Reviews extends Component {
                             className={styles.content__bar__percent}>
                           </span>
                           {rating[r]}
-                        </div>    
+                        </div>
                       </div>
                     )
                   })}
               </div>
             </Card>
           </Col>
-          
+
 
           <Col className={styles.padding} xs={12} md={12}>
             <Card borderColor={colorMap.yellow} className={styles.card}>
@@ -120,7 +103,7 @@ class Reviews extends Component {
                   <Tag label="dentist vancouver" color={colorMap.red} />
                   <Tag label="dentist kitsilano" color={colorMap.yellow} />
                   <Tag label="dentist hygienist" color={colorMap.green} />
-                  
+
                 </div>
 
               </div>
