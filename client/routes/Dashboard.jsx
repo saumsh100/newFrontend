@@ -106,16 +106,16 @@ export default function Routes({ history }) {
           <Route
             path="reviews"
             getComponent={(location, callback) => {
-              require.ensure(['../components/ReputationComponent/Reviews'], (require) => {
-                callback(null, require('../components/ReputationComponent/Reviews').default);
+              require.ensure(['../components/Reputation/Reviews'], (require) => {
+                callback(null, require('../components/Reputation/Reviews').default);
               });
             }}
           />
           <Route
             path="listings"
             getComponent={(location, callback) => {
-              require.ensure(['../components/ReputationComponent/Listings'], (require) => {
-                callback(null, require('../components/ReputationComponent/Listings').default);
+              require.ensure(['../components/Reputation/Listings'], (require) => {
+                callback(null, require('../components/Reputation/Listings').default);
               });
             }}
           />

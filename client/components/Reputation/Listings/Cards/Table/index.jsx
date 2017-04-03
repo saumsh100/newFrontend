@@ -1,6 +1,6 @@
 
-import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../../library';
+import React, { Component, PropTypes } from 'react';
+import { List, ListItem, Card, CardHeader, Icon } from '../../../../library';
 import styles from './styles.scss';
 
 
@@ -18,74 +18,14 @@ class Table extends Component {
     });
   }
   render() {
-    const hardcodeData = [{
-      data:
-        [{
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'lwater12@gmail.com',
-          listing: 0,
-        }, {
-          img: '/images/services/voyager.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'emilee1@gmail.com',
-          listing: 26,
-        }, {
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'barlet@gmail.com',
-          listing: 54,
-        }] }, {
-      title: 'Review Sites',
-      data:
-        [{
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'lwater12@gmail.com',
-          listing: 0,
-        }, {
-          img: '/images/services/voyager.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'emilee1@gmail.com',
-          listing: 26,
-        }, {
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'barlet@gmail.com',
-          listing: 0,
-        }] }, {
-      title: 'Review Sites',
-      data:
-        [{
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'lwater12@gmail.com',
-          listing: 0,
-        }, {
-          img: '/images/services/voyager.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'emilee1@gmail.com',
-          listing: 26,
-        }, {
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'barlet@gmail.com',
-          listing: 0,
-        }] }];
     const {
       borderColor,
       cardTitle,
+      data,
     } = this.props;
+
     const { detailsModeActive } = this.state;
+
     return (
       <Card className={styles.mostLoyal} borderColor={borderColor}>
         <div className={styles.mostLoyal__header}>
@@ -96,7 +36,7 @@ class Table extends Component {
             <a className={styles.mostLoyal__header_link}>Print Listings Repost</a>
           </CardHeader>
         </div>
-        {hardcodeData.map(obj => (
+        {data.map(obj => (
           <div className={styles.mostLoyal__body}>
             {obj.title ? (
               <div className={styles.mostLoyal__header}>
@@ -150,5 +90,8 @@ class Table extends Component {
   }
 }
 
+Table.PropTypes = {
+  data: PropTypes.arrayOf(PropTypes.object),
+};
 
 export default Table;

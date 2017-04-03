@@ -1,24 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import { Card } from '../../../library';
+import { Card } from '../../../../library';
 import styles from './styles.scss';
 
 class Score extends Component {
   render() {
     const {
       title,
-      count,
+      data,
       borderColor,
     } = this.props;
-    const data = [
-      { title: 'Industry Avg', count: 404 },
-      { title: 'Industry Avg', count: 404 },
-    ];
+
     return (
       <Card borderColor={borderColor}
             className={styles.score}>
         <div className={styles.score__header}>
           <div className={styles.score__header_count}>
-            {count}
+            {data.length}
           </div>
           <div className={styles.score__header_title}>
             {title}
@@ -39,6 +36,7 @@ class Score extends Component {
   }
 }
 Score.PropTypes = {
+  data: PropTypes.arrayOf(PropTypes.object),
   count: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
 };

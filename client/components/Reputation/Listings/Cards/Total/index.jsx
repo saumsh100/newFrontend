@@ -1,17 +1,14 @@
-import React, { Component } from 'react';
-import { Card, Icon } from '../../../library';
+import React, { Component, PropTypes } from 'react';
+import { Card, Icon } from '../../../../library';
 import styles from './styles.scss';
 
 class Total extends Component {
   render() {
     const {
       borderColor,
+      data,
     } = this.props;
-    const data = [
-      { icon: 'check', title: 'Accurate', count: 3 },
-      { icon: 'exclamation', title: 'Found with Possible Errors', count: 2 },
-      { icon: 'times', title: 'Not Found', count: 15 },
-    ];
+
     const allDataCount = data.reduce((sum, cur) => sum + cur.count, 0);
     return (
       <Card
@@ -47,4 +44,7 @@ class Total extends Component {
   }
 }
 
+Total.PropTypes = {
+  data: PropTypes.arrayOf(PropTypes.object),
+};
 export default Total;
