@@ -103,9 +103,8 @@ class Reviews extends Component {
                   <Tag label="dentist vancouver" color={colorMap.red} />
                   <Tag label="dentist kitsilano" color={colorMap.yellow} />
                   <Tag label="dentist hygienist" color={colorMap.green} />
-
+                  <span className={styles.tags__left__update}>Update keyword based on filters</span>
                 </div>
-
               </div>
             </Card>
           </Col>

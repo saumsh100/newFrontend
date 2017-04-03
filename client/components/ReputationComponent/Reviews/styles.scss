@@ -124,5 +124,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    &__update {
+    	margin-top: 10px;
+    	color: $primary-darkgrey;
+    }
 	}
 }
