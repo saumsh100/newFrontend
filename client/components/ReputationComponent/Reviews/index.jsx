@@ -1,8 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import { Card, Col, Grid, Row, CardHeader, Star, Tag } from '../../library';
+import { Card, Col, Grid, Row, CardHeader, Star, Tag, BigCommentBubble } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 import _ from 'lodash';
+import moment from 'moment'
 
 class Reviews extends Component {
   render() {
@@ -17,6 +18,42 @@ class Reviews extends Component {
 
     const ratingStars = _.keys(rating).sort((a,b) => a > b);
     const maxValue = _.max(_.values(rating));
+
+    const DataBigComment = [{
+      icon: "facebook",
+      iconColor: '#ffffff',
+      background: '#395998',
+      iconAlign: 'flex-end',
+      headerLinkName: "S. Lalala",
+      headerLinkSite: "yelp.ca",
+      siteStars: 4,
+      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
+      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      createdAt: moment().subtract(10, 'days').fromNow()
+    },{
+      icon: "bitcoin",
+      iconColor: '#ffffff',
+      background: '#ffc55b',
+      iconAlign: 'center',
+      headerLinkName: "L. Linda",
+      headerLinkSite: "yelp.ca",
+      siteStars: 6,
+      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
+      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      createdAt: moment().subtract(10, 'days').fromNow()
+    },{
+      icon: "twitter",
+      iconColor: '#ffffff',
+      background: '#FF715A',
+      iconAlign: 'center',
+      headerLinkName: "N. Blabla",
+      headerLinkSite: "yelp.ca",
+      siteStars: 3,
+      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
+      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      createdAt: moment().subtract(10, 'days').fromNow()
+    }];
+   
 
     return (
       <Grid className={styles.reviews}>
@@ -94,7 +131,6 @@ class Reviews extends Component {
             </Card>
           </Col>
 
-
           <Col className={styles.padding} xs={12} md={12}>
             <Card borderColor={colorMap.yellow} className={styles.card}>
               <div className={styles.tags}>
@@ -108,6 +144,46 @@ class Reviews extends Component {
               </div>
             </Card>
           </Col>
+
+          <Col className={styles.padding} xs={12} md={12} sm={6} lg={8}>
+            <Card borderColor={colorMap.blue} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title={'REVIEWS'} />
+                <div className={styles.reviewsComments}>
+                  <div className={styles.reviewsComments__container} >
+
+                    <Col xs={12} md={12} className={styles.reviewsComments__comment} >
+                      {DataBigComment.map(obj => {
+                        return (
+                          <BigCommentBubble
+                            icon={obj.icon}
+                            iconColor={obj.iconColor}
+                            background={obj.background}
+                            iconAlign={obj.iconAlign}
+                            headerLinkName={obj.headerLinkName}
+                            headerLinkSite={obj.headerLinkSite}
+                            siteStars={obj.siteStars}
+                            siteTitle={obj.siteTitle}
+                            sitePreview={obj.sitePreview}
+                            createdAt={obj.createdAt}/>
+                        )
+                      })}
+                    </Col>
+                  </div>
+                </div>
+            </Card>
+          </Col>
+
+          <Col className={styles.padding} xs={12} md={4} sm={4} lg={4}>
+            <Card borderColor={colorMap.red} className={styles.card}>
+              <div className={styles.filters}>
+                  dsadsadsa
+              </div>
+            </Card>
+          </Col>
+
+
+
+
 
 
 
