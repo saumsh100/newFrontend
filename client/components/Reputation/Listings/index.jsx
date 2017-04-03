@@ -13,11 +13,13 @@ class Listings extends Component {
       { title: 'Industry Avg', count: 404 },
       { title: 'Industry Avg', count: 404 },
     ];
+    
     const totalData = [
       { icon: 'check', title: 'Accurate', count: 3 },
       { icon: 'exclamation', title: 'Found with Possible Errors', count: 2 },
       { icon: 'times', title: 'Not Found', count: 15 },
     ];
+
     const informationData = [
       { title: 'Business Name', data: 'ABC Dental Care' },
       { title: 'Street Address', data: 'East 2nd Ave' },
