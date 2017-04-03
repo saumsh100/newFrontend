@@ -17,9 +17,14 @@ export default function DashboardStats(props) {
     <Row className={styles.dashboardStats}>
       {data.map(d => (
         <Col className={styles.dashboardStats__item} xs={12} sm={6} md={3}>
-            <IconCard className={styles[d.color]} count={d.count} title={d.title} icon={d.icon} size={d.size} />
+          <IconCard
+            className={styles[d.color]}
+            count={d.count} title={d.title}
+            icon={d.icon}
+            size={d.size}
+          />
         </Col>
       ))}
     </Row>
-    );
+  );
 }

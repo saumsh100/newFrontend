@@ -3,13 +3,14 @@ import createModel from '../createModel';
 
 const ServicesSchema = {
   id: null,
+  createdAt: null,
   accountId: null,
   name: null,
   duration: null,
   bufferTime: null,
   unitCost: null,
-  customCosts: null,
-  practitioners: null,
+  customCosts: {},
+  practitioners: [],
   allowedPractitioners: null,
 };
 

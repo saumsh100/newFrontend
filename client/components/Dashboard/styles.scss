@@ -50,7 +50,6 @@
   }
   &__patientList {
     &_item {
-      min-width: 500px;
       padding: 0 5px;
       @media screen and (max-width: 650px) {
         min-width: 300px;
