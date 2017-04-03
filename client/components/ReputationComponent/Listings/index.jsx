@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { Col, Grid, Row } from '../../library';
 import colorMap from '../../library/util/colorMap';
-import Score from "./Score";
-import Total from "./Total";
-import Information from "./Information";
+import Score from './Score';
+import Total from './Total';
+import Information from './Information';
+import Table from './Table';
 import styles from './styles.scss';
 
 class Listings extends Component {
@@ -30,6 +31,12 @@ class Listings extends Component {
               borderColor={colorMap.blue}
               count="232"
               title="Listing Score"
+            />
+          </Col>
+          <Col xs={12}>
+            <Table
+              borderColor={colorMap.blue}
+              cardTitle="Search Engines"
             />
           </Col>
         </Row>
