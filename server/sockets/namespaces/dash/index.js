@@ -4,6 +4,7 @@ const twilioClient = require('../../../config/twilio');
 const twilioConfig = require('../../../config/globals').twilio;
 const sharedChangeFeeds = require('../../sharedChangeFeeds');
 const dashChangeFeeds = require('./dashChangeFeeds');
+const Appointment = require('../../../models/Appointment');
 
 const nsps = globals.namespaces;
 
@@ -13,8 +14,7 @@ const socketIoOptions = {
 };
 
 module.exports = function setupDashNsp(io) {
-  const dashNsp = io.of(nsps.dash);
-  dashNsp
+  io.of(nsps.dash)
     .on('connection', socketIoJwt.authorize(socketIoOptions))
     .on('authenticated', (socket) => {
       const accountIdFromSocket = socket.decoded_token.activeAccountId;
@@ -45,30 +45,42 @@ module.exports = function setupDashNsp(io) {
         }).then((result) => {
           // TODO: this is queued, and not delivered, so not techincally sent...
           console.log(result);
-          /* TextMessage.save({
-          id: result.sid,
-          to: result.to,
-          from: result.from,
-          body: result.body,
-          status: result.status,
-        }).then(tm => console.log('SMS sent and saved', tm))
-        .catch(err => console.log(err)); */
+          // TextMessage.save({
+          //   id: result.sid,
+          //   to: result.to,
+          //   from: result.from,
+          //   body: result.body,
+          //   status: result.status,
+          // }).then(tm => console.log('SMS sent and saved', tm))
+          //   .catch(err => console.log(err));
         }).catch((err) => {
           console.log('Error sending SMS');
           console.log(err);
         });
       });
 
-      // TODO put this back - how?
-      // dashChangeFeeds(io, accountIdFromSocket);
+      dashChangeFeeds(io, accountIdFromSocket);
 
-      // const isSyncedWithPMS = false;
-      // sharedChangeFeeds(io.of(nsps.sync), accountIdFromSocket, isSyncedWithPMS, 'DashNsp');
+      Appointment
+        .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: false })
+        .changes({ squash: true })
+        .then((feed) => {
+          feed.each((error, doc) => {
+            if (error) throw new Error('Feed error');
+
+            if (doc.getOldValue() === null) {
+              console.log('[ INFO ] CREATE | from=dash', doc);
+              io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
+            } else {
+              // Updated
+              console.log('[ INFO ] UPDATE from=dash', doc);
+              io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
+            }
+          });
+        });
     })
     .on('unauthorized', (msg) => {
       console.err('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
     });
-  console.log('4 setupDashNsp: done configuring callbacks');
-  return dashNsp;
 };
