@@ -11,7 +11,8 @@ const socketIoOptions = {
 };
 
 module.exports = function setupSyncNsp(io) {
-  io.of(nsps.sync)
+  const syncNsp = io.of(nsps.sync);
+  syncNsp
     .on('connection', socketIoJwt.authorize(socketIoOptions))
     .on('authenticated', (socket) => {
       const accountIdFromSocket = socket.decoded_token.activeAccountId;
@@ -22,12 +23,14 @@ module.exports = function setupSyncNsp(io) {
       console.log('active rooms', io.sockets.adapter.rooms);
       socket.join(roomName);
 
-      // true means that this change feed will feed the dashboard only
-      const isSyncedWithPMS = true;
-      sharedChangeFeeds(io.of(nsps.dash), accountIdFromSocket, isSyncedWithPMS);
+      // true means that this change feed will send to the dashboard only
+      // const isSyncedWithPMS = true;
+      // sharedChangeFeeds(io.of(nsps.dash), accountIdFromSocket, isSyncedWithPMS, 'SyncNsp');
     })
     .on('unauthorized', (msg) => {
       console.err('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
     });
+  console.log('2 setupSyncNsp: done configuring callbacks');
+  return syncNsp;
 };

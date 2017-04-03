@@ -10,7 +10,6 @@ module.exports = function dashChangeFeeds(io, accountIdFromSocket) {
    * TODO this may break due to rooms and namespaces.
    */
   TextMessage.changes().then((feed) => {
-    console.log('>>>>>>>>> TextMessage changes');
     feed.each((error, doc) => {
       if (error) {
         throw new Error('Feed error');

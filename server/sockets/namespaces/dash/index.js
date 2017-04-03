@@ -13,7 +13,8 @@ const socketIoOptions = {
 };
 
 module.exports = function setupDashNsp(io) {
-  io.of(nsps.dash)
+  const dashNsp = io.of(nsps.dash);
+  dashNsp
     .on('connection', socketIoJwt.authorize(socketIoOptions))
     .on('authenticated', (socket) => {
       const accountIdFromSocket = socket.decoded_token.activeAccountId;
@@ -44,27 +45,30 @@ module.exports = function setupDashNsp(io) {
         }).then((result) => {
           // TODO: this is queued, and not delivered, so not techincally sent...
           console.log(result);
-          /*TextMessage.save({
-        id: result.sid,
-        to: result.to,
-        from: result.from,
-        body: result.body,
-        status: result.status,
-      }).then(tm => console.log('SMS sent and saved', tm))
-        .catch(err => console.log(err));*/
+          /* TextMessage.save({
+          id: result.sid,
+          to: result.to,
+          from: result.from,
+          body: result.body,
+          status: result.status,
+        }).then(tm => console.log('SMS sent and saved', tm))
+        .catch(err => console.log(err)); */
         }).catch((err) => {
           console.log('Error sending SMS');
           console.log(err);
         });
       });
 
-      dashChangeFeeds(io, accountIdFromSocket);
+      // TODO put this back - how?
+      // dashChangeFeeds(io, accountIdFromSocket);
 
-      const isSyncedWithPMS = false;
-      sharedChangeFeeds(io.of(nsps.sync), accountIdFromSocket, isSyncedWithPMS);
+      // const isSyncedWithPMS = false;
+      // sharedChangeFeeds(io.of(nsps.sync), accountIdFromSocket, isSyncedWithPMS, 'DashNsp');
     })
     .on('unauthorized', (msg) => {
       console.err('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
     });
+  console.log('4 setupDashNsp: done configuring callbacks');
+  return dashNsp;
 };

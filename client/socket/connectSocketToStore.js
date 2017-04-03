@@ -28,5 +28,9 @@ export default function connectSocketToStore(socket, store) {
   socket.on('add:Appointment', (data) => {
     console.log('EVENT:addAppointment: data=', data);
   });
+
+  socket.on('update:Appointment', (data) => {
+    console.log('EVENT:update:Appointment: data=', data);
+  });
 }
 
