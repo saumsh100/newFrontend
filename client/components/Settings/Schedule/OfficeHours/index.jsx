@@ -24,7 +24,7 @@ function OfficeHours(props) {
         onSubmit={handleSubmit}
         formName="officeHours"
       />
-      <Header title="Breaks"/>
+      <Header title="Breaks" />
       <BreaksForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}

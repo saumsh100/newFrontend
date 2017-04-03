@@ -1,6 +1,6 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, Button, Header, Grid, Row, Col } from '../../library';
+import {  Form, Field, IconButton, Header, } from '../../library';
 import styles from './styles.scss';
 
 const parseNum = value => value && parseInt(value);
@@ -12,7 +12,7 @@ const maxLength25 = maxLength(25);
 const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 
 
-class ServiceItemData extends Component {
+class ServiceDataItem extends Component {
   constructor(props) {
     super(props)
     this.updateService = this.updateService.bind(this);
@@ -42,27 +42,23 @@ class ServiceItemData extends Component {
   render() {
     const { service } = this.props;
 
-    if(!service) {
-      return null;
-    }
+    let showComponent = null;
 
-    const initialValues = {
-      name: service.get('name'),
-      duration: service.get('duration'),
-      bufferTime: service.get('bufferTime'),
-    };
+    if (service) {
+      const initialValues = {
+        name: service.get('name'),
+        duration: service.get('duration'),
+        bufferTime: service.get('bufferTime'),
+      };
 
-    return (
-      <div>
-        <div className={styles.serviceHeaderContainer}>
-          <Header title={service.get('name')} />
-          <div className={styles.trashButton}>
-            <Button icon="trash" notflat raised className={styles.trashButton__trashIcon} onClick={this.deleteService}>
-              Delete
-            </Button>
-          </div>
-        </div>
+      showComponent = (
         <div>
+          <div className={styles.serviceHeaderContainer}>
+            <Header title={service.get('name')} />
+            <div className={styles.trashButton}>
+              <IconButton icon="trash" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
+            </div>
+          </div>
           <div className={styles.servicesFormRow}>
             <Form
               form={`${service.get('id')}Form`}
@@ -94,9 +90,15 @@ class ServiceItemData extends Component {
             </Form>
           </div>
         </div>
+      );
+    }
+
+    return (
+      <div>
+        {showComponent}
       </div>
     );
   }
 }
 
-export default ServiceItemData;
+export default ServiceDataItem;

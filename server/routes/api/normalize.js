@@ -34,24 +34,12 @@ const patientSchema = () => {
   return new schema.Entity('patients');
 };
 
-const practitionerSchema = () => {
-  return new schema.Entity('practitioners', {
-    weeklySchedule: weeklyScheduleSchema(),
-  });
-};
-
 const requestSchema = () => {
   return new schema.Entity('requests', {
     patient: patientSchema(),
     service: serviceSchema(),
     practitioner: practitionerSchema(),
     chair: chairSchema(),
-  });
-};
-
-const serviceSchema = () => {
-  return new schema.Entity('services', {
-    practitioner: practitionerSchema(),
   });
 };
 
@@ -71,9 +59,25 @@ const weeklyScheduleSchema = () => {
   return new schema.Entity('weeklySchedules');
 };
 
+const practitionerSchema = () => {
+  return new schema.Entity('practitioners', {
+    weeklySchedule: weeklyScheduleSchema(),
+    services: [_serviceSchema],
+  });
+};
+
+const serviceSchema = () => {
+  return new schema.Entity('services', {
+    practitioners: [_practitionerSchema],
+  });
+};
+
 const reservationSchema = () => {
   return new schema.Entity('reservations');
 };
+
+var _practitionerSchema = practitionerSchema();
+var _serviceSchema = serviceSchema();
 
 const SCHEMAS = {
   // Models (singleFetch/findOne)

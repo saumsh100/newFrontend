@@ -16,7 +16,8 @@ const sortPractitionersAlphabetical = (a, b) => {
 class Practitioners extends Component {
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule'] });
+    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services'] });
+    this.props.fetchEntities({ key: 'services' });
   }
 
   render() {
@@ -50,6 +51,7 @@ Practitioners.propTypes = {
 function mapStateToProps({ entities }) {
 
   const practitioners = entities.getIn(['practitioners', 'models']);
+
   const weeklyScheduleIds = practitioners.toArray().map((practitioner) => {
     if (practitioner.get('isCustomSchedule')) {
       return practitioner.get('weeklyScheduleId');
@@ -59,6 +61,7 @@ function mapStateToProps({ entities }) {
   const weeklySchedules = entities.getIn(['weeklySchedules', 'models']).filter((schedule) => {
     return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
   });
+
 
   return {
     practitioners,

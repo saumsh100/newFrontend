@@ -13,6 +13,7 @@ const Practitioner = createModel('Practitioner', {
   // If false we use Clinic's sechedule as default
   isCustomSchedule: type.boolean().default(false),
   weeklyScheduleId: type.string().uuid(4),
+
 });
 
 module.exports = Practitioner;

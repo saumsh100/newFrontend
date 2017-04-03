@@ -10,6 +10,12 @@ servicesRouter.param('serviceId', loaders('service', 'Service'));
 
 
 servicesRouter.get('/', checkPermissions('services:read'), (req, res, next) => {
+
+  const {
+    accountId,
+    joinObject,
+  } = req;
+
   if (req.query.practitionerId) {
     return Service.run()
       .then((services) => {
@@ -18,10 +24,9 @@ servicesRouter.get('/', checkPermissions('services:read'), (req, res, next) => {
         );
         res.send(normalize('services', services));
       });
-    
   }
 
-  Service.run()
+  Service.filter({ accountId }).getJoin(joinObject).run()
     .then(services => res.send(normalize('services', services)))
     .catch(next);
 });
@@ -44,9 +49,14 @@ servicesRouter.get('/:serviceId', (req, res, next) => {
 });
 
 servicesRouter.put('/:serviceId', checkPermissions('services:update'), (req, res, next) => {
-  return req.service.merge(req.body).save()
-    .then(service => res.send(normalize('service', service)))
-    .catch(next);
+
+  return Service.get(req.service.id).getJoin({ practitioners: true }).run()
+    .then((service) => {
+      service.merge(req.body).saveAll({ practitioners: true })
+        .then((servicePractitioners) => {
+          res.send(normalize('service', servicePractitioners));
+        }).catch(next);
+    });
 });
 
 servicesRouter.delete('/:serviceId', checkPermissions('services:delete'), (req, res, next) => {
