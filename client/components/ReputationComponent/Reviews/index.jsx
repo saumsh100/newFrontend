@@ -145,7 +145,7 @@ class Reviews extends Component {
             </Card>
           </Col>
 
-          <Col className={styles.padding} xs={12} md={12} sm={6} lg={8}>
+          <Col className={styles.padding} xs={12} md={12} sm={7} lg={7}>
             <Card borderColor={colorMap.blue} className={styles.card}>
               <CardHeader className={styles.cardHeader} title={'REVIEWS'} />
                 <div className={styles.reviewsComments}>
@@ -173,10 +173,24 @@ class Reviews extends Component {
             </Card>
           </Col>
 
-          <Col className={styles.padding} xs={12} md={4} sm={4} lg={4}>
+          <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
             <Card borderColor={colorMap.red} className={styles.card}>
               <div className={styles.filters}>
-                  dsadsadsa
+                  <div className={styles.filters__header}>
+                    <div className={styles.filters__header__left}>
+                      <span>Filters</span>
+                      <span className="fa fa-sliders"></span>
+
+                    </div>
+                    <div className={styles.filters__header__right}>
+                      <span>Select All</span>
+                      <span>Clear All</span>
+                    </div>
+                  </div>
+                  <div className={styles.filters__search}>
+                    <span className="fa fa-search" ></span>
+                    <input type="text" placeholder="Search..."/>
+                  </div>
               </div>
             </Card>
           </Col>
