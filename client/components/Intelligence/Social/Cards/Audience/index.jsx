@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Card, CardHeader, LineChart } from '../../../library';
-import colorMap from '../../../library/util/colorMap';
-import styles from '../styles.scss';
+import { Card, CardHeader, LineChart } from '../../../../library';
+import colorMap from '../../../../library/util/colorMap';
+import styles from '../../styles.scss';
 
 export default function Audience(props) {
   const {
@@ -23,7 +23,7 @@ export default function Audience(props) {
             {
               label: 'Appointments Booked',
               color: 'yellow',
-              data: data,
+              data
             }
           ]}
         />

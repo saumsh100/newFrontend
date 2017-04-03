@@ -1,16 +1,13 @@
-import React, { PropTypes, Component } from "react";
+import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import { Card, Col, Grid, Row, DashboardStats, CardHeader, BarChart, PieChart, ContainerList, LineChart, Icon } from "../../library";
-import BackgroundIcon from "../../library/BackgroundIcon";
-import colorMap from "../../library/util/colorMap";
+import BackgroundIcon from '../../library/BackgroundIcon';
+import colorMap from '../../library/util/colorMap';
 import SocialOverview from './Cards/SocialOverview';
 import ByGender from './Cards/ByGender';
 import ByAge from './Cards/ByAge';
 import Audience from './Cards/Audience';
-import styles from "./styles.scss";
-
-console.log("BackgroundIcon")
-console.log(BackgroundIcon)
+import styles from './styles.scss';
 
 class Social extends Component {
   render() {

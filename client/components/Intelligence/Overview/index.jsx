@@ -1,7 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
-import MostLoyal from './Cards/MostLoyal';
-import TopReference from '../TopReference';
 import {
   Card, CardHeader, Col, Grid, Row, PieChart,
   DashboardStats, ContainerList,
@@ -16,6 +14,8 @@ import VisitorConversions from './Cards/VisitorConversions';
 import NewVsReturning from './Cards/NewVsReturning';
 import MaleVsFemale from './Cards/MaleVsFemale';
 import AgeRange from './Cards/AgeRange';
+import TopReference from './Cards/TopReference';
+import MostLoyal from './Cards/MostLoyal';
 import VisitorsByDevice from './Cards/VisitorsByDevice';
 import BusiestTimeOfWeek from './Cards/BusiestTimeOfWeek';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
@@ -23,6 +23,56 @@ import styles from './styles.scss';
 
 class Overview extends Component {
   render() {
+    const mostLoyalData = [{
+      img: "/images/practitioner_1.png",
+      name: "Syndee Hart",
+      age: "34",
+      phone: "123 456 7890",
+      email: "lwater12@gmail.com",
+      loyalNumber: 98,
+      appointmentNumber: 17,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Emily Paris",
+      age: "7",
+      phone: "123 456 7890",
+      email: "emilee1@gmail.com",
+      loyalNumber: 83,
+      appointmentNumber: 26,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Regan Barlet",
+      age: "67",
+      phone: "123 456 7890",
+      email: "barlet@gmail.com",
+      loyalNumber: 78,
+      appointmentNumber: 54,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Syndee Hart",
+      age: "34",
+      phone: "123 456 7890",
+      email: "lwater12@gmail.com",
+      loyalNumber: 98,
+      appointmentNumber: 17,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Emily Paris",
+      age: "7",
+      phone: "123 456 7890",
+      email: "emilee1@gmail.com",
+      loyalNumber: 83,
+      appointmentNumber: 26,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Regan Barlet",
+      age: "67",
+      phone: "123 456 7890",
+      email: "barlet@gmail.com",
+      loyalNumber: 78,
+      appointmentNumber: 54,
+    }];
+
     const hardcodeData = [{
       img: '/images/practitioner_1.png',
       name: "Dr. Chelsea",
@@ -63,6 +113,28 @@ class Overview extends Component {
       {count: 39, title: "New Patients", icon: "user", size: 6, color: 'primaryGreen' },
       {count: 311, title: "Confirmed Appointments", icon: "check-circle", size: 6, color: 'primaryYellow' },
     ];
+
+    const referenceData = [{
+      img: "/images/practitioner_1.png",
+      name: "Jehn Frue",
+      age: "30",
+      number: 7,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Liz Mcmahon",
+      age: "21",
+      number: 5,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Issac Brune",
+      age: "47",
+      number: 5,
+    },{
+      img: "/images/practitioner_1.png",
+      name: "Monica Lee",
+      age: "54",
+      number: 4,
+    }];
 
     return (
       <Grid className={styles.intelligence}>
@@ -197,13 +269,18 @@ class Overview extends Component {
             />
           </Col>
           <Col styles={styles.padding5} xs={12}>
-            <MostLoyal borderColor={colorMap.red}
-                       cardTitle="Most Loyal" />
+            <MostLoyal
+              borderColor={colorMap.red}
+              cardTitle="Most Loyal"
+              data={mostLoyalData}
+            />
           </Col>
           <Col xs={12}>
-            <TopReference borderColor={colorMap.red} />
+            <TopReference
+              data={referenceData}
+              borderColor={colorMap.red}
+            />
           </Col>
-
           <Col className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}>
             <VisitorConversions
               conversionrate={3.5}

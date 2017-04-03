@@ -28,6 +28,16 @@ class Business extends Component {
       {count: 480, title: "Schedule Hours", date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
       {count: 13, title: "Broken Appts Not Filled", date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
       {count: "$1300", title: "Revenue Lost From Broken Appts", date:  moment({year: 2015, month: 6, day: 15}).fromNow(), color: 'primaryGreen' },];
+
+    const hardcodeData1 = [
+      {count: 202, icon: "phone"},
+      {count: 141, icon: "user"},
+      {count: 71, icon: "calendar-o"},];
+    const hardcodeData2 = [
+      {percentage: 2, subtitle: "Calls From Website"},
+      {percentage: 70, subtitle: "Pickups"},
+      {percentage: 53, subtitle: "Booking"},];
+
     return (
       <Grid className={styles.business}>
         <Row>
@@ -42,7 +52,13 @@ class Business extends Component {
                 <BusinessStats data={data} className={styles.business__body_arrows} />
               </Col>
               <Col xs={12}>
-                <DataStats data={tabStep} borderColor={colorMap.red} className={styles.business__body_call} />
+                <DataStats
+                  data={tabStep}
+                  borderColor={colorMap.red}
+                  className={styles.business__body_call}
+                  data1={hardcodeData1}
+                  data2={hardcodeData2}
+                />
               </Col>
               <Col xs={12}>
                 <Patients className={styles.business__body_call}

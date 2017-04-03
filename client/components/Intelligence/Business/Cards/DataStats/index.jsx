@@ -1,6 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
-import { Card, Row, Col, Tabs, Tab, Icon   } from '../../../../library'
+import { Card, Row, Col, Tabs, Tab, Icon } from '../../../../library'
 import classNames from 'classnames';
 import styles from './styles.scss';
 
@@ -19,16 +19,11 @@ class DataStats extends Component{
   render() {
     const {
       borderColor,
-      data
+      data,
+      data1,
+      data2,
     } = this.props;
-    const hardcodeData1 = [
-      {count: 202, icon: "phone"},
-      {count: 141, icon: "user"},
-      {count: 71, icon: "calendar-o"},];
-    const hardcodeData2 = [
-      {percentage: 2, subtitle: "Calls From Website"},
-      {percentage: 70, subtitle: "Pickups"},
-      {percentage: 53, subtitle: "Booking"},];
+
 
     return (
       <Card  borderColor={borderColor} className={styles.dataStats}>
@@ -58,7 +53,7 @@ class DataStats extends Component{
             <div className={styles.right}>
               <Col className={styles.right__item} sm={12} md={7}>
                 <ul className={styles.right__list}>
-                  {hardcodeData1.map((d) => {
+                  {data1.map((d) => {
                     return (
                       <li className={styles.right__list_item}>
                         <div className={styles.data}>
@@ -75,7 +70,7 @@ class DataStats extends Component{
               </Col>
               <Col className={styles.right__item} sm={12} md={5}>
                 <ul className={styles.right__percentage}>
-                  {hardcodeData2.map((d) => {
+                  {data2.map((d) => {
                     return (
                       <li className={styles.right__percentage_item}>
                         <div className={styles.information}>

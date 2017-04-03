@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Card, CardHeader, Icon, PieChart } from '../../../library';
-import colorMap from '../../../library/util/colorMap';
-import styles from '../styles.scss';
+import { Card, CardHeader, Icon, PieChart } from '../../../../library';
+import colorMap from '../../../../library/util/colorMap';
+import styles from '../../styles.scss';
 
 export default function ByGender(props) {
   const {

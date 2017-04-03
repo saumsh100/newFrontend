@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, List, ListItem, Card, CardHeader } from '../../../library';
+import { Col, List, ListItem, Card, CardHeader } from '../../../../../library';
 import styles from './styles.scss';
 
 class Item extends Component {
