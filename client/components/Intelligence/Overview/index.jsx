@@ -24,83 +24,83 @@ import styles from './styles.scss';
 class Overview extends Component {
   render() {
     const mostLoyalData = [{
-      img: "/images/practitioner_1.png",
-      name: "Syndee Hart",
-      age: "34",
-      phone: "123 456 7890",
-      email: "lwater12@gmail.com",
+      img: '/images/practitioner_1.png',
+      name: 'Syndee Hart',
+      age: '34',
+      phone: '123 456 7890',
+      email: 'lwater12@gmail.com',
       loyalNumber: 98,
       appointmentNumber: 17,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Emily Paris",
-      age: "7",
-      phone: "123 456 7890",
-      email: "emilee1@gmail.com",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Emily Paris',
+      age: '7',
+      phone: '123 456 7890',
+      email: 'emilee1@gmail.com',
       loyalNumber: 83,
       appointmentNumber: 26,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Regan Barlet",
-      age: "67",
-      phone: "123 456 7890",
-      email: "barlet@gmail.com",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Regan Barlet',
+      age: '67',
+      phone: '123 456 7890',
+      email: 'barlet@gmail.com',
       loyalNumber: 78,
       appointmentNumber: 54,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Syndee Hart",
-      age: "34",
-      phone: "123 456 7890",
-      email: "lwater12@gmail.com",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Syndee Hart',
+      age: '34',
+      phone: '123 456 7890',
+      email: 'lwater12@gmail.com',
       loyalNumber: 98,
       appointmentNumber: 17,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Emily Paris",
-      age: "7",
-      phone: "123 456 7890",
-      email: "emilee1@gmail.com",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Emily Paris',
+      age: '7',
+      phone: '123 456 7890',
+      email: 'emilee1@gmail.com',
       loyalNumber: 83,
       appointmentNumber: 26,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Regan Barlet",
-      age: "67",
-      phone: "123 456 7890",
-      email: "barlet@gmail.com",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Regan Barlet',
+      age: '67',
+      phone: '123 456 7890',
+      email: 'barlet@gmail.com',
       loyalNumber: 78,
       appointmentNumber: 54,
     }];
 
     const hardcodeData = [{
       img: '/images/practitioner_1.png',
-      name: "Dr. Chelsea",
-      profession: "Hygienist",
+      name: 'Dr. Chelsea',
+      profession: 'Hygienist',
       appointmentBooked: 77,
       appointmentNotFiltred: 83,
       newPatients: 12,
       percentage: 80,
-    },{
+    }, {
       img: '/images/practitioner_1.png',
-      name: "Dr. Chelsea",
-      profession: "Hygienist",
+      name: 'Dr. Chelsea',
+      profession: 'Hygienist',
       appointmentBooked: 77,
       appointmentNotFiltred: 83,
       newPatients: 12,
       percentage: 46,
-    },{
+    }, {
       img: '/images/practitioner_1.png',
-      name: "Dr. Chelsea",
-      profession: "Hygienist",
+      name: 'Dr. Chelsea',
+      profession: 'Hygienist',
       appointmentBooked: 77,
       appointmentNotFiltred: 83,
       newPatients: 12,
       percentage: 21,
-    },{
+    }, {
       img: '/images/practitioner_1.png',
-      name: "Dr. Chelsea",
-      profession: "Hygienist",
+      name: 'Dr. Chelsea',
+      profession: 'Hygienist',
       appointmentBooked: 77,
       appointmentNotFiltred: 83,
       newPatients: 12,
@@ -108,31 +108,31 @@ class Overview extends Component {
     }];
 
     const data = [
-      {count: 388, title: "Appointment Booked", icon: "calendar", size: 6, color: 'primaryColor' },
-      {count: "116K", title: "Estimated Revenue", icon: "line-chart", size: 6, color: 'primaryBlue' },
-      {count: 39, title: "New Patients", icon: "user", size: 6, color: 'primaryGreen' },
-      {count: 311, title: "Confirmed Appointments", icon: "check-circle", size: 6, color: 'primaryYellow' },
+      { count: 388, title: 'Appointment Booked', icon: 'calendar', size: 6, color: 'primaryColor' },
+      { count: '116K', title: 'Estimated Revenue', icon: 'line-chart', size: 6, color: 'primaryBlue' },
+      { count: 39, title: 'New Patients', icon: 'user', size: 6, color: 'primaryGreen' },
+      { count: 311, title: 'Confirmed Appointments', icon: 'check-circle', size: 6, color: 'primaryYellow' },
     ];
 
     const referenceData = [{
-      img: "/images/practitioner_1.png",
-      name: "Jehn Frue",
-      age: "30",
+      img: '/images/practitioner_1.png',
+      name: 'Jehn Frue',
+      age: '30',
       number: 7,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Liz Mcmahon",
-      age: "21",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Liz Mcmahon',
+      age: '21',
       number: 5,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Issac Brune",
-      age: "47",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Issac Brune',
+      age: '47',
       number: 5,
-    },{
-      img: "/images/practitioner_1.png",
-      name: "Monica Lee",
-      age: "54",
+    }, {
+      img: '/images/practitioner_1.png',
+      name: 'Monica Lee',
+      age: '54',
       number: 4,
     }];
 
@@ -150,59 +150,67 @@ class Overview extends Component {
             <DashboardStats data={data} />
           </Col>
           <Col xs={12} sm={6}>
-            <AppointmentFilled borderColor={colorMap.grey}/>
+            <AppointmentFilled borderColor={colorMap.grey} />
           </Col>
           <Col xs={12} sm={6}>
-            <ContainerList borderColor={colorMap.red}
-               cardTitle="Top Services by Hours"
-               data={[{
-                 title: "Invisalign",
-                 hours: 35
-               },{
-                 title: "Teeth Whitening",
-                 hours: 28
-               },{
-                 title: "Regular Checkup",
-                 hours: 19.5
-               },{
-                 title: "Lost Fillings",
-                 hours: 11
-               },{
-                 title: "Emergency Appointments",
-                 hours: 5
-               }]} />
+            <ContainerList
+              borderColor={colorMap.red}
+              cardTitle="Top Services by Hours"
+              data={[{
+                title: 'Invisalign',
+                hours: 35,
+              }, {
+                title: 'Teeth Whitening',
+                hours: 28,
+              }, {
+                title: 'Regular Checkup',
+                hours: 19.5,
+              }, {
+                title: 'Lost Fillings',
+                hours: 11,
+              }, {
+                title: 'Emergency Appointments',
+                hours: 5,
+              }]}
+            />
           </Col>
           <FlexGrid borderColor={colorMap.red} columnCount="4" columnWidth={12}>
-            <PractitionersList img="/images/practitioner_1.png"
-                               name="Dr. Chelsea"
-                               profession="Dentist"
-                               appointmentBooked="118"
-                               appointmentNotFiltred="42"
-                               newPatients="12"
-                               percentage="70"
+            <PractitionersList
+              img="/images/practitioner_1.png"
+              name="Dr. Chelsea"
+              profession="Dentist"
+              appointmentBooked="118"
+              appointmentNotFiltred="42"
+              newPatients="12"
+              percentage="70"
             />
-            <PractitionersList img="/images/practitioner_1.png"
-                               name="Dr. Mike"
-                               profession="Dentist"
-                               appointmentBooked="142"
-                               appointmentNotFiltred="18"
-                               newPatients="14"
-                               percentage="85"/>
-            <PractitionersList img="/images/practitioner_1.png"
-                               name="Dr. Jennifer"
-                               profession="CDA"
-                               appointmentBooked="77"
-                               appointmentNotFiltred="83"
-                               newPatients="8"
-                               percentage="45"
+            <PractitionersList
+              img="/images/practitioner_1.png"
+              name="Dr. Mike"
+              profession="Dentist"
+              appointmentBooked="142"
+              appointmentNotFiltred="18"
+              newPatients="14"
+              percentage="85"
             />
-            <PractitionersList img="/images/practitioner_1.png"
-                               name="John"
-                               profession="Hygienist"
-                               appointmentBooked="40"
-                               appointmentNotFiltred="110"
-                               newPatients="14"
-                               percentage="15"/>
+            <PractitionersList
+              img="/images/practitioner_1.png"
+              name="Dr. Jennifer"
+              profession="CDA"
+              appointmentBooked="77"
+              appointmentNotFiltred="83"
+              newPatients="8"
+              percentage="45"
+            />
+            <PractitionersList
+              img="/images/practitioner_1.png"
+              name="John"
+              profession="Hygienist"
+              appointmentBooked="40"
+              appointmentNotFiltred="110"
+              newPatients="14"
+              percentage="15"
+            />
           </FlexGrid>
           <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
             <Stats
@@ -244,7 +252,7 @@ class Overview extends Component {
 
           <FlexGrid borderColor={colorMap.blue} title="Online Reputation" >
             <Stats
-              count={"48.5"}
+              count={48.5}
               details="stars"
               icon="star"
             />
@@ -263,8 +271,8 @@ class Overview extends Component {
                 {
                   label: 'Appointments Booked',
                   color: 'yellow',
-                  data: [125, 150, 143, 200, 180, 220, 300 ],
-                }
+                  data: [125, 150, 143, 200, 180, 220, 300],
+                },
               ]}
             />
           </Col>
@@ -281,7 +289,9 @@ class Overview extends Component {
               borderColor={colorMap.red}
             />
           </Col>
-          <Col className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}>
+          <Col
+            className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}
+          >
             <VisitorConversions
               conversionrate={3.5}
               visits={11086}
@@ -292,7 +302,7 @@ class Overview extends Component {
             <NewVsReturning
               newVisitors={68}
               returningVisitors={32}
-              chartData={[{ value: 32, color: "blue" }, { value: 68, color: "green" }]}
+              chartData={[{ value: 32, color: 'blue' }, { value: 68, color: 'green' }]}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
@@ -303,7 +313,7 @@ class Overview extends Component {
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <AgeRange
-              chartData={[18, 25, 35, 45, 55 ]}
+              chartData={[18, 25, 35, 45, 55]}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
@@ -317,52 +327,56 @@ class Overview extends Component {
             <BusiestTimeOfWeek
               time={'12pm - 3pm'}
               day={'Tuesday'}
-              chartData={[{ value: 25, color: "green" }, { value: 75, color: "grey" }]}
+              chartData={[{ value: 25, color: 'green' }, { value: 75, color: 'grey' }]}
             />
           </Col>
           <Col xs={12} sm={6}>
-            <ContainerList borderColor={colorMap.green}
-                           cardTitle="Pages with Most Visits"
-                           data={[{
-                             title: "Invisalign",
-                             hours: 243
-                           },{
-                             title: "Teeth Whitening",
-                             hours: 199
-                           },{
-                             title: "Regular Checkup",
-                             hours: 183
-                           },{
-                             title: "Lost Fillings",
-                             hours: 146
-                           },{
-                             title: "Emergency Appointments",
-                             hours: 122
-                           }]} />
+            <ContainerList
+              borderColor={colorMap.green}
+              cardTitle="Pages with Most Visits"
+              data={[{
+                title: 'Invisalign',
+                hours: 243,
+              }, {
+                title: 'Teeth Whitening',
+                hours: 199,
+              }, {
+                title: 'Regular Checkup',
+                hours: 183,
+              }, {
+                title: 'Lost Fillings',
+                hours: 146,
+              }, {
+                title: 'Emergency Appointments',
+                hours: 122,
+              }]}
+            />
           </Col>
           <Col xs={12} sm={6}>
-            <ContainerList borderColor={colorMap.green}
-                           cardTitle="Website Engagement"
-                           data={[{
-                             title: "Total Visits",
-                             hours: 11086
-                           },{
-                             title: "Avg Visit Duration",
-                             hours: "3.38"
-                           },{
-                             title: "Pages per Visit",
-                             hours: "3.8"
-                           },{
-                             title: "Bounce Rate",
-                             hours: "47%"
-                           }]} />
+            <ContainerList
+              borderColor={colorMap.green}
+              cardTitle="Website Engagement"
+              data={[{
+                title: 'Total Visits',
+                hours: 11086,
+              }, {
+                title: 'Avg Visit Duration',
+                hours: '3.38',
+              }, {
+                title: 'Pages per Visit',
+                hours: '3.8',
+              }, {
+                title: 'Bounce Rate',
+                hours: '47%',
+              }]}
+            />
           </Col>
           <Col className={styles.padding} xs={12}>
             <WebsiteTrafficSources
               chartData={[
                 { label: 'Appointments Booked',
                   color: ['yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
-                  data: [18, 25, 35, 45, 55 , 4],
+                  data: [18, 25, 35, 45, 55, 4],
                 },
               ]}
             />
