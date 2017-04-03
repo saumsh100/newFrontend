@@ -7,11 +7,13 @@
   font-size: $font-size;
   font-weight: 600;
   height: 40px;
+  box-shadow: 0px 0px 1px 0px rgba(149, 149, 150, 1);
 }
 
-.displayFlex{
+.displayFlex {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .notFlat {
@@ -23,6 +25,7 @@
       background-color: $primary-color-hover;
     }
   }
+
   &:focus, &:active {
     outline: none;
     box-shadow: 0 0 0 2px lighten($primary-color, 20%);
@@ -33,6 +36,7 @@
 .flat {
   background-color: transparent;
   color: $primary-dark;
+  box-shadow: none;
   &:not(.disabled) {
     &:hover {
       color: $primary-color-hover;
@@ -48,13 +52,6 @@
   background-color: $primary-lightgrey;
   color: $disabled-color;
   cursor: not-allowed;
-}
-
-.raised {
-  -webkit-box-shadow: 0px 0px 1px 0px rgba(149, 149, 150, 1);
-  -moz-box-shadow: 0px 0px 1px 0px rgba(149, 149, 150, 1);
-  box-shadow: 0px 0px 1px 0px rgba(149, 149, 150, 1);
-  border: 0px;
 }
 
 .icon{
