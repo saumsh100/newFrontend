@@ -65,7 +65,7 @@ $padding-size-border: 10px;
 .logoImageCollapsed {
   @extend .logoImage;
   @media screen and (min-width: $medium-screen-width) {
-    width: $mini-side-nav-width;
+    width: $mini-side-nav-width - 2 * $padding-size-border;
     // background-color: green;
   }
 }
