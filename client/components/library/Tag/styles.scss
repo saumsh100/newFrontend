@@ -1,0 +1,19 @@
+@import "../../../ui.scss";
+
+.tagsContainer {
+	position: relative;
+	width: 90%;
+	padding: 5px 0 5px 5px;
+	margin: 2px 0 2px 0;
+	color: $primary-dark;
+	font-weight: $normall-weight;
+	border-top: 1px solid $primary-darkgrey;
+	border-bottom: 1px solid $primary-darkgrey;
+	border-right: 1px solid $primary-darkgrey;
+}
+
+.close {
+	position: absolute;
+	right: 5px;
+	font-weight: $normall-weight;
+}
