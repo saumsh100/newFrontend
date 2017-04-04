@@ -42,7 +42,14 @@ export default function Filters(props) {
           })
           return (
             <div>
-              <div className={styles.filters__title}>{f.title}</div>
+              <div className={styles.filters__title}>
+                {f.titleIcon &&
+                  <div style={{backgroundColor: f.titleIcon.color}} className={styles.filters__title__icon}>
+                    <span className={`fa fa-${f.titleIcon.icon}`} />
+                  </div> 
+                }
+                {f.title}
+              </div>
               <div className={styles.filters__checkFilter}>
                 {content}
               </div>

@@ -44,19 +44,34 @@ class Patient extends Component {
 
     const filters = [
       {
-        title: 'Date Range',
-        type: 'select',
-        items: ['options1', 'options2', 'options3', 'options4'],
+        title: 'Facebook',
+        titleIcon: {
+          color: colorMap.facebookBlue,
+          icon: 'facebook',
+        }, 
+        items: [
+          {type: 'checkbox', value: 'ADC Dental Care'},
+          {type: 'checkbox', value: 'Carecru Dental Care'},
+        ]
       }, {
-        title: 'Sources',
-        type: 'checkbox',
-        items: ['Google Maps (5)', 'Yelp (4)', 'Facebook (3)'],
+        title: 'Twitter',
+        titleIcon: {
+          color: colorMap.lightBlue,
+          icon: 'twitter',
+        }, 
+        items: [
+          {type: 'checkbox', value: 'ADC Dental Care'},
+        ],
       }, {
-        title: 'Rating',
-        type: 'checkbox',
-        items: ['1 Star', '2 Star', '3 Star', '4 Star', '5 Star', 'No Rating'],
+        title: 'Action Filter',
+        items: [
+          {type: 'checkbox', value: 'Avaiting Response'},
+          {type: 'checkbox', value: 'Respond To'},
+          {type: 'checkbox', value: 'Dismissed'},
+        ],
       },
     ];
+
 
 
     return (
