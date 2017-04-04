@@ -44,7 +44,7 @@ export default function NavList({ location, isCollapsed }) {
     return (
       <Link to={path} disabled={disabled}>
         <NavItem className={classes}>
-          <Icon icon={icon} className={styles.icon} />
+          <Icon icon={icon} className={styles.icon} size={1.2} />
           {labelComponent}
         </NavItem>
       </Link>
@@ -101,7 +101,7 @@ export default function NavList({ location, isCollapsed }) {
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <SingleNavItem path="/" icon="tachometer" label="Dashboard"  />
+        <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
         <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
           <SubNavItem path="/intelligence/business" label="Business" />
