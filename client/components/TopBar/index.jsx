@@ -15,7 +15,6 @@ import {
 } from '../library';
 import styles from './styles.scss';
 
-
 const UserMenu = (props) => {
   // TODO: create a separate container for this to load in user data from 'currentUser'
   return (

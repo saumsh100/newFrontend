@@ -10,16 +10,20 @@ export default function Icon(props) {
     className,
     onClick,
   } = props;
-  
+
   const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
-  
-  return <i className={classes} style={{fontSize: size + 'em'}} onClick={onClick} />;
+
+  return <i className={classes} style={{ fontSize: `${size} em` }} onClick={onClick} />;
 }
+
 Icon.defaultProps = {
-  size: 1
+  size: 1,
 };
+
 Icon.propTypes = {
   icon: PropTypes.string.isRequired,
   size: PropTypes.number,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
 };
