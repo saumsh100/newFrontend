@@ -2,19 +2,19 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ReputationComponent from '../components/ReputationComponent';
+import Reputation from '../components/Reputation';
 
-class StarContainer extends Component {
+class ReputationContainer extends Component {
   render() {
     return (
       <div>
-        <ReputationComponent {...this.props} />
+        <Reputation {...this.props} />
       </div>
     );
   }
 }
 
-StarContainer.propTypes = {
+ReputationContainer.propTypes = {
   fetchEntities: PropTypes.func,
   openForm: PropTypes.func,
 };
@@ -31,4 +31,4 @@ function mapDispatchToProps(dispatch) {
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
-export default enhance(StarContainer);
+export default enhance(ReputationContainer);

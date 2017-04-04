@@ -17,8 +17,8 @@ class PractitionerOfficeHours extends Component{
 
   componentWillMount() {
     const { practitioner } = this.props;
-    let customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null
-    let value = customScheduleValue ? 'on' : 'off';
+    const customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null
+    const value = customScheduleValue ? 'on' : 'off';
     this.setState({ value });
   }
 
@@ -47,17 +47,19 @@ class PractitionerOfficeHours extends Component{
 
     let showComponent = null;
 
-    if (weeklySchedule) {
+    if (practitioner.get('isCustomSchedule')) {
       showComponent = (
         <div >
           <Header title="Weekly Schedule"/>
           <OfficeHoursForm
+            key={`${practitioner.get('id')}_Hours`}
             weeklySchedule={weeklySchedule}
             onSubmit={this.handleFormUpdate}
             formName={`${weeklySchedule.get('id')}officeHours`}
           />
           <Header title="Breaks"/>
           <BreaksForm
+            key={`${practitioner.get('id')}_Breaks`}
             weeklySchedule={weeklySchedule}
             onSubmit={this.handleFormUpdate}
             formName={`${weeklySchedule.get('id')}officeHours`}
@@ -65,8 +67,7 @@ class PractitionerOfficeHours extends Component{
           />
         </div>
       );
-
-    } else if (!practitioner.get('isCustomSchedule')) {
+    } else {
       showComponent = (
         <div className={styles.notCustom}>
           Currently, { practitioner.getFullName() } is inheriting the same weekly

@@ -2,6 +2,7 @@
 /* eslint global-require:0 */
 import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
+import { enableBatching } from 'redux-batched-actions';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 
@@ -12,10 +13,10 @@ export default function configure({ initialState, browserHistory }) {
 
   const createStoreWithMiddleware = applyMiddleware(
     thunkMiddleware,
-    routerMiddleware(browserHistory)
+    routerMiddleware(browserHistory),
   )(create);
 
-  const store = createStoreWithMiddleware(rootReducer, initialState);
+  const store = createStoreWithMiddleware(enableBatching(rootReducer), initialState);
 
   if (module.hot) {
     module.hot.accept('../reducers', () => {

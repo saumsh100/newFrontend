@@ -1,0 +1,61 @@
+@import "../../../../../ui";
+@import "../../../../../fonts";
+
+* {
+  box-sizing: border-box;
+}
+
+.total {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  &__item {
+    display: flex;
+  }
+  &__header {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    border-bottom: 1px solid $primary-lightgrey;
+    padding-bottom: 10px;
+    &_item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 5px;
+    }
+    &_wrapper {
+      width: 10px;
+      height: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &_text {
+      padding-left: 20px;
+      color: $primary-dark;
+    }
+  }
+  &__body {
+    width: 80%;
+    padding-top: 10px;
+    &_total {
+      display: flex;
+      justify-content: space-between;
+      color: $primary-blue;
+    }
+  }
+}
+.fa-check {
+  color: $primary-green;
+}
+.fa-exclamation {
+  color: $primary-yellow;
+}
+.fa-times {
+  color: $primary-red;
+}

@@ -8,5 +8,6 @@ export default {
   grey: '#B4B4B4',
   lightgrey: '#DCDCDC',
   darK: '#2E3845',
-  primaryBlue: '#8CBCD6',
+  primaryBlue: '#206477',
+  lightBlue: '#8CBCD6',
 };

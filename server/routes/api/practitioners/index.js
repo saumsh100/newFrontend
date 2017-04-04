@@ -5,7 +5,9 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
 const WeeklySchedule = require('../../../models/WeeklySchedule');
+const Service = require('../../../models/Service');
 const normalize = require('../normalize');
+const _= require('lodash');
 
 practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
@@ -40,15 +42,13 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, re
           weeklyScheduleId: weeklySchedule.id,
         },
         req.body);
-
       Practitioner.save(practitionerData)
-        .then(practitioner => {
+        .then((practitioner) => {
           practitioner.weeklySchedule = weeklySchedule;
-          res.status(201).send(normalize('practitioner', practitioner))
+          res.status(201).send(normalize('practitioner', practitioner));
         })
         .catch(next);
     }).catch(next);
-
 });
 
 /**
@@ -64,9 +64,16 @@ practitionersRouter.get('/:practitionerId', checkPermissions('practitioners:read
  * Update a practitioner
  */
 practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:update'), (req, res, next) => {
-  return req.practitioner.merge(req.body).save()
-    .then(practitioner => res.send(normalize('practitioner', practitioner)))
-    .catch(next);
+
+  //TODO: how to Query Practitioners based on service
+
+  return Practitioner.get(req.practitioner.id).getJoin({ services: true }).run()
+   .then((practitioner) => {
+     practitioner.merge(req.body).saveAll({ services: true })
+       .then((practitionerServices) => {
+         res.send(normalize('practitioner', practitionerServices));
+       }).catch(next);
+   });
 });
 
 /**
