@@ -21,6 +21,10 @@
 	height: 168px;
 	align-items: center;
 	padding-left: 20px;
+	@media (max-width: 484px) {
+		flex-direction: column;
+		height: auto;
+	}
 
 	&__video {
 		width: 20%;
