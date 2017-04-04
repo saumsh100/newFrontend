@@ -56,6 +56,22 @@ class Reviews extends Component {
       createdAt: moment().subtract(10, 'days').fromNow()
     }];
 
+    const filters = [
+      {
+        title: 'Date Range',
+        type: 'select',
+        items: ['options1', 'options2', 'options3', 'options4'],
+      }, {
+        title: 'Sources',
+        type: 'checkbox',
+        items: ['Google Maps (5)', 'Yelp (4)', 'Facebook (3)' ],
+      }, {
+        title: 'Rating',
+        type: 'checkbox',
+        items: ['1 Star', '2 Star', '3 Star', '4 Star', '5 Star', 'No Rating'],
+      }
+    ];
+
 
     return (
       <Grid className={styles.reviews}>
@@ -92,7 +108,7 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
-            <Filters />
+            <Filters filters={filters} />
           </Col>
         </Row>
       </Grid>

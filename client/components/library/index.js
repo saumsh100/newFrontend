@@ -11,7 +11,6 @@ import Checkbox from './Checkbox';
 import DropdownSelect from './DropdownSelect';
 import DashboardStats from './DashboardStats';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
-import Filters from './Filters'
 import Guage from './Guage';
 import Header from './Header';
 import Icon from './Icon';
@@ -56,7 +55,6 @@ export {
   FieldArray,
   Form,
   FormSection,
-  Filters,
   Guage,
   Header,
   Icon,
