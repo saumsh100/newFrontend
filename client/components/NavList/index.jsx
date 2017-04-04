@@ -105,7 +105,7 @@ export default function NavList({ location, isCollapsed }) {
         <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
           <SubNavItem path="/intelligence/business" label="Business" />
-          <SubNavItem path="/intelligence/social" label="social" />
+          <SubNavItem path="/intelligence/social" label="Social" />
         </MultiNavItem>
         <MultiNavItem path="/schedule" icon="calendar" label="Schedule">
           <SubNavItem path="/schedule/calendar" label="Calendar View" />
@@ -120,7 +120,10 @@ export default function NavList({ location, isCollapsed }) {
           <SubNavItem path="/reputation/reviews" label="Reviews" />
           <SubNavItem path="/reputation/listings" label="Listings" />
         </MultiNavItem>
-        <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />
+        <MultiNavItem path="/social" icon="thumbs-up" label="Social Media">
+          <SubNavItem path="/social/patient" label="Patient" />
+          <SubNavItem path="/social/practice" label="Practice" />
+        </MultiNavItem>
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">

@@ -121,6 +121,33 @@ export default function Routes({ history }) {
           />
         </Route>
         <Route
+          path="social"
+          getComponent={(location, callback) => {
+            require.ensure(['../containers/SocialContainer'], (require) => {
+              callback(null, require('../containers/SocialContainer').default);
+            });
+          }}
+        >
+          <IndexRedirect to="patient" />
+          <Route
+            path="patient"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Social/Patient'], (require) => {
+                callback(null, require('../components/Social/Patient').default);
+              });
+            }}
+          />
+          <Route
+            path="practice"
+            getComponent={(location, callback) => {
+              require.ensure(['../components/Social/Practice'], (require) => {
+                callback(null, require('../components/Social/Practice').default);
+              });
+            }}
+          />
+        </Route>
+
+        <Route
           path="patients"
           getComponent={(location, callback) => {
             require.ensure(['../containers/PatientsContainer'], (require) => {

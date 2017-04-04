@@ -52,6 +52,7 @@ const ROUTES = {
       label: 'Practitioners',
     },
   ],
+
   '/intelligence': [
     {
       to: '/intelligence/overview',
@@ -66,16 +67,27 @@ const ROUTES = {
       label: 'Social',
     },
   ],
+
   '/reputation': [
-    {
-      to: '/reputation/reviews',
-      label: 'Review',
-    },
     {
       to: '/reputation/listings',
       label: 'Listing',
     },
+    {
+      to: '/reputation/reviews',
+      label: 'Review',
+    },
   ],
+
+  '/social': [
+    {
+      to: '/social/patient',
+      label: 'Patient Post',
+    },
+    {
+      to: '/social/practice',
+      label: 'Practice Post',
+    }],
 };
 
 class SubTabs extends Component {
@@ -133,6 +145,13 @@ class SubTabs extends Component {
         <RouterTabs
           location={location}
           routes={ROUTES['/reputation']}
+        />
+      );
+    } else if (location.pathname.indexOf('/social') === 0) {
+      subTabsComponent = (
+        <RouterTabs
+          location={location}
+          routes={ROUTES['/social']}
         />
       );
     }
