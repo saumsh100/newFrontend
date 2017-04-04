@@ -22,9 +22,11 @@ export default function IconCard(props) {
           <div className={styles.iconCard__count}>{count}</div>
           <div className={styles.iconCard__title}>{title}</div>
         </div>
-        <Icon className={styles.iconCard__icon}
-              icon={icon}
-              size={6} />
+        <Icon
+          className={styles.iconCard__icon}
+          icon={icon}
+          size={6}
+        />
       </Card>
     </div>
   );
