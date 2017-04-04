@@ -44,40 +44,31 @@ class Patient extends Component {
 
     const filters = [
       {
-        title: 'Date Range',
+        title: 'Facebook',
+        titleIcon: {
+          color: colorMap.facebookBlue,
+          icon: 'facebook',
+        },
         items: [
-          { type: 'select', options: ['options1', 'options2', 'options3', 'options4'] },
+          { type: 'checkbox', value: 'ADC Dental Care' },
+          { type: 'checkbox', value: 'Carecru Dental Care' },
         ],
       }, {
-        title: 'Sources',
+        title: 'Twitter',
+        titleIcon: {
+          color: colorMap.lightBlue,
+          icon: 'twitter',
+        },
         items: [
-          { type: 'checkbox', value: 'Google Maps (5)' },
-          { type: 'checkbox', value: 'Yelp (4)' },
-          { type: 'checkbox', value: 'Facebook (3)' },
+          { type: 'checkbox', value: 'ADC Dental Care' },
         ],
       }, {
-        title: 'Rating',
+        title: 'Action Filter',
         items: [
-          { type: 'checkbox', value: '1 Star' },
-          { type: 'checkbox', value: '2 Star' },
-          { type: 'checkbox', value: '3 Star' },
-          { type: 'checkbox', value: '4 Star' },
-          { type: 'checkbox', value: '5 Star' },
-          { type: 'checkbox', value: 'No Rating' },
+          { type: 'checkbox', value: 'Avaiting Response' },
+          { type: 'checkbox', value: 'Respond To' },
+          { type: 'checkbox', value: 'Dismissed' },
         ],
-      },
-      {
-        title: 'Status',
-        items: [
-          { type: 'select', options: ['Select Response Status', 'options1', 'options3', 'options4'] },
-          { type: 'select', options: ['Select Shared Status', 'options1', 'options3', 'options4'] },
-          { type: 'select', options: ['Select Publishing Status', 'options1', 'options3', 'options4'] },
-          { type: 'checkbox', value: 'With Comments' },
-          { type: 'checkbox', value: 'Without Comments' },
-          { type: 'checkbox', value: 'With new Comments' },
-          { type: 'checkbox', value: 'Without new Comments' },
-        ],
-
       },
     ];
 

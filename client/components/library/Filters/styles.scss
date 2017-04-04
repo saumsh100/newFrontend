@@ -6,9 +6,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 12px 30px;
+    padding: 12px 50px;
     color: $primary-darkgrey;
-    font-size: $small-size;
+    font-size: $medium-size;
     &__chbox {
       width: 100%;
       display: flex;
@@ -67,7 +67,23 @@
     color: $primary-dark;
     padding: 10px 20px;
     font-weight: $large-weight;
-    font-size: $small-size;
+    font-size: $medium-size;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+
+    &__icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-radius: 10px;
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      align-items: center;
+      border-radius: 50%;
+      color: $primary-white;
+    }
   }
 
   &__selectFilter {
@@ -76,13 +92,16 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    font-size: $small-size;
+    font-size: $medium-size;
     margin: 5px 0 5px -8px;
+    color: $primary-darkgrey;
 		select {
 			margin-left: -4px;
+      color: $primary-darkgrey;
+      font-family: $dashboard-font;
+      font-size: $medium-size;
 			border: 0;
 	  	background: none;
-	    color: $primary-blue;
 	    width: 100%;
 	    margin: 0 auto;
 	    padding-left: 0;
