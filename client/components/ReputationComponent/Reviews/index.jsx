@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Card, Col, Grid, Row, CardHeader, Star, Tag, BigCommentBubble, Checkbox } from '../../library';
+import { Card, Col, Grid, Row, CardHeader, Star, Tag, BigCommentBubble, Checkbox, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 import _ from 'lodash';
@@ -53,8 +53,26 @@ class Reviews extends Component {
       sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
       createdAt: moment().subtract(10, 'days').fromNow()
     }];
-   
 
+    const filters = [
+      {
+        title: 'Select day range',
+        type: 'select',
+        items: ['option1', 'option1', 'option2', 'option3', 'option4'],
+      },
+      {
+        title: 'Sources',
+        type: 'checkbox',
+        items: ['Google maps', 'Yelp', 'Facebook'],
+      },
+      {
+        title: 'Rating',
+        type: 'checkbox',
+        items: ['1 Star', '2 Star', '3 Star', '4 Star', '5 Star', 'No Rating'],
+      }
+
+    ]
+   
     return (
       <Grid className={styles.reviews}>
         <Row>
@@ -174,76 +192,7 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
-            <Card borderColor={colorMap.red} className={styles.card}>
-              <div className={styles.filters}>
-                <div className={styles.filters__header}>
-                  <div className={styles.filters__header__left}>
-                    <span>Filters</span>
-                    <span className="fa fa-sliders"></span>
-                  </div>
-                  <div className={styles.filters__header__right}>
-                    <span>Select All</span>
-                    <span>Clear All</span>
-                  </div>
-                </div>
-                <div className={styles.filters__search}>
-                  <span className="fa fa-search" ></span>
-                  <input type="text" placeholder="Search..."/>
-                </div>
-                <div className={styles.filters__title}>Date Range</div>
-                <div className={styles.filters__selectFilter}>
-                  <select>
-                    <option selected value="option1">Select date range</option>
-                    <option value="option2">option1</option>
-                    <option value="option3">option2</option>
-                    <option value="option4">option3</option>
-                    <option value="option5">option4</option>
-                  </select>
-                </div>
-                <div className={styles.filters__title}>Sources</div>
-                <div className={styles.filters__checkFilter}>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>Google maps (5)</span>
-                    <span><Checkbox /></span>
-                  </div>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>Yelp (3)</span>
-                    <span><Checkbox /></span>
-                  </div>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>Facebook (3)</span>
-                    <span><Checkbox /></span>
-                  </div>
-                </div>
-                <div className={styles.filters__title}>Rating</div>
-                <div className={styles.filters__checkFilter}>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>1 Star</span>
-                    <span><Checkbox /></span>
-                  </div>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>2 Star</span>
-                    <span><Checkbox /></span>
-                  </div>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>3 Star</span>
-                    <span><Checkbox /></span>
-                  </div>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>4 Star</span>
-                    <span><Checkbox /></span>
-                  </div>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>5 Star</span>
-                    <span><Checkbox /></span>
-                  </div>
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>No Rating</span>
-                    <span><Checkbox /></span>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <Filters filters={filters} />
           </Col>
         </Row>
       </Grid>
