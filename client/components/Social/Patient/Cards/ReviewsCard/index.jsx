@@ -1,21 +1,31 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component} from 'react';
 import { Card, CardHeader, BigCommentBubble, Col } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
 
-export default function ReviewsCard(props) {
-  const {
-    data,
-  } = props;
-
-  return (
-    <Card borderColor={colorMap.blue} className={styles.card}>
-      <CardHeader className={styles.cardHeader} title={'REVIEWS'} />
-      <div className={styles.reviewsComments}>
-        <div className={styles.reviewsComments__container} >
-          <Col xs={12} md={12} className={styles.reviewsComments__comment} >
-            {data.map((obj) => {
-              return (
+class ReviewsCard extends Component {
+  constructor(props) {
+    super(props);
+    this.togglePost = this.togglePost.bind(this);
+  }
+  togglePost(e) {
+    console.log(e.target);
+  }
+  render() {
+    const {data} = this.props;
+    return (
+      <Card borderColor={colorMap.blue} className={styles.card}>
+        <CardHeader
+          className={styles.cardHeader}
+          title={'REVIEWS'}>
+          <div onClick={this.togglePost}>
+            Compose
+          </div>
+        </CardHeader>
+        <div className={styles.reviewsComments}>
+          <div className={styles.reviewsComments__container} >
+            <Col xs={12} className={styles.reviewsComments__comment} >
+              {data.map(obj => (
                 <BigCommentBubble
                   icon={obj.icon}
                   iconColor={obj.iconColor}
@@ -28,15 +38,17 @@ export default function ReviewsCard(props) {
                   sitePreview={obj.sitePreview}
                   createdAt={obj.createdAt}
                 />
-              );
-            })}
-          </Col>
+              ))}
+            </Col>
+          </div>
         </div>
-      </div>
-    </Card>
-  );
+      </Card>
+    );
+  }
 }
 
 ReviewsCard.PropTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
 };
+export default ReviewsCard;
+

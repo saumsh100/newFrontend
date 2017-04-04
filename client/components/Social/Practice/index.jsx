@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { Col, Grid, Row, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import ReviewsCard from './Cards/ReviewsCard';
@@ -42,13 +43,40 @@ class Practice extends Component {
     }];
     const filters = [
       {
-        title: 'Source Types',
-        type: 'checkbox',
-        items: ['Search Engines (2)', 'Review Sites (4)', 'Derictories (8)', 'Sorial Sites (6)'],
+        title: 'Date Range',
+        items: [
+          { type: 'select', options: ['options1', 'options2', 'options3', 'options4'] },
+        ],
       }, {
-        title: 'Listing Status',
-        type: 'checkbox',
-        items: ['Accurate (3)', 'Friends with possible errors (2)', 'Respond (15)'],
+        title: 'Sources',
+        items: [
+          { type: 'checkbox', value: 'Google Maps (5)' },
+          { type: 'checkbox', value: 'Yelp (4)' },
+          { type: 'checkbox', value: 'Facebook (3)' },
+        ],
+      }, {
+        title: 'Rating',
+        items: [
+          { type: 'checkbox', value: '1 Star' },
+          { type: 'checkbox', value: '2 Star' },
+          { type: 'checkbox', value: '3 Star' },
+          { type: 'checkbox', value: '4 Star' },
+          { type: 'checkbox', value: '5 Star' },
+          { type: 'checkbox', value: 'No Rating' },
+        ],
+      },
+      {
+        title: 'Status',
+        items: [
+          { type: 'select', options: ['Select Response Status', 'options1', 'options3', 'options4'] },
+          { type: 'select', options: ['Select Shared Status', 'options1', 'options3', 'options4'] },
+          { type: 'select', options: ['Select Publishing Status', 'options1', 'options3', 'options4'] },
+          { type: 'checkbox', value: 'With Comments' },
+          { type: 'checkbox', value: 'Without Comments' },
+          { type: 'checkbox', value: 'With new Comments' },
+          { type: 'checkbox', value: 'Without new Comments' },
+        ],
+
       },
     ];
 
