@@ -79,13 +79,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 12px 30px;
+    width: 100%;
+    font-size: $small-size;
+    margin: 5px 0 5px -8px;
 		select {
+			margin-left: -4px;
 			border: 0;
 	  	background: none;
 	    color: $primary-blue;
-	    width: 50%;
+	    width: 100%;
 	    margin: 0 auto;
+	    padding-left: 0;
+
 		}
 		select:focus {
 			outline: none;

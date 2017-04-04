@@ -23,28 +23,30 @@ export default function Filters(props) {
           <input type="text" placeholder="Search..."/>
         </div>
         {filters.map(f => {
-          const content = f.type === 'checkbox' ?
-            <div className={styles.filters__checkFilter}>
-              {f.items.map(i => (
-                <div className={styles.filters__checkFilter__chbox}>
-                  <span>{i}</span>
-                  <span><Checkbox /></span>
-                </div>
-              ))}
-            </div>
-           :
-            <div className={styles.filters__selectFilter}>
-              <select>
-                <option selected value="option1">Select date range</option>
-                {f.items.map(i => (
-                  <option value={i}>{i}</option>
-                ))}
-              </select>
-            </div>
+          let content =
+          f.items.map(i => {
+            return i.type === 'checkbox' ?
+              <div className={styles.filters__checkFilter__chbox}>
+                <span>{i.value}</span>
+                <span><Checkbox /></span>
+              </div>
+              :
+              <div className={styles.filters__selectFilter}>
+                <select>
+                  <option selected value={i.options[0]}>{i.options[0]}</option>
+                    {i.options.map(item => (
+                    <option value={item}>{item}</option>
+                    ))} 
+                </select>
+              </div>
+          })
+
           return (
             <div>
               <div className={styles.filters__title}>{f.title}</div>
-              {content}
+              <div className={styles.filters__checkFilter}>
+                {content}
+              </div>
             </div>
           )
         })}

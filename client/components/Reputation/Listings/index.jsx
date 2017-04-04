@@ -94,21 +94,25 @@ class Listings extends Component {
           listing: 0,
         }] }];
 
-
-
     const filters = [
       {
-
-        title: 'Source Types',
-        type: 'checkbox',
-        items: ['Search Engines (2)', 'Review Sites (4)', 'Derictories (8)', 'Sorial Sites (6)'],
-      }, {
-        title: 'Listing Status',
-        type: 'checkbox',
-        items: ['Accurate (3)', 'Friends with possible errors (2)', 'Respond (15)'],
-      }
+        title: 'Sources',
+        items: [
+          {type: 'checkbox', value: 'Search Engines (2)'},
+          {type: 'checkbox', value: 'Review Sites (4)'},
+          {type: 'checkbox', value: 'Derictories (8)'},
+          {type: 'checkbox', value: 'Sorial Sites (6)'},
+        ]
+      },
+      {
+        title: 'Sources',
+        items: [
+          {type: 'checkbox', value: 'Accurate (3)'},
+          {type: 'checkbox', value: 'Friends with possible errors (2)'},
+          {type: 'checkbox', value: 'Respond (15)'},
+        ]
+      },
     ];
-
 
     return (
       <Grid className={styles.listings}>

@@ -58,16 +58,39 @@ class Reviews extends Component {
     const filters = [
       {
         title: 'Date Range',
-        type: 'select',
-        items: ['options1', 'options2', 'options3', 'options4'],
+        items: [
+          {type: 'select', options: ['options1', 'options2', 'options3', 'options4'] }
+        ]
       }, {
         title: 'Sources',
-        type: 'checkbox',
-        items: ['Google Maps (5)', 'Yelp (4)', 'Facebook (3)' ],
+        items: [
+          {type: 'checkbox', value: 'Google Maps (5)'},
+          {type: 'checkbox', value: 'Yelp (4)'},
+          {type: 'checkbox', value: 'Facebook (3)'},
+        ]
       }, {
         title: 'Rating',
-        type: 'checkbox',
-        items: ['1 Star', '2 Star', '3 Star', '4 Star', '5 Star', 'No Rating'],
+        items: [
+          {type: 'checkbox', value: '1 Star'},
+          {type: 'checkbox', value: '2 Star'},
+          {type: 'checkbox', value: '3 Star'},
+          {type: 'checkbox', value: '4 Star'},
+          {type: 'checkbox', value: '5 Star'},
+          {type: 'checkbox', value: 'No Rating'},
+        ],
+      },
+      {
+        title: 'Status',
+        items: [
+          {type: 'select', options: ['Select Response Status', 'options1', 'options3', 'options4']},
+          {type: 'select', options: ['Select Shared Status', 'options1', 'options3', 'options4']},
+          {type: 'select', options: ['Select Publishing Status', 'options1', 'options3', 'options4']},
+          {type: 'checkbox', value: 'With Comments'},
+          {type: 'checkbox', value: 'Without Comments'},
+          {type: 'checkbox', value: 'With new Comments'},
+          {type: 'checkbox', value: 'Without new Comments'},
+        ]
+
       }
     ];
 
