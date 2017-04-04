@@ -1,20 +1,21 @@
 @import "../../../../../ui";
 
 .mostLoyal {
-  border-top: 5px solid $primary-color;
-  margin: 0 5px 20px;
-  min-width: 250px;
-  display: block;
-  width: 100%;
-  max-height: 450px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: inherit;
+  &__wrapper {
+    display: block;
+    width: 100%;
+    max-height: 450px;
+    overflow: auto;
+  }
   &__header {
     display: flex;
     align-items: center;
-    height: 100px;
-    margin: 0 15px;
+    height: 80px;
+    padding: 0 10px 0 15px;
     text-transform: uppercase;
+    border-bottom: 2px solid $primary-lightgrey;
+    overflow: inherit;
     &_item {
       width: 100%;
     }
@@ -38,14 +39,34 @@
       border-right: 2px solid $primary-lightgrey;
     }
   }
+  &__subheader {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    margin: 0 10px 0 15px;
+    border-right: 2px solid $primary-lightgrey;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: $primary-dark;
+    @media screen and (max-width: 950px) {
+      border-right: none;
+    }
+  }
 }
 .data {
   display: block;
-  border-top: 2px solid $primary-grey;
   padding: 0;
-  margin: 0;
   color: $primary-dark;
   font-weight: $large-weight;
+  border-right: 2px solid $primary-lightgrey;
+  margin-right: 10px;
+  min-width: 800px;
+  @media screen and (max-width: 950px) {
+    border-right: none;
+  }
+  &:not(:first-child) {
+    border-top: 2px solid $primary-grey;
+  }
   &__item {
     min-width: 250px;
     padding: 0 40px 0 15px;
@@ -99,18 +120,11 @@
     &_right {
       display: flex;
       align-items: center;
-      margin-left: auto;
       text-align: right;
       height: 100%;
       width: 100%;
+      justify-content: flex-start;
     }
-    @media(max-width: 864px) {
-      &_right {
-        width: auto;
-      }
-    }
-
-
     &_status {
       text-align: center;
       padding: 0 50px;

@@ -13,7 +13,7 @@ class Listings extends Component {
       { title: 'Industry Avg', count: 404 },
       { title: 'Industry Avg', count: 404 },
     ];
-    
+
     const totalData = [
       { icon: 'check', title: 'Accurate', count: 3 },
       { icon: 'exclamation', title: 'Found with Possible Errors', count: 2 },
@@ -118,7 +118,7 @@ class Listings extends Component {
               data={informationData}
             />
           </Col>
-          <Col xs={12}>
+          <Col className={styles.padding} xs={12}>
             <Table
               borderColor={colorMap.blue}
               cardTitle="Search Engines"
