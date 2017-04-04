@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Col, Grid, Row } from '../../library';
+import { Col, Grid, Row, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import Score from './Cards/Score';
 import Total from './Cards/Total';
@@ -94,6 +94,22 @@ class Listings extends Component {
           listing: 0,
         }] }];
 
+
+
+    const filters = [
+      {
+
+        title: 'Source Types',
+        type: 'checkbox',
+        items: ['Search Engines (2)', 'Review Sites (4)', 'Derictories (8)', 'Sorial Sites (6)'],
+      }, {
+        title: 'Listing Status',
+        type: 'checkbox',
+        items: ['Accurate (3)', 'Friends with possible errors (2)', 'Respond (15)'],
+      }
+    ];
+
+
     return (
       <Grid className={styles.listings}>
         <Row>
@@ -124,6 +140,9 @@ class Listings extends Component {
               cardTitle="Search Engines"
               data={hardcodeTableData}
             />
+          </Col>
+          <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
+            <Filters filters={filters} />
           </Col>
         </Row>
       </Grid>

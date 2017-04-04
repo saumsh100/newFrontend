@@ -1,12 +1,11 @@
 import React, { PropTypes, Component } from 'react';
-import { Card, Col, Grid, Row, CardHeader, Star, Tag, BigCommentBubble, Checkbox } from '../../library';
+import { Card, Col, Grid, Row, CardHeader, Star, Tag, BigCommentBubble, Checkbox, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import GoogleMapsVideo from './Cards/GoogleMapsVideo';
 import AverageRating from './Cards/AverageRating';
 import RatingsChart from './Cards/RatingsChart';
 import ReviewsCard from './Cards/ReviewsCard';
 import Tags from './Cards/Tags';
-import Filters from './Cards/Filters';
 import styles from './styles.scss';
 import _ from 'lodash';
 import moment from 'moment';

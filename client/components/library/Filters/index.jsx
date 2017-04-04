@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Card, Checkbox } from '../../../../library';
-import colorMap from '../../../../library/util/colorMap';
-import styles from '../../styles.scss';
+import { Card, Checkbox } from '../../library';
+import colorMap from '../../library/util/colorMap';
+import styles from './styles.scss';
 
 export default function Filters(props) {
   const { filters } = props;
