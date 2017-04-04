@@ -21,6 +21,9 @@ class PractitionerList extends Component {
     this.createPractitioner = this.createPractitioner.bind(this);
   }
 
+  componentWillMount() {
+    this.props.setPractitionerId({ id: null })
+  }
   createPractitioner(values) {
     values.firstName = values.firstName.trim();
     values.lastName = values.lastName.trim();
@@ -42,10 +45,15 @@ class PractitionerList extends Component {
   }
 
   render() {
-    const { practitioners, practitionerId, weeklySchedules } = this.props;
+    const {
+      practitioners,
+      practitionerId,
+      weeklySchedules,
+      services,
+      } = this.props;
 
-    const selectedPractitioner = (
-      practitionerId ? practitioners.get(practitionerId) : practitioners.first());
+    const selectedPractitioner = (practitionerId ?
+      practitioners.get(practitionerId) : practitioners.first());
 
     const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
 
@@ -84,9 +92,11 @@ class PractitionerList extends Component {
         </Col>
         <Col xs={10} className={styles.practDataContainer}>
           <PractitionerTabs
+            key={this.props.practitionerId}
             practitioner={selectedPractitioner}
             weeklySchedule={weeklySchedule}
             setPractitionerId={this.props.setPractitionerId}
+            services={services}
           />
         </Col>
       </Row>

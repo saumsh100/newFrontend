@@ -1,5 +1,6 @@
 
-@import '../../../styles/dashboard.scss';
+@import '../../../ui.scss';
+@import '../../../fonts.scss';
 
 .iconCard {
     display: flex;
@@ -25,7 +26,7 @@
         position: absolute;
         bottom: -25%;
         transform: translateY(-25%);
-        right: -5%;
+        right: -1%;
         color: rgba($primary-lightgrey, .5);
     }
 }

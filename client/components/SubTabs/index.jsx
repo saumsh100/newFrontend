@@ -52,6 +52,7 @@ const ROUTES = {
       label: 'Practitioners',
     },
   ],
+
   '/intelligence': [
     {
       to: '/intelligence/overview',

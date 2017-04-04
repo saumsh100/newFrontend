@@ -26,6 +26,7 @@ import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
 import IconCard from './IconCard';
+import Search from './Search';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 import { BigCommentBubble } from './BigCommentBubble';
@@ -68,6 +69,7 @@ export {
   RouterList,
   RouterTabs,
   SaveButton,
+  Search,
   Stats,
   FlexGrid,
   Tabs,

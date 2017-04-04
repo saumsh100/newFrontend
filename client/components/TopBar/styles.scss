@@ -1,6 +1,8 @@
 
 @import '../../ui';
 
+$padding-size-border: 10px;
+
 .topBarContainer {
   background-color: $primary-grey;
 }
@@ -34,8 +36,11 @@
 .logoWrapper {
   // padding-left: 20px;
   height: 100%;
-  border-bottom: 2px grey solid;
+  // border-bottom: 2px grey solid;
   background-color: $primary-dark;
+  padding-left: $padding-size-border;
+  padding-right: $padding-size-border;
+  box-sizing: border-box;
   color: white;
 }
 
@@ -50,9 +55,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $side-nav-width;
+  width: $side-nav-width - 2 * $padding-size-border;
   height: 100%;
   text-align: center;
+  border-bottom: 1px $primary-darkgrey solid;
+  box-sizing: border-box;
 }
 
 .logoImageCollapsed {

@@ -11,15 +11,21 @@ const initialState = fromJS({
 })
 
 export default handleActions({
-  [SET_SERVICE_ID](state, action){
-    return state.merge({
-      serviceId: action.payload.id,
-    });
+  [SET_SERVICE_ID](state, action) {
+    const serviceId = action.payload.id;
+    if (state.get('serviceId') === serviceId) {
+      return state;
+    }
+
+    return state.set('serviceId', serviceId);
   },
 
-  [SET_PRACTITIONER_ID](state, action){
-    return state.merge({
-      practitionerId: action.payload.id,
-    });
+  [SET_PRACTITIONER_ID](state, action) {
+    const practitionerId = action.payload.id;
+    if (state.get('practitionerId') === practitionerId) {
+      return state;
+    }
+
+    return state.set('practitionerId', practitionerId);
   },
 }, initialState);

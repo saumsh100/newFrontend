@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../library';
-import { red } from '../../library/util/colorMap';
+import { List, ListItem, Card, CardHeader } from '../../library';
+import classnames from 'classnames'
 import styles from './styles.scss';
 
 
@@ -10,9 +10,10 @@ class ContainerList extends Component {
       data,
       borderColor,
       cardTitle,
+      className
     } = this.props;
     return (
-      <Card className={styles.containerList} borderColor={borderColor}>
+      <Card className={classnames(className, styles.containerList)} borderColor={borderColor}>
         <div className={styles.containerList__header}>
           <CardHeader title={cardTitle} />
         </div>
@@ -29,7 +30,8 @@ class ContainerList extends Component {
                     </div>
                     <div className={styles.data__item_right}>
                       <div className={styles.data__item_hours}>
-                        <span>{obj.hours + " h"}</span>
+                        {obj.hours && <span>{obj.hours}h</span>}
+                        {obj.data && <span>${obj.data}</span>}
                       </div>
                     </div>
                   </div>

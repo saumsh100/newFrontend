@@ -7,10 +7,11 @@ $primary-color-hover: darken($primary-color, 5%);
 
 $secondary-color1: #CAEBF2;
 $secondary-color2: #CAEBF2;
-$primary-yellow: #ffc55b;
-$primary-blue: #8CBCD6;
+$primary-yellow: #ffc45a;
+$primary-blue: #206477;
 $primary-green: #2CC4A7;
 $primary-dark-blue: #3a5199;
+$primary-light-blue: #8CBCD6;
 
 $primary-dark: #2e3845;
 $inactive-color: #b4b4b5;
@@ -19,8 +20,8 @@ $primary-grey: #efefef;
 $primary-lightgrey: #f0f0f0;
 $primary-white: #fafafa;
 $background-color: #E6E6E6;
+$primary-red: #FF715C;
 // $primary-color-dark: black;
-
 $disabled-color: lighten($primary-darkgrey, 25%);
 
 // Feedback Colors
@@ -43,21 +44,26 @@ $selection-border: 3px solid;
 
 $dashboard-font: Gotham-Book;
 
-$jumbo-font: "Gotham Condensed";
-$medium-font: "Gotham Medium";
+$medium-font: Gotham-Medium;
 
 //header-sizes
 $count-size: 36px;
 $title-size: 16px;
 
 //Font-sizes
-$jumbo-size: 55px;
+$extra-large-size: 66px;
+$jumbo-size: 53px;
+$x-large-size: 48px;
 $large-size: 34px;
+
+$extra-medium-size: 24px;
 $medium-size: 14px;
 $small-size: 12px;
+$extra-small-size: 10px;
 
 //Font-weights
 $jumbo-weight: 600;
 $large-weight: 700;
 $medium-weight: 500;
 $small-weight: 400;
+$normall-weight: 200;
