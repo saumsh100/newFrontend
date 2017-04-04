@@ -21,6 +21,15 @@
     }
     &__title {
         @extend .font-header-title-white;
+        @media screen and (max-width: 1660px) {
+            max-width: 120px;
+            display: flex;
+            align-items: center;
+        }
+        @media screen and (max-width: 1010px){
+          max-width: 180px;
+          align-items: center;
+        }
     }
     &__icon {
         position: absolute;
@@ -29,4 +38,5 @@
         right: -1%;
         color: rgba($primary-lightgrey, .5);
     }
+
 }
