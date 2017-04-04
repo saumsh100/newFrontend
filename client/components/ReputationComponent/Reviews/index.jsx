@@ -1,17 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { Card, Col, Grid, Row, CardHeader, Star, Tag, BigCommentBubble, Checkbox, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
-import GoogleMapsVideo from './Cards/GoogleMapsVideo';
-import AverageRating from './Cards/AverageRating';
-import RatingsChart from './Cards/RatingsChart';
-import ReviewsCard from './Cards/ReviewsCard';
-import Tags from './Cards/Tags';
 import styles from './styles.scss';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment'
 
 class Reviews extends Component {
   render() {
+
     const rating = {
       5: 11,
       4: 0,
@@ -19,6 +15,9 @@ class Reviews extends Component {
       2: 0,
       1: 1,
     }
+
+    const ratingStars = _.keys(rating).sort((a,b) => a > b);
+    const maxValue = _.max(_.values(rating));
 
     const DataBigComment = [{
       icon: "facebook",
@@ -57,53 +56,54 @@ class Reviews extends Component {
 
     const filters = [
       {
-        title: 'Date Range',
-        items: [
-          {type: 'select', options: ['options1', 'options2', 'options3', 'options4'] }
-        ]
-      }, {
-        title: 'Sources',
-        items: [
-          {type: 'checkbox', value: 'Google Maps (5)'},
-          {type: 'checkbox', value: 'Yelp (4)'},
-          {type: 'checkbox', value: 'Facebook (3)'},
-        ]
-      }, {
-        title: 'Rating',
-        items: [
-          {type: 'checkbox', value: '1 Star'},
-          {type: 'checkbox', value: '2 Star'},
-          {type: 'checkbox', value: '3 Star'},
-          {type: 'checkbox', value: '4 Star'},
-          {type: 'checkbox', value: '5 Star'},
-          {type: 'checkbox', value: 'No Rating'},
-        ],
+        title: 'Select day range',
+        type: 'select',
+        items: ['option1', 'option1', 'option2', 'option3', 'option4'],
       },
       {
-        title: 'Status',
-        items: [
-          {type: 'select', options: ['Select Response Status', 'options1', 'options3', 'options4']},
-          {type: 'select', options: ['Select Shared Status', 'options1', 'options3', 'options4']},
-          {type: 'select', options: ['Select Publishing Status', 'options1', 'options3', 'options4']},
-          {type: 'checkbox', value: 'With Comments'},
-          {type: 'checkbox', value: 'Without Comments'},
-          {type: 'checkbox', value: 'With new Comments'},
-          {type: 'checkbox', value: 'Without new Comments'},
-        ]
-
+        title: 'Sources',
+        type: 'checkbox',
+        items: ['Google maps', 'Yelp', 'Facebook'],
+      },
+      {
+        title: 'Rating',
+        type: 'checkbox',
+        items: ['1 Star', '2 Star', '3 Star', '4 Star', '5 Star', 'No Rating'],
       }
-    ];
 
-
+    ]
+   
     return (
       <Grid className={styles.reviews}>
         <Row>
           <Col className={styles.padding} xs={12} md={12}>
-            <GoogleMapsVideo />
+            <Card borderColor={colorMap.red} className={styles.card}>
+              <div className={styles.googleMapsRespond}>
+                <div className={styles.googleMapsRespond__video}>
+                  <iframe width="250" height="120"
+                  src="https://www.youtube.com/watch?v=t13DULDt01k">
+                  </iframe>
+                </div>
+                <div className={styles.googleMapsRespond__descr}>
+                  <div> Respond to google maps review </div>
+                  <div> You can respond from here! Connect your Google My Busyness account to get started </div>
+                </div>
+              </div>
+            </Card>
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <AverageRating />
+            <Card borderColor={colorMap.blue} className={styles.card}>
+              <div className={styles.stats}>
+                <span className={styles.stats__count} >4.7</span>
+                <span className={styles.stats__title} >Average Rating</span>
+                <div className={styles.stats__rating}>
+                  <Star size={1.3} />
+                  <Star size={1.3} />
+                </div>
+                <span className={styles.stats__bottom}>Industry Average 4.1/5</span>
+              </div>
+            </Card>
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
@@ -120,13 +120,75 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <RatingsChart rating={rating} />
+            <Card borderColor={colorMap.blue} className={styles.card}>
+              <div className={styles.stats}>
+                  {ratingStars.map(r => {
+                    const rows = [];
+                    for(let i = 1; i <= r; i++ ) {
+                      rows.push(<Star size={1.3} />);
+                    }
+                    const width = rating[r] ? (Math.floor((rating[r] / maxValue) * 80)) : 5;
+                    const style = { width: `${width}%` };
+                    return (
+                      <div className={styles.content}>
+                        <div className={styles.content__stars}>
+                          {rows}
+                        </div>
+
+                        <div className={styles.content__bar}>
+                          <span
+                            style={style}
+                            className={styles.content__bar__percent}>
+                          </span>
+                          {rating[r]}
+                        </div>
+                      </div>
+                    )
+                  })}
+              </div>
+            </Card>
           </Col>
+
           <Col className={styles.padding} xs={12} md={12}>
-            <Tags />
+            <Card borderColor={colorMap.yellow} className={styles.card}>
+              <div className={styles.tags}>
+                <div className={styles.tags__left}>
+                  <Tag label="dentist" color={colorMap.blue}  />
+                  <Tag label="dentist vancouver" color={colorMap.red} />
+                  <Tag label="dentist kitsilano" color={colorMap.yellow} />
+                  <Tag label="dentist hygienist" color={colorMap.green} />
+                  <span className={styles.tags__left__update}>Update keyword based on filters</span>
+                </div>
+              </div>
+            </Card>
           </Col>
+
           <Col className={styles.padding} xs={12} md={12} sm={7} lg={7}>
-            <ReviewsCard data={DataBigComment} />
+            <Card borderColor={colorMap.blue} className={styles.card}>
+              <CardHeader className={styles.cardHeader} title={'REVIEWS'} />
+                <div className={styles.reviewsComments}>
+                  <div className={styles.reviewsComments__container} >
+
+                    <Col xs={12} md={12} className={styles.reviewsComments__comment} >
+                      {DataBigComment.map(obj => {
+                        return (
+                          <BigCommentBubble
+                            icon={obj.icon}
+                            iconColor={obj.iconColor}
+                            background={obj.background}
+                            iconAlign={obj.iconAlign}
+                            headerLinkName={obj.headerLinkName}
+                            headerLinkSite={obj.headerLinkSite}
+                            siteStars={obj.siteStars}
+                            siteTitle={obj.siteTitle}
+                            sitePreview={obj.sitePreview}
+                            createdAt={obj.createdAt}/>
+                        )
+                      })}
+                    </Col>
+                  </div>
+                </div>
+            </Card>
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>

@@ -67,16 +67,27 @@ const ROUTES = {
       label: 'Social',
     },
   ],
+
   '/reputation': [
     {
-      to: '/reputation/reviews',
-      label: 'Review',
+      to: '/reputation/listings',
+      label: 'Listings',
     },
     {
-      to: '/reputation/listings',
-      label: 'Listing',
+      to: '/reputation/reviews',
+      label: 'Reviews',
     },
   ],
+
+  '/social': [
+    {
+      to: '/social/patient',
+      label: 'Patient Posts',
+    },
+    {
+      to: '/social/practice',
+      label: 'Practice Posts',
+    }],
 };
 
 class SubTabs extends Component {
@@ -134,6 +145,13 @@ class SubTabs extends Component {
         <RouterTabs
           location={location}
           routes={ROUTES['/reputation']}
+        />
+      );
+    } else if (location.pathname.indexOf('/social') === 0) {
+      subTabsComponent = (
+        <RouterTabs
+          location={location}
+          routes={ROUTES['/social']}
         />
       );
     }
