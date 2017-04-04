@@ -64,12 +64,12 @@
 
 	&__title {
 		font-size: $extra-medium-size;
-		font-weight: $small-weight;	
+		font-weight: $small-weight;
 	}
 
 	&__rating {
 		color: $primary-darkgrey;
-		font-weight: $small-weight;	
+		font-weight: $small-weight;
 	}
 
 	&__bottom {
@@ -77,7 +77,7 @@
 		margin: 5px 0 0 0;
 		box-shadow: border-box;
 		padding-top: 15px;
-		text-align: center; 
+		text-align: center;
 		border-top: 1px solid $primary-darkgrey;
 		color: $primary-darkgrey;
 		font-size: $medium-size;
@@ -142,10 +142,10 @@
 	&__container {
 		border-top: 2px solid $primary-lightgrey;
 		border-right: 2px solid $primary-lightgrey;
-		padding: 10px 10px 0 0;	
+		padding: 10px 10px 0 0;
 	}
 
   &__comment {
 
-  }	
+  }
 }

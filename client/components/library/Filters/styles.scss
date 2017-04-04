@@ -1,81 +1,77 @@
 @import "../../../ui";
 
 .filters {
-
-	&__checkFilter {
-		display: flex;
+  &__checkFilter {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 12px 30px;
     color: $primary-darkgrey;
-		font-size: $small-size;
+    font-size: $small-size;
     &__chbox {
-    	width: 100%;
-    	display: flex;
-    	flex-direction: row;
-    	justify-content: space-between;
-    	align-items: center;
-			div {
-				display: inline-block;
-			}
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      div {
+        display: inline-block;
+      }
     }
-	}
+  }
 
 
-	&__header {
-		display: flex;
-		align-items: center;
-		flex-direction: row;
-		justify-content: flex-end;
-		margin-top: 10px;
-		&__left {
-			margin-right: 20px;
-			font-size: $medium-size;
-			font-weight: $medium-weight;
-			span {
-				margin: 0 10px;
-			}
-		}
-		&__right {
-			margin-right: 10px;
-			font-size: $extra-small-size;
-			color: $primary-darkgrey;
+  &__header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 10px;
+    &__left {
+      margin-right: 20px;
+      font-size: $medium-size;
+      font-weight: $medium-weight;
+      span {
+        margin: 0 10px;
+      }
+    }
+    &__right {
+      margin-right: 10px;
+      font-size: $extra-small-size;
+      color: $primary-darkgrey;
 
-			span {
-				margin: 0 5px;
-			}
-		}
+      span {
+        margin: 0 5px;
+      }
+    }
+  }
+  &__search {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    margin: 10px 0;
+    color: $primary-darkgrey;
+    input {
+      width: 80%;
+      margin-left: 5px;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid $primary-darkgrey;
+      background-color: inherit;
+    }
+  }
 
-	}
-	&__search {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		flex-direction: center;
-		padding-left: 20px;
-		margin: 10px 0;
-		color: $primary-darkgrey;
-		input {
-			width: 80%;
-			margin-left: 5px;
-			outline: none;
-			border: none;
-			border-bottom: 1px solid $primary-darkgrey;
-			background-color: none;
-		}
-	}
+  &__title {
+    background-color: $primary-grey;
+    color: $primary-dark;
+    padding: 10px 20px;
+    font-weight: $large-weight;
+    font-size: $small-size;
+  }
 
-	&__title {
-		background-color: $primary-grey;
-		color: $primary-dark;
-		padding: 10px 20px;
-		font-weight: $large-weight;
-		font-size: $small-size;
-	}
-
-	&__selectFilter {
-		display: flex;
+  &__selectFilter {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;

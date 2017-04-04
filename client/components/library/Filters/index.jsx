@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Card, Checkbox } from '../../library';
+import { Card, Checkbox, Search } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 
@@ -11,7 +11,7 @@ export default function Filters(props) {
         <div className={styles.filters__header}>
           <div className={styles.filters__header__left}>
             <span>Filters</span>
-            <span className="fa fa-sliders"></span>
+            <span className="fa fa-sliders" />
           </div>
           <div className={styles.filters__header__right}>
             <span>Select All</span>
@@ -19,8 +19,8 @@ export default function Filters(props) {
           </div>
         </div>
         <div className={styles.filters__search}>
-          <span className="fa fa-search" ></span>
-          <input type="text" placeholder="Search..."/>
+          <span className="fa fa-search" />
+          <input type="text" placeholder="Search..." />
         </div>
         {filters.map(f => {
           let content =
@@ -40,7 +40,6 @@ export default function Filters(props) {
                 </select>
               </div>
           })
-
           return (
             <div>
               <div className={styles.filters__title}>{f.title}</div>
@@ -48,7 +47,7 @@ export default function Filters(props) {
                 {content}
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </Card>

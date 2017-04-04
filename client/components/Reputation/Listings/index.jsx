@@ -13,7 +13,7 @@ class Listings extends Component {
       { title: 'Industry Avg', count: 404 },
       { title: 'Industry Avg', count: 404 },
     ];
-    
+
     const totalData = [
       { icon: 'check', title: 'Accurate', count: 3 },
       { icon: 'exclamation', title: 'Found with Possible Errors', count: 2 },
@@ -32,48 +32,27 @@ class Listings extends Component {
 
     const hardcodeTableData = [{
       data:
-        [{
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'lwater12@gmail.com',
-          listing: 0,
-        }, {
-          img: '/images/services/voyager.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'emilee1@gmail.com',
-          listing: 26,
-        }, {
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'barlet@gmail.com',
-          listing: 54,
-        }] }, {
-      title: 'Review Sites',
-      data:
-        [{
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'lwater12@gmail.com',
-          listing: 0,
-        }, {
-          img: '/images/services/voyager.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'emilee1@gmail.com',
-          listing: 26,
-        }, {
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'barlet@gmail.com',
-          listing: 0,
-        }] }, {
-      title: 'Review Sites',
-      data:
+      [{
+        img: '/images/services/google_maps.png',
+        name: 'Google Maps',
+        phone: '123 456 7890',
+        email: 'lwater12@gmail.com',
+        listing: 0,
+      }, {
+        img: '/images/services/voyager.png',
+        name: 'Google Maps',
+        phone: '123 456 7890',
+        email: 'emilee1@gmail.com',
+        listing: 26,
+      }, {
+        img: '/images/services/google_maps.png',
+        name: 'Google Maps',
+        phone: '123 456 7890',
+        email: 'barlet@gmail.com',
+        listing: 54,
+      }] }, {
+        title: 'Review Sites',
+        data:
         [{
           img: '/images/services/google_maps.png',
           name: 'Google Maps',
@@ -93,6 +72,7 @@ class Listings extends Component {
           email: 'barlet@gmail.com',
           listing: 0,
         }] }];
+
 
     const filters = [
       {
@@ -138,14 +118,14 @@ class Listings extends Component {
               data={informationData}
             />
           </Col>
-          <Col xs={12}>
+          <Col className={styles.padding} xs={12} md={8}>
             <Table
               borderColor={colorMap.blue}
               cardTitle="Search Engines"
               data={hardcodeTableData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
+          <Col className={styles.padding} xs={12} md={4}>
             <Filters filters={filters} />
           </Col>
         </Row>
