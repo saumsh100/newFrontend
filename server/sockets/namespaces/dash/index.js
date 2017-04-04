@@ -62,19 +62,19 @@ module.exports = function setupDashNsp(io) {
       dashChangeFeeds(io, accountIdFromSocket);
 
       Appointment
-        .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: false })
+        .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: true })
         .changes({ squash: true })
         .then((feed) => {
           feed.each((error, doc) => {
             if (error) throw new Error('Feed error');
 
             if (doc.getOldValue() === null) {
-              console.log('[ INFO ] CREATE | from=dash', doc);
-              io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
+              console.log('[ INFO ] CREATE | from=dash', doc, 'socketId=', socket.id);
+              io.of('/dash').in(doc.accountId).emit('add:Appointment', doc);
             } else {
               // Updated
-              console.log('[ INFO ] UPDATE from=dash', doc);
-              io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
+              console.log('[ INFO ] UPDATE from=dash', doc, 'socketId=', socket.id);
+              io.of('/dash').in(doc.accountId).emit('add:Appointment', doc, 'socketId=', socket.id);
             }
           });
         });

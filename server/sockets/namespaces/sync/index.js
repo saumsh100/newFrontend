@@ -23,19 +23,19 @@ module.exports = function setupSyncNsp(io) {
       socket.join(roomName);
 
       Appointment
-        .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: true })
+        .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: false })
         .changes({ squash: true })
         .then((feed) => {
           feed.each((error, doc) => {
             if (error) throw new Error('Feed error');
 
             if (doc.getOldValue() === null) {
-              console.log('[ INFO ] CREATE from=sync', doc);
-              io.of('/dash').in(doc.accountId).emit('add:Appointment', doc);
+              console.log('[ INFO ] CREATE from=sync', doc, 'socketId=', socket.id);
+              io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
             } else {
               // Updated
-              console.log('[ INFO ] UPDATE from=sync', doc);
-              io.of('/dash').in(doc.accountId).emit('add:Appointment', doc);
+              console.log('[ INFO ] UPDATE from=sync', doc, 'socketId=', socket.id);
+              io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
             }
           });
         });
