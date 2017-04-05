@@ -21,7 +21,7 @@ function runSyncClientFeeds(io) {
         } else {
           // Updated
           // console.log('[ INFO ] UPDATE | from=dash; socketId=', socket.id);
-          io.of(namespaces.sync).in(doc.accountId).emit('add:Appointment', doc);
+          io.of(namespaces.sync).in(doc.accountId).emit('update:Appointment', doc);
           // socket.emit('update:Appointment', normalize('appointment', doc));
         }
       });
