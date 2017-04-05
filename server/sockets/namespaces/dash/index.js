@@ -1,8 +1,8 @@
+
 const socketIoJwt = require('socketio-jwt');
 const globals = require('../../../config/globals');
 const twilioClient = require('../../../config/twilio');
 const twilioConfig = require('../../../config/globals').twilio;
-const sharedChangeFeeds = require('../../sharedChangeFeeds');
 const dashChangeFeeds = require('./dashChangeFeeds');
 const Appointment = require('../../../models/Appointment');
 
@@ -10,7 +10,8 @@ const nsps = globals.namespaces;
 
 const socketIoOptions = {
   secret: globals.tokenSecret,
-  timeout: 5000,
+  // TODO change to lower value or remove
+  timeout: 15000,
 };
 
 module.exports = function setupDashNsp(io) {
@@ -21,19 +22,12 @@ module.exports = function setupDashNsp(io) {
       const roomName = accountIdFromSocket;
 
       // TODO JWT token verification
-      console.log(`dashNsp connection. Joining client to roomName=${roomName}`);
-      console.log('active rooms', io.sockets.adapter.rooms);
+      // console.log(`dashNsp connection. Joining client to roomName=${roomName}; connected to /dash=`, io.of('/dash').connected);
+      console.log(`dashNsp connection. Joining client to roomName=${roomName}; connected to /dash=`);
+      console.log('active rooms', JSON.stringify(io.sockets.adapter.rooms));
       socket.join(roomName);
 
       io.of(nsps.dash).in(roomName).emit('newJoin', 'dash board joined'); // notify everyone that someone joined
-
-      socket.on('sendToRoom', (data) => {
-        const room = io.of(nsps.dash).adapter.rooms[roomName];
-        console.log('clients in this room: ', room.length);
-        console.log(`Sending to all in the room ${roomName}: data=${data.msg}`);
-
-        io.of(nsps.dash).in(roomName).emit('roomMessage', `${data.msg} ${roomName}`);
-      });
 
       socket.on('sendMessage', (data) => {
         const { patient, message } = data;
@@ -65,16 +59,25 @@ module.exports = function setupDashNsp(io) {
         .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: true })
         .changes({ squash: true })
         .then((feed) => {
+          cursor = feed;
           feed.each((error, doc) => {
             if (error) throw new Error('Feed error');
 
+            // close rethinkdb change feed on socket disconnect, not on namespace disconnect
+            socket.on('disconnect', () => {
+              console.log('[ INFO ] SIO DISCONNECT');
+              feed.close();
+            });
+
             if (doc.getOldValue() === null) {
-              console.log('[ INFO ] CREATE | from=dash', doc, 'socketId=', socket.id);
-              io.of('/dash').in(doc.accountId).emit('add:Appointment', doc);
+              console.log('[ INFO ] CREATE | from=dash; socketId=', socket.id);
+              // io.of('/dash').in(doc.accountId).emit('add:Appointment', doc);
+              socket.emit('add:Appointment', doc);
             } else {
               // Updated
-              console.log('[ INFO ] UPDATE from=dash', doc, 'socketId=', socket.id);
-              io.of('/dash').in(doc.accountId).emit('add:Appointment', doc, 'socketId=', socket.id);
+              console.log('[ INFO ] UPDATE | from=dash; socketId=', socket.id);
+              // io.of('/dash').in(doc.accountId).emit('add:Appointment', doc, 'socketId=', socket.id);
+              socket.emit('update:Appointment', doc);
             }
           });
         });

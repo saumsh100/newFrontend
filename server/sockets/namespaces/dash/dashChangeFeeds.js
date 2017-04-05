@@ -28,7 +28,6 @@ module.exports = function dashChangeFeeds(io, accountIdFromSocket) {
 
   /**
    * Listen to changes on the Requests table
-   * TODO batching
    */
   Request
     .filter({ accountId: accountIdFromSocket })

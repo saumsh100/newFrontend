@@ -19,7 +19,7 @@ module.exports = function setupSyncNsp(io) {
 
       // TODO JWT token verification
       console.log(`syncNsp connection. Joining client to roomName=${roomName}`);
-      console.log('active rooms', io.sockets.adapter.rooms);
+      console.log('active rooms', JSON.stringify(io.sockets.adapter.rooms));
       socket.join(roomName);
 
       Appointment
@@ -30,11 +30,11 @@ module.exports = function setupSyncNsp(io) {
             if (error) throw new Error('Feed error');
 
             if (doc.getOldValue() === null) {
-              console.log('[ INFO ] CREATE from=sync', doc, 'socketId=', socket.id);
+              console.log('[ INFO ] CREATE | from=sync; socketId=', socket.id);
               io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
             } else {
               // Updated
-              console.log('[ INFO ] UPDATE from=sync', doc, 'socketId=', socket.id);
+              console.log('[ INFO ] UPDATE | from=sync; socketId=', socket.id);
               io.of('/sync').in(doc.accountId).emit('add:Appointment', doc);
             }
           });
