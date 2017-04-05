@@ -49,6 +49,7 @@ class ReviewsCard extends Component {
                   siteTitle={obj.siteTitle}
                   sitePreview={obj.sitePreview}
                   createdAt={obj.createdAt}
+                  comments={obj.comments}
                 />
               ))}
             </Col>

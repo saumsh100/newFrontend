@@ -18,6 +18,12 @@ class Patient extends Component {
       siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
       sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
       createdAt: moment().subtract(10, 'days').fromNow(),
+      comments: [{
+        imageSrc: 'https://placeimg.com/80/80/animals',
+        userName:'Scott Bell',
+        message: 'Discounted cleanup?',
+        sentAt: moment()._d,            
+      }]
     }, {
       icon: 'bitcoin',
       iconColor: '#ffffff',
@@ -29,6 +35,18 @@ class Patient extends Component {
       siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
       sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
       createdAt: moment().subtract(10, 'days').fromNow(),
+      comments: [{
+        imageSrc: 'https://placeimg.com/80/80/animals',
+        userName:'Monica Lee',
+        message: 'Congrats!',
+        sentAt: moment()._d,             
+      },
+      {
+        imageSrc: 'https://placeimg.com/80/80/animals',
+        userName:'Kaiya Bush',
+        message: 'Can you post a reminder before the launch day?',
+        sentAt: moment()._d,             
+      }]
     }, {
       icon: 'twitter',
       iconColor: '#ffffff',

@@ -21,6 +21,28 @@ export class IconBox extends Component {
   }
 }
 
+export class Comment extends Component {
+  render () {
+    const { imageSrc, userName, message, sentAt } = this.props;
+    return (
+      <div className={styles.bigCommentBubble__comments}>
+        <div className={styles.comment}>
+          <div className={styles.comment__avatar}>
+            <img src={imageSrc} />
+          </div>
+          <div className={styles.comment__message}>
+            <span className={styles.comment__message__username}>{userName}</span>
+            <span className={styles.comment__message__text}>{message}</span>
+            <span className={styles.comment__message__sentAt}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span>    
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+
+
 export class BigCommentBubble extends Component {
   render () {
     const {
@@ -33,9 +55,9 @@ export class BigCommentBubble extends Component {
       siteTitle,
       siteStars,
       sitePreview,
-      createdAt
+      createdAt,
+      comments = [],
     } = this.props;
-
     return (
       <div  className={styles.bigCommentBubble}>
         <IconBox data={{ icon: icon, iconColor: iconColor, background: background, iconAlign: iconAlign}} />
@@ -61,6 +83,7 @@ export class BigCommentBubble extends Component {
             <div className={styles.bigCommentBubble__mainContent__requirements}>
               ACTION REQUIRED
             </div>
+            {comments.map(c =>(<Comment {...c} />))}
             <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt}</div>
           </div>
           <div className={styles.bigCommentBubble__respondBlock}>
