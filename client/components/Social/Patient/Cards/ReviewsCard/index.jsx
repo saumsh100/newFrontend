@@ -2,14 +2,14 @@ import React, { PropTypes, Component } from 'react';
 import { Card, CardHeader, BigCommentBubble, Col, Modal } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import ComposePost from '../ComposePost';
-import styles from '../../styles.scss';
+import styles from './styles.scss';
 
 class ReviewsCard extends Component {
   constructor(props) {
     super(props);
     this.setActive = this.setActive.bind(this);
     this.state = {
-      active: false,
+      active: true,
     };
   }
   setActive() {
@@ -19,7 +19,8 @@ class ReviewsCard extends Component {
   render() {
     const { data } = this.props;
     return (
-      <Card borderColor={colorMap.blue} className={styles.card}>
+      <Card className={styles.card}
+            borderColor={colorMap.blue}>
         <CardHeader
           className={styles.cardHeader}
           title={'REVIEWS'}>
