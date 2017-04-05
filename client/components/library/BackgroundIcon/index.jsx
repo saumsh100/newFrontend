@@ -8,15 +8,15 @@ export default function BackgroundIcon(props) {
     icon,
     size,
     iconClassName,
-    backgroundClassName,
     color,
     fontSize,
     onClick,
+    className,
   } = props;
 
   const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const iconClasses = classNames(iconClassName, fontAwesomeClass, styles.icon);
-  const bckGroundClasses = classNames(styles.bckGround, styles[backgroundClassName]);
+  const bckGroundClasses = classNames(styles.bckGround, className);
 
   return (
     <div

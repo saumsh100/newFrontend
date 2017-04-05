@@ -17,7 +17,7 @@ class ReviewsCard extends Component {
     this.setState({ active });
   }
   render() {
-    const { data } = this.props;
+    const { data, headerTabs } = this.props;
     return (
       <Card className={styles.card}
             borderColor={colorMap.blue}>
@@ -32,7 +32,7 @@ class ReviewsCard extends Component {
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
           >
-            <ComposePost />
+            <ComposePost headerTabs={headerTabs} />
           </Modal>
         </CardHeader>
         <div className={styles.reviewsComments}>

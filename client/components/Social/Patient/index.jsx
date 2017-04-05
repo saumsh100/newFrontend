@@ -71,13 +71,29 @@ class Patient extends Component {
         ],
       },
     ];
-
+    const headerTabs = [{
+      icon: 'facebook',
+      color: 'facebookBlue',
+      company: 'ABC Dental Care',
+    }, {
+      icon: 'twitter',
+      color: 'lightBlue',
+      company: 'ABCCare',
+    }, {
+      icon: 'facebook',
+      color: 'facebookBlue',
+      company: 'ABC Dental Care',
+    }, {
+      icon: 'facebook',
+      color: 'facebookBlue',
+      company: 'ABC Dental Care',
+    }];
 
     return (
       <Grid className={styles.reviews}>
         <Row>
           <Col className={styles.padding} xs={12} md={12} sm={7} lg={7}>
-            <ReviewsCard data={DataBigComment} />
+            <ReviewsCard data={DataBigComment} headerTabs={headerTabs} />
           </Col>
           <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
             <Filters filters={filters} />

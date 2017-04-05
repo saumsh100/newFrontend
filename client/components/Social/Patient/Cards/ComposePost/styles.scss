@@ -9,18 +9,103 @@
 .post {
   height: 540px;
   display: flex;
+  flex-wrap: wrap;
   &__left {
     padding: 0 15px;
     border: 2px solid $primary-light-blue;
     height: 100%;
-    &_header {
+    &_headerTitle {
       padding: 35px 0;
+      @extend .font-header-title;
+      color: $primary-light-blue;
     }
   }
   .header {
-    &__title {
-      @extend .font-header-title;
-      color: $primary-light-blue;
+    padding: 0 20px 15px;
+    border-bottom: 2px solid $primary-lightgrey;
+    &__add {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 15px;
+      span {
+        margin-left: 15px;
+      }
+    }
+    &__tags {
+      display: flex;
+      flex-wrap: wrap;
+      &_item {
+        display: flex;
+        align-items: baseline;
+        line-height: 1;
+        position: relative;
+        padding: 5px;
+        margin: 5px;
+        color: $primary-dark;
+        background: $inactive-color;
+      }
+      &_icon {
+        margin-right: 5px;
+      }
+      &_text {
+        color: $color-white;
+        @extend .font-small;
+        margin-right: 5px;
+      }
+      &_close {
+        color: $color-white;
+        position: relative;
+        right: 0;
+        cursor: pointer;
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+  .body {
+    padding: 0 20px 15px;
+    &__comment {
+      margin-top: 10px;
+      height: 200px;
+      border: 1px solid $primary-light-blue;
+      border-radius: 5px;
+      width: 100%;
+      margin-bottom: 25px;
+      padding: 5px 20px 5px 5px;
+      &_element {
+        width: 100%;
+        height: 85%;
+        border: none;
+        background: inherit;
+        &:focus {
+          outline: none;
+        }
+      }
+      &_maxLength {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        align-items: center;
+        background: #8CBCD6;
+        margin-left: auto;
+        width: 55px;
+        height: 20px;
+        border-radius: 5px;
+        color: $color-white;
+        @extend .font-small;
+      }
+    }
+    &__footer {
+      display: flex;
+      flex-direction: row;
+      &_element {
+        margin-right: 10px;
+        i {
+          margin-right: 5px;
+        }
+      }
     }
   }
   &__right {
@@ -29,5 +114,3 @@
     height: 100%;
   }
 }
-
-
