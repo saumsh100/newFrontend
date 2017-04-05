@@ -26,10 +26,12 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-    justify-content: flex-end;
     margin-top: 10px;
     &__left {
-      margin-right: 20px;
+      width: 55%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
       font-size: $medium-size;
       font-weight: $medium-weight;
       span {
@@ -37,10 +39,12 @@
       }
     }
     &__right {
-      margin-right: 10px;
+      width: 45%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
       font-size: $extra-small-size;
       color: $primary-darkgrey;
-
       span {
         margin: 0 5px;
       }
