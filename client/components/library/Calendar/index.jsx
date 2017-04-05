@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Popover from 'react-popover';
 import moment from 'moment';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import DayPickerStyles from './styles.css';
@@ -6,18 +7,46 @@ import Input from '../Input';
 
 class Calendar extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      selectedDay: new Date(),
-    }
+      selectedDay: null,
+      isOpen: false,
+    };
     this.handleDayClick = this.handleDayClick.bind(this);
+    this.handleInputClick = this.handleInputClick.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   handleDayClick(day, { selected }) {
-    this.props.onChange(day);
+    this.props.onChange(moment(day).format('L'));
+
     this.setState({
       selectedDay: selected ? undefined : day,
-   });
+      isOpen: false,
+      dayPicker: null,
+    });
+  }
+
+  handleInputClick(e) {
+    this.setState({
+      isOpen: !this.state.isOpen,
+    });
+  }
+
+  handleInputChange(e) {
+    const { value } = e.target;
+    const momentDay = moment(value, 'L', true);
+    if (momentDay.isValid()) {
+      this.props.onChange(value);
+      this.setState({
+        selectedDay: momentDay.toDate(),
+      }, () => {
+        this.state.dayPicker.showMonth(this.state.selectedDay);
+      });
+    } else {
+      this.props.onChange(value);
+      this.setState({ selectedDay: null });
+    }
   }
 
   render() {
@@ -27,10 +56,25 @@ class Calendar extends Component {
     } = this.props
 
     return (
-      <DayPicker
-        onDayClick={this.handleDayClick}
-        selectedDays={this.state.selectedDay}
-      />
+      <Popover
+        isOpen={this.state.isOpen}
+        body={[(
+          <DayPicker
+            ref={(el) => { this.state.dayPicker = el; }}
+            onDayClick={this.handleDayClick}
+            selectedDays={this.state.selectedDay}
+          />
+        )]}
+        preferPlace="below"
+        tipSize={5}
+        onOuterAction={this.handleInputClick}
+      >
+        <Input
+          {...this.props}
+          onChange={this.handleInputChange}
+          onFocus={this.handleInputClick}
+        />
+      </Popover>
     );
   }
 

@@ -9,6 +9,6 @@ const PractitionerTimeOffSchema = {
 
 export default class PractitionerTimeOff extends createModel(PractitionerTimeOffSchema) {
   getUrlRoot() {
-    return `/api/practitionerTimeOff/${this.getId()}`;
+    return `/api/timeOffs/${this.get('id')}`;
   }
 }

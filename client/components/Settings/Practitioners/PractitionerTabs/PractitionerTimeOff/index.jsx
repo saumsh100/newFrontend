@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { fetchEntities } from '../../../../../thunks/fetchEntities';
+import { fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../../thunks/fetchEntities';
 import { IconButton, Modal } from '../../../../library';
-import TimeOffList from './TimeOffList'
-import CreateTimeOff from './CreateTimeOff';
+import TimeOffList from './TimeOffList';
+import CreateTimeOffForm from './CreateTimeOffForm';
 
 class PractitionerTimeOff extends Component {
   constructor(props) {
@@ -20,12 +20,11 @@ class PractitionerTimeOff extends Component {
   }
 
   setActive() {
-    const active = (this.state.active !== true);
-    this.setState({ active });
+    this.setState({ active: !this.state.active });
   }
 
   render() {
-    const { timeOffs } = this.props;
+    const { timeOffs, practitioner } = this.props;
 
     if (!timeOffs) {
       return null;
@@ -33,6 +32,7 @@ class PractitionerTimeOff extends Component {
 
     return (
       <div>
+        Add Time Off
         <IconButton
           icon="plus"
           onClick={this.setActive}
@@ -42,10 +42,17 @@ class PractitionerTimeOff extends Component {
           onEscKeyDown={this.setActive}
           onOverlayClick={this.setActive}
         >
-          <CreateTimeOff />
+          <CreateTimeOffForm
+            key={`${practitioner.get('id')}_createTimeOff`}
+            practitioner={practitioner}
+            setActive={this.setActive}
+            createEntityRequest={this.props.createEntityRequest}
+          />
         </Modal>
         <TimeOffList
+          key={`${practitioner.get('id')}_timeOffList`}
           timeOffs={timeOffs}
+          deleteTimeOff={this.props.deleteEntityRequest}
         />
       </div>
     );
@@ -56,11 +63,14 @@ class PractitionerTimeOff extends Component {
 PractitionerTimeOff.PropTypes = {
   fetchEntities: PropTypes.func,
   timeOffs: PropTypes.prop,
+  createEntityRequest: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    createEntityRequest,
+    deleteEntityRequest,
   }, dispatch);
 }
 

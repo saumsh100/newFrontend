@@ -8,15 +8,16 @@ class TimeOffList extends Component {
   }
 
   render() {
-    const { timeOffs } = this.props;
+    const { timeOffs, deleteTimeOff } = this.props;
 
     return (
       <List>
-        {timeOffs.toArray().map((tf) => {
+        {timeOffs.toArray().map((tf, index) => {
           return (
             <TimeOffListItem
               key={tf.get('id')}
               timeOff={tf}
+              deleteTimeOff={deleteTimeOff}
             />
           );
         })}

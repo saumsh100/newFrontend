@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Calendar from '../../Calendar';
-import Input from '../../Input';
+
 
 export default function RFCalendar(props) {
   const {
@@ -10,16 +10,10 @@ export default function RFCalendar(props) {
   } = props;
 
   return (
-    <div>
-      <Input
-        {...props}
-        {...input}
-      />
-      <Calendar
-        {...props}
-        {...input}
-      />
-    </div>
+    <Calendar
+      {...props}
+      {...input}
+    />
   );
 }
 
