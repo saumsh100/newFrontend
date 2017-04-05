@@ -50,7 +50,7 @@ class PractitionerList extends Component {
       practitionerId,
       weeklySchedules,
       services,
-      } = this.props;
+    } = this.props;
 
     const selectedPractitioner = (practitionerId ?
       practitioners.get(practitionerId) : practitioners.first());

@@ -7,8 +7,9 @@ import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 
 function checkValues(obj) {
-  const allTrue = Object.keys(obj).every((key) =>
-  { return obj[key] });
+  const allTrue = Object.keys(obj).every((key) => {
+    return obj[key]; 
+  });
   return allTrue;
 }
 
