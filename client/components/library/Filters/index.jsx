@@ -37,7 +37,6 @@ export default class Filters extends Component {
                 name="firstName"
                 laceholder="Search..."
                 onChange={(event, newValue, previousValue) => {
-                  console.log("111111111111111");
                   console.log("newValue");
                   console.log(newValue);
                 }}
@@ -49,7 +48,22 @@ export default class Filters extends Component {
                 return i.type === 'checkbox' ?
                   <div className={styles.filters__checkFilter__chbox}>
                     <span>{i.value}</span>
-                    <span><Checkbox /></span>
+                    <span>
+                      <Field 
+                        component="Checkbox"
+                        name={i.value}
+                        type="checkbox"
+                        input={{ onChange: (event, newValue, previousValue) => {
+                          console.log("newValue");
+                          console.log(newValue);
+                        }}}
+                        onChange={(e, newValue, previousValue) => {
+                          console.log("newValue")
+                          console.log(newValue)
+                        }} 
+                      />
+                    
+                    </span>
                   </div>
                   :
                   <div className={styles.filters__selectFilter}>
