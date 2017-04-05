@@ -1,4 +1,6 @@
 @import "../../../../../ui.scss";
+@import "../../../../../fonts.scss";
+
 
 * {
   box-sizing: border-box;
@@ -6,5 +8,26 @@
 
 .post {
   height: 540px;
-  width: 520px;
+  display: flex;
+  &__left {
+    padding: 0 15px;
+    border: 2px solid $primary-light-blue;
+    height: 100%;
+    &_header {
+      padding: 35px 0;
+    }
+  }
+  .header {
+    &__title {
+      @extend .font-header-title;
+      color: $primary-light-blue;
+    }
+  }
+  &__right {
+    padding: 0 15px;
+    background: $primary-light-blue;
+    height: 100%;
+  }
 }
+
+
