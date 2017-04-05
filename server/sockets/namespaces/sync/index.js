@@ -1,62 +1,24 @@
-// const Appointment = require('../../../models/Appointment');
-const socketIoJwt = require('socketio-jwt');
-const globals = require('../../../config/globals');
-const Appointment = require('../../../models/Appointment');
-const normalize = require('../../../routes/api/normalize');
 
-const nsps = globals.namespaces;
 
-const socketIoOptions = {
-  secret: globals.tokenSecret,
-  timeout: 15000,
-};
+const authenticate = require('../authenticate');
+const { namespaces } = require('../../../config/globals');
+// const twilioClient = require('../../../config/twilio');
+// const twilioConfig = require('../../../config/globals').twilio;
 
-module.exports = function setupSyncNsp(io) {
-  let cursor = null;
-  io.of(nsps.sync)
-    .on('connection', socketIoJwt.authorize(socketIoOptions))
-    .on('authenticated', (socket) => {
-      const accountIdFromSocket = socket.decoded_token.activeAccountId;
-      const roomName = accountIdFromSocket;
+function setupSyncNamespace(io) {
+  const sync = io.of(namespaces.sync);
+  return authenticate(sync, (socket) => {
+    const { activeAccountId } = socket.decoded_token;
 
-      // TODO JWT token verification
-      console.log(`syncNsp connection. Joining client to roomName=${roomName}`);
-      console.log('active rooms', JSON.stringify(io.sockets.adapter.rooms));
-      socket.join(roomName);
+    // TODO: JWT token verification
+    // console.log(`syncNsp connection. Joining client to roomName=${roomName}; connected to /sync=`, io.of('/sync').connected);
+    console.log(`syncNsp connection. Joining client to roomName=${activeAccountId}; connected to /sync=`);
+    console.log('active rooms', JSON.stringify(io.sockets.adapter.rooms));
+    socket.join(activeAccountId);
 
-      Appointment
-        .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: false })
-        .changes({ squash: true })
-        .then((feed) => {
-          cursor = feed;
-          feed.each((error, doc) => {
-            if (error) throw new Error('Feed error');
+    const room = sync.in(activeAccountId);
+    room.emit('newJoin', 'sync board joined'); // notify everyone that someone joined
+  });
+}
 
-            // close rethinkdb change feed on socket disconnect, not on namespace disconnect
-            socket.on('disconnect', () => {
-              console.log('[ INFO ] SIO DISCONNECT. Closing feed.');
-              feed.close();
-            });
-
-            if (doc.getOldValue() === null) {
-              console.log('[ INFO ] CREATE | from=sync; socketId=', socket.id);
-              // io.of('/sync').in(doc.accountId).emit('add:Appointment', normalize('appointment', doc));
-              socket.emit('add:Appointment', normalize('appointment', doc));
-            } else {
-              // Updated
-              console.log('[ INFO ] UPDATE | from=sync; socketId=', socket.id);
-              // io.of('/sync').in(doc.accountId).emit('update:Appointment', normalize('appointment', doc));
-              // socket.emit('update:Appointment', normalize('appointment', doc));
-            }
-          });
-        });
-    })
-    .on('unauthorized', (msg) => {
-      console.err('unauthorized: ', JSON.stringify(msg.data));
-      throw new Error(msg.data.type);
-    });
-    // .on('disconnect', () => {
-    //   console.log('[ INFO ] SIO DISCONNECT. Closing feed.');
-    //   cursor.close();
-    // });
-};
+module.exports = setupSyncNamespace;
