@@ -57,6 +57,7 @@ export class BigCommentBubble extends Component {
       sitePreview,
       createdAt,
       comments = [],
+      attachments=[],
     } = this.props;
     return (
       <div  className={styles.bigCommentBubble}>
@@ -69,7 +70,7 @@ export class BigCommentBubble extends Component {
               <span className={styles.bigCommentBubble__mainContent__header__site}>{headerLinkSite}</span>
             </div>
             <div className={styles.bigCommentBubble__mainContent__rating}>
-              {[...Array(siteStars)].map((x, i) =>
+              {siteStars > 0 && [...Array(siteStars)].map((x, i) =>
                 <Icon key={i + 1} icon="star" />
               )}
             </div>
@@ -83,8 +84,11 @@ export class BigCommentBubble extends Component {
             <div className={styles.bigCommentBubble__mainContent__requirements}>
               ACTION REQUIRED
             </div>
-            {comments.map(c =>(<Comment {...c} />))}
             <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt}</div>
+            <div className={styles.bigCommentBubble__attachments}>
+              {attachments.map(at => (<img src={at.src} />))}
+            </div>
+            {comments.map(c =>(<Comment {...c} />))}
           </div>
           <div className={styles.bigCommentBubble__respondBlock}>
             <div className={styles.bigCommentBubble__respondBlock__respondButton}>

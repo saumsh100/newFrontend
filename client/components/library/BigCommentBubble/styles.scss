@@ -78,8 +78,10 @@
       }
     }
     &__createdAt {
-      color: #fafafa;
-      font-size: 14px;
+      color: $primary-darkgrey;
+      font-weight: $large-weight;
+      font-size: $small-size;
+      margin-bottom: 5px;
     }
   }
 
@@ -87,6 +89,17 @@
     border-top: 2px solid $primary-grey;
     padding: 10px 0 0 10px;
     margin-bottom: 10px;
+  }
+
+  &__attachments {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    img {
+      max-width: 100%;
+    }
   }
 
 

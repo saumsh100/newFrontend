@@ -27,6 +27,7 @@ export default function ReviewsCard(props) {
                   siteTitle={obj.siteTitle}
                   sitePreview={obj.sitePreview}
                   createdAt={obj.createdAt}
+                  attachments={obj.attachments}
                 />
               );
             })}
