@@ -5,6 +5,7 @@ const twilioClient = require('../../../config/twilio');
 const twilioConfig = require('../../../config/globals').twilio;
 const dashChangeFeeds = require('./dashChangeFeeds');
 const Appointment = require('../../../models/Appointment');
+const normalize = require('../../../routes/api/normalize');
 
 const nsps = globals.namespaces;
 
@@ -59,7 +60,6 @@ module.exports = function setupDashNsp(io) {
         .filter({ accountId: accountIdFromSocket, isSyncedWithPMS: true })
         .changes({ squash: true })
         .then((feed) => {
-          cursor = feed;
           feed.each((error, doc) => {
             if (error) throw new Error('Feed error');
 
@@ -72,12 +72,12 @@ module.exports = function setupDashNsp(io) {
             if (doc.getOldValue() === null) {
               console.log('[ INFO ] CREATE | from=dash; socketId=', socket.id);
               // io.of('/dash').in(doc.accountId).emit('add:Appointment', doc);
-              socket.emit('add:Appointment', doc);
+              socket.emit('add:Appointment', normalize('appointment', doc));
             } else {
               // Updated
               console.log('[ INFO ] UPDATE | from=dash; socketId=', socket.id);
-              // io.of('/dash').in(doc.accountId).emit('add:Appointment', doc, 'socketId=', socket.id);
-              socket.emit('update:Appointment', doc);
+              // io.of('/dash').in(doc.accountId).emit('add:Appointment', doc);
+              socket.emit('update:Appointment', normalize('appointment', doc));
             }
           });
         });

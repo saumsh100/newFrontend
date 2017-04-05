@@ -109,6 +109,7 @@ appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (re
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
+  debugger;
   return req.appointment.merge(req.body).save()
     .then(appointment => res.send(normalize('appointment', appointment)))
     .catch(next);
