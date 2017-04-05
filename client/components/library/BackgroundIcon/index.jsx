@@ -9,6 +9,8 @@ export default function BackgroundIcon(props) {
     size,
     iconClassName,
     backgroundClassName,
+    color,
+    fontSize,
     onClick,
   } = props;
 
@@ -17,15 +19,22 @@ export default function BackgroundIcon(props) {
   const bckGroundClasses = classNames(styles.bckGround, styles[backgroundClassName]);
 
   return (
-    <div className={bckGroundClasses} >
-      <i className={iconClasses} onClick={onClick} />
+    <div
+      className={bckGroundClasses}
+      style={{ background: color, width: `${fontSize}rem`, height: `${fontSize}rem` }}
+    >
+      <i
+        style={{ fontSize: `${fontSize / 2}rem` }}
+        className={iconClasses}
+        onClick={onClick}
+      />
     </div>
   );
 }
 
 
 BackgroundIcon.defaultProps = {
-  size: 1
+  size: 1,
 };
 BackgroundIcon.propTypes = {
   icon: PropTypes.string.isRequired,
