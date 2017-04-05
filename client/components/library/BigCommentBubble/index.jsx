@@ -21,6 +21,28 @@ export class IconBox extends Component {
   }
 }
 
+export class Comment extends Component {
+  render () {
+    const { imageSrc, userName, message, sentAt } = this.props;
+    return (
+      <div className={styles.bigCommentBubble__comments}>
+        <div className={styles.comment}>
+          <div className={styles.comment__avatar}>
+            <img src={imageSrc} />
+          </div>
+          <div className={styles.comment__message}>
+            <span className={styles.comment__message__username}>{userName}</span>
+            <span className={styles.comment__message__text}>{message}</span>
+            <span className={styles.comment__message__sentAt}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span>    
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+
+
 export class BigCommentBubble extends Component {
   render () {
     const {
@@ -33,9 +55,10 @@ export class BigCommentBubble extends Component {
       siteTitle,
       siteStars,
       sitePreview,
-      createdAt
+      createdAt,
+      comments = [],
+      attachments=[],
     } = this.props;
-
     return (
       <div  className={styles.bigCommentBubble}>
         <IconBox data={{ icon: icon, iconColor: iconColor, background: background, iconAlign: iconAlign}} />
@@ -47,7 +70,7 @@ export class BigCommentBubble extends Component {
               <span className={styles.bigCommentBubble__mainContent__header__site}>{headerLinkSite}</span>
             </div>
             <div className={styles.bigCommentBubble__mainContent__rating}>
-              {[...Array(siteStars)].map((x, i) =>
+              {siteStars > 0 && [...Array(siteStars)].map((x, i) =>
                 <Icon key={i + 1} icon="star" />
               )}
             </div>
@@ -62,6 +85,10 @@ export class BigCommentBubble extends Component {
               ACTION REQUIRED
             </div>
             <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt}</div>
+            <div className={styles.bigCommentBubble__attachments}>
+              {attachments.map(at => (<img src={at.src} />))}
+            </div>
+            {comments.map(c =>(<Comment {...c} />))}
           </div>
           <div className={styles.bigCommentBubble__respondBlock}>
             <div className={styles.bigCommentBubble__respondBlock__respondButton}>
