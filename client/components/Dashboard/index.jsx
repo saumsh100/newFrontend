@@ -9,7 +9,6 @@ import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble  } f
 import RemindersList from './Cards/RemindersList';
 import Table from './Cards/Table';
 import Referrals from './Cards/Referrals';
-import TrendLineTest from '../demo/TrendLineTest';
 import colorMap from "../library/util/colorMap";
 import styles from "./styles.scss";
 
@@ -320,9 +319,6 @@ class Dashboard extends React.Component {
     return (
       <div>
         {this.renderCards()}
-        <Card>
-          <TrendLineTest />
-        </Card>
       </div>
     );
   }
