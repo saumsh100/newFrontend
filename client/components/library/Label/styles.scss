@@ -1,0 +1,39 @@
+@import "../../../ui";
+@import "../../../fonts";
+
+
+.tags {
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+  position: relative;
+  padding: 2px 5px;
+  margin: 0 5px;
+  &:first-child {
+    margin-left: 0;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+  color: $primary-dark;
+  background: $inactive-color;
+  &_icon {
+    margin-right: 5px;
+  }
+  &_text {
+    color: $color-white;
+    @extend .font-small;
+    margin-left: 5px;
+    margin-right: 20px;
+  }
+  &_close {
+    margin-right: 0!important;
+    color: $color-white;
+    position: absolute;
+    right: 5px;
+    cursor: pointer;
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}

@@ -20,10 +20,10 @@ class Patient extends Component {
       createdAt: moment().subtract(10, 'days').fromNow(),
       comments: [{
         imageSrc: 'https://placeimg.com/80/80/animals',
-        userName:'Scott Bell',
+        userName: 'Scott Bell',
         message: 'Discounted cleanup?',
-        sentAt: moment()._d,            
-      }]
+        sentAt: moment()._d,
+      }],
     }, {
       icon: 'bitcoin',
       iconColor: '#ffffff',
@@ -37,16 +37,16 @@ class Patient extends Component {
       createdAt: moment().subtract(10, 'days').fromNow(),
       comments: [{
         imageSrc: 'https://placeimg.com/80/80/animals',
-        userName:'Monica Lee',
+        userName: 'Monica Lee',
         message: 'Congrats!',
-        sentAt: moment()._d,             
+        sentAt: moment()._d,
       },
       {
         imageSrc: 'https://placeimg.com/80/80/animals',
-        userName:'Kaiya Bush',
+        userName: 'Kaiya Bush',
         message: 'Can you post a reminder before the launch day?',
-        sentAt: moment()._d,             
-      }]
+        sentAt: moment()._d,
+      }],
     }, {
       icon: 'twitter',
       iconColor: '#ffffff',
@@ -101,19 +101,27 @@ class Patient extends Component {
       icon: 'facebook',
       color: 'facebookBlue',
       company: 'ABC Dental Care',
-    }, {
-      icon: 'facebook',
-      color: 'facebookBlue',
-      company: 'ABC Dental Care',
     }];
-
+    const socialPreview = [{
+      company: 'Facebook',
+      message: 'Have you heard about our new Teeth Whitening Promotion?',
+      image: '/images/dental.png',
+    }, {
+      company: 'Twitter',
+      message: 'Have you heard about our new Teeth Whitening Promotion?',
+      image: '/images/dental.png',
+    }];
     return (
       <Grid className={styles.reviews}>
         <Row>
-          <Col className={styles.padding} xs={12} md={12} sm={7} lg={7}>
-            <ReviewsCard data={DataBigComment} headerTabs={headerTabs} />
+          <Col className={styles.padding} xs={12} md={12} sm={7}>
+            <ReviewsCard
+              data={DataBigComment}
+              headerTabs={headerTabs}
+              socialPreview={socialPreview}
+            />
           </Col>
-          <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
+          <Col className={styles.padding} xs={12} md={4} sm={5}>
             <Filters filters={filters} />
           </Col>
         </Row>

@@ -17,13 +17,16 @@ class ReviewsCard extends Component {
     this.setState({ active });
   }
   render() {
-    const { data, headerTabs } = this.props;
+    const { data, headerTabs, socialPreview } = this.props;
     return (
-      <Card className={styles.card}
-            borderColor={colorMap.blue}>
+      <Card
+        className={styles.card}
+        borderColor={colorMap.blue}
+      >
         <CardHeader
           className={styles.cardHeader}
-          title={'REVIEWS'}>
+          title={'REVIEWS'}
+        >
           <div onClick={this.setActive}>
             Compose
           </div>
@@ -31,8 +34,12 @@ class ReviewsCard extends Component {
             active={this.state.active}
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
+            className={styles.modal}
           >
-            <ComposePost headerTabs={headerTabs} />
+            <ComposePost
+              socialPreview={socialPreview}
+              headerTabs={headerTabs}
+            />
           </Modal>
         </CardHeader>
         <div className={styles.reviewsComments}>
