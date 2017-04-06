@@ -10,8 +10,9 @@ const runDashboardFeeds = require('./runDashboardFeeds');
  */
 function runChangeFeeds(io) {
   console.log('Starting changeFeeds...');
-  runSyncClientFeeds(io);
-  runDashboardFeeds(io);
+  // DEPRECATED, NOT USED AT THE MOMENT
+  // runSyncClientFeeds(io);
+  // runDashboardFeeds(io);
 }
 
 module.exports = runChangeFeeds;

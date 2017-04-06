@@ -22,6 +22,7 @@ export default function connectSocketToStore(socket, store) {
   });
 
   socket.on('addRequest', (data) => {
+    console.log('request received');
     store.dispatch(addSocketEntity({ key: 'requests', entity: data }));
   });
 

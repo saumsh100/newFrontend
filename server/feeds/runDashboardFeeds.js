@@ -3,26 +3,27 @@
 // TODO: If so, we should consider abstracting that so we dont slow up other services
 const Appointment = require('../models/Appointment');
 const Request = require('../models/Request');
-const { namespaces } = require('../config/globals');
 
-function runDashboardFeeds(io) {
-  console.log('Initializing Dashboard Feeds');
+function runDashboardFeeds(socket) {
+  const { activeAccountId } = socket.decoded_token;
+
+  // TODO: add feed closing for socket closing!
 
   // ASSUMPTION: These are the changes coming from the SYNC client...
   Appointment
-    .filter({ isSyncedWithPMS: true })
+    .filter({ accountId: activeAccountId, isSyncedWithPMS: true })
     .changes({ squash: true })
     .then((feed) => {
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
         if (doc.getOldValue() === null) {
           // console.log('[ INFO ] CREATE | from=dash; socketId=', socket.id);
-          io.of(namespaces.dash).in(doc.accountId).emit('add:Appointment', doc);
+          socket.emit('add:Appointment', doc);
           // socket.emit('add:Appointment', normalize('appointment', doc));
         } else {
           // Updated
           // console.log('[ INFO ] UPDATE | from=dash; socketId=', socket.id);
-          io.of(namespaces.dash).in(doc.accountId).emit('update:Appointment', doc);
+          socket.emit('update:Appointment', doc);
           // socket.emit('update:Appointment', normalize('appointment', doc));
         }
       });
@@ -32,6 +33,7 @@ function runDashboardFeeds(io) {
    * Listen to changes on the Requests table and update dashbaords in realtime
    */
   Request
+    .filter({ accountId: activeAccountId })
     .changes({ squash: true })
     .then((feed) => {
       feed.each((error, doc) => {
@@ -39,7 +41,8 @@ function runDashboardFeeds(io) {
         if (error) throw new Error('Feed error');
         if (doc.getOldValue() === null) {
           // console.log('[[INFO]] sending', doc);
-          io.of(namespaces.dash).in(doc.accountId).emit('addRequest', doc);
+          console.log('request added');
+          socket.emit('addRequest', doc);
         }
       });
     });
