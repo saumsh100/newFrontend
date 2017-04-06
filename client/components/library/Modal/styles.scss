@@ -40,12 +40,19 @@
   opacity: 1;
   flex-direction: column;
   z-index: 301;
+  @media screen and (max-width: 1600px){
+    width: 70%;
+  }
+  @media screen and (max-width: 800px){
+    width: 90%;
+  }
 }
 
 .modalCloseIcon{
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   position: absolute;
   right: 25%;
   z-index: 1000;
+  color: inherit;
 }

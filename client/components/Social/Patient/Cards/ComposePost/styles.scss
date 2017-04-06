@@ -10,10 +10,10 @@
   height: 540px;
   display: flex;
   flex-wrap: wrap;
+  color: $primary-dark;
   &__left {
     padding: 0 15px;
-    border: 2px solid $primary-light-blue;
-    height: 100%;
+    width: 100%;
     &_headerTitle {
       padding: 35px 0;
       @extend .font-header-title;
@@ -21,7 +21,7 @@
     }
   }
   .header {
-    padding: 0 20px 15px;
+    padding: 0 20px 30px;
     border-bottom: 2px solid $primary-lightgrey;
     &__add {
       display: inline-flex;
@@ -35,31 +35,13 @@
     &__tags {
       display: flex;
       flex-wrap: wrap;
-      &_item {
-        display: flex;
-        align-items: baseline;
-        line-height: 1;
-        position: relative;
-        padding: 5px;
+      margin-left: -5px;
+      & > div {
+        flex: 0 1 200px;
+        text-align: center;
         margin: 5px;
-        color: $primary-dark;
-        background: $inactive-color;
-      }
-      &_icon {
-        margin-right: 5px;
-      }
-      &_text {
-        color: $color-white;
-        @extend .font-small;
-        margin-right: 5px;
-      }
-      &_close {
-        color: $color-white;
-        position: relative;
-        right: 0;
-        cursor: pointer;
-        &:hover {
-          color: $primary-color;
+        @media screen and (max-width: 1000px) {
+          flex: 1 1 200px;
         }
       }
     }
@@ -79,6 +61,7 @@
         height: 85%;
         border: none;
         background: inherit;
+        color: $primary-dark;
         &:focus {
           outline: none;
         }
@@ -88,7 +71,7 @@
         justify-content: space-between;
         padding: 0 10px;
         align-items: center;
-        background: #8CBCD6;
+        background: $primary-light-blue;
         margin-left: auto;
         width: 55px;
         height: 20px;
@@ -100,8 +83,13 @@
     &__footer {
       display: flex;
       flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      @media screen and (max-width: 1000px) {
+        justify-content: center;
+      }
       &_element {
-        margin-right: 10px;
+        margin: 5px;
         i {
           margin-right: 5px;
         }
@@ -112,5 +100,65 @@
     padding: 0 15px;
     background: $primary-light-blue;
     height: 100%;
+    width: 100%;
+    &_icon {
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      right: 26%;
+      z-index: 1000;
+      color: inherit;
+    }
+    &_preview {
+      margin-top: 90px;
+      margin-bottom: 25px;
+      max-height: 320px;
+      overflow: auto;
+    }
+    &_footer {
+      display: flex;
+      justify-content: center;
+    }
+    &_footerElement {
+      color: $color-white;
+      margin-right: 15px;
+      i {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+.preview {
+  overflow: auto;
+  &:not(:first-child) {
+    margin-top: 40px;
+  }
+  &__title {
+    @extend .font-header-title-white;
+    margin-bottom: 5px;
+  }
+  &__body {
+    background: $primary-white;
+    height: 111px;
+    padding: 5px;
+    border-radius: 5px;
+    position: relative;
+    &_text {
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      max-height: 100%;
+    }
+    &_img {
+      margin-top: 8px;
+      max-height: 50px;
+      max-width: 90px;
+    }
+    &_icon {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      cursor: pointer;
+    }
   }
 }

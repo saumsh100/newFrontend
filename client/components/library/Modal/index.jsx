@@ -13,13 +13,13 @@ class Modal extends Component {
     this.handleOverlayClick = this.handleOverlayClick.bind(this);
     this.deactivate = this.deactivate.bind(this);
   }
-  
+
   componentDidMount() {
     if (this.props.active && this.props.onEscKeyDown) {
       document.body.addEventListener('keydown', this.handleEscKey);
     }
   }
-  
+
   componentDidUpdate({ active }) {
     if (active) {
       document.body.addEventListener('keydown', this.handleEscKeyDown);
@@ -32,35 +32,36 @@ class Modal extends Component {
     this.props.onOverlayClick && this.props.onOverlayClick(e);
   }
 
-  
+
   handleEscKeyDown(e) {
     this.props.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
   }
-  
+
   handleOverlayClick(e) {
     this.props.onOverlayClick && this.props.onOverlayClick(e);
   }
-  
+
   render() {
     const {
       children,
-      active
+      active,
+      className
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
     if (active) {
       modalContainerClassName = classNames(styles.active, modalContainerClassName);
     }
-  
+
     const backDropClassName = classNames(styles.backDropDefault);
-  
+
     return (
       <div className={modalContainerClassName}>
         <div
           onClick={this.handleOverlayClick}
           className={backDropClassName}
         />
-        <Card className={styles.modalBody}>
+        <Card className={classNames(styles.modalBody, className)}>
           <IconButton
             icon="window-close"
             className={styles.modalCloseIcon}

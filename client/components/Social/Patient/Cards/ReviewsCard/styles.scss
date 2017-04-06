@@ -6,3 +6,7 @@
 .card {
   border-radius: 5px;
 }
+.modal {
+  border-radius: $card-border-radius;
+  border: 2px solid $primary-light-blue;
+}

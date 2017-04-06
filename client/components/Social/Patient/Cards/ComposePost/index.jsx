@@ -1,11 +1,25 @@
 import React, { Component } from 'react';
-import { Card, Col, BackgroundIcon, Icon } from '../../../../library';
+import { Card, Col, BackgroundIcon, Icon, IconButton, Label } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import styles from './styles.scss';
 
 class ComposePost extends Component {
+  constructor() {
+    super();
+    this.state = {
+      maxPostLength: 140,
+      imageUpload: false,
+    };
+    this.handlerImageUpload = this.handlerImageUpload.bind(this);
+  }
+  handlerImageUpload() {
+    this.setState({
+      imageUpload: !this.state.imageUpload,
+    });
+  }
   render() {
-    const { headerTabs } = this.props;
+    const { maxPostLength } = this.state;
+    const { headerTabs, socialPreview } = this.props;
     return (
       <Card className={styles.post}>
         <Col
@@ -27,9 +41,8 @@ class ComposePost extends Component {
               </div>
               <div className={styles.header__tags}>
                 {headerTabs.map((obj, i) => (
-                  <div
-                    key={i}
-                    className={styles.header__tags_item}
+                  <Label
+                    text={obj.company}
                   >
                     <BackgroundIcon
                       icon={obj.icon}
@@ -37,14 +50,7 @@ class ComposePost extends Component {
                       fontSize={1.2}
                       className={styles.header__tags_icon}
                     />
-                    <div className={styles.header__tags_text}>
-                      {obj.company}
-                    </div>
-                    <Icon
-                      icon="close"
-                      className={styles.header__tags_close}
-                    />
-                  </div>
+                  </Label>
                 ))}
               </div>
             </div>
@@ -53,12 +59,13 @@ class ComposePost extends Component {
             <div className={styles.body}>
               <div className={styles.body__comment}>
                 <textarea
-                  maxLength="140"
+                  maxLength={maxPostLength}
                   className={styles.body__comment_element}
-                />
+                >Have you heard about our new Teeth Whitening Promotion?
+                </textarea>
                 <div className={styles.body__comment_maxLength}>
                   <Icon icon="twitter" />
-                  <span >140</span>
+                  <span>{maxPostLength}</span>
                 </div>
               </div>
               <div className={styles.body__footer}>
@@ -68,11 +75,21 @@ class ComposePost extends Component {
                     Shared Link
                   </span>
                 </div>
-                <div className={styles.body__footer_element}>
-                  <Icon icon="picture-o" />
-                  <span>
-                    Upload a Images
-                  </span>
+                <div
+                  onClick={this.handlerImageUpload}
+                  className={styles.body__footer_element}
+                >
+                  {!this.state.imageUpload ?
+                    <div>
+                      <Icon icon="picture-o" />
+                      <span>
+                      Upload a Images
+                    </span>
+                    </div> : <div className={styles.body__footer_tag}>
+                      <Label text="Dentist 2.jpeg(1,5MB)">
+                        <Icon icon="image" />
+                      </Label>
+                    </div>}
                 </div>
               </div>
             </div>
@@ -82,11 +99,38 @@ class ComposePost extends Component {
           sm={12} md={4}
           className={styles.post__right}
         >
+          <IconButton
+            icon="trash"
+            className={styles.post__right_icon}
+          />
           <div className={styles.post__right_preview}>
-            <div className={styles.preview}>
-              <div className={styles.preview__title}>
+            {socialPreview.map((obj, i) => (
+              <div
+                key={i}
+                className={styles.preview}
+              >
+                <div className={styles.preview__title}>{`${obj.company} Preview`}</div>
+                <div className={styles.preview__body}>
+                  <div className={styles.preview__body_text}>
+                    {obj.message}
+                    {obj.image && <img className={styles.preview__body_img} src={obj.image} alt="dental" />}
+                  </div>
+                  <Icon
+                    className={styles.preview__body_icon}
+                    icon="times"
+                  />
+                </div>
               </div>
-              <div className={styles.preview__body} />
+            ))}
+          </div>
+          <div className={styles.post__right_footer}>
+            <div className={styles.post__right_footerElement}>
+              <Icon icon="calendar" />
+              <span>Schedule a Post</span>
+            </div>
+            <div className={styles.post__right_footerElement}>
+              <Icon icon="picture-o" />
+              <span>Post</span>
             </div>
           </div>
         </Col>
