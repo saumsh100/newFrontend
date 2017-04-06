@@ -71,22 +71,22 @@ const ROUTES = {
   '/reputation': [
     {
       to: '/reputation/listings',
-      label: 'Listing',
+      label: 'Listings',
     },
     {
       to: '/reputation/reviews',
-      label: 'Review',
+      label: 'Reviews',
     },
   ],
 
   '/social': [
     {
       to: '/social/patient',
-      label: 'Patient Post',
+      label: 'Patient Posts',
     },
     {
       to: '/social/practice',
-      label: 'Practice Post',
+      label: 'Practice Posts',
     }],
 };
 

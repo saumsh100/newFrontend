@@ -44,7 +44,7 @@ export default function NavList({ location, isCollapsed }) {
     return (
       <Link to={path} disabled={disabled}>
         <NavItem className={classes}>
-          <Icon icon={icon} className={styles.icon} size={1.2} />
+          <Icon icon={icon} className={styles.icon} size={1.5} />
           {labelComponent}
         </NavItem>
       </Link>
@@ -117,12 +117,12 @@ export default function NavList({ location, isCollapsed }) {
           <SubNavItem path="/patients/phone" label="Phone Calls" disabled />
         </MultiNavItem>
         <MultiNavItem path="/reputation" icon="star" label="Reputation">
-          <SubNavItem path="/reputation/reviews" label="Reviews" />
           <SubNavItem path="/reputation/listings" label="Listings" />
+          <SubNavItem path="/reputation/reviews" label="Reviews" />
         </MultiNavItem>
         <MultiNavItem path="/social" icon="thumbs-up" label="Social Media">
-          <SubNavItem path="/social/patient" label="Patient" />
-          <SubNavItem path="/social/practice" label="Practice" />
+          <SubNavItem path="/social/patient" label="Patient Posts" />
+          <SubNavItem path="/social/practice" label="Practice Posts" />
         </MultiNavItem>
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />

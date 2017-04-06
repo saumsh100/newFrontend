@@ -6,6 +6,7 @@ import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
+import PractitionerTimeOff from './PractitionerTimeOff';
 import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 
 class PractitionerTabs extends Component {
@@ -52,8 +53,7 @@ class PractitionerTabs extends Component {
 
     let serviceIds = null;
     serviceIds = practitioner.get('services');
-    console.log(weeklySchedule);
-    
+
     return (
       <div>
         <div className={styles.pracHeaderContainer}>
@@ -84,6 +84,12 @@ class PractitionerTabs extends Component {
               serviceIds={serviceIds}
               practitioner={practitioner}
               updatePractitioner={this.updatePractitioner}
+            />
+          </Tab>
+          <Tab label="Time Off">
+            <PractitionerTimeOff
+              key={practitioner.get('id')}
+              practitioner={practitioner}
             />
           </Tab>
         </Tabs>

@@ -45,6 +45,7 @@ Service.belongsTo(Account, 'account', 'accountId', 'id');
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
 Chair.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
+PractitionerTimeOff.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 
 Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');

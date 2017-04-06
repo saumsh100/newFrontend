@@ -9,7 +9,6 @@ export default function DashboardStats(props) {
       count,
       title,
       icon,
-      size,
       data,
   } = props;
 
@@ -21,7 +20,6 @@ export default function DashboardStats(props) {
             className={styles[d.color]}
             count={d.count} title={d.title}
             icon={d.icon}
-            size={d.size}
           />
         </Col>
       ))}

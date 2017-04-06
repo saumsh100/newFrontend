@@ -14,7 +14,7 @@ export default function Icon(props) {
   const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
 
-  return <i className={classes} style={{ fontSize: `${size} em` }} onClick={onClick} />;
+  return <i className={classes} style={{fontSize: size + 'em'}} onClick={onClick} />;
 }
 
 Icon.defaultProps = {
