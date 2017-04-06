@@ -20,8 +20,7 @@ class Calendar extends Component {
   }
 
   handleDayClick(day, { selected }) {
-    this.props.onChange(moment(day).format('L'));
-
+    this.props.onChange(day);
     this.setState({
       selectedDay: selected ? undefined : day,
       isOpen: false,
@@ -31,6 +30,7 @@ class Calendar extends Component {
 
   componentWillMount() {
     const { value } = this.props;
+
     if (value) {
       this.setState({
         selectedDay: value,
@@ -47,6 +47,7 @@ class Calendar extends Component {
   handleInputChange(e) {
     const { value } = e.target;
     const momentDay = moment(value, 'L', true);
+
     if (momentDay.isValid()) {
       this.props.onChange(value);
       this.setState({
@@ -84,6 +85,7 @@ class Calendar extends Component {
           {...this.props}
           onChange={this.handleInputChange}
           onFocus={this.handleInputClick}
+          disabled={this.state.isOpen}
         />
       </Popover>
     );

@@ -33,8 +33,8 @@ class PractitionerTimeOff extends Component {
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
-      startDate: new Date(values.startDate.trim()),
-      endDate: new Date(values.endDate.trim()),
+      startDate: values.startDate,
+      endDate: values.endDate,
     };
 
     if (this.state.formState === 'create') {

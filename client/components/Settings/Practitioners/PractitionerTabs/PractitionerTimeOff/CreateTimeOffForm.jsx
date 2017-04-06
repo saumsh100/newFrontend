@@ -15,8 +15,8 @@ class CreateTimeOffForm extends Component {
 
     if (timeOff) {
       initialValues = {
-        startDate: timeOff.get('startDate'),
-        endDate: timeOff.get('endDate'),
+        startDate: new Date(timeOff.get('startDate')),
+        endDate: new Date(timeOff.get('endDate')),
       };
       showDeleteButton = (
         <IconButton icon="trash" onClick={deleteTimeOff} />
