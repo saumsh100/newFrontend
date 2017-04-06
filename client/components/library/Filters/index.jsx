@@ -45,7 +45,6 @@ export default class Filters extends Component {
             {filters.map(f => {
               let content =
               f.items.map((i, index) => {
-                debugger;
                 return i.type === 'checkbox' ?
                   <div className={styles.filters__checkFilter__chbox}>
                     <span>{i.value}</span>
@@ -78,7 +77,7 @@ export default class Filters extends Component {
                     {f.titleIcon &&
                       <div style={{backgroundColor: f.titleIcon.color}} className={styles.filters__title__icon}>
                         <span className={`fa fa-${f.titleIcon.icon}`} />
-                      </div> 
+                      </div>
                     }
                     {f.title}
                   </div>

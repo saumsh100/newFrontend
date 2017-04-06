@@ -101,11 +101,12 @@
     background: $primary-light-blue;
     height: 100%;
     width: 100%;
+    position: relative;
     &_icon {
       padding: 0;
       margin: 0;
       position: absolute;
-      right: 26%;
+      right: 1%;
       z-index: 1000;
       color: inherit;
     }

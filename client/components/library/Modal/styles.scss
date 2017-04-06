@@ -49,10 +49,22 @@
 }
 
 .modalCloseIcon{
-  padding: 0;
-  margin: 0;
-  position: absolute;
-  right: 25%;
-  z-index: 1000;
-  color: inherit;
+  font-size: 60px;
+  position: fixed;
+  top: 2%;
+  right: 1%;
+  visibility: visible;
+  cursor: pointer;
+  z-index: 10;
+  color: white;
+  line-height: 1rem;
+  @media screen and (max-width: 1000px){
+    font-size: inherit;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: inherit;
+    right: 5%;
+    color: inherit;
+  }
 }

@@ -57,16 +57,16 @@ class Modal extends Component {
 
     return (
       <div className={modalContainerClassName}>
+        <IconButton
+          icon="times"
+          className={styles.modalCloseIcon}
+          onClick={this.deactivate}
+        />
         <div
           onClick={this.handleOverlayClick}
           className={backDropClassName}
         />
         <Card className={classNames(styles.modalBody, className)}>
-          <IconButton
-            icon="window-close"
-            className={styles.modalCloseIcon}
-            onClick={this.deactivate}
-          />
           {children}
         </Card>
       </div>
