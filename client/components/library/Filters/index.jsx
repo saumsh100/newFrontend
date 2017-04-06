@@ -12,8 +12,10 @@ export default class Filters extends Component {
 
   }
 
+
   render() {
     const { filters } = this.props;
+    const defaultValues = {search: ''}
     return (
       <Card borderColor={colorMap.red} className={styles.card}>
         <Form form="filters" ignoreSaveButton>
@@ -32,47 +34,42 @@ export default class Filters extends Component {
               <span className="fa fa-search" />
 
               <Field
-                required
                 min
-                name="firstName"
+                name="search"
                 laceholder="Search..."
                 onChange={(event, newValue, previousValue) => {
-                  console.log("newValue");
-                  console.log(newValue);
+
                 }}
               />
             </div>
             {filters.map(f => {
               let content =
-              f.items.map(i => {
+              f.items.map((i, index) => {
+                debugger;
                 return i.type === 'checkbox' ?
                   <div className={styles.filters__checkFilter__chbox}>
                     <span>{i.value}</span>
                     <span>
-                      <Field 
-                        component="Checkbox"
-                        name={i.value}
-                        type="checkbox"
-                        input={{ onChange: (event, newValue, previousValue) => {
-                          console.log("newValue");
-                          console.log(newValue);
-                        }}}
-                        onChange={(e, newValue, previousValue) => {
-                          console.log("newValue")
-                          console.log(newValue)
-                        }} 
-                      />
-                    
+                      <Field name={i.value}
+                        input={{ value: true, onChange: ((e, newValue) => { console.log(newValue) })}}
+                        component="Checkbox" type="checkbox" />
                     </span>
                   </div>
                   :
                   <div className={styles.filters__selectFilter}>
-                    <select>
-                      <option selected value={i.options[0]}>{i.options[0]}</option>
-                        {i.options.map(item => (
-                        <option value={item}>{item}</option>
-                        ))} 
-                    </select>
+
+
+                  <Field
+                    component="Select"
+                    name={`${f.title}-${i.title}-${index}`}
+                    label="Select Practitioner"
+                    min
+                    className={styles.appointment__select_item}
+                  >
+                    {i.options.map(item => (
+                    <option value={item}>{item}</option>
+                    ))}
+                  </Field>
                   </div>
               })
               return (
