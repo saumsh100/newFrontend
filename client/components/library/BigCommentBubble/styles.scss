@@ -11,6 +11,10 @@
 .bigCommentBubble {
   display: flex;
   padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
   @media screen and (max-width: 500px) {
     padding: 10px;
   }
