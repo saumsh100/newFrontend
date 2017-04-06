@@ -8,10 +8,10 @@ import styles from './styles.scss';
 class Patient extends Component {
   render() {
     const DataBigComment = [{
-      icon: 'facebook',
-      iconColor: '#ffffff',
-      background: '#395998',
-      iconAlign: 'flex-end',
+      doubleIcon: { 
+        smallIcon: { icon: 'facebook', iconColor: '#ffffff', background: colorMap.facebookBlue, iconAlign: 'center' },
+        bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
+      },
       headerLinkName: 'S. Lalala',
       headerLinkSite: 'yelp.ca',
       siteStars: 4,
@@ -25,10 +25,11 @@ class Patient extends Component {
         sentAt: moment()._d,
       }],
     }, {
-      icon: 'bitcoin',
-      iconColor: '#ffffff',
-      background: '#ffc55b',
-      iconAlign: 'center',
+
+      doubleIcon: { 
+        smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.primaryBlue, iconAlign: 'center' },
+        bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
+      },
       headerLinkName: 'L. Linda',
       headerLinkSite: 'yelp.ca',
       siteStars: 6,

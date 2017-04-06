@@ -3,6 +3,8 @@ import React, { PropTypes, Component } from 'react';
 import { Icon } from '../index';
 import styles from './styles.scss';
 
+import DoubleIcon from '../DoubleIcon';
+
 export class IconBox extends Component {
   render () {
     const { icon, iconColor, background, iconAlign } = this.props.data;
@@ -47,6 +49,7 @@ export class BigCommentBubble extends Component {
   render () {
     const {
       icon,
+      doubleIcon,
       iconColor,
       background,
       iconAlign,
@@ -61,7 +64,8 @@ export class BigCommentBubble extends Component {
     } = this.props;
     return (
       <div  className={styles.bigCommentBubble}>
-        <IconBox data={{ icon: icon, iconColor: iconColor, background: background, iconAlign: iconAlign}} />
+        {doubleIcon && <DoubleIcon {...doubleIcon} /> }
+        {icon && <IconBox data={{ icon: icon, iconColor: iconColor, background: background, iconAlign: iconAlign}} /> }
         <div className={styles.bigCommentBubble__commentBody}>
           <div className={styles.bigCommentBubble__mainContent}>
             <div className={styles.bigCommentBubble__mainContent__header}>

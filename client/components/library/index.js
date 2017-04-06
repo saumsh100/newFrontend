@@ -38,6 +38,7 @@ import Tag from './Tag';
 import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
 import Filters from './Filters';
+import DoubleIcon from './DoubleIcon';
 
 export {
   AppBar,
@@ -54,6 +55,7 @@ export {
   ChartStats,
   DropdownSelect,
   DashboardStats,
+  DoubleIcon,
   Filters,
   Field,
   FieldArray,
