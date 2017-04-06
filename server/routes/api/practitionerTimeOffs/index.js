@@ -30,6 +30,15 @@ timeOffRouter.post('/', checkPermissions('timeOffs:create'), (req, res, next) =>
 
 
 /**
+ * Update a timeOff
+ */
+timeOffRouter.put('/:timeOffId', checkPermissions('timeOffs:update'), (req, res, next) =>{
+  return req.timeOff.merge(req.body).save()
+    .then(tf => res.send(normalize('practitionerTimeOff', tf)))
+    .catch(next);
+});
+
+/**
  * Delete a timeOff
  */
 timeOffRouter.delete('/:timeOffId', checkPermissions('timeOffs:delete'), (req, res, next) => {
