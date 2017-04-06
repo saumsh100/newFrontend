@@ -61,7 +61,7 @@ export default class Filters extends Component {
 
                   <Field
                     component="Select"
-                    name={`${f.title}-${i.title}-${index}`}
+                    name={`${f.title}-${index}`}
                     label="Select Practitioner"
                     min
                     className={styles.appointment__select_item}
