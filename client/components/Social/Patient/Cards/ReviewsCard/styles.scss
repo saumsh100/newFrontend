@@ -4,9 +4,14 @@
   box-sizing: border-box;
 }
 .card {
-  border-radius: 5px;
+
 }
 .modal {
   border-radius: $card-border-radius;
   border: 2px solid $primary-light-blue;
+}
+
+.cardHeader {
+	padding: 20px 20px 0 20px;
+	margin-bottom: 20px;
 }
