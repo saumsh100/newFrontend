@@ -19,3 +19,9 @@
 .padding {
 	padding-top: 10px;
 }
+.calendar {
+    overflow-x: auto;
+    border-top: $card-border-size $primary-dark-blue;
+    margin-top: 10px;
+    background-color: #fafafa;
+}

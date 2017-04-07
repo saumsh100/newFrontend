@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Col, Grid, Row, Filters } from '../../library';
+import { Col, Grid, Row, Filters, Calendar } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import ReviewsCard from './Cards/ReviewsCard';
 import styles from './styles.scss';
 
+import { DateUtils } from 'react-day-picker';
+
 class Patient extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { selectedDay: moment()._d };
+  }
+
   render() {
     const DataBigComment = [{
       doubleIcon: {
@@ -121,6 +128,14 @@ class Patient extends Component {
           </Col>
           <Col className={styles.padding} xs={12} md={4}>
             <Filters filters={filters} />
+
+
+            <Calendar
+              className={styles.calendar}
+              initialMonth={new Date(2016, 1)}
+              selectedDays={this.state.selectedDays}
+            />
+
           </Col>
         </Row>
       </Grid>
