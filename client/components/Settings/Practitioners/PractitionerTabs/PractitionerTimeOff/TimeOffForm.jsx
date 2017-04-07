@@ -25,6 +25,7 @@ const generateTimeOptions = () => {
 
   return timeOptions;
 };
+
 const timeOptions = generateTimeOptions();
 
 const setTime = (time) => {
@@ -33,8 +34,7 @@ const setTime = (time) => {
   newTime.setHours(tempTime.getHours());
   newTime.setMinutes(tempTime.getMinutes());
   return newTime.toISOString();
-}
-
+};
 
 class CreateTimeOffForm extends Component {
   constructor(props) {
@@ -42,66 +42,61 @@ class CreateTimeOffForm extends Component {
   }
 
   render() {
-    const { timeOff, formName, handleSubmit, deleteTimeOff, values } = this.props;
+    const { timeOff, formName, handleSubmit, values } = this.props;
 
-    let initialValues = {
-      allDay: true,
+    const {
+      startDate,
+      endDate,
+      allDay,
+    } = timeOff.toJS();
+
+    const initialValues = {
+      startDate,
+      endDate,
+      allDay,
+
+      // TODO: pluck time off and set (1970, 0, 1, time...)
+      startTime: startDate,
+      endTime: endDate,
     };
 
-    let showDeleteButton = null;
-    let startTime = null;
-    let endTime = null;
 
-    if (timeOff) {
-      initialValues = {
-        startDate: timeOff.get('startDate'),
-        endDate: timeOff.get('endDate'),
-        allDay: timeOff.get('allDay'),
-      };
-      showDeleteButton = (
-        <IconButton icon="trash" onClick={deleteTimeOff} />
-      );
-    }
-
-    if (!values.allDay) {
-      startTime = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" />);
-      endTime = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" />);
-    }
-
+    // TODO: style these components with hidden class if values.allDay
+    const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" />);
+    const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" />);
 
     return (
-      <div>
-        {showDeleteButton}
-        <Form
-          form={formName}
-          onSubmit={handleSubmit}
-          initialValues={initialValues}
-        >
-          <Field
-            component="Calendar"
-            name="startDate"
-            label="Start Date"
-          />
-          <Field
-            component="Calendar"
-            name="endDate"
-            label="End Date"
-          />
-          {startTime}
-          {endTime}
-          <Field
-            component="Toggle"
-            name="allDay"
-            onChange={this.handleToggle}
-          />
-        </Form>
-      </div>
+      <Form
+        form={formName}
+        onSubmit={handleSubmit}
+        initialValues={initialValues}
+      >
+        <Field
+          component="Calendar"
+          name="startDate"
+          label="Start Date"
+        />
+        <Field
+          component="Calendar"
+          name="endDate"
+          label="End Date"
+        />
+        {startTimeComponent}
+        {endTimeComponent}
+        <Field
+          component="Toggle"
+          name="allDay"
+          onChange={this.handleToggle}
+        />
+      </Form>
     );
   }
 }
 
 CreateTimeOffForm.PropTypes = {
-
+  timeOff: PropTypes.object,
+  formName: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ form }, { formName }) {

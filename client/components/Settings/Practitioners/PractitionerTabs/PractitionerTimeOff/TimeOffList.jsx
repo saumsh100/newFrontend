@@ -7,18 +7,23 @@ class TimeOffList extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
-    const { timeOffs, practitioner, setFormState } = this.props;
+    const {
+      timeOffs,
+      practitioner,
+      onSelectTimeOff,
+    } = this.props;
 
     return (
       <List>
-        {timeOffs.toArray().map((tf) => {
+        {timeOffs.toArray().map((timeOff) => {
           return (
             <TimeOffListItem
-              key={tf.get('id')}
-              timeOff={tf}
+              key={timeOff.get('id')}
+              timeOff={timeOff}
               practitioner={practitioner}
-              setFormState={setFormState}
+              onClick={() => onSelectTimeOff(timeOff)}
             />
           );
         })}
@@ -27,8 +32,11 @@ class TimeOffList extends Component {
   }
 }
 
-TimeOffList.PropTypes = {
-  timeOffs: PropTypes.props,
+TimeOffList.propTypes = {
+  // TODO: use Immutable PropTypes
+  timeOffs: PropTypes.object.isRequired,
+  practitioner: PropTypes.object.isRequired,
+  onSelectTimeOff: PropTypes.func.isRequired,
 };
 
 export default TimeOffList

@@ -1,107 +1,149 @@
+
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { createEntityRequest, deleteEntityRequest, updateEntityRequest } from '../../../../../thunks/fetchEntities';
+import moment from 'moment';
+import {
+  createEntityRequest,
+  deleteEntityRequest,
+  updateEntityRequest,
+} from '../../../../../thunks/fetchEntities';
 import { IconButton, Modal } from '../../../../library';
 import TimeOffList from './TimeOffList';
-import CreateTimeOffForm from './CreateTimeOffForm';
+import TimeOffForm from './TimeOffForm';
 
 class PractitionerTimeOff extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+
     this.state = {
-      active: false,
-      timeOff: null,
-      formState: '',
-    }
-    this.setActive = this.setActive.bind(this);
-    this.setFormState = this.setFormState.bind(this);
+      isAdding: false,
+      selectedTimeOff: null,
+    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.deleteTimeOff = this.deleteTimeOff.bind(this);
+    this.addTimeOff = this.addTimeOff.bind(this);
+    this.selectTimeOff = this.selectTimeOff.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
   }
 
 
   handleSubmit(values) {
-    const { practitioner, createEntityRequest, updateEntityRequest } = this.props;
+    const {
+      practitioner,
+      createEntityRequest,
+      updateEntityRequest,
+    } = this.props;
+
     const { timeOff } = this.state;
+
+    const {
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      allDay,
+    } = values;
+
+    // TODO: is !allDay merge in startTime, endTime into startDate endDate
+    const mergedStartDate = startDate;
+    const mergedEndDate = endDate;
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
-      startDate: values.startDate,
-      endDate: values.endDate,
+      startDate: mergedStartDate,
+      endDate: mergedEndDate,
       allDay: values.allDay,
     };
 
-    if (this.state.formState === 'create') {
+    if (this.state.isAdding) {
       createEntityRequest({ key: 'timeOffs', entityData: trimValues });
-
-    } else {
+    } else if (this.state.selectedTimeOff) {
+      // We assume selected practitioner is
       const valuesMap = Map(trimValues);
       const modifiedAccount = timeOff.merge(valuesMap);
       updateEntityRequest({ key: 'timeOff', model: modifiedAccount });
+    } else {
+      throw new Error('Form was submitted without added or selected time off');
     }
-    this.setActive();
+
+    this.reinitializeState();
   }
 
-  deleteTimeOff() {
-    const { timeOff } = this.state;
+  deleteTimeOff(timeOff) {
     this.props.deleteEntityRequest({ key: 'timeOffs', id: timeOff.get('id') });
-    this.setActive();
   }
 
-  setFormState(formState, timeOff) {
+  reinitializeState() {
     this.setState({
-      active: true,
-      timeOff,
-      formState,
+      isAdding: false,
+      selectedTimeOff: null,
     });
   }
 
-  setActive() {
-    this.setState({ active: !this.state.active });
+  addTimeOff() {
+    this.setState({
+      isAdding: true,
+      selectedTimeOff: null,
+    });
+  }
+
+  selectTimeOff(timeOff) {
+    this.setState({
+      isAdding: false,
+      selectedTimeOff: timeOff,
+    });
   }
 
   render() {
+    const {
+      timeOffs,
+      practitioner,
+    } = this.props;
 
-    const { timeOffs, practitioner } = this.props;
-    const { timeOff } = this.state;
+    const {
+      isAdding,
+      selectedTimeOff,
+    } = this.state;
 
+    // TODO: what about if no practitioner? its same ajax request
     if (!timeOffs) {
       return null;
     }
 
-    let key =`${practitioner.get('id')}_createTimeOff`;
-    if (timeOff) {
-      key = `${timeOff.get('id')}_editTimeOff`;
-    }
+
+    const formTimeOff = selectedTimeOff || Map({
+      startDate: moment().toISOString(),
+      endDate: moment().toISOString(),
+      allDay: true,
+    });
+
+    const formName = `practitioner${practitioner.get('id')}_timeOff`;
 
     return (
       <div>
         Add Time Off
         <IconButton
           icon="plus"
-          onClick={() => this.setFormState('create', null)}
+          onClick={this.addTimeOff}
         />
         <Modal
-          active={this.state.active}
-          onEscKeyDown={this.setActive}
-          onOverlayClick={this.setActive}
+          active={isAdding || !!selectedTimeOff}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
         >
-          <CreateTimeOffForm
-            key={key}
-            formName={key}
-            timeOff={this.state.timeOff}
+          <TimeOffForm
+            formName={formName}
+            timeOff={formTimeOff}
             handleSubmit={this.handleSubmit}
-            deleteTimeOff={this.deleteTimeOff}
           />
         </Modal>
         <TimeOffList
-          key={`${practitioner.get('id')}_timeOffList`}
           timeOffs={timeOffs}
           practitioner={practitioner}
-          deleteEntityRequest={this.props.deleteEntityRequest}
-          setFormState={this.setFormState}
+          onSelectTimeOff={this.selectTimeOff}
         />
       </div>
     );
@@ -109,9 +151,12 @@ class PractitionerTimeOff extends Component {
 
 }
 
-PractitionerTimeOff.PropTypes = {
-  timeOffs: PropTypes.prop,
-  createEntityRequest: PropTypes.func,
+PractitionerTimeOff.propTypes = {
+  timeOffs: PropTypes.arrayOf(PropTypes.object),
+  practitioner: PropTypes.object,
+  createEntityRequest: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
 };
 
 function mapActionsToProps(dispatch) {
