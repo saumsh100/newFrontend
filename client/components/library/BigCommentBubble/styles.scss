@@ -10,8 +10,6 @@
 }
 .bigCommentBubble {
   display: flex;
-  padding: 20px;
-  display: flex;
   flex-direction: row;
   justify-content: flex-start;
   padding: 40px 40px 20px 20px;
@@ -25,6 +23,8 @@
   &__commentBody {
     width: 95%;
     margin-left: 20px;
+    border-radius: $card-border-radius;
+    box-shadow: $box-shadow;
   }
   &__mainContent {
     position: relative;
@@ -123,13 +123,9 @@
     border-bottom: 2px solid $primary-light-blue;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-
-
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-
-
     display: flex;
     &__respondButton {
       width: 50%;
@@ -147,6 +143,9 @@
       justify-content: flex-start;
       align-items: center;
       font-size: $medium-size;
+      span {
+        cursor: pointer;
+      }
       span:first-child {
         color: $primary-lightgrey;
         margin-right: 10px;
@@ -201,7 +200,5 @@
       color: $primary-darkgrey;
       font-size: $small-size;
     }
-
   }
-
 }
