@@ -109,14 +109,35 @@
 
   &__respondBlock {
     padding: 10px 20px 10px 20px;
-    background-color: #8cbcd6;
-    color: #fff;
-    border-bottom: 2px solid #8cbcd6;
+    background-color: $primary-light-blue;
+    color: $primary-white;
+    border-bottom: 2px solid $primary-light-blue;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    display: flex;
     &__respondButton {
-      text-align: right;
-      font-size: 14px;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-direction: row;
+      font-size: $medium-size;
+      font-weight: $large-weight;
+    }
+    &__actions {
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: $medium-size;
+      span:first-child {
+        color: $primary-lightgrey;
+        margin-right: 10px;
+      }
+      span:last-child { 
+        color: $primary-lightgrey;
+      }
     }
   }
 }

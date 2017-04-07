@@ -61,6 +61,7 @@ export class BigCommentBubble extends Component {
       createdAt,
       comments = [],
       attachments=[],
+      actions,
     } = this.props;
     return (
       <div  className={styles.bigCommentBubble}>
@@ -95,6 +96,12 @@ export class BigCommentBubble extends Component {
             {comments.map(c =>(<Comment {...c} />))}
           </div>
           <div className={styles.bigCommentBubble__respondBlock}>
+            {actions &&
+              <div className={styles.bigCommentBubble__respondBlock__actions} >
+                <span className="fa fa-window-close"></span>
+                <span className="fa fa-trash"></span>
+              </div>
+            }
             <div className={styles.bigCommentBubble__respondBlock__respondButton}>
               Respond
             </div>

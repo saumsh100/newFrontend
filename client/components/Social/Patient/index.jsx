@@ -12,6 +12,7 @@ class Patient extends Component {
         smallIcon: { icon: 'facebook', iconColor: '#ffffff', background: colorMap.facebookBlue, iconAlign: 'center' },
         bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
       },
+      actions: true,
       headerLinkName: 'S. Lalala',
       headerLinkSite: 'yelp.ca',
       siteStars: 4,
@@ -27,9 +28,10 @@ class Patient extends Component {
     }, {
 
       doubleIcon: { 
-        smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.primaryBlue, iconAlign: 'center' },
+        smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
         bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
       },
+      actions: true,
       headerLinkName: 'L. Linda',
       headerLinkSite: 'yelp.ca',
       siteStars: 6,

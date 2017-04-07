@@ -11,4 +11,5 @@ export default {
   primaryBlue: '#206477',
   lightBlue: '#8CBCD6',
   facebookBlue: '#395998',
+  lightBlue: '#8CBCD6',
 };
