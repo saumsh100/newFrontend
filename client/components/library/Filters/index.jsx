@@ -14,8 +14,8 @@ export default class Filters extends Component {
 
 
   render() {
-    const { filters } = this.props;
-    const defaultValues = {search: ''}
+    const { filters, min } = this.props;
+    const defaultValues = { search: '' };
     return (
       <Card borderColor={colorMap.red} className={styles.card}>
         <Form form="filters" ignoreSaveButton>
@@ -30,54 +30,53 @@ export default class Filters extends Component {
                 <span>Clear All</span>
               </div>
             </div>
+            {!min &&
             <div className={styles.filters__search}>
               <span className="fa fa-search" />
-
               <Field
                 min
                 name="search"
                 laceholder="Search..."
                 onChange={(event, newValue, previousValue) => {
-
                 }}
               />
-            </div>
-            {filters.map(f => {
-              let content =
-              f.items.map((i, index) => {
-                return i.type === 'checkbox' ?
+            </div> }
+            {filters.map((f) => {
+              const content =
+                f.items.map((i, index) => i.type === 'checkbox' ?
                   <div className={styles.filters__checkFilter__chbox}>
                     <span>{i.value}</span>
                     <span>
-                      <Field name={i.value}
-                        input={{ value: true, onChange: ((e, newValue) => { console.log(newValue) })}}
-                        component="Checkbox" type="checkbox" />
+                      <Field
+                        name={i.value}
+                        input={{ value: true, onChange: ((e, newValue) => { console.log(newValue); }) }}
+                        component="Checkbox" type="checkbox"
+                      />
                     </span>
                   </div>
                   :
                   <div className={styles.filters__selectFilter}>
 
 
-                  <Field
-                    component="Select"
-                    name={`${f.title}-${index}`}
-                    label="Select Practitioner"
-                    min
-                    className={styles.appointment__select_item}
-                  >
-                    {i.options.map(item => (
-                    <option value={item}>{item}</option>
-                    ))}
-                  </Field>
-                  </div>
-              })
+                    <Field
+                      component="Select"
+                      name={`${f.title}-${index}`}
+                      label="Select Practitioner"
+                      min
+                      className={styles.appointment__select_item}
+                    >
+                      {i.options.map(item => (
+                        <option value={item}>{item}</option>
+                      ))}
+                    </Field>
+                  </div>);
               return (
                 <div>
                   <div className={styles.filters__title}>
                     {f.titleIcon &&
-                      <div style={{backgroundColor: f.titleIcon.color}} className={styles.filters__title__icon}>
-                        <span className={`fa fa-${f.titleIcon.icon}`} />
-                      </div>
+                    <div style={{ backgroundColor: f.titleIcon.color }} className={styles.filters__title__icon}>
+                      <span className={`fa fa-${f.titleIcon.icon}`} />
+                    </div>
                     }
                     {f.title}
                   </div>

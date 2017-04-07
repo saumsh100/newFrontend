@@ -15,11 +15,12 @@
 .cardHeader {
 	padding: 20px 20px 0 20px;
 	margin-bottom: 20px;
+  text-transform: uppercase;
 	&__menu {
 		display: flex;
 		flex-direction: row;
-    text-transform: none;
 		font-size: $small-size;
+    text-transform: none;
 		span:first-child {
 			margin-right: 10px;
 			cursor: pointer;

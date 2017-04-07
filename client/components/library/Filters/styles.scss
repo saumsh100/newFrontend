@@ -1,4 +1,5 @@
 @import "../../../ui";
+@import "../../../fonts";
 
 .filters {
   &__checkFilter {
@@ -9,6 +10,9 @@
     padding: 12px 50px;
     color: $primary-darkgrey;
     font-size: $medium-size;
+    @media screen and (max-width: 1000px) {
+      padding: 12px 20px;
+    }
     &__chbox {
       width: 100%;
       display: flex;
@@ -26,7 +30,7 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-    margin-top: 10px;
+    margin: 10px 0;
     &__left {
       width: 55%;
       display: flex;
@@ -43,7 +47,7 @@
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
-      font-size: $extra-small-size;
+      @extend .font-small;
       color: $primary-darkgrey;
       span {
         margin: 0 5px;

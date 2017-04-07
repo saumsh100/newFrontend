@@ -6,7 +6,6 @@
 }
 .padding {
   padding: 0 5px;
-  margin-bottom: 30px;
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
   }
@@ -22,8 +21,7 @@
 .cardHeader {
 	padding: 20px 20px 0 20px;
 	margin-bottom: 20px;
-
-
+  text-transform: uppercase;
 	&__menu {
 		width: 100%;
 		display: flex;

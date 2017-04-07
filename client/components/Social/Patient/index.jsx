@@ -17,7 +17,7 @@ class Patient extends Component {
     const DataBigComment = [{
       doubleIcon: {
         smallIcon: { icon: 'facebook', iconColor: '#ffffff', background: colorMap.facebookBlue, iconAlign: 'center' },
-        bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
+        bigIcon: { src: '/images/logo_dent.png' },
       },
       actions: true,
       headerLinkName: 'S. Lalala',
@@ -34,7 +34,7 @@ class Patient extends Component {
 
       doubleIcon: {
         smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
-        bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
+        bigIcon: { src: '/images/logo_dent.png' },
       },
       actions: true,
       headerLinkName: 'L. Linda',
@@ -56,7 +56,7 @@ class Patient extends Component {
     }, {
       doubleIcon: {
         smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
-        bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
+        bigIcon: { src: '/images/logo_dent.png' },
       },
       actions: true,
       headerLinkName: 'N. Blabla',
@@ -127,15 +127,12 @@ class Patient extends Component {
             />
           </Col>
           <Col className={styles.padding} xs={12} md={4}>
-            <Filters filters={filters} />
-
-
+            <Filters filters={filters} min />
             <Calendar
               className={styles.calendar}
               initialMonth={new Date(2016, 1)}
               selectedDays={this.state.selectedDays}
             />
-
           </Col>
         </Row>
       </Grid>

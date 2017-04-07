@@ -6,7 +6,7 @@ import styles from './styles.scss';
 import DoubleIcon from '../DoubleIcon';
 
 export class IconBox extends Component {
-  render () {
+  render() {
     const { icon, iconColor, background, iconAlign } = this.props.data;
     const iconClass = `fa fa-${icon}`;
     const style = {
@@ -15,8 +15,10 @@ export class IconBox extends Component {
       justifyContent: iconAlign,
     };
     return (
-      <div className={styles.bigComment}
-           style={style}>
+      <div
+        className={styles.bigComment}
+        style={style}
+      >
         <span className={iconClass} />
       </div>
     );
@@ -24,7 +26,7 @@ export class IconBox extends Component {
 }
 
 export class Comment extends Component {
-  render () {
+  render() {
     const { imageSrc, userName, message, sentAt } = this.props;
     return (
       <div className={styles.bigCommentBubble__comments}>
@@ -35,18 +37,17 @@ export class Comment extends Component {
           <div className={styles.comment__message}>
             <span className={styles.comment__message__username}>{userName}</span>
             <span className={styles.comment__message__text}>{message}</span>
-            <span className={styles.comment__message__sentAt}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span>    
+            <span className={styles.comment__message__sentAt}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
 
-
 export class BigCommentBubble extends Component {
-  render () {
+  render() {
     const {
       icon,
       doubleIcon,
@@ -60,14 +61,14 @@ export class BigCommentBubble extends Component {
       sitePreview,
       createdAt,
       comments = [],
-      attachments=[],
+      attachments = [],
       actions,
       requiredAction,
     } = this.props;
     return (
-      <div  className={styles.bigCommentBubble}>
+      <div className={styles.bigCommentBubble}>
         {doubleIcon && <DoubleIcon {...doubleIcon} /> }
-        {icon && <IconBox data={{ icon: icon, iconColor: iconColor, background: background, iconAlign: iconAlign}} /> }
+        {icon && <IconBox data={{ icon, iconColor, background, iconAlign }} /> }
         <div className={styles.bigCommentBubble__commentBody}>
           <div className={styles.bigCommentBubble__mainContent}>
             <div className={styles.bigCommentBubble__mainContent__header}>
@@ -96,13 +97,13 @@ export class BigCommentBubble extends Component {
             <div className={styles.bigCommentBubble__attachments}>
               {attachments.map(at => (<img src={at.src} />))}
             </div>
-            {comments.map(c =>(<Comment {...c} />))}
+            {comments.map(c => (<Comment {...c} />))}
           </div>
           <div className={styles.bigCommentBubble__respondBlock}>
             {actions &&
               <div className={styles.bigCommentBubble__respondBlock__actions} >
-                <span className="fa fa-window-close"></span>
-                <span className="fa fa-trash"></span>
+                <span className="fa fa-ban" />
+                <span className="fa fa-trash" />
               </div>
             }
             <div className={styles.bigCommentBubble__respondBlock__respondButton}>

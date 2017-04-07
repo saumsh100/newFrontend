@@ -62,8 +62,8 @@ class ComposePost extends Component {
                 <textarea
                   maxLength={maxPostLength}
                   className={styles.body__comment_element}
-                >Have you heard about our new Teeth Whitening Promotion?
-                </textarea>
+                  defaultValue="Have you heard about our new Teeth Whitening Promotion?"
+                />
                 <div className={styles.body__comment_maxLength}>
                   <Icon icon="twitter" />
                   <span>{maxPostLength}</span>

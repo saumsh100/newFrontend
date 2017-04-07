@@ -4,6 +4,11 @@
 * {
   box-sizing: border-box;
 }
+.listings {
+  &__wrapper {
+    padding-top: 15px;
+  }
+}
 .padding {
   padding: 0 5px;
   margin-bottom: 30px;
