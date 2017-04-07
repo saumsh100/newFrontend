@@ -34,7 +34,7 @@ const setTime = (time, allDay) => {
 };
 
 function TimeOffForm(props) {
-  const { timeOff, formName, handleSubmit, values } = props;
+  const { timeOff, formName, handleSubmit, values, isAdding } = props;
 
   const {
     startDate,
@@ -99,6 +99,5 @@ function mapStateToProps({ form }, { formName }) {
     values: form[formName].values,
   };
 }
-
 
 export default connect(mapStateToProps,null)(TimeOffForm);

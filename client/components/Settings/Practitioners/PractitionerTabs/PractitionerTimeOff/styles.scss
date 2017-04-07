@@ -1,0 +1,11 @@
+@import '../../../../../ui.scss';
+
+.timeOffList {
+  display: flex;
+  background-color: $primary-white;
+
+  &_delete {
+    margin-left: auto;
+  }
+}
+

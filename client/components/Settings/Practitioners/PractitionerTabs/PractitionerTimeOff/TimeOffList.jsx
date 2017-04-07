@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import TimeOffListItem from './TimeOffListItem';
 import { List, IconButton } from '../../../../library';
+import styles from './styles.scss';
 
 class TimeOffList extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class TimeOffList extends Component {
       <List>
         {timeOffs.toArray().map((timeOff) => {
           return (
-            <div style={{ display: 'flex' }}>
+            <div className={styles.timeOffList}>
               <TimeOffListItem
                 key={timeOff.get('id')}
                 timeOff={timeOff}
@@ -29,7 +30,7 @@ class TimeOffList extends Component {
               />
               <IconButton
                 icon="trash"
-                style={{ marginLeft: 'auto', backgroundColor: 'white' }}
+                className={styles.timeOffList_delete}
                 onClick={() => deleteTimeOff(timeOff)}
               />
             </div>

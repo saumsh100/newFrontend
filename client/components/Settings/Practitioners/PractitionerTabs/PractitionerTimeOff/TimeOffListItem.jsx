@@ -9,7 +9,7 @@ class TimeOffListItem extends Component {
   }
 
   render() {
-    const { timeOff, practitioner, onClick } = this.props;
+    const { timeOff, onClick } = this.props;
 
     const {
       startDate,
@@ -29,7 +29,6 @@ class TimeOffListItem extends Component {
 
 TimeOffListItem.propTypes = {
   timeOff: PropTypes.object.isRequired,
-  practitioner: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
