@@ -17,7 +17,7 @@ class TimeOffListItem extends Component {
     } = timeOff;
 
     return (
-      <ListItem onClick={onClick}>
+      <ListItem style={{width: '100%' }}onClick={onClick}>
         From:
         {moment(startDate).format('L')}
         To:

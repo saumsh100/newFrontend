@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { Form, Field } from '../../../../library';
 
@@ -25,12 +26,11 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-const setTime = (time) => {
-  let tempTime = new Date(time);
-  let newTime = new Date(1970, 1, 0);
-  newTime.setHours(tempTime.getHours());
-  newTime.setMinutes(tempTime.getMinutes());
-  return newTime.toISOString();
+const setTime = (time, allDay) => {
+  const tempTime = new Date(time);
+  const mergeTime = new Date(1970, 1, 0);
+  mergeTime.setHours(tempTime.getHours());
+  return mergeTime.toISOString();
 };
 
 function TimeOffForm(props) {
@@ -43,27 +43,23 @@ function TimeOffForm(props) {
   } = timeOff.toJS();
 
   const initialValues = {
-    startDate,
-    endDate,
+    startDate: moment(startDate).format('L'),
+    endDate: moment(endDate).format('L'),
     allDay,
-
-    // TODO: pluck time off and set (1970, 0, 1, time...)
-    startTime: startDate,
-    endTime: endDate,
+    startTime: setTime(startDate, allDay),
+    endTime:  setTime(endDate, allDay),
   };
 
-
-
-
   // TODO: style these components with hidden class if values.allDay
-  const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" />);
-  const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" />);
+  const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" disabled={values.allDay}/>);
+  const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" disabled={values.allDay}/>);
 
   return (
     <Form
       form={formName}
       onSubmit={handleSubmit}
       initialValues={initialValues}
+      destroyOnUnmount
     >
       <Field
         component="Calendar"

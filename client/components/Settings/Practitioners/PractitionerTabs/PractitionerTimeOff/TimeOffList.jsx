@@ -20,7 +20,7 @@ class TimeOffList extends Component {
       <List>
         {timeOffs.toArray().map((timeOff) => {
           return (
-            <div style={{display: 'flex'}}>
+            <div style={{ display: 'flex' }}>
               <TimeOffListItem
                 key={timeOff.get('id')}
                 timeOff={timeOff}
@@ -28,9 +28,9 @@ class TimeOffList extends Component {
                 onClick={() => onSelectTimeOff(timeOff)}
               />
               <IconButton
-                key={`${timeOff.get('id')}_delete`}
                 icon="trash"
-                onClick={()=> deleteTimeOff(timeOff)}
+                style={{ marginLeft: 'auto', backgroundColor: 'white' }}
+                onClick={() => deleteTimeOff(timeOff)}
               />
             </div>
           );

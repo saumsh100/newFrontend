@@ -13,7 +13,9 @@ import { IconButton, Modal } from '../../../../library';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
-
+const mergeTime = (date, time, allDay) => {
+  return allDay ? date : new Date(date.setHours(time.getHours()));
+}
 
 class PractitionerTimeOff extends Component {
   constructor(props) {
@@ -23,17 +25,11 @@ class PractitionerTimeOff extends Component {
       isAdding: false,
       selectedTimeOff: null,
     };
-
     this.handleSubmit = this.handleSubmit.bind(this);
     this.deleteTimeOff = this.deleteTimeOff.bind(this);
     this.addTimeOff = this.addTimeOff.bind(this);
     this.selectTimeOff = this.selectTimeOff.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
-    this.mergeTime = this.mergeTime.bind(this);
-  }
-
-  mergeTime(date, time, allDay) {
-    return allDay ? date : new Date(date.setHours(time.getHours()));
   }
 
   handleSubmit(values) {
@@ -54,8 +50,8 @@ class PractitionerTimeOff extends Component {
     } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
-    const mergedStartDate = this.mergeTime(new Date(startDate), new Date(startTime), allDay);
-    const mergedEndDate = this.mergeTime(new Date(endDate), new Date(endTime), allDay)
+    const mergedStartDate = mergeTime(new Date(startDate), new Date(startTime), allDay);
+    const mergedEndDate = mergeTime(new Date(endDate), new Date(endTime), allDay)
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
@@ -63,7 +59,6 @@ class PractitionerTimeOff extends Component {
       endDate: mergedEndDate,
       allDay: values.allDay,
     };
-
 
     if (this.state.isAdding) {
       createEntityRequest({ key: 'timeOffs', entityData: trimValues });
