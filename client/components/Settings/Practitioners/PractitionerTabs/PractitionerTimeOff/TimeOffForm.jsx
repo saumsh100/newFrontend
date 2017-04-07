@@ -1,10 +1,7 @@
 
-import React, { Component, PropTypes } from 'react';
-import { Form, Field, IconButton, Toggle } from '../../../../library';
-import _ from 'lodash';
-import { change } from 'redux-form';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import { Form, Field } from '../../../../library';
 
 const generateTimeOptions = () => {
   const timeOptions = [];
@@ -36,64 +33,57 @@ const setTime = (time) => {
   return newTime.toISOString();
 };
 
-class CreateTimeOffForm extends Component {
-  constructor(props) {
-    super(props);
-  }
+function TimeOffForm(props) {
+  const { timeOff, formName, handleSubmit, values } = props;
 
-  render() {
-    const { timeOff, formName, handleSubmit, values } = this.props;
+  const {
+    startDate,
+    endDate,
+    allDay,
+  } = timeOff.toJS();
 
-    const {
-      startDate,
-      endDate,
-      allDay,
-    } = timeOff.toJS();
+  const initialValues = {
+    startDate,
+    endDate,
+    allDay,
 
-    const initialValues = {
-      startDate,
-      endDate,
-      allDay,
-
-      // TODO: pluck time off and set (1970, 0, 1, time...)
-      startTime: startDate,
-      endTime: endDate,
-    };
+    // TODO: pluck time off and set (1970, 0, 1, time...)
+    startTime: startDate,
+    endTime: endDate,
+  };
 
 
-    // TODO: style these components with hidden class if values.allDay
-    const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" />);
-    const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" />);
+  // TODO: style these components with hidden class if values.allDay
+  const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" />);
+  const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" />);
 
-    return (
-      <Form
-        form={formName}
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-      >
-        <Field
-          component="Calendar"
-          name="startDate"
-          label="Start Date"
-        />
-        <Field
-          component="Calendar"
-          name="endDate"
-          label="End Date"
-        />
-        {startTimeComponent}
-        {endTimeComponent}
-        <Field
-          component="Toggle"
-          name="allDay"
-          onChange={this.handleToggle}
-        />
-      </Form>
-    );
-  }
+  return (
+    <Form
+      form={formName}
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+    >
+      <Field
+        component="Calendar"
+        name="startDate"
+        label="Start Date"
+      />
+      <Field
+        component="Calendar"
+        name="endDate"
+        label="End Date"
+      />
+      {startTimeComponent}
+      {endTimeComponent}
+      <Field
+        component="Toggle"
+        name="allDay"
+      />
+    </Form>
+  );
 }
 
-CreateTimeOffForm.PropTypes = {
+TimeOffForm.PropTypes = {
   timeOff: PropTypes.object,
   formName: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
@@ -113,4 +103,4 @@ function mapStateToProps({ form }, { formName }) {
 }
 
 
-export default connect(mapStateToProps,null)(CreateTimeOffForm);
+export default connect(mapStateToProps,null)(TimeOffForm);
