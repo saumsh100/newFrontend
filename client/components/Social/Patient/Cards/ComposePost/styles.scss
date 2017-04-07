@@ -18,11 +18,17 @@
       padding: 35px 0;
       @extend .font-header-title;
       color: $primary-light-blue;
+      @media screen and (max-width: 1000px){
+        padding: 10px 0 15px;
+      }
     }
   }
   .header {
     padding: 0 20px 30px;
     border-bottom: 2px solid $primary-lightgrey;
+    @media screen and (max-width: 600px) {
+      padding: 0 0 5px;
+    }
     &__add {
       display: inline-flex;
       align-items: center;
@@ -48,6 +54,9 @@
   }
   .body {
     padding: 0 20px 15px;
+    @media screen and (max-width: 600px) {
+      padding: 0 0 5px;
+    }
     &__comment {
       margin-top: 10px;
       height: 200px;
