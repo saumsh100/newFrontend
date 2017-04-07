@@ -114,7 +114,6 @@ class TopBar extends Component {
                   window.socket.emit('onDemandSync');
                 }}
               >
-                FORCE SYNC
               </SyncButton>
             </li>
             <li>
