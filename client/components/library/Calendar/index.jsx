@@ -1,4 +1,3 @@
-
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
 import moment from 'moment';
@@ -20,7 +19,7 @@ class Calendar extends Component {
   }
 
   handleDayClick(day, { selected }) {
-    this.props.onChange(day);
+    this.props.onChange(moment(day).format('L'));
     this.setState({
       selectedDay: selected ? undefined : day,
       isOpen: false,
@@ -28,15 +27,7 @@ class Calendar extends Component {
     });
   }
 
-  componentWillMount() {
-    const { value } = this.props;
 
-    if (value) {
-      this.setState({
-        selectedDay: value,
-      })
-    }
-  }
 
   handleInputClick(e) {
     this.setState({

@@ -1,3 +1,4 @@
+
 import React, {Component, PropTypes} from 'react';
 import PractServicesList from './PractServicesList';
 import { Form, Field, Toggle} from '../../../../library';
@@ -8,7 +9,7 @@ import { connect } from 'react-redux';
 
 function checkValues(obj) {
   const allTrue = Object.keys(obj).every((key) => {
-    return obj[key]; 
+    return obj[key];
   });
   return allTrue;
 }
@@ -35,6 +36,7 @@ class PractServicesForm extends Component {
     e.stopPropagation;
     this.props.allServices = checkValues(this.props.values);
   }
+
   render() {
     const { services, practitioner, initialValues, formName, values } = this.props;
 
@@ -89,7 +91,7 @@ function mapStateToProps({ form }, { formName }) {
 
   return {
     allServices: checkValues(form[formName].values),
-    values: form[formName].values
+    values: form[formName].values,
   };
 }
 

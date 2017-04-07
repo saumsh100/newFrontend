@@ -1,9 +1,8 @@
-
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { fetchEntities, createEntityRequest, deleteEntityRequest, updateEntityRequest } from '../../../../../thunks/fetchEntities';
+import { createEntityRequest, deleteEntityRequest, updateEntityRequest } from '../../../../../thunks/fetchEntities';
 import { IconButton, Modal } from '../../../../library';
 import TimeOffList from './TimeOffList';
 import CreateTimeOffForm from './CreateTimeOffForm';
@@ -22,10 +21,6 @@ class PractitionerTimeOff extends Component {
     this.deleteTimeOff = this.deleteTimeOff.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchEntities({ key: 'practitioners', join: ['timeOffs'] });
-  }
-
 
   handleSubmit(values) {
     const { practitioner, createEntityRequest, updateEntityRequest } = this.props;
@@ -35,6 +30,7 @@ class PractitionerTimeOff extends Component {
       practitionerId: practitioner.get('id'),
       startDate: values.startDate,
       endDate: values.endDate,
+      allDay: values.allDay,
     };
 
     if (this.state.formState === 'create') {
@@ -53,7 +49,6 @@ class PractitionerTimeOff extends Component {
     this.props.deleteEntityRequest({ key: 'timeOffs', id: timeOff.get('id') });
     this.setActive();
   }
-
 
   setFormState(formState, timeOff) {
     this.setState({
@@ -115,30 +110,19 @@ class PractitionerTimeOff extends Component {
 }
 
 PractitionerTimeOff.PropTypes = {
-  fetchEntities: PropTypes.func,
   timeOffs: PropTypes.prop,
   createEntityRequest: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    fetchEntities,
     createEntityRequest,
     deleteEntityRequest,
     updateEntityRequest,
   }, dispatch);
 }
 
-function mapStateToProps({ entities }, { practitioner }) {
-  const timeOffs = entities.getIn(['timeOffs', 'models']).filter((timeOff) => {
-    return timeOff.practitionerId === practitioner.get('id');
-  });
 
-  return {
-    timeOffs,
-  };
-}
-
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(null, mapActionsToProps);
 
 export default enhance(PractitionerTimeOff);

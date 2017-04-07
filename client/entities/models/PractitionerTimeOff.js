@@ -5,6 +5,7 @@ const PractitionerTimeOffSchema = {
   practitionerId: null,
   startDate: null,
   endDate: null,
+  allDay: null,
 };
 
 export default class PractitionerTimeOff extends createModel(PractitionerTimeOffSchema) {

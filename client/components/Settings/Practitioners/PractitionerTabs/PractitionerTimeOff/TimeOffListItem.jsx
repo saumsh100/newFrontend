@@ -15,7 +15,7 @@ class TimeOffListItem extends Component {
       startDate,
       endDate,
     } = timeOff
-
+    
     return (
       <div>
         <ListItem onClick={() => setFormState('edit', timeOff)}>

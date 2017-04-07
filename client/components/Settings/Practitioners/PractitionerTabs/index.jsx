@@ -45,9 +45,9 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule, } = this.props;
+    const { practitioner, weeklySchedule, timeOffs } = this.props;
 
-    if (!practitioner && !weeklySchedule ) {
+    if (!practitioner && !weeklySchedule) {
       return null;
     }
 
@@ -90,6 +90,7 @@ class PractitionerTabs extends Component {
             <PractitionerTimeOff
               key={practitioner.get('id')}
               practitioner={practitioner}
+              timeOffs={timeOffs}
             />
           </Tab>
         </Tabs>
