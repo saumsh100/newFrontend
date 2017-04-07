@@ -62,6 +62,7 @@ export class BigCommentBubble extends Component {
       comments = [],
       attachments=[],
       actions,
+      requiredAction,
     } = this.props;
     return (
       <div  className={styles.bigCommentBubble}>
@@ -86,9 +87,11 @@ export class BigCommentBubble extends Component {
               {sitePreview}
               <span className={styles.bigCommentBubble__mainContent__preview__toggleButton} >more... </span>
             </div>
-            <div className={styles.bigCommentBubble__mainContent__requirements}>
-              ACTION REQUIRED
-            </div>
+            {requiredAction &&
+              <div className={styles.bigCommentBubble__mainContent__requirements}>
+                {requiredAction}
+              </div>
+            }
             <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt}</div>
             <div className={styles.bigCommentBubble__attachments}>
               {attachments.map(at => (<img src={at.src} />))}

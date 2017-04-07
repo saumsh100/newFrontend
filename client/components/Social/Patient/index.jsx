@@ -15,8 +15,6 @@ class Patient extends Component {
       actions: true,
       headerLinkName: 'S. Lalala',
       headerLinkSite: 'yelp.ca',
-      siteStars: 4,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
       sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
       createdAt: moment().subtract(10, 'days').fromNow(),
       comments: [{
@@ -34,8 +32,6 @@ class Patient extends Component {
       actions: true,
       headerLinkName: 'L. Linda',
       headerLinkSite: 'yelp.ca',
-      siteStars: 6,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
       sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
       createdAt: moment().subtract(10, 'days').fromNow(),
       comments: [{
@@ -51,14 +47,13 @@ class Patient extends Component {
         sentAt: moment()._d,
       }],
     }, {
-      icon: 'twitter',
-      iconColor: '#ffffff',
-      background: '#FF715A',
-      iconAlign: 'center',
+      doubleIcon: { 
+        smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
+        bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
+      },
+      actions: true,
       headerLinkName: 'N. Blabla',
       headerLinkSite: 'yelp.ca',
-      siteStars: 3,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
       sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
       createdAt: moment().subtract(10, 'days').fromNow(),
     }];

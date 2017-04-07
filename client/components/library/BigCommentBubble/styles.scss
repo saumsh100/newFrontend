@@ -114,6 +114,13 @@
     border-bottom: 2px solid $primary-light-blue;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+
     display: flex;
     &__respondButton {
       width: 50%;

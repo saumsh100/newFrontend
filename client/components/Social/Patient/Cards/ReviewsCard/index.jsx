@@ -60,6 +60,7 @@ class ReviewsCard extends Component {
                   comments={obj.comments}
                   doubleIcon={obj.doubleIcon}
                   actions={obj.actions}
+                  requiredAction={obj.requiredAction}
                 />
               ))}
             </Col>
