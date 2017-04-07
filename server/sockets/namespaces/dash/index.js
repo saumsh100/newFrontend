@@ -2,23 +2,13 @@
 
 const authenticate = require('../authenticate');
 const { namespaces } = require('../../../config/globals');
-// const twilioClient = require('../../../config/twilio');
-// const twilioConfig = require('../../../config/globals').twilio;
+const runDashboardFeeds = require('../../../feeds/runDashboardFeeds');
 
 function setupDashboardNamespace(io) {
   const dash = io.of(namespaces.dash);
   return authenticate(dash, (socket) => {
-    const { activeAccountId } = socket.decoded_token;
-
-    // TODO: JWT token verification
-    // console.log(`dashNsp connection. Joining client to roomName=${roomName}; connected to /dash=`, io.of('/dash').connected);
-    console.log(`dashNsp connection. Joining client to roomName=${activeAccountId}; connected to /dash=`);
-    console.log('active rooms', JSON.stringify(io.sockets.adapter.rooms));
-    socket.join(activeAccountId);
-
-    const room = dash.in(activeAccountId);
-    room.emit('newJoin', 'dash board joined'); // notify everyone that someone joined
-
+    console.log('socket authenticated!');
+    runDashboardFeeds(socket);
     // TODO: only keeping this so i dont lose Twilio setup
     /*socket.on('sendMessage', (data) => {
      const { patient, message } = data;
