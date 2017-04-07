@@ -19,10 +19,14 @@
 }
 
 .subTabs {
-  margin-top: -49px;
+  margin-top: -40px;
   margin-left: 52px;
   position: fixed;
   z-index: 20;
+  display: block;
+  @media screen and (max-width: 800px){
+    display: none;
+  }
 }
 
 .mainRegionChildren {
