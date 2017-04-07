@@ -59,12 +59,15 @@
   color: white;
   line-height: 1rem;
   @media screen and (max-width: 1000px){
-    font-size: inherit;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: inherit;
-    right: 5%;
-    color: inherit;
+    display: none;
+  }
+  &__mobile {
+    display: none;
+    @media screen and (max-width: 1000px){
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      padding: 0 22px;
+    }
   }
 }

@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import Card from '../Card';
 import styles from './styles.scss';
-import IconButton   from '../IconButton';
+import IconButton from '../IconButton';
 
 
 class Modal extends Component {
@@ -45,7 +45,8 @@ class Modal extends Component {
     const {
       children,
       active,
-      className
+      className,
+      close,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
@@ -67,6 +68,11 @@ class Modal extends Component {
           className={backDropClassName}
         />
         <Card className={classNames(styles.modalBody, className)}>
+          <IconButton
+            icon="times"
+            className={styles.modalCloseIcon__mobile}
+            onClick={this.deactivate}
+          />
           {children}
         </Card>
       </div>
