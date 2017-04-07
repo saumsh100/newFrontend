@@ -42,6 +42,7 @@ class ComposePost extends Component {
               <div className={styles.header__tags}>
                 {headerTabs.map((obj, i) => (
                   <Label
+                    key={i}
                     text={obj.company}
                   >
                     <BackgroundIcon

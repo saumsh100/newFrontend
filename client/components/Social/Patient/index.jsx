@@ -8,7 +8,7 @@ import styles from './styles.scss';
 class Patient extends Component {
   render() {
     const DataBigComment = [{
-      doubleIcon: { 
+      doubleIcon: {
         smallIcon: { icon: 'facebook', iconColor: '#ffffff', background: colorMap.facebookBlue, iconAlign: 'center' },
         bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
       },
@@ -25,7 +25,7 @@ class Patient extends Component {
       }],
     }, {
 
-      doubleIcon: { 
+      doubleIcon: {
         smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
         bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
       },
@@ -47,7 +47,7 @@ class Patient extends Component {
         sentAt: moment()._d,
       }],
     }, {
-      doubleIcon: { 
+      doubleIcon: {
         smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
         bigIcon: { src: "http://previews.123rf.com/images/glopphy/glopphy1209/glopphy120900011/15168826-Tooth-stylized-with-shadows-vector-Stock-Vector-tooth-dental-logo.jpg" }
       },
@@ -112,14 +112,14 @@ class Patient extends Component {
     return (
       <Grid className={styles.reviews}>
         <Row>
-          <Col className={styles.padding} xs={12} md={12} sm={7}>
+          <Col className={styles.padding} xs={12} md={8}>
             <ReviewsCard
               data={DataBigComment}
               headerTabs={headerTabs}
               socialPreview={socialPreview}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={4} sm={5}>
+          <Col className={styles.padding} xs={12} md={4}>
             <Filters filters={filters} />
           </Col>
         </Row>

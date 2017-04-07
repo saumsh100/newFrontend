@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 .card {
-
+  max-height: calc(100vh - 65px - 45px - 15px); // 100vh - header height - padding / margin
 }
 .modal {
   border-radius: $card-border-radius;

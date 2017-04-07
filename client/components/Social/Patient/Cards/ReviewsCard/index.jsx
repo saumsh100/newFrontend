@@ -9,7 +9,7 @@ class ReviewsCard extends Component {
     super(props);
     this.setActive = this.setActive.bind(this);
     this.state = {
-      active: true,
+      active: false,
     };
   }
   setActive() {
@@ -46,8 +46,9 @@ class ReviewsCard extends Component {
         <div className={styles.reviewsComments}>
           <div className={styles.reviewsComments__container} >
             <Col xs={12} className={styles.reviewsComments__comment} >
-              {data.map(obj => (
+              {data.map((obj, i) => (
                 <BigCommentBubble
+                  key={i}
                   icon={obj.icon}
                   iconColor={obj.iconColor}
                   background={obj.background}
