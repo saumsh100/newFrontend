@@ -22,6 +22,10 @@
 		font-size: $small-size;
 		span:first-child {
 			margin-right: 10px;
+			cursor: pointer;
+		}
+		span:last-child {
+			cursor: pointer;
 		}
 	}
 }
