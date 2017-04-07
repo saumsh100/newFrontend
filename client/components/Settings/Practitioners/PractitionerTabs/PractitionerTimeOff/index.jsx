@@ -13,6 +13,8 @@ import { IconButton, Modal } from '../../../../library';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
+
+
 class PractitionerTimeOff extends Component {
   constructor(props) {
     super(props);
@@ -27,8 +29,12 @@ class PractitionerTimeOff extends Component {
     this.addTimeOff = this.addTimeOff.bind(this);
     this.selectTimeOff = this.selectTimeOff.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
+    this.mergeTime = this.mergeTime.bind(this);
   }
 
+  mergeTime(date, time, allDay) {
+    return allDay ? date : new Date(date.setHours(time.getHours()));
+  }
 
   handleSubmit(values) {
     const {
@@ -37,7 +43,7 @@ class PractitionerTimeOff extends Component {
       updateEntityRequest,
     } = this.props;
 
-    const { timeOff } = this.state;
+    const { selectedTimeOff } = this.state;
 
     const {
       startDate,
@@ -48,8 +54,8 @@ class PractitionerTimeOff extends Component {
     } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
-    const mergedStartDate = startDate;
-    const mergedEndDate = endDate;
+    const mergedStartDate = this.mergeTime(new Date(startDate), new Date(startTime), allDay);
+    const mergedEndDate = this.mergeTime(new Date(endDate), new Date(endTime), allDay)
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
@@ -58,13 +64,14 @@ class PractitionerTimeOff extends Component {
       allDay: values.allDay,
     };
 
+
     if (this.state.isAdding) {
       createEntityRequest({ key: 'timeOffs', entityData: trimValues });
-    } else if (this.state.selectedTimeOff) {
+    } else if (selectedTimeOff) {
       // We assume selected practitioner is
       const valuesMap = Map(trimValues);
-      const modifiedAccount = timeOff.merge(valuesMap);
-      updateEntityRequest({ key: 'timeOff', model: modifiedAccount });
+      const modifiedAccount = selectedTimeOff.merge(valuesMap);
+      updateEntityRequest({ key: 'timeOffs', model: modifiedAccount });
     } else {
       throw new Error('Form was submitted without added or selected time off');
     }
@@ -115,12 +122,16 @@ class PractitionerTimeOff extends Component {
 
 
     const formTimeOff = selectedTimeOff || Map({
-      startDate: moment().toISOString(),
-      endDate: moment().toISOString(),
+      startDate: moment().format('L'),
+      endDate: moment().format('L'),
       allDay: true,
     });
 
-    const formName = `practitioner${practitioner.get('id')}_timeOff`;
+    let formName = `practitioner${practitioner.get('id')}_timeOff`;
+    if(selectedTimeOff) {
+      formName = `timeOff${selectedTimeOff.get('id')}_timeOff`;
+    }
+
 
     return (
       <div>
@@ -135,6 +146,7 @@ class PractitionerTimeOff extends Component {
           onOverlayClick={this.reinitializeState}
         >
           <TimeOffForm
+            key={formName}
             formName={formName}
             timeOff={formTimeOff}
             handleSubmit={this.handleSubmit}
@@ -144,6 +156,7 @@ class PractitionerTimeOff extends Component {
           timeOffs={timeOffs}
           practitioner={practitioner}
           onSelectTimeOff={this.selectTimeOff}
+          deleteTimeOff={this.deleteTimeOff}
         />
       </div>
     );

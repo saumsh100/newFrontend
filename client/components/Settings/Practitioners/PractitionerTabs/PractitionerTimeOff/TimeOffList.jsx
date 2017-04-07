@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import TimeOffListItem from './TimeOffListItem';
-import { List } from '../../../../library';
+import { List, IconButton } from '../../../../library';
 
 class TimeOffList extends Component {
   constructor(props) {
@@ -13,18 +13,26 @@ class TimeOffList extends Component {
       timeOffs,
       practitioner,
       onSelectTimeOff,
+      deleteTimeOff,
     } = this.props;
 
     return (
       <List>
         {timeOffs.toArray().map((timeOff) => {
           return (
-            <TimeOffListItem
-              key={timeOff.get('id')}
-              timeOff={timeOff}
-              practitioner={practitioner}
-              onClick={() => onSelectTimeOff(timeOff)}
-            />
+            <div style={{display: 'flex'}}>
+              <TimeOffListItem
+                key={timeOff.get('id')}
+                timeOff={timeOff}
+                practitioner={practitioner}
+                onClick={() => onSelectTimeOff(timeOff)}
+              />
+              <IconButton
+                key={`${timeOff.get('id')}_delete`}
+                icon="trash"
+                onClick={()=> deleteTimeOff(timeOff)}
+              />
+            </div>
           );
         })}
       </List>
