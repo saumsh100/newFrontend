@@ -86,6 +86,7 @@
       font-weight: $large-weight;
       font-size: $small-size;
       margin-bottom: 5px;
+      margin: 10px 0 10px 0;
     }
   }
 
@@ -93,6 +94,7 @@
     border-top: 2px solid $primary-grey;
     padding: 10px 0 0 10px;
     margin-bottom: 10px;
+    margin-top: 20px;
   }
 
   &__attachments {
