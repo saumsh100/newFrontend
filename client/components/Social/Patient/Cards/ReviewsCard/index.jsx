@@ -27,8 +27,9 @@ class ReviewsCard extends Component {
           className={styles.cardHeader}
           title={'REVIEWS'}
         >
-          <div onClick={this.setActive}>
-            Compose
+          <div className={styles.cardHeader__menu} onClick={this.setActive}>
+            <span>Compose</span>
+            <span>Settings</span>
           </div>
           <Modal
             active={this.state.active}
