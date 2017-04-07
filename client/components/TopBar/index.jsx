@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   Icon,
   IconButton,
+  SyncButton,
   Link,
   MenuItem,
   MenuSeparator,
@@ -100,6 +101,18 @@ class TopBar extends Component {
             </li>
             <li>
               <IconButton icon="comments" onClick={() => alert('Implement Messages')} />
+            </li>
+            <li>
+              <SyncButton
+                icon="refresh"
+                onClick={(e) => {
+                  e.preventDefault();
+                  alert('Would you like to sync with the PMS?');
+                  window.socket.emit('onDemandSync');
+                }}
+              >
+                FORCE SYNC
+              </SyncButton>
             </li>
             <li>
               <DropdownMenu labelComponent={UserMenu}>
