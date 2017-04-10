@@ -90,7 +90,7 @@ class PractitionerTabs extends Component {
           <Tab label="Time Off">
             <PractitionerTimeOff
               key={practitioner.get('id')}
-              practitioner={practitioner}
+              practitioner={practitioner}x
               timeOffs={timeOffs}
             />
           </Tab>

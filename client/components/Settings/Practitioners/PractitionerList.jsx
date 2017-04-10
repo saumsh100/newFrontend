@@ -1,9 +1,10 @@
+
 import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
-import { IconButton, CardHeader, Row, Col } from '../../library';
+import { IconButton, CardHeader, Col } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
@@ -25,6 +26,11 @@ class PractitionerList extends Component {
     this.props.setPractitionerId({ id: null })
   }
 
+  setActive() {
+    const active = (this.state.active !== true);
+    this.setState({ active });
+  }
+
   createPractitioner(values) {
     values.firstName = values.firstName.trim();
     values.lastName = values.lastName.trim();
@@ -35,14 +41,9 @@ class PractitionerList extends Component {
       .then((entities) => {
         const id = Object.keys(entities[key])[0];
         this.props.setPractitionerId({ id });
-    });
+      });
 
     this.setState({ active: false });
-  }
-
-  setActive() {
-    const active = (this.state.active !== true);
-    this.setState({ active });
   }
 
   render() {
@@ -68,7 +69,7 @@ class PractitionerList extends Component {
     }
 
     return (
-      <Row className={styles.practMainContainer} >
+      <div className={styles.practMainContainer} >
         <Col xs={2} className={styles.practListContainer}>
           <div className={styles.modalContainer}>
             <CardHeader count={practitioners.size} title="Practitioners" />
@@ -108,7 +109,7 @@ class PractitionerList extends Component {
             timeOffs={filteredTimeOffs}
           />
         </Col>
-      </Row>
+      </div>
     );
   }
 }

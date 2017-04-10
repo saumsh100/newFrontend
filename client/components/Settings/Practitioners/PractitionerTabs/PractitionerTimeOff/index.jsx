@@ -47,7 +47,6 @@ class PractitionerTimeOff extends Component {
       startTime,
       endTime,
       allDay,
-      note,
     } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate

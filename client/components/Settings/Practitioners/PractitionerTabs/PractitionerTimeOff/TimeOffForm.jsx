@@ -1,8 +1,10 @@
 
 import React, { PropTypes } from 'react';
+import { withState } from 'recompose'
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { Form, Field, Icon } from '../../../../library';
+import styles from './styles.scss';
 
 const generateTimeOptions = () => {
   const timeOptions = [];
@@ -33,8 +35,9 @@ const setTime = (time) => {
   return mergeTime.toISOString();
 };
 
+
 function TimeOffForm(props) {
-  const { timeOff, formName, handleSubmit, values } = props;
+  const { timeOff, formName, handleSubmit, values, showOption, setOption } = props;
 
   const {
     startDate,
@@ -55,6 +58,11 @@ function TimeOffForm(props) {
   // TODO: style these components with hidden class if values.allDay
   const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" disabled={values.allDay} />);
   const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" disabled={values.allDay} />);
+
+  let showNoteComponent = null;
+  if (showOption) {
+    showNoteComponent = (<Field name="note" label="Note" />);
+  }
 
   return (
     <Form
@@ -78,11 +86,13 @@ function TimeOffForm(props) {
         component="Toggle"
         name="allDay"
       />
-      More Details:
-      <Field
-        name="note"
-        label="Note"
+      More Options
+      <Icon
+        icon="plus"
+        onClick={() => setOption(!showOption)}
+        className={styles.moreOptions}
       />
+      {showNoteComponent}
     </Form>
   );
 }
@@ -106,4 +116,6 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(mapStateToProps,null)(TimeOffForm);
+const enhance = withState('showOption', 'setOption', false)
+
+export default enhance(connect(mapStateToProps,null)(TimeOffForm));
