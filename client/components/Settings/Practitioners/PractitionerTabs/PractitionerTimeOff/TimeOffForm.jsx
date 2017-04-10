@@ -26,7 +26,7 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-const setTime = (time, allDay) => {
+const setTime = (time) => {
   const tempTime = new Date(time);
   const mergeTime = new Date(1970, 1, 0);
   mergeTime.setHours(tempTime.getHours());
@@ -34,7 +34,7 @@ const setTime = (time, allDay) => {
 };
 
 function TimeOffForm(props) {
-  const { timeOff, formName, handleSubmit, values, isAdding } = props;
+  const { timeOff, formName, handleSubmit, values } = props;
 
   const {
     startDate,
@@ -46,20 +46,19 @@ function TimeOffForm(props) {
     startDate: moment(startDate).format('L'),
     endDate: moment(endDate).format('L'),
     allDay,
-    startTime: setTime(startDate, allDay),
-    endTime:  setTime(endDate, allDay),
+    startTime: setTime(startDate),
+    endTime: setTime(endDate),
   };
 
   // TODO: style these components with hidden class if values.allDay
-  const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" disabled={values.allDay}/>);
-  const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" disabled={values.allDay}/>);
+  const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" disabled={values.allDay} />);
+  const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" disabled={values.allDay} />);
 
   return (
     <Form
       form={formName}
       onSubmit={handleSubmit}
       initialValues={initialValues}
-      destroyOnUnmount
     >
       <Field
         component="Calendar"

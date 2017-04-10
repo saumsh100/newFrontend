@@ -51,7 +51,7 @@ class PractitionerTimeOff extends Component {
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
     const mergedStartDate = mergeTime(new Date(startDate), new Date(startTime), allDay);
-    const mergedEndDate = mergeTime(new Date(endDate), new Date(endTime), allDay)
+    const mergedEndDate = mergeTime(new Date(endDate), new Date(endTime), allDay);
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
