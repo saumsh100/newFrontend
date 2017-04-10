@@ -24,6 +24,7 @@ class PractitionerTimeOff extends Component {
     this.state = {
       isAdding: false,
       selectedTimeOff: null,
+      values: {},
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.deleteTimeOff = this.deleteTimeOff.bind(this);

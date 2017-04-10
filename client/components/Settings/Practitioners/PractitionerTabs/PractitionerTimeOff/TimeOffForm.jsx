@@ -1,9 +1,10 @@
 
 import React, { PropTypes } from 'react';
-import { withState } from 'recompose'
+import { withState } from 'recompose';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { Form, Field, Icon } from '../../../../library';
+import TimeOffDisplay from './TimeOffDisplay';
 import styles from './styles.scss';
 
 const generateTimeOptions = () => {
@@ -58,11 +59,8 @@ function TimeOffForm(props) {
   // TODO: style these components with hidden class if values.allDay
   const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" disabled={values.allDay} />);
   const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" disabled={values.allDay} />);
+  const showNoteComponent = showOption ? <Field name="note" label="Note" /> : null;
 
-  let showNoteComponent = null;
-  if (showOption) {
-    showNoteComponent = (<Field name="note" label="Note" />);
-  }
 
   return (
     <Form
@@ -93,6 +91,7 @@ function TimeOffForm(props) {
         className={styles.moreOptions}
       />
       {showNoteComponent}
+      <TimeOffDisplay values={values} />
     </Form>
   );
 }
