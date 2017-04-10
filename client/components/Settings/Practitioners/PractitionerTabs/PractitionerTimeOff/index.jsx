@@ -47,6 +47,7 @@ class PractitionerTimeOff extends Component {
       startTime,
       endTime,
       allDay,
+      note,
     } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
@@ -58,6 +59,7 @@ class PractitionerTimeOff extends Component {
       startDate: mergedStartDate,
       endDate: mergedEndDate,
       allDay: values.allDay,
+      note: values.note,
     };
 
     if (this.state.isAdding) {
@@ -120,6 +122,7 @@ class PractitionerTimeOff extends Component {
       startDate: moment().format('L'),
       endDate: moment().format('L'),
       allDay: true,
+      note: '',
     });
 
     let formName = `practitioner${practitioner.get('id')}_timeOff`;

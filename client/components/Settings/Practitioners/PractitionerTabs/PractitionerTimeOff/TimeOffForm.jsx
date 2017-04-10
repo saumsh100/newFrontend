@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { Form, Field } from '../../../../library';
+import { Form, Field, Icon } from '../../../../library';
 
 const generateTimeOptions = () => {
   const timeOptions = [];
@@ -40,6 +40,7 @@ function TimeOffForm(props) {
     startDate,
     endDate,
     allDay,
+    note,
   } = timeOff.toJS();
 
   const initialValues = {
@@ -48,6 +49,7 @@ function TimeOffForm(props) {
     allDay,
     startTime: setTime(startDate),
     endTime: setTime(endDate),
+    note,
   };
 
   // TODO: style these components with hidden class if values.allDay
@@ -75,6 +77,11 @@ function TimeOffForm(props) {
       <Field
         component="Toggle"
         name="allDay"
+      />
+      More Details:
+      <Field
+        name="note"
+        label="Note"
       />
     </Form>
   );

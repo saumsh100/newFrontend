@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
 import moment from 'moment';
@@ -27,9 +28,7 @@ class Calendar extends Component {
     });
   }
 
-
-
-  handleInputClick(e) {
+  handleInputClick() {
     this.setState({
       isOpen: !this.state.isOpen,
     });
@@ -53,11 +52,6 @@ class Calendar extends Component {
   }
 
   render() {
-    const {
-      value,
-      onChange,
-    } = this.props;
-
     return (
       <Popover
         preferPlace="below"
@@ -81,7 +75,6 @@ class Calendar extends Component {
       </Popover>
     );
   }
-
 }
 
 export default Calendar;

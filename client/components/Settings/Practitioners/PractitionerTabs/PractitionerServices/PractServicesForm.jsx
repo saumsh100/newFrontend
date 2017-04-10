@@ -18,7 +18,6 @@ class PractServicesForm extends Component {
   constructor(props) {
     super(props);
     this.setAllServices = this.setAllServices.bind(this);
-    this.setCheck = this.setCheck.bind(this);
   }
 
   setAllServices(e) {
@@ -30,11 +29,6 @@ class PractServicesForm extends Component {
     });
 
     this.props.dispatch(batchActions(actions));
-  }
-
-  setCheck(e) {
-    e.stopPropagation;
-    this.props.allServices = checkValues(this.props.values);
   }
 
   render() {

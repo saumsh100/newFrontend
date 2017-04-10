@@ -7,6 +7,7 @@ const PractitionerTimeOff = createModel('PractitionerTimeOff', {
   startDate: type.date().required(),
   endDate: type.date().required(),
   allDay: type.boolean().default(true),
+  note: type.string(),
 });
 
 module.exports = PractitionerTimeOff;
