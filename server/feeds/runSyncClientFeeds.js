@@ -7,15 +7,16 @@ const normalize = require('../routes/api/normalize');
 function runSyncClientFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
 
-  // TODO: add feed closing for socket closing!
-
   // ASSUMPTION: Assuming these are the changes coming from the Dashboard
   Appointment
     .filter({ accountId: activeAccountId, isSyncedWithPMS: false })
     .changes({ squash: true })
     .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
+
 
         if (isDeleted(doc)) {
           socket.emit('remove:Appointment', normalize('appointment', doc));
@@ -34,6 +35,19 @@ function isDeleted(doc) {
 
 function isCreated(doc) {
   return doc.getOldValue() === null;
+}
+
+/**
+ * Convenience function.
+ * Will close the feed associated with a given socket.
+ * @param socket
+ * @param feed
+ */
+function setupFeedShutdown(socket, feed) {
+  socket.on('disconnect', () => {
+    console.log('EVENT | disconnect | closing feed.');
+    feed.close();
+  });
 }
 
 module.exports = runSyncClientFeeds;
