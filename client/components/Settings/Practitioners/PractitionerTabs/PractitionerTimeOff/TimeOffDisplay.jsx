@@ -15,12 +15,13 @@ export default function TimeOffDisplay({ values }) {
 
   const formattedSt = moment(startTime).format('LT');
   const formattedEt = moment(endTime).format('LT');
+
   const showDisplayComponent = allDay ? (<div>From : {startDate} To: {endDate}</div>) :
     (<div>From: {startDate} {formattedSt} To: {endDate} {formattedEt}</div>);
 
   return (
     <div className={styles.displayTimeOff}>
-    { showDisplayComponent }
+      {showDisplayComponent}
     </div>
   );
 }

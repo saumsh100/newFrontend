@@ -10,7 +10,8 @@ class TimeOffListItem extends Component {
     this.deleteTimeOff = this.deleteTimeOff.bind(this);
   }
 
-  deleteTimeOff() {
+  deleteTimeOff(e) {
+    e.stopPropagation();
     const { timeOff, deleteTimeOff, } = this.props;
 
     let deleteTf = confirm('Delete Time Off ?');
@@ -30,19 +31,17 @@ class TimeOffListItem extends Component {
     } = timeOff;
 
     return (
-      <div className={styles.timeOffList}>
-        <ListItem style={{width: '100%' }}onClick={onClick}>
-          From:
-          {moment(startDate).format('L')}
-          To:
-          {moment(endDate).format('L')}
-        </ListItem>
+      <ListItem className={styles.timeOffList} onClick={onClick}>
+        From:
+        {moment(startDate).format('L')}
+        To:
+        {moment(endDate).format('L')}
         <IconButton
           icon="trash"
           className={styles.timeOffList_delete}
           onClick={this.deleteTimeOff}
         />
-      </div>
+      </ListItem>
     );
   }
 }
