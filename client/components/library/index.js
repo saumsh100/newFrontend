@@ -25,14 +25,18 @@ import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
+import TrendLine from './TrendLine';
 import IconCard from './IconCard';
+import Search from './Search';
+import Star from './Star';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 import { BigCommentBubble } from './BigCommentBubble';
 import BackgroundIcon from './BackgroundIcon';
-
+import Tag from './Tag';
 import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
+import Filters from './Filters';
 
 export {
   AppBar,
@@ -49,6 +53,7 @@ export {
   ChartStats,
   DropdownSelect,
   DashboardStats,
+  Filters,
   Field,
   FieldArray,
   Form,
@@ -68,12 +73,16 @@ export {
   RouterList,
   RouterTabs,
   SaveButton,
+  Search,
+  Star,
   Stats,
   FlexGrid,
   Tabs,
   Tab,
+  Tag,
   Toggle,
   Tooltip,
+  TrendLine,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

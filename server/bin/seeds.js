@@ -46,6 +46,7 @@ const chairId = uuid();
 
 const serviceId = uuid();
 const serviceId2 = uuid();
+const serviceId3 = uuid();
 const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 
 const appointmentId1 = uuid();

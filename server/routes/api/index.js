@@ -13,6 +13,7 @@ const chatsRouter = require('./chats');
 const servicesRouter = require('./services');
 const availabilitiesRouter = require('./availabilities');
 const syncErrorRouter = require('./syncError');
+const timeOffsRouter = require('./practitionerTimeOffs');
 const updaterRouter = require('./updater');
 const weeklySchedulesRouter = require('./weeklySchedules');
 const authMiddleware = require('../../middleware/auth');
@@ -32,6 +33,7 @@ apiRouter.use('/textMessages', textMessagesRouter);
 apiRouter.use('/users', userRouter);
 apiRouter.use('/availabilities', availabilitiesRouter);
 apiRouter.use('/syncError', syncErrorRouter);
+apiRouter.use('/timeOffs', timeOffsRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/updater', updaterRouter);
 

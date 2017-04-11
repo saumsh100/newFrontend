@@ -44,7 +44,7 @@ export default function NavList({ location, isCollapsed }) {
     return (
       <Link to={path} disabled={disabled}>
         <NavItem className={classes}>
-          <Icon icon={icon} className={styles.icon} />
+          <Icon icon={icon} className={styles.icon} size={1.5} />
           {labelComponent}
         </NavItem>
       </Link>
@@ -101,8 +101,12 @@ export default function NavList({ location, isCollapsed }) {
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        <SingleNavItem path="/" icon="tachometer" label="Dashboard"  />
-        <SingleNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence" />
+        <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
+        <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
+          <SubNavItem path="/intelligence/overview" label="Overview" />
+          <SubNavItem path="/intelligence/business" label="Business" />
+          <SubNavItem path="/intelligence/social" label="Social" />
+        </MultiNavItem>
         <MultiNavItem path="/schedule" icon="calendar" label="Schedule">
           <SubNavItem path="/schedule/calendar" label="Calendar View" />
           <SubNavItem path="/schedule/appointments" label="Appointments List" disabled />
@@ -112,8 +116,14 @@ export default function NavList({ location, isCollapsed }) {
           <SubNavItem path="/patients/messages" label="Messages" />
           <SubNavItem path="/patients/phone" label="Phone Calls" disabled />
         </MultiNavItem>
-        <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />
-        <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />
+        <MultiNavItem path="/reputation" icon="star" label="Reputation">
+          <SubNavItem path="/reputation/listings" label="Listings" />
+          <SubNavItem path="/reputation/reviews" label="Reviews" />
+        </MultiNavItem>
+        <MultiNavItem path="/social" icon="thumbs-up" label="Social Media">
+          <SubNavItem path="/social/patient" label="Patient Posts" />
+          <SubNavItem path="/social/practice" label="Practice Posts" />
+        </MultiNavItem>
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">

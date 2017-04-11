@@ -10,7 +10,6 @@ export default function IconCard(props) {
     count,
     title,
     icon,
-    size,
   } = props;
 
   const classes = classNames(className, styles.iconCard);
@@ -23,9 +22,11 @@ export default function IconCard(props) {
           <div className={styles.iconCard__count}>{count}</div>
           <div className={styles.iconCard__title}>{title}</div>
         </div>
-        <Icon className={styles.iconCard__icon}
-              icon={icon}
-              size={size} />
+        <Icon
+          className={styles.iconCard__icon}
+          icon={icon}
+          size={6}
+        />
       </Card>
     </div>
   );

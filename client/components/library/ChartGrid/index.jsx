@@ -13,14 +13,14 @@ const ChartStats = function (props) {
             <div className={styles.sideByside__vote_icons_block} >
               <i className="fa fa-thumbs-up">
                 <span className={styles.sideByside__vote_icons_text} >
-                  {positive}
+                  {positive}%
                 </span>
               </i>
             </div>
             <div className={styles.sideByside__vote_icons_block}>
               <i className="fa fa-thumbs-down">
                 <span className={styles.sideByside__vote_icons_text}>
-                  {negative}
+                  {negative}%
                 </span>
               </i>
             </div>

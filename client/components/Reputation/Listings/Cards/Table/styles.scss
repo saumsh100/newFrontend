@@ -1,0 +1,188 @@
+@import "../../../../../ui";
+
+.mostLoyal {
+  overflow: inherit;
+  &__wrapper {
+    display: block;
+    width: 100%;
+    max-height: 700px;
+    overflow: auto;
+  }
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    padding: 0 10px 0 15px;
+    text-transform: uppercase;
+    border-bottom: 2px solid $primary-lightgrey;
+    overflow: inherit;
+    &_item {
+      width: 100%;
+    }
+    &_title {
+      display: flex;
+      align-items: center;
+      width: 205px;
+      height: 100%;
+      font-size: $title-size;
+      color: $primary-dark;
+      font-weight: 600;
+      border-right: 2px solid $primary-lightgrey;
+    }
+    &_link {
+      text-transform: none;
+      cursor: pointer ;
+    }
+    &_cell {
+      width: 120px;
+      height: 100%;
+      border-right: 2px solid $primary-lightgrey;
+    }
+  }
+  &__subheader {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    margin: 0 10px 0 15px;
+    border-right: 2px solid $primary-lightgrey;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: $primary-dark;
+    @media screen and (max-width: 950px) {
+      border-right: none;
+    }
+  }
+}
+.data {
+  display: block;
+  padding: 0;
+  color: $primary-dark;
+  font-weight: $large-weight;
+  border-right: 2px solid $primary-lightgrey;
+  margin-right: 10px;
+  min-width: 800px;
+  @media screen and (max-width: 950px) {
+    border-right: none;
+  }
+  &:not(:first-child) {
+    border-top: 2px solid $primary-grey;
+  }
+  &__item {
+    min-width: 250px;
+    padding: 0 40px 0 15px;
+    display: table;
+    width: 100%;
+    position: relative;
+    height: 100px;
+    list-style: none;
+    margin: 0;
+    border-bottom: 2px solid $primary-lightgrey;
+
+    &_phone {
+      color: #b5b5b5;
+    }
+
+    &_email {
+      color: #b5b5b5;
+    }
+
+    @media screen and (max-width: 800px) {
+      height: 85px;
+    }
+    &_wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+    &_left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 100%;
+      width: 205px;
+      border-right: 2px solid $primary-lightgrey;
+    }
+    &_center {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      border-right: 2px solid $primary-lightgrey;
+      width: 120px;
+    }
+
+    &_personal {
+      width: 150px;
+    }
+
+    &_right {
+      display: flex;
+      align-items: center;
+      text-align: right;
+      height: 100%;
+      width: 100%;
+      justify-content: flex-start;
+    }
+    &_status {
+      text-align: center;
+      padding: 0 50px;
+    }
+    .status {
+      &__icon {
+        font-size: $extra-medium-size;
+        &_check {
+          color: $primary-green;
+        }
+        &_times {
+          color: $primary-color;
+        }
+      }
+    }
+
+    &_table {
+      text-align: center;
+      padding: 0 25px;
+      min-width: 200px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .table {
+      &__text {
+        color: $primary-dark;
+      }
+      &__data {
+        font-size: $small-size;
+      }
+      &__button {
+        color: $primary-blue;
+        font-size: $small-size;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        i {
+          margin-right: 4px;
+        }
+      }
+    }
+    &_img {
+      width: 44px;
+      height: 44px;
+      margin-right: 10px;
+    }
+    &_icon {
+      cursor: pointer;
+      display: flex;
+      position: relative;
+      align-items: center;
+      right: -20px;
+      &:hover {
+        color: #ff715a;
+      }
+    }
+  }
+}

@@ -1,0 +1,116 @@
+@import "../../../ui";
+
+.filters {
+  &__checkFilter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 50px;
+    color: $primary-darkgrey;
+    font-size: $medium-size;
+    &__chbox {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      div {
+        display: inline-block;
+      }
+    }
+  }
+
+
+  &__header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 10px;
+    &__left {
+      margin-right: 20px;
+      font-size: $medium-size;
+      font-weight: $medium-weight;
+      span {
+        margin: 0 10px;
+      }
+    }
+    &__right {
+      margin-right: 10px;
+      font-size: $extra-small-size;
+      color: $primary-darkgrey;
+
+      span {
+        margin: 0 5px;
+      }
+    }
+  }
+  &__search {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    margin: 10px 0;
+    color: $primary-darkgrey;
+    input {
+      width: 80%;
+      margin-left: 5px;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid $primary-darkgrey;
+      background-color: inherit;
+    }
+  }
+
+  &__title {
+    background-color: $primary-grey;
+    color: $primary-dark;
+    padding: 10px 20px;
+    font-weight: $large-weight;
+    font-size: $medium-size;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+
+    &__icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-radius: 10px;
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      align-items: center;
+      border-radius: 50%;
+      color: $primary-white;
+    }
+  }
+
+  &__selectFilter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: $medium-size;
+    margin: 5px 0 5px -8px;
+    color: $primary-darkgrey;
+		select {
+			margin-left: -4px;
+      color: $primary-darkgrey;
+      font-family: $dashboard-font;
+      font-size: $medium-size;
+			border: 0;
+	  	background: none;
+	    width: 100%;
+	    margin: 0 auto;
+	    padding-left: 0;
+
+		}
+		select:focus {
+			outline: none;
+			border: 0;
+		}
+	}
+
+}

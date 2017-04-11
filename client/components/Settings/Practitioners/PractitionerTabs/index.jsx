@@ -1,12 +1,13 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Card, Tab, Button, Header, Grid, Row, Col } from '../../../library';
+import { Tabs, Tab, IconButton, Header } from '../../../library';
 import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
+import PractitionerServices from './PractitionerServices';
+import PractitionerTimeOff from './PractitionerTimeOff';
 import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
-
 
 class PractitionerTabs extends Component {
   constructor(props) {
@@ -14,9 +15,14 @@ class PractitionerTabs extends Component {
     this.state = {
       index: 0,
     };
+
     this.handleTabChange = this.handleTabChange.bind(this);
     this.updatePractitioner = this.updatePractitioner.bind(this);
     this.deletePractitioner = this.deletePractitioner.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ index: 0 });
   }
 
   updatePractitioner(modifiedPractitioner) {
@@ -39,20 +45,21 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule } = this.props;
+    const { practitioner, weeklySchedule, } = this.props;
 
-    if (!practitioner && !weeklySchedule) {
+    if (!practitioner && !weeklySchedule ) {
       return null;
     }
+
+    let serviceIds = null;
+    serviceIds = practitioner.get('services');
 
     return (
       <div>
         <div className={styles.pracHeaderContainer}>
           <Header title={practitioner.getFullName()} />
           <div className={styles.trashButton}>
-            <Button icon="trash" raised onClick={this.deletePractitioner}>
-              Delete
-            </Button>
+            <IconButton icon="trash" onClick={this.deletePractitioner} />
           </div>
         </div>
         <Tabs index={this.state.index} onChange={this.handleTabChange} >
@@ -69,6 +76,20 @@ class PractitionerTabs extends Component {
               weeklySchedule={weeklySchedule}
               practitioner={practitioner}
               updateEntityRequest={this.props.updateEntityRequest}
+            />
+          </Tab>
+          <Tab label="Services" >
+            <PractitionerServices
+              key={practitioner.get('id')}
+              serviceIds={serviceIds}
+              practitioner={practitioner}
+              updatePractitioner={this.updatePractitioner}
+            />
+          </Tab>
+          <Tab label="Time Off">
+            <PractitionerTimeOff
+              key={practitioner.get('id')}
+              practitioner={practitioner}
             />
           </Tab>
         </Tabs>

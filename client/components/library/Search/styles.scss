@@ -2,21 +2,27 @@
 
 .search {
   display: flex;
-  position: absolute;
   align-items: center;
   right: -30px;
   color: #959596;
+  @media(max-width: 496px) {
+    position: relative;
+  }
+
   &__searchInput {
     border: 0;
     padding: 5px;
     background: inherit;
-    margin: 0 15px 0 15px;
     border-bottom: 1px solid #959596;
+    width: 100%;
     &:focus {
       background: inherit;
       border-bottom: 1px solid #959596;
       outline: none;
     }
+  }
+  i {
+    padding: 5px;
   }
   &__text {
     margin: 0 15px 0 15px;

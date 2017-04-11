@@ -6,9 +6,9 @@ import RequestsContainer from "../../containers/RequestContainer";
 import fetchReputationData from "../../thunks/fetchReputationData";
 import fetchReviewsData from "../../thunks/fetchReviewsData";
 import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble  } from "../library";
-import RemindersList from "./RemindersList";
-import Table from './Table';
-import TopServices from './TopServices';
+import RemindersList from './Cards/RemindersList';
+import Table from './Cards/Table';
+import Referrals from './Cards/Referrals';
 import colorMap from "../library/util/colorMap";
 import styles from "./styles.scss";
 
@@ -196,6 +196,40 @@ class Dashboard extends React.Component {
       {count: 16, title: "Unresponded Reviews", icon: "star", size: 6, color: 'primaryYellow' },
     ];
 
+    const hardcodedReferralData = [{
+      img: "images/patient_1.png",
+      name: "Bobby Okelley",
+      age: "53",
+      phone: "123 456 7890",
+      email: "Monroe_Jacobs@gmail.com",
+      from: "Seminder Sent",
+      date: "22/11",
+    },{
+      img: "images/patient_2.png",
+      name: "Bobby Okelley",
+      age: "53",
+      phone: "123 456 7890",
+      email: "Monroe_Jacobs@gmail.com",
+      from: "Seminder Sent",
+      date: "22/11",
+    },{
+      img: "images/patient_3.png",
+      name: "Bobby Okelley",
+      age: "53",
+      phone: "123 456 7890",
+      email: "Monroe_Jacobs@gmail.com",
+      from: "Seminder Sent",
+      date: "22/11",
+    },{
+      img: "images/patient_4.png",
+      name: "Bobby Okelley",
+      age: "53",
+      phone: "123 456 7890",
+      email: "Monroe_Jacobs@gmail.com",
+      from: "Seminder Sent",
+      date: "22/11",
+    },];
+
 
     return (
       <Grid className={styles.dashboard}>
@@ -218,7 +252,7 @@ class Dashboard extends React.Component {
                    cardTitle="Phone / SMS / Email"/>
           </Col>
           <Col className={styles.padding}
-               xs={12} sm={5} md={4}>
+               xs={12}  md={4}>
             <RequestsContainer className={styles.dashboard__body_request}
                                borderColor={colorMap.yellow}/>
           </Col>
@@ -227,9 +261,9 @@ class Dashboard extends React.Component {
             <Card className={styles.dashboard__body_comments}
                   borderColor={colorMap.green}>
               <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
-              <div styles={{ flexDirection: 'column', display: 'flex', height: '400', justifyContent: 'center' }}>
-                <div styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                  <Col xs={12} md={12}>
+              <div className={styles.underspondedReviews}>
+                <div className={styles.underspondedReviews__mainContainer}>
+                  <Col xs={12} md={12} className={styles.underspondedReviews__comment} >
                     {DataBigComment.map(obj => {
                       return (
                         <BigCommentBubble
@@ -252,29 +286,26 @@ class Dashboard extends React.Component {
           </Col>
           <Col className={styles.padding}
                xs={12} md={4}>
-            <TopServices className={styles.dashboard__body_table}
+            <Referrals className={styles.dashboard__body_table}
                          borderColor={colorMap.blue}
-                         cardCount="13"
+                         data={hardcodedReferralData}
                          cardTitle="Unconfirmed Referrals"/>
           </Col>
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RemindersList data={DataRemindersList}
                                borderColor={colorMap.blue}
-                               cardCount="8"
                                cardTitle="Reminders" />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RemindersList data={DataRemindersList}
                                borderColor={colorMap.blue}
-                               cardCount="2"
                                cardTitle="Recalls" />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
                 <RemindersList data={DataRemindersList2}
                                borderColor={colorMap.blue}
-                               cardCount="5"
                                cardTitle="Digital Waitlist" />
               </Col>
             </Row>

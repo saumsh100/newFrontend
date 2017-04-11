@@ -1,11 +1,9 @@
-@import "../../ui.scss";
-* {
-  box-sizing: border-box;
-}
+@import "../../styles/dashboard.scss";
+
 .dashboard {
   width: 100%;
   &__header {
-    padding: 5px 20px 0;
+    padding: 15px 20px 0;
     @media screen and (max-width: 450px) {
       padding: 5px 10px 0;
     }
@@ -15,8 +13,8 @@
       height: 35px;
       background: $primary-white;
       width: 100%;
-      padding-left: 30px;
-      margin-bottom: 20px;
+      padding-left: 10px;
+      margin-bottom: 15px;
       font-size: $medium-size;
       b {
         padding-left: 5px;
@@ -40,8 +38,8 @@
       height: 640px;
     }
     &_request {
-      overflow: auto;
-      min-height: 635px;
+      height: 640px;
+
     }
     @media screen and (max-width: 450px) {
       padding: 0 5px 45px 5px;
@@ -49,9 +47,8 @@
   }
   &__patientList {
     &_item {
-      min-width: 500px;
       padding: 0 5px;
-      @media screen and (max-width: 400px) {
+      @media screen and (max-width: 650px) {
         min-width: 300px;
       }
       @media screen and (max-width: 300px) {
@@ -63,16 +60,16 @@
     padding: 5px;
   }
 }
-.primaryColor, .fa-phone {
+.primaryColor {
   background: $primary-color;
 }
-.primaryBlue, .fa-phone {
+.primaryBlue {
   background: $primary-blue;
 }
-.primaryGreen, .fa-phone {
+.primaryGreen {
   background: $primary-green;
 }
-.primaryYellow, .fa-phone {
+.primaryYellow {
   background: $primary-yellow;
 }
 
@@ -97,4 +94,26 @@
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
   }
+}
+
+
+.underspondedReviews {
+  flexDirection: column;
+  display: flex;
+  justifyContent: center;
+  overflow: hidden;
+  &__mainContainer {
+    flexDirection: row;
+    justifyContent: space-around;
+  }
+
+  &__comment {
+    max-height: 500px;
+    overflow: auto;
+  }
+
+}
+
+.cardHeader {
+  padding-left: 15px;
 }

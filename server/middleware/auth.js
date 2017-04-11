@@ -44,6 +44,7 @@ const OWNER = {
     create: true,
   },
 
+  timeOffs: CRUD,
   weeklySchedules: CRUD,
 };
 

@@ -27,11 +27,13 @@ class Requests extends Component {
           <div className={styles.requestHeader}>
             <CardHeader count={sortedRequests.length} title={'New Appointment Requests'} />
           </div>
-          <RequestList
-            sortedRequests={sortedRequests}
-            patients={patients}
-            services={services}
-          />
+          <div className={styles.requestBody}>
+            <RequestList
+              sortedRequests={sortedRequests}
+              patients={patients}
+              services={services}
+            />
+          </div>
         </div>
       </Card>
     );

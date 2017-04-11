@@ -15,7 +15,7 @@
     padding: 10px;
   }
   &__commentBody {
-    width: 75%;
+    width: 95%;
     margin-left: 20px;
   }
   &__mainContent {
@@ -31,6 +31,7 @@
     &__header {
       color: $primary-dark;
       font-size: 14px;
+      font-weight: $large-weight;
       &__link {
         color: #8cbcd6;
         cursor: pointer;

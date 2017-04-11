@@ -68,9 +68,11 @@ class TopBar extends Component {
 
     if (isCollapsed) {
       logoImage = (
-        <div>
-          C
-        </div>
+        <img
+          className={styles.logoImageImageCollapsed}
+          src="/images/carecru_logo_collapsed.png"
+          alt="CareCru logo"
+        />
       );
     }
 

@@ -1,8 +1,8 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames/bind';
-import styles from './styles.scss';
 import omit from 'lodash/omit';
+import styles from './styles.scss';
 import Icon from '../Icon';
 
 const cx = classNames.bind(styles);
@@ -15,26 +15,29 @@ export default function Button(props) {
       flat: props.flat,
       notFlat: !props.flat,
       disabled: props.disabled,
-      raised: props.raised,
-      icon: props.icon
+      icon: props.icon,
     })
   );
-  let showComponent = null;
+
+  let iconComponent = null;
   if (props.icon) {
-    showComponent = (<Icon icon={props.icon} className={styles.icon}/>);
+    iconComponent = <Icon icon={props.icon} className={styles.icon}/>;
   }
 
   const newProps = omit(props, ['flat']);
-  return (<button {...newProps} className={classes}>
-            <div className={styles.displayFlex}>
-              {showComponent}
-              {props.children}
-            </div>
-          </button>);
+  return (
+    <button {...newProps} className={classes}>
+      <div className={styles.displayFlex}>
+        {iconComponent}
+        {props.children}
+      </div>
+    </button>
+  );
 }
 
 Button.propTypes = {
   flat: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  icon: PropTypes.bool,
 };

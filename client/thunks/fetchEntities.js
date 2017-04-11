@@ -124,4 +124,3 @@ export function readMessagesInCurrentDialog(dialogId, readMessageId = null) {
 
   }
 }
-

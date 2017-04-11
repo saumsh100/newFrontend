@@ -1,5 +1,6 @@
 
-@import "../../../ui.scss";
+@import '../../../ui.scss';
+@import '../../../fonts.scss';
 
 .iconCard {
     display: flex;
@@ -16,18 +17,25 @@
         flex-direction: column;
     }
     &__count {
-        font-size: 40px;
-        font-weight: 900;
+      @extend .font-jumbo;
     }
     &__title {
-        font-size: 14px;
-        font-weight: 600;
+        @extend .font-header-title-white;
+        @media screen and (max-width: 1660px) {
+            max-width: 120px;
+            text-align: center;
+        }
+        @media screen and (max-width: 1010px){
+          max-width: 160px;
+          text-align: center;
+        }
     }
     &__icon {
         position: absolute;
         bottom: -25%;
         transform: translateY(-25%);
-        right: -5%;
+        right: -1%;
         color: rgba($primary-lightgrey, .5);
     }
+
 }
