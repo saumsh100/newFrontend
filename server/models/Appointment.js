@@ -16,6 +16,7 @@ const Appointment = createModel('Appointment', {
   practitionerId: type.string().uuid(4).required(),
   chairId: type.string().uuid(4),
 
+  isDeleted: type.boolean().default(false),
   pmsId: type.string(),
 
   // Lifecycle Attributes

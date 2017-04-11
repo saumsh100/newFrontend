@@ -3,6 +3,7 @@
 // TODO: If so, we should consider abstracting that so we dont slow up other services
 const Appointment = require('../models/Appointment');
 const Request = require('../models/Request');
+const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
@@ -16,15 +17,13 @@ function runDashboardFeeds(socket) {
     .then((feed) => {
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-        if (doc.getOldValue() === null) {
-          // console.log('[ INFO ] CREATE | from=dash; socketId=', socket.id);
-          socket.emit('add:Appointment', doc);
-          // socket.emit('add:Appointment', normalize('appointment', doc));
+
+        if (isDeleted(doc)) {
+          socket.emit('remove:Appointment', normalize('appointment', doc));
+        } else if (isCreated(doc)) {
+          socket.emit('add:Appointment', normalize('appointment', doc));
         } else {
-          // Updated
-          // console.log('[ INFO ] UPDATE | from=dash; socketId=', socket.id);
-          socket.emit('update:Appointment', doc);
-          // socket.emit('update:Appointment', normalize('appointment', doc));
+          socket.emit('update:Appointment', normalize('appointment', doc));
         }
       });
     });
@@ -46,6 +45,14 @@ function runDashboardFeeds(socket) {
         }
       });
     });
+}
+
+function isDeleted(doc) {
+  return doc.isSaved() === false;
+}
+
+function isCreated(doc) {
+  return doc.getOldValue() === null;
 }
 
 module.exports = runDashboardFeeds;
