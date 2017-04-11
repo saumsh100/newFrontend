@@ -4,7 +4,6 @@ import moment from 'moment';
 import styles from './styles.scss'
 
 export default function TimeOffDisplay({ values }) {
-
   const {
     startDate,
     endDate,

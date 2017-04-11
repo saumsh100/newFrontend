@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import { ListItem, IconButton } from '../../../../library';
+import { ListItem, Icon, IconButton } from '../../../../library';
 import styles from './styles.scss';
 
 class TimeOffListItem extends Component {
@@ -12,30 +12,26 @@ class TimeOffListItem extends Component {
 
   deleteTimeOff(e) {
     e.stopPropagation();
-    const { timeOff, deleteTimeOff, } = this.props;
-
-    let deleteTf = confirm('Delete Time Off ?');
-
-    if (deleteTf) {
-      deleteTimeOff(timeOff);
-    }
+    const { timeOff, deleteTimeOff } = this.props;
+    deleteTimeOff(timeOff);
   }
 
   render() {
-    const { timeOff, onClick, } = this.props;
+    const { timeOff, onClick } = this.props;
 
     const {
       startDate,
       endDate,
-
+      note,
     } = timeOff;
 
+    const showNote = note ? ` Note: ${note}` : null;
+
     return (
-      <ListItem className={styles.timeOffList} onClick={onClick}>
-        From:
-        {moment(startDate).format('L')}
-        To:
-        {moment(endDate).format('L')}
+      <ListItem onClick={onClick}>
+        <Icon icon="clock-o" className={styles.timeOffList_clockIcon} />
+        {moment(startDate).format('MMM Do YYYY')} To: {moment(endDate).format('MMM Do YYYY')}
+        {showNote}
         <IconButton
           icon="trash"
           className={styles.timeOffList_delete}

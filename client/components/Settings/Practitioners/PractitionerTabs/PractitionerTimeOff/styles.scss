@@ -1,11 +1,16 @@
 @import '../../../../../ui.scss';
 
 .timeOffList {
-  display: flex;
   background-color: $primary-white;
 
+  &_clockIcon{
+    padding: 5px;
+  }
   &_delete {
     margin-left: auto;
+  }
+  &_addTimeOffText {
+    padding: 5px;
   }
 }
 
@@ -16,3 +21,5 @@
 .displayTimeOff {
   background-color: yellow;
 }
+
+

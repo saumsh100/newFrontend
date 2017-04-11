@@ -9,10 +9,14 @@ export default function RFCalendar(props) {
     meta,
   } = props;
 
+  const { touched, dirty } = meta;
+  const finalError = error || ((touched || dirty) ? meta.error : null);
+
   return (
     <Calendar
       {...props}
       {...input}
+      error={finalError}
     />
   );
 }

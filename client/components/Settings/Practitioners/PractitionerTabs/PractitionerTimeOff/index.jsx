@@ -9,7 +9,7 @@ import {
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
-import { IconButton, Modal } from '../../../../library';
+import { IconButton, Modal, Button } from '../../../../library';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
@@ -117,7 +117,6 @@ class PractitionerTimeOff extends Component {
       return null;
     }
 
-
     const formTimeOff = selectedTimeOff || Map({
       startDate: moment().format('L'),
       endDate: moment().format('L'),
@@ -126,18 +125,33 @@ class PractitionerTimeOff extends Component {
     });
 
     let formName = `practitioner${practitioner.get('id')}_timeOff`;
-    if(selectedTimeOff) {
+    if (selectedTimeOff) {
       formName = `timeOff${selectedTimeOff.get('id')}_timeOff`;
     }
 
+    let showAddOrListComponent = (
+      <Button onClick={this.addTimeOff}>Add Time Off</Button>
+    );
+
+    if (timeOffs.size > 0) {
+      showAddOrListComponent = (
+        <TimeOffList
+          timeOffs={timeOffs}
+          practitioner={practitioner}
+          onSelectTimeOff={this.selectTimeOff}
+          deleteTimeOff={this.deleteTimeOff}
+        >
+          <IconButton
+            icon="plus"
+            onClick={this.addTimeOff}
+          />
+        </TimeOffList>
+      );
+    }
 
     return (
       <div>
-        Add Time Off
-        <IconButton
-          icon="plus"
-          onClick={this.addTimeOff}
-        />
+        {showAddOrListComponent}
         <Modal
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
@@ -150,12 +164,6 @@ class PractitionerTimeOff extends Component {
             handleSubmit={this.handleSubmit}
           />
         </Modal>
-        <TimeOffList
-          timeOffs={timeOffs}
-          practitioner={practitioner}
-          onSelectTimeOff={this.selectTimeOff}
-          deleteTimeOff={this.deleteTimeOff}
-        />
       </div>
     );
   }

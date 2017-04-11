@@ -56,11 +56,20 @@ function TimeOffForm(props) {
     note,
   };
 
-  // TODO: style these components with hidden class if values.allDay
+  const validateStartDate = (value) => {
+    const sDate = new Date(value);
+    const eDate = new Date(values.endDate);
+    return (sDate.getDate() > eDate.getDate()) ? 'Start date has to be less than end date.' : undefined;
+  };
+  const validateEndDate = (value) => {
+    const eDate = new Date(value);
+    const sDate = new Date(values.startDate);
+    return (eDate.getDate() < sDate.getDate()) ? 'End date has to be greater than start date.' : undefined;
+  };
+
   const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" disabled={values.allDay} />);
   const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" disabled={values.allDay} />);
   const showNoteComponent = showOption ? <Field name="note" label="Note" /> : null;
-
 
   return (
     <Form
@@ -72,14 +81,17 @@ function TimeOffForm(props) {
         component="Calendar"
         name="startDate"
         label="Start Date"
+        validate={[validateStartDate]}
       />
       <Field
         component="Calendar"
         name="endDate"
         label="End Date"
+        validate={[validateEndDate]}
       />
       {startTimeComponent}
       {endTimeComponent}
+      All Day
       <Field
         component="Toggle"
         name="allDay"
