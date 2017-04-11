@@ -9,6 +9,7 @@ function setupDashboardNamespace(io) {
   return authenticate(dash, (socket) => {
     console.log('socket authenticated!');
     runDashboardFeeds(socket);
+
     // TODO: only keeping this so i dont lose Twilio setup
     /*socket.on('sendMessage', (data) => {
      const { patient, message } = data;

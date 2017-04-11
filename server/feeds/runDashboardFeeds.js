@@ -5,8 +5,6 @@ const Appointment = require('../models/Appointment');
 const Request = require('../models/Request');
 const normalize = require('../routes/api/normalize');
 
-let feedMap
-
 function runDashboardFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
 
