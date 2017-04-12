@@ -23,6 +23,8 @@ import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
 import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
+import TimeOff from '../entities/models/PractitionerTimeOff';
+import timeOffs from '../entities/collections/practitionerTimeOffs';
 import Requests from '../entities/models/Request';
 import requests from '../entities/collections/requests';
 import Dialogs from '../entities/models/Dialogs';
@@ -56,6 +58,7 @@ const initialState = Map({
   chairs: new chairs(),
   weeklySchedules: new weeklySchedules(),
   users: new users(),
+  timeOffs: new timeOffs(),
   // reviews: Reviews(), MODEL
   // listings: Listings(),
 });
@@ -68,6 +71,7 @@ const Models = {
   requests: Requests,
   services: Service,
   practitioners: Practitioners,
+  timeOffs: TimeOff,
   dialogs: Dialogs,
   patientList: PatientList,
   chairs: Chairs,

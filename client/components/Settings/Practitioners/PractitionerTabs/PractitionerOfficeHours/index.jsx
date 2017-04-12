@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import OfficeHoursForm from '../../Schedule/OfficeHours/OfficeHoursForm';
-import BreaksForm from '../../Schedule/OfficeHours/BreaksForm';
-import { Toggle, Header, Row, Col  } from '../../../library';
-import styles from '../styles.scss';
+import OfficeHoursForm from '../../../Schedule/OfficeHours/OfficeHoursForm';
+import BreaksForm from '../../../Schedule/OfficeHours/BreaksForm';
+import { Toggle, Header, Row, Col  } from '../../../../library';
+import styles from '../../styles.scss';
 
 class PractitionerOfficeHours extends Component{
 

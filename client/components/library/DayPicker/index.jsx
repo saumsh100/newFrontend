@@ -2,11 +2,11 @@
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
 import moment from 'moment';
-import DayPicker, { DateUtils } from 'react-day-picker';
+import Daypicker, { DateUtils } from 'react-day-picker';
 import DayPickerStyles from './styles.css';
 import Input from '../Input';
 
-class Calendar extends Component {
+class DayPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,7 +59,7 @@ class Calendar extends Component {
         onOuterAction={this.handleInputClick}
         isOpen={this.state.isOpen}
         body={[(
-          <DayPicker
+          <Daypicker
             ref={(el) => { this.state.dayPicker = el; }}
             onDayClick={this.handleDayClick}
             selectedDays={this.state.selectedDay}
@@ -77,4 +77,4 @@ class Calendar extends Component {
   }
 }
 
-export default Calendar;
+export default DayPicker;

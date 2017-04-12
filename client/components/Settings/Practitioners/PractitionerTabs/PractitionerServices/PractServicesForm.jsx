@@ -1,3 +1,4 @@
+
 import React, {Component, PropTypes} from 'react';
 import PractServicesList from './PractServicesList';
 import { Form, Field, Toggle} from '../../../../library';
@@ -7,8 +8,9 @@ import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 
 function checkValues(obj) {
-  const allTrue = Object.keys(obj).every((key) =>
-  { return obj[key] });
+  const allTrue = Object.keys(obj).every((key) => {
+    return obj[key];
+  });
   return allTrue;
 }
 
@@ -16,7 +18,6 @@ class PractServicesForm extends Component {
   constructor(props) {
     super(props);
     this.setAllServices = this.setAllServices.bind(this);
-    this.setCheck = this.setCheck.bind(this);
   }
 
   setAllServices(e) {
@@ -30,10 +31,6 @@ class PractServicesForm extends Component {
     this.props.dispatch(batchActions(actions));
   }
 
-  setCheck(e) {
-    e.stopPropagation;
-    this.props.allServices = checkValues(this.props.values);
-  }
   render() {
     const { services, practitioner, initialValues, formName, values } = this.props;
 
@@ -88,7 +85,7 @@ function mapStateToProps({ form }, { formName }) {
 
   return {
     allServices: checkValues(form[formName].values),
-    values: form[formName].values
+    values: form[formName].values,
   };
 }
 
