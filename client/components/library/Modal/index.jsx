@@ -82,11 +82,12 @@ class Modal extends Component {
         <Card className={styles.modalBody}>
           <div className={styles.modalBody__modalHeader}>
             <CardHeader title={title} />
-            <Icon
-              icon="times"
+            <div
               className={styles.modalBody__closeIcon}
               onClick={this.deactivate}
-            />
+            >
+              x
+            </div>
           </div>
           {children}
           {showFooterComponent}

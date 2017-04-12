@@ -9,7 +9,7 @@ import {
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
-import { IconButton, Modal, Button } from '../../../../library';
+import { IconButton, Modal, Button, RemoteSubmitButton } from '../../../../library';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
@@ -113,8 +113,7 @@ class PractitionerTimeOff extends Component {
       selectedTimeOff,
     } = this.state;
 
-    // TODO: what about if no practitioner? its same ajax request
-    if (!timeOffs) {
+    if (!timeOffs && !practitioner) {
       return null;
     }
 
@@ -151,7 +150,7 @@ class PractitionerTimeOff extends Component {
     }
 
     const actions = [
-      { label: 'Save', onClick: this.handleSubmit, form: formName, },
+      { label: 'Save', onClick: this.handleSubmit, form: formName, component: RemoteSubmitButton },
     ];
 
     return (
