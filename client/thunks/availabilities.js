@@ -92,8 +92,9 @@ export function setRegistrationStep(registrationStep, accountId) {
 					dispatch(setTemporaryReservationAction(reservation.data.result))
 				})
 		}
+
 		dispatch(setRegistrationStepAction(registrationStep));
-  }
+  };
 }
 
 export function getClinicInfo(accountId) {

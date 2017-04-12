@@ -1,16 +1,11 @@
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
-import includes from 'lodash/includes';
-import DayPicker, { DateUtils } from 'react-day-picker';
-import { Button, Form, Field, Checkbox } from '../library';
+import { DateUtils } from 'react-day-picker';
 import SignUp from './SignUp';
 import RenderFirstStep from './RenderFirstStep';
-import Preferences from './Preferences';
-import DayPickerStyles from '../library/DayPicker/styles.css';
-import styles from './styles.scss';
 
-class Availabilities extends React.Component {
+class Availabilities extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,6 +31,7 @@ class Availabilities extends React.Component {
     this.collapseMenu = this.collapseMenu.bind(this);
     this.closeIframe = this.closeIframe.bind(this);
   }
+
   componentWillReceiveProps() {
     document.body.style.setProperty('--bookingWidgetPrimaryColor', this.props.bookingWidgetPrimaryColor);
   }
@@ -172,6 +168,7 @@ class Availabilities extends React.Component {
       removeReservation,
       bookingWidgetPrimaryColor,
     } = this.props;
+
     const serviceId = this.props.serviceId || services[0] && services[0].id;
     const prId = practitioners[0] && practitioners.id;
     const defaultValues = { practitionerId, serviceId };
@@ -179,26 +176,32 @@ class Availabilities extends React.Component {
     const appointmentInfo = this.getAppointmentInfo(serviceId);
     switch (practitionersStartEndDate.get('registrationStep')) {
       case 1:
-        return (<RenderFirstStep
-          params={params}
-          props={this.props}
-          upperState={this.state}
-          collapseMenu={this.collapseMenu}
-          selectAvailability={this.selectAvailability}
-          handleSaveClick={this.handleSaveClick}
-          handleChange={this.handleChange}
-        />);
+        return (
+          <RenderFirstStep
+            params={params}
+            props={this.props}
+            upperState={this.state}
+            collapseMenu={this.collapseMenu}
+            selectAvailability={this.selectAvailability}
+            handleSaveClick={this.handleSaveClick}
+            handleChange={this.handleChange}
+            sixDaysForward={this.sixDaysForward}
+            sixDaysBack={this.sixDaysBack}
+          />
+        );
       case 2:
-        return (<SignUp
-          setRegistrationStep={setRegistrationStep}
-          createPatient={createPatient}
-          practitionersStartEndDate={practitionersStartEndDate}
-          logo={logo}
-          address={address}
-          appointmentInfo={appointmentInfo}
-          removeReservation={removeReservation}
-          bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
-        />);
+        return (
+          <SignUp
+            setRegistrationStep={setRegistrationStep}
+            createPatient={createPatient}
+            practitionersStartEndDate={practitionersStartEndDate}
+            logo={logo}
+            address={address}
+            appointmentInfo={appointmentInfo}
+            removeReservation={removeReservation}
+            bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
+          />
+        );
       case undefined:
         return (
           <div>Loading..</div>

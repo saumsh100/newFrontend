@@ -1,24 +1,31 @@
+
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import includes from 'lodash/includes';
 import { Button, Form, Field, Checkbox } from '../library';
-import Preferences from './Preferences';
+import WaitListPreferences from './WaitListPreferences';
+import AvailabilitiesPreferencesForm from './AvailabilitiesPreferencesForm';
+import AvailabilitiesDisplay from './AvailabilitiesDisplay';
 import styles from './styles.scss';
 
 export default class RenderFirstStep extends Component {
   render() {
     const { practitionerId, services, availabilities, practitioners, defaultValues } = this.props.params;
-    const { props } = this.props;
+    const { props, upperState } = this.props;
 
     const startsAt = props.practitionersStartEndDate.get('startsAt');
-    const preferences = this.props.upperState.checked
-      ?
-        (<Preferences
+
+    let waitListPreferences = null;
+    if (upperState.checked) {
+      waitListPreferences = (
+        <WaitListPreferences
           startsAt={startsAt}
           setRegistrationStep={props.setRegistrationStep}
           color={props.bookingWidgetPrimaryColor}
-        />)
-      : null;
+        />
+      );
+    }
+
     const { logo, address, clinicName } = props;
     return (
       <div className={styles.appointment}>
@@ -70,7 +77,12 @@ export default class RenderFirstStep extends Component {
             </div>
             <div onClick={() => this.props.collapseMenu(false)} className={styles.appointment__body}>
               <div className={styles.appointment__body_header}>
-                <div className={styles.appointment__select_title}>Practitioner</div>
+                <AvailabilitiesPreferencesForm
+                  services={services}
+                  practitioners={practitioners}
+                  onChange={values => alert(JSON.stringify(values))}
+                />
+                {/*<div className={styles.appointment__select_title}>Practitioner</div>
                 {defaultValues && defaultValues.practitionerId &&
                 <Form
                   className={styles.appointment__select_wrapper} form="availabilities"
@@ -101,7 +113,7 @@ export default class RenderFirstStep extends Component {
                       <option value={s.id} key={s.id}>{s.name}</option>
                     )}
                   </Field>
-                </Form>}
+                </Form>}*/}
                 <div className={styles.appointment__daypicker}>
                   <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
                   <div
@@ -123,43 +135,19 @@ export default class RenderFirstStep extends Component {
                   }
                 </div>
               </div>
-              <div className={styles.appointment__table}>
-                <button className={styles.appointment__table_btn} onClick={this.sixDaysBack}>
-                  <i className="fa fa-arrow-circle-o-left" />
-                </button>
-                <div className={styles.appointment__table_elements}>
-                  {availabilities.map(av => (
-                    <ul className={styles.appointment__list} key={av.date}>
-                      <div className={styles.appointment__list_header}>
-                        <div className={styles.list__header_day}>
-                          {moment(av.date).format('ddd')}
-                        </div>
-                        <div className={styles.list__header_number}>
-                          {moment(av.date).format('DD/MM/YYYY')}
-                        </div>
-                      </div>
-                      {av.availabilities.map(slot =>
-                        <li
-                          onClick={() => {
-                            this.props.selectAvailability(slot);
-                          }}
-                          className={`${styles.appointment__list_item} ${slot.isBusy ? styles.appointment__list_active : ''} ${slot.startsAt === startsAt ? styles.appointment__list_selected : ''}`}
-                          key={slot.startsAt}
-                        >
-                          {moment(slot.startsAt).format('HH:mm A')}
-                        </li>)
-                      }
-                    </ul>))}
-                </div>
-                <button className={styles.appointment__table_btn} onClick={this.sixDaysForward}>
-                  <i className="fa fa-arrow-circle-o-right" />
-                </button>
-              </div>
+              <AvailabilitiesDisplay
+                startsAt={startsAt}
+                onSelect={this.props.selectAvailability}
+                onSixDaysBack={this.props.sixDaysBack}
+                onSixDaysForward={this.props.sixDaysForward}
+                availabilities={availabilities}
+              />
               <div className={styles.appointment__footer}>
                 <div className={styles.appointment__footer_wrapper}>
                   <div className={styles.appointment__footer_title}>
                     BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
                   </div>
+                  {/* TODO: Remove Form, only need CheckBox component and ContinueButton */}
                   <form className={styles.appointment__footer_confirm}>
                     <div className={styles.appointment__footer_select}>
                       <Checkbox
@@ -170,14 +158,14 @@ export default class RenderFirstStep extends Component {
                       />
                     </div>
                     <button
-                      disabled={!startsAt}
+                      disabled={!startsAt }
                       onClick={this.props.handleSaveClick}
                       className={this.props.upperState.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn}
                       type="submit"
                     >Continue</button>
                   </form>
                 </div>
-                {preferences}
+                {waitListPreferences}
               </div>
             </div>
           </div>

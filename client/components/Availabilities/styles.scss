@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700");
 
 .appointment {
@@ -17,12 +18,14 @@
             overflow: scroll;
         }
     }
+
     > div {
         display: flex;
         flex-direction: row;
         flex: 1;
         justify-content: center;
     }
+
     &__sidebar {
         width: 25%;
         padding: 0 20px;
@@ -37,6 +40,7 @@
             transform: translateX(-200px);
         }
     }
+
     &__sidebarActive {
         display: flex;
         flex-direction: column;
@@ -49,6 +53,7 @@
         left: 0;
         transition: transform .5s;
     }
+
     .sidebar {
         &__header {
             height: 70px;
@@ -106,12 +111,14 @@
             }
         }
     }
+
     &__main {
         width: 75%;
         @media screen and (max-width: 800px) {
             width: 100%;
         }
     }
+
     &__header {
         background: #fff;
         border-radius: 5px;
@@ -151,15 +158,15 @@
             }
         }
     }
+
     &__body {
-        padding: 20px 50px;
+        padding: 20px 20px;
         @media screen and (max-width: 800px) {
             padding: 20px 30px;
         }
         border-radius: 5px;
         &_header {
             margin-bottom: 30px;
-            text-align: center;
             @media screen and (max-width: 800px) {
                 margin-bottom: 15px;
             }
@@ -178,6 +185,7 @@
             }
         }
     }
+
     &__daypicker {
         display: flex;
         margin-top: 30px;
@@ -262,6 +270,7 @@
             }
         }
     }
+
     &__table {
         position: relative;
         display: flex;
@@ -322,6 +331,7 @@
             }
         }
     }
+
     &__list {
         box-sizing: border-box;
         padding: 0;
@@ -369,6 +379,7 @@
             flex-grow: 1;
         }
     }
+
     &__footer {
         margin-top: 10px;
         font-size: 10px;
@@ -435,4 +446,16 @@
             }
         }
     }
+}
+
+.dsCol {
+  padding: 10px;
+}
+
+.label {
+  text-transform: uppercase;
+  font-size: 10px;
+  text-align: left;
+  font-family: Gotham-Medium;
+  font-weight: bolder;
 }

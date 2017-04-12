@@ -1,9 +1,10 @@
+
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import { Checkbox } from '../library';
+import { Checkbox } from '../../library';
 import 'react-day-picker/lib/style.css';
-import styles from './Preferences.scss';
+import styles from './styles.scss';
 
 class Preferences extends Component {
   constructor(props) {
@@ -15,17 +16,21 @@ class Preferences extends Component {
       practitionersStartEndDate: {},
       checked: false,
     };
+
     this.openModal = this.openModal.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
   }
+
   openModal() {
-    this.setState({modalIsOpen: !this.state.modalIsOpen});
+    this.setState({ modalIsOpen: !this.state.modalIsOpen });
   }
+
   handleSaveClick(e) {
     e.preventDefault();
     const { setRegistrationStep } = this.props;
     setRegistrationStep(2);
   }
+
   render() {
     return (
       <div className={styles.appointment__footer_preferences}>
@@ -73,9 +78,5 @@ class Preferences extends Component {
     );
   }
 }
-
-
-
-
 
 export default Preferences;

@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import Timer from './Timer';
-import styles from './SignUp.scss';
 
-import { Button, Form, Field } from '../library';
-import { validate, asyncEmailValidate } from '../library/Form/validate';
+import React, { Component } from 'react';
+import Timer from '../Timer';
+import styles from './styles.scss';
+import { Button, Form, Field } from '../../library';
+import { validate, asyncEmailValidate } from '../../library/Form/validate';
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       time: 3 * 60 * 1000,
       maxtime: 3 * 60 * 1000,
       collapseMenu: false,
     };
+
     this.registrationTimer = null;
     this.startTimer = this.startTimer.bind(this);
     this.getPercent = this.getPercent.bind(this);
@@ -22,7 +22,6 @@ class SignUp extends Component {
     this.renderBookingForm = this.renderBookingForm.bind(this);
     this.collapseMenu = this.collapseMenu.bind(this);
   }
-
 
   componentDidMount() {
     this.startTimer();
@@ -66,6 +65,7 @@ class SignUp extends Component {
     removeReservation(reservationId);
     clearInterval(this.registrationTimer);
   }
+
   collapseMenu(open) {
     if(open) {
       this.setState({
@@ -77,6 +77,7 @@ class SignUp extends Component {
       });
     }
   }
+
   renderBookingForm() {
     return (
       <Form
@@ -142,6 +143,7 @@ class SignUp extends Component {
       </div>
     );
   }
+
   render() {
     const { practitionersStartEndDate, logo, address, appointmentInfo } = this.props;
     const { messages } = practitionersStartEndDate.toJS();

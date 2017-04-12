@@ -17,7 +17,7 @@ class Requests extends Component {
     })
 
     const sortedRequests = filteredRequests.sort((a, b) => {
-      return Date.parse(b.startTime) - Date.parse(a.startTime);
+      return Date.parse(b.startDate) - Date.parse(a.startDate);
     });
 
     return (

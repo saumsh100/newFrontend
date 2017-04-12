@@ -49,7 +49,6 @@ PractitionerTimeOff.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'i
 
 Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
-Account.hasMany(Patient, 'patients', 'id', 'accountId');
 //Account.hasMany(User, 'users', 'id', 'activeAccountId');
 
 Chat.hasOne(Account, 'account', 'accountId', 'id');
