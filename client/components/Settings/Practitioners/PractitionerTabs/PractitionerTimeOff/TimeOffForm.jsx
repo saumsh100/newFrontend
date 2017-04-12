@@ -36,7 +36,6 @@ const setTime = (time) => {
   return mergeTime.toISOString();
 };
 
-
 function TimeOffForm(props) {
   const { timeOff, formName, handleSubmit, values, showOption, setOption } = props;
 
@@ -76,6 +75,7 @@ function TimeOffForm(props) {
       form={formName}
       onSubmit={handleSubmit}
       initialValues={initialValues}
+      ignoreSaveButton
     >
       <Field
         component="Calendar"

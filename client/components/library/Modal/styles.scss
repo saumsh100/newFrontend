@@ -50,14 +50,13 @@
   animation: slidein 0.5s;
   &__modalHeader{
     display: flex;
-    &_modalCloseIcon {
-      position: absolute;
-      right: 25%;
-      cursor: pointer;
-    }
   }
-
-  &__actions{
+  &__closeIcon {
+    margin-left: auto;
+    cursor: pointer;
+  }
+  &__footer{
+    padding: 5px;
     margin-left: auto;
   }
 }

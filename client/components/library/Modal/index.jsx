@@ -6,6 +6,7 @@ import styles from './styles.scss';
 import Icon from '../Icon';
 import CardHeader from '../CardHeader';
 import Button from '../Button';
+import RemoteSubmitButton from '../Form/RemoteSubmitButton';
 
 class Modal extends Component {
   constructor(props) {
@@ -58,13 +59,14 @@ class Modal extends Component {
     let showFooterComponent = null;
     if (actions) {
       showFooterComponent = (
-        <div className={styles.modalBody__actions}>
+        <div className={styles.modalBody__footer}>
           {actions.map((action) => {
-           return(
-             <Button onClick={action.onClick}>
-               {action.label}
-             </Button>
-           )})}
+            return (
+              <RemoteSubmitButton form={action.form} onClick={action.onClick}>
+                {action.label}
+              </RemoteSubmitButton>
+            );
+          })}
         </div>
       );
     }
@@ -78,12 +80,14 @@ class Modal extends Component {
           className={backDropClassName}
         />
         <Card className={styles.modalBody}>
-          <CardHeader className={styles.modalBody__modalHeader} title={title} />
-          <Icon
-            icon="times"
-            className={styles.modalBody__modalHeader_modalCloseIcon}
-            onClick={this.deactivate}
-          />
+          <div className={styles.modalBody__modalHeader}>
+            <CardHeader title={title} />
+            <Icon
+              icon="times"
+              className={styles.modalBody__closeIcon}
+              onClick={this.deactivate}
+            />
+          </div>
           {children}
           {showFooterComponent}
         </Card>

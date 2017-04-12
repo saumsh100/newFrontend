@@ -26,6 +26,7 @@ class PractitionerTimeOff extends Component {
       selectedTimeOff: null,
       values: {},
     };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.deleteTimeOff = this.deleteTimeOff.bind(this);
     this.addTimeOff = this.addTimeOff.bind(this);
@@ -150,7 +151,7 @@ class PractitionerTimeOff extends Component {
     }
 
     const actions = [
-      { label: "Cancel", onClick: this.reinitializeState },
+      { label: 'Save', onClick: this.handleSubmit, form: formName, },
     ];
 
     return (
@@ -158,7 +159,7 @@ class PractitionerTimeOff extends Component {
         {showAddOrListComponent}
         <Modal
           actions={actions}
-          title='Add Time Off'
+          title="Add Time Off"
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
