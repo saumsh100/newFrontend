@@ -25,6 +25,7 @@ import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
+import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import Search from './Search';
 import Star from './Star';
@@ -81,6 +82,7 @@ export {
   Tag,
   Toggle,
   Tooltip,
+  TrendLine,
 };
 
 export { RemoteSubmitButton } from './Form';
