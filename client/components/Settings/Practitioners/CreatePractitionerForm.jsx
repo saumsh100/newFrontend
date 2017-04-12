@@ -15,9 +15,6 @@ export default function CreatePractitionerForm(props) {
       onSubmit={onSubmit}
     >
       <div className={styles.practFormRow__createRow}>
-        <CardHeader title="Add New Practitioner" />
-      </div>
-      <div className={styles.practFormRow__createRow}>
         <Field
           required
           name="firstName"

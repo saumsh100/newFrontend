@@ -12,7 +12,6 @@ class TimeOffList extends Component {
 
   deleteTimeOff(timeOff) {
     const { deleteTimeOff } = this.props;
-
     const deleteTf = confirm('Delete Time Off ?');
 
     if (deleteTf) {
@@ -39,7 +38,7 @@ class TimeOffList extends Component {
               timeOff={timeOff}
               practitioner={practitioner}
               onClick={() => onSelectTimeOff(timeOff)}
-              deleteTimeOff={deleteTimeOff}
+              deleteTimeOff={this.deleteTimeOff}
             />
           );
         })}

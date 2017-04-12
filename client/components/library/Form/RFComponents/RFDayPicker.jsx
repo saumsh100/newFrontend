@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
-import Calendar from '../../Calendar';
+import DayPicker from '../../DayPicker';
 
 
-export default function RFCalendar(props) {
+
+export default function RFDayPicker(props) {
   const {
     input,
     error,
@@ -13,7 +14,7 @@ export default function RFCalendar(props) {
   const finalError = error || ((touched || dirty) ? meta.error : null);
 
   return (
-    <Calendar
+    <DayPicker
       {...props}
       {...input}
       error={finalError}
@@ -22,7 +23,7 @@ export default function RFCalendar(props) {
 }
 
 /* eslint react/forbid-prop-types: 0 */
-RFCalendar.propTypes = {
+RFDayPicker.propTypes = {
   input: PropTypes.object,
   meta: PropTypes.object,
   error: PropTypes.string,

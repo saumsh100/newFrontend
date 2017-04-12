@@ -82,6 +82,7 @@ class PractitionerList extends Component {
               active={this.state.active}
               onEscKeyDown={this.setActive}
               onOverlayClick={this.setActive}
+              title="Add New Practitioner"
             >
               <CreatePractitionerForm
                 onSubmit={this.createPractitioner}

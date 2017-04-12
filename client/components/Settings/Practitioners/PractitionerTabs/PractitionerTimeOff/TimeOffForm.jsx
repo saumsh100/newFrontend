@@ -78,13 +78,13 @@ function TimeOffForm(props) {
       ignoreSaveButton
     >
       <Field
-        component="Calendar"
+        component="DayPicker"
         name="startDate"
         label="Start Date"
         validate={[validateStartDate]}
       />
       <Field
-        component="Calendar"
+        component="DayPicker"
         name="endDate"
         label="End Date"
         validate={[validateEndDate]}

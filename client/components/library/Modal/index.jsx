@@ -3,10 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import Card from '../Card';
 import styles from './styles.scss';
-import Icon from '../Icon';
 import CardHeader from '../CardHeader';
-import Button from '../Button';
-import RemoteSubmitButton from '../Form/RemoteSubmitButton';
 
 class Modal extends Component {
   constructor(props) {
@@ -49,11 +46,19 @@ class Modal extends Component {
       active,
       actions,
       title,
+      type,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
     if (active) {
       modalContainerClassName = classNames(styles.active, modalContainerClassName);
+    }
+
+    let modalBodyClassName = styles.modalBody;
+    if (type) {
+      modalBodyClassName = classNames(styles.type, modalBodyClassName);
+    } else {
+      modalBodyClassName = classNames(styles.medium, modalBodyClassName);
     }
 
     let showFooterComponent = null;
@@ -62,9 +67,9 @@ class Modal extends Component {
         <div className={styles.modalBody__footer}>
           {actions.map((action) => {
             return (
-              <RemoteSubmitButton form={action.form} onClick={action.onClick}>
+              <action.component onClick={action.onClick} {...action.props} className={styles.modalBody__action}>
                 {action.label}
-              </RemoteSubmitButton>
+              </action.component>
             );
           })}
         </div>
@@ -79,7 +84,7 @@ class Modal extends Component {
           onClick={this.handleOverlayClick}
           className={backDropClassName}
         />
-        <Card className={styles.modalBody}>
+        <Card className={modalBodyClassName}>
           <div className={styles.modalBody__modalHeader}>
             <CardHeader title={title} />
             <div

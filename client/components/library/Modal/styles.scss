@@ -19,6 +19,18 @@
   display: flex;
 }
 
+.small {
+  width: 25%;
+}
+
+.medium {
+  width: 50%;
+}
+
+.large {
+  width: 75%;
+}
+
 .backDropDefault {
   position: absolute;
   top: 0;
@@ -40,7 +52,6 @@
 }
 
 .modalBody {
-  width: 50%;
   display: flex;
   max-width: 96%;
   max-height: 96%;
@@ -60,10 +71,14 @@
     margin-left: auto;
     cursor: pointer;
   }
-  &__footer{
-    padding: 5px;
+  &__footer {
     margin-left: auto;
   }
+
+  &__action {
+    margin-left: 5px;
+  }
+
 }
 
 @keyframes slidein {

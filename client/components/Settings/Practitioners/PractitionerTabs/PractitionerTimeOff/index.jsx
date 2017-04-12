@@ -9,7 +9,8 @@ import {
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
-import { IconButton, Modal, Button, RemoteSubmitButton } from '../../../../library';
+import { IconButton, Modal, Button } from '../../../../library';
+import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
@@ -150,7 +151,8 @@ class PractitionerTimeOff extends Component {
     }
 
     const actions = [
-      { label: 'Save', onClick: this.handleSubmit, form: formName, component: RemoteSubmitButton },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
     return (
@@ -159,6 +161,7 @@ class PractitionerTimeOff extends Component {
         <Modal
           actions={actions}
           title="Add Time Off"
+          type="small"
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
