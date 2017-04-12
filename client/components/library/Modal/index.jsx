@@ -3,8 +3,9 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import Card from '../Card';
 import styles from './styles.scss';
-import IconButton   from '../IconButton';
-
+import Icon from '../Icon';
+import CardHeader from '../CardHeader';
+import Button from '../Button';
 
 class Modal extends Component {
   constructor(props) {
@@ -13,13 +14,13 @@ class Modal extends Component {
     this.handleOverlayClick = this.handleOverlayClick.bind(this);
     this.deactivate = this.deactivate.bind(this);
   }
-  
+
   componentDidMount() {
     if (this.props.active && this.props.onEscKeyDown) {
       document.body.addEventListener('keydown', this.handleEscKey);
     }
   }
-  
+
   componentDidUpdate({ active }) {
     if (active) {
       document.body.addEventListener('keydown', this.handleEscKeyDown);
@@ -32,28 +33,44 @@ class Modal extends Component {
     this.props.onOverlayClick && this.props.onOverlayClick(e);
   }
 
-  
+
   handleEscKeyDown(e) {
     this.props.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
   }
-  
+
   handleOverlayClick(e) {
     this.props.onOverlayClick && this.props.onOverlayClick(e);
   }
-  
+
   render() {
     const {
       children,
-      active
+      active,
+      actions,
+      title,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
     if (active) {
       modalContainerClassName = classNames(styles.active, modalContainerClassName);
     }
-  
+
+    let showFooterComponent = null;
+    if (actions) {
+      showFooterComponent = (
+        <div className={styles.modalBody__actions}>
+          {actions.map((action) => {
+           return(
+             <Button onClick={action.onClick}>
+               {action.label}
+             </Button>
+           )})}
+        </div>
+      );
+    }
+
     const backDropClassName = classNames(styles.backDropDefault);
-  
+
     return (
       <div className={modalContainerClassName}>
         <div
@@ -61,12 +78,14 @@ class Modal extends Component {
           className={backDropClassName}
         />
         <Card className={styles.modalBody}>
-          <IconButton
-            icon="window-close"
-            className={styles.modalCloseIcon}
+          <CardHeader className={styles.modalBody__modalHeader} title={title} />
+          <Icon
+            icon="times"
+            className={styles.modalBody__modalHeader_modalCloseIcon}
             onClick={this.deactivate}
           />
           {children}
+          {showFooterComponent}
         </Card>
       </div>
     );

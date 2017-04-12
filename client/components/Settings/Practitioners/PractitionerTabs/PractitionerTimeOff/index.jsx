@@ -149,10 +149,16 @@ class PractitionerTimeOff extends Component {
       );
     }
 
+    const actions = [
+      { label: "Cancel", onClick: this.reinitializeState },
+    ];
+
     return (
       <div>
         {showAddOrListComponent}
         <Modal
+          actions={actions}
+          title='Add Time Off'
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
