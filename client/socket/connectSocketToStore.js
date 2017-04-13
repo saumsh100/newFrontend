@@ -33,7 +33,5 @@ export default function connectSocketToStore(socket, store) {
   socket.on('update:Appointment', (data) => {
     console.log('EVENT:update:Appointment: data=', data);
   });
-
-  window.socket = socket;
 }
 
