@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import { DateUtils } from 'react-day-picker';
 import SignUp from './SignUp';
-import RenderFirstStep from './RenderFirstStep';
+import SelectionView from './SelectionView';
 
 class Availabilities extends Component {
   constructor(props) {
@@ -177,7 +177,7 @@ class Availabilities extends Component {
     switch (practitionersStartEndDate.get('registrationStep')) {
       case 1:
         return (
-          <RenderFirstStep
+          <SelectionView
             params={params}
             props={this.props}
             upperState={this.state}

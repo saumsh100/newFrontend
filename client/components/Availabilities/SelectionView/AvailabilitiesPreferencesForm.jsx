@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
-import { Form, Field, Grid, Row, Col } from '../library';
-import styles from './styles.scss';
+import { Form, Field, Grid, Row, Col } from '../../library';
+import styles from '../styles.scss';
 
 function AvailabilitiesPreferencesForm(props) {
   const {

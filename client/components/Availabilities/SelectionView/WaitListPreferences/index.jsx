@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import { Checkbox } from '../../library';
+import { Checkbox } from '../../../library';
 import 'react-day-picker/lib/style.css';
 import styles from './styles.scss';
 

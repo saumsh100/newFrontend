@@ -2,13 +2,13 @@
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import includes from 'lodash/includes';
-import { Button, Form, Field, Checkbox } from '../library';
+import { Button, Form, Field, Checkbox } from '../../library';
 import WaitListPreferences from './WaitListPreferences';
 import AvailabilitiesPreferencesForm from './AvailabilitiesPreferencesForm';
 import AvailabilitiesDisplay from './AvailabilitiesDisplay';
 import styles from './styles.scss';
 
-export default class RenderFirstStep extends Component {
+export default class SelectionView extends Component {
   render() {
     const { practitionerId, services, availabilities, practitioners, defaultValues } = this.props.params;
     const { props, upperState } = this.props;
