@@ -106,6 +106,30 @@ appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (re
 });
 
 /**
+ * TESTING ONLY
+ * Used to search an appointment by any property.
+ * E.g. api/appointments/test?key=pmsId&value=1003
+ */
+appointmentsRouter.get('/test', checkPermissions('appointments:read'), (req, res, next) => {
+  const keyValue = {};
+  keyValue[req.query.key] = req.query.value;
+  return Appointment
+    .filter(keyValue)
+    .run()
+    .then(appointment => res.send(normalize('appointments', appointment)))
+    .catch(next);
+});
+
+/**
+ * Get an appointment
+ */
+appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'), (req, res, next) => {
+  return Promise.resolve(req.appointment)
+    .then(appointment => res.send(normalize('appointment', appointment)))
+    .catch(next);
+});
+
+/**
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
