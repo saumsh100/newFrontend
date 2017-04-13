@@ -20,15 +20,15 @@
 }
 
 .small {
-  width: 25%;
+  width: 20%;
 }
 
 .medium {
-  width: 50%;
+  width: 40%;
 }
 
 .large {
-  width: 75%;
+  width: 80%;
 }
 
 .backDropDefault {
@@ -53,11 +53,12 @@
 
 .modalBody {
   display: flex;
-  max-width: 96%;
+  min-width: 250px;
   max-height: 96%;
   flex-direction: column;
-  padding: 25px;
+  padding: 2rem;
   z-index: 301;
+  border-radius: .2rem;
   box-shadow: 0 19px 60px rgba(0,0,0,.3), 0 15px 20px rgba(0,0,0,.22);
   animation: slidein 0.5s;
   &__modalHeader{

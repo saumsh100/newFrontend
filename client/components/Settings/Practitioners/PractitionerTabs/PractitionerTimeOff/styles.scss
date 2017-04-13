@@ -3,8 +3,8 @@
 .timeOffList {
   background-color: $primary-white;
 
-  &_clockIcon{
-    padding: 5px;
+  &_item {
+    padding-left: 5px;
   }
   &_delete {
     margin-left: auto;
@@ -18,9 +18,25 @@
   cursor: pointer;
 }
 
-.displayTimeOff {
-  background-color: yellow;
-  margin-bottom: 5px;
+
+.inlineBlock {
+  display: inline-block;
+  padding-bottom: 5px;
 }
 
+.displayTimeOff {
+  display: flex;
+  border: 1px solid;
+  border-color: $primary-grey;
+  background-color: #ffffbc;
+  text-align: center;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-top: 5px;
+  padding-left: 2px;
+}
 
+.flexCenter {
+  display: flex;
+  align-items: center;
+}

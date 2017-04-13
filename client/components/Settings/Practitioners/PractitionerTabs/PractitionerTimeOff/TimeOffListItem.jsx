@@ -28,8 +28,7 @@ class TimeOffListItem extends Component {
     const showNote = note ? ` Note: ${note}` : null;
 
     return (
-      <ListItem onClick={onClick}>
-        <Icon icon="clock-o" className={styles.timeOffList_clockIcon} />
+      <ListItem onClick={onClick} className={styles.timeOffList_item}>
         {moment(startDate).format('MMM Do YYYY')} To: {moment(endDate).format('MMM Do YYYY')}
         {showNote}
         <IconButton

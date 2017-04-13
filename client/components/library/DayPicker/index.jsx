@@ -64,7 +64,6 @@ class DayPicker extends Component {
         {...this.props}
         onChange={this.handleInputChange}
         onFocus={this.handleInputClick}
-        disabled={this.state.isOpen}
       />
     );
 
@@ -80,16 +79,16 @@ class DayPicker extends Component {
 
     return (
       <Popover
-        preferPlace="below"
+        preferPlace="left"
         onOuterAction={this.handleInputClick}
         isOpen={this.state.isOpen}
         body={[(
-            <Daypicker
-              ref={(el) => { this.state.dayPicker = el; }}
-              onDayClick={this.handleDayClick}
-              selectedDays={this.state.selectedDay}
-              className={styles.dayPickerContainer}
-            />
+          <Daypicker
+            ref={(el) => { this.state.dayPicker = el; }}
+            onDayClick={this.handleDayClick}
+            selectedDays={this.state.selectedDay}
+            className={styles.dayPickerContainer}
+          />
         )]}
       >
         {dayPickerTargetComponent}
