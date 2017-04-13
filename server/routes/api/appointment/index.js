@@ -108,15 +108,16 @@ appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (re
 /**
  * TESTING ONLY
  * Used to search an appointment by any property.
- * E.g. api/appointments/test?key=pmsId&value=1003
+ * E.g. api/appointments/test?pmsId=1003&note=unit test appointment
  */
 appointmentsRouter.get('/test', checkPermissions('appointments:read'), (req, res, next) => {
-  const keyValue = {};
-  keyValue[req.query.key] = req.query.value;
+  const property = req.query;
   return Appointment
-    .filter(keyValue)
+    .filter(property)
     .run()
-    .then(appointment => res.send(normalize('appointments', appointment)))
+    .then((appointments) => {
+      (appointments.length !== 0) ? res.send(normalize('appointments', appointments)) : res.sendStatus(404);
+    })
     .catch(next);
 });
 
