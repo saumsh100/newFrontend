@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Icon from '../Icon';
 import styles from './styles.scss';
 
 class Collapsible extends Component {
@@ -19,13 +20,21 @@ class Collapsible extends Component {
   render() {
     const {
       children,
+      title,
     } = this.props;
 
     const showCollapsed = this.state.isCollapsed ? children : null;
+    const icon = this.state.isCollapsed ? 'minus' : 'plus';
 
     return (
-      <div onClick={this.setCollapsed}>
-        {showCollapsed}
+      <div className={styles.collapsibleContainer}>
+        <div className={styles.title} onClick={this.setCollapsed}>
+          {title}
+          <Icon icon={icon} className={styles.icon} />
+        </div>
+        <div className={styles.collapsed}>
+          {showCollapsed}
+        </div>
       </div>
     );
   }
@@ -33,7 +42,7 @@ class Collapsible extends Component {
 
 Collapsible.PropTypes = {
   children: PropTypes.node,
+  title: PropTypes.string,
 }
 export default Collapsible;
-
 
