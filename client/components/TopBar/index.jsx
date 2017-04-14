@@ -9,12 +9,12 @@ import {
   DropdownMenu,
   Icon,
   IconButton,
-  SyncButton,
   Link,
   MenuItem,
   MenuSeparator,
 } from '../library';
 import styles from './styles.scss';
+import runOnDemandSync from '../SyncButton';
 
 
 const UserMenu = (props) => {
@@ -106,15 +106,10 @@ class TopBar extends Component {
               <IconButton icon="comments" onClick={() => alert('Implement Messages')} />
             </li>
             <li>
-              <SyncButton
+              <IconButton
                 icon="refresh"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert('Would you like to sync with the PMS?');
-                  window.socket.emit('onDemandSync');
-                }}
-              >
-              </SyncButton>
+                onClick={e => runOnDemandSync(e)}
+              />
             </li>
             <li>
               <DropdownMenu labelComponent={UserMenu}>

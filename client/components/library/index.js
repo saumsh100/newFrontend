@@ -15,7 +15,6 @@ import Guage from './Guage';
 import Header from './Header';
 import Icon from './Icon';
 import IconButton from './IconButton';
-import SyncButton from './SyncButton';
 import InfiniteScroll from './InfiniteScroll';
 import Input from './Input';
 import Link from './Link';
@@ -64,7 +63,6 @@ export {
   Icon,
   IconCard,
   IconButton,
-  SyncButton,
   InfiniteScroll,
   Input,
   Link,
