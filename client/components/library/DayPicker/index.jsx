@@ -2,11 +2,14 @@
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
 import moment from 'moment';
-import DayPicker, { DateUtils } from 'react-day-picker';
+import { pick } from 'lodash';
+import Daypicker, { DateUtils } from 'react-day-picker';
 import DayPickerStyles from './styles.css';
 import Input from '../Input';
+import Icon from '../Icon';
+import styles from './styles.scss';
 
-class Calendar extends Component {
+class DayPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,29 +55,46 @@ class Calendar extends Component {
   }
 
   render() {
+    const {
+      target
+    } = this.props;
+
+    let dayPickerTargetComponent = (
+      <Input
+        {...this.props}
+        onChange={this.handleInputChange}
+        onFocus={this.handleInputClick}
+      />
+    );
+
+    if (target === 'icon') {
+      const iconProps = pick(this.props, ['icon']);
+      dayPickerTargetComponent = (
+        <Icon
+          {...iconProps}
+          onClick={this.handleInputClick}
+        />
+      );
+    }
+
     return (
       <Popover
         preferPlace="below"
-        tipSize={12}
         onOuterAction={this.handleInputClick}
         isOpen={this.state.isOpen}
         body={[(
-          <DayPicker
+          <Daypicker
             ref={(el) => { this.state.dayPicker = el; }}
             onDayClick={this.handleDayClick}
             selectedDays={this.state.selectedDay}
+            className={styles.dayPickerContainer}
           />
         )]}
       >
-        <Input
-          {...this.props}
-          onChange={this.handleInputChange}
-          onFocus={this.handleInputClick}
-          disabled={this.state.isOpen}
-        />
+        {dayPickerTargetComponent}
       </Popover>
     );
   }
 }
 
-export default Calendar;
+export default DayPicker;

@@ -40,7 +40,7 @@ export default function Settings(props) {
 
   return (
     <Grid>
-        {showNav}
+      {showNav}
     </Grid>
   );
 }

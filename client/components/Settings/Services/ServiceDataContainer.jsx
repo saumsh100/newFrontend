@@ -1,3 +1,4 @@
+
 import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -33,7 +34,7 @@ class ServiceDataContainer extends Component {
 
     let showComponent1 = null;
     let showComponent2 = null;
-    
+
     const practitionerIds = (
       selectedService ? selectedService.get('practitioners') : null);
 

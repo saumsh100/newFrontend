@@ -14,7 +14,6 @@ export default function RFToggle(props) {
 
   const newProps = Object.assign({} , props, { defaultChecked: input.value });
 
-
   return (
     <div>
       <Toggle
