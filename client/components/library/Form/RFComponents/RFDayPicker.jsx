@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
 import DayPicker from '../../DayPicker';
 
-
-
 export default function RFDayPicker(props) {
   const {
     input,

@@ -12,7 +12,7 @@ class TimeOffList extends Component {
 
   deleteTimeOff(timeOff) {
     const { deleteTimeOff } = this.props;
-    const deleteTf = confirm('Delete Time Off ?');
+    const deleteTf = confirm('Are you sure you want to the delete time off ?');
 
     if (deleteTf) {
       deleteTimeOff(timeOff);
@@ -30,7 +30,7 @@ class TimeOffList extends Component {
 
     return (
       <List className={styles.timeOffList} >
-        <div className={styles.timeOffList_addTimeOffText}>Add Time Off: {children}</div>
+        <div className={styles.timeOffList_addTimeOffText}>Add Time Off{children}</div>
         {timeOffs.toArray().map((timeOff) => {
           return (
             <TimeOffListItem

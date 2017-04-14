@@ -3,7 +3,14 @@ import React, { PropTypes } from 'react';
 import { withState } from 'recompose';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { Form, Field, Icon } from '../../../../library';
+import {
+  Form,
+  Field,
+  Icon,
+  Grid,
+  Row,
+  Col,
+} from '../../../../library';
 import TimeOffDisplay from './TimeOffDisplay';
 import styles from './styles.scss';
 
@@ -36,8 +43,33 @@ const setTime = (time) => {
   return mergeTime.toISOString();
 };
 
+const checkDates = ({ startDate, endDate }) => {
+  const errors = {};
+  const sDate = new Date(startDate);
+  const eDate = new Date(endDate);
+
+  if (sDate > eDate) {
+    errors.startDate = 'Start date has to be less than end date.';
+  } else if (eDate < sDate) {
+    errors.endDate = 'End date has to be greater than start date.';
+  }
+
+  return errors;
+};
+
+const maxLength = max => value =>
+  value && (value.length > max || value.length < max) ? 'Please enter a date: DD/MM/YYYY.' : undefined
+const maxLength10 = maxLength(10);
+
 function TimeOffForm(props) {
-  const { timeOff, formName, handleSubmit, values, showOption, setOption } = props;
+  const {
+    timeOff,
+    formName,
+    handleSubmit,
+    values,
+    showOption,
+    setOption
+  } = props;
 
   const {
     startDate,
@@ -55,53 +87,82 @@ function TimeOffForm(props) {
     note,
   };
 
-  const validateStartDate = (value) => {
-    const sDate = new Date(value);
-    const eDate = new Date(values.endDate);
-    return (sDate.getDate() > eDate.getDate()) ? 'Start date has to be less than end date.' : undefined;
-  };
-  const validateEndDate = (value) => {
-    const eDate = new Date(value);
-    const sDate = new Date(values.startDate);
-    return (eDate.getDate() < sDate.getDate()) ? 'End date has to be greater than start date.' : undefined;
-  };
+  const startTimeComponent = !values.allDay ? (
+    <Field
+      component="DropdownSelect"
+      options={timeOptions}
+      name="startTime"
+      label="Start Time"
+      className={styles.inlineBlock}
+    />) : null;
+  const endTimeComponent = !values.allDay ? (
+    <Field
+      component="DropdownSelect"
+      options={timeOptions} name="endTime"
+      label="End Time"
+      className={styles.inlineBlock}
+    />) : null;
 
-  const startTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" disabled={values.allDay} />);
-  const endTimeComponent = (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" disabled={values.allDay} />);
   const showNoteComponent = showOption ? <Field name="note" label="Note" /> : null;
+  const optionsIcon = showOption ? 'minus' : 'plus';
+
+  const columnSizeDate = values.allDay ? 12 : 8;
+  const columnSizeTime = values.allDay ? 0 : 4;
 
   return (
     <Form
       form={formName}
       onSubmit={handleSubmit}
+      validate={checkDates}
       initialValues={initialValues}
       ignoreSaveButton
     >
-      <Field
-        component="DayPicker"
-        name="startDate"
-        label="Start Date"
-        validate={[validateStartDate]}
-      />
-      <Field
-        component="DayPicker"
-        name="endDate"
-        label="End Date"
-        validate={[validateEndDate]}
-      />
-      {startTimeComponent}
-      {endTimeComponent}
-      All Day
-      <Field
-        component="Toggle"
-        name="allDay"
-      />
-      More Options
-      <Icon
-        icon="plus"
-        onClick={() => setOption(!showOption)}
-        className={styles.moreOptions}
-      />
+      <Grid>
+        <Row>
+          <Col xs={12} md={columnSizeDate}>
+            <Field
+              component="DayPicker"
+              name="startDate"
+              label="Start Date"
+              validate={[maxLength10]}
+            />
+          </Col>
+          <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
+            {startTimeComponent}
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={columnSizeDate}>
+            <Field
+              component="DayPicker"
+              name="endDate"
+              label="End Date"
+              validate={[maxLength10]}
+            />
+          </Col>
+          <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
+            {endTimeComponent}
+          </Col>
+        </Row>
+        <Row className={styles.flexCenter}>
+          <Col xs={6} className={styles.allDay}>
+            <div className={styles.allDay_text}> All Day </div>
+            <Field
+              component="Toggle"
+              name="allDay"
+            />
+          </Col>
+          <Col xs={6}>
+            <div onClick={() => setOption(!showOption)} className={styles.moreOptions}>
+              More Options
+              <Icon
+                icon={optionsIcon}
+                className={styles.moreOptions_icon}
+              />
+            </div>
+          </Col>
+        </Row>
+      </Grid>
       {showNoteComponent}
       <TimeOffDisplay values={values} />
     </Form>

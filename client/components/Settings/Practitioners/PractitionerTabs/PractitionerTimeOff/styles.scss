@@ -2,25 +2,63 @@
 
 .timeOffList {
   background-color: $primary-white;
+  min-width: 300px;
+  &_item {
+    height: 50px;
+  }
+  &_date {
 
-  &_clockIcon{
-    padding: 5px;
+  }
+  &_note {
+    color: $primary-darkgrey;
+  }
+  &_allDay{
+    margin-left: auto;
+    color: $primary-darkgrey;
   }
   &_delete {
     margin-left: auto;
   }
   &_addTimeOffText {
-    padding: 5px;
+    margin-left: auto;
+    font-weight: $large-weight;
   }
 }
 
+.allDay {
+  display: flex;
+  align-items: center;
+  &_text {
+    padding-right: 5px;
+  }
+}
 .moreOptions {
   cursor: pointer;
+  text-align: end;
+  &_icon {
+    padding-left: 5px;
+    color: $primary-darkgrey;
+  }
+}
+
+
+.inlineBlock {
+  padding-left: 10px;
+  padding-bottom: 5px;
 }
 
 .displayTimeOff {
-  background-color: yellow;
+  border: 1px solid;
+  border-color: $primary-grey;
+  background-color: $primary-grey;
+  text-align: center;
   margin-bottom: 5px;
+  margin-top: 5px;
+  padding-top: 5px;
+  padding-left: 2px;
 }
 
-
+.flexCenter {
+  display: flex;
+  align-items: center;
+}
