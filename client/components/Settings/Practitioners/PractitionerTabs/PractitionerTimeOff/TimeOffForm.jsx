@@ -57,8 +57,19 @@ const checkDates = ({ startDate, endDate }) => {
   return errors;
 };
 
+const maxLength = max => value =>
+  value && (value.length > max || value.length < max) ? 'Please enter a date: DD/MM/YYYY.' : undefined
+const maxLength10 = maxLength(10);
+
 function TimeOffForm(props) {
-  const { timeOff, formName, handleSubmit, values, showOption, setOption } = props;
+  const {
+    timeOff,
+    formName,
+    handleSubmit,
+    values,
+    showOption,
+    setOption
+  } = props;
 
   const {
     startDate,
@@ -76,10 +87,21 @@ function TimeOffForm(props) {
     note,
   };
 
-
-
-  const startTimeComponent = !values.allDay ? (<Field component="DropdownSelect" options={timeOptions} name="startTime" label="Start Time" className={styles.inlineBlock}/>) : null;
-  const endTimeComponent = !values.allDay ? (<Field component="DropdownSelect" options={timeOptions} name="endTime" label="End Time" className={styles.inlineBlock}/>) : null;
+  const startTimeComponent = !values.allDay ? (
+    <Field
+      component="DropdownSelect"
+      options={timeOptions}
+      name="startTime"
+      label="Start Time"
+      className={styles.inlineBlock}
+    />) : null;
+  const endTimeComponent = !values.allDay ? (
+    <Field
+      component="DropdownSelect"
+      options={timeOptions} name="endTime"
+      label="End Time"
+      className={styles.inlineBlock}
+    />) : null;
 
   const showNoteComponent = showOption ? <Field name="note" label="Note" /> : null;
   const optionsIcon = showOption ? 'minus' : 'plus';
@@ -102,6 +124,7 @@ function TimeOffForm(props) {
               component="DayPicker"
               name="startDate"
               label="Start Date"
+              validate={[maxLength10]}
             />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
@@ -114,6 +137,7 @@ function TimeOffForm(props) {
               component="DayPicker"
               name="endDate"
               label="End Date"
+              validate={[maxLength10]}
             />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
@@ -121,8 +145,8 @@ function TimeOffForm(props) {
           </Col>
         </Row>
         <Row className={styles.flexCenter}>
-          <Col xs={6} >
-            All Day
+          <Col xs={6} className={styles.allDay}>
+            <div className={styles.allDay_text}> All Day </div>
             <Field
               component="Toggle"
               name="allDay"
@@ -133,13 +157,14 @@ function TimeOffForm(props) {
               More Options
               <Icon
                 icon={optionsIcon}
+                className={styles.moreOptions_icon}
               />
             </div>
           </Col>
         </Row>
       </Grid>
-        {showNoteComponent}
-        <TimeOffDisplay values={values} />
+      {showNoteComponent}
+      <TimeOffDisplay values={values} />
     </Form>
   );
 }

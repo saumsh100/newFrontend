@@ -50,11 +50,13 @@ class Modal extends Component {
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
+
     if (active) {
       modalContainerClassName = classNames(styles.active, modalContainerClassName);
     }
 
     let modalBodyClassName = styles.modalBody;
+
     if (type) {
       modalBodyClassName = classNames(styles[type], modalBodyClassName);
     } else {

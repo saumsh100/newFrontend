@@ -79,7 +79,7 @@ class DayPicker extends Component {
 
     return (
       <Popover
-        preferPlace="left"
+        preferPlace="below"
         onOuterAction={this.handleInputClick}
         isOpen={this.state.isOpen}
         body={[(
