@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Card, CardHeader, BigCommentBubble, Col, Modal } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import ComposePost from '../ComposePost';
-import styles from '../../styles.scss';
+import styles from './styles.scss';
 
 class ReviewsCard extends Component {
   constructor(props) {
@@ -17,28 +17,38 @@ class ReviewsCard extends Component {
     this.setState({ active });
   }
   render() {
-    const { data } = this.props;
+    const { data, headerTabs, socialPreview } = this.props;
     return (
-      <Card borderColor={colorMap.blue} className={styles.card}>
+      <Card
+        className={styles.card}
+        borderColor={colorMap.blue}
+      >
         <CardHeader
           className={styles.cardHeader}
-          title={'REVIEWS'}>
-          <div onClick={this.setActive}>
-            Compose
+          title={'REVIEWS'}
+        >
+          <div className={styles.cardHeader__menu} onClick={this.setActive}>
+            <span>Compose</span>
+            <span>Settings</span>
           </div>
           <Modal
             active={this.state.active}
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
+            className={styles.modal}
           >
-            <ComposePost />
+            <ComposePost
+              socialPreview={socialPreview}
+              headerTabs={headerTabs}
+            />
           </Modal>
         </CardHeader>
         <div className={styles.reviewsComments}>
           <div className={styles.reviewsComments__container} >
             <Col xs={12} className={styles.reviewsComments__comment} >
-              {data.map(obj => (
+              {data.map((obj, i) => (
                 <BigCommentBubble
+                  key={i}
                   icon={obj.icon}
                   iconColor={obj.iconColor}
                   background={obj.background}
@@ -49,6 +59,10 @@ class ReviewsCard extends Component {
                   siteTitle={obj.siteTitle}
                   sitePreview={obj.sitePreview}
                   createdAt={obj.createdAt}
+                  comments={obj.comments}
+                  doubleIcon={obj.doubleIcon}
+                  actions={obj.actions}
+                  requiredAction={obj.requiredAction}
                 />
               ))}
             </Col>

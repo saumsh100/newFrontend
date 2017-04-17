@@ -18,6 +18,7 @@ import Icon from './Icon';
 import IconButton from './IconButton';
 import InfiniteScroll from './InfiniteScroll';
 import Input from './Input';
+import Label from './Label';
 import Link from './Link';
 import LineChart from './LineChart';
 import Modal from './Modal';
@@ -38,6 +39,7 @@ import Tag from './Tag';
 import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
 import Filters from './Filters';
+import DoubleIcon from './DoubleIcon';
 
 export {
   AppBar,
@@ -55,6 +57,7 @@ export {
   Collapsible,
   DropdownSelect,
   DashboardStats,
+  DoubleIcon,
   Filters,
   Field,
   FieldArray,
@@ -68,6 +71,7 @@ export {
   InfiniteScroll,
   Input,
   Link,
+  Label,
   LineChart,
   Modal,
   PieChart,

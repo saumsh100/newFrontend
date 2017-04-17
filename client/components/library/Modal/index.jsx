@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import Card from '../Card';
 import styles from './styles.scss';
+import IconButton from '../IconButton';
 import CardHeader from '../CardHeader';
 
 class Modal extends Component {
@@ -47,10 +48,11 @@ class Modal extends Component {
       actions,
       title,
       type,
+      className,
+      close,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
-
     if (active) {
       modalContainerClassName = classNames(styles.active, modalContainerClassName);
     }

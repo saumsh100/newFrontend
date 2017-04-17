@@ -9,7 +9,7 @@ export default function RatingsChart(props) {
     rating,
   } = props;
 
-  const ratingStars = _.keys(rating).sort((a,b) => a > b);
+  const ratingStars = _.keys(rating).sort((a, b) => a > b);
   const maxValue = _.max(_.values(rating));
 
   return (
@@ -39,9 +39,9 @@ export default function RatingsChart(props) {
         })}
       </div>
     </Card>
-  )
+  );
 }
 
 RatingsChart.PropTypes = {
   rating: PropTypes.object,
-}
+};
