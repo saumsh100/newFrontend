@@ -14,8 +14,6 @@ import {
   MenuSeparator,
 } from '../library';
 import styles from './styles.scss';
-import runOnDemandSync from '../SyncButton';
-
 
 const UserMenu = (props) => {
   // TODO: create a separate container for this to load in user data from 'currentUser'
@@ -41,12 +39,18 @@ class TopBar extends Component {
     };
 
     this.logout = this.logout.bind(this);
+    this.sync = this.sync.bind(this);
   }
 
   logout() {
     localStorage.setItem('token', '');
     browserHistory.push('/login');
     this.props.logout();
+  }
+
+  sync(e) {
+    e.preventDefault();
+    this.props.runOnDemandSync();
   }
 
   render() {
@@ -85,7 +89,6 @@ class TopBar extends Component {
       </div>
     );
 
-
     return (
       <AppBar className={topBarClassName}>
         {logoComponent}
@@ -108,7 +111,7 @@ class TopBar extends Component {
             <li>
               <IconButton
                 icon="refresh"
-                onClick={e => runOnDemandSync(e)}
+                onClick={this.sync}
               />
             </li>
             <li>
@@ -133,6 +136,7 @@ TopBar.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
+  runOnDemandSync: PropTypes.func.isRequired,
 };
 
 export default TopBar;
