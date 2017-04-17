@@ -11,7 +11,7 @@
   &__header {
     display: flex;
     align-items: center;
-    height: 80px;
+    height: 60px;
     padding: 0 10px 0 15px;
     text-transform: uppercase;
     border-bottom: 2px solid $primary-lightgrey;
@@ -30,6 +30,7 @@
       border-right: 2px solid $primary-lightgrey;
     }
     &_link {
+      font-size: $small-size;
       text-transform: none;
       cursor: pointer ;
     }
@@ -42,8 +43,8 @@
   &__subheader {
     display: flex;
     align-items: center;
-    height: 100px;
-    margin: 0 10px 0 15px;
+    padding-left: 15px;
+    height: 60px;
     border-right: 2px solid $primary-lightgrey;
     font-weight: 600;
     text-transform: uppercase;
@@ -59,7 +60,6 @@
   color: $primary-dark;
   font-weight: $large-weight;
   border-right: 2px solid $primary-lightgrey;
-  margin-right: 10px;
   min-width: 800px;
   @media screen and (max-width: 950px) {
     border-right: none;
@@ -69,17 +69,17 @@
   }
   &__item {
     min-width: 250px;
-    padding: 0 40px 0 15px;
     display: table;
     width: 100%;
     position: relative;
-    height: 100px;
+    height: 60px;
     list-style: none;
     margin: 0;
     border-bottom: 2px solid $primary-lightgrey;
 
     &_phone {
-      color: #b5b5b5;
+      font-size: $small-size;
+      color: $primary-light-blue;;
     }
 
     &_email {
@@ -103,6 +103,8 @@
       align-items: center;
       height: 100%;
       width: 205px;
+      padding-left: 5px;
+      padding-right: 30px;
       border-right: 2px solid $primary-lightgrey;
     }
     &_center {
@@ -110,7 +112,8 @@
       display: flex;
       align-items: center;
       border-right: 2px solid $primary-lightgrey;
-      width: 120px;
+      width: 80px;
+      justify-content: center;
     }
 
     &_personal {
@@ -127,11 +130,10 @@
     }
     &_status {
       text-align: center;
-      padding: 0 50px;
     }
     .status {
       &__icon {
-        font-size: $extra-medium-size;
+        font-size: $large-size;
         &_check {
           color: $primary-green;
         }
@@ -159,7 +161,7 @@
         font-size: $small-size;
       }
       &__button {
-        color: $primary-blue;
+        color: $primary-light-blue;;
         font-size: $small-size;
         display: flex;
         justify-content: center;

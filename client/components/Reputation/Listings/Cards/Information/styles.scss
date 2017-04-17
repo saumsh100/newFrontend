@@ -2,18 +2,18 @@
 @import "../../../../../fonts";
 
 .total {
-  height: 200px;
+  height: 210px;
   &__header {
     display: flex;
-    padding: 10px 20px;
+    padding: 15px 10px;
   }
   &__wrapper {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 0 20px;
+    padding: 0 0 0px 20px;
     @media screen and (max-width: 400px){
-      padding: 0 20px;
+      padding: 0 0 15px 20px;
     }
   }
   &__item {

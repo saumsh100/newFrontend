@@ -234,7 +234,7 @@ class Dashboard extends React.Component {
     return (
       <Grid className={styles.dashboard}>
         <Row className={styles.dashboard__header}>
-          <Col xs={12}>
+          <Col xs={12} >
             <Card className={styles.dashboard__header_title}>
               Welcome Back, <b>Corina</b>
             </Card>
@@ -317,7 +317,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.dashboardContainer}>
         {this.renderCards()}
       </div>
     );

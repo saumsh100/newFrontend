@@ -97,7 +97,7 @@ class Listings extends Component {
     return (
       <Grid className={styles.listings}>
         <Row>
-          <Col className={styles.padding} xs={12} md={4}>
+          <Col className={styles.padding} xs={12} md={3}>
             <Score
               borderColor={colorMap.blue}
               title="Listing Score"
@@ -111,21 +111,21 @@ class Listings extends Component {
               data={totalData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={4}>
+          <Col className={styles.padding} xs={12} md={5}>
             <Information
               borderColor={colorMap.blue}
               title="Listing Score"
               data={informationData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={8}>
+          <Col className={styles.padding} xs={12} md={9}>
             <Table
               borderColor={colorMap.blue}
               cardTitle="Search Engines"
               data={hardcodeTableData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={4}>
+          <Col className={styles.padding} xs={12} md={3}>
             <Filters filters={filters} />
           </Col>
         </Row>

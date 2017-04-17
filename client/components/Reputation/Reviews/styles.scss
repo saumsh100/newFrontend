@@ -81,7 +81,7 @@
 		box-shadow: border-box;
 		padding-top: 15px;
 		text-align: center;
-		border-top: 1px solid $primary-darkgrey;
+		border-top: 2px solid $primary-grey;
 		color: $primary-darkgrey;
 		font-size: $medium-size;
 	}
@@ -108,7 +108,7 @@
 		&__percent {
 			height: 16px;
 			margin-right: 4px;
-			background-color: $primary-blue;
+			background-color: $primary-light-blue;
 			display: inline-block;
 		}
 	}
@@ -139,7 +139,7 @@
 	width: 100%;
 	margin-top: 10px;
 	min-height: 168px;
-	max-height: 400px;
+	max-height: 700px;
 	overflow: auto;
 
   &__cardHeader {
