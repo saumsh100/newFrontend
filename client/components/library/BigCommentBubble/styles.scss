@@ -28,7 +28,7 @@
     border-right: 2px solid #8cbcd6;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    box-shadow: 0px 0px 25px 1px rgba(209,209,209,0.5);
+    box-shadow: 0px 2px 0px -4px rgba(0,0,0,0.33);
 
     &__header {
       color: $primary-dark;
@@ -49,10 +49,10 @@
       position: absolute;
       width: 0;
       height: 0;
-      left: -16px;
-      border-top: 8px solid transparent;
-      border-right: 16px solid #8cbcd6;
-      border-bottom: 8px solid transparent;
+      left: -12px;
+      border-top: 12px solid transparent;
+      border-right: 12px solid #8cbcd6;
+      border-bottom: 12px solid transparent;
       display: block;
       content: "";
     }
@@ -93,6 +93,7 @@
     border-bottom: 2px solid #8cbcd6;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    box-shadow: 0px 11px 16px -10px rgba(0,0,0,0.33);
     &__respondButton {
       text-align: right;
       font-size: 14px;

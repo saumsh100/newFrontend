@@ -36,7 +36,7 @@ export default function Filters(props) {
                   <option selected value={i.options[0]}>{i.options[0]}</option>
                     {i.options.map(item => (
                     <option value={item}>{item}</option>
-                    ))} 
+                    ))}
                 </select>
               </div>
           })
@@ -46,7 +46,7 @@ export default function Filters(props) {
                 {f.titleIcon &&
                   <div style={{backgroundColor: f.titleIcon.color}} className={styles.filters__title__icon}>
                     <span className={`fa fa-${f.titleIcon.icon}`} />
-                  </div> 
+                  </div>
                 }
                 {f.title}
               </div>

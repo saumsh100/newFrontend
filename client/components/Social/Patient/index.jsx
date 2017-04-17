@@ -76,10 +76,10 @@ class Patient extends Component {
     return (
       <Grid className={styles.reviews}>
         <Row>
-          <Col className={styles.padding} xs={12} md={12} sm={7} lg={7}>
+          <Col className={styles.padding} xs={12} md={12} sm={9} lg={9}>
             <ReviewsCard data={DataBigComment} />
           </Col>
-          <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
+          <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
             <Filters filters={filters} />
           </Col>
         </Row>

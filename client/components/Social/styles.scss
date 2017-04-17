@@ -1,7 +1,7 @@
 @import "../../ui.scss";
 
 .mainIntelligenceContainer {
-  padding: 0 15px 45px 15px;
+  padding: $container-padding;
 }
 
 .header {
@@ -38,5 +38,6 @@
 }
 
 .cardHeader {
-  padding: 20px;
+  padding-top: 15px;
+  padding-left: 15px;
 }

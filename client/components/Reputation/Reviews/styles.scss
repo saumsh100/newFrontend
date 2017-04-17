@@ -44,7 +44,8 @@
 			margin-bottom: 20px;
 		}
 		div:last-child {
-			color: $primary-darkgrey;
+      font-weight: $large-weight;
+      color: $primary-darkgrey;
 		}
 	}
 }
@@ -139,7 +140,7 @@
 	width: 100%;
 	margin-top: 10px;
 	min-height: 168px;
-	max-height: 700px;
+	max-height: 747px;
 	overflow: auto;
 
   &__cardHeader {
