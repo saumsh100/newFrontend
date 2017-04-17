@@ -1,12 +1,12 @@
 @import "../../../ui";
 
 .bigComment {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 38px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   padding: 0 5px;
-  font-size: 25px;
+  font-size: 35px;
 }
 .bigCommentBubble {
   display: flex;
@@ -28,6 +28,8 @@
     border-right: 2px solid #8cbcd6;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    box-shadow: 0px 0px 25px 1px rgba(209,209,209,0.5);
+
     &__header {
       color: $primary-dark;
       font-size: 14px;
@@ -64,6 +66,7 @@
       color: #8cbcd6;
       margin-bottom: 15px;
       font-size: 14px;
+      font-weight: $large-weight;
     }
     &__rating {
       color: #ede27d;

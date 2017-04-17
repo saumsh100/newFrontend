@@ -90,7 +90,6 @@ class Reviews extends Component {
           {type: 'checkbox', value: 'With new Comments'},
           {type: 'checkbox', value: 'Without new Comments'},
         ]
-
       }
     ];
 
@@ -103,7 +102,7 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <AverageRating />
+            <AverageRating count={4.7} average={5}/>
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
@@ -125,11 +124,10 @@ class Reviews extends Component {
           <Col className={styles.padding} xs={12} md={12}>
             <Tags />
           </Col>
-          <Col className={styles.padding} xs={12} md={12} sm={7} lg={7}>
+          <Col className={styles.padding} xs={12} md={12} sm={9} lg={9}>
             <ReviewsCard data={DataBigComment} />
           </Col>
-
-          <Col className={styles.padding} xs={12} md={4} sm={5} lg={5}>
+          <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
             <Filters filters={filters} />
           </Col>
         </Row>

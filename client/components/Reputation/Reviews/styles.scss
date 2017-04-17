@@ -62,17 +62,17 @@
 	padding: 10px 0 10px 0;
 	&__count {
 		font-size: $x-large-size;
-		font-weight: $small-weight;
+		font-weight: $large-weight;
 	}
 
 	&__title {
 		font-size: $extra-medium-size;
-		font-weight: $small-weight;
+		font-weight: $large-weight;
 	}
 
 	&__rating {
 		color: $primary-darkgrey;
-		font-weight: $small-weight;
+		font-weight: $large-weight;
 	}
 
 	&__bottom {
@@ -141,6 +141,11 @@
 	min-height: 168px;
 	max-height: 400px;
 	overflow: auto;
+
+  &__cardHeader {
+    padding-top: 15px;
+    padding-left: 15px;
+  }
 
 	&__container {
 		border-top: 2px solid $primary-lightgrey;
