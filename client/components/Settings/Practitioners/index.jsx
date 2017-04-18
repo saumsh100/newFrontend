@@ -16,12 +16,12 @@ const sortPractitionersAlphabetical = (a, b) => {
 class Practitioners extends Component {
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services'] });
+    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services', 'timeOffs'] });
     this.props.fetchEntities({ key: 'services' });
   }
 
   render() {
-    const { practitioners, weeklySchedules } = this.props;
+    const { practitioners, weeklySchedules, timeOffs } = this.props;
 
     let showComponent = null;
     if (practitioners) {
@@ -30,6 +30,7 @@ class Practitioners extends Component {
         <PractitionerList
           practitioners={filteredPractitioners}
           weeklySchedules={weeklySchedules}
+          timeOffs={timeOffs}
         />
       );
     }
@@ -62,10 +63,12 @@ function mapStateToProps({ entities }) {
     return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
   });
 
+  const timeOffs = entities.getIn(['timeOffs', 'models']);
 
   return {
     practitioners,
     weeklySchedules,
+    timeOffs,
   };
 }
 

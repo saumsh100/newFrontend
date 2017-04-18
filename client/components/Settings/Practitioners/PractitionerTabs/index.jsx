@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -45,9 +46,9 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule, } = this.props;
+    const { practitioner, weeklySchedule, timeOffs } = this.props;
 
-    if (!practitioner && !weeklySchedule ) {
+    if (!practitioner && !weeklySchedule) {
       return null;
     }
 
@@ -89,7 +90,8 @@ class PractitionerTabs extends Component {
           <Tab label="Time Off">
             <PractitionerTimeOff
               key={practitioner.get('id')}
-              practitioner={practitioner}
+              practitioner={practitioner}x
+              timeOffs={timeOffs}
             />
           </Tab>
         </Tabs>

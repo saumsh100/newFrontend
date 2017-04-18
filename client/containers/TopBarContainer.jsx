@@ -5,9 +5,10 @@ import { bindActionCreators } from 'redux';
 import TopBar from '../components/TopBar';
 import { setIsCollapsed } from '../actions/toolbar';
 import { logout } from '../actions/auth';
+import runOnDemandSync from '../thunks/runOnDemandSync';
 
 function TopBarContainer(props) {
-  return <TopBar {...props}/>;
+  return <TopBar {...props} />;
 }
 
 TopBarContainer.propTypes = {
@@ -25,6 +26,7 @@ function mapActionsToProps(dispatch) {
   return bindActionCreators({
     setIsCollapsed,
     logout,
+    runOnDemandSync,
   }, dispatch);
 }
 

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, Grid, Row, Col } from '../../../library';
-import styles from '../styles.scss';
+import {  Form, Field, } from '../../../../library';
+import styles from '../../styles.scss';
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined

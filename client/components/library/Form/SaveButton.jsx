@@ -21,6 +21,7 @@ export default function SaveButton(props) {
   );
 }
 SaveButton.propTypes = {
+  pristine: PropTypes.bool,
 };
 
 
