@@ -38,7 +38,7 @@ class Reviews extends Component {
       iconAlign: 'center',
       headerLinkName: "L. Linda",
       headerLinkSite: "yelp.ca",
-      siteStars: 6,
+      siteStars: 5,
       siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
       sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
       createdAt: moment().subtract(10, 'days').fromNow()
@@ -59,7 +59,7 @@ class Reviews extends Component {
       {
         title: 'Date Range',
         items: [
-          {type: 'select', options: ['options1', 'options2', 'options3', 'options4'] }
+          {type: 'select', name: 'opt1', options: [{ value: 'options1' }, { value: 'options2' }, { values: 'options3' }, { value: 'options4' },]}
         ]
       }, {
         title: 'Sources',
@@ -82,9 +82,9 @@ class Reviews extends Component {
       {
         title: 'Status',
         items: [
-          {type: 'select', options: ['Select Response Status', 'options1', 'options3', 'options4']},
-          {type: 'select', options: ['Select Shared Status', 'options1', 'options3', 'options4']},
-          {type: 'select', options: ['Select Publishing Status', 'options1', 'options3', 'options4']},
+          {type: 'select', name: 'opt2', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
+          {type: 'select', name: 'opt3', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
+          {type: 'select', name: 'opt4', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
           {type: 'checkbox', value: 'With Comments'},
           {type: 'checkbox', value: 'Without Comments'},
           {type: 'checkbox', value: 'With new Comments'},

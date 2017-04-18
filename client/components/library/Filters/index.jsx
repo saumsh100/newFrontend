@@ -1,62 +1,51 @@
-import React, { PropTypes } from 'react';
-import { Card, Checkbox, Search } from '../../library';
+import React, { Component, PropTypes } from 'react';
+import { Card, Checkbox, Search, Form } from '../../library';
+import FilterForm from './FilterForm';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 
-export default function Filters(props) {
-  const { filters } = props;
-  return (
-    <Card borderColor={colorMap.red} className={styles.card}>
-      <div className={styles.filters}>
-        <div className={styles.filters__header}>
-          <div className={styles.filters__header__left}>
-            <span>Filters</span>
-            <span className="fa fa-sliders" />
-          </div>
-          <div className={styles.filters__header__right}>
-            <span>Select All</span>
-            <span>Clear All</span>
-          </div>
-        </div>
-        <div className={styles.filters__search}>
-          <span className="fa fa-search" />
-          <input type="text" placeholder="Search..." />
-        </div>
-        {filters.map(f => {
-          let content =
-          f.items.map(i => {
-            return i.type === 'checkbox' ?
-              <div className={styles.filters__checkFilter__chbox}>
-                <span>{i.value}</span>
-                <span><Checkbox /></span>
-              </div>
-              :
-              <div className={styles.filters__selectFilter}>
-                <select>
-                  <option selected value={i.options[0]}>{i.options[0]}</option>
-                    {i.options.map(item => (
-                    <option value={item}>{item}</option>
-                    ))}
-                </select>
-              </div>
-          })
-          return (
-            <div>
-              <div className={styles.filters__title}>
-                {f.titleIcon &&
-                  <div style={{backgroundColor: f.titleIcon.color}} className={styles.filters__title__icon}>
-                    <span className={`fa fa-${f.titleIcon.icon}`} />
-                  </div>
-                }
-                {f.title}
-              </div>
-              <div className={styles.filters__checkFilter}>
-                {content}
-              </div>
+class Filters extends Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(values) {
+    console.log(values);
+  }
+
+  render() {
+    const { filters } = this.props;
+    return (
+      <Card borderColor={colorMap.red} className={styles.card}>
+        <div className={styles.filters}>
+          <div className={styles.filters__header}>
+            <div className={styles.filters__header__left}>
+              <span>Filters</span>
+              <span className="fa fa-sliders" />
             </div>
-          );
-        })}
-      </div>
-    </Card>
-  );
+            <div className={styles.filters__header__right}>
+              <span>Select All</span>
+              <span>Clear All</span>
+            </div>
+          </div>
+          <div className={styles.filters__search}>
+            <span className="fa fa-search" />
+            <input type="text" placeholder="Search..." />
+          </div>
+          <FilterForm
+            filters={filters}
+            formName="filtersList"
+            handleSubmit={this.handleSubmit}
+          />
+        </div>
+      </Card>
+    );
+  }
 }
+
+Filters.propTypes = {
+  filters: PropTypes.arrayOf(Object),
+};
+
+export default Filters;
