@@ -1,3 +1,4 @@
+
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
@@ -11,9 +12,14 @@ import {
   SET_CLINIC_INFO,
   REMOVE_RESERVATION,
   SET_RESERVATION,
+  SET_SELECTED_AVAILABILITY,
 } from '../constants';
 
-const initialState = fromJS({
+export const createInitialWidgetState = state => fromJS(Object.assign({
+  account: null,
+  practitioners: null,
+  services: null,
+  selectedAvailability: null,
   practitionerId: null,
   serviceId: null,
   messages: [],
@@ -24,9 +30,13 @@ const initialState = fromJS({
   clinicName: null,
   bookingWidgetPrimaryColor: null,
   reservationId: null,
-});
+}, state));
 
 export default handleActions({
+  [SET_SELECTED_AVAILABILITY](state, action) {
+    return state.set('selectedAvailability', action.payload);
+  },
+
   [SIX_DAYS_SHIFT](state, action) {
     const { selectedStartDay, selectedEndDay, practitionerId, retrievedFirstTime } = action.payload;
     return state.merge({
@@ -97,5 +107,4 @@ export default handleActions({
       messages: [`Reserved time for this practitioner has been expired...`]
     })
   },
-
-}, initialState);
+}, createInitialWidgetState());

@@ -5,7 +5,7 @@ import styles from './styles.scss';
 import { Button, Form, Field } from '../../library';
 import { validate, asyncEmailValidate } from '../../library/Form/validate';
 
-class SignUp extends Component {
+class SubmitView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -152,60 +152,13 @@ class SignUp extends Component {
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>
-          <div className={`${styles.signup__sidebar} ${this.state.collapseMenu ? styles.signup__sidebarActive : ''}`}>
-            <div className={styles.sidebar__header}>
-              <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
-              <div className={styles.sidebar__header_title}>
-                Pacific Heart
-                <span>Dental</span>
-              </div>
-            </div>
-            <div className={styles.sidebar__body}>
-              <div className={styles.sidebar__body_information}>
-                <div className={styles.sidebar__information}>
-                  <div className={styles.sidebar__information_title}>
-                    PACIFIC HEART DENTAL
-                  </div>
-                  <div className={styles.sidebar__information_text}>
-                    {address}
-                  </div>
-                </div>
-              </div>
-              <div className={styles.sidebar__body_information}>
-                <div className={styles.sidebar__information}>
-                  <div className={styles.sidebar__information_title}>
-                    YOUR APPOINTMENT
-                  </div>
-                  <div className={styles.sidebar__information_text}>
-                    {appointmentInfo}
-                  </div>
-                </div>
-              </div>
-              <button onClick={this.setRegistrationStep} className={styles.sidebar__body_btn}>GO BACK</button>
-            </div>
-            <div className={styles.sidebar__footer}>
-              <div className={styles.sidebar__footer_copy}>
-                <div>POWERED BY:</div>
-                <img src="/images/logo_black.png" alt="logo" />
-              </div>
-            </div>
-          </div>
           <div className={styles.signup__main}>
-            <div className={styles.signup__header}>
-              <button className={styles.signup__header_btn}
-                      onClick={() => this.collapseMenu(true)}>
-                <i className="fa fa-bars" />
-              </button>
-              <div className={styles.signup__header_title}>
-                SIGN UP
-              </div>
-              <Timer
-                className={styles.signup__header_timer}
-                seconds={this.state.time}
-                percentage={this.getPercent()}
-                color={this.props.bookingWidgetPrimaryColor}
-              />
-            </div>
+            <Timer
+              className={styles.signup__header_timer}
+              seconds={this.state.time}
+              percentage={this.getPercent()}
+              color={this.props.bookingWidgetPrimaryColor}
+            />
             <div onClick={() => this.collapseMenu(false)} className={styles.signup__body}>
               {contnet}
             </div>
@@ -229,4 +182,4 @@ class SignUp extends Component {
 }
 
 
-export default SignUp;
+export default SubmitView;

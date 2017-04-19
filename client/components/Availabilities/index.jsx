@@ -2,9 +2,12 @@
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import { DateUtils } from 'react-day-picker';
-import SignUp from './SignUp';
 import SelectionView from './SelectionView';
+import SubmitView from './SubmitView';
+import SideBar from './SideBar';
+import styles from './styles.scss';
 
+let i = 0;
 class Availabilities extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +36,7 @@ class Availabilities extends Component {
   }
 
   componentWillReceiveProps() {
-    document.body.style.setProperty('--bookingWidgetPrimaryColor', this.props.bookingWidgetPrimaryColor);
+    document.body.style.setProperty('--bookingWidgetPrimaryColor', this.props.account.get('bookingWidgetPrimaryColor'));
   }
 
   onDoctorChange(e) {
@@ -92,11 +95,14 @@ class Availabilities extends Component {
     });
   }
 
-  selectAvailability(slot) {
-    if (!slot.isBusy) {
-      const { startsAt } = slot;
-      this.props.setStartingAppointmentTime(startsAt);
-    }
+  selectAvailability() {
+    alert('selecting new availability');
+    const newAvailability = {
+      startDate: new Date(2017, i++, i * 2, 8, 0),
+      endDate: new Date(2017, i++, i * 2, 9, 0),
+    };
+
+    this.props.setSelectedAvailability(newAvailability);
   }
 
   isDaySelected(day) {
@@ -163,10 +169,8 @@ class Availabilities extends Component {
       createPatient,
       practitionersStartEndDate,
       setRegistrationStep,
-      logo,
-      address,
+      account,
       removeReservation,
-      bookingWidgetPrimaryColor,
     } = this.props;
 
     const serviceId = this.props.serviceId || services[0] && services[0].id;
@@ -174,39 +178,68 @@ class Availabilities extends Component {
     const defaultValues = { practitionerId, serviceId };
     const params = { practitionerId, services, availabilities, practitioners, defaultValues };
     const appointmentInfo = this.getAppointmentInfo(serviceId);
-    switch (practitionersStartEndDate.get('registrationStep')) {
-      case 1:
-        return (
-          <SelectionView
-            params={params}
-            props={this.props}
-            upperState={this.state}
-            collapseMenu={this.collapseMenu}
-            selectAvailability={this.selectAvailability}
-            handleSaveClick={this.handleSaveClick}
-            handleChange={this.handleChange}
-            sixDaysForward={this.sixDaysForward}
-            sixDaysBack={this.sixDaysBack}
-          />
-        );
-      case 2:
-        return (
-          <SignUp
-            setRegistrationStep={setRegistrationStep}
-            createPatient={createPatient}
-            practitionersStartEndDate={practitionersStartEndDate}
-            logo={logo}
-            address={address}
-            appointmentInfo={appointmentInfo}
-            removeReservation={removeReservation}
-            bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
-          />
-        );
-      case undefined:
-        return (
-          <div>Loading..</div>
-        );
+    const registrationStep = 1;//practitionersStartEndDate.get('registrationStep');
+
+    // TODO: does this ever happen?...
+    let currentView = (
+      <div>Loading...</div>
+    );
+
+    if (registrationStep === 1) {
+      currentView = (
+        <SelectionView
+          params={params}
+          props={this.props}
+          upperState={this.state}
+          account={account}
+          collapseMenu={this.collapseMenu}
+          selectAvailability={this.selectAvailability}
+          handleSaveClick={this.handleSaveClick}
+          handleChange={this.handleChange}
+          sixDaysForward={this.sixDaysForward}
+          sixDaysBack={this.sixDaysBack}
+        />
+      );
+    } else if (registrationStep === 2) {
+      currentView = (
+        <SubmitView
+          setRegistrationStep={setRegistrationStep}
+          createPatient={createPatient}
+          practitionersStartEndDate={practitionersStartEndDate}
+          account={account}
+          appointmentInfo={appointmentInfo}
+          removeReservation={removeReservation}
+        />
+      );
     }
+
+    return (
+      <div className={styles.signup}>
+        <div className={styles.signup__wrapper}>
+          <SideBar collapsed={this.state.collapsedMenu} account={account}  />
+          <div className={styles.appointment__main}>
+            <div className={styles.appointment__header}>
+              <button
+                className={styles.appointment__header_btn}
+                onClick={() => this.collapseMenu(true)}
+              >
+                <i className="fa fa-bars" />
+              </button>
+              <div className={styles.appointment__header_title}>
+                BOOK APPOINTMENT
+              </div>
+              <button
+                className={styles.appointment__header_btn}
+                onClick={this.closeIframe}
+              >
+                <i className="fa fa-times" />
+              </button>
+            </div>
+            {currentView}
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 

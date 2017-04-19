@@ -13,7 +13,7 @@ function AvailabilitiesDisplay(props) {
   } = props;
 
   return (
-    <div className={styles.appointment__table}>
+    <div className={styles.appointment__table} onClick={onSelect}>
       <button className={styles.appointment__table_btn} onClick={onSixDaysBack}>
         <i className="fa fa-arrow-circle-o-left" />
       </button>

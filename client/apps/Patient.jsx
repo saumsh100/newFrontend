@@ -11,14 +11,12 @@ import jwt from 'jwt-decode';
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
 import PatientRoutes from '../routes/Patient';
-import configure from '../store';
+import configure from '../store/availabilitiesStore';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
 
-const store = configure({ browserHistory });
+const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
 const history = syncHistoryWithStore(browserHistory, store);
-// loadInitialData(store);
-
 
 /*const token = localStorage.getItem('token');
 if (!token) {
@@ -35,7 +33,7 @@ if (!token) {
   }
 }*/
 
-connectSocketToStore(socket, store);
+// connectSocketToStore(socket, store);
 
 window.store = store;
 window.browserHistory = history;

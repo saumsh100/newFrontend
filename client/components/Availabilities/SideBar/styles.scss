@@ -1,0 +1,133 @@
+
+/* TODO: remove this out of here and put in a top level style sheet */
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700");
+
+.signup {
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    padding: 0 20px;
+    background-color: #f3715c;
+    background-color: var(--bookingWidgetPrimaryColor);
+    position: relative;
+    @media screen and (max-width: 800px) {
+      display: none;
+      transform: translateX(-200px);
+    }
+  }
+
+  &__sidebarActive {
+    display: flex;
+    transform: translateX(0px);
+    width: 200px;
+    position: absolute;
+    height: 100%;
+    z-index: 1;
+    left: 0;
+    transition: transform .5s;
+
+  }
+}
+
+.sidebar {
+  &__header {
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    &_logo {
+      margin: 0 auto;
+      display: block;
+      height: 30px;
+    }
+
+    &_title {
+      margin-top: 5px;
+      text-align: center;
+      color: #fff;
+      font-size: 8px;
+      font-weight: 500;
+      span {
+        font-weight: 200;
+      }
+    }
+
+    &_btn {
+      height: 25px;
+      position: absolute;
+      background: none;
+      border: none;
+      display: none;
+      left: 10px;
+      &:hover {
+        color: #f3715c;
+        color: var(--bookingWidgetPrimaryColor);
+      }
+    }
+  }
+
+  &__body {
+    &_address {
+      margin-top: 30px;
+    }
+
+    &_btn {
+      width: 100%;
+      padding: 6px 0;
+      margin-top: 61px;
+      margin-bottom: 20px;
+      font-size: 10px;
+      color: #f3715c;
+      color: var(--bookingWidgetPrimaryColor);
+      text-transform: uppercase;
+      cursor: pointer;
+      background: #fff;
+      border: none;
+      position: relative;
+      &::before {
+        content: "\25c4";
+        position: absolute;
+        left: 5px;
+      }
+    }
+  }
+
+  &__information {
+    font-size: 10px;
+    text-align: center;
+    line-height: 1.25;
+    padding: 25px 0;
+    color: #fff;
+    border-top: 1px solid #fff;
+    &_title {
+      font-size: 11px;
+      padding: 2px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+  }
+
+  &__footer {
+    padding: 10px 0 20px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    &_copy {
+      display: flex;
+      margin-top: 18px;
+      align-items: center;
+      flex-direction: column;
+      div {
+        margin-right: 2px;
+        font-size: 8px;
+        color: #fff;
+      }
+
+      img {
+        height: 40px;
+      }
+    }
+  }
+}

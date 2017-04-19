@@ -48,6 +48,8 @@ Patient.belongsTo(Account, 'account', 'accountId', 'id');
 
 Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
+Account.hasMany(Service, 'services', 'id', 'accountId');
+Account.hasMany(Practitioner, 'practitioners', 'id', 'accountId');
 //Account.hasMany(User, 'users', 'id', 'activeAccountId');
 
 Chat.hasOne(Account, 'account', 'accountId', 'id');

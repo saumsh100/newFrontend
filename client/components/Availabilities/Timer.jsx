@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import 'moment-duration-format';
 import styles from './Timer.scss';
+
 class Timer extends React.Component {
   constructor(props) {
     super(props);
@@ -10,7 +11,6 @@ class Timer extends React.Component {
       percentage: props.initialAnimation ? 0 : props.percentage,
     };
   }
-
 
   componentDidMount() {
     if (this.props.initialAnimation) {
