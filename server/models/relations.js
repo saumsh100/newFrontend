@@ -14,6 +14,7 @@ const TextMessage = require('./TextMessage');
 const Token = require('./Token');
 const User = require('./User');
 const Reservation = require('./Reservation')
+const SyncLog = require('./SyncLog');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
@@ -62,3 +63,6 @@ Practitioner.hasMany(PractitionerTimeOff, 'timeOffs', 'id', 'practitionerId');
 
 Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
 Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
+
+SyncLog.hasOne(Patient, 'patient', 'patientId', 'id');
+SyncLog.hasOne(Appointment, 'appointment', 'appointmentId', 'id');

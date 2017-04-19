@@ -11,7 +11,7 @@ const Practitioner_Service = require('./Practitioner_Service');
 const PractitionerTimeOff = require('./PractitionerTimeOff');
 const Request = require('./Request');
 const Service = require('./Service');
-const SyncError = require('./SyncError');
+const SyncLog = require('./SyncLog');
 const SyncClientVersion = require('./SyncClientVersion');
 const TextMessage = require('./TextMessage');
 const User = require('./User');
@@ -35,6 +35,6 @@ module.exports = {
   TextMessage,
   User,
   Token,
-  SyncError,
+  SyncLog,
   SyncClientVersion,
 };

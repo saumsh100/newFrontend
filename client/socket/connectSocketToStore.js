@@ -33,5 +33,9 @@ export default function connectSocketToStore(socket, store) {
   socket.on('update:Appointment', (data) => {
     console.log('EVENT:update:Appointment: data=', data);
   });
+
+  socket.on('syncLog', (data) => {
+    console.log('[ TEMP ] normalized logEntry', data);
+  });
 }
 

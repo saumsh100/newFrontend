@@ -3,6 +3,8 @@
 // TODO: If so, we should consider abstracting that so we dont slow up other services
 const Appointment = require('../models/Appointment');
 const Request = require('../models/Request');
+const Patient = require('../models/Patient');
+const SyncLog = require('../models/SyncLog');
 const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
@@ -30,7 +32,7 @@ function runDashboardFeeds(socket) {
     });
 
   /**
-   * Listen to changes on the Requests table and update dashbaords in realtime
+   * Listen to changes on the Requests table and update dashboards in real time
    */
   Request
     .filter({ accountId: activeAccountId })
@@ -45,6 +47,43 @@ function runDashboardFeeds(socket) {
           // console.log('[[INFO]] sending', doc);
           console.log('request added');
           socket.emit('addRequest', doc);
+        }
+      });
+    });
+
+  /**
+   * Listen to changes on the SyncLog table to update dashboards in real time.
+   * Artificially set up the document from the feed for the normalizer.
+   */
+  SyncLog
+    .filter({ accountId: activeAccountId })
+    .filter((entry) => {
+      return entry('operation').ne('sync');
+    })
+    .changes({ squash: true })
+    .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
+      // TODO maybe there is a way to do this without querying the db on feed change?
+      feed.each((error, logEntry) => {
+        if (logEntry.patientId) {
+          Patient
+            .get(logEntry.patientId)
+            .run()
+            .then((patient) => {
+              logEntry.patient = patient;
+              socket.emit('syncLog', normalize('syncLog', logEntry));
+            })
+            .catch(err => console.log('ERROR', err));
+        } else if (logEntry.appointmentId) {
+          Appointment
+            .get(logEntry.appointmentId)
+            .run()
+            .then((appointment) => {
+              logEntry.appointment = appointment;
+              socket.emit('syncLog', normalize('syncLog', logEntry));
+            })
+            .catch(err => console.log('ERROR', err));
         }
       });
     });

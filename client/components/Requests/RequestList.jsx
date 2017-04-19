@@ -31,6 +31,8 @@ class RequestList extends Component {
 
     createEntityRequest({ key: 'appointments', entityData: appointment })
       .then(() => {
+        // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
+        console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
         const modifiedRequest = request.set('isCancelled', true);
         updateEntityRequest({ key: 'requests', model: modifiedRequest });
       }).catch(err => console.log(err));

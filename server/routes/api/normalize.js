@@ -51,8 +51,11 @@ const userSchema = () => {
   return new schema.Entity('users');
 };
 
-const syncErrorSchema = () => {
-  return new schema.Entity('syncErrors');
+const syncLogSchema = () => {
+  return new schema.Entity('syncLog', {
+    patient: patientSchema(),
+    appointment: appointmentSchema(),
+  });
 };
 
 const weeklyScheduleSchema = () => {
@@ -98,7 +101,7 @@ const SCHEMAS = {
   user: userSchema(),
   practitioner: practitionerSchema(),
   practitionerTimeOff: timeOffSchema(),
-  syncError: syncErrorSchema(),
+  syncLog: syncLogSchema(),
   reservation: reservationSchema(),
   weeklySchedule: weeklyScheduleSchema(),
 
@@ -112,7 +115,7 @@ const SCHEMAS = {
   services: [serviceSchema()],
   textMessages: [textMessageSchema()],
   users: [userSchema()],
-  syncErrors: [syncErrorSchema()],
+  syncLogs: [syncLogSchema()],
   practitioners: [practitionerSchema()],
   practitionerTimeOffs: [timeOffSchema()],
   weeklySchedules: [weeklyScheduleSchema()],
