@@ -73,7 +73,7 @@ class AddressForm extends React.Component {
           <Field
             required
             name="street"
-            label="Street"
+            label="Street Address"
             validate={[maxLength25]}
           />
           <div className={styles.addressCol}>

@@ -1,7 +1,8 @@
+
 import React, { Component, PropTypes } from 'react';
 import {
   Icon, Card
-} from '../../library';
+} from '../../../library';
 import styles from './styles.scss';
 
 class Filters extends Component {

@@ -1,15 +1,17 @@
+
 import React, { Component, PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import { DateUtils } from 'react-day-picker';
 import { Grid, Row, Col, Card, Icon, Calendar, Tabs, Tab } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
-import Filters from './Filters'
+import Filters from './Cards/Filters';
 import DayView from './DayView';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
-import CurrentDate from './CurrentDate';
+import CurrentDate from './Cards/CurrentDate';
 import styles from './styles.scss';
+
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 
@@ -26,7 +28,6 @@ class ScheduleComponent extends Component {
     };
     this.addAvailability = this.addAvailability.bind(this);
     this.removeAvailability = this.removeAvailability.bind(this);
-    this.handleDayClick = this.handleDayClick.bind(this);
     this.toggleCalendar = this.toggleCalendar.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
   }
@@ -47,18 +48,6 @@ class ScheduleComponent extends Component {
     window.socket.emit('fetchAvailabilities');
   }
 
-  handleDayClick(e, day, {selected, disabled}) {
-    if (disabled) {
-      return;
-    }
-    if (selected) {
-      this.setState({selectedDay: null, showDatePicker: false});
-    } else {
-      this.setState({selectedDay: day, showDatePicker: false});
-    }
-    const scheduleDate = moment(day);
-    this.props.setCurrentScheduleDate(scheduleDate);
-  }
 
   toggleCalendar() {
     this.setState({showDatePicker: !this.state.showDatePicker});
@@ -128,7 +117,7 @@ class ScheduleComponent extends Component {
     }
     return (
       <Grid className={styles.schedule}>
-        <Row>
+        <Row className={styles.rowTest}>
           <Col xs={9} className={styles.schedule__container}>
             <Card>
               <div className={`${styles.schedule__title} ${styles.title}`}>
@@ -152,9 +141,6 @@ class ScheduleComponent extends Component {
                   </div>
                   <Calendar
                     className={styles.schedule__daypicker_select}
-                    initialMonth={new Date(2016, 1)}
-                    selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
-                    onDayClick={this.handleDayClick}
                   />
                 </div>
                 }
@@ -171,12 +157,9 @@ class ScheduleComponent extends Component {
               appointmentsTypes={appointmentsTypes}
               selectAppointmentType={selectAppointmentType}
             />
-            <RequestsContainer className={styles.schedule__sidebar_request}/>
+            <RequestsContainer className={styles.schedule__sidebar_request} />
             <Calendar
               className={styles.schedule__sidebar_calendar}
-              initialMonth={new Date(2016, 1)}
-              selectedDays={day => DateUtils.isSameDay(this.state.selectedDay, day)}
-              onDayClick={this.handleDayClick}
             />
           </Col>
         </Row>

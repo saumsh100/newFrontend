@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import styles from '../styles.scss';
+import styles from '../../styles.scss';
 
 const CurrentDate = (props) => {
   const { currentDate } = props;

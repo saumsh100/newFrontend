@@ -7,10 +7,10 @@ import styles from './styles.scss';
 function FilterField(props) {
   const {
     item,
+    flipped,
   } = props;
 
   let showFieldComponent = null;
-
   if (item.type === 'checkbox') {
     showFieldComponent = (
       <div className={styles.filters__checkFilter__chbox} >
@@ -18,6 +18,7 @@ function FilterField(props) {
         <Field
           component="Checkbox"
           name={item.value}
+          flipped={flipped}
         />
       </div>
     );

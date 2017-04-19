@@ -8,11 +8,11 @@ class RFCheckbox extends Component {
     this.state = {
       checked: false,
     };
-
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange() {
+
+  handleChange(e) {
     const {
       input,
     } = this.props;
@@ -22,7 +22,6 @@ class RFCheckbox extends Component {
     this.setState({
       checked: !this.state.checked,
     });
-
   }
 
   render() {
@@ -51,7 +50,6 @@ class RFCheckbox extends Component {
       />
     );
   }
-
 }
 
 /* eslint react/forbid-prop-types: 0 */

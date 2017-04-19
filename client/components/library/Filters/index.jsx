@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { withState } from 'recompose';
 import { Card, Checkbox, Search, Form } from '../../library';
 import FilterForm from './FilterForm';
 import colorMap from '../../library/util/colorMap';
@@ -14,8 +15,11 @@ class Filters extends Component {
     console.log(values);
   }
 
+
+  // TODO: add initialValues to form
+
   render() {
-    const { filters } = this.props;
+    const { filters, selectAll, setAll } = this.props;
     return (
       <Card borderColor={colorMap.red} className={styles.card}>
         <div className={styles.filters}>
@@ -25,8 +29,8 @@ class Filters extends Component {
               <span className="fa fa-sliders" />
             </div>
             <div className={styles.filters__header__right}>
-              <span>Select All</span>
-              <span>Clear All</span>
+              <span onClick={()=>setAll(true)}>Select All</span>
+              <span onClick={()=>setAll(false)}>Clear All</span>
             </div>
           </div>
           <div className={styles.filters__search}>
@@ -37,6 +41,7 @@ class Filters extends Component {
             filters={filters}
             formName="filtersList"
             handleSubmit={this.handleSubmit}
+            flipped={selectAll}
           />
         </div>
       </Card>
@@ -48,4 +53,6 @@ Filters.propTypes = {
   filters: PropTypes.arrayOf(Object),
 };
 
-export default Filters;
+const enhance = withState('selectAll', 'setAll', false)
+
+export default enhance(Filters);

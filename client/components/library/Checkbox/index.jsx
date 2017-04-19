@@ -19,12 +19,13 @@ export default function Checkbox(props) {
         id={id}
         checked={checked}
         value={value}
-        onChange={()=>{}}
+        onChange={() => {}}
       />
       <label
         htmlFor={id}
         className={styles.checkbox__label}
         onClick={onChange}
+        onChange={onChange}
       >
         {label}
       </label>

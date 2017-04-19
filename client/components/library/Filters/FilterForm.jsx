@@ -1,26 +1,28 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Form, Field } from '../../library';
+import { connect } from 'react-redux';
 import FilterField from './FilterField';
 import styles from './styles.scss';
 
-export default function FilterForm(props) {
+function FilterForm(props) {
   const {
     filters,
     handleSubmit,
     formName,
+    flipped,
   } = props;
 
   return (
     <Form
       form={formName}
-      onSubmit={handleSubmit}
+      onChange={handleSubmit}
       ignoreSaveButton
     >
       {filters.map((f) => {
         const content =
           f.items.map((item) => {
-            return <FilterField item={item} />;
+            return <FilterField item={item} flipped={flipped} />;
           });
 
         return (
@@ -51,3 +53,17 @@ FilterForm.propTypes = {
   handleSubmit: PropTypes.func,
   formName: PropTypes.string,
 };
+
+function mapStateToProps({ form },{ formName }) {
+
+  if (!form[formName]) {
+    return {
+      values: {},
+    };
+  }
+  return {
+    values: form[formName].values,
+  }
+}
+
+export default connect(mapStateToProps, null)(FilterForm);

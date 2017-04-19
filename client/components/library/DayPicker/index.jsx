@@ -87,7 +87,7 @@ class DayPicker extends Component {
             ref={(el) => { this.state.dayPicker = el; }}
             onDayClick={this.handleDayClick}
             selectedDays={this.state.selectedDay}
-            className={styles.dayPickerContainer}
+            {...this.props}
           />
         )]}
       >
