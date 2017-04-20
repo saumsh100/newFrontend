@@ -6,6 +6,7 @@ import { DateUtils } from 'react-day-picker';
 import { Grid, Row, Col, Card, Icon, Calendar, Tabs, Tab } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import Filters from './Cards/Filters';
+import HeaderButtons from './Cards/HeaderButtons'
 import DayView from './DayView';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
@@ -118,13 +119,16 @@ class ScheduleComponent extends Component {
     return (
       <Grid className={styles.schedule}>
         <Row className={styles.rowTest}>
-          <Col xs={9} className={styles.schedule__container}>
+          <Col xs={12} sm={8} md={8}className={styles.schedule__container}>
             <Card>
               <div className={`${styles.schedule__title} ${styles.title}`}>
-                <CurrentDate currentDate={currentDate}/>
-                <Icon icon="calendar"
-                      onClick={this.toggleCalendar}
-                />
+                <CurrentDate currentDate={currentDate}>
+                  <Icon icon="calendar"
+                        onClick={this.toggleCalendar}
+                        className={styles.title__icon}
+                  />
+                  <HeaderButtons />
+                </CurrentDate>
                 <Tabs index={this.state.index} onChange={this.handleTabChange}>
                   {schedule.toJS().scheduleModes.map(s => {
                     const label = s;
@@ -148,19 +152,31 @@ class ScheduleComponent extends Component {
               {content}
             </Card>
           </Col>
-          <Col xs={3} className={styles.schedule__sidebar}>
-            <Filters
-              practitioners={practitioners.get('models').toArray()}
-              addPractitionerToFilter={addPractitionerToFilter}
-              removePractitionerFromFilter={removePractitionerFromFilter}
-              schedule={schedule}
-              appointmentsTypes={appointmentsTypes}
-              selectAppointmentType={selectAppointmentType}
-            />
-            <RequestsContainer className={styles.schedule__sidebar_request} />
-            <Calendar
-              className={styles.schedule__sidebar_calendar}
-            />
+          <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
+            <Row >
+              <Col xs={12}>
+                <Filters
+                  practitioners={practitioners.get('models').toArray()}
+                  addPractitionerToFilter={addPractitionerToFilter}
+                  removePractitionerFromFilter={removePractitionerFromFilter}
+                  schedule={schedule}
+                  appointmentsTypes={appointmentsTypes}
+                  selectAppointmentType={selectAppointmentType}
+                />
+              </Col>
+            </Row>
+            <Row className={styles.schedule__sidebar_rowRequest}>
+              <Col xs={12}>
+                <RequestsContainer className={styles.schedule__sidebar_request} />
+              </Col>
+            </Row>
+            <Row className={styles.schedule__sidebar_rowCalendar}>
+              <Col xs={12}>
+                <Calendar
+                  className={styles.schedule__sidebar_calendar}
+                />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Grid>

@@ -8,25 +8,31 @@
     &__container {
         position: relative;
     }
+
     &__sidebar {
-        padding-right: 5px;
-        padding-left: 5px;
+        padding-left: 15px;
+
+        &_rowCalendar {
+          margin-top: 10px;
+        }
+        &_rowRequest {
+          margin-top: 10px;
+          height: 340px;
+          overflow: auto;
+
+        }
         &_request {
           border-top: $card-border-size $primary-yellow;
-          margin-top: 10px;
-          height: 330px;
         }
         &_calendar {
-          overflow-x: auto;
           border-top: $card-border-size $primary-dark-blue;
-          margin-top: 10px;
           background-color: #fafafa;
         }
     }
     &__title {
         min-height: 65px;
         padding: 10px;
-        border-top: $card-border-size $primary-blue;
+        border-top: $card-border-size $primary-light-blue;
         border-bottom: $selection-border $background-color;
     }
 
@@ -74,27 +80,47 @@
 }
 
 .title {
-    &__side {
-        float: left;
-    }
-
     &__month {
-        color: #2e3845;
-        font-size: 18px;
+      font-size: 18px;
+      font-weight: $large-weight;
     }
 
     &__day {
-        color: #2e3845;
-        font-size: 18px;
+      font-size: 18px;
+      font-weight: $large-weight;
     }
 
     &__number {
-        color: #8cbcd6;
-        font-size: 2.5rem;
-        font-weight: 600;
+        font-size: 18px;
+        font-weight: $large-weight;
     }
+    &__icon {
+      padding-left: 5px;
+    }
+
 }
 
+.headerButtons {
+  display:flex;
+  margin-left: auto;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  font-size: $small-size;
+
+  &__text {
+    padding-right: 35px;
+  }
+
+  &__quickAdd {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+     &_icon{
+       padding-left: 5px;
+     }
+  }
+}
 .appointment {
     position: absolute;
     width: 99%;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Col, Grid, Row, Filters } from '../../library';
+import { Col, Grid, Row, Filters, Calendar } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import ReviewsCard from './Cards/ReviewsCard';
 import styles from './styles.scss';
@@ -76,11 +76,20 @@ class Patient extends Component {
     return (
       <Grid className={styles.reviews}>
         <Row>
-          <Col className={styles.padding} xs={12} md={12} sm={9} lg={9}>
+          <Col className={styles.padding} xs={12} sm={12} md={8} lg={8}>
             <ReviewsCard data={DataBigComment} />
           </Col>
-          <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
-            <Filters filters={filters} />
+          <Col className={styles.padding} xs={12} sm={4} md={4} lg={4}>
+            <Row>
+              <Col xs={12} >
+                <Filters filters={filters} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} className={styles.calendarContainer}>
+                <Calendar className={styles.calendarContainer_calendar} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Grid>

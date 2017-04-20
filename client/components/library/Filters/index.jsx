@@ -15,9 +15,7 @@ class Filters extends Component {
     console.log(values);
   }
 
-
-  // TODO: add initialValues to form
-
+  // TODO: add initialValues to form and get Select All and Clear All working
   render() {
     const { filters, selectAll, setAll } = this.props;
     return (

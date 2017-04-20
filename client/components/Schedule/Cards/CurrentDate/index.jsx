@@ -7,13 +7,14 @@ const CurrentDate = (props) => {
   const dayOftheWeek = new Date(currentDate._d).toLocaleString('en-us', {  weekday: 'long' });
   const dayOftheMonth = currentDate.date();
   const currentMonth = currentDate.format("MMMM");
+  const currentYear = currentDate.format("YYYY");
   return (
-    <div>
-      <div className={styles.title__side}>
-        <div className={styles.title__month}>{currentMonth}</div>
-        <div className={styles.title__day}>{dayOftheWeek}</div>
-      </div>
-      <div className={styles.title__number}>{dayOftheMonth}</div>
+    <div style={{display: 'flex'}}>
+      <div className={styles.title__month}>{currentMonth}</div>
+      <div className={styles.title__number}>&nbsp;{dayOftheMonth}</div>
+      <div className={styles.title__day}>, {currentYear}</div>
+      {props.children}
+
     </div>
   );
 };

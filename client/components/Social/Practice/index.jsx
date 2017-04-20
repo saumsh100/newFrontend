@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Col, Grid, Row, Filters } from '../../library';
+import { Col, Grid, Row, Filters, Calendar } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import ReviewsCard from './Cards/ReviewsCard';
 import styles from './styles.scss';
@@ -65,30 +65,27 @@ class Practice extends Component {
           { type: 'checkbox', value: 'No Rating' },
         ],
       },
-      {
-        title: 'Status',
-        items: [
-          { type: 'select', options: ['Select Response Status', 'options1', 'options3', 'options4'] },
-          { type: 'select', options: ['Select Shared Status', 'options1', 'options3', 'options4'] },
-          { type: 'select', options: ['Select Publishing Status', 'options1', 'options3', 'options4'] },
-          { type: 'checkbox', value: 'With Comments' },
-          { type: 'checkbox', value: 'Without Comments' },
-          { type: 'checkbox', value: 'With new Comments' },
-          { type: 'checkbox', value: 'Without new Comments' },
-        ],
 
-      },
     ];
 
 
     return (
       <Grid className={styles.listing}>
         <Row>
-          <Col className={styles.padding} xs={12} sm={7} md={12}>
+          <Col className={styles.padding} xs={12} sm={12} md={8}>
             <ReviewsCard data={DataBigComment} />
           </Col>
-          <Col className={styles.padding} xs={12} md={4}>
-            <Filters filters={filters} />
+          <Col className={styles.padding} xs={12} sm={12} md={4}>
+            <Row>
+              <Col xs={12} >
+                <Filters filters={filters} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} className={styles.calendarContainer}>
+                <Calendar className={styles.calendarContainer_calendar} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Grid>

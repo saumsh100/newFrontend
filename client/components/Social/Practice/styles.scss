@@ -11,3 +11,10 @@
 
 .listings {
 }
+
+.calendarContainer {
+  padding-top: 10px;
+  &_calendar {
+    border-top: $card-border-size $primary-dark-blue;
+  }
+}
