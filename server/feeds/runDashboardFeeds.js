@@ -66,18 +66,18 @@ function runDashboardFeeds(socket) {
 
       // TODO maybe there is a way to do this without querying the db on feed change?
       feed.each((error, logEntry) => {
-        if (logEntry.patientId) {
+        if (logEntry.model === 'patient') {
           Patient
-            .get(logEntry.patientId)
+            .get(logEntry.documentId)
             .run()
             .then((patient) => {
               logEntry.patient = patient;
               socket.emit('syncLog', normalize('syncLog', logEntry));
             })
             .catch(err => console.log('ERROR', err));
-        } else if (logEntry.appointmentId) {
+        } else if (logEntry.model === 'appointment') {
           Appointment
-            .get(logEntry.appointmentId)
+            .get(logEntry.documentId)
             .run()
             .then((appointment) => {
               logEntry.appointment = appointment;
