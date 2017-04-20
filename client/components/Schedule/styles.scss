@@ -4,6 +4,7 @@
   padding: $container-padding;
 }
 .schedule {
+  height: 855px;
 
     &__container {
         position: relative;
@@ -107,6 +108,7 @@
   align-content: center;
   text-align: center;
   font-size: $small-size;
+  color: $primary-darkgrey;
 
   &__text {
     padding-right: 35px;
@@ -116,9 +118,22 @@
     display: flex;
     align-items: center;
     font-weight: 600;
-     &_icon{
-       padding-left: 5px;
-     }
+    color: $primary-dark;
+
+    &_icon{
+      padding-top: 1px;
+    }
+    span {
+      display: flex;
+      width: 20px;
+      height: 20px;
+      margin-left: 5px;
+      border: 2px solid $primary-dark;
+      border-radius: 20px;
+      justify-content: center;
+      align-items: center;
+
+    }
   }
 }
 .appointment {

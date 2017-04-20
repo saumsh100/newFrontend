@@ -11,7 +11,7 @@ export default function VisitorConversions(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.green}>
+    <Card borderColor={colorMap.grey}>
       <CardHeader className={styles.cardHeader} title={'Website Visitor Conversions'} />
       <div className={styles.websiteVisitorConversions__mainContainer}>
         <div className={styles.websiteVisitorConversions__rowContainer}>

@@ -9,7 +9,7 @@ export default function HeaderButtons(props) {
       <div className={styles.headerButtons__text}>Run Waitlist</div>
       <div className={styles.headerButtons__quickAdd}>
         Quick Add
-        <Icon icon="plus-circle" size={3} className={styles.headerButtons__quickAdd_icon}/>
+        <span><Icon icon="plus" size={1} className={styles.headerButtons__quickAdd_icon}/></span>
       </div>
     </div>
   );

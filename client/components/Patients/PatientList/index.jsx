@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import PatientListItem from './PatientListItem';
 import PatientData from './PatientData';
-import { Button, Form, Field , Tabs, Tab } from '../../library';
+import { Button, Form, Field , Tabs, Tab, Grid, Row, Col } from '../../library';
 import styles from './main.scss';
 
 // TODO: separate this component into:
@@ -27,7 +27,7 @@ class PatientList extends Component {
       case 0:
         title = "personal";
         break
-      case 1: 
+      case 1:
         title = "insurance";
         break;
     }
@@ -46,7 +46,7 @@ class PatientList extends Component {
   }
 
   render() {
-    const { 
+    const {
       filters,
       updateEditingPatientState,
       editingPatientState,
@@ -75,98 +75,106 @@ class PatientList extends Component {
       activeTabIndex = currentPatientState.activeTabIndex;
     }
     return (
-      <div className={styles.patients}>
-        <div className={styles.patients_list}>
-          <div className={`${styles.patients_list__search} ${styles.search}`}>
-            <label className={styles.search__label} htmlFor="search__input">
-              <i className="fa fa-search" />
-            </label>
-            <Form form="patientList">
-              <Field className={styles.search__input}
-                type="text"
-                name="patients"
-              />
-            </Form>
-            <div className={styles.search__edit}>
-              <i className="fa fa-pencil" />
-            </div>
-          </div>
-          <ul className={styles.patients_list__users}>
-            {patientListSorted.map(user => {
-              return (<PatientListItem
-                key={user.patientId}
-                user={user}
-                currentPatient={this.props.currentPatient}
-                setCurrentPatient={this.props.setCurrentPatient}
-              />);
-            })}
-          </ul>
-        </div>
-        <div className={styles.patients_content}>
-          <div className={styles.patients_content__header}>
-            <div className={styles.patients_content__addUser}>
-              Add New Patient
-              <span>
-                <i className="fa fa-plus" />
-              </span>
-            </div>
-            <div className={styles.patient_profile}>
-              <div className={styles.patient_profile__photo}>
-                <img src="../img/patient-profile.png" alt="photo" />
-              </div>
-              <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
-                <i className="fa fa-user" />
-                <span>Claire Lacey, 6</span>
-              </div>
-              <div className={`${styles.patient_profile__info} ${styles.personal__table}`}>
-                <div className={styles.personal__birthday}>
-                  <i className="fa fa-calendar" />
-                  <span>05/22/2010</span>
-                </div>
-                <div className={styles.personal__age}>
-                  <span>6 years</span>
-                </div>
-                <div className={styles.personal__gender}>
-                  <span>Female</span>
+      <Grid>
+        <Row>
+          <div className={styles.patients}>
+            <Col xs={2}>
+            <div className={styles.patients_list}>
+              <div className={`${styles.patients_list__search} ${styles.search}`}>
+                <label className={styles.search__label} htmlFor="search__input">
+                  <i className="fa fa-search" />
+                </label>
+                <Form form="patientList" ignoreSaveButton>
+                  <Field className={styles.search__input}
+                    type="text"
+                    name="patients"
+                  />
+                </Form>
+                <div className={styles.search__edit}>
+                  <i className="fa fa-pencil" />
                 </div>
               </div>
-              <div className={`${styles.patient_profile__language} ${styles.personal__table}`}>
-                <i className="fa fa-phone" />
-                <span>123-456-7890</span>
-              </div>
-              <div className={`${styles.patient_profile__status} ${styles.personal__table}`}>
-                <i className="fa fa-flag" />
-                <span>claire123@gmail.com</span>
-              </div>
+              <ul className={styles.patients_list__users}>
+                {patientListSorted.map(user => {
+                  return (<PatientListItem
+                    key={user.patientId}
+                    user={user}
+                    currentPatient={this.props.currentPatient}
+                    setCurrentPatient={this.props.setCurrentPatient}
+                  />);
+                })}
+              </ul>
             </div>
-          </div>
-          <div className={styles.patients_content__wrapper}>
-            <div className={styles.left}></div>
-            <div className={styles.right}>
-              <Tabs index={activeTabIndex || 0}
-                onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>
-                <Tab label="Personal">
-                  <PatientData 
-                    patient={patientListFiltered}
-                    tabTitle="personal"
-                    form={form}
-                    changePatientInfo={changePatientInfo}
+            </Col>
+            <Col xs={10}>
+            <div className={styles.patients_content}>
+              <div className={styles.patients_content__header}>
+                <div className={styles.patients_content__addUser}>
+                  Add New Patient
+                  <span>
+                    <i className="fa fa-plus" />
+                  </span>
+                </div>
+                <div className={styles.patient_profile}>
+                  <div className={styles.patient_profile__photo}>
+                    <img src="../img/patient-profile.png" alt="photo" />
+                  </div>
+                  <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
+                    <i className="fa fa-user" />
+                    <span>Claire Lacey, 6</span>
+                  </div>
+                  <div className={`${styles.patient_profile__info} ${styles.personal__table}`}>
+                    <div className={styles.personal__birthday}>
+                      <i className="fa fa-calendar" />
+                      <span>05/22/2010</span>
+                    </div>
+                    <div className={styles.personal__age}>
+                      <span>6 years</span>
+                    </div>
+                    <div className={styles.personal__gender}>
+                      <span>Female</span>
+                    </div>
+                  </div>
+                  <div className={`${styles.patient_profile__language} ${styles.personal__table}`}>
+                    <i className="fa fa-phone" />
+                    <span>123-456-7890</span>
+                  </div>
+                  <div className={`${styles.patient_profile__status} ${styles.personal__table}`}>
+                    <i className="fa fa-flag" />
+                    <span>claire123@gmail.com</span>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.patients_content__wrapper}>
+                <div className={styles.left}></div>
+                <div className={styles.right}>
+                  <Tabs index={activeTabIndex || 0}
+                    onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>
+                    <Tab label="Personal">
+                      <PatientData
+                        patient={patientListFiltered}
+                        tabTitle="personal"
+                        form={form}
+                        changePatientInfo={changePatientInfo}
 
-                  />
-                </Tab>
-                <Tab label="Insurance">
-                  <PatientData
-                    patient={patientListFiltered}
-                    tabTitle="insurance"
-                    form={form}
-                    changePatientInfo={changePatientInfo}
-                  />
-                </Tab>
-              </Tabs>
+                      />
+                    </Tab>
+                    <Tab label="Insurance">
+                      <PatientData
+                        patient={patientListFiltered}
+                        tabTitle="insurance"
+                        form={form}
+                        changePatientInfo={changePatientInfo}
+                      />
+                    </Tab>
+                  </Tabs>
+                </div>
+              </div>
             </div>
+            </Col>
           </div>
-        </div>
-      </div>
+        </Row>
+      </Grid>
     );
   }
 }

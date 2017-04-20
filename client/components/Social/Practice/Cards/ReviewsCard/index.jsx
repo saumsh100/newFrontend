@@ -10,7 +10,7 @@ export default function ReviewsCard(props) {
 
   return (
     <Card borderColor={colorMap.blue} className={styles.card}>
-      <CardHeader className={styles.cardHeader} title={'REVIEWS'} />
+      <CardHeader className={styles.cardHeader} title={'RECENT ACTIVITY'} />
       <div className={styles.reviewsComments}>
         <div className={styles.reviewsComments__container} >
           <Col xs={12} md={12} className={styles.reviewsComments__comment} >

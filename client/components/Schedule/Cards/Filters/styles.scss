@@ -33,6 +33,7 @@
 
 .filter_practitioner {
     margin: 0 5px;
+    padding: 10px;
     input[type=checkbox] {
         display: none;
         &:checked + label li img {

@@ -34,7 +34,7 @@ class Referrals extends Component {
     } = this.props;
 
     return (
-      <Card className={styles.referrals} borderColor={colorMap.red}>
+      <Card className={styles.referrals} borderColor={colorMap.green}>
         <div className={styles.referrals__header}>
           <CardHeader title={cardTitle} count={data.length}>
             <Search min calendar className={styles.referrals__search} />

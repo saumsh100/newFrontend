@@ -22,9 +22,12 @@ class ReviewsCard extends Component {
       <Card borderColor={colorMap.blue} className={styles.card}>
         <CardHeader
           className={styles.cardHeader}
-          title={'REVIEWS'}>
-          <div onClick={this.setActive}>
+          title={'RECENT ACTIVITY'}>
+          <div onClick={this.setActive} className={styles.cardHeader_textCompose}>
             Compose
+          </div>
+          <div onClick={this.setActive} className={styles.cardHeader_textSettings}>
+            Settings
           </div>
           <Modal
             active={this.state.active}

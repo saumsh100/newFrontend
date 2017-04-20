@@ -12,18 +12,17 @@ ul {
 }
 
 .loading {
-    text-align: center;
-    color: #959596;
+  text-align: center;
+  color: #959596;
 }
 
 .patients {
-    display: flex;
-    min-width: 800px;
-    padding: 10px;
+  display: flex;
+  width: 100%;
+  padding: 10px;
 }
 
 .patients_list {
-    max-width: 30%;
     background: #f7f7f7;
 
     &::before {
@@ -141,7 +140,6 @@ ul {
 
 .patients_content {
     position: relative;
-    width: 70%;
     margin-left: 10px;
     background: #fafafa;
 

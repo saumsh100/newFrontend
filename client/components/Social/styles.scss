@@ -49,4 +49,15 @@
 .cardHeader {
   padding-top: 15px;
   padding-left: 15px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  &_textCompose {
+    font-size: $small-size;
+  }
+  &_textSettings {
+    font-size: $small-size;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }

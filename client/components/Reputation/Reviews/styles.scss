@@ -136,11 +136,15 @@
 	}
 }
 
+.rowReviewsFilter {
+  height: 700px;
+}
+
 .reviewsComments {
 	width: 100%;
 	margin-top: 10px;
 	min-height: 168px;
-	max-height: 700px;
+  max-height: 745px;
 	overflow: auto;
 
   &__cardHeader {

@@ -10,7 +10,7 @@ export default function WebsiteTrafficSources(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.green}>
+    <Card borderColor={colorMap.grey}>
       <CardHeader className={styles.cardHeader} title="Website Traffic Sources" />
       <div className={styles.websiteTrafikSources}>
         <div className={styles.websiteTrafikSources__mainContent}>
