@@ -23,9 +23,9 @@
     padding: 10px 20px 10px 20px;
     background-color: #fff;
     font-size: 14px;
-    border-top: 2px solid #8cbcd6;
-    border-left: 2px solid #8cbcd6;
-    border-right: 2px solid #8cbcd6;
+    border-top: 2px solid $primary-blue;
+    border-left: 2px solid $primary-blue;
+    border-right: 2px solid $primary-blue;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     box-shadow: 0px 2px 0px -4px rgba(0,0,0,0.33);
@@ -35,12 +35,12 @@
       font-size: 14px;
       font-weight: $large-weight;
       &__link {
-        color: #8cbcd6;
+        color: $primary-green;
         cursor: pointer;
         margin-right: 5px;
       }
       &__site {
-        color: #8cbcd6;
+        color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
       }
@@ -51,7 +51,7 @@
       height: 0;
       left: -12px;
       border-top: 12px solid transparent;
-      border-right: 12px solid #8cbcd6;
+      border-right: 12px solid $primary-blue;
       border-bottom: 12px solid transparent;
       display: block;
       content: "";
@@ -64,7 +64,7 @@
       margin: 10px 0 10px 0;
     }
     &__title {
-      color: #8cbcd6;
+      color: $primary-green;
       margin-bottom: 15px;
       font-size: 14px;
       font-weight: $large-weight;
@@ -76,7 +76,7 @@
     &__preview {
       color: $primary-dark;
       &__toggleButton {
-        color: #8cbcd6;
+        color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
       }
@@ -88,9 +88,9 @@
   }
   &__respondBlock {
     padding: 10px 20px 10px 20px;
-    background-color: #8cbcd6;
+    background-color: $primary-blue;
     color: #fff;
-    border-bottom: 2px solid #8cbcd6;
+    border-bottom: 2px solid $primary-blue;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     box-shadow: 0px 11px 16px -10px rgba(0,0,0,0.33);

@@ -11,11 +11,11 @@ import styles from "./styles.scss";
 class Business extends Component {
   render() {
     const data = [
-      {percentage: 12, question: true, count: 353, title: "All Calls", icon: "phone", color: 'primaryColor' },
-      {percentage: 12, question: true, count: 243, title: "Pickups", icon: "user", color: 'primaryBlue' },
-      {percentage: 12, question: true, count: 102, title: "Bookings", icon: "calendar-o", color: 'primaryGreen' },];
+      {percentage: 12, question: true, count: 353, title: "All Calls", icon: "phone", color: 'primaryInactive' },
+      {percentage: 12, question: true, count: 243, title: "Pickups", icon: "user", color: 'primaryNavyBlue' },
+      {percentage: 12, question: true, count: 102, title: "Bookings", icon: "calendar-o", color: 'primaryDarkBlue' },];
 
-    const tabStep = [{label: "Online Booking", data: {count: 353, title: "Website Visits", icon: "television", color: 'primaryColor' }},
+    const tabStep = [{label: "Online Booking", data: {count: '10,104', title: "Website Visits", icon: "television", color: 'primaryColor' }},
       {label: "Calls From Website", data: {count: 102, title: "Online Booking", icon: "users", color: 'primaryColor' }}, ];
 
     const patientsData1 = [
@@ -54,7 +54,7 @@ class Business extends Component {
               <Col xs={12}>
                 <DataStats
                   data={tabStep}
-                  borderColor={colorMap.red}
+                  borderColor={colorMap.darkblue}
                   className={styles.business__body_call}
                   data1={hardcodeData1}
                   data2={hardcodeData2}
@@ -64,8 +64,8 @@ class Business extends Component {
                 <Patients
                   className={styles.business__body_call}
                   data={patientsData1}
-                  borderColor={colorMap.green}
-                  fontColor={colorMap.green}
+                  borderColor={colorMap.darkblue}
+                  fontColor={colorMap.darkblue}
                 />
               </Col>
               <Col xs={12} className={styles.business__body_select}>
@@ -120,8 +120,8 @@ class Business extends Component {
                 <Patients
                   className={styles.business__body_call}
                   data={patientsData2}
-                  borderColor={colorMap.blue}
-                  fontColor={colorMap.blue}
+                  borderColor={colorMap.darkblue}
+                  fontColor={colorMap.darkblue}
                 />
               </Col>
             </Row>

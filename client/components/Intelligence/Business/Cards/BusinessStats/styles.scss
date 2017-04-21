@@ -41,17 +41,17 @@
       }
       &:nth-child(1) {
         &::after {
-          border-left: 30px solid $primary-color;
+          border-left: 30px solid $inactive-color;
         }
       }
       &:nth-child(2) {
         &::after {
-          border-left: 30px solid $primary-blue;
+          border-left: 31px solid $primary-navy-blue;
         }
       }
       &:nth-child(3) {
         &::after {
-          border-left: 30px solid $primary-green;
+          border-left: 30px solid  $primary-blue;
         }
       }
     }
@@ -60,7 +60,10 @@
 .primaryColor {
   background: $primary-color;
 }
-.primaryBlue {
+.primaryNavyBlue {
+  background: $primary-navy-blue;
+}
+.primaryDarkBlue {
   background: $primary-blue;
 }
 .primaryGreen {
@@ -68,4 +71,7 @@
 }
 .primaryYellow {
   background: $primary-yellow;
+}
+.primaryInactive {
+  background: $inactive-color;
 }

@@ -22,7 +22,7 @@ export default function SocialOverview(props) {
             <span className={styles.iconsContainer__last}>Impressions</span>
           </div>
           <div className={styles.iconsContainer} >
-            <BackgroundIcon icon="heart" backgroundClassName="backgroundColorDarkBlue" />
+            <BackgroundIcon icon="heart" backgroundClassName="backgroundColorBlueGreen" />
             <span className={styles.iconsContainer__first}>{engagements}</span>
             <span className={styles.iconsContainer__last}>Engagements</span>
           </div>
