@@ -92,8 +92,7 @@ class PatientList extends Component {
 
     return (
       <Grid>
-        <Row>
-          <div className={styles.patients}>
+        <Row className={styles.patients}>
             <Col xs={12} sm={4} md={4} lg={2}>
               <div className={styles.patients_list}>
                 <div className={`${styles.patients_list__search} ${styles.search}`}>
@@ -171,7 +170,7 @@ class PatientList extends Component {
                       <div className={styles.left}></div>
                     </Col>
                     <Col xs={4}>
-                      <div className={styles.left}></div>
+                      <div className={styles.middle}></div>
                     </Col>
                     <Col xs={4}>
                       <div className={styles.right}>
@@ -202,7 +201,6 @@ class PatientList extends Component {
                 </Row>
               </div>
             </Col>
-          </div>
         </Row>
       </Grid>
     );

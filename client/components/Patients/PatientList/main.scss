@@ -1,3 +1,4 @@
+@import '../../../ui';
 
 
 body {
@@ -17,6 +18,8 @@ ul {
 }
 
 .patients {
+  height: 775px;
+  max-height: 775px;
   display: flex;
   width: 100%;
   padding: 10px;
@@ -24,6 +27,7 @@ ul {
 
 .patients_list {
     background: #f7f7f7;
+    height: 100%;
 
     &::before {
         display: block;
@@ -144,6 +148,7 @@ ul {
     position: relative;
     margin-left: 10px;
     background: #fafafa;
+    height: 100%;
 
     &__addUser {
         position: absolute;
@@ -173,7 +178,7 @@ ul {
     }
 
     &__header {
-        height: 200px;
+        height: 310px;
         padding: 50px;
         background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
         background-size: cover;
@@ -204,14 +209,14 @@ ul {
     &__wrapper {
         display: flex;
         flex-direction: row;
-        height: 320px;
+        height: 345px;
         background: #cdcaca;
         width: 100%;
-
         .left {
-            height: 100%;
-            background: #969696;
-
+          height: 345px;
+          min-width: 250px;
+          background-color: $primary-white;
+          border-right: 2px solid $primary-grey;
             &::before {
                 display: block;
                 width: 100%;
@@ -220,16 +225,28 @@ ul {
                 background: #ff715a;
             }
         }
-
-        .right {
+        .middle {
+           height: 345px;
+           min-width: 250px;
+           background-color: $primary-white;
+           &::before {
+             display: block;
+             width: 100%;
+             height: 3px;
+             content: '';
+             background: #ff715a;
+           }
+         }
+       .right {
+            height: 345px;
             min-width: 250px;
-            height: 100%;
             background: #fafafa;
             font-size: 12px;
-
+            margin-left: 5px;
             &::before {
                 display: block;
-                width: 100%;
+
+              width: 100%;
                 height: 3px;
                 content: '';
                 background: #8cbcd6;
