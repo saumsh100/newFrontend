@@ -7,7 +7,6 @@
 }
 
 .requestCard {
-
 }
 
 .requestHeader{
@@ -15,9 +14,9 @@
 }
 
 .requestList {
+  max-height: 590px;
   border-top: 1px solid;
   border-top-color: $primary-grey;
-  height: 590px;
   overflow: auto;
   background: $primary-white;
 }

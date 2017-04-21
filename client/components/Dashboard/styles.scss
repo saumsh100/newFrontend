@@ -41,7 +41,7 @@
     }
     &_request {
       height: 640px;
-
+      background-color: $primary-white;
     }
     @media screen and (max-width: 450px) {
       padding: 0 5px 45px 5px;

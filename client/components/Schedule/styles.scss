@@ -4,8 +4,9 @@
   padding: $container-padding;
 }
 .schedule {
-  height: 855px;
-
+  height: 797px;
+  max-height: 797px;
+  overflow-y: scroll;
     &__container {
         position: relative;
     }
@@ -19,8 +20,8 @@
         &_rowRequest {
           margin-top: 10px;
           height: 340px;
-          overflow: auto;
-
+          max-height: 340px;
+          background-color: $primary-white;
         }
         &_request {
           border-top: $card-border-size $primary-yellow;
@@ -32,7 +33,7 @@
     }
     &__title {
         min-height: 65px;
-        padding: 10px;
+        padding: 10px 20px 5px 20px;
         border-top: $card-border-size $primary-light-blue;
         border-bottom: $selection-border $background-color;
     }
@@ -84,6 +85,7 @@
     &__month {
       font-size: 18px;
       font-weight: $large-weight;
+      text-transform: uppercase;
     }
 
     &__day {
@@ -98,7 +100,31 @@
     &__icon {
       padding-left: 5px;
     }
+}
 
+.calendarTitle {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  border-bottom: 2px solid;
+  border-bottom-color: $background-color;
+
+  &__month {
+    display: inline-block;
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+  &__dayWeek {
+    font-size: 18px;
+    font-weight: $large-weight;
+    text-transform: uppercase;
+  }
+
+  &__dayMonth {
+    font-size: $jumbo-size;
+    font-weight: $large-weight;
+    color: $primary-light-blue;
+  }
 }
 
 .headerButtons {

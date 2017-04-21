@@ -11,6 +11,7 @@ import DayView from './DayView';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
 import CurrentDate from './Cards/CurrentDate';
+import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
 import styles from './styles.scss';
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -119,7 +120,7 @@ class ScheduleComponent extends Component {
     return (
       <Grid className={styles.schedule}>
         <Row className={styles.rowTest}>
-          <Col xs={12} sm={8} md={8}className={styles.schedule__container}>
+          <Col xs={12} sm={8} md={9}className={styles.schedule__container}>
             <Card>
               <div className={`${styles.schedule__title} ${styles.title}`}>
                 <CurrentDate currentDate={currentDate}>
@@ -149,10 +150,11 @@ class ScheduleComponent extends Component {
                 </div>
                 }
               </div>
+              <CurrentDateCalendar currentDate={currentDate}/>
               {content}
             </Card>
           </Col>
-          <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
+          <Col xs={12} sm={4} md={3} className={styles.schedule__sidebar}>
             <Row >
               <Col xs={12}>
                 <Filters
