@@ -1,7 +1,7 @@
 @import "../../ui.scss";
 
 .mainIntelligenceContainer {
-  padding: 0 15px 15px 15px;
+  padding: $container-padding;
 }
 
 .header {
@@ -36,7 +36,21 @@
 .padding {
   padding: 5px;
 }
+.paddingRight {
+
+}
+.calendarContainer {
+  padding-top: 10px;
+  &_calendar {
+    border-top: $card-border-size $primary-dark-blue;
+  }
+}
 
 .cardHeader {
-  padding: 20px;
+  padding-top: 15px;
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
 }

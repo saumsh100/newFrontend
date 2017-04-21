@@ -234,7 +234,7 @@ class Dashboard extends React.Component {
     return (
       <Grid className={styles.dashboard}>
         <Row className={styles.dashboard__header}>
-          <Col xs={12}>
+          <Col xs={12} >
             <Card className={styles.dashboard__header_title}>
               Welcome Back, <b>Corina</b>
             </Card>
@@ -247,19 +247,19 @@ class Dashboard extends React.Component {
           <Col className={styles.padding}
                xs={12} md={8}>
             <Table className={styles.dashboard__body_table}
-                   borderColor={colorMap.blue}
+                   borderColor={colorMap.grey}
                    cardCount="7"
                    cardTitle="Phone / SMS / Email"/>
           </Col>
           <Col className={styles.padding}
                xs={12}  md={4}>
             <RequestsContainer className={styles.dashboard__body_request}
-                               borderColor={colorMap.yellow}/>
+                               borderColor={colorMap.darkblue}/>
           </Col>
           <Col className={styles.padding}
                xs={12} md={8}>
             <Card className={styles.dashboard__body_comments}
-                  borderColor={colorMap.green}>
+                  borderColor={colorMap.yellow}>
               <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
               <div className={styles.underspondedReviews}>
                 <div className={styles.underspondedReviews__mainContainer}>
@@ -295,17 +295,17 @@ class Dashboard extends React.Component {
             <Row center="xs" className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RemindersList data={DataRemindersList}
-                               borderColor={colorMap.blue}
+                               borderColor={colorMap.grey}
                                cardTitle="Reminders" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RemindersList data={DataRemindersList}
-                               borderColor={colorMap.blue}
+                               borderColor={colorMap.grey}
                                cardTitle="Recalls" />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
                 <RemindersList data={DataRemindersList2}
-                               borderColor={colorMap.blue}
+                               borderColor={colorMap.grey}
                                cardTitle="Digital Waitlist" />
               </Col>
             </Row>
@@ -317,7 +317,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.dashboardContainer}>
         {this.renderCards()}
       </div>
     );

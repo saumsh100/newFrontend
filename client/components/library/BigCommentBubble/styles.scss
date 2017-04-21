@@ -1,12 +1,12 @@
 @import "../../../ui";
 
 .bigComment {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 38px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   padding: 0 5px;
-  font-size: 25px;
+  font-size: 35px;
 }
 .bigCommentBubble {
   display: flex;
@@ -31,22 +31,24 @@
     padding: 10px 40px 10px 20px;
     background-color: #fff;
     font-size: 14px;
-    border-top: 2px solid #8cbcd6;
-    border-left: 2px solid #8cbcd6;
-    border-right: 2px solid #8cbcd6;
+    border-top: 2px solid $primary-blue;
+    border-left: 2px solid $primary-blue;
+    border-right: 2px solid $primary-blue;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    box-shadow: 0px 2px 0px -4px rgba(0,0,0,0.33);
+
     &__header {
       color: $primary-dark;
       font-size: 14px;
       font-weight: $large-weight;
       &__link {
-        color: #8cbcd6;
+        color: $primary-green;
         cursor: pointer;
         margin-right: 5px;
       }
       &__site {
-        color: #8cbcd6;
+        color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
       }
@@ -55,23 +57,25 @@
       position: absolute;
       width: 0;
       height: 0;
-      left: -16px;
-      border-top: 8px solid transparent;
-      border-right: 16px solid #8cbcd6;
-      border-bottom: 8px solid transparent;
+      left: -12px;
+      border-top: 12px solid transparent;
+      border-right: 12px solid $primary-blue;
+      border-bottom: 12px solid transparent;
       display: block;
       content: "";
     }
     &__requirements {
       text-transform: uppercase;
       font-size: 12px;
+      font-weight: $large-weight;
       color: #ff7761;
       margin: 10px 0 10px 0;
     }
     &__title {
-      color: #8cbcd6;
+      color: $primary-green;
       margin-bottom: 15px;
       font-size: 14px;
+      font-weight: $large-weight;
     }
     &__rating {
       color: #ede27d;
@@ -80,7 +84,7 @@
     &__preview {
       color: $primary-dark;
       &__toggleButton {
-        color: #8cbcd6;
+        color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
       }
@@ -118,15 +122,15 @@
 
   &__respondBlock {
     padding: 10px 20px 10px 20px;
-    background-color: $primary-light-blue;
-    color: $primary-white;
-    border-bottom: 2px solid $primary-light-blue;
+    background-color: $primary-blue;
+    border-bottom: 2px solid $primary-blue;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    box-shadow: 0px 11px 16px -10px rgba(0,0,0,0.33);
+    color: $primary-white;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    display: flex;
     &__respondButton {
       width: 50%;
       display: flex;

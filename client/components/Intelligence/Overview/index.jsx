@@ -154,7 +154,7 @@ class Overview extends Component {
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList
-              borderColor={colorMap.red}
+              borderColor={colorMap.grey}
               cardTitle="Top Services by Hours"
               data={[{
                 title: 'Invisalign',
@@ -174,7 +174,7 @@ class Overview extends Component {
               }]}
             />
           </Col>
-          <FlexGrid borderColor={colorMap.red} columnCount="4" columnWidth={12}>
+          <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
             <PractitionersList
               img="/images/practitioner_1.png"
               name="Dr. Chelsea"
@@ -212,7 +212,7 @@ class Overview extends Component {
               percentage="15"
             />
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.grey} title="Appoinment Types" >
             <Stats
               count={107}
               details="via phone"
@@ -224,7 +224,7 @@ class Overview extends Component {
               icon="calendar-o"
             />
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.blue} title="New vs Returning Patients" >
+          <FlexGrid borderColor={colorMap.grey} title="New vs Returning Patients" >
             <Stats
               count={102}
               details="new"
@@ -237,7 +237,7 @@ class Overview extends Component {
             />
           </FlexGrid>
 
-          <FlexGrid borderColor={colorMap.blue} title="Website Appts vs Web Profile Appts" >
+          <FlexGrid borderColor={colorMap.grey} title="Website Appts vs Web Profile Appts" >
             <Stats
               count={204}
               details="via Website"
@@ -250,7 +250,7 @@ class Overview extends Component {
             />
           </FlexGrid>
 
-          <FlexGrid borderColor={colorMap.blue} title="Online Reputation" >
+          <FlexGrid borderColor={colorMap.grey} title="Online Reputation" >
             <Stats
               count={48.5}
               details="stars"
@@ -264,7 +264,7 @@ class Overview extends Component {
           </FlexGrid>
           <Col styles={styles.padding5} xs={12}>
             <AppointmentsBooked
-              borderColor={colorMap.yellow}
+              borderColor={colorMap.grey}
               cardTitle="Appointments Booked Last 12 Months"
               labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
               dataSets={[
@@ -278,7 +278,7 @@ class Overview extends Component {
           </Col>
           <Col styles={styles.padding5} xs={12}>
             <MostLoyal
-              borderColor={colorMap.red}
+              borderColor={colorMap.grey}
               cardTitle="Most Loyal"
               data={mostLoyalData}
             />
@@ -286,7 +286,7 @@ class Overview extends Component {
           <Col xs={12}>
             <TopReference
               data={referenceData}
-              borderColor={colorMap.red}
+              borderColor={colorMap.grey}
             />
           </Col>
           <Col
@@ -332,7 +332,7 @@ class Overview extends Component {
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList
-              borderColor={colorMap.green}
+              borderColor={colorMap.grey}
               cardTitle="Pages with Most Visits"
               data={[{
                 title: 'Invisalign',
@@ -354,7 +354,7 @@ class Overview extends Component {
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList
-              borderColor={colorMap.green}
+              borderColor={colorMap.grey}
               cardTitle="Website Engagement"
               data={[{
                 title: 'Total Visits',

@@ -6,11 +6,7 @@ import Social from '../components/Social';
 
 class SocialContainer extends Component {
   render() {
-    return (
-      <div>
-        <Social {...this.props} />
-      </div>
-    );
+    return <Social {...this.props} />;
   }
 }
 

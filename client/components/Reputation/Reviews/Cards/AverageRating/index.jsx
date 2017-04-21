@@ -4,17 +4,31 @@ import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
 
 export default function AverageRating(props) {
+  const {
+    count,
+    average,
+  } = props;
+
+  const rows = [];
+  for (let i = 1; i < count; i++) {
+    rows.push(<Star size={1.3} />);
+  }
+
   return (
     <Card borderColor={colorMap.blue} className={styles.card}>
       <div className={styles.stats}>
-        <span className={styles.stats__count} >4.7</span>
+        <span className={styles.stats__count} >{count}</span>
         <span className={styles.stats__title} >Average Rating</span>
         <div className={styles.stats__rating}>
-          <Star size={1.3} />
-          <Star size={1.3} />
+          {rows}
         </div>
-        <span className={styles.stats__bottom}>Industry Average 4.1/5</span>
+        <span className={styles.stats__bottom}>Industry Average {count}/{average}</span>
       </div>
     </Card>
-  )
+  );
+}
+
+AverageRating.PropTypes = {
+  count: PropTypes.number,
+  average: PropTypes.number,
 }

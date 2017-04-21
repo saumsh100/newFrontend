@@ -29,12 +29,13 @@
 }
 .left {
   padding: 10px;
+  font-weight: $large-weight;
   &__icon {
-    color: $primary-color;
+    color: $primary-blue;
     margin-bottom: 20px;
   }
   &__count {
-    color: $primary-color;
+    color: $primary-blue;
     @extend .font-jumbo-thin;
     margin-bottom: 10px;
   }
@@ -135,17 +136,39 @@
             border: 0 solid transparent;
             border-left-width: 13px;
             border-right-width: 13px;
-            border-top: 13px solid $primary-color;
+            border-top: 13px solid $inactive-color;
           }
         }
         &::before,
         &::after {
-          background: $primary-color;
+          background: $inactive-color;
         }
         width: 100%;
       }
       &:nth-child(2) {
         .arrow {
+          &::after {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(13px);
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 0 solid transparent;
+            border-left-width: 13px;
+            border-right-width: 13px;
+            border-top: 13px solid $primary-navy-blue;
+          }
+        }
+        &::before,
+        &::after {
+          background: $primary-navy-blue;
+        }
+        width: 75%;
+      }
+      &:nth-child(3) {
+        .data {
           &::after {
             bottom: 0;
             left: 50%;
@@ -163,28 +186,6 @@
         &::before,
         &::after {
           background: $primary-blue;
-        }
-        width: 75%;
-      }
-      &:nth-child(3) {
-        .data {
-          &::after {
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%) translateY(13px);
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 0;
-            border: 0 solid transparent;
-            border-left-width: 13px;
-            border-right-width: 13px;
-            border-top: 13px solid $primary-green;
-          }
-        }
-        &::before,
-        &::after {
-          background: $primary-green;
         }
         width: 50%;
       }

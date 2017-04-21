@@ -1,9 +1,7 @@
-@import "../../../ui.scss";
+@import "../../../../ui.scss";
 
 .schedule_filter {
     border-top: $card-border-size $primary-color;
-    padding-bottom: 50px;
-    font-family: sans-serif;
 }
 
 .filter_header {
@@ -35,6 +33,7 @@
 
 .filter_practitioner {
     margin: 0 5px;
+    padding: 10px;
     input[type=checkbox] {
         display: none;
         &:checked + label li img {

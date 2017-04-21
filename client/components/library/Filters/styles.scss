@@ -37,18 +37,16 @@
       flex-direction: row;
       justify-content: flex-end;
       font-size: $medium-size;
-      font-weight: $medium-weight;
+      font-weight: $large-weight;
       span {
         margin: 0 10px;
       }
     }
     &__right {
-      width: 45%;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      @extend .font-small;
+      margin-right: 10px;
+      font-size: $small-size;
       color: $primary-darkgrey;
+      font-weight: $large-weight;
       span {
         margin: 0 5px;
       }

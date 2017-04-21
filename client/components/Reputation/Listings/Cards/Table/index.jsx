@@ -66,7 +66,7 @@ class Table extends Component {
                             {obj.name}
                           </div>
                           <a className={styles.data__item_phone}>
-                            Notes
+                            notes
                           </a>
                         </div>
                       </div>

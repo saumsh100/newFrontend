@@ -145,18 +145,18 @@
 }
 
 .reviewsComments {
-  width: 100%;
-  margin-top: 10px;
-  min-height: 168px;
-  max-height: 400px;
-  overflow: auto;
 
-  &__container {
-    border-top: 2px solid $primary-lightgrey;
-    border-right: 2px solid $primary-lightgrey;
-    padding: 10px 10px 0 0;
-  }
+	width: 100%;
+	margin-top: 20px;
+	min-height: 168px;
+	max-height: 745px;
+	overflow: auto;
 
+	&__container {
+		border-top: 2px solid $primary-lightgrey;
+		border-right: 2px solid $primary-lightgrey;
+		padding: 10px 10px 0 0;
+	}
   &__comment {
 
   }

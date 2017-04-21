@@ -1,7 +1,8 @@
+
 import React, { Component, PropTypes } from 'react';
 import {
   Icon, Card
-} from '../../library';
+} from '../../../library';
 import styles from './styles.scss';
 
 class Filters extends Component {
@@ -43,7 +44,7 @@ class Filters extends Component {
         </div>
         <div className={styles.filter_practitioner}>
           <div className={styles.filter_practitioner__title}>
-            Practitioners
+            Practitioner
           </div>
           <ul className={styles.filter_practitioner__wrapper}>
             {practitioners.map((pr, i) => {
