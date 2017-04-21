@@ -16,6 +16,16 @@ const db = {
   db: environmentVariables.RETHINKDB_DB || 'carecru_development',
 };
 
+const redis = {
+  host: environmentVariables.REDIS_HOST || 'localhost',
+  port: environmentVariables.REDIS_PORT || '6379',
+};
+
+const namespaces = {
+  dash: '/dash',
+  sync: '/sync',
+};
+
 const vendasta = {
   apiKey: environmentVariables.VENDASTA_API_KEY,
   apiUser: environmentVariables.VENDASTA_API_USER,
@@ -41,7 +51,9 @@ module.exports = {
   port,
   bundlePort,
   db,
+  redis,
   vendasta,
   twilio,
   mandrill,
+  namespaces,
 };

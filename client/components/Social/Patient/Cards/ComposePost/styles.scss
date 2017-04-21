@@ -1,6 +1,170 @@
 @import "../../../../../ui.scss";
+@import "../../../../../fonts.scss";
+
 
 .post {
   height: 540px;
-  width: 520px;
+  display: flex;
+  flex-wrap: wrap;
+  color: $primary-dark;
+  &__left {
+    padding: 0 15px;
+    width: 100%;
+    &_headerTitle {
+      padding: 35px 0;
+      @extend .font-header-title;
+      color: $primary-light-blue;
+      @media screen and (max-width: 1000px){
+        padding: 10px 0 15px;
+      }
+    }
+  }
+  .header {
+    padding: 0 20px 30px;
+    border-bottom: 2px solid $primary-lightgrey;
+    @media screen and (max-width: 600px) {
+      padding: 0 0 5px;
+    }
+    &__add {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 15px;
+      span {
+        margin-left: 15px;
+      }
+    }
+    &__tags {
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: -5px;
+      & > div {
+        flex: 0 1 200px;
+        text-align: center;
+        margin: 5px;
+        @media screen and (max-width: 1000px) {
+          flex: 1 1 200px;
+        }
+      }
+    }
+  }
+  .body {
+    padding: 0 20px 15px;
+    @media screen and (max-width: 600px) {
+      padding: 0 0 5px;
+    }
+    &__comment {
+      margin-top: 10px;
+      height: 200px;
+      border: 1px solid $primary-light-blue;
+      border-radius: 5px;
+      width: 100%;
+      margin-bottom: 25px;
+      padding: 5px 20px 5px 5px;
+      &_element {
+        width: 100%;
+        height: 85%;
+        border: none;
+        background: inherit;
+        color: $primary-dark;
+        &:focus {
+          outline: none;
+        }
+      }
+      &_maxLength {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        align-items: center;
+        background: $primary-light-blue;
+        margin-left: auto;
+        width: 55px;
+        height: 20px;
+        border-radius: 5px;
+        color: $color-white;
+        @extend .font-small;
+      }
+    }
+    &__footer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      @media screen and (max-width: 1000px) {
+        justify-content: center;
+      }
+      &_element {
+        margin: 5px;
+        i {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  &__right {
+    padding: 0 15px;
+    background: $primary-light-blue;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    &_icon {
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      right: 1%;
+      z-index: 1000;
+      color: inherit;
+    }
+    &_preview {
+      margin-top: 90px;
+      margin-bottom: 25px;
+      max-height: 320px;
+      overflow: auto;
+    }
+    &_footer {
+      display: flex;
+      justify-content: center;
+    }
+    &_footerElement {
+      color: $color-white;
+      margin-right: 15px;
+      i {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+.preview {
+  overflow: auto;
+  &:not(:first-child) {
+    margin-top: 40px;
+  }
+  &__title {
+    @extend .font-header-title-white;
+    margin-bottom: 5px;
+  }
+  &__body {
+    background: $primary-white;
+    height: 111px;
+    padding: 5px;
+    border-radius: 5px;
+    position: relative;
+    &_text {
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      max-height: 100%;
+    }
+    &_img {
+      margin-top: 8px;
+      max-height: 50px;
+      max-width: 90px;
+    }
+    &_icon {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      cursor: pointer;
+    }
+  }
 }

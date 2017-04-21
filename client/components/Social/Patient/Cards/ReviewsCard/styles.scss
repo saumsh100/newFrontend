@@ -1,0 +1,49 @@
+@import "../../../../../ui.scss";
+
+* {
+  box-sizing: border-box;
+}
+.card {
+  overflow: inherit;
+}
+
+.modal {
+  border-radius: $card-border-radius;
+  border: 2px solid $primary-light-blue;
+}
+
+.cardHeader {
+	padding: 20px 20px 0 20px;
+	margin-bottom: 20px;
+  align-items: center;
+  text-align: center;
+	&__menu {
+		display: flex;
+		flex-direction: row;
+    text-transform: none;
+		font-size: $small-size;
+		span:first-child {
+			margin-right: 10px;
+			cursor: pointer;
+		}
+		span:last-child {
+			cursor: pointer;
+		}
+
+	}
+  &_textCompose {
+    font-size: $small-size;
+  }
+  &_textSettings {
+    font-size: $small-size;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.reviewsComments {
+  overflow: auto;
+  &__comment {
+    max-height: calc(100vh - 65px - 45px - 15px - 35px);
+  }
+}

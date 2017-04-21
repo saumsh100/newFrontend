@@ -17,17 +17,17 @@ export default function SocialOverview(props) {
       <div className={styles.facebookActivity} >
         <div className={styles.facebookActivity__container} >
           <div className={styles.iconsContainer} >
-            <BackgroundIcon icon="eye" backgroundClassName="backgroundColorGrey" />
+            <BackgroundIcon icon="eye" color={colorMap.grey} fontSize={8.75} />
             <span className={styles.iconsContainer__first}>{impressions}</span>
             <span className={styles.iconsContainer__last}>Impressions</span>
           </div>
           <div className={styles.iconsContainer} >
-            <BackgroundIcon icon="heart" backgroundClassName="backgroundColorBlueGreen" />
+            <BackgroundIcon icon="heart" color={colorMap.facebookBlue} fontSize={8.75} />
             <span className={styles.iconsContainer__first}>{engagements}</span>
             <span className={styles.iconsContainer__last}>Engagements</span>
           </div>
           <div className={styles.iconsContainer} >
-            <BackgroundIcon icon="location-arrow" backgroundClassName="backgroundColorDarkGrey" />
+            <BackgroundIcon icon="location-arrow" color={colorMap.dark} fontSize={8.75} />
             <span className={styles.iconsContainer__first}>{clicks}</span>
             <span className={styles.iconsContainer__last}>Clicks</span>
           </div>

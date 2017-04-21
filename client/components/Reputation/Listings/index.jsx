@@ -78,19 +78,19 @@ class Listings extends Component {
       {
         title: 'Sources',
         items: [
-          {type: 'checkbox', value: 'Search Engines (2)'},
-          {type: 'checkbox', value: 'Review Sites (4)'},
-          {type: 'checkbox', value: 'Derictories (8)'},
-          {type: 'checkbox', value: 'Sorial Sites (6)'},
-        ]
+          { type: 'checkbox', value: 'Search Engines (2)' },
+          { type: 'checkbox', value: 'Review Sites (4)' },
+          { type: 'checkbox', value: 'Derictories (8)' },
+          { type: 'checkbox', value: 'Sorial Sites (6)' },
+        ],
       },
       {
         title: 'Sources',
         items: [
-          {type: 'checkbox', value: 'Accurate (3)'},
-          {type: 'checkbox', value: 'Friends with possible errors (2)'},
-          {type: 'checkbox', value: 'Respond (15)'},
-        ]
+          { type: 'checkbox', value: 'Accurate (3)' },
+          { type: 'checkbox', value: 'Friends with possible errors (2)' },
+          { type: 'checkbox', value: 'Respond (15)' },
+        ],
       },
     ];
 

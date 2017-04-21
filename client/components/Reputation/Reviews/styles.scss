@@ -2,7 +2,9 @@
 @import "../styles.scss";
 
 .reviews {
-
+  &__wrapper {
+    padding-top: 15px;
+  }
 }
 
 .padding {
@@ -89,20 +91,20 @@
 }
 
 .content {
-	width: 100%;
-	height: 16px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	&__stars {
-		width: 50%;
-		text-align: right;
-		display: inline-block;
-	}
+  width: 100%;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__stars {
+    width: 50%;
+    text-align: right;
+    display: inline-block;
+  }
 
-	&__bar {
-		width: 50%;
-		text-align: left;
+  &__bar {
+    width: 50%;
+    text-align: left;
     display: flex;
     align-items: center;
 		color: $primary-blue;
@@ -117,23 +119,23 @@
 
 
 .tags {
-	width: 100%;
-	height: 168px;
-	&__left {
-		width: 25%;
-		min-width: 250px;
-		height: 168px;
-		position: relative;
-		display: flex;
+  width: 100%;
+  height: 168px;
+  &__left {
+    width: 25%;
+    min-width: 250px;
+    height: 168px;
+    position: relative;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
     &__update {
-    	margin-top: 10px;
-    	color: $primary-darkgrey;
+      margin-top: 10px;
+      color: $primary-darkgrey;
     }
-	}
+  }
 }
 
 .rowReviewsFilter {
@@ -153,7 +155,6 @@
   }
 
 	&__container {
-		border-top: 2px solid $primary-lightgrey;
 		border-right: 2px solid $primary-lightgrey;
 		padding: 10px 10px 0 0;
 	}

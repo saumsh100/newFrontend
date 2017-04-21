@@ -1,4 +1,5 @@
 @import "../../../ui";
+@import "../../../fonts";
 
 .filters {
   &__checkFilter {
@@ -9,6 +10,9 @@
     padding: 12px 50px;
     color: $primary-darkgrey;
     font-size: $medium-size;
+    @media screen and (max-width: 1000px) {
+      padding: 12px 20px;
+    }
     &__chbox {
       width: 100%;
       display: flex;
@@ -26,10 +30,12 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-    justify-content: flex-end;
-    margin-top: 10px;
+    margin: 10px 0;
     &__left {
-      margin-right: 20px;
+      width: 55%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
       font-size: $medium-size;
       font-weight: $large-weight;
       span {
@@ -54,6 +60,7 @@
     color: $primary-darkgrey;
     input {
       width: 80%;
+      padding: 0;
       margin-left: 5px;
       outline: none;
       border: none;
@@ -105,7 +112,7 @@
 	    width: 100%;
 	    margin: 0 auto;
 	    padding-left: 0;
-
+      border: none;
 		}
 		select:focus {
 			outline: none;

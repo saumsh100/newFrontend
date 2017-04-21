@@ -31,8 +31,10 @@ const accountId2 = uuid();
 const justinUserId = uuid();
 const alexUserId = uuid();
 const sergeyUserId = uuid();
+const jdUserId = uuid();
 
 const alexPatientId = uuid();
+const alexPatientId2 = uuid();
 const markPatientId = uuid();
 const justinPatientId = uuid();
 const sergeyPatientId = uuid();
@@ -301,6 +303,14 @@ const SEEDS = {
       activeAccountId: accountId,
       // accounts: [accountId],
     },
+    // account 2 user
+    {
+      username: 'jd@carecru.com',
+      password: bcrypt.hashSync('jd', saltRounds),
+      id: jdUserId,
+      activeAccountId: accountId2,
+      // accounts: [accountId],
+    },
     {
       username: 'alex@carecru.com',
       password: bcrypt.hashSync('alex', saltRounds),
@@ -364,6 +374,20 @@ const SEEDS = {
       accountId,
       firstName: 'Alex',
       lastName: 'Bashliy',
+      phoneNumber: alexPhoneNumber,
+      birthDate: moment({year: 1997, month: 3, day: 4})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
+      email: 'alex.bashliy@keenethics.com',
+      appointmentPreference: 'both',
+    },
+    // account 2
+    {
+      id: alexPatientId2,
+      accountId: accountId2,
+      firstName: 'Alex2',
+      lastName: 'Bashliy2',
       phoneNumber: alexPhoneNumber,
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
@@ -473,6 +497,12 @@ const SEEDS = {
     {
       userId: sergeyUserId,
       accountId,
+      role: 'OWNER',
+      permissions: {},
+    },
+    {
+      userId: jdUserId,
+      accountId: accountId2,
       role: 'OWNER',
       permissions: {},
     },
@@ -626,6 +656,12 @@ const SEEDS = {
     },
     {
       accountId,
+      name: 'Chair 2',
+      description: '',
+    },
+    // account 2
+    {
+      accountId: accountId2,
       name: 'Chair 2',
       description: '',
     },

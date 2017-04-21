@@ -1,0 +1,39 @@
+@import "../../../../../ui.scss";
+
+* {
+  box-sizing: border-box;
+}
+.card {
+  overflow: inherit;
+}
+
+.modal {
+  border-radius: $card-border-radius;
+  border: 2px solid $primary-light-blue;
+}
+
+.cardHeader {
+	padding: 20px 20px 0 20px;
+	margin-bottom: 20px;
+  text-transform: uppercase;
+	&__menu {
+		display: flex;
+		flex-direction: row;
+		font-size: $small-size;
+    text-transform: none;
+		span:first-child {
+			margin-right: 10px;
+			cursor: pointer;
+		}
+		span:last-child {
+			cursor: pointer;
+		}
+	}
+}
+
+.reviewsComments {
+  overflow: auto;
+  &__comment {
+    max-height: calc(100vh - 65px - 45px - 15px - 35px);
+  }
+}
