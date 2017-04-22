@@ -4,11 +4,14 @@
   padding: $container-padding;
 }
 .schedule {
-  height: 797px;
-  max-height: 797px;
-  overflow-y: scroll;
-    &__container {
-        position: relative;
+
+  &__container {
+
+      &_content {
+        height: 860px;
+        max-height: 860px;
+        overflow-y: auto;
+      }
     }
 
     &__sidebar {
