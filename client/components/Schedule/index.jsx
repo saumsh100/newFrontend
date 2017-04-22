@@ -150,8 +150,10 @@ class ScheduleComponent extends Component {
                 </div>
                 }
               </div>
-              <CurrentDateCalendar currentDate={currentDate}/>
-              {content}
+              <div className={styles.schedule__container_content}>
+                <CurrentDateCalendar currentDate={currentDate} />
+                {content}
+              </div>
             </Card>
           </Col>
           <Col xs={12} sm={4} md={3} className={styles.schedule__sidebar}>
