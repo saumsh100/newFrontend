@@ -12,7 +12,6 @@ const PATHS = {
     {
       to: '/settings/clinic/users',
       label: 'Users',
-      disabled: true,
     },
     {
       to: '',

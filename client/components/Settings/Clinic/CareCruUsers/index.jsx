@@ -56,6 +56,3 @@ function mapDispatchToProps(dispatch) {
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(CareCruUsers);
-
-
-
