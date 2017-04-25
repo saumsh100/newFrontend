@@ -269,8 +269,8 @@ class AvailabilitiesContainer extends Component {
       <Availabilities
         availabilities={filteredByDoctor}
         practitionerId={practitionerId}
-        services={this.props.services.get('models').toArray()}
-        practitioners={this.props.practitioners.get('models').toArray()}
+        services={this.props.services}
+        practitioners={this.props.practitioners}
         sixDaysShift={this.props.sixDaysShift}
         setDay={this.props.setDay}
         setPractitioner={this.props.setPractitioner}

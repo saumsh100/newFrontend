@@ -5,6 +5,7 @@ import { DateUtils } from 'react-day-picker';
 import SelectionView from './SelectionView';
 import SubmitView from './SubmitView';
 import SideBar from './SideBar';
+import Header from './Header';
 import styles from './styles.scss';
 
 let i = 0;
@@ -17,7 +18,6 @@ class Availabilities extends Component {
       modalIsOpen: false,
       practitionersStartEndDate: {},
       checked: false,
-      collapseMenu: false,
     };
 
     this.onDoctorChange = this.onDoctorChange.bind(this);
@@ -31,7 +31,6 @@ class Availabilities extends Component {
     this.selectAvailability = this.selectAvailability.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.collapseMenu = this.collapseMenu.bind(this);
     this.closeIframe = this.closeIframe.bind(this);
   }
 
@@ -96,7 +95,6 @@ class Availabilities extends Component {
   }
 
   selectAvailability() {
-    alert('selecting new availability');
     const newAvailability = {
       startDate: new Date(2017, i++, i * 2, 8, 0),
       endDate: new Date(2017, i++, i * 2, 9, 0),
@@ -131,32 +129,21 @@ class Availabilities extends Component {
     setRegistrationStep(2, accountId);
   }
 
-  collapseMenu(open) {
-    if (open) {
-      this.setState({
-        collapseMenu: true,
-      });
-    } else {
-      this.setState({
-        collapseMenu: false,
-      });
-    }
-  }
-
   closeIframe() {
     window.parent.postMessage('message', '*');
   }
 
   getAppointmentInfo(serviceId) {
     const { practitionersStartEndDate, practitioners, services, practitionerId } = this.props;
-    const selectedService = services.filter(s => s.id === serviceId)[0];
-    const selectedPractitioner = practitioners.filter(p => p.id === practitionerId)[0];
+    const selectedService = services.get(serviceId);
+    const selectedPractitioner = practitioners.get(practitionerId);
     if (selectedPractitioner && selectedService) {
       const { firstName, lastName } = selectedPractitioner;
       const { name } = selectedService;
       const date = moment(practitionersStartEndDate.toJS().startsAt).format('LLLL');
       return `${name} Dr ${lastName} ${date} `;
     }
+
     return null;
   }
 
@@ -173,34 +160,28 @@ class Availabilities extends Component {
       removeReservation,
     } = this.props;
 
-    const serviceId = this.props.serviceId || services[0] && services[0].id;
-    const prId = practitioners[0] && practitioners.id;
+    const serviceId = this.props.serviceId;
+    const prId = this.props.practitionerId;
     const defaultValues = { practitionerId, serviceId };
     const params = { practitionerId, services, availabilities, practitioners, defaultValues };
     const appointmentInfo = this.getAppointmentInfo(serviceId);
     const registrationStep = 1;//practitionersStartEndDate.get('registrationStep');
 
-    // TODO: does this ever happen?...
     let currentView = (
-      <div>Loading...</div>
+      <SelectionView
+        params={params}
+        props={this.props}
+        upperState={this.state}
+        account={account}
+        selectAvailability={this.selectAvailability}
+        handleSaveClick={this.handleSaveClick}
+        handleChange={this.handleChange}
+        sixDaysForward={this.sixDaysForward}
+        sixDaysBack={this.sixDaysBack}
+      />
     );
 
-    if (registrationStep === 1) {
-      currentView = (
-        <SelectionView
-          params={params}
-          props={this.props}
-          upperState={this.state}
-          account={account}
-          collapseMenu={this.collapseMenu}
-          selectAvailability={this.selectAvailability}
-          handleSaveClick={this.handleSaveClick}
-          handleChange={this.handleChange}
-          sixDaysForward={this.sixDaysForward}
-          sixDaysBack={this.sixDaysBack}
-        />
-      );
-    } else if (registrationStep === 2) {
+    if (registrationStep === 2) {
       currentView = (
         <SubmitView
           setRegistrationStep={setRegistrationStep}
@@ -216,25 +197,9 @@ class Availabilities extends Component {
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>
-          <SideBar collapsed={this.state.collapsedMenu} account={account}  />
+          <SideBar account={account} />
           <div className={styles.appointment__main}>
-            <div className={styles.appointment__header}>
-              <button
-                className={styles.appointment__header_btn}
-                onClick={() => this.collapseMenu(true)}
-              >
-                <i className="fa fa-bars" />
-              </button>
-              <div className={styles.appointment__header_title}>
-                BOOK APPOINTMENT
-              </div>
-              <button
-                className={styles.appointment__header_btn}
-                onClick={this.closeIframe}
-              >
-                <i className="fa fa-times" />
-              </button>
-            </div>
+            <Header />
             {currentView}
           </div>
         </div>

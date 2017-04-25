@@ -5,8 +5,8 @@ import { reducer as form } from 'redux-form';
 import mapValues from 'lodash/mapValues';
 import toolbar from './toolbar';
 import auth from './auth';
-import entities from './entities';
 import availabilities, { createInitialWidgetState } from './availabilities';
+import entities, { createInitialEntitiesState } from './entities';
 
 export default combineReducers({
   routing,
@@ -19,6 +19,7 @@ export default combineReducers({
 
 const reducerCreators = {
   availabilities: createInitialWidgetState,
+  entities: createInitialEntitiesState,
 };
 
 export function createInitialState(initialState) {

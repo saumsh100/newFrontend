@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Form, Field, Grid, Row, Col } from '../../library';
 import styles from '../styles.scss';
 
@@ -10,20 +11,20 @@ function AvailabilitiesPreferencesForm(props) {
     onChange,
   } = props;
 
-  if (!services.length) {
+  if (!services.get('models').size) {
     return null;
   }
 
   const initialValues = {
-    serviceId: services[0].id,
+    serviceId: services.get('models').first().get('id'),
     practitionerId: '',
   };
 
-  const serviceOptions = services.map(s => ({ label: s.get('name'), value: s.get('id') }));
+  const serviceOptions = services.get('models').map(s => ({ label: s.get('name'), value: s.get('id') })).toArray();
 
   const practitionerOptions = [
     { label: 'No Preference', value: '' },
-    ...practitioners.map(p => ({ label: p.getFullName(), value: p.get('id') })),
+    ...practitioners.get('models').map(p => ({ label: p.getFullName(), value: p.get('id') })).toArray(),
   ];
 
   return (
@@ -72,8 +73,8 @@ function AvailabilitiesPreferencesForm(props) {
 }
 
 AvailabilitiesPreferencesForm.propTypes = {
-  services: PropTypes.arrayOf(PropTypes.object).isRequired,
-  practitioners: PropTypes.arrayOf(PropTypes.object).isRequired,
+  services: ImmutablePropTypes.map.isRequired,
+  practitioners: ImmutablePropTypes.map.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 

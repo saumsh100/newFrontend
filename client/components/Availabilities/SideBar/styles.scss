@@ -2,31 +2,17 @@
 /* TODO: remove this out of here and put in a top level style sheet */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700");
 
-.signup {
-  &__sidebar {
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    padding: 0 20px;
-    background-color: #f3715c;
-    background-color: var(--bookingWidgetPrimaryColor);
-    position: relative;
-    @media screen and (max-width: 800px) {
-      display: none;
-      transform: translateX(-200px);
-    }
-  }
-
-  &__sidebarActive {
-    display: flex;
-    transform: translateX(0px);
-    width: 200px;
-    position: absolute;
-    height: 100%;
-    z-index: 1;
-    left: 0;
-    transition: transform .5s;
-
+.sideBarWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  padding: 0 20px;
+  background-color: #f3715c;
+  background-color: var(--bookingWidgetPrimaryColor);
+  position: relative;
+  @media screen and (max-width: 700px) {
+    display: none;
+    transform: translateX(-200px);
   }
 }
 

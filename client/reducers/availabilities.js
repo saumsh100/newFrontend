@@ -17,8 +17,8 @@ import {
 
 export const createInitialWidgetState = state => fromJS(Object.assign({
   account: null,
-  practitioners: null,
-  services: null,
+  practitioners: [],
+  services: [],
   selectedAvailability: null,
   practitionerId: null,
   serviceId: null,

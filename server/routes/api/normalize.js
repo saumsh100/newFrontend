@@ -6,6 +6,8 @@ const schema = normalizr.schema;
 const accountSchema = () => {
   return new schema.Entity('accounts', {
     users: [userSchema()],
+    practitioners: [_practitionerSchema],
+    services: [_serviceSchema],
     weeklySchedule: weeklyScheduleSchema(),
   });
 };

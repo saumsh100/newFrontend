@@ -10,7 +10,7 @@ class SideBar extends Component {
 
   render() {
     const {
-      collapsed,
+      isCollapsed,
       account,
       selectedAvailability,
       // selectedWaitlist,
@@ -48,10 +48,8 @@ class SideBar extends Component {
       logo,
     } = account.toJS();
 
-    // TODO: process image to set size
-
     return (
-      <div className={`${styles.signup__sidebar} ${collapsed ? styles.signup__sidebarActive : ''}`}>
+      <div className={styles.sideBarWrapper}>
         <div className={styles.sidebar__header}>
           <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
         </div>
@@ -85,17 +83,18 @@ class SideBar extends Component {
 }
 
 SideBar.defaultProps = {
-
+  isCollapsed: false,
 };
 
 SideBar.propTypes = {
-  collapsed: PropTypes.bool.isRequired,
   account: PropTypes.object,
+  isCollapsed: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ availabilities }) {
+function mapStateToProps({ availabilities, toolbar }) {
   return {
     selectedAvailability: availabilities.get('selectedAvailability'),
+    isCollapsed: toolbar.get('isCollapsed'),
   };
 }
 

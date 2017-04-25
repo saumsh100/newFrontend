@@ -1,5 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import includes from 'lodash/includes';
 import { Button, Form, Field, Checkbox } from '../../library';
@@ -8,10 +10,10 @@ import AvailabilitiesPreferencesForm from './AvailabilitiesPreferencesForm';
 import AvailabilitiesDisplay from './AvailabilitiesDisplay';
 import styles from './styles.scss';
 
-export default class SelectionView extends Component {
+class SelectionView extends Component {
   render() {
-    const { practitionerId, services, availabilities, practitioners, defaultValues } = this.props.params;
-    const { props, upperState } = this.props;
+    const { practitionerId, availabilities, defaultValues } = this.props.params;
+    const { props, upperState, services, practitioners } = this.props;
 
     const startsAt = props.practitionersStartEndDate.get('startsAt');
 
@@ -28,45 +30,13 @@ export default class SelectionView extends Component {
 
     const { logo, address, clinicName } = props;
     return (
-      <div onClick={() => this.props.collapseMenu(false)} className={styles.appointment__body}>
+      <div className={styles.appointment__body}>
         <div className={styles.appointment__body_header}>
           <AvailabilitiesPreferencesForm
             services={services}
             practitioners={practitioners}
             onChange={values => alert(JSON.stringify(values))}
           />
-          {/*<div className={styles.appointment__select_title}>Practitioner</div>
-           {defaultValues && defaultValues.practitionerId &&
-           <Form
-           className={styles.appointment__select_wrapper} form="availabilities"
-           initialValues={defaultValues}
-           >
-           <Field
-           component="Select"
-           name="practitionerId"
-           label="Select Practitioner"
-           min
-           className={styles.appointment__select_item}
-           >
-           {practitioners.map(p =>
-           <option value={p.id} key={p.id}>{p.getFullName()}</option>
-           )}
-           </Field>
-
-           <Field
-           component="Select"
-           className={styles.appointment__select_item}
-           name="serviceId"
-           label="Select Service"
-           min
-           >
-           {services.filter(s =>
-           includes(s.allowedPractitioners, practitionerId)
-           ).map(s =>
-           <option value={s.id} key={s.id}>{s.name}</option>
-           )}
-           </Field>
-           </Form>}*/}
           <div className={styles.appointment__daypicker}>
             <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
             <div
@@ -124,3 +94,17 @@ export default class SelectionView extends Component {
     );
   }
 }
+
+SelectionView.propTypes = {
+  services: ImmutablePropTypes.map.isRequired,
+  practitioners: ImmutablePropTypes.map.isRequired,
+};
+
+function mapStateToProps({ entities }) {
+  return {
+    services: entities.get('services'),
+    practitioners: entities.get('practitioners'),
+  };
+}
+
+export default connect(mapStateToProps, null)(SelectionView);

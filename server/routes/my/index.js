@@ -10,6 +10,7 @@ const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
+const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
 myRouter.use('/practitioners', practitionersRouter);
@@ -25,15 +26,20 @@ myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, 
 myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
   try {
     // Needs to match the structure of the reducers
+    const { entities } = normalize('account', req.account);
+    // console.log(req.account);
+    // console.log(normalize('account', req.account));
+    console.log(entities);
     const initialState = {
       availabilities: {
         account: req.account,
         services: req.account.services,
         practitioners: req.account.practitioners,
       },
+
+      entities,
     };
 
-    console.log(JSON.stringify(initialState));
     return res.render('patient', {
       account: req.account,
       initialState: JSON.stringify(initialState),

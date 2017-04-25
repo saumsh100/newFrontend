@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import moment from 'moment';
 import _ from 'lodash';
+import * as Immutable from 'immutable';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
 import socket from '../socket';
@@ -40,6 +41,11 @@ window.browserHistory = history;
 window.socket = socket;
 window.moment = moment;
 window._ = _;
+window.Immutable = Immutable;
+
+console.log('Patient App');
+console.log('width', window.innerWidth);
+console.log('height', window.innerHeight);
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

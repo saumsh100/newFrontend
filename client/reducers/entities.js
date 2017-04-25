@@ -42,26 +42,28 @@ import WeeklySchedule from '../entities/models/WeeklySchedule';
 import User from '../entities/models/User';
 import users from '../entities/collections/users';
 
-const initialState = Map({
-  // KEYs must map to the response object
-  // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
-  accounts: new accounts(),
-  patients: new patients(),
-  textMessages: new textMessages(),
-  appointments: new appointments(),
-  requests: new requests(),
-  services: new services(),
-  practitioners: new practitioners(),
-  availabilities: new availabilities(),
-  dialogs: new dialogs(),
-  patientList: new patientList(),
-  chairs: new chairs(),
-  weeklySchedules: new weeklySchedules(),
-  users: new users(),
-  timeOffs: new timeOffs(),
-  // reviews: Reviews(), MODEL
-  // listings: Listings(),
-});
+export const createInitialEntitiesState = (initialEntitiesState = {}) => {
+  return receiveEntities(Map({
+    // KEYs must map to the response object
+    // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
+    accounts: new accounts(),
+    patients: new patients(),
+    textMessages: new textMessages(),
+    appointments: new appointments(),
+    requests: new requests(),
+    services: new services(),
+    practitioners: new practitioners(),
+    availabilities: new availabilities(),
+    dialogs: new dialogs(),
+    patientList: new patientList(),
+    chairs: new chairs(),
+    weeklySchedules: new weeklySchedules(),
+    users: new users(),
+    timeOffs: new timeOffs(),
+    // reviews: Reviews(), MODEL
+    // listings: Listings(),
+  }), initialEntitiesState);
+};
 
 const Models = {
   accounts: Account,
@@ -86,24 +88,7 @@ export default handleActions({
   },
 
   [RECEIVE_ENTITIES](state, { payload: { entities } }) {
-    // TODO: update all appropriate entitites in state
-
-    let newState = state;
-    each(entities, (collectionMap, key) => {
-      each(collectionMap, (modelData, id) => {
-        const model = newState.getIn([key, 'models', id]);
-        // TODO: Fix weeklySchedules merge issues
-        if (!model || key === 'weeklySchedules') {
-          // newModel will have lastUpdated populated
-          const newModel = new Models[key](modelData);
-          newState = newState.setIn([key, 'models', id], newModel);
-        } else {
-          newState = newState.mergeIn([key, 'models', id], modelData);
-        }
-      });
-    });
-
-    return newState;
+    return receiveEntities(state, entities);
   },
 
   [DELETE_ENTITY](state, { payload: { key, id } }) {
@@ -179,7 +164,7 @@ export default handleActions({
     return state.updateIn(['patientList', 'models', id], () => updatedPatient.toJS());
   }
 
-}, initialState);
+}, createInitialEntitiesState());
 
 /* function updateEntityStateWithEntities(state, key, id, modelData) {
   const entityState = state.get(key);
@@ -190,3 +175,23 @@ export default handleActions({
     return state.set('')
   }
 }*/
+
+function receiveEntities(state, entities) {
+  // TODO: update all appropriate entitites in state
+  let newState = state;
+  each(entities, (collectionMap, key) => {
+    each(collectionMap, (modelData, id) => {
+      const model = newState.getIn([key, 'models', id]);
+      // TODO: Fix weeklySchedules merge issues
+      if (!model || key === 'weeklySchedules') {
+        // newModel will have lastUpdated populated
+        const newModel = new Models[key](modelData);
+        newState = newState.setIn([key, 'models', id], newModel);
+      } else {
+        newState = newState.mergeIn([key, 'models', id], modelData);
+      }
+    });
+  });
+
+  return newState;
+}
