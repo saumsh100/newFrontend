@@ -1,12 +1,11 @@
 
 import React, { PropTypes } from 'react';
-import ChatContainer from '../../containers/ChatContainer';
 
 function Phone({ patient, patients }) {
+  console.log(patient, patients)
   return (
     <div>
       Phone
-      {/*<ChatContainer patient={patient} patients={patients} />*/}
     </div>
   );
 }
