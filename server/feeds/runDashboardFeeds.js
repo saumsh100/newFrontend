@@ -20,11 +20,10 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-
         if (isDeleted(doc)) {
           socket.emit('remove:Appointment', normalize('appointment', doc));
         } else if (isCreated(doc)) {
-          socket.emit('add:Appointment', normalize('appointment', doc));
+          socket.emit('create:Appointment', normalize('appointment', doc));
         } else {
           socket.emit('update:Appointment', normalize('appointment', doc));
         }
@@ -64,27 +63,10 @@ function runDashboardFeeds(socket) {
     .then((feed) => {
       setupFeedShutdown(socket, feed);
 
-      // TODO maybe there is a way to do this without querying the db on feed change?
       feed.each((error, logEntry) => {
-        if (logEntry.model === 'patient') {
-          Patient
-            .get(logEntry.documentId)
-            .run()
-            .then((patient) => {
-              logEntry.patient = patient;
-              socket.emit('syncLog', normalize('syncLog', logEntry));
-            })
-            .catch(err => console.log('ERROR', err));
-        } else if (logEntry.model === 'appointment') {
-          Appointment
-            .get(logEntry.documentId)
-            .run()
-            .then((appointment) => {
-              logEntry.appointment = appointment;
-              socket.emit('syncLog', normalize('syncLog', logEntry));
-            })
-            .catch(err => console.log('ERROR', err));
-        }
+        // stacktrace attribute can be very large and does not mean anything for the dashboard.
+        delete logEntry.stackTrace;
+        socket.emit('syncLog', normalize('syncLog', logEntry));
       });
     });
 }

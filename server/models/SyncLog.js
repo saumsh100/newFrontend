@@ -11,12 +11,9 @@ const SyncLog = createModel('SyncLog', {
   operation: type.string().enum('create', 'update', 'delete', 'sync').required(),
   success: type.boolean(),
 
-  // payload: type.string(),
   model: type.string(),
   documentId: type.string().uuid(4),
-
-  // patientId: type.string().uuid(4),
-  // appointmentId: type.string().uuid(4),
+  payload: type.string(),
 
   errorMessage: type.string(),
   stackTrace: type.string(),

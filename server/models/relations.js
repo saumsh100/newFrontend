@@ -63,6 +63,3 @@ Practitioner.hasMany(PractitionerTimeOff, 'timeOffs', 'id', 'practitionerId');
 
 Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
 Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
-
-SyncLog.hasOne(Patient, 'patient', 'patientId', 'id');
-SyncLog.hasOne(Appointment, 'appointment', 'appointmentId', 'id');

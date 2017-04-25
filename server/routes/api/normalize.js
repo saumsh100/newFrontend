@@ -52,10 +52,7 @@ const userSchema = () => {
 };
 
 const syncLogSchema = () => {
-  return new schema.Entity('syncLog', {
-    patient: patientSchema(),
-    appointment: appointmentSchema(),
-  });
+  return new schema.Entity('syncLog');
 };
 
 const weeklyScheduleSchema = () => {
