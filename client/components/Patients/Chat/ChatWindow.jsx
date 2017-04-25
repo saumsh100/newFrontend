@@ -46,7 +46,7 @@ export default class ChatWindow extends Component {
   }
 
 	render() {
-		const { 
+		const {
 			textMessages,
 			sendMessage,
 			patient,
@@ -73,7 +73,7 @@ export default class ChatWindow extends Component {
 		          </div>
 		        </div>
 		        <div className={styles.message_list} ref={ref => (this.messagesList = ref)}>
-		          <Messages 
+		          <Messages
 		          	messages={textMessages}
 		          	patientId={patient.id}
 		          	readMessagesInCurrentDialog={readMessagesInCurrentDialog}

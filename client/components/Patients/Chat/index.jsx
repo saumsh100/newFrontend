@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { createEntity } from '../../../thunks/fetchEntities';
+import { createEntityRequest } from '../../../thunks/fetchEntities';
 import Messages from './Messages';
 import DialogsListItem from './DialogsList';
 import styles from './styles.scss';
@@ -12,7 +12,6 @@ class Chat extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
     const {
       currentDialogId,
@@ -94,7 +93,7 @@ class Chat extends Component {
 
 Chat.propTypes = {
   textMessages: PropTypes.object.isRequired,
-  createEntityRequest: PropTypes.object.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
 };
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
