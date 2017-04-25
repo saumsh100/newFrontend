@@ -9,7 +9,7 @@ export default function AgeRange(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.green} className={styles.card}>
+    <Card borderColor={colorMap.grey} className={styles.card}>
       <CardHeader className={styles.cardHeader} title="Age Range" />
       <div className={styles.ageRange}>
         <div className={styles.ageRange__content}>

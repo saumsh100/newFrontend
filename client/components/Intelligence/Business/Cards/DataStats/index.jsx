@@ -35,7 +35,7 @@ class DataStats extends Component{
                   return (
                     <Tab label={obj.label}>
                       <div className={styles.left__wrapper}>
-                        <Icon className={styles.left__icon} icon={obj.data.icon} size={5}/>
+                        <Icon className={styles.left__icon} icon={obj.data.icon} size={6}/>
                         <div className={styles.left__count}>
                           {obj.data.count}
                         </div>
@@ -63,25 +63,6 @@ class DataStats extends Component{
                           </div>
                         </div>
                         <div className={styles.arrow}></div>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </Col>
-              <Col className={styles.right__item} sm={12} md={5}>
-                <ul className={styles.right__percentage}>
-                  {data2.map((d) => {
-                    return (
-                      <li className={styles.right__percentage_item}>
-                        <div className={styles.information}>
-                          <div className={styles.information__count}>{d.percentage}%</div>
-                          <div className={styles.information__subtitle}>
-                            {d.subtitle}
-                          </div>
-                        </div>
-                        <div className={styles.information__question}>
-                          <Icon icon="question-circle" size={1.5} />
-                        </div>
                       </li>
                     )
                   })}

@@ -1,28 +1,43 @@
 @import "../../ui.scss";
 
+.rowTest {
+  padding: $container-padding;
+}
 .schedule {
-    &__container {
-        position: relative;
-        padding-right: 5px;
-        padding-left: 5px;
+
+  &__container {
+
+      &_content {
+        height: 860px;
+        max-height: 860px;
+        overflow-y: auto;
+      }
     }
+
     &__sidebar {
-        padding-right: 5px;
-        padding-left: 5px;
+        padding-left: 15px;
+
+        &_rowCalendar {
+          margin-top: 10px;
+        }
+        &_rowRequest {
+          margin-top: 10px;
+          height: 340px;
+          max-height: 340px;
+          background-color: $primary-white;
+        }
         &_request {
-            margin-top: 10px;
+          border-top: $card-border-size $primary-yellow;
         }
         &_calendar {
-            overflow-x: auto;
-            border-top: $card-border-size $primary-dark-blue;
-            margin-top: 10px;
-            background-color: #fafafa;
+          border-top: $card-border-size $primary-dark-blue;
+          background-color: #fafafa;
         }
     }
     &__title {
         min-height: 65px;
-        padding: 10px;
-        border-top: $card-border-size $primary-blue;
+        padding: 10px 20px 5px 20px;
+        border-top: $card-border-size $primary-light-blue;
         border-bottom: $selection-border $background-color;
     }
 
@@ -70,27 +85,86 @@
 }
 
 .title {
-    &__side {
-        float: left;
-    }
-
     &__month {
-        color: #2e3845;
-        font-size: 18px;
+      font-size: 18px;
+      font-weight: $large-weight;
+      text-transform: uppercase;
     }
 
     &__day {
-        color: #2e3845;
-        font-size: 18px;
+      font-size: 18px;
+      font-weight: $large-weight;
     }
 
     &__number {
-        color: #8cbcd6;
-        font-size: 2.5rem;
-        font-weight: 600;
+        font-size: 18px;
+        font-weight: $large-weight;
+    }
+    &__icon {
+      padding-left: 5px;
     }
 }
 
+.calendarTitle {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  border-bottom: 2px solid;
+  border-bottom-color: $background-color;
+
+  &__month {
+    display: inline-block;
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+  &__dayWeek {
+    font-size: 18px;
+    font-weight: $large-weight;
+    text-transform: uppercase;
+  }
+
+  &__dayMonth {
+    font-size: $jumbo-size;
+    font-weight: $large-weight;
+    color: $primary-light-blue;
+  }
+}
+
+.headerButtons {
+  display:flex;
+  margin-left: auto;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  font-size: $small-size;
+  color: $primary-darkgrey;
+
+  &__text {
+    padding-right: 35px;
+  }
+
+  &__quickAdd {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: $primary-dark;
+
+    &_icon{
+      padding-top: 1px;
+    }
+    span {
+      display: flex;
+      width: 20px;
+      height: 20px;
+      margin-left: 5px;
+      border: 2px solid $primary-dark;
+      border-radius: 20px;
+      justify-content: center;
+      align-items: center;
+
+    }
+  }
+}
 .appointment {
     position: absolute;
     width: 99%;

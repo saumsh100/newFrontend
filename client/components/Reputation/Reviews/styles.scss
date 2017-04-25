@@ -9,7 +9,7 @@
 
 .padding {
   padding: 0 5px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
   }
@@ -17,74 +17,77 @@
 
 
 .googleMapsRespond {
-  display: flex;
-  flex-direction: row;
-  height: 168px;
-  align-items: center;
-  padding-left: 20px;
-  @media (max-width: 484px) {
-    flex-direction: column;
-    height: auto;
-  }
+	display: flex;
+	flex-direction: row;
+	height: 168px;
+	align-items: center;
+	padding-left: 20px;
+	@media (max-width: 484px) {
+		flex-direction: column;
+		height: auto;
+	}
 
-  &__video {
-    width: 20%;
-    height: 120px;
-    margin-right: 40px;
-    min-width: 250px;
-  }
+	&__video {
+		width: 20%;
+		height: 120px;
+		margin-right: 40px;
+		min-width: 250px;
+	}
 
-  &__descr {
-    width: 80%;
-    height: 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    div:first-child {
+	&__descr {
+		width: 80%;
+		height: 120px;
+		display: flex;
+		flex-direction: column;
+		align-items: space-around;
+		justify-content: center;
+		div:first-child {
+			font-weight: $large-weight;
+			margin-bottom: 20px;
+		}
+		div:last-child {
       font-weight: $large-weight;
-      margin-bottom: 20px;
-    }
-    div:last-child {
       color: $primary-darkgrey;
-    }
-  }
+		}
+	}
 }
 
 
 .stats {
-  min-height: 168px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 80%;
-  min-width: 250px;
-  margin: 0 auto;
-  padding: 10px 0 10px 0;
-  &__count {
-    font-size: $x-large-size;
-    font-weight: $small-weight;
-  }
+	min-height: 168px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	width: 80%;
+	min-width: 250px;
+	margin: 0 auto;
+	padding: 10px 0 10px 0;
+	&__count {
+		font-size: $x-large-size;
+		font-weight: $large-weight;
+	}
 
-  &__title {
-    font-size: $extra-medium-size;
-    font-weight: $small-weight;
-  }
+	&__title {
+		font-size: $extra-medium-size;
+		font-weight: $large-weight;
+	}
 
-  &__rating {
-    color: $primary-darkgrey;
-    font-weight: $small-weight;
-  }
+	&__rating {
+		color: $primary-darkgrey;
+		font-weight: $large-weight;
+	}
 
-  &__bottom {
-    width: 100%;
-    margin: 5px 0 0 0;
-    padding-top: 15px;
-    text-align: center;
-    border-top: 1px solid $primary-grey;
-    color: $primary-darkgrey;
-    font-size: $medium-size;
-  }
+	&__bottom {
+		width: 100%;
+		margin: 5px 0 0 0;
+		box-shadow: border-box;
+		padding-top: 15px;
+		text-align: center;
+		border-top: 2px solid $primary-grey;
+		color: $primary-darkgrey;
+		font-size: $medium-size;
+	}
 }
 
 .content {
@@ -104,14 +107,14 @@
     text-align: left;
     display: flex;
     align-items: center;
-    color: $primary-light-blue;
-    &__percent {
-      height: 16px;
-      margin-right: 4px;
-      background-color: $primary-light-blue;
-      display: inline-block;
-    }
-  }
+		color: $primary-blue;
+		&__percent {
+			height: 16px;
+			margin-right: 4px;
+			background-color: $primary-light-blue;
+			display: inline-block;
+		}
+	}
 }
 
 
@@ -135,14 +138,28 @@
   }
 }
 
+.rowReviewsFilter {
+  height: 700px;
+}
+
 .reviewsComments {
-  width: 100%;
-  margin-top: 10px;
-  min-height: 168px;
-  max-height: 400px;
-  overflow: auto;
-  &__container {
-    border-right: 2px solid $primary-lightgrey;
-    padding: 10px 10px 0 0;
+	width: 100%;
+	margin-top: 10px;
+	min-height: 168px;
+  max-height: 745px;
+	overflow: auto;
+
+  &__cardHeader {
+    padding-top: 15px;
+    padding-left: 15px;
+  }
+
+	&__container {
+		border-right: 2px solid $primary-lightgrey;
+		padding: 10px 10px 0 0;
+	}
+
+  &__comment {
+
   }
 }

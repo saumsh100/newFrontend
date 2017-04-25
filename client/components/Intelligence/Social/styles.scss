@@ -59,6 +59,7 @@
   flex-direction: row;
   justify-content: flex-end;
   height: 400px;
+  overflow: hidden;
 
   &__gender {
     display: inline-block;
@@ -347,7 +348,7 @@
   align-items: center;
   justify-content: center;
   height: 400px;
-  overflow: auto;
+  overflow: hidden;
     &__content {
       display: flex;
       flex-direction: row;
@@ -459,7 +460,6 @@
   }
   &__body {
     position: relative;
-    overflow: auto;
     max-height: 450px;
     @media screen and (max-width: 900px){
       position: relative;

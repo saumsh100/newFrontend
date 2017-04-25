@@ -25,11 +25,12 @@ class ReviewsCard extends Component {
       >
         <CardHeader
           className={styles.cardHeader}
-          title={'REVIEWS'}
-        >
-          <div className={styles.cardHeader__menu} onClick={this.setActive}>
-            <span>Compose</span>
-            <span>Settings</span>
+          title={'RECENT ACTIVITY'}>
+          <div onClick={this.setActive} className={styles.cardHeader_textCompose}>
+            Compose
+          </div>
+          <div onClick={this.setActive} className={styles.cardHeader_textSettings}>
+            Settings
           </div>
           <Modal
             active={this.state.active}

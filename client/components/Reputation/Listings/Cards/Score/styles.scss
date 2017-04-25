@@ -2,23 +2,22 @@
 @import '../../../../../fonts';
 
 .score {
-  height: 200px;
+  height: 210px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
-  padding: 20px;
   &__header {
     width: 80%;
     border-bottom: 1px solid $primary-lightgrey;
     padding-bottom: 10px;
     &_count {
-      color: $primary-blue;
-      @extend .font-large;
+      color: $primary-light-blue;
+      @extend .font-jumbo;
     }
     &_title {
-      color: $primary-darkgrey;
+      color: $primary-dark;
       font-size: 20px;
       font-weight: 600;
     }

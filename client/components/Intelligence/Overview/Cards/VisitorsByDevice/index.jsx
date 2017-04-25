@@ -12,7 +12,7 @@ export default function VisitorsByDevice(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.green}>
+    <Card borderColor={colorMap.grey}>
       <CardHeader className={styles.cardHeader} title="Visitors by device" />
       <div className={styles.visitors}>
         <div className={styles.visitors__container} >

@@ -1,11 +1,11 @@
 @import "../../ui.scss";
 
 .mainIntelligenceContainer {
-  padding: 0 15px 45px 15px;
+  padding: $container-padding;
 }
 
 .header {
-  padding: 15px 5px 0;
+  padding: 0px 5px 0;
   @media screen and (max-width: 450px) {
     padding: 5px 10px 0;
   }

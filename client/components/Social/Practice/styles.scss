@@ -11,25 +11,9 @@
 .listings {
 }
 
-.padding {
-	padding-top: 10px;
-}
-
-.cardHeader {
-	padding: 20px 20px 0 20px;
-	margin-bottom: 20px;
-  text-transform: uppercase;
-	&__menu {
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-    justify-content: flex-end;
-		font-size: $small-size;
-		span:first-child {
-			cursor: pointer;
-		}
-		span:last-child {
-			cursor: pointer;
-		}
-	}
+.calendarContainer {
+  padding-top: 10px;
+  &_calendar {
+    border-top: $card-border-size $primary-dark-blue;
+  }
 }

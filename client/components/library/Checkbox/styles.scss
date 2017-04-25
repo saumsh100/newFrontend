@@ -2,12 +2,14 @@
   input[type="checkbox"] {
     display: none;
   }
+
   input[type=checkbox]:checked + label::before {
     content: "\2713";
     font-size: 13px;
     background: #f3715c;
     color: white;
   }
+
   label {
     float: left;
     display: flex;

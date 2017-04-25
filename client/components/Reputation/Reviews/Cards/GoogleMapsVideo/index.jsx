@@ -11,12 +11,12 @@ export default function GoogleMapsVideo(props) {
           <iframe
             width="250"
             height="120"
-            src="https://www.youtube.com/watch?v=t13DULDt01k"
+            src="https://www.youtube.com/embed/32vzLgGP0Rg"
           />
         </div>
         <div className={styles.googleMapsRespond__descr}>
           <div> Respond to google maps review </div>
-          <div> You can respond from here! Connect your Google My Busyness
+          <div> You can respond from here! Connect your Google My Business
             account to get started
           </div>
         </div>

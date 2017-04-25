@@ -9,6 +9,7 @@ import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
 import Collapsible from './Collapsible';
+import DayPicker from './DayPicker';
 import DropdownSelect from './DropdownSelect';
 import DashboardStats from './DashboardStats';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
@@ -55,6 +56,7 @@ export {
   Checkbox,
   ChartStats,
   Collapsible,
+  DayPicker,
   DropdownSelect,
   DashboardStats,
   DoubleIcon,
