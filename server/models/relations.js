@@ -49,7 +49,7 @@ Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Patient, 'patients', 'id', 'accountId');
-//Account.hasMany(User, 'users', 'id', 'activeAccountId');
+// Account.hasMany(User, 'users', 'id', 'activeAccountId');
 
 Chat.hasOne(Account, 'account', 'accountId', 'id');
 Chat.hasOne(Patient, 'patient', 'patientId', 'id');
@@ -62,3 +62,5 @@ Practitioner.hasMany(PractitionerTimeOff, 'timeOffs', 'id', 'practitionerId');
 
 Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
 Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
+
+Permission.hasMany(User, 'users', 'userId', 'id');

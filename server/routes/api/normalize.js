@@ -22,6 +22,7 @@ const chairSchema = () => {
   return new schema.Entity('chairs');
 };
 
+
 const chatSchema = () => {
   return new schema.Entity('chats', {
     account: accountSchema(),
@@ -32,6 +33,12 @@ const chatSchema = () => {
 
 const patientSchema = () => {
   return new schema.Entity('patients');
+};
+
+const permissionSchema = () => {
+  return new schema.Entity('permissions', {
+    users: [userSchema()],
+  });
 };
 
 const requestSchema = () => {
@@ -101,7 +108,6 @@ const SCHEMAS = {
   syncError: syncErrorSchema(),
   reservation: reservationSchema(),
   weeklySchedule: weeklyScheduleSchema(),
-
   // Collections (list/find)
   accounts: [accountSchema()],
   appointments: [appointmentSchema()],
@@ -113,6 +119,7 @@ const SCHEMAS = {
   textMessages: [textMessageSchema()],
   users: [userSchema()],
   syncErrors: [syncErrorSchema()],
+  permissions: [permissionSchema()],
   practitioners: [practitionerSchema()],
   practitionerTimeOffs: [timeOffSchema()],
   weeklySchedules: [weeklyScheduleSchema()],

@@ -290,6 +290,8 @@ const SEEDS = {
 
   User: [
     {
+      firstName: 'Justin',
+      lastName: 'Sharp',
       username: 'justin@carecru.com',
       password: bcrypt.hashSync('justin', saltRounds),
       id: justinUserId,
@@ -297,6 +299,8 @@ const SEEDS = {
       // accounts: [accountId],
     },
     {
+      firstName: 'Sergey',
+      lastName: 'Skovorodnikov',
       username: 'sergey@carecru.com',
       password: bcrypt.hashSync('sergey', saltRounds),
       id: sergeyUserId,
@@ -305,6 +309,8 @@ const SEEDS = {
     },
     // account 2 user
     {
+      firstName: 'Jatinder',
+      lastName: 'Dhillion',
       username: 'jd@carecru.com',
       password: bcrypt.hashSync('jd', saltRounds),
       id: jdUserId,
@@ -312,6 +318,8 @@ const SEEDS = {
       // accounts: [accountId],
     },
     {
+      firstName: 'Alex',
+      lastName: ' ',
       username: 'alex@carecru.com',
       password: bcrypt.hashSync('alex', saltRounds),
       id: alexUserId,

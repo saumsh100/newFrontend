@@ -23,6 +23,8 @@ import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
 import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
+import permissions from '../entities/collections/permissions';
+import Permission from '../entities/models/Permission';
 import TimeOff from '../entities/models/PractitionerTimeOff';
 import timeOffs from '../entities/collections/practitionerTimeOffs';
 import Requests from '../entities/models/Request';
@@ -51,6 +53,7 @@ const initialState = Map({
   appointments: new appointments(),
   requests: new requests(),
   services: new services(),
+  permissions: new permissions(),
   practitioners: new practitioners(),
   availabilities: new availabilities(),
   dialogs: new dialogs(),
@@ -70,6 +73,7 @@ const Models = {
   appointments: Appointments,
   requests: Requests,
   services: Service,
+  permissions: Permission,
   practitioners: Practitioners,
   timeOffs: TimeOff,
   dialogs: Dialogs,
