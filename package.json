@@ -75,7 +75,7 @@
     "handlebars": "~4.0.5",
     "helmet": "^1.1.0",
     "immutability-helper": "^2.0.0",
-    "immutable": "^4.0.0-rc.2",
+    "immutable": "3.7.4",
     "imports-loader": "^0.6.5",
     "interval-arithmetic-eval": "^0.4.3",
     "jsdom": "^7.2.2",
