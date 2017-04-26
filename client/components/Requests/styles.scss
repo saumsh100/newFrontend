@@ -7,7 +7,6 @@
 }
 
 .requestCard {
-
 }
 
 .requestHeader{
@@ -15,9 +14,9 @@
 }
 
 .requestList {
+  max-height: 590px;
   border-top: 1px solid;
   border-top-color: $primary-grey;
-  height: 587px;
   overflow: auto;
   background: $primary-white;
 }
@@ -45,7 +44,7 @@
   }
 
   &__nameAge{
-    font-family: "Gotham Medium";
+    font-family: $medium-font;
     display: flex;
   }
 
@@ -79,7 +78,7 @@
   text-align: center;
   padding-top: 1em;
   padding-right: 1em;
-  font-family: "Gotham Medium";
+  font-family: $medium-font;
   &__month {
     font-size: $medium-size
   }

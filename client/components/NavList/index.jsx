@@ -114,7 +114,7 @@ export default function NavList({ location, isCollapsed }) {
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
-          <SubNavItem path="/patients/phone" label="Phone Calls" disabled />
+          <SubNavItem path="/patients/phone" label="Phone Calls"/>
         </MultiNavItem>
         <MultiNavItem path="/reputation" icon="star" label="Reputation">
           <SubNavItem path="/reputation/listings" label="Listings" />

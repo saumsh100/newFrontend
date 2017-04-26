@@ -11,7 +11,7 @@ export default function MaleVsFemale(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.green}>
+    <Card borderColor={colorMap.grey}>
       <CardHeader className={styles.cardHeader} title="Male vs Famale" />
       <div className={styles.maleVsFamale}>
         <div className={styles.maleVsFamale__menContainer}>

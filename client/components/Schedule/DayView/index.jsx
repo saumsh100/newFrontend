@@ -1,10 +1,11 @@
+
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import {fetchEntities} from '../../../thunks/fetchEntities';
 import Link from '../../library/Link';
-import CurrentDate from '../CurrentDate';
+import CurrentDate from '../Cards/CurrentDate';
 import styles from '../styles.scss';
 
 

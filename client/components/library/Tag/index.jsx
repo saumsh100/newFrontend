@@ -9,11 +9,11 @@ export default function Tag(props) {
   const classname = classNames(styles.tagsContainer);
   const iconClass = classNames(styles.close, "fa fa-close");
   return (
-  	<div style={{borderLeft: `4px solid ${color}` }} className={classname} >
-  		{label}
-  		<i className={iconClass} />
-  	</div>
-  	)
+    <div style={{ borderLeft: `4px solid ${color}` }} className={classname} >
+      {label}
+      <i className={iconClass} />
+    </div>
+  );
 }
 
 Tag.defaultProps = {

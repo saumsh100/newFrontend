@@ -172,14 +172,14 @@ export default function Routes({ history }) {
               });
             }}
           />
-          {/*<Route
-           path="phone"
-           getComponent={(location, callback) => {
-           require.ensure(['./containers/PatientsPhoneContainer'], (require) => {
-           callback(null, require('./containers/PatientsPhoneContainer').default);
-           });
-           }}
-           />*/}
+          <Route
+            path="phone"
+            getComponent={(location, callback) => {
+              require.ensure(['../containers/PatientsPhoneContainer'], (require) => {
+                callback(null, require('../containers/PatientsPhoneContainer').default);
+              });
+            }}
+          />
         </Route>
         {/*<Route
          path="reputation"

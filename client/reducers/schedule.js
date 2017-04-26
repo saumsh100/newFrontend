@@ -12,7 +12,7 @@ const initialState = fromJS({
   practitioners: [],
   appointmentType: null,
   currentScheduleMode: 'day',
-  scheduleModes: ['day', 'month', 'week'],
+  scheduleModes: ['Month', 'Week', 'Day'],
 });
 
 export default handleActions({

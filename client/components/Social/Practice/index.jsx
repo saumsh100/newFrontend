@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Col, Grid, Row, Filters } from '../../library';
+import { Col, Grid, Row, Filters, Calendar } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import ReviewsCard from './Cards/ReviewsCard';
 import styles from './styles.scss';
@@ -27,7 +27,7 @@ class Practice extends Component {
       requiredAction: 'ACTION REQUIRED',
       headerLinkName: 'L. Linda',
       headerLinkSite: 'yelp.ca',
-      siteStars: 6,
+      siteStars: 5,
       siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
       sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
       createdAt: moment().subtract(10, 'days').fromNow(),
@@ -68,30 +68,27 @@ class Practice extends Component {
           { type: 'checkbox', value: 'No Rating' },
         ],
       },
-      {
-        title: 'Status',
-        items: [
-          { type: 'select', options: ['Select Response Status', 'options1', 'options3', 'options4'] },
-          { type: 'select', options: ['Select Shared Status', 'options1', 'options3', 'options4'] },
-          { type: 'select', options: ['Select Publishing Status', 'options1', 'options3', 'options4'] },
-          { type: 'checkbox', value: 'With Comments' },
-          { type: 'checkbox', value: 'Without Comments' },
-          { type: 'checkbox', value: 'With new Comments' },
-          { type: 'checkbox', value: 'Without new Comments' },
-        ],
 
-      },
     ];
 
 
     return (
       <Grid className={styles.listing}>
         <Row>
-          <Col className={styles.padding} xs={12} sm={8}>
+          <Col className={styles.padding} xs={12} sm={12} md={8}>
             <ReviewsCard data={DataBigComment} />
           </Col>
-          <Col className={styles.padding} xs={12} md={4}>
-            <Filters filters={filters} />
+          <Col className={styles.padding} xs={12} sm={12} md={4}>
+            <Row>
+              <Col xs={12} >
+                <Filters filters={filters} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} className={styles.calendarContainer}>
+                <Calendar className={styles.calendarContainer_calendar} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Grid>

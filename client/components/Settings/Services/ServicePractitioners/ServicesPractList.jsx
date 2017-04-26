@@ -3,11 +3,11 @@ import { Field } from '../../../library';
 
 class ServicesPractList extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    const { practitioner, fieldValue } = this.props;
+    const { practitioner } = this.props;
 
     let showComponent = null;
 

@@ -1,94 +1,57 @@
-import React, { PropTypes, Component } from 'react';
-import { Card, Checkbox, Search, Form, Field } from '../../library';
+
+import React, { Component, PropTypes } from 'react';
+import { withState } from 'recompose';
+import { Card, Checkbox, Search, Form } from '../../library';
+import FilterForm from './FilterForm';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
 
-export default class Filters extends Component {
+class Filters extends Component {
   constructor(props) {
     super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit() {
-
+  handleSubmit(values) {
+    console.log(values);
   }
 
-
+  // TODO: add initialValues to form and get Select All and Clear All working
   render() {
-    const { filters, min } = this.props;
-    const defaultValues = { search: '' };
+    const { filters, selectAll, setAll } = this.props;
     return (
       <Card borderColor={colorMap.red} className={styles.card}>
-        <Form form="filters" ignoreSaveButton>
-          <div className={styles.filters}>
-            <div className={styles.filters__header}>
-              <div className={styles.filters__header__left}>
-                <span>Filters</span>
-                <span className="fa fa-sliders" />
-              </div>
-              <div className={styles.filters__header__right}>
-                <span>Select All</span>
-                <span>Clear All</span>
-              </div>
+        <div className={styles.filters}>
+          <div className={styles.filters__header}>
+            <div className={styles.filters__header__left}>
+              <span>Filters</span>
+              <span className="fa fa-sliders" />
             </div>
-            {!min &&
-            <div className={styles.filters__search}>
-              <span className="fa fa-search" />
-              <Field
-                min
-                name="search"
-                laceholder="Search..."
-                onChange={(event, newValue, previousValue) => {
-                }}
-              />
-            </div> }
-            {filters.map((f) => {
-              const content =
-                f.items.map((i, index) => i.type === 'checkbox' ?
-                  <div className={styles.filters__checkFilter__chbox}>
-                    <span>{i.value}</span>
-                    <span>
-                      <Field
-                        name={i.value}
-                        input={{ value: true, onChange: ((e, newValue) => { console.log(newValue); }) }}
-                        component="Checkbox" type="checkbox"
-                      />
-                    </span>
-                  </div>
-                  :
-                  <div className={styles.filters__selectFilter}>
-
-
-                    <Field
-                      component="Select"
-                      name={`${f.title}-${index}`}
-                      label="Select Practitioner"
-                      min
-                      className={styles.appointment__select_item}
-                    >
-                      {i.options.map(item => (
-                        <option value={item}>{item}</option>
-                      ))}
-                    </Field>
-                  </div>);
-              return (
-                <div>
-                  <div className={styles.filters__title}>
-                    {f.titleIcon &&
-                    <div style={{ backgroundColor: f.titleIcon.color }} className={styles.filters__title__icon}>
-                      <span className={`fa fa-${f.titleIcon.icon}`} />
-                    </div>
-                    }
-                    {f.title}
-                  </div>
-                  <div className={styles.filters__checkFilter}>
-                    {content}
-                  </div>
-                </div>
-              );
-            })}
+            <div className={styles.filters__header__right}>
+              <span onClick={()=>setAll(true)}>Select All</span>
+              <span onClick={()=>setAll(false)}>Clear All</span>
+            </div>
           </div>
-        </Form>
+          <div className={styles.filters__search}>
+            <span className="fa fa-search" />
+            <input type="text" placeholder="Search..." />
+          </div>
+          <FilterForm
+            filters={filters}
+            formName="filtersList"
+            handleSubmit={this.handleSubmit}
+            flipped={selectAll}
+          />
+        </div>
       </Card>
     );
   }
 }
+
+Filters.propTypes = {
+  filters: PropTypes.arrayOf(Object),
+};
+
+const enhance = withState('selectAll', 'setAll', false)
+
+export default enhance(Filters);

@@ -39,6 +39,8 @@ class Patient extends Component {
       actions: true,
       headerLinkName: 'L. Linda',
       headerLinkSite: 'yelp.ca',
+      siteStars: 5,
+      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
       sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
       createdAt: moment().subtract(10, 'days').fromNow(),
       comments: [{
@@ -119,20 +121,24 @@ class Patient extends Component {
     return (
       <Grid className={styles.reviews}>
         <Row>
-          <Col className={styles.padding} xs={12} md={8}>
+          <Col className={styles.padding} xs={12} sm={12} md={8} lg={8}>
             <ReviewsCard
               data={DataBigComment}
               headerTabs={headerTabs}
               socialPreview={socialPreview}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={4}>
-            <Filters filters={filters} min />
-            <Calendar
-              className={styles.calendar}
-              initialMonth={new Date(2016, 1)}
-              selectedDays={this.state.selectedDays}
-            />
+          <Col className={styles.padding} xs={12} sm={4} md={4} lg={4}>
+            <Row>
+              <Col xs={12} >
+                <Filters filters={filters} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} className={styles.calendarContainer}>
+                <Calendar className={styles.calendarContainer_calendar} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Grid>

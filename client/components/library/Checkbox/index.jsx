@@ -1,4 +1,5 @@
-import React, { PropTypes, defaultProps } from 'react';
+
+import React, { PropTypes, Component, defaultProps } from 'react';
 import styles from './styles.scss';
 
 export default function Checkbox(props) {
@@ -17,9 +18,15 @@ export default function Checkbox(props) {
         type="checkbox"
         id={id}
         checked={checked}
-        onChange={onChange}
+        value={value}
+        onChange={() => {}}
       />
-      <label htmlFor={id} className={styles.checkbox__label}>
+      <label
+        htmlFor={id}
+        className={styles.checkbox__label}
+        onClick={onChange}
+        onChange={onChange}
+      >
         {label}
       </label>
     </div>
@@ -31,5 +38,5 @@ Checkbox.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   onChange: PropTypes.func,
+  checked: PropTypes.bool,
 };
-
