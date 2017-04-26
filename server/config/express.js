@@ -45,7 +45,7 @@ app.use(compress({
 // app.use(favicon(`${globals.root}/public/images/favicon.ico`));
 app.use(express.static(`${globals.root}/public`));
 
-app.use(express.static(`${globals.root}/${globals.loader}`));
+// app.use(express.static(`${globals.root}/${globals.loader}`));
 
 // Allows the use of PUT and DELETE from clients that do not support those HTTP Methods
 app.use(methodOverride());

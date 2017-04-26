@@ -42,7 +42,7 @@ const mandrill = {
 };
 
 const loader = {
-  token: 'loaderio-082e358b5ecf3feb30b155b6c522661a',
+  token: environmentVariables.LOADERIO,
 };
 
 module.exports = {
