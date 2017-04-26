@@ -6,6 +6,7 @@ const loaders = require('../../util/loaders');
 const Permission = require('../../../models/Permission');
 const StatusError = require('../../../util/StatusError');
 const Account = require('../../../models/Account');
+const _ = require('lodash');
 
 accountsRouter.param('accountId', loaders('account', 'Account'));
 
@@ -52,12 +53,15 @@ accountsRouter.get('/:accountId/users', (req, res, next) => {
   console.log(req.account.id);
 
   return Permission.filter({ accountId: req.account.id }).getJoin({ users: true }).run()
-    .then(permissions => {
-      const obj = normalize('permissions', permissions);
+    .then((permissions) => {
+      const noPassword = permissions.map((permission) => {
+        delete permission.users[0].password;
+        return permission;
+      });
+      const obj = normalize('permissions', noPassword);
       obj.entities.accounts = {
         [req.account.id]: req.account,
       };
-
       res.send(obj);
     })
     .catch(next);

@@ -31,12 +31,6 @@ const chatSchema = () => {
   });
 };
 
-const clientUserSchema = () => {
-  return new schema.Entity('users', {
-    users: [userSchema()],
-  });
-};
-
 const patientSchema = () => {
   return new schema.Entity('patients');
 };
