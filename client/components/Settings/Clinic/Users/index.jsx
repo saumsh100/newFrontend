@@ -20,18 +20,26 @@ class Users extends Component{
   }
 
   render() {
-    const { users } = this.props;
+    const { users, permissions, accounts } = this.props;
+    const clinic = accounts.toArray()[0];
+    console.log(clinic);
+    let clinicName = '';
+    if (clinic) {
+      clinicName = clinic.getClinic();
+    }
     return (
       <Grid>
         <Row>
-          <Header title="Active Users" />
+          <Header title={`Users in ${clinicName}`} />
         </Row>
         <List className={styles.userList}>
-        {users.toArray().map((user) => {
+        {users.toArray().map((user, i) => {
+          permissions.toArray()[i].getRole()
           return (
             <ActiveUsersList
               key={user.id}
               activeUser={user}
+              role={permissions.toArray()[i].getRole()}
             />
           );
         })}

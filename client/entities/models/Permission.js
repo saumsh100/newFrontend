@@ -9,7 +9,7 @@ const PermissionSchema = {
 };
 
 export default class Permission extends createModel(PermissionSchema) {
-  getUrlRoot() {
-    return '/api/permissions';
+  getRole() {
+    return this.get('role');
   }
 }
