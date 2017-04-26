@@ -34,7 +34,7 @@ export default class Account extends createModel(AccountSchema) {
   }
 
   getClinic() {
-    return this.get('city') ;
+    return this.get('name') ;
   }
 
 }
