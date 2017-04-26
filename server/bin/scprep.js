@@ -1,7 +1,7 @@
 const models = require('../models');
 
 // Will default to this list of tables if there are no arguments to the script
-const defaultTables = ['Patient', 'Appointment', 'Chair', 'Practitioner', 'SyncLog'];
+const defaultTables = ['Patient', 'Appointment', 'Chair', 'Practitioner', 'SyncClientError'];
 
 /**
  * Remove these tables because sync client expects them to be empty
@@ -29,7 +29,7 @@ function prepForSyncClient(tables) {
  * Else use tables in the arguments - `tables`.
  *
  * List tables space-separated
- * e.g. node server/bin/scprep.js Patient Appointment SyncLog
+ * e.g. node server/bin/scprep.js Patient Appointment SyncClientError
  */
 const argTables = [];
 for (let i = 2; i < process.argv.length; i++) {

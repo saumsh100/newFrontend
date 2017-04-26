@@ -14,7 +14,6 @@ const TextMessage = require('./TextMessage');
 const Token = require('./Token');
 const User = require('./User');
 const Reservation = require('./Reservation')
-const SyncLog = require('./SyncLog');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');

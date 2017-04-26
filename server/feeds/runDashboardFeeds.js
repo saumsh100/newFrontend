@@ -4,7 +4,7 @@
 const Appointment = require('../models/Appointment');
 const Request = require('../models/Request');
 const Patient = require('../models/Patient');
-const SyncLog = require('../models/SyncLog');
+const SyncClientError = require('../models/SyncClientError');
 const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
@@ -51,10 +51,10 @@ function runDashboardFeeds(socket) {
     });
 
   /**
-   * Listen to changes on the SyncLog table to update dashboards in real time.
+   * Listen to changes on the SyncClientError table to update dashboards in real time.
    * Artificially set up the document from the feed for the normalizer.
    */
-  SyncLog
+  SyncClientError
     .filter({ accountId: activeAccountId })
     .filter((entry) => {
       return entry('operation').ne('sync');
@@ -66,7 +66,7 @@ function runDashboardFeeds(socket) {
       feed.each((error, logEntry) => {
         // stacktrace attribute can be very large and does not mean anything for the dashboard.
         delete logEntry.stackTrace;
-        socket.emit('syncLog', normalize('syncLog', logEntry));
+        socket.emit('syncClientError', normalize('syncClientError', logEntry));
       });
     });
 }

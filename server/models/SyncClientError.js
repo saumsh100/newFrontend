@@ -3,7 +3,7 @@ const createModel = require('./createModel');
 
 const type = thinky.type;
 
-const SyncLog = createModel('SyncLog', {
+const SyncClientError = createModel('SyncClientError', {
   accountId: type.string().uuid(4).required(),
   version: type.string(),
   adapter: type.string(),
@@ -19,4 +19,4 @@ const SyncLog = createModel('SyncLog', {
   stackTrace: type.string(),
 });
 
-module.exports = SyncLog;
+module.exports = SyncClientError;
