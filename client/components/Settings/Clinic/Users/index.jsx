@@ -22,7 +22,6 @@ class Users extends Component{
   render() {
     const { users, permissions, accounts } = this.props;
     const clinic = accounts.toArray()[0];
-    console.log(clinic);
     let clinicName = '';
     if (clinic) {
       clinicName = clinic.getClinic();
