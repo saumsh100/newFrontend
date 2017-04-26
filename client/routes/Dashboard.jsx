@@ -258,8 +258,8 @@ export default function Routes({ history }) {
             <Route
               path="users"
               getComponent={(location, callback) => {
-                require.ensure(['../components/Settings/Clinic/CareCruUsers'], (require) => {
-                  callback(null, require('../components/Settings/Clinic/CareCruUsers').default);
+                require.ensure(['../components/Settings/Clinic/Users'], (require) => {
+                  callback(null, require('../components/Settings/Clinic/Users').default);
                 });
               }}
             />

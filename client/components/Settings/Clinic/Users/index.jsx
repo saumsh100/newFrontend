@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
 import { List, Grid, CardHeader, Row } from '../../../library';
-import CareCruUser from './ActiveUserList';
+import ActiveUsersList from './ActiveUsersList';
+import styles from './styles.scss';
 
-
-class CareCruUsers extends Component{
+class Users extends Component{
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   componentWillMount() {
@@ -24,15 +24,15 @@ class CareCruUsers extends Component{
     return (
       <Grid>
         <Row>
-          <CardHeader title="CareCru Users" />
+          <CardHeader title="Active Users" />
         </Row>
-        <List>
+        <List className={styles.userList}>
         {users.toArray().map((user) => {
           return (
-              <CareCruUser
-                key={user.id}
-                careCruUser={user}
-              />
+            <ActiveUsersList
+              key={user.id}
+              activeUser={user}
+            />
           );
         })}
         </List>
@@ -41,7 +41,7 @@ class CareCruUsers extends Component{
   }
 }
 
-CareCruUsers.propTypes = {
+Users.propTypes = {
   fetchEntities: PropTypes.func,
   users: PropTypes.object,
   permissions: PropTypes.object,
@@ -64,4 +64,4 @@ function mapDispatchToProps(dispatch) {
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
-export default enhance(CareCruUsers);
+export default enhance(Users);
