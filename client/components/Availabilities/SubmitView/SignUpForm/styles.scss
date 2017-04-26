@@ -1,5 +1,10 @@
 
-@import '../../../ui.scss';
+@import '../../../../ui.scss';
+
+
+.submitViewWrapper {
+  padding: 20px;
+}
 
 .signup {
   &__header {
@@ -131,8 +136,3 @@
     }
   }
 }
-
-.submitViewWrapper {
-  padding: 10px;
-}
-

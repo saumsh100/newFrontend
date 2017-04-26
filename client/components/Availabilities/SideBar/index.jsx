@@ -1,6 +1,9 @@
 
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Button } from '../../library';
+import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
 
 class SideBar extends Component {
@@ -13,6 +16,8 @@ class SideBar extends Component {
       isCollapsed,
       account,
       selectedAvailability,
+      registrationStep,
+      setRegistrationStep,
       // selectedWaitlist,
     } = this.props;
 
@@ -48,6 +53,20 @@ class SideBar extends Component {
       logo,
     } = account.toJS();
 
+
+    let goBackButton = null;
+    if (registrationStep === 2) {
+      goBackButton = (
+        <Button
+          icon="arrow-left"
+          onClick={() => setRegistrationStep(1)}
+        >
+          Go Back
+        </Button>
+      );
+    }
+
+
     return (
       <div className={styles.sideBarWrapper}>
         <div className={styles.sidebar__header}>
@@ -70,6 +89,7 @@ class SideBar extends Component {
           <div className={styles.sidebar__body_information}>
             {selectedAvailabilityComponent}
           </div>
+          {goBackButton}
         </div>
         <div className={styles.sidebar__footer}>
           <div className={styles.sidebar__footer_copy}>
@@ -83,19 +103,26 @@ class SideBar extends Component {
 }
 
 SideBar.defaultProps = {
-  isCollapsed: false,
+
 };
 
 SideBar.propTypes = {
-  account: PropTypes.object,
-  isCollapsed: PropTypes.bool.isRequired,
+  // account: PropTypes.object,
+  selectedAvailability: PropTypes.object,
+  registrationStep: PropTypes.number.isRequired,
 };
 
 function mapStateToProps({ availabilities, toolbar }) {
   return {
     selectedAvailability: availabilities.get('selectedAvailability'),
-    isCollapsed: toolbar.get('isCollapsed'),
+    registrationStep: availabilities.get('registrationStep'),
   };
 }
 
-export default connect(mapStateToProps, null)(SideBar);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    setRegistrationStep: Actions.setRegistrationStepAction,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar);
