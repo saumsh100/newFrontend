@@ -6,7 +6,6 @@ const loaders = require('../../util/loaders');
 const Permission = require('../../../models/Permission');
 const StatusError = require('../../../util/StatusError');
 const Account = require('../../../models/Account');
-const _ = require('lodash');
 
 accountsRouter.param('accountId', loaders('account', 'Account'));
 
