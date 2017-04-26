@@ -53,7 +53,6 @@ module.exports = (port) => {
     noInfo: true,
     stats: {
       color: true,
-      errorDetails: true,
     },
   }));
 
