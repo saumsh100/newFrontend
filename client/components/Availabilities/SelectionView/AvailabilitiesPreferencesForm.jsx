@@ -15,9 +15,11 @@ function AvailabilitiesPreferencesForm(props) {
     return null;
   }
 
+  // Default service and practitioner selection and date
   const initialValues = {
     serviceId: services.get('models').first().get('id'),
     practitionerId: '',
+    startDate: (new Date()).toISOString(),
   };
 
   const serviceOptions = services.get('models').map(s => ({ label: s.get('name'), value: s.get('id') })).toArray();
@@ -60,10 +62,10 @@ function AvailabilitiesPreferencesForm(props) {
           <Col className={styles.dsCol} xs={12}>
             <span className={styles.label}>Date Range</span>
             <Field
-              component="DropdownSelect"
-              name="serviceId"
+              component="DayPicker"
+              name="startDate"
+              target="icon"
               label="Select Service"
-              options={serviceOptions}
             />
           </Col>
         </Row>

@@ -279,7 +279,7 @@ class AvailabilitiesContainer extends Component {
         createPatient={this.props.createPatient}
         serviceId={serviceId}
         setStartingAppointmentTime={setStartingAppointmentTime}
-        registrationStep={this.props.practitionersStartEndDate}
+        registrationStep={this.props.practitionersStartEndDate.get('registrationStep')}
         setRegistrationStep={this.props.setRegistrationStep}
         account={this.props.account}
         removeReservation={this.props.removeReservation}

@@ -165,7 +165,7 @@ class Availabilities extends Component {
     const defaultValues = { practitionerId, serviceId };
     const params = { practitionerId, services, availabilities, practitioners, defaultValues };
     const appointmentInfo = this.getAppointmentInfo(serviceId);
-    const registrationStep = 1;//practitionersStartEndDate.get('registrationStep');
+    const registrationStep = practitionersStartEndDate.get('registrationStep');
 
     let currentView = (
       <SelectionView
@@ -176,8 +176,6 @@ class Availabilities extends Component {
         selectAvailability={this.selectAvailability}
         handleSaveClick={this.handleSaveClick}
         handleChange={this.handleChange}
-        sixDaysForward={this.sixDaysForward}
-        sixDaysBack={this.sixDaysBack}
       />
     );
 

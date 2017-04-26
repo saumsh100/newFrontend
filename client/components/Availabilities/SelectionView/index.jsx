@@ -4,16 +4,18 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import includes from 'lodash/includes';
+import { bindActionCreators } from 'redux';
 import { Button, Form, Field, Checkbox } from '../../library';
 import WaitListPreferences from './WaitListPreferences';
 import AvailabilitiesPreferencesForm from './AvailabilitiesPreferencesForm';
-import AvailabilitiesDisplay from './AvailabilitiesDisplay';
+import AvailabilitiesDisplay from './AvailabilitiesDIsplay/index';
+import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
 
 class SelectionView extends Component {
   render() {
     const { practitionerId, availabilities, defaultValues } = this.props.params;
-    const { props, upperState, services, practitioners } = this.props;
+    const { props, upperState, services, practitioners, setRegistrationStep } = this.props;
 
     const startsAt = props.practitionersStartEndDate.get('startsAt');
 
@@ -37,26 +39,6 @@ class SelectionView extends Component {
             practitioners={practitioners}
             onChange={values => alert(JSON.stringify(values))}
           />
-          <div className={styles.appointment__daypicker}>
-            <div className={styles.appointment__daypicker_title}>Appointment scheduler</div>
-            <div
-              onClick={this.openModal}
-              className={styles.appointment__daypicker_icon}
-            >
-              <i className="fa fa-calendar" />
-            </div>
-            {this.props.upperState.modalIsOpen ?
-              (
-                <div onClick={this.openModal} className={styles.appointment__daypicker_modal}>
-                  <DayPicker
-                    className={styles.appointment__daypicker_select}
-                    onDayClick={this.handleDayClick}
-                    selectedDays={this.isDaySelected}
-                  />
-                </div>
-              ) : null
-            }
-          </div>
         </div>
         <AvailabilitiesDisplay
           startsAt={startsAt}
@@ -80,12 +62,16 @@ class SelectionView extends Component {
                   onChange={this.props.handleChange}
                 />
               </div>
-              <button
-                disabled={!startsAt }
-                onClick={this.props.handleSaveClick}
+              <Button
                 className={this.props.upperState.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn}
-                type="submit"
-              >Continue</button>
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log('working');
+                  setRegistrationStep(2);
+                }}
+              >
+                Continue
+              </Button>
             </form>
           </div>
           {waitListPreferences}
@@ -107,4 +93,10 @@ function mapStateToProps({ entities }) {
   };
 }
 
-export default connect(mapStateToProps, null)(SelectionView);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    setRegistrationStep: Actions.setRegistrationStepAction,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectionView);

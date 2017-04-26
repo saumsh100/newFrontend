@@ -27,9 +27,6 @@ myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
   try {
     // Needs to match the structure of the reducers
     const { entities } = normalize('account', req.account);
-    // console.log(req.account);
-    // console.log(normalize('account', req.account));
-    console.log(entities);
     const initialState = {
       availabilities: {
         account: req.account,
