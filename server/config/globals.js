@@ -41,6 +41,10 @@ const mandrill = {
   apiKey: environmentVariables.MANDRILL_API_KEY,
 };
 
+const loader = {
+  token: 'loaderio-082e358b5ecf3feb30b155b6c522661a',
+};
+
 module.exports = {
   root,
   tokenSecret,
@@ -56,4 +60,5 @@ module.exports = {
   twilio,
   mandrill,
   namespaces,
+  loader,
 };

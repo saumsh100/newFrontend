@@ -45,6 +45,8 @@ app.use(compress({
 // app.use(favicon(`${globals.root}/public/images/favicon.ico`));
 app.use(express.static(`${globals.root}/public`));
 
+app.use(express.static(`${globals.root}/${globals.loader}`));
+
 // Allows the use of PUT and DELETE from clients that do not support those HTTP Methods
 app.use(methodOverride());
 app.use(cookieParser());
@@ -66,15 +68,15 @@ app.use(bodyParser.raw({ limit: '10mb' }));
 
 // Heroku will proxy HTTPS to this HTTP application
 /*if (globals.env === 'production') {
-  // Assume and ensure HTTPS connections
-  app.set('trust proxy', 1);
-  app.use((req, res, next) => {
-    if (!req.secure) {
-      return res.redirect(`https://${req.get('host')}${req.url}`);
-    }
-    
-    return next();
-  });
-}*/
+ // Assume and ensure HTTPS connections
+ app.set('trust proxy', 1);
+ app.use((req, res, next) => {
+ if (!req.secure) {
+ return res.redirect(`https://${req.get('host')}${req.url}`);
+ }
+
+ return next();
+ });
+ }*/
 
 module.exports = app;
