@@ -1,36 +1,41 @@
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import jwt from 'jwt-decode';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
-import { Grid, CardHeader, Row } from '../../../library';
-import CareCruUser from './CareCruUser';
+import { List, Grid, CardHeader, Row } from '../../../library';
+import CareCruUser from './ActiveUserList';
 
 
 class CareCruUsers extends Component{
-
-  constructor(props){
+  constructor(props) {
     super(props)
   }
 
-  componentWillMount(){
-    this.props.fetchEntities({ key: 'users'});
+  componentWillMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+    const url = `/api/accounts/${decodedToken.activeAccountId}/users`;
+    this.props.fetchEntities({ url });
   }
 
   render() {
-    const { careCruUsers } = this.props;
+    const { users } = this.props;
     return (
       <Grid>
         <Row>
           <CardHeader title="CareCru Users" />
         </Row>
-        {careCruUsers.toArray().map((user) => {
+        <List>
+        {users.toArray().map((user) => {
           return (
-            <CareCruUser
-              key={user.id}
-              careCruUser={user}
-            />
+              <CareCruUser
+                key={user.id}
+                careCruUser={user}
+              />
           );
         })}
+        </List>
       </Grid>
     );
   }
@@ -38,12 +43,16 @@ class CareCruUsers extends Component{
 
 CareCruUsers.propTypes = {
   fetchEntities: PropTypes.func,
-  careCruUsers: PropTypes.object,
+  users: PropTypes.object,
+  permissions: PropTypes.object,
+  accounts: PropTypes.object,
 };
 
 function mapStateToProps({ entities }) {
   return {
-    careCruUsers: entities.getIn(['users', 'models']),
+    users: entities.getIn(['users', 'models']),
+    permissions: entities.getIn(['permissions', 'models']),
+    accounts: entities.getIn(['accounts', 'models']),
   };
 }
 

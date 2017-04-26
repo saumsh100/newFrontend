@@ -53,11 +53,11 @@ accountsRouter.get('/:accountId/users', (req, res, next) => {
 
   return Permission.filter({ accountId: req.account.id }).getJoin({ users: true }).run()
     .then(permissions => {
-      console.log(permissions);
       const obj = normalize('permissions', permissions);
-      obj.entities.account = {
+      obj.entities.accounts = {
         [req.account.id]: req.account,
-      }
+      };
+
       res.send(obj);
     })
     .catch(next);
