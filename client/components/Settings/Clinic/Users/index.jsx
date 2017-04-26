@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
-import { List, Grid, CardHeader, Row } from '../../../library';
+import { List, Grid, Header, Row } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import styles from './styles.scss';
 
@@ -24,7 +24,7 @@ class Users extends Component{
     return (
       <Grid>
         <Row>
-          <CardHeader title="Active Users" />
+          <Header title="Active Users" />
         </Row>
         <List className={styles.userList}>
         {users.toArray().map((user) => {
