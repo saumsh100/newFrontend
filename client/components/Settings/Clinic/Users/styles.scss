@@ -29,7 +29,9 @@
 
 .form {
   display: block;
-  width: 25%;
+  button {
+    margin:0px 0px 0px auto;
+  }
 }
 
 .userList{

@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { fetchEntities, deleteEntityRequest, createEntityRequest } from '../../../../thunks/fetchEntities';
-import { List, Grid, Header, Row, Button } from '../../../library';
+import { List, ListItem, Grid, Header, Modal, Row, Button } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
 import InviteUser from './InviteUser';
@@ -12,10 +12,13 @@ import styles from './styles.scss';
 class Users extends Component{
   constructor(props) {
     super(props);
+    this.state = {
+      active: false,
+    };
     this.deleteInvite = this.deleteInvite.bind(this);
     this.sendInvite = this.sendInvite.bind(this);
-    this.showInvite = this.showInvite.bind(this);
-    this.state = { show: false };
+    this.addUser = this.addUser.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
   }
 
   componentWillMount() {
@@ -42,33 +45,68 @@ class Users extends Component{
     entityData.sendingUserId = decodedToken.userId;
 
     this.setState({
-      show: false,
+      active: false,
     });
 
     this.props.createEntityRequest({ key: 'invites', entityData, url });
+    entityData.email = '';
   }
 
-  showInvite() {
+  reinitializeState() {
     this.setState({
-      show: !this.state.show,
+      active: false,
     });
   }
 
+  addUser() {
+    this.setState({
+      active: true,
+    });
+  }
 
   render() {
     const { users, permissions, accounts, invites } = this.props;
+    const {
+      active,
+    } = this.state;
     const clinic = accounts.toArray()[0];
     let clinicName = '';
     if (clinic) {
       clinicName = clinic.getClinic();
     }
-    const displayInvitation = (this.state.show ? <InviteUser sendInvite={this.sendInvite} /> : null);
+
+    let usersInvited = <ListItem className={styles.userListItem}>
+      <div className={styles.main}>
+        <p className={styles.name}>Users you have invited will show up here.</p>
+      </div>
+    </ListItem>
+    if (invites.size !== 0){
+      console.log('this shouldnt happen')
+      usersInvited = invites.toArray().map((invite) => {
+        return (
+          <InviteUsersList
+            key={invite.id}
+            email={invite.getEmail()}
+            date={invite.getDate()}
+            onDelete={this.deleteInvite.bind(null, invite.getId())}
+          />
+        );
+      })
+    }
+
     return (
       <Grid>
-        {displayInvitation}
+        <Modal
+          type="small"
+          active={active}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
+        >
+          <InviteUser sendInvite={this.sendInvite} />
+        </Modal>
         <Row className={styles.mainHead}>
           <Header title={`Users in ${clinicName}`} />
-          <Button className={styles.inviteUser} onClick={this.showInvite} >Invite a User</Button>
+          <Button className={styles.inviteUser} onClick={this.addUser} >Invite a User</Button>
         </Row>
         <List className={styles.userList}>
         {users.toArray().map((user, i) => {
@@ -86,16 +124,7 @@ class Users extends Component{
           <Header className={styles.header} title={`Users invited to ${clinicName}`} />
         </Row>
         <List className={styles.userList}>
-          {invites.toArray().map((invite) => {
-            return (
-              <InviteUsersList
-                key={invite.id}
-                email={invite.getEmail()}
-                date={invite.getDate()}
-                onDelete={this.deleteInvite.bind(null, invite.getId())}
-              />
-            );
-          })}
+          {usersInvited}
         </List>
       </Grid>
     );
