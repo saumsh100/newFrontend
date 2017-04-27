@@ -20,4 +20,8 @@ export default class Invites extends createModel(InvitesSchema) {
   getDate() {
     return this.get('createdAt');
   }
+
+  getId() {
+    return this.get('id');
+  }
 }
