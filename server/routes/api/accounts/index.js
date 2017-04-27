@@ -69,7 +69,7 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
   return Invite.save(newInvite)
     .then((invites) => {
       console.log(invites)
-      res.send(normalize('invites', invites));
+      res.send(normalize('invites', [invites]));
     })
     .catch(next);
 
