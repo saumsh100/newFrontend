@@ -81,7 +81,6 @@ class Users extends Component{
       </div>
     </ListItem>
     if (invites.size !== 0){
-      console.log('this shouldnt happen')
       usersInvited = invites.toArray().map((invite) => {
         return (
           <InviteUsersList
