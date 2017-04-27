@@ -101,7 +101,7 @@ class SubmitView extends Component {
           percentage={this.getPercent()}
           color={this.props.bookingWidgetPrimaryColor}
         />
-        <div onClick={() => this.collapseMenu(false)} className={styles.signup__body}>
+        <div onClick={() => this.collapseMenu(false)} className={styles.formWrapper}>
           {contnet}
         </div>
         <div className={styles.signup__footer}>

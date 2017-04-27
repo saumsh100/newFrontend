@@ -9,37 +9,44 @@ export default function SignUpForm({ onSubmit }) {
     <Form
       form="userSignUpForm"
       onSubmit={onSubmit}
-      validate={validate}
       asyncValidate={asyncEmailValidate}
       asyncBlurFields={['email']}
       ignoreSaveButton
     >
       <div>
         <Field
+          required
           name="firstName"
-          label="First Name*"
+          label="First Name"
         />
         <Field
+          required
           name="lastName"
-          label="Last Name*"
+          label="Last Name"
         />
       </div>
       <Field
-        label="Phone Number*"
+        required
+        label="Phone Number"
         name="phone"
       />
       <Field
-        label="Email*"
+        required
+        label="Email"
         name="email"
         type="email"
       />
       <Field
-        label="Password*"
+        required
+        label="Password"
         name="password"
+        type="password"
       />
       <Field
-        label="Confirm Password*"
+        required
+        label="Confirm Password"
         name="confirmPassword"
+        type="password"
       />
       <Button
         type="submit"

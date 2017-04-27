@@ -136,3 +136,10 @@
   padding: 10px;
 }
 
+.formWrapper {
+  padding: 0px 80px;
+  @media screen and (max-width: 600px) {
+    padding: 0px 10px;
+  }
+}
+

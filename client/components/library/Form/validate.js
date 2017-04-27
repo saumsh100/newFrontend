@@ -46,7 +46,7 @@ const asyncEmailValidate = (values) => {
        throw { email: `patient with ${values.email} already exists... ` }
       }
     })
-}
+};
 
 export {
   validate,
