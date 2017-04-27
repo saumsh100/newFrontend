@@ -4,8 +4,11 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
 const Permission = require('../../../models/Permission');
+const Invite = require('../../../models/Invite');
 const StatusError = require('../../../util/StatusError');
 const Account = require('../../../models/Account');
+const uuid = require('uuid').v4;
+
 
 accountsRouter.param('accountId', loaders('account', 'Account'));
 
@@ -47,6 +50,48 @@ accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res
     .catch(next);
 });
 
+accountsRouter.get('/:accountId/invites', (req, res, next) => {
+  console.log(req.account.id);
+
+  return Invite.filter({ accountId: req.account.id }).getJoin({}).run()
+    .then((invite) => {
+      res.send(normalize('invites', invite));
+    })
+    .catch(next);
+});
+
+accountsRouter.post('/:accountId/invites', (req, res, next) => {
+  console.log(req.account.id);
+  const newInvite = req.body;
+
+  newInvite.token = uuid();
+
+  return Invite.save(newInvite)
+    .then(() => {
+      Invite.filter({ accountId: req.account.id }).getJoin({}).run()
+        .then((invite) => {
+          res.send(normalize('invites', invite));
+        })
+        .catch(next);
+    })
+    .catch(next);
+
+});
+
+accountsRouter.delete('/:accountId/invites', (req, res, next) => {
+  console.log(req.account.id);
+
+  return Invite.filter(req.body).run().then((invite) => {
+    invite[0].delete().then((result) => {
+      Invite.filter({ accountId: req.account.id }).getJoin({}).run()
+        .then((invite) => {
+          res.send(normalize('invites', invite));
+        })
+        .catch(next);
+    });
+  });
+
+});
 
 accountsRouter.get('/:accountId/users', (req, res, next) => {
   console.log(req.account.id);
