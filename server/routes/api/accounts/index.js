@@ -54,8 +54,8 @@ accountsRouter.get('/:accountId/invites', (req, res, next) => {
   console.log(req.account.id);
 
   return Invite.filter({ accountId: req.account.id }).getJoin({}).run()
-    .then((invite) => {
-      res.send(normalize('invites', invite));
+    .then((invites) => {
+      res.send(normalize('invites', invites));
     })
     .catch(next);
 });
@@ -67,31 +67,30 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
   newInvite.token = uuid();
 
   return Invite.save(newInvite)
-    .then(() => {
-      Invite.filter({ accountId: req.account.id }).getJoin({}).run()
-        .then((invite) => {
-          res.send(normalize('invites', invite));
-        })
-        .catch(next);
+    .then((invites) => {
+      console.log(invites)
+      res.send(normalize('invites', invites));
     })
     .catch(next);
 
 });
 
-accountsRouter.delete('/:accountId/invites', (req, res, next) => {
-  console.log(req.account.id);
 
-  return Invite.filter(req.body).run().then((invite) => {
-    invite[0].delete().then((result) => {
+accountsRouter.delete('/:accountId/invites/:id', (req, res, next) => {
+  console.log(req.params.id);
+
+  return Invite.get(req.params.id).then((invite) => {
+    invite.delete().then((result) => {
       Invite.filter({ accountId: req.account.id }).getJoin({}).run()
-        .then((invite) => {
-          res.send(normalize('invites', invite));
+        .then((invites) => {
+          res.send(normalize('invites', invites));
         })
         .catch(next);
     });
   });
 
 });
+
 
 accountsRouter.get('/:accountId/users', (req, res, next) => {
   console.log(req.account.id);

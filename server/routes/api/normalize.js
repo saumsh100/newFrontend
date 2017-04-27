@@ -51,7 +51,7 @@ const requestSchema = () => {
 };
 
 const inviteSchema = () => {
-  return new schema.Entity('invite');
+  return new schema.Entity('invites');
 };
 
 const textMessageSchema = () => {
