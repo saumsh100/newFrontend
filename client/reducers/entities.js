@@ -21,6 +21,8 @@ import textMessages from '../entities/collections/textMessages';
 import TextMessage from '../entities/models/TextMessage';
 import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
+import invites from '../entities/collections/invites';
+import Invites from '../entities/models/Invites';
 import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
 import permissions from '../entities/collections/permissions';
@@ -54,6 +56,7 @@ const initialState = Map({
   requests: new requests(),
   services: new services(),
   permissions: new permissions(),
+  invites: new invites(),
   practitioners: new practitioners(),
   availabilities: new availabilities(),
   dialogs: new dialogs(),
@@ -74,6 +77,7 @@ const Models = {
   requests: Requests,
   services: Service,
   permissions: Permission,
+  invites: Invites,
   practitioners: Practitioners,
   timeOffs: TimeOff,
   dialogs: Dialogs,

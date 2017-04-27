@@ -7,7 +7,6 @@ class ActiveUsersList extends Component {
 
   render() {
     const { activeUser, role } = this.props;
-
     return (
       <ListItem className={styles.userListItem}>
         <div className={styles.main}>
