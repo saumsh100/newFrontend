@@ -32,7 +32,7 @@ class SelectionView extends Component {
 
     const { logo, address, clinicName } = props;
     return (
-      <div className={styles.appointment__body}>
+      <div>
         <div className={styles.appointment__body_header}>
           <AvailabilitiesPreferencesForm
             services={services}

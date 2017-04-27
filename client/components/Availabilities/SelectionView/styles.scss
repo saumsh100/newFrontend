@@ -166,10 +166,7 @@
         }
         border-radius: 5px;
         &_header {
-            margin-bottom: 30px;
-            @media screen and (max-width: 800px) {
-                margin-bottom: 15px;
-            }
+            margin-bottom: 10px;
         }
         &_input {
             width: 100%;

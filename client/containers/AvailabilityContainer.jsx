@@ -40,6 +40,7 @@ class AvailabilitiesContainer extends Component {
     //this.props.fetchEntities({ key: 'practitioners', domen });
     //this.props.fetchEntities({ key: 'services', domen });
 
+
     const array = location.pathname.split('/');
     const accountId = array[array.length - 1];
     this.props.getClinicInfo(accountId);

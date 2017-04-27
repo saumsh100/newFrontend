@@ -104,7 +104,7 @@ class SubmitView extends Component {
         <div onClick={() => this.collapseMenu(false)} className={styles.formWrapper}>
           {contnet}
         </div>
-        <div className={styles.signup__footer}>
+        {/*<div className={styles.signup__footer}>
           <div className={styles.signup__footer_header}>
             <div className={styles.signup__footer_title}>
               ALREADY HAVE AN ACCOUNT?
@@ -115,7 +115,7 @@ class SubmitView extends Component {
             <span className="fa fa-facebook-official" />
             LOG IN WITH FACEBOOK
           </a>
-        </div>
+        </div>*/}
       </div>
     );
   }

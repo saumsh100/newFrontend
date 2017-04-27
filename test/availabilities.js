@@ -103,11 +103,12 @@ describe('Availabilities Library', () => {
         const startDate = new Date(3000, 1, 1);
         const endDate = new Date(3001, 1, 1);
         fetchPractitionerData({ practitioners, startDate, endDate })
-          .then(({ practitioners: newPractitioners }) => {
-            expect(newPractitioners).to.be.an('array');
-            expect(newPractitioners.length).to.equal(1);
+          .then((data) => {
+            console.log('data', data);
+            expect(data.practitioners).to.be.an('array');
+            expect(data.practitioners.length).to.equal(1);
 
-            const { appointments, timeOff } = newPractitioners[0];
+            const { appointments, timeOff } = data.practitioners[0];
             expect(appointments).to.be.an('array');
             expect(appointments.length).to.equal(0);
             expect(timeOff).to.be.an('array');

@@ -12,62 +12,22 @@
     justify-content: space-between;
 
     &_btn {
-      position: absolute;
-      font-size: 18px;
-      color: #f3715c;
+      //font-size: 18px;
       color: var(--bookingWidgetPrimaryColor);
-      cursor: pointer;
-      background: none;
-      border: none;
+      /*cursor: pointer;
       &:focus {
         outline: none;
-      }
-
-      align-self: flex-start;
-      &:first-child {
-        top: 0;
-        left: -25px;
-      }
-
-      &:last-child {
-        top: 0;
-        right: -25px;
-      }
-
-      @media screen and (max-width: 860px) {
-        &:first-child {
-          left: -20px;
-        }
-
-        &:last-child {
-          right: -20px;
-        }
-      }
-
-      @media screen and (max-width: 600px) {
-        &:first-child {
-          left: -25px;
-        }
-
-        &:last-child {
-          right: -25px;
-        }
-      }
+      }*/
     }
 
     &_elements {
       display: flex;
-      width: 100%;
+      // width: 100%;
+      min-width: 370px;
       height: 200px;
-      margin: 0 auto 30px;
-      overflow-y: scroll;
-      @media screen and (max-width: 600px) {
-        margin: 0 auto 5px;
-      }
+      // overflow-y: scroll;
 
-      @media screen and (max-width: 800px) {
-        margin: 0 20px 20px;
-      }
+
     }
   }
 
@@ -124,4 +84,13 @@
       flex-grow: 1;
     }
   }
+}
+
+.centeredContent {
+  display: flex;
+  justify-content: center;
+}
+
+.columnsWrapper {
+  overflow-x: auto;
 }

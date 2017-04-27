@@ -204,9 +204,9 @@ function generatePractitionerAvailabilities(options) {
   const timeSlots = createIntervalsFromWeeklySchedule(weeklySchedule, startDate, endDate);
   const possibleTimeSlots = createPossibleTimeSlots(timeSlots, service.duration, 30);
 
-  console.log(timeSlots);
-  console.log(possibleTimeSlots);
-  console.log(appointments);
+  //console.log(timeSlots);
+  //console.log(possibleTimeSlots);
+  //console.log(appointments);
 
   const availabilities = possibleTimeSlots.filter((timeSlot) => {
     // see if the timeSlot conflicts with any appointments, requests or resos
