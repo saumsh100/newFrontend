@@ -9,6 +9,7 @@ import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
+import Immutable from 'immutable';
 
 // TODO: improve this to only create socket when use is logged in, JWT is undefined when not...
 import socket from '../socket';
@@ -48,6 +49,7 @@ window.socket = socket;
 window.moment = extendMoment(moment);
 window.time = time;
 window._ = _;
+window.Immutable = Immutable;
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

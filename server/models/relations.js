@@ -64,6 +64,8 @@ Practitioner.hasMany(PractitionerTimeOff, 'timeOffs', 'id', 'practitionerId');
 Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
 Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
 
+Permission.hasMany(User, 'users', 'userId', 'id');
+
 Account.hasAndBelongsToMany(Patient, 'patients', 'id', 'id');
 Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 

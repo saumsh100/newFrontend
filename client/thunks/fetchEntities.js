@@ -11,17 +11,16 @@ import {
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
 
-export function fetchEntities({ key, join, params = {}, domen }) {
+export function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-
     // Add onto the query param for join if passed in
     if (join && join.length) {
       params.join = join.join(',');
     }
 
-    const url = domen ? `/${key}` : entity.getUrlRoot();
+    url = url || entity.getUrlRoot();
     axios.get(url, { params })
       .then((response) => {
         const { data } = response;

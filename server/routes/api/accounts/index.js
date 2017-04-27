@@ -3,6 +3,7 @@ const accountsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
+const Permission = require('../../../models/Permission');
 const StatusError = require('../../../util/StatusError');
 const Account = require('../../../models/Account');
 
@@ -42,7 +43,26 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
 
 accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
   return req.account.merge(req.body).save()
-    .then(account => res.send(normalize('account', account)))
+    .then(account => {res.send(normalize('account', account))})
+    .catch(next);
+});
+
+
+accountsRouter.get('/:accountId/users', (req, res, next) => {
+  console.log(req.account.id);
+
+  return Permission.filter({ accountId: req.account.id }).getJoin({ users: true }).run()
+    .then((permissions) => {
+      const noPassword = permissions.map((permission) => {
+        delete permission.users[0].password;
+        return permission;
+      });
+      const obj = normalize('permissions', noPassword);
+      obj.entities.accounts = {
+        [req.account.id]: req.account,
+      };
+      res.send(obj);
+    })
     .catch(next);
 });
 
