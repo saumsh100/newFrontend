@@ -1,14 +1,5 @@
 
-const path = require('path');
+// const path = require('path');
+const baseWebpackConfig = require('../server/config/webpack/webpack.base.config');
 
-module.exports = {
-  module: {
-    loaders: [
-      {
-        test: /.scss$/,
-        loaders: ["style", "css", "sass"],
-        include: path.resolve(__dirname, '../')
-      }
-    ]
-  }
-};
+module.exports = baseWebpackConfig;
