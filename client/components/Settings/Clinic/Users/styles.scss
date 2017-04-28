@@ -5,6 +5,35 @@
   border-bottom: 1px solid #959596;
 }
 
+.emailInvite{
+  display: flex;
+  flex-direction: column;
+}
+
+.emailHeader{
+  font-size: 24px;
+}
+
+.inviteUser{
+  margin: 25px;
+}
+
+.mainHead {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header{
+  margin-top: 20px;
+}
+
+.form {
+  display: block;
+  button {
+    margin:0px 0px 0px auto;
+  }
+}
+
 .userList{
   background-color: inherit;
 }

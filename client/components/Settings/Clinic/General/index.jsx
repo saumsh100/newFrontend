@@ -21,7 +21,7 @@ class General extends React.Component {
   updateName(values) {
     const { activeAccount, updateEntityRequest } = this.props;
     const valuesMap = Map(values);
-    const modifiedAccount =activeAccount.merge(valuesMap);
+    const modifiedAccount = activeAccount.merge(valuesMap);
     updateEntityRequest({ key: 'accounts', model: modifiedAccount });
   }
 
