@@ -7,6 +7,7 @@ const myRouter = require('./my');
 const twilioRouter = require('./twilio');
 
 const Token = require('../models/Token');
+const Invite = require('../models/Invite');
 const Appointment = require('../models/Appointment');
 
 // Bind subdomain capturing
@@ -29,6 +30,19 @@ rootRouter.use('/twilio', twilioRouter);
 // Booking Widget IFRAME Embed
 rootRouter.get('/embed', (req, res, next) => {
   return res.render('embed');
+});
+
+rootRouter.get('/signup/:tokenId', (req, res, next) => {
+  Invite.filter({ token: req.params.tokenId }).run()
+    .then((invite) => {
+      if (invite.length === 0) {
+        res.send(404);
+      }
+      else {
+        res.redirect('/');
+      }
+    })
+    .catch(next);
 });
 
 rootRouter.get('/confirmation/:tokenId', (req, res, next) => {
