@@ -102,6 +102,7 @@ const SCHEMAS = {
   appointment: appointmentSchema(),
   chair: chairSchema(),
   chat: chatSchema(),
+  invite: inviteSchema(),
   patient: patientSchema(),
   request: requestSchema(),
   service: serviceSchema(),
