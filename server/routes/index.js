@@ -39,7 +39,7 @@ rootRouter.get('/signup/:tokenId', (req, res, next) => {
         res.send(404);
       }
       else {
-        res.redirect('/');
+        res.redirect(`/signupinvite/${req.params.tokenId}/`);
       }
     })
     .catch(next);
