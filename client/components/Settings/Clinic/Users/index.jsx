@@ -6,7 +6,8 @@ import { fetchEntities, deleteEntityRequest, createEntityRequest } from '../../.
 import { List, ListItem, Grid, Header, Modal, Row, Button } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
-import InviteUser from './InviteUser';
+import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
+import InviteUserForm from './InviteUserForm';
 import styles from './styles.scss';
 
 class Users extends Component{
@@ -15,6 +16,7 @@ class Users extends Component{
     this.state = {
       active: false,
     };
+
     this.deleteInvite = this.deleteInvite.bind(this);
     this.sendInvite = this.sendInvite.bind(this);
     this.addUser = this.addUser.bind(this);
@@ -72,7 +74,7 @@ class Users extends Component{
     const clinic = accounts.toArray()[0];
     let clinicName = '';
     if (clinic) {
-      clinicName = clinic.getClinic();
+      clinicName = clinic.get('name');
     }
 
     let usersInvited = <ListItem className={styles.userListItem}>
@@ -85,23 +87,29 @@ class Users extends Component{
         return (
           <InviteUsersList
             key={invite.id}
-            email={invite.getEmail()}
-            date={invite.getDate()}
-            onDelete={this.deleteInvite.bind(null, invite.getId())}
+            email={invite.get('email')}
+            date={invite.get('createdAt')}
+            onDelete={this.deleteInvite.bind(null, invite.get('id'))}
           />
         );
       })
     }
 
+    const actions = [
+      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton},
+    ];
+
     return (
       <Grid>
         <Modal
+          action={actions}
+          title="Email Invite"
           type="small"
           active={active}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
         >
-          <InviteUser sendInvite={this.sendInvite} />
+          <InviteUserForm sendInvite={this.sendInvite} />
         </Modal>
         <Row className={styles.mainHead}>
           <Header title={`Users in ${clinicName}`} />
@@ -109,12 +117,12 @@ class Users extends Component{
         </Row>
         <List className={styles.userList}>
         {users.toArray().map((user, i) => {
-          permissions.toArray()[i].getRole();
+          permissions.toArray()[i].get('role');
           return (
             <ActiveUsersList
               key={user.id}
               activeUser={user}
-              role={permissions.toArray()[i].getRole()}
+              role={permissions.toArray()[i].get('role')}
             />
           );
         })}

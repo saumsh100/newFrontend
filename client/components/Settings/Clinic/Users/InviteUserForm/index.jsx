@@ -3,13 +3,12 @@ import { Header, Row, Form, Field } from '../../../../library';
 import styles from '../styles.scss';
 
 
-class InviteUser extends Component {
+class InviteUserForm extends Component {
 
   render() {
     const { sendInvite } = this.props;
     return (
-      <Row className={styles.emailInvite}>
-        <Header className={styles.emailHeader}>Enter Email to send Invite:</Header>
+      <div className={styles.emailInvite}>
         <Form
           className={styles.form}
           form="generalSettingsForm"
@@ -22,10 +21,10 @@ class InviteUser extends Component {
             label="Email"
           />
         </Form>
-      </Row>
+      </div>
     );
   }
 }
 
 
-export default InviteUser;
+export default InviteUserForm;

@@ -11,6 +11,8 @@ const uuid = require('uuid').v4;
 
 
 accountsRouter.param('accountId', loaders('account', 'Account'));
+accountsRouter.param('id', loaders('invite', 'Invite'));
+
 
 accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, next) => {
   if (req.account.id !== req.accountId) {
@@ -77,18 +79,16 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
 
 
 accountsRouter.delete('/:accountId/invites/:id', (req, res, next) => {
-  console.log(req.params.id);
+  console.log(req.invite.id);
 
-  return Invite.get(req.params.id).then((invite) => {
-    invite.delete().then((result) => {
-      Invite.filter({ accountId: req.account.id }).getJoin({}).run()
-        .then((invites) => {
-          res.send(normalize('invites', invites));
-        })
+  return Invite.get(req.invite.id)
+    .then((invite) => {
+      invite.delete().then((result) => {
+        res.send(200);
+      })
         .catch(next);
-    });
-  });
-
+    })
+    .catch(next);
 });
 
 

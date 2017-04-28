@@ -13,15 +13,5 @@ export default class Invites extends createModel(InvitesSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
-  getEmail() {
-    return this.get('email');
-  }
 
-  getDate() {
-    return this.get('createdAt');
-  }
-
-  getId() {
-    return this.get('id');
-  }
 }
