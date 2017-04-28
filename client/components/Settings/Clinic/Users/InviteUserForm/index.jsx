@@ -1,18 +1,21 @@
-import React, {Proptypes, Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 import { Header, Row, Form, Field } from '../../../../library';
+import { validate } from '../../../../library/Form/validate'
 import styles from '../styles.scss';
 
 
 class InviteUserForm extends Component {
 
   render() {
-    const { sendInvite } = this.props;
+    const { sendInvite, formName } = this.props;
     return (
       <div className={styles.emailInvite}>
         <Form
           className={styles.form}
-          form="generalSettingsForm"
+          form={formName}
+          validate={validate}
           onSubmit={sendInvite}
+          ignoreSaveButton
         >
           <Field
             required
@@ -25,6 +28,11 @@ class InviteUserForm extends Component {
     );
   }
 }
+
+InviteUserForm.PropTypes = {
+  formName: PropTypes.string,
+  sendInvite: PropTypes.func.isRequired,
+};
 
 
 export default InviteUserForm;

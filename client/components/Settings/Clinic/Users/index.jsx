@@ -40,6 +40,7 @@ class Users extends Component{
   }
 
   sendInvite(entityData) {
+    console.log('asdsad')
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
     const url = `/api/accounts/${decodedToken.activeAccountId}/invites/`;
@@ -67,6 +68,7 @@ class Users extends Component{
   }
 
   render() {
+    const formName = 'emailInvite';
     const { users, permissions, accounts, invites } = this.props;
     const {
       active,
@@ -96,20 +98,24 @@ class Users extends Component{
     }
 
     const actions = [
-      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton},
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName }},
     ];
 
     return (
       <Grid>
         <Modal
-          action={actions}
+          actions={actions}
           title="Email Invite"
           type="small"
           active={active}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
         >
-          <InviteUserForm sendInvite={this.sendInvite} />
+          <InviteUserForm
+            sendInvite={this.sendInvite}
+            formName={formName}
+          />
         </Modal>
         <Row className={styles.mainHead}>
           <Header title={`Users in ${clinicName}`} />

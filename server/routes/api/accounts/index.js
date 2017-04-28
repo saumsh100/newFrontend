@@ -69,7 +69,7 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
   newInvite.token = uuid();
 
   return Invite.save(newInvite)
-    .then(invite => res.send(normalize('invite', invite))
+    .then(invite => res.send(normalize('invite', invite)))
     .catch(next);
 
 });
