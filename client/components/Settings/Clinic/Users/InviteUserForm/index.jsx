@@ -1,17 +1,15 @@
-import React, {PropTypes, Component} from 'react';
-import { Header, Row, Form, Field } from '../../../../library';
+import React, { PropTypes, Component } from 'react';
+import { Form, Field } from '../../../../library';
 import { validate } from '../../../../library/Form/validate'
-import styles from '../styles.scss';
-
 
 class InviteUserForm extends Component {
 
   render() {
-    const { sendInvite, formName } = this.props;
+    const { sendInvite, formName, mainStyle, formStyle } = this.props;
     return (
-      <div className={styles.emailInvite}>
+      <div className={mainStyle}>
         <Form
-          className={styles.form}
+          className={formStyle}
           form={formName}
           validate={validate}
           onSubmit={sendInvite}

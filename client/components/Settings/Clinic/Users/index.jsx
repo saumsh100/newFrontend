@@ -40,7 +40,6 @@ class Users extends Component{
   }
 
   sendInvite(entityData) {
-    console.log('asdsad')
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
     const url = `/api/accounts/${decodedToken.activeAccountId}/invites/`;
@@ -92,6 +91,11 @@ class Users extends Component{
             email={invite.get('email')}
             date={invite.get('createdAt')}
             onDelete={this.deleteInvite.bind(null, invite.get('id'))}
+            mainStyle={styles.main}
+            nameStyle={styles.name}
+            emailStyle={styles.email}
+            userListStyle={styles.userListItem}
+            editStyles={styles.edit}
           />
         );
       })
@@ -113,6 +117,8 @@ class Users extends Component{
           onOverlayClick={this.reinitializeState}
         >
           <InviteUserForm
+            mainStyle={styles.emailInvite}
+            formStyle={styles.form}
             sendInvite={this.sendInvite}
             formName={formName}
           />

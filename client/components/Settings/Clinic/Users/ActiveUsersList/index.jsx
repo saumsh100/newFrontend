@@ -1,4 +1,4 @@
-import React, {Proptypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Avatar, ListItem, Button } from '../../../../library';
 import styles from '../styles.scss';
 
