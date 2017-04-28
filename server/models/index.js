@@ -4,6 +4,7 @@ const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
 const WeeklySchedule = require('./WeeklySchedule');
+const Invite = require('./Invite');
 const Patient = require('./Patient');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
@@ -24,6 +25,7 @@ module.exports = {
   Chair,
   Chat,
   WeeklySchedule,
+  Invite,
   Patient,
   Permission,
   Practitioner,
