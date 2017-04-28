@@ -84,9 +84,8 @@ accountsRouter.delete('/:accountId/invites/:id', (req, res, next) => {
   return Invite.get(req.invite.id)
     .then((invite) => {
       invite.delete().then((result) => {
-        res.send(200);
+        res.send(204);
       })
-        .catch(next);
     })
     .catch(next);
 });
