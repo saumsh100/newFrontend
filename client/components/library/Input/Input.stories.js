@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { storiesOf, action } from '@kadira/storybook';
+import { storiesOf, action, boolean } from '@kadira/storybook';
 import Input from './';
 
 storiesOf('Input', module)
@@ -9,5 +9,12 @@ storiesOf('Input', module)
       value="text"
       label="Test value"
       onChange={action('change')}
+    />
+  ))
+  .add('disabled input', () => (
+    <Input
+      value="text"
+      label="Test value"
+      disabled
     />
   ));

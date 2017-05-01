@@ -53,7 +53,6 @@ export default class DropdownSelect extends Component {
           if (isSelected) {
             className = classNames(className, styles.selectedListItem);
           }
-
           return (
             <ListItem
               key={option.value + i}
@@ -89,9 +88,15 @@ export default class DropdownSelect extends Component {
       toggleDiv = <ToggleTemplate option={option} />;
     }
 
+    let toggleClassName = styles.toggleDiv;
+
+    if (this.state.isOpen) {
+      toggleClassName = classNames(styles.active, toggleClassName);
+    }
+
     return (
       <div
-        className={disabled ? styles.toggleDivDisabled : styles.toggleDiv}
+        className={disabled ? styles.toggleDivDisabled : toggleClassName}
         onClick={disabled ? false : this.toggle}
       >
         <div className={styles.toggleValueDiv}>
@@ -109,7 +114,7 @@ export default class DropdownSelect extends Component {
     const menuOptions = {
       children,
       toggle,
-      align: 'right',
+      align: 'left',
       isOpen: this.state.isOpen,
       close: this.close,
       className: classNames(this.props.className, styles.wrapper),
