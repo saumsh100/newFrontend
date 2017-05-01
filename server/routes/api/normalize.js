@@ -52,6 +52,10 @@ const requestSchema = () => {
   });
 };
 
+const inviteSchema = () => {
+  return new schema.Entity('invites');
+};
+
 const textMessageSchema = () => {
   return new schema.Entity('textMessages');
 };
@@ -100,6 +104,7 @@ const SCHEMAS = {
   appointment: appointmentSchema(),
   chair: chairSchema(),
   chat: chatSchema(),
+  invite: inviteSchema(),
   patient: patientSchema(),
   request: requestSchema(),
   service: serviceSchema(),
@@ -115,6 +120,7 @@ const SCHEMAS = {
   appointments: [appointmentSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
+  invites: [inviteSchema()],
   patients: [patientSchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],

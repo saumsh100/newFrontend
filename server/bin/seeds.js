@@ -566,6 +566,15 @@ const SEEDS = {
     },
   ],
 
+  Invite: [
+    {
+      sendingUserId: justinUserId,
+      accountId,
+      email: 'test@email.com',
+      token: uuid(),
+    },
+  ],
+
   PractitionerTimeOff: [
     // For tests!
     {

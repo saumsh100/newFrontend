@@ -33,8 +33,4 @@ export default class Account extends createModel(AccountSchema) {
     return `/api/accounts/${this.getId()}`;
   }
 
-  getClinic() {
-    return this.get('name') ;
-  }
-
 }

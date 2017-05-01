@@ -1,4 +1,4 @@
-import React, {Proptypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Avatar, ListItem, Button } from '../../../../library';
 import styles from '../styles.scss';
 
@@ -7,7 +7,6 @@ class ActiveUsersList extends Component {
 
   render() {
     const { activeUser, role } = this.props;
-
     return (
       <ListItem className={styles.userListItem}>
         <div className={styles.main}>
