@@ -19,8 +19,8 @@ class RequestList extends Component {
   confirmAppointment(request) {
     const { updateEntityRequest, createEntityRequest } = this.props;
     const appointment = {
-      startTime: request.get('startTime'),
-      endTime: request.get('endTime'),
+      startDate: request.get('startDate'),
+      endDate: request.get('endDate'),
       patientId: request.get('patientId'),
       serviceId: request.get('serviceId'),
       practitionerId: request.get('practitionerId'),

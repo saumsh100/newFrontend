@@ -8,9 +8,7 @@ const loaders = require('../../util/loaders');
 
 servicesRouter.param('serviceId', loaders('service', 'Service'));
 
-
-servicesRouter.get('/', checkPermissions('services:read'), (req, res, next) => {
-
+servicesRouter.get('/', /*checkPermissions('services:read'),*/ (req, res, next) => {
   const {
     accountId,
     joinObject,

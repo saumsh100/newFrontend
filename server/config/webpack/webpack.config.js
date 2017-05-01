@@ -16,12 +16,6 @@ webpackConfig.entry = {
     `webpack-hot-middleware/client?path=http://localhost:${globals.bundlePort}/__webpack_hmr`,
     '../../entries/patient.js',
   ],
-  
-  embed: [
-    'webpack/hot/dev-server',
-    `webpack-hot-middleware/client?path=http://localhost:${globals.bundlePort}/__webpack_hmr`,
-    '../../entries/embed.js',
-  ],
 };
 
 webpackConfig.output = {
@@ -42,4 +36,3 @@ webpackConfig.plugins = [
 ];
 
 module.exports = webpackConfig;
-  

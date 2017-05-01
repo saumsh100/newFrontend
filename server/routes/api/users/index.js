@@ -16,7 +16,6 @@ userRouter.get('/',checkPermissions('users:read'), (req, res, next) => {
     accountId,
     joinObject,
   } = req;
-
   console.log(accountId);
   return User.filter({ activeAccountId: accountId }).getJoin(joinObject).run()
     .then(users => res.send(normalize('users', users)))
@@ -32,7 +31,7 @@ userRouter.put('/:userId', (req, res, next) => {
       if (password !== confirmPassword) {
         return next(StatusError(401, 'Passwords do not match'));
       }
-      
+
       // Check if the password is valid,
       // if so, we must set the new password, other attrs and then save
       // if all is well, we respond with the updated user
@@ -44,7 +43,7 @@ userRouter.put('/:userId', (req, res, next) => {
           if (score < 2) {
             throw StatusError(401, warning || 'New password not strong enough');
           }
-          
+
           return user.setPasswordAsync(password)
             .then((updatedUser) => {
               // Now save and respond finally!

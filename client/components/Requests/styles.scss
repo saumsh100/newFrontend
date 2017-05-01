@@ -7,6 +7,7 @@
 }
 
 .requestCard {
+
 }
 
 .requestHeader{
@@ -39,7 +40,7 @@
   @media screen and (max-width: 350px){
     max-width: 170px;
   }
-  &__time{
+  &__time {
     @extend .font-medium-dark;
   }
 

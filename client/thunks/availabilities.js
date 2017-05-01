@@ -27,13 +27,13 @@ export function setDay() {
 export function setPractitioner(practitionerId) {
 	return function (dispatch, getState) {
 		dispatch(setPractitionerAction(practitionerId));
-	}	
+	}
 }
 
 export function setService(serviceId) {
 	return function (dispatch, getState) {
 		dispatch(setServiceAction(serviceId));
-	}	
+	}
 }
 
 export function createPatient(params) {
@@ -52,11 +52,11 @@ export function createPatient(params) {
 	} = params;
 	return function (dispatch, getState) {
 		const patientParams = { firstName, lastName, email, phone, accountId }
-    const url = domen ? '/patients' : 'api/patients'; 
+    const url = domen ? '/patients' : 'api/patients';
     axios.post(url, patientParams)
       .then((result) => {
         dispatch(createPatientAction(params));
-        const saveParams = { 
+        const saveParams = {
         	isConfirmed: false,
     			isCancelled: false,
 			    startTime: startsAt,
@@ -66,7 +66,7 @@ export function createPatient(params) {
 			    domen,
 			    accountId,
         }
-				const requestUrl = domen ? '/requests' : 'api/requests'; 
+				const requestUrl = domen ? '/requests' : 'api/requests';
 		    axios.post(requestUrl, saveParams)
 		      .then(() => {
 						dispatch(saveRequestAction(params));
@@ -74,13 +74,13 @@ export function createPatient(params) {
 		      .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
-	}	
+	}
 }
 
 export function setStartingAppointmentTime(startsAt) {
 	return function (dispatch, getState) {
 		dispatch(setStartingAppointmentTimeAction(startsAt));
-	}	
+	}
 }
 
 export function setRegistrationStep(registrationStep, accountId) {
@@ -92,13 +92,14 @@ export function setRegistrationStep(registrationStep, accountId) {
 					dispatch(setTemporaryReservationAction(reservation.data.result))
 				})
 		}
+
 		dispatch(setRegistrationStepAction(registrationStep));
-  }
+  };
 }
 
 export function getClinicInfo(accountId) {
   return function (dispatch, getState) {
-	  axios.get(`/logo/${accountId}`).then( (data => {	
+	  axios.get(`/logo/${accountId}`).then( (data => {
 	  	const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
 	  	dispatch(setClinicInfoAction({ logo, address, clinicName, bookingWidgetPrimaryColor }))
 	  }).bind(this) )
@@ -112,4 +113,11 @@ export function removeReservation(reservationId) {
 				dispatch(removeReservationAction());
 			})
 	}
+}
+
+export function closeBookingModal() {
+  return (dispatch, getState) => {
+    // clean up state for closing the Modal
+    window.parent.postMessage('message', '*');
+  };
 }

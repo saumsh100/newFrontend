@@ -11,17 +11,15 @@ import {
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
 
-export function fetchEntities({ key, join, params = {}, domen }) {
+export function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-
     // Add onto the query param for join if passed in
     if (join && join.length) {
       params.join = join.join(',');
     }
-
-    const url = domen ? `/${key}` : entity.getUrlRoot();
+    url = url || entity.getUrlRoot();
     axios.get(url, { params })
       .then((response) => {
         const { data } = response;
@@ -34,11 +32,13 @@ export function fetchEntities({ key, join, params = {}, domen }) {
   };
 }
 
-export function deleteEntityRequest({ key, id }) {
+export function deleteEntityRequest({ key, id, url }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    axios.delete(`${entity.getUrlRoot()}/${id}`)
+
+    url = url || `${entity.getUrlRoot()}/${id}`;
+    axios.delete(url)
       .then(() => {
         dispatch(deleteEntity({ key, id }));
       })
@@ -46,11 +46,14 @@ export function deleteEntityRequest({ key, id }) {
   };
 }
 
-export function createEntityRequest({ key, entityData }) {
+export function createEntityRequest({ key, entityData, url }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
-    return axios.post(entity.getUrlRoot(), entityData)
+
+    url = url || entity.getUrlRoot();
+
+    return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));

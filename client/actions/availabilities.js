@@ -1,3 +1,4 @@
+
 import { createAction } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
@@ -10,6 +11,7 @@ import {
   SET_CLINIC_INFO,
   SET_RESERVATION,
   REMOVE_RESERVATION,
+  SET_SELECTED_AVAILABILITY,
 } from '../constants';
 
 export const sixDaysShiftAction  = createAction(SIX_DAYS_SHIFT);
@@ -22,3 +24,4 @@ export const setRegistrationStepAction = createAction(SET_REGISTRATION_STEP);
 export const setClinicInfoAction = createAction(SET_CLINIC_INFO);
 export const setTemporaryReservationAction = createAction(SET_RESERVATION);
 export const removeReservationAction = createAction(REMOVE_RESERVATION);
+export const setSelectedAvailability = createAction(SET_SELECTED_AVAILABILITY);

@@ -49,8 +49,8 @@ function Form(props) {
         onSubmit={handleSubmit}
         onChange={e => e.stopPropagation()}
       >
-        { children }
-        { showSubmitButton }
+        {children}
+        {showSubmitButton}
       </form>
     </div>
   );
@@ -64,7 +64,7 @@ Form.propTypes = {
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
 const withReduxForm = (BaseComponent) => {
   return reduxForm({
-    
+
   })(BaseComponent);
 };
 

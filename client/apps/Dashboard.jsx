@@ -5,15 +5,18 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import moment from 'moment';
+import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
+import Immutable from 'immutable';
 
 // TODO: improve this to only create socket when use is logged in, JWT is undefined when not...
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
 import DashboardRoutes from '../routes/Dashboard';
 import configure from '../store';
+import time from '../../server/util/time';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
 import '../styles/dashboard.scss';
@@ -43,8 +46,10 @@ if (!token) {
 window.store = store;
 window.browserHistory = history;
 window.socket = socket;
-window.moment = moment;
+window.moment = extendMoment(moment);
+window.time = time;
 window._ = _;
+window.Immutable = Immutable;
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

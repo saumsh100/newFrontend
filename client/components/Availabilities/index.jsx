@@ -1,16 +1,15 @@
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
-import includes from 'lodash/includes';
-import DayPicker, { DateUtils } from 'react-day-picker';
-import { Button, Form, Field, Checkbox } from '../library';
-import SignUp from './SignUp';
-import RenderFirstStep from './RenderFirstStep';
-import Preferences from './Preferences';
-import DayPickerStyles from '../library/DayPicker/styles.css';
+import { DateUtils } from 'react-day-picker';
+import SelectionView from './SelectionView';
+import SubmitView from './SubmitView';
+import SideBar from './SideBar';
+import Header from './Header';
 import styles from './styles.scss';
 
-class Availabilities extends React.Component {
+let i = 0;
+class Availabilities extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +18,6 @@ class Availabilities extends React.Component {
       modalIsOpen: false,
       practitionersStartEndDate: {},
       checked: false,
-      collapseMenu: false,
     };
 
     this.onDoctorChange = this.onDoctorChange.bind(this);
@@ -33,11 +31,11 @@ class Availabilities extends React.Component {
     this.selectAvailability = this.selectAvailability.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.collapseMenu = this.collapseMenu.bind(this);
     this.closeIframe = this.closeIframe.bind(this);
   }
+
   componentWillReceiveProps() {
-    document.body.style.setProperty('--bookingWidgetPrimaryColor', this.props.bookingWidgetPrimaryColor);
+    document.body.style.setProperty('--bookingWidgetPrimaryColor', this.props.account.get('bookingWidgetPrimaryColor'));
   }
 
   onDoctorChange(e) {
@@ -96,11 +94,13 @@ class Availabilities extends React.Component {
     });
   }
 
-  selectAvailability(slot) {
-    if (!slot.isBusy) {
-      const { startsAt } = slot;
-      this.props.setStartingAppointmentTime(startsAt);
-    }
+  selectAvailability() {
+    const newAvailability = {
+      startDate: new Date(2017, i++, i * 2, 8, 0),
+      endDate: new Date(2017, i++, i * 2, 9, 0),
+    };
+
+    this.props.setSelectedAvailability(newAvailability);
   }
 
   isDaySelected(day) {
@@ -129,32 +129,21 @@ class Availabilities extends React.Component {
     setRegistrationStep(2, accountId);
   }
 
-  collapseMenu(open) {
-    if (open) {
-      this.setState({
-        collapseMenu: true,
-      });
-    } else {
-      this.setState({
-        collapseMenu: false,
-      });
-    }
-  }
-
   closeIframe() {
     window.parent.postMessage('message', '*');
   }
 
   getAppointmentInfo(serviceId) {
     const { practitionersStartEndDate, practitioners, services, practitionerId } = this.props;
-    const selectedService = services.filter(s => s.id === serviceId)[0];
-    const selectedPractitioner = practitioners.filter(p => p.id === practitionerId)[0];
+    const selectedService = services.get(serviceId);
+    const selectedPractitioner = practitioners.get(practitionerId);
     if (selectedPractitioner && selectedService) {
       const { firstName, lastName } = selectedPractitioner;
       const { name } = selectedService;
       const date = moment(practitionersStartEndDate.toJS().startsAt).format('LLLL');
       return `${name} Dr ${lastName} ${date} `;
     }
+
     return null;
   }
 
@@ -167,43 +156,53 @@ class Availabilities extends React.Component {
       createPatient,
       practitionersStartEndDate,
       setRegistrationStep,
-      logo,
-      address,
+      account,
       removeReservation,
-      bookingWidgetPrimaryColor,
     } = this.props;
-    const serviceId = this.props.serviceId || services[0] && services[0].id;
-    const prId = practitioners[0] && practitioners.id;
+
+    const serviceId = this.props.serviceId;
+    const prId = this.props.practitionerId;
     const defaultValues = { practitionerId, serviceId };
     const params = { practitionerId, services, availabilities, practitioners, defaultValues };
     const appointmentInfo = this.getAppointmentInfo(serviceId);
-    switch (practitionersStartEndDate.get('registrationStep')) {
-      case 1:
-        return (<RenderFirstStep
-          params={params}
-          props={this.props}
-          upperState={this.state}
-          collapseMenu={this.collapseMenu}
-          selectAvailability={this.selectAvailability}
-          handleSaveClick={this.handleSaveClick}
-          handleChange={this.handleChange}
-        />);
-      case 2:
-        return (<SignUp
+    const registrationStep = practitionersStartEndDate.get('registrationStep');
+
+    let currentView = (
+      <SelectionView
+        params={params}
+        props={this.props}
+        upperState={this.state}
+        account={account}
+        selectAvailability={this.selectAvailability}
+        handleSaveClick={this.handleSaveClick}
+        handleChange={this.handleChange}
+      />
+    );
+
+    if (registrationStep === 2) {
+      currentView = (
+        <SubmitView
           setRegistrationStep={setRegistrationStep}
           createPatient={createPatient}
           practitionersStartEndDate={practitionersStartEndDate}
-          logo={logo}
-          address={address}
+          account={account}
           appointmentInfo={appointmentInfo}
           removeReservation={removeReservation}
-          bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
-        />);
-      case undefined:
-        return (
-          <div>Loading..</div>
-        );
+        />
+      );
     }
+
+    return (
+      <div className={styles.signup}>
+        <div className={styles.signup__wrapper}>
+          <SideBar account={account} />
+          <div className={styles.appointment__main}>
+            <Header />
+            {currentView}
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 

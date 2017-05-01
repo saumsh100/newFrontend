@@ -6,6 +6,8 @@ const schema = normalizr.schema;
 const accountSchema = () => {
   return new schema.Entity('accounts', {
     users: [userSchema()],
+    practitioners: [_practitionerSchema],
+    services: [_serviceSchema],
     weeklySchedule: weeklyScheduleSchema(),
   });
 };
@@ -22,6 +24,7 @@ const chairSchema = () => {
   return new schema.Entity('chairs');
 };
 
+
 const chatSchema = () => {
   return new schema.Entity('chats', {
     account: accountSchema(),
@@ -34,6 +37,12 @@ const patientSchema = () => {
   return new schema.Entity('patients');
 };
 
+const permissionSchema = () => {
+  return new schema.Entity('permissions', {
+    users: [userSchema()],
+  });
+};
+
 const requestSchema = () => {
   return new schema.Entity('requests', {
     patient: patientSchema(),
@@ -41,6 +50,10 @@ const requestSchema = () => {
     practitioner: practitionerSchema(),
     chair: chairSchema(),
   });
+};
+
+const inviteSchema = () => {
+  return new schema.Entity('invites');
 };
 
 const textMessageSchema = () => {
@@ -91,6 +104,7 @@ const SCHEMAS = {
   appointment: appointmentSchema(),
   chair: chairSchema(),
   chat: chatSchema(),
+  invite: inviteSchema(),
   patient: patientSchema(),
   request: requestSchema(),
   service: serviceSchema(),
@@ -101,18 +115,19 @@ const SCHEMAS = {
   syncClientError: syncClientErrorSchema(),
   reservation: reservationSchema(),
   weeklySchedule: weeklyScheduleSchema(),
-
   // Collections (list/find)
   accounts: [accountSchema()],
   appointments: [appointmentSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
+  invites: [inviteSchema()],
   patients: [patientSchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],
   textMessages: [textMessageSchema()],
   users: [userSchema()],
-  syncClientLogs: [syncClientErrorSchema()],
+  syncClientErrors: [syncClientErrorSchema()],
+  permissions: [permissionSchema()],
   practitioners: [practitionerSchema()],
   practitionerTimeOffs: [timeOffSchema()],
   weeklySchedules: [weeklyScheduleSchema()],

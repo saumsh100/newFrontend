@@ -18,8 +18,11 @@ import {
   getClinicInfo,
   removeReservation,
 } from  '../thunks/availabilities';
+import {
+  setSelectedAvailability,
+} from '../actions/availabilities';
 
-class Availability extends Component {
+class AvailabilitiesContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,8 +37,9 @@ class Availability extends Component {
     const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
 
     // TODO: put these into their separate containers
-    this.props.fetchEntities({ key: 'practitioners', domen });
-    this.props.fetchEntities({ key: 'services', domen });
+    //this.props.fetchEntities({ key: 'practitioners', domen });
+    //this.props.fetchEntities({ key: 'services', domen });
+
 
     const array = location.pathname.split('/');
     const accountId = array[array.length - 1];
@@ -260,12 +264,14 @@ class Availability extends Component {
     const { setStartingAppointmentTime } = this.props;
     const { logo, address, clinicName, bookingWidgetPrimaryColor } = this.props.practitionersStartEndDate.toJS();
 
+    // TODO: this is fucking NASTY... use spread props?
+
     return (
       <Availabilities
         availabilities={filteredByDoctor}
         practitionerId={practitionerId}
-        services={this.props.services.get('models').toArray()}
-        practitioners={this.props.practitioners.get('models').toArray()}
+        services={this.props.services}
+        practitioners={this.props.practitioners}
         sixDaysShift={this.props.sixDaysShift}
         setDay={this.props.setDay}
         setPractitioner={this.props.setPractitioner}
@@ -274,25 +280,30 @@ class Availability extends Component {
         createPatient={this.props.createPatient}
         serviceId={serviceId}
         setStartingAppointmentTime={setStartingAppointmentTime}
-        registrationStep={this.props.practitionersStartEndDate}
+        registrationStep={this.props.practitionersStartEndDate.get('registrationStep')}
         setRegistrationStep={this.props.setRegistrationStep}
-        logo={logo}
-        address={address}
-        clinicName={clinicName}
+        account={this.props.account}
         removeReservation={this.props.removeReservation}
-        bookingWidgetPrimaryColor={bookingWidgetPrimaryColor}
+        setSelectedAvailability={this.props.setSelectedAvailability}
+        selectedAvailability={this.props.selectedAvailability}
       />
     );
   }
 }
 
-function mapStateToProps({entities, availabilities, form}) {
+AvailabilitiesContainer.propTypes = {
+
+};
+
+function mapStateToProps({ entities, availabilities, form }) {
   return {
     availabilities: entities.get('availabilities'),
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
     practitionersStartEndDate: availabilities,
+    account: availabilities.get('account'),
     availabilitiesForm: form.availabilities,
+    selectedAvailability: availabilities.get('selectedAvailability'),
   };
 }
 
@@ -308,9 +319,10 @@ function mapDispatchToProps(dispatch) {
     setStartingAppointmentTime,
     setRegistrationStep,
     removeReservation,
+    setSelectedAvailability,
   }, dispatch);
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
-export default enhance(Availability);
+export default enhance(AvailabilitiesContainer);
