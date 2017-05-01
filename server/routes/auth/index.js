@@ -63,7 +63,7 @@ authRouter.post('/', (req, res, next) => {
 authRouter.post('/signupinvite/:token', (req, res, next) => {
   // Get user by the unique username
   const newUser = req.body;
-  console.log(newUser)
+
   if (newUser.passwordConfirmation === newUser.password) {
     return next(StatusError(400, 'Passwords Do Not Match!'));
   }

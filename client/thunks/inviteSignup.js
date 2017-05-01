@@ -30,7 +30,7 @@ export default function invite(location) {
       lastName: values.lastName,
       passwordConfirmation: values.passwordConfirmation,
     };
-    console.log(values.passwordConfirmation);
+
     const url = `/auth${location.pathname}`;
 
     return axios
