@@ -75,7 +75,7 @@ authRouter.post('/signupinvite/:token', (req, res, next) => {
   newUser.password = bcrypt.hashSync(newUser.password, saltRounds);
 
   User.filter({username: newUser.username}).run()
-    .then(checkEmail => {
+    .then((checkEmail) => {
       if (checkEmail[0]) {
         console.log(checkEmail)
         return next(StatusError(400, 'Email Already in Use'));
