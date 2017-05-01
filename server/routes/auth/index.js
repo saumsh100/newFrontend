@@ -64,7 +64,7 @@ authRouter.post('/signupinvite/:token', (req, res, next) => {
   // Get user by the unique username
   const newUser = req.body;
 
-  if (newUser.passwordConfirmation === newUser.password) {
+  if (newUser.passwordConfirmation !== newUser.password) {
     return next(StatusError(400, 'Passwords Do Not Match!'));
   }
 
@@ -90,7 +90,7 @@ authRouter.post('/signupinvite/:token', (req, res, next) => {
                 const newPermission = {
                   userId: user.id,
                   accountId: user.activeAccountId,
-                  role: 'OWNER',
+                  role: 'VIEWER',
                   permissions: {},
                 }
                 Permission.save(newPermission)
@@ -99,7 +99,7 @@ authRouter.post('/signupinvite/:token', (req, res, next) => {
                       inviteDelete.delete();
                       const {role, permissions = {}} = permission;
                       const tokenData = {role, permissions, userId: user.id, activeAccountId: user.activeAccountId};
-                      
+
                       return jwt.sign(tokenData, globals.tokenSecret, {expiresIn: globals.tokenExpiry}, (error, token) => {
                         if (error) {
                           return next(StatusError(500, 'Error signing the token'));
