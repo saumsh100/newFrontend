@@ -11,22 +11,35 @@ export default function invite(location) {
     // TODO: change to use values onSubmit
     const { form: { login: { values } } } = getState();
     // reduxForm will not have this set if form is not dirty
-    if (!values) return;
+
+    if (!values) {
+      const error = 'Enter All Values';
+      throw new SubmissionError({
+        firstName: error,
+        lastName: error,
+        email: error,
+        password: error,
+        passwordConfirmation: error,
+      });
+    };
+
     const signUpDetails = {
       username: values.email,
       password: values.password,
       firstName: values.firstName,
       lastName: values.lastName,
+      passwordConfirmation: values.passwordConfirmation,
     };
+    console.log(values.passwordConfirmation);
     const url = `/auth${location.pathname}`;
-    console.log(url)
+
     return axios
       .post(url , signUpDetails)
       .then(({ data }) => {
-        // // set data in local storage
-        // localStorage.setItem('token', data.token);
-        // dispatch(loginSuccess(jwt(data.token)));
-        // dispatch(push('/'));
+        // set data in local storage
+        localStorage.setItem('token', data.token);
+        dispatch(loginSuccess(jwt(data.token)));
+        dispatch(push('/'));
       })
       .catch((err) => {
         const { data } = err;
@@ -35,6 +48,7 @@ export default function invite(location) {
           lastName: data,
           email: data,
           password: data,
+          passwordConfirmation: data,
         });
       });
   };

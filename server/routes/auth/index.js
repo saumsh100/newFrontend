@@ -6,6 +6,8 @@ const User = require('../../models/User');
 const Invite = require('../../models/Invite');
 const Permission = require('../../models/Permission');
 const StatusError = require('../../util/StatusError');
+const saltRounds = 10;
+
 
 // TODO: find a better way to do Model.findOne
 
@@ -61,21 +63,62 @@ authRouter.post('/', (req, res, next) => {
 authRouter.post('/signupinvite/:token', (req, res, next) => {
   // Get user by the unique username
   const newUser = req.body;
+  console.log(newUser)
+  if (newUser.passwordConfirmation === newUser.password) {
+    return next(StatusError(400, 'Passwords Do Not Match!'));
+  }
+
   if (!newUser.username || !newUser.password || !newUser.lastName || !newUser.firstName ) {
     return next(StatusError(400, 'Please  Fill in all Values'));
   }
 
-  Invite.filter({ token: req.params.token }).run()
-    .then((invite) => {
-      if (!invite[0]){
-        return next(StatusError(401, 'Bad invite'));
-      } else {
+  newUser.password = bcrypt.hashSync(newUser.password, saltRounds);
 
+  User.filter({username: newUser.username}).run()
+    .then(checkEmail => {
+      if (checkEmail[0]) {
+        console.log(checkEmail)
+        return next(StatusError(400, 'Email Already in Use'));
       }
-    })
+      Invite.filter({token: req.params.token}).run()
+        .then((invite) => {
+          console.log(invite, 'asdasdsa');
+          if (!invite[0]) {
+            return next(StatusError(401, 'Bad invite'));
+          } else {
+            newUser.activeAccountId = invite[0].accountId;
+            User.save(newUser)
+              .then((user) => {
+                const newPermission = {
+                  userId: user.id,
+                  accountId: user.activeAccountId,
+                  role: 'OWNER',
+                  permissions: {},
+                }
+                Permission.save(newPermission)
+                  .then((permission) => {
+                    Invite.get(invite[0].id).then((inviteDelete) => {
+                      inviteDelete.delete();
+                      const {role, permissions = {}} = permission;
+                      const tokenData = {role, permissions, userId: user.id, activeAccountId: user.activeAccountId};
 
-  console.log(req.body);
-  return res.send(200);
+                      console.log('signing token', tokenData);
+
+                      return jwt.sign(tokenData, globals.tokenSecret, {expiresIn: globals.tokenExpiry}, (error, token) => {
+                        if (error) {
+                          return next(StatusError(500, 'Error signing the token'));
+                        }
+
+                        return res.json({token});
+                      });
+                    });
+                  });
+              });
+          }
+        })
+    })
+    .catch(next);
+
 });
 
 module.exports = authRouter;

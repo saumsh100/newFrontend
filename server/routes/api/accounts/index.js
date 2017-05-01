@@ -72,8 +72,9 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
   return Invite.save(newInvite)
     .then((invite) => {
       const fullUrl = `${req.protocol}://${req.get('host')}/signup/${invite.token}`;
-      User.filter({id: invite.sendingUserId}).run()
+      User.filter({ id: invite.sendingUserId }).run()
         .then((user) => {
+          console.log(user)
           const mergeVars = [
             {
               name: 'URL',
@@ -91,7 +92,7 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
             mergeVars,
           });
           res.send(normalize('invite', invite));
-        })
+        });
     })
     .catch(next);
 

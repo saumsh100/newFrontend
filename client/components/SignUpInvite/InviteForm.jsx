@@ -23,6 +23,11 @@ export default function Invite({ onSubmit }) {
         name="password"
         label="Password"
       />
+      <Field
+        type="password"
+        name="passwordConfirmation"
+        label="Password Confirmation"
+      />
       <Button
         type="submit"
         style={{ width: '100%' }}
