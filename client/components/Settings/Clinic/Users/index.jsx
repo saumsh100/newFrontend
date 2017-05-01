@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { fetchEntities, deleteEntityRequest, createEntityRequest } from '../../../../thunks/fetchEntities';
-import { List, ListItem, Grid, Header, Modal, Row, Button } from '../../../library';
+import { List, ListItem, Grid, Header, Modal, Row, Button, DropdownSelect } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
@@ -15,12 +15,17 @@ class Users extends Component{
     super(props);
     this.state = {
       active: false,
+      editActive: false,
+      editValue: 'VIEWER',
     };
 
     this.deleteInvite = this.deleteInvite.bind(this);
     this.sendInvite = this.sendInvite.bind(this);
     this.addUser = this.addUser.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
+    this.editUser = this.editUser.bind(this);
+    this.editDropdown = this.editDropdown.bind(this);
+    this.sendEdit = this.sendEdit.bind(this);
   }
 
   componentWillMount() {
@@ -30,6 +35,11 @@ class Users extends Component{
     const urlInvites = `/api/accounts/${decodedToken.activeAccountId}/invites`;
     this.props.fetchEntities({ url });
     this.props.fetchEntities({ url: urlInvites });
+
+    this.setState({
+      userId: decodedToken.userId,
+      role: decodedToken.role,
+    });
   }
 
   deleteInvite(id) {
@@ -54,9 +64,18 @@ class Users extends Component{
     entityData.email = '';
   }
 
+  sendEdit(entityData) {
+    this.setState({
+      editActive: false,
+    });
+
+    console.log('you did half of it');
+  }
+
   reinitializeState() {
     this.setState({
       active: false,
+      editActive: false,
     });
   }
 
@@ -66,11 +85,22 @@ class Users extends Component{
     });
   }
 
+  editUser() {
+    this.setState({
+      editActive: true,
+    });
+  }
+
+  editDropdown(value) {
+    this.setState({ editValue: value });
+  }
+
   render() {
     const formName = 'emailInvite';
     const { users, permissions, accounts, invites } = this.props;
     const {
       active,
+      editActive,
     } = this.state;
     const clinic = accounts.toArray()[0];
     let clinicName = '';
@@ -106,6 +136,11 @@ class Users extends Component{
       { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName }},
     ];
 
+    const editActions = [
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Edit', onClick: this.sendEdit, component: Button },
+    ];
+
     return (
       <Grid>
         <Modal
@@ -123,6 +158,25 @@ class Users extends Component{
             formName={formName}
           />
         </Modal>
+        <Modal
+          actions={editActions}
+          title="Edit User Rights"
+          type="small"
+          active={editActive}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
+        >
+          <DropdownSelect
+            value={this.state.editValue}
+            onChange={this.editDropdown}
+            className={styles.dropdown}
+            options={[
+            { value: 'OWNER' },
+            { value: 'ADMIN' },
+            { value: 'VIEWER' },
+          ]}
+          />
+        </Modal>
         <Row className={styles.mainHead}>
           <Header title={`Users in ${clinicName}`} />
           <Button className={styles.inviteUser} onClick={this.addUser} >Invite a User</Button>
@@ -135,6 +189,10 @@ class Users extends Component{
               key={user.id}
               activeUser={user}
               role={permissions.toArray()[i].get('role')}
+              currentUserId={this.state.userId}
+              userId={user.get('id')}
+              currentUserRole={this.state.role}
+              edit={this.editUser}
             />
           );
         })}

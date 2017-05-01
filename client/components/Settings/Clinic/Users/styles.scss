@@ -5,6 +5,27 @@
   border-bottom: 1px solid #959596;
 }
 
+.badge {
+  background-color: #000;
+  border-radius: 50%;
+  color: #fff;
+  display: inline-block;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: center;
+  padding-top: 5px;
+  font-size: 15px;
+  font-family: "Gotham-Medium";
+  padding-bottom: 2px;
+}
+
+.dropdown {
+  margin-bottom: 10px;
+  div{
+    margin-right: 10px;
+  }
+}
+
 .emailInvite{
   display: flex;
   flex-direction: column;
