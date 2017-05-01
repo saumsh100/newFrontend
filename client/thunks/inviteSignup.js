@@ -19,7 +19,7 @@ export default function invite(location) {
         lastName: error,
         email: error,
         password: error,
-        passwordConfirmation: error,
+        confirmPassword: error,
       });
     };
 
@@ -28,18 +28,15 @@ export default function invite(location) {
       password: values.password,
       firstName: values.firstName,
       lastName: values.lastName,
-      passwordConfirmation: values.passwordConfirmation,
+      confirmPassword: values.confirmPassword,
     };
 
-    const url = `/auth${location.pathname}`;
+    const url = `${location.pathname}`;
 
     return axios
       .post(url , signUpDetails)
       .then(({ data }) => {
-        // set data in local storage
-        localStorage.setItem('token', data.token);
-        dispatch(loginSuccess(jwt(data.token)));
-        dispatch(push('/'));
+        dispatch(push('/login'));
       })
       .catch((err) => {
         const { data } = err;
@@ -48,7 +45,7 @@ export default function invite(location) {
           lastName: data,
           email: data,
           password: data,
-          passwordConfirmation: data,
+          confirmPassword: data,
         });
       });
   };

@@ -71,7 +71,7 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
 
   return Invite.save(newInvite)
     .then((invite) => {
-      const fullUrl = `${req.protocol}://${req.get('host')}/signup/${invite.token}`;
+      const fullUrl = `${req.protocol}://${req.get('host')}/signupinvite/${invite.token}`;
       User.filter({ id: invite.sendingUserId }).run()
         .then((user) => {
           console.log(user)

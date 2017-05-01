@@ -5,9 +5,10 @@ const apiRouter = require('./api');
 const authRouter = require('./auth');
 const myRouter = require('./my');
 const twilioRouter = require('./twilio');
-
+const signupRouter = require('./signup');
 const Token = require('../models/Token');
 const Invite = require('../models/Invite');
+const User = require('../models/User');
 const Appointment = require('../models/Appointment');
 
 // Bind subdomain capturing
@@ -16,6 +17,8 @@ rootRouter.use(subdomain('my', myRouter));
 
 // Bind auth route to generate tokens
 rootRouter.use('/auth', authRouter);
+
+rootRouter.use('/signup', signupRouter);
 
 rootRouter.get('/atoms', (req, res, next) => {
   res.send('ATOMS');
@@ -32,17 +35,32 @@ rootRouter.get('/embed', (req, res, next) => {
   return res.render('embed');
 });
 
-rootRouter.get('/signup/:tokenId', (req, res, next) => {
+rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
   Invite.filter({ token: req.params.tokenId }).run()
     .then((invite) => {
       if (invite.length === 0) {
         res.send(404);
       }
       else {
-        res.redirect(`/signupinvite/${req.params.tokenId}/`);
+        res.redirect(`/signup/${req.params.tokenId}/`);
       }
     })
     .catch(next);
+});
+
+rootRouter.post('/userCheck', (req, res, next) => {
+  const username = req.body.email.toLowerCase();
+  User.filter({ username }).run()
+    .then((user) => {
+      console.log(user)
+      if (user[0]) {
+        res.send({exists: true});
+      } else {
+        res.send({exists: false});
+      }
+    })
+    .catch(next);
+
 });
 
 rootRouter.get('/confirmation/:tokenId', (req, res, next) => {

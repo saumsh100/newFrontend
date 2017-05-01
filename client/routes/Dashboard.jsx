@@ -20,7 +20,7 @@ export default function Routes({ history }) {
       <Route path="/" component={DashboardApp}>
         <IndexRedirect to="/schedule"/>
         <Route
-          path="signupinvite/*"
+          path="signup/*"
           getComponent={(location, callback) => {
             require.ensure(['../components/SignUpInvite'], (require) => {
               callback(null, require('../components/SignUpInvite/index').default);

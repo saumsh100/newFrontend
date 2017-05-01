@@ -26,7 +26,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 // TODO: below will call a flash with Login, perhaps fix with background color?
 const token = localStorage.getItem('token');
 
-const signUp = /^\/signupinvite\/.+\/$/i;
+const signUp = /^\/signup\/.+\/$/i;
 
 const urlTest = signUp.test(window.location.pathname);
 
