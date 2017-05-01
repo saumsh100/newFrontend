@@ -77,12 +77,10 @@ authRouter.post('/signupinvite/:token', (req, res, next) => {
   User.filter({username: newUser.username}).run()
     .then((checkEmail) => {
       if (checkEmail[0]) {
-        console.log(checkEmail)
         return next(StatusError(400, 'Email Already in Use'));
       }
       Invite.filter({token: req.params.token}).run()
         .then((invite) => {
-          console.log(invite, 'asdasdsa');
           if (!invite[0]) {
             return next(StatusError(401, 'Bad invite'));
           } else {
@@ -101,9 +99,7 @@ authRouter.post('/signupinvite/:token', (req, res, next) => {
                       inviteDelete.delete();
                       const {role, permissions = {}} = permission;
                       const tokenData = {role, permissions, userId: user.id, activeAccountId: user.activeAccountId};
-
-                      console.log('signing token', tokenData);
-
+                      
                       return jwt.sign(tokenData, globals.tokenSecret, {expiresIn: globals.tokenExpiry}, (error, token) => {
                         if (error) {
                           return next(StatusError(500, 'Error signing the token'));
