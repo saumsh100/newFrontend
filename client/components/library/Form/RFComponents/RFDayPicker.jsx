@@ -1,4 +1,6 @@
+
 import React, { PropTypes } from 'react';
+import omit from 'lodash/omit';
 import DayPicker from '../../DayPicker';
 
 export default function RFDayPicker(props) {
@@ -10,10 +12,13 @@ export default function RFDayPicker(props) {
 
   const { touched, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
+  const newProps = omit(props, ['input', 'meta']);
+
+  console.log(newProps.target);
 
   return (
     <DayPicker
-      {...props}
+      {...newProps}
       {...input}
       error={finalError}
     />

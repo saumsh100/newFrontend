@@ -1,11 +1,10 @@
 
-import createModel from '../createModel';
 import moment from 'moment';
-
+import createModel from '../createModel';
 
 const RequestsSchema = {
-  startTime: null,
-  endTime: null,
+  startDate: null,
+  endDate: null,
   id: null,
   accountId: null,
   patientId: null,
@@ -28,16 +27,16 @@ export default class Requests extends createModel(RequestsSchema) {
   }
 
   getFormattedTime() {
-    const startHourMinute = moment(this.get('startTime')).format("h:mm");
-    const endHourMinute = moment(this.get('endTime')).format("h:mm");
+    const startHourMinute = moment(this.get('startDate')).format('h:mm');
+    const endHourMinute = moment(this.get('endDate')).format('h:mm');
     return startHourMinute.concat('-', endHourMinute);
   }
 
   getMonth() {
-    return moment(this.get('startTime')).format("MMM");
+    return moment(this.get('startDate')).format('MMM');
   }
 
   getDay() {
-    return moment(this.get('startTime')).date();
+    return moment(this.get('startDate')).date();
   }
 }

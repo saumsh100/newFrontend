@@ -5,8 +5,8 @@ const createModel = require('./createModel');
 const type = thinky.type;
 
 const Appointment = createModel('Appointment', {
-  startTime: type.date().required(),
-  endTime: type.date().required(),
+  startDate: type.date().required(),
+  endDate: type.date().required(),
   note: type.string(),
 
   // Relations

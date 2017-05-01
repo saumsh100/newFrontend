@@ -11,7 +11,7 @@ function createModel(tableName, schema) {
   });
 
   // TODO: add Model helper functionss
-  // Model.fetch({  })
+  // Model.fetch({  }) filters and joiners to match API and controller requirements
 
   return Model;
 }

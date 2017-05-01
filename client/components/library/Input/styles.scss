@@ -3,12 +3,11 @@
 
 $error-color: $danger-color;
 $active-color: $primary-dark;
-$empty-grey: $primary-darkgrey;
+$empty-grey: darken(lightgrey, 5%);
 
 .group {
   position: relative;
-  margin-bottom: 45px;
-  margin-top: 30px;
+  padding: 20px 0px;
 }
 
 .input {
@@ -40,8 +39,8 @@ $empty-grey: $primary-darkgrey;
 
 // TODO: figure out how to stack the CSS to make sure we dont have to use !important
 .filled {
-  top: -12px !important;
-  left: -1px !important;
+  top: 10px !important;
+  left: 0px !important;
   font-size: 12px !important;
 }
 
@@ -50,9 +49,9 @@ $empty-grey: $primary-darkgrey;
   font-weight: normal;
   position: absolute;
   pointer-events: none;
-  left: 5px;
+  left: 0px;
   transition: 0.2s ease all;
-  top: 10px;
+  top: 35px;
   font-size: 16px;
 }
 
@@ -95,9 +94,9 @@ $empty-grey: $primary-darkgrey;
   font-weight: normal;
   position: absolute;
   pointer-events: none;
-  left: 5px;
-  top: 41px;
-  font-size: 12px;
+  left: 0px;
+  top: 62px;
+  font-size: 11px;
 }
 
 /*.highlight {

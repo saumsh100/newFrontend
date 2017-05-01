@@ -6,19 +6,18 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import moment from 'moment';
 import _ from 'lodash';
+import * as Immutable from 'immutable';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import jwt from 'jwt-decode';
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
 import PatientRoutes from '../routes/Patient';
-import configure from '../store';
+import configure from '../store/availabilitiesStore';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
 
-const store = configure({ browserHistory });
+const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
 const history = syncHistoryWithStore(browserHistory, store);
-// loadInitialData(store);
-
 
 /*const token = localStorage.getItem('token');
 if (!token) {
@@ -35,13 +34,18 @@ if (!token) {
   }
 }*/
 
-connectSocketToStore(socket, store);
+// connectSocketToStore(socket, store);
 
 window.store = store;
 window.browserHistory = history;
 window.socket = socket;
 window.moment = moment;
 window._ = _;
+window.Immutable = Immutable;
+
+console.log('Patient App');
+console.log('width', window.innerWidth);
+console.log('height', window.innerHeight);
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

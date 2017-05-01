@@ -30,7 +30,6 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
 };
 
-
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     login,

@@ -1,0 +1,145 @@
+
+@import '../../../ui.scss';
+
+.signup {
+  &__header {
+    position: relative;
+    display: flex;
+    height: 70px;
+    border-radius: 5px;
+    background: #fff;
+    justify-content: center;
+    align-items: center;
+    &_btn {
+      height: 25px;
+      position: absolute;
+      left: 10px;
+      background: none;
+      border: none;
+      display: none;
+      @media screen and (max-width: 800px) {
+        display: block;
+      }
+
+      &:hover {
+        color: #f3715c;
+        color: var(--bookingWidgetPrimaryColor);
+      }
+    }
+
+    &_title {
+      font-size: 12px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #f3715c;
+      color: var(--bookingWidgetPrimaryColor);
+    }
+
+    &_timer {
+      position: absolute;
+      right: 20px;
+    }
+  }
+
+  &__body {
+    // padding: 20px 150px;
+    border-radius: 5px;
+    @media screen and (max-width: 800px) {
+      // padding: 20px 30px;
+    }
+
+    &_header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    &_input {
+      width: 100%;
+      padding: 0 5px;
+      border: none;
+      border-bottom: 1px solid #dddcdc;
+      background: none;
+      &:not(:last-child) {
+        margin-bottom: 34px;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &__footer {
+    font-size: 10px;
+    margin-top: 10px;
+    text-align: center;
+    &_header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &_title {
+      font-size: 8px;
+      font-weight: 500;
+      margin: 0 5px;
+      text-transform: uppercase;
+      color: #2e3945;
+    }
+
+    &_login {
+      font-size: 8px;
+      font-weight: 500;
+      margin: 0 5px;
+      text-decoration: none;
+      text-transform: uppercase;
+      color: #f3715c;
+      color: var(--bookingWidgetPrimaryColor);
+    }
+
+    &_btn {
+      font-size: 10px;
+      position: relative;
+      width: 100%;
+      padding: 6px 20px;
+      height: inherit;
+      text-transform: uppercase;
+      color: #fff;
+      border: none;
+      background-color: #f3715c;
+      background: var(--bookingWidgetPrimaryColor);
+      &:hover {
+        background-color: #f3715c;
+        background: var(--bookingWidgetPrimaryColor);
+      }
+    }
+
+    &_facebook {
+      font-size: 8px;
+      display: inline-block;
+      margin: 10px;
+      padding: 6px 20px;
+      text-decoration: none;
+      text-transform: uppercase;
+      color: #fff;
+      border: none;
+      background: #395199;
+      span {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.submitViewWrapper {
+  padding: 10px;
+}
+
+.formWrapper {
+  padding: 0px 80px;
+  @media screen and (max-width: 600px) {
+    padding: 0px 10px;
+  }
+}
+

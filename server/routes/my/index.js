@@ -10,6 +10,7 @@ const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
+const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
 myRouter.use('/practitioners', practitionersRouter);
@@ -20,10 +21,26 @@ myRouter.use('/patients', patientsRouter);
 myRouter.use('/reservations', reservationsRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
+myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
 
-myRouter.get('/embeds/:accountId', (req, res, next) => {
+myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
   try {
-    return res.render('patient', { account: req.account });
+    // Needs to match the structure of the reducers
+    const { entities } = normalize('account', req.account);
+    const initialState = {
+      availabilities: {
+        account: req.account,
+        services: req.account.services,
+        practitioners: req.account.practitioners,
+      },
+
+      entities,
+    };
+
+    return res.render('patient', {
+      account: req.account,
+      initialState: JSON.stringify(initialState),
+    });
   } catch (err) {
     next(err);
   }
@@ -42,10 +59,10 @@ myRouter.get('/widgets/:accountId', (req, res, next) => {
 
 myRouter.get('/logo/:accountId', (req, res, next) => {
 	const { accountId } = req.params;
-	Account.get(accountId).run().then(account => {
+	return Account.get(accountId).run().then(account => {
 		const { logo, address, clinicName, bookingWidgetPrimaryColor } = account;
 		res.send({ logo, address, clinicName, bookingWidgetPrimaryColor });
-	})
+	});
 });
 
 // Very important we catch all other endpoints,
