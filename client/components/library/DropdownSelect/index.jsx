@@ -17,7 +17,6 @@ function DefaultOption({ option }) {
 export default class DropdownSelect extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       isOpen: false,
     };
@@ -85,6 +84,7 @@ export default class DropdownSelect extends Component {
 
     let toggleDiv = label;
     const option = options.find(opt => opt.value === value);
+
     if (option) {
       toggleDiv = <ToggleTemplate option={option} />;
     }

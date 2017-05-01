@@ -2,7 +2,6 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-
 import styles from './styles.scss';
 
 export default function Input(props) {
@@ -44,8 +43,7 @@ export default function Input(props) {
     </div>
 
     return content;
-
-};
+}
 
 Input.propTypes = {
   error: PropTypes.string,

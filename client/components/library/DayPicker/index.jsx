@@ -6,14 +6,13 @@ import { pick } from 'lodash';
 import Daypicker, { DateUtils } from 'react-day-picker';
 import DayPickerStyles from './styles.css';
 import Input from '../Input';
-import Icon from '../Icon';
+import IconButton from '../IconButton';
 import styles from './styles.scss';
 
 class DayPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDay: null,
       isOpen: false,
     };
 
@@ -23,12 +22,8 @@ class DayPicker extends Component {
   }
 
   handleDayClick(day, { selected }) {
-    this.props.onChange(moment(day).format('L'));
-    this.setState({
-      selectedDay: selected ? undefined : day,
-      isOpen: false,
-      dayPicker: null,
-    });
+    this.props.onChange(day.toISOString());
+    this.setState({ isOpen: false });
   }
 
   handleInputClick() {
@@ -40,23 +35,17 @@ class DayPicker extends Component {
   handleInputChange(e) {
     const { value } = e.target;
     const momentDay = moment(value, 'L', true);
-
     if (momentDay.isValid()) {
       this.props.onChange(value);
-      this.setState({
-        selectedDay: momentDay.toDate(),
-      }, () => {
-        this.state.dayPicker.showMonth(this.state.selectedDay);
-      });
     } else {
       this.props.onChange(value);
-      this.setState({ selectedDay: null });
     }
   }
 
   render() {
     const {
-      target
+      target,
+      value,
     } = this.props;
 
     let dayPickerTargetComponent = (
@@ -68,14 +57,19 @@ class DayPicker extends Component {
     );
 
     if (target === 'icon') {
-      const iconProps = pick(this.props, ['icon']);
+      // const iconProps = pick(this.props, ['icon']);
       dayPickerTargetComponent = (
-        <Icon
-          {...iconProps}
+        <IconButton
+          // {...iconProps}
+          icon="calendar"
+          type="button"
           onClick={this.handleInputClick}
         />
       );
     }
+
+    // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
+    const selectedDays = new Date(value);
 
     return (
       <Popover
@@ -86,7 +80,8 @@ class DayPicker extends Component {
           <Daypicker
             ref={(el) => { this.state.dayPicker = el; }}
             onDayClick={this.handleDayClick}
-            selectedDays={this.state.selectedDay}
+            selectedDays={selectedDays}
+            // TODO: why do we spread props?
             {...this.props}
           />
         )]}
@@ -96,5 +91,11 @@ class DayPicker extends Component {
     );
   }
 }
+
+DayPicker.propTypes = {
+  target: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.object,
+};
 
 export default DayPicker;

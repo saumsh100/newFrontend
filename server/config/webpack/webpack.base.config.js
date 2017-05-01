@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const cssnext = require('postcss-cssnext');
 
-
 // Babel Config Stuff.
 const babelQuery = {
   es2015: require.resolve('babel-preset-es2015'),
@@ -32,7 +31,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loader: `babel-loader?cacheDirectory,${createQuery(babelQuery.es2015)}`,
+        loader: `babel-loader?cacheDirectory,${fullQuery}`,
         exclude: /node_modules/,
       },
       {

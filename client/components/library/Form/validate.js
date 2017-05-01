@@ -47,7 +47,7 @@ const asyncEmailValidate = (values) => {
        throw { email: `patient with ${values.email} already exists... ` }
       }
     })
-}
+};
 
 const asyncEmailValidateUser = (values) => {
   return axios.post('/userCheck', { email: values.email })

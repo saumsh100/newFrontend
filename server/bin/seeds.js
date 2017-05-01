@@ -25,8 +25,8 @@ const saltRounds = 10;
 const oneHour = 1 * 60 * 60;
 const recentStartTime = r.now().add(oneHour);
 
-const accountId = "2aeab035-b72c-4f7a-ad73-09465cbf5654";
-const accountId2 = uuid();
+const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
+const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
 
 const justinUserId = uuid();
 const alexUserId = uuid();
@@ -42,15 +42,14 @@ const sergeyPatientId = uuid();
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const practitionerId3 = uuid();
-const practitionerId4 = uuid();
+const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
 
 const chairId = uuid();
 
 const serviceId = uuid();
 const serviceId2 = uuid();
 const serviceId3 = uuid();
-
-const cleanupServiceId = uuid();
+const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
@@ -62,7 +61,7 @@ const sergeyChatId = uuid();
 
 const weeklyScheduleId = uuid();
 const weeklyScheduleId2 = uuid();
-const weeklyScheduleId3 = uuid();
+const weeklyScheduleId3 = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 
 const hour8 = new Date(1970, 1, 1, 8, 0);
 const hour5 = new Date(1970, 1, 1, 17, 0);
@@ -138,19 +137,20 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 const SEEDS = {
   Reservation: [
     {
-      accountId,
-      practitionerId,
-      startTime: new Date(2017, 2, 4, 17, 30, 0),
-      endTime: new Date(2017, 2, 4, 19, 30, 0),
-      serviceId,
+      // TODO: make a reservation in a certain timeslot
+      accountId: accountId2,
+      serviceId: cleanupServiceId,
+      startDate: new Date(2017, 2, 4, 17, 30, 0),
+      endDate: new Date(2017, 2, 4, 19, 30, 0),
     },
   ],
+
   Appointment: [
     {
       id: appointmentId1,
       accountId,
-      startTime: recentStartTime,
-      endTime: recentStartTime.add(oneHour),
+      startDate: recentStartTime,
+      endDate: recentStartTime.add(oneHour),
       patientId: alexPatientId,
       serviceId: serviceId2,
       practitionerId,
@@ -159,8 +159,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(oneHour),
-      endTime: recentStartTime.add(2 * oneHour),
+      startDate: recentStartTime.add(oneHour),
+      endDate: recentStartTime.add(2 * oneHour),
       patientId: alexPatientId,
       serviceId,
       practitionerId,
@@ -169,8 +169,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(23 * oneHour),
-      endTime: recentStartTime.add(24 * oneHour),
+      startDate: recentStartTime.add(23 * oneHour),
+      endDate: recentStartTime.add(24 * oneHour),
       patientId: justinPatientId,
       serviceId,
       practitionerId,
@@ -179,8 +179,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(48 * oneHour),
-      endTime: recentStartTime.add(49 * oneHour),
+      startDate: recentStartTime.add(48 * oneHour),
+      endDate: recentStartTime.add(49 * oneHour),
       patientId: markPatientId,
       serviceId,
       practitionerId,
@@ -190,8 +190,8 @@ const SEEDS = {
     {
       id: appointmentId2,
       accountId,
-      startTime: recentStartTime.add(49 * oneHour),
-      endTime: recentStartTime.add(50 * oneHour),
+      startDate: recentStartTime.add(49 * oneHour),
+      endDate: recentStartTime.add(50 * oneHour),
       patientId: alexPatientId,
       serviceId,
       practitionerId,
@@ -200,8 +200,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: recentStartTime.add(72 * oneHour),
-      endTime: recentStartTime.add(73 * oneHour),
+      startDate: recentStartTime.add(72 * oneHour),
+      endDate: recentStartTime.add(73 * oneHour),
       patientId: justinPatientId,
       practitionerId: practitionerId2,
       serviceId,
@@ -216,8 +216,8 @@ const SEEDS = {
 
     {
       accountId,
-      startTime: new Date(2017, 2, 29, 12, 30, 0, 0),
-      endTime: new Date(2017, 2, 29, 12, 30, 0, 0),
+      startDate: new Date(2017, 2, 29, 12, 30, 0, 0),
+      endDate: new Date(2017, 2, 29, 12, 30, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -225,8 +225,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: new Date(2017, 1, 4, 16, 0, 0, 0),
-      endTime: new Date(2016, 1, 4, 17, 0, 0, 0),
+      startDate: new Date(2017, 1, 4, 16, 0, 0, 0),
+      endDate: new Date(2016, 1, 4, 17, 0, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -237,8 +237,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: new Date(2016, 2, 29, 18, 30, 0, 0),
-      endTime: new Date(2016, 2, 29, 20, 30, 0, 0),
+      startDate: new Date(2016, 2, 29, 18, 30, 0, 0),
+      endDate: new Date(2016, 2, 29, 20, 30, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -249,8 +249,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: new Date(2016, 2, 30, 18, 30, 0, 0),
-      endTime: new Date(2016, 2, 30, 20, 30, 0, 0),
+      startDate: new Date(2016, 2, 30, 18, 30, 0, 0),
+      endDate: new Date(2016, 2, 30, 20, 30, 0, 0),
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -258,14 +258,40 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+    },
+
+    // Availabilities Test
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 8, 0),
+      endDate: new Date(2017, 3, 3, 9, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 9, 0),
+      endDate: new Date(2017, 3, 3, 10, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 10, 0),
+      endDate: new Date(2017, 3, 3, 11, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
     },
   ],
 
   Request: [
     {
       accountId,
-      startTime: moment({hour: 11, minute: 10})._d,
-      endTime: moment({hour: 22, minute: 50})._d,
+      startDate: moment({ hour: 11, minute: 10 })._d,
+      endDate: moment({ hour: 22, minute: 50 })._d,
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -276,8 +302,8 @@ const SEEDS = {
     },
     {
       accountId,
-      startTime: moment({hour: 13, minute: 10})._d,
-      endTime: moment({hour: 13, minute: 50})._d,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
       patientId: justinPatientId,
       serviceId: serviceId2,
       practitionerId: practitionerId2,
@@ -285,6 +311,24 @@ const SEEDS = {
       isConfirmed: false,
       isCancelled: false,
       note: 'testing note 2....',
+    },
+
+    // Availabilities Test
+    {
+      accountId: accountId2,
+      // practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 13, 0),
+      endDate: new Date(2017, 3, 3, 14, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      // practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 14, 0),
+      endDate: new Date(2017, 3, 3, 15, 0),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
     },
   ],
 
@@ -441,7 +485,14 @@ const SEEDS = {
       id: weeklyScheduleId3,
       accountId,
       monday: {
-        isClosed: true,
+        startTime: time(8, 0),
+        endTime: time(17, 0),
+        breaks: [
+          {
+            startTime: time(12, 0),
+            endTime: time(13, 0),
+          },
+        ],
       },
 
       saturday: {
@@ -459,17 +510,16 @@ const SEEDS = {
       id: accountId,
       weeklyScheduleId,
       name: 'Beckett Dental',
-      street: '354 Beach Ave',
-      country: 'United States',
-      state: 'California',
-      city: 'Riverside',
+      street: '#101 – 1312 Marine Drive',
+      country: 'Canada',
+      state: 'BC',
+      city: 'North Vancouver',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
-      logo: 'images/availabilies_sidebar_logo_2.png',
-      address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
-      clinicName: 'PACIFIC HEART DENTAL',
-      bookingWidgetPrimaryColor: '#0597d8',
+      logo: '/images/beckett_dental.png',
+      address: '#101 – 1312 Marine Drive',
+      bookingWidgetPrimaryColor: '#f29b12',
     },
     {
       id: accountId2,
@@ -526,10 +576,26 @@ const SEEDS = {
   ],
 
   PractitionerTimeOff: [
+    // For tests!
     {
-      practitionerId,
-      startDate: new Date(2017, 2, 23, 0, 0),
-      endDate: new Date(2017, 2, 23, 0, 0),
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 19, 0, 0), // sunday (2 days)
+      endDate: new Date(2017, 2, 20, 23, 59), // monday
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 22, 0, 0), // wednesday (1 day)
+      endDate: new Date(2017, 2, 22, 23, 59), // wednesday
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 24, 0, 0), // friday (3 days)
+      endDate: new Date(2017, 2, 26, 23, 59), // sunday
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 28, 0, 0), // tuesday (1 day)
+      endDate: new Date(2017, 2, 28, 23, 59), // tuesday
     },
   ],
 

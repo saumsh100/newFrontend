@@ -1,6 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../library';
+import styles from './styles.scss';
 
 export default function Login({ onSubmit }) {
   return (
@@ -17,7 +18,7 @@ export default function Login({ onSubmit }) {
       />
       <Button
         type="submit"
-        style={{ width: '100%' }}
+        className={styles.signInSubmitButton}
       >
         Sign In
       </Button>
