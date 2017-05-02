@@ -132,6 +132,7 @@ class Users extends Component{
           <InviteUsersList
             key={invite.id}
             email={invite.get('email')}
+            currentUserRole={this.state.role}
             date={invite.get('createdAt')}
             onDelete={this.deleteInvite.bind(null, invite.get('id'))}
             mainStyle={styles.main}
