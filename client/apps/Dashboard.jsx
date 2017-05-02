@@ -27,15 +27,28 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 // TODO: below will call a flash with Login, perhaps fix with background color?
 const token = localStorage.getItem('token');
+
+const signUp = /^\/signup\/.+\/$/i;
+
+const urlTest = signUp.test(window.location.pathname);
+
 if (!token) {
-  browserHistory.push('/login');
+  if (urlTest) {
+    browserHistory.push(window.location.pathname);
+  } else {
+    browserHistory.push('/login');
+  }
 } else {
   const decodedToken = jwt(token);
 
   // TODO: use a different expiry calculation
   const hasExpired = (decodedToken.exp - (Date.now() / 1000)) < 0;
   if (hasExpired) {
-    browserHistory.push('/login');
+    if (urlTest) {
+      browserHistory.push(window.location.pathname);
+    } else {
+      browserHistory.push('/login');
+    }
   } else {
     store.dispatch(loginSuccess(decodedToken));
     connectSocketToStore(socket, store);

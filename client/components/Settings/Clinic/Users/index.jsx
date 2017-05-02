@@ -17,6 +17,7 @@ class Users extends Component{
       active: false,
       editActive: false,
       editValue: 'VIEWER',
+      roleChange: {},
     };
 
     this.deleteInvite = this.deleteInvite.bind(this);
@@ -80,14 +81,19 @@ class Users extends Component{
     const url = `/api/accounts/${decodedToken.activeAccountId}/user/${this.state.userId}/edit/${this.state.editUserId}`
 
     this.props.updateEntityRequest({ key: 'accounts', values, url });
-    console.log('you did half of it');
   }
 
   reinitializeState() {
-    this.setState({
+
+    const newState = {
       active: false,
       editActive: false,
-    });
+      roleChange: this.state.roleChange,
+    };
+
+    newState.roleChange[this.state.userEdit] = this.state.editValue;
+
+    this.setState(newState);
   }
 
   addUser() {
@@ -96,11 +102,17 @@ class Users extends Component{
     });
   }
 
-  editUser(editUserId, editPermissionId) {
+  editUser(editUserId, editPermissionId, role, i) {
+    if (this.state.roleChange[i]) {
+      role = this.state.roleChange[i];
+    }
     this.setState({
       editActive: true,
       editUserId,
       editPermissionId,
+      editValue: role,
+      userEdit: i,
+      roleChange: this.state.roleChange,
     });
   }
 
@@ -157,6 +169,7 @@ class Users extends Component{
 
     return (
       <Grid>
+        <Header title={'Users'} />
         <Modal
           actions={actions}
           title="Email Invite"
@@ -192,7 +205,7 @@ class Users extends Component{
           />
         </Modal>
         <Row className={styles.mainHead}>
-          <Header title={`Users in ${clinicName}`} />
+          <h2 className={styles.mainHeader}>Users in {clinicName}</h2>
           <Button className={styles.inviteUser} onClick={this.addUser} >Invite a User</Button>
         </Row>
         <List className={styles.userList}>
@@ -206,13 +219,13 @@ class Users extends Component{
               currentUserId={this.state.userId}
               userId={user.get('id')}
               currentUserRole={this.state.role}
-              edit={this.editUser.bind(null, user.get('id'), permissions.toArray()[i].get('id'))}
+              edit={this.editUser.bind(null, user.get('id'), permissions.toArray()[i].get('id'), permissions.toArray()[i].get('role'), i)}
             />
           );
         })}
         </List>
         <Row>
-          <Header className={styles.header} title={`Users invited to ${clinicName}`} />
+          <h2 className={styles.header} >Pending Invitations</h2>
         </Row>
         <List className={styles.userList}>
           {usersInvited}

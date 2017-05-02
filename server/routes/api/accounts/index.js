@@ -9,7 +9,7 @@ const User = require('../../../models/User');
 const StatusError = require('../../../util/StatusError');
 const Account = require('../../../models/Account');
 const uuid = require('uuid').v4;
-
+const { sendInvite } = require('../../../lib/inviteMail')
 
 accountsRouter.param('accountId', loaders('account', 'Account'));
 accountsRouter.param('inviteId', loaders('invite', 'Invite'));
@@ -98,7 +98,30 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
   newInvite.token = uuid();
 
   return Invite.save(newInvite)
-    .then(invite => res.send(normalize('invite', invite)))
+    .then((invite) => {
+      const fullUrl = `${req.protocol}://${req.get('host')}/signupinvite/${invite.token}`;
+      User.filter({ id: invite.sendingUserId }).run()
+        .then((user) => {
+          console.log(user)
+          const mergeVars = [
+            {
+              name: 'URL',
+              content: fullUrl,
+            },
+            {
+              name: 'NAME',
+              content: `${user[0].firstName} ${user[0].lastName}`,
+
+            },
+          ];
+          sendInvite({
+            subject: 'Test',
+            toEmail: invite.email,
+            mergeVars,
+          });
+          res.send(normalize('invite', invite));
+        });
+    })
     .catch(next);
 
 });

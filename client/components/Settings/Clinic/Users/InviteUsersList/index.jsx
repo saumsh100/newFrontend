@@ -14,7 +14,7 @@ class InviteUsersList extends Component {
         <div className={mainStyle}>
           <p className={nameStyle}>{email}</p>
           <p className={emailStyle}>
-            Invited: {localDate.toDateString()} {localDate.toLocaleTimeString()}</p>
+            Invited {localDate.toDateString()} {localDate.toLocaleTimeString()}</p>
         </div>
         {button}
       </ListItem>
