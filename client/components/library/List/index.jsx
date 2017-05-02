@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import styles from './styles.scss';
 import withHoverable from '../../../hocs/withHoverable';

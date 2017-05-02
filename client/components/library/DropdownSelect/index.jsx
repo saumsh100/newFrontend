@@ -5,6 +5,8 @@ import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
 import Icon from '../Icon';
 import { List, ListItem } from '../List';
+import ListItem2 from '../List/ListItem2';
+import List2 from '../List/List2';
 import styles from './styles.scss';
 
 function DefaultOption({ option }) {
@@ -20,6 +22,7 @@ export default class DropdownSelect extends Component {
     super(props);
     this.state = {
       isOpen: false,
+      scrollTo: 0,
     };
 
     this.toggle = this.toggle.bind(this);
@@ -27,10 +30,13 @@ export default class DropdownSelect extends Component {
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
   }
-
+  /*
   componentDidUpdate() {
-
-  }
+    const { scrollTo } = this.state;
+    if (scrollTo) {
+      this.refs[scrollTo].scrollIntoView({block: 'end', behavior: 'smooth'});
+    }
+  }*/
 
   toggle() {
     this.setState({ isOpen: !this.state.isOpen });
@@ -60,11 +66,10 @@ export default class DropdownSelect extends Component {
           }
           return (
             <ListItem
-              key={i}
               className={className}
               onClick={() => onChange(option.value)}
             >
-              <div className={styles.optionDiv}>
+              <div className={styles.optionDiv} >
                 <OptionTemplate option={option} />
               </div>
             </ListItem>
@@ -129,6 +134,7 @@ export default class DropdownSelect extends Component {
       align: 'left',
       isOpen: this.state.isOpen,
       close: this.close,
+      animAlign: 'right',
       className: classNames(this.props.className, styles.wrapper),
     };
 
