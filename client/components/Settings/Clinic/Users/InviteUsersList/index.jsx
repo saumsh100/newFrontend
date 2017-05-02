@@ -24,6 +24,12 @@ class InviteUsersList extends Component {
 
 InviteUsersList.PropTypes = {
   activeUser: PropTypes.object,
+  date: PropTypes.instanceOf(Date),
+  mainStyle: PropTypes.object,
+  nameStyle: PropTypes.object,
+  emailStyle: PropTypes.object,
+  editStyles: PropTypes.object,
+  userListStyle: PropTypes.object,
   email: PropTypes.string,
   currentUserRole: PropTypes.string,
   onDelete: PropTypes.func,
