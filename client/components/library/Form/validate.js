@@ -36,6 +36,7 @@ const validate = values => {
     errors.confirmPassword = 'Password is not match';
 
   }
+
   return errors
 };
 
@@ -48,7 +49,17 @@ const asyncEmailValidate = (values) => {
     })
 };
 
+const asyncEmailValidateUser = (values) => {
+  return axios.post('/userCheck', { email: values.email })
+    .then((response) => {
+      if (response.data.exists === true) {
+        throw { email: `User with ${values.email} already exists... ` }
+      }
+    })
+}
+
 export {
   validate,
   asyncEmailValidate,
+  asyncEmailValidateUser,
 };

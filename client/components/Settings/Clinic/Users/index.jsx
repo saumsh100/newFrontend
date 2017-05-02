@@ -105,7 +105,6 @@ class Users extends Component{
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
       { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName }},
     ];
-
     return (
       <Grid>
         <Modal

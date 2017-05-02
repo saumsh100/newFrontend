@@ -22,6 +22,7 @@ userRouter.get('/',checkPermissions('users:read'), (req, res, next) => {
     .catch(next);
 });
 
+
 userRouter.put('/:userId', (req, res, next) => {
   Promise.resolve(req.profile)
     .then(((user) => {
