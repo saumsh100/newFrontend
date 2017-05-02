@@ -110,6 +110,7 @@ const SCHEMAS = {
   service: serviceSchema(),
   textMessage: textMessageSchema(),
   user: userSchema(),
+  permission: permissionSchema(),
   practitioner: practitionerSchema(),
   practitionerTimeOff: timeOffSchema(),
   syncError: syncErrorSchema(),

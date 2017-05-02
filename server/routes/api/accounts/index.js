@@ -49,7 +49,12 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
 
 
 accountsRouter.put('/:accountId/user/:userId/edit/:editUserId', (req, res, next) => {
-  const data = req.body;
+  const data = { role: req.body.role };
+
+  if (data.role !== 'VIEWER' && data.role !== 'OWNER' && data.role !== 'ADMIN') {
+    return next(StatusError(400, "Role doesn't exist"));
+  }
+
   if (req.account.id !== req.accountId) {
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
@@ -59,11 +64,12 @@ accountsRouter.put('/:accountId/user/:userId/edit/:editUserId', (req, res, next)
       if (user[0].role !== 'OWNER'){
         return next(StatusError(401, 'You do not have permission to do this.'))
       }
-      Permission.get(data.id).run().then((post) => {
-          console.log(post)
+      return Permission.get(req.body.id).getJoin({ users: true }).run().then((permission) => {
+        permission.merge(data).save().then((result) => {
+          delete result.users[0].password;
+          return res.send(normalize('permission', result));
         });
-      console.log(user);
-      res.send(200);
+      });
     })
   .catch(next);
 });
