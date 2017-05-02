@@ -20,25 +20,20 @@ export default class DropdownSelect extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      scrollTo: this.props.value || undefined,
     };
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidUpdate() {
+
   }
 
   toggle() {
     this.setState({ isOpen: !this.state.isOpen });
-  }
-
-  handleClick() {
-
   }
 
   close() {
@@ -102,10 +97,10 @@ export default class DropdownSelect extends Component {
 
     let toggleClassName = styles.toggleDiv;
     let caretIconClassName = styles.caretIcon;
-
     if (this.state.isOpen) {
       toggleClassName = classNames(styles.active, toggleClassName);
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
+      labelClassName = classNames(styles.activeLabel, labelClassName);
     }
 
     return (

@@ -14,7 +14,7 @@ $empty-grey: darken(lightgrey, 5%);
   font-family: $dashboard-font;
   height: 27.89px;
   width: 100%;
-  padding: 5px;
+  padding: 5px 5px 5px 0px;
   cursor: pointer;
   border-bottom: 1px solid $disabled-color;
   display: flex;
@@ -94,4 +94,8 @@ $empty-grey: darken(lightgrey, 5%);
   top: -10px !important;
   left: 0px !important;
   font-size: 12px !important;
+}
+
+.activeLabel {
+  color: $primary-dark;
 }

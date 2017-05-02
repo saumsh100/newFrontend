@@ -18,5 +18,5 @@ export function ListItem(props) {
     classes = classNames(props.className, styles.listItem);
   }
 
-  return <li {...props} className={classes} />;
+  return <li {...props}  className={classes} />;
 }
