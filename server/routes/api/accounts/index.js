@@ -5,6 +5,7 @@ const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
 const Permission = require('../../../models/Permission');
 const Invite = require('../../../models/Invite');
+const User = require('../../../models/User');
 const StatusError = require('../../../util/StatusError');
 const Account = require('../../../models/Account');
 const uuid = require('uuid').v4;
@@ -45,6 +46,28 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .then(account => res.send(normalize('account', account)))
     .catch(next);
 });
+
+
+accountsRouter.put('/:accountId/user/:userId/edit/:editUserId', (req, res, next) => {
+  const data = req.body;
+  if (req.account.id !== req.accountId) {
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  Permission.filter({ userId: req.params.userId }).run()
+    .then((user) => {
+      if (user[0].role !== 'OWNER'){
+        return next(StatusError(401, 'You do not have permission to do this.'))
+      }
+      Permission.get(data.id).run().then((post) => {
+          console.log(post)
+        });
+      console.log(user);
+      res.send(200);
+    })
+  .catch(next);
+});
+
 
 accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
   return req.account.merge(req.body).save()

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
-import { fetchEntities, deleteEntityRequest, createEntityRequest } from '../../../../thunks/fetchEntities';
+import { fetchEntities, deleteEntityRequest, createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { List, ListItem, Grid, Header, Modal, Row, Button, DropdownSelect } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
@@ -64,11 +64,22 @@ class Users extends Component{
     entityData.email = '';
   }
 
-  sendEdit(entityData) {
+  sendEdit() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
     this.setState({
       editActive: false,
     });
 
+    const values = {
+      role: this.state.editValue,
+      id: this.state.editPermissionId,
+    };
+
+    const url = `/api/accounts/${decodedToken.activeAccountId}/user/${this.state.userId}/edit/${this.state.editUserId}`
+
+    this.props.updateEntityRequest({ key: 'accounts', values, url });
     console.log('you did half of it');
   }
 
@@ -85,9 +96,11 @@ class Users extends Component{
     });
   }
 
-  editUser() {
+  editUser(editUserId, editPermissionId) {
     this.setState({
       editActive: true,
+      editUserId,
+      editPermissionId,
     });
   }
 
@@ -192,7 +205,7 @@ class Users extends Component{
               currentUserId={this.state.userId}
               userId={user.get('id')}
               currentUserRole={this.state.role}
-              edit={this.editUser}
+              edit={this.editUser.bind(null, user.get('id'), permissions.toArray()[i].get('id'))}
             />
           );
         })}
@@ -212,6 +225,7 @@ Users.propTypes = {
   fetchEntities: PropTypes.func,
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
+  updateEntityRequest: PropTypes.func,
   users: PropTypes.object,
   permissions: PropTypes.object,
   accounts: PropTypes.object,
@@ -232,6 +246,7 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     deleteEntityRequest,
     createEntityRequest,
+    updateEntityRequest,
   }, dispatch);
 }
 
