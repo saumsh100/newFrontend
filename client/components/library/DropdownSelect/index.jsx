@@ -5,8 +5,6 @@ import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
 import Icon from '../Icon';
 import { List, ListItem } from '../List';
-import ListItem2 from '../List/ListItem2';
-import List2 from '../List/List2';
 import styles from './styles.scss';
 
 function DefaultOption({ option }) {

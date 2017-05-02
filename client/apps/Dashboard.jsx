@@ -19,7 +19,7 @@ import configure from '../store';
 import time from '../../server/util/time';
 //import loadInitialData from '../../utilities/loadInitialData';
 import { loginSuccess } from '../actions/auth';
-import '../styles/dashboard.scss';
+import '../styles/default.scss';
 
 const store = configure({ browserHistory });
 const history = syncHistoryWithStore(browserHistory, store);

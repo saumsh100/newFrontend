@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { storiesOf, action, boolean } from '@kadira/storybook';
+import { storiesOf, action } from '@kadira/storybook';
+import { boolean } from '@kadira/storybook-addon-knobs';
 import Input from './';
 
 storiesOf('Input', module)
@@ -15,6 +16,17 @@ storiesOf('Input', module)
     <Input
       value="text"
       label="Test value"
-      disabled
+      disabled={boolean('Disabled', true)}
+      onClick={action('disabled')}
     />
+  ))
+  .add('empty value', () => (
+    <Input
+      value=""
+      label="Test value"
+      onChange={action('change')}
+    />
+  ))
+  .add('without props', () => (
+    <Input />
   ));

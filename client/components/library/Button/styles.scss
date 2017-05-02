@@ -2,6 +2,7 @@
 @import '../../../ui.scss';
 
 .default {
+  font-family: $dashboard-font;
   cursor: pointer;
   border: none;
   font-size: $font-size;
@@ -25,13 +26,11 @@
       background-color: $primary-color-hover;
     }
   }
-
   &:focus, &:active {
     outline: none;
     box-shadow: 0 0 0 2px lighten($primary-color, 20%);
   }
 }
-
 
 .flat {
   background-color: transparent;

@@ -28,4 +28,21 @@ storiesOf('Button', module)
     >
       Test
     </Button>
+  ))
+  .add('flat button', () => (
+    <Button
+      onClick={action('clicked')}
+      flat
+    >
+      Test
+    </Button>
+  ))
+  .add('raised button', () => (
+    <Button
+      onClick={action('clicked')}
+      raised
+    >
+      Test
+    </Button>
   ));
+
