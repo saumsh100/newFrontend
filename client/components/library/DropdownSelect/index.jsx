@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
 import Icon from '../Icon';
@@ -19,16 +20,25 @@ export default class DropdownSelect extends Component {
     super(props);
     this.state = {
       isOpen: false,
+      scrollTo: this.props.value || undefined,
     };
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  componentDidUpdate() {
   }
 
   toggle() {
     this.setState({ isOpen: !this.state.isOpen });
+  }
+
+  handleClick() {
+
   }
 
   close() {
@@ -55,7 +65,7 @@ export default class DropdownSelect extends Component {
           }
           return (
             <ListItem
-              key={option.value + i}
+              key={i}
               className={className}
               onClick={() => onChange(option.value)}
             >
@@ -81,17 +91,21 @@ export default class DropdownSelect extends Component {
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
     const ToggleTemplate = template || defaultTemplate;
 
-    let toggleDiv = label;
+    let toggleDiv = null;
     const option = options.find(opt => opt.value === value);
 
+    let labelClassName = styles.label;
     if (option) {
       toggleDiv = <ToggleTemplate option={option} />;
+      labelClassName = classNames(styles.filled, labelClassName);
     }
 
     let toggleClassName = styles.toggleDiv;
+    let caretIconClassName = styles.caretIcon;
 
     if (this.state.isOpen) {
       toggleClassName = classNames(styles.active, toggleClassName);
+      caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
     }
 
     return (
@@ -99,10 +113,13 @@ export default class DropdownSelect extends Component {
         className={disabled ? styles.toggleDivDisabled : toggleClassName}
         onClick={disabled ? false : this.toggle}
       >
+        <label className={labelClassName}>
+          {label}
+        </label>
         <div className={styles.toggleValueDiv}>
           {toggleDiv}
         </div>
-        <Icon className={styles.caretIcon} icon="caret-down" />
+        <Icon className={caretIconClassName} icon="caret-down" />
       </div>
     );
   }
