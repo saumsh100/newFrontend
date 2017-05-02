@@ -549,13 +549,13 @@ const SEEDS = {
     {
       userId: alexUserId,
       accountId,
-      role: 'OWNER',
+      role: 'VIEWER',
       permissions: {},
     },
     {
       userId: sergeyUserId,
       accountId,
-      role: 'OWNER',
+      role: 'ADMIN',
       permissions: {},
     },
     {
