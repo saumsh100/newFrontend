@@ -75,10 +75,9 @@ class Users extends Component{
 
     const values = {
       role: this.state.editValue,
-      id: this.state.editPermissionId,
     };
 
-    const url = `/api/accounts/${decodedToken.activeAccountId}/user/${this.state.userId}/edit/${this.state.editUserId}`
+    const url = `/api/accounts/${decodedToken.activeAccountId}/permissions/${this.state.editPermissionId}`
 
     this.props.updateEntityRequest({ key: 'accounts', values, url });
   }
