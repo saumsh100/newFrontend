@@ -7,22 +7,20 @@ class InviteUserForm extends Component {
   render() {
     const { sendInvite, formName, mainStyle, formStyle } = this.props;
     return (
-      <div className={mainStyle}>
-        <Form
-          className={formStyle}
-          form={formName}
-          validate={validate}
-          onSubmit={sendInvite}
-          ignoreSaveButton
-        >
-          <Field
-            required
-            type="email"
-            name="email"
-            label="Email"
-          />
-        </Form>
-      </div>
+      <Form
+        className={formStyle}
+        form={formName}
+        validate={validate}
+        onSubmit={sendInvite}
+        ignoreSaveButton
+      >
+        <Field
+          required
+          type="email"
+          name="email"
+          label="Email"
+        />
+      </Form>
     );
   }
 }
@@ -30,6 +28,8 @@ class InviteUserForm extends Component {
 InviteUserForm.PropTypes = {
   formName: PropTypes.string,
   sendInvite: PropTypes.func.isRequired,
+  mainStyle: PropTypes.object,
+  formStyle: PropTypes.object,
 };
 
 

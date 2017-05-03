@@ -63,9 +63,13 @@ export function createEntityRequest({ key, entityData, url }) {
   };
 }
 
-export function updateEntityRequest({ key, model }) {
+export function updateEntityRequest({ key, model, values, url }) {
+
+  url = url || model.getUrlRoot();
+  values = values || model.toJSON();
+
   return (dispatch) => {
-    axios.put(model.getUrlRoot(), model.toJSON())
+    axios.put(url, values)
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));

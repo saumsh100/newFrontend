@@ -5,13 +5,15 @@ const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
 const Permission = require('../../../models/Permission');
 const Invite = require('../../../models/Invite');
+const User = require('../../../models/User');
 const StatusError = require('../../../util/StatusError');
 const Account = require('../../../models/Account');
 const uuid = require('uuid').v4;
-
+const { sendInvite } = require('../../../lib/inviteMail')
 
 accountsRouter.param('accountId', loaders('account', 'Account'));
 accountsRouter.param('inviteId', loaders('invite', 'Invite'));
+accountsRouter.param('permissionId', loaders('permission', 'Permission'));
 
 
 accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, next) => {
@@ -46,6 +48,23 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .catch(next);
 });
 
+accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => {
+  const { permission } = req;
+
+  if (req.account.id !== req.accountId) {
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  if (req.role !== 'OWNER') {
+    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+  }
+
+  permission.merge(req.body).save()
+    .then(p => res.send(normalize('permission', p)))
+    .catch(next);
+});
+
+
 accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
   return req.account.merge(req.body).save()
     .then(account => {res.send(normalize('account', account))})
@@ -69,7 +88,29 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
   newInvite.token = uuid();
 
   return Invite.save(newInvite)
-    .then(invite => res.send(normalize('invite', invite)))
+    .then((invite) => {
+      const fullUrl = `${req.protocol}://${req.get('host')}/signupinvite/${invite.token}`;
+      User.filter({ id: invite.sendingUserId }).run()
+        .then((user) => {
+          const mergeVars = [
+            {
+              name: 'URL',
+              content: fullUrl,
+            },
+            {
+              name: 'NAME',
+              content: `${user[0].firstName} ${user[0].lastName}`,
+
+            },
+          ];
+          sendInvite({
+            subject: 'Test',
+            toEmail: invite.email,
+            mergeVars,
+          });
+          res.send(normalize('invite', invite));
+        });
+    })
     .catch(next);
 
 });

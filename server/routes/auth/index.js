@@ -24,7 +24,7 @@ authRouter.post('/', (req, res, next) => {
         if (err) {
           return next(StatusError(500, 'Error comparing passwords'));
         }
-        
+
         if (!match) {
           return next(StatusError(401, 'Invalid credentials'));
         }
@@ -37,7 +37,7 @@ authRouter.post('/', (req, res, next) => {
             if (!permission || !permission[0]) {
               return next(StatusError(500, 'User has no account permissions'));
             }
-            
+
             const { role, permissions = {} } = permission[0];
             const tokenData = { role, permissions, userId: id, activeAccountId };
 
@@ -47,7 +47,7 @@ authRouter.post('/', (req, res, next) => {
               if (error) {
                 return next(StatusError(500, 'Error signing the token'));
               }
-              
+
               return res.json({ token });
             });
           });
