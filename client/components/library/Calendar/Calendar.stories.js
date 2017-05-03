@@ -9,6 +9,5 @@ storiesOf('Calendar', module)
   .add('clickable dates', () => (
     <Calendar
       onClick={action('change')}
-      style={{width: 50%}}
     />
   ));

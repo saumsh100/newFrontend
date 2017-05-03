@@ -17,7 +17,7 @@ storiesOf('Input', module)
       value="text"
       label="Test value"
       disabled={boolean('Disabled', true)}
-      onClick={action('disabled')}
+      onChange={action('disabled')}
     />
   ))
   .add('empty value', () => (
