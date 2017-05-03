@@ -1,15 +1,21 @@
 
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
-import { boolean } from '@kadira/storybook-addon-knobs';
+import { withKnobs, boolean, object } from '@kadira/storybook-addon-knobs';
 import Input from './';
 
+const style = {
+  width: '50%',
+};
+
 storiesOf('Input', module)
-  .add('default with value', () => (
+  .addDecorator(withKnobs)
+  .add('default with value, 50% width', () => (
     <Input
       value="text"
       label="Test value"
       onChange={action('change')}
+      style={object('Style', style)}
     />
   ))
   .add('disabled input', () => (

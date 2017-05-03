@@ -1,11 +1,12 @@
 
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
-import { boolean } from '@kadira/storybook-addon-knobs';
+import { withKnobs } from '@kadira/storybook-addon-knobs';
 
 import DayPicker from './';
 
 storiesOf('DayPicker', module)
+  .addDecorator(withKnobs)
   .add('target input ', () => (
     <DayPicker
       onChange={action('changed')}

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
-import { boolean } from '@kadira/storybook-addon-knobs';
+import { boolean, withKnobs, object } from '@kadira/storybook-addon-knobs';
 
 import DropdownSelect from './';
 
@@ -11,12 +11,18 @@ const options = [
   { value: 'Vancouver' },
 ];
 
+const style = {
+  width: '200px',
+};
+
 storiesOf('DropdownSelect', module)
+  .addDecorator(withKnobs)
   .add('with options ', () => (
     <DropdownSelect
       onChange={action('changed')}
       label="Test"
       options={options}
+      style={object('Style', style)}
     />
   ))
   .add('no options ', () => (
