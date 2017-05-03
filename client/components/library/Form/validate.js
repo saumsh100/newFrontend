@@ -34,8 +34,8 @@ const validate = values => {
   if (values.password !== values.confirmPassword) {
     errors.password = 'Password is not match';
     errors.confirmPassword = 'Password is not match';
-
   }
+
   return errors
 };
 

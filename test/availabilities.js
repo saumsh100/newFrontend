@@ -99,25 +99,24 @@ describe('Availabilities Library', () => {
           });
       });
 
-      it('should return 0 appointments and 0 timeOff', (done) => {
+      it('should return 0 appointments and 0 timeOffs', (done) => {
         const startDate = new Date(3000, 1, 1);
         const endDate = new Date(3001, 1, 1);
         fetchPractitionerData({ practitioners, startDate, endDate })
           .then((data) => {
-            console.log('data', data);
             expect(data.practitioners).to.be.an('array');
             expect(data.practitioners.length).to.equal(1);
 
-            const { appointments, timeOff } = data.practitioners[0];
+            const { appointments, timeOffs } = data.practitioners[0];
             expect(appointments).to.be.an('array');
             expect(appointments.length).to.equal(0);
-            expect(timeOff).to.be.an('array');
-            expect(timeOff.length).to.equal(0);
+            expect(timeOffs).to.be.an('array');
+            expect(timeOffs.length).to.equal(0);
             done();
           });
       });
 
-      it('should return 2 appointments and 0 timeOff', (done) => {
+      it('should return 2 appointments and 0 timeOffs', (done) => {
         const startDate = new Date(2017, 3, 3, 8, 0);
         const endDate = new Date(2017, 3, 3, 10, 0);
         fetchPractitionerData({ practitioners, startDate, endDate })
@@ -125,11 +124,11 @@ describe('Availabilities Library', () => {
             expect(newPractitioners).to.be.an('array');
             expect(newPractitioners.length).to.equal(1);
 
-            const { appointments, timeOff } = newPractitioners[0];
+            const { appointments, timeOffs } = newPractitioners[0];
             expect(appointments).to.be.an('array');
             expect(appointments.length).to.equal(2);
-            expect(timeOff).to.be.an('array');
-            expect(timeOff.length).to.equal(0);
+            expect(timeOffs).to.be.an('array');
+            expect(timeOffs.length).to.equal(0);
             done();
           });
       });
@@ -142,7 +141,7 @@ describe('Availabilities Library', () => {
       done();
     });
 
-    describe('1 Practitioner', () => {
+    describe('1 Practitioner - 1 day', () => {
       it('should return 0 availabilities', (done) => {
         const startDate = new Date(3000, 1, 1);
         const endDate = new Date(3001, 1, 1);
@@ -162,12 +161,12 @@ describe('Availabilities Library', () => {
             expect(availabilities).to.be.an('array');
             expect(availabilities.length).to.equal(0);
             const endTime = Date.now();
-            console.log('Time elapsed:', endTime - startTime);
+            //console.log('Time elapsed:', endTime - startTime);
             done();
           });
       });
 
-      it('should return 0 availabilities', (done) => {
+      it('should return 1 availability (seedData just appointments)', (done) => {
         const startDate = new Date(2017, 3, 3, 8, 0);
         const endDate = new Date(2017, 3, 3, 12, 0);
 
@@ -181,21 +180,157 @@ describe('Availabilities Library', () => {
           endDate,
         };
 
+        // TODO: make sure that the seeds setup is correct for our tests
+        // TODO: fix the algo!
+
         fetchAvailabilities(options)
           .then((availabilities) => {
             expect(availabilities).to.be.an('array');
             expect(availabilities.length).to.equal(1);
             expect(availabilities[0]).to.deep.equal({
-              startDate: new Date(2017, 3, 3, 11, 0),
-              endDate: new Date*(2017, 3, 3, 12, 0),
+              startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
             });
 
             const endTime = Date.now();
-            console.log('Time elapsed:', endTime - startTime);
+            //console.log('Time elapsed:', endTime - startTime);
+            done();
+          });
+      });
+
+      it('should return 3 availabilities (seedData w/ requests)', (done) => {
+        const startDate = new Date(2017, 3, 3, 8, 0);
+        const endDate = new Date(2017, 3, 3, 22, 0);
+
+        const startTime = Date.now();
+
+        const options = {
+          accountId,
+          practitionerId,
+          serviceId,
+          startDate,
+          endDate,
+        };
+
+        // TODO: make sure that the seeds setup is correct for our tests
+        // TODO: fix the algo!
+
+        fetchAvailabilities(options)
+          .then((availabilities) => {
+            expect(availabilities).to.be.an('array');
+            expect(availabilities.length).to.equal(3);
+            expect(availabilities[0]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
+            });
+
+            expect(availabilities[1]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 15, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
+            });
+
+            expect(availabilities[2]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 17, 0)).toISOString(),
+            });
+
+            const endTime = Date.now();
+            //console.log('Time elapsed:', endTime - startTime);
             done();
           });
       });
     });
+
+    describe('No Preference on Practitioner - 1 day morning', () => {
+      it('should return 5 availabilities (1 from prac. above and 4 from other)', (done) => {
+        const startDate = new Date(2017, 3, 3, 8, 0);
+        const endDate = new Date(2017, 3, 3, 12, 0);
+
+        const options = {
+          accountId,
+          serviceId,
+          startDate,
+          endDate,
+        };
+
+        // TODO: make sure that the seeds setup is correct for our tests
+        // TODO: fix the algo!
+
+        fetchAvailabilities(options)
+          .then((availabilities) => {
+            //console.log('availabilities', availabilities);
+            expect(availabilities).to.be.an('array');
+            expect(availabilities.length).to.equal(4);
+            expect(availabilities[0]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 8, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 9, 0)).toISOString(),
+            });
+
+            expect(availabilities[1]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 9, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 10, 0)).toISOString(),
+            });
+
+            expect(availabilities[2]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 10, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
+            });
+
+            expect(availabilities[3]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
+            });
+
+            const endTime = Date.now();
+            //console.log('Time elapsed:', endTime - startTime);
+            done();
+          });
+      });
+    });
+
+    /*describe('No Preference on Practitioner - Monday to Friday', () => {
+      it('should return 5 availabilities (1 from prac. above and 4 from other)', (done) => {
+        const startDate = new Date(2017, 3, 3, 8, 0);
+        const endDate = new Date(2017, 3, 3, 22, 0);
+
+        const startTime = Date.now();
+
+        const options = {
+          accountId,
+          practitionerId,
+          serviceId,
+          startDate,
+          endDate,
+        };
+
+        // TODO: make sure that the seeds setup is correct for our tests
+        // TODO: fix the algo!
+
+        fetchAvailabilities(options)
+          .then((availabilities) => {
+            expect(availabilities).to.be.an('array');
+            expect(availabilities.length).to.equal(3);
+            expect(availabilities[0]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
+            });
+
+            expect(availabilities[1]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 15, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
+            });
+
+            expect(availabilities[2]).to.deep.equal({
+              startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 17, 0)).toISOString(),
+            });
+
+            const endTime = Date.now();
+            //console.log('Time elapsed:', endTime - startTime);
+            done();
+          });
+      });
+    });*/
 
   });
 });

@@ -29,20 +29,20 @@ function AvailabilitiesDisplay(props) {
 
   const availabilities = [
     {
-      startDate: (new Date(2017, 3, 27, 12, 0)).toISOString(),
-      endDate: (new Date(2017, 3, 27, 13, 0)).toISOString(),
+      startDate: (new Date(2017, 4, 1, 12, 0)).toISOString(),
+      endDate: (new Date(2017, 4, 1, 13, 0)).toISOString(),
     },
     {
-      startDate: (new Date(2017, 3, 28, 13, 0)).toISOString(),
-      endDate: (new Date(2017, 3, 28, 14, 0)).toISOString(),
+      startDate: (new Date(2017, 4, 1, 13, 0)).toISOString(),
+      endDate: (new Date(2017, 4, 1, 14, 0)).toISOString(),
     },
     {
-      startDate: (new Date(2017, 3, 28, 14, 0)).toISOString(),
-      endDate: (new Date(2017, 3, 28, 15, 0)).toISOString(),
+      startDate: (new Date(2017, 4, 2, 14, 0)).toISOString(),
+      endDate: (new Date(2017, 4, 2, 15, 0)).toISOString(),
     },
     {
-      startDate: (new Date(2017, 3, 29, 9, 0)).toISOString(),
-      endDate: (new Date(2017, 3, 29, 10, 0)).toISOString(),
+      startDate: (new Date(2017, 4, 3, 9, 0)).toISOString(),
+      endDate: (new Date(2017, 4, 3, 10, 0)).toISOString(),
     },
   ];
 

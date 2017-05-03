@@ -135,7 +135,7 @@ function fetchPractitionersSchedules(practitioners) {
 function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
   return new Promise((resolve, reject) => {
     const joinObject = {
-      timeOff: {
+      timeOffs: {
         _apply: (sequence) => {
           return sequence.filter((timeOff) => {
             return generateDuringFilter(timeOff, startDate, endDate);
@@ -184,6 +184,9 @@ function generatePractitionerAvailabilities(options) {
     reservations,
   } = service;
 
+  // console.log('requests', requests);
+  // console.log('weeklySchedule.monday', weeklySchedule.monday);
+
   /*
    - getTimeSlots for this practitioner from startDate to endDate
    - split timeSlots up into service.duration intervals
@@ -202,19 +205,34 @@ function generatePractitionerAvailabilities(options) {
 
   // Incorporate timeOff into this!
   const timeSlots = createIntervalsFromWeeklySchedule(weeklySchedule, startDate, endDate);
-  const possibleTimeSlots = createPossibleTimeSlots(timeSlots, service.duration, 30);
+  const validTimeSlots = timeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
+  const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, 30, startDate, endDate);
+  const finalSlots = possibleTimeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
 
-  //console.log(timeSlots);
-  //console.log(possibleTimeSlots);
-  //console.log(appointments);
+  // TODO: possibleTimeSlots is still not cutting off endDate
 
-  const availabilities = possibleTimeSlots.filter((timeSlot) => {
+  // console.log('timeSlots', timeSlots);
+  // console.log('validTimeSlots', validTimeSlots);
+  // console.log('finalSlots', finalSlots);
+
+  const availabilities = finalSlots.filter((timeSlot) => {
     // see if the timeSlot conflicts with any appointments, requests or resos
     const conflictsWithAppointment = appointments.some(a => isDuringEachother(timeSlot, a));
-    const conflictsWithRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
-    const conflictsWithReservations = practitionerReservations.some(pr => isDuringEachother(timeSlot, pr));
-    return conflictsWithAppointment || conflictsWithRequests || conflictsWithReservations;
+    const conflictsWithPractitionerRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
+    const conflictsWithPractitionerReservations = practitionerReservations.some(pr => isDuringEachother(timeSlot, pr));
+
+    // TODO: this needs to be changed to accomodate "filling up" allowable request queue
+    const conflictsWithNoPrefRequests = noPrefRequests.some(pr => isDuringEachother(timeSlot, pr));
+    const conflictsWithNoPrefReservations = noPrefReservations.some(pr => isDuringEachother(timeSlot, pr));
+    return !conflictsWithAppointment &&
+           !conflictsWithPractitionerRequests &&
+           !conflictsWithPractitionerReservations &&
+           !conflictsWithNoPrefRequests &&
+           !conflictsWithNoPrefReservations;
   });
+
+  // console.log(practitioner.id);
+  // console.log('generatedAvailabiltiies', availabilities);
 
   return availabilities;
 }
