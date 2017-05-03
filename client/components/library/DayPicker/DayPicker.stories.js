@@ -1,15 +1,20 @@
 
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
-import { withKnobs } from '@kadira/storybook-addon-knobs';
+import { withKnobs, object } from '@kadira/storybook-addon-knobs';
 
 import DayPicker from './';
+
+const style = {
+  color: 'red',
+};
 
 storiesOf('DayPicker', module)
   .addDecorator(withKnobs)
   .add('target input ', () => (
     <DayPicker
       onChange={action('changed')}
+      style={object('Style', style)}
     />
   ))
   .add('target icon ', () => (
