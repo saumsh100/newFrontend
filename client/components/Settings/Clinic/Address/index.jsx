@@ -31,10 +31,10 @@ class Address extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-          <AddressForm
-            onSubmit={this.submit}
-            accountInfo={activeAccount}
-          />
+        <AddressForm
+          onSubmit={this.submit}
+          accountInfo={activeAccount}
+        />
       );
     }
     return (
