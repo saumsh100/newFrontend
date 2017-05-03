@@ -2,6 +2,7 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
 import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs';
+
 import Button from './';
 
 storiesOf('Button', module)
@@ -28,4 +29,21 @@ storiesOf('Button', module)
     >
       Test
     </Button>
+  ))
+  .add('flat button', () => (
+    <Button
+      onClick={action('clicked')}
+      flat
+    >
+      Test
+    </Button>
+  ))
+  .add('raised button', () => (
+    <Button
+      onClick={action('clicked')}
+      raised
+    >
+      Test
+    </Button>
   ));
+

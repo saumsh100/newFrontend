@@ -1,22 +1,29 @@
 
 @import '../../../ui.scss';
 
+$empty-grey: darken(lightgrey, 5%);
+
 .wrapper {
+  position: relative;
   width: 100%;
 }
 
 .toggleDiv {
+  position: relative;
   font-size: 16px;
   font-family: $dashboard-font;
-  height: 40px;
-  box-sizing: border-box;
-  min-width: 100px;
+  height: 28.89px;
   width: 100%;
-  padding: 5px;
+  padding: 5px 5px 5px 0px;
   cursor: pointer;
-  border-bottom: 1px solid $primary-darkgrey;
+  border-bottom: 1px solid $disabled-color;
   display: flex;
   align-items: center;
+  transition : border 500ms ease-out;
+
+}
+.active {
+  border-bottom: 2px solid $primary-dark ;
 }
 
 .toggleDivDisabled {
@@ -31,11 +38,15 @@
 
 .optionDiv {
   padding: 0px !important;
+  font-family: $dashboard-font !important;
 }
 
 .optionListItem {
   font-size: 14px;
   cursor: pointer;
+  padding-left: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   &:hover {
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;
@@ -48,6 +59,7 @@
 }
 
 .selectedListItem {
+  padding-left: 15px;
   border-left: $primary-color $selection-border;
 }
 
@@ -59,9 +71,33 @@
 .caretIcon {
   margin-left: auto;
   color: $primary-darkgrey;
+  transition : color 500ms ease-out;
 }
-
+.activeIcon {
+  color: $primary-dark;
+}
 
 .noBorder {
   border: none;
+}
+
+.label {
+  color: $empty-grey;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 0px;
+  transition: 0.2s ease all;
+  top: 15px;
+  font-size: 16px;
+}
+
+.filled {
+  top: -10px !important;
+  left: 0px !important;
+  font-size: 12px !important;
+}
+
+.activeLabel {
+  color: $primary-dark;
 }

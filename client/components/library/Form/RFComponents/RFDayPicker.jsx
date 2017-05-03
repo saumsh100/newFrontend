@@ -13,9 +13,7 @@ export default function RFDayPicker(props) {
   const { touched, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
   const newProps = omit(props, ['input', 'meta']);
-
-  console.log(newProps.target);
-
+  
   return (
     <DayPicker
       {...newProps}

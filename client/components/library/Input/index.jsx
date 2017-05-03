@@ -29,7 +29,6 @@ export default function Input(props) {
 
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
-
   const content = min ?
     <input type={type || "text"} className={inputClassName} {...inputProps} ref={(input) => { if (inputProps.refCallback) inputProps.refCallback(input) } } />
     :
