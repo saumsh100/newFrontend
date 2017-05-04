@@ -39,7 +39,7 @@ class PatientList extends Component {
     } = this.props;
 
     const x = this.props.appointments.toArray().map((appointment) => {
-      let patient = this.props.patients.get(appointment.patientId);
+      const patient = this.props.patients.get(appointment.patientId);
       patient.appointment = appointment;
 
       return patient;
