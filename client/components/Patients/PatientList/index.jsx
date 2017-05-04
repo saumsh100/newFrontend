@@ -26,34 +26,6 @@ import styles from './main.scss';
 class PatientList extends Component {
   constructor(props) {
     super(props);
-    this.handleTabChange = this.handleTabChange.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-  }
-
-  handleTabChange(index, patientListFiltered) {
-    if (!(typeof index === "number")) return
-    if (!patientListFiltered) return
-    let title = "personal";
-    switch (index) {
-      case 0:
-        title = "personal";
-        break
-      case 1:
-        title = "insurance";
-        break;
-    }
-    const params = {
-      id: patientListFiltered.id,
-      activeTabIndex: index,
-      isEditing: false,
-      title,
-    };
-    this.props.updateEditingPatientState(params);
-  }
-
-  handleInput() {
-    const value = this.textInput.value;
-    this.props.setPatientsFilter(value);
   }
 
   render() {
@@ -79,40 +51,14 @@ class PatientList extends Component {
     let patientList = x.sort((a, b) => moment(a.appointment.startDate).diff(b.appointment.startDate));
 
     const array = [];
-    patientList = patientList.filter(function(item, pos) {
+    patientList = patientList.filter((item, pos) => {
       const id = item.id;
       if (array.includes(id)) {
         return false;
       }
       array.push(id);
       return true;
-    })
-
-    if (!!patientNameFilterText) {
-      const pattern = new RegExp(patientNameFilterText, 'i');
-      patientList = patientList.filter(d => pattern.test(d.name));
-    }
-
-    const patientListWithAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
-      .toString() !== "Invalid Date"))
-      .sort((a, b) => (moment(a.toJS && a.toJS().lastAppointmentDate) > moment(b.toJS && b.toJS().lastAppointmentDate)));
-
-    const patientListWithoutAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
-        .toString() === "Invalid Date"));
-
-    const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
-
-    const patientListFiltered = patientListSorted
-      .filter(n => (n.patientId === this.props.currentPatient))[0];
-
-    const currentPatientState = patientListFiltered && editingPatientState[patientListFiltered.id];
-    let activeTabIndex = null;
-
-    if (currentPatientState) {
-      activeTabIndex = currentPatientState.activeTabIndex;
-    }
-
-
+    });
 
     return (
       <Grid>
@@ -211,27 +157,27 @@ class PatientList extends Component {
                   </Col>
                   <Col xs={4}>
                     <div className={styles.right}>
-                      <Tabs
-                        index={activeTabIndex || 0}
-                        onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>
-                        <Tab label="Personal">
-                          <PatientData
-                            patient={patientListFiltered}
-                            tabTitle="personal"
-                            form={form}
-                            changePatientInfo={changePatientInfo}
+                      {/*<Tabs*/}
+                        {/*index={0}*/}
+                        {/*onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>*/}
+                        {/*<Tab label="Personal">*/}
+                          {/*<PatientData*/}
+                            {/*patient={patientListFiltered}*/}
+                            {/*tabTitle="personal"*/}
+                            {/*form={form}*/}
+                            {/*changePatientInfo={changePatientInfo}*/}
 
-                          />
-                        </Tab>
-                        <Tab label="Insurance">
-                          <PatientData
-                            patient={patientListFiltered}
-                            tabTitle="insurance"
-                            form={form}
-                            changePatientInfo={changePatientInfo}
-                          />
-                        </Tab>
-                      </Tabs>
+                          {/*/>*/}
+                        {/*</Tab>*/}
+                        {/*<Tab label="Insurance">*/}
+                          {/*<PatientData*/}
+                            {/*patient={patientListFiltered}*/}
+                            {/*tabTitle="insurance"*/}
+                            {/*form={form}*/}
+                            {/*changePatientInfo={changePatientInfo}*/}
+                          {/*/>*/}
+                        {/*</Tab>*/}
+                      {/*</Tabs>*/}
                     </div>
                   </Col>
                 </div>

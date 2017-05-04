@@ -49,17 +49,10 @@ class PatientsListContainer extends Component {
   }
 
   loadMore() {
-    console.log('wrf')
-    this.props.fetchEntities({
-      key: 'appointments',
-      join: ['patient'],
-      params: {
-        skip: this.state.people,
-        limit: HOW_MANY_TO_SKIP,
-      },
-    });
+    const newState = {};
+    newState.roll = this.state.roll;
 
-    let roll = this.state.roll;
+    //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
 
     if (this.state.roll === 2) {
       if (this.state.patients === this.props.patients) {
@@ -67,18 +60,27 @@ class PatientsListContainer extends Component {
           moreData: false,
         });
       }
-      roll = 0;
+      newState.roll = 0;
+    } else if (this.state.roll === 1) {
+
+      this.props.fetchEntities({
+        key: 'appointments',
+        join: ['patient'],
+        params: {
+          skip: this.state.people,
+          limit: HOW_MANY_TO_SKIP,
+        },
+      });
+
+      newState.people = this.state.people + HOW_MANY_TO_SKIP;
+      newState.roll += 1;
     } else {
-      roll += 1;
+      newState.roll += 1;
     }
 
-    const people = this.state.people + HOW_MANY_TO_SKIP;
+    newState.patients = this.props.patients;
 
-    this.setState({
-      patients: this.props.patients,
-      people,
-      roll,
-    });
+    this.setState(newState);
   }
 
   render() {

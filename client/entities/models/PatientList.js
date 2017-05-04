@@ -10,7 +10,7 @@ const PatientListSchema = {
 	photo: null,
 	patientId: null,
 	language: null,
-	birthday: null,
+	birthDate: null,
 	status: null,
 	id: null,
 	insurance: null,

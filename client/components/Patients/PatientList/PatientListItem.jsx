@@ -8,19 +8,25 @@ class PatientListItem extends Component {
     super(props);
     this.goToDialogue = this.goToDialogue.bind(this);
   }
+
   goToDialogue() {
-    this.props.setCurrentPatient(this.props.user.patientId)
+    this.props.setCurrentPatient(this.props.user.patientId);
   }
+
   render() {
     const { user, currentPatient } = this.props;
     const { startDate } = user.appointment;
     let showDate = startDate;
+
     if (moment(showDate)._d.toString() !== "Invalid Date") {
       showDate = moment(startDate).format('MMMM Do YYYY, h:mm:ss a')
     }
+
+    const age = moment().diff(user.birthDate, 'years');
+
     const usersActiveClassName = classNames(
       styles.users,
-      user.patientId == currentPatient ?
+      user.patientId === currentPatient ?
         styles.users__active :
         styles.users__noactive
     );
@@ -30,7 +36,7 @@ class PatientListItem extends Component {
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
             <div className={styles.users__name}>
-              {user.firstName} {user.lastName}, {user.age}
+              {user.firstName} {user.lastName}, {age}
             </div>
 
           </div>
