@@ -560,6 +560,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
+      isSyncedWithPMS: false,
     },
     {
       id: sergeyPatientId,
@@ -580,6 +581,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
+      isSyncedWithPMS: false,
     },
     {
       id: markPatientId,
@@ -592,6 +594,7 @@ const SEEDS = {
       gender: 'male',
       status: 'Active',
       language: 'English',
+      isSyncedWithPMS: false,
     },
     {
       id: alexPatientId,
@@ -606,6 +609,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
+      isSyncedWithPMS: false,
     },
     // account 2
     {
@@ -621,6 +625,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
+      isSyncedWithPMS: false,
     },
     {
       id:"c7a04662-35be-448c-bb63-83f94713b9b5",
