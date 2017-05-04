@@ -11,6 +11,7 @@ const {
   isDuringEachother,
   createPossibleTimeSlots,
   createIntervalsFromWeeklySchedule,
+  getISOSortPredicate,
 } = require('../util/time');
 
 // TODO: Currently returns if EQUAL but that
@@ -267,7 +268,9 @@ function fetchAvailabilities(options) {
               });
             });
 
-            return resolve(unionBy(...practitionerAvailabilities, 'startDate'));
+            const squashed = unionBy(...practitionerAvailabilities, 'startDate');
+            const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
+            return resolve(squashedAndSorted);
           });
       })
       .catch(err => reject(err));

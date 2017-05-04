@@ -141,7 +141,7 @@ describe('Availabilities Library', () => {
       done();
     });
 
-    /*describe('1 Practitioner - 1 day', () => {
+    describe('1 Practitioner - 1 day', () => {
       it('should return 0 availabilities', (done) => {
         const startDate = (new Date()).toISOString();
         const endDate = (new Date()).toISOString();
@@ -178,9 +178,6 @@ describe('Availabilities Library', () => {
           endDate,
         };
 
-        // TODO: make sure that the seeds setup is correct for our tests
-        // TODO: fix the algo!
-
         fetchAvailabilities(options)
           .then((availabilities) => {
             expect(availabilities).to.be.an('array');
@@ -210,9 +207,6 @@ describe('Availabilities Library', () => {
           endDate,
         };
 
-        // TODO: make sure that the seeds setup is correct for our tests
-        // TODO: fix the algo!
-
         fetchAvailabilities(options)
           .then((availabilities) => {
             expect(availabilities).to.be.an('array');
@@ -240,7 +234,7 @@ describe('Availabilities Library', () => {
     });
 
     describe('No Preference on Practitioner - 1 day morning', () => {
-      it('should return 5 availabilities (1 from prac. above and 4 from other)', (done) => {
+      it('should return 4 availabilities (1 from prac. above and 4 from other but without duplicates)', (done) => {
         const startDate = (new Date(2017, 3, 3, 8, 0)).toISOString();
         const endDate = (new Date(2017, 3, 3, 12, 0)).toISOString();
 
@@ -250,9 +244,6 @@ describe('Availabilities Library', () => {
           startDate,
           endDate,
         };
-
-        // TODO: make sure that the seeds setup is correct for our tests
-        // TODO: fix the algo!
 
         fetchAvailabilities(options)
           .then((availabilities) => {
@@ -284,10 +275,10 @@ describe('Availabilities Library', () => {
             done();
           });
       });
-    });*/
+    });
 
     describe('No Preference on Practitioner - Monday to Friday (wide open)', () => {
-      it('should return 5 availabilities (1 from prac. above and 4 from other)', (done) => {
+      it('should return 36 availabilities for M,T,T,F (W closed) 1 prac has break but the other is avaialble so does not matter', (done) => {
         const startDate = (new Date(2017, 4, 1, 7, 23)).toISOString();
         const endDate = (new Date(2017, 4, 6, 7, 23)).toISOString();
 
@@ -295,35 +286,16 @@ describe('Availabilities Library', () => {
 
         const options = {
           accountId,
-          practitionerId,
           serviceId,
           startDate,
           endDate,
         };
 
-        // TODO: make sure that the seeds setup is correct for our tests
-        // TODO: fix the algo!
-
         fetchAvailabilities(options)
           .then((availabilities) => {
             // debugger;
             expect(availabilities).to.be.an('array');
-            expect(availabilities.length).to.equal(45);
-            /*expect(availabilities[0]).to.deep.equal({
-              startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
-              endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
-            });
-
-            expect(availabilities[1]).to.deep.equal({
-              startDate: (new Date(2017, 3, 3, 15, 0)).toISOString(),
-              endDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
-            });
-
-            expect(availabilities[2]).to.deep.equal({
-              startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
-              endDate: (new Date(2017, 3, 3, 17, 0)).toISOString(),
-            });*/
-
+            expect(availabilities.length).to.equal(36);
             const endTime = Date.now();
             //console.log('Time elapsed:', endTime - startTime);
             done();

@@ -12,6 +12,7 @@ const {
   combineDateAndTime,
   createIntervalsFromWeeklySchedule,
   isDuringEachother,
+  getISOSortPredicate,
 } = require('../server/util/time');
 
 
@@ -72,6 +73,26 @@ describe('util/time', () => {
     it('should be a function', () => {
       expect(time).to.be.a('function');
     });
+  });
+
+  describe('#getISOSortPredicate', () => {
+    it('should be a function', () => {
+      expect(getISOSortPredicate).to.be.a('function');
+    });
+
+    it('should sort the array properly', () => {
+      const array = [
+        { startDate: (new Date(2016, 1, 4)).toISOString(), key: 1 },
+        { startDate: (new Date(2015, 1, 4)).toISOString(), key: 0 },
+        { startDate: (new Date(2016, 1, 5, 9, 37)).toISOString(), key: 3 },
+        { startDate: (new Date(2016, 1, 5, 9, 36)).toISOString(), key: 2 },
+      ];
+
+      const sortedArray = array.sort(getISOSortPredicate('startDate'));
+      sortedArray.forEach((a, i) => {
+        expect(a.key).to.equal(i);
+      });
+    })
   });
 
   describe('#createIntervalsFromDailySchedule', () => {

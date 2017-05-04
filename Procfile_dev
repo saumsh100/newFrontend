@@ -1,5 +1,3 @@
 web: nodemon --inspect server/bin/server.js
 cron: nodemon server/bin/cron.js
 reminders: nodemon server/bin/reminders.js
-
-// TODO: ADD THE FULL WEEK AVAILABILITIES LIST WITH OFF-HOUR TIMES

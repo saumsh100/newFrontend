@@ -8,6 +8,14 @@ const Time = {
     return new Date(1970, 1, 0, hours, minutes);
   },
 
+  getISOSortPredicate: (property) => {
+    return (a, b) => {
+      const ap = a[property];
+      const bp = b[property];
+      return (ap < bp) ? -1 : ((ap > bp) ? 1 : 0);
+    };
+  },
+
   /**
    *
    * @param date
