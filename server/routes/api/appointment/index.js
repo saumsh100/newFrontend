@@ -34,8 +34,8 @@ appointmentsRouter.get('/', (req, res, next) => {
 
   return Appointment
     .filter({ accountId })
-    .filter(r.row('startTime').during(startDate, endDate))
-    .orderBy('startTime')
+    .filter(r.row('startDate').during(startDate, endDate))
+    .orderBy('startDate')
     .skip(parseInt(skip))
     .limit(Math.min(parseInt(limit), 100))
     .getJoin(joinObject)
