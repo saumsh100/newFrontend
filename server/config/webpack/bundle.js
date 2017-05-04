@@ -1,7 +1,7 @@
 
 // const WebpackDevServer = require('webpack-dev-server');
 const Webpack = require('webpack');
-const webpackConfig = require('./webpack.config');
+const webpackConfig = require('./webpack.development.config');
 const express = require('express');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');

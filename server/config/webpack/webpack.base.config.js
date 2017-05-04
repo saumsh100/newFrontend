@@ -1,95 +1,99 @@
-
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const cssnext = require('postcss-cssnext');
 
-// Babel Config Stuff.
-const babelQuery = {
-  es2015: require.resolve('babel-preset-es2015'),
-  react: require.resolve('babel-preset-react'),
-};
-
-function createQuery(...paths) {
-  return paths.map(resolvePath => `presets[]=${resolvePath}`).join(',');
-}
-
-const fullQuery = createQuery(babelQuery.es2015, babelQuery.react);
+const localIdentName = '[name]__[local]___[hash:base64:5]';
 
 module.exports = {
   cache: true,
   context: __dirname,
-  debug: true,
   devtool: 'cheap-module-source-map',
-  entry: {},
   output: {
     publicPath: 'http://localhost:5000/',
+    filename: '[name].js',
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
 
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.js$/,
-        loader: `babel-loader?cacheDirectory,${fullQuery}`,
+        test: /\.jsx?$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true
+          },
+        },
         exclude: /node_modules/,
-      },
-      {
-        test: /\.jsx$/,
-        loader: `babel-loader?cacheDirectory,${fullQuery}`,
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader',
       },
       {
         test: /\.scss$/,
-        loader: 'style-loader' +
-        '!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]' +
-        '!postcss-loader!sass-loader?outputStyle=expanded&sourceMap',
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              sourceMap: true,
+              localIdentName,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [
+                cssnext({
+                  features: {
+                    customProperties: false,
+                  },
+                }),
+              ],
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              outputStyle: 'expanded',
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'file-loader?name=img/[name].[ext]',
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: 'img/[name].[ext]',
+          },
+        },
       },
       {
         test: /\.(ttf|eot|svg|woff(2)?)(\?v=\d+\.\d+\.\d+)?(\?[a-z0-9]+)?$/,
-        loader: 'file-loader',
+        use: 'file-loader',
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]',
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              sourceMap: true,
+              localIdentName,
+            },
+          },
+        ],
         include: /flexboxgrid/,
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader',
+        use: ['style-loader', 'css-loader'],
         exclude: /flexboxgrid/, // so we have to exclude it
       },
     ],
   },
-
-  postcss() {
-    return [cssnext({
-      features: {
-        customProperties: false
-      }
-    })];
-  },
-
-  resolveLoader: {
-    // fallback: rootPath('node_modules'),
-  },
-
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('development'),
-      },
-    }),
-  ],
 };

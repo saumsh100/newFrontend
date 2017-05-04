@@ -1,6 +1,6 @@
 
 //const webpack = require('webpack');
-const webpackConfig = require('./webpack.config');
+const webpackConfig = require('./webpack.development.config');
 const path = require('path');
 
 //function relativePath(additionalPath) {
