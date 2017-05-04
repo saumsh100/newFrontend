@@ -38,8 +38,7 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
     .then((release) => {
       if (release.version > reqVersion) {
         const msg = Object.assign(
-          {},
-          _.pick(release, ['url']),
+          release,
           { available: true },
         );
         res.send(msg);
