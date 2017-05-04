@@ -27,11 +27,13 @@ const recentStartTime = r.now().add(oneHour);
 
 const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
 const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
+const syncTestAccId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
 const justinUserId = uuid();
 const alexUserId = uuid();
 const sergeyUserId = uuid();
 const jdUserId = uuid();
+const syncUserId = uuid();
 
 const alexPatientId = uuid();
 const alexPatientId2 = uuid();
@@ -528,6 +530,14 @@ const SEEDS = {
       id: alexUserId,
       activeAccountId: accountId,
     },
+    {
+      firstName: 'SyncClient',
+      lastName: ' ',
+      username: 'syncclient@carecru.com',
+      password: bcrypt.hashSync('sync', saltRounds),
+      id: syncUserId,
+      activeAccountId: syncTestAccId,
+    }
   ],
 
   Patient: [
@@ -971,6 +981,21 @@ const SEEDS = {
       // clinicName: 'PACIFIC HEART DENTAL',
       // bookingWidgetPrimaryColor: '#0597d8',
     },
+    {
+      id: syncTestAccId,
+      weeklyScheduleId,
+      name: 'Sync Client Dental',
+      street: '#101 – 1312 Random Drive',
+      country: 'Canada',
+      state: 'BC',
+      city: 'North Vancouver',
+      zipCode: '92509',
+      vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      smsPhoneNumber: clinicPhoneNumber,
+      logo: '/images/beckett_dental.png',
+      address: '#101 – 1312 Random Drive',
+      bookingWidgetPrimaryColor: '#f29b12',
+    },
   ],
 
   Permission: [
@@ -995,6 +1020,12 @@ const SEEDS = {
     {
       userId: jdUserId,
       accountId: accountId2,
+      role: 'OWNER',
+      permissions: {},
+    },
+    {
+      userId: syncUserId,
+      accountId: syncTestAccId,
       role: 'OWNER',
       permissions: {},
     },

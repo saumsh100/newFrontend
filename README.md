@@ -21,6 +21,27 @@ Use node and npm versions in package.json file, install them if not already inst
 
 `npm install -g foreman`
 
+### Installation on Windows 10 (work in progress)
+Run all commands PowerShell as admin:
+
+clone the repo: 
+- git clone <repo url>
+
+install node-gyp globally
+- npm install -g node-gyp
+
+installs MS build tools, python, sets PATH correctly for builds
+- npm install --g --production windows-build-tools
+
+go into project dir and try bcrypt - it's the one that files due to incorrect build tools setup
+- cd carecru
+- npm install bcrypt
+
+foreman
+- npm install -g foreman
+
+If there are problems with build and you are changing order of installation, build utils you are installing (e.g. Visual Studio, Build tools, etc) before running `npm install <whatever>` make sure to remove the node_modules directory and clean cache `npm cache clean`. Not doing that may cause problems (or may not) - better do to be sure you have a clean folder.
+
 ## Database Setup
 
 `rethinkdb`
