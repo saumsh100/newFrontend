@@ -13,10 +13,10 @@ class PatientListItem extends Component {
   }
   render() {
     const { user, currentPatient } = this.props;
-    const { lastAppointmentDate } = user;
-    let showDate = lastAppointmentDate;
+    const { startDate } = user.appointment;
+    let showDate = startDate;
     if (moment(showDate)._d.toString() !== "Invalid Date") {
-      showDate = moment(lastAppointmentDate).format("MMM Do YYYY")
+      showDate = moment(startDate).format('MMMM Do YYYY, h:mm:ss a')
     }
     const usersActiveClassName = classNames(
       styles.users,
@@ -25,24 +25,22 @@ class PatientListItem extends Component {
         styles.users__noactive
     );
     return (
-      <li onClick={this.goToDialogue} className={usersActiveClassName}>
-        <img className={styles.users__photo} src={user.photo} alt="photo" />
+      <div onClick={this.goToDialogue} className={usersActiveClassName}>
+        <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
             <div className={styles.users__name}>
-              {user.name}, {user.age}
+              {user.firstName} {user.lastName}, {user.age}
             </div>
+
           </div>
           <div className={styles.users__body}>
             <div className={styles.users__text}>
-              Last Appt
-            </div>
-            <div className={styles.users__appointment}>
-              {showDate}
+              <strong>Next Appt</strong> {showDate}
             </div>
           </div>
         </div>
-      </li>
+      </div>
     );
   }
 }

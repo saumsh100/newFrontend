@@ -17,10 +17,14 @@ appointmentsRouter.get('/', (req, res, next) => {
     query,
   } = req;
 
+
   const {
-    limit = 100,
-    skip = 0,
+    limit,
+    skip,
   } = query;
+
+  const skipped = skip || 0;
+  const limitted = limit || 25;
 
   let {
     startDate,
@@ -33,13 +37,15 @@ appointmentsRouter.get('/', (req, res, next) => {
 
   return Appointment
     .filter({ accountId })
-    .filter(r.row('startTime').during(startDate, endDate))
-    .orderBy('startTime')
-    .skip(parseInt(skip))
-    .limit(Math.min(parseInt(limit), 100))
+    .filter(r.row('startDate').during(startDate, endDate))
+    .orderBy('startDate')
+    .skip(parseInt(skipped))
+    .limit(parseInt(limitted))
     .getJoin(joinObject)
     .run()
-    .then(appointments => res.send(normalize('appointments', appointments)))
+    .then((appointments) => {
+      res.send(normalize('appointments', appointments));
+    })
     .catch(next);
 });
 

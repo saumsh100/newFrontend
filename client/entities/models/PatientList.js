@@ -3,7 +3,9 @@ import createModel from '../createModel';
 const PatientListSchema = {
 	lastAppointmentDate: null,
 	nextAppointmentTitle: null,
-	name: null,
+  firstName: null,
+  lastName: null,
+  startDate: null,
 	gender: null,
 	photo: null,
 	patientId: null,

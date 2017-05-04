@@ -12,7 +12,8 @@ import {
   Grid,
   Row,
   Col,
-  ListItem
+  ListItem,
+  InfiniteScroll,
 } from '../../library';
 import styles from './main.scss';
 
@@ -56,6 +57,7 @@ class PatientList extends Component {
   }
 
   render() {
+
     const {
       filters,
       updateEditingPatientState,
@@ -64,7 +66,27 @@ class PatientList extends Component {
       form,
     } = this.props;
     const patientNameFilterText = filters && filters.values && filters.values.patients;
-    let patientList = this.props.patients.models.toArray()
+
+    const x = this.props.appointments.toArray().map((appointment) => {
+      let patient = this.props.patients.get(appointment.patientId);
+      patient.appointment = appointment;
+
+      return patient;
+    });
+
+    // TODO: remove appointments with repeating patientIds
+
+    let patientList = x.sort((a, b) => moment(a.appointment.startDate).diff(b.appointment.startDate));
+
+    const array = [];
+    patientList = patientList.filter(function(item, pos) {
+      const id = item.id;
+      if (array.includes(id)) {
+        return false;
+      }
+      array.push(id);
+      return true;
+    })
 
     if (!!patientNameFilterText) {
       const pattern = new RegExp(patientNameFilterText, 'i');
@@ -90,6 +112,8 @@ class PatientList extends Component {
       activeTabIndex = currentPatientState.activeTabIndex;
     }
 
+
+
     return (
       <Grid>
         <Row className={styles.patients}>
@@ -110,16 +134,27 @@ class PatientList extends Component {
                   <i className="fa fa-pencil" />
                 </div>
               </div>
-              <ListItem className={styles.patients_list__users}>
-                {patientListSorted.map(user => {
-                  return (<PatientListItem
-                    key={user.patientId}
+              <div className={styles.patients_list__users}>
+                <InfiniteScroll
+                  loadMore={this.props.loadMore}
+                  loader={<div style={{ clear: 'both' }}>Loading...</div>}
+                  hasMore={this.props.moreData}
+                  initialLoad={false}
+                  useWindow={false}
+                  threshold={50}
+                >
+                  {patientList.map((user, i) => {
+                    return <PatientListItem
+                    key={user.appointment.id + i}
                     user={user}
+                    initialLoad={false}
+                    threshold={0}
                     currentPatient={this.props.currentPatient}
                     setCurrentPatient={this.props.setCurrentPatient}
-                  />);
-                })}
-              </ListItem>
+                    />
+                  })}
+                </InfiniteScroll>
+              </div>
             </div>
           </Col>
           <Col xs={12} sm={8} md={8} lg={10}>
