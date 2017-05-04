@@ -4,6 +4,14 @@ import {
   Icon, Card
 } from '../../../library';
 import styles from './styles.scss';
+import FilterServices from './FilterServices';
+
+
+function getPractitioners(practitioners, practitionerIds) {
+  return practitioners.filter(p => {
+    return practitionerIds.indexOf(p.get('id')) > -1;
+  })
+}
 
 class Filters extends Component {
   constructor(props) {
@@ -29,8 +37,11 @@ class Filters extends Component {
   }
 
   render() {
-    const { practitioners, schedule, appointmentsTypes } = this.props;
+    const { practitioners, schedule, appointmentsTypes, services } = this.props;
     const filterPractitioners = schedule.toJS().practitioners;
+
+    const selectedPractitioners = getPractitioners(practitioners, filterPractitioners);
+
     return (
       <Card className={styles.schedule_filter}>
         <div className={styles.filter_header}>
@@ -53,8 +64,8 @@ class Filters extends Component {
                 <div key={pr.id} className={styles.filter_practitioner__list}>
                   <input className={styles.filter_practitioner__checkbox}
                     type="checkbox" checked={checked} id={`checkbox-${i}`}
-                    onChange={() => {this.handleCheckDoctor(pr.id, checked);
-                  }} />
+                    onChange={() => {this.handleCheckDoctor(pr.id, checked);}}
+                  />
                   <label className={styles.filter_practitioner__label} htmlFor={`checkbox-${i}`}>
                     <li className={styles.filter_practitioner__item}>
                       <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner" />
@@ -67,15 +78,10 @@ class Filters extends Component {
             })}
           </ul>
           <div className={styles.filter_options}>
-            <div className={styles.filter_options__item}>
-              <div className={styles.filter_options__title}>Services:</div>
-              <select ref="select" onChange={this.handleTypeFilter}>
-                <option  value="all">All</option>
-                {appointmentsTypes.map((app, i) => (
-                  <option key={i} value={app}>{app}</option>
-                ))}
-              </select>
-            </div>
+            <FilterServices
+              practitioners={selectedPractitioners}
+              services={services}
+            />
             <div className={styles.filter_options__item}>
               <div className={styles.filter_options__title}>Chairs:</div>
               <select disabled="disabled">

@@ -166,19 +166,13 @@ class ScheduleComponent extends Component {
                   schedule={schedule}
                   appointmentsTypes={appointmentsTypes}
                   selectAppointmentType={selectAppointmentType}
+                  services={services.get('models').toArray()}
                 />
               </Col>
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
                 <RequestsContainer className={styles.schedule__sidebar_request} />
-              </Col>
-            </Row>
-            <Row className={styles.schedule__sidebar_rowCalendar}>
-              <Col xs={12}>
-                <Calendar
-                  className={styles.schedule__sidebar_calendar}
-                />
               </Col>
             </Row>
           </Col>
