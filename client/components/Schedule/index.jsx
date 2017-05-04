@@ -90,6 +90,7 @@ class ScheduleComponent extends Component {
       patients,
       requests,
       services,
+      chairs,
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
@@ -167,6 +168,7 @@ class ScheduleComponent extends Component {
                   appointmentsTypes={appointmentsTypes}
                   selectAppointmentType={selectAppointmentType}
                   services={services.get('models').toArray()}
+                  chairs={chairs.get('models').toArray()}
                 />
               </Col>
             </Row>

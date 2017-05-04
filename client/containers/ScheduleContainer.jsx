@@ -12,6 +12,8 @@ import {
   setSheduleMode,
 } from '../thunks/schedule';
 
+
+
 class ScheduleContainer extends React.Component {
   componentWillMount() {
     this.props.fetchEntities({ key: 'patients' });
@@ -22,6 +24,7 @@ class ScheduleContainer extends React.Component {
     this.props.fetchEntities({ key: 'practitioners', join: ['services'] });
     this.props.fetchEntities({ key: 'requests' });
     this.props.fetchEntities({ key: 'services' });
+    this.props.fetchEntities({ key: 'chairs' });
   }
 
   render() {
@@ -32,12 +35,14 @@ class ScheduleContainer extends React.Component {
       setCurrentScheduleDate,
       addPractitionerToFilter,
       removePractitionerFromFilter,
+      addServiceFilter,
       selectAppointmentType,
       fetchEntities,
       setSheduleMode,
       requests,
       services,
       patients,
+      chairs,
     } = this.props;
     return (
       <ScheduleComponent
@@ -53,6 +58,7 @@ class ScheduleContainer extends React.Component {
         requests={requests}
         services={services}
         patients={patients}
+        chairs={chairs}
       />
     );
   }
@@ -75,6 +81,7 @@ function mapStateToProps({ entities, schedule }) {
     requests: entities.get('requests'),
     patients: entities.get('patients'),
     services: entities.get('services'),
+    chairs: entities.get('chairs'),
   };
 }
 

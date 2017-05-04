@@ -1,31 +1,37 @@
 import React, { Component, PropTypes } from 'react';
 import styles from '../styles.scss';
-import Checkbox from '../../../../library';
-
-function getServicesForPractitioner(serviceIds, services) {
-  return services.map(s => {
-    return serviceIds.indexOf(s.get('id')) > -1;
-  })
-}
+import { Checkbox } from '../../../../library';
 
 export default function FilterServices(props) {
+
   const {
-    practitioners,
+    selectedFilterServices,
     services,
+    addScheduleFilter,
+    removeScheduleFilter,
   } = props;
 
-  const filteredServices = practitioners.map((p) => {
-    return p.get('services').toJS();
-  });
+  const serviceIds = selectedFilterServices.map(service => service.id);
 
   return (
     <div className={styles.filter_options__item}>
       <div className={styles.filter_options__title}>Services:</div>
-        {services.map((s) => {
-          return (
-            <span>{s.get('name')}</span>
-          );
-        })}
+      {services.map((s) => {
+        const checked = serviceIds.indexOf(s.get('id')) > -1;
+        return (
+          <Checkbox
+            label={s.get('name')}
+            checked={checked}
+            onChange={() => { checked ? removeScheduleFilter({ key: 'servicesFilter', id: s.get('id') }) : addScheduleFilter({ key: 'servicesFilter', entity: s }); }}
+          />
+        );
+      })}
     </div>
   );
+
 }
+
+FilterServices.PropTypes = {
+  services: PropTypes.Object,
+  selectedFilterServices: PropTypes.arrayOf(Object),
+};

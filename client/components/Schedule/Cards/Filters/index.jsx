@@ -1,17 +1,18 @@
 
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import {
   Icon, Card
 } from '../../../library';
 import styles from './styles.scss';
 import FilterServices from './FilterServices';
-
-
-function getPractitioners(practitioners, practitionerIds) {
-  return practitioners.filter(p => {
-    return practitionerIds.indexOf(p.get('id')) > -1;
-  })
-}
+import FilterChairs from './FilterChairs';
+import FilterPractitioners from './FilterPractitioners';
+import {
+  addScheduleFilter,
+  removeScheduleFilter,
+} from '../../../../actions/schedule';
 
 class Filters extends Component {
   constructor(props) {
@@ -37,10 +38,17 @@ class Filters extends Component {
   }
 
   render() {
-    const { practitioners, schedule, appointmentsTypes, services } = this.props;
-    const filterPractitioners = schedule.toJS().practitioners;
+    const {
+      practitioners,
+      schedule,
+      appointmentsTypes,
+      services,
+      chairs,
+    } = this.props;
 
-    const selectedPractitioners = getPractitioners(practitioners, filterPractitioners);
+    const selectedFilterPractitioners = schedule.toJS().practitioners;
+    const selectedFilterServices = schedule.toJS().servicesFilter;
+    const selectedFilterChairs = schedule.toJS().chairsFilter;
 
     return (
       <Card className={styles.schedule_filter}>
@@ -54,40 +62,24 @@ class Filters extends Component {
           <div onClick={this.clearAllSelectors} className={styles.filter_header__link}>Clear All</div>
         </div>
         <div className={styles.filter_practitioner}>
-          <div className={styles.filter_practitioner__title}>
-            Practitioner
-          </div>
-          <ul className={styles.filter_practitioner__wrapper}>
-            {practitioners.map((pr, i) => {
-              const checked = filterPractitioners.indexOf(pr.id) > -1;
-              return (
-                <div key={pr.id} className={styles.filter_practitioner__list}>
-                  <input className={styles.filter_practitioner__checkbox}
-                    type="checkbox" checked={checked} id={`checkbox-${i}`}
-                    onChange={() => {this.handleCheckDoctor(pr.id, checked);}}
-                  />
-                  <label className={styles.filter_practitioner__label} htmlFor={`checkbox-${i}`}>
-                    <li className={styles.filter_practitioner__item}>
-                      <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner" />
-                      <div className={styles.filter_practitioner__name}>{pr.firstName}</div>
-                      <div className={styles.filter_practitioner__spec}>Dentist</div>
-                    </li>
-                  </label>
-                </div>
-              );
-            })}
-          </ul>
+          <FilterPractitioners
+            practitioners={practitioners}
+            selectedFilterPractitioners={selectedFilterPractitioners}
+            handleCheckDoctor={this.handleCheckDoctor}
+          />
           <div className={styles.filter_options}>
             <FilterServices
-              practitioners={selectedPractitioners}
               services={services}
+              selectedFilterServices={selectedFilterServices}
+              addScheduleFilter={this.props.addScheduleFilter}
+              removeScheduleFilter={this.props.removeScheduleFilter}
             />
-            <div className={styles.filter_options__item}>
-              <div className={styles.filter_options__title}>Chairs:</div>
-              <select disabled="disabled">
-                <option value="all">All</option>
-              </select>
-            </div>
+            <FilterChairs
+              chairs={chairs}
+              selectedFilterChairs={selectedFilterChairs}
+              addScheduleFilter={this.props.addScheduleFilter}
+              removeScheduleFilter={this.props.removeScheduleFilter}
+            />
             <div className={styles.filter_options__item}>
               <div className={styles.filter_options__title}>Reminders:</div>
               <select disabled="disabled">
@@ -110,7 +102,17 @@ class Filters extends Component {
 Filters.PropTypes = {
   addPractitionerToFilter: PropTypes.func,
   selectAppointmentType: PropTypes.func,
-  removePractitionerFromFilter: PropTypes.func
+  removePractitionerFromFilter: PropTypes.func,
+  addServiceFilter: PropTypes.func,
 };
 
-export default Filters;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    addScheduleFilter,
+    removeScheduleFilter,
+  }, dispatch);
+}
+
+const enhance = connect(null, mapDispatchToProps);
+
+export default enhance(Filters);
