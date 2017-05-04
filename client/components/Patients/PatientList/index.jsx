@@ -37,7 +37,6 @@ class PatientList extends Component {
       changePatientInfo,
       form,
     } = this.props;
-    const patientNameFilterText = filters && filters.values && filters.values.patients;
 
     const x = this.props.appointments.toArray().map((appointment) => {
       let patient = this.props.patients.get(appointment.patientId);
