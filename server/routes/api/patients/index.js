@@ -6,6 +6,7 @@ const checkIsArray = require('../../../middleware/checkIsArray');
 const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
 const loaders = require('../../util/loaders');
+const globals = require('../../../config/globals');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
 
@@ -47,16 +48,19 @@ patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('
  * Used to search an patient by any property.
  * E.g. api/patients/test?pmsId=1003&note=unit test patient
  */
-patientsRouter.get('/test', checkPermissions('patients:read'), (req, res, next) => {
-  const property = req.query;
-  return Patient
-    .filter(property)
-    .run()
-    .then((patients) => {
-      (patients.length !== 0) ? res.send(normalize('patients', patients)) : res.sendStatus(404);
-    })
-    .catch(next);
-});
+if (globals.env !== 'production') {
+  patientsRouter.get('/test', checkPermissions('patients:read'), (req, res, next) => {
+    const property = req.query;
+    return Patient
+      .filter(property)
+      .run()
+      .then((patients) => {
+        (patients.length !== 0) ? res.send(normalize('patients', patients)) : res.sendStatus(404);
+      })
+      .catch(next);
+  });
+}
+
 
 // TODO: this should have default queries and limits
 /**
