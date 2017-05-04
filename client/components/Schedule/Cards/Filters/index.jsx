@@ -12,11 +12,14 @@ import FilterPractitioners from './FilterPractitioners';
 import {
   addScheduleFilter,
   removeScheduleFilter,
+  clearScheduleFilter,
 } from '../../../../actions/schedule';
+
 
 class Filters extends Component {
   constructor(props) {
     super(props);
+
     this.handleTypeFilter = this.handleTypeFilter.bind(this);
     this.handleCheckDoctor = this.handleCheckDoctor.bind(this);
     this.clearAllSelectors = this.clearAllSelectors.bind(this);
@@ -44,11 +47,15 @@ class Filters extends Component {
       appointmentsTypes,
       services,
       chairs,
+      addScheduleFilter,
+      removeScheduleFilter,
+      clearScheduleFilter,
     } = this.props;
 
     const selectedFilterPractitioners = schedule.toJS().practitioners;
     const selectedFilterServices = schedule.toJS().servicesFilter;
     const selectedFilterChairs = schedule.toJS().chairsFilter;
+
 
     return (
       <Card className={styles.schedule_filter}>
@@ -71,14 +78,16 @@ class Filters extends Component {
             <FilterServices
               services={services}
               selectedFilterServices={selectedFilterServices}
-              addScheduleFilter={this.props.addScheduleFilter}
-              removeScheduleFilter={this.props.removeScheduleFilter}
+              addScheduleFilter={addScheduleFilter}
+              removeScheduleFilter={removeScheduleFilter}
+              clearScheduleFilter={clearScheduleFilter}
             />
             <FilterChairs
               chairs={chairs}
               selectedFilterChairs={selectedFilterChairs}
-              addScheduleFilter={this.props.addScheduleFilter}
-              removeScheduleFilter={this.props.removeScheduleFilter}
+              addScheduleFilter={addScheduleFilter}
+              removeScheduleFilter={removeScheduleFilter}
+              clearScheduleFilter={clearScheduleFilter}
             />
             <div className={styles.filter_options__item}>
               <div className={styles.filter_options__title}>Reminders:</div>
@@ -106,10 +115,12 @@ Filters.PropTypes = {
   addServiceFilter: PropTypes.func,
 };
 
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addScheduleFilter,
     removeScheduleFilter,
+    clearScheduleFilter,
   }, dispatch);
 }
 

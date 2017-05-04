@@ -28,3 +28,11 @@ export function setSheduleMode(mode) {
       dispatch(setSheduleModeAction({ mode }));
     };
 }
+
+export function setAllFilters({key, filter}) {
+  return function (dispatch, getState) {
+    const { entities } = getState();
+    const model = entities.getIn([key, 'models']);
+    console.log(model);
+  }
+}

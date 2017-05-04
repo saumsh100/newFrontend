@@ -20,11 +20,15 @@ class ScheduleContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEntities({ key: 'appointments' });
-    this.props.fetchEntities({ key: 'practitioners', join: ['services'] });
-    this.props.fetchEntities({ key: 'requests' });
-    this.props.fetchEntities({ key: 'services' });
-    this.props.fetchEntities({ key: 'chairs' });
+    Promise.all([
+      this.props.fetchEntities({ key: 'appointments' }),
+      this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
+      this.props.fetchEntities({ key: 'requests' }),
+      this.props.fetchEntities({ key: 'services' }),
+      this.props.fetchEntities({ key: 'chairs' }),
+    ]).then(() => {
+
+    });
   }
 
   render() {

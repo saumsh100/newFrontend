@@ -50,7 +50,6 @@ class ScheduleComponent extends Component {
     window.socket.emit('fetchAvailabilities');
   }
 
-
   toggleCalendar() {
     this.setState({showDatePicker: !this.state.showDatePicker});
   }
