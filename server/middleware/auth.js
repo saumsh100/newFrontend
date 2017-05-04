@@ -34,7 +34,7 @@ const OWNER = {
 
   services: CRUD,
 
-  syncErrors: {
+  syncClientError: {
     read: true,
     create: true,
   },

@@ -13,15 +13,13 @@ function runSyncClientFeeds(socket) {
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
-
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-
 
         if (isDeleted(doc)) {
           socket.emit('remove:Appointment', normalize('appointment', doc));
         } else if (isCreated(doc)) {
-          socket.emit('add:Appointment', normalize('appointment', doc));
+          socket.emit('create:Appointment', normalize('appointment', doc));
         } else {
           socket.emit('update:Appointment', normalize('appointment', doc));
         }
