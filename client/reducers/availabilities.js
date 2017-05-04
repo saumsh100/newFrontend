@@ -13,16 +13,21 @@ import {
   REMOVE_RESERVATION,
   SET_RESERVATION,
   SET_SELECTED_AVAILABILITY,
+  SET_IS_FETCHING,
+  SET_AVAILABILITIES,
 } from '../constants';
 
 export const createInitialWidgetState = state => fromJS(Object.assign({
   account: null,
   practitioners: [],
   services: [],
+  availabilities: [],
+  isFetching: true,
   selectedAvailability: null,
   practitionerId: null,
-  serviceId: null,
+  serviceId: '5f439ff8-c55d-4423-9316-a41240c4d329',
   messages: [],
+  startDate: (new Date()).toISOString(),
   startsAt: null,
   registrationStep: 1,
   logo: null,
@@ -35,6 +40,14 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
 export default handleActions({
   [SET_SELECTED_AVAILABILITY](state, action) {
     return state.set('selectedAvailability', action.payload);
+  },
+
+  [SET_AVAILABILITIES](state, action) {
+    return state.set('availabilities', action.payload);
+  },
+
+  [SET_AVAILABILITIES](state, action) {
+    return state.set('isFetching', action.payload);
   },
 
   [SIX_DAYS_SHIFT](state, action) {

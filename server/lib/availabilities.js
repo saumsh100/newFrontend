@@ -15,6 +15,8 @@ const {
 
 // TODO: Currently returns if EQUAL but that
 const generateDuringFilter = (m, startDate, endDate) => {
+  startDate = r.ISO8601(startDate);
+  endDate = r.ISO8601(endDate);
   return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
     m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
   );
@@ -196,6 +198,9 @@ function generatePractitionerAvailabilities(options) {
    - appointments
    */
 
+  //console.log('startDate', startDate);
+  //console.log('endDate', endDate);
+
   const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
   const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
 
@@ -211,9 +216,9 @@ function generatePractitionerAvailabilities(options) {
 
   // TODO: possibleTimeSlots is still not cutting off endDate
 
-  // console.log('timeSlots', timeSlots);
-  // console.log('validTimeSlots', validTimeSlots);
-  // console.log('finalSlots', finalSlots);
+  //console.log('timeSlots', timeSlots);
+  //console.log('validTimeSlots', validTimeSlots);
+  //console.log('finalSlots', finalSlots);
 
   const availabilities = finalSlots.filter((timeSlot) => {
     // see if the timeSlot conflicts with any appointments, requests or resos
@@ -231,8 +236,7 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefReservations;
   });
 
-  // console.log(practitioner.id);
-  // console.log('generatedAvailabiltiies', availabilities);
+  debugger;
 
   return availabilities;
 }

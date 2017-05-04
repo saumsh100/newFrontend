@@ -9,6 +9,7 @@ const {
   createPossibleTimeSlots,
   createIntervalsFromDailySchedule,
   getDailySchedules,
+  combineDateAndTime,
   createIntervalsFromWeeklySchedule,
   isDuringEachother,
 } = require('../server/util/time');
@@ -273,12 +274,68 @@ describe('util/time', () => {
     });
   });
 
+  describe('#combineDateAndTime', () => {
+    it('should be a function', () => {
+      expect(combineDateAndTime).to.be.a('function');
+    });
+
+    it('should return the correct time on the right day', () => {
+      const startTime = time(4, 56);
+      const day = (new Date(2017, 4, 1));
+      const combinedDate = combineDateAndTime(day, startTime);
+      expect(combinedDate).to.be.a('string');
+      expect(combinedDate).to.equal((new Date(2017, 4, 1, 4, 56)).toISOString());
+    });
+  });
+
   describe('#createIntervalsFromWeeklySchedule', () => {
     it('should be a function', () => {
       expect(createIntervalsFromWeeklySchedule).to.be.a('function');
     });
 
     // TODO: write Unit Tests for this!!!!!!!
+    it('should return the schedule for monday', () => {
+      // Need to test with offset dates
+      const sd = new Date(2017, 4, 1, 7, 32);
+      const ed = new Date(2017, 4, 1, 19, 56);
+      const weeklySchedule = createWeeklySchedule({
+        monday: {
+          startTime: time(12, 0),
+          endTime: time(16, 0),
+        },
+      });
+
+      const intervals = createIntervalsFromWeeklySchedule(weeklySchedule, sd, ed);
+      expect(intervals).to.be.an('array');
+      expect(intervals.length).to.equal(1);
+
+      const { startDate, endDate } = intervals[0];
+      expect(startDate).to.equal(new Date(2017, 4, 1, 12, 0).toISOString());
+      expect(endDate).to.equal(new Date(2017, 4, 1, 16, 0).toISOString());
+    });
+
+    // TODO: write Unit Tests for this!!!!!!!
+    it('should return the intervals for monday to friday', () => {
+      // Need to test with offset dates
+      const sd = new Date(2017, 4, 1, 7, 32);
+      const ed = new Date(2017, 4, 6, 7, 32);
+      const weeklySchedule = createWeeklySchedule();
+
+      const intervals = createIntervalsFromWeeklySchedule(weeklySchedule, sd, ed);
+      expect(intervals).to.be.an('array');
+      expect(intervals.length).to.equal(5);
+
+      expect(intervals[0].startDate).to.equal(new Date(2017, 4, 1, 8, 0).toISOString());
+      expect(intervals[0].endDate).to.equal(new Date(2017, 4, 1, 17, 0).toISOString());
+      expect(intervals[1].startDate).to.equal(new Date(2017, 4, 2, 8, 0).toISOString());
+      expect(intervals[1].endDate).to.equal(new Date(2017, 4, 2, 17, 0).toISOString());
+      expect(intervals[2].startDate).to.equal(new Date(2017, 4, 3, 8, 0).toISOString());
+      expect(intervals[2].endDate).to.equal(new Date(2017, 4, 3, 17, 0).toISOString());
+      expect(intervals[3].startDate).to.equal(new Date(2017, 4, 4, 8, 0).toISOString());
+      expect(intervals[3].endDate).to.equal(new Date(2017, 4, 4, 17, 0).toISOString());
+      expect(intervals[4].startDate).to.equal(new Date(2017, 4, 5, 8, 0).toISOString());
+      expect(intervals[4].endDate).to.equal(new Date(2017, 4, 5, 17, 0).toISOString());
+    });
 
   });
 

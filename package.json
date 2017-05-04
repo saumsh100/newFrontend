@@ -192,7 +192,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.8.0",
     "material-design-icons": "^2.2.3",
-    "mocha": "^2.2.5",
+    "mocha": "^3.3.0",
     "nodemon": "^1.10.2",
     "postcss-cssnext": "^2.9.0",
     "react-addons-perf": "^15.2.1",

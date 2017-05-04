@@ -473,10 +473,6 @@ const SEEDS = {
         isClosed: true,
       },
 
-      thursday: {
-        endTime: time(14, 30),
-      },
-
       saturday: {
         isClosed: true,
       },
@@ -497,6 +493,14 @@ const SEEDS = {
             endTime: time(13, 0),
           },
         ],
+      },
+
+      wednesday: {
+        isClosed: true,
+      },
+
+      friday: {
+        isClosed: true,
       },
 
       saturday: {
@@ -534,6 +538,10 @@ const SEEDS = {
       state: 'CA',
       city: 'Los Angeles',
       zipCode: '90210',
+
+      logo: '/images/liberty_logo.png',
+      address: '10204 112th St.',
+      // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       // smsPhoneNumber: clinicPhoneNumber,
       // logo: 'images/availabilies_sidebar_logo_2.png',

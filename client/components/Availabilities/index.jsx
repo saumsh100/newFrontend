@@ -8,7 +8,6 @@ import SideBar from './SideBar';
 import Header from './Header';
 import styles from './styles.scss';
 
-let i = 0;
 class Availabilities extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +34,8 @@ class Availabilities extends Component {
   }
 
   componentWillReceiveProps() {
-    document.body.style.setProperty('--bookingWidgetPrimaryColor', this.props.account.get('bookingWidgetPrimaryColor'));
+    const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
+    document.body.style.setProperty('--bookingWidgetPrimaryColor', color);
   }
 
   onDoctorChange(e) {
@@ -205,9 +205,5 @@ class Availabilities extends Component {
     );
   }
 }
-
-Availabilities.defaultProps = {
-  bookingWidgetPrimaryColor: '#ff715a',
-};
 
 export default Availabilities;

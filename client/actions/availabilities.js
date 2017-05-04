@@ -12,6 +12,8 @@ import {
   SET_RESERVATION,
   REMOVE_RESERVATION,
   SET_SELECTED_AVAILABILITY,
+  SET_IS_FETCHING,
+  SET_AVAILABILITIES,
 } from '../constants';
 
 export const sixDaysShiftAction  = createAction(SIX_DAYS_SHIFT);
@@ -25,3 +27,5 @@ export const setClinicInfoAction = createAction(SET_CLINIC_INFO);
 export const setTemporaryReservationAction = createAction(SET_RESERVATION);
 export const removeReservationAction = createAction(REMOVE_RESERVATION);
 export const setSelectedAvailability = createAction(SET_SELECTED_AVAILABILITY);
+export const setIsFetching = createAction(SET_IS_FETCHING);
+export const setAvailabilities = createAction(SET_AVAILABILITIES);
