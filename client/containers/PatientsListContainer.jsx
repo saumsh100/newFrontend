@@ -20,9 +20,11 @@ class PatientsListContainer extends Component {
       moreData: true,
       patients: null,
       roll: 0,
+      currentPatient: {id: null},
     };
 
     this.loadMore = this.loadMore.bind(this);
+    this.setCurrentPatient = this.setCurrentPatient.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +36,13 @@ class PatientsListContainer extends Component {
       params: {
         limit: HOW_MANY_TO_SKIP,
       },
+    });
+  }
+
+  setCurrentPatient(currentPatient) {
+    console.log(currentPatient.firstName);
+    this.setState({
+      currentPatient,
     });
   }
 
@@ -98,8 +107,8 @@ class PatientsListContainer extends Component {
     return (
       <PatientList
         loadMore={this.loadMore}
-        setCurrentPatient={setCurrentPatient}
-        currentPatient={'asds'}
+        setCurrentPatient={this.setCurrentPatient}
+        currentPatient={this.state.currentPatient}
         patients={patients}
         moreData={this.state.moreData}
         appointments={appointments}
