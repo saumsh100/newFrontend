@@ -13,7 +13,6 @@ class PatientInfoDisplay extends Component {
 
   render() {
     const { currentPatient } = this.props;
-    console.log(currentPatient);
 
     let showDate = null;
 

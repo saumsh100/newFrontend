@@ -31,7 +31,7 @@ class PatientList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      birthday: 'Enter Birthday',
+      birthday: new Date(),
     };
 
     this.saveBirthday = this.saveBirthday.bind(this);
@@ -52,12 +52,8 @@ class PatientList extends Component {
       return patient;
     });
 
-    // TODO: remove appointments with repeating patientIds
-
-    let patientList = x.sort((a, b) => moment(a.appointment.startDate).diff(b.appointment.startDate));
-
     const array = [];
-    patientList = patientList.filter((item, pos) => {
+    const patientList = x.filter((item, pos) => {
       const id = item.id;
       if (array.includes(id)) {
         return false;
@@ -123,16 +119,11 @@ class PatientList extends Component {
                   threshold={50}
                 >
                   {patientList.map((user, i) => {
-                    if (this.props.initialUser  && i === 0) {
-                      this.props.setCurrentPatient(user);
-                    }
                     return <PatientListItem
-                    key={user.appointment.id + i}
-                    user={user}
-                    initialLoad={false}
-                    threshold={0}
-                    currentPatient={this.props.currentPatient}
-                    setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
+                      key={user.appointment.id + i}
+                      user={user}
+                      currentPatient={this.props.currentPatient}
+                      setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
                     />
                   })}
                 </InfiniteScroll>
@@ -153,7 +144,7 @@ class PatientList extends Component {
                     </div>
                   </Col>
                   <Col xs={4}>
-                    <div className={styles.middle}></div>
+                    <div className={styles.middle}/>
                   </Col>
                   <Col xs={4}>
                     <div className={styles.right}>
@@ -161,10 +152,11 @@ class PatientList extends Component {
                         index={0}>
                         <Tab label="Info">
                           <EditPatientForm
-                            onSubmit={this.props.submit}
-                            formName={formName}
-                            birthday={this.state.birthday}
-                            saveBirthday={this.saveBirthday}
+                            onSubmit={this.props.submitEdit.bind(null, this.props.currentPatient)}
+                            currentPatient={this.props.currentPatient}
+                            formName={'editPatient'}
+                            styles={styles}
+                            onDelete={this.props.deletePatient}
                           />
                         </Tab>
                       </Tabs>
@@ -181,8 +173,19 @@ class PatientList extends Component {
 }
 
 PatientList.propTypes = {
-  patients: PropTypes.array.isRequired,
-  setCurrentPatient: PropTypes.function
+  patients: PropTypes.object.isRequired,
+  setCurrentPatient: PropTypes.func,
+  loadMore: PropTypes.func,
+  currentPatient: PropTypes.object,
+  moreData: PropTypes.bool,
+  appointments: PropTypes.object.isRequired,
+  active: PropTypes.bool,
+  initialUser: PropTypes.bool,
+  newUserForm: PropTypes.func,
+  deletePatient: PropTypes.func,
+  reinitializeState: PropTypes.func,
+  submitEdit: PropTypes.func,
+  submit: PropTypes.func,
 };
 
 export default PatientList;

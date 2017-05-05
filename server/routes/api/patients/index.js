@@ -74,7 +74,9 @@ patientsRouter.get('/', (req, res, next) => {
     .then(p => res.send({ length: p.length }));
   } else {
     return Patient.filter({ accountId }).run()
-      .then(patients => res.send(normalize('patients', patients)))
+      .then((patients) => {
+        res.send(normalize('patients', patients))
+      })
       .catch(next);
   }
 });
@@ -128,8 +130,10 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+  const key = req.body.key || 'patientSingle';
+  delete req.body.key;
   return req.patient.merge(req.body).save()
-    .then(patient => res.send(normalize('patient', patient)))
+    .then(patient => res.send(normalize(key, patient)))
     .catch(next);
 });
 
@@ -137,8 +141,12 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Delete a patient
  */
 patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
-  return req.patient.delete()
-    .then(() => res.send(204))
+  return Patient.get(req.patient.id).getJoin({ appointments: true }).run()
+    .then((patient) => {
+      console.log(patient);
+      patient.deleteAll();
+      res.send(204);
+    })
     .catch(next);
 });
 

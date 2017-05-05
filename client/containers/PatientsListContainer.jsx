@@ -1,14 +1,10 @@
 
 import React, { PropTypes, Component } from 'react';
 import PatientList from '../components/Patients/PatientList/';
-import { fetchEntities, createEntityRequest } from '../thunks/fetchEntities';
-import {
-  setCurrentPatient,
-  updateEditingPatientState,
-  changePatientInfo,
-} from '../thunks/patientList';
+import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 
 const HOW_MANY_TO_SKIP = 10;
 
@@ -20,7 +16,7 @@ class PatientsListContainer extends Component {
       moreData: true,
       patients: null,
       roll: 0,
-      currentPatient: {id: null},
+      currentPatient: { id: null },
       active: false,
       showNewUser: false,
       initialUser: true,
@@ -31,6 +27,8 @@ class PatientsListContainer extends Component {
     this.newUserForm = this.newUserForm.bind(this);
     this.newPatient = this.newPatient.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
+    this.submitEdit = this.submitEdit.bind(this);
+    this.deletePatient = this.deletePatient.bind(this);
   }
 
   componentDidMount() {
@@ -58,7 +56,54 @@ class PatientsListContainer extends Component {
     };
 
     this.setState(newState);
-    this.props.createEntityRequest({key: 'patient', entityData: values});
+    this.props.createEntityRequest({
+      key: 'patient',
+      entityData: values,
+      noSave: true,
+    });
+  }
+
+  deletePatient() {
+    const key = (this.state.showNewUser ? 'patient' : 'patients');
+    const currentPatient = ((this.state.showNewUser) ? this.props.patient.toArray()[0] : this.state.currentPatient);
+
+    this.setState({
+      currentPatient: { id: null },
+      showNewUser: false,
+    });
+
+    const ids = [];
+
+    this.props.appointments.toArray().forEach((appointment) => {
+      if (appointment.patientId === currentPatient.id) {
+        ids.push(appointment.id);
+      }
+    });
+
+    this.props.deleteEntityCascade({
+      key,
+      id: currentPatient.id,
+      url: `/api/patients/${currentPatient.id}`,
+      cascadeKey: 'appointments',
+      ids,
+    })
+  }
+
+  submitEdit(currentPatient, values) {
+    const key = (this.state.showNewUser ? 'patient' : 'patients');
+
+    if (key === 'patients') {
+      values.key = 'patient';
+    }
+
+    this.props.updateEntityRequest({
+      key,
+      values,
+      url: `/api/patients/${currentPatient.id}`,
+    })
+
+    values.firstName = '';
+    values.lastName = '';
   }
 
   newUserForm() {
@@ -115,18 +160,27 @@ class PatientsListContainer extends Component {
   render() {
     const {
       patients,
-      setCurrentPatient,
-      filters,
-      updateEditingPatientState,
-      editingPatientState,
-      changePatientInfo,
-      form,
       appointments,
     } = this.props;
 
-    const currentPatient = ((this.state.showNewUser) ? this.props.patient.toArray()[0] : this.state.currentPatient)
-    currentPatient.appointment = {};
 
+    let currentPatient = this.state.currentPatient;
+    const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+
+    if (this.state.initialUser && appointments.toArray()[0]) {
+      currentPatient = patients.get(app.toArray()[0].patientId);
+      currentPatient.appointment = app.toArray()[0];
+    }
+
+    if (this.state.showNewUser) {
+      currentPatient = patients.toArray()[0];
+      currentPatient.appointment = {};
+    } else {
+      if (this.state.currentPatient.id !== null) {
+        currentPatient = patients.get(this.state.currentPatient.id);
+        currentPatient.appointment = appointments.get(this.state.currentPatient.appointment.id);
+      }
+    }
 
     return (
       <PatientList
@@ -135,23 +189,28 @@ class PatientsListContainer extends Component {
         currentPatient={currentPatient}
         patients={patients}
         moreData={this.state.moreData}
-        appointments={appointments}
+        appointments={app}
         active={this.state.active}
         initialUser={this.state.initialUser}
         newUserForm={this.newUserForm}
+        deletePatient={this.deletePatient}
         reinitializeState={this.reinitializeState}
-        filters={filters}
+        submitEdit={this.submitEdit}
         submit={this.newPatient}
-        updateEditingPatientState={updateEditingPatientState}
-        editingPatientState={editingPatientState}
-        form={form}
-        changePatientInfo={changePatientInfo}
       />
     );
   }
 }
 
-PatientsListContainer.propTypes = {};
+PatientsListContainer.PropTypes = {
+  appointments: PropTypes.object,
+  patient: PropTypes.object,
+  patients: PropTypes.object,
+  fetchEntities: PropTypes.function,
+  createEntityRequest: PropTypes.function,
+  updateEntityRequest: PropTypes.function,
+  deleteEntityCascade: PropTypes.function,
+};
 
 function mapStateToProps({ entities }) {
   return {
@@ -165,9 +224,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     createEntityRequest,
-    setCurrentPatient,
-    updateEditingPatientState,
-    changePatientInfo,
+    updateEntityRequest,
+    deleteEntityCascade,
   }, dispatch);
 }
 

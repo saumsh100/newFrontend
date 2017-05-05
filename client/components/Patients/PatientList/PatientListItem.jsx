@@ -52,6 +52,7 @@ class PatientListItem extends Component {
 }
 PatientListItem.propTypes = {
   user: PropTypes.object.isRequired,
+  currentPatient: PropTypes.object,
 };
 
 export default PatientListItem;

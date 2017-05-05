@@ -33,6 +33,16 @@ ul {
   margin-top: 20px;
 }
 
+.formButton {
+  float:right;
+  margin-left: 10px;
+}
+
+.form {
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
 .name {
   font-family: "Gotham-Medium";
   font-size: 1.8em;
@@ -107,8 +117,8 @@ ul {
 }
 
 .patients {
-  height: 775px;
-  max-height: 775px;
+  height: 895px;
+  max-height: 895px;
   display: flex;
   width: 100%;
   padding: 10px;
@@ -175,7 +185,7 @@ ul {
 
   .patients_list__users {
     overflow-y: auto;
-    max-height: 600px;
+    max-height: 720px;
     margin: 0;
     padding: 0;
   }
@@ -274,7 +284,7 @@ ul {
   }
 
   &__header {
-    height: 310px;
+    height: 430px;
     min-height: 310px;
     padding: 50px;
     background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
@@ -284,7 +294,7 @@ ul {
   .patient_profile {
     width: 500px;
     background: #fafafa;
-    margin-top: 20px;
+    margin-top: 50px;
     margin-left: 30px;
 
 

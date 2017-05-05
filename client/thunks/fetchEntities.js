@@ -46,7 +46,27 @@ export function deleteEntityRequest({ key, id, url }) {
   };
 }
 
-export function createEntityRequest({ key, entityData, url }) {
+export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
+  return (dispatch, getState) => {
+    const { entities } = getState();
+    const entity = entities.get(key);
+
+    url = url || `${entity.getUrlRoot()}/${id}`;
+    axios.delete(url)
+      .then(() => {
+        if (cascadeKey) {
+          ids.forEach((singleId) => {
+            dispatch(deleteEntity({ key: cascadeKey, id: singleId }));
+          });
+        }
+        dispatch(deleteEntity({ key, id }));
+      })
+      .catch(err => console.log(err));
+  };
+}
+
+
+export function createEntityRequest({ key, entityData, url, noSave }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -55,7 +75,7 @@ export function createEntityRequest({ key, entityData, url }) {
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;
-        dispatch(receiveEntities({ key, entities: data.entities }));
+        dispatch(receiveEntities({ key, entities: data.entities, noSave }));
         return data.entities;
       })
       .catch(err => console.log(err));
