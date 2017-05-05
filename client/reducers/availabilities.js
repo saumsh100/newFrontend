@@ -3,9 +3,9 @@ import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
-  SET_DAY,
-  SET_PRACTITIONER,
-  SET_SERVICE,
+  SET_START_DATE,
+  SET_SELECTED_PRACTITIONER_ID,
+  SET_SELECTED_SERVICE_ID,
   CREATE_PATIENT,
   SET_STARTING_APPOINTMENT_TIME,
   SET_REGISTRATION_STEP,
@@ -24,10 +24,10 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
   availabilities: [],
   isFetching: true,
   selectedAvailability: null,
-  practitionerId: null,
-  serviceId: '5f439ff8-c55d-4423-9316-a41240c4d329',
+  selectedServiceId: null, // Will be set by the initialState from server
+  selectedPractitionerId: '',
+  selectedStartDate: (new Date()).toISOString(),
   messages: [],
-  startDate: (new Date()).toISOString(),
   startsAt: null,
   registrationStep: 1,
   logo: null,
@@ -46,7 +46,7 @@ export default handleActions({
     return state.set('availabilities', action.payload);
   },
 
-  [SET_AVAILABILITIES](state, action) {
+  [SET_IS_FETCHING](state, action) {
     return state.set('isFetching', action.payload);
   },
 
@@ -57,36 +57,22 @@ export default handleActions({
     });
   },
 
-  [SET_DAY](state, action) {
-    return state.merge({
-
-    });
+  [SET_SELECTED_SERVICE_ID](state, action) {
+    return state.set('selectedServiceId', action.payload);
   },
 
-  [SET_PRACTITIONER](state, action) {
-    const practitionerObj = state[action.payload.practitionerId];
-    return state.merge({
-      practitionerId: action.payload.practitionerId,
-    })
+  [SET_SELECTED_PRACTITIONER_ID](state, action) {
+    return state.set('selectedPractitionerId', action.payload);
   },
 
-  [SET_SERVICE](state, action) {
-    return state.merge({
-      serviceId: action.payload.serviceId,
-    })
+  [SET_START_DATE](state, action) {
+    return state.set('selectedStartDate', action.payload);
   },
 
   [CREATE_PATIENT](state, action) {
     const { firstName, lastName } = action.payload;
     return state.merge({
       messages: [`Patient ${firstName} ${lastName} has been registered`]
-    });
-  },
-
-  [SET_STARTING_APPOINTMENT_TIME](state, action) {
-    const startsAt = action.payload;
-    return state.merge({
-      startsAt: startsAt,
     });
   },
 

@@ -9,21 +9,57 @@ import {
   Col,
   IconButton,
 } from '../../../library';
+import * as Actions from '../../../../actions/availabilities';
 import * as Thunks from '../../../../thunks/availabilities';
 import styles from './styles.scss';
 
 const getSortedAvailabilities = (momentDate, availabilities) => {
-  const filteredAvailabilities = availabilities.filter(a => moment(a.startDate).isSame(momentDate, 'd'));
-  return filteredAvailabilities.sort((a, b) => moment(a).diff(b));
+  // TODO: This could be sped up, we can assume availabilities are in order
+  return availabilities.filter(a => moment(a.startDate).isSame(momentDate, 'd'));
+  // return filteredAvailabilities.sort((a, b) => moment(a).diff(b));
 };
 
 class AvailabilitiesDisplay extends Component {
   constructor(props) {
     super(props);
+
+    this.setDateBack = this.setDateBack.bind(this);
+    this.setDateForward = this.setDateForward.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchAvailabilities();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    /*console.log('nextProps');
+    console.log(nextProps.practitionerId);
+    console.log(nextProps.startDate);
+    console.log(nextProps.serviceId);
+    console.log('this.props');
+    console.log(this.props.practitionerId);
+    console.log(this.props.startDate);
+    console.log(this.props.serviceId);*/
+
+    // TODO: this is a good reason to make an object for form values
+
+    const shouldFetchAvailabilities = (nextProps.selectedPractitionerId !== this.props.selectedPractitionerId) ||
+                                      (nextProps.selectedServiceId !== this.props.selectedServiceId) ||
+                                      (nextProps.selectedStartDate !== this.props.selectedStartDate);
+
+    if (shouldFetchAvailabilities) {
+      this.props.fetchAvailabilities();
+    }
+  }
+
+  setDateBack() {
+    const newStartDate = moment(this.props.selectedStartDate).subtract(5, 'days').toISOString();
+    this.props.setSelectedStartDate(newStartDate);
+  }
+
+  setDateForward() {
+    const newStartDate = moment(this.props.selectedStartDate).add(5, 'days').toISOString();
+    this.props.setSelectedStartDate(newStartDate);
   }
 
   render() {
@@ -31,89 +67,102 @@ class AvailabilitiesDisplay extends Component {
       // startDate,
       // availabilities,
       onSelect,
-      onSixDaysBack,
-      onSixDaysForward,
-      selectedAvailability = {},
+      selectedStartDate,
+      isFetching,
+      availabilities,
+      selectedAvailability,
+      setSelectedAvailability,
     } = this.props;
 
     const numDaysForward = 4;
     const dayAvailabilities = [];
-
-    const availabilities = [
-      {
-        startDate: (new Date(2017, 4, 1, 12, 0)).toISOString(),
-        endDate: (new Date(2017, 4, 1, 13, 0)).toISOString(),
-      },
-      {
-        startDate: (new Date(2017, 4, 1, 13, 0)).toISOString(),
-        endDate: (new Date(2017, 4, 1, 14, 0)).toISOString(),
-      },
-      {
-        startDate: (new Date(2017, 4, 2, 14, 0)).toISOString(),
-        endDate: (new Date(2017, 4, 2, 15, 0)).toISOString(),
-      },
-      {
-        startDate: (new Date(2017, 4, 3, 9, 0)).toISOString(),
-        endDate: (new Date(2017, 4, 3, 10, 0)).toISOString(),
-      },
-    ];
-
-    const startDate = new Date();
+    // const startDate = new Date();
 
     let i;
     for (i = 0; i <= numDaysForward; i++) {
-      const momentDate = moment(startDate).add(i, 'days');
+      const momentDate = moment(selectedStartDate).add(i, 'days');
       const sortedAvailabilities = getSortedAvailabilities(momentDate, availabilities);
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
 
-    console.log(dayAvailabilities);
+    const header = (
+      <div className={styles.appointment__table_elements}>
+        {dayAvailabilities.map((a) => {
+          return (
+            <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_header`}>
+              <div className={styles.appointment__list_header}>
+                <div className={styles.list__header_day}>
+                  {a.momentDate.format('ddd')}
+                </div>
+                <div className={styles.list__header_number}>
+                  {a.momentDate.format('DD/MM/YYYY')}
+                </div>
+              </div>
+            </ul>
+          );
+        })}
+      </div>
+    );
+
+    // console.log(dayAvailabilities);
+    let availabilitiesDisplay = (
+      <div className={styles.displayContainer}>
+        <i className={`fa fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
+      </div>
+    );
+
+    if (!isFetching) {
+      availabilitiesDisplay = (
+        <div className={styles.displayAvailabilitiesContainer}>
+        <div className={styles.appointment__table_elements}>
+          {dayAvailabilities.map((a) => {
+            return (
+              <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
+                {a.sortedAvailabilities.map((availability) => {
+                  let classes = styles.appointment__list_item;
+                  if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
+                    classes = `${classes} ${styles.appointment__list_selected}`;
+                  }
+
+                  return (
+                    <li
+                      key={`${availability.startDate}_item`}
+                      onClick={() => setSelectedAvailability(availability)}
+                      className={classes}
+                    >
+                      {moment(availability.startDate).format('HH:mm A')}
+                    </li>
+                  );
+                })}
+              </ul>
+            );
+          })}
+        </div>
+        </div>
+      );
+    }
 
     return (
-      <Grid onClick={onSelect}>
+      <Grid>
         <Row>
           <Col xs={1} className={styles.centeredContent}>
             <IconButton
               icon="arrow-circle-o-left"
               className={styles.appointment__table_btn}
-              onClick={onSixDaysForward}
+              onClick={this.setDateBack}
             />
           </Col>
           <Col xs={10} className={styles.columnsWrapper}>
-            <div className={styles.appointment__table_elements}>
-              {dayAvailabilities.map((a) => {
-                console.log(a.sortedAvailabilities);
-                return (
-                  <ul className={styles.appointment__list} key={a.startDate}>
-                    <div className={styles.appointment__list_header}>
-                      <div className={styles.list__header_day}>
-                        {a.momentDate.format('ddd')}
-                      </div>
-                      <div className={styles.list__header_number}>
-                        {a.momentDate.format('DD/MM/YYYY')}
-                      </div>
-                    </div>
-                    {a.sortedAvailabilities.map((availability) => {
-                      return (
-                        <li
-                          key={availability.startDate}
-                          onClick={() => onSelect(availability)}
-                          className={`${styles.appointment__list_item} ${availability.isBusy ? styles.appointment__list_active : ''} ${availability.startDate === selectedAvailability.startDate ? styles.appointment__list_selected : ''}`}
-                        >
-                          {moment(availability.startDate).format('HH:mm A')}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                );
-              })}
+            <div className={styles.displayWrapperForHorizontalScroll}>
+              {header}
+              {availabilitiesDisplay}
             </div>
           </Col>
           <Col xs={1} className={styles.centeredContent}>
             <IconButton
               icon="arrow-circle-o-right"
               className={styles.appointment__table_btn}
-              onClick={onSixDaysForward}
+              onClick={this.setDateForward}
             />
           </Col>
         </Row>
@@ -130,21 +179,32 @@ AvailabilitiesDisplay.propTypes = {
   // startsAt: PropTypes.prop,
   availabilities: PropTypes.arrayOf(PropTypes.object),
   onSelect: PropTypes.func.isRequired,
-  onSixDaysBack: PropTypes.func.isRequired,
-  onSixDaysForward: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   fetchAvailabilities: PropTypes.func.isRequired,
+  selectedStartDate: PropTypes.string.isRequired,
+  selectedPractitionerId: PropTypes.string,
+  selectedServiceId: PropTypes.string.isRequired,
+  setSelectedStartDate: PropTypes.func.isRequired,
+  setSelectedAvailability: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ availabilities }) {
   return {
-
+    isFetching: availabilities.get('isFetching'),
+    availabilities: availabilities.get('availabilities'),
+    selectedStartDate: availabilities.get('selectedStartDate'),
+    selectedPractitionerId: availabilities.get('selectedPractitionerId'),
+    selectedServiceId: availabilities.get('selectedServiceId'),
+    selectedAvailability: availabilities.get('selectedAvailability'),
   };
 }
 
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchAvailabilities: Thunks.fetchAvailabilities
+    fetchAvailabilities: Thunks.fetchAvailabilities,
+    setSelectedStartDate: Actions.setSelectedStartDate,
+    setSelectedAvailability: Actions.setSelectedAvailability,
   }, dispatch);
 }
 

@@ -5,9 +5,6 @@ import {
   setIsFetching,
   setAvailabilities,
   sixDaysShiftAction,
-  setDayAction,
-  setPractitionerAction,
-  setServiceAction,
   createPatientAction,
   setStartingAppointmentTimeAction,
   setRegistrationStepAction,
@@ -20,24 +17,6 @@ export function sixDaysShift(dayObj) {
   return function (dispatch, getState) {
     dispatch(sixDaysShiftAction(dayObj));
   };
-}
-
-export function setDay() {
-  return function (dispatch, getState) {
-    dispatch(setDayAction({ }));
-  }
-}
-
-export function setPractitioner(practitionerId) {
-  return function (dispatch, getState) {
-    dispatch(setPractitionerAction(practitionerId));
-  }
-}
-
-export function setService(serviceId) {
-  return function (dispatch, getState) {
-    dispatch(setServiceAction(serviceId));
-  }
 }
 
 export function createPatient(params) {
@@ -136,22 +115,26 @@ export function fetchAvailabilities() {
     // Make request with current selected options
     const { availabilities, entities } = getState();
     const account = entities.getIn(['accounts', 'models']).first();
-    const startDate = availabilities.get('startDate');
+    const startDate = availabilities.get('selectedStartDate');
     const endDate = moment(startDate).add(5, 'days').toISOString();
     const params = {
-      practitionerId: availabilities.get('practitionerId'),
-      serviceId: availabilities.get('serviceId'),
+      serviceId: availabilities.get('selectedServiceId'),
+      practitionerId: availabilities.get('selectedPractitionerId'),
       startDate,
       endDate,
     };
 
+    //debugger;
+
     axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
       .then(({ data }) => {
         console.log(data.availabilities);
+        console.log('dispatching availabilities');
         dispatch(setAvailabilities(data.availabilities));
 
         // Remove loading symbol
-        dispatch(setIsFetching(true));
+        console.log('dispatching isFetching');
+        dispatch(setIsFetching(false));
       })
       .catch((err) => {
         throw err;

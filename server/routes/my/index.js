@@ -32,10 +32,14 @@ myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
         account: req.account,
         services: req.account.services,
         practitioners: req.account.practitioners,
+        selectedServiceId: req.account.services[0].id,
       },
 
       entities,
     };
+
+    // console.log('services', req.account.services);
+    // console.log('practitioners', req.account.practitioners);
 
     return res.render('patient', {
       account: req.account,

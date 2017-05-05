@@ -9,9 +9,6 @@ import { fetchEntities } from '../thunks/fetchEntities';
 import Availabilities from '../components/Availabilities';
 import {
   sixDaysShift,
-  setDay,
-  setPractitioner,
-  setService,
   createPatient,
   setStartingAppointmentTime,
   setRegistrationStep,
@@ -48,7 +45,7 @@ class AvailabilitiesContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     // TODO: KILL THIS domen usage
-    const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
+    /*const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
 
     const {setPractitioner, setService} = this.props;
     const thisPractitioners = this.props.practitioners.get('models').toArray();
@@ -200,7 +197,7 @@ class AvailabilitiesContainer extends Component {
           domen,
         });
       });
-    }
+    }*/
   }
 
   getAppointmentsSorted() {
@@ -273,9 +270,6 @@ class AvailabilitiesContainer extends Component {
         services={this.props.services}
         practitioners={this.props.practitioners}
         sixDaysShift={this.props.sixDaysShift}
-        setDay={this.props.setDay}
-        setPractitioner={this.props.setPractitioner}
-        setService={this.props.setService}
         practitionersStartEndDate={this.props.practitionersStartEndDate}
         createPatient={this.props.createPatient}
         serviceId={serviceId}
@@ -311,9 +305,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     sixDaysShift,
-    setDay,
-    setPractitioner,
-    setService,
     createPatient,
     getClinicInfo,
     setStartingAppointmentTime,

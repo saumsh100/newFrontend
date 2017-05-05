@@ -1,6 +1,8 @@
 
 @import '../../../../ui.scss';
 
+$widget-primary-color: var(--bookingWidgetPrimaryColor);
+
 .appointment {
   &__table {
     position: relative;
@@ -24,7 +26,7 @@
       display: flex;
       // width: 100%;
       min-width: 370px;
-      height: 200px;
+      // height: 200px;
       // overflow-y: scroll;
 
 
@@ -36,7 +38,7 @@
     padding: 0;
     margin: 0 5px;
     font-size: 18px;
-    flex-grow: 1;
+    width: 20%;
     @media screen and (max-width: 800px) {
       margin: 0 2px;
     }
@@ -62,12 +64,6 @@
       background-color: #e6e6e6 !important;
     }
 
-    &_selected {
-      background-color: #f3715c !important;
-      background-color: var(--bookingWidgetPrimaryColor) !important;
-      filter: grayscale(80%);
-    }
-
     &_item {
       cursor: pointer;
       width: 100%;
@@ -79,10 +75,21 @@
       text-align: center;
       text-transform: lowercase;
       list-style: none;
-      background-color: #f3715c;
       background-color: var(--bookingWidgetPrimaryColor);
       flex-grow: 1;
+      &:hover {
+        background-color: darken(#FF715A, 5%);
+      }
     }
+
+    &_selected {
+      // background-color: var(--bookingWidgetPrimaryColor) !important;
+      filter: grayscale(80%);
+      &:hover {
+
+      }
+    }
+
   }
 }
 
@@ -93,4 +100,32 @@
 
 .columnsWrapper {
   overflow-x: auto;
+}
+
+.headerWrapper {
+  height: 60px;
+}
+
+.displayWrapperForHorizontalScroll {
+  min-width: 370px;
+}
+
+.displayContainer {
+  overflow-y: scroll;
+  // height: 250px;
+  height: 225px;
+  min-height: 225px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.displayAvailabilitiesContainer {
+  overflow-y: scroll;
+  height: 225px;
+  min-height: 225px;
+}
+
+.loadingSpinnerIcon {
+  color: var(--bookingWidgetPrimaryColor);
 }

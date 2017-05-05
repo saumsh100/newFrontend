@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { Button } from '../../library';
 import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
@@ -23,11 +24,7 @@ class SideBar extends Component {
 
     let selectedAvailabilityComponent = null;
     if (selectedAvailability) {
-      const {
-        startDate,
-        endDate,
-      } = selectedAvailability;
-
+      const { startDate } = selectedAvailability;
       selectedAvailabilityComponent = (
         <div className={styles.sidebar__information}>
           {/* TODO: selectedAvailability needs it's own display */}
@@ -35,16 +32,15 @@ class SideBar extends Component {
             YOUR APPOINTMENT
           </div>
           <div className={styles.sidebar__information_text}>
-            8:30 AM
+            {moment(startDate).format('dddd, MMMM Do YYYY')}
+          </div>
+          <div className={styles.sidebar__information_text}>
+            {moment(startDate).format('h:mm a')}
           </div>
         </div>
       );
     }
 
-    // TODO: add real account data to this!
-    // - address
-    // - name
-    // - logo
     const {
       name,
       address,

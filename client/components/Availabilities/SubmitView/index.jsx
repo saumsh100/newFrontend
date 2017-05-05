@@ -18,7 +18,7 @@ class SubmitView extends Component {
     this.getPercent = this.getPercent.bind(this);
     this.bookAnAppointment = this.bookAnAppointment.bind(this);
     this.setRegistrationStep = this.setRegistrationStep.bind(this);
-    this.collapseMenu = this.collapseMenu.bind(this);
+    // this.collapseMenu = this.collapseMenu.bind(this);
   }
 
   componentDidMount() {
@@ -64,18 +64,6 @@ class SubmitView extends Component {
     clearInterval(this.registrationTimer);
   }
 
-  collapseMenu(open) {
-    if(open) {
-      this.setState({
-        collapseMenu: true,
-      });
-    } else {
-      this.setState({
-        collapseMenu: false,
-      });
-    }
-  }
-
   renderMessages(messages) {
     return (
       <div>
@@ -89,10 +77,6 @@ class SubmitView extends Component {
   }
 
   render() {
-    const { practitionersStartEndDate, logo, address, appointmentInfo } = this.props;
-    const { messages } = practitionersStartEndDate.toJS();
-    const contnet = messages.length ? this.renderMessages(messages)
-      : <SignUpForm onSubmit={values => alert(JSON.stringify(values))} />;
     return (
       <div className={styles.submitViewWrapper}>
         <Timer
@@ -101,8 +85,8 @@ class SubmitView extends Component {
           percentage={this.getPercent()}
           color={this.props.bookingWidgetPrimaryColor}
         />
-        <div onClick={() => this.collapseMenu(false)} className={styles.formWrapper}>
-          {contnet}
+        <div className={styles.formWrapper}>
+          <SignUpForm onSubmit={values => alert(JSON.stringify(values))} />
         </div>
         {/*<div className={styles.signup__footer}>
           <div className={styles.signup__footer_header}>

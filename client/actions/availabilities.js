@@ -2,9 +2,9 @@
 import { createAction } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
-  SET_DAY,
-  SET_PRACTITIONER,
-  SET_SERVICE,
+  SET_START_DATE,
+  SET_SELECTED_SERVICE_ID,
+  SET_SELECTED_PRACTITIONER_ID,
   CREATE_PATIENT,
   SET_STARTING_APPOINTMENT_TIME,
   SET_REGISTRATION_STEP,
@@ -17,9 +17,9 @@ import {
 } from '../constants';
 
 export const sixDaysShiftAction  = createAction(SIX_DAYS_SHIFT);
-export const setDayAction = createAction(SET_DAY);
-export const setPractitionerAction = createAction(SET_PRACTITIONER);
-export const setServiceAction = createAction(SET_SERVICE);
+export const setSelectedStartDate = createAction(SET_START_DATE);
+export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_ID);
+export const setSelectedServiceId = createAction(SET_SELECTED_SERVICE_ID);
 export const createPatientAction = createAction(CREATE_PATIENT);
 export const setStartingAppointmentTimeAction = createAction(SET_STARTING_APPOINTMENT_TIME);
 export const setRegistrationStepAction = createAction(SET_REGISTRATION_STEP);

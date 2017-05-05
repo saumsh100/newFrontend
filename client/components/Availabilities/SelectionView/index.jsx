@@ -7,15 +7,24 @@ import includes from 'lodash/includes';
 import { bindActionCreators } from 'redux';
 import { Button, Form, Field, Checkbox } from '../../library';
 import WaitListPreferences from './WaitListPreferences';
-import AvailabilitiesPreferencesForm from './AvailabilitiesPreferencesForm';
-import AvailabilitiesDisplay from './AvailabilitiesDIsplay/index';
+import AvailabilitiesPreferences from './AvailabilitiesPreferences';
+import AvailabilitiesDisplay from './AvailabilitiesDIsplay';
 import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
 
 class SelectionView extends Component {
   render() {
     const { practitionerId, availabilities, defaultValues } = this.props.params;
-    const { props, upperState, services, practitioners, setRegistrationStep } = this.props;
+    const {
+      props,
+      upperState,
+      services,
+      practitioners,
+      selectedServiceId,
+      selectedPractitionerId,
+      selectedStartDate,
+      setRegistrationStep,
+    } = this.props;
 
     const startsAt = props.practitionersStartEndDate.get('startsAt');
 
@@ -34,19 +43,15 @@ class SelectionView extends Component {
     return (
       <div>
         <div className={styles.appointment__body_header}>
-          <AvailabilitiesPreferencesForm
+          <AvailabilitiesPreferences
             services={services}
             practitioners={practitioners}
-            onChange={values => alert(JSON.stringify(values))}
+            selectedServiceId={selectedServiceId}
+            selectedPractitionerId={selectedPractitionerId}
+            selectedStartDate={selectedStartDate}
           />
         </div>
-        <AvailabilitiesDisplay
-          startsAt={startsAt}
-          onSelect={this.props.selectAvailability}
-          onSixDaysBack={this.props.sixDaysBack}
-          onSixDaysForward={this.props.sixDaysForward}
-          availabilities={availabilities}
-        />
+        <AvailabilitiesDisplay />
         <div className={styles.appointment__footer}>
           <div className={styles.appointment__footer_wrapper}>
             <div className={styles.appointment__footer_title}>
@@ -84,12 +89,18 @@ class SelectionView extends Component {
 SelectionView.propTypes = {
   services: ImmutablePropTypes.map.isRequired,
   practitioners: ImmutablePropTypes.map.isRequired,
+  selectedServiceId: PropTypes.string.isRequired,
+  selectedPractitionerId: PropTypes.string,
+  selectedStartDate: PropTypes.string.isRequired,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, availabilities }) {
   return {
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
+    selectedServiceId: availabilities.get('selectedServiceId'),
+    selectedPractitionerId: availabilities.get('selectedPractitionerId'),
+    selectedStartDate: availabilities.get('selectedStartDate'),
   };
 }
 

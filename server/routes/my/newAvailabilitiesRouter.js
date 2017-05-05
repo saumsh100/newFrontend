@@ -13,11 +13,11 @@ availabilitiesRouter.get('/accounts/:accountId/availabilities', (req, res, next)
     accountId: req.account.id,
   });
 
-  console.log(req.query);
+  // console.log(req.query);
 
   return fetchAvailabilities(data)
     .then((availabilities) => {
-      console.log(availabilities);
+      // console.log(availabilities);
       res.send({ availabilities });
     })
     .catch(next);
