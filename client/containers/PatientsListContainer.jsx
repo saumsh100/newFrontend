@@ -1,7 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
 import PatientList from '../components/Patients/PatientList/';
-import { fetchEntities } from '../thunks/fetchEntities';
+import { fetchEntities, createEntityRequest } from '../thunks/fetchEntities';
 import {
   setCurrentPatient,
   updateEditingPatientState,
@@ -25,6 +25,7 @@ class PatientsListContainer extends Component {
 
     this.loadMore = this.loadMore.bind(this);
     this.setCurrentPatient = this.setCurrentPatient.bind(this);
+    this.newPatient = this.newPatient.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +38,11 @@ class PatientsListContainer extends Component {
         limit: HOW_MANY_TO_SKIP,
       },
     });
+  }
+
+  newPatient(values) {
+    console.log(values)
+    this.props.createEntityRequest({key: 'patient', entityData: values});
   }
 
   setCurrentPatient(currentPatient) {
@@ -104,6 +110,8 @@ class PatientsListContainer extends Component {
       appointments,
     } = this.props;
 
+    console.log(this.props.patient)
+
     return (
       <PatientList
         loadMore={this.loadMore}
@@ -113,6 +121,7 @@ class PatientsListContainer extends Component {
         moreData={this.state.moreData}
         appointments={appointments}
         filters={filters}
+        submit={this.newPatient}
         updateEditingPatientState={updateEditingPatientState}
         editingPatientState={editingPatientState}
         form={form}
@@ -127,6 +136,7 @@ PatientsListContainer.propTypes = {};
 function mapStateToProps({ entities }) {
     return {
       appointments: entities.getIn(['appointments', 'models']),
+      patient: entities.getIn(['patient', 'models']),
       patients: entities.getIn(['patients', 'models']),
     };
 }
@@ -134,6 +144,7 @@ function mapStateToProps({ entities }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    createEntityRequest,
     setCurrentPatient,
     updateEditingPatientState,
     changePatientInfo,

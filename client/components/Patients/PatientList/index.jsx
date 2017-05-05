@@ -2,21 +2,23 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import PatientListItem from './PatientListItem';
+import NewPatientForm from './NewPatientForm';
 import PatientInfoDisplay from './PatientInfoDisplay';
 import PatientData from './PatientData';
+import { createEntityRequest } from '../../../thunks/fetchEntities';
 import {
   Button,
   Form,
-  Field ,
-  Tabs,
-  Tab,
+  Field,
+  Modal,
   Grid,
   Row,
   Col,
-  ListItem,
   InfiniteScroll,
 } from '../../library';
 import styles from './main.scss';
+import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+
 
 // TODO: separate this component into:
 // - PatientList
@@ -27,17 +29,39 @@ import styles from './main.scss';
 class PatientList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      active: false,
+      birthday: 'Enter Birthday',
+    };
+
+    this.newUserForm = this.newUserForm.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
+    this.saveBirthday = this.saveBirthday.bind(this);
+  }
+
+  saveBirthday(value){
+    this.setState({
+      birthday: value,
+    });
+  }
+
+  newUserForm() {
+    const newState = {
+      active: true,
+    };
+
+    this.setState(newState);
+  }
+
+  reinitializeState() {
+    const newState = {
+      active: false,
+    };
+
+    this.setState(newState);
   }
 
   render() {
-
-    const {
-      filters,
-      updateEditingPatientState,
-      editingPatientState,
-      changePatientInfo,
-      form,
-    } = this.props;
 
     const x = this.props.appointments.toArray().map((appointment) => {
       const patient = this.props.patients.get(appointment.patientId);
@@ -62,10 +86,33 @@ class PatientList extends Component {
 
     const PatientInfo = (<PatientInfoDisplay
       currentPatient={this.props.currentPatient}
+      onClick={this.newUserForm}
     />);
+
+    const formName = 'newUser';
+
+    const actions = [
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Save', onClick: this.props.submit, component: RemoteSubmitButton, props: { form: formName }},
+    ];
 
     return (
       <Grid>
+        <Modal
+          actions={actions}
+          title="New Patient"
+          type="small"
+          active={this.state.active}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
+        >
+          <NewPatientForm
+            onSubmit={this.props.submit}
+            formName={formName}
+            birthday={this.state.birthday}
+            saveBirthday={this.saveBirthday}
+          />
+        </Modal>
         <Row className={styles.patients}>
           <Col xs={12} sm={4} md={4} lg={2}>
             <div className={styles.patients_list}>

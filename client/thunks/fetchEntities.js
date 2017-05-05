@@ -52,7 +52,6 @@ export function createEntityRequest({ key, entityData, url }) {
     const entity = entities.get(key);
 
     url = url || entity.getUrlRoot();
-
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;
