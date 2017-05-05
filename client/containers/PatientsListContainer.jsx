@@ -21,16 +21,19 @@ class PatientsListContainer extends Component {
       patients: null,
       roll: 0,
       currentPatient: {id: null},
+      active: false,
+      showNewUser: false,
+      initialUser: true,
     };
 
     this.loadMore = this.loadMore.bind(this);
     this.setCurrentPatient = this.setCurrentPatient.bind(this);
+    this.newUserForm = this.newUserForm.bind(this);
     this.newPatient = this.newPatient.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
   }
 
   componentDidMount() {
-    const options = { key: 'patients', params: { patientsList: true } };
-    this.props.fetchEntities(options);
     this.props.fetchEntities({
       key: 'appointments',
       join: ['patient'],
@@ -40,27 +43,38 @@ class PatientsListContainer extends Component {
     });
   }
 
-  newPatient(values) {
-    console.log(values)
-    this.props.createEntityRequest({key: 'patient', entityData: values});
-  }
-
   setCurrentPatient(currentPatient) {
-    console.log(currentPatient.firstName);
     this.setState({
       currentPatient,
+      showNewUser: false,
+      initialUser: false,
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { filters } = this.props;
-    const patientName = filters
-    && filters.values && filters.values.patients;
-    if (!patientName) return
-    if (patientName && !nextProps.filters.values) return;
-    if (patientName != nextProps.filters.values.patients) {
-      this.props.fetchEntities({ key: 'patients', params: { patientsList: true, patientName }})
-    }
+  newPatient(values) {
+    const newState = {
+      active: false,
+      showNewUser: true,
+    };
+
+    this.setState(newState);
+    this.props.createEntityRequest({key: 'patient', entityData: values});
+  }
+
+  newUserForm() {
+    const newState = {
+      active: true,
+    };
+
+    this.setState(newState);
+  }
+
+  reinitializeState() {
+    const newState = {
+      active: false,
+    };
+
+    this.setState(newState);
   }
 
   loadMore() {
@@ -110,16 +124,22 @@ class PatientsListContainer extends Component {
       appointments,
     } = this.props;
 
-    console.log(this.props.patient)
+    const currentPatient = ((this.state.showNewUser) ? this.props.patient.toArray()[0] : this.state.currentPatient)
+    currentPatient.appointment = {};
+
 
     return (
       <PatientList
         loadMore={this.loadMore}
         setCurrentPatient={this.setCurrentPatient}
-        currentPatient={this.state.currentPatient}
+        currentPatient={currentPatient}
         patients={patients}
         moreData={this.state.moreData}
         appointments={appointments}
+        active={this.state.active}
+        initialUser={this.state.initialUser}
+        newUserForm={this.newUserForm}
+        reinitializeState={this.reinitializeState}
         filters={filters}
         submit={this.newPatient}
         updateEditingPatientState={updateEditingPatientState}
@@ -134,11 +154,11 @@ class PatientsListContainer extends Component {
 PatientsListContainer.propTypes = {};
 
 function mapStateToProps({ entities }) {
-    return {
-      appointments: entities.getIn(['appointments', 'models']),
-      patient: entities.getIn(['patient', 'models']),
-      patients: entities.getIn(['patients', 'models']),
-    };
+  return {
+    appointments: entities.getIn(['appointments', 'models']),
+    patient: entities.getIn(['patient', 'models']),
+    patients: entities.getIn(['patients', 'models']),
+  };
 }
 
 function mapDispatchToProps(dispatch) {

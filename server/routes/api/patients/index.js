@@ -84,10 +84,16 @@ patientsRouter.get('/', (req, res, next) => {
  */
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
+
+  console.log(req.body);
+
   const patientData = Object.assign({}, req.body, { accountId: accountId });
   patientData.isSyncedWithPMS = false;
   return Patient.save(patientData)
-    .then(patient => res.status(201).send(normalize('patientSingle', patient)))
+    .then((patient) => {
+      console.log(patient)
+      res.status(201).send(normalize('patientSingle', patient));
+    })
     .catch(next);
 });
 

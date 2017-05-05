@@ -20,19 +20,19 @@ class PatientInfoDisplay extends Component {
     if (moment(currentPatient.birthDate)._d.toString() !== "Invalid Date") {
       showDate = moment(currentPatient.birthDate).format('MMMM Do YYYY')
     }
-
-    const lastApp = moment(currentPatient.lastAppointmentDate).format('MMMM Do YYYY');
+    const lastApp = (currentPatient.lastAppointmentDate ? moment(currentPatient.lastAppointmentDate).format('MMMM Do YYYY') : 'N/A')
 
     let display = false;
 
     const age = moment().diff(currentPatient.birthDate, 'years');
 
-    let nextApp;
-
+    let nextApp = 'N/A';
 
     if (currentPatient.id !== null) {
       display = true;
-      nextApp = moment(currentPatient.appointment.startDate).format('MMMM Do YYYY');
+      if (currentPatient.appointment.startDate) {
+        nextApp = moment(currentPatient.appointment.startDate).format('MMMM Do YYYY');
+      }
     }
 
     return (

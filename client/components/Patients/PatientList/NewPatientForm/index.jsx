@@ -4,11 +4,16 @@ import { Form, Field, DayPicker } from '../../../library';
 import { maxLength, asyncEmailValidateUser, emailValidate, phoneValidate } from '../../../library/Form/validate';
 
 
-export default function Invite({ onSubmit, saveBirthday, birthday, formName }) {
+export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formName }) {
+
+  function submit(values) {
+    values.birthDate = birthday;
+    onSubmit(values);
+  }
 
   return (
     <Form form={formName}
-          onSubmit={onSubmit}
+          onSubmit={submit}
           ignoreSaveButton={true}
     >
       <Field
@@ -53,7 +58,7 @@ export default function Invite({ onSubmit, saveBirthday, birthday, formName }) {
   );
 }
 
-Invite.propTypes = {
+NewPatientForm.propTypes = {
   formName: PropTypes.string,
   saveBirthday: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

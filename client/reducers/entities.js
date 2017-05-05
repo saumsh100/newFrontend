@@ -51,7 +51,6 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     // KEYs must map to the response object
     // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
     accounts: new accounts(),
-    patients: new patients(),
     textMessages: new textMessages(),
     appointments: new appointments(),
     requests: new requests(),
@@ -61,7 +60,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     practitioners: new practitioners(),
     availabilities: new availabilities(),
     dialogs: new dialogs(),
-    atient: new patients(),
+    patient: new patients(),
     patients: new patientList(),
     chairs: new chairs(),
     weeklySchedules: new weeklySchedules(),
@@ -74,7 +73,6 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
 
 const Models = {
   accounts: Account,
-  patients: Patient,
   textMessages: TextMessage,
   appointments: Appointments,
   requests: Requests,
@@ -193,7 +191,11 @@ function receiveEntities(state, entities) {
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
-      if (!model || key === 'weeklySchedules') {
+      if (key === 'patient') {
+        const newModel = new Models[key](modelData);
+        newState = newState.deleteIn([key, 'models']);
+        newState = newState.setIn([key, 'models', id], newModel);
+      } else if (!model || key === 'weeklySchedules') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);

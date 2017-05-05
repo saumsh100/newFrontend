@@ -3,9 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import PatientListItem from './PatientListItem';
 import NewPatientForm from './NewPatientForm';
+import EditPatientForm from './EditPatientForm';
 import PatientInfoDisplay from './PatientInfoDisplay';
-import PatientData from './PatientData';
-import { createEntityRequest } from '../../../thunks/fetchEntities';
 import {
   Button,
   Form,
@@ -13,6 +12,8 @@ import {
   Modal,
   Grid,
   Row,
+  Tabs,
+  Tab,
   Col,
   InfiniteScroll,
 } from '../../library';
@@ -30,12 +31,9 @@ class PatientList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: false,
       birthday: 'Enter Birthday',
     };
 
-    this.newUserForm = this.newUserForm.bind(this);
-    this.reinitializeState = this.reinitializeState.bind(this);
     this.saveBirthday = this.saveBirthday.bind(this);
   }
 
@@ -43,22 +41,6 @@ class PatientList extends Component {
     this.setState({
       birthday: value,
     });
-  }
-
-  newUserForm() {
-    const newState = {
-      active: true,
-    };
-
-    this.setState(newState);
-  }
-
-  reinitializeState() {
-    const newState = {
-      active: false,
-    };
-
-    this.setState(newState);
   }
 
   render() {
@@ -86,13 +68,13 @@ class PatientList extends Component {
 
     const PatientInfo = (<PatientInfoDisplay
       currentPatient={this.props.currentPatient}
-      onClick={this.newUserForm}
+      onClick={this.props.newUserForm}
     />);
 
     const formName = 'newUser';
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.props.reinitializeState, component: Button },
       { label: 'Save', onClick: this.props.submit, component: RemoteSubmitButton, props: { form: formName }},
     ];
 
@@ -102,9 +84,9 @@ class PatientList extends Component {
           actions={actions}
           title="New Patient"
           type="small"
-          active={this.state.active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
+          active={this.props.active}
+          onEscKeyDown={this.props.reinitializeState}
+          onOverlayClick={this.props.reinitializeState}
         >
           <NewPatientForm
             onSubmit={this.props.submit}
@@ -141,6 +123,9 @@ class PatientList extends Component {
                   threshold={50}
                 >
                   {patientList.map((user, i) => {
+                    if (this.props.initialUser  && i === 0) {
+                      this.props.setCurrentPatient(user);
+                    }
                     return <PatientListItem
                     key={user.appointment.id + i}
                     user={user}
@@ -172,27 +157,17 @@ class PatientList extends Component {
                   </Col>
                   <Col xs={4}>
                     <div className={styles.right}>
-                      {/*<Tabs*/}
-                        {/*index={0}*/}
-                        {/*onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>*/}
-                        {/*<Tab label="Personal">*/}
-                          {/*<PatientData*/}
-                            {/*patient={patientListFiltered}*/}
-                            {/*tabTitle="personal"*/}
-                            {/*form={form}*/}
-                            {/*changePatientInfo={changePatientInfo}*/}
-
-                          {/*/>*/}
-                        {/*</Tab>*/}
-                        {/*<Tab label="Insurance">*/}
-                          {/*<PatientData*/}
-                            {/*patient={patientListFiltered}*/}
-                            {/*tabTitle="insurance"*/}
-                            {/*form={form}*/}
-                            {/*changePatientInfo={changePatientInfo}*/}
-                          {/*/>*/}
-                        {/*</Tab>*/}
-                      {/*</Tabs>*/}
+                      <Tabs
+                        index={0}>
+                        <Tab label="Info">
+                          <EditPatientForm
+                            onSubmit={this.props.submit}
+                            formName={formName}
+                            birthday={this.state.birthday}
+                            saveBirthday={this.saveBirthday}
+                          />
+                        </Tab>
+                      </Tabs>
                     </div>
                   </Col>
                 </div>
