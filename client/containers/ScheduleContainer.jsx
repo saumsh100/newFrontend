@@ -13,8 +13,9 @@ import {
   setAllFilters,
 } from '../thunks/schedule';
 
+
 class ScheduleContainer extends React.Component {
-  componentWillMount(){
+  componentDidMount() {
     Promise.all([
       this.props.fetchEntities({ key: 'patients' }),
       this.props.fetchEntities({ key: 'appointments' }),
@@ -22,7 +23,7 @@ class ScheduleContainer extends React.Component {
       this.props.fetchEntities({ key: 'requests' }),
       this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
-    ]).then(() => {
+  ]).then(() => {
       this.props.setAllFilters();
     }).catch(e => console.log(e))
   }
@@ -44,22 +45,23 @@ class ScheduleContainer extends React.Component {
       patients,
       chairs,
     } = this.props;
+
     return (
-      <ScheduleComponent
-        practitioners={practitioners}
-        schedule={schedule}
-        appointments={appointments}
-        setCurrentScheduleDate={setCurrentScheduleDate}
-        addPractitionerToFilter={addPractitionerToFilter}
-        removePractitionerFromFilter={removePractitionerFromFilter}
-        selectAppointmentType={selectAppointmentType}
-        fetchEntities={selectAppointmentType}
-        setSheduleMode={setSheduleMode}
-        requests={requests}
-        services={services}
-        patients={patients}
-        chairs={chairs}
-      />
+        <ScheduleComponent
+          practitioners={practitioners}
+          schedule={schedule}
+          appointments={appointments}
+          setCurrentScheduleDate={setCurrentScheduleDate}
+          addPractitionerToFilter={addPractitionerToFilter}
+          removePractitionerFromFilter={removePractitionerFromFilter}
+          selectAppointmentType={selectAppointmentType}
+          fetchEntities={selectAppointmentType}
+          setSheduleMode={setSheduleMode}
+          requests={requests}
+          services={services}
+          patients={patients}
+          chairs={chairs}
+        />
     );
   }
 }
@@ -74,16 +76,13 @@ ScheduleContainer.propTypes = {
 };
 
 function mapStateToProps({ entities, schedule }) {
-
-  const services = entities.get('services');
-
   return {
     practitioners: entities.get('practitioners'),
     schedule,
     appointments: entities.get('appointments'),
     requests: entities.get('requests'),
     patients: entities.get('patients'),
-    services,
+    services: entities.get('services'),
     chairs: entities.get('chairs'),
   };
 }

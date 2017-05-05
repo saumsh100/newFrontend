@@ -32,17 +32,16 @@ export function setSheduleMode(mode) {
 
 export function setAllFilters() {
   return function (dispatch, getState) {
+    const { entities } = getState();
 
-    const entityKeys = ['services', 'chairs'];
-    const filterKeys = ['servicesFilter', 'chairsFilter']
+    const entityKeys = [
+      { key: 'services', fkey: 'servicesFilter' },
+      { key: 'chairs', fkey: 'chairsFilter' },
+    ];
 
-    entityKeys.map((key) => {
-      const { entities } = getState();
-      const { schedule } = getState();
-      const entity = entities.getIn([key, 'models']);
-      filterKeys.map((fkey) => {
-        dispatch(addAllScheduleFilter({ key: fkey, entities: entity }));
-      });
+    entityKeys.map((entity) => {
+      const model = entities.getIn([entity.key, 'models']);
+      dispatch(addAllScheduleFilter({ key: entity.fkey, entities: model }));
     });
   };
 }

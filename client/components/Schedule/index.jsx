@@ -131,10 +131,10 @@ class ScheduleComponent extends Component {
                   <HeaderButtons />
                 </CurrentDate>
                 <Tabs index={this.state.index} onChange={this.handleTabChange}>
-                  {schedule.toJS().scheduleModes.map(s => {
+                  {schedule.toJS().scheduleModes.map((s, index) => {
                     const label = s;
                     return (
-                      <Tab label={label}>
+                      <Tab key={index} label={label}>
                         {/* <span>{label}</span> */}
                       </Tab>
                     )

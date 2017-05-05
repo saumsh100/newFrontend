@@ -93,6 +93,7 @@ class Filters extends Component {
               addScheduleFilter={addScheduleFilter}
               removeScheduleFilter={removeScheduleFilter}
               clearScheduleFilter={clearScheduleFilter}
+              addAllScheduleFilter={addAllScheduleFilter}
             />
             <div className={styles.filter_options__item}>
               <div className={styles.filter_options__title}>Reminders:</div>

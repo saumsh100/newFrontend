@@ -13,33 +13,28 @@ class FilterServices extends Component {
     this.isAllChecked = this.isAllChecked.bind(this);
   }
 
-  componentWillMount() {
-    const {
-      services
-    } = this.props;
-
-    //this.props.addAllScheduleFilter({ key: 'servicesFilter', entities: services })
-  }
-
   handleServiceCheck(checked, service) {
     if (checked) {
       this.props.removeScheduleFilter({ key: 'servicesFilter', id: service.get('id') })
-      this.setState({ allServices: false });
+      this.isAllChecked(-1);
     } else {
       this.props.addScheduleFilter({ key: 'servicesFilter', entity: service });
-      this.isAllChecked();
+      this.isAllChecked(1);
     }
   }
 
-  isAllChecked() {
+  isAllChecked(addOrRemove) {
     const {
       selectedFilterServices,
       services,
     } = this.props;
 
-    if(selectedFilterServices.length + 1 === services.length) {
-      this.setState({ allServices: true });
+    if ((selectedFilterServices.length + addOrRemove) === services.length) {
+        this.setState({ allServices : true });
+    } else {
+      this.setState({ allServices: false })
     }
+
   }
 
   handleAllCheck() {
@@ -48,6 +43,7 @@ class FilterServices extends Component {
     } else {
       this.props.addAllScheduleFilter({ key: 'servicesFilter', entities: this.props.services })
     }
+
     this.setState({ allServices: !this.state.allServices });
   }
 
@@ -63,6 +59,7 @@ class FilterServices extends Component {
 
     const serviceIds = selectedFilterServices.map(service => service.id);
 
+    console.log(serviceIds);
     return (
       <div className={styles.filter_options__item}>
         <div className={styles.filter_options__title}>Services:</div>

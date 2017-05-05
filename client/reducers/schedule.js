@@ -61,7 +61,15 @@ export default handleActions({
     const filterEntities= state.toJS()[key];
 
     entities.map((entity) => {
-      filterEntities.push(entity);
+      let checkFilter = false;
+      filterEntities.map((filterEntity) => {
+        if (filterEntity.id === entity.get('id')) {
+          checkFilter = true;
+        }
+      });
+      if(!checkFilter) {
+        filterEntities.push(entity);
+      }
     });
 
     const mergeObj = {};
