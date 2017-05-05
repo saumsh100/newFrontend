@@ -13,13 +13,13 @@ import {
   addScheduleFilter,
   removeScheduleFilter,
   clearScheduleFilter,
+  addAllScheduleFilter,
 } from '../../../../actions/schedule';
 
 
 class Filters extends Component {
   constructor(props) {
     super(props);
-
     this.handleTypeFilter = this.handleTypeFilter.bind(this);
     this.handleCheckDoctor = this.handleCheckDoctor.bind(this);
     this.clearAllSelectors = this.clearAllSelectors.bind(this);
@@ -50,12 +50,16 @@ class Filters extends Component {
       addScheduleFilter,
       removeScheduleFilter,
       clearScheduleFilter,
+      addAllScheduleFilter,
     } = this.props;
 
     const selectedFilterPractitioners = schedule.toJS().practitioners;
     const selectedFilterServices = schedule.toJS().servicesFilter;
     const selectedFilterChairs = schedule.toJS().chairsFilter;
 
+    if(!services) {
+      return null;
+    }
 
     return (
       <Card className={styles.schedule_filter}>
@@ -81,6 +85,7 @@ class Filters extends Component {
               addScheduleFilter={addScheduleFilter}
               removeScheduleFilter={removeScheduleFilter}
               clearScheduleFilter={clearScheduleFilter}
+              addAllScheduleFilter={addAllScheduleFilter}
             />
             <FilterChairs
               chairs={chairs}
@@ -121,6 +126,7 @@ function mapDispatchToProps(dispatch) {
     addScheduleFilter,
     removeScheduleFilter,
     clearScheduleFilter,
+    addAllScheduleFilter,
   }, dispatch);
 }
 

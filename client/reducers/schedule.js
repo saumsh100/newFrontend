@@ -7,6 +7,7 @@ import {
   SELECT_APPOINMENT_TYPE,
   SET_SCHEDULE_MODE,
   CLEAR_SCHEDULE_FILTER,
+  ADD_ALL_SCHEDULE_FILTER,
   ADD_SCHEDULE_FILTER,
   REMOVE_SCHEDULE_FILTER
 } from '../constants';
@@ -29,12 +30,14 @@ export default handleActions({
       practitioners,
     });
   },
+
   [REMOVE_PRACTITIONER](state, action) {
     const practitioners = state.toJS().practitioners;
     return state.merge({
       practitioners: practitioners.filter(el => el !== action.payload.practitioner),
     });
   },
+
   [ADD_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const filterEntities= state.toJS()[key];
@@ -43,6 +46,7 @@ export default handleActions({
     mergeObj[key] = filterEntities;
     return state.merge(mergeObj);
   },
+
   [REMOVE_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const filterEntities= state.toJS()[key];
@@ -50,11 +54,26 @@ export default handleActions({
     mergeObj[key] = filterEntities.filter(entity => entity.id !== action.payload.id);
     return state.merge(mergeObj);
   },
+
+  [ADD_ALL_SCHEDULE_FILTER](state, action) {
+    const key = action.payload.key;
+    const entities = action.payload.entities;
+    const filterEntities= state.toJS()[key];
+
+    entities.map((entity) => {
+      filterEntities.push(entity);
+    });
+
+    const mergeObj = {};
+    mergeObj[key] = filterEntities;
+    return state.merge(mergeObj);
+  },
+
   [CLEAR_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
-    console.log(key);
     return state.set(key, []);
   },
+
   [SELECT_APPOINMENT_TYPE](state, action) {
     const type = action.payload.type === 'all' ? null : action.payload.type;
     return state.merge({

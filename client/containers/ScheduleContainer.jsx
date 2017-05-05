@@ -10,25 +10,21 @@ import {
   selectAppointmentType,
   removePractitionerFromFilter,
   setSheduleMode,
+  setAllFilters,
 } from '../thunks/schedule';
 
-
-
 class ScheduleContainer extends React.Component {
-  componentWillMount() {
-    this.props.fetchEntities({ key: 'patients' });
-  }
-
-  componentDidMount() {
+  componentWillMount(){
     Promise.all([
+      this.props.fetchEntities({ key: 'patients' }),
       this.props.fetchEntities({ key: 'appointments' }),
-      this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
+      this.props.fetchEntities({ key: 'practitioners'}),
       this.props.fetchEntities({ key: 'requests' }),
       this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
     ]).then(() => {
-
-    });
+      this.props.setAllFilters();
+    }).catch(e => console.log(e))
   }
 
   render() {
@@ -78,13 +74,16 @@ ScheduleContainer.propTypes = {
 };
 
 function mapStateToProps({ entities, schedule }) {
+
+  const services = entities.get('services');
+
   return {
     practitioners: entities.get('practitioners'),
     schedule,
     appointments: entities.get('appointments'),
     requests: entities.get('requests'),
     patients: entities.get('patients'),
-    services: entities.get('services'),
+    services,
     chairs: entities.get('chairs'),
   };
 }
@@ -97,6 +96,7 @@ function mapDispatchToProps(dispatch) {
     selectAppointmentType,
     fetchEntities,
     setSheduleMode,
+    setAllFilters,
   }, dispatch);
 }
 

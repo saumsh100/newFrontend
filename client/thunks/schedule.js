@@ -3,6 +3,7 @@ import {
   removePractitionerFilter,
   selectAppointmentTypeFilter,
   setSheduleModeAction,
+  addAllScheduleFilter,
 } from '../actions/schedule';
 
 export function addPractitionerToFilter(id) {
@@ -29,10 +30,19 @@ export function setSheduleMode(mode) {
     };
 }
 
-export function setAllFilters({key, filter}) {
+export function setAllFilters() {
   return function (dispatch, getState) {
-    const { entities } = getState();
-    const model = entities.getIn([key, 'models']);
-    console.log(model);
-  }
+
+    const entityKeys = ['services', 'chairs'];
+    const filterKeys = ['servicesFilter', 'chairsFilter']
+
+    entityKeys.map((key) => {
+      const { entities } = getState();
+      const { schedule } = getState();
+      const entity = entities.getIn([key, 'models']);
+      filterKeys.map((fkey) => {
+        dispatch(addAllScheduleFilter({ key: fkey, entities: entity }));
+      });
+    });
+  };
 }

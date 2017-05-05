@@ -13,6 +13,14 @@ class FilterServices extends Component {
     this.isAllChecked = this.isAllChecked.bind(this);
   }
 
+  componentWillMount() {
+    const {
+      services
+    } = this.props;
+
+    //this.props.addAllScheduleFilter({ key: 'servicesFilter', entities: services })
+  }
+
   handleServiceCheck(checked, service) {
     if (checked) {
       this.props.removeScheduleFilter({ key: 'servicesFilter', id: service.get('id') })
@@ -37,8 +45,9 @@ class FilterServices extends Component {
   handleAllCheck() {
     if (this.state.allServices) {
       this.props.clearScheduleFilter({ key: 'servicesFilter' });
+    } else {
+      this.props.addAllScheduleFilter({ key: 'servicesFilter', entities: this.props.services })
     }
-
     this.setState({ allServices: !this.state.allServices });
   }
 
@@ -46,7 +55,6 @@ class FilterServices extends Component {
     const {
       selectedFilterServices,
       services,
-      addScheduleFilter,
     } = this.props;
 
     const {
@@ -66,15 +74,11 @@ class FilterServices extends Component {
         {services.map((s) => {
           const checked = serviceIds.indexOf(s.get('id')) > -1;
 
-          if (allServices && !checked) {
-            addScheduleFilter({ key: 'servicesFilter', entity: s });
-          }
-
           return (
             <Checkbox
               key={s.get('id')}
               label={s.get('name')}
-              checked={checked || allServices}
+              checked={checked}
               onChange={() => this.handleServiceCheck(checked, s)}
             />
           );
