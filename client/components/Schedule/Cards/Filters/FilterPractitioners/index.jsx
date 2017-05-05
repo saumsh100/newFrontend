@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import styles from '../styles.scss';
+import { CheckboxImage } from '../../../../library';
+
 
 export default function FilterPractitioners(props) {
 
@@ -18,20 +20,16 @@ export default function FilterPractitioners(props) {
       <ul className={styles.filter_practitioner__wrapper}>
         {practitioners.map((pr, i) => {
           const checked = selectedFilterPractitioners.indexOf(pr.id) > -1;
+          const label = (<div className={styles.filter_practitioner__name}>{pr.firstName}</div>);
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>
-              <input
-                className={styles.filter_practitioner__checkbox}
-                type="checkbox" checked={checked} id={`checkbox-${i}`}
+              <CheckboxImage
+                key={pr.id}
+                checked={checked}
                 onChange={() => { handleCheckDoctor(pr.id, checked); }}
+                id={`checkbox-${i}`}
+                label={label}
               />
-              <label className={styles.filter_practitioner__label} htmlFor={`checkbox-${i}`}>
-                <li className={styles.filter_practitioner__item}>
-                  <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner" />
-                  <div className={styles.filter_practitioner__name}>{pr.firstName}</div>
-                  <div className={styles.filter_practitioner__spec}>Dentist</div>
-                </li>
-              </label>
             </div>
           );
         })}

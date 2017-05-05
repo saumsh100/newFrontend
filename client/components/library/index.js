@@ -8,6 +8,7 @@ import Calendar from './Calendar';
 import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
+import CheckboxImage from './CheckboxImage';
 import Collapsible from './Collapsible';
 import DayPicker from './DayPicker';
 import DropdownSelect from './DropdownSelect';
@@ -54,6 +55,7 @@ export {
   ContainerList,
   CardHeader,
   Checkbox,
+  CheckboxImage,
   ChartStats,
   Collapsible,
   DayPicker,

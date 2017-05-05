@@ -1,20 +1,12 @@
 
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import {
   Icon, Card
 } from '../../../library';
 import styles from './styles.scss';
-import FilterServices from './FilterServices';
-import FilterChairs from './FilterChairs';
+import FiltersList from './FiltersList';
 import FilterPractitioners from './FilterPractitioners';
-import {
-  addScheduleFilter,
-  removeScheduleFilter,
-  clearScheduleFilter,
-  addAllScheduleFilter,
-} from '../../../../actions/schedule';
+
 
 
 class Filters extends Component {
@@ -47,10 +39,6 @@ class Filters extends Component {
       appointmentsTypes,
       services,
       chairs,
-      addScheduleFilter,
-      removeScheduleFilter,
-      clearScheduleFilter,
-      addAllScheduleFilter,
     } = this.props;
 
     const selectedFilterPractitioners = schedule.toJS().practitioners;
@@ -79,30 +67,22 @@ class Filters extends Component {
             handleCheckDoctor={this.handleCheckDoctor}
           />
           <div className={styles.filter_options}>
-            <FilterServices
-              services={services}
-              selectedFilterServices={selectedFilterServices}
-              addScheduleFilter={addScheduleFilter}
-              removeScheduleFilter={removeScheduleFilter}
-              clearScheduleFilter={clearScheduleFilter}
-              addAllScheduleFilter={addAllScheduleFilter}
+            <FiltersList
+              key="FilterServices"
+              label="Services"
+              entities={services}
+              filterKey="servicesFilter"
+              selectedFilterItem={selectedFilterServices}
             />
-            <FilterChairs
-              chairs={chairs}
-              selectedFilterChairs={selectedFilterChairs}
-              addScheduleFilter={addScheduleFilter}
-              removeScheduleFilter={removeScheduleFilter}
-              clearScheduleFilter={clearScheduleFilter}
-              addAllScheduleFilter={addAllScheduleFilter}
+            <FiltersList
+              key="FilterChairs"
+              label="Chairs"
+              entities={chairs}
+              filterKey="chairsFilter"
+              selectedFilterItem={selectedFilterChairs}
             />
             <div className={styles.filter_options__item}>
               <div className={styles.filter_options__title}>Reminders:</div>
-              <select disabled="disabled">
-                <option value="all">All</option>
-              </select>
-            </div>
-            <div className={styles.filter_options__item}>
-              <div className={styles.filter_options__title}>Insurance:</div>
               <select disabled="disabled">
                 <option value="all">All</option>
               </select>
@@ -121,16 +101,4 @@ Filters.PropTypes = {
   addServiceFilter: PropTypes.func,
 };
 
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    addScheduleFilter,
-    removeScheduleFilter,
-    clearScheduleFilter,
-    addAllScheduleFilter,
-  }, dispatch);
-}
-
-const enhance = connect(null, mapDispatchToProps);
-
-export default enhance(Filters);
+export default Filters;

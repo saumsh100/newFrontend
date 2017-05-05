@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import styles from '../styles.scss';
-import { Checkbox } from '../../../../library';
+import styles from './styles.scss';
+import { Checkbox } from '../../../library';
 import {
   addScheduleFilter,
   removeScheduleFilter,
   clearScheduleFilter,
   addAllScheduleFilter,
-} from '../../../../../actions/schedule';
+} from '../../../../actions/schedule';
 
 class FilterServices extends Component {
   constructor(props) {
