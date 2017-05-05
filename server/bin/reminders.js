@@ -28,7 +28,7 @@ remindersQueue.process((job, next) => {
     .then((appointments) => {
       const shouldNotifyAppointments = appointments.filter((appointment) => {
         const now = Date.now();
-        const start = appointment.startTime.getTime();
+        const start = appointment.startDate.getTime();
         return ((((start - now) <= mili24hours) && (start - now) > 0)
           && appointment.confirmed === false);
       });
@@ -40,7 +40,7 @@ remindersQueue.process((job, next) => {
             token: token[0].id,
             accountName: a.account.name,
             smsPhoneNumber: a.account.smsPhoneNumber,
-            date: a.startTime,
+            date: a.startDate,
             patientFirstname: a.patient.firstName };
           if (a.patient.appointmentPreference === 'both') {
             Promise.all([emailConfirmation(emailConfObject), smsConfirmation(a)])

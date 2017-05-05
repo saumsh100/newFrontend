@@ -22,7 +22,9 @@ module.exports = {
   debug: true,
   devtool: 'cheap-module-source-map',
   entry: {},
-  output: {},
+  output: {
+    publicPath: 'http://localhost:5000/',
+  },
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },

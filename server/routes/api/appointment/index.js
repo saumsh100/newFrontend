@@ -7,6 +7,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
+const globals = require('../../../config/globals');
 
 appointmentsRouter.param('appointmentId', loaders('appointment', 'Appointment'));
 
@@ -33,8 +34,8 @@ appointmentsRouter.get('/', (req, res, next) => {
 
   return Appointment
     .filter({ accountId })
-    .filter(r.row('startTime').during(startDate, endDate))
-    .orderBy('startTime')
+    .filter(r.row('startDate').during(startDate, endDate))
+    .orderBy('startDate')
     .skip(parseInt(skip))
     .limit(Math.min(parseInt(limit), 100))
     .getJoin(joinObject)
@@ -110,16 +111,18 @@ appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (re
  * Used to search an appointment by any property.
  * E.g. api/appointments/test?pmsId=1003&note=unit test appointment
  */
-appointmentsRouter.get('/test', checkPermissions('appointments:read'), (req, res, next) => {
-  const property = req.query;
-  return Appointment
-    .filter(property)
-    .run()
-    .then((appointments) => {
-      (appointments.length !== 0) ? res.send(normalize('appointments', appointments)) : res.sendStatus(404);
-    })
-    .catch(next);
-});
+if (globals.env !== 'production') {
+  appointmentsRouter.get('/test', checkPermissions('appointments:read'), (req, res, next) => {
+    const property = req.query;
+    return Appointment
+      .filter(property)
+      .run()
+      .then((appointments) => {
+        (appointments.length !== 0) ? res.send(normalize('appointments', appointments)) : res.sendStatus(404);
+      })
+      .catch(next);
+  });
+}
 
 /**
  * Get an appointment

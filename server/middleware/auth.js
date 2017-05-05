@@ -34,7 +34,7 @@ const OWNER = {
 
   services: CRUD,
 
-  syncErrors: {
+  syncClientError: {
     read: true,
     create: true,
   },
@@ -103,7 +103,7 @@ module.exports = function authMiddleware(req, res, next) {
     req.token = token;
     req.decodedToken = decoded;
     req.accountId = decoded.activeAccountId;
-
+    req.role = decoded.role;
     // Pull in the role's permissions and extend the extra permissions ontop
     req.permissions = Object.assign({}, permissions[decoded.role], decoded.permissions);
     return next();

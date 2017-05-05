@@ -27,11 +27,13 @@ const recentStartTime = r.now().add(oneHour);
 
 const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
 const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
+const syncTestAccId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
 const justinUserId = uuid();
 const alexUserId = uuid();
 const sergeyUserId = uuid();
 const jdUserId = uuid();
+const syncUserId = uuid();
 
 const alexPatientId = uuid();
 const alexPatientId2 = uuid();
@@ -369,6 +371,14 @@ const SEEDS = {
       id: alexUserId,
       activeAccountId: accountId,
     },
+    {
+      firstName: 'SyncClient',
+      lastName: ' ',
+      username: 'syncclient@carecru.com',
+      password: bcrypt.hashSync('sync', saltRounds),
+      id: syncUserId,
+      activeAccountId: syncTestAccId,
+    }
   ],
 
   Patient: [
@@ -390,6 +400,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
+      isSyncedWithPMS: false,
     },
     {
       id: sergeyPatientId,
@@ -409,6 +420,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
+      isSyncedWithPMS: false,
     },
     {
       id: markPatientId,
@@ -420,6 +432,7 @@ const SEEDS = {
       gender: 'male',
       status: 'Active',
       language: 'English',
+      isSyncedWithPMS: false,
     },
     {
       id: alexPatientId,
@@ -433,6 +446,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
+      isSyncedWithPMS: false,
     },
     // account 2
     {
@@ -447,6 +461,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
+      isSyncedWithPMS: false,
     },
   ],
 
@@ -549,6 +564,21 @@ const SEEDS = {
       // clinicName: 'PACIFIC HEART DENTAL',
       // bookingWidgetPrimaryColor: '#0597d8',
     },
+    {
+      id: syncTestAccId,
+      weeklyScheduleId,
+      name: 'Sync Client Dental',
+      street: '#101 – 1312 Random Drive',
+      country: 'Canada',
+      state: 'BC',
+      city: 'North Vancouver',
+      zipCode: '92509',
+      vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      smsPhoneNumber: clinicPhoneNumber,
+      logo: '/images/beckett_dental.png',
+      address: '#101 – 1312 Random Drive',
+      bookingWidgetPrimaryColor: '#f29b12',
+    },
   ],
 
   Permission: [
@@ -561,18 +591,24 @@ const SEEDS = {
     {
       userId: alexUserId,
       accountId,
-      role: 'OWNER',
+      role: 'VIEWER',
       permissions: {},
     },
     {
       userId: sergeyUserId,
       accountId,
-      role: 'OWNER',
+      role: 'ADMIN',
       permissions: {},
     },
     {
       userId: jdUserId,
       accountId: accountId2,
+      role: 'OWNER',
+      permissions: {},
+    },
+    {
+      userId: syncUserId,
+      accountId: syncTestAccId,
       role: 'OWNER',
       permissions: {},
     },
@@ -774,8 +810,10 @@ const SEEDS = {
   SyncClientVersion: [
     {
       version: 2.0,
-      build: 1,
       url: 'http://carecru.dev:8080/api/updater/download',
+      key: '',
+      secret: '',
+      build: 1,
     },
   ],
 };
