@@ -13,7 +13,6 @@ export default function FilterPractitioners(props) {
     handleEntityCheck,
   } = props;
 
-  console.log(selectedFilterItem);
 
   return (
     <div>

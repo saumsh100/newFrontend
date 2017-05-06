@@ -15,7 +15,7 @@ import {
 
 
 class ScheduleContainer extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
     Promise.all([
       this.props.fetchEntities({ key: 'patients' }),
       this.props.fetchEntities({ key: 'appointments' }),
@@ -45,6 +45,7 @@ class ScheduleContainer extends React.Component {
       patients,
       chairs,
     } = this.props;
+
 
     return (
         <ScheduleComponent
