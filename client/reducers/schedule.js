@@ -73,7 +73,9 @@ export default handleActions({
 
   [CLEAR_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
-    return state.set(key, []);
+    const temp={};
+    temp[key] = [];
+    return state.merge(temp);
   },
 
   [SELECT_APPOINMENT_TYPE](state, action) {

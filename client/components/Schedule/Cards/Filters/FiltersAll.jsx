@@ -15,7 +15,8 @@ import FilterCheckbox from './FilterCheckbox';
 class FiltersAll extends Component {
   constructor(props) {
     super(props);
-    this.state = this.props.allFiltersCheck
+    this.state = this.props.allFiltersCheck;
+
     this.handleEntityCheck = this.handleEntityCheck.bind(this);
     this.handleAllCheck = this.handleAllCheck.bind(this);
     this.isAllChecked = this.isAllChecked.bind(this);
@@ -39,26 +40,18 @@ class FiltersAll extends Component {
       entities,
     } = this.props;
 
-    console.log(selectedFilters[filterKey].length );
-    console.log(entities[filterKey].length);
     const temp = {};
+    temp[filterKey] = true;
     let sumFilter = selectedFilters[filterKey].length ;
+    let lenEntities = entities[filterKey].length;
 
-
-    if (entities[filterKey].length > 2) {
-      sumFilter++;
-      if (sumFilter === entities[filterKey].length ) {
-        temp[filterKey]=true;
+    if (lenEntities > 2) {
+      if (sumFilter + 1 === entities[filterKey].length ) {
         this.setState(temp);
       }
-    } else {
-      console.log("here")
-      if (sumFilter === entities[filterKey].length - 1 ) {
-        temp[filterKey]=true;
+    } else if (sumFilter === lenEntities - 1 ) {
         this.setState(temp);
-      }
     }
-
   }
 
   handleAllCheck(filterKey) {
@@ -69,7 +62,6 @@ class FiltersAll extends Component {
     } else {
       this.props.addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
     }
-
     const temp = {};
     temp[filterKey] = !this.state[filterKey];
     this.setState(temp);
