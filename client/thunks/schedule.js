@@ -37,6 +37,7 @@ export function setAllFilters() {
     const entityKeys = [
       { key: 'services', fkey: 'servicesFilter' },
       { key: 'chairs', fkey: 'chairsFilter' },
+      { key: 'practitioners', fkey: 'practitionersFilter' },
     ];
 
     entityKeys.map((entity) => {

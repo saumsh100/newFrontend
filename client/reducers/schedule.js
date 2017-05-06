@@ -41,7 +41,7 @@ export default handleActions({
   [ADD_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const filterEntities= state.toJS()[key];
-    filterEntities.push(action.payload.entity);
+    filterEntities.push(action.payload.id);
     const mergeObj = {};
     mergeObj[key] = filterEntities;
     return state.merge(mergeObj);
@@ -51,7 +51,7 @@ export default handleActions({
     const key = action.payload.key;
     const filterEntities= state.toJS()[key];
     const mergeObj = {};
-    mergeObj[key] = filterEntities.filter(entity => entity.id !== action.payload.id);
+    mergeObj[key] = filterEntities.filter(id => id !== action.payload.id);
     return state.merge(mergeObj);
   },
 
@@ -61,17 +61,11 @@ export default handleActions({
     const filterEntities= state.toJS()[key];
 
     entities.map((entity) => {
-      let checkFilter = false;
-      filterEntities.map((filterEntity) => {
-        if (filterEntity.id === entity.get('id')) {
-          checkFilter = true;
-        }
-      });
+      const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
       if(!checkFilter) {
-        filterEntities.push(entity);
+        filterEntities.push(entity.get('id'));
       }
     });
-
     const mergeObj = {};
     mergeObj[key] = filterEntities;
     return state.merge(mergeObj);
