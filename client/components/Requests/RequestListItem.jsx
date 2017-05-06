@@ -39,6 +39,10 @@ class RequestListItem extends Component {
       active,
     } = this.props;
 
+    if (!service || !patient || !request) {
+      return null;
+    }
+
     const data = {
       time: request.getFormattedTime(),
       age: request.getAge(patient.birthDate),

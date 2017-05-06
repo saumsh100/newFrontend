@@ -50,7 +50,6 @@ class ScheduleComponent extends Component {
     window.socket.emit('fetchAvailabilities');
   }
 
-
   toggleCalendar() {
     this.setState({showDatePicker: !this.state.showDatePicker});
   }
@@ -90,6 +89,7 @@ class ScheduleComponent extends Component {
       patients,
       requests,
       services,
+      chairs,
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
@@ -131,10 +131,10 @@ class ScheduleComponent extends Component {
                   <HeaderButtons />
                 </CurrentDate>
                 <Tabs index={this.state.index} onChange={this.handleTabChange}>
-                  {schedule.toJS().scheduleModes.map(s => {
+                  {schedule.toJS().scheduleModes.map((s, index) => {
                     const label = s;
                     return (
-                      <Tab label={label}>
+                      <Tab key={index} label={label}>
                         {/* <span>{label}</span> */}
                       </Tab>
                     )
@@ -166,19 +166,14 @@ class ScheduleComponent extends Component {
                   schedule={schedule}
                   appointmentsTypes={appointmentsTypes}
                   selectAppointmentType={selectAppointmentType}
+                  services={services.get('models').toArray()}
+                  chairs={chairs.get('models').toArray()}
                 />
               </Col>
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
                 <RequestsContainer className={styles.schedule__sidebar_request} />
-              </Col>
-            </Row>
-            <Row className={styles.schedule__sidebar_rowCalendar}>
-              <Col xs={12}>
-                <Calendar
-                  className={styles.schedule__sidebar_calendar}
-                />
               </Col>
             </Row>
           </Col>

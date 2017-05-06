@@ -4,6 +4,10 @@ import {
   Icon, Card
 } from '../../../library';
 import styles from './styles.scss';
+import FiltersList from './FiltersList';
+import FilterPractitioners from './FilterPractitioners';
+
+
 
 class Filters extends Component {
   constructor(props) {
@@ -29,8 +33,22 @@ class Filters extends Component {
   }
 
   render() {
-    const { practitioners, schedule, appointmentsTypes } = this.props;
-    const filterPractitioners = schedule.toJS().practitioners;
+    const {
+      practitioners,
+      schedule,
+      appointmentsTypes,
+      services,
+      chairs,
+    } = this.props;
+
+    const selectedFilterPractitioners = schedule.toJS().practitioners;
+    const selectedFilterServices = schedule.toJS().servicesFilter;
+    const selectedFilterChairs = schedule.toJS().chairsFilter;
+
+    if(!services) {
+      return null;
+    }
+
     return (
       <Card className={styles.schedule_filter}>
         <div className={styles.filter_header}>
@@ -43,53 +61,28 @@ class Filters extends Component {
           <div onClick={this.clearAllSelectors} className={styles.filter_header__link}>Clear All</div>
         </div>
         <div className={styles.filter_practitioner}>
-          <div className={styles.filter_practitioner__title}>
-            Practitioner
-          </div>
-          <ul className={styles.filter_practitioner__wrapper}>
-            {practitioners.map((pr, i) => {
-              const checked = filterPractitioners.indexOf(pr.id) > -1;
-              return (
-                <div key={pr.id} className={styles.filter_practitioner__list}>
-                  <input className={styles.filter_practitioner__checkbox}
-                    type="checkbox" checked={checked} id={`checkbox-${i}`}
-                    onChange={() => {this.handleCheckDoctor(pr.id, checked);
-                  }} />
-                  <label className={styles.filter_practitioner__label} htmlFor={`checkbox-${i}`}>
-                    <li className={styles.filter_practitioner__item}>
-                      <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner" />
-                      <div className={styles.filter_practitioner__name}>{pr.firstName}</div>
-                      <div className={styles.filter_practitioner__spec}>Dentist</div>
-                    </li>
-                  </label>
-                </div>
-              );
-            })}
-          </ul>
+          <FilterPractitioners
+            practitioners={practitioners}
+            selectedFilterPractitioners={selectedFilterPractitioners}
+            handleCheckDoctor={this.handleCheckDoctor}
+          />
           <div className={styles.filter_options}>
-            <div className={styles.filter_options__item}>
-              <div className={styles.filter_options__title}>Services:</div>
-              <select ref="select" onChange={this.handleTypeFilter}>
-                <option  value="all">All</option>
-                {appointmentsTypes.map((app, i) => (
-                  <option key={i} value={app}>{app}</option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.filter_options__item}>
-              <div className={styles.filter_options__title}>Chairs:</div>
-              <select disabled="disabled">
-                <option value="all">All</option>
-              </select>
-            </div>
+            <FiltersList
+              key="FilterServices"
+              label="Services"
+              entities={services}
+              filterKey="servicesFilter"
+              selectedFilterItem={selectedFilterServices}
+            />
+            <FiltersList
+              key="FilterChairs"
+              label="Chairs"
+              entities={chairs}
+              filterKey="chairsFilter"
+              selectedFilterItem={selectedFilterChairs}
+            />
             <div className={styles.filter_options__item}>
               <div className={styles.filter_options__title}>Reminders:</div>
-              <select disabled="disabled">
-                <option value="all">All</option>
-              </select>
-            </div>
-            <div className={styles.filter_options__item}>
-              <div className={styles.filter_options__title}>Insurance:</div>
               <select disabled="disabled">
                 <option value="all">All</option>
               </select>
@@ -104,7 +97,8 @@ class Filters extends Component {
 Filters.PropTypes = {
   addPractitionerToFilter: PropTypes.func,
   selectAppointmentType: PropTypes.func,
-  removePractitionerFromFilter: PropTypes.func
+  removePractitionerFromFilter: PropTypes.func,
+  addServiceFilter: PropTypes.func,
 };
 
 export default Filters;
