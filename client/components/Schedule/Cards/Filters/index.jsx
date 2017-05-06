@@ -4,38 +4,34 @@ import {
   Icon, Card
 } from '../../../library';
 import styles from './styles.scss';
-import FiltersList from './FiltersList';
-import FilterPractitioners from './FilterPractitioners';
+import FiltersAll from './FiltersAll';
 
 class Filters extends Component {
-  constructor(props) {
-    super(props);
-    this.handleCheckDoctor = this.handleCheckDoctor.bind(this);
-  }
-
-  handleCheckDoctor(practitionerId, checked) {
-    if (checked) {
-      this.props.removePractitionerFromFilter(practitionerId);
-    } else {
-      this.props.addPractitionerToFilter(practitionerId);
-    }
-  }
-
   render() {
     const {
       practitioners,
       schedule,
-      appointmentsTypes,
       services,
       chairs,
     } = this.props;
 
-    const selectedFilterPractitioners = schedule.toJS().practitionersFilter;
-    const selectedFilterServices = schedule.toJS().servicesFilter;
-    const selectedFilterChairs = schedule.toJS().chairsFilter;
 
-    if(!services) {
-      return null;
+    const selectedFilters = {
+      practitionersFilter: schedule.toJS().practitionersFilter,
+      servicesFilter: schedule.toJS().servicesFilter,
+      chairsFilter: schedule.toJS().chairsFilter,
+    }
+
+    const entities = {
+      practitionersFilter: practitioners,
+      servicesFilter: services,
+      chairsFilter: chairs,
+    }
+
+    const allFiltersCheck = {
+      practitionersFilter: true,
+      servicesFilter: true,
+      chairsFilter: true,
     }
 
     return (
@@ -50,31 +46,13 @@ class Filters extends Component {
           <div className={styles.filter_header__link}>Clear All</div>
         </div>
         <div className={styles.filter_practitioner}>
-          <FiltersList
-            key="FilterPractitioners"
-            label="Practitioners"
-            entities={practitioners}
-            filterKey="practitionersFilter"
-            selectedFilterItem={selectedFilterPractitioners}
-            useCheckboxImage
-            displayText="firstName"
-          />
+
           <div className={styles.filter_options}>
-            <FiltersList
-              key="FilterServices"
-              label="Services"
-              entities={services}
-              filterKey="servicesFilter"
-              selectedFilterItem={selectedFilterServices}
-              displayText="name"
-            />
-            <FiltersList
-              key="FilterChairs"
-              label="Chairs"
-              entities={chairs}
-              filterKey="chairsFilter"
-              selectedFilterItem={selectedFilterChairs}
-              displayText="name"
+            <FiltersAll
+             selectedFilters={selectedFilters}
+             entities={entities}
+             allFiltersCheck={allFiltersCheck}
+             className={styles.filter_options}
             />
             <div className={styles.filter_options__item}>
               <div className={styles.filter_options__title}>Reminders:</div>
