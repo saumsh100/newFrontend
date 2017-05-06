@@ -161,6 +161,7 @@ class PatientsListContainer extends Component {
     const {
       patients,
       appointments,
+      patient,
     } = this.props;
 
 
@@ -173,8 +174,7 @@ class PatientsListContainer extends Component {
     }
 
     if (this.state.showNewUser) {
-      console.log('test')
-      currentPatient = patients.toArray()[0];
+      currentPatient = patient.toArray()[0];
       currentPatient.appointment = {};
     } else {
       if (this.state.currentPatient.id !== null) {
