@@ -175,11 +175,12 @@ class PatientsListContainer extends Component {
     if (this.state.showNewUser) {
       currentPatient = patients.toArray()[0];
       currentPatient.appointment = {};
-    } else if (this.state.currentPatient.id !== null) {
-      currentPatient = patients.get(this.state.currentPatient.id);
-      currentPatient.appointment = appointments.get(this.state.currentPatient.appointment.id);
+    } else {
+      if (this.state.currentPatient.id !== null) {
+        currentPatient = patients.get(this.state.currentPatient.id);
+        currentPatient.appointment = appointments.get(this.state.currentPatient.appointment.id);
+      }
     }
-
 
     return (
       <PatientList
