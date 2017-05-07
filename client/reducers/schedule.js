@@ -14,9 +14,10 @@ import {
 
 const initialState = fromJS({
   practitioners: [],
+  appointmentsFilter: [],
+  chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
-  chairsFilter: [],
   appointmentType: null,
   currentScheduleMode: 'day',
   scheduleModes: ['Month', 'Week', 'Day'],

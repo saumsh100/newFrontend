@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import FilterPractitioners from './FilterPractitioners';
 import FilterCheckbox from './FilterCheckbox';
+import FilterAppointments from './FilterAppointments';
 import { Card, Icon } from '../../../library';
 import styles from './styles.scss';
 
@@ -53,12 +54,15 @@ export default function FiltersDisplay(props) {
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
           />
-          <div className={styles.filter_options__item}>
-            <div className={styles.filter_options__title}>Reminders:</div>
-            <select disabled="disabled">
-              <option value="all">All</option>
-            </select>
-          </div>
+          <FilterAppointments
+            label="Reminders"
+            filterKey="appointmentsFilter"
+            allChecked={allChecked.appointmentsFilter}
+            entities={entities.appointmentsFilter}
+            selectedFilterItem={selectedFilters.appointmentsFilter}
+            handleAllCheck={handleAllCheck}
+            handleEntityCheck={handleEntityCheck}
+          />
         </div>
       </div>
     </Card>

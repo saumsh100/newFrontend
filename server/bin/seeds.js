@@ -195,6 +195,9 @@ const SEEDS = {
       startDate: recentStartTime.add(49 * oneHour),
       endDate: recentStartTime.add(50 * oneHour),
       patientId: alexPatientId,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
       serviceId,
       practitionerId,
       chairId,
@@ -211,7 +214,7 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
-      note: 'Sixth',
+      note: 'Kirat Appointment',
     },
 
     // OTHER DATES
@@ -236,6 +239,7 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+      note: 'JD Appointment',
     },
     {
       accountId,
@@ -248,6 +252,7 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+      note: 'Sergey Appointment',
     },
     {
       accountId,
@@ -260,6 +265,7 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
+      note: 'Justin Appointment',
     },
 
     // Availabilities Test

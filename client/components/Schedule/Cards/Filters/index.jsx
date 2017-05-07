@@ -5,6 +5,7 @@ import FiltersAll from './FiltersAll';
 
 export default function Filters(props) {
   const {
+    appointments,
     practitioners,
     schedule,
     services,
@@ -12,21 +13,24 @@ export default function Filters(props) {
   } = props;
 
   const selectedFilters = {
+    appointmentsFilter: schedule.toJS().appointmentsFilter,
+    chairsFilter: schedule.toJS().chairsFilter,
     practitionersFilter: schedule.toJS().practitionersFilter,
     servicesFilter: schedule.toJS().servicesFilter,
-    chairsFilter: schedule.toJS().chairsFilter,
   };
 
   const entities = {
+    appointmentsFilter: appointments.filter((app) => app.get('isPatientConfirmed')),
+    chairsFilter: chairs,
     practitionersFilter: practitioners,
     servicesFilter: services,
-    chairsFilter: chairs,
   };
 
   const allFiltersCheck = {
-    practitionersFilter: false,
-    servicesFilter: false,
-    chairsFilter: false,
+    appointmentsFilter: true,
+    chairsFilter: true,
+    practitionersFilter: true,
+    servicesFilter: true,
   };
 
   return (

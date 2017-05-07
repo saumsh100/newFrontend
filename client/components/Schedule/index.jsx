@@ -160,14 +160,11 @@ class ScheduleComponent extends Component {
             <Row >
               <Col xs={12}>
                 <Filters
-                  practitioners={practitioners.get('models').toArray()}
-                  addPractitionerToFilter={addPractitionerToFilter}
-                  removePractitionerFromFilter={removePractitionerFromFilter}
                   schedule={schedule}
-                  appointmentsTypes={appointmentsTypes}
-                  selectAppointmentType={selectAppointmentType}
-                  services={services.get('models').toArray()}
+                  appointments={appointments.get('models').toArray()}
                   chairs={chairs.get('models').toArray()}
+                  practitioners={practitioners.get('models').toArray()}
+                  services={services.get('models').toArray()}
                 />
               </Col>
             </Row>

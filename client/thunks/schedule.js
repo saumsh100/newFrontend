@@ -35,14 +35,26 @@ export function setAllFilters() {
     const { entities } = getState();
 
     const entityKeys = [
-      { key: 'services', fkey: 'servicesFilter' },
-      { key: 'chairs', fkey: 'chairsFilter' },
-      { key: 'practitioners', fkey: 'practitionersFilter' },
+      { key: 'appointments', filterKey: 'appointmentsFilter'},
+      { key: 'chairs', filterKey: 'chairsFilter' },
+      { key: 'practitioners', filterKey: 'practitionersFilter',  },
+      { key: 'services', filterKey: 'servicesFilter'  },
     ];
+
+    const filterFromEntity = {
+      appointments: 'isPatientConfirmed',
+    };
 
     entityKeys.map((entity) => {
       const model = entities.getIn([entity.key, 'models']);
-      dispatch(addAllScheduleFilter({ key: entity.fkey, entities: model }));
+      const filterItem = filterFromEntity[entity.key];
+
+      if (filterItem) {
+        const filterModel = model.toArray().filter((m) => m.get(filterItem));
+        dispatch(addAllScheduleFilter({ key: entity.filterKey, entities: filterModel }));
+      } else {
+        dispatch(addAllScheduleFilter({key: entity.filterKey, entities: model}));
+      }
     });
   };
 }
