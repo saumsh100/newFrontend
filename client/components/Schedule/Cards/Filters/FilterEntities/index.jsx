@@ -16,6 +16,8 @@ export default function FilterEntities(props) {
     handleEntityCheck,
   } = props;
 
+  console.log(selectedFilterItem);
+
   return (
     <div className={styles.filter_options__item}>
       <div className={styles.filter_options__title}>{label}</div>
@@ -27,12 +29,17 @@ export default function FilterEntities(props) {
       {entities.map((entity) => {
         const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
 
+        let hideCheck = checked;
+        if(hideCheck && allChecked) {
+          hideCheck = false;
+        }
+
         return (
           <Checkbox
             key={entity.get(display)}
             label={entity.get(display)}
-            checked={checked}
-            onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+            checked={hideCheck}
+            onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey, hideCheck)}
           />
         );
       })}

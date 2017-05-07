@@ -21,13 +21,18 @@ class FiltersAll extends Component {
     this.isAllChecked = this.isAllChecked.bind(this);
   }
 
-  handleEntityCheck(checked, id, filterKey ) {
+  handleEntityCheck(checked, id, filterKey, hideCheck ) {
     const temp = {}
-    if (checked) {
+    if (checked && hideCheck) {
       this.props.removeScheduleFilter({ key: filterKey , id })
       temp[filterKey] = false;
       this.setState(temp);
-    } else {
+    } else if (checked && !hideCheck) {
+      this.props.clearScheduleFilter({ key: filterKey });
+      this.props.addScheduleFilter({ key: filterKey , id });
+      temp[filterKey] = false;
+      this.setState(temp);
+    } else  {
       this.props.addScheduleFilter({ key: filterKey , id });
       this.isAllChecked(filterKey);
     }

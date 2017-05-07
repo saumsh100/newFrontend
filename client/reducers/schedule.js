@@ -20,7 +20,7 @@ const initialState = fromJS({
   servicesFilter: [],
   appointmentType: null,
   currentScheduleMode: 'day',
-  scheduleModes: ['Month', 'Week', 'Day'],
+  scheduleModes: ['Day', 'Week', 'Month'],
 });
 
 export default handleActions({
