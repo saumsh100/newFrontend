@@ -13,6 +13,7 @@ export default function FilterPractitioners(props) {
     handleEntityCheck,
   } = props;
 
+  console.log(selectedFilterItem);
 
   return (
     <div>
@@ -30,7 +31,7 @@ export default function FilterPractitioners(props) {
           const label = (<div className={styles.filter_practitioner__name}>{pr.firstName}</div>);
 
           let hideCheck = checked;
-          if(hideCheck && allChecked) {
+          if (hideCheck && allChecked) {
             hideCheck = false;
           }
 

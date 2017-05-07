@@ -30,7 +30,7 @@ export default function FilterEntities(props) {
         const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
 
         let hideCheck = checked;
-        if(hideCheck && allChecked) {
+        if (hideCheck && allChecked) {
           hideCheck = false;
         }
 

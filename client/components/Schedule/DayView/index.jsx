@@ -126,7 +126,7 @@ class SelectedDay extends Component {
       appointments,
       schedule,
     } = this.props;
-    const start = moment({ hour: 0, minute: 0 });
+    const start = moment({ hour: 8, minute: 0 });
     const end = moment({ hour: 23, minute: 59 });
     const workingMinutes = end.diff(start, 'minutes');
     const startHours = start.get('hours');
@@ -136,7 +136,7 @@ class SelectedDay extends Component {
       workingHours.push(i);
     }
     let practitionersArray = practitioners.get('models').toArray();
-    const checkedPractitioers = schedule.toJS().practitioners;
+    const checkedPractitioers = schedule.toJS().practitionersFilter;
     if (checkedPractitioers.length) {
       practitionersArray = practitionersArray.filter(pr => checkedPractitioers.indexOf(pr.id) > -1);
     }

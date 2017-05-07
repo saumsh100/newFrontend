@@ -12,6 +12,7 @@ export default function FiltersDisplay(props) {
     allChecked,
     handleAllCheck,
     handleEntityCheck,
+    handleClearAll,
   } = props;
 
   return (
@@ -23,7 +24,7 @@ export default function FiltersDisplay(props) {
         <div className={styles.filter_header__icon}>
           <Icon icon="sliders" />
         </div>
-        <div className={styles.filter_header__link}>Clear All</div>
+        <div className={styles.filter_header__link} onClick={handleClearAll}>Clear All</div>
       </div>
       <div className={styles.filter_practitioner}>
         <FilterPractitioners
