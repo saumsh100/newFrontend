@@ -51,4 +51,3 @@ export default function FilterPractitioners(props) {
 FilterPractitioners.PropTypes = {
 
 };
-

@@ -3,9 +3,10 @@ import { Checkbox } from '../../../../library';
 
 import styles from '../styles.scss';
 
-export default function FilterAppointments(props) {
+export default function FilterEntities(props) {
 
   const {
+    display,
     label,
     filterKey,
     allChecked,
@@ -28,8 +29,8 @@ export default function FilterAppointments(props) {
 
         return (
           <Checkbox
-            key={entity.get('id')}
-            label={entity.get('note')}
+            key={entity.get(display)}
+            label={entity.get(display)}
             checked={checked}
             onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
           />
