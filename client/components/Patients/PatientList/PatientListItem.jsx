@@ -26,7 +26,7 @@ class PatientListItem extends Component {
 
     const usersActiveClassName = classNames(
       styles.users,
-      user.patientId === currentPatient ?
+      user.id === currentPatient.id ?
         styles.users__active :
         styles.users__noactive
     );

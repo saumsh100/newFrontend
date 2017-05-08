@@ -12,6 +12,95 @@ ul {
   list-style: none;
 }
 
+.appointment {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  padding-bottom: 20px;
+}
+
+.end {
+  text-align: end;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stats {
+  width: 500px;
+  margin-top: 20px;
+}
+
+.name {
+  font-family: "Gotham-Medium";
+  font-size: 1.8em;
+}
+
+.statInfo {
+  font-family: "Gotham-Book";
+  color: grey;
+  font-size: 1.1em;
+}
+
+.statData {
+  font-family: "Gotham-Book";
+  color: white;
+  font-size: 1.1em;
+}
+
+.container1 {
+  width: 50%;
+  margin: 25% 0;
+  text-align: center;
+  border-right-style: solid;
+  border-right-color: grey;
+  float:left;
+  position: relative;
+}
+
+.container2 {
+  margin: 6% 0;
+  width: 40%;
+  float: right;
+  text-align: center;
+  position: relative;
+}
+
+.loyal {
+  position: relative;
+}
+
+.loyality1 {
+  font-family: "Gotham-Medium";
+  color: white;
+  font-size: 2.5em;
+}
+.loyality2 {
+  font-family: "Gotham-Book";
+  color: white;
+  font-size: 1.0em;
+}
+.loyality3 {
+  font-family: "Gotham-Medium";
+  color: white;
+  font-size: 1.2em;
+}
+
+
+.info {
+  font-family: "Gotham-Book";
+  font-size: 1em;
+  color: #bfbfbf;
+}
+
+.contact {
+  font-family: "Gotham-Book";
+  font-size: 1.1em;
+  color: #bfbfbf;
+}
+
 .loading {
   text-align: center;
   color: #959596;
@@ -193,9 +282,11 @@ ul {
   }
 
   .patient_profile {
-    display: none;
-    width: 250px;
+    width: 500px;
     background: #fafafa;
+    margin-top: 20px;
+    margin-left: 30px;
+
 
     &::before {
       display: block;
@@ -206,10 +297,14 @@ ul {
     }
 
     &__photo {
+      width: 100px;
+      height: 100px;
+      margin: -50px auto 0 auto;
+      display: table;
+
       img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
+        width: 100px;
+        height: 100px;
       }
     }
   }
@@ -284,10 +379,14 @@ ul {
   &__table {
     position: relative;
     padding: 10px 20px;
+    margin: auto;
+    width: 50%;
+  }
 
-    &:not(:last-child) {
-      border-bottom: 1px solid #acacac;
-    }
+  &__table_info {
+    position: relative;
+    padding: 10px 20px;
+    text-align: center;
   }
 
   &__icon {
