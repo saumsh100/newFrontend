@@ -8,6 +8,7 @@ const requestRouter = require('../api/request');
 const patientsRouter = require('../api/patients');
 const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
+const Patient = require('../../models/Patient');
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
 const normalize = require('../api/normalize');
@@ -67,6 +68,13 @@ myRouter.get('/logo/:accountId', (req, res, next) => {
 		const { logo, address, clinicName, bookingWidgetPrimaryColor } = account;
 		res.send({ logo, address, clinicName, bookingWidgetPrimaryColor });
 	});
+});
+
+myRouter.post('/patientCheck', (req, res, next) => {
+  const email = req.body.email.toLowerCase();
+  Patient.filter({ email }).run()
+    .then(p => res.send({ exists: !!p[0] }))
+    .catch(next);
 });
 
 // Very important we catch all other endpoints,

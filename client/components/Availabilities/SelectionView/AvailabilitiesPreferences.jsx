@@ -26,15 +26,12 @@ function AvailabilitiesPreferences(props) {
     ...practitioners.get('models').map(p => ({ label: p.getFullName(), value: p.get('id') })).toArray(),
   ];
 
-  //debugger;
-
   return (
     <Grid>
       <Row>
         <Col className={styles.dsCol} xs={6}>
           <span className={styles.label}>Service</span>
           <DropdownSelect
-            label="Select Service"
             options={serviceOptions}
             value={selectedServiceId}
             onChange={value => setSelectedServiceId(value)}
@@ -43,7 +40,6 @@ function AvailabilitiesPreferences(props) {
         <Col className={styles.dsCol} xs={6}>
           <span className={styles.label}>Practitioner</span>
           <DropdownSelect
-            label="Select Practitioner"
             options={practitionerOptions}
             value={selectedPractitionerId}
             onChange={value => setSelectedPractitionerId(value)}
@@ -55,7 +51,6 @@ function AvailabilitiesPreferences(props) {
           <span className={styles.label}>Date Range</span>
           <DayPicker
             target="icon"
-            label="Select Service"
             value={selectedStartDate}
             onChange={value => setSelectedStartDate(value)}
           />

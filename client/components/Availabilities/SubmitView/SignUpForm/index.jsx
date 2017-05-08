@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../../../library';
-import { validate, asyncEmailValidate } from '../../../library/Form/validate';
+import { asyncEmailValidatePatient } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
 export default function SignUpForm({ onSubmit }) {
@@ -9,7 +9,7 @@ export default function SignUpForm({ onSubmit }) {
     <Form
       form="userSignUpForm"
       onSubmit={onSubmit}
-      asyncValidate={asyncEmailValidate}
+      asyncValidate={asyncEmailValidatePatient}
       asyncBlurFields={['email']}
       ignoreSaveButton
     >
