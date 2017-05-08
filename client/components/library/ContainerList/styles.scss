@@ -1,7 +1,8 @@
 @import "../../../ui.scss";
 
 .containerList {
-    margin: 0 5px 20px;
+  border-top: 5px solid $inactive-color;
+  margin: 0 5px 20px;
     min-width: 250px;
     height: 450px;
     &__header {

@@ -13,7 +13,7 @@ class RemindersList extends Component {
       data,
     } = this.props;
     return (
-      <Card className={styles.reminders} borderColor={borderColor}>
+      <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
           <CardHeader count={data.length} title={cardTitle}>
             <Search />
@@ -21,23 +21,23 @@ class RemindersList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {data.map(obj => {
+            {data.map((obj,index) => {
               const rightContent = obj.appointment && typeof obj.appointment === "object" ?
-                <div className={styles.patients__item_right}>
+                <div key={`appointments${index}`} className={styles.patients__item_right}>
                   <div className={styles.availability}>
                     Availability
                   </div>
                   <div className={styles.patients__item_days}>
-                    {obj.appointment.days.map(d => (<span>{d}</span>))}
+                    {obj.appointment.days.map((d,i) => (<span key={i}>{d}</span>))}
                   </div>
                   Except
                   <div className={styles.patients__item_days}>
-                    {obj.appointment.except.map(e => (
-                      <span>{moment(e).format("m/d")}</span>))}
+                    {obj.appointment.except.map((e,i) => (
+                      <span key={i}>{moment(e).format("m/d")}</span>))}
                   </div>
                 </div>
                 :
-                <div className={styles.patients__item_right}>
+                <div key={`patients${index}`} className={styles.patients__item_right}>
                   <div className={styles.patients__item_status}>
                     {obj.status}
                   </div>
@@ -50,7 +50,7 @@ class RemindersList extends Component {
                 </div>
 
               return (
-                <ListItem className={styles.patients__item}>
+                <ListItem key={`patientsItem${index}`} className={styles.patients__item}>
                   <img className={styles.patients__item_img} src={obj.img} alt=""/>
                   <div className={styles.patients__item_wrapper}>
                     <div className={styles.patients__item_left}>

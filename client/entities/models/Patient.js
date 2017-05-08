@@ -14,7 +14,6 @@ const PatientSchema = {
   insurance: null,
   birthDate: null,
   middleName: null,
-
 };
 
 export default class Patient extends createModel(PatientSchema) {

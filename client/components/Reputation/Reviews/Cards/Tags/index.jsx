@@ -5,7 +5,7 @@ import styles from '../../styles.scss';
 
 export default function Tags() {
   return (
-    <Card borderColor={colorMap.yellow} className={styles.card}>
+    <Card >
       <div className={styles.tags}>
         <div className={styles.tags__left}>
           <Tag label="dentist" color={colorMap.blue}  />

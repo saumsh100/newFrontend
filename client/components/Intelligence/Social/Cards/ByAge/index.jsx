@@ -10,7 +10,7 @@ export default function ByAge(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.darkblue} className={styles.card}>
+    <Card  className={styles.card}>
       <CardHeader className={styles.cardHeader} title="By Age" />
       <div className={styles.ageRange}>
         <div className={styles.ageRange__content}>
@@ -32,6 +32,6 @@ export default function ByAge(props) {
 }
 
 ByAge.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.array),
+  data: PropTypes.arrayOf(PropTypes.number),
   labels:PropTypes.arrayOf(PropTypes.string)
 };

@@ -159,6 +159,7 @@ class PractitionerTimeOff extends Component {
       <div>
         {showAddOrListComponent}
         <Modal
+          key={`addTimeOff`}
           actions={actions}
           title="Add Time Off"
           type="small"
@@ -180,7 +181,7 @@ class PractitionerTimeOff extends Component {
 }
 
 PractitionerTimeOff.propTypes = {
-  timeOffs: PropTypes.arrayOf(PropTypes.object),
+  timeOffs: PropTypes.object,
   practitioner: PropTypes.object,
   createEntityRequest: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,

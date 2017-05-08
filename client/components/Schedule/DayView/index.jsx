@@ -13,7 +13,7 @@ class SelectedDay extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.renderDoctrosSchedule = this.renderDoctrosSchedule.bind(this);
+    this.renderDoctorsSchedule = this.renderDoctorsSchedule.bind(this);
     this.renderTimeColumn = this.renderTimeColumn.bind(this);
   }
 
@@ -23,7 +23,7 @@ class SelectedDay extends Component {
     this.props.fetchEntities({ key: 'patients' });
   }
 
-  renderAppoinment(appointment, scale, startDay) {
+  renderAppoinment(appointment, scale, startDay, index) {
     const start = appointment.startTime;
     const end = appointment.endTime;
     const minutesDuration = end.diff(start, 'minutes');
@@ -36,7 +36,7 @@ class SelectedDay extends Component {
     const displayStartDate = appointment.startTime.format(format);
     const displayEndDate = appointment.endTime.format(format);
     return (
-      <div className={styles.appointment} style={appointmentStyles}>
+      <div key={index} className={styles.appointment} style={appointmentStyles}>
           <div className={styles.appointment__username}>{appointment.name}</div>
           <div className={styles.appointment__date}>{`${displayStartDate} - ${displayEndDate}`}</div>
           <div className={styles.appointment__title}>{appointment.title}</div>
@@ -44,7 +44,7 @@ class SelectedDay extends Component {
     );
   }
 
-  renderDoctrosSchedule(doctor, workingHours, scale, startDay, tablesCount) {
+  renderDoctorsSchedule(doctor, workingHours, scale, startDay, tablesCount, divIndex) {
     const { patients, appointments, schedule, currentDate } = this.props;
     const patientsArray = patients.get('models').toArray();
     const appointmentsArray = appointments.get('models').toArray();
@@ -87,13 +87,13 @@ class SelectedDay extends Component {
       color: 'white',
     };
     return (
-      <div className={styles.schedule__body} style={doctorScheduleColumn}>
-          {workingHours.map((h) => (
-              <div className={styles.schedule__element} style={workingHour}>
+      <div key={divIndex} className={styles.schedule__body} style={doctorScheduleColumn}>
+          {workingHours.map((h, i) => (
+              <div key={i} className={styles.schedule__element} style={workingHour}>
                   {h}
               </div>
           ))}
-          {doctorAppointments.map(app => this.renderAppoinment(app, scale, startDay))}
+          {doctorAppointments.map((app, i) => this.renderAppoinment(app, scale, startDay, i))}
       </div>
     );
   }
@@ -107,8 +107,8 @@ class SelectedDay extends Component {
     };
     return (
       <div className={styles.schedule__header} style={workingHoursColumn}>
-        {workingHours.map(h => (
-          <div className={styles.schedule__element} style={workingHour}>
+        {workingHours.map((h, i) => (
+          <div key={i} className={styles.schedule__element} style={workingHour}>
             <div className={styles.schedule__date}>
               {moment({ hour: h, minute: 0 }).format('h:mm a')}
             </div>
@@ -126,7 +126,7 @@ class SelectedDay extends Component {
       appointments,
       schedule,
     } = this.props;
-    const start = moment({ hour: 0, minute: 0 });
+    const start = moment({ hour: 8, minute: 0 });
     const end = moment({ hour: 23, minute: 59 });
     const workingMinutes = end.diff(start, 'minutes');
     const startHours = start.get('hours');
@@ -136,7 +136,7 @@ class SelectedDay extends Component {
       workingHours.push(i);
     }
     let practitionersArray = practitioners.get('models').toArray();
-    const checkedPractitioers = schedule.toJS().practitioners;
+    const checkedPractitioers = schedule.toJS().practitionersFilter;
     if (checkedPractitioers.length) {
       practitionersArray = practitionersArray.filter(pr => checkedPractitioers.indexOf(pr.id) > -1);
     }
@@ -145,8 +145,8 @@ class SelectedDay extends Component {
     return (
       <div className={styles.schedule}>
           {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}
-          {practitionersArray.map(d => (
-              this.renderDoctrosSchedule(d, workingHours, scale, start, tablesCount)
+          {practitionersArray.map((d,index) => (
+              this.renderDoctorsSchedule(d, workingHours, scale, start, tablesCount, index)
           ))}
       </div>
     );

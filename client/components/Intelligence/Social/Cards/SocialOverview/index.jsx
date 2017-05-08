@@ -12,7 +12,7 @@ export default function SocialOverview(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.darkblue} className={styles.card}>
+    <Card className={styles.card}>
       <CardHeader className={styles.cardHeader} title={title} />
       <div className={styles.facebookActivity} >
         <div className={styles.facebookActivity__container} >

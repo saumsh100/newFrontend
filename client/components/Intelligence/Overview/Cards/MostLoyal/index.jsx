@@ -13,15 +13,15 @@ class MostLoyal extends Component {
     } = this.props;
 
     return (
-      <Card className={styles.mostLoyal} borderColor={borderColor}>
+      <Card className={styles.mostLoyal} >
         <div className={styles.mostLoyal__header}>
           <CardHeader title={cardTitle} />
         </div>
         <div className={styles.mostLoyal__body}>
           <List className={styles.data}>
-            {data.map(obj => {
+            {data.map((obj, i) => {
               return (
-                <ListItem className={styles.data__item}>
+                <ListItem key={i} className={styles.data__item}>
                   <div className={styles.data__item_wrapper}>
                     <div className={styles.data__item_left}>
                       <img className={styles.data__item_img} src={obj.img} alt=""/>

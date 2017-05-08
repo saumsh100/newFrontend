@@ -69,9 +69,10 @@ class Modal extends Component {
     if (actions) {
       showFooterComponent = (
         <div className={styles.modalBody__footer}>
-          {actions.map((action) => {
+          {actions.map((action, index) => {
             return (
               <action.component
+                key={`action_${index}`}
                 onClick={action.onClick}
                 className={styles.modalBody__action}
                 {...action.props}

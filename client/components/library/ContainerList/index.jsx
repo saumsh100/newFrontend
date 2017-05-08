@@ -13,15 +13,15 @@ class ContainerList extends Component {
       className
     } = this.props;
     return (
-      <Card className={classnames(className, styles.containerList)} borderColor={borderColor}>
+      <Card className={classnames(className, styles.containerList)} >
         <div className={styles.containerList__header}>
           <CardHeader title={cardTitle} />
         </div>
         <div className={styles.containerList__body}>
           <List className={styles.data}>
-            {data.map(obj => {
+            {data.map((obj, i) => {
               return (
-                <ListItem className={styles.data__item}>
+                <ListItem key={i} className={styles.data__item}>
                   <div className={styles.data__item_wrapper}>
                     <div className={styles.data__item_left}>
                       <div className={styles.data__item_title}>
