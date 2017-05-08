@@ -18,7 +18,6 @@ class SubmitView extends Component {
     this.getPercent = this.getPercent.bind(this);
     this.bookAnAppointment = this.bookAnAppointment.bind(this);
     this.setRegistrationStep = this.setRegistrationStep.bind(this);
-    // this.collapseMenu = this.collapseMenu.bind(this);
   }
 
   componentDidMount() {
@@ -79,12 +78,14 @@ class SubmitView extends Component {
   render() {
     return (
       <div className={styles.submitViewWrapper}>
-        <Timer
-          className={styles.signup__header_timer}
-          seconds={this.state.time}
-          percentage={this.getPercent()}
-          color={this.props.bookingWidgetPrimaryColor}
-        />
+        <div className={styles.timerWrapper}>
+          <Timer
+            className={styles.signup__header_timer}
+            seconds={this.state.time}
+            percentage={this.getPercent()}
+            color={this.props.bookingWidgetPrimaryColor}
+          />
+        </div>
         <div className={styles.formWrapper}>
           <SignUpForm onSubmit={values => alert(JSON.stringify(values))} />
         </div>

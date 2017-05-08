@@ -38,7 +38,7 @@ class Timer extends React.Component {
 
 
   render() {
-    const radius = (50 - this.props.strokeWidth / 2);
+    const radius = 50 - (this.props.strokeWidth / 2);
     const pathDescription = `
       M 50,50 m 0,-${radius}
       a ${radius},${radius} 0 1 1 0,${2 * radius}
@@ -60,18 +60,16 @@ class Timer extends React.Component {
           className={styles.CircularProgressbar_trail}
           d={pathDescription}
           strokeWidth={this.props.strokeWidth}
-          fillOpacity={0}
+          fill="white"
         />
-
         <path
           className={styles.CircularProgressbar_path}
           d={pathDescription}
           strokeWidth={this.props.strokeWidth}
-          fillOpacity={0}
+          fill="none"
           stroke={this.props.color}
           style={progressStyle}
         />
-
         <text
           className={styles.CircularProgressbar_text}
           x={50}
@@ -79,7 +77,7 @@ class Timer extends React.Component {
           fill={this.props.color}
         >
           {this.props.textForSeconds(this.props.seconds)}
-          </text>
+        </text>
       </svg>
     );
   }

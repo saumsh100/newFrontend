@@ -64,12 +64,9 @@ class AvailabilitiesDisplay extends Component {
 
   render() {
     const {
-      // startDate,
-      // availabilities,
-      onSelect,
-      selectedStartDate,
       isFetching,
       availabilities,
+      selectedStartDate,
       selectedAvailability,
       setSelectedAvailability,
     } = this.props;
@@ -114,30 +111,30 @@ class AvailabilitiesDisplay extends Component {
     if (!isFetching) {
       availabilitiesDisplay = (
         <div className={styles.displayAvailabilitiesContainer}>
-        <div className={styles.appointment__table_elements}>
-          {dayAvailabilities.map((a) => {
-            return (
-              <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
-                {a.sortedAvailabilities.map((availability) => {
-                  let classes = styles.appointment__list_item;
-                  if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
-                    classes = `${classes} ${styles.appointment__list_selected}`;
-                  }
+          <div className={styles.appointment__table_elements}>
+            {dayAvailabilities.map((a) => {
+              return (
+                <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
+                  {a.sortedAvailabilities.map((availability) => {
+                    let classes = styles.appointment__list_item;
+                    if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
+                      classes = `${classes} ${styles.appointment__list_selected}`;
+                    }
 
-                  return (
-                    <li
-                      key={`${availability.startDate}_item`}
-                      onClick={() => setSelectedAvailability(availability)}
-                      className={classes}
-                    >
-                      {moment(availability.startDate).format('HH:mm A')}
-                    </li>
-                  );
-                })}
-              </ul>
-            );
-          })}
-        </div>
+                    return (
+                      <li
+                        key={`${availability.startDate}_item`}
+                        onClick={() => setSelectedAvailability(availability)}
+                        className={classes}
+                      >
+                        {moment(availability.startDate).format('HH:mm A')}
+                      </li>
+                    );
+                  })}
+                </ul>
+              );
+            })}
+          </div>
         </div>
       );
     }
@@ -184,6 +181,7 @@ AvailabilitiesDisplay.propTypes = {
   selectedStartDate: PropTypes.string.isRequired,
   selectedPractitionerId: PropTypes.string,
   selectedServiceId: PropTypes.string.isRequired,
+  selectedAvailability: PropTypes.object,
   setSelectedStartDate: PropTypes.func.isRequired,
   setSelectedAvailability: PropTypes.func.isRequired,
 };
