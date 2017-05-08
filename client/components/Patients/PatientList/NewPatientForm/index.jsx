@@ -5,16 +5,17 @@ import { maxLength, asyncEmailValidateUser, emailValidate, phoneValidate } from 
 
 
 export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formName }) {
+  const options = [
+    { value: 'Male' },
+    { value: 'Female' },
+  ];
 
-  function submit(values) {
-    values.birthDate = birthday;
-    onSubmit(values);
-  }
 
   return (
-    <Form form={formName}
-          onSubmit={submit}
-          ignoreSaveButton={true}
+    <Form
+      form={formName}
+      onSubmit={onSubmit}
+      ignoreSaveButton={true}
     >
       <Field
         required
@@ -31,8 +32,9 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
       <Field
         required
         name="gender"
-        validate={[maxLength(15)]}
         label="Gender"
+        component="DropdownSelect"
+        options={options}
       />
       <Field
         required
@@ -47,11 +49,10 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
         validate={[emailValidate]}
         label="Email"
       />
-      <DayPicker
+      <Field
         required
+        component="DayPicker"
         name="birthDate"
-        value={birthday}
-        onChange={saveBirthday}
         label="Birth Date"
       />
     </Form>

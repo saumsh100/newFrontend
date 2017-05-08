@@ -5,7 +5,12 @@ import { maxLength } from '../../../library/Form/validate';
 
 export default function EditPatientForm({ onSubmit, formName, styles, currentPatient }) {
 
-  const key = currentPatient.id || 1;
+  const key = currentPatient.id;
+  const initialValues = {
+    firstName: currentPatient.firstName,
+    lastName: currentPatient.lastName,
+  };
+  
   return (
     <Form
       key={key}
@@ -13,14 +18,13 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
       onSubmit={onSubmit}
       ignoreSaveButton
       className={styles.form}
-      initialValues={currentPatient}
+      initialValues={initialValues}
     >
       <Field
         required
         name="firstName"
         validate={[maxLength(15)]}
         label="First Name"
-        value="asdsads"
       />
       <Field
         required

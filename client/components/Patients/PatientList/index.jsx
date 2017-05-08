@@ -33,18 +33,9 @@ class PatientList extends Component {
     this.state = {
       birthday: new Date(),
     };
-
-    this.saveBirthday = this.saveBirthday.bind(this);
-  }
-
-  saveBirthday(value){
-    this.setState({
-      birthday: value,
-    });
   }
 
   render() {
-
     const x = this.props.appointments.toArray().map((appointment) => {
       const patient = this.props.patients.get(appointment.patientId);
       patient.appointment = appointment;
@@ -120,12 +111,12 @@ class PatientList extends Component {
                   threshold={50}
                 >
                   {patientList.map((user, i) => {
-                    return <PatientListItem
+                    return (<PatientListItem
                       key={user.appointment.id + i}
                       user={user}
                       currentPatient={this.props.currentPatient}
                       setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
-                    />
+                    />);
                   })}
                 </InfiniteScroll>
               </div>
@@ -149,23 +140,25 @@ class PatientList extends Component {
                   </Col>
                   <Col xs={4}>
                     <div className={styles.right}>
-                      <Tabs
-                        index={0}>
-                        <Tab label="Info">
-                          <EditPatientForm
-                            onSubmit={this.props.submitEdit.bind(null, this.props.currentPatient)}
-                            currentPatient={this.props.currentPatient}
-                            formName={'editPatient'}
-                            styles={styles}
-                          />
-                          <Button
-                            className={styles.formButton}
-                            onClick={this.props.deletePatient}
-                          >
-                            Delete Patient
-                          </Button>
-                        </Tab>
-                      </Tabs>
+                      {(this.props.currentPatient.id ? (
+                        <Tabs
+                          index={0}>
+                          <Tab label="Personal">
+                            <EditPatientForm
+                              onSubmit={this.props.submitEdit.bind(null, this.props.currentPatient)}
+                              currentPatient={this.props.currentPatient}
+                              formName={'editPatient'}
+                              styles={styles}
+                            />
+                            <Button
+                              className={styles.formButton}
+                              onClick={this.props.deletePatient}
+                            >
+                              Delete Patient
+                            </Button>
+                          </Tab>
+                        </Tabs>
+                        ) : <div className={styles.loading}>Loading...</div>)}
                     </div>
                   </Col>
                 </div>
