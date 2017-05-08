@@ -32,7 +32,7 @@ export default function CheckboxImage(props) {
 CheckboxImage.propTypes = {
   id: PropTypes.string,
   value: PropTypes.string,
-  label: PropTypes.string,
+  label: PropTypes.object,
   onChange: PropTypes.func,
   checked: PropTypes.bool,
 };

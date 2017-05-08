@@ -17,13 +17,14 @@ import {
 class ScheduleContainer extends React.Component {
   componentWillMount() {
     Promise.all([
-      this.props.fetchEntities({ key: 'patients' }),
-      this.props.fetchEntities({ key: 'appointments' }),
       this.props.fetchEntities({ key: 'practitioners'}),
-      this.props.fetchEntities({ key: 'requests' }),
       this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
-  ]).then(() => {
+      this.props.fetchEntities({ key: 'appointments' }),
+      this.props.fetchEntities({ key: 'patients' }),
+      this.props.fetchEntities({ key: 'requests' }),
+
+    ]).then(() => {
       this.props.setAllFilters();
     }).catch(e => console.log(e))
   }

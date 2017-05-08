@@ -11,7 +11,7 @@ export default function NewVsReturning(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.grey}>
+    <Card >
       <CardHeader className={styles.cardHeader} title={'New vs Returning Visitors'} />
       <div className={styles.byGender}>
         <div className={styles.byGender__stats}>

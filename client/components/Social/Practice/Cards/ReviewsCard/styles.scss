@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 .card {
+  border-top: $card-border-size $primary-light-blue;
   overflow: inherit;
 }
 

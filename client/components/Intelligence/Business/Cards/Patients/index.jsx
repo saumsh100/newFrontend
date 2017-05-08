@@ -14,10 +14,10 @@ export default function Patients(props) {
 
   return (
     <Row className={styles.patients}>
-      {data.map((d, items, array) => {
+      {data.map((d,index, items, array) => {
         return (
-          <Col className={styles.patients__wrapper} xs={12} sm={Math.floor(12 / array)}>
-            <Card className={styles.patients__item} borderColor={borderColor} fontColor={fontColor}>
+          <Col key={index} className={styles.patients__wrapper} xs={12} sm={Math.floor(12 / array)}>
+            <Card className={styles.patients__item} >
               <div className={styles.patients__item_count}>{d.count}</div>
               <div className={styles.patients__item_subtitle}>{d.title}</div>
               <div className={styles.patients__item_date}>{d.date}</div>

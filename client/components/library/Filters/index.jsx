@@ -20,7 +20,7 @@ class Filters extends Component {
   render() {
     const { filters, selectAll, setAll } = this.props;
     return (
-      <Card borderColor={colorMap.red} className={styles.card}>
+      <Card  className={styles.card}>
         <div className={styles.filters}>
           <div className={styles.filters__header}>
             <div className={styles.filters__header__left}>

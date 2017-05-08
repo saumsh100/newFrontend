@@ -14,17 +14,17 @@ export default function RatingsChart(props) {
   const maxValue = _.max(_.values(rating));
 
   return (
-    <Card borderColor={colorMap.blue} className={styles.card}>
+    <Card className={styles.card}>
       <div className={styles.stats}>
-        {ratingStars.map((r) => {
+        {ratingStars.map((r, index) => {
           const rows = [];
           for (let i = 1; i <= r; i++) {
-            rows.push(<Star size={1.3} />);
+            rows.push(<Star key={i} size={1.3} />);
           }
           const width = rating[r] ? (Math.floor((rating[r] / maxValue) * 80)) : 5;
           const style = { width: `${width}%` };
           return (
-            <div className={styles.content}>
+            <div key={index} className={styles.content}>
               <div className={styles.content__stars}>
                 {rows}
               </div>

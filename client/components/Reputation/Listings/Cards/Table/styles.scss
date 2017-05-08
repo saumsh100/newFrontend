@@ -1,6 +1,7 @@
 @import "../../../../../ui";
 
 .mostLoyal {
+  border-top: $card-border-size $primary-light-blue;
   overflow: inherit;
   &__wrapper {
     display: block;

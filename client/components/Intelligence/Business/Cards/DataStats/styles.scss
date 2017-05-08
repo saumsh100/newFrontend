@@ -2,6 +2,7 @@
 @import "../../../../../fonts";
 
 .dataStats {
+  border-top: $card-border-size $primary-blue-green;
   display: flex;
   justify-content: center;
   //height: 330px;

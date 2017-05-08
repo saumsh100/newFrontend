@@ -16,8 +16,6 @@ export default function FilterEntities(props) {
     handleEntityCheck,
   } = props;
 
-  console.log(selectedFilterItem);
-
   return (
     <div className={styles.filter_options__item}>
       <div className={styles.filter_options__title}>{label}</div>

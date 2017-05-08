@@ -12,9 +12,9 @@ export default function BusinessStats(props) {
 
   return (
     <Row className={styles.businessStats}>
-      {data.map(d => (
-        <Col className={styles.businessStats__item} xs={12} md={4}>
-            <Arrow className={classNames(d.className, styles[d.color])}
+      {data.map((d,i) => (
+        <Col key={i} className={styles.businessStats__item} xs={12} md={4}>
+            <Arrow  className={classNames(d.className, styles[d.color])}
                    percentage={d.percentage}
                    count={d.count}
                    title={d.title}

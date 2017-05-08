@@ -13,6 +13,7 @@ import WeekView from './WeekView';
 import CurrentDate from './Cards/CurrentDate';
 import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
 import styles from './styles.scss';
+import colorMap from "../library/util/colorMap";
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -170,7 +171,7 @@ class ScheduleComponent extends Component {
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
-                <RequestsContainer className={styles.schedule__sidebar_request} />
+                <RequestsContainer className={styles.schedule__sidebar_request} borderColor={colorMap.darkblue}/>
               </Col>
             </Row>
           </Col>

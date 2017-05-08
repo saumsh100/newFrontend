@@ -75,6 +75,7 @@
 }
 
 .cardHeader {
+  border-top: $card-border-size $inactive-color;
   padding: 20px;
 }
 
@@ -221,6 +222,7 @@
 /*  padding: 10px;*/
 
   &__mainContainer {
+
     flex-direction: column;
     display: flex;
     height: 400px;

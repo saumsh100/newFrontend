@@ -64,6 +64,7 @@ export default class DropdownSelect extends Component {
           }
           return (
             <ListItem
+              key={`dropDownSelect_${i}`}
               className={className}
               onClick={() => onChange(option.value)}
             >

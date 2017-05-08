@@ -28,6 +28,8 @@
     }
   }
   &__item {
+    border-top: $card-border-size $primary-blue-green;
+    color: $primary-blue-green;
     position: relative;
     height: 100%;
     display: flex;
