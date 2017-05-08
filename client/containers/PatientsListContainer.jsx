@@ -4,8 +4,6 @@ import Patients from '../components/Patients/';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-const HOW_MANY_TO_SKIP = 10;
-
 class PatientsListContainer extends Component {
   constructor(props) {
     super(props);
