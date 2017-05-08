@@ -400,6 +400,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
+      isSyncedWithPMS: false,
     },
     {
       id: sergeyPatientId,
@@ -419,6 +420,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
+      isSyncedWithPMS: false,
     },
     {
       id: markPatientId,
@@ -430,6 +432,7 @@ const SEEDS = {
       gender: 'male',
       status: 'Active',
       language: 'English',
+      isSyncedWithPMS: false,
     },
     {
       id: alexPatientId,
@@ -443,6 +446,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
+      isSyncedWithPMS: false,
     },
     // account 2
     {
@@ -457,6 +461,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
+      isSyncedWithPMS: false,
     },
   ],
 
@@ -793,8 +798,10 @@ const SEEDS = {
   SyncClientVersion: [
     {
       version: 2.0,
-      build: 1,
       url: 'http://carecru.dev:8080/api/updater/download',
+      key: '',
+      secret: '',
+      build: 1,
     },
   ],
 };

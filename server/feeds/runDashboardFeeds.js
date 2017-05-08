@@ -3,6 +3,8 @@
 // TODO: If so, we should consider abstracting that so we dont slow up other services
 const Appointment = require('../models/Appointment');
 const Request = require('../models/Request');
+const Patient = require('../models/Patient');
+const SyncClientError = require('../models/SyncClientError');
 const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
@@ -18,11 +20,10 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-
         if (isDeleted(doc)) {
           socket.emit('remove:Appointment', normalize('appointment', doc));
         } else if (isCreated(doc)) {
-          socket.emit('add:Appointment', normalize('appointment', doc));
+          socket.emit('create:Appointment', normalize('appointment', doc));
         } else {
           socket.emit('update:Appointment', normalize('appointment', doc));
         }
@@ -30,7 +31,7 @@ function runDashboardFeeds(socket) {
     });
 
   /**
-   * Listen to changes on the Requests table and update dashbaords in realtime
+   * Listen to changes on the Requests table and update dashboards in real time
    */
   Request
     .filter({ accountId: activeAccountId })
@@ -46,6 +47,26 @@ function runDashboardFeeds(socket) {
           console.log('request added');
           socket.emit('addRequest', doc);
         }
+      });
+    });
+
+  /**
+   * Listen to changes on the SyncClientError table to update dashboards in real time.
+   * Artificially set up the document from the feed for the normalizer.
+   */
+  SyncClientError
+    .filter({ accountId: activeAccountId })
+    .filter((entry) => {
+      return entry('operation').ne('sync');
+    })
+    .changes({ squash: true })
+    .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
+      feed.each((error, logEntry) => {
+        // stacktrace attribute can be very large and does not mean anything for the dashboard.
+        delete logEntry.stackTrace;
+        socket.emit('syncClientError', normalize('syncClientError', logEntry));
       });
     });
 }
