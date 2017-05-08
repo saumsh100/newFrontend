@@ -94,8 +94,8 @@ patientsRouter.post('/', (req, res, next) => {
   patientData.isSyncedWithPMS = false;
   return Patient.save(patientData)
     .then((patient) => {
-      console.log(patient)
-      res.status(201).send(normalize('patientSingle', patient));
+      console.log(normalize('patient', patient))
+      res.status(201).send(normalize('patient', patient));
     })
     .catch(next);
 });
@@ -131,12 +131,11 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
-  const key = req.body.key || 'patientSingle';
   delete req.body.key;
 
   // res.send(normalize('patient', patient))
   return req.patient.merge(req.body).save()
-    .then(patient => res.send(normalize(key, patient)))
+    .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });
 
@@ -144,21 +143,8 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Delete a patient
  */
 patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
-  // TODO: change to joinPatientId
-
-  /*
    return req.patient.deleteAll()
     .then(() => res.send(204))
-    .catch(next);
-
-   */
-
-  return Patient.get(req.patient.id).getJoin({ appointments: true }).run()
-    .then((patient) => {
-      console.log(patient);
-      patient.deleteAll();
-      res.send(204);
-    })
     .catch(next);
 });
 

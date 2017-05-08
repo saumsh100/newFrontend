@@ -21,10 +21,8 @@ const initialState = fromJS({
 
 export default handleActions({
   [SET_CURRENT_PATIENT](state, action) {
-    return state.merge({
-
-      currentPatient: action.payload.currentDialogId,
-    });
+    const key = Object.keys(action.payload.currentDialogId.patients)[0]
+    return state.set('selectedPatient', action.payload.currentDialogId.patients[key]);
   },
 
   [UPDATE_EDITING_PATIENT_STATE](state, action) {

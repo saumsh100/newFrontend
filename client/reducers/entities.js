@@ -95,8 +95,8 @@ export default handleActions({
     return state.setIn([key, 'isFetching'], true);
   },
 
-  [RECEIVE_ENTITIES](state, { payload: { entities, noSave } }) {
-    return receiveEntities(state, entities, noSave);
+  [RECEIVE_ENTITIES](state, { payload: { entities } }) {
+    return receiveEntities(state, entities);
   },
 
   [DELETE_ENTITY](state, { payload: { key, id } }) {
@@ -184,18 +184,14 @@ export default handleActions({
   }
 }*/
 
-function receiveEntities(state, entities, noSave) {
+function receiveEntities(state, entities) {
   // TODO: update all appropriate entitites in state
   let newState = state;
   each(entities, (collectionMap, key) => {
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
-      if (key === 'patient' && noSave) {
-        const newModel = new Models[key](modelData);
-        newState = newState.deleteIn([key, 'models']);
-        newState = newState.setIn([key, 'models', id], newModel);
-      } else if (!model || key === 'weeklySchedules') {
+      if (!model || key === 'weeklySchedules') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);

@@ -66,7 +66,7 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
 }
 
 
-export function createEntityRequest({ key, entityData, url, noSave }) {
+export function createEntityRequest({ key, entityData, url }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -75,7 +75,7 @@ export function createEntityRequest({ key, entityData, url, noSave }) {
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;
-        dispatch(receiveEntities({ key, entities: data.entities, noSave }));
+        dispatch(receiveEntities({ key, entities: data.entities }));
         return data.entities;
       })
       .catch(err => console.log(err));
@@ -88,10 +88,11 @@ export function updateEntityRequest({ key, model, values, url }) {
   values = values || model.toJSON();
 
   return (dispatch) => {
-    axios.put(url, values)
+    return axios.put(url, values)
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
+        return data.entities;
       })
       .catch(err => console.log(err));
   };

@@ -1,192 +1,244 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import PatientListItem from './PatientListItem';
-import NewPatientForm from './NewPatientForm';
-import EditPatientForm from './EditPatientForm';
-import PatientInfoDisplay from './PatientInfoDisplay';
+import MainContainer from './MainContainer';
+import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
 import {
-  Button,
-  Form,
-  Field,
-  Modal,
-  Grid,
-  Row,
-  Tabs,
-  Tab,
-  Col,
-  InfiniteScroll,
-} from '../../library';
-import styles from './main.scss';
-import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+  setCurrentPatient,
+} from '../../../thunks/patientList';
 
-
-// TODO: separate this component into:
-// - PatientList
-// - PatientDisplay
-// - PatientEventLog
-// - PatientSettings
+const HOW_MANY_TO_SKIP = 10;
 
 class PatientList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      birthday: new Date(),
+      people: HOW_MANY_TO_SKIP,
+      moreData: true,
+      patients: null,
+      roll: 0,
+      currentPatient: { id: null },
+      active: false,
+      showNewUser: false,
+      initialUser: true,
     };
+
+    this.loadMore = this.loadMore.bind(this);
+    this.setCurrentPatient = this.setCurrentPatient.bind(this);
+    this.newUserForm = this.newUserForm.bind(this);
+    this.newPatient = this.newPatient.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
+    this.submitEdit = this.submitEdit.bind(this);
+    this.deletePatient = this.deletePatient.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchEntities({
+      key: 'appointments',
+      join: ['patient'],
+      params: {
+        limit: HOW_MANY_TO_SKIP,
+      },
+    });
+  }
+
+  setCurrentPatient(currentPatient) {
+    this.setState({
+      currentPatient,
+      showNewUser: false,
+      initialUser: false,
+    });
+  }
+
+  newPatient(values) {
+    const newState = {
+      active: false,
+      showNewUser: true,
+    };
+
+    this.setState(newState);
+    this.props.createEntityRequest({
+      key: 'patient',
+      entityData: values,
+    }).then((result) => {
+        this.props.setCurrentPatient(result);
+    }).catch(err => console.log(err));
+  }
+
+  deletePatient() {
+    const key = (this.state.showNewUser ? 'patient' : 'patients');
+    const currentPatient = ((this.state.showNewUser) ? this.props.patient.toArray()[0] : this.state.currentPatient);
+
+    this.setState({
+      currentPatient: { id: null },
+      showNewUser: false,
+    });
+
+    const ids = [];
+
+    this.props.appointments.toArray().forEach((appointment) => {
+      if (appointment.patientId === currentPatient.id) {
+        ids.push(appointment.id);
+      }
+    });
+
+    this.props.deleteEntityCascade({
+      key,
+      id: currentPatient.id,
+      url: `/api/patients/${currentPatient.id}`,
+      cascadeKey: 'appointments',
+      ids,
+    })
+  }
+
+  submitEdit(currentPatient, values) {
+    const key = (this.state.showNewUser ? 'patient' : 'patients');
+
+    if (key === 'patients') {
+      values.key = 'patient';
+    }
+
+    this.props.updateEntityRequest({
+      key,
+      values,
+      url: `/api/patients/${currentPatient.id}`,
+    }).then((result) => {
+      this.props.setCurrentPatient(result);
+    }).catch(err => console.log(err));
+
+    values.firstName = '';
+    values.lastName = '';
+  }
+
+  newUserForm() {
+    const newState = {
+      active: true,
+    };
+
+    this.setState(newState);
+  }
+
+  reinitializeState() {
+    const newState = {
+      active: false,
+    };
+
+    this.setState(newState);
+  }
+
+  loadMore() {
+    const newState = {};
+    newState.roll = this.state.roll;
+
+    //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
+
+    if (this.state.roll === 2) {
+      if (this.state.patients === this.props.patients) {
+        this.setState({
+          moreData: false,
+        });
+      }
+      newState.roll = 0;
+    } else if (this.state.roll === 1) {
+
+      this.props.fetchEntities({
+        key: 'appointments',
+        join: ['patient'],
+        params: {
+          skip: this.state.people,
+          limit: HOW_MANY_TO_SKIP,
+        },
+      });
+
+      newState.people = this.state.people + HOW_MANY_TO_SKIP;
+      newState.roll += 1;
+    } else {
+      newState.roll += 1;
+    }
+
+    newState.patients = this.props.patients;
+
+    this.setState(newState);
   }
 
   render() {
-    const x = this.props.appointments.toArray().map((appointment) => {
-      const patient = this.props.patients.get(appointment.patientId);
-      patient.appointment = appointment;
+    const {
+      patients,
+      appointments,
+      patient,
+    } = this.props;
 
-      return patient;
-    });
+    let currentPatient = this.state.currentPatient;
+    const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
 
-    const array = [];
-    const patientList = x.filter((item, pos) => {
-      const id = item.id;
-      if (array.includes(id)) {
-        return false;
+    if (this.state.initialUser && appointments.toArray()[0]) {
+      currentPatient = patients.get(app.toArray()[0].patientId);
+      currentPatient.appointment = app.toArray()[0];
+    }
+
+    if (this.state.showNewUser && patient) {
+      currentPatient = patient;
+      currentPatient.appointment = {};
+    } else {
+      if (this.state.currentPatient.id !== null) {
+        currentPatient = patients.get(this.state.currentPatient.id);
+        currentPatient.appointment = appointments.get(this.state.currentPatient.appointment.id);
       }
-      array.push(id);
-      return true;
-    });
-
-    const PatientInfo = (<PatientInfoDisplay
-      currentPatient={this.props.currentPatient}
-      onClick={this.props.newUserForm}
-    />);
-
-    const formName = 'newUser';
-
-    const actions = [
-      { label: 'Cancel', onClick: this.props.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.props.submit, component: RemoteSubmitButton, props: { form: formName }},
-    ];
+    }
 
     return (
-      <Grid>
-        <Modal
-          key={0}
-          actions={actions}
-          title="New Patient"
-          type="small"
-          active={this.props.active}
-          onEscKeyDown={this.props.reinitializeState}
-          onOverlayClick={this.props.reinitializeState}
-        >
-          <NewPatientForm
-            onSubmit={this.props.submit}
-            formName={formName}
-            birthday={this.state.birthday}
-            saveBirthday={this.saveBirthday}
-          />
-        </Modal>
-        <Row className={styles.patients}>
-          <Col xs={12} sm={4} md={4} lg={2}>
-            <div className={styles.patients_list}>
-              <div className={styles.patients_list_title}>Patients</div>
-              <div className={`${styles.patients_list__search} ${styles.search}`}>
-                <label className={styles.search__label} htmlFor="search__input">
-                  <i className="fa fa-search" />
-                </label>
-                <Form form="patientList" ignoreSaveButton>
-                  <Field className={styles.search__input}
-                    type="text"
-                    name="patients"
-                  />
-                </Form>
-                <div className={styles.search__edit}>
-                  <i className="fa fa-pencil" />
-                </div>
-              </div>
-              <div className={styles.patients_list__users}>
-                <InfiniteScroll
-                  loadMore={this.props.loadMore}
-                  loader={<div style={{ clear: 'both' }}>Loading...</div>}
-                  hasMore={this.props.moreData}
-                  initialLoad={false}
-                  useWindow={false}
-                  threshold={50}
-                >
-                  {patientList.map((user, i) => {
-                    return (
-                      <PatientListItem
-                        key={user.appointment.id + i}
-                        user={user}
-                        currentPatient={this.props.currentPatient}
-                        setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
-                      />
-                    );
-                  })}
-                </InfiniteScroll>
-              </div>
-            </div>
-          </Col>
-          <Col xs={12} sm={8} md={8} lg={10}>
-            <div className={styles.patients_content}>
-              <Row>
-                <Col xs={12}>
-                  {PatientInfo}
-                </Col>
-              </Row>
-              <Row>
-                <div className={styles.patients_content__wrapper}>
-                  <Col xs={4}>
-                    <div className={styles.left}>
-                    </div>
-                  </Col>
-                  <Col xs={4}>
-                    <div className={styles.middle}/>
-                  </Col>
-                  <Col xs={4}>
-                    <div className={styles.right}>
-                      {(this.props.currentPatient.id ? (
-                        <Tabs
-                          index={0}>
-                          <Tab label="Personal">
-                            <EditPatientForm
-                              onSubmit={this.props.submitEdit.bind(null, this.props.currentPatient)}
-                              currentPatient={this.props.currentPatient}
-                              formName={'editPatient'}
-                              styles={styles}
-                            />
-                            <Button
-                              className={styles.formButton}
-                              onClick={this.props.deletePatient}
-                            >
-                              Delete Patient
-                            </Button>
-                          </Tab>
-                        </Tabs>
-                        ) : <div className={styles.loading}>Loading...</div>)}
-                    </div>
-                  </Col>
-                </div>
-              </Row>
-            </div>
-          </Col>
-        </Row>
-      </Grid>
+      <MainContainer
+        loadMore={this.loadMore}
+        setCurrentPatient={this.setCurrentPatient}
+        currentPatient={currentPatient}
+        patients={patients}
+        moreData={this.state.moreData}
+        appointments={app}
+        active={this.state.active}
+        initialUser={this.state.initialUser}
+        newUserForm={this.newUserForm}
+        deletePatient={this.deletePatient}
+        reinitializeState={this.reinitializeState}
+        editUser={this.submitEdit}
+        newPatient={this.newPatient}
+      />
     );
   }
 }
 
-PatientList.propTypes = {
-  patients: PropTypes.object.isRequired,
-  setCurrentPatient: PropTypes.func,
-  loadMore: PropTypes.func,
-  currentPatient: PropTypes.object,
-  moreData: PropTypes.bool,
-  appointments: PropTypes.object.isRequired,
-  active: PropTypes.bool,
-  initialUser: PropTypes.bool,
-  newUserForm: PropTypes.func,
-  deletePatient: PropTypes.func,
-  reinitializeState: PropTypes.func,
-  submitEdit: PropTypes.func,
-  submit: PropTypes.func,
+PatientList.PropTypes = {
+  appointments: PropTypes.object,
+  patient: PropTypes.object,
+  patients: PropTypes.object,
+  fetchEntities: PropTypes.function,
+  createEntityRequest: PropTypes.function,
+  updateEntityRequest: PropTypes.function,
+  deleteEntityCascade: PropTypes.function,
+  setCurrentPatient: PropTypes.function,
 };
 
-export default PatientList;
+function mapStateToProps({ entities, patientList }) {
+  const selectedPatient = patientList.get('selectedPatient');
+  return {
+    appointments: entities.getIn(['appointments', 'models']),
+    patient: selectedPatient,
+    patients: entities.getIn(['patients', 'models']),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntities,
+    createEntityRequest,
+    updateEntityRequest,
+    deleteEntityCascade,
+    setCurrentPatient,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(PatientList);
+

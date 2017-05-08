@@ -109,7 +109,6 @@ const SCHEMAS = {
   chair: chairSchema(),
   chat: chatSchema(),
   invite: inviteSchema(),
-  patientSingle: patientSingleSchema(),
   patient: patientSchema(),
   request: requestSchema(),
   service: serviceSchema(),

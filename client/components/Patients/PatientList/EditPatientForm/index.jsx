@@ -10,7 +10,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
     firstName: currentPatient.firstName,
     lastName: currentPatient.lastName,
   };
-  
+
   return (
     <Form
       key={key}
