@@ -5,9 +5,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import MainContainer from './MainContainer';
 import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
-import {
-  setCurrentPatient,
-} from '../../../thunks/patientList';
+import * as Actions from '../../../actions/patientList';
 
 const HOW_MANY_TO_SKIP = 10;
 
@@ -63,7 +61,7 @@ class PatientList extends Component {
       key: 'patient',
       entityData: values,
     }).then((result) => {
-        this.props.setCurrentPatient(result);
+        this.props.setSelectedPatient(result);
     }).catch(err => console.log(err));
   }
 
@@ -105,7 +103,7 @@ class PatientList extends Component {
       values,
       url: `/api/patients/${currentPatient.id}`,
     }).then((result) => {
-      this.props.setCurrentPatient(result);
+      this.props.setSelectedPatient(result);
     }).catch(err => console.log(err));
 
     values.firstName = '';
@@ -167,7 +165,7 @@ class PatientList extends Component {
     const {
       patients,
       appointments,
-      patient,
+      selectedPatient,
     } = this.props;
 
     let currentPatient = this.state.currentPatient;
@@ -178,8 +176,8 @@ class PatientList extends Component {
       currentPatient.appointment = app.toArray()[0];
     }
 
-    if (this.state.showNewUser && patient) {
-      currentPatient = patient;
+    if (this.state.showNewUser && selectedPatient) {
+      currentPatient = selectedPatient;
       currentPatient.appointment = {};
     } else {
       if (this.state.currentPatient.id !== null) {
@@ -212,19 +210,21 @@ PatientList.PropTypes = {
   appointments: PropTypes.object,
   patient: PropTypes.object,
   patients: PropTypes.object,
-  fetchEntities: PropTypes.function,
-  createEntityRequest: PropTypes.function,
-  updateEntityRequest: PropTypes.function,
-  deleteEntityCascade: PropTypes.function,
-  setCurrentPatient: PropTypes.function,
+  fetchEntities: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  deleteEntityCascade: PropTypes.func.isRequired,
+  setSelectedPatient: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, patientList }) {
-  const selectedPatient = patientList.get('selectedPatient');
+  const patients = entities.getIn(['patients', 'models']);
+  const selectedPatientId = patientList.get('selectedPatientId');
+  const selectedPatient = patients.get(selectedPatientId);
   return {
+    selectedPatient,
+    patients,
     appointments: entities.getIn(['appointments', 'models']),
-    patient: selectedPatient,
-    patients: entities.getIn(['patients', 'models']),
   };
 }
 
@@ -234,7 +234,7 @@ function mapDispatchToProps(dispatch) {
     createEntityRequest,
     updateEntityRequest,
     deleteEntityCascade,
-    setCurrentPatient,
+    setSelectedPatient: Actions.setSelectedPatientIdAction,
   }, dispatch);
 }
 

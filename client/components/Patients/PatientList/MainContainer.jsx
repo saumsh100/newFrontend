@@ -20,8 +20,7 @@ import {
 import styles from './main.scss';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 
-
-class mainContainer extends Component {
+class MainContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -136,7 +135,7 @@ class mainContainer extends Component {
   }
 }
 
-mainContainer.propTypes = {
+MainContainer.propTypes = {
   patients: PropTypes.object.isRequired,
   setCurrentPatient: PropTypes.func,
   loadMore: PropTypes.func,
@@ -152,4 +151,4 @@ mainContainer.propTypes = {
   newPatient: PropTypes.func,
 };
 
-export default mainContainer;
+export default MainContainer;

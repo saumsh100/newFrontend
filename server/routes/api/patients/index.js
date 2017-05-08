@@ -88,13 +88,10 @@ patientsRouter.get('/', (req, res, next) => {
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
 
-  console.log(req.body);
-
   const patientData = Object.assign({}, req.body, { accountId: accountId });
   patientData.isSyncedWithPMS = false;
   return Patient.save(patientData)
     .then((patient) => {
-      console.log(normalize('patient', patient))
       res.status(201).send(normalize('patient', patient));
     })
     .catch(next);
@@ -130,10 +127,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
 /**
  * Update a patient
  */
-patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
-  delete req.body.key;
-
-  // res.send(normalize('patient', patient))
+patientsRouter.put('/:joinPatientId', checkPermissions('patients:read'), (req, res, next) => {
   return req.patient.merge(req.body).save()
     .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
