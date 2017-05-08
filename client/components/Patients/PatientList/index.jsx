@@ -77,6 +77,7 @@ class PatientList extends Component {
     return (
       <Grid>
         <Modal
+          key={0}
           actions={actions}
           title="New Patient"
           type="small"
