@@ -39,5 +39,5 @@ Button.propTypes = {
   flat: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
-  icon: PropTypes.bool,
+  icon: PropTypes.string,
 };

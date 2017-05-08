@@ -9,14 +9,15 @@ export default function ReviewsCard(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.blue} className={styles.card}>
+    <Card  className={styles.card}>
       <CardHeader className={styles.reviewsComments__cardHeader} title={'REVIEWS'} />
       <div className={styles.reviewsComments}>
         <div className={styles.reviewsComments__container} >
           <Col xs={12} md={12} className={styles.reviewsComments__comment} >
-            {data.map((obj) => {
+            {data.map((obj, i) => {
               return (
                 <BigCommentBubble
+                  key={i}
                   icon={obj.icon}
                   iconColor={obj.iconColor}
                   background={obj.background}

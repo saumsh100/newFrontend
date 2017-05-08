@@ -13,7 +13,7 @@ class AppointmentsBooked extends Component {
 
     } = this.props;
     return (
-      <Card className={styles.booked} borderColor={borderColor}>
+      <Card className={styles.booked} >
         <div className={styles.booked__header}>
           <CardHeader title={cardTitle} />
         </div>

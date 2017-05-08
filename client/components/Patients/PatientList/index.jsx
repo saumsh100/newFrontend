@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import PatientListItem from './PatientListItem';
+import PatientInfoDisplay from './PatientInfoDisplay';
 import PatientData from './PatientData';
 import {
   Button,
@@ -12,7 +13,8 @@ import {
   Grid,
   Row,
   Col,
-  ListItem
+  ListItem,
+  InfiniteScroll,
 } from '../../library';
 import styles from './main.scss';
 
@@ -25,37 +27,10 @@ import styles from './main.scss';
 class PatientList extends Component {
   constructor(props) {
     super(props);
-    this.handleTabChange = this.handleTabChange.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-  }
-
-  handleTabChange(index, patientListFiltered) {
-    if (!(typeof index === "number")) return
-    if (!patientListFiltered) return
-    let title = "personal";
-    switch (index) {
-      case 0:
-        title = "personal";
-        break
-      case 1:
-        title = "insurance";
-        break;
-    }
-    const params = {
-      id: patientListFiltered.id,
-      activeTabIndex: index,
-      isEditing: false,
-      title,
-    };
-    this.props.updateEditingPatientState(params);
-  }
-
-  handleInput() {
-    const value = this.textInput.value;
-    this.props.setPatientsFilter(value);
   }
 
   render() {
+
     const {
       filters,
       updateEditingPatientState,
@@ -63,32 +38,31 @@ class PatientList extends Component {
       changePatientInfo,
       form,
     } = this.props;
-    const patientNameFilterText = filters && filters.values && filters.values.patients;
-    let patientList = this.props.patients.models.toArray()
 
-    if (!!patientNameFilterText) {
-      const pattern = new RegExp(patientNameFilterText, 'i');
-      patientList = patientList.filter(d => pattern.test(d.name));
-    }
+    const x = this.props.appointments.toArray().map((appointment) => {
+      const patient = this.props.patients.get(appointment.patientId);
+      patient.appointment = appointment;
 
-    const patientListWithAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
-      .toString() !== "Invalid Date"))
-      .sort((a, b) => (moment(a.toJS && a.toJS().lastAppointmentDate) > moment(b.toJS && b.toJS().lastAppointmentDate)));
+      return patient;
+    });
 
-    const patientListWithoutAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
-        .toString() === "Invalid Date"));
+    // TODO: remove appointments with repeating patientIds
 
-    const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
+    let patientList = x.sort((a, b) => moment(a.appointment.startDate).diff(b.appointment.startDate));
 
-    const patientListFiltered = patientListSorted
-      .filter(n => (n.patientId === this.props.currentPatient))[0];
+    const array = [];
+    patientList = patientList.filter((item, pos) => {
+      const id = item.id;
+      if (array.includes(id)) {
+        return false;
+      }
+      array.push(id);
+      return true;
+    });
 
-    const currentPatientState = patientListFiltered && editingPatientState[patientListFiltered.id];
-    let activeTabIndex = null;
-
-    if (currentPatientState) {
-      activeTabIndex = currentPatientState.activeTabIndex;
-    }
+    const PatientInfo = (<PatientInfoDisplay
+      currentPatient={this.props.currentPatient}
+    />);
 
     return (
       <Grid>
@@ -110,59 +84,34 @@ class PatientList extends Component {
                   <i className="fa fa-pencil" />
                 </div>
               </div>
-              <ListItem className={styles.patients_list__users}>
-                {patientListSorted.map(user => {
-                  return (<PatientListItem
-                    key={user.patientId}
+              <div className={styles.patients_list__users}>
+                <InfiniteScroll
+                  loadMore={this.props.loadMore}
+                  loader={<div style={{ clear: 'both' }}>Loading...</div>}
+                  hasMore={this.props.moreData}
+                  initialLoad={false}
+                  useWindow={false}
+                  threshold={50}
+                >
+                  {patientList.map((user, i) => {
+                    return <PatientListItem
+                    key={user.appointment.id + i}
                     user={user}
+                    initialLoad={false}
+                    threshold={0}
                     currentPatient={this.props.currentPatient}
-                    setCurrentPatient={this.props.setCurrentPatient}
-                  />);
-                })}
-              </ListItem>
+                    setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
+                    />
+                  })}
+                </InfiniteScroll>
+              </div>
             </div>
           </Col>
           <Col xs={12} sm={8} md={8} lg={10}>
             <div className={styles.patients_content}>
               <Row>
                 <Col xs={12}>
-                  <div className={styles.patients_content__header}>
-                    <div className={styles.patients_content__addUser}>
-                      Add New Patient
-                      <span>
-                        <i className="fa fa-plus" />
-                      </span>
-                    </div>
-                    <div className={styles.patient_profile}>
-                      <div className={styles.patient_profile__photo}>
-                        <img src="../img/patient-profile.png" alt="photo" />
-                      </div>
-                      <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
-                        <i className="fa fa-user" />
-                        <span>Claire Lacey, 6</span>
-                      </div>
-                      <div className={`${styles.patient_profile__info} ${styles.personal__table}`}>
-                        <div className={styles.personal__birthday}>
-                          <i className="fa fa-calendar" />
-                          <span>05/22/2010</span>
-                        </div>
-                        <div className={styles.personal__age}>
-                          <span>6 years</span>
-                        </div>
-                        <div className={styles.personal__gender}>
-                          <span>Female</span>
-                        </div>
-                      </div>
-                      <div className={`${styles.patient_profile__language} ${styles.personal__table}`}>
-                        <i className="fa fa-phone" />
-                        <span>123-456-7890</span>
-                      </div>
-                      <div className={`${styles.patient_profile__status} ${styles.personal__table}`}>
-                        <i className="fa fa-flag" />
-                        <span>claire123@gmail.com</span>
-                      </div>
-                    </div>
-                  </div>
+                  {PatientInfo}
                 </Col>
               </Row>
               <Row>
@@ -176,27 +125,27 @@ class PatientList extends Component {
                   </Col>
                   <Col xs={4}>
                     <div className={styles.right}>
-                      <Tabs
-                        index={activeTabIndex || 0}
-                        onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>
-                        <Tab label="Personal">
-                          <PatientData
-                            patient={patientListFiltered}
-                            tabTitle="personal"
-                            form={form}
-                            changePatientInfo={changePatientInfo}
+                      {/*<Tabs*/}
+                        {/*index={0}*/}
+                        {/*onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>*/}
+                        {/*<Tab label="Personal">*/}
+                          {/*<PatientData*/}
+                            {/*patient={patientListFiltered}*/}
+                            {/*tabTitle="personal"*/}
+                            {/*form={form}*/}
+                            {/*changePatientInfo={changePatientInfo}*/}
 
-                          />
-                        </Tab>
-                        <Tab label="Insurance">
-                          <PatientData
-                            patient={patientListFiltered}
-                            tabTitle="insurance"
-                            form={form}
-                            changePatientInfo={changePatientInfo}
-                          />
-                        </Tab>
-                      </Tabs>
+                          {/*/>*/}
+                        {/*</Tab>*/}
+                        {/*<Tab label="Insurance">*/}
+                          {/*<PatientData*/}
+                            {/*patient={patientListFiltered}*/}
+                            {/*tabTitle="insurance"*/}
+                            {/*form={form}*/}
+                            {/*changePatientInfo={changePatientInfo}*/}
+                          {/*/>*/}
+                        {/*</Tab>*/}
+                      {/*</Tabs>*/}
                     </div>
                   </Col>
                 </div>

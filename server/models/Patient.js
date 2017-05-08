@@ -12,6 +12,7 @@ const Patient = createModel('Patient', {
   phoneNumber: type.string(),
   mobileNumber: type.string(),
   email: type.string(),
+  lastAppointmentDate: type.date(),
   notes: type.string(),
   gender: type.string(),
   prefName: type.string(),

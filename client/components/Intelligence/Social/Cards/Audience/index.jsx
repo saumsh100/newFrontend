@@ -11,9 +11,9 @@ export default function Audience(props) {
   } = props;
 
   return (
-    <Card className={styles.booked} borderColor={colorMap.darkblue}>
+    <Card className={styles.booked} >
       <div className={styles.booked__header}>
-        <CardHeader title={title} />
+        <CardHeader  title={title} />
       </div>
       <div className={styles.booked__body}>
         <LineChart

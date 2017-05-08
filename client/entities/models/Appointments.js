@@ -10,6 +10,7 @@ const AppointmentsSchema = {
   serviceId: null,
   practitionerId: null,
   chairId: null,
+  isPatientConfirmed: null,
   note: null,
 };
 

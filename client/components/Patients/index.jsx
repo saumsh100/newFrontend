@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import PatientList from './PatientList';
 
+
 class Patients extends Component {
   constructor(props) {
     super(props);

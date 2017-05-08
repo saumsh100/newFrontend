@@ -12,7 +12,7 @@ export default function ByGender(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.darkblue}>
+    <Card >
       <CardHeader className={styles.cardHeader} title={'By Gender'} />
       <div className={styles.byGender}>
         <div className={styles.byGender__stats}>
@@ -46,5 +46,5 @@ export default function ByGender(props) {
 ByGender.propTypes = {
   maleCount: PropTypes.number,
   femaleCount: PropTypes.number,
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.object),
 };

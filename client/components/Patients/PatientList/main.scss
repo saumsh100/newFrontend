@@ -2,14 +2,103 @@
 
 
 body {
-    margin: 0;
-    padding: 0;
-    background: #e6e6e6;
-    font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #e6e6e6;
+  font-family: sans-serif;
 }
 
 ul {
-    list-style: none;
+  list-style: none;
+}
+
+.appointment {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  padding-bottom: 20px;
+}
+
+.end {
+  text-align: end;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stats {
+  width: 500px;
+  margin-top: 20px;
+}
+
+.name {
+  font-family: "Gotham-Medium";
+  font-size: 1.8em;
+}
+
+.statInfo {
+  font-family: "Gotham-Book";
+  color: grey;
+  font-size: 1.1em;
+}
+
+.statData {
+  font-family: "Gotham-Book";
+  color: white;
+  font-size: 1.1em;
+}
+
+.container1 {
+  width: 50%;
+  margin: 25% 0;
+  text-align: center;
+  border-right-style: solid;
+  border-right-color: grey;
+  float:left;
+  position: relative;
+}
+
+.container2 {
+  margin: 6% 0;
+  width: 40%;
+  float: right;
+  text-align: center;
+  position: relative;
+}
+
+.loyal {
+  position: relative;
+}
+
+.loyality1 {
+  font-family: "Gotham-Medium";
+  color: white;
+  font-size: 2.5em;
+}
+.loyality2 {
+  font-family: "Gotham-Book";
+  color: white;
+  font-size: 1.0em;
+}
+.loyality3 {
+  font-family: "Gotham-Medium";
+  color: white;
+  font-size: 1.2em;
+}
+
+
+.info {
+  font-family: "Gotham-Book";
+  font-size: 1em;
+  color: #bfbfbf;
+}
+
+.contact {
+  font-family: "Gotham-Book";
+  font-size: 1.1em;
+  color: #bfbfbf;
 }
 
 .loading {
@@ -26,455 +115,465 @@ ul {
 }
 
 .patients_list {
-    background: #f7f7f7;
-    height: 100%;
+  background: #f7f7f7;
+  height: 100%;
 
-    &_title {
-      padding-top: 20px;
-      padding-left: 30px;
-      font-size: 18px;
-      font-weight: $large-weight;
-    }
-    &::before {
-        display: block;
-        width: 100%;
-        height: 5px;
-        content: '';
-        background: #8cbcd6;
-    }
+  &_title {
+    padding-top: 20px;
+    padding-left: 30px;
+    font-size: 18px;
+    font-weight: $large-weight;
+  }
+  &::before {
+    display: block;
+    width: 100%;
+    height: 5px;
+    content: '';
+    background: #8cbcd6;
+  }
 
-    &__search {
-        display: flex;
-        height: 70px;
-        padding-left: 20px;
-        padding-right: 20px;
-        border-bottom: 1px solid #e6e6e6;
-        justify-content: center;
-        align-items: center;
+  &__search {
+    display: flex;
+    height: 70px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    justify-content: center;
+    align-items: center;
 
-        .search {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-            &__label {
-                position: relative;
-                left: 15px;
-                top: -10px;
-                cursor: pointer;
-                color: #b3b2b1;
-            }
-
-            &__input {
-                width: 100%;
-                height: 30px;
-                font-size: 12px;
-                border: none;
-                border-bottom: 2px solid #8cbcd6;
-                background-color: inherit;
-                &:focus {
-                  outline: none;
-                }
-            }
-
-            &__edit {
-                margin-left: auto;
-                cursor: pointer;
-                color: #b3b2b1;
-            }
-        }
-    }
-
-    .patients_list__users {
-        overflow-y: auto;
-        max-height: 450px;
-        margin: 0;
-        padding: 0;
-    }
-
-    .users {
+    .search {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &__label {
         position: relative;
-        display: flex;
-        padding: 20px;
-        border-bottom: 1px solid #e6e6e6;
+        left: 15px;
+        top: -10px;
+        cursor: pointer;
+        color: #b3b2b1;
+      }
 
-        &:hover {
-            background: #E7E7E7;
+      &__input {
+        width: 100%;
+        height: 30px;
+        font-size: 12px;
+        border: none;
+        border-bottom: 2px solid #8cbcd6;
+        background-color: inherit;
+        &:focus {
+          outline: none;
         }
+      }
 
-        &__active {
-            background: #E7E7E7;
-        }
-
-        &__photo {
-            width: 100%;
-            max-width: 50px;
-            height: auto;
-            max-height: 50px;
-            margin-right: 10px;
-            border-radius: 50%;
-        }
-
-        &__header {
-            display: flex;
-            align-items: center;
-        }
-
-        &__name {
-            color: #2e3845;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        &__body {
-            display: flex;
-            flex-direction: row;
-        }
-
-        &__text {
-            padding-top: 10px;
-            padding-right: 40px;
-            padding-bottom: 10px;
-            color: #969696;
-            font-size: 12px;
-        }
-
-        &__appointment {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            color: #969696;
-            font-size: 12px;
-        }
-
-        span {
-            margin: auto;
-        }
+      &__edit {
+        margin-left: auto;
+        cursor: pointer;
+        color: #b3b2b1;
+      }
     }
+  }
+
+  .patients_list__users {
+    overflow-y: auto;
+    max-height: 600px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .users {
+    position: relative;
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #e6e6e6;
+
+    &:hover {
+      background: #E7E7E7;
+    }
+
+    &__active {
+      background: #E7E7E7;
+    }
+
+    &__photo {
+      width: 100%;
+      max-width: 50px;
+      height: auto;
+      max-height: 50px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+    }
+
+    &__name {
+      color: #2e3845;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: row;
+    }
+
+    &__text {
+      padding-top: 10px;
+      padding-right: 40px;
+      padding-bottom: 10px;
+      color: #969696;
+      font-size: 12px;
+    }
+
+    &__appointment {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      color: #969696;
+      font-size: 12px;
+    }
+
+    span {
+      margin: auto;
+    }
+  }
 }
 
 .patients_content {
-    position: relative;
-    margin-left: 10px;
+  position: relative;
+  margin-left: 10px;
+  background: #fafafa;
+  height: 100%;
+
+  &__addUser {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    color: #F5F5F5;
+    font-size: 12px;
+    align-items: center;
+
+    span {
+      display: flex;
+      width: 20px;
+      height: 20px;
+      margin-left: 5px;
+      border: 2px solid #F5F5F5;
+      border-radius: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    i {
+      font-size: 12px;
+    }
+  }
+
+  &__header {
+    height: 310px;
+    min-height: 310px;
+    padding: 50px;
+    background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
+    background-size: cover;
+  }
+
+  .patient_profile {
+    width: 500px;
     background: #fafafa;
-    height: 100%;
+    margin-top: 20px;
+    margin-left: 30px;
 
-    &__addUser {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        display: flex;
-        flex-direction: row;
-        cursor: pointer;
-        color: #F5F5F5;
-        font-size: 12px;
-        align-items: center;
 
-        span {
-            display: flex;
-            width: 20px;
-            height: 20px;
-            margin-left: 5px;
-            border: 2px solid #F5F5F5;
-            border-radius: 20px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        i {
-            font-size: 12px;
-        }
+    &::before {
+      display: block;
+      width: 100%;
+      height: 5px;
+      content: '';
+      background: #ff715a;
     }
 
-    &__header {
-        height: 310px;
-        min-height: 310px;
-        padding: 50px;
-        background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
-        background-size: cover;
+    &__photo {
+      width: 100px;
+      height: 100px;
+      margin: -50px auto 0 auto;
+      display: table;
+
+      img {
+        width: 100px;
+        height: 100px;
+      }
     }
+  }
 
-    .patient_profile {
-        display: none;
-        width: 250px;
-        background: #fafafa;
-
-        &::before {
-            display: block;
-            width: 100%;
-            height: 5px;
-            content: '';
-            background: #ff715a;
-        }
-
-        &__photo {
-            img {
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-            }
-        }
-    }
-
-    &__wrapper {
-        display: flex;
-        flex-direction: row;
-        height: 345px;
-        background: #cdcaca;
+  &__wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 345px;
+    background: #cdcaca;
+    width: 100%;
+    .left {
+      height: 345px;
+      min-width: 250px;
+      background-color: $primary-white;
+      border-right: 2px solid $primary-grey;
+      &::before {
+        display: block;
         width: 100%;
-        .left {
-          height: 345px;
-          min-width: 250px;
-          background-color: $primary-white;
-          border-right: 2px solid $primary-grey;
-            &::before {
-                display: block;
-                width: 100%;
-                height: 3px;
-                content: '';
-                background: #ff715a;
-            }
-        }
-        .middle {
-           height: 345px;
-           min-width: 250px;
-           background-color: $primary-white;
-           &::before {
-             display: block;
-             width: 100%;
-             height: 3px;
-             content: '';
-             background: #ff715a;
-           }
-         }
-       .right {
-            height: 345px;
-            min-width: 250px;
-            background: #fafafa;
-            font-size: 12px;
-            margin-left: 5px;
-            &::before {
-                display: block;
-
-              width: 100%;
-                height: 3px;
-                content: '';
-                background: #8cbcd6;
-            }
-
-            &__header {
-                display: flex;
-                flex-direction: row;
-                padding: 10px 0;
-                color: #B4B4B4;
-                justify-content: space-around;
-            }
-
-            .right__item {
-                &__active {
-                    color: black;
-                    border-bottom: 2px solid #8cbcd6;
-                }
-            }
-        }
+        height: 3px;
+        content: '';
+        background: #ff715a;
+      }
     }
+    .middle {
+      height: 345px;
+      min-width: 250px;
+      background-color: $primary-white;
+      &::before {
+        display: block;
+        width: 100%;
+        height: 3px;
+        content: '';
+        background: #ff715a;
+      }
+    }
+    .right {
+      height: 345px;
+      min-width: 250px;
+      background: #fafafa;
+      font-size: 12px;
+      margin-left: 5px;
+      &::before {
+        display: block;
+
+        width: 100%;
+        height: 3px;
+        content: '';
+        background: #8cbcd6;
+      }
+
+      &__header {
+        display: flex;
+        flex-direction: row;
+        padding: 10px 0;
+        color: #B4B4B4;
+        justify-content: space-around;
+      }
+
+      .right__item {
+        &__active {
+          color: black;
+          border-bottom: 2px solid #8cbcd6;
+        }
+      }
+    }
+  }
 }
 
 .personal {
-    padding: 0 35px;
+  padding: 0 35px;
 
-    &__table {
-        position: relative;
-        padding: 10px 20px;
+  &__table {
+    position: relative;
+    padding: 10px 20px;
+    margin: auto;
+    width: 50%;
+  }
 
-        &:not(:last-child) {
-            border-bottom: 1px solid #acacac;
-        }
-    }
+  &__table_info {
+    position: relative;
+    padding: 10px 20px;
+    text-align: center;
+  }
 
-    &__icon {
-        position: absolute;
-        left: 0;
-        color: #8cbcd6;
-    }
+  &__icon {
+    position: absolute;
+    left: 0;
+    color: #8cbcd6;
+  }
 }
 
 .edit_personal {
-    margin-top: 10px;
-    outline: none;
+  margin-top: 10px;
+  outline: none;
 
-    &__icon {
-        position: absolute;
-        left: 20px;
-        color: #8cbcd6;
+  &__icon {
+    position: absolute;
+    left: 20px;
+    color: #8cbcd6;
+  }
+
+  input,
+  select {
+    margin-bottom: 5px;
+    margin-bottom: 10px;
+    margin-left: 3px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    color: #B6B6B6;
+    border: none;
+    border-bottom: 1px solid #B6B6B6;
+    background: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__table {
+    position: relative;
+    padding: 0 35px;
+  }
+
+  &__name {
+    display: flex;
+    align-items: baseline;
+
+    &_first {
+      width: 37%;
     }
 
-    input,
+    &_m {
+      width: 20%;
+    }
+
+    &_last {
+      width: 37%;
+    }
+  }
+
+  &__info {
+    &_header {
+      display: flex;
+    }
+  }
+
+  &__birthday {
+    width: 50%;
+  }
+
+  &__age {
+    width: 50%;
+  }
+
+  &__gender {
     select {
-        margin-bottom: 5px;
-        margin-bottom: 10px;
-        margin-left: 3px;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        color: #B6B6B6;
-        border: none;
-        border-bottom: 1px solid #B6B6B6;
-        background: none;
+      width: 50%;
+      margin-top: 5px;
+    }
+  }
 
-        &:focus {
-            outline: none;
-        }
+  &__language {
+    select {
+      width: 100%;
+    }
+  }
+
+  &__status {
+    select {
+      width: 100%;
+    }
+  }
+
+  &__btn {
+    display: flex;
+    margin: 25px 10px 20px auto !important;
+    cursor: pointer;
+    border: none !important;
+
+    &_enabled {
+      color: red !important;
     }
 
-    &__table {
-        position: relative;
-        padding: 0 35px;
+    &:hover {
+      color: #5a5656;
     }
-
-    &__name {
-        display: flex;
-        align-items: baseline;
-
-        &_first {
-            width: 37%;
-        }
-
-        &_m {
-            width: 20%;
-        }
-
-        &_last {
-            width: 37%;
-        }
-    }
-
-    &__info {
-        &_header {
-            display: flex;
-        }
-    }
-
-    &__birthday {
-        width: 50%;
-    }
-
-    &__age {
-        width: 50%;
-    }
-
-    &__gender {
-        select {
-            width: 50%;
-            margin-top: 5px;
-        }
-    }
-
-    &__language {
-        select {
-            width: 100%;
-        }
-    }
-
-    &__status {
-        select {
-            width: 100%;
-        }
-    }
-
-    &__btn {
-        display: flex;
-        margin: 25px 10px 20px auto !important;
-        cursor: pointer;
-        border: none !important;
-
-        &_enabled {
-            color: red !important;
-        }
-
-        &:hover {
-            color: #5a5656;
-        }
-    }
+  }
 }
 
 .insurance {
+  position: relative;
+  margin-top: 10px;
+  padding: 0 30px;
+
+  .icon {
+    position: absolute;
+    left: 0;
+    color: #8cbcd6;
+  }
+
+  &__title {
+    padding-left: 20px;
+    color: #B5B5B5;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+
+  &__value {
+    margin-bottom: 10px;
+    padding-left: 20px;
+  }
+
+  &__header {
     position: relative;
-    margin-top: 10px;
-    padding: 0 30px;
+    border-bottom: 1px solid #acacac;
+  }
 
-    .icon {
-        position: absolute;
-        left: 0;
-        color: #8cbcd6;
-    }
+  &__footer {
+    position: relative;
+    margin-top: 20px;
+  }
 
-    &__title {
-        padding-left: 20px;
-        color: #B5B5B5;
-        text-transform: uppercase;
-        font-size: 10px;
-    }
-
-    &__value {
-        margin-bottom: 10px;
-        padding-left: 20px;
-    }
-
-    &__header {
-        position: relative;
-        border-bottom: 1px solid #acacac;
-    }
-
-    &__footer {
-        position: relative;
-        margin-top: 20px;
-    }
-
-    &__name {
-        display: flex;
-        flex-direction: column;
-    }
+  &__name {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .edit_insurance {
-    position: relative;
-    margin-top: 10px;
-    padding: 0 35px;
+  position: relative;
+  margin-top: 10px;
+  padding: 0 35px;
 
-    .icon {
-        position: absolute;
-        left: 20px;
-        color: #8cbcd6;
+  .icon {
+    position: absolute;
+    left: 20px;
+    color: #8cbcd6;
+  }
+
+  &__input {
+    width: 100%;
+    margin-bottom: 5px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    color: #B6B6B6;
+    border: none;
+    border-bottom: 1px solid #B6B6B6;
+    background: none;
+
+    &:focus {
+      outline: none;
     }
+  }
 
-    &__input {
-        width: 100%;
-        margin-bottom: 5px;
-        margin-bottom: 10px;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        color: #B6B6B6;
-        border: none;
-        border-bottom: 1px solid #B6B6B6;
-        background: none;
+  &__footer {
+    margin-top: 15px;
+  }
 
-        &:focus {
-            outline: none;
-        }
+  &__btn {
+    display: flex;
+    margin: 25px 10px 20px auto !important;
+    cursor: pointer;
+    color: #B6B6B6;
+    border: none !important;
+    background: none;
+
+    &:hover {
+      color: #5a5656;
     }
-
-    &__footer {
-        margin-top: 15px;
-    }
-
-    &__btn {
-        display: flex;
-        margin: 25px 10px 20px auto !important;
-        cursor: pointer;
-        color: #B6B6B6;
-        border: none !important;
-        background: none;
-
-        &:hover {
-            color: #5a5656;
-        }
-    }
+  }
 }

@@ -108,7 +108,7 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
-            <Card borderColor={colorMap.blue} className={styles.card}>
+            <Card  className={styles.card}>
               <div className={styles.stats}>
                 <span className={styles.stats__count} >12</span>
                 <span className={styles.stats__title} >Average Rating</span>

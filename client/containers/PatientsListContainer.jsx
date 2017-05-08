@@ -2,7 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import PatientList from '../components/Patients/PatientList/';
 import { fetchEntities } from '../thunks/fetchEntities';
-import { 
+import {
   setCurrentPatient,
   updateEditingPatientState,
   changePatientInfo,
@@ -10,14 +10,40 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+const HOW_MANY_TO_SKIP = 10;
+
 class PatientsListContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      people: HOW_MANY_TO_SKIP,
+      moreData: true,
+      patients: null,
+      roll: 0,
+      currentPatient: {id: null},
+    };
+
+    this.loadMore = this.loadMore.bind(this);
+    this.setCurrentPatient = this.setCurrentPatient.bind(this);
   }
 
   componentDidMount() {
     const options = { key: 'patients', params: { patientsList: true } };
     this.props.fetchEntities(options);
+    this.props.fetchEntities({
+      key: 'appointments',
+      join: ['patient'],
+      params: {
+        limit: HOW_MANY_TO_SKIP,
+      },
+    });
+  }
+
+  setCurrentPatient(currentPatient) {
+    console.log(currentPatient.firstName);
+    this.setState({
+      currentPatient,
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,6 +57,41 @@ class PatientsListContainer extends Component {
     }
   }
 
+  loadMore() {
+    const newState = {};
+    newState.roll = this.state.roll;
+
+    //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
+
+    if (this.state.roll === 2) {
+      if (this.state.patients === this.props.patients) {
+        this.setState({
+          moreData: false,
+        });
+      }
+      newState.roll = 0;
+    } else if (this.state.roll === 1) {
+
+      this.props.fetchEntities({
+        key: 'appointments',
+        join: ['patient'],
+        params: {
+          skip: this.state.people,
+          limit: HOW_MANY_TO_SKIP,
+        },
+      });
+
+      newState.people = this.state.people + HOW_MANY_TO_SKIP;
+      newState.roll += 1;
+    } else {
+      newState.roll += 1;
+    }
+
+    newState.patients = this.props.patients;
+
+    this.setState(newState);
+  }
+
   render() {
     const {
       patients,
@@ -40,13 +101,17 @@ class PatientsListContainer extends Component {
       editingPatientState,
       changePatientInfo,
       form,
+      appointments,
     } = this.props;
-    {console.log('currentPatient', this.props.currentPatient.get('currentPatient'))}
+
     return (
       <PatientList
-        setCurrentPatient={setCurrentPatient}
-        currentPatient={this.props.currentPatient.get('currentPatient')}
+        loadMore={this.loadMore}
+        setCurrentPatient={this.setCurrentPatient}
+        currentPatient={this.state.currentPatient}
         patients={patients}
+        moreData={this.state.moreData}
+        appointments={appointments}
         filters={filters}
         updateEditingPatientState={updateEditingPatientState}
         editingPatientState={editingPatientState}
@@ -59,13 +124,10 @@ class PatientsListContainer extends Component {
 
 PatientsListContainer.propTypes = {};
 
-function mapStateToProps({ entities, patientList, form }) {
+function mapStateToProps({ entities }) {
     return {
-      patients: entities.get('patientList'),
-      currentPatient: patientList,
-      filters: form.patientList,
-      editingPatientState: patientList.toJS().editingPatientState,
-      form,
+      appointments: entities.getIn(['appointments', 'models']),
+      patients: entities.getIn(['patients', 'models']),
     };
 }
 

@@ -13,6 +13,7 @@ import WeekView from './WeekView';
 import CurrentDate from './Cards/CurrentDate';
 import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
 import styles from './styles.scss';
+import colorMap from "../library/util/colorMap";
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -49,7 +50,6 @@ class ScheduleComponent extends Component {
     });
     window.socket.emit('fetchAvailabilities');
   }
-
 
   toggleCalendar() {
     this.setState({showDatePicker: !this.state.showDatePicker});
@@ -90,6 +90,7 @@ class ScheduleComponent extends Component {
       patients,
       requests,
       services,
+      chairs,
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
@@ -131,10 +132,10 @@ class ScheduleComponent extends Component {
                   <HeaderButtons />
                 </CurrentDate>
                 <Tabs index={this.state.index} onChange={this.handleTabChange}>
-                  {schedule.toJS().scheduleModes.map(s => {
+                  {schedule.toJS().scheduleModes.map((s, index) => {
                     const label = s;
                     return (
-                      <Tab label={label}>
+                      <Tab key={index} label={label}>
                         {/* <span>{label}</span> */}
                       </Tab>
                     )
@@ -160,25 +161,17 @@ class ScheduleComponent extends Component {
             <Row >
               <Col xs={12}>
                 <Filters
-                  practitioners={practitioners.get('models').toArray()}
-                  addPractitionerToFilter={addPractitionerToFilter}
-                  removePractitionerFromFilter={removePractitionerFromFilter}
                   schedule={schedule}
-                  appointmentsTypes={appointmentsTypes}
-                  selectAppointmentType={selectAppointmentType}
+                  appointments={appointments.get('models').toArray()}
+                  chairs={chairs.get('models').toArray()}
+                  practitioners={practitioners.get('models').toArray()}
+                  services={services.get('models').toArray()}
                 />
               </Col>
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
-                <RequestsContainer className={styles.schedule__sidebar_request} />
-              </Col>
-            </Row>
-            <Row className={styles.schedule__sidebar_rowCalendar}>
-              <Col xs={12}>
-                <Calendar
-                  className={styles.schedule__sidebar_calendar}
-                />
+                <RequestsContainer className={styles.schedule__sidebar_request} borderColor={colorMap.darkblue}/>
               </Col>
             </Row>
           </Col>

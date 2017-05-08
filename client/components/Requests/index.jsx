@@ -21,8 +21,7 @@ class Requests extends Component {
     });
 
     return (
-      <Card className={styles.requestCard}
-            borderColor={this.props.borderColor}>
+      <Card className={styles.requestCard}>
         <div className={`${this.props.className} ${styles.requestCard__wrapper}`}>
           <div className={styles.requestHeader}>
             <CardHeader count={sortedRequests.length} title={'New Appointment Requests'} />

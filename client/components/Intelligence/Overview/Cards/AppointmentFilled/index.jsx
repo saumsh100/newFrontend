@@ -7,7 +7,7 @@ class AppointmentFilled extends Component {
   render() {
     const { borderColor } = this.props;
     return (
-      <Card className={styles.appointmentFilled} borderColor={borderColor}>
+      <Card className={styles.appointmentFilled} >
         <div className={styles.appointmentFilled__wrapper}>
           <div className={styles.appointmentFilled__header}>
             <div className={styles.appointmentFilled__header_number}>
