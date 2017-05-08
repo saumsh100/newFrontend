@@ -1,5 +1,3 @@
-const path = require('path');
-const webpack = require('webpack');
 const cssnext = require('postcss-cssnext');
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';

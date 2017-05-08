@@ -41,3 +41,4 @@ rethinkdb_data/
 *.exe
 zz_*
 tags
+statics/assets/

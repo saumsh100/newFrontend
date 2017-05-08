@@ -29,6 +29,6 @@ export default combineReducers({
   schedule,
   requests,
   currentDialog: dialogs,
-  patientList: patientList,
+  patientList,
   availabilities,
 });
