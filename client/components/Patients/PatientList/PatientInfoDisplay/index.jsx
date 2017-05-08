@@ -47,7 +47,10 @@ class PatientInfoDisplay extends Component {
             <div className={styles.patient_profile}>
               <Avatar className={styles.patient_profile__photo} url="https://placeimg.com/640/480/people" />
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
-                <span className={styles.name}>{currentPatient.firstName} {currentPatient.lastName}, {age}</span>
+                <p className={styles.name}>
+                  <span>{currentPatient.firstName} {currentPatient.lastName}</span>
+                  <span>, {age}</span>
+                </p>
               </div>
               <div className={`${styles.patient_profile__info} ${styles.personal__table_info}`}>
                 <div className={styles.info}>

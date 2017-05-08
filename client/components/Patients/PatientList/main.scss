@@ -43,6 +43,22 @@ ul {
   margin-left: 30px;
 }
 
+
+.name {
+  display:flex;
+  font-family: "Gotham-Medium";
+  font-size: 1.8em;
+}
+.name span:first-child {
+  flex-shrink:1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.name span {
+  white-space: nowrap;
+}
+
 .name {
   font-family: "Gotham-Medium";
   font-size: 1.8em;
@@ -51,13 +67,14 @@ ul {
 .statInfo {
   font-family: "Gotham-Book";
   color: grey;
-  font-size: 1.1em;
+  font-size: 0.9em;
 }
 
 .statData {
   font-family: "Gotham-Book";
   color: white;
   font-size: 1.1em;
+  font-weight: bold;
 }
 
 .container1 {
@@ -71,10 +88,10 @@ ul {
 }
 
 .container2 {
-  margin: 6% 0;
+  margin: 10% 0;
   width: 40%;
   float: right;
-  text-align: center;
+  text-align: left;
   position: relative;
 }
 

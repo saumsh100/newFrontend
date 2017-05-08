@@ -3,25 +3,30 @@ import { Form, Field, Button } from '../../../library';
 import { maxLength } from '../../../library/Form/validate';
 
 
-export default function EditPatientForm({ onSubmit, formName, styles, currentPatient, onDelete }) {
+export default function EditPatientForm({ onSubmit, formName, styles, currentPatient }) {
 
-  return (<div>
-    <Form form={formName}
-          onSubmit={onSubmit}
-          ignoreSaveButton={true}
-          className={styles.form}
+  const key = currentPatient.id || 1;
+  return (
+    <Form
+      key={key}
+      form={formName}
+      onSubmit={onSubmit}
+      ignoreSaveButton
+      className={styles.form}
+      initialValues={currentPatient}
     >
       <Field
         required
         name="firstName"
         validate={[maxLength(15)]}
-        label={currentPatient.firstName}
+        label="First Name"
+        value="asdsads"
       />
       <Field
         required
-        name='lastName'
+        name="lastName"
         validate={[maxLength(15)]}
-        label={currentPatient.lastName}
+        label="Last Name"
       />
       <Button
         type="submit"
@@ -30,13 +35,6 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
         Change Info
       </Button>
     </Form>
-    <Button
-      className={styles.formButton}
-      onClick={onDelete}
-      >
-      Delete Patient
-    </Button>
-    </div>
   );
 }
 
@@ -44,6 +42,5 @@ EditPatientForm.propTypes = {
   formName: PropTypes.string,
   styles: PropTypes.object,
   currentPatient: PropTypes.object,
-  onDelete: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

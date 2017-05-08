@@ -157,8 +157,13 @@ class PatientList extends Component {
                             currentPatient={this.props.currentPatient}
                             formName={'editPatient'}
                             styles={styles}
-                            onDelete={this.props.deletePatient}
                           />
+                          <Button
+                            className={styles.formButton}
+                            onClick={this.props.deletePatient}
+                          >
+                            Delete Patient
+                          </Button>
                         </Tab>
                       </Tabs>
                     </div>
