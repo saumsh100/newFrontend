@@ -9,6 +9,7 @@ const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
+patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
 
 /**
  * Batch creation
@@ -132,6 +133,8 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
   const key = req.body.key || 'patientSingle';
   delete req.body.key;
+
+  // res.send(normalize('patient', patient))
   return req.patient.merge(req.body).save()
     .then(patient => res.send(normalize(key, patient)))
     .catch(next);
@@ -141,6 +144,15 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Delete a patient
  */
 patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
+  // TODO: change to joinPatientId
+
+  /*
+   return req.patient.deleteAll()
+    .then(() => res.send(204))
+    .catch(next);
+
+   */
+
   return Patient.get(req.patient.id).getJoin({ appointments: true }).run()
     .then((patient) => {
       console.log(patient);

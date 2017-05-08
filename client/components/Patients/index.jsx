@@ -183,6 +183,9 @@ class Patients extends Component {
       }
     }
 
+    // TODO: describe props better, submit and submitEdit are not very descriptive
+    // TODO:
+
     return (
       <PatientList
         loadMore={this.loadMore}
@@ -213,10 +216,13 @@ Patients.PropTypes = {
   deleteEntityCascade: PropTypes.function,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, patientList }) {
+  const selectedPatientId = patientList.get('selectedPatientId');
+  const selectedPatient = entities.getIn(['patients', 'models']).get(selectedPatientId);
   return {
     appointments: entities.getIn(['appointments', 'models']),
     patient: entities.getIn(['patient', 'models']),
+    selectedPatient,
     patients: entities.getIn(['patients', 'models']),
   };
 }

@@ -111,12 +111,14 @@ class PatientList extends Component {
                   threshold={50}
                 >
                   {patientList.map((user, i) => {
-                    return (<PatientListItem
-                      key={user.appointment.id + i}
-                      user={user}
-                      currentPatient={this.props.currentPatient}
-                      setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
-                    />);
+                    return (
+                      <PatientListItem
+                        key={user.appointment.id + i}
+                        user={user}
+                        currentPatient={this.props.currentPatient}
+                        setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
+                      />
+                    );
                   })}
                 </InfiniteScroll>
               </div>
