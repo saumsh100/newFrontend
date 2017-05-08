@@ -13,9 +13,12 @@ import {
 
 export const addPractitionerFilter = createAction(ADD_PRACTITIONER);
 export const removePractitionerFilter = createAction(REMOVE_PRACTITIONER);
+
 export const addScheduleFilter = createAction(ADD_SCHEDULE_FILTER);
 export const removeScheduleFilter = createAction(REMOVE_SCHEDULE_FILTER);
 export const addAllScheduleFilter = createAction(ADD_ALL_SCHEDULE_FILTER);
 export const clearScheduleFilter = createAction(CLEAR_SCHEDULE_FILTER);
+
 export const selectAppointmentTypeFilter = createAction(SELECT_APPOINMENT_TYPE);
 export const setSheduleModeAction = createAction(SET_SCHEDULE_MODE);
+

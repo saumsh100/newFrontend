@@ -5,16 +5,23 @@ import { connect } from 'react-redux';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import setCurrentScheduleDate from '../thunks/date';
+
 import {
   addPractitionerToFilter,
   selectAppointmentType,
   removePractitionerFromFilter,
-  setSheduleMode,
   setAllFilters,
 } from '../thunks/schedule';
 
 
 class ScheduleContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    }
+  }
+
   componentWillMount() {
     Promise.all([
       this.props.fetchEntities({ key: 'practitioners'}),
@@ -26,6 +33,7 @@ class ScheduleContainer extends React.Component {
 
     ]).then(() => {
       this.props.setAllFilters();
+      this.setState({ loaded: true })
     }).catch(e => console.log(e))
   }
 
@@ -34,36 +42,43 @@ class ScheduleContainer extends React.Component {
       practitioners,
       schedule,
       appointments,
-      setCurrentScheduleDate,
       addPractitionerToFilter,
       removePractitionerFromFilter,
-      addServiceFilter,
       selectAppointmentType,
-      fetchEntities,
-      setSheduleMode,
+      setCurrentScheduleDate,
       requests,
       services,
       patients,
       chairs,
+      date,
     } = this.props;
 
+    let loadComponent = null;
 
-    return (
+    if (this.state.loaded) {
+      loadComponent = (
         <ScheduleComponent
           practitioners={practitioners}
           schedule={schedule}
           appointments={appointments}
-          setCurrentScheduleDate={setCurrentScheduleDate}
           addPractitionerToFilter={addPractitionerToFilter}
           removePractitionerFromFilter={removePractitionerFromFilter}
           selectAppointmentType={selectAppointmentType}
           fetchEntities={selectAppointmentType}
-          setSheduleMode={setSheduleMode}
+          setCurrentScheduleDate={setCurrentScheduleDate}
           requests={requests}
           services={services}
           patients={patients}
           chairs={chairs}
+          date={date}
         />
+      )
+    }
+
+    return (
+      <div>
+        {loadComponent}
+      </div>
     );
   }
 }
@@ -77,10 +92,11 @@ ScheduleContainer.propTypes = {
   selectAppointmentType: PropTypes.func,
 };
 
-function mapStateToProps({ entities, schedule }) {
+function mapStateToProps({ entities, schedule, date }) {
   return {
     practitioners: entities.get('practitioners'),
     schedule,
+    date,
     appointments: entities.get('appointments'),
     requests: entities.get('requests'),
     patients: entities.get('patients'),
@@ -91,14 +107,13 @@ function mapStateToProps({ entities, schedule }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    setCurrentScheduleDate,
     addPractitionerToFilter,
     removePractitionerFromFilter,
     selectAppointmentType,
     fetchEntities,
-    setSheduleMode,
     setAllFilters,
-  }, dispatch);
+    setCurrentScheduleDate,
+}, dispatch);
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

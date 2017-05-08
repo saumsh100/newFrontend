@@ -1,6 +1,8 @@
 
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
+import moment from 'moment';
+
 import {
   ADD_PRACTITIONER,
   REMOVE_PRACTITIONER,
@@ -9,7 +11,7 @@ import {
   CLEAR_SCHEDULE_FILTER,
   ADD_ALL_SCHEDULE_FILTER,
   ADD_SCHEDULE_FILTER,
-  REMOVE_SCHEDULE_FILTER
+  REMOVE_SCHEDULE_FILTER,
 } from '../constants';
 
 const initialState = fromJS({
@@ -18,9 +20,11 @@ const initialState = fromJS({
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
+
   appointmentType: null,
   currentScheduleMode: 'day',
   scheduleModes: ['Day', 'Week', 'Month'],
+
 });
 
 export default handleActions({

@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import { DateUtils } from 'react-day-picker';
-import { Grid, Row, Col, Card, Icon, Calendar, Tabs, Tab } from '../library';
+import { Grid, Row, Col, Card, Icon, DayPicker, Tabs, Tab } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import Filters from './Cards/Filters';
 import HeaderButtons from './Cards/HeaderButtons'
@@ -14,6 +14,8 @@ import CurrentDate from './Cards/CurrentDate';
 import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
 import styles from './styles.scss';
 import colorMap from "../library/util/colorMap";
+import Calendar from "../library/Calendar/index";
+//import {DayPicker} from "react-day-picker/types/index.d";
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -27,12 +29,14 @@ class ScheduleComponent extends Component {
       availabilities: [],
       selectedDay: new Date(),
       showDatePicker: false,
+      dayPicker: new Date(),
       index: 0,
     };
     this.addAvailability = this.addAvailability.bind(this);
     this.removeAvailability = this.removeAvailability.bind(this);
     this.toggleCalendar = this.toggleCalendar.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
+    this.handleDayPicker = this.handleDayPicker.bind(this);
   }
 
   componentDidMount() {
@@ -53,6 +57,14 @@ class ScheduleComponent extends Component {
 
   toggleCalendar() {
     this.setState({showDatePicker: !this.state.showDatePicker});
+  }
+
+  handleDayPicker(day) {
+    console.log(day)
+    this.props.setCurrentScheduleDate(moment(day).toDate())
+    this.setState({
+      dayPicker: day,
+    });
   }
 
   addAvailability({start, end}) {
@@ -91,6 +103,7 @@ class ScheduleComponent extends Component {
       requests,
       services,
       chairs,
+      date,
     } = this.props;
     const appointmentsTypes = [];
     appointments.get('models').toArray()
@@ -100,13 +113,18 @@ class ScheduleComponent extends Component {
         }
       });
     let content = null;
+
+
     const params = {
       practitioners,
       patients,
       appointments,
       schedule,
     };
-    const currentDate = moment(schedule.toJS().scheduleDate);
+
+    const currentDate = moment(date.toJS().scheduleDate);
+
+
     switch (this.state.index) {
       case 0:
         content = <DayView {...params} />;
@@ -125,9 +143,9 @@ class ScheduleComponent extends Component {
             <Card>
               <div className={`${styles.schedule__title} ${styles.title}`}>
                 <CurrentDate currentDate={currentDate}>
-                  <Icon icon="calendar"
-                        onClick={this.toggleCalendar}
-                        className={styles.title__icon}
+                  <DayPicker
+                    target="icon"
+                    onChange={this.handleDayPicker}
                   />
                   <HeaderButtons />
                 </CurrentDate>
@@ -145,9 +163,6 @@ class ScheduleComponent extends Component {
                 <div className={styles.schedule__daypicker}>
                   <div onClick={this.toggleCalendar} className={styles.schedule__daypicker_wrapper}>
                   </div>
-                  <Calendar
-                    className={styles.schedule__daypicker_select}
-                  />
                 </div>
                 }
               </div>
@@ -171,7 +186,7 @@ class ScheduleComponent extends Component {
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
-                <RequestsContainer className={styles.schedule__sidebar_request} borderColor={colorMap.darkblue}/>
+                <RequestsContainer className={styles.schedule__sidebar_request} />
               </Col>
             </Row>
           </Col>

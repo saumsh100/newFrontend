@@ -29,7 +29,7 @@ export default function FilterPractitioners(props) {
           const label = (<div className={styles.filter_practitioner__name}>{pr.firstName}</div>);
 
           let hideCheck = checked;
-          if (hideCheck && allChecked) {
+          if (checked && allChecked) {
             hideCheck = false;
           }
 
