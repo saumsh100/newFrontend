@@ -19,7 +19,7 @@ class ScheduleContainer extends React.Component {
     super(props);
     this.state = {
       loaded: false,
-    }
+    };
   }
 
   componentWillMount() {
@@ -30,11 +30,10 @@ class ScheduleContainer extends React.Component {
       this.props.fetchEntities({ key: 'appointments' }),
       this.props.fetchEntities({ key: 'patients' }),
       this.props.fetchEntities({ key: 'requests' }),
-
     ]).then(() => {
-      this.props.setAllFilters();
-      this.setState({ loaded: true })
-    }).catch(e => console.log(e))
+      this.props.setAllFilters(['appointments', 'chairs', 'practitioners', 'services']);
+      this.setState({ loaded: true });
+    }).catch(e => console.log(e));
   }
 
   render() {
@@ -84,6 +83,7 @@ class ScheduleContainer extends React.Component {
 }
 
 ScheduleContainer.propTypes = {
+  setAllFilters: PropTypes.func,
   fetchEntities: PropTypes.func,
   setSheduleMode: PropTypes.func,
   setCurrentScheduleDate: PropTypes.func,

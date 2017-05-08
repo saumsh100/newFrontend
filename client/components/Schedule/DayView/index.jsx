@@ -52,7 +52,8 @@ class SelectedDay extends Component {
     let apps = appointmentsArray.length && appointmentsArray
       .filter((app) => {
         const currentDoctorsAppointment = app.practitionerId === doctor.id;
-        const momentDate = currentDate.toJS().scheduleDate;
+        const momentDate = moment(currentDate.toJS().scheduleDate);
+        console.log(momentDate);
         const momentStartTime = moment(app.startTime);
         const theSameDay = momentDate.date() === momentStartTime.date();
         const theSameMonth = momentDate.month() === momentStartTime.month();

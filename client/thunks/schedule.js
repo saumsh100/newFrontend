@@ -30,30 +30,23 @@ export function setSheduleMode(mode) {
     };
 }
 
-export function setAllFilters() {
+export function setAllFilters(entityKeys) {
   return function (dispatch, getState) {
     const { entities } = getState();
-
-    const entityKeys = [
-      { key: 'appointments', filterKey: 'appointmentsFilter'},
-      { key: 'chairs', filterKey: 'chairsFilter' },
-      { key: 'practitioners', filterKey: 'practitionersFilter',  },
-      { key: 'services', filterKey: 'servicesFilter'  },
-    ];
 
     const filterFromEntity = {
       appointments: 'isPatientConfirmed',
     };
 
-    entityKeys.map((entity) => {
-      const model = entities.getIn([entity.key, 'models']);
-      const filterItem = filterFromEntity[entity.key];
+    entityKeys.map((key) => {
+      const model = entities.getIn([key, 'models']);
+      const filterItem = filterFromEntity[key];
 
       if (filterItem) {
         const filterModel = model.toArray().filter((m) => m.get(filterItem));
-        dispatch(addAllScheduleFilter({ key: entity.filterKey, entities: filterModel }));
+        dispatch(addAllScheduleFilter({ key: `${key}Filter`, entities: filterModel }));
       } else {
-        dispatch(addAllScheduleFilter({key: entity.filterKey, entities: model}));
+        dispatch(addAllScheduleFilter({ key: `${key}Filter`, entities: model }));
       }
     });
   };

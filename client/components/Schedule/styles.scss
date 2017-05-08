@@ -8,13 +8,13 @@
   &__container {
 
       &_content {
-        height: 860px;
-        max-height: 860px;
+        max-height: 700px;
         overflow-y: auto;
       }
     }
 
     &__sidebar {
+        max-height: 700px;
         padding-left: 15px;
 
         &_rowCalendar {

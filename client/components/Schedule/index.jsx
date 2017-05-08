@@ -139,7 +139,7 @@ class ScheduleComponent extends Component {
     return (
       <Grid className={styles.schedule}>
         <Row className={styles.rowTest}>
-          <Col xs={12} sm={8} md={9}className={styles.schedule__container}>
+          <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
             <Card>
               <div className={`${styles.schedule__title} ${styles.title}`}>
                 <CurrentDate currentDate={currentDate}>
@@ -172,7 +172,7 @@ class ScheduleComponent extends Component {
               </div>
             </Card>
           </Col>
-          <Col xs={12} sm={4} md={3} className={styles.schedule__sidebar}>
+          <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
             <Row >
               <Col xs={12}>
                 <Filters
