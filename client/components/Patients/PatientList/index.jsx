@@ -69,7 +69,7 @@ class PatientList extends Component {
 
   deletePatient() {
     const key = (this.state.showNewUser ? 'patient' : 'patients');
-    const currentPatient = ((this.state.showNewUser) ? this.props.patient.toArray()[0] : this.state.currentPatient);
+    const currentPatient = ((this.state.showNewUser) ? this.props.patient : this.state.currentPatient);
 
     this.setState({
       currentPatient: { id: null },
