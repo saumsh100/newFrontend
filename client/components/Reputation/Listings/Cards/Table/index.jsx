@@ -28,7 +28,6 @@ class Table extends Component {
 
     return (
       <Card
-        borderColor={borderColor}
         className={styles.mostLoyal}
       >
         <div className={styles.mostLoyal__header}>

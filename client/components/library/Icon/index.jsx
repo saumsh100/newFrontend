@@ -22,7 +22,7 @@ Icon.defaultProps = {
 };
 
 Icon.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   size: PropTypes.number,
   className: PropTypes.string,
   onClick: PropTypes.func,

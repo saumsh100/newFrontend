@@ -9,7 +9,7 @@ export default function ReviewsCard(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.blue} className={styles.card}>
+    <Card className={styles.card}>
       <CardHeader className={styles.cardHeader} title={'RECENT ACTIVITY'}>
         <div className={styles.cardHeader__menu}>
           <span>Compose</span>
@@ -18,8 +18,9 @@ export default function ReviewsCard(props) {
       <div className={styles.reviewsComments}>
         <div className={styles.reviewsComments__container} >
           <Col xs={12} className={styles.reviewsComments__comment} >
-            {data.map(obj => (
+            {data.map((obj,i) => (
               <BigCommentBubble
+                key={i}
                 icon={obj.icon}
                 iconColor={obj.iconColor}
                 background={obj.background}

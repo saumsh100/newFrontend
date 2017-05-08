@@ -12,7 +12,6 @@ class Total extends Component {
     const allDataCount = data.reduce((sum, cur) => sum + cur.count, 0);
     return (
       <Card
-        borderColor={borderColor}
         className={styles.total}>
         <div className={styles.total__header}>
           {data.map((obj, i) => (

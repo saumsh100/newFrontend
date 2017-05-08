@@ -57,7 +57,7 @@ class Social extends Component {
           </Col>
 
           <Col className={classNames(styles.padding, styles.margin)} xs={12} md={12}>
-            <Card borderColor={colorMap.darkblue} className={styles.fans}>
+            <Card  className={styles.fans}>
               <span className={styles.fans__between}>Woman</span> between age of
               <span className={styles.fans__between}>35-44</span>
               appear to be the leader force among your fans
@@ -104,7 +104,7 @@ class Social extends Component {
           </Col>
 
           <Col className={classNames(styles.padding, styles.margin)} xs={12} md={12}>
-            <Card borderColor={colorMap.primaryBlue} className={styles.fans}>
+            <Card className={styles.fans}>
               <span className={styles.fans__primaryBlue}>Woman</span> between age of
               <span className={styles.fans__primaryBlue}>35-44</span>
               appear to be the leader force among your fans

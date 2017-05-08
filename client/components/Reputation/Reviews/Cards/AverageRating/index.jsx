@@ -11,11 +11,11 @@ export default function AverageRating(props) {
 
   const rows = [];
   for (let i = 1; i < count; i++) {
-    rows.push(<Star size={1.3} />);
+    rows.push(<Star key={i} size={1.3} />);
   }
 
   return (
-    <Card borderColor={colorMap.blue} className={styles.card}>
+    <Card className={styles.card}>
       <div className={styles.stats}>
         <span className={styles.stats__count} >{count}</span>
         <span className={styles.stats__title} >Average Rating</span>

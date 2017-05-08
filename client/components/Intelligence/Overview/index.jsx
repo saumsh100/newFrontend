@@ -154,7 +154,6 @@ class Overview extends Component {
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList
-              borderColor={colorMap.grey}
               cardTitle="Top Services by Hours"
               data={[{
                 title: 'Invisalign',
@@ -182,7 +181,7 @@ class Overview extends Component {
               appointmentBooked="118"
               appointmentNotFiltred="42"
               newPatients="12"
-              percentage="70"
+              percentage={70}
             />
             <PractitionersList
               img="/images/practitioner_1.png"
@@ -191,7 +190,7 @@ class Overview extends Component {
               appointmentBooked="142"
               appointmentNotFiltred="18"
               newPatients="14"
-              percentage="85"
+              percentage={85}
             />
             <PractitionersList
               img="/images/practitioner_1.png"
@@ -200,7 +199,7 @@ class Overview extends Component {
               appointmentBooked="77"
               appointmentNotFiltred="83"
               newPatients="8"
-              percentage="45"
+              percentage={45}
             />
             <PractitionersList
               img="/images/practitioner_1.png"
@@ -209,7 +208,7 @@ class Overview extends Component {
               appointmentBooked="40"
               appointmentNotFiltred="110"
               newPatients="14"
-              percentage="15"
+              percentage={15}
             />
           </FlexGrid>
           <FlexGrid borderColor={colorMap.grey} title="Appoinment Types" >
@@ -262,7 +261,7 @@ class Overview extends Component {
               percantage={80}
             />
           </FlexGrid>
-          <Col styles={styles.padding5} xs={12}>
+          <Col xs={12}>
             <AppointmentsBooked
               borderColor={colorMap.grey}
               cardTitle="Appointments Booked Last 12 Months"
@@ -276,7 +275,7 @@ class Overview extends Component {
               ]}
             />
           </Col>
-          <Col styles={styles.padding5} xs={12}>
+          <Col xs={12}>
             <MostLoyal
               borderColor={colorMap.grey}
               cardTitle="Most Loyal"

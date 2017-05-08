@@ -72,7 +72,7 @@ Search.defaultProps = {
   size: 1,
 };
 Search.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   size: PropTypes.number,
 };
 

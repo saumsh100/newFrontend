@@ -10,20 +10,23 @@ import {
   selectAppointmentType,
   removePractitionerFromFilter,
   setSheduleMode,
+  setAllFilters,
 } from '../thunks/schedule';
+
 
 class ScheduleContainer extends React.Component {
   componentWillMount() {
-    this.props.fetchEntities({ key: 'patients' });
-  }
+    Promise.all([
+      this.props.fetchEntities({ key: 'practitioners'}),
+      this.props.fetchEntities({ key: 'services' }),
+      this.props.fetchEntities({ key: 'chairs' }),
+      this.props.fetchEntities({ key: 'appointments' }),
+      this.props.fetchEntities({ key: 'patients' }),
+      this.props.fetchEntities({ key: 'requests' }),
 
-  componentDidMount() {
-    this.props.fetchEntities({ key: 'appointments' });
-    this.props.fetchEntities({ key: 'practitioners' });
-    this.props.fetchEntities({ key: 'requests' });
-    this.props.fetchEntities({ key: 'services' });
-
-
+    ]).then(() => {
+      this.props.setAllFilters();
+    }).catch(e => console.log(e))
   }
 
   render() {
@@ -34,13 +37,17 @@ class ScheduleContainer extends React.Component {
       setCurrentScheduleDate,
       addPractitionerToFilter,
       removePractitionerFromFilter,
+      addServiceFilter,
       selectAppointmentType,
       fetchEntities,
       setSheduleMode,
       requests,
       services,
       patients,
+      chairs,
     } = this.props;
+
+
     return (
       <ScheduleComponent
         practitioners={practitioners}
@@ -55,6 +62,7 @@ class ScheduleContainer extends React.Component {
         requests={requests}
         services={services}
         patients={patients}
+        chairs={chairs}
       />
     );
   }
@@ -77,7 +85,7 @@ function mapStateToProps({ entities, schedule }) {
     requests: entities.get('requests'),
     patients: entities.get('patients'),
     services: entities.get('services'),
-
+    chairs: entities.get('chairs'),
   };
 }
 
@@ -89,6 +97,7 @@ function mapDispatchToProps(dispatch) {
     selectAppointmentType,
     fetchEntities,
     setSheduleMode,
+    setAllFilters,
   }, dispatch);
 }
 

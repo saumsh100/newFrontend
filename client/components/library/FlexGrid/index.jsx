@@ -21,13 +21,13 @@ const FlexGrid = function (props) {
   return (
     <Col xs={12} sm={columnWidth}>
       <div className={styles.settingsFormsCol}>
-        <Card className={styles.sideByside} borderColor={borderColor} >
+        <Card className={styles.sideByside}  >
           {title && <div className={styles.sideByside__title}>{title}</div>}
           <div className={styles.sideByside__body}  >
-            {renderChilden.map(child => (
-              <Col className={styles.sideByside__split} xs={12} >
+            {renderChilden.map((child, i) => (
+              <Col key={i} className={styles.sideByside__split} xs={12} >
                 {React.Children.map(child, (ch) => (
-                  <Col className={styles.sideByside__item} xs={12} md={width} >
+                  <Col  className={styles.sideByside__item} xs={12} md={width} >
                     {React.cloneElement(ch)}
                   </Col>
                 ))}

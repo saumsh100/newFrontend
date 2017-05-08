@@ -45,6 +45,7 @@
 }
 
 .cardHeader {
+  border-top: $card-border-size $primary-blue-green;
   padding: 20px;
 }
 
@@ -195,6 +196,7 @@
   }
 
   .facebookActivity {
+
     flex-direction: column;
     &__container {
       flex-direction: column;
@@ -448,6 +450,7 @@
 
 
 .booked {
+  border-top: $card-border-size $primary-blue-green;
   margin:0 5px 20px;
   min-width: 250px;
   overflow: hidden;

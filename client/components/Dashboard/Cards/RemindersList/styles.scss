@@ -19,6 +19,7 @@
   }
 }
 .reminders {
+  border-top: $card-border-size $primary-darkgrey;
   height: 604px;
   margin-bottom: 20px;
   &__header {

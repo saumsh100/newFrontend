@@ -19,14 +19,14 @@ function FilterForm(props) {
       onChange={handleSubmit}
       ignoreSaveButton
     >
-      {filters.map((f) => {
+      {filters.map((f, i) => {
         const content =
-          f.items.map((item) => {
-            return <FilterField item={item} flipped={flipped} />;
+          f.items.map((item, index) => {
+            return <FilterField key={`filterField_${index}`} item={item} flipped={flipped} />;
           });
 
         return (
-          <div>
+          <div key={`filterForm_${i}`}>
             <div className={styles.filters__title}>
               {f.titleIcon &&
               <div
