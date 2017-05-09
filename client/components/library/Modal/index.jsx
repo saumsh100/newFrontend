@@ -48,8 +48,7 @@ class Modal extends Component {
       actions,
       title,
       type,
-      className,
-      close,
+      custom,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
@@ -59,11 +58,10 @@ class Modal extends Component {
 
     let modalBodyClassName = styles.modalBody;
 
-    if (type) {
-      modalBodyClassName = classNames(styles[type], modalBodyClassName);
-    } else {
-      modalBodyClassName = classNames(styles.medium, modalBodyClassName);
+    if (!custom) {
+      modalBodyClassName = type ? classNames(styles[type], modalBodyClassName) : classNames(styles.medium, modalBodyClassName);
     }
+
 
     let showFooterComponent = null;
     if (actions) {
