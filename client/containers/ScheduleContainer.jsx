@@ -4,15 +4,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
-import setCurrentScheduleDate from '../thunks/date';
+import { setScheduleDate } from '../actions/schedule';
 
 import {
-  addPractitionerToFilter,
-  selectAppointmentType,
-  removePractitionerFromFilter,
   setAllFilters,
 } from '../thunks/schedule';
-
 
 class ScheduleContainer extends React.Component {
   constructor(props) {
@@ -45,10 +41,7 @@ class ScheduleContainer extends React.Component {
       practitioners,
       schedule,
       appointments,
-      addPractitionerToFilter,
-      removePractitionerFromFilter,
-      selectAppointmentType,
-      setCurrentScheduleDate,
+      setScheduleDate,
       services,
       patients,
       chairs,
@@ -63,11 +56,10 @@ class ScheduleContainer extends React.Component {
           practitioners={practitioners}
           schedule={schedule}
           appointments={appointments}
-          setCurrentScheduleDate={setCurrentScheduleDate}
+          setScheduleDate={setScheduleDate}
           services={services}
           patients={patients}
           chairs={chairs}
-          date={date}
         />
       )
     }
@@ -83,18 +75,13 @@ class ScheduleContainer extends React.Component {
 ScheduleContainer.propTypes = {
   setAllFilters: PropTypes.func,
   fetchEntities: PropTypes.func,
-  setSheduleMode: PropTypes.func,
-  setCurrentScheduleDate: PropTypes.func,
-  addPractitionerToFilter: PropTypes.func,
-  removePractitionerFromFilter: PropTypes.func,
-  selectAppointmentType: PropTypes.func,
+  setScheduleDate: PropTypes.func,
 };
 
-function mapStateToProps({ entities, schedule, date }) {
+function mapStateToProps({ entities, schedule }) {
   return {
     practitioners: entities.get('practitioners'),
     schedule,
-    date,
     appointments: entities.get('appointments'),
     patients: entities.get('patients'),
     services: entities.get('services'),
@@ -104,12 +91,9 @@ function mapStateToProps({ entities, schedule, date }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    addPractitionerToFilter,
-    removePractitionerFromFilter,
-    selectAppointmentType,
     fetchEntities,
     setAllFilters,
-    setCurrentScheduleDate,
+    setScheduleDate,
 }, dispatch);
 }
 

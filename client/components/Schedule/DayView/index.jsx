@@ -17,12 +17,6 @@ class SelectedDay extends Component {
     this.renderTimeColumn = this.renderTimeColumn.bind(this);
   }
 
-  componentDidMount() {
-    this.props.fetchEntities({ key: 'appointments' });
-    this.props.fetchEntities({ key: 'practitioners' });
-    this.props.fetchEntities({ key: 'patients' });
-  }
-
   renderAppoinment(appointment, scale, startDay, index) {
     const start = appointment.startTime;
     const end = appointment.endTime;
@@ -52,7 +46,7 @@ class SelectedDay extends Component {
     let apps = appointmentsArray.length && appointmentsArray
         .filter((app) => {
           const currentDoctorsAppointment = app.practitionerId === doctor.id;
-          const momentDate = currentDate.toJS().scheduleDate;
+          const momentDate = currentDate;
           const momentStartTime = moment(app.startDate);
           const theSameDay = momentDate.date() === momentStartTime.date();
           const theSameMonth = momentDate.month() === momentStartTime.month();
@@ -119,7 +113,6 @@ class SelectedDay extends Component {
   }
 
   render() {
-    const currentDate = this.props.currentDate.toJS().scheduleDate;
     const {
       practitioners,
       patients,
@@ -162,22 +155,4 @@ SelectedDay.PropTypes = {
   currentDate: PropTypes.object,
 };
 
-function mapStateToProps({ entities, date, schedule }) {
-  return {
-    appointments: entities.get('appointments'),
-    practitioners: entities.get('practitioners'),
-    patients: entities.get('patients'),
-    currentDate: date,
-    schedule,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-  }, dispatch);
-}
-
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-
-export default enhance(SelectedDay);
+export default SelectedDay;
