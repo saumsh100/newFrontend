@@ -2,20 +2,17 @@
 import React, { Component, PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
-import { DateUtils } from 'react-day-picker';
 import { Grid, Row, Col, Card, Icon, DayPicker, Tabs, Tab } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import Filters from './Cards/Filters';
-import HeaderButtons from './Cards/HeaderButtons'
+import HeaderButtons from './Cards/HeaderButtons';
 import DayView from './DayView';
-import MonthView from './MonthView';
-import WeekView from './WeekView';
+import TestDayView from './DayView/TestDayView';
+
 import CurrentDate from './Cards/CurrentDate';
 import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
 import styles from './styles.scss';
-import colorMap from "../library/util/colorMap";
-import Calendar from "../library/Calendar/index";
-//import {DayPicker} from "react-day-picker/types/index.d";
+
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -60,8 +57,7 @@ class ScheduleComponent extends Component {
   }
 
   handleDayPicker(day) {
-    console.log(day)
-    this.props.setCurrentScheduleDate(moment(day).toDate())
+    this.props.setCurrentScheduleDate(moment(day))
     this.setState({
       dayPicker: day,
     });
@@ -95,12 +91,8 @@ class ScheduleComponent extends Component {
     const {
       practitioners,
       appointments,
-      addPractitionerToFilter,
-      removePractitionerFromFilter,
-      selectAppointmentType,
       schedule,
       patients,
-      requests,
       services,
       chairs,
       date,
@@ -114,15 +106,16 @@ class ScheduleComponent extends Component {
       });
     let content = null;
 
+    const currentDate = moment(date.toJS().scheduleDate);
 
     const params = {
       practitioners,
-      patients,
-      appointments,
+      patients: patients.get('models'),
+      appointments: appointments.get('models'),
       schedule,
+      currentDate,
     };
 
-    const currentDate = moment(date.toJS().scheduleDate);
 
 
     switch (this.state.index) {
@@ -168,7 +161,7 @@ class ScheduleComponent extends Component {
               </div>
               <div className={styles.schedule__container_content}>
                 <CurrentDateCalendar currentDate={currentDate} />
-                {content}
+                <DayView {...params} />
               </div>
             </Card>
           </Col>

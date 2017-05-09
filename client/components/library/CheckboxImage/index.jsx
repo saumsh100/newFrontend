@@ -6,12 +6,11 @@ import styles from './styles.scss';
 export default function CheckboxImage(props) {
   const {
     id,
-    value,
-    image,
     label,
     checked,
     onChange,
     imgColor,
+    imageSrc,
   } = props;
 
   let imgStyle = styles.checkBoxImage__photo;
@@ -30,7 +29,7 @@ export default function CheckboxImage(props) {
       />
       <label className={styles.checkBoxImage__label} htmlFor={id}>
         <li className={styles.checkBoxImage__list}>
-          <img className={imgStyle} src="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner" />
+          <img className={imgStyle} src={imageSrc} />
           {label}
         </li>
       </label>

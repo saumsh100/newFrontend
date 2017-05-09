@@ -29,7 +29,6 @@ class ScheduleContainer extends React.Component {
       this.props.fetchEntities({ key: 'chairs' }),
       this.props.fetchEntities({ key: 'appointments' }),
       this.props.fetchEntities({ key: 'patients' }),
-      this.props.fetchEntities({ key: 'requests' }),
     ]).then(() => {
       this.props.setAllFilters(['appointments', 'chairs', 'practitioners', 'services']);
       this.setState({ loaded: true });
@@ -45,7 +44,6 @@ class ScheduleContainer extends React.Component {
       removePractitionerFromFilter,
       selectAppointmentType,
       setCurrentScheduleDate,
-      requests,
       services,
       patients,
       chairs,
@@ -65,7 +63,6 @@ class ScheduleContainer extends React.Component {
           selectAppointmentType={selectAppointmentType}
           fetchEntities={selectAppointmentType}
           setCurrentScheduleDate={setCurrentScheduleDate}
-          requests={requests}
           services={services}
           patients={patients}
           chairs={chairs}
@@ -98,7 +95,6 @@ function mapStateToProps({ entities, schedule, date }) {
     schedule,
     date,
     appointments: entities.get('appointments'),
-    requests: entities.get('requests'),
     patients: entities.get('patients'),
     services: entities.get('services'),
     chairs: entities.get('chairs'),

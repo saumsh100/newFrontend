@@ -31,6 +31,9 @@ export default function FilterPractitioners(props) {
           const label = (<div className={styles.filter_practitioner__name}>{pr.firstName}</div>);
 
           let hideCheck = checked;
+          /*if (hideCheck && allChecked) {
+           hideCheck = false;
+           }*/
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>
               <CheckboxImage
@@ -40,6 +43,7 @@ export default function FilterPractitioners(props) {
                 id={`checkbox-${i}`}
                 label={label}
                 imgColor={colorArray[i]}
+                imageSrc="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner"
               />
             </div>
           );
