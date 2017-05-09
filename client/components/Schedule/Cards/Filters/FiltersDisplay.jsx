@@ -2,7 +2,6 @@
 import React, { Component, PropTypes } from 'react';
 import FilterPractitioners from './FilterPractitioners';
 import FilterEntities from './FilterEntities';
-import FilterReminders from './FilterReminders';
 import { Card, Icon } from '../../../library';
 import styles from './styles.scss';
 
@@ -57,7 +56,10 @@ export default function FiltersDisplay(props) {
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
           />
-          <FilterReminders
+          <FilterEntities
+            display="id"
+            label="Reminders"
+            filterKey="remindersFilter"
             allChecked={allChecked.remindersFilter}
             entities={entities.remindersFilter}
             selectedFilterItem={selectedFilters.remindersFilter}
