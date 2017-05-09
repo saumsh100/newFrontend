@@ -19,12 +19,23 @@ class ScheduleContainer extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: this.props.date will add query to appointments
+    const {
+      currentDate,
+    } = this.props;
+
+    const startDate = currentDate.startOf('day').toISOString();
+    const endDate = currentDate.endOf('day').toISOString();
+
+    const query = {
+      startDate,
+      endDate,
+    };
+
     Promise.all([
       this.props.fetchEntities({ key: 'practitioners'}),
       this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
-      this.props.fetchEntities({ key: 'appointments' }),
+      this.props.fetchEntities({ key: 'appointments', params: query }),
       this.props.fetchEntities({ key: 'patients' }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
@@ -33,7 +44,22 @@ class ScheduleContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.date !== this.props.date) this.
+    const {
+      currentDate,
+    } = this.props;
+
+    const nextPropsDate = nextProps.schedule.toJS().scheduleDate;
+
+    if (!nextPropsDate.isSame(currentDate)) {
+      const startDate = nextPropsDate.startOf('day').toISOString();
+      const endDate = nextPropsDate.endOf('day').toISOString();
+
+      const query = {
+        startDate,
+        endDate,
+      };
+      this.props.fetchEntities({ key: 'appointments', params: query });
+    }
   }
 
   render() {
@@ -45,7 +71,6 @@ class ScheduleContainer extends React.Component {
       services,
       patients,
       chairs,
-      date,
     } = this.props;
 
     let loadComponent = null;
@@ -76,12 +101,15 @@ ScheduleContainer.propTypes = {
   setAllFilters: PropTypes.func,
   fetchEntities: PropTypes.func,
   setScheduleDate: PropTypes.func,
+  currentDate: PropTypes.object,
+  schedule: PropTypes.object,
 };
 
 function mapStateToProps({ entities, schedule }) {
   return {
     practitioners: entities.get('practitioners'),
     schedule,
+    currentDate: schedule.toJS().scheduleDate,
     appointments: entities.get('appointments'),
     patients: entities.get('patients'),
     services: entities.get('services'),
