@@ -22,7 +22,8 @@ class ScheduleContainer extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    // TODO: this.props.date will add query to appointments
     Promise.all([
       this.props.fetchEntities({ key: 'practitioners'}),
       this.props.fetchEntities({ key: 'services' }),
@@ -33,6 +34,10 @@ class ScheduleContainer extends React.Component {
       this.props.setAllFilters(['appointments', 'chairs', 'practitioners', 'services']);
       this.setState({ loaded: true });
     }).catch(e => console.log(e));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if (nextProps.date !== this.props.date) this.
   }
 
   render() {

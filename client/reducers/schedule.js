@@ -21,6 +21,7 @@ const initialState = fromJS({
   practitionersFilter: [],
   servicesFilter: [],
 
+
   appointmentType: null,
   currentScheduleMode: 'day',
   scheduleModes: ['Day', 'Week', 'Month'],
