@@ -46,10 +46,10 @@ class FiltersAll extends Component {
     const lenEntities = entities[filterKey].length;
 
     if (lenEntities > 2) {
-      if (lenFilter + 1 === entities[filterKey].length ) {
+      if (lenFilter + 1 === entities[filterKey].length) {
         this.setState(temp);
       }
-    } else if (lenFilter === lenEntities - 1 ) {
+    } else if (lenFilter === lenEntities - 1) {
         this.setState(temp);
     }
   }

@@ -101,8 +101,13 @@ ScheduleContainer.propTypes = {
   setAllFilters: PropTypes.func,
   fetchEntities: PropTypes.func,
   setScheduleDate: PropTypes.func,
+  practitioners: PropTypes.object,
   currentDate: PropTypes.object,
+  appointments: PropTypes.object,
   schedule: PropTypes.object,
+  services: PropTypes.object,
+  patients: PropTypes.object,
+  chairs: PropTypes.object,
 };
 
 function mapStateToProps({ entities, schedule }) {

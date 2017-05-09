@@ -70,5 +70,13 @@ export default function FiltersDisplay(props) {
       </div>
     </Card>
   );
-
 }
+
+FiltersDisplay.PropTypes = {
+  selectedFilters: PropTypes.object,
+  entities: PropTypes.object,
+  allChecked: PropTypes.object,
+  handleAllCheck: PropTypes.func,
+  handleEntityCheck: PropTypes.func,
+  handleClearAll: PropTypes.func,
+};
