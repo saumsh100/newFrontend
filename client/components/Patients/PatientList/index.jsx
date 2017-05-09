@@ -61,8 +61,8 @@ class PatientList extends Component {
       key: 'patient',
       entityData: values,
     }).then((result) => {
-        this.props.setSelectedPatient(result);
-    }).catch(err => console.log(err));
+        this.props.setSelectedPatient(Object.keys(result.patients)[0]);
+    });
   }
 
   deletePatient() {
@@ -88,7 +88,7 @@ class PatientList extends Component {
       url: `/api/patients/${currentPatient.id}`,
       cascadeKey: 'appointments',
       ids,
-    })
+    });
   }
 
   submitEdit(currentPatient, values) {
@@ -103,11 +103,8 @@ class PatientList extends Component {
       values,
       url: `/api/patients/${currentPatient.id}`,
     }).then((result) => {
-      this.props.setSelectedPatient(result);
-    }).catch(err => console.log(err));
-
-    values.firstName = '';
-    values.lastName = '';
+      this.props.setSelectedPatient(Object.keys(result.patients)[0]);
+    });
   }
 
   newUserForm() {

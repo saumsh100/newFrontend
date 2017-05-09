@@ -154,7 +154,6 @@ export default function Routes({ history }) {
             }}
           />
         </Route>
-
         <Route
           path="patients"
           getComponent={(location, callback) => {

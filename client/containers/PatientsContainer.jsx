@@ -7,7 +7,6 @@ class PatientsContainer extends React.Component {
   }
 
   render() {
-    console.log('RENDERING PATIENT CONTAINER');
     return (
       <div>
         {this.props.children}

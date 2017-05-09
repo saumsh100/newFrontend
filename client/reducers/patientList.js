@@ -21,7 +21,7 @@ const initialState = fromJS({
 
 export default handleActions({
   [SET_SELECTED_PATIENT_ID](state, action) {
-    const id = Object.keys(action.payload.patients)[0];
+    const id = action.payload;
     return state.set('selectedPatientId', id);
   },
 

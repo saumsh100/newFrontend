@@ -1,8 +1,10 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import uniqBy from 'lodash/uniqBy';
 import NewPatientForm from './NewPatientForm';
 import EditPatientForm from './EditPatientForm';
+import TextMessage from './TextMessage';
 import UpcomingPatientsList from './UpcomingPatientsList';
 import PatientInfoDisplay from './PatientInfoDisplay';
 import {
@@ -29,27 +31,21 @@ class MainContainer extends Component {
   }
 
   render() {
-    const x = this.props.appointments.toArray().map((appointment) => {
+    const patientsWithAppointments = this.props.appointments.toArray().map((appointment) => {
       const patient = this.props.patients.get(appointment.patientId);
       patient.appointment = appointment;
 
       return patient;
     });
 
-    const array = [];
-    const patientList = x.filter((item, pos) => {
-      const id = item.id;
-      if (array.includes(id)) {
-        return false;
-      }
-      array.push(id);
-      return true;
-    });
+    const patientList = uniqBy(patientsWithAppointments, 'id');
 
-    const PatientInfo = (<PatientInfoDisplay
-      currentPatient={this.props.currentPatient}
-      onClick={this.props.newUserForm}
-    />);
+    const PatientInfo = (
+      <PatientInfoDisplay
+        currentPatient={this.props.currentPatient}
+        onClick={this.props.newUserForm}
+      />
+    );
 
     const formName = 'newUser';
 
@@ -61,7 +57,7 @@ class MainContainer extends Component {
     return (
       <Grid>
         <Modal
-          key={0}
+          // key={0}
           actions={actions}
           title="New Patient"
           type="small"
@@ -77,7 +73,7 @@ class MainContainer extends Component {
           />
         </Modal>
         <Row className={styles.patients}>
-          <Col xs={12} sm={4} md={4} lg={2}>
+          <Col xs={12} sm={4} md={4} lg={3}>
             <UpcomingPatientsList
               currentPatient={this.props.currentPatient}
               setCurrentPatient={this.props.setCurrentPatient}
@@ -86,7 +82,7 @@ class MainContainer extends Component {
               hasMore={this.props.moreData}
             />
           </Col>
-          <Col xs={12} sm={8} md={8} lg={10}>
+          <Col xs={12} sm={8} md={8} lg={9}>
             <div className={styles.patients_content}>
               <Row>
                 <Col xs={12}>
@@ -95,16 +91,12 @@ class MainContainer extends Component {
               </Row>
               <Row>
                 <div className={styles.patients_content__wrapper}>
-                  <Col xs={4}>
-                    <div className={styles.left}>
-                    </div>
-                  </Col>
-                  <Col xs={4}>
-                    <div className={styles.middle}/>
+                  <Col xs={8}>
+                    <TextMessage />
                   </Col>
                   <Col xs={4}>
                     <div className={styles.right}>
-                      {(this.props.currentPatient.id ? (
+                      {(this.props.currentPatient ? (
                         <Tabs
                           index={0}>
                           <Tab label="Personal">

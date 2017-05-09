@@ -408,6 +408,9 @@ ul {
     padding: 10px 20px;
     margin: auto;
     width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__table_info {
