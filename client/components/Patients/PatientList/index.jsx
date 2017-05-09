@@ -159,6 +159,7 @@ class PatientList extends Component {
   }
 
   render() {
+    
     const {
       patients,
       appointments,

@@ -57,7 +57,6 @@ class MainContainer extends Component {
     return (
       <Grid>
         <Modal
-          // key={0}
           actions={actions}
           title="New Patient"
           type="small"
@@ -79,7 +78,7 @@ class MainContainer extends Component {
               setCurrentPatient={this.props.setCurrentPatient}
               patientList={patientList}
               loadMore={this.props.loadMore}
-              hasMore={this.props.moreData}
+              moreData={this.props.moreData}
             />
           </Col>
           <Col xs={12} sm={8} md={8} lg={9}>
