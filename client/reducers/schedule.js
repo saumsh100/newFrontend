@@ -16,16 +16,14 @@ import {
 
 const initialState = fromJS({
   practitioners: [],
-  appointmentsFilter: [],
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
-
+  remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
 
   appointmentType: null,
   currentScheduleMode: 'day',
   scheduleModes: ['Day', 'Week', 'Month'],
-
 });
 
 export default handleActions({
@@ -55,7 +53,7 @@ export default handleActions({
 
   [REMOVE_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
-    const filterEntities= state.toJS()[key];
+    const filterEntities = state.toJS()[key];
     const mergeObj = {};
     mergeObj[key] = filterEntities.filter(id => id !== action.payload.id);
     return state.merge(mergeObj);

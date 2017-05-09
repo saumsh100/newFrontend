@@ -31,7 +31,7 @@ class ScheduleContainer extends React.Component {
       this.props.fetchEntities({ key: 'appointments' }),
       this.props.fetchEntities({ key: 'patients' }),
     ]).then(() => {
-      this.props.setAllFilters(['appointments', 'chairs', 'practitioners', 'services']);
+      this.props.setAllFilters(['chairs', 'practitioners', 'services']);
       this.setState({ loaded: true });
     }).catch(e => console.log(e));
   }
@@ -63,10 +63,6 @@ class ScheduleContainer extends React.Component {
           practitioners={practitioners}
           schedule={schedule}
           appointments={appointments}
-          addPractitionerToFilter={addPractitionerToFilter}
-          removePractitionerFromFilter={removePractitionerFromFilter}
-          selectAppointmentType={selectAppointmentType}
-          fetchEntities={selectAppointmentType}
           setCurrentScheduleDate={setCurrentScheduleDate}
           services={services}
           patients={patients}

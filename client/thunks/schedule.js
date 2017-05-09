@@ -33,21 +33,9 @@ export function setSheduleMode(mode) {
 export function setAllFilters(entityKeys) {
   return function (dispatch, getState) {
     const { entities } = getState();
-
-    const filterFromEntity = {
-      appointments: 'isPatientConfirmed',
-    };
-
     entityKeys.map((key) => {
       const model = entities.getIn([key, 'models']);
-      const filterItem = filterFromEntity[key];
-
-      if (filterItem) {
-        const filterModel = model.toArray().filter((m) => m.get(filterItem));
-        dispatch(addAllScheduleFilter({ key: `${key}Filter`, entities: filterModel }));
-      } else {
-        dispatch(addAllScheduleFilter({ key: `${key}Filter`, entities: model }));
-      }
+      dispatch(addAllScheduleFilter({ key: `${key}Filter`, entities: model }));
     });
   };
 }

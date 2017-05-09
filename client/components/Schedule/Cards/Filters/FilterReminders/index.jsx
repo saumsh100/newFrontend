@@ -1,37 +1,36 @@
+
 import React, { Component, PropTypes } from 'react';
 import { Checkbox } from '../../../../library';
-
 import styles from '../styles.scss';
 
-export default function FilterEntities(props) {
+export default function FilterReminders(props) {
 
   const {
-    display,
-    label,
-    filterKey,
-    allChecked,
     entities,
+    allChecked,
     selectedFilterItem,
     handleAllCheck,
     handleEntityCheck,
   } = props;
 
+
   return (
     <div className={styles.filter_options__item}>
-      <div className={styles.filter_options__title}>{label}</div>
+      <div className={styles.filter_options__title}>Reminders</div>
       <Checkbox
         label={'All'}
         checked={allChecked}
-        onChange={ () => handleAllCheck(filterKey)}
+        onChange={() => handleAllCheck('remindersFilter')}
       />
-      {entities.map((entity) => {
+      {entities.map((entity, index) => {
         const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
+        console.log(selectedFilterItem)
         return (
           <Checkbox
-            key={entity.get(display)}
-            label={entity.get(display)}
+            key={`reminders_${index}`}
+            label={entity.get('id')}
             checked={checked}
-            onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+            onChange={() => handleEntityCheck(checked, entity.get('id'), 'remindersFilter')}
           />
         );
       })}

@@ -41,7 +41,6 @@ class ScheduleComponent extends Component {
       this.setState({availabilities: results});
     });
     window.socket.on('availabilityAdded', (result) => {
-      console.log('availabilityAdded', result);
       const availabilities = this.state.availabilities.concat(result);
       this.setState({availabilities});
     });
@@ -88,6 +87,7 @@ class ScheduleComponent extends Component {
       });
     });
     const {showDatePicker} = this.state;
+
     const {
       practitioners,
       appointments,
@@ -97,13 +97,7 @@ class ScheduleComponent extends Component {
       chairs,
       date,
     } = this.props;
-    const appointmentsTypes = [];
-    appointments.get('models').toArray()
-      .forEach((app) => {
-        if (appointmentsTypes.indexOf(app.title) < 0) {
-          appointmentsTypes.push(app.title);
-        }
-      });
+
     let content = null;
 
     const currentDate = moment(date.toJS().scheduleDate);
@@ -170,7 +164,6 @@ class ScheduleComponent extends Component {
               <Col xs={12}>
                 <Filters
                   schedule={schedule}
-                  appointments={appointments.get('models').toArray()}
                   chairs={chairs.get('models').toArray()}
                   practitioners={practitioners.get('models').toArray()}
                   services={services.get('models').toArray()}
@@ -190,14 +183,10 @@ class ScheduleComponent extends Component {
 }
 
 ScheduleComponent.propTypes = {
-  fetchEntities: PropTypes.func,
   children: PropTypes.arrayOf(PropTypes.object),
   practitioners: PropTypes.object,
   patients: PropTypes.object,
   appointments: PropTypes.object,
-  addPractitionerToFilter: PropTypes.func,
-  removePractitionerFromFilter: PropTypes.func,
-  selectAppointmentType: PropTypes.func,
   schedule: PropTypes.object,
 };
 
