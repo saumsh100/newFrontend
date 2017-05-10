@@ -16,10 +16,11 @@ function Header(props) {
     closeBookingModal,
     isConfirming,
     isSuccessfulBooking,
+    isTimerExpired,
   } = props;
 
   let goBackButton = <div className={styles.spacer} />;
-  if (registrationStep === 2 && !isSuccessfulBooking) {
+  if (registrationStep === 2 && !isSuccessfulBooking && !isTimerExpired) {
     goBackButton = (
       <IconButton
         icon="arrow-left"
@@ -38,6 +39,10 @@ function Header(props) {
 
     if (isSuccessfulBooking) {
       headerText = 'SUCCESS';
+    }
+
+    if (isTimerExpired) {
+      headerText = 'TIME IS UP';
     }
   }
 
@@ -65,6 +70,7 @@ Header.propTypes = {
   setRegistrationStep: PropTypes.func.isRequired,
   registrationStep: PropTypes.number.isRequired,
   isConfirming: PropTypes.bool.isRequired,
+  isTimerExpired: PropTypes.bool.isRequired,
   isSuccessfulBooking: PropTypes.bool.isRequired,
 };
 
@@ -72,6 +78,7 @@ function mapStateToProps({ availabilities }) {
   return {
     registrationStep: availabilities.get('registrationStep'),
     isConfirming: availabilities.get('isConfirming'),
+    isTimerExpired: availabilities.get('isTimerExpired'),
     isSuccessfulBooking: availabilities.get('isSuccessfulBooking'),
   };
 }

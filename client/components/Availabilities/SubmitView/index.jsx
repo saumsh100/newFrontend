@@ -10,48 +10,14 @@ import * as Actions from '../../../actions/availabilities';
 import * as Thunks from '../../../thunks/availabilities';
 import styles from './styles.scss';
 
+const TOTAL_SECONDS_ALLOWED = 3 * 60;
+
 class SubmitView extends Component {
   constructor(props) {
     super(props);
 
-    this.bookAnAppointment = this.bookAnAppointment.bind(this);
-    this.setRegistrationStep = this.setRegistrationStep.bind(this);
     this.signUpAndConfirm = this.signUpAndConfirm.bind(this);
     this.confirmAndBook = this.confirmAndBook.bind(this);
-  }
-
-  bookAnAppointment(params) {
-    const { startsAt, practitionerId, serviceId, reservationId } = this.props.practitionersStartEndDate.toJS();
-    const domen = location.hostname == 'my.carecru.dev' ? location.hostname : null;
-    const array = location.pathname.split('/');
-    const accountId = array[array.length - 1];
-    const paramsToPass = Object.assign({ startsAt, practitionerId, serviceId, accountId }, params, { domen });
-    this.props.createPatient(paramsToPass);
-    this.props.removeReservation(reservationId);
-    clearInterval(this.registrationTimer);
-  }
-
-  setRegistrationStep(e) {
-    e.preventDefault();
-    const { setRegistrationStep, removeReservation } = this.props;
-    const { reservationId } = this.props.practitionersStartEndDate.toJS();
-    const array = location.pathname.split('/');
-    const accountId = array[array.length - 1];
-    setRegistrationStep(1, accountId);
-    removeReservation(reservationId);
-    clearInterval(this.registrationTimer);
-  }
-
-  renderMessages(messages) {
-    return (
-      <div>
-        {messages.map(m => (
-          <div className={styles.signup__header_title}>
-            {m}
-          </div>
-        ))}
-      </div>
-    );
   }
 
   signUpAndConfirm(values) {
@@ -78,7 +44,10 @@ class SubmitView extends Component {
   render() {
     const {
       isConfirming,
+      isTimerExpired,
+      setIsTimerExpired,
       isSuccessfulBooking,
+      restartBookingProcess,
       patientUser,
       closeBookingModal,
       bookingWidgetPrimaryColor,
@@ -110,9 +79,31 @@ class SubmitView extends Component {
           <Button
             icon="sign-out"
             className={styles.exitButton}
-            onClick={closeBookingModal}
+            onClick={() => {
+              closeBookingModal();
+              restartBookingProcess();
+            }}
           >
             Exit
+          </Button>
+        </div>
+      );
+    }
+
+    if (isTimerExpired) {
+      formComponent = (
+        <div>
+          <div className={styles.messageWrapper}>
+            Dang! Your reservation expired...
+            To start again, simply click on the button below to go back and select
+            the availability you desire.
+          </div>
+          <Button
+            icon="arrow-left"
+            className={styles.exitButton}
+            onClick={restartBookingProcess}
+          >
+            Go Back
           </Button>
         </div>
       );
@@ -122,13 +113,14 @@ class SubmitView extends Component {
       <div className={styles.timerWrapper}>
         <Timer
           className={styles.signup__header_timer}
-          totalSeconds={3 * 60}
+          totalSeconds={TOTAL_SECONDS_ALLOWED}
           color={bookingWidgetPrimaryColor}
+          onEnd={() => setIsTimerExpired(true)}
         />
       </div>
     );
 
-    if (isSuccessfulBooking) {
+    if (isSuccessfulBooking || isTimerExpired) {
       timerComponent = null;
     }
 
@@ -160,6 +152,9 @@ SubmitView.propTypes = {
   confirmCode: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
   setIsConfirming: PropTypes.func.isRequired,
+  setIsTimerExpired: PropTypes.func.isRequired,
+  restartBookingProcess: PropTypes.func.isRequired,
+  isTimerExpired: PropTypes.bool.isRequired,
   isConfirming: PropTypes.bool.isRequired,
   isSuccessfulBooking: PropTypes.bool.isRequired,
   closeBookingModal: PropTypes.func.isRequired,
@@ -170,6 +165,7 @@ SubmitView.propTypes = {
 function mapStateToProps({ availabilities }) {
   return {
     isConfirming: availabilities.get('isConfirming'),
+    isTimerExpired: availabilities.get('isTimerExpired'),
     isSuccessfulBooking: availabilities.get('isSuccessfulBooking'),
     patientUser: availabilities.get('patientUser'),
 
@@ -183,7 +179,9 @@ function mapDispatchToProps(dispatch) {
     createPatient: Thunks.createPatient,
     confirmCode: Thunks.confirmCode,
     createRequest: Thunks.createRequest,
+    restartBookingProcess: Thunks.restartBookingProcess,
     setIsConfirming: Actions.setIsConfirming,
+    setIsTimerExpired: Actions.setIsTimerExpired,
     closeBookingModal: Thunks.closeBookingModal,
   }, dispatch);
 }

@@ -12,10 +12,11 @@ import {
   setClinicInfoAction,
   setTemporaryReservationAction,
   removeReservationAction,
+  refreshAvailabilitiesState,
 } from '../actions/availabilities';
 
 export function sixDaysShift(dayObj) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(sixDaysShiftAction(dayObj));
   };
 }
@@ -77,6 +78,13 @@ export function createRequest() {
         console.log('FAILED REQUEST!');
         console.log(err);
       });
+  };
+}
+
+export function restartBookingProcess() {
+  return function (dispatch, getState) {
+    // This is a thunk because we may need to do some other maintanence here...
+    dispatch(refreshAvailabilitiesState());
   };
 }
 
@@ -142,16 +150,11 @@ export function fetchAvailabilities() {
       endDate,
     };
 
-    //debugger;
-
     axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
       .then(({ data }) => {
-        console.log(data.availabilities);
-        console.log('dispatching availabilities');
         dispatch(setAvailabilities(data.availabilities));
 
         // Remove loading symbol
-        console.log('dispatching isFetching');
         dispatch(setIsFetching(false));
       })
       .catch((err) => {

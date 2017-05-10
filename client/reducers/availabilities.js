@@ -14,9 +14,11 @@ import {
   SET_SELECTED_AVAILABILITY,
   SET_IS_FETCHING,
   SET_IS_CONFIRMING,
+  SET_IS_TIMER_EXPIRED,
   SET_AVAILABILITIES,
   SET_PATIENT_USER,
   SET_IS_SUCCESSFUL_BOOKING,
+  REFRESH_AVAILABILITIES_STATE,
 } from '../constants';
 
 export const createInitialWidgetState = state => fromJS(Object.assign({
@@ -27,22 +29,31 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
   patientUser: null,
   isFetching: true,
   isConfirming: false,
+  isTimerExpired: false,
   isSuccessfulBooking: false,
   selectedAvailability: null,
   selectedServiceId: null, // Will be set by the initialState from server
   selectedPractitionerId: '',
   selectedStartDate: (new Date()).toISOString(),
-  messages: [],
-  startsAt: null,
   registrationStep: 1,
-  logo: null,
-  address: null,
-  clinicName: null,
-  bookingWidgetPrimaryColor: null,
   reservationId: null,
 }, state));
 
 export default handleActions({
+  [REFRESH_AVAILABILITIES_STATE](state) {
+    // We can't re-fetch practitioners and services cause they are pulled from server, so don't purge those...
+    // We also don't wanna re-set user-selected state because why make them re-select?
+    return state.merge({
+      selectedAvailability: null,
+      isFetching: true,
+      isConfirming: false,
+      isTimerExpired: false,
+      isSuccessfulBooking: false,
+      registrationStep: 1,
+      reservationId: null,
+    });
+  },
+
   [SET_SELECTED_AVAILABILITY](state, action) {
     return state.set('selectedAvailability', action.payload);
   },
@@ -57,6 +68,10 @@ export default handleActions({
 
   [SET_IS_CONFIRMING](state, action) {
     return state.set('isConfirming', action.payload);
+  },
+
+  [SET_IS_TIMER_EXPIRED](state, action) {
+    return state.set('isTimerExpired', action.payload);
   },
 
   [SET_PATIENT_USER](state, action) {
