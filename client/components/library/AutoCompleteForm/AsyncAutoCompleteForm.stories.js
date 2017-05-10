@@ -39,16 +39,17 @@ class AsyncAutoCompleteForm extends Component {
   }
 
   getSuggestions(value) {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-
-    return inputLength === 0 ? [] : this.state.languages.filter(lang =>
-      lang.name.toLowerCase().slice(0, inputLength) === inputValue
-    );
+    return new Promise((resolve) => {
+      const inputValue = value.trim().toLowerCase();
+      const inputLength = inputValue.length;
+      return resolve(inputLength === 0 ? [] : this.state.languages.filter(lang =>
+        lang.name.toLowerCase().slice(0, inputLength) === inputValue
+      ));
+    });
   };
 
   asyncCall(callback) {
-    setTimeout(callback, 3000);
+    setTimeout(callback, 300);
   }
 
   onChange(event, { newValue }) {

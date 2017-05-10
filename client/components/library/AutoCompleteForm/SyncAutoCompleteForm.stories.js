@@ -19,15 +19,16 @@ const languages = [
   },
 ];
 
-const getSuggestions = value => {
-  const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
 
-  return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue
-  );
+const getSuggestions = (value) => {
+  return new Promise((resolve) => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    return resolve(inputLength === 0 ? [] : languages.filter(lang =>
+      lang.name.toLowerCase().slice(0, inputLength) === inputValue
+    ));
+  });
 };
-
 
 class SyncAutoCompleteForm extends Component {
 
