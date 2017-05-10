@@ -14,7 +14,7 @@ class RouterTabs extends Component {
 
   handleRouterTabChange(index) {
     const { to } = this.props.routes[index];
-    this.props.router.push(to);
+    this.props.history.push(to);
   }
 
   renderChildren(routes) {

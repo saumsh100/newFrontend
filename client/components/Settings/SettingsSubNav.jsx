@@ -69,7 +69,9 @@ const PATHS = {
 
 export default function SettingsSubNav({ location, className, }) {
   const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
-  return <RouterList location={location} routes={routes} className={className} />;
+
+  // Workaround for redirects
+  return routes ? <RouterList location={location} routes={routes} className={className} /> : null;
 }
 
 SettingsSubNav.propTypes = {
