@@ -15,6 +15,6 @@ const io = createSocketIOServer(server);
 bindSocketHandlers(io);
 
 // Bind to supplied port
-server.listen(globals.port, () => {
+server.listen(globals.port, '192.168.56.1', () => {
   console.log(`CareCru HTTP Server is running on port ${globals.port}`);
 });

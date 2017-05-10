@@ -23,6 +23,7 @@ const Patient = createModel('Patient', {
   insurance: type.object().allowNull(),
   isDeleted: type.boolean(),
   isSyncedWithPMS: type.boolean().required(),
+  familyId: type.string().uuid(4),
 
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
