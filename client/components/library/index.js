@@ -32,6 +32,7 @@ import Tabs, { Tab } from './Tabs';
 import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import Search from './Search';
+import RangeSlider from './RangeSlider';
 import Star from './Star';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
@@ -84,6 +85,7 @@ export {
   RouterTabs,
   SaveButton,
   Search,
+  RangeSlider,
   Star,
   Stats,
   FlexGrid,

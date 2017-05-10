@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, Field } from '../../library';
+import { Grid, Row, Col, Field, RangeSlider } from '../../library';
 import { timeOptions } from '../../library/util/TimeOptions';
 
 export default function AppointmentForm(props) {
@@ -94,6 +94,15 @@ export default function AppointmentForm(props) {
             component="DropdownSelect"
             name="status"
             label="Status"
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12}>
+          <Field
+            component="RangeSlider"
+            name="duration2"
+            label="Duration"
           />
         </Col>
       </Row>

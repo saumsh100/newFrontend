@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
-import { Grid, Row, Col, Card, DayPicker, Modal } from '../library';
+import { Grid, Row, Col, Card, DayPicker, Modal, RangeSlider } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
