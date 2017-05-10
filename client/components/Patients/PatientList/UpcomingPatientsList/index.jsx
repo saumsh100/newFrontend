@@ -2,16 +2,36 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from '../main.scss';
 import PatientListItem from '../PatientListItem';
+import UserSearchList from './UserSearchList';
 import {
   Field,
   InfiniteScroll,
   Form,
 } from '../../../library';
 
-
 class UpcomingPatientList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showSearch: false,
+    };
+
+    this.submit = this.submit.bind(this);
+    this.resetState = this.resetState.bind(this);
+  }
+
+  submit(value) {
+    this.setState({
+      showSearch: true,
+    });
+
+    this.props.submitSearch(value);
+  }
+
+  resetState() {
+    this.setState({
+      showSearch: false,
+    });
   }
 
   render() {
@@ -23,15 +43,33 @@ class UpcomingPatientList extends Component {
           <label className={styles.search__label} htmlFor="search__input">
             <i className="fa fa-search" />
           </label>
-          <Form form="patientList" ignoreSaveButton>
-            <Field className={styles.search__input}
-                   type="text"
-                   name="patients"
+          <Form
+            form="patientList"
+            ignoreSaveButton
+            onSubmit={this.submit}
+          >
+            <Field
+              className={styles.search__input}
+              type="text"
+              name="patients"
+              onBlur={this.resetState}
             />
           </Form>
           <div className={styles.search__edit}>
             <i className="fa fa-pencil" />
           </div>
+        </div>
+        <div className={styles.patients_list__users2}>
+          {(this.state.showSearch ? (this.props.searchedPatients.map((userId, i) => {
+            const user = this.props.patients.get(userId);
+            return (
+              <UserSearchList
+                key={user.id + i}
+                user={user}
+                setSearchPatient={this.props.setSearchPatient.bind(null, userId)}
+              />
+            );
+          })) : null)}
         </div>
         <div className={styles.patients_list__users}>
           <InfiniteScroll
@@ -65,5 +103,7 @@ UpcomingPatientList.propTypes = {
   loadMore: PropTypes.func,
   currentPatient: PropTypes.object,
   moreData: PropTypes.bool,
+  submitSearch: PropTypes.func,
+  setSearchPatient: PropTypes.func,
 };
 export default UpcomingPatientList;

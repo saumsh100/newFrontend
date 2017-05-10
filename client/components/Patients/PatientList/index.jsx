@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import _ from 'lodash';
 import MainContainer from './MainContainer';
 import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
 import * as Actions from '../../../actions/patientList';
@@ -24,11 +25,13 @@ class PatientList extends Component {
     };
 
     this.loadMore = this.loadMore.bind(this);
+    this.setSearchPatient = this.setSearchPatient.bind(this);
     this.setCurrentPatient = this.setCurrentPatient.bind(this);
     this.newUserForm = this.newUserForm.bind(this);
     this.newPatient = this.newPatient.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.submitEdit = this.submitEdit.bind(this);
+    this.submitSearch = this.submitSearch.bind(this);
     this.deletePatient = this.deletePatient.bind(this);
   }
 
@@ -47,6 +50,14 @@ class PatientList extends Component {
       currentPatient,
       showNewUser: false,
       initialUser: false,
+    });
+  }
+
+  setSearchPatient(currentPatientId) {
+    this.props.setSelectedPatient(this.props.patients.get(currentPatientId).get('id'));
+    this.setState({
+      showNewUser: true,
+      initialUser: true,
     });
   }
 
@@ -89,6 +100,13 @@ class PatientList extends Component {
       cascadeKey: 'appointments',
       ids,
     });
+  }
+
+  submitSearch(value){
+    this.props.fetchEntities({ url: '/api/patients/search', params: value })
+      .then(result => {
+        this.props.searchPatient(Object.keys(result.patients));
+      });
   }
 
   submitEdit(currentPatient, values) {
@@ -159,12 +177,14 @@ class PatientList extends Component {
   }
 
   render() {
-    
+
     const {
       patients,
       appointments,
       selectedPatient,
     } = this.props;
+
+    const patientSearch = this.props.searchedPatients || [] ;
 
     let currentPatient = this.state.currentPatient;
     const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
@@ -176,7 +196,16 @@ class PatientList extends Component {
 
     if (this.state.showNewUser && selectedPatient) {
       currentPatient = selectedPatient;
-      currentPatient.appointment = {};
+
+      let userAppointments = currentPatient.get('appointments');
+
+      if (userAppointments) {
+        userAppointments = userAppointments
+          .sort((a, b) => moment(a.startDate).diff(b.startDate));
+        currentPatient.appointment = userAppointments[0];
+      } else {
+        currentPatient.appointment = {};
+      }
     } else {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
@@ -188,6 +217,7 @@ class PatientList extends Component {
       <MainContainer
         loadMore={this.loadMore}
         setCurrentPatient={this.setCurrentPatient}
+        setSearchPatient={this.setSearchPatient}
         currentPatient={currentPatient}
         patients={patients}
         moreData={this.state.moreData}
@@ -199,6 +229,8 @@ class PatientList extends Component {
         reinitializeState={this.reinitializeState}
         editUser={this.submitEdit}
         newPatient={this.newPatient}
+        submitSearch={this.submitSearch}
+        searchedPatients={patientSearch}
       />
     );
   }
@@ -213,6 +245,7 @@ PatientList.PropTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   deleteEntityCascade: PropTypes.func.isRequired,
   setSelectedPatient: PropTypes.func.isRequired,
+  searchPatient: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, patientList }) {
@@ -222,6 +255,7 @@ function mapStateToProps({ entities, patientList }) {
   return {
     selectedPatient,
     patients,
+    searchedPatients: patientList.get('searchedPatients'),
     appointments: entities.getIn(['appointments', 'models']),
   };
 }
@@ -233,6 +267,7 @@ function mapDispatchToProps(dispatch) {
     updateEntityRequest,
     deleteEntityCascade,
     setSelectedPatient: Actions.setSelectedPatientIdAction,
+    searchPatient: Actions.searchPatientAction,
   }, dispatch);
 }
 

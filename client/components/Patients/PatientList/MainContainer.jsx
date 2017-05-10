@@ -76,9 +76,13 @@ class MainContainer extends Component {
             <UpcomingPatientsList
               currentPatient={this.props.currentPatient}
               setCurrentPatient={this.props.setCurrentPatient}
+              setSearchPatient={this.props.setSearchPatient}
               patientList={patientList}
               loadMore={this.props.loadMore}
               moreData={this.props.moreData}
+              submitSearch={this.props.submitSearch}
+              searchedPatients={this.props.searchedPatients}
+              patients={this.props.patients}
             />
           </Col>
           <Col xs={12} sm={8} md={8} lg={9}>
@@ -140,6 +144,7 @@ MainContainer.propTypes = {
   reinitializeState: PropTypes.func,
   editUser: PropTypes.func,
   newPatient: PropTypes.func,
+  submitSearch: PropTypes.func,
 };
 
 export default MainContainer;

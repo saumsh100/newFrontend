@@ -20,10 +20,11 @@ export function fetchEntities({ key, join, params = {}, url }) {
       params.join = join.join(',');
     }
     url = url || entity.getUrlRoot();
-    axios.get(url, { params })
+    return axios.get(url, { params })
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
+        return data.entities;
       })
       .catch((err) => {
         // TODO: set didInvalidate=true of entity and dispatch alert action
