@@ -98,6 +98,17 @@ body {
     }
     .rc-slider-handle {
       display: none;
+
+    }
+    .rc-slider-mark {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      width: 100%;
+      font-size: 12px;
+    }
+    .rc-slider-dot {
+      display: none,
     }
   }
 

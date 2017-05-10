@@ -12,8 +12,10 @@
   width: 900px;
   height: 470px;
   padding: 0px 30px 30px 30px;
+  max-width:
   &_grid {
     max-height: 455px;
+    min-width: 200px;
   }
   &_row {
     height: 95px;

@@ -3,6 +3,20 @@ import { Grid, Row, Col, Field, RangeSlider } from '../../library';
 import { timeOptions } from '../../library/util/TimeOptions';
 import styles from './styles.scss';
 
+const marks = {
+  15: '15',
+  30: '30',
+  45: '45',
+  60: '60',
+  75: '75',
+  90: '90',
+  105: '105',
+  120: '120',
+  135: '135',
+  150: '150',
+  165: '165',
+  180: '180',
+};
 export default function   AppointmentForm(props) {
   return (
     <Grid >
@@ -102,8 +116,11 @@ export default function   AppointmentForm(props) {
         <Col xs={12} className={styles.addNewAppt_col_nearFields}>
           <Field
             component="RangeSlider"
-            name="duration2"
+            name="duration"
             label="Duration"
+            min={15}
+            max={180}
+            marks={marks}
           />
         </Col>
       </Row>
