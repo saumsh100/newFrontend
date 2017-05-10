@@ -26,4 +26,28 @@ familyRouter.get('/:familyId', checkPermissions('family:read'), (req, res, next)
     .catch(next);
 });
 
+/**
+ * Get all family info in a given account.
+ */
+familyRouter.get('/', checkPermissions('family:read'), (req, res, next) => {
+  const { accountId } = req;
+
+  return Family
+    .filter({ accountId })
+    .run()
+    .then(allFamilyInfo => res.send(normalize('families', allFamilyInfo)))
+    .catch(next);
+});
+
+/**
+ * Create an family entry
+ */
+familyRouter.post('/', checkPermissions('family:create'), (req, res, next) => {
+  console.log(req.body);
+  const familyData = Object.assign({}, { accountId: req.accountId }, req.body);
+  return Family.save(familyData)
+    .then(family => res.status(201).send(normalize('family', family)))
+    .catch(next);
+});
+
 module.exports = familyRouter;

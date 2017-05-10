@@ -7,6 +7,7 @@ const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
+const { r } = require('../../../config/thinky');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
 
