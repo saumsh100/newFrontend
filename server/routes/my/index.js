@@ -1,11 +1,7 @@
 
 const myRouter = require('express').Router();
-const practitionersRouter = require('../api/practitioners');
-const servicesRouter = require('../api/services');
-const availabilitiesRouter = require('../api/availabilities');
 const newAvailabilitiesRouter = require('./newAvailabilitiesRouter');
 const requestRouter = require('../api/request');
-const patientsRouter = require('../api/patients');
 const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
 const Patient = require('../../models/Patient');
@@ -14,14 +10,11 @@ const createJoinObject = require('../../middleware/createJoinObject');
 const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
-myRouter.use('/practitioners', practitionersRouter);
-myRouter.use('/services', servicesRouter);
-myRouter.use('/availabilities', availabilitiesRouter);
 myRouter.use('/requests', requestRouter);
-myRouter.use('/patients', patientsRouter);
 myRouter.use('/reservations', reservationsRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
+myRouter.param('patientId', loaders('patient', 'Patient'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
 
 myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
@@ -38,9 +31,6 @@ myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
 
       entities,
     };
-
-    // console.log('services', req.account.services);
-    // console.log('practitioners', req.account.practitioners);
 
     return res.render('patient', {
       account: req.account,
@@ -72,9 +62,28 @@ myRouter.get('/logo/:accountId', (req, res, next) => {
 
 myRouter.post('/patientCheck', (req, res, next) => {
   const email = req.body.email.toLowerCase();
-  Patient.filter({ email }).run()
+  return Patient.filter({ email }).run()
     .then(p => res.send({ exists: !!p[0] }))
     .catch(next);
+});
+
+myRouter.post('/patients', (req, res, next) => {
+  return Patient.save(req.body)
+    .then(patient => res.status(201).send(normalize('patient', patient)))
+    .catch(next);
+});
+
+myRouter.post('/patients/:patientId/confirm', (req, res, next) => {
+  const { confirmCode } = req.body;
+  try {
+    if (confirmCode !== '8888') {
+      res.status(400).send('Invalid confirmation code');
+    }
+
+    res.send(req.patient);
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Very important we catch all other endpoints,

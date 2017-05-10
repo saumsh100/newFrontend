@@ -5,7 +5,8 @@ import {
   setIsFetching,
   setAvailabilities,
   sixDaysShiftAction,
-  createPatientAction,
+  setPatientUser,
+  setIsSuccessfulBooking,
   setStartingAppointmentTimeAction,
   setRegistrationStepAction,
   setClinicInfoAction,
@@ -19,47 +20,64 @@ export function sixDaysShift(dayObj) {
   };
 }
 
-export function createPatient(params) {
-  const {
-    firstName,
-    lastName,
-    email,
-    phone,
+export function createPatient(values) {
+  return function (dispatch) {
+    return axios.post('/patients', values)
+      .then(({ data }) => {
+        // TODO: dispatch function that successfully created patient, plug in, confirm code
+        // TODO: then allow them to create the patient
+        // dispatch(createPatientAction(params));
+        const patients = data.entities.patients;
+        const id = Object.keys(patients)[0];
+        const patient = patients[id];
 
-    startsAt,
-    patientId,
-    serviceId,
-    practitionerId,
-    domen,
-    accountId,
-  } = params;
+        // Set the patient in state so other thunks can know the patient user
+        dispatch(setPatientUser(patient));
+        return patient;
+      });
+  };
+}
 
+export function confirmCode(values) {
   return function (dispatch, getState) {
-    const patientParams = { firstName, lastName, email, phone, accountId }
-    const url = domen ? '/patients' : 'api/patients';
-    axios.post(url, patientParams)
-      .then((result) => {
-        dispatch(createPatientAction(params));
-        const saveParams = {
-          isConfirmed: false,
-          isCancelled: false,
-          startTime: startsAt,
-          patientId: result.data.result,
-          serviceId,
-          practitionerId,
-          domen,
-          accountId,
-        };
+    const state = getState();
+    const patientUser = state.availabilities.get('patientUser');
+    return axios.post(`/patients/${patientUser.id}/confirm`, values);
+  };
+}
 
-        const requestUrl = domen ? '/requests' : 'api/requests';
-        axios.post(requestUrl, saveParams)
-          .then(() => {
-            dispatch(saveRequestAction(params));
-          })
-          .catch(err => console.log(err));
+export function createRequest() {
+  return function (dispatch, getState) {
+    const state = getState();
+    const {
+      account,
+      patientUser,
+      selectedAvailability: { startDate, endDate },
+      selectedPractitionerId,
+      selectedServiceId,
+    } = state.availabilities.toJS();
+
+    let params = {
+      accountId: account.id,
+      patientId: patientUser.id,
+      serviceId: selectedServiceId,
+      startDate,
+      endDate,
+    };
+
+    if (selectedPractitionerId) {
+      params = Object.assign({}, params, { practitionerId: selectedPractitionerId });
+    }
+
+    return axios.post('/requests', params)
+      .then(() => {
+        dispatch(setIsSuccessfulBooking(true));
       })
-      .catch(err => console.log(err));
-  }
+      .catch((err) => {
+        console.log('FAILED REQUEST!');
+        console.log(err);
+      });
+  };
 }
 
 export function setStartingAppointmentTime(startsAt) {

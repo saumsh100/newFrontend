@@ -7,14 +7,16 @@ import {
   SET_SELECTED_PRACTITIONER_ID,
   SET_SELECTED_SERVICE_ID,
   CREATE_PATIENT,
-  SET_STARTING_APPOINTMENT_TIME,
   SET_REGISTRATION_STEP,
   SET_CLINIC_INFO,
   REMOVE_RESERVATION,
   SET_RESERVATION,
   SET_SELECTED_AVAILABILITY,
   SET_IS_FETCHING,
+  SET_IS_CONFIRMING,
   SET_AVAILABILITIES,
+  SET_PATIENT_USER,
+  SET_IS_SUCCESSFUL_BOOKING,
 } from '../constants';
 
 export const createInitialWidgetState = state => fromJS(Object.assign({
@@ -22,7 +24,10 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
   practitioners: [],
   services: [],
   availabilities: [],
+  patientUser: null,
   isFetching: true,
+  isConfirming: false,
+  isSuccessfulBooking: false,
   selectedAvailability: null,
   selectedServiceId: null, // Will be set by the initialState from server
   selectedPractitionerId: '',
@@ -48,6 +53,18 @@ export default handleActions({
 
   [SET_IS_FETCHING](state, action) {
     return state.set('isFetching', action.payload);
+  },
+
+  [SET_IS_CONFIRMING](state, action) {
+    return state.set('isConfirming', action.payload);
+  },
+
+  [SET_PATIENT_USER](state, action) {
+    return state.set('patientUser', action.payload);
+  },
+
+  [SET_IS_SUCCESSFUL_BOOKING](state, action) {
+    return state.set('isSuccessfulBooking', action.payload);
   },
 
   [SIX_DAYS_SHIFT](state, action) {

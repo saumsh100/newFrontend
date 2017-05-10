@@ -14,10 +14,7 @@ import styles from './styles.scss';
 
 class SelectionView extends Component {
   render() {
-    const { practitionerId, availabilities, defaultValues } = this.props.params;
     const {
-      props,
-      upperState,
       services,
       practitioners,
       selectedServiceId,
@@ -26,10 +23,8 @@ class SelectionView extends Component {
       setRegistrationStep,
     } = this.props;
 
-    const startsAt = props.practitionersStartEndDate.get('startsAt');
-
     let waitListPreferences = null;
-    if (upperState.checked) {
+    /*if (upperState.checked) {
       waitListPreferences = (
         <WaitListPreferences
           startsAt={startsAt}
@@ -37,9 +32,8 @@ class SelectionView extends Component {
           color={props.bookingWidgetPrimaryColor}
         />
       );
-    }
+    }*/
 
-    const { logo, address, clinicName } = props;
     return (
       <div>
         <div className={styles.appointment__body_header}>
@@ -59,19 +53,18 @@ class SelectionView extends Component {
             </div>
             {/* TODO: Remove Form, only need CheckBox component and ContinueButton */}
             <form className={styles.appointment__footer_confirm}>
-              <div className={styles.appointment__footer_select}>
+              {/*<div className={styles.appointment__footer_select}>
                 <Checkbox
                   id="yes"
                   value="yes"
                   checked={this.props.upperState.checked}
                   onChange={this.props.handleChange}
                 />
-              </div>
+              </div>*/}
               <Button
-                className={this.props.upperState.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn}
+                className={styles.appointment__footer_btn}
                 onClick={(e) => {
                   e.preventDefault();
-                  console.log('working');
                   setRegistrationStep(2);
                 }}
               >
@@ -92,6 +85,7 @@ SelectionView.propTypes = {
   selectedServiceId: PropTypes.string.isRequired,
   selectedPractitionerId: PropTypes.string,
   selectedStartDate: PropTypes.string.isRequired,
+  setRegistrationStep: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, availabilities }) {

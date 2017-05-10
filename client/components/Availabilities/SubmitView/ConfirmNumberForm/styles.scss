@@ -1,5 +1,10 @@
 
-@import '../../../ui.scss';
+@import '../../../../ui.scss';
+
+
+.submitViewWrapper {
+  padding: 20px;
+}
 
 .signup {
   &__header {
@@ -99,14 +104,14 @@
     }
 
     &_btn {
-      font-size: 10px;
-      position: relative;
+      //font-size: 10px;
+      //position: relative;
       width: 100%;
       padding: 6px 20px;
-      height: inherit;
-      text-transform: uppercase;
-      color: #fff;
-      border: none;
+      //height: inherit;
+      //text-transform: uppercase;
+      //color: #fff;
+      //border: none;
       background-color: #f3715c;
       background: var(--bookingWidgetPrimaryColor);
       &:hover {
@@ -130,34 +135,4 @@
       }
     }
   }
-}
-
-.submitViewWrapper {
-  padding: 10px;
-}
-
-.formWrapper {
-  padding: 0px 80px;
-  @media screen and (max-width: 600px) {
-    padding: 0px 10px;
-  }
-}
-
-.messageWrapper {
-  max-width: 250px;
-  margin: 0px auto;
-  margin-bottom: 20px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
-
-.timerWrapper {
-  position: relative;
-  top: -20px;
-  right: 10px;
-}
-
-.exitButton {
-  width: 100%;
 }

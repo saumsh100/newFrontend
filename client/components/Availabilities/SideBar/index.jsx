@@ -50,7 +50,7 @@ class SideBar extends Component {
     } = account.toJS();
 
 
-    let goBackButton = null;
+    /*let goBackButton = null;
     if (registrationStep === 2) {
       goBackButton = (
         <Button
@@ -60,8 +60,7 @@ class SideBar extends Component {
           Go Back
         </Button>
       );
-    }
-
+    }*/
 
     return (
       <div className={styles.sideBarWrapper}>
@@ -85,7 +84,7 @@ class SideBar extends Component {
           <div className={styles.sidebar__body_information}>
             {selectedAvailabilityComponent}
           </div>
-          {goBackButton}
+          {/*goBackButton*/}
         </div>
         <div className={styles.sidebar__footer}>
           <div className={styles.sidebar__footer_copy}>

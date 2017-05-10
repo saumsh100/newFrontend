@@ -19,10 +19,6 @@ class Availabilities extends Component {
       checked: false,
     };
 
-    this.onDoctorChange = this.onDoctorChange.bind(this);
-    this.onServiceChange = this.onServiceChange.bind(this);
-    this.sixDaysBack = this.sixDaysBack.bind(this);
-    this.sixDaysForward = this.sixDaysForward.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -36,47 +32,6 @@ class Availabilities extends Component {
   componentWillReceiveProps() {
     const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
     document.body.style.setProperty('--bookingWidgetPrimaryColor', color);
-  }
-
-  onDoctorChange(e) {
-    const { setPractitioner } = this.props;
-    setPractitioner({ practitionerId: e.target.value });
-  }
-
-  onServiceChange(e) {
-    const { setService, practitionersStartEndDate } = this.props;
-    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
-    setService(e.target.value);
-  }
-
-  sixDaysBack() {
-    const { sixDaysShift, practitionersStartEndDate } = this.props;
-    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
-    const newEndDay = moment(selectedOldStartDay)._d;
-    const newStartDay = moment(newEndDay).subtract(4, 'd')._d;
-
-    sixDaysShift({
-      selectedStartDay: newStartDay,
-      selectedEndDay: newEndDay,
-      practitionerId,
-      retrievedFirstTime: false,
-    });
-  }
-
-  sixDaysForward() {
-    const { sixDaysShift, practitionersStartEndDate } = this.props;
-    const practitionerId = practitionersStartEndDate.toJS().practitionerId;
-    const selectedOldStartDay = practitionersStartEndDate.toJS()[practitionerId].selectedStartDay;
-    const newStartDay = moment(selectedOldStartDay).add(4, 'd')._d;
-    const newEndDay = moment(newStartDay).add(4, 'd')._d;
-
-    sixDaysShift({
-      selectedStartDay: newStartDay,
-      selectedEndDay: newEndDay,
-      practitionerId,
-      retrievedFirstTime: false,
-    });
   }
 
   handleDayClick(e, day) {
@@ -163,20 +118,11 @@ class Availabilities extends Component {
     const serviceId = this.props.serviceId;
     const prId = this.props.practitionerId;
     const defaultValues = { practitionerId, serviceId };
-    const params = { practitionerId, services, availabilities, practitioners, defaultValues };
     const appointmentInfo = this.getAppointmentInfo(serviceId);
     const registrationStep = practitionersStartEndDate.get('registrationStep');
 
     let currentView = (
-      <SelectionView
-        params={params}
-        props={this.props}
-        upperState={this.state}
-        account={account}
-        selectAvailability={this.selectAvailability}
-        handleSaveClick={this.handleSaveClick}
-        handleChange={this.handleChange}
-      />
+      <SelectionView />
     );
 
     if (registrationStep === 2) {
