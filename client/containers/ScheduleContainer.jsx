@@ -32,10 +32,10 @@ class ScheduleContainer extends React.Component {
     };
 
     Promise.all([
+      this.props.fetchEntities({ key: 'appointments', params: query }),
       this.props.fetchEntities({ key: 'practitioners'}),
       this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
-      this.props.fetchEntities({ key: 'appointments', params: query }),
       this.props.fetchEntities({ key: 'patients' }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
@@ -53,7 +53,6 @@ class ScheduleContainer extends React.Component {
     if (!nextPropsDate.isSame(currentDate)) {
       const startDate = nextPropsDate.startOf('day').toISOString();
       const endDate = nextPropsDate.endOf('day').toISOString();
-
       const query = {
         startDate,
         endDate,

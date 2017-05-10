@@ -1,7 +1,14 @@
 @import '../../../ui.scss';
 
+
+.formContainer {
+  border: 1px solid #ff715a;
+  border-radius: .5rem;
+  width: 900px;
+  height: 600px;
+}
+
 .title {
-  padding-left: 10px;
   padding-bottom: 30px;
   font-size: $extra-medium-size;
   font-weight: $jumbo-weight;
@@ -9,24 +16,40 @@
 }
 
 .addNewAppt {
+  border-radius: .5rem;
   width: 900px;
-  height: 470px;
-  padding: 0px 30px 30px 30px;
-  max-width:
+  height: 545px;
+
   &_grid {
-    max-height: 455px;
     min-width: 200px;
+    &_left {
+      width: 420px;
+      padding-left: 25px;
+    }
+
+    &_right {
+      //width: 250px;
+      background-color: #ff755e;
+      height: 600px;
+    }
   }
+
   &_row {
     height: 95px;
-
   }
+
   &_col {
     display: flex;
     align-items: center;
 
     &_nearFields {
       width: 100%;
+    }
+
+    &_select {
+      display: flex;
+      align-items: center;
+      height: 80px;
     }
   }
 }

@@ -17,15 +17,16 @@ const marks = {
   165: '165',
   180: '180',
 };
+
 export default function   AppointmentForm(props) {
   return (
-    <Grid >
+    <Grid className={styles.addNewAppt_grid_left}>
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
             component="DayPicker"
             name="date"
-            label="Date"
+            label="DATE"
           />
         </Col>
         <Col md={2} />
@@ -34,7 +35,7 @@ export default function   AppointmentForm(props) {
             options={timeOptions}
             component="DropdownSelect"
             name="time"
-            label="Time"
+            label="TIME"
           />
         </Col>
       </Row>
@@ -44,7 +45,7 @@ export default function   AppointmentForm(props) {
             options={[]}
             component="DropdownSelect"
             name="service"
-            label="Service"
+            label="SERVICE"
           />
         </Col>
       </Row>
@@ -56,7 +57,7 @@ export default function   AppointmentForm(props) {
                 options={[]}
                 component="DropdownSelect"
                 name="practitioner"
-                label="Practitioner"
+                label="PRACTITIONER"
               />
             </Col>
             <Col xs={1} />
@@ -78,7 +79,7 @@ export default function   AppointmentForm(props) {
                 options={[]}
                 component="DropdownSelect"
                 name="split"
-                label="Split"
+                label="SPLIT"
               />
             </Col>
             <Col xs={1} />
@@ -99,7 +100,7 @@ export default function   AppointmentForm(props) {
             options={[]}
             component="DropdownSelect"
             name="chair"
-            label="Chair"
+            label="CHAIR"
           />
         </Col>
         <Col md={2} />
@@ -108,7 +109,7 @@ export default function   AppointmentForm(props) {
             options={[]}
             component="DropdownSelect"
             name="status"
-            label="Status"
+            label="STATUS"
           />
         </Col>
       </Row>
@@ -117,7 +118,7 @@ export default function   AppointmentForm(props) {
           <Field
             component="RangeSlider"
             name="duration"
-            label="Duration"
+            label="DURATION"
             min={15}
             max={180}
             marks={marks}

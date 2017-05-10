@@ -92,7 +92,7 @@ class Modal extends Component {
           className={backDropClassName}
         />
         <Card className={modalBodyClassName}>
-          <div className={styles.modalBody__modalHeader}>
+          {!custom && <div className={styles.modalBody__modalHeader}>
             <CardHeader title={title} />
             <div
               className={styles.modalBody__closeIcon}
@@ -100,7 +100,7 @@ class Modal extends Component {
             >
               x
             </div>
-          </div>
+          </div>}
           {children}
           {showFooterComponent}
         </Card>

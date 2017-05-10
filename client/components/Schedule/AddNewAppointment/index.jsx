@@ -15,11 +15,10 @@ class AddNewAppointment extends Component {
   }
   render() {
     return (
-      <div>
-        <div className={styles.title}>Create New Appoinment</div>
-        <DisplayForm
-          handleSubmit={this.handleSubmit}
-        />
+      <div className={styles.formContainer}>
+      <DisplayForm
+        handleSubmit={this.handleSubmit}
+      />
       </div>
     );
   }
