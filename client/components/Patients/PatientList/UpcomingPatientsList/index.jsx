@@ -4,7 +4,7 @@ import styles from '../main.scss';
 import PatientListItem from '../PatientListItem';
 import UserSearchList from './UserSearchList';
 import {
-  Field,
+  AutoCompleteForm,
   InfiniteScroll,
   Form,
 } from '../../../library';
@@ -14,19 +14,50 @@ class UpcomingPatientList extends Component {
     super(props);
     this.state = {
       showSearch: false,
+      value: '',
+      searched: [],
+      results: [],
     };
 
     this.submit = this.submit.bind(this);
     this.resetState = this.resetState.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.getSuggestions = this.getSuggestions.bind(this);
   }
 
-  submit(value) {
-    this.setState({
-      showSearch: true,
+  submit(event) {
+    if (event.key === 'Enter') {
+      let id = null;
+      this.state.results.forEach((result) => {
+        if (result.name === this.state.value) {
+          id = result.id;
+        }
+      });
+
+      if (id) {
+        this.props.setSearchPatient(id);
+      }
+    }
+  }
+
+  getSuggestions(value) {
+    return this.props.submitSearch({
+      patients: value,
+    }).then(() => {
+      const inputValue = value.trim().toLowerCase();
+      const inputLength = inputValue.length;
+
+      const results = inputLength === 0 ? [] : this.state.searched.filter(lang =>
+      lang.name.toLowerCase().slice(0, inputLength) === inputValue);
+
+      this.setState({
+        results,
+      });
+
+      return results;
     });
 
-    this.props.submitSearch(value);
-  }
+  };
 
   resetState() {
     this.setState({
@@ -34,7 +65,35 @@ class UpcomingPatientList extends Component {
     });
   }
 
+  onChange(event, { newValue }) {
+
+    this.props.submitSearch({
+      patients: newValue,
+    }).then(() => {
+      const searched = this.props.searchedPatients.map((userId) => {
+        return {
+          id: this.props.patients.get(userId).get('id'),
+          name: `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`,
+          email: this.props.patients.get(userId).get('email'),
+        };
+      });
+
+      this.setState({
+        value: newValue,
+        searched,
+      });
+    });
+
+  };
+
   render() {
+    const inputProps = {
+      placeholder: 'Patient Search',
+      value: this.state.value,
+      onChange: this.onChange,
+      onKeyDown: this.submit,
+      name: 'patients',
+    };
 
     return (
       <div className={styles.patients_list}>
@@ -43,33 +102,14 @@ class UpcomingPatientList extends Component {
           <label className={styles.search__label} htmlFor="search__input">
             <i className="fa fa-search" />
           </label>
-          <Form
-            form="patientList"
-            ignoreSaveButton
-            onSubmit={this.submit}
-          >
-            <Field
-              className={styles.search__input}
-              type="text"
-              name="patients"
-              onBlur={this.resetState}
-            />
-          </Form>
+          <AutoCompleteForm
+            value={this.state.value}
+            getSuggestions={this.getSuggestions}
+            inputProps={inputProps}
+          />
           <div className={styles.search__edit}>
             <i className="fa fa-pencil" />
           </div>
-        </div>
-        <div className={styles.patients_list__users2}>
-          {(this.state.showSearch ? (this.props.searchedPatients.map((userId, i) => {
-            const user = this.props.patients.get(userId);
-            return (
-              <UserSearchList
-                key={user.id + i}
-                user={user}
-                setSearchPatient={this.props.setSearchPatient.bind(null, userId)}
-              />
-            );
-          })) : null)}
         </div>
         <div className={styles.patients_list__users}>
           <InfiniteScroll

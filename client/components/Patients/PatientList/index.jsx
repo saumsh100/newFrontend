@@ -54,11 +54,13 @@ class PatientList extends Component {
   }
 
   setSearchPatient(currentPatientId) {
-    this.props.setSelectedPatient(this.props.patients.get(currentPatientId).get('id'));
-    this.setState({
-      showNewUser: true,
-      initialUser: true,
-    });
+    if (this.props.patients.get(currentPatientId)) {
+      this.props.setSelectedPatient(this.props.patients.get(currentPatientId).get('id'));
+      this.setState({
+        showNewUser: true,
+        initialUser: true,
+      });
+    }
   }
 
   newPatient(values) {
@@ -103,7 +105,7 @@ class PatientList extends Component {
   }
 
   submitSearch(value){
-    this.props.fetchEntities({ url: '/api/patients/search', params: value })
+    return this.props.fetchEntities({ url: '/api/patients/search', params: value })
       .then(result => {
         this.props.searchPatient(Object.keys(result.patients));
       });
@@ -198,14 +200,17 @@ class PatientList extends Component {
       currentPatient = selectedPatient;
 
       let userAppointments = currentPatient.get('appointments');
+      userAppointments = userAppointments.toArray();
 
-      if (userAppointments) {
+      if (userAppointments[0]) {
         userAppointments = userAppointments
           .sort((a, b) => moment(a.startDate).diff(b.startDate));
         currentPatient.appointment = userAppointments[0];
+        currentPatient.appointment = currentPatient.appointment.toObject();
       } else {
         currentPatient.appointment = {};
       }
+
     } else {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
