@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import { Header } from '../../library';
 import DisplayForm from './DisplayForm';
 import styles from './styles.scss';
 
@@ -12,10 +13,10 @@ class AddNewAppointment extends Component {
   handleSubmit(values) {
     console.log(values);
   }
-
   render() {
     return (
-      <div className={styles.addNewAppt}>
+      <div>
+        <div className={styles.title}>Create New Appoinment</div>
         <DisplayForm
           handleSubmit={this.handleSubmit}
         />

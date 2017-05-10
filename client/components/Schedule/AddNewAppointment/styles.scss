@@ -1,5 +1,33 @@
+@import '../../../ui.scss';
+
+.title {
+  padding-left: 10px;
+  padding-bottom: 30px;
+  font-size: $extra-medium-size;
+  font-weight: $jumbo-weight;
+  color: $primary-color;
+}
 
 .addNewAppt {
   width: 900px;
-  height: 500px;
+  height: 470px;
+  padding: 0px 30px 30px 30px;
+  &_grid {
+    max-height: 455px;
+  }
+  &_row {
+    height: 95px;
+
+  }
+  &_col {
+    display: flex;
+    align-items: center;
+
+    &_nearFields {
+      width: 100%;
+    }
+  }
 }
+
+
+

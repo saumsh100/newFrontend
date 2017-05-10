@@ -1,7 +1,9 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, Form } from '../../library';
+import { Grid, Row, Col, Form, CardHeader } from '../../library';
 import AppointmentForm from './AppointmentForm';
+import styles from './styles.scss';
+
 
 export default function DisplayForm(props) {
   const {
@@ -12,13 +14,14 @@ export default function DisplayForm(props) {
     <Form
       form="NewAppointmentForm"
       onSubmit={handleSubmit}
+      className={styles.addNewAppt}
     >
-      <Grid>
+      <Grid className={styles.addNewAppt_grid}>
         <Row>
-          <Col xs={12} sm={6} md={8}>
+          <Col xs={12} sm={6} md={7}>
             <AppointmentForm />
           </Col>
-          <Col xs={12} sm={6} md={4}>
+          <Col xs={12} sm={6} md={5}>
             test
           </Col>
         </Row>

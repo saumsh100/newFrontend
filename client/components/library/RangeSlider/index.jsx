@@ -23,11 +23,11 @@ class RangeSlider extends Component {
   render() {
     return (
       <div>
+        {this.state.value}
         <Range
           onAfterChange={this.onAfterChange}
           {...this.props}
         />
-        {this.state.value}
       </div>
     );
   }

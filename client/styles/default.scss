@@ -80,4 +80,26 @@ body {
     background-color: $primary-lightgrey !important;
   }
 
+  .rc-slider {
+    .rc-slider-rail {
+      position: absolute;
+      width: 100%;
+      background-color: #fafafa;
+      height: 25px;
+      border: 1px solid #ff715a;
+      border-radius: 0px;
+    }
+    .rc-slider-track {
+      position: absolute;
+      left: 0;
+      height: 25px;
+      border-radius: 0px;
+      background-color: #ff715a;
+    }
+    .rc-slider-handle {
+      display: none;
+    }
+  }
+
+
 }

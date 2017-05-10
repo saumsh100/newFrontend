@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Grid, Row, Col, Field, RangeSlider } from '../../library';
 import { timeOptions } from '../../library/util/TimeOptions';
+import styles from './styles.scss';
 
-export default function AppointmentForm(props) {
+export default function   AppointmentForm(props) {
   return (
-    <Grid>
-      <Row>
-        <Col md={5}>
+    <Grid >
+      <Row className={styles.addNewAppt_row}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
             component="DayPicker"
             name="date"
@@ -14,7 +15,7 @@ export default function AppointmentForm(props) {
           />
         </Col>
         <Col md={2} />
-        <Col md={5}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
             options={timeOptions}
             component="DropdownSelect"
@@ -23,8 +24,8 @@ export default function AppointmentForm(props) {
           />
         </Col>
       </Row>
-      <Row>
-        <Col md={12}>
+      <Row className={styles.addNewAppt_row}>
+        <Col xs={12} md={12} className={styles.addNewAppt_col}>
           <Field
             options={[]}
             component="DropdownSelect"
@@ -33,10 +34,10 @@ export default function AppointmentForm(props) {
           />
         </Col>
       </Row>
-      <Row>
-        <Col md={5}>
-          <Row>
-            <Col xs={9}>
+      <Row className={styles.addNewAppt_row}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Row className={styles.addNewAppt_col_nearFields}>
+            <Col xs={9} >
               <Field
                 options={[]}
                 component="DropdownSelect"
@@ -45,7 +46,7 @@ export default function AppointmentForm(props) {
               />
             </Col>
             <Col xs={1} />
-            <Col xs={2}>
+            <Col xs={2} >
               <Field
                 options={[]}
                 component="DropdownSelect"
@@ -56,9 +57,9 @@ export default function AppointmentForm(props) {
           </Row>
         </Col>
         <Col md={2} />
-        <Col md={5}>
-          <Row>
-            <Col xs={9}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Row className={styles.addNewAppt_col_nearFields}>
+            <Col xs={9} >
               <Field
                 options={[]}
                 component="DropdownSelect"
@@ -78,8 +79,8 @@ export default function AppointmentForm(props) {
           </Row>
         </Col>
       </Row>
-      <Row>
-        <Col md={5}>
+      <Row className={styles.addNewAppt_row}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
             options={[]}
             component="DropdownSelect"
@@ -88,7 +89,7 @@ export default function AppointmentForm(props) {
           />
         </Col>
         <Col md={2} />
-        <Col md={5}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
             options={[]}
             component="DropdownSelect"
@@ -97,8 +98,8 @@ export default function AppointmentForm(props) {
           />
         </Col>
       </Row>
-      <Row>
-        <Col xs={12}>
+      <Row className={styles.addNewAppt_row}>
+        <Col xs={12} className={styles.addNewAppt_col_nearFields}>
           <Field
             component="RangeSlider"
             name="duration2"
