@@ -46,12 +46,20 @@ class UpcomingPatientList extends Component {
     }).then(() => {
       const inputValue = value.trim().toLowerCase();
       const inputLength = inputValue.length;
+      const searched = this.props.searchedPatients.map((userId) => {
+        return {
+          id: this.props.patients.get(userId).get('id'),
+          name: `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`,
+          email: this.props.patients.get(userId).get('email'),
+        };
+      });
 
-      const results = inputLength === 0 ? [] : this.state.searched.filter(lang =>
+      const results = inputLength === 0 ? [] : searched.filter(lang =>
       lang.name.toLowerCase().slice(0, inputLength) === inputValue);
 
       this.setState({
         results,
+        searched,
       });
 
       return results;
@@ -66,24 +74,9 @@ class UpcomingPatientList extends Component {
   }
 
   onChange(event, { newValue }) {
-
-    this.props.submitSearch({
-      patients: newValue,
-    }).then(() => {
-      const searched = this.props.searchedPatients.map((userId) => {
-        return {
-          id: this.props.patients.get(userId).get('id'),
-          name: `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`,
-          email: this.props.patients.get(userId).get('email'),
-        };
-      });
-
-      this.setState({
-        value: newValue,
-        searched,
-      });
+    this.setState({
+      value: newValue,
     });
-
   };
 
   render() {
