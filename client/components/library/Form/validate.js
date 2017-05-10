@@ -49,6 +49,13 @@ const asyncEmailValidate = (values) => {
     })
 };
 
+const phoneValidate = (value) => {
+  if (!/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s.]{0,1}[0-9]{3}[-\s.]{0,1}[0-9]{4}$/i.test(value)) {
+    return 'Invalid phone Number';
+  }
+  return undefined;
+};
+
 const emailValidate = (value) => {
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
     return 'Invalid email address';
@@ -82,4 +89,5 @@ export {
   maxLength,
   emailValidate,
   passwordsValidate,
+  phoneValidate,
 };

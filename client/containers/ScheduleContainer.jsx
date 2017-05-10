@@ -49,21 +49,21 @@ class ScheduleContainer extends React.Component {
 
 
     return (
-        <ScheduleComponent
-          practitioners={practitioners}
-          schedule={schedule}
-          appointments={appointments}
-          setCurrentScheduleDate={setCurrentScheduleDate}
-          addPractitionerToFilter={addPractitionerToFilter}
-          removePractitionerFromFilter={removePractitionerFromFilter}
-          selectAppointmentType={selectAppointmentType}
-          fetchEntities={selectAppointmentType}
-          setSheduleMode={setSheduleMode}
-          requests={requests}
-          services={services}
-          patients={patients}
-          chairs={chairs}
-        />
+      <ScheduleComponent
+        practitioners={practitioners}
+        schedule={schedule}
+        appointments={appointments}
+        setCurrentScheduleDate={setCurrentScheduleDate}
+        addPractitionerToFilter={addPractitionerToFilter}
+        removePractitionerFromFilter={removePractitionerFromFilter}
+        selectAppointmentType={selectAppointmentType}
+        fetchEntities={selectAppointmentType}
+        setSheduleMode={setSheduleMode}
+        requests={requests}
+        services={services}
+        patients={patients}
+        chairs={chairs}
+      />
     );
   }
 }

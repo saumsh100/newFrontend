@@ -16,6 +16,7 @@ const PatientListSchema = {
 	status: null,
 	id: null,
 	insurance: null,
+  appointments: null,
 	middleName: null,
 };
 
