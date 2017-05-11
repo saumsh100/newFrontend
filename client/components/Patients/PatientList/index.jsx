@@ -8,7 +8,7 @@ import MainContainer from './MainContainer';
 import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
 import * as Actions from '../../../actions/patientList';
 
-const HOW_MANY_TO_SKIP = 10;
+const HOW_MANY_TO_SKIP = 15;
 
 class PatientList extends Component {
   constructor(props) {
@@ -105,7 +105,7 @@ class PatientList extends Component {
   }
 
   submitSearch(value){
-    if (value.patients.length >= 3) {
+    if (value.patients.length >= 2) {
       return this.props.fetchEntities({url: '/api/patients/search', params: value})
         .then(result => {
           this.props.searchPatient(Object.keys(result.patients));
@@ -153,11 +153,6 @@ class PatientList extends Component {
     //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
 
     if (this.state.roll === 2) {
-      if (this.state.patients === this.props.patients) {
-        this.setState({
-          moreData: false,
-        });
-      }
       newState.roll = 0;
     } else if (this.state.roll === 1) {
 

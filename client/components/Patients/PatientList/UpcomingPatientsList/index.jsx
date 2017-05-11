@@ -7,6 +7,8 @@ import {
   AutoCompleteForm,
   InfiniteScroll,
   Row,
+  Card,
+  CardHeader,
 } from '../../../library';
 
 class UpcomingPatientList extends Component {
@@ -46,16 +48,31 @@ class UpcomingPatientList extends Component {
     }).then(() => {
       const inputValue = new RegExp(value, 'i');
       const inputLength = inputValue.length;
+
       const searched = this.props.searchedPatients.map((userId) => {
+        const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
+        const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
+        const display = (<div className={styles.searchList}>
+          <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
+          <div className={styles.users__wrapper}>
+            <div className={styles.users__header}>
+              <div className={styles.users__name}>
+                {name}, {age}
+              </div>
+            </div>
+          </div>
+        </div>);
+
         return {
           id: this.props.patients.get(userId).get('id'),
-          name: `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`,
+          display: display,
+          name,
           email: this.props.patients.get(userId).get('email'),
         };
       });
 
       const results = inputLength === 0 ? [] : searched.filter((person) => {
-        return inputValue.test(person.name) || inputValue.test(person.email);
+        return inputValue.test(person.fullName) || inputValue.test(person.email);
       });
 
       this.setState({
@@ -91,8 +108,9 @@ class UpcomingPatientList extends Component {
 
     return (
       <div className={styles.patients_list}>
-        <Row>
-          <div className={styles.patients_list_title}>Patients</div>
+        <Row className={styles.topRow}>
+          <Card>
+            <CardHeader title="Patients" />
           <div className={`${styles.patients_list__search} ${styles.search}`}>
             <label className={styles.search__label} htmlFor="search__input">
               <i className="fa fa-search" />
@@ -106,16 +124,19 @@ class UpcomingPatientList extends Component {
               <i className="fa fa-pencil" />
             </div>
           </div>
+          </Card>
         </Row>
-        <Row>
+        <Row className={styles.listRow}>
+          <Card>
           <div className={styles.patients_list__users}>
+              <CardHeader title="Upcoming Patients" />
             <InfiniteScroll
               loadMore={this.props.loadMore}
               loader={<div style={{ clear: 'both' }}>Loading...</div>}
               hasMore={this.props.moreData}
               initialLoad={false}
               useWindow={false}
-              threshold={50}
+              threshold={100}
             >
               {this.props.patientList.map((user, i) => {
                 return (
@@ -129,6 +150,7 @@ class UpcomingPatientList extends Component {
               })}
             </InfiniteScroll>
           </div>
+          </Card>
         </Row>
       </div>
     );

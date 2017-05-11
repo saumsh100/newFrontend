@@ -14,6 +14,7 @@ class DayPicker extends Component {
     super(props);
     this.state = {
       isOpen: false,
+      selectedDay: new Date(),
     };
 
     this.handleDayClick = this.handleDayClick.bind(this);
@@ -23,7 +24,7 @@ class DayPicker extends Component {
 
   handleDayClick(day, { selected }) {
     this.props.onChange(day.toISOString());
-    this.setState({ isOpen: false });
+    this.setState({ isOpen: false, selectedDay: day });
   }
 
   handleInputClick() {
@@ -69,7 +70,7 @@ class DayPicker extends Component {
     }
 
     // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
-    const selectedDays = new Date(value);
+    const selectedDays = new Date();
 
     return (
       <Popover
@@ -80,7 +81,7 @@ class DayPicker extends Component {
           <Daypicker
             ref={(el) => { this.state.dayPicker = el; }}
             onDayClick={this.handleDayClick}
-            selectedDays={selectedDays}
+            selectedDays={this.state.selectedDay}
             // TODO: why do we spread props?
             {...this.props}
           />

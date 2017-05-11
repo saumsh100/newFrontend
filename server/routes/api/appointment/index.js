@@ -8,6 +8,7 @@ const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
+const moment = require('moment');
 
 appointmentsRouter.param('appointmentId', loaders('appointment', 'Appointment'));
 

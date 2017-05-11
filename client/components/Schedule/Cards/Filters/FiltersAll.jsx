@@ -22,20 +22,12 @@ class FiltersAll extends Component {
     this.handleClearAll = this.handleClearAll.bind(this);
   }
 
-  handleEntityCheck(checked, id, filterKey, hideCheck ) {
+  handleEntityCheck(checked, id, filterKey) {
     const temp = {}
-
-    if (checked && hideCheck) {
+    if (checked) {
       this.props.removeScheduleFilter({ key: filterKey , id })
       temp[filterKey] = false;
       this.setState(temp);
-
-    } else if (checked && !hideCheck) {
-      this.props.clearScheduleFilter({ key: filterKey });
-      this.props.addScheduleFilter({ key: filterKey , id });
-      temp[filterKey] = false;
-      this.setState(temp);
-
     } else  {
       this.props.addScheduleFilter({ key: filterKey , id });
       this.isAllChecked(filterKey);
@@ -50,20 +42,20 @@ class FiltersAll extends Component {
 
     const temp = {};
     temp[filterKey] = true;
-    let lenFilter = selectedFilters[filterKey].length ;
-    let lenEntities = entities[filterKey].length;
+    const lenFilter = selectedFilters[filterKey].length ;
+    const lenEntities = entities[filterKey].length;
 
     if (lenEntities > 2) {
-      if (lenFilter + 1 === entities[filterKey].length ) {
+      if (lenFilter + 1 === entities[filterKey].length) {
         this.setState(temp);
       }
-    } else if (lenFilter === lenEntities - 1 ) {
+    } else if (lenFilter === lenEntities - 1) {
         this.setState(temp);
     }
   }
 
   handleAllCheck(filterKey) {
-    const { entities }  = this.props
+    const { entities } = this.props
 
     if (this.state[filterKey]) {
       this.props.clearScheduleFilter({ key: filterKey });
@@ -114,6 +106,8 @@ const enhance = connect(null, mapDispatchToProps);
 FiltersAll.PropTypes = {
   services: PropTypes.Object,
   selectedFilterServices: PropTypes.arrayOf(Object),
+  entities: PropTypes.Object,
+  clearScheduleFilter: PropTypes.func,
 };
 
 export default enhance(FiltersAll);
