@@ -6,9 +6,12 @@ import { bindActionCreators } from 'redux';
 class TextMessage extends Component {
 
   render() {
+    const style = {
+      backgroundColor: 'grey',
+    };
 
     return (
-      <img src="http://images.mysafetysign.com/img/lg/S/under-construction-caution-sign-s-0816.png" height='100%' width='100%' />
+      <div style={style} height='100%' width='100%' />
         );
   }
 }

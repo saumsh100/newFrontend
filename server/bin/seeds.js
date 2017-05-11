@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
 const { r } = require('../config/thinky');
+const faker = require('Faker');
 const fs = require('fs');
 const seedDatabase = require('../util/seedDatabase');
 const { time } = require('../util/time');

@@ -27,6 +27,7 @@
     "remind:cron": "nf start -j REMIND_CRON"
   },
   "dependencies": {
+    "Faker": "^0.7.2",
     "async": "0.2.9",
     "attr-accept": "^1.0.3",
     "autoprefixer": "^6.3.1",

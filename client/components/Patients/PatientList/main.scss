@@ -19,8 +19,27 @@ ul {
   padding-bottom: 20px;
 }
 
+.upcoming{
+  background-color: white;
+  margin-bottom: 1px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  div {
+    text-align: center;
+  }
+}
+
+.searchList{
+  display: flex;
+  justify-content: center;
+}
+
 .end {
   text-align: end;
+}
+
+.listRow {
+  margin-top: 20px;
 }
 
 .flex {
@@ -141,10 +160,13 @@ ul {
   padding: 10px;
 }
 
-.patients_list {
+.topRow {
   background: #f7f7f7;
-  height: 100%;
+}
 
+.patients_list {
+  background: #e6e6e6;
+  height: 100%;
   &_title {
     padding-top: 20px;
     padding-left: 30px;
@@ -204,9 +226,10 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 720px;
+    max-height: 760px;
     margin: 0;
     padding: 0;
+    width: 100%;
   }
   .patients_list__users2 {
     position: relative;
