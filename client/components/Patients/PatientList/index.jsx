@@ -1,217 +1,282 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import PatientListItem from './PatientListItem';
-import PatientData from './PatientData';
-import {
-  Button,
-  Form,
-  Field ,
-  Tabs,
-  Tab,
-  Grid,
-  Row,
-  Col,
-  ListItem
-} from '../../library';
-import styles from './main.scss';
+import _ from 'lodash';
+import MainContainer from './MainContainer';
+import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
+import * as Actions from '../../../actions/patientList';
 
-// TODO: separate this component into:
-// - PatientList
-// - PatientDisplay
-// - PatientEventLog
-// - PatientSettings
+const HOW_MANY_TO_SKIP = 10;
 
 class PatientList extends Component {
   constructor(props) {
     super(props);
-    this.handleTabChange = this.handleTabChange.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-  }
-
-  handleTabChange(index, patientListFiltered) {
-    if (!(typeof index === "number")) return
-    if (!patientListFiltered) return
-    let title = "personal";
-    switch (index) {
-      case 0:
-        title = "personal";
-        break
-      case 1:
-        title = "insurance";
-        break;
-    }
-    const params = {
-      id: patientListFiltered.id,
-      activeTabIndex: index,
-      isEditing: false,
-      title,
+    this.state = {
+      people: HOW_MANY_TO_SKIP,
+      moreData: true,
+      patients: null,
+      roll: 0,
+      currentPatient: { id: null },
+      active: false,
+      showNewUser: false,
+      initialUser: true,
     };
-    this.props.updateEditingPatientState(params);
+
+    this.loadMore = this.loadMore.bind(this);
+    this.setSearchPatient = this.setSearchPatient.bind(this);
+    this.setCurrentPatient = this.setCurrentPatient.bind(this);
+    this.newUserForm = this.newUserForm.bind(this);
+    this.newPatient = this.newPatient.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
+    this.submitEdit = this.submitEdit.bind(this);
+    this.submitSearch = this.submitSearch.bind(this);
+    this.deletePatient = this.deletePatient.bind(this);
   }
 
-  handleInput() {
-    const value = this.textInput.value;
-    this.props.setPatientsFilter(value);
+  componentDidMount() {
+    this.props.fetchEntities({
+      key: 'appointments',
+      join: ['patient'],
+      params: {
+        limit: HOW_MANY_TO_SKIP,
+      },
+    });
+  }
+
+  setCurrentPatient(currentPatient) {
+    this.setState({
+      currentPatient,
+      showNewUser: false,
+      initialUser: false,
+    });
+  }
+
+  setSearchPatient(currentPatientId) {
+    if (this.props.patients.get(currentPatientId)) {
+      this.props.setSelectedPatient(this.props.patients.get(currentPatientId).get('id'));
+      this.setState({
+        showNewUser: true,
+        initialUser: true,
+      });
+    }
+  }
+
+  newPatient(values) {
+    const newState = {
+      active: false,
+      showNewUser: true,
+    };
+
+    this.setState(newState);
+    this.props.createEntityRequest({
+      key: 'patient',
+      entityData: values,
+    }).then((result) => {
+        this.props.setSelectedPatient(Object.keys(result.patients)[0]);
+    });
+  }
+
+  deletePatient() {
+    const key = (this.state.showNewUser ? 'patient' : 'patients');
+    const currentPatient = ((this.state.showNewUser) ? this.props.patient : this.state.currentPatient);
+
+    this.setState({
+      currentPatient: { id: null },
+      showNewUser: false,
+    });
+
+    const ids = [];
+
+    this.props.appointments.toArray().forEach((appointment) => {
+      if (appointment.patientId === currentPatient.id) {
+        ids.push(appointment.id);
+      }
+    });
+
+    this.props.deleteEntityCascade({
+      key,
+      id: currentPatient.id,
+      url: `/api/patients/${currentPatient.id}`,
+      cascadeKey: 'appointments',
+      ids,
+    });
+  }
+
+  submitSearch(value){
+    return this.props.fetchEntities({ url: '/api/patients/search', params: value })
+      .then(result => {
+        this.props.searchPatient(Object.keys(result.patients));
+      });
+  }
+
+  submitEdit(currentPatient, values) {
+    const key = (this.state.showNewUser ? 'patient' : 'patients');
+
+    if (key === 'patients') {
+      values.key = 'patient';
+    }
+
+    this.props.updateEntityRequest({
+      key,
+      values,
+      url: `/api/patients/${currentPatient.id}`,
+    }).then((result) => {
+      this.props.setSelectedPatient(Object.keys(result.patients)[0]);
+    });
+  }
+
+  newUserForm() {
+    const newState = {
+      active: true,
+    };
+
+    this.setState(newState);
+  }
+
+  reinitializeState() {
+    const newState = {
+      active: false,
+    };
+
+    this.setState(newState);
+  }
+
+  loadMore() {
+    const newState = {};
+    newState.roll = this.state.roll;
+
+    //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
+
+    if (this.state.roll === 2) {
+      if (this.state.patients === this.props.patients) {
+        this.setState({
+          moreData: false,
+        });
+      }
+      newState.roll = 0;
+    } else if (this.state.roll === 1) {
+
+      this.props.fetchEntities({
+        key: 'appointments',
+        join: ['patient'],
+        params: {
+          skip: this.state.people,
+          limit: HOW_MANY_TO_SKIP,
+        },
+      });
+
+      newState.people = this.state.people + HOW_MANY_TO_SKIP;
+      newState.roll += 1;
+    } else {
+      newState.roll += 1;
+    }
+
+    newState.patients = this.props.patients;
+
+    this.setState(newState);
   }
 
   render() {
-    const {
-      filters,
-      updateEditingPatientState,
-      editingPatientState,
-      changePatientInfo,
-      form,
-    } = this.props;
-    const patientNameFilterText = filters && filters.values && filters.values.patients;
-    let patientList = this.props.patients.models.toArray()
 
-    if (!!patientNameFilterText) {
-      const pattern = new RegExp(patientNameFilterText, 'i');
-      patientList = patientList.filter(d => pattern.test(d.name));
+    const {
+      patients,
+      appointments,
+      selectedPatient,
+    } = this.props;
+
+    const patientSearch = this.props.searchedPatients || [] ;
+
+    let currentPatient = this.state.currentPatient;
+    const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+
+    if (this.state.initialUser && appointments.toArray()[0]) {
+      currentPatient = patients.get(app.toArray()[0].patientId);
+      currentPatient.appointment = app.toArray()[0];
     }
 
-    const patientListWithAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
-      .toString() !== "Invalid Date"))
-      .sort((a, b) => (moment(a.toJS && a.toJS().lastAppointmentDate) > moment(b.toJS && b.toJS().lastAppointmentDate)));
+    if (this.state.showNewUser && selectedPatient) {
+      currentPatient = selectedPatient;
 
-    const patientListWithoutAppointments = patientList.filter((p) => (moment(p.lastAppointmentDate)._d
-        .toString() === "Invalid Date"));
+      let userAppointments = currentPatient.get('appointments');
+      userAppointments = userAppointments.toArray();
 
-    const patientListSorted = patientListWithAppointments.concat(patientListWithoutAppointments);
+      if (userAppointments[0]) {
+        userAppointments = userAppointments
+          .sort((a, b) => moment(a.startDate).diff(b.startDate));
+        currentPatient.appointment = userAppointments[0];
+        currentPatient.appointment = currentPatient.appointment.toObject();
+      } else {
+        currentPatient.appointment = {};
+      }
 
-    const patientListFiltered = patientListSorted
-      .filter(n => (n.patientId === this.props.currentPatient))[0];
-
-    const currentPatientState = patientListFiltered && editingPatientState[patientListFiltered.id];
-    let activeTabIndex = null;
-
-    if (currentPatientState) {
-      activeTabIndex = currentPatientState.activeTabIndex;
+    } else {
+      if (this.state.currentPatient.id !== null) {
+        currentPatient = patients.get(this.state.currentPatient.id);
+        currentPatient.appointment = appointments.get(this.state.currentPatient.appointment.id);
+      }
     }
 
     return (
-      <Grid>
-        <Row className={styles.patients}>
-          <Col xs={12} sm={4} md={4} lg={2}>
-            <div className={styles.patients_list}>
-              <div className={styles.patients_list_title}>Patients</div>
-              <div className={`${styles.patients_list__search} ${styles.search}`}>
-                <label className={styles.search__label} htmlFor="search__input">
-                  <i className="fa fa-search" />
-                </label>
-                <Form form="patientList" ignoreSaveButton>
-                  <Field className={styles.search__input}
-                    type="text"
-                    name="patients"
-                  />
-                </Form>
-                <div className={styles.search__edit}>
-                  <i className="fa fa-pencil" />
-                </div>
-              </div>
-              <ListItem className={styles.patients_list__users}>
-                {patientListSorted.map(user => {
-                  return (<PatientListItem
-                    key={user.patientId}
-                    user={user}
-                    currentPatient={this.props.currentPatient}
-                    setCurrentPatient={this.props.setCurrentPatient}
-                  />);
-                })}
-              </ListItem>
-            </div>
-          </Col>
-          <Col xs={12} sm={8} md={8} lg={10}>
-            <div className={styles.patients_content}>
-              <Row>
-                <Col xs={12}>
-                  <div className={styles.patients_content__header}>
-                    <div className={styles.patients_content__addUser}>
-                      Add New Patient
-                      <span>
-                        <i className="fa fa-plus" />
-                      </span>
-                    </div>
-                    <div className={styles.patient_profile}>
-                      <div className={styles.patient_profile__photo}>
-                        <img src="../img/patient-profile.png" alt="photo" />
-                      </div>
-                      <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
-                        <i className="fa fa-user" />
-                        <span>Claire Lacey, 6</span>
-                      </div>
-                      <div className={`${styles.patient_profile__info} ${styles.personal__table}`}>
-                        <div className={styles.personal__birthday}>
-                          <i className="fa fa-calendar" />
-                          <span>05/22/2010</span>
-                        </div>
-                        <div className={styles.personal__age}>
-                          <span>6 years</span>
-                        </div>
-                        <div className={styles.personal__gender}>
-                          <span>Female</span>
-                        </div>
-                      </div>
-                      <div className={`${styles.patient_profile__language} ${styles.personal__table}`}>
-                        <i className="fa fa-phone" />
-                        <span>123-456-7890</span>
-                      </div>
-                      <div className={`${styles.patient_profile__status} ${styles.personal__table}`}>
-                        <i className="fa fa-flag" />
-                        <span>claire123@gmail.com</span>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <div className={styles.patients_content__wrapper}>
-                  <Col xs={4}>
-                    <div className={styles.left}>
-                    </div>
-                  </Col>
-                  <Col xs={4}>
-                    <div className={styles.middle}></div>
-                  </Col>
-                  <Col xs={4}>
-                    <div className={styles.right}>
-                      <Tabs
-                        index={activeTabIndex || 0}
-                        onChange={(index)=> this.handleTabChange(index, patientListFiltered)}>
-                        <Tab label="Personal">
-                          <PatientData
-                            patient={patientListFiltered}
-                            tabTitle="personal"
-                            form={form}
-                            changePatientInfo={changePatientInfo}
-
-                          />
-                        </Tab>
-                        <Tab label="Insurance">
-                          <PatientData
-                            patient={patientListFiltered}
-                            tabTitle="insurance"
-                            form={form}
-                            changePatientInfo={changePatientInfo}
-                          />
-                        </Tab>
-                      </Tabs>
-                    </div>
-                  </Col>
-                </div>
-              </Row>
-            </div>
-          </Col>
-        </Row>
-      </Grid>
+      <MainContainer
+        loadMore={this.loadMore}
+        setCurrentPatient={this.setCurrentPatient}
+        setSearchPatient={this.setSearchPatient}
+        currentPatient={currentPatient}
+        patients={patients}
+        moreData={this.state.moreData}
+        appointments={app}
+        active={this.state.active}
+        initialUser={this.state.initialUser}
+        newUserForm={this.newUserForm}
+        deletePatient={this.deletePatient}
+        reinitializeState={this.reinitializeState}
+        editUser={this.submitEdit}
+        newPatient={this.newPatient}
+        submitSearch={this.submitSearch}
+        searchedPatients={patientSearch}
+      />
     );
   }
 }
 
-PatientList.propTypes = {
-  patients: PropTypes.array.isRequired,
-  setCurrentPatient: PropTypes.function
+PatientList.PropTypes = {
+  appointments: PropTypes.object,
+  patient: PropTypes.object,
+  patients: PropTypes.object,
+  fetchEntities: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  deleteEntityCascade: PropTypes.func.isRequired,
+  setSelectedPatient: PropTypes.func.isRequired,
+  searchPatient: PropTypes.func.isRequired,
 };
 
-export default PatientList;
+function mapStateToProps({ entities, patientList }) {
+  const patients = entities.getIn(['patients', 'models']);
+  const selectedPatientId = patientList.get('selectedPatientId');
+  const selectedPatient = patients.get(selectedPatientId);
+  return {
+    selectedPatient,
+    patients,
+    searchedPatients: patientList.get('searchedPatients'),
+    appointments: entities.getIn(['appointments', 'models']),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntities,
+    createEntityRequest,
+    updateEntityRequest,
+    deleteEntityCascade,
+    setSelectedPatient: Actions.setSelectedPatientIdAction,
+    searchPatient: Actions.searchPatientAction,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(PatientList);
+

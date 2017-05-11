@@ -1,6 +1,7 @@
 
 import AppBar from './AppBar';
 import Avatar from './Avatar';
+import AutoCompleteForm from './AutoCompleteForm';
 import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
@@ -47,6 +48,7 @@ import DoubleIcon from './DoubleIcon';
 export {
   AppBar,
   Avatar,
+  AutoCompleteForm,
   BarChart,
   BackgroundIcon,
   Button,

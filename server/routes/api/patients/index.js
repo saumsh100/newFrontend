@@ -1,6 +1,7 @@
 
 const _ = require('lodash');
 const patientsRouter = require('express').Router();
+const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const checkIsArray = require('../../../middleware/checkIsArray');
 const normalize = require('../normalize');
@@ -9,6 +10,13 @@ const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
+patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
+
+const generateDuringFilter = (m, startDate, endDate) => {
+  return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
+    m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
+  );
+};
 
 /**
  * Batch creation
@@ -61,6 +69,35 @@ if (globals.env !== 'production') {
   });
 }
 
+patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next) => {
+  const searchString = req.query.patients || '';
+  const search = searchString.toLowerCase().split(' ');
+
+  search[1] = search[1] || '';
+
+  const startDate = r.now();
+  const endDate = r.now().add(365 * 24 * 60 * 60);
+
+  Patient.filter((patient) => {
+    return patient('accountId').eq(req.accountId).and(
+      patient('firstName').downcase().eq(search[0])
+        .or(patient('lastName').downcase().eq(search[0]))
+        .or(patient('lastName').downcase().eq(search[1]))
+        .or(patient('email').downcase().eq(search[0])));
+  }).getJoin({ appointments: {
+    _apply: (appointment) => {
+      return appointment.filter((request) => {
+        return generateDuringFilter(request, startDate, endDate);
+      });
+    } } })
+    .run()
+    .then((patients) => {
+      const normPatients = normalize('patients', patients);
+      normPatients.entities.patients = normPatients.entities.patients || {};
+      res.send(normPatients);
+    })
+    .catch(next);
+});
 
 // TODO: this should have default queries and limits
 /**
@@ -74,7 +111,9 @@ patientsRouter.get('/', (req, res, next) => {
     .then(p => res.send({ length: p.length }));
   } else {
     return Patient.filter({ accountId }).run()
-      .then(patients => res.send(normalize('patients', patients)))
+      .then((patients) => {
+        res.send(normalize('patients', patients))
+      })
       .catch(next);
   }
 });
@@ -84,10 +123,13 @@ patientsRouter.get('/', (req, res, next) => {
  */
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
-  const patientData = Object.assign({}, req.body, { accountId: accountId });
 
+  const patientData = Object.assign({}, req.body, { accountId: accountId });
+  patientData.isSyncedWithPMS = false;
   return Patient.save(patientData)
-    .then(patient => res.status(201).send(normalize('patient', patient)))
+    .then((patient) => {
+      res.status(201).send(normalize('patient', patient));
+    })
     .catch(next);
 });
 
@@ -121,7 +163,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
 /**
  * Update a patient
  */
-patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+patientsRouter.put('/:joinPatientId', checkPermissions('patients:read'), (req, res, next) => {
   return req.patient.merge(req.body).save()
     .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
@@ -131,7 +173,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Delete a patient
  */
 patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
-  return req.patient.delete()
+   return req.patient.deleteAll()
     .then(() => res.send(204))
     .catch(next);
 });

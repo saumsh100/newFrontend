@@ -2,21 +2,18 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import PatientList from './PatientList';
 
-
-class Patients extends Component {
+class TextMessage extends Component {
 
   render() {
 
     return (
-      <PatientList
-      />
-    );
+      <img src="http://images.mysafetysign.com/img/lg/S/under-construction-caution-sign-s-0816.png" height='100%' width='100%' />
+        );
   }
 }
 
-Patients.PropTypes = {
+TextMessage.PropTypes = {
 };
 
 function mapStateToProps({ entities }) {
@@ -31,5 +28,4 @@ function mapDispatchToProps(dispatch) {
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
-export default enhance(Patients);
-
+export default enhance(TextMessage);
