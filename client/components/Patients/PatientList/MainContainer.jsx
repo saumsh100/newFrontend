@@ -101,8 +101,12 @@ class MainContainer extends Component {
                     <div className={styles.right}>
                       {(this.props.currentPatient ? (
                         <Tabs
-                          index={0}>
-                          <Tab label="Personal">
+                          index={0}
+                        >
+                          <Tab
+                            label="Personal"
+                            className={styles.tabs}
+                          >
                             <EditPatientForm
                               onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
                               currentPatient={this.props.currentPatient}

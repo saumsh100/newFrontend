@@ -4,6 +4,7 @@ const PatientListSchema = {
 	lastAppointmentDate: null,
 	nextAppointmentTitle: null,
   firstName: null,
+  middleName: null,
   lastName: null,
   startDate: null,
   phoneNumber: null,
