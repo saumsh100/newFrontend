@@ -1,19 +1,19 @@
 
 /* eslint global-require:0 */
 import { createStore, applyMiddleware } from 'redux';
-// import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from 'react-router-redux';
 import { enableBatching } from 'redux-batched-actions';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 
-export default function configure({ initialState }) {
+export default function configure({ initialState, browserHistory }) {
   const create = window.devToolsExtension
     ? window.devToolsExtension()(createStore)
     : createStore;
 
   const createStoreWithMiddleware = applyMiddleware(
     thunkMiddleware,
-    // routerMiddleware(browserHistory),
+    routerMiddleware(browserHistory),
   )(create);
 
   const store = createStoreWithMiddleware(enableBatching(rootReducer), initialState);

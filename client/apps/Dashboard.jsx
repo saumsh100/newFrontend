@@ -1,5 +1,4 @@
-
-import history from 'history';
+import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import React from 'react';
@@ -16,48 +15,29 @@ import connectSocketToStore from '../socket/connectSocketToStore';
 import DashboardRoutes from '../routes/DashboardNew';
 import configure from '../store';
 import time from '../../server/util/time';
-import { loginSuccess } from '../actions/auth';
+import { load } from '../thunks/auth';
 import '../styles/default.scss';
 
 // import loadInitialData from '../../utilities/loadInitialData';
+const browserHistory = createBrowserHistory();
 // const history = syncHistoryWithStore(browserHistory, store);
 // loadInitialData(store);
 
 // TODO: below will call a flash with Login, perhaps fix with background color?
 
-const store = configure({});
-// const token = localStorage.getItem('token');
-//
-// const signUp = /^\/signup\/.+\/$/i;
-//
-// const urlTest = signUp.test(window.location.pathname);
-//
-// if (!token) {
-//   if (urlTest) {
-//     history.push(window.location.pathname);
-//   } else {
-//     history.push('/login');
-//   }
-// } else {
-//   const decodedToken = jwt(token);
-//
-//   // TODO: use a different expiry calculation
-//   const hasExpired = (decodedToken.exp - (Date.now() / 1000)) < 0;
-//   if (hasExpired) {
-//     if (urlTest) {
-//       history.push(window.location.pathname);
-//     } else {
-//       history.push('/login');
-//     }
-//   } else {
-//     store.dispatch(loginSuccess(decodedToken));
-//     connectSocketToStore(socket, store);
-//   }
-// }
+const store = configure({ browserHistory });
 
+// Load auth from storage
+load()(store.dispatch);
+
+const { auth } = store.getState();
+
+if (auth.get('isAuthenticated')) {
+  connectSocketToStore(socket, store);
+}
 
 window.store = store;
-// window.browserHistory = history;
+window.browserHistory = browserHistory;
 window.socket = socket;
 window.moment = extendMoment(moment);
 window.time = time;
@@ -67,7 +47,7 @@ window.Immutable = Immutable;
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Provider store={store}>
-      <DashboardRoutes />
+      <DashboardRoutes history={browserHistory} />
     </Provider>,
     document.getElementById('root')
   );
