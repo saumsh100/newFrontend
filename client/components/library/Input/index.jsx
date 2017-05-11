@@ -5,7 +5,7 @@ import omit from 'lodash/omit';
 import styles from './styles.scss';
 
 export default function Input(props) {
-  const { label, value, error, icon, type = 'text', min } = props;
+  const { label, value, error, icon, borderColor, type = 'text', min } = props;
 
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
@@ -25,6 +25,10 @@ export default function Input(props) {
   if (error) {
     labelClassName = classNames(styles.erroredLabel, labelClassName);
     inputClassName = classNames(styles.erroredInput, inputClassName);
+  }
+
+  if (borderColor) {
+    inputClassName = classNames(styles[`${borderColor}Border`], inputClassName);
   }
 
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;

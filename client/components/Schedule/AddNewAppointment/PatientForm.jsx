@@ -5,17 +5,12 @@ import styles from './styles.scss';
 
 export default function PatientForm(props) {
 
-  const {
-    patientOptions
-  } = props;
-
   return (
     <Grid className={styles.addNewAppt_mainContainer_right}>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12} className={styles.addNewAppt_col_select}>
+        <Col xs={12}>
           <Field
-            options={patientOptions}
-            component="DropdownSelect"
+            component="AutoComplete"
             name="name"
             label="Patient Name"
           />

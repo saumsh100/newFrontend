@@ -18,7 +18,7 @@ const marks = {
   180: '180',
 };
 
-export default function   AppointmentForm(props) {
+export default function AppointmentForm(props) {
 
   const {
     serviceOptions,
@@ -34,6 +34,7 @@ export default function   AppointmentForm(props) {
             component="DayPicker"
             name="date"
             label="Date"
+            borderColor="primaryColor"
           />
         </Col>
         <Col md={2} />
@@ -43,6 +44,7 @@ export default function   AppointmentForm(props) {
             component="DropdownSelect"
             name="time"
             label="Time"
+            borderColor="primaryColor"
           />
         </Col>
       </Row>
@@ -53,6 +55,7 @@ export default function   AppointmentForm(props) {
             component="DropdownSelect"
             name="service"
             label="Service"
+            borderColor="primaryColor"
           />
         </Col>
       </Row>
@@ -65,6 +68,7 @@ export default function   AppointmentForm(props) {
                 component="DropdownSelect"
                 name="practitioner"
                 label="Practitioner"
+                borderColor="primaryColor"
               />
             </Col>
             <Col xs={1} />
@@ -74,6 +78,7 @@ export default function   AppointmentForm(props) {
                 component="DropdownSelect"
                 name="duration"
                 label=""
+                borderColor="primaryColor"
               />
             </Col>
           </Row>
@@ -87,6 +92,7 @@ export default function   AppointmentForm(props) {
                 component="DropdownSelect"
                 name="split"
                 label="Split"
+                borderColor="primaryColor"
               />
             </Col>
             <Col xs={1} />
@@ -96,6 +102,7 @@ export default function   AppointmentForm(props) {
                 component="DropdownSelect"
                 name="empty"
                 label=""
+                borderColor="primaryColor"
               />
             </Col>
           </Row>
@@ -108,6 +115,7 @@ export default function   AppointmentForm(props) {
             component="DropdownSelect"
             name="chair"
             label="Chair"
+            borderColor="primaryColor"
           />
         </Col>
         <Col md={2} />
@@ -117,6 +125,7 @@ export default function   AppointmentForm(props) {
             component="DropdownSelect"
             name="status"
             label="Status"
+            borderColor="primaryColor"
           />
         </Col>
       </Row>
@@ -126,6 +135,7 @@ export default function   AppointmentForm(props) {
             component="RangeSlider"
             name="duration"
             label="Duration"
+            unit="m"
             min={15}
             max={180}
             marks={marks}

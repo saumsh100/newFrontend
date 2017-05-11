@@ -24,11 +24,9 @@ export default function DisplayForm(props) {
     practitioners,
   } = props;
 
-
   const serviceOptions = generateEntityOptions(services, 'name');
   const practititionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
-  const patientOptions = generateEntityOptions(patients, 'firstName');
 
   return (
     <Form
@@ -46,9 +44,7 @@ export default function DisplayForm(props) {
             />
           </Col>
           <Col xs={12} sm={6} md={4}>
-            <PatientForm
-              patientOptions={patientOptions}
-            />
+            <PatientForm />
           </Col>
         </Row>
       </Grid>

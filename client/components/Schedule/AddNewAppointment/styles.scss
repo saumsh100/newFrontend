@@ -2,7 +2,7 @@
 
 
 .formContainer {
-  border: 1px solid #ff715a;
+  border: .5px solid #ff715a;
   border-radius: .5rem;
   width: 900px;
   height: 600px;
@@ -30,9 +30,12 @@
     }
 
     &_right {
-      padding-top: 60px;
+      padding-top: 65px;
       background-color: #ff755e;
-      height: 540px;
+      height: 535px;
+      width: 300px;
+      border-bottom-right-radius: .3rem;
+      border-top-right-radius: .3rem;
       &_row {
         height: 95px;
         padding-left: 20px;
@@ -75,7 +78,6 @@
     }
   }
 }
-
 
 
 
