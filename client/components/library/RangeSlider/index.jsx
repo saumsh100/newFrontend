@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import styles from './styles.scss';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider);
@@ -22,9 +23,18 @@ class RangeSlider extends Component {
   }
 
   render() {
+
+    const {
+      label,
+      unit
+    } = this.props;
+
     return (
       <div>
-        {this.state.value}
+        <div className={styles.label}>
+          <div>{label}</div>
+          <div className={styles.label_valueUnit}>{this.state.value}{unit}</div>
+        </div>
         <Range
           onAfterChange={this.onAfterChange}
           {...this.props}

@@ -84,7 +84,13 @@ class ScheduleComponent extends Component {
                   onOverlayClick={this.reinitializeState}
                   custom
                 >
-                  <AddNewAppointment {...params} />
+                  <AddNewAppointment
+                    currentDate={currentDate}
+                    chairs={chairs.get('models').toArray()}
+                    practitioners={practitioners.get('models').toArray()}
+                    services={services.get('models').toArray()}
+                    patients={patients.get('models').toArray()}
+                  />
                 </Modal>
               </div>
             </Card>

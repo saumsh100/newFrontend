@@ -19,6 +19,13 @@ const marks = {
 };
 
 export default function   AppointmentForm(props) {
+
+  const {
+    serviceOptions,
+    practitionerOptions,
+    chairOptions,
+  } = props;
+
   return (
     <Grid className={styles.addNewAppt_mainContainer_left}>
       <Row className={styles.addNewAppt_row}>
@@ -42,7 +49,7 @@ export default function   AppointmentForm(props) {
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={12} className={styles.addNewAppt_col}>
           <Field
-            options={[]}
+            options={serviceOptions}
             component="DropdownSelect"
             name="service"
             label="Service"
@@ -54,7 +61,7 @@ export default function   AppointmentForm(props) {
           <Row className={styles.addNewAppt_col_nearFields}>
             <Col xs={9} >
               <Field
-                options={[]}
+                options={practitionerOptions}
                 component="DropdownSelect"
                 name="practitioner"
                 label="Practitioner"
@@ -97,7 +104,7 @@ export default function   AppointmentForm(props) {
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={[]}
+            options={chairOptions}
             component="DropdownSelect"
             name="chair"
             label="Chair"

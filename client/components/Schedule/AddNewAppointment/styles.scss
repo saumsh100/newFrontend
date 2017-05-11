@@ -60,7 +60,7 @@
     }
 
     &_textArea {
-      padding-top: 15px;
+      padding-top: 25px;
     }
   }
 
@@ -69,8 +69,9 @@
     max-width: 240px;
     max-height: 95px;
     border-color: $empty-grey;
-    &:focus {
-      border-color: $primary-dark;
+    background-color: $primary-color;
+    &:after{
+      border-color: $primary-grey
     }
   }
 }

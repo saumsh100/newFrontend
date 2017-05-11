@@ -13,12 +13,25 @@ class AddNewAppointment extends Component {
   handleSubmit(values) {
     console.log(values);
   }
+
+
   render() {
+    const {
+      services,
+      patients,
+      chairs,
+      practitioners,
+    } = this.props;
+
     return (
       <div className={styles.formContainer}>
-      <DisplayForm
-        handleSubmit={this.handleSubmit}
-      />
+        <DisplayForm
+          handleSubmit={this.handleSubmit}
+          services={services}
+          patients={patients}
+          chairs={chairs}
+          practitioners={practitioners}
+        />
       </div>
     );
   }

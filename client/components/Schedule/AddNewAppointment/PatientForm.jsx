@@ -4,13 +4,20 @@ import { timeOptions } from '../../library/util/TimeOptions';
 import styles from './styles.scss';
 
 export default function PatientForm(props) {
+
+  const {
+    patientOptions
+  } = props;
+
   return (
     <Grid className={styles.addNewAppt_mainContainer_right}>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12} >
+        <Col xs={12} className={styles.addNewAppt_col_select}>
           <Field
+            options={patientOptions}
+            component="DropdownSelect"
             name="name"
-            label="Patient Names"
+            label="Patient Name"
           />
         </Col>
       </Row>

@@ -1,0 +1,18 @@
+$empty-grey: darken(lightgrey, 5%);
+$primary-color: #FF715A;
+
+
+.label {
+  display: flex;
+  color: $empty-grey;
+  font-weight: normal;
+  pointer-events: none;
+  font-size: 16px;
+  padding-bottom: 5px;
+
+  &_valueUnit {
+    color: $primary-color;
+    padding-left: 10px;
+    text-decoration: underline;
+  }
+}
