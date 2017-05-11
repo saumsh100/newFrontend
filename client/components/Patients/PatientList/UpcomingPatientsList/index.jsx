@@ -136,7 +136,7 @@ class UpcomingPatientList extends Component {
               hasMore={this.props.moreData}
               initialLoad={false}
               useWindow={false}
-              threshold={50}
+              threshold={100}
             >
               {this.props.patientList.map((user, i) => {
                 return (

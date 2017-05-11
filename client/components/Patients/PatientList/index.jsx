@@ -153,11 +153,6 @@ class PatientList extends Component {
     //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
 
     if (this.state.roll === 2) {
-      if (this.state.patients === this.props.patients) {
-        this.setState({
-          moreData: false,
-        });
-      }
       newState.roll = 0;
     } else if (this.state.roll === 1) {
 

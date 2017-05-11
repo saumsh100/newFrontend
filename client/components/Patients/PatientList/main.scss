@@ -339,7 +339,7 @@ ul {
   }
 
   &__header {
-    height: 430px;
+    height: 370px;
     min-height: 310px;
     padding: 50px;
     background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
@@ -349,7 +349,7 @@ ul {
   .patient_profile {
     width: 500px;
     background: #fafafa;
-    margin-top: 50px;
+    margin-top: 40px;
     margin-left: 30px;
 
 
@@ -377,11 +377,11 @@ ul {
   &__wrapper {
     display: flex;
     flex-direction: row;
-    height: 345px;
+    height: 405px;
     background: #cdcaca;
     width: 100%;
     .left {
-      height: 345px;
+      height: 405px;
       min-width: 250px;
       background-color: $primary-white;
       border-right: 2px solid $primary-grey;
@@ -394,7 +394,7 @@ ul {
       }
     }
     .middle {
-      height: 345px;
+      height: 405px;
       min-width: 250px;
       background-color: $primary-white;
       &::before {
@@ -406,7 +406,7 @@ ul {
       }
     }
     .right {
-      height: 345px;
+      height: 405px;
       min-width: 250px;
       background: #fafafa;
       font-size: 12px;
@@ -443,9 +443,8 @@ ul {
 
   &__table {
     position: relative;
-    padding: 10px 20px;
+    padding: 10px 20px 0 20px;
     margin: auto;
-    width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
