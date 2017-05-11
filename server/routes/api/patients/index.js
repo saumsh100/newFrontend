@@ -85,7 +85,8 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
         .or(patient('lastName').match(search[0]))
         .or(patient('lastName').match(search[1]))
         .or(patient('email').match(search[0])));
-  }).getJoin({ appointments: {
+  }).limit(20)
+    .getJoin({ appointments: {
     _apply: (appointment) => {
       return appointment.filter((request) => {
         return generateDuringFilter(request, startDate, endDate);
