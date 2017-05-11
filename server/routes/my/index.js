@@ -1,5 +1,6 @@
 
 const myRouter = require('express').Router();
+const fs = require('fs');
 const newAvailabilitiesRouter = require('./newAvailabilitiesRouter');
 const requestRouter = require('../api/request');
 const reservationsRouter = require('../api/reservations');
@@ -17,7 +18,7 @@ myRouter.param('accountId', loaders('account', 'Account'));
 myRouter.param('patientId', loaders('patient', 'Patient'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
 
-myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
+myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
     // Needs to match the structure of the reducers
     const { entities } = normalize('account', req.account);
@@ -41,11 +42,45 @@ myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
   }
 });
 
-myRouter.get('/widgets/:accountId', (req, res, next) => {
+myRouter.get('/test', (req, res, next) => {
   try {
     return res.render('widget', {
       host: `${req.protocol}://${req.headers.host}`,
       account: req.account,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+function replaceIndex(string, regex, index, repl) {
+  let nth = -1;
+  return string.replace(regex, (match) => {
+    nth += 1;
+    if (index === nth) return repl;
+    return match;
+  });
+}
+
+const toString = str => `"${str}"`;
+const toTemplateString = str => `\`${str}\``;
+
+myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
+  try {
+    fs.readFile(`${__dirname}/widget.js`, 'utf8', (err, widgetJS) => {
+      if (err) throw err;
+      fs.readFile(`${__dirname}/widget.css`, 'utf8', (_err, widgetCSS) => {
+        if (_err) throw _err;
+        const color = req.account.bookingWidgetPrimaryColor || '#FF715A';
+        const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${req.account.id}/embed`;
+        const withColor = replaceIndex(widgetJS, /__REPLACE_THIS_COLOR__/g, 1, toString(color));
+        const withSrc = replaceIndex(withColor, /__REPLACE_THIS_IFRAME_SRC__/g, 1, toString(iframeSrc));
+        const replacedWidgetJS = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
+
+        // TODO: need to be able to minify and compress code UglifyJS
+        res.send(replacedWidgetJS);
+      });
     });
   } catch (err) {
     next(err);

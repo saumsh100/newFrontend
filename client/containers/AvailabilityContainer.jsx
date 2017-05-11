@@ -40,7 +40,7 @@ class AvailabilitiesContainer extends Component {
 
     const array = location.pathname.split('/');
     const accountId = array[array.length - 1];
-    this.props.getClinicInfo(accountId);
+    // this.props.getClinicInfo(accountId);
   }
 
   componentWillReceiveProps(nextProps) {

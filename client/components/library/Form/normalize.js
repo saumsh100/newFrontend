@@ -22,9 +22,7 @@ export function maxDigits(max) {
       return value;
     }
 
-    console.log('value', value);
     const onlyNums = value.replace(/[^\d]/g, '');
-    console.log('onlyNums', onlyNums);
     if (onlyNums.length <= max) {
       return onlyNums;
     } else {

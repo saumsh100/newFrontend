@@ -28,7 +28,6 @@ export default function withTimer(BasicComponent) {
     }
 
     tick() {
-      console.log('TICK');
       // This function is called every props.interval ms. It updates the
       // secondsLeft counter. Calling setState causes the component to be re-rendered
       const { _secondsLeft } = this.state;

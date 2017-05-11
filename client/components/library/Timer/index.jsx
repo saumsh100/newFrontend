@@ -13,8 +13,6 @@ function Timer(props) {
     className,
   } = props;
 
-  console.log(secondsLeft, totalSeconds);
-
   const radius = 50 - (strokeWidth / 2);
   const pathDescription = `
       M 50,50 m 0,-${radius}
