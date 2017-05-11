@@ -1,14 +1,12 @@
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
-
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
 import FourZeroFour from '../components/FourZeroFour';
 import LazyRoute from './LazyRoute';
-
 import loadSchedule from 'bundle-loader?lazy!./Dashboard/Schedule';
 import loadIntelligence from 'bundle-loader?lazy!./Dashboard/Intelligence';
 import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
