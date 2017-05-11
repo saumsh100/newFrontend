@@ -6,7 +6,7 @@ import UserSearchList from './UserSearchList';
 import {
   AutoCompleteForm,
   InfiniteScroll,
-  Form,
+  Row,
 } from '../../../library';
 
 class UpcomingPatientList extends Component {
@@ -44,7 +44,7 @@ class UpcomingPatientList extends Component {
     return this.props.submitSearch({
       patients: value,
     }).then(() => {
-      const inputValue = value.trim().toLowerCase();
+      const inputValue = new RegExp(value, 'i');
       const inputLength = inputValue.length;
       const searched = this.props.searchedPatients.map((userId) => {
         return {
@@ -54,8 +54,9 @@ class UpcomingPatientList extends Component {
         };
       });
 
-      const results = inputLength === 0 ? [] : searched.filter(lang =>
-      lang.name.toLowerCase().slice(0, inputLength) === inputValue);
+      const results = inputLength === 0 ? [] : searched.filter((person) => {
+        return inputValue.test(person.name) || inputValue.test(person.email);
+      });
 
       this.setState({
         results,
@@ -90,41 +91,45 @@ class UpcomingPatientList extends Component {
 
     return (
       <div className={styles.patients_list}>
-        <div className={styles.patients_list_title}>Patients</div>
-        <div className={`${styles.patients_list__search} ${styles.search}`}>
-          <label className={styles.search__label} htmlFor="search__input">
-            <i className="fa fa-search" />
-          </label>
-          <AutoCompleteForm
-            value={this.state.value}
-            getSuggestions={this.getSuggestions}
-            inputProps={inputProps}
-          />
-          <div className={styles.search__edit}>
-            <i className="fa fa-pencil" />
+        <Row>
+          <div className={styles.patients_list_title}>Patients</div>
+          <div className={`${styles.patients_list__search} ${styles.search}`}>
+            <label className={styles.search__label} htmlFor="search__input">
+              <i className="fa fa-search" />
+            </label>
+            <AutoCompleteForm
+              value={this.state.value}
+              getSuggestions={this.getSuggestions}
+              inputProps={inputProps}
+            />
+            <div className={styles.search__edit}>
+              <i className="fa fa-pencil" />
+            </div>
           </div>
-        </div>
-        <div className={styles.patients_list__users}>
-          <InfiniteScroll
-            loadMore={this.props.loadMore}
-            loader={<div style={{ clear: 'both' }}>Loading...</div>}
-            hasMore={this.props.moreData}
-            initialLoad={false}
-            useWindow={false}
-            threshold={50}
-          >
-            {this.props.patientList.map((user, i) => {
-              return (
-                <PatientListItem
-                  key={user.appointment.id + i}
-                  user={user}
-                  currentPatient={this.props.currentPatient}
-                  setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
-                />
-              );
-            })}
-          </InfiniteScroll>
-        </div>
+        </Row>
+        <Row>
+          <div className={styles.patients_list__users}>
+            <InfiniteScroll
+              loadMore={this.props.loadMore}
+              loader={<div style={{ clear: 'both' }}>Loading...</div>}
+              hasMore={this.props.moreData}
+              initialLoad={false}
+              useWindow={false}
+              threshold={50}
+            >
+              {this.props.patientList.map((user, i) => {
+                return (
+                  <PatientListItem
+                    key={user.appointment.id + i}
+                    user={user}
+                    currentPatient={this.props.currentPatient}
+                    setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
+                  />
+                );
+              })}
+            </InfiniteScroll>
+          </div>
+        </Row>
       </div>
     );
   }

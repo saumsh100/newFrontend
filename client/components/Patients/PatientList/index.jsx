@@ -105,10 +105,13 @@ class PatientList extends Component {
   }
 
   submitSearch(value){
-    return this.props.fetchEntities({ url: '/api/patients/search', params: value })
-      .then(result => {
-        this.props.searchPatient(Object.keys(result.patients));
-      });
+    if (value.patients.length >= 3) {
+      return this.props.fetchEntities({url: '/api/patients/search', params: value})
+        .then(result => {
+          this.props.searchPatient(Object.keys(result.patients));
+        });
+    }
+    return new Promise((resolve) => { resolve(); });
   }
 
   submitEdit(currentPatient, values) {

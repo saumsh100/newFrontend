@@ -73,6 +73,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
   const searchString = req.query.patients || '';
   const search = searchString.toLowerCase().split(' ');
 
+  search[0] = search[0] || '';
   search[1] = search[1] || '';
 
   const startDate = r.now();
@@ -80,10 +81,10 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 
   Patient.filter((patient) => {
     return patient('accountId').eq(req.accountId).and(
-      patient('firstName').downcase().eq(search[0])
-        .or(patient('lastName').downcase().eq(search[0]))
-        .or(patient('lastName').downcase().eq(search[1]))
-        .or(patient('email').downcase().eq(search[0])));
+      patient('firstName').match(search[0])
+        .or(patient('lastName').match(search[0]))
+        .or(patient('lastName').match(search[1]))
+        .or(patient('email').match(search[0])));
   }).getJoin({ appointments: {
     _apply: (appointment) => {
       return appointment.filter((request) => {
