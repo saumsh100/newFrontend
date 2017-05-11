@@ -33,6 +33,32 @@ ul {
   margin-top: 20px;
 }
 
+.formButton {
+  float:right;
+  margin-left: 10px;
+}
+
+.form {
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
+
+.name {
+  display:flex;
+  font-family: "Gotham-Medium";
+  font-size: 1.8em;
+}
+.name span:first-child {
+  flex-shrink:1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.name span {
+  white-space: nowrap;
+}
+
 .name {
   font-family: "Gotham-Medium";
   font-size: 1.8em;
@@ -41,13 +67,14 @@ ul {
 .statInfo {
   font-family: "Gotham-Book";
   color: grey;
-  font-size: 1.1em;
+  font-size: 0.9em;
 }
 
 .statData {
   font-family: "Gotham-Book";
   color: white;
   font-size: 1.1em;
+  font-weight: bold;
 }
 
 .container1 {
@@ -61,10 +88,10 @@ ul {
 }
 
 .container2 {
-  margin: 6% 0;
+  margin: 10% 0;
   width: 40%;
   float: right;
-  text-align: center;
+  text-align: left;
   position: relative;
 }
 
@@ -107,8 +134,8 @@ ul {
 }
 
 .patients {
-  height: 775px;
-  max-height: 775px;
+  height: 895px;
+  max-height: 895px;
   display: flex;
   width: 100%;
   padding: 10px;
@@ -174,8 +201,19 @@ ul {
   }
 
   .patients_list__users {
+    position: relative;
+    z-index: 0;
     overflow-y: auto;
-    max-height: 600px;
+    max-height: 720px;
+    margin: 0;
+    padding: 0;
+  }
+  .patients_list__users2 {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    overflow-y: auto;
+    max-height: 720px;
     margin: 0;
     padding: 0;
   }
@@ -188,6 +226,10 @@ ul {
 
     &:hover {
       background: #E7E7E7;
+    }
+
+    &:not(:hover){
+      background: white;
     }
 
     &__active {
@@ -274,7 +316,7 @@ ul {
   }
 
   &__header {
-    height: 310px;
+    height: 430px;
     min-height: 310px;
     padding: 50px;
     background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
@@ -284,7 +326,7 @@ ul {
   .patient_profile {
     width: 500px;
     background: #fafafa;
-    margin-top: 20px;
+    margin-top: 50px;
     margin-left: 30px;
 
 
@@ -381,6 +423,9 @@ ul {
     padding: 10px 20px;
     margin: auto;
     width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__table_info {

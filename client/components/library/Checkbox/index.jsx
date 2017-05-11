@@ -1,6 +1,9 @@
 
 import React, { PropTypes, Component, defaultProps } from 'react';
 import styles from './styles.scss';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 export default function Checkbox(props) {
   const {
@@ -9,10 +12,19 @@ export default function Checkbox(props) {
     label,
     checked,
     onChange,
+    hidden,
   } = props;
 
+  const classes = classNames(
+    props.className,
+    cx({
+      checkbox: true,
+      hidden,
+    })
+  );
+
   return (
-    <div className={styles.checkbox}>
+    <div className={classes}>
       <input
         className={styles.checkbox__input}
         type="checkbox"

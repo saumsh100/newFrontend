@@ -2,17 +2,21 @@
 import createModel from '../createModel';
 
 const PatientSchema = {
-  id: null,
+  lastAppointmentDate: null,
+  nextAppointmentTitle: null,
   firstName: null,
   lastName: null,
-  email: null,
+  startDate: null,
   phoneNumber: null,
-  status: null,
-  image: null,
   gender: null,
+  photo: null,
+  email: null,
+  patientId: null,
   language: null,
-  insurance: null,
   birthDate: null,
+  status: null,
+  id: null,
+  insurance: null,
   middleName: null,
 };
 
@@ -29,6 +33,6 @@ export default class Patient extends createModel(PatientSchema) {
   }
 
   getUrlRoot() {
-    return `/api/patients/${this.getId()}`;
+    return '/api/patients/';
   }
 }

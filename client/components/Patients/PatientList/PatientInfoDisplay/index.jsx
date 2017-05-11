@@ -13,31 +13,30 @@ class PatientInfoDisplay extends Component {
 
   render() {
     const { currentPatient } = this.props;
-    console.log(currentPatient);
 
     let showDate = null;
 
     if (moment(currentPatient.birthDate)._d.toString() !== "Invalid Date") {
       showDate = moment(currentPatient.birthDate).format('MMMM Do YYYY')
     }
-
-    const lastApp = moment(currentPatient.lastAppointmentDate).format('MMMM Do YYYY');
+    const lastApp = (currentPatient.lastAppointmentDate ? moment(currentPatient.lastAppointmentDate).format('MMMM Do YYYY') : 'N/A')
 
     let display = false;
 
     const age = moment().diff(currentPatient.birthDate, 'years');
 
-    let nextApp;
-
+    let nextApp = 'N/A';
 
     if (currentPatient.id !== null) {
       display = true;
-      nextApp = moment(currentPatient.appointment.startDate).format('MMMM Do YYYY');
+      if (currentPatient.appointment.startDate) {
+        nextApp = moment(currentPatient.appointment.startDate).format('MMMM Do YYYY');
+      }
     }
 
     return (
       <div className={styles.patients_content__header}>
-        <div className={styles.patients_content__addUser}>
+        <div onClick={this.props.onClick} className={styles.patients_content__addUser}>
           Add New Patient
           <span>
                         <i className="fa fa-plus" />
@@ -48,7 +47,10 @@ class PatientInfoDisplay extends Component {
             <div className={styles.patient_profile}>
               <Avatar className={styles.patient_profile__photo} url="https://placeimg.com/640/480/people" />
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
-                <span className={styles.name}>{currentPatient.firstName} {currentPatient.lastName}, {age}</span>
+                <p className={styles.name}>
+                  <span>{currentPatient.firstName} {currentPatient.lastName}</span>
+                  <span>, {age}</span>
+                </p>
               </div>
               <div className={`${styles.patient_profile__info} ${styles.personal__table_info}`}>
                 <div className={styles.info}>

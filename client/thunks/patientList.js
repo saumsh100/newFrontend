@@ -1,7 +1,7 @@
 import axios from './axios';
 
 import {
-	setCurrentPatientAction,
+  setSelectedPatientIdAction,
 	updateEditingPatientStateAction,
 } from '../actions/patientList';
 
@@ -26,7 +26,7 @@ export function changePatientInfo(patientInfo) {
   return function (dispatch, getState) {
   	const url = `/api/patients/${patientInfo.id}`
   	axios.put(url, patientInfo)
-  		.then(result => {		
+  		.then(result => {
     		dispatch(updatePatientInPatientListAction(patientInfo));
   		});
   };
