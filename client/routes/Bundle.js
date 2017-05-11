@@ -1,5 +1,4 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { Component, PropTypes } from 'react';
 
 export default
 class Bundle extends Component {
@@ -9,9 +8,12 @@ class Bundle extends Component {
     this.state = {
       mod: null,
     };
+
+    this.mounted = false;
   }
 
   componentWillMount() {
+    this.mounted = true;
     this.load(this.props);
   }
 
@@ -21,12 +23,20 @@ class Bundle extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
   load(props) {
     this.setState({
       mod: null,
     });
 
     props.load((mod) => {
+      if (!this.mounted) {
+        return;
+      }
+
       this.setState({
         // handle both es imports and cjs
         mod: mod.default ? mod.default : mod,
@@ -40,5 +50,7 @@ class Bundle extends Component {
 }
 
 Bundle.propTypes = {
-  load: PropTypes.func.required,
+  load: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  children: PropTypes.func.isRequired,
 };

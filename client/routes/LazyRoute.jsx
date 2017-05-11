@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Route } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import Bundle from './Bundle';
 
 const Loading = () =>
   <div>Loading</div>;
 
-const LazyRoute = ({ path, load, component = null }) => {
+const LazyRoute = ({ path, load, component = null, name = '' }) => {
   const bundleComponent = props =>
-    <Bundle load={load}>
+    <Bundle load={load} name={name}>
       {((Module) => {
         const renderModule = () =>
           (component
@@ -25,8 +24,9 @@ const LazyRoute = ({ path, load, component = null }) => {
 };
 
 LazyRoute.propTypes = {
-  path: PropTypes.string.required,
-  load: PropTypes.func.required,
+  path: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  load: PropTypes.func.isRequired,
   component: PropTypes.element,
 };
 

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
@@ -15,73 +16,47 @@ import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
 
-const getIsAuth = () => store.getState().auth.get('isAuthenticated');
+const DashboardRouter = ({ history, isAuth }) => {
+  const getAuthorizedRoutes = () =>
+    <div>
+      <Redirect exact from="/" to="/schedule" />
+      <Route path="/profile" component={Profile} />
+      <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
+      <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
+      <LazyRoute path="/patients" load={loadPatients} name="patients" />
+      <LazyRoute path="/settings" load={loadSettings} name="settings" />
+    </div>;
 
-export default
-class DashboardRouter extends Component {
-  constructor(...args) {
-    super(...args);
+  const Dashboard = props =>
+    <DashboardApp {...props}>
+      <Switch>
+        <Route
+          render={() => (isAuth ?
+              getAuthorizedRoutes() :
+              <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+          )}
+        />
+        <Route component={FourZeroFour} />
+      </Switch>
+    </DashboardApp>;
 
-    this.state = {
-      isAuth: getIsAuth(),
-    };
-
-    this.unsubscribe = store.subscribe(() => {
-      const isAuth = getIsAuth();
-
-      if (this.state.isAuth !== isAuth) {
-        this.setState({ isAuth });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
-  }
-
-  render() {
-    const { isAuth } = this.state;
-    const { history } = this.props;
-
-    const getAuthorizedRoutes = () =>
+  return (
+    <Router history={history}>
       <div>
-        <Redirect exact from="/" to="/schedule" />
-        <Route path="/profile" component={Profile} />
-        <LazyRoute path="/intelligence" load={loadIntelligence} />
-        <LazyRoute path="/schedule" load={loadSchedule} />
-        <LazyRoute path="/patients" load={loadPatients} />
-        <LazyRoute path="/settings" load={loadSettings} />
-      </div>;
-
-    const Dashboard = props =>
-      <DashboardApp {...props}>
         <Switch>
-          <Route
-            render={() => (isAuth ?
-                getAuthorizedRoutes() :
-                <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-            )}
-          />
-          <Route component={FourZeroFour} />
+          <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
+          <Route exact path="/signup" render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
+          <Route path="/" component={Dashboard} />
         </Switch>
-      </DashboardApp>;
-
-    return (
-      <Router history={history}>
-        <div>
-          <Switch>
-            <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
-            <Route exact path="/signup" render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
-            <Route path="/" component={Dashboard} />
-          </Switch>
-        </div>
-      </Router>
-    );
-  }
-}
+      </div>
+    </Router>
+  );
+};
 
 DashboardRouter.propTypes = {
-  history: PropTypes.any.required,
+  history: PropTypes.object.isRequired,
+  isAuth: PropTypes.bool.isRequired,
 };
+
+const mapStoreToProps = state => ({ isAuth: state.auth.get('isAuthenticated') });
+export default connect(mapStoreToProps)(DashboardRouter);
