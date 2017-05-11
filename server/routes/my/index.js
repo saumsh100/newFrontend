@@ -1,5 +1,6 @@
 
 const myRouter = require('express').Router();
+const fs = require('fs');
 const practitionersRouter = require('../api/practitioners');
 const servicesRouter = require('../api/services');
 const availabilitiesRouter = require('../api/availabilities');
@@ -52,6 +53,25 @@ myRouter.get('/widgets/:accountId', (req, res, next) => {
       host: `${req.protocol}://${req.headers.host}`,
       account: req.account,
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+myRouter.get('/test/:name/widget.js', (req, res, next) => {
+  try {
+    const start = Date.now();
+    fs.readFile('./widget.js', 'utf8', (err, data) => {
+      if (err) throw err;
+
+      // TODO: find variable in JS and replace
+      debugger;
+
+      console.log(`time elapsed ${Date.now() - start}ms`);
+      res.send(data);
+    });
+
+
   } catch (err) {
     next(err);
   }
