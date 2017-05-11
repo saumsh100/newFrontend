@@ -2,7 +2,8 @@
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
-  SET_CURRENT_PATIENT,
+  SET_SELECTED_PATIENT_ID,
+  SEARCH_PATIENT,
   SET_PATIENTS_FILTER,
   UPDATE_EDITING_PATIENT_STATE,
   CHANGE_PATIENT_INFO,
@@ -20,11 +21,14 @@ const initialState = fromJS({
 });
 
 export default handleActions({
-  [SET_CURRENT_PATIENT](state, action) {
-    return state.merge({
+  [SET_SELECTED_PATIENT_ID](state, action) {
+    const id = action.payload;
+    return state.set('selectedPatientId', id);
+  },
 
-      currentPatient: action.payload.currentDialogId,
-    });
+  [SEARCH_PATIENT](state, action) {
+    const patients = action.payload;
+    return state.set('searchedPatients', patients);
   },
 
   [UPDATE_EDITING_PATIENT_STATE](state, action) {

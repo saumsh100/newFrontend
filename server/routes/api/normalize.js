@@ -33,6 +33,10 @@ const chatSchema = () => {
   });
 };
 
+const patientSingleSchema = () => {
+  return new schema.Entity('patient');
+};
+
 const patientSchema = () => {
   return new schema.Entity('patients');
 };
