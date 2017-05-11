@@ -83,12 +83,14 @@ const randomPatients = [];
 
 for (let i = 0; i < 10000; i++) {
   let id = uuid();
+  const firstName = faker.name.firstName();
+  const lastName = faker.name.lastName()
   randomPatients.push({
     id,
     accountId,
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    email: faker.internet.email(),
+    firstName,
+    lastName,
+    email: `${firstName}.${lastName}@google.ca`,
     phoneNumber: faker.phone.phoneNumber(),
     birthDate: faker.date.past(),
     gender: 'male',
