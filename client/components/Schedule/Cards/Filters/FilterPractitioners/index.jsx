@@ -13,6 +13,7 @@ export default function FilterPractitioners(props) {
     handleEntityCheck,
   } = props;
 
+  const colorArray = ['primaryColor', 'primaryYellow', 'primaryGreen', 'primaryBlueGreen' ]
   return (
     <div>
       <div className={styles.filter_practitioner__title}>
@@ -20,27 +21,25 @@ export default function FilterPractitioners(props) {
       </div>
       <ul className={styles.filter_practitioner__wrapper}>
         <Checkbox
+          hidden
           label={'All'}
           checked={allChecked}
-          onChange={ () => handleAllCheck(filterKey)}
+          onChange={() => handleAllCheck(filterKey)}
         />
         {practitioners.map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
           const label = (<div className={styles.filter_practitioner__name}>{pr.firstName}</div>);
 
-          let hideCheck = checked;
-          if (hideCheck && allChecked) {
-            hideCheck = false;
-          }
-
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>
               <CheckboxImage
                 key={pr.id}
-                checked={hideCheck}
-                onChange={() => { handleEntityCheck(checked, pr.id, filterKey, hideCheck); }}
+                checked={checked}
+                onChange={() => { handleEntityCheck(checked, pr.id, filterKey); }}
                 id={`checkbox-${i}`}
                 label={label}
+                imgColor={colorArray[i]}
+                imageSrc="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner"
               />
             </div>
           );

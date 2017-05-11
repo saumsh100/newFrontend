@@ -57,12 +57,12 @@ export default function FiltersDisplay(props) {
             handleEntityCheck={handleEntityCheck}
           />
           <FilterEntities
-            display="note"
+            display="id"
             label="Reminders"
-            filterKey="appointmentsFilter"
-            allChecked={allChecked.appointmentsFilter}
-            entities={entities.appointmentsFilter}
-            selectedFilterItem={selectedFilters.appointmentsFilter}
+            filterKey="remindersFilter"
+            allChecked={allChecked.remindersFilter}
+            entities={entities.remindersFilter}
+            selectedFilterItem={selectedFilters.remindersFilter}
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
           />
@@ -70,5 +70,13 @@ export default function FiltersDisplay(props) {
       </div>
     </Card>
   );
-
 }
+
+FiltersDisplay.PropTypes = {
+  selectedFilters: PropTypes.object,
+  entities: PropTypes.object,
+  allChecked: PropTypes.object,
+  handleAllCheck: PropTypes.func,
+  handleEntityCheck: PropTypes.func,
+  handleClearAll: PropTypes.func,
+};

@@ -1,21 +1,17 @@
 
 import { createAction } from 'redux-actions';
 import {
-  ADD_PRACTITIONER,
-  REMOVE_PRACTITIONER,
-  SELECT_APPOINMENT_TYPE,
-  SET_SCHEDULE_MODE,
   ADD_SCHEDULE_FILTER,
   REMOVE_SCHEDULE_FILTER,
   CLEAR_SCHEDULE_FILTER,
   ADD_ALL_SCHEDULE_FILTER,
+  SET_SCHEDULE_DATE,
 } from '../constants';
 
-export const addPractitionerFilter = createAction(ADD_PRACTITIONER);
-export const removePractitionerFilter = createAction(REMOVE_PRACTITIONER);
+export const setScheduleDate = createAction(SET_SCHEDULE_DATE)
 export const addScheduleFilter = createAction(ADD_SCHEDULE_FILTER);
 export const removeScheduleFilter = createAction(REMOVE_SCHEDULE_FILTER);
 export const addAllScheduleFilter = createAction(ADD_ALL_SCHEDULE_FILTER);
 export const clearScheduleFilter = createAction(CLEAR_SCHEDULE_FILTER);
-export const selectAppointmentTypeFilter = createAction(SELECT_APPOINMENT_TYPE);
-export const setSheduleModeAction = createAction(SET_SCHEDULE_MODE);
+
+
