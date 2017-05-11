@@ -1,35 +1,32 @@
 
 import React, { PropTypes } from 'react';
 import omit from 'lodash/omit';
-import RangeSlider from '../../RangeSlider';
+import TextArea from '../../TextArea';
 
-export default function RFRangeSlider(props) {
+export default function RFTextArea(props) {
   const {
     input,
     error,
+    label,
     meta,
   } = props;
 
-  const {
-    value
-  } = input;
   const { touched, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
-  const numValue = Number(input.value)
-  const newProps = omit(props, ['input', 'meta']);
-  const newInput = omit(input, ['value']);
+  const newProps = omit(props, ['input', 'meta', 'error']);
+
   return (
-    <RangeSlider
+    <TextArea
       {...newProps}
-      {...newInput}
-      error={finalError}
+      {...input}
     />
   );
 }
 
 /* eslint react/forbid-prop-types: 0 */
-RFRangeSlider.propTypes = {
+RFTextArea.propTypes = {
   input: PropTypes.object,
   meta: PropTypes.object,
   error: PropTypes.string,
+  label: PropTypes.string,
 };

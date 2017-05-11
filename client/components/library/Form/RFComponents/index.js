@@ -6,6 +6,7 @@ import RFDropdownSelect from './RFDropdownSelect';
 import RFToggle from './RFToggle';
 import RFCheckbox from './RFCheckbox';
 import RFRangeSlider from './RFRangeSlider';
+import RFTextArea from './RFTextArea';
 
 export default {
   Input: RFInput,
@@ -16,4 +17,5 @@ export default {
   // DropDown: RFDropDown.
   Checkbox: RFCheckbox,
   RangeSlider: RFRangeSlider,
+  TextArea: RFTextArea,
 };

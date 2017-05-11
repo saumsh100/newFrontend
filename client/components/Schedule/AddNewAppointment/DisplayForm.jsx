@@ -18,12 +18,12 @@ export default function DisplayForm(props) {
 
     >
       <Grid className={styles.addNewAppt}>
-        <Row className={styles.addNewAppt_grid}>
-          <Col xs={12} sm={6} md={7}>
+        <Row className={styles.addNewAppt_mainContainer}>
+          <Col xs={12} sm={6} md={8}>
             <div className={styles.title}>Create New Appoinment</div>
             <AppointmentForm />
           </Col>
-          <Col xs={12} sm={6} md={5}>
+          <Col xs={12} sm={6} md={4}>
             <PatientForm />
           </Col>
         </Row>

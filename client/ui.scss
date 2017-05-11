@@ -29,6 +29,8 @@ $primary-star: #FBF174;
 // $primary-color-dark: black;
 $box-shadow: 1px 1px 16px 0.1px rgba(0,0,0,0.3);
 $disabled-color: lighten($primary-darkgrey, 25%);
+$empty-grey: darken(lightgrey, 5%);
+
 
 // Feedback Colors
 $danger-color: red;

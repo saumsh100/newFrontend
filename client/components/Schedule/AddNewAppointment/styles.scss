@@ -9,7 +9,9 @@
 }
 
 .title {
-  padding-bottom: 30px;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
   font-size: $extra-medium-size;
   font-weight: $jumbo-weight;
   color: $primary-color;
@@ -20,17 +22,22 @@
   width: 900px;
   height: 545px;
 
-  &_grid {
-    min-width: 200px;
+  &_mainContainer {
+    min-width: 250px;
     &_left {
-      width: 420px;
-      padding-left: 25px;
+      width: 450px;
+      padding-left: 60px;
     }
 
     &_right {
-      //width: 250px;
+      padding-top: 60px;
       background-color: #ff755e;
-      height: 600px;
+      height: 540px;
+      &_row {
+        height: 95px;
+        padding-left: 20px;
+        width: 250px;
+      }
     }
   }
 
@@ -51,8 +58,23 @@
       align-items: center;
       height: 80px;
     }
+
+    &_textArea {
+      padding-top: 15px;
+    }
+  }
+
+  &_comment {
+    width: 240px;
+    max-width: 240px;
+    max-height: 95px;
+    border-color: $empty-grey;
+    &:focus {
+      border-color: $primary-dark;
+    }
   }
 }
+
 
 
 
