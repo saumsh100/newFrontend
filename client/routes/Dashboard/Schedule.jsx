@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import ScheduleDayView from '../../components/Schedule/DayView';
@@ -7,7 +8,6 @@ const Schedule = () =>
   <ScheduleContainer>
     <Switch>
       <Redirect exact from="/schedule" to="/schedule/calendar" />
-
       <Route path="/schedule/calendar" component={ScheduleDayView} />
     </Switch>
   </ScheduleContainer>;

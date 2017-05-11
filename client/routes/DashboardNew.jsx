@@ -24,9 +24,9 @@ const DashboardRouter = ({ history, isAuth }) => {
       <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
       <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
       <LazyRoute path="/patients" load={loadPatients} name="patients" />
-      <LazyRoute path="/settings" load={loadSettings} name="settings" />
       <LazyRoute path="/social" load={loadSocial} name="social" />
       <LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />
+      <LazyRoute path="/settings" load={loadSettings} name="settings" />
     </div>;
 
   const Dashboard = props =>

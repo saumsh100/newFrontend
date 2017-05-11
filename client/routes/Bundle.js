@@ -1,7 +1,7 @@
+
 import { Component, PropTypes } from 'react';
 
-export default
-class Bundle extends Component {
+export default class Bundle extends Component {
   constructor(...props) {
     super(...props);
 
