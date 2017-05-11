@@ -375,6 +375,19 @@ const SEEDS = {
       isCancelled: false,
       note: 'Kirat Appointment',
     },
+    {
+      accountId,
+      startDate: recentStartTime.add(48 * oneHour),
+      endDate: recentStartTime.add(49 * oneHour),
+      patientId: markPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+      note: 'mark appointment',
+    },
 
     // OTHER DATES
 

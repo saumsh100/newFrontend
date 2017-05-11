@@ -1,44 +1,32 @@
 
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
+import moment from 'moment';
+
 import {
-  ADD_PRACTITIONER,
-  REMOVE_PRACTITIONER,
-  SELECT_APPOINMENT_TYPE,
-  SET_SCHEDULE_MODE,
   CLEAR_SCHEDULE_FILTER,
   ADD_ALL_SCHEDULE_FILTER,
   ADD_SCHEDULE_FILTER,
-  REMOVE_SCHEDULE_FILTER
+  REMOVE_SCHEDULE_FILTER,
+  SET_SCHEDULE_DATE,
 } from '../constants';
 
 const initialState = fromJS({
+  scheduleDate: moment(),
+
   practitioners: [],
-  appointmentsFilter: [],
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
-  appointmentType: null,
-  currentScheduleMode: 'day',
-  scheduleModes: ['Day', 'Week', 'Month'],
+  remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
 });
 
 export default handleActions({
-  [ADD_PRACTITIONER](state, action) {
-    const practitioners = state.toJS().practitioners;
-    practitioners.push(action.payload.practitioner);
+  [SET_SCHEDULE_DATE](state, action) {
     return state.merge({
-      practitioners,
+      scheduleDate: action.payload.scheduleDate,
     });
   },
-
-  [REMOVE_PRACTITIONER](state, action) {
-    const practitioners = state.toJS().practitioners;
-    return state.merge({
-      practitioners: practitioners.filter(el => el !== action.payload.practitioner),
-    });
-  },
-
   [ADD_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const filterEntities= state.toJS()[key];
@@ -50,7 +38,7 @@ export default handleActions({
 
   [REMOVE_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
-    const filterEntities= state.toJS()[key];
+    const filterEntities = state.toJS()[key];
     const mergeObj = {};
     mergeObj[key] = filterEntities.filter(id => id !== action.payload.id);
     return state.merge(mergeObj);
@@ -78,19 +66,4 @@ export default handleActions({
     temp[key] = [];
     return state.merge(temp);
   },
-
-  [SELECT_APPOINMENT_TYPE](state, action) {
-    const type = action.payload.type === 'all' ? null : action.payload.type;
-    return state.merge({
-      appointmentType: type,
-    });
-  },
-
-  [SET_SCHEDULE_MODE](state, action) {
-    const { mode } = action.payload
-    return state.merge({
-      currentScheduleMode: state.toJS().scheduleModes[mode],
-    });
-  }
-
 }, initialState);

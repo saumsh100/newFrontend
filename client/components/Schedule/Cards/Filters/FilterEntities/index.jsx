@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { Checkbox } from '../../../../library';
 
@@ -26,18 +27,12 @@ export default function FilterEntities(props) {
       />
       {entities.map((entity) => {
         const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
-
-        let hideCheck = checked;
-        if (hideCheck && allChecked) {
-          hideCheck = false;
-        }
-
         return (
           <Checkbox
             key={entity.get(display)}
             label={entity.get(display)}
-            checked={hideCheck}
-            onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey, hideCheck)}
+            checked={checked}
+            onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
           />
         );
       })}

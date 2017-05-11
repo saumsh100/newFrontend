@@ -1,11 +1,11 @@
-.filter_practitioner {
+@import '../../../ui.scss';
+
+.checkBoxImage {
   margin: 0 5px;
   padding: 10px;
   input[type=checkbox] {
     display: none;
-    &:checked + label li img {
-      box-shadow: 0 0 16px 2px #ff715a;
-    }
+
   }
   &__title {
     margin-left: 5px;
@@ -35,11 +35,26 @@
   }
 
   &__photo {
-    max-width: 40px;
+    max-width: 45px;
     margin-bottom: 5px;
     border-radius: 50%;
   }
+
   &__spec {
     color: #b4b4b4;
   }
+
+}
+
+.primaryColor {
+  box-shadow: 0 0 4px 2px $primary-color;
+}
+.primaryYellow {
+  box-shadow: 0 0 4px 2px $primary-yellow;
+}
+.primaryGreen {
+  box-shadow: 0 0 4px 2px $primary-green;
+}
+.primaryBlueGreen {
+  box-shadow: 0 0 4px 2px $primary-blue-green;
 }

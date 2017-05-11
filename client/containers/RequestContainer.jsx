@@ -20,7 +20,6 @@ class RequestContainer extends React.Component {
           requests={this.props.requests}
           patients={this.props.patients}
           services={this.props.services}
-          borderColor={this.props.borderColor}
         />
       </div>
     );
