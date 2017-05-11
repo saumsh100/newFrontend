@@ -13,6 +13,7 @@ import loadSchedule from 'bundle-loader?lazy!./Dashboard/Schedule';
 import loadIntelligence from 'bundle-loader?lazy!./Dashboard/Intelligence';
 import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
+import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
 
@@ -25,6 +26,7 @@ const DashboardRouter = ({ history, isAuth }) => {
       <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
       <LazyRoute path="/patients" load={loadPatients} name="patients" />
       <LazyRoute path="/settings" load={loadSettings} name="settings" />
+      <LazyRoute path="/social" load={loadSocial} name="social" />
     </div>;
 
   const Dashboard = props =>
