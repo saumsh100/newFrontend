@@ -105,51 +105,52 @@ class UpcomingPatientList extends Component {
       onKeyDown: this.submit,
       name: 'patients',
     };
+    console.log(this.props.patientList[0])
+    const display = (this.props.patientList[0] ? (this.props.patientList.map((user, i) => {
+      return (
+        <PatientListItem
+          key={user.appointment.id + i}
+          user={user}
+          currentPatient={this.props.currentPatient}
+          setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
+        />
+      );
+    })) : (<div className={styles.patients_list__users_loading} />
+    ))
 
     return (
       <div className={styles.patients_list}>
         <Row className={styles.topRow}>
           <Card>
-            <CardHeader title="Patients" />
-          <div className={`${styles.patients_list__search} ${styles.search}`}>
-            <label className={styles.search__label} htmlFor="search__input">
-              <i className="fa fa-search" />
-            </label>
-            <AutoCompleteForm
-              value={this.state.value}
-              getSuggestions={this.getSuggestions}
-              inputProps={inputProps}
-            />
-            <div className={styles.search__edit}>
-              <i className="fa fa-pencil" />
+            <div className={styles.header}>
+              <CardHeader title="Patients" />
             </div>
-          </div>
+            <div className={`${styles.patients_list__search} ${styles.search}`}>
+              <AutoCompleteForm
+                value={this.state.value}
+                getSuggestions={this.getSuggestions}
+                inputProps={inputProps}
+              />
+            </div>
           </Card>
         </Row>
         <Row className={styles.listRow}>
-          <Card>
-          <div className={styles.patients_list__users}>
+          <Card className={styles.upcomingHead}>
+            <div className={styles.header}>
               <CardHeader title="Upcoming Patients" />
-            <InfiniteScroll
-              loadMore={this.props.loadMore}
-              loader={<div style={{ clear: 'both' }}>Loading...</div>}
-              hasMore={this.props.moreData}
-              initialLoad={false}
-              useWindow={false}
-              threshold={100}
-            >
-              {this.props.patientList.map((user, i) => {
-                return (
-                  <PatientListItem
-                    key={user.appointment.id + i}
-                    user={user}
-                    currentPatient={this.props.currentPatient}
-                    setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
-                  />
-                );
-              })}
-            </InfiniteScroll>
-          </div>
+            </div>
+            <div className={styles.patients_list__users}>
+              <InfiniteScroll
+                loadMore={this.props.loadMore}
+                loader={<div style={{ clear: 'both' }}>Loading...</div>}
+                hasMore={this.props.moreData}
+                initialLoad={false}
+                useWindow={false}
+                threshold={100}
+              >
+                {display}
+              </InfiniteScroll>
+            </div>
           </Card>
         </Row>
       </div>
@@ -166,4 +167,5 @@ UpcomingPatientList.propTypes = {
   submitSearch: PropTypes.func,
   setSearchPatient: PropTypes.func,
 };
+
 export default UpcomingPatientList;
