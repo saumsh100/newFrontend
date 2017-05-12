@@ -7,7 +7,6 @@
     &__wrapper {
         display: flex;
         width: 730px;
-        border-radius: 5px;
         min-height: 610px;
         margin: 0 auto;
         flex-direction: column;
@@ -459,7 +458,6 @@
     overflow: hidden;
     flex-direction: column;
     background: #fafafa;
-    border-radius: 5px;
     @media screen and (max-width: 800px) {
       width: auto;
       position: relative;
@@ -725,4 +723,9 @@
   text-align: left;
   font-family: Gotham-Medium;
   font-weight: bolder;
+}
+
+.widgetBody {
+  max-height: 500px;
+  overflow-y: auto;
 }

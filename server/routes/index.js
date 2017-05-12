@@ -60,7 +60,6 @@ rootRouter.post('/userCheck', (req, res, next) => {
       }
     })
     .catch(next);
-
 });
 
 rootRouter.get('/confirmation/:tokenId', (req, res, next) => {

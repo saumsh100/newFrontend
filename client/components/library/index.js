@@ -34,6 +34,7 @@ import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import Search from './Search';
 import Star from './Star';
+import Timer from './Timer';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 import { BigCommentBubble } from './BigCommentBubble';
@@ -92,6 +93,7 @@ export {
   Tabs,
   Tab,
   Tag,
+  Timer,
   Toggle,
   Tooltip,
   TrendLine,

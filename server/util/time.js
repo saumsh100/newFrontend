@@ -8,10 +8,36 @@ const Time = {
     return new Date(1970, 1, 0, hours, minutes);
   },
 
-  combineDateAndTime: (date, time) => {
-    return moment(date).hours(moment(time).hours()).toISOString();
+  getISOSortPredicate: (property) => {
+    return (a, b) => {
+      const ap = a[property];
+      const bp = b[property];
+      return (ap < bp) ? -1 : ((ap > bp) ? 1 : 0);
+    };
   },
 
+  /**
+   *
+   * @param date
+   * @param time
+   * @returns {string}
+   */
+  combineDateAndTime: (date, time) => {
+    const mTime = moment(time);
+    return moment(date)
+      .hours(mTime.hours())
+      .minutes(mTime.minutes())
+      .seconds(mTime.seconds())
+      .milliseconds(mTime.seconds())
+      .toISOString();
+  },
+
+  /**
+   *
+   * @param date
+   * @param timeSlot
+   * @returns {*}
+   */
   combineDateAndTimeSlot: (date, timeSlot) => {
     // combine day from date and time from timeSlot into a new timeSlot
     return Object.assign({}, timeSlot, {
@@ -149,7 +175,7 @@ const Time = {
    * availability
    *
    * - this is used in availabilities calc
-   * - we compare these timeslots against actual appointments
+   * - we breakdown these timeslots and then compare against actual appointments
    *
    * @param weeklySchedule
    * @param startDate ISOString
@@ -164,9 +190,9 @@ const Time = {
     let timeIntervals = [];
     for (i = 0; i < dailySchedules.length; i++) {
       // TODO: add conversion of
-      const newTimeIntervals = Time.createIntervalsFromDailySchedule(dailySchedules[i]).map((i) => {
+      const newTimeIntervals = Time.createIntervalsFromDailySchedule(dailySchedules[i]).map((day) => {
         const date = moment(startDate).add(i, 'days');
-        return Time.combineDateAndTimeSlot(date, i);
+        return Time.combineDateAndTimeSlot(date, day);
       });
 
       timeIntervals = [...timeIntervals, ...newTimeIntervals];
