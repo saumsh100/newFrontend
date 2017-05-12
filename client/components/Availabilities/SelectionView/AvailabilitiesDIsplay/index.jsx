@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import classNames from 'classnames';
 import {
   Grid,
   Row,
@@ -32,17 +33,6 @@ class AvailabilitiesDisplay extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    /*console.log('nextProps');
-    console.log(nextProps.practitionerId);
-    console.log(nextProps.startDate);
-    console.log(nextProps.serviceId);
-    console.log('this.props');
-    console.log(this.props.practitionerId);
-    console.log(this.props.startDate);
-    console.log(this.props.serviceId);*/
-
-    // TODO: this is a good reason to make an object for form values
-
     const shouldFetchAvailabilities = (nextProps.selectedPractitionerId !== this.props.selectedPractitionerId) ||
                                       (nextProps.selectedServiceId !== this.props.selectedServiceId) ||
                                       (nextProps.selectedStartDate !== this.props.selectedStartDate);
@@ -82,8 +72,9 @@ class AvailabilitiesDisplay extends Component {
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
 
+    const headerClasses = classNames(styles.appointment__table_elements);
     const header = (
-      <div className={styles.appointment__table_elements}>
+      <div className={headerClasses}>
         {dayAvailabilities.map((a) => {
           return (
             <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_header`}>

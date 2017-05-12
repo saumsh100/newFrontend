@@ -144,7 +144,14 @@ class Availabilities extends Component {
           <SideBar account={account} />
           <div className={styles.appointment__main}>
             <Header />
-            {currentView}
+            <div className={styles.widgetBody}>
+              {currentView}
+              <br/><br/><br/><br/>
+              <br/><br/><br/><br/>
+              <br/><br/><br/><br/>
+              <br/><br/><br/><br/>
+              <br/><br/><br/><br/>
+            </div>
           </div>
         </div>
       </div>
