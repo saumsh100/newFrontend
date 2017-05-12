@@ -54,7 +54,7 @@ class UpcomingPatientList extends Component {
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={styles.searchList}>
           <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
-          <div className={styles.users__wrapper}>
+          <div className={styles.grow}>
             <div className={styles.users__header}>
               <div className={styles.users__name}>
                 {name}, {age}

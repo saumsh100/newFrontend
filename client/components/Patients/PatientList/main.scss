@@ -12,6 +12,11 @@ ul {
   list-style: none;
 }
 
+.grow {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
 .appointment {
   display: flex;
   justify-content: space-between;

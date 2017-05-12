@@ -165,7 +165,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
 /**
  * Update a patient
  */
-patientsRouter.put('/:joinPatientId', checkPermissions('patients:read'), (req, res, next) => {
+patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
   return req.patient.merge(req.body).save()
     .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
@@ -174,7 +174,7 @@ patientsRouter.put('/:joinPatientId', checkPermissions('patients:read'), (req, r
 /**
  * Delete a patient
  */
-patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
+patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => {
    return req.patient.deleteAll()
     .then(() => res.send(204))
     .catch(next);
