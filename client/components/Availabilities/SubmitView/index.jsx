@@ -129,6 +129,12 @@ class SubmitView extends Component {
         {timerComponent}
         <div className={styles.formWrapper}>
           {formComponent}
+
+          <br/><br/><br/><br/>
+          <br/><br/><br/><br/>
+          <br/><br/><br/><br/>
+          <br/><br/><br/><br/>
+          <br/><br/><br/><br/>
         </div>
         {/*<div className={styles.signup__footer}>
           <div className={styles.signup__footer_header}>

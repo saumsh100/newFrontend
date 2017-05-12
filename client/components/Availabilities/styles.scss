@@ -7,7 +7,6 @@
     &__wrapper {
         display: flex;
         width: 730px;
-        min-height: 610px;
         margin: 0 auto;
         flex-direction: column;
         background: #fafafa;
@@ -452,8 +451,7 @@
   overflow: auto;
   &__wrapper {
     display: flex;
-    width: 730px;
-    min-height: 610px;
+    height: 600px;
     margin: 0 auto;
     overflow: hidden;
     flex-direction: column;
@@ -726,6 +724,6 @@
 }
 
 .widgetBody {
-  max-height: 500px;
+  max-height: 560px;
   overflow-y: auto;
 }

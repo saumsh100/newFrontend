@@ -39,11 +39,13 @@
   CareCruBookingModal.prototype.open = function() {
     this.overlay.className = `${this.overlay.className} active`;
     this.inner.className = `${this.inner.className} active`;
+    document.body.style.setProperty('overflow', 'hidden');
   };
 
   CareCruBookingModal.prototype.close = function() {
     this.overlay.className = this.overlay.className.replace('active', '');
     this.inner.className = this.inner.className.replace('active', '');
+    document.body.style.setProperty('overflow', '');
   };
 
   window.document.addEventListener('DOMContentLoaded', function() {
@@ -53,10 +55,8 @@
     bookingButton.className = 'CareCruButton';
 
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('id', 'modal');
-    //iframe.setAttribute('scrolling', 'yes');
+    iframe.setAttribute('allowfullscreen', 'yes');
     iframe.className = 'CareCruIframe';
-    console.log(IFRAME_SRC);
     iframe.src = IFRAME_SRC;
 
     // modal.style.transition = 'translateX(-50%)';

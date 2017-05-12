@@ -146,11 +146,6 @@ class Availabilities extends Component {
             <Header />
             <div className={styles.widgetBody}>
               {currentView}
-              <br/><br/><br/><br/>
-              <br/><br/><br/><br/>
-              <br/><br/><br/><br/>
-              <br/><br/><br/><br/>
-              <br/><br/><br/><br/>
             </div>
           </div>
         </div>
