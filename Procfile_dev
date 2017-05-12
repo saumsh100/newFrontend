@@ -1,4 +1,3 @@
 web: nodemon --inspect server/bin/server.js
-client: npm run client:dev:server
 cron: nodemon server/bin/cron.js
 reminders: nodemon server/bin/reminders.js
