@@ -13,19 +13,9 @@ requestsRouter.param('requestId', loaders('request', 'Request'));
  * Create a request
  */
 requestsRouter.post('/', (req, res, next) => {
-  const { serviceId, startTime, accountId } = req.body;
-  Service.get(serviceId).run().then((service) => {
-    const serviceDuration = service.duration;
-    const endTime = moment(startTime).clone().add(serviceDuration ,'minutes')._d;
-    const requestData = Object.assign({}, req.body, {
-      accountId: req.accountId || accountId,
-      endTime,
-    });
-
-  return Request.save(requestData)
+  return Request.save(req.body)
     .then(request => res.status(201).send(normalize('request', request)))
     .catch(next);
-  })
 });
 
 /**

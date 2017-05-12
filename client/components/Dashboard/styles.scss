@@ -34,9 +34,11 @@
   }
   &__body {
     &_table {
+      border-top: $card-border-size $inactive-color;
       height: 638px;
     }
     &_comments {
+      border-top: $card-border-size $primary-yellow;
       height: 640px;
     }
     &_request {

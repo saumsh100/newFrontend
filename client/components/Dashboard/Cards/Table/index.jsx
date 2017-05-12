@@ -12,9 +12,9 @@ class Table extends Component {
       className,
     } = this.props;
     return (
-      <Card className={`${className} ${styles.table}`} borderColor={borderColor}>
+      <Card className={`${className} ${styles.table}`} >
         <div className={styles.table__header}>
-          <CardHeader count={cardCount} title={cardTitle}>
+          <CardHeader count={7} title={cardTitle}>
             <Search min/>
           </CardHeader>
         </div>

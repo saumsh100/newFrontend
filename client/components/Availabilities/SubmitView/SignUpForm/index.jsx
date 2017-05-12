@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../../../library';
-import { validate, asyncEmailValidate } from '../../../library/Form/validate';
+import { asyncEmailValidatePatient, passwordsMatch, passwordStrength } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
 export default function SignUpForm({ onSubmit }) {
@@ -9,26 +9,26 @@ export default function SignUpForm({ onSubmit }) {
     <Form
       form="userSignUpForm"
       onSubmit={onSubmit}
-      asyncValidate={asyncEmailValidate}
+      validate={passwordsMatch}
+      asyncValidate={asyncEmailValidatePatient}
       asyncBlurFields={['email']}
       ignoreSaveButton
     >
-      <div>
-        <Field
-          required
-          name="firstName"
-          label="First Name"
-        />
-        <Field
-          required
-          name="lastName"
-          label="Last Name"
-        />
-      </div>
+      <Field
+        required
+        name="firstName"
+        label="First Name"
+      />
+      <Field
+        required
+        name="lastName"
+        label="Last Name"
+      />
       <Field
         required
         label="Phone Number"
         name="phone"
+        type="tel"
       />
       <Field
         required
@@ -41,6 +41,7 @@ export default function SignUpForm({ onSubmit }) {
         label="Password"
         name="password"
         type="password"
+        validate={[passwordStrength]}
       />
       <Field
         required

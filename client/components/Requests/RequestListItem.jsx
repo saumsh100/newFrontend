@@ -39,6 +39,10 @@ class RequestListItem extends Component {
       active,
     } = this.props;
 
+    if (!service || !patient || !request) {
+      return null;
+    }
+
     const data = {
       time: request.getFormattedTime(),
       age: request.getAge(patient.birthDate),
@@ -111,7 +115,7 @@ class RequestListItem extends Component {
 }
 
 RequestListItem.propTypes = {
-  patient: PropTypes.object.isRequired,
+  patient: PropTypes.object,
   request: PropTypes.object.isRequired,
   service: PropTypes.object.isRequired,
   updateEntityRequest: PropTypes.func,

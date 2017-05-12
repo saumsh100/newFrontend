@@ -34,7 +34,7 @@ class Referrals extends Component {
     } = this.props;
 
     return (
-      <Card className={styles.referrals} borderColor={colorMap.green}>
+      <Card className={styles.referrals}>
         <div className={styles.referrals__header}>
           <CardHeader title={cardTitle} count={data.length}>
             <Search min calendar className={styles.referrals__search} />
@@ -42,9 +42,9 @@ class Referrals extends Component {
         </div>
         <div className={styles.referrals__body}>
           <List className={styles.data}>
-            {data.map(obj => {
+            {data.map((obj, index) => {
               return (
-                <ListItem className={styles.referrals__item}>
+                <ListItem key={`Referrals${index}`} className={styles.referrals__item}>
                   <img className={styles.referrals__item_img} src={obj.img} alt=""/>
                   <div className={styles.referrals__item_wrapper}>
                     <div className={styles.referrals__item_left}>

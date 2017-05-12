@@ -11,7 +11,6 @@ class Information extends Component {
 
     return (
       <Card
-        borderColor={borderColor}
         className={styles.total}
       >
         <CardHeader

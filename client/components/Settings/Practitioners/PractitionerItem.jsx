@@ -25,7 +25,7 @@ class PractitionerItem extends Component {
 
 PractitionerItem.propTypes = {
   setPractitionerId: PropTypes.func,
-  fullName: PropTypes.func,
+  fullName: PropTypes.string,
 };
 
 export default PractitionerItem;
