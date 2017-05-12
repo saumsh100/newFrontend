@@ -1,3 +1,3 @@
-web: nodemon server/bin/server.js
+web: nodemon --inspect server/bin/server.js
 cron: nodemon server/bin/cron.js
 reminders: nodemon server/bin/reminders.js

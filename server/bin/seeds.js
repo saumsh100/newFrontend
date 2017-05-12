@@ -1,4 +1,4 @@
-
+1
 const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
@@ -100,7 +100,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: patientPhone,
       from: clinicPhone,
       body: 'How were you doing yesterday?',
-      createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
+        createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
       read: true,
     },
     {
@@ -966,9 +966,9 @@ const SEEDS = {
     },
     {
       id: weeklyScheduleId2,
-      accountId,
-      thursday: {
-        endTime: time(14, 30),
+      accountId: accountId2,
+      wednesday: {
+        isClosed: true,
       },
 
       saturday: {
@@ -991,6 +991,14 @@ const SEEDS = {
             endTime: time(13, 0),
           },
         ],
+      },
+
+      wednesday: {
+        isClosed: true,
+      },
+
+      friday: {
+        isClosed: true,
       },
 
       saturday: {
@@ -1028,6 +1036,10 @@ const SEEDS = {
       state: 'CA',
       city: 'Los Angeles',
       zipCode: '90210',
+
+      logo: '/images/liberty_logo.png',
+      address: '10204 112th St.',
+      // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       // smsPhoneNumber: clinicPhoneNumber,
       // logo: 'images/availabilies_sidebar_logo_2.png',
