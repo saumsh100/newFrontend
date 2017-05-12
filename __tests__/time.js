@@ -2,7 +2,6 @@
  * Created by sharp on 2017-03-22.
  */
 
-const { expect } = require('chai');
 const {
   time,
   breakdownTimeSlot,
@@ -14,7 +13,6 @@ const {
   isDuringEachother,
   getISOSortPredicate,
 } = require('../server/util/time');
-
 
 // Monday -> Friday 9 to 5 by default
 const createWeeklySchedule = (custom = {}) => {
@@ -71,13 +69,13 @@ const createWeeklySchedule = (custom = {}) => {
 describe('util/time', () => {
   describe('#time', () => {
     it('should be a function', () => {
-      expect(time).to.be.a('function');
+      expect(typeof time).toBe('function');
     });
   });
 
   describe('#getISOSortPredicate', () => {
     it('should be a function', () => {
-      expect(getISOSortPredicate).to.be.a('function');
+      expect(typeof getISOSortPredicate).toBe('function');
     });
 
     it('should sort the array properly', () => {
@@ -90,14 +88,14 @@ describe('util/time', () => {
 
       const sortedArray = array.sort(getISOSortPredicate('startDate'));
       sortedArray.forEach((a, i) => {
-        expect(a.key).to.equal(i);
+        expect(a.key).toBe(i);
       });
     })
   });
 
   describe('#createIntervalsFromDailySchedule', () => {
     it('should be a function', () => {
-      expect(createIntervalsFromDailySchedule).to.be.a('function');
+      expect(typeof createIntervalsFromDailySchedule).toBe('function');
     });
 
     it('should return empty array for isClosed', () => {
@@ -107,8 +105,8 @@ describe('util/time', () => {
 
       const intervals = createIntervalsFromDailySchedule(closeDay);
 
-      expect(intervals).to.be.an('array');
-      expect(intervals.length).to.equal(0);
+      expect(Array.isArray(intervals)).toBe(true);
+      expect(intervals.length).toBe(0);
     });
 
     it('should return an array with 1 interval for no breaks', () => {
@@ -123,9 +121,9 @@ describe('util/time', () => {
 
       const intervals = createIntervalsFromDailySchedule(day);
 
-      expect(intervals).to.be.an('array');
-      expect(intervals.length).to.equal(1);
-      expect(intervals).to.deep.equal([
+      expect(Array.isArray(intervals)).toBe(true);
+      expect(intervals.length).toBe(1);
+      expect(intervals).toEqual([
         {
           openedStart: true,
           startTime,
@@ -152,9 +150,9 @@ describe('util/time', () => {
 
       const intervals = createIntervalsFromDailySchedule(day);
 
-      expect(intervals).to.be.an('array');
-      expect(intervals.length).to.equal(2);
-      expect(intervals).to.deep.equal([
+      expect(Array.isArray(intervals)).toBe(true);
+      expect(intervals.length).toBe(2);
+      expect(intervals).toEqual([
         {
           openedStart: true,
           startTime,
@@ -188,9 +186,9 @@ describe('util/time', () => {
 
       const intervals = createIntervalsFromDailySchedule(day);
 
-      expect(intervals).to.be.an('array');
-      expect(intervals.length).to.equal(5);
-      expect(intervals).to.deep.equal([
+      expect(Array.isArray(intervals)).toBe(true);
+      expect(intervals.length).toBe(5);
+      expect(intervals).toEqual([
         {
           openedStart: true,
           startTime,
@@ -227,7 +225,7 @@ describe('util/time', () => {
 
   describe('#getDailySchedules', () => {
     it('should be a function', () => {
-      expect(getDailySchedules).to.be.a('function');
+      expect(typeof getDailySchedules).toBe('function');
     });
 
     it('should return an array of 1 dailySchedule if startDate and endDate are same-day', () => {
@@ -237,9 +235,9 @@ describe('util/time', () => {
 
       const dailySchedules = getDailySchedules(weeklySchedule, mondayStartDate, mondayEndDate);
 
-      expect(dailySchedules).to.be.an('array');
-      expect(dailySchedules.length).to.equal(1);
-      expect(dailySchedules).to.deep.equal([
+      expect(Array.isArray(dailySchedules)).toBe(true);
+      expect(dailySchedules.length).toBe(1);
+      expect(dailySchedules).toEqual([
         weeklySchedule.monday,
       ]);
     });
@@ -251,9 +249,9 @@ describe('util/time', () => {
 
       const dailySchedules = getDailySchedules(weeklySchedule, mondayStartDate, tuesdayEndDate);
 
-      expect(dailySchedules).to.be.an('array');
-      expect(dailySchedules.length).to.equal(2);
-      expect(dailySchedules).to.deep.equal([
+      expect(Array.isArray(dailySchedules)).toBe(true);
+      expect(dailySchedules.length).toBe(2);
+      expect(dailySchedules).toEqual([
         weeklySchedule.monday,
         weeklySchedule.tuesday,
       ]);
@@ -268,9 +266,9 @@ describe('util/time', () => {
 
       const dailySchedules = getDailySchedules(weeklySchedule, mondayStartDate, tuesdayEndDate);
 
-      expect(dailySchedules).to.be.an('array');
-      expect(dailySchedules.length).to.equal(2);
-      expect(dailySchedules).to.deep.equal([
+      expect(Array.isArray(dailySchedules)).toBe(true);
+      expect(dailySchedules.length).toBe(2);
+      expect(dailySchedules).toEqual([
         weeklySchedule.monday,
         weeklySchedule.tuesday,
       ]);
@@ -283,9 +281,9 @@ describe('util/time', () => {
 
       const dailySchedules = getDailySchedules(weeklySchedule, mondayStartDate, fridayEndDate);
 
-      expect(dailySchedules).to.be.an('array');
-      expect(dailySchedules.length).to.equal(5);
-      expect(dailySchedules).to.deep.equal([
+      expect(Array.isArray(dailySchedules)).toBe(true);
+      expect(dailySchedules.length).toBe(5);
+      expect(dailySchedules).toEqual([
         weeklySchedule.monday,
         weeklySchedule.tuesday,
         weeklySchedule.wednesday,
@@ -297,26 +295,26 @@ describe('util/time', () => {
 
   describe('#combineDateAndTime', () => {
     it('should be a function', () => {
-      expect(combineDateAndTime).to.be.a('function');
+      expect(typeof combineDateAndTime).toBe('function');
     });
 
     it('should return the correct time on the right day', () => {
       const startTime = time(4, 56);
       const day = (new Date(2017, 4, 1));
       const combinedDate = combineDateAndTime(day, startTime);
-      expect(combinedDate).to.be.a('string');
-      expect(combinedDate).to.equal((new Date(2017, 4, 1, 4, 56)).toISOString());
+      expect(typeof combinedDate).toBe('string');
+      expect(combinedDate).toBe((new Date(2017, 4, 1, 4, 56)).toISOString());
     });
   });
 
   describe('#createIntervalsFromWeeklySchedule', () => {
     it('should be a function', () => {
-      expect(createIntervalsFromWeeklySchedule).to.be.a('function');
+      expect(typeof createIntervalsFromWeeklySchedule).toBe('function');
     });
 
     // TODO: write Unit Tests for this!!!!!!!
     it('should return the schedule for monday', () => {
-      // Need to test with offset dates
+      // Need to describe with offset dates
       const sd = new Date(2017, 4, 1, 7, 32);
       const ed = new Date(2017, 4, 1, 19, 56);
       const weeklySchedule = createWeeklySchedule({
@@ -327,42 +325,42 @@ describe('util/time', () => {
       });
 
       const intervals = createIntervalsFromWeeklySchedule(weeklySchedule, sd, ed);
-      expect(intervals).to.be.an('array');
-      expect(intervals.length).to.equal(1);
+      expect(Array.isArray(intervals)).toBe(true);
+      expect(intervals.length).toBe(1);
 
       const { startDate, endDate } = intervals[0];
-      expect(startDate).to.equal(new Date(2017, 4, 1, 12, 0).toISOString());
-      expect(endDate).to.equal(new Date(2017, 4, 1, 16, 0).toISOString());
+      expect(startDate).toBe(new Date(2017, 4, 1, 12, 0).toISOString());
+      expect(endDate).toBe(new Date(2017, 4, 1, 16, 0).toISOString());
     });
 
     // TODO: write Unit Tests for this!!!!!!!
     it('should return the intervals for monday to friday', () => {
-      // Need to test with offset dates
+      // Need to describe with offset dates
       const sd = new Date(2017, 4, 1, 7, 32);
       const ed = new Date(2017, 4, 6, 7, 32);
       const weeklySchedule = createWeeklySchedule();
 
       const intervals = createIntervalsFromWeeklySchedule(weeklySchedule, sd, ed);
-      expect(intervals).to.be.an('array');
-      expect(intervals.length).to.equal(5);
+      expect(Array.isArray(intervals)).toBe(true);
+      expect(intervals.length).toBe(5);
 
-      expect(intervals[0].startDate).to.equal(new Date(2017, 4, 1, 8, 0).toISOString());
-      expect(intervals[0].endDate).to.equal(new Date(2017, 4, 1, 17, 0).toISOString());
-      expect(intervals[1].startDate).to.equal(new Date(2017, 4, 2, 8, 0).toISOString());
-      expect(intervals[1].endDate).to.equal(new Date(2017, 4, 2, 17, 0).toISOString());
-      expect(intervals[2].startDate).to.equal(new Date(2017, 4, 3, 8, 0).toISOString());
-      expect(intervals[2].endDate).to.equal(new Date(2017, 4, 3, 17, 0).toISOString());
-      expect(intervals[3].startDate).to.equal(new Date(2017, 4, 4, 8, 0).toISOString());
-      expect(intervals[3].endDate).to.equal(new Date(2017, 4, 4, 17, 0).toISOString());
-      expect(intervals[4].startDate).to.equal(new Date(2017, 4, 5, 8, 0).toISOString());
-      expect(intervals[4].endDate).to.equal(new Date(2017, 4, 5, 17, 0).toISOString());
+      expect(intervals[0].startDate).toBe(new Date(2017, 4, 1, 8, 0).toISOString());
+      expect(intervals[0].endDate).toBe(new Date(2017, 4, 1, 17, 0).toISOString());
+      expect(intervals[1].startDate).toBe(new Date(2017, 4, 2, 8, 0).toISOString());
+      expect(intervals[1].endDate).toBe(new Date(2017, 4, 2, 17, 0).toISOString());
+      expect(intervals[2].startDate).toBe(new Date(2017, 4, 3, 8, 0).toISOString());
+      expect(intervals[2].endDate).toBe(new Date(2017, 4, 3, 17, 0).toISOString());
+      expect(intervals[3].startDate).toBe(new Date(2017, 4, 4, 8, 0).toISOString());
+      expect(intervals[3].endDate).toBe(new Date(2017, 4, 4, 17, 0).toISOString());
+      expect(intervals[4].startDate).toBe(new Date(2017, 4, 5, 8, 0).toISOString());
+      expect(intervals[4].endDate).toBe(new Date(2017, 4, 5, 17, 0).toISOString());
     });
 
   });
 
   describe('#breakdownTimeSlot', () => {
     it('should be a function', () => {
-      expect(breakdownTimeSlot).to.be.a('function');
+      expect(typeof breakdownTimeSlot).toBe('function');
     });
 
     it('should return 0 timeSlots', () => {
@@ -376,8 +374,8 @@ describe('util/time', () => {
       };
 
       const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
-      expect(timeSlots).to.be.an('array');
-      expect(timeSlots.length).to.equal(0);
+      expect(Array.isArray(timeSlots)).toBe(true);
+      expect(timeSlots.length).toBe(0);
     });
 
     it('should return 1 timeSlot from startDate to endDate - no remainder', () => {
@@ -391,9 +389,9 @@ describe('util/time', () => {
       };
 
       const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
-      expect(timeSlots).to.be.an('array');
-      expect(timeSlots.length).to.equal(1);
-      expect(timeSlots[0]).to.deep.equal({
+      expect(Array.isArray(timeSlots)).toBe(true);
+      expect(timeSlots.length).toBe(1);
+      expect(timeSlots[0]).toEqual({
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
       });
@@ -410,9 +408,9 @@ describe('util/time', () => {
       };
 
       const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
-      expect(timeSlots).to.be.an('array');
-      expect(timeSlots.length).to.equal(1);
-      expect(timeSlots[0]).to.deep.equal({
+      expect(Array.isArray(timeSlots)).toBe(true);
+      expect(timeSlots.length).toBe(1);
+      expect(timeSlots[0]).toEqual({
         startDate: startDate.toISOString(),
         endDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
       });
@@ -429,14 +427,14 @@ describe('util/time', () => {
       };
 
       const timeSlots = breakdownTimeSlot(timeSlot, intervalLength, minimumLength);
-      expect(timeSlots).to.be.an('array');
-      expect(timeSlots.length).to.equal(2);
-      expect(timeSlots[0]).to.deep.equal({
+      expect(Array.isArray(timeSlots)).toBe(true);
+      expect(timeSlots.length).toBe(2);
+      expect(timeSlots[0]).toEqual({
         startDate: startDate.toISOString(),
         endDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
       });
 
-      expect(timeSlots[1]).to.deep.equal({
+      expect(timeSlots[1]).toEqual({
         startDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
         endDate: (new Date(2017, 2, 30, 11, 0)).toISOString(),
       });
@@ -445,7 +443,7 @@ describe('util/time', () => {
 
   describe('#createPossibleTimeSlots', () => {
     it('should be a function', () => {
-      expect(createPossibleTimeSlots).to.be.a('function');
+      expect(typeof createPossibleTimeSlots).toBe('function');
     });
 
     it('should return 4 time slots', () => {
@@ -463,14 +461,14 @@ describe('util/time', () => {
       ];
 
       const newTimeSlots = createPossibleTimeSlots(timeSlots, intervalLength, minimumLength);
-      expect(newTimeSlots).to.be.an('array');
-      expect(newTimeSlots.length).to.equal(4);
-      expect(newTimeSlots[0]).to.deep.equal({
+      expect(Array.isArray(newTimeSlots)).toBe(true);
+      expect(newTimeSlots.length).toBe(4);
+      expect(newTimeSlots[0]).toEqual({
         startDate: (new Date(2017, 2, 30, 9, 0)).toISOString(),
         endDate: (new Date(2017, 2, 30, 10, 0)).toISOString(),
       });
 
-      expect(newTimeSlots[3]).to.deep.equal({
+      expect(newTimeSlots[3]).toEqual({
         startDate: (new Date(2017, 2, 30, 15, 30)).toISOString(),
         endDate: (new Date(2017, 2, 30, 16, 30)).toISOString(),
       });
@@ -479,7 +477,7 @@ describe('util/time', () => {
 
   describe('#isDuringEachother', () => {
     it('should be a function', () => {
-      expect(isDuringEachother).to.be.a('function');
+      expect(typeof isDuringEachother).toBe('function');
     });
 
     it('should return false for completely outside', () => {
@@ -493,7 +491,7 @@ describe('util/time', () => {
         endDate: new Date(2017, 2, 1, 9, 0),
       };
 
-      expect(isDuringEachother(a, b)).to.equal(false);
+      expect(isDuringEachother(a, b)).toBe(false);
     });
 
     it('should return false for just before', () => {
@@ -507,7 +505,7 @@ describe('util/time', () => {
         endDate: new Date(2017, 1, 1, 8, 0),
       };
 
-      expect(isDuringEachother(a, b)).to.equal(false);
+      expect(isDuringEachother(a, b)).toBe(false);
     });
 
     it('should return false for just after', () => {
@@ -521,7 +519,7 @@ describe('util/time', () => {
         endDate: new Date(2017, 1, 1, 10, 0),
       };
 
-      expect(isDuringEachother(a, b)).to.equal(false);
+      expect(isDuringEachother(a, b)).toBe(false);
     });
 
     it('should return true for equal', () => {
@@ -535,7 +533,7 @@ describe('util/time', () => {
         endDate: new Date(2017, 1, 1, 9, 0),
       };
 
-      expect(isDuringEachother(a, b)).to.equal(true);
+      expect(isDuringEachother(a, b)).toBe(true);
     });
 
     it('should return true for during before', () => {
@@ -549,7 +547,7 @@ describe('util/time', () => {
         endDate: new Date(2017, 1, 1, 8, 30),
       };
 
-      expect(isDuringEachother(a, b)).to.equal(true);
+      expect(isDuringEachother(a, b)).toBe(true);
     });
 
     it('should return true for during after', () => {
@@ -563,7 +561,7 @@ describe('util/time', () => {
         endDate: new Date(2017, 1, 1, 9, 30),
       };
 
-      expect(isDuringEachother(a, b)).to.equal(true);
+      expect(isDuringEachother(a, b)).toBe(true);
     });
   });
 });

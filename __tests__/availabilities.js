@@ -3,7 +3,6 @@
  * MAJOR DISCLAIMER: this assumes the DB is seeded with seeds!
  */
 
-const { expect } = require('chai');
 const {
   fetchServiceData,
   fetchPractitionerData,
@@ -20,7 +19,7 @@ const weeklyScheduleId = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 describe('Availabilities Library', () => {
   describe('#fetchServiceData', () => {
     it('should be a function', (done) => {
-      expect(fetchServiceData).to.be.a('function');
+      expect(typeof fetchServiceData).toBe('function');
       done();
     });
 
@@ -29,7 +28,7 @@ describe('Availabilities Library', () => {
       const endDate = (new Date(3001, 1, 1)).toISOString();
       fetchServiceData({ accountId, serviceId: 'cat', startDate, endDate })
         .catch((err) => {
-          expect(err.message).to.be.a('string');
+          expect(typeof err.message).toBe('string');
           // expect(err.status).to.equal(400);
           done();
         });
@@ -40,7 +39,7 @@ describe('Availabilities Library', () => {
       const endDate = (new Date(3001, 1, 1)).toISOString();
       fetchServiceData({ accountId, serviceId, practitionerId: 'cat', startDate, endDate })
         .catch((err) => {
-          expect(err.message).to.equal('Service has no practitioners with id: cat');
+          expect(err.message).toBe('Service has no practitioners with id: cat');
           // expect(err.status).to.equal(400);
           done();
         });
@@ -51,8 +50,8 @@ describe('Availabilities Library', () => {
       const endDate = (new Date(3001, 1, 1)).toISOString();
       fetchServiceData({ accountId, serviceId, practitionerId, startDate, endDate })
         .then((service) => {
-          expect(service.practitioners.length).to.equal(1);
-          expect(service.practitioners[0].id).to.equal(practitionerId);
+          expect(service.practitioners.length).toBe(1);
+          expect(service.practitioners[0].id).toBe(practitionerId);
           done();
         });
     });
@@ -62,10 +61,10 @@ describe('Availabilities Library', () => {
       const endDate = (new Date(3001, 1, 1)).toISOString();
       fetchServiceData({ accountId, serviceId, practitionerId, startDate, endDate })
         .then((service) => {
-          expect(service.requests).to.be.an('array');
-          expect(service.reservations).to.be.an('array');
-          expect(service.requests.length).to.equal(0);
-          expect(service.reservations.length).to.equal(0);
+          expect(Array.isArray(service.requests)).toBe(true);
+          expect(Array.isArray(service.reservations)).toBe(true);
+          expect(service.requests.length).toBe(0);
+          expect(service.reservations.length).toBe(0);
           done();
         });
     });
@@ -73,7 +72,7 @@ describe('Availabilities Library', () => {
 
   describe('#fetchPractitionerData', () => {
     it('should be a function', (done) => {
-      expect(fetchPractitionerData).to.be.a('function');
+      expect(typeof fetchPractitionerData).toBe('function');
       done();
     });
 
@@ -92,9 +91,9 @@ describe('Availabilities Library', () => {
         const endDate = (new Date(3001, 1, 1)).toISOString();
         fetchPractitionerData({ practitioners, startDate, endDate })
           .then(({ weeklySchedules }) => {
-            expect(weeklySchedules).to.be.an('array');
-            expect(weeklySchedules.length).to.equal(1);
-            expect(weeklySchedules[0].id).to.equal(weeklyScheduleId);
+            expect(Array.isArray(weeklySchedules)).toBe(true);
+            expect(weeklySchedules.length).toBe(1);
+            expect(weeklySchedules[0].id).toBe(weeklyScheduleId);
             done();
           });
       });
@@ -104,14 +103,14 @@ describe('Availabilities Library', () => {
         const endDate = (new Date(3001, 1, 1)).toISOString();
         fetchPractitionerData({ practitioners, startDate, endDate })
           .then((data) => {
-            expect(data.practitioners).to.be.an('array');
-            expect(data.practitioners.length).to.equal(1);
+            expect(Array.isArray(data.practitioners)).toBe(true);
+            expect(data.practitioners.length).toBe(1);
 
             const { appointments, timeOffs } = data.practitioners[0];
-            expect(appointments).to.be.an('array');
-            expect(appointments.length).to.equal(0);
-            expect(timeOffs).to.be.an('array');
-            expect(timeOffs.length).to.equal(0);
+            expect(Array.isArray(appointments)).toBe(true);
+            expect(appointments.length).toBe(0);
+            expect(Array.isArray(timeOffs)).toBe(true);
+            expect(timeOffs.length).toBe(0);
             done();
           });
       });
@@ -121,14 +120,14 @@ describe('Availabilities Library', () => {
         const endDate = (new Date(2017, 3, 3, 10, 0)).toISOString();
         fetchPractitionerData({ practitioners, startDate, endDate })
           .then(({ practitioners: newPractitioners }) => {
-            expect(newPractitioners).to.be.an('array');
-            expect(newPractitioners.length).to.equal(1);
+            expect(Array.isArray(newPractitioners)).toBe(true);
+            expect(newPractitioners.length).toBe(1);
 
             const { appointments, timeOffs } = newPractitioners[0];
-            expect(appointments).to.be.an('array');
-            expect(appointments.length).to.equal(2);
-            expect(timeOffs).to.be.an('array');
-            expect(timeOffs.length).to.equal(0);
+            expect(Array.isArray(appointments)).toBe(true);
+            expect(appointments.length).toBe(2);
+            expect(Array.isArray(timeOffs)).toBe(true);
+            expect(timeOffs.length).toBe(0);
             done();
           });
       });
@@ -137,7 +136,7 @@ describe('Availabilities Library', () => {
 
   describe('#fetchAvailabilities', () => {
     it('should be a function', (done) => {
-      expect(fetchAvailabilities).to.be.a('function');
+      expect(typeof fetchAvailabilities).toBe('function');
       done();
     });
 
@@ -156,8 +155,8 @@ describe('Availabilities Library', () => {
 
         fetchAvailabilities(options)
           .then((availabilities) => {
-            expect(availabilities).to.be.an('array');
-            expect(availabilities.length).to.equal(0);
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(0);
             // const endTime = Date.now();
             //console.log('Time elapsed:', endTime - startTime);
             done();
@@ -180,9 +179,9 @@ describe('Availabilities Library', () => {
 
         fetchAvailabilities(options)
           .then((availabilities) => {
-            expect(availabilities).to.be.an('array');
-            expect(availabilities.length).to.equal(1);
-            expect(availabilities[0]).to.deep.equal({
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(1);
+            expect(availabilities[0]).toEqual({
               startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
             });
@@ -209,19 +208,19 @@ describe('Availabilities Library', () => {
 
         fetchAvailabilities(options)
           .then((availabilities) => {
-            expect(availabilities).to.be.an('array');
-            expect(availabilities.length).to.equal(3);
-            expect(availabilities[0]).to.deep.equal({
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(3);
+            expect(availabilities[0]).toEqual({
               startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
             });
 
-            expect(availabilities[1]).to.deep.equal({
+            expect(availabilities[1]).toEqual({
               startDate: (new Date(2017, 3, 3, 15, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
             });
 
-            expect(availabilities[2]).to.deep.equal({
+            expect(availabilities[2]).toEqual({
               startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 17, 0)).toISOString(),
             });
@@ -248,24 +247,24 @@ describe('Availabilities Library', () => {
         fetchAvailabilities(options)
           .then((availabilities) => {
             //console.log('availabilities', availabilities);
-            expect(availabilities).to.be.an('array');
-            expect(availabilities.length).to.equal(4);
-            expect(availabilities[0]).to.deep.equal({
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(4);
+            expect(availabilities[0]).toEqual({
               startDate: (new Date(2017, 3, 3, 8, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 9, 0)).toISOString(),
             });
 
-            expect(availabilities[1]).to.deep.equal({
+            expect(availabilities[1]).toEqual({
               startDate: (new Date(2017, 3, 3, 9, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 10, 0)).toISOString(),
             });
 
-            expect(availabilities[2]).to.deep.equal({
+            expect(availabilities[2]).toEqual({
               startDate: (new Date(2017, 3, 3, 10, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
             });
 
-            expect(availabilities[3]).to.deep.equal({
+            expect(availabilities[3]).toEqual({
               startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
               endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
             });
@@ -294,8 +293,8 @@ describe('Availabilities Library', () => {
         fetchAvailabilities(options)
           .then((availabilities) => {
             // debugger;
-            expect(availabilities).to.be.an('array');
-            expect(availabilities.length).to.equal(36);
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(36);
             const endTime = Date.now();
             //console.log('Time elapsed:', endTime - startTime);
             done();
