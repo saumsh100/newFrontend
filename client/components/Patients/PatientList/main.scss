@@ -16,11 +16,26 @@ ul {
   border-bottom-color: #8cbcd6;
 }
 
+.grow {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
 .appointment {
   display: flex;
   justify-content: space-between;
   margin: 20px;
   padding-bottom: 20px;
+}
+
+.headerInput {
+  width: 100%;
+}
+
+.input {
+  margin-right: 5%;
+  margin-left: 5%;
+  width: 90%;
 }
 
 .upcoming{
@@ -33,9 +48,33 @@ ul {
   }
 }
 
+.header {
+  width: 100%;
+  margin-bottom: 10px;
+  padding-left: 15px;
+}
+
+.upcomingHead {
+  width: 100%;
+  &::before {
+    padding-left: 0px;
+    display: block;
+    height: 5px;
+    content: '';
+    background: #8cbcd6;
+  }
+}
+
 .searchList{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  img {
+    margin-right: 20px;
+  }
+  div {
+    text-align: left;
+    font-family: "Gotham-Medium";
+  }
 }
 
 .end {
@@ -328,19 +367,20 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 760px;
+    max-height: 700px;
     margin: 0;
     padding: 0;
     width: 100%;
   }
-  .patients_list__users2 {
+  .patients_list__users_loading {
     position: relative;
-    width: 100%;
-    z-index: 2;
+    z-index: 0;
     overflow-y: auto;
-    max-height: 720px;
+    height: 690px;
     margin: 0;
     padding: 0;
+    width: 100%;
+    background-color: #E0E0E0;
   }
 
   .users {
@@ -351,10 +391,6 @@ ul {
 
     &:hover {
       background: #E7E7E7;
-    }
-
-    &:not(:hover){
-      background: white;
     }
 
     &__active {

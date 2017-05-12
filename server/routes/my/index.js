@@ -1,29 +1,24 @@
 
 const myRouter = require('express').Router();
-const practitionersRouter = require('../api/practitioners');
-const servicesRouter = require('../api/services');
-const availabilitiesRouter = require('../api/availabilities');
+const fs = require('fs');
 const newAvailabilitiesRouter = require('./newAvailabilitiesRouter');
 const requestRouter = require('../api/request');
-const patientsRouter = require('../api/patients');
 const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
+const Patient = require('../../models/Patient');
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
 const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
-myRouter.use('/practitioners', practitionersRouter);
-myRouter.use('/services', servicesRouter);
-myRouter.use('/availabilities', availabilitiesRouter);
 myRouter.use('/requests', requestRouter);
-myRouter.use('/patients', patientsRouter);
 myRouter.use('/reservations', reservationsRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
+myRouter.param('patientId', loaders('patient', 'Patient'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
 
-myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
+myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
     // Needs to match the structure of the reducers
     const { entities } = normalize('account', req.account);
@@ -32,6 +27,7 @@ myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
         account: req.account,
         services: req.account.services,
         practitioners: req.account.practitioners,
+        selectedServiceId: req.account.services[0].id,
       },
 
       entities,
@@ -46,11 +42,45 @@ myRouter.get('/embeds/:accountIdJoin', (req, res, next) => {
   }
 });
 
-myRouter.get('/widgets/:accountId', (req, res, next) => {
+myRouter.get('/test', (req, res, next) => {
   try {
     return res.render('widget', {
       host: `${req.protocol}://${req.headers.host}`,
       account: req.account,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+function replaceIndex(string, regex, index, repl) {
+  let nth = -1;
+  return string.replace(regex, (match) => {
+    nth += 1;
+    if (index === nth) return repl;
+    return match;
+  });
+}
+
+const toString = str => `"${str}"`;
+const toTemplateString = str => `\`${str}\``;
+
+myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
+  try {
+    fs.readFile(`${__dirname}/widget.js`, 'utf8', (err, widgetJS) => {
+      if (err) throw err;
+      fs.readFile(`${__dirname}/widget.css`, 'utf8', (_err, widgetCSS) => {
+        if (_err) throw _err;
+        const color = req.account.bookingWidgetPrimaryColor || '#FF715A';
+        const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${req.account.id}/embed`;
+        const withColor = replaceIndex(widgetJS, /__REPLACE_THIS_COLOR__/g, 1, toString(color));
+        const withSrc = replaceIndex(withColor, /__REPLACE_THIS_IFRAME_SRC__/g, 1, toString(iframeSrc));
+        const replacedWidgetJS = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
+
+        // TODO: need to be able to minify and compress code UglifyJS
+        res.send(replacedWidgetJS);
+      });
     });
   } catch (err) {
     next(err);
@@ -63,6 +93,32 @@ myRouter.get('/logo/:accountId', (req, res, next) => {
 		const { logo, address, clinicName, bookingWidgetPrimaryColor } = account;
 		res.send({ logo, address, clinicName, bookingWidgetPrimaryColor });
 	});
+});
+
+myRouter.post('/patientCheck', (req, res, next) => {
+  const email = req.body.email.toLowerCase();
+  return Patient.filter({ email }).run()
+    .then(p => res.send({ exists: !!p[0] }))
+    .catch(next);
+});
+
+myRouter.post('/patients', (req, res, next) => {
+  return Patient.save(req.body)
+    .then(patient => res.status(201).send(normalize('patient', patient)))
+    .catch(next);
+});
+
+myRouter.post('/patients/:patientId/confirm', (req, res, next) => {
+  const { confirmCode } = req.body;
+  try {
+    if (confirmCode !== '8888') {
+      res.status(400).send('Invalid confirmation code');
+    }
+
+    res.send(req.patient);
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Very important we catch all other endpoints,

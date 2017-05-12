@@ -54,7 +54,7 @@ class UpcomingPatientList extends Component {
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={styles.searchList}>
           <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
-          <div className={styles.users__wrapper}>
+          <div className={styles.grow}>
             <div className={styles.users__header}>
               <div className={styles.users__name}>
                 {name}, {age}
@@ -99,57 +99,57 @@ class UpcomingPatientList extends Component {
 
   render() {
     const inputProps = {
-      placeholder: 'Patient Search',
+      placeholder: 'Search...',
       value: this.state.value,
       onChange: this.onChange,
       onKeyDown: this.submit,
       name: 'patients',
     };
+    const display = (this.props.patientList[0] ? (this.props.patientList.map((user, i) => {
+      return (
+        <PatientListItem
+          key={user.appointment.id + i}
+          user={user}
+          currentPatient={this.props.currentPatient}
+          setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
+        />
+      );
+    })) : (<div className={styles.patients_list__users_loading} />)
+    );
 
     return (
       <div className={styles.patients_list}>
         <Row className={styles.topRow}>
-          <Card>
-            <CardHeader title="Patients" />
-          <div className={`${styles.patients_list__search} ${styles.search}`}>
-            <label className={styles.search__label} htmlFor="search__input">
-              <i className="fa fa-search" />
-            </label>
-            <AutoCompleteForm
-              value={this.state.value}
-              getSuggestions={this.getSuggestions}
-              inputProps={inputProps}
-            />
-            <div className={styles.search__edit}>
-              <i className="fa fa-pencil" />
+          <Card className={styles.headerInput}>
+            <div className={styles.header}>
+              <CardHeader title="Patient Search" />
             </div>
-          </div>
+            <div className={styles.input}>
+              <AutoCompleteForm
+                value={this.state.value}
+                getSuggestions={this.getSuggestions}
+                inputProps={inputProps}
+              />
+            </div>
           </Card>
         </Row>
         <Row className={styles.listRow}>
-          <Card>
-          <div className={styles.patients_list__users}>
+          <Card className={styles.upcomingHead}>
+            <div className={styles.header}>
               <CardHeader title="Upcoming Patients" />
-            <InfiniteScroll
-              loadMore={this.props.loadMore}
-              loader={<div style={{ clear: 'both' }}>Loading...</div>}
-              hasMore={this.props.moreData}
-              initialLoad={false}
-              useWindow={false}
-              threshold={100}
-            >
-              {this.props.patientList.map((user, i) => {
-                return (
-                  <PatientListItem
-                    key={user.appointment.id + i}
-                    user={user}
-                    currentPatient={this.props.currentPatient}
-                    setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
-                  />
-                );
-              })}
-            </InfiniteScroll>
-          </div>
+            </div>
+            <div className={styles.patients_list__users}>
+              <InfiniteScroll
+                loadMore={this.props.loadMore}
+                loader={<div style={{ clear: 'both' }}>Loading...</div>}
+                hasMore={this.props.moreData}
+                initialLoad={false}
+                useWindow={false}
+                threshold={100}
+              >
+                {display}
+              </InfiniteScroll>
+            </div>
           </Card>
         </Row>
       </div>
@@ -166,4 +166,5 @@ UpcomingPatientList.propTypes = {
   submitSearch: PropTypes.func,
   setSearchPatient: PropTypes.func,
 };
+
 export default UpcomingPatientList;
