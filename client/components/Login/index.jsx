@@ -3,12 +3,14 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../library';
-import login from '../../thunks/auth';
+import { login } from '../../thunks/auth';
 import LoginForm from './LoginForm';
 import styles from './styles.scss';
 
 class Login extends Component {
   render() {
+    const { location: { state } } = this.props;
+
     return (
       <div className={styles.backDrop}>
         <Card className={styles.loginForm}>
@@ -19,7 +21,7 @@ class Login extends Component {
               alt="CareCru Logo"
             />
           </div>
-          <LoginForm onSubmit={this.props.login} />
+          <LoginForm onSubmit={() => this.props.login(state && state.from)} />
         </Card>
       </div>
     );
