@@ -375,6 +375,19 @@ const SEEDS = {
       isCancelled: false,
       note: 'Kirat Appointment',
     },
+    {
+      accountId,
+      startDate: recentStartTime.add(48 * oneHour),
+      endDate: recentStartTime.add(49 * oneHour),
+      patientId: markPatientId,
+      serviceId,
+      practitionerId,
+      chairId,
+      isPatientConfirmed: true,
+      isSyncedWithPMS: true,
+      isCancelled: false,
+      note: 'mark appointment',
+    },
 
     // OTHER DATES
 
@@ -635,6 +648,8 @@ const SEEDS = {
     },
     {
       id:"c7a04662-35be-448c-bb63-83f94713b9b5",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Giavani",
       lastName:"Lidington",
       email:"glidington0@nhs.uk",
@@ -653,6 +668,8 @@ const SEEDS = {
     },
     {
       id:"2ac72466-5c52-4a14-8f60-4341516b7d0a",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Sibelle",
       lastName:"McCamish",
       email:"smccamish1@chicagotribune.com",
@@ -671,6 +688,8 @@ const SEEDS = {
     },
     {
       id:"b6ee696e-41c9-42bb-886c-0637ec54896f",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Amber",
       lastName:"Quincee",
       email:"aquincee2@goo.ne.jp",
@@ -689,6 +708,8 @@ const SEEDS = {
     },
     {
       id:"9917e3f5-c558-44fa-8f32-e3cd1adde9ab",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Nannie",
       lastName:"Lundbech",
       email:"nlundbech3@howstuffworks.com",
@@ -707,6 +728,8 @@ const SEEDS = {
     },
     {
       id:"d729f619-34d7-4979-8970-327940541053",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Barret",
       lastName:"Fitchett",
       email:"bfitchett4@google.es",
@@ -725,6 +748,8 @@ const SEEDS = {
     },
     {
       id:"05415c97-c38a-4ad0-867a-87ee561cd173",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Claybourne",
       lastName:"Grimsdale",
       email:"cgrimsdale5@angelfire.com",
@@ -743,6 +768,8 @@ const SEEDS = {
     },
     {
       id:"4b0d43f7-db99-4f0d-8d20-9210893d4553",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Cross",
       lastName:"Grenkov",
       email:"cgrenkov6@google.cn",
@@ -761,6 +788,8 @@ const SEEDS = {
     },
     {
       id:"374e2080-eefe-4f8d-952c-006b2404b0e6",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Dorthea",
       lastName:"Strewthers",
       email:"dstrewthers7@sbwire.com",
@@ -779,6 +808,8 @@ const SEEDS = {
     },
     {
       id:"dff8be6c-a1af-43f6-b75b-46e55723a00d",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Lavina",
       lastName:"Tipping",
       email:"ltipping8@youtube.com",
@@ -797,6 +828,8 @@ const SEEDS = {
     },
     {
       id:"8bcfd355-a063-4cd0-a7a0-4435a0609392",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Gill",
       lastName:"Ambrosoli",
       email:"gambrosoli9@cbsnews.com",
@@ -815,6 +848,8 @@ const SEEDS = {
     },
     {
       id:"d7d646b4-9e89-4209-8309-e45595e359bf",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Valerie",
       lastName:"Presdie",
       email:"vpresdiea@cocolog-nifty.com",
@@ -833,6 +868,8 @@ const SEEDS = {
     },
     {
       id:"a96e1d9a-533e-4df7-8e34-3bfe8e34ee53",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Kerrin",
       lastName:"Borrel",
       email:"kborrelb@dmoz.org",
@@ -851,6 +888,8 @@ const SEEDS = {
     },
     {
       id:"ce58576c-574d-4b9c-9797-985d30d3d16f",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Margalit",
       lastName:"Kettleson",
       email:"mkettlesonc@unc.edu",
@@ -869,6 +908,8 @@ const SEEDS = {
     },
     {
       id:"5d16aefd-0695-4bee-a44e-1f67f16ede62",
+      accountId,
+      isSyncedWithPMS: false,
       firstName:"Roderick",
       lastName:"Chazelle",
       email:"rchazelled@mashable.com",
@@ -887,6 +928,8 @@ const SEEDS = {
     },
     {
       id:"e8950859-6903-426f-9b52-efabd483f8dd",
+      accountId,
+      isSyncedWithPMS: false,
       firstName: "Seamus",
       lastName: "Penvarden",
       email: "spenvardene@php.net",

@@ -1,27 +1,35 @@
 
 import React, { PropTypes, Component, defaultProps } from 'react';
+import classNames from 'classnames';
 import styles from './styles.scss';
 
 export default function CheckboxImage(props) {
   const {
     id,
-    value,
-    image,
     label,
     checked,
     onChange,
+    imgColor,
+    imageSrc,
   } = props;
 
+  let imgStyle = styles.checkBoxImage__photo;
+
+  if (checked && imgColor) {
+    imgStyle = classNames(styles[imgColor], imgStyle);
+  } else if (checked && !imgColor) {
+    imgStyle = classNames(styles.primaryColor, imgStyle);
+  }
+
   return (
-    <div className={styles.checkbox}>
+    <div className={styles.checkBoxImage}>
       <input
-        className={styles.filter_practitioner__checkbox}
         type="checkbox" checked={checked} id={id}
         onChange={onChange}
       />
-      <label className={styles.filter_practitioner__label} htmlFor={id}>
-        <li className={styles.filter_practitioner__item}>
-          <img className={styles.filter_practitioner__photo} src="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner" />
+      <label className={styles.checkBoxImage__label} htmlFor={id}>
+        <li className={styles.checkBoxImage__list}>
+          <img className={imgStyle} src={imageSrc} />
           {label}
         </li>
       </label>

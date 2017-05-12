@@ -4,29 +4,62 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
-import setCurrentScheduleDate from '../thunks/date';
+import { setScheduleDate } from '../actions/schedule';
+
 import {
-  addPractitionerToFilter,
-  selectAppointmentType,
-  removePractitionerFromFilter,
-  setSheduleMode,
   setAllFilters,
 } from '../thunks/schedule';
 
-
 class ScheduleContainer extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+  }
+
+  componentDidMount() {
+    const {
+      currentDate,
+    } = this.props;
+
+    const startDate = currentDate.startOf('day').toISOString();
+    const endDate = currentDate.endOf('day').toISOString();
+
+    const query = {
+      startDate,
+      endDate,
+    };
+
     Promise.all([
       this.props.fetchEntities({ key: 'practitioners'}),
       this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
-      this.props.fetchEntities({ key: 'appointments' }),
+      this.props.fetchEntities({ key: 'appointments', params: query }),
       this.props.fetchEntities({ key: 'patients' }),
-      this.props.fetchEntities({ key: 'requests' }),
-
     ]).then(() => {
-      this.props.setAllFilters();
-    }).catch(e => console.log(e))
+      this.props.setAllFilters(['chairs', 'practitioners', 'services']);
+      this.setState({ loaded: true });
+    }).catch(e => console.log(e));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      currentDate,
+    } = this.props;
+
+    const nextPropsDate = nextProps.schedule.toJS().scheduleDate;
+
+    if (!nextPropsDate.isSame(currentDate)) {
+      const startDate = nextPropsDate.startOf('day').toISOString();
+      const endDate = nextPropsDate.endOf('day').toISOString();
+
+      const query = {
+        startDate,
+        endDate,
+      };
+      this.props.fetchEntities({ key: 'appointments', params: query });
+    }
   }
 
   render() {
@@ -34,55 +67,55 @@ class ScheduleContainer extends React.Component {
       practitioners,
       schedule,
       appointments,
-      setCurrentScheduleDate,
-      addPractitionerToFilter,
-      removePractitionerFromFilter,
-      addServiceFilter,
-      selectAppointmentType,
-      fetchEntities,
-      setSheduleMode,
-      requests,
+      setScheduleDate,
       services,
       patients,
       chairs,
     } = this.props;
 
+    let loadComponent = null;
 
-    return (
+    if (this.state.loaded) {
+      loadComponent = (
         <ScheduleComponent
           practitioners={practitioners}
           schedule={schedule}
           appointments={appointments}
-          setCurrentScheduleDate={setCurrentScheduleDate}
-          addPractitionerToFilter={addPractitionerToFilter}
-          removePractitionerFromFilter={removePractitionerFromFilter}
-          selectAppointmentType={selectAppointmentType}
-          fetchEntities={selectAppointmentType}
-          setSheduleMode={setSheduleMode}
-          requests={requests}
+          setScheduleDate={setScheduleDate}
           services={services}
           patients={patients}
           chairs={chairs}
         />
+      )
+    }
+
+    return (
+      <div>
+        {loadComponent}
+      </div>
     );
   }
 }
 
 ScheduleContainer.propTypes = {
+  setAllFilters: PropTypes.func,
   fetchEntities: PropTypes.func,
-  setSheduleMode: PropTypes.func,
-  setCurrentScheduleDate: PropTypes.func,
-  addPractitionerToFilter: PropTypes.func,
-  removePractitionerFromFilter: PropTypes.func,
-  selectAppointmentType: PropTypes.func,
+  setScheduleDate: PropTypes.func,
+  practitioners: PropTypes.object,
+  currentDate: PropTypes.object,
+  appointments: PropTypes.object,
+  schedule: PropTypes.object,
+  services: PropTypes.object,
+  patients: PropTypes.object,
+  chairs: PropTypes.object,
 };
 
 function mapStateToProps({ entities, schedule }) {
   return {
     practitioners: entities.get('practitioners'),
     schedule,
+    currentDate: schedule.toJS().scheduleDate,
     appointments: entities.get('appointments'),
-    requests: entities.get('requests'),
     patients: entities.get('patients'),
     services: entities.get('services'),
     chairs: entities.get('chairs'),
@@ -91,14 +124,10 @@ function mapStateToProps({ entities, schedule }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    setCurrentScheduleDate,
-    addPractitionerToFilter,
-    removePractitionerFromFilter,
-    selectAppointmentType,
     fetchEntities,
-    setSheduleMode,
     setAllFilters,
-  }, dispatch);
+    setScheduleDate,
+}, dispatch);
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

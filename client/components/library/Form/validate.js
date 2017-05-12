@@ -5,10 +5,18 @@ import zxcvbn from 'zxcvbn';
 const asyncEmailValidatePatient = (values) => {
   return axios.post('/patientCheck', { email: values.email })
     .then((response) => {
-      if (response.data.exists === true) {
+      if (response.data.exists) {
         throw { email: 'There is already a user with that email' };
       }
     });
+};
+
+const phoneValidate = (value) => {
+  if (!/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s.]{0,1}[0-9]{3}[-\s.]{0,1}[0-9]{4}$/i.test(value)) {
+    return 'Invalid phone Number';
+  }
+
+  return undefined;
 };
 
 const emailValidate = (value) => {
@@ -89,4 +97,5 @@ export {
   compose,
   passwordStrength,
   numDigitsValidate,
+  phoneValidate,
 };
