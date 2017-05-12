@@ -85,8 +85,9 @@ patientsRouter.get('/', (req, res, next) => {
  */
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
-  const patientData = Object.assign({}, req.body, { accountId: accountId });
+  const patientData = Object.assign({}, req.body, { accountId });
 
+  console.log('>>>>', patientData);
   return Patient.save(patientData)
     .then(patient => res.status(201).send(normalize('patient', patient)))
     .catch(next);

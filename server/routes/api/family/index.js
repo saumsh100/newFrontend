@@ -15,10 +15,12 @@ familyRouter.get('/:familyId', checkPermissions('family:read'), (req, res, next)
     accountId,
     joinObject,
   } = req;
+  console.log(accountId, joinObject, req.family.id);
 
   return Family
     .filter({
       accountId,
+      id: req.family.id,
     })
     .getJoin(joinObject)
     .run()
@@ -43,7 +45,6 @@ familyRouter.get('/', checkPermissions('family:read'), (req, res, next) => {
  * Create an family entry
  */
 familyRouter.post('/', checkPermissions('family:create'), (req, res, next) => {
-  console.log(req.body);
   const familyData = Object.assign({}, { accountId: req.accountId }, req.body);
   return Family.save(familyData)
     .then(family => res.status(201).send(normalize('family', family)))
