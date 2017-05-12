@@ -99,13 +99,12 @@ class UpcomingPatientList extends Component {
 
   render() {
     const inputProps = {
-      placeholder: 'Patient Search',
+      placeholder: 'Search...',
       value: this.state.value,
       onChange: this.onChange,
       onKeyDown: this.submit,
       name: 'patients',
     };
-    console.log(this.props.patientList[0])
     const display = (this.props.patientList[0] ? (this.props.patientList.map((user, i) => {
       return (
         <PatientListItem
@@ -121,11 +120,11 @@ class UpcomingPatientList extends Component {
     return (
       <div className={styles.patients_list}>
         <Row className={styles.topRow}>
-          <Card>
+          <Card className={styles.headerInput}>
             <div className={styles.header}>
-              <CardHeader title="Patients" />
+              <CardHeader title="Patient Search" />
             </div>
-            <div className={`${styles.patients_list__search} ${styles.search}`}>
+            <div className={styles.input}>
               <AutoCompleteForm
                 value={this.state.value}
                 getSuggestions={this.getSuggestions}

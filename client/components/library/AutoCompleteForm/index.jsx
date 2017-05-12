@@ -47,7 +47,7 @@ class AutoCompleteForm extends Component {
   displayField(props) {
     delete props.className;
 
-    if (this.props.className) {
+    if (props.className) {
       props.className = this.props.className;
     }
 
