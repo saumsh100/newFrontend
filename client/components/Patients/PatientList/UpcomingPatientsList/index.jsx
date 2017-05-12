@@ -115,8 +115,8 @@ class UpcomingPatientList extends Component {
           setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
         />
       );
-    })) : (<div className={styles.patients_list__users_loading} />
-    ))
+    })) : (<div className={styles.patients_list__users_loading} />)
+    );
 
     return (
       <div className={styles.patients_list}>
