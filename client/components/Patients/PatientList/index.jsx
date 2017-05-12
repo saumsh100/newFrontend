@@ -121,6 +121,13 @@ class PatientList extends Component {
       values.key = 'patient';
     }
 
+    values.address = {
+      country: values.country,
+      province: values.province,
+      street: values.street,
+      city: values.city,
+    };
+
     this.props.updateEntityRequest({
       key,
       values,

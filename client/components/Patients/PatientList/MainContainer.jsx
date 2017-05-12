@@ -4,6 +4,8 @@ import moment from 'moment';
 import uniqBy from 'lodash/uniqBy';
 import NewPatientForm from './NewPatientForm';
 import EditPatientForm from './EditPatientForm';
+import PreferencesPatientForm from './PreferencesPatientForm';
+import ContactPatientForm from './ContactPatientForm';
 import TextMessage from './TextMessage';
 import UpcomingPatientsList from './UpcomingPatientsList';
 import PatientInfoDisplay from './PatientInfoDisplay';
@@ -27,7 +29,15 @@ class MainContainer extends Component {
     super(props);
     this.state = {
       birthday: new Date(),
+      index: 0,
     };
+    this.handleTabChange = this.handleTabChange.bind(this);
+  }
+
+  handleTabChange(index) {
+    this.setState({
+      index,
+    });
   }
 
   render() {
@@ -101,7 +111,8 @@ class MainContainer extends Component {
                     <div className={styles.right}>
                       {(this.props.currentPatient ? (
                         <Tabs
-                          index={0}
+                          index={this.state.index}
+                          onChange={(index) => this.handleTabChange(index)}
                         >
                           <Tab
                             label="Personal"
@@ -114,11 +125,49 @@ class MainContainer extends Component {
                               styles={styles}
                             />
                             <Button
-                              className={styles.formButton}
+                              className={styles.deleteButton}
                               onClick={this.props.deletePatient}
                             >
                               Delete Patient
                             </Button>
+                          </Tab>
+                          <Tab
+                            label="Contact"
+                            className={styles.tabs}
+                          >
+                            <ContactPatientForm
+                              onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
+                              currentPatient={this.props.currentPatient}
+                              formName={'contactPatient'}
+                              styles={styles}
+                            />
+                          </Tab>
+                          <Tab
+                            label="Insurance"
+                            className={styles.tabs}
+                          >
+                            <div>
+                              Coming Soon!
+                            </div>
+                          </Tab>
+                          <Tab
+                            label="Preferences"
+                            className={styles.tabs}
+                          >
+                            <PreferencesPatientForm
+                              onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
+                              currentPatient={this.props.currentPatient}
+                              formName={'preferencesPatient'}
+                              styles={styles}
+                            />
+                          </Tab>
+                          <Tab
+                            label="Family"
+                            className={styles.tabs}
+                          >
+                            <div>
+                              Coming Soon!
+                            </div>
                           </Tab>
                         </Tabs>
                         ) : <div className={styles.loading}>Loading...</div>)}

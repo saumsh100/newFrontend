@@ -24,7 +24,17 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
       value: 'InActive',
     }
     ,
-  ]
+  ];
+
+  const gender = [
+    {
+      value: 'Male',
+    },
+    {
+      value: 'Female',
+    }
+    ,
+  ];
 
   return (
     <Form
@@ -66,37 +76,33 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
         <div className={styles.calendarIcon}>
           <i className="fa fa-calendar" />
         </div>
-        <Field
-          required
-          className={styles.nameFields}
-          component="DayPicker"
-          name="birthDate"
-          label="Birth Date &#128197;"
-        />
-        <Field
-          className={styles.nameFields}
-          name="Age"
-          validate={[maxLength(15)]}
-          label="Age"
-        />
-      </div>
-      <Field
-        required
-        className={styles.langaugeInput}
-        name="status"
-        label="Status"
-        component="DropdownSelect"
-        options={statusOptions}
-      />
-      <div className={styles.genger}>
-        <div className={styles.langaugeIcon}>
-          <i className="fa fa-globe" />
+        <div className={styles.birthFields}>
+          <Field
+            required
+            className={styles.nameFields}
+            component="DayPicker"
+            name="birthDate"
+            label="Birth Date &#128197;"
+          />
         </div>
         <Field
           required
           className={styles.genderInput}
           name="gender"
+          component="DropdownSelect"
           label="Gender"
+          options={gender}
+        />
+      </div>
+      <div className={styles.names}>
+        <div className={styles.langaugeIcon}>
+          <i className="fa fa-globe" />
+        </div>
+        <Field
+          required
+          className={styles.langaugeInput}
+          name="language"
+          label="Language"
           component="DropdownSelect"
           options={languages}
         />

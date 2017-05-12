@@ -13,6 +13,7 @@ ul {
 }
 
 .tabs {
+  padding: 8px;
   border-bottom-color: #8cbcd6;
 }
 
@@ -24,8 +25,7 @@ ul {
 .appointment {
   display: flex;
   justify-content: space-between;
-  margin: 20px;
-  padding-bottom: 20px;
+  margin: 20px 20px 0 20px;
 }
 
 .headerInput {
@@ -114,12 +114,85 @@ ul {
   background-color: #fafafa;
 }
 
+.birthFields{
+  margin-left: 4%;
+  width: 100%;
+}
+
 .middleField {
   width: 20%;
   margin-right: 1%;
 }
+.firstField {
+  flex-grow: 1;
+}
+
+.twoFields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.drop {
+
+}
 
 .langaugeInput{
+  position: relative;
+  font-size: 16px;
+  font-family: Gotham-Book;
+  height: 28.89px;
+  width: 95%;
+  padding: 5px 5px 5px 0px;
+  margin-right: 2%;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: border 500ms ease-out;
+}
+.prefInput{
+  position: relative;
+  font-size: 16px;
+  font-family: Gotham-Book;
+  height: 28.89px;
+  width: 95%;
+  padding: 5px 5px 5px 0px;
+  margin-left: 2.5%;
+  margin-right: 2%;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: border 500ms ease-out;
+}
+.genderInput{
+  position: relative;
+  font-size: 16px;
+  font-family: Gotham-Book;
+  height: 28.89px;
+  width: 90%;
+  padding: 5px 5px 5px 0px;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: border 500ms ease-out;
+  margin: 20px 2.5% 0 .5%;
+}
+
+.countryInput{
   position: relative;
   font-size: 16px;
   font-family: Gotham-Book;
@@ -135,25 +208,7 @@ ul {
   -ms-flex-align: center;
   align-items: center;
   transition: border 500ms ease-out;
-}
-.genderInput{
-  margin-left: 15%;
-  margin-right: 20%;
-  width: 40%;
-  position: relative;
-  font-size: 16px;
-  font-family: Gotham-Book;
-  height: 28.89px;
-  padding: 5px 5px 5px 0px;
-  cursor: pointer;
-  border-bottom: 1px solid #d5d5d5;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  transition: border 500ms ease-out;
+  margin: 20px 0 0 .5%;
 }
 
 .langaugeIcon {
@@ -177,6 +232,75 @@ ul {
   }
 }
 
+.noIcon {
+  width: 40%;
+  height: 100%;
+
+  i {
+    margin: 55% 20% 30% 0;
+    font-size: 2.4em;
+    color: #8cbcd6;
+  }
+}
+.noIcon2 {
+  width: 52%;
+  height: 100%;
+
+  i {
+    margin: 55% 20% 30% 0;
+    font-size: 2.4em;
+    color: #8cbcd6;
+  }
+}
+
+.mailIcon {
+  width: 20%;
+  height: 100%;
+
+  i {
+    margin: 55% 10% 30% 0;
+    font-size: 2.4em;
+    color: #8cbcd6;
+  }
+}
+
+.compref {
+  margin-top: 30px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.toggle{
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  margin: auto 0;
+}
+
+.checkbox{
+  display: flex;
+  justify-content: space-between;
+  margin: auto 0;
+}
+
+.morning{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.marginZero {
+  label {
+    margin: 0 5px 5px 5px;
+  }
+}
+
+.comprestitle {
+  flex-grow: 1;
+}
+
 .calendarIcon {
   width: 25%;
   height: 100%;
@@ -191,11 +315,35 @@ ul {
 .form {
   margin-right: 30px;
   margin-left: 30px;
+  button {
+    position: absolute;
+    right:    10px;
+    bottom:   2px;
+  }
+}
+
+.deleteButton {
+  position: absolute;
+  bottom:   0;
+  margin-left: 20px;
+  margin-bottom: 2px;
 }
 
 .names {
   display: flex;
   justify-content: space-between;
+}
+
+.names2 {
+  display: flex;
+  justify-content: space-between;
+  height: 53px;
+}
+
+.names3 {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
 }
 
 .status {
@@ -477,7 +625,7 @@ ul {
   }
 
   &__header {
-    height: 370px;
+    height: 310px;
     min-height: 310px;
     padding: 50px;
     background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
@@ -487,7 +635,7 @@ ul {
   .patient_profile {
     width: 500px;
     background: #fafafa;
-    margin-top: 40px;
+    margin-bottom: 10px;
     margin-left: 30px;
 
 
@@ -515,11 +663,11 @@ ul {
   &__wrapper {
     display: flex;
     flex-direction: row;
-    height: 405px;
+    height: 465px;
     background: #cdcaca;
     width: 100%;
     .left {
-      height: 405px;
+      height: 465px;
       min-width: 250px;
       background-color: $primary-white;
       border-right: 2px solid $primary-grey;
@@ -532,7 +680,7 @@ ul {
       }
     }
     .middle {
-      height: 405px;
+      height: 465px;
       min-width: 250px;
       background-color: $primary-white;
       &::before {
@@ -544,7 +692,7 @@ ul {
       }
     }
     .right {
-      height: 405px;
+      height: 465px;
       min-width: 250px;
       background: #fafafa;
       font-size: 12px;
