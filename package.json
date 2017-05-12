@@ -61,6 +61,7 @@
     "globalize": "^1.1.2",
     "handlebars": "~4.0.5",
     "helmet": "^1.1.0",
+    "history": "^4.6.1",
     "immutability-helper": "^2.0.0",
     "immutable": "^4.0.0-rc.2",
     "interval-arithmetic-eval": "^0.4.3",
