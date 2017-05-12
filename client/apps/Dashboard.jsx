@@ -11,7 +11,7 @@ import Immutable from 'immutable';
 // TODO: improve this to only create socket when use is logged in, JWT is undefined when not...
 import socket from '../socket';
 import connectSocketToStore from '../socket/connectSocketToStore';
-import DashboardRoutes from '../routes/DashboardNew';
+import DashboardRoutes from '../routes/Dashboard';
 import configure from '../store';
 import time from '../../server/util/time';
 import { load } from '../thunks/auth';

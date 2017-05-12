@@ -8,7 +8,7 @@ import _ from 'lodash';
 import * as Immutable from 'immutable';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import socket from '../socket';
-import PatientRoutes from '../routes/PatientNew';
+import PatientRoutes from '../routes/Patient';
 import configure from '../store/availabilitiesStore';
 
 const browserHistory = createBrowserHistory();
