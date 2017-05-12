@@ -144,6 +144,7 @@
     "react-router": "^2.2.2",
     "react-router-redux": "^4.0.2",
     "react-select": "^1.0.0-rc.3",
+    "react-textarea-autosize": "^4.3.0",
     "react-timeago": "^3.1.2",
     "react-toggle": "^3.0.0",
     "recompose": "^0.20.2",
