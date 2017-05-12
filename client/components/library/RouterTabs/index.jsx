@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { compose } from 'recompose';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import Tabs, { Tab } from '../Tabs';
 
 class RouterTabs extends Component {
@@ -43,7 +43,7 @@ class RouterTabs extends Component {
 RouterTabs.propTypes = {
   location: PropTypes.object,
   routes: PropTypes.array.isRequired,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const enhance = compose(withRouter);

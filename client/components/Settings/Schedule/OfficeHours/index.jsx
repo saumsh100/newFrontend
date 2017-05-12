@@ -7,8 +7,6 @@ import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { Header } from '../../../library';
 
-
-
 function OfficeHours(props) {
   const { weeklySchedule } = props;
   const handleSubmit = (values) => {
@@ -41,8 +39,13 @@ OfficeHours.propTypes = {
   updateEntityRequest: PropTypes.func,
 };
 
-function mapStateToProps({ entities }, { activeAccount }) {
-  if (!activeAccount) return {};
+function mapStateToProps({ entities }) {
+  const activeAccount = entities.getIn(['accounts', 'models']).first();
+
+  if (!activeAccount) {
+    return {};
+  }
+
   const weeklySchedule = entities.getIn([
     'weeklySchedules',
     'models',
@@ -51,6 +54,7 @@ function mapStateToProps({ entities }, { activeAccount }) {
 
   return {
     weeklySchedule,
+    activeAccount,
   };
 }
 

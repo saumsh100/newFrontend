@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { browserHistory } from 'react-router';
 import moment from 'moment';
 import styles from './DislogsList.scss';
 
