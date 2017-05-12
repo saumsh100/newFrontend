@@ -1,22 +1,24 @@
 const path = require('path');
 const webpack = require('webpack');
-const baseConfig = require('./webpack.base.config');
 const merge = require('webpack-merge');
+const baseConfig = require('./webpack.base.config');
 const devServer = require('./dev-server.config');
 
-const devServerURL = `http://${devServer.host}:${devServer.port}`;
 const extendWithDevApps = apps =>
-  ['react-hot-loader/patch',
-    `webpack-dev-server/client?${devServerURL}`,
-    'webpack/hot/only-dev-server',
-  ].concat(apps);
+  ['react-hot-loader/patch'].concat(apps);
 
 const projectRoot = process.cwd();
 
 const developmentConfig = merge(baseConfig, {
   entry: {
-    app: extendWithDevApps('./client/entries/app.js'),
-    patient: extendWithDevApps('./client/entries/patient.js'),
+    app: extendWithDevApps([
+      'babel-polyfill',
+      './client/entries/app.js',
+    ]),
+    patient: extendWithDevApps([
+      'babel-polyfill',
+      './client/entries/patient.js',
+    ]),
   },
 
   output: {

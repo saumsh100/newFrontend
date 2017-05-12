@@ -1,3 +1,3 @@
 
 import '../apps/default';
-import '../apps/Dashboard';
+import '../apps/DashboardEntry';
