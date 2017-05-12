@@ -12,6 +12,7 @@ import Checkbox from './Checkbox';
 import CheckboxImage from './CheckboxImage';
 import Collapsible from './Collapsible';
 import DayPicker from './DayPicker';
+import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
 import DashboardStats from './DashboardStats';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
@@ -62,6 +63,7 @@ export {
   ChartStats,
   Collapsible,
   DayPicker,
+  DialogBox,
   DropdownSelect,
   DashboardStats,
   DoubleIcon,

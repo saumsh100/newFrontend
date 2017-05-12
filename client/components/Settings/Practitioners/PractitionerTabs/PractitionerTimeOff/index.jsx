@@ -9,7 +9,7 @@ import {
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
-import { IconButton, Modal, Button } from '../../../../library';
+import { IconButton, Modal, Button, DialogBox } from '../../../../library';
 import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
@@ -158,8 +158,8 @@ class PractitionerTimeOff extends Component {
     return (
       <div>
         {showAddOrListComponent}
-        <Modal
-          key={`addTimeOff`}
+        <DialogBox
+          key={'addTimeOff'}
           actions={actions}
           title="Add Time Off"
           type="small"
@@ -173,7 +173,7 @@ class PractitionerTimeOff extends Component {
             timeOff={formTimeOff}
             handleSubmit={this.handleSubmit}
           />
-        </Modal>
+        </DialogBox>
       </div>
     );
   }

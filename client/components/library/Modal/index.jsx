@@ -62,27 +62,6 @@ class Modal extends Component {
       modalBodyClassName = type ? classNames(styles[type], modalBodyClassName) : classNames(styles.medium, modalBodyClassName);
     }
 
-
-    let showFooterComponent = null;
-    if (actions) {
-      showFooterComponent = (
-        <div className={styles.modalBody__footer}>
-          {actions.map((action, index) => {
-            return (
-              <action.component
-                key={`action_${index}`}
-                onClick={action.onClick}
-                className={styles.modalBody__action}
-                {...action.props}
-              >
-                {action.label}
-              </action.component>
-            );
-          })}
-        </div>
-      );
-    }
-
     const backDropClassName = classNames(styles.backDropDefault);
 
     return (
@@ -92,17 +71,7 @@ class Modal extends Component {
           className={backDropClassName}
         />
         <Card className={modalBodyClassName}>
-          {!custom && <div className={styles.modalBody__modalHeader}>
-            <CardHeader title={title} />
-            <div
-              className={styles.modalBody__closeIcon}
-              onClick={this.deactivate}
-            >
-              x
-            </div>
-          </div>}
           {children}
-          {showFooterComponent}
         </Card>
       </div>
     );
