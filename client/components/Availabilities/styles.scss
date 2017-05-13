@@ -451,7 +451,8 @@
   overflow: auto;
   &__wrapper {
     display: flex;
-    height: 600px;
+    max-height: 600px; // really only used for development to ensure it doesnt fill full body
+    height: 100%;
     margin: 0 auto;
     overflow: hidden;
     flex-direction: column;
@@ -724,6 +725,6 @@
 }
 
 .widgetBody {
-  max-height: 560px;
+  height: calc(100% - 40px);
   overflow-y: auto;
 }
