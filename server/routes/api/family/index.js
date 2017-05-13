@@ -51,4 +51,22 @@ familyRouter.post('/', checkPermissions('family:create'), (req, res, next) => {
     .catch(next);
 });
 
+/**
+ * Update a family entry
+ */
+familyRouter.put('/:familyId', checkPermissions('family:read'), (req, res, next) => {
+  return req.family.merge(req.body).save()
+    .then(family => res.send(normalize('family', family)))
+    .catch(next);
+});
+
+/**
+ * Delete a family entry
+ */
+familyRouter.delete('/:familyId', checkPermissions('family:delete'), (req, res, next) => {
+  return req.family.delete()
+    .then(() => res.status(204))
+    .catch(next);
+});
+
 module.exports = familyRouter;
