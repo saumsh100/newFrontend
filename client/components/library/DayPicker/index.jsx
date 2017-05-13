@@ -46,7 +46,7 @@ class DayPicker extends Component {
   render() {
     const {
       target,
-      value,
+      iconClassName,
     } = this.props;
 
     let dayPickerTargetComponent = (
@@ -64,6 +64,7 @@ class DayPicker extends Component {
           // {...iconProps}
           icon="calendar"
           type="button"
+          className={iconClassName}
           onClick={this.handleInputClick}
         />
       );
@@ -97,6 +98,7 @@ DayPicker.propTypes = {
   target: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
+  iconClassName: PropTypes.string,
 };
 
 export default DayPicker;

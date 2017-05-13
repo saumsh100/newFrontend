@@ -107,8 +107,8 @@
       text-transform: uppercase;
       color: #fff;
       border: none;
-      background-color: #f3715c;
-      background: var(--bookingWidgetPrimaryColor);
+      margin-top: 10px;
+      background-color: var(--bookingWidgetPrimaryColor);
       &:hover {
         background-color: #f3715c;
         background: var(--bookingWidgetPrimaryColor);
@@ -133,11 +133,11 @@
 }
 
 .submitViewWrapper {
-  padding: 10px;
+  padding: 0 10px 10px 10px 10px;
 }
 
 .formWrapper {
-  padding: 0px 80px;
+  padding: 0px 120px;
   @media screen and (max-width: 600px) {
     padding: 0px 10px;
   }
@@ -162,4 +162,11 @@
 
 .exitButton {
   width: 100%;
+  opacity: 0.9;
+  background-color: var(--bookingWidgetPrimaryColor);
+  &:hover {
+    opacity: 1.0;
+    background-color: var(--bookingWidgetPrimaryColor) !important;
+  }
+
 }

@@ -112,11 +112,11 @@
       //text-transform: uppercase;
       //color: #fff;
       //border: none;
-      background-color: #f3715c;
+      opacity: 0.9;
       background: var(--bookingWidgetPrimaryColor);
       &:hover {
-        background-color: #f3715c;
-        background: var(--bookingWidgetPrimaryColor);
+        opacity: 1.0;
+        background: var(--bookingWidgetPrimaryColor) !important;
       }
     }
 

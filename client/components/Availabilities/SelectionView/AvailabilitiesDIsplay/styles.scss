@@ -1,7 +1,12 @@
 
 @import '../../../../ui.scss';
 
-$widget-primary-color: var(--bookingWidgetPrimaryColor);
+@mixin setBgColorAndHover($baseColor) {
+  color: $baseColor;
+  &:hover {
+    color: darken($baseColor, 5%);
+  }
+}
 
 .appointment {
   &__table {
@@ -15,7 +20,13 @@ $widget-primary-color: var(--bookingWidgetPrimaryColor);
 
     &_btn {
       //font-size: 18px;
+      opacity: 0.9;
       color: var(--bookingWidgetPrimaryColor);
+      &:hover {
+        opacity: 1.0;
+        color: var(--bookingWidgetPrimaryColor) !important;
+      }
+
       /*cursor: pointer;
       &:focus {
         outline: none;
@@ -68,17 +79,23 @@ $widget-primary-color: var(--bookingWidgetPrimaryColor);
       cursor: pointer;
       width: 100%;
       box-sizing: border-box;
-      padding: 10px 0;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin: 5px 0;
-      font-size: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: $medium-font;
       color: white;
       text-align: center;
       text-transform: lowercase;
       list-style: none;
+      opacity: 0.9;
       background-color: var(--bookingWidgetPrimaryColor);
       flex-grow: 1;
       &:hover {
-        background-color: darken(#FF715A, 5%);
+        opacity: 1.0;
       }
     }
 

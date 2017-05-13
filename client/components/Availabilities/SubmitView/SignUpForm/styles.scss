@@ -108,15 +108,16 @@
       //position: relative;
       width: 100%;
       padding: 6px 20px;
+      margin-top: 10px;
       //height: inherit;
       //text-transform: uppercase;
       //color: #fff;
       //border: none;
-      background-color: #f3715c;
-      background: var(--bookingWidgetPrimaryColor);
+      opacity: 0.9;
+      background-color: var(--bookingWidgetPrimaryColor);
       &:hover {
-        background-color: #f3715c;
-        background: var(--bookingWidgetPrimaryColor);
+        background-color: var(--bookingWidgetPrimaryColor) !important;
+        opacity: 1.0;
       }
     }
 
