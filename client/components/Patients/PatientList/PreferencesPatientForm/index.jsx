@@ -1,15 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Form, Field, Button } from '../../../library';
-import { maxLength, emailValidate, phoneValidate, postalCodeValidate } from '../../../library/Form/validate';
 
 export default function ContactPatientForm({ onSubmit, formName, styles, currentPatient }) {
 
   const key = currentPatient.id;
   const initialValues = {
-    email: currentPatient.email,
-    phoneNumber: currentPatient.phoneNumber,
-    mobileNumber: currentPatient.mobileNumber,
-    workNumber: currentPatient.workNumber,
+    reminders: currentPatient.preferences.reminders,
+    sms: currentPatient.preferences.sms,
   };
 
   const test = [
@@ -22,6 +19,8 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
     ,
   ];
 
+  console.log(currentPatient.preferences.sms);
+
   return (
     <Form
       key={key}
@@ -30,11 +29,6 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
       className={styles.form}
       initialValues={initialValues}
     >
-      {/*/>*/}
-      {/*<Field*/}
-        {/*name="amail"*/}
-        {/*component='Checkbox'*/}
-      {/*/>*/}
       <div className={styles.names3}>
         <div className={styles.mailIcon}>
           <i className="fa fa-clock-o" />

@@ -13,6 +13,7 @@ const PatientSchema = {
   workNumber: null,
   gender: null,
   address: null,
+  preferences: null,
   photo: null,
   email: null,
   patientId: null,

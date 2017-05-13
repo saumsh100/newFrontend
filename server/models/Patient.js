@@ -3,6 +3,7 @@ const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const type = thinky.type;
 const AddressSchema = require('./schemas/Address');
+const PreferencesSchema = require('./schemas/Preferences');
 
 const Patient = createModel('Patient', {
   accountId: type.string(),
@@ -21,6 +22,7 @@ const Patient = createModel('Patient', {
   language: type.string(),
   prefContactPhone: type.string(),
   address: AddressSchema,
+  preferences: PreferencesSchema,
   type: type.string(),
   birthDate: type.date(),
   insurance: type.object().allowNull(),

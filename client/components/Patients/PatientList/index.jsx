@@ -121,6 +121,8 @@ class PatientList extends Component {
       values.key = 'patient';
     }
 
+    console.log(values, 'asd')
+
     values.address = {
       country: values.country,
       province: values.province,
