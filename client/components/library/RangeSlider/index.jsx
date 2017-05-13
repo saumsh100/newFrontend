@@ -5,13 +5,13 @@ import 'rc-slider/assets/index.css';
 import styles from './styles.scss';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(Slider);
+const Range = createSliderWithTooltip(Slider.Range);
 
 class RangeSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 0,
+      value: [30,60],
     };
     this.onAfterChange = this.onAfterChange.bind(this);
   }
@@ -33,11 +33,20 @@ class RangeSlider extends Component {
       <div>
         <div className={styles.label}>
           <div>{label}</div>
-          <div className={styles.label_valueUnit}>{this.state.value}{unit}</div>
+          <div className={styles.label_valueUnit}>
+            <div  className={styles.label_valueUnit_duration}>{this.state.value[0]}{unit}</div>
+            <div className={styles.label_labelBuffer}> Buffer </div>
+            <div className={styles.label_valueUnit_buffer}>{this.state.value[1] - this.state.value[0]}{unit}</div>
+          </div>
         </div>
         <Range
+          defaultValue={[30,60]}
+          pushable
+          count={1}
+          allowCross={false}
           onAfterChange={this.onAfterChange}
           {...this.props}
+          minimumTrackStyle={{ backgroundColor: 'blue', height: 10 }}
         />
       </div>
     );

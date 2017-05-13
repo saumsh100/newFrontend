@@ -4,6 +4,9 @@ import { timeOptions } from '../../library/util/TimeOptions';
 import styles from './styles.scss';
 
 export default function PatientForm(props) {
+  const {
+    getSuggestions,
+  } = props;
 
   return (
     <Grid className={styles.addNewAppt_mainContainer_right}>
@@ -11,8 +14,9 @@ export default function PatientForm(props) {
         <Col xs={12}>
           <Field
             component="AutoComplete"
-            name="name"
+            name="patientId"
             label="Patient Name"
+            getSuggestions={getSuggestions}
           />
         </Col>
       </Row>

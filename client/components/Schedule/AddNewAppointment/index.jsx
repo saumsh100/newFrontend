@@ -3,7 +3,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DisplayForm from './DisplayForm';
-import styles from './styles.scss';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 
 class AddNewAppointment extends Component {
@@ -18,7 +17,14 @@ class AddNewAppointment extends Component {
   }
 
   getSuggestions(value) {
-
+    return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
+      .then((searchData) => {
+        return searchData.patients;
+      }).then((searchedPatients) => {
+        const results = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
+          (key) => { return searchedPatients[key]; }) : [];
+        return results;
+    });
   }
 
   render() {
@@ -30,15 +36,14 @@ class AddNewAppointment extends Component {
     } = this.props;
 
     return (
-      <div className={styles.formContainer}>
-        <DisplayForm
-          handleSubmit={this.handleSubmit}
-          services={services}
-          patients={patients}
-          chairs={chairs}
-          practitioners={practitioners}
-        />
-      </div>
+      <DisplayForm
+        handleSubmit={this.handleSubmit}
+        services={services}
+        patients={patients}
+        chairs={chairs}
+        practitioners={practitioners}
+        getSuggestions={this.getSuggestions}
+      />
     );
   }
 }

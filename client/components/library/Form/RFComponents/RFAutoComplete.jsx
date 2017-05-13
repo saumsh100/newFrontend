@@ -1,38 +1,64 @@
 
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import AutoComplete from '../../AutoCompleteForm';
 
-export default function RFAutoComplete(props) {
-  const {
-    input,
-    icon,
-    label,
-    error,
-    meta,
-  } = props;
+class RFAutoComplete extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: this.props.input.value,
+    };
+    this.setValue = this.setValue.bind(this);
+  }
 
-  const { touched, asyncValidating, dirty } = meta;
-  const finalError = error || ((touched || dirty) ? meta.error : null);
-  const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
+  setValue(newValue) {
+    const {
+      input,
+    } = this.props;
 
-  const inputProps = {
-    value: input.value || '',
-    onChange: (e, { newValue }) => { input.onChange(newValue); },
-    //onKeyDown: this.submit,
-    label,
-    error,
-    icon,
-  };
+    if (typeof newValue === 'string') {
+      input.onChange(newValue);
+      this.setState({ value: newValue });
+    } else {
+      this.setState({ value: newValue.firstName });
+      return input.onChange(newValue);
+    }
+  }
 
+  render() {
+    const {
+      icon,
+      label,
+      error,
+      meta,
+      input,
+    } = this.props;
 
-  return (
-    <AutoComplete
-      value={input.value || ''}
-      {...props}
-      inputProps={inputProps}
-      getSuggestions={{name: input.value || '', id: 'test'}}
-    />
-  );
+    const { touched, asyncValidating, dirty } = meta;
+    const finalError = error || ((touched || dirty) ? meta.error : null);
+    const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
+
+    const inputProps = {
+      value: this.state.value || '',
+      onChange: (e, { newValue }) => {
+        return this.setValue(newValue);
+      },
+      label,
+      error,
+      icon,
+    };
+
+    return (
+      <AutoComplete
+        value={this.state.value}
+        {...this.props}
+        inputProps={inputProps}
+        finalError={finalError}
+        finalIcon={finalIcon}
+        focusInputOnSuggestionClick={false}
+      />
+    );
+  }
 }
 
 /* eslint react/forbid-prop-types: 0 */
@@ -43,3 +69,5 @@ RFAutoComplete.propTypes = {
   label: PropTypes.node,
   error: PropTypes.string,
 };
+
+export default RFAutoComplete;

@@ -76,9 +76,10 @@ export default function AppointmentForm(props) {
               <Field
                 options={[]}
                 component="DropdownSelect"
-                name="duration"
+                name="buffer"
                 label=""
                 borderColor="primaryColor"
+                disabled
               />
             </Col>
           </Row>
@@ -93,6 +94,7 @@ export default function AppointmentForm(props) {
                 name="split"
                 label="Split"
                 borderColor="primaryColor"
+                disabled
               />
             </Col>
             <Col xs={1} />
@@ -103,6 +105,7 @@ export default function AppointmentForm(props) {
                 name="empty"
                 label=""
                 borderColor="primaryColor"
+                disabled
               />
             </Col>
           </Row>
@@ -126,6 +129,7 @@ export default function AppointmentForm(props) {
             name="status"
             label="Status"
             borderColor="primaryColor"
+            disabled
           />
         </Col>
       </Row>

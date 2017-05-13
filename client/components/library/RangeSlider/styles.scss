@@ -10,9 +10,23 @@ $primary-color: #FF715A;
   font-size: 16px;
   padding-bottom: 5px;
 
+  &_labelBuffer{
+    color: $empty-grey;
+    text-decoration: none;
+  }
+
   &_valueUnit {
+    display: flex;
     color: $primary-color;
     padding-left: 10px;
-    text-decoration: underline;
+    &_duration {
+      padding-right: 20px;
+      text-decoration: underline;
+    }
+
+    &_buffer {
+      padding-left: 10px;
+      text-decoration: underline;
+    }
   }
 }

@@ -20,18 +20,19 @@ export default function DisplayForm(props) {
     handleSubmit,
     services,
     chairs,
-    patients,
     practitioners,
+    getSuggestions,
   } = props;
 
   const serviceOptions = generateEntityOptions(services, 'name');
-  const practititionerOptions = generateEntityOptions(practitioners, 'firstName');
+  const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
 
   return (
     <Form
       form="NewAppointmentForm"
       onSubmit={handleSubmit}
+      className={styles.formContainer}
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>
@@ -39,12 +40,14 @@ export default function DisplayForm(props) {
             <div className={styles.title}>Create New Appoinment</div>
             <AppointmentForm
               serviceOptions={serviceOptions}
-              practitionerOptions={practititionerOptions}
+              practitionerOptions={practitionerOptions}
               chairOptions={chairOptions}
             />
           </Col>
           <Col xs={12} sm={6} md={4}>
-            <PatientForm />
+            <PatientForm
+              getSuggestions={getSuggestions}
+            />
           </Col>
         </Row>
       </Grid>
