@@ -29,10 +29,8 @@ export default function PatientForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12} className={styles.addNewAppt_col_select}>
+        <Col xs={12} >
           <Field
-            options={[]}
-            component="DropdownSelect"
             name="email"
             label="Email"
           />
@@ -44,7 +42,7 @@ export default function PatientForm(props) {
             component="TextArea"
             name="comment"
             label="Comment"
-            rows="6"
+            rows={6}
             className={styles.addNewAppt_comment}
           />
         </Col>
