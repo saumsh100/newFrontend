@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
+const { appEntries } = require('../utils');
 
 const projectRoot = path.resolve(__dirname, '../..');
 
@@ -9,8 +10,10 @@ const externalModules = nodeModulesPath =>
     .filter(f => ['.bin'].indexOf(f) === -1)
     .reduce((map, mod) => Object.assign(map, { [mod]: `commonjs ${mod}` }), {});
 
-const appEntries = (...list) => list.reduce((entries, app) =>
-  Object.assign(entries, { [app]: ['babel-polyfill', `./server/bin/${app}.js`] }), {});
+const entries = appEntries(name => [
+  'babel-polyfill',
+  `./server/bin/${name}.js`,
+]);
 
 module.exports = {
   name: 'server',
@@ -18,7 +21,7 @@ module.exports = {
 
   context: projectRoot,
 
-  entry: appEntries('server', 'cron', 'reminders'),
+  entry: entries('server', 'cron', 'reminders'),
 
   output: {
     path: path.resolve(projectRoot, './server/bin/build'),

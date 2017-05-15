@@ -1,18 +1,23 @@
 const cssnext = require('postcss-cssnext');
-
+const path = require('path');
+const { projectRoot } = require('../utils');
 const localIdentName = '[name]__[local]___[hash:base64:5]';
 
 module.exports = {
   cache: true,
-  context: __dirname,
   devtool: 'cheap-module-source-map',
-  output: {
-    publicPath: 'http://localhost:5000/',
-    filename: '[name].js',
-  },
+
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+
+  output: {
+    path: path.resolve(projectRoot, 'statics/assets/'),
+    publicPath: '/assets/',
+    filename: '[name].js',
+  },
+
+  context: projectRoot,
 
   module: {
     rules: [

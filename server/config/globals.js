@@ -45,7 +45,10 @@ const loader = {
   token: environmentVariables.LOADERIO,
 };
 
+const staticPath = path.normalize(path.join(root, '../statics'));
+
 module.exports = {
+  staticPath,
   root,
   tokenSecret,
   tokenExpiry,

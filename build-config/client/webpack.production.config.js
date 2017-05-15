@@ -1,12 +1,10 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config');
-const devServer = require('./dev-server.config');
 const { appEntries } = require('../utils');
 
 const entries = appEntries(name => [
   'babel-polyfill',
-  'react-hot-loader/patch',
   `./client/entries/${name}.js`,
 ]);
 
@@ -16,21 +14,20 @@ const developmentConfig = merge(baseConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('development'),
+        NODE_ENV: JSON.stringify('production'),
       },
     }),
-    new webpack.LoaderOptionsPlugin({ debug: true }),
 
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }),
 
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
       chunks: ['app', 'patient'],
     }),
   ],
-
-  devServer,
 });
 
 module.exports = developmentConfig;
