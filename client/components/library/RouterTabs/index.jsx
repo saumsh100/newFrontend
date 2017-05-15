@@ -1,6 +1,5 @@
 
 import React, { Component, PropTypes } from 'react';
-import { compose } from 'recompose';
 import { withRouter } from 'react-router-dom';
 import Tabs, { Tab } from '../Tabs';
 
@@ -46,6 +45,4 @@ RouterTabs.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-const enhance = compose(withRouter);
-
-export default enhance(RouterTabs);
+export default withRouter(RouterTabs);

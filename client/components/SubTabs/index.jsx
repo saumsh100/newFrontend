@@ -107,55 +107,13 @@ class SubTabs extends Component {
 
 
   render() {
-    const { location } = this.props;
+    const { location: { pathname } } = this.props;
 
-    // TODO: if we can strip off /${rootPath}/blah/blah then we can simplify below
-    let subTabsComponent = null;
-    if (location.pathname.indexOf('/patients') === 0) {
-      subTabsComponent = (
-        <RouterTabs
-          location={location}
-          routes={ROUTES['/patients']}
-        />
-      );
-    } else if (location.pathname.indexOf('/schedule') === 0) {
-      subTabsComponent = (
-        <RouterTabs
-          location={location}
-          routes={ROUTES['/schedule']}
-        />
-      );
-    } else if (location.pathname.indexOf('/settings') === 0) {
-      subTabsComponent = (
-        <RouterTabs
-          location={location}
-          routes={ROUTES['/settings']}
-        />
-      );
-    } else if (location.pathname.indexOf('/intelligence') === 0) {
-      subTabsComponent = (
-        <RouterTabs
-          location={location}
-          routes={ROUTES['/intelligence']}
-        />
-      );
-    } else if (location.pathname.indexOf('/reputation') === 0) {
-      subTabsComponent = (
-        <RouterTabs
-          location={location}
-          routes={ROUTES['/reputation']}
-        />
-      );
-    } else if (location.pathname.indexOf('/social') === 0) {
-      subTabsComponent = (
-        <RouterTabs
-          location={location}
-          routes={ROUTES['/social']}
-        />
-      );
-    }
+    const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
 
-    return subTabsComponent;
+    return activeRoute ?
+      <RouterTabs routes={ROUTES[activeRoute]} /> :
+      null;
   }
 }
 
