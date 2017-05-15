@@ -1,3 +1,3 @@
-web: node server/bin/server.js
-cron: node server/bin/cron.js
-reminders: node server/bin/reminders.js
+web: node --inspect server/bin/build/server.bundle.js
+cron: node server/bin/build/cron.bundle.js
+reminders: node server/bin/build/reminders.bundle.js

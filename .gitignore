@@ -42,3 +42,4 @@ rethinkdb_data/
 zz_*
 tags
 statics/assets/
+server/bin/build/
