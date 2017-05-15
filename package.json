@@ -15,7 +15,7 @@
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "storybook": "start-storybook -p 9001 -c .storybook ",
-    "test": "jest",
+    "test": "cypress run && jest",
     "clean": "npm run clean:assets && npm run clean:modules",
     "clean:assets": "rimraf server/public/assets",
     "clean:modules": "rimraf node_modules",
