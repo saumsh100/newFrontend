@@ -35,6 +35,7 @@ export default function AppointmentForm(props) {
             name="date"
             label="Date"
             borderColor="primaryColor"
+            required
           />
         </Col>
         <Col md={2} />
@@ -45,6 +46,7 @@ export default function AppointmentForm(props) {
             name="time"
             label="Time"
             borderColor="primaryColor"
+            required
           />
         </Col>
       </Row>
@@ -56,6 +58,7 @@ export default function AppointmentForm(props) {
             name="service"
             label="Service"
             borderColor="primaryColor"
+            required
           />
         </Col>
       </Row>
@@ -69,6 +72,7 @@ export default function AppointmentForm(props) {
                 name="practitioner"
                 label="Practitioner"
                 borderColor="primaryColor"
+                required
               />
             </Col>
             <Col xs={1} />
@@ -119,6 +123,7 @@ export default function AppointmentForm(props) {
             name="chair"
             label="Chair"
             borderColor="primaryColor"
+            required
           />
         </Col>
         <Col md={2} />
@@ -143,6 +148,7 @@ export default function AppointmentForm(props) {
             min={15}
             max={180}
             marks={marks}
+            required
           />
         </Col>
       </Row>

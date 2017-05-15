@@ -39,11 +39,11 @@ class AddNewAppointment extends Component {
     } = values.patient;
 
     const startDate = mergeTime(new Date(date), new Date(time));
-    const endDate = mergeTime(startDate);
+    //const endDate = mergeTime(startDate);
 
     const appointment = {
       startDate,
-      endDate,
+      endDate: '',
       patientId: selectedService.id,
       serviceId: service,
       practitionerId: practitioner,

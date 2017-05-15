@@ -10,10 +10,7 @@ import { change, }  from 'redux-form';
 class PatientForm extends Component {
   constructor(props) {
    super(props);
-   this.state = {
-     phoneNumber: '',
-   }
-    this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
+   this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
   }
 
   handleAutoSuggest(e, newValue, previousValue) {
@@ -48,6 +45,7 @@ class PatientForm extends Component {
               label="Patient Name"
               getSuggestions={getSuggestions}
               onChange={this.handleAutoSuggest}
+              required
             />
           </Col>
         </Row>
@@ -56,6 +54,7 @@ class PatientForm extends Component {
             <Field
               name="phoneNumber"
               label="Phone #"
+              required
             />
           </Col>
         </Row>
@@ -64,6 +63,7 @@ class PatientForm extends Component {
             <Field
               name="email"
               label="Email"
+              required
             />
           </Col>
         </Row>
