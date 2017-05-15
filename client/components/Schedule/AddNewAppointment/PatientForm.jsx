@@ -1,13 +1,23 @@
+
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, Field, RangeSlider } from '../../library';
-import { timeOptions } from '../../library/util/TimeOptions';
+import { connect } from 'react-redux';
+import { Grid, Row, Col, Field,  } from '../../library';
+import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import styles from './styles.scss';
 
-export default function PatientForm(props) {
+function PatientForm(props) {
   const {
     getSuggestions,
+    handleSubmit,
+    values
   } = props;
 
+  const remoteButtonProps = {
+    onClick: handleSubmit,
+    form: "NewAppointmentForm",
+  };
+
+  console.log(values);
   return (
     <Grid className={styles.addNewAppt_mainContainer_right}>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
@@ -47,6 +57,32 @@ export default function PatientForm(props) {
           />
         </Col>
       </Row>
+      <Row className={styles.addNewAppt_mainContainer_right_row}>
+        <Col xs={12} style={{padding: '90px'}}>
+         <RemoteSubmitButton
+           {...remoteButtonProps}
+         >
+           Save
+         </RemoteSubmitButton>
+        </Col>
+      </Row>
     </Grid>
   );
 }
+
+
+function mapStateToProps({ form }) {
+  // form data is populated when component renders
+  if (!form["NewAppointmentForm"]) {
+    return {
+      values: {},
+    };
+  }
+
+  return {
+    values: form["NewAppointmentForm"].values,
+  };
+}
+
+
+export default connect(mapStateToProps,null)(PatientForm);

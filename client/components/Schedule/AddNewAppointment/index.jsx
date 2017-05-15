@@ -37,12 +37,12 @@ class AddNewAppointment extends Component {
 
     return (
       <DisplayForm
-        handleSubmit={this.handleSubmit}
         services={services}
         patients={patients}
         chairs={chairs}
         practitioners={practitioners}
         getSuggestions={this.getSuggestions}
+        handleSubmit={this.handleSubmit}
       />
     );
   }
