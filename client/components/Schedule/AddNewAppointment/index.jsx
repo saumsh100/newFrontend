@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DisplayForm from './DisplayForm';
@@ -7,7 +8,7 @@ import { fetchEntities, createEntityRequest, } from '../../../thunks/fetchEntiti
 
 const mergeTime = (date, time) => {
   return new Date(date.setHours(time.getHours()));
-}
+};
 
 class AddNewAppointment extends Component {
   constructor(props) {
@@ -17,7 +18,6 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values)
     const { createEntityRequest } = this.props;
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
@@ -32,25 +32,26 @@ class AddNewAppointment extends Component {
     } = appointmentValues;
 
     const {
-      phoneNumber,
-      email,
-      selectedService,
+      selectedPatient,
       comment,
-    } = values.patient;
+    } = patientValues;
 
+    const totalDurationMin = (duration[0] + (duration[1] - duration[0]));
     const startDate = mergeTime(new Date(date), new Date(time));
-    //const endDate = mergeTime(startDate);
+    const endDate = moment(startDate).minute(totalDurationMin);
 
     const appointment = {
-      startDate,
-      endDate: '',
-      patientId: selectedService.id,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      patientId: selectedPatient.id,
       serviceId: service,
       practitionerId: practitioner,
       chairId: chair,
       note: comment,
       isSyncedWithPMS: false,
     };
+
+    createEntityRequest({ key: 'appointments', entityData: appointment });
   }
 
   getSuggestions(value) {
@@ -62,7 +63,7 @@ class AddNewAppointment extends Component {
           (key) => { return searchedPatients[key]; }) : [];
         this.setState({ patientResult: results })
         return results;
-    });
+      });
   }
 
   render() {

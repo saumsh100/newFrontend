@@ -7,6 +7,10 @@ import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import styles from './styles.scss';
 import { change, }  from 'redux-form';
 
+function validatePatient(value) {
+  return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
+}
+
 class PatientForm extends Component {
   constructor(props) {
    super(props);
@@ -16,11 +20,12 @@ class PatientForm extends Component {
   handleAutoSuggest(e, newValue, previousValue) {
     const {
       change,
+      formName,
     } = this.props;
 
     if (typeof newValue === 'object') {
-      change("NewAppointmentForm", 'patient.phoneNumber', newValue.phoneNumber)
-      change("NewAppointmentForm", 'patient.email', newValue.email)
+      change(formName, 'patient.phoneNumber', newValue.phoneNumber);
+      change(formName, 'patient.email', newValue.email);
     }
   }
 
@@ -28,11 +33,12 @@ class PatientForm extends Component {
     const {
       getSuggestions,
       handleSubmit,
+      formName,
     } = this.props;
 
     const remoteButtonProps = {
       onClick: handleSubmit,
-      form: "NewAppointmentForm",
+      form: formName,
     };
 
     return (
@@ -46,6 +52,7 @@ class PatientForm extends Component {
               getSuggestions={getSuggestions}
               onChange={this.handleAutoSuggest}
               required
+              validate={[validatePatient]}
             />
           </Col>
         </Row>
@@ -92,24 +99,10 @@ class PatientForm extends Component {
   }
 }
 
-
-function mapStateToProps({ form }) {
-  // form data is populated when component renders
-  if (!form["NewAppointmentForm"]) {
-    return {
-      values: {},
-    };
-  }
-
-  return {
-    values: form["NewAppointmentForm"].values,
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     change,
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientForm);
+export default connect(null, mapDispatchToProps)(PatientForm);

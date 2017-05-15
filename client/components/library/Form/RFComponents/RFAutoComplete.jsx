@@ -44,7 +44,7 @@ class RFAutoComplete extends Component {
         return this.setValue(newValue);
       },
       label,
-      error,
+      error: finalError,
       icon,
     };
 
@@ -53,8 +53,6 @@ class RFAutoComplete extends Component {
         value={this.state.value}
         {...this.props}
         inputProps={inputProps}
-        finalError={finalError}
-        finalIcon={finalIcon}
         focusInputOnSuggestionClick={false}
       />
     );

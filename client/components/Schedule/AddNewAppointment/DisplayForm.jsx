@@ -50,6 +50,7 @@ export default function DisplayForm(props) {
               <PatientForm
                 getSuggestions={getSuggestions}
                 handleSubmit={handleSubmit}
+                formName="NewAppointmentForm"
               />
             </FormSection>
           </Col>
