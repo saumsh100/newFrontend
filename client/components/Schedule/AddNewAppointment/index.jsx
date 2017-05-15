@@ -5,7 +5,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DisplayForm from './DisplayForm';
-import { fetchEntities, createEntityRequest, } from '../../../thunks/fetchEntities';
+import { fetchEntities, createEntityRequest } from '../../../thunks/fetchEntities';
 import { IconButton } from '../../library';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import styles from './styles.scss';
