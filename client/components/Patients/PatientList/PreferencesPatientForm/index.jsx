@@ -1,13 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Form, Field, Button } from '../../../library';
 
+
 export default function ContactPatientForm({ onSubmit, formName, styles, currentPatient }) {
 
   const key = currentPatient.id;
-  const initialValues = {
-    reminders: currentPatient.preferences.reminders,
-    sms: currentPatient.preferences.sms,
-  };
+  const initialValues = currentPatient.preferences;
 
   const test = [
     {
@@ -19,13 +17,20 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
     ,
   ];
 
-  console.log(currentPatient.preferences.sms);
+  initialValues.newsletter = (initialValues.newsletter === true ? 'True' : 'False');
+  initialValues.birthdayMessage = (initialValues.birthdayMessage === true ? 'True' : 'False');
+
+  function submit(values) {
+    values.newsletter = values.newsletter === 'True';
+    values.birthdayMessage = values.birthdayMessage === 'True';
+    onSubmit({ preferences: values });
+  }
 
   return (
     <Form
       key={key}
       form={formName}
-      onSubmit={onSubmit}
+      onSubmit={submit}
       className={styles.form}
       initialValues={initialValues}
     >
@@ -67,7 +72,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
                 Weekends
                 <Field
                   className={styles.marginZero}
-                  name="weekend"
+                  name="weekends"
                   component="Checkbox"
                 />
               </div>
@@ -75,7 +80,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
                 Weekdays
                 <Field
                   className={styles.marginZero}
-                  name="weekday"
+                  name="weekdays"
                   component="Checkbox"
                 />
               </div>
@@ -101,7 +106,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
             Email
             <Field
               className={styles.marginZero}
-              name="emailnotifications"
+              name="emailNotifications"
               component="Checkbox"
             />
           </div>
@@ -134,7 +139,6 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
           <i className="fa fa-paper-plane" />
         </div>
         <Field
-          required
           className={styles.prefInput}
           name="newsletter"
           label="NewsLetter"
@@ -148,7 +152,6 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
           <i className="fa fa-calendar" />
         </div>
         <Field
-          required
           className={styles.prefInput}
           name="birthdayMessage"
           label="Birthday/Holiday Messages"

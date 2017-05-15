@@ -10,7 +10,7 @@ const generatePreferencesSchema = (options = {}) => {
     weekdays: type.boolean().default(true),
     weekends: type.boolean().default(true),
     sms: type.boolean().default(true),
-    email: type.boolean().default(true),
+    emailNotifications: type.boolean().default(true),
     phone: type.boolean().default(true),
     reminders: type.boolean().default(true),
     newsletter: type.boolean().default(true),
