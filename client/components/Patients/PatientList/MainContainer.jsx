@@ -97,12 +97,12 @@ class MainContainer extends Component {
           </Col>
           <Col xs={12} sm={8} md={8} lg={9}>
             <div className={styles.patients_content}>
-              <Row>
+              <Row className={styles.rightCon}>
                 <Col xs={12}>
                   {PatientInfo}
                 </Col>
               </Row>
-              <Row>
+              <Row className={styles.rightCon}>
                 <div className={styles.patients_content__wrapper}>
                   <Col xs={8}>
                     <TextMessage />
@@ -118,29 +118,33 @@ class MainContainer extends Component {
                             label="Personal"
                             className={styles.tabs}
                           >
-                            <EditPatientForm
-                              onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
-                              currentPatient={this.props.currentPatient}
-                              formName={'editPatient'}
-                              styles={styles}
-                            />
-                            <Button
-                              className={styles.deleteButton}
-                              onClick={this.props.deletePatient}
-                            >
-                              Delete Patient
-                            </Button>
+                            <div className={styles.tabdivs}>
+                              <EditPatientForm
+                                onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
+                                currentPatient={this.props.currentPatient}
+                                formName={'editPatient'}
+                                styles={styles}
+                              />
+                              <Button
+                                className={styles.deleteButton}
+                                onClick={this.props.deletePatient}
+                              >
+                                Delete Patient
+                              </Button>
+                            </div>
                           </Tab>
                           <Tab
                             label="Contact"
                             className={styles.tabs}
                           >
-                            <ContactPatientForm
-                              onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
-                              currentPatient={this.props.currentPatient}
-                              formName={'contactPatient'}
-                              styles={styles}
-                            />
+                            <div className={styles.tabdivs}>
+                              <ContactPatientForm
+                                onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
+                                currentPatient={this.props.currentPatient}
+                                formName={'contactPatient'}
+                                styles={styles}
+                              />
+                            </div>
                           </Tab>
                           <Tab
                             label="Insurance"
@@ -154,12 +158,14 @@ class MainContainer extends Component {
                             label="Preferences"
                             className={styles.tabs}
                           >
-                            <PreferencesPatientForm
-                              onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
-                              currentPatient={this.props.currentPatient}
-                              formName={'preferencesPatient'}
-                              styles={styles}
-                            />
+                            <div className={styles.tabdivs}>
+                              <PreferencesPatientForm
+                                onSubmit={this.props.editUser.bind(null, this.props.currentPatient)}
+                                currentPatient={this.props.currentPatient}
+                                formName={'preferencesPatient'}
+                                styles={styles}
+                              />
+                            </div>
                           </Tab>
                           <Tab
                             label="Family"

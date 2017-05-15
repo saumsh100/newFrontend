@@ -38,6 +38,10 @@ ul {
   width: 90%;
 }
 
+.rightCon {
+  height: 50%;
+}
+
 .upcoming{
   background-color: white;
   margin-bottom: 1px;
@@ -318,15 +322,20 @@ ul {
   button {
     position: absolute;
     right:    10px;
-    bottom:   2px;
+    margin: 15px;
   }
 }
 
 .deleteButton {
   position: absolute;
-  bottom:   0;
-  margin-left: 20px;
-  margin-bottom: 2px;
+  margin: 15px;
+}
+
+.tabdivs {
+  position: relative;
+  overflow-y: auto;
+  min-height: 40vh;
+  max-height: 50vh;
 }
 
 .names {
@@ -442,10 +451,10 @@ ul {
 }
 
 .patients {
-  height: 895px;
-  max-height: 895px;
+  height: 93%;
+  overflow: auto;
+  position: absolute;
   display: flex;
-  width: 100%;
   padding: 10px;
 }
 
@@ -515,7 +524,7 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 700px;
+    max-height: 680px;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -524,7 +533,7 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    height: 690px;
+    max-height: 690px;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -625,8 +634,6 @@ ul {
   }
 
   &__header {
-    height: 310px;
-    min-height: 310px;
     padding: 50px;
     background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
     background-size: cover;
@@ -663,11 +670,11 @@ ul {
   &__wrapper {
     display: flex;
     flex-direction: row;
-    height: 465px;
     background: #cdcaca;
+    height: 100%;
     width: 100%;
     .left {
-      height: 465px;
+      height: 100%;
       min-width: 250px;
       background-color: $primary-white;
       border-right: 2px solid $primary-grey;
@@ -692,8 +699,7 @@ ul {
       }
     }
     .right {
-      height: 465px;
-      min-width: 250px;
+      height: 100%;
       background: #fafafa;
       font-size: 12px;
       margin-left: 5px;
