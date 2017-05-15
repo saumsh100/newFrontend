@@ -8,7 +8,6 @@ const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
-const { r } = require('../../../config/thinky');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
 patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
@@ -124,7 +123,7 @@ patientsRouter.get('/', (req, res, next) => {
  */
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
-  const patientData = Object.assign({}, req.body, { accountId: accountId });
+  const patientData = Object.assign({}, req.body, { accountId });
   patientData.isSyncedWithPMS = false;
   return Patient.save(patientData)
     .then((patient) => {

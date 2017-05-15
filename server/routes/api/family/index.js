@@ -15,7 +15,6 @@ familyRouter.get('/:familyId', checkPermissions('family:read'), (req, res, next)
     accountId,
     joinObject,
   } = req;
-  console.log(accountId, joinObject, req.family.id);
 
   return Family
     .filter({
