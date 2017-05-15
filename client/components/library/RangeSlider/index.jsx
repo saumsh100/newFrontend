@@ -38,6 +38,11 @@ class RangeSlider extends Component {
       max,
     } = this.props;
 
+    const maximumTrackStyle= {
+      backgroundColor: '#ff715a',
+      width: `${((this.state.value[0] - 15)/(max - 15)) * 100}%`,
+    };
+
     return (
       <div>
         <div className={styles.label}>
@@ -59,7 +64,7 @@ class RangeSlider extends Component {
           min={min}
           max={max}
           marks={marks}
-          maximumTrackStyle={{ backgroundColor: '#ff715a', width: `${(this.state.value[0]/max)*100}%` }}
+          maximumTrackStyle={maximumTrackStyle}
         />
       </div>
     );
