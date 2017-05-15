@@ -2,10 +2,9 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Field,  } from '../../library';
-import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+import { Grid, Row, Col, Field } from '../../library';
 import styles from './styles.scss';
-import { change, }  from 'redux-form';
+import { change } from 'redux-form';
 
 function validatePatient(value) {
   return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
@@ -35,11 +34,6 @@ class PatientForm extends Component {
       handleSubmit,
       formName,
     } = this.props;
-
-    const remoteButtonProps = {
-      onClick: handleSubmit,
-      form: formName,
-    };
 
     return (
       <Grid className={styles.addNewAppt_mainContainer_right}>
@@ -83,15 +77,6 @@ class PatientForm extends Component {
               rows={6}
               className={styles.addNewAppt_comment}
             />
-          </Col>
-        </Row>
-        <Row className={styles.addNewAppt_mainContainer_right_row}>
-          <Col xs={12} style={{padding: '90px'}}>
-            <RemoteSubmitButton
-              {...remoteButtonProps}
-            >
-              Save
-            </RemoteSubmitButton>
           </Col>
         </Row>
       </Grid>

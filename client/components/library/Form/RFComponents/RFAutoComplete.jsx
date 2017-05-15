@@ -6,7 +6,7 @@ class RFAutoComplete extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: this.props.input.value,
+      value: '',
     };
     this.setValue = this.setValue.bind(this);
   }
@@ -18,7 +18,7 @@ class RFAutoComplete extends Component {
 
     if (typeof newValue === 'string') {
       input.onChange(newValue);
-      this.setState({ value: newValue });
+      return this.setState({ value: newValue });
     } else {
       this.setState({ value: newValue.firstName });
       return input.onChange(newValue);
@@ -31,7 +31,6 @@ class RFAutoComplete extends Component {
       label,
       error,
       meta,
-      input,
     } = this.props;
 
     const { touched, asyncValidating, dirty } = meta;
@@ -39,13 +38,13 @@ class RFAutoComplete extends Component {
     const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
 
     const inputProps = {
-      value: this.state.value || '',
+      value: this.state.value,
       onChange: (e, { newValue }) => {
         return this.setValue(newValue);
       },
       label,
       error: finalError,
-      icon,
+      icon: finalIcon,
     };
 
     return (

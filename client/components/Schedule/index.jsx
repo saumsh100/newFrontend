@@ -34,6 +34,7 @@ class ScheduleComponent extends Component {
 
     this.handleDayPicker = this.handleDayPicker.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
+    this.addNewAppointment = this.addNewAppointment.bind(this)
   }
 
   handleDayPicker(day) {
@@ -42,7 +43,13 @@ class ScheduleComponent extends Component {
 
   reinitializeState() {
     this.setState({
-      addNewAppointment: !this.state.addNewAppointment,
+      addNewAppointment: false,
+    });
+  }
+
+  addNewAppointment() {
+    this.setState({
+      addNewAppointment: true,
     });
   }
 
@@ -78,7 +85,7 @@ class ScheduleComponent extends Component {
                     onChange={this.handleDayPicker}
                   />
                   <HeaderButtons
-                    reinitializeState={this.reinitializeState}
+                    addNewAppointment={this.addNewAppointment}
                   />
                 </CurrentDate>
               </div>
@@ -97,6 +104,7 @@ class ScheduleComponent extends Component {
                     practitioners={practitioners.get('models').toArray()}
                     services={services.get('models').toArray()}
                     patients={patients.get('models').toArray()}
+                    reinitializeState={this.reinitializeState}
                   />
                 </Modal>
               </div>

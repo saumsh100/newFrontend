@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, Form, CardHeader, FormSection } from '../../library';
+import { Grid, Row, Col, Form, FormSection } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import PatientForm from './PatientForm';
 import styles from './styles.scss';
@@ -20,17 +20,18 @@ export default function DisplayForm(props) {
     chairs,
     practitioners,
     getSuggestions,
+    formName,
   } = props;
 
   const serviceOptions = generateEntityOptions(services, 'name');
   const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
 
+
   return (
     <Form
-      form="NewAppointmentForm"
+      form={formName}
       onSubmit={handleSubmit}
-      className={styles.formContainer}
       ignoreSaveButton
     >
       <Grid className={styles.addNewAppt}>
@@ -50,7 +51,7 @@ export default function DisplayForm(props) {
               <PatientForm
                 getSuggestions={getSuggestions}
                 handleSubmit={handleSubmit}
-                formName="NewAppointmentForm"
+                formName={formName}
               />
             </FormSection>
           </Col>

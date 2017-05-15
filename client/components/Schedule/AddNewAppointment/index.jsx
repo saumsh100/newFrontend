@@ -1,14 +1,20 @@
 
 import React, { Component, PropTypes } from 'react';
+import { reset } from 'redux-form';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DisplayForm from './DisplayForm';
 import { fetchEntities, createEntityRequest, } from '../../../thunks/fetchEntities';
+import { IconButton } from '../../library';
+import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
   return new Date(date.setHours(time.getHours()));
 };
+
+const formName = 'NewAppointmentForm';
 
 class AddNewAppointment extends Component {
   constructor(props) {
@@ -18,7 +24,11 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
-    const { createEntityRequest } = this.props;
+    const {
+      createEntityRequest,
+      reinitializeState,
+      reset,
+    } = this.props;
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
 
@@ -52,6 +62,8 @@ class AddNewAppointment extends Component {
     };
 
     createEntityRequest({ key: 'appointments', entityData: appointment });
+    reinitializeState();
+    reset(formName);
   }
 
   getSuggestions(value) {
@@ -67,22 +79,50 @@ class AddNewAppointment extends Component {
   }
 
   render() {
+
     const {
       services,
       patients,
       chairs,
       practitioners,
+      reset,
     } = this.props;
 
+    const remoteButtonProps = {
+      onClick: this.handleSubmit,
+      form: formName,
+    };
+
     return (
-      <DisplayForm
-        services={services}
-        patients={patients}
-        chairs={chairs}
-        practitioners={practitioners}
-        getSuggestions={this.getSuggestions}
-        handleSubmit={this.handleSubmit}
-      />
+      <div className={styles.formContainer}>
+        <IconButton
+          icon="trash"
+          onClick={(e)=>{
+            e.stopPropagation();
+            reset(formName);
+            return this.props.reinitializeState();
+          }}
+          className={styles.trashIcon}
+        />
+        <DisplayForm
+          key={formName}
+          services={services}
+          patients={patients}
+          chairs={chairs}
+          practitioners={practitioners}
+          getSuggestions={this.getSuggestions}
+          handleSubmit={this.handleSubmit}
+          formName={formName}
+        />
+        <div className={styles.remoteSubmit}>
+          <RemoteSubmitButton
+            {...remoteButtonProps}
+            className={styles.remoteSubmit_button}
+          >
+            Save
+          </RemoteSubmitButton>
+        </div>
+      </div>
     );
   }
 }
@@ -91,6 +131,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     createEntityRequest,
+    reset,
   }, dispatch);
 }
 

@@ -2,6 +2,7 @@
 
 
 .formContainer {
+  position: relative;
   border: .5px solid #ff715a;
   border-radius: .5rem;
   width: 900px;
@@ -15,6 +16,22 @@
   font-size: $extra-medium-size;
   font-weight: $jumbo-weight;
   color: $primary-color;
+}
+
+.remoteSubmit {
+  display: flex;
+  padding-right: 130px;
+  &_button {
+    margin-left: auto;
+  }
+}
+
+.trashIcon {
+  position: absolute;
+  left: 845px;
+  top: 5px;
+  font-size: 1.4em;
+  color: $inactive-color;
 }
 
 .addNewAppt {
