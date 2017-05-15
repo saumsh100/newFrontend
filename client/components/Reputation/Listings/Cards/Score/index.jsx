@@ -11,8 +11,7 @@ class Score extends Component {
     } = this.props;
 
     return (
-      <Card borderColor={borderColor}
-            className={styles.score}>
+      <Card className={styles.score}>
         <div className={styles.score__header}>
           <div className={styles.score__header_count}>
             {data.length}

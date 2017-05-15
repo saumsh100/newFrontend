@@ -4,14 +4,15 @@ const createModel = require('./createModel');
 const type = thinky.type;
 
 const Patient = createModel('Patient', {
-  accountId: type.string().required(),
+  accountId: type.string(),
   pmsId: type.string(),
   firstName: type.string().required(),
-  middleName: type.string(),
   lastName: type.string().required(),
+  middleName: type.string(),
   phoneNumber: type.string(),
   mobileNumber: type.string(),
   email: type.string(),
+  lastAppointmentDate: type.date(),
   notes: type.string(),
   gender: type.string(),
   prefName: type.string(),

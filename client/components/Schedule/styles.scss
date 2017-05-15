@@ -8,13 +8,13 @@
   &__container {
 
       &_content {
-        height: 860px;
-        max-height: 860px;
+        max-height: 760px;
         overflow-y: auto;
       }
     }
 
     &__sidebar {
+        max-height: 700px;
         padding-left: 15px;
 
         &_rowCalendar {
@@ -27,7 +27,6 @@
           background-color: $primary-white;
         }
         &_request {
-          border-top: $card-border-size $primary-yellow;
         }
         &_calendar {
           border-top: $card-border-size $primary-dark-blue;
@@ -35,7 +34,7 @@
         }
     }
     &__title {
-        min-height: 65px;
+        min-height: 45px;
         padding: 10px 20px 5px 20px;
         border-top: $card-border-size $primary-light-blue;
         border-bottom: $selection-border $background-color;

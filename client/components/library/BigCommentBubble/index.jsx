@@ -95,9 +95,9 @@ export class BigCommentBubble extends Component {
             }
             <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt}</div>
             <div className={styles.bigCommentBubble__attachments}>
-              {attachments.map(at => (<img src={at.src} />))}
+              {attachments.map((at,i) => (<img key={i} src={at.src} />))}
             </div>
-            {comments.map(c => (<Comment {...c} />))}
+            {comments.map((c,i) => (<Comment key={i} {...c} />))}
           </div>
           <div className={styles.bigCommentBubble__respondBlock}>
             {actions &&

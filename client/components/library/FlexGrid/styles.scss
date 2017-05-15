@@ -2,6 +2,8 @@
 @import "../../../fonts.scss";
 
 .sideByside {
+  border-top: 5px solid $inactive-color;
+
   margin: 0 5px 10px 5px;
   padding: 10px;
   &__title {

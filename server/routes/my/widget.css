@@ -88,7 +88,7 @@
   font-size: 1.4em;
   display: flex;
   align-items: center;
-  background-color: blue;
+  background-color: var(--bookingWidgetPrimaryColor);
   text-align: center;
   justify-content: center;
   text-transform: uppercase;

@@ -1,6 +1,7 @@
 
 import AppBar from './AppBar';
 import Avatar from './Avatar';
+import AutoCompleteForm from './AutoCompleteForm';
 import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
@@ -8,6 +9,7 @@ import Calendar from './Calendar';
 import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
+import CheckboxImage from './CheckboxImage';
 import Collapsible from './Collapsible';
 import DayPicker from './DayPicker';
 import DropdownSelect from './DropdownSelect';
@@ -32,6 +34,7 @@ import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import Search from './Search';
 import Star from './Star';
+import Timer from './Timer';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
 import { BigCommentBubble } from './BigCommentBubble';
@@ -45,6 +48,7 @@ import DoubleIcon from './DoubleIcon';
 export {
   AppBar,
   Avatar,
+  AutoCompleteForm,
   BarChart,
   BackgroundIcon,
   Button,
@@ -54,6 +58,7 @@ export {
   ContainerList,
   CardHeader,
   Checkbox,
+  CheckboxImage,
   ChartStats,
   Collapsible,
   DayPicker,
@@ -88,6 +93,7 @@ export {
   Tabs,
   Tab,
   Tag,
+  Timer,
   Toggle,
   Tooltip,
   TrendLine,

@@ -2,6 +2,8 @@
 @import "../../../fonts";
 
 .filters {
+  border-top: $card-border-size $primary-color;
+
   &__checkFilter {
     display: flex;
     flex-direction: column;

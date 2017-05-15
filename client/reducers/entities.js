@@ -51,7 +51,6 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     // KEYs must map to the response object
     // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
     accounts: new accounts(),
-    patients: new patients(),
     textMessages: new textMessages(),
     appointments: new appointments(),
     requests: new requests(),
@@ -61,7 +60,8 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     practitioners: new practitioners(),
     availabilities: new availabilities(),
     dialogs: new dialogs(),
-    patientList: new patientList(),
+    patient: new patients(),
+    patients: new patientList(),
     chairs: new chairs(),
     weeklySchedules: new weeklySchedules(),
     users: new users(),
@@ -73,7 +73,6 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
 
 const Models = {
   accounts: Account,
-  patients: Patient,
   textMessages: TextMessage,
   appointments: Appointments,
   requests: Requests,
@@ -83,7 +82,8 @@ const Models = {
   practitioners: Practitioners,
   timeOffs: TimeOff,
   dialogs: Dialogs,
-  patientList: PatientList,
+  patient: Patient,
+  patients: PatientList,
   chairs: Chairs,
   availabilities: Availability,
   weeklySchedules: WeeklySchedule,

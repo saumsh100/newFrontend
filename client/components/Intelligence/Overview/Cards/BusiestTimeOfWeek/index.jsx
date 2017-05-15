@@ -12,7 +12,7 @@ export default function BusiestTimeOfWeek(props) {
   } = props;
 
   return (
-    <Card borderColor={colorMap.grey}>
+    <Card >
       <CardHeader className={styles.cardHeader} title={'Busiest time of week'} />
       <div className={styles.bussiestTimeOfWeekWrapper}>
         <div className={classNames(styles.pieChartWrapper)} style={{ width: '200px' }} >

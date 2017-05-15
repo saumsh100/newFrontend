@@ -11,15 +11,15 @@ class Item extends Component {
     } = this.props;
     return (
       <Col className={styles.padding} xs={12} sm={6} md={3}>
-        <Card className={styles.userItem} borderColor={borderColor}>
+        <Card className={styles.userItem}>
           <div className={styles.userItem__header}>
             <CardHeader title={cardTitle}/>
           </div>
           <div className={styles.userItem__body}>
             <List className={styles.patients}>
-              {data.map(obj => {
+              {data.map((obj, i) => {
                 return (
-                  <ListItem className={styles.patients__item}>
+                  <ListItem key={i} className={styles.patients__item}>
                     <img className={styles.patients__item_img} src={obj.img} alt=""/>
                     <div className={styles.patients__item_wrapper}>
                       <div className={styles.patients__item_left}>

@@ -13,30 +13,24 @@ class SelectedDay extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.renderDoctrosSchedule = this.renderDoctrosSchedule.bind(this);
+    this.renderDoctorsSchedule = this.renderDoctorsSchedule.bind(this);
     this.renderTimeColumn = this.renderTimeColumn.bind(this);
   }
 
-  componentDidMount() {
-    this.props.fetchEntities({ key: 'appointments' });
-    this.props.fetchEntities({ key: 'practitioners' });
-    this.props.fetchEntities({ key: 'patients' });
-  }
-
-  renderAppoinment(appointment, scale, startDay) {
+  renderAppoinment(appointment, scale, startDay, index) {
     const start = appointment.startTime;
     const end = appointment.endTime;
     const minutesDuration = end.diff(start, 'minutes');
     const positionTop = start.diff(startDay, 'minutes') * scale;
     const appointmentStyles = {
-      height: `${minutesDuration * scale}px`,
+      //height: `${minutesDuration * scale}px`,
       top: `${positionTop}px`,
     };
     const format = 'MMMM Do YYYY, h:mm:ss a';
     const displayStartDate = appointment.startTime.format(format);
     const displayEndDate = appointment.endTime.format(format);
     return (
-      <div className={styles.appointment} style={appointmentStyles}>
+      <div key={index} className={styles.appointment} style={appointmentStyles}>
           <div className={styles.appointment__username}>{appointment.name}</div>
           <div className={styles.appointment__date}>{`${displayStartDate} - ${displayEndDate}`}</div>
           <div className={styles.appointment__title}>{appointment.title}</div>
@@ -44,34 +38,34 @@ class SelectedDay extends Component {
     );
   }
 
-  renderDoctrosSchedule(doctor, workingHours, scale, startDay, tablesCount) {
+  renderDoctorsSchedule(doctor, workingHours, scale, startDay, tablesCount, divIndex) {
     const { patients, appointments, schedule, currentDate } = this.props;
     const patientsArray = patients.get('models').toArray();
     const appointmentsArray = appointments.get('models').toArray();
     const appointmentType = schedule.toJS().appointmentType;
     let apps = appointmentsArray.length && appointmentsArray
-      .filter((app) => {
-        const currentDoctorsAppointment = app.practitionerId === doctor.id;
-        const momentDate = currentDate.toJS().scheduleDate;
-        const momentStartTime = moment(app.startTime);
-        const theSameDay = momentDate.date() === momentStartTime.date();
-        const theSameMonth = momentDate.month() === momentStartTime.month();
-        const theSameYear = momentDate.year() === momentStartTime.year();
-        const theSameDate = theSameDay && theSameMonth && theSameYear;
-        return currentDoctorsAppointment && theSameDate;
-      })
-      .map((app) => {
-        const patient = patientsArray.filter(pt => pt.id === app.patientId)[0];
-        const patientName = patient && `${patient.firstName} ${patient.lastName}`;
-        const { title, startTime, endTime, practitionerId } = app;
-        const appObject = {
-          title,
-          startTime: moment(startTime),
-          endTime: moment(endTime),
-          practitionerId,
-        };
-        return Object.assign({}, appObject, { name: patientName });
-      });
+        .filter((app) => {
+          const currentDoctorsAppointment = app.practitionerId === doctor.id;
+          const momentDate = currentDate;
+          const momentStartTime = moment(app.startDate);
+          const theSameDay = momentDate.date() === momentStartTime.date();
+          const theSameMonth = momentDate.month() === momentStartTime.month();
+          const theSameYear = momentDate.year() === momentStartTime.year();
+          const theSameDate = theSameDay && theSameMonth && theSameYear;
+          return currentDoctorsAppointment && theSameDate;
+        })
+        .map((app) => {
+          const patient = patientsArray.filter(pt => pt.id === app.patientId)[0];
+          const patientName = patient && `${patient.firstName} ${patient.lastName}`;
+          const { title, startTime, endTime, practitionerId } = app;
+          const appObject = {
+            title,
+            startTime: moment(startTime),
+            endTime: moment(endTime),
+            practitionerId,
+          };
+          return Object.assign({}, appObject, { name: patientName });
+        });
     if (appointmentType) {
       apps = apps.filter(app => app.title === appointmentType);
     }
@@ -87,13 +81,13 @@ class SelectedDay extends Component {
       color: 'white',
     };
     return (
-      <div className={styles.schedule__body} style={doctorScheduleColumn}>
-          {workingHours.map((h) => (
-              <div className={styles.schedule__element} style={workingHour}>
-                  {h}
-              </div>
-          ))}
-          {doctorAppointments.map(app => this.renderAppoinment(app, scale, startDay))}
+      <div key={divIndex} className={styles.schedule__body} style={doctorScheduleColumn}>
+        {workingHours.map((h, i) => (
+          <div key={i} className={styles.schedule__element} style={workingHour}>
+            {h}
+          </div>
+        ))}
+        {doctorAppointments.map((app, i) => this.renderAppoinment(app, scale, startDay, i))}
       </div>
     );
   }
@@ -107,8 +101,8 @@ class SelectedDay extends Component {
     };
     return (
       <div className={styles.schedule__header} style={workingHoursColumn}>
-        {workingHours.map(h => (
-          <div className={styles.schedule__element} style={workingHour}>
+        {workingHours.map((h, i) => (
+          <div key={i} className={styles.schedule__element} style={workingHour}>
             <div className={styles.schedule__date}>
               {moment({ hour: h, minute: 0 }).format('h:mm a')}
             </div>
@@ -119,7 +113,6 @@ class SelectedDay extends Component {
   }
 
   render() {
-    const currentDate = this.props.currentDate.toJS().scheduleDate;
     const {
       practitioners,
       patients,
@@ -135,8 +128,9 @@ class SelectedDay extends Component {
     for (let i = startHours; i <= endHours; i += 1) {
       workingHours.push(i);
     }
+
     let practitionersArray = practitioners.get('models').toArray();
-    const checkedPractitioers = schedule.toJS().practitioners;
+    const checkedPractitioers = schedule.toJS().practitionersFilter;
     if (checkedPractitioers.length) {
       practitionersArray = practitionersArray.filter(pr => checkedPractitioers.indexOf(pr.id) > -1);
     }
@@ -145,8 +139,8 @@ class SelectedDay extends Component {
     return (
       <div className={styles.schedule}>
           {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}
-          {practitionersArray.map(d => (
-              this.renderDoctrosSchedule(d, workingHours, scale, start, tablesCount)
+          {practitionersArray.map((d,index) => (
+              this.renderDoctorsSchedule(d, workingHours, scale, start, tablesCount, index)
           ))}
       </div>
     );
@@ -161,22 +155,4 @@ SelectedDay.PropTypes = {
   currentDate: PropTypes.object,
 };
 
-function mapStateToProps({ entities, date, schedule }) {
-  return {
-    appointments: entities.get('appointments'),
-    practitioners: entities.get('practitioners'),
-    patients: entities.get('patients'),
-    currentDate: date,
-    schedule,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-  }, dispatch);
-}
-
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-
-export default enhance(SelectedDay);
+export default SelectedDay;

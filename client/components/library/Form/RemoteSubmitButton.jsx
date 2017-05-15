@@ -28,7 +28,7 @@ function RemoteSubmitButton(props) {
 }
 
 RemoteSubmitButton.propTypes = {
-  form: PropTypes.func.isRequired,
+  form: PropTypes.string,
 };
 
 function mapActionsToProps(dispatch) {

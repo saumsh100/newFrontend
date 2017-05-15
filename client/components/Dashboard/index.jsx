@@ -258,15 +258,15 @@ class Dashboard extends React.Component {
           </Col>
           <Col className={styles.padding}
                xs={12} md={8}>
-            <Card className={styles.dashboard__body_comments}
-                  borderColor={colorMap.yellow}>
+            <Card className={styles.dashboard__body_comments} >
               <CardHeader className={styles.cardHeader} title="Unresponded Reviews" count={16}/>
               <div className={styles.underspondedReviews}>
                 <div className={styles.underspondedReviews__mainContainer}>
                   <Col xs={12} md={12} className={styles.underspondedReviews__comment} >
-                    {DataBigComment.map(obj => {
+                    {DataBigComment.map((obj, index) => {
                       return (
                         <BigCommentBubble
+                          key={index}
                           icon={obj.icon}
                           iconColor={obj.iconColor}
                           background={obj.background}
@@ -287,26 +287,31 @@ class Dashboard extends React.Component {
           <Col className={styles.padding}
                xs={12} md={4}>
             <Referrals className={styles.dashboard__body_table}
-                         borderColor={colorMap.blue}
                          data={hardcodedReferralData}
                          cardTitle="Unconfirmed Referrals"/>
           </Col>
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
-                <RemindersList data={DataRemindersList}
-                               borderColor={colorMap.grey}
-                               cardTitle="Reminders" />
+                <RemindersList
+                  key="Reminders"
+                  data={DataRemindersList}
+                  cardTitle="Reminders"
+                />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
-                <RemindersList data={DataRemindersList}
-                               borderColor={colorMap.grey}
-                               cardTitle="Recalls" />
+              <Col  className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
+                <RemindersList
+                  key="Recalls"
+                  data={DataRemindersList}
+                  cardTitle="Recalls"
+                />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
-                <RemindersList data={DataRemindersList2}
-                               borderColor={colorMap.grey}
-                               cardTitle="Digital Waitlist" />
+                <RemindersList
+                  key="Waitlist"
+                  data={DataRemindersList2}
+                  cardTitle="Digital Waitlist"
+                />
               </Col>
             </Row>
           </Col>

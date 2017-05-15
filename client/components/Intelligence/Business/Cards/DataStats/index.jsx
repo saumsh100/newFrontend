@@ -26,14 +26,14 @@ class DataStats extends Component{
 
 
     return (
-      <Card  borderColor={borderColor} className={styles.dataStats}>
+      <Card className={styles.dataStats}>
         <Row className={styles.dataStats__wrapper}>
           <Col className={styles.dataStats__left} sm={12} md={4}>
             <div className={styles.left}>
               <Tabs index={this.state.index} onChange={this.handleTabChange}>
-                {data.map((obj) => {
+                {data.map((obj,i) => {
                   return (
-                    <Tab label={obj.label}>
+                    <Tab key={i} label={obj.label}>
                       <div className={styles.left__wrapper}>
                         <Icon className={styles.left__icon} icon={obj.data.icon} size={6}/>
                         <div className={styles.left__count}>
@@ -53,9 +53,9 @@ class DataStats extends Component{
             <div className={styles.right}>
               <Col className={styles.right__item} sm={12} md={7}>
                 <ul className={styles.right__list}>
-                  {data1.map((d) => {
+                  {data1.map((d,i) => {
                     return (
-                      <li className={styles.right__list_item}>
+                      <li key={i} className={styles.right__list_item}>
                         <div className={styles.data}>
                           <div className={styles.data__wrapper}>
                             <span className={styles.data__count}>{d.count}</span>

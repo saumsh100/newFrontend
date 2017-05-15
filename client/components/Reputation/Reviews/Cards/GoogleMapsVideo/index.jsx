@@ -5,7 +5,7 @@ import styles from '../../styles.scss';
 
 export default function GoogleMapsVideo(props) {
   return (
-    <Card borderColor={colorMap.red} className={styles.card}>
+    <Card>
       <div className={styles.googleMapsRespond}>
         <div className={styles.googleMapsRespond__video}>
           <iframe

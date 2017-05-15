@@ -1,0 +1,60 @@
+@import '../../../ui.scss';
+
+.checkBoxImage {
+  margin: 0 5px;
+  padding: 10px;
+  input[type=checkbox] {
+    display: none;
+
+  }
+  &__title {
+    margin-left: 5px;
+    text-transform: uppercase;
+    color: #b4b4b4;
+    font-size: 9px;
+    line-height: 30px;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: row;
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 12px;
+    align-items: center;
+    flex: 1 0 25%;
+  }
+
+  &__photo {
+    max-width: 45px;
+    margin-bottom: 5px;
+    border-radius: 50%;
+  }
+
+  &__spec {
+    color: #b4b4b4;
+  }
+
+}
+
+.primaryColor {
+  box-shadow: 0 0 4px 2px $primary-color;
+}
+.primaryYellow {
+  box-shadow: 0 0 4px 2px $primary-yellow;
+}
+.primaryGreen {
+  box-shadow: 0 0 4px 2px $primary-green;
+}
+.primaryBlueGreen {
+  box-shadow: 0 0 4px 2px $primary-blue-green;
+}

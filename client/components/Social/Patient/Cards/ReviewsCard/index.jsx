@@ -21,7 +21,6 @@ class ReviewsCard extends Component {
     return (
       <Card
         className={styles.card}
-        borderColor={colorMap.blue}
       >
         <CardHeader
           className={styles.cardHeader}
