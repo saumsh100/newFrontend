@@ -14,9 +14,9 @@
 // https://on.cypress.io/guides/bundled-tools#section-mocha
 //
 
-describe('Kitchen Sink', function(){
+describe('CareCru End2End Tests', function() {
 
-  beforeEach(function(){
+  beforeEach(function() {
     // **** Resetting State Before Each Test ****
     //
     // Visiting our app before each test
@@ -29,10 +29,10 @@ describe('Kitchen Sink', function(){
     // before each test.
   })
 
-  it('cy.should - assert that <title> is correct', function(){
+  it('cy.should - assert that <title> is correct', () => {
 
     // https://on.cypress.io/api/visit
-    cy.visit('https://example.cypress.io')
+    cy.visit('localhost:5000');
 
     // **** Making Assertions ****
     //
@@ -45,10 +45,10 @@ describe('Kitchen Sink', function(){
     // https://on.cypress.io/api/and
 
     // https://on.cypress.io/api/title
-    cy.title().should('include', 'Kitchen Sink')
+    cy.title().should('include', 'CareCru');
     //   ↲               ↲            ↲
     // subject        chainer      value
-  })
+  });
 
   /*context('Querying', function(){
     beforeEach(function(){

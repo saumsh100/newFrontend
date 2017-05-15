@@ -8,6 +8,9 @@
     "npm": "~3.10.6"
   },
   "private": true,
+  "jets": {
+
+  },
   "scripts": {
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
@@ -15,7 +18,9 @@
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "storybook": "start-storybook -p 9001 -c .storybook ",
-    "test": "cypress run && jest",
+    "test": "npm run test:cypress && npm run test:jest",
+    "test:cypress": "cypress run",
+    "test:jest": "jest",
     "clean": "npm run clean:assets && npm run clean:modules",
     "clean:assets": "rimraf server/public/assets",
     "clean:modules": "rimraf node_modules",
