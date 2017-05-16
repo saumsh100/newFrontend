@@ -1,6 +1,5 @@
 
 import React, { PropTypes, Component } from 'react';
-import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 import {
   AppBar,
@@ -38,14 +37,7 @@ class TopBar extends Component {
       index: 0,
     };
 
-    this.logout = this.logout.bind(this);
     this.sync = this.sync.bind(this);
-  }
-
-  logout() {
-    localStorage.setItem('token', '');
-    browserHistory.push('/login');
-    this.props.logout();
   }
 
   sync(e) {
@@ -119,11 +111,11 @@ class TopBar extends Component {
                 <Link to="/profile"><MenuItem icon="user">User Profile</MenuItem></Link>
                 <Link to="/settings"><MenuItem icon="cogs">Account Settings</MenuItem></Link>
                 <MenuSeparator />
-                <MenuItem icon="power-off" onClick={this.logout}>Sign Out</MenuItem>
+                <MenuItem icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
               </DropdownMenu>
             </li>
             <li className={styles.logoutPill}>
-              <IconButton onClick={this.logout} icon="power-off" />
+              <IconButton onClick={this.props.logout} icon="power-off" />
             </li>
           </ul>
         </div>

@@ -15,11 +15,8 @@ const cors = require('cors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
-
 // Initialize Express App!
 const app = express();
-
-
 
 // TODO: configure better for just embeds, currently it is global
 app.use(cors());
@@ -43,7 +40,7 @@ app.use(compress({
 
 // Bind middle ware to show favicon and set up static routes
 // app.use(favicon(`${globals.root}/public/images/favicon.ico`));
-app.use(express.static(`${globals.root}/public`));
+app.use(express.static(globals.staticPath));
 
 // app.use(express.static(`${globals.root}/${globals.loader}`));
 

@@ -14,7 +14,7 @@ export default handleActions({
   [LOGIN_SUCCESS](state, { token }) {
     return state.merge({
       token,
-      isAuthenticate: true,
+      isAuthenticated: true,
     });
   },
 

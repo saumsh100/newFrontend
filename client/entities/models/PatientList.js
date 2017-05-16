@@ -21,6 +21,11 @@ const PatientListSchema = {
 };
 
 export default class PatientList extends createModel(PatientListSchema) {
+  // TODO: temp fix, this file will be removed
+  getFullName() {
+    return `${this.get('firstName')} ${this.get('lastName')}`;
+  }
+
   /**
    * Add all TextMessage specific member functions here
    */
