@@ -23,6 +23,7 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
+    console.log(values);
     const {
       createEntityRequest,
       reinitializeState,
@@ -42,7 +43,7 @@ class AddNewAppointment extends Component {
     } = appointmentValues;
 
     const {
-      patient,
+      patientData,
       note,
     } = patientValues;
 
@@ -53,7 +54,7 @@ class AddNewAppointment extends Component {
     const appointment = {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
-      patientId: patient.id,
+      patientId: patientData.id,
       serviceId,
       practitionerId,
       chairId,

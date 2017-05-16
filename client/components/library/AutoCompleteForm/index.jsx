@@ -1,7 +1,9 @@
+
 import React, { Component, PropTypes } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { Input } from '../';
 import { Provider } from 'react-redux';
+import omit from 'lodash/omit';
 
 
 // input value for every given suggestion.
@@ -60,8 +62,8 @@ class AutoCompleteForm extends Component {
 
   render() {
     const { suggestions } = this.state;
-    const { value, inputProps } = this.props;
 
+    const newProps = omit(this.props, ['value',]);
     // Autosuggest will pass through all these props to the input element.
     // Finally, render it!
     return (
@@ -72,8 +74,7 @@ class AutoCompleteForm extends Component {
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
-          inputProps={inputProps}
-          {...this.props}
+          {...newProps}
         />
     );
   }

@@ -34,7 +34,11 @@ class SelectedDay extends Component {
     return (
       <div key={index} className={styles.appointment} style={appointmentStyles}
            onClick={()=>{
-            selectAppointment({appointment: appointment.app.toJS(), patient: appointment.patient.toJS()})}}>
+            selectAppointment({
+                appointment: appointment.app.toJS(),
+                patient: appointment.patient
+              })
+           }}>
           <div className={styles.appointment__username}>{appointment.name}</div>
           <div className={styles.appointment__date}>{`${displayStartDate} - ${displayEndDate}`}</div>
           <div className={styles.appointment__title}>{appointment.title}</div>
@@ -62,9 +66,10 @@ class SelectedDay extends Component {
           const patient = patientsArray.filter(pt => pt.id === app.patientId)[0];
           const patientName = patient && `${patient.firstName} ${patient.lastName}`;
           const { note, startDate, endDate, practitionerId } = app;
+          const addPatient = Object.assign({}, patient.toJS(), { patientData: patient.toJS(), note: app.note });
           const appObject = {
             app: app,
-            patient: patient,
+            patient: addPatient,
             title: note,
             startTime: moment(startDate),
             endTime: moment(endDate),

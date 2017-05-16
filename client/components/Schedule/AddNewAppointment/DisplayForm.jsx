@@ -11,7 +11,7 @@ const generateEntityOptions = (entities, label) => {
     options.push({ label: entity[label], value: entity.id });
   });
   return options;
-}
+};
 
 export default function DisplayForm(props) {
   const {
@@ -28,7 +28,6 @@ export default function DisplayForm(props) {
   const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
 
-  console.log(selectedAppointment)
   return (
     <Form
       form={formName}

@@ -11,6 +11,7 @@ class TextArea extends Component {
   render() {
     const {
       label,
+      input,
     } = this.props;
 
     return (

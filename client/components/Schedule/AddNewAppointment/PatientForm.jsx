@@ -39,8 +39,8 @@ class PatientForm extends Component {
           <Col xs={12}>
             <Field
               component="AutoComplete"
-              name="patient"
-              label="Patient Name"
+              name="patientData"
+              label="Enter Patient Name"
               getSuggestions={getSuggestions}
               onChange={this.handleAutoSuggest}
               validate={[validatePatient]}
