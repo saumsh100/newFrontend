@@ -17,7 +17,6 @@ class PatientForm extends Component {
   }
 
   handleAutoSuggest(e, newValue, previousValue) {
-    console.log(newValue);
     const {
       change,
       formName,

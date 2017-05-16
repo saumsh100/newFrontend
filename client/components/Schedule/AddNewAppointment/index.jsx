@@ -24,7 +24,6 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values);
     const {
       createEntityRequest,
       reinitializeState,

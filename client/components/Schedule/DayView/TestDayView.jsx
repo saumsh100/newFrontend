@@ -1,4 +1,6 @@
+
 import React, { Component } from 'react';
+import moment from 'moment';
 
 class TestDayView extends Component  {
 
@@ -43,10 +45,10 @@ class TestDayView extends Component  {
     } = this.props;
 
     let practitionersArray = practitioners.get('models').toArray();
-    const checkedPractitioers = schedule.toJS().practitionersFilter;
+    const checkedPractitioners = schedule.toJS().practitionersFilter;
 
-    if (checkedPractitioers.length) {
-      practitionersArray = practitionersArray.filter(pr => checkedPractitioers.indexOf(pr.id) > -1);
+    if (checkedPractitioners.length) {
+      practitionersArray = practitionersArray.filter(pr => checkedPractitioners.indexOf(pr.id) > -1);
     }
 
     return (

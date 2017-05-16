@@ -21,9 +21,10 @@ class SelectedDay extends Component {
     const start = appointment.startTime;
     const end = appointment.endTime;
     const minutesDuration = end.diff(start, 'minutes');
-    const positionTop = start.diff(startDay, 'minutes') * scale;
+    const positionTop = start.diff(startDay, 'minutes') * scale ;
+    console.log(start.diff(startDay, 'minutes'))
     const appointmentStyles = {
-      //height: `${minutesDuration * scale}px`,
+      height: `${minutesDuration * scale}px`,
       top: `${positionTop}px`,
     };
     const format = 'MMMM Do YYYY, h:mm:ss a';
@@ -57,11 +58,11 @@ class SelectedDay extends Component {
         .map((app) => {
           const patient = patientsArray.filter(pt => pt.id === app.patientId)[0];
           const patientName = patient && `${patient.firstName} ${patient.lastName}`;
-          const { title, startTime, endTime, practitionerId } = app;
+          const { note, startDate, endDate, practitionerId } = app;
           const appObject = {
-            title,
-            startTime: moment(startTime),
-            endTime: moment(endTime),
+            title: note,
+            startTime: moment(startDate),
+            endTime: moment(endDate),
             practitionerId,
           };
           return Object.assign({}, appObject, { name: patientName });
@@ -80,6 +81,7 @@ class SelectedDay extends Component {
       height: `${scale * 60}px`,
       color: 'white',
     };
+
     return (
       <div key={divIndex} className={styles.schedule__body} style={doctorScheduleColumn}>
         {workingHours.map((h, i) => (
@@ -118,8 +120,10 @@ class SelectedDay extends Component {
       patients,
       appointments,
       schedule,
+      currentDate,
     } = this.props;
-    const start = moment({ hour: 0, minute: 0 });
+    //const start = moment({ hour: 0, minute: 0 });
+    const start = currentDate.hour(0).minute(0);
     const end = moment({ hour: 23, minute: 59 });
     const workingMinutes = end.diff(start, 'minutes');
     const startHours = start.get('hours');
@@ -135,7 +139,7 @@ class SelectedDay extends Component {
       practitionersArray = practitionersArray.filter(pr => checkedPractitioers.indexOf(pr.id) > -1);
     }
     const tablesCount = (100 / (practitionersArray.length + 1));
-    const scale = 1.5;
+    const scale = 1.2;
     return (
       <div className={styles.schedule}>
           {this.renderTimeColumn(workingHours, workingMinutes, scale, tablesCount)}

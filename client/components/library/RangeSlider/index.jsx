@@ -18,7 +18,6 @@ class RangeSlider extends Component {
   }
 
   onRangeChange(value) {
-    console.log(value)
     const test15 = value[1] - value[0];
     if(test15 < 15) {
       const newValue = [value[0], value[0] + 15];
