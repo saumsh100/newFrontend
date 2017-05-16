@@ -40,6 +40,8 @@ ul {
 
 .rightCon {
   flex: 1;
+  max-height: calc(62vh - 75px);
+  overflow-y: auto;
 }
 
 .upcoming{
@@ -87,6 +89,7 @@ ul {
 
 .listRow {
   margin-top: 20px;
+  flex: 1;
 }
 
 .flex {
@@ -342,17 +345,25 @@ ul {
   margin: 15px;
 }
 
+
+.background {
+  background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
+  background-size: auto auto;
+  background-size: cover;
+}
+
 .tabdivs {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  min-height: 40vh;
-  max-height: 50vh;
+  max-height: calc(50vh - 110px);
+  height: calc(50vh - 110px);
 }
 
 .names {
   display: flex;
   justify-content: space-between;
+  margin-top: 25px;
 }
 
 .names2 {
@@ -463,7 +474,7 @@ ul {
 }
 
 .patients {
-  height: 93%;
+  height: 91%;
   position: absolute;
   display: flex;
   padding: 10px;
@@ -471,11 +482,15 @@ ul {
 
 .topRow {
   background: #f7f7f7;
+  min-height: 115px;
+  max-height: 115px;
 }
 
 .patients_list {
   background: #e6e6e6;
-  height: 100%;
+  max-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
   &_title {
     padding-top: 20px;
     padding-left: 30px;
@@ -535,7 +550,7 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 73vh;
+    max-height: calc(96vh - 230px);
     margin: 0;
     padding: 0;
     width: 100%;
@@ -544,7 +559,7 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 73vh;
+    max-height: calc(96vh - 230px);
     margin: 0;
     padding: 0;
     width: 100%;
@@ -615,7 +630,7 @@ ul {
   position: relative;
   margin-left: 10px;
   background: #fafafa;
-  height: 100%;
+  height: calc(99vh - 75px);
   display: flex;
   width: calc(77vw - 222px);
   flex-direction: column;
@@ -649,9 +664,6 @@ ul {
 
   &__header {
     padding: 50px;
-    background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
-    background-size: cover;
-    height: 100%;
   }
 
   .patient_profile {

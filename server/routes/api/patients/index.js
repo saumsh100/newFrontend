@@ -71,14 +71,14 @@ if (globals.env !== 'production') {
 
 patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next) => {
   const searchString = req.query.patients || '';
-  const search = searchString.toLowerCase().split(' ');
+  const search = searchString.split(' ');
 
   search[0] = search[0] || '';
   search[1] = search[1] || '';
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
-
+  console.log(search)
   Patient.filter((patient) => {
     return patient('accountId').eq(req.accountId).and(
       patient('firstName').match(search[0])
@@ -94,6 +94,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
     } } })
     .run()
     .then((patients) => {
+    console.log(patients)
       const normPatients = normalize('patients', patients);
       normPatients.entities.patients = normPatients.entities.patients || {};
       res.send(normPatients);

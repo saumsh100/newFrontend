@@ -54,13 +54,11 @@ class PatientList extends Component {
   }
 
   setSearchPatient(currentPatientId) {
-    if (this.props.patients.get(currentPatientId)) {
-      this.props.setSelectedPatient(this.props.patients.get(currentPatientId).get('id'));
-      this.setState({
-        showNewUser: true,
-        initialUser: true,
-      });
-    }
+    this.props.setSelectedPatient(currentPatientId);
+    this.setState({
+      showNewUser: true,
+      initialUser: true,
+    });
   }
 
   newPatient(values) {
@@ -207,7 +205,7 @@ class PatientList extends Component {
 
       let userAppointments = currentPatient.get('appointments');
 
-      userAppointments = (userAppointments ? userAppointments.toArray() : []);
+      userAppointments = (!userAppointments.toArray ? [] : userAppointments.toArray());
 
       if (userAppointments[0]) {
         userAppointments = userAppointments

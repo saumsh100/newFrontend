@@ -98,7 +98,7 @@ class MainContainer extends Component {
           <Col xs={12} sm={8} md={8} lg={9}>
             <div className={styles.patients_content}>
               <Row className={styles.rightCon}>
-                <Col xs={12}>
+                <Col xs={12} className={styles.background}>
                   {PatientInfo}
                 </Col>
               </Row>
