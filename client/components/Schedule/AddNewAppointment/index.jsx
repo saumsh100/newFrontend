@@ -1,19 +1,24 @@
 
 import React, { Component, PropTypes } from 'react';
-import { reset } from 'redux-form';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Map } from 'immutable';
+import { reset } from 'redux-form';
+import moment from 'moment';
 import DisplayForm from './DisplayForm';
-import { fetchEntities, createEntityRequest } from '../../../thunks/fetchEntities';
-import { IconButton } from '../../library';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+import {
+  fetchEntities,
+  createEntityRequest,
+  updateEntityRequest,
+  deleteEntityRequest,
+} from '../../../thunks/fetchEntities';
+import { IconButton } from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
   return new Date(date.setHours(time.getHours()));
 };
-
 
 class AddNewAppointment extends Component {
   constructor(props) {
@@ -24,7 +29,9 @@ class AddNewAppointment extends Component {
 
   handleSubmit(values) {
     const {
+      selectedAppointment,
       createEntityRequest,
+      updateEntityRequest,
       reinitializeState,
       reset,
       formName,
@@ -48,7 +55,8 @@ class AddNewAppointment extends Component {
     } = patientValues;
 
     const bufferTime = duration[1] - duration[0]
-    const totalDurationMin = (duration[0] + bufferTime);
+    const totalDurationMin = duration[0] + bufferTime;
+
     const startDate = mergeTime(new Date(date), new Date(time));
     const endDate = moment(startDate).minute(totalDurationMin);
 
@@ -64,9 +72,17 @@ class AddNewAppointment extends Component {
       customBufferTime: bufferTime,
     };
 
-    createEntityRequest({ key: 'appointments', entityData: newAppointment });
-    reinitializeState();
-    reset(formName);
+    if (!selectedAppointment) {
+      createEntityRequest({ key: 'appointments', entityData: newAppointment });
+      reinitializeState();
+      reset(formName);
+    } else {
+      const appModel = selectedAppointment.appointment.appModel;
+      const valuesMap = Map(newAppointment);
+      const modifiedAppointment = appModel.merge(valuesMap);
+      updateEntityRequest({ key: 'appointments', model: modifiedAppointment });
+      reinitializeState();
+    }
   }
 
   getSuggestions(value) {
@@ -88,6 +104,7 @@ class AddNewAppointment extends Component {
       practitioners,
       reset,
       selectedAppointment,
+      deleteEntityRequest,
     } = this.props;
 
     const remoteButtonProps = {
@@ -98,11 +115,15 @@ class AddNewAppointment extends Component {
     return (
       <div className={styles.formContainer}>
         <IconButton
-          icon="trash"
-          onClick={(e)=>{
-            e.stopPropagation();
-            reset(formName);
-            return this.props.reinitializeState();
+          icon={selectedAppointment ? "trash" : "times-circle-o"}
+          onClick={()=>{
+            if (!selectedAppointment) {
+              reset(formName);
+              return this.props.reinitializeState();
+            } else {
+              deleteEntityRequest({ key: 'appointments', id: selectedAppointment.appointment.id });
+              return this.props.reinitializeState();
+            }
           }}
           className={styles.trashIcon}
         />
@@ -134,6 +155,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     createEntityRequest,
+    updateEntityRequest,
+    deleteEntityRequest,
     reset,
   }, dispatch);
 }

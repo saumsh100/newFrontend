@@ -21,11 +21,8 @@ class RangeSlider extends Component {
     const {
       setRangeState
     } = this.props;
-
     if (setRangeState) {
-      const duration = setRangeState[0];
-      const buffer = setRangeState[0] + setRangeState[1];
-      this.setState({ value: [duration, buffer] });
+      this.setState({ value: setRangeState });
     }
   }
 

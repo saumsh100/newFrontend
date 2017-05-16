@@ -17,7 +17,7 @@ export default function RFRangeSlider(props) {
   const finalError = error || ((touched || dirty) ? meta.error : null);
   const newProps = omit(props, ['input', 'meta']);
   const newInput = omit(input, ['value', 'onChange']);
-  
+
   return (
     <RangeSlider
       {...newProps}

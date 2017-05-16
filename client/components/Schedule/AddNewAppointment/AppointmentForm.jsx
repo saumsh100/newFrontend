@@ -20,7 +20,6 @@ const marks = {
 };
 
 export default function AppointmentForm(props) {
-
   const {
     serviceOptions,
     practitionerOptions,

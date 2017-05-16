@@ -80,10 +80,13 @@ class SelectedDay extends Component {
             note: app.note
           });
 
+          const durationTime = getDuration(startDate, endDate, customBufferTime);
+          const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime
           const addToApp = Object.assign({}, app.toJS(), {
+            appModel: app,
             time: setTime(startDate),
             date: moment(startDate).format('L'),
-            duration: [getDuration(startDate, endDate, customBufferTime), customBufferTime]
+            duration: [durationTime, bufferTime]
           });
 
           const appObject = {
