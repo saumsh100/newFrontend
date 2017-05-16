@@ -19,8 +19,6 @@ Use node and npm versions in package.json file, install them if not already inst
 
 `npm install`
 
-`npm install -g foreman`
-
 ### Installation on Windows 10 (work in progress)
 Run all commands PowerShell as admin:
 
@@ -36,9 +34,6 @@ installs MS build tools, python, sets PATH correctly for builds
 go into project dir and try bcrypt - it's the one that files due to incorrect build tools setup
 - cd carecru
 - npm install bcrypt
-
-foreman
-- npm install -g foreman
 
 If there are problems with build and you are changing order of installation, build utils you are installing (e.g. Visual Studio, Build tools, etc) before running `npm install <whatever>` make sure to remove the node_modules directory and clean cache `npm cache clean`. Not doing that may cause problems (or may not) - better do to be sure you have a clean folder.
 
@@ -78,6 +73,28 @@ add the following to `/etc/hosts`
 127.0.0.1        my.carecru.dev
 127.0.0.1       api.carecru.dev
 ```
+
+## Build Tools
+### Front-end
+
+You have to run next command (in a separate tab) to see changes on a fly.
+
+`npm run client:dev:server`
+
+So now application hosted on `http://localhost:5100`. All not static requests are transparently proxied to `http://localhost:5000`.
+
+#### Possible pitfalls
+- If you get a message like `Error occured while trying to proxy` you need to check application is running. It could be not initialized yet, so just reload page in a moment.
+- If there are no changes even after page reload - be sure that you get application from a right endpoint `http://localhost:5100` not a `http://localhost:5000`.
+
+### Back-end
+
+Be sure that you start application with `npm start` command. In a new terminal do next command to start watching on changes:
+
+`npm run server:watch`
+
+Server will be restarted automatically.
+
 ## View on Heroku
 
 To view pull-request app on Heroku domain for it is created as follows:
