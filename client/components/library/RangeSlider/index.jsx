@@ -39,12 +39,8 @@ class RangeSlider extends Component {
       max,
     } = this.props;
 
-    const maximumTrackStyle = {
-      backgroundColor: '#ff715a',
-      width: `${((this.state.value[0] - 15)/(max - 15)) * 100}%`,
-    };
 
-    const newProps = omit(this.props, ['value']);
+    const newProps = omit(this.props, ['value',]);
 
     return (
       <div>
@@ -61,9 +57,7 @@ class RangeSlider extends Component {
         <Range
           pushable
           count={1}
-          onAfterChange={this.onRangeChange}
-          maximumTrackStyle={maximumTrackStyle}
-          {...newProps}
+          {...this.props}
         />
       </div>
     );
