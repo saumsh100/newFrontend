@@ -39,7 +39,7 @@ class PatientForm extends Component {
           <Col xs={12}>
             <Field
               component="AutoComplete"
-              name="selectedPatient"
+              name="patient"
               label="Patient Name"
               getSuggestions={getSuggestions}
               onChange={this.handleAutoSuggest}
@@ -70,7 +70,7 @@ class PatientForm extends Component {
           <Col xs={12} className={styles.addNewAppt_col_textArea} >
             <Field
               component="TextArea"
-              name="comment"
+              name="note"
               label="Comment"
               rows={6}
               className={styles.addNewAppt_comment}

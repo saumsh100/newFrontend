@@ -18,11 +18,12 @@ class SelectedDay extends Component {
   }
 
   renderAppoinment(appointment, scale, startDay, index) {
+    const { selectAppointment } = this.props;
+
     const start = appointment.startTime;
     const end = appointment.endTime;
     const minutesDuration = end.diff(start, 'minutes');
     const positionTop = start.diff(startDay, 'minutes') * scale ;
-    console.log(start.diff(startDay, 'minutes'))
     const appointmentStyles = {
       height: `${minutesDuration * scale}px`,
       top: `${positionTop}px`,
@@ -31,7 +32,9 @@ class SelectedDay extends Component {
     const displayStartDate = appointment.startTime.format(format);
     const displayEndDate = appointment.endTime.format(format);
     return (
-      <div key={index} className={styles.appointment} style={appointmentStyles}>
+      <div key={index} className={styles.appointment} style={appointmentStyles}
+           onClick={()=>{
+            selectAppointment({appointment: appointment.app.toJS(), patient: appointment.patient.toJS()})}}>
           <div className={styles.appointment__username}>{appointment.name}</div>
           <div className={styles.appointment__date}>{`${displayStartDate} - ${displayEndDate}`}</div>
           <div className={styles.appointment__title}>{appointment.title}</div>
@@ -60,6 +63,8 @@ class SelectedDay extends Component {
           const patientName = patient && `${patient.firstName} ${patient.lastName}`;
           const { note, startDate, endDate, practitionerId } = app;
           const appObject = {
+            app: app,
+            patient: patient,
             title: note,
             startTime: moment(startDate),
             endTime: moment(endDate),

@@ -30,11 +30,13 @@ class ScheduleComponent extends Component {
     super(props);
     this.state = {
       addNewAppointment: false,
+      selectedAppointment: null,
     };
 
     this.handleDayPicker = this.handleDayPicker.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
-    this.addNewAppointment = this.addNewAppointment.bind(this)
+    this.addNewAppointment = this.addNewAppointment.bind(this);
+    this.selectAppointment = this.selectAppointment.bind(this);
   }
 
   handleDayPicker(day) {
@@ -44,12 +46,19 @@ class ScheduleComponent extends Component {
   reinitializeState() {
     this.setState({
       addNewAppointment: false,
+      selectedAppointment: null,
     });
   }
 
   addNewAppointment() {
     this.setState({
       addNewAppointment: true,
+    });
+  }
+
+  selectAppointment(app) {
+    this.setState({
+      selectedAppointment: app,
     });
   }
 
@@ -63,6 +72,11 @@ class ScheduleComponent extends Component {
       chairs,
     } = this.props;
 
+    const {
+      addNewAppointment,
+      selectedAppointment,
+    } = this.state;
+
     const currentDate = moment(schedule.toJS().scheduleDate);
 
     const params = {
@@ -71,8 +85,14 @@ class ScheduleComponent extends Component {
       appointments,
       schedule,
       currentDate,
+      selectAppointment: this.selectAppointment,
     };
 
+    let formName = 'NewAppointmentForm';
+    if( selectedAppointment ) {
+      const app = selectedAppointment.appointment;
+      formName = `EditAppointment_${app.id}`
+    }
     return (
       <Grid className={styles.schedule}>
         <Row className={styles.rowTest}>
@@ -93,17 +113,19 @@ class ScheduleComponent extends Component {
                 <CurrentDateCalendar currentDate={currentDate} />
                 <DayView {...params} />
                 <Modal
-                  active={this.state.addNewAppointment}
+                  active={addNewAppointment || !!selectedAppointment}
                   onEscKeyDown={this.reinitializeState}
                   onOverlayClick={this.reinitializeState}
                   custom
                 >
                   <AddNewAppointment
                     currentDate={currentDate}
+                    formName={formName}
                     chairs={chairs.get('models').toArray()}
                     practitioners={practitioners.get('models').toArray()}
                     services={services.get('models').toArray()}
                     patients={patients.get('models').toArray()}
+                    selectedAppointment={selectedAppointment}
                     reinitializeState={this.reinitializeState}
                   />
                 </Modal>

@@ -14,7 +14,6 @@ const mergeTime = (date, time) => {
   return new Date(date.setHours(time.getHours()));
 };
 
-const formName = 'NewAppointmentForm';
 
 class AddNewAppointment extends Component {
   constructor(props) {
@@ -28,6 +27,7 @@ class AddNewAppointment extends Component {
       createEntityRequest,
       reinitializeState,
       reset,
+      formName,
     } = this.props;
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
@@ -35,15 +35,15 @@ class AddNewAppointment extends Component {
     const {
       date,
       time,
-      service,
-      practitioner,
-      chair,
+      serviceId,
+      practitionerId,
+      chairId,
       duration,
     } = appointmentValues;
 
     const {
-      selectedPatient,
-      comment,
+      patient,
+      note,
     } = patientValues;
 
     const totalDurationMin = (duration[0] + (duration[1] - duration[0]));
@@ -53,11 +53,11 @@ class AddNewAppointment extends Component {
     const appointment = {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
-      patientId: selectedPatient.id,
-      serviceId: service,
-      practitionerId: practitioner,
-      chairId: chair,
-      note: comment,
+      patientId: patient.id,
+      serviceId,
+      practitionerId,
+      chairId,
+      note,
       isSyncedWithPMS: false,
     };
 
@@ -80,11 +80,13 @@ class AddNewAppointment extends Component {
 
   render() {
     const {
+      formName,
       services,
       patients,
       chairs,
       practitioners,
       reset,
+      selectedAppointment,
     } = this.props;
 
     const remoteButtonProps = {
@@ -112,6 +114,7 @@ class AddNewAppointment extends Component {
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           formName={formName}
+          selectedAppointment={selectedAppointment}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton

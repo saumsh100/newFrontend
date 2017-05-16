@@ -21,18 +21,20 @@ export default function DisplayForm(props) {
     practitioners,
     getSuggestions,
     formName,
+    selectedAppointment,
   } = props;
 
   const serviceOptions = generateEntityOptions(services, 'name');
   const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
 
-
+  console.log(selectedAppointment)
   return (
     <Form
       form={formName}
       onSubmit={handleSubmit}
       ignoreSaveButton
+      initialValues={selectedAppointment}
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>
