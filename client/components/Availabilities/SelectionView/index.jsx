@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { Button, Icon, Form, Field, Checkbox } from '../../library';
 import WaitListPreferences from './WaitListPreferences';
 import AvailabilitiesPreferences from './AvailabilitiesPreferences';
-import AvailabilitiesDisplay from './AvailabilitiesDIsplay';
+import AvailabilitiesDisplay from './AvailabilitiesDisplay';
 import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
 
