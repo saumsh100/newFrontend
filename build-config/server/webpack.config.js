@@ -23,6 +23,10 @@ module.exports = {
 
   entry: entries('server', 'cron', 'reminders'),
 
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+
   output: {
     path: path.resolve(projectRoot, './server/bin/build'),
     filename: '[name].bundle.js',
@@ -45,6 +49,14 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.css$/,
+        use: ['isomorphic-style-loader', 'css-loader'],
+      },
+      {
+        test: /\.scss$/,
+        use: ['isomorphic-style-loader', 'css-loader', 'sass-loader'],
+      },
     ],
   },
 
@@ -60,7 +72,6 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.IgnorePlugin(/\.(css|scss)$/),
     new webpack.DefinePlugin({
       'process.env.BROWSER': false,
       'process.env.BUNDLED': true,
