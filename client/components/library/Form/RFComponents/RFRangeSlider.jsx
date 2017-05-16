@@ -11,17 +11,17 @@ export default function RFRangeSlider(props) {
   } = props;
 
   const {
-    value
+    value,
   } = input;
   const { touched, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
-  const numValue = Number(input.value)
   const newProps = omit(props, ['input', 'meta']);
   const newInput = omit(input, ['value']);
+
   return (
     <RangeSlider
       {...newProps}
-      {...newInput}
+      {...input}
       error={finalError}
     />
   );

@@ -17,6 +17,7 @@ class PatientForm extends Component {
   }
 
   handleAutoSuggest(e, newValue, previousValue) {
+    console.log(newValue);
     const {
       change,
       formName,
@@ -31,8 +32,6 @@ class PatientForm extends Component {
   render() {
     const {
       getSuggestions,
-      handleSubmit,
-      formName,
     } = this.props;
 
     return (
@@ -45,8 +44,8 @@ class PatientForm extends Component {
               label="Patient Name"
               getSuggestions={getSuggestions}
               onChange={this.handleAutoSuggest}
-              required
               validate={[validatePatient]}
+              required
             />
           </Col>
         </Row>
@@ -55,7 +54,7 @@ class PatientForm extends Component {
             <Field
               name="phoneNumber"
               label="Phone #"
-              required
+              disabled
             />
           </Col>
         </Row>
@@ -64,7 +63,7 @@ class PatientForm extends Component {
             <Field
               name="email"
               label="Email"
-              required
+              disabled
             />
           </Col>
         </Row>

@@ -1,5 +1,6 @@
+
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, Field, RangeSlider } from '../../library';
+import { Grid, Row, Col, Field, } from '../../library';
 import { timeOptions } from '../../library/util/TimeOptions';
 import styles from './styles.scss';
 
@@ -148,7 +149,6 @@ export default function AppointmentForm(props) {
             min={15}
             max={180}
             marks={marks}
-            required
           />
         </Col>
       </Row>

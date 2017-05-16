@@ -24,6 +24,7 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
+    console.log(values);
     const {
       createEntityRequest,
       reinitializeState,
@@ -79,7 +80,6 @@ class AddNewAppointment extends Component {
   }
 
   render() {
-
     const {
       services,
       patients,
