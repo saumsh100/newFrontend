@@ -1,0 +1,10 @@
+{
+  "presets": [
+    ["env", { "modules": false }],
+    "react"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    "react-hot-loader/babel"
+  ]
+}

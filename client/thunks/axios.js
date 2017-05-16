@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { browserHistory } from 'react-router';
 
 // Add a request interceptor
 axios.interceptors.request.use((config) => {
@@ -21,7 +20,7 @@ axios.interceptors.response.use((response) => {
     localStorage.setItem('token', '');
     browserHistory.push('/login');
   }*/
-  
+
   return Promise.reject(error);
 });
 

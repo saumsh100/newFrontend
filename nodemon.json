@@ -8,7 +8,7 @@
     "server/.idea/"
   ],
   "watch": [
-    "server/",
+    "server/bin/build/",
     "webpack.base.config"
   ]
 }
