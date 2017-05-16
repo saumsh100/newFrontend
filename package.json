@@ -4,8 +4,8 @@
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin.d.sharp@gmail.com>",
   "engines": {
-    "node": "~6.2.0",
-    "npm": "~3.10.6"
+    "node": "~6.10.3",
+    "npm": "~3.10.10"
   },
   "private": true,
   "scripts": {
@@ -19,7 +19,9 @@
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "storybook": "start-storybook -p 9001 -c .storybook ",
-    "test": "jest",
+    "test": "npm run test:cypress && npm run test:jest",
+    "test:cypress": "cypress run",
+    "test:jest": "jest",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
     "clean:assets": "rimraf statics/assets",

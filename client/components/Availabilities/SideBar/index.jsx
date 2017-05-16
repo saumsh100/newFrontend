@@ -107,8 +107,9 @@ SideBar.propTypes = {
   registrationStep: PropTypes.number.isRequired,
 };
 
-function mapStateToProps({ availabilities, toolbar }) {
+function mapStateToProps({ availabilities }) {
   return {
+    account: availabilities.get('account'),
     selectedAvailability: availabilities.get('selectedAvailability'),
     registrationStep: availabilities.get('registrationStep'),
   };

@@ -51,6 +51,7 @@ function AvailabilitiesPreferences(props) {
           <span className={styles.label}>Date Range</span>
           <DayPicker
             target="icon"
+            iconClassName={styles.dayPickerIcon}
             value={selectedStartDate}
             onChange={value => setSelectedStartDate(value)}
           />

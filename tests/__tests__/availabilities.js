@@ -7,8 +7,8 @@ const {
   fetchServiceData,
   fetchPractitionerData,
   fetchAvailabilities,
-} = require('../server/lib/availabilities');
-const Practitioner = require('../server/models/Practitioner');
+} = require('../../server/lib/availabilities');
+const Practitioner = require('../../server/models/Practitioner');
 
 // TODO: make seeds more modular so we can see here
 const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';

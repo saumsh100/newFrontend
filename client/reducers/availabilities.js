@@ -109,11 +109,7 @@ export default handleActions({
   },
 
   [SET_REGISTRATION_STEP](state, action) {
-    const registrationStep = action.payload;
-    console.log('reducers');
-    return state.merge({
-      registrationStep,
-    });
+    return state.set('registrationStep', action.payload);
   },
 
   [SET_CLINIC_INFO](state, action) {

@@ -5,11 +5,11 @@
   &__header {
     background: #fff;
     font-family: $medium-font;
-    border-radius: 5px;
     display: flex;
     position: relative;
     align-items: center;
     height: 40px;
+    box-shadow: $widget-box-shadow;
 
     &_title {
       display: flex;
