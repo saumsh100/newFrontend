@@ -39,7 +39,7 @@ ul {
 }
 
 .rightCon {
-  height: 50%;
+  flex: 1;
 }
 
 .upcoming{
@@ -116,6 +116,16 @@ ul {
   border-bottom-color: currentcolor;
   border-bottom: 1px solid #c6c6c6;
   background-color: #fafafa;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus ~ label {
+    top: 10px;
+    left: 0px;
+    font-size: 12px;
+  }
 }
 
 .birthFields{
@@ -157,6 +167,7 @@ ul {
   -ms-flex-align: center;
   align-items: center;
   transition: border 500ms ease-out;
+
 }
 .prefInput{
   position: relative;
@@ -334,6 +345,7 @@ ul {
 .tabdivs {
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
   min-height: 40vh;
   max-height: 50vh;
 }
@@ -452,7 +464,6 @@ ul {
 
 .patients {
   height: 93%;
-  overflow: auto;
   position: absolute;
   display: flex;
   padding: 10px;
@@ -524,7 +535,7 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 680px;
+    max-height: 73vh;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -533,7 +544,7 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 690px;
+    max-height: 73vh;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -605,6 +616,9 @@ ul {
   margin-left: 10px;
   background: #fafafa;
   height: 100%;
+  display: flex;
+  width: calc(77vw - 222px);
+  flex-direction: column;
 
   &__addUser {
     position: absolute;
@@ -637,6 +651,7 @@ ul {
     padding: 50px;
     background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
     background-size: cover;
+    height: 100%;
   }
 
   .patient_profile {

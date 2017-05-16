@@ -70,8 +70,9 @@ class PatientList extends Component {
     };
 
     this.setState(newState);
+
     this.props.createEntityRequest({
-      key: 'patient',
+      key: 'patients',
       entityData: values,
     }).then((result) => {
         this.props.setSelectedPatient(Object.keys(result.patients)[0]);
@@ -205,7 +206,8 @@ class PatientList extends Component {
       currentPatient = selectedPatient;
 
       let userAppointments = currentPatient.get('appointments');
-      userAppointments = userAppointments.toArray();
+
+      userAppointments = (userAppointments ? userAppointments.toArray() : []);
 
       if (userAppointments[0]) {
         userAppointments = userAppointments

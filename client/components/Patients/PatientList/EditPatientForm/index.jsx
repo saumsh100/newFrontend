@@ -82,7 +82,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
             className={styles.nameFields}
             component="DayPicker"
             name="birthDate"
-            label="Birth Date &#128197;"
+            label="Birth Date"
           />
         </div>
         <Field
