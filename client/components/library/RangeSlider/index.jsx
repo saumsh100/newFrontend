@@ -18,17 +18,20 @@ class RangeSlider extends Component {
   }
 
   onRangeChange(value) {
+    console.log(value)
     const test15 = value[1] - value[0];
     if(test15 < 15) {
       const newValue = [value[0], value[0] + 15];
       this.setState({
         value: newValue,
       });
+      this.props.onChange(newValue)
 
     } else {
       this.setState({
         value,
       });
+      this.props.onChange(value)
     }
   }
 
@@ -39,8 +42,12 @@ class RangeSlider extends Component {
       max,
     } = this.props;
 
+    const maximumTrackStyle = {
+      backgroundColor: '#ff715a',
+      width: `${((this.state.value[0] - 15)/(max - 15)) * 100}%`,
+    };
 
-    const newProps = omit(this.props, ['value',]);
+    const newProps = omit(this.props, ['onChange']);
 
     return (
       <div>
@@ -55,9 +62,12 @@ class RangeSlider extends Component {
           </div>
         </div>
         <Range
+          value={[this.state.value[0], this.state.value[1]]}
           pushable
           count={1}
-          {...this.props}
+          onChange={this.onRangeChange}
+          maximumTrackStyle={maximumTrackStyle}
+          {...newProps}
         />
       </div>
     );
