@@ -50,7 +50,7 @@ class SelectionView extends Component {
            onChange={this.props.handleChange}
            />
            </div>*/}
-          <Button
+          {/*<Button
             icon="arrow-right"
             disabled={!selectedAvailability}
             className={styles.continueButton}
@@ -60,7 +60,7 @@ class SelectionView extends Component {
             }}
           >
             <span>Continue</span>
-          </Button>
+          </Button>*/}
           {/*waitListPreferences*/}
         </div>
       </div>
