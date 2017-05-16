@@ -4,13 +4,10 @@
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin.d.sharp@gmail.com>",
   "engines": {
-    "node": "~6.2.0",
-    "npm": "~3.10.6"
+    "node": "~6.10.3",
+    "npm": "~3.10.10"
   },
   "private": true,
-  "jets": {
-
-  },
   "scripts": {
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
