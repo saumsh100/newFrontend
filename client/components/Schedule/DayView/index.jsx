@@ -7,7 +7,14 @@ import {fetchEntities} from '../../../thunks/fetchEntities';
 import Link from '../../library/Link';
 import CurrentDate from '../Cards/CurrentDate';
 import styles from '../styles.scss';
+import { setTime } from '../../library/util/TimeOptions';
 
+
+const getDuration = (startDate, endDate, customBufferTime) => {
+  const end = moment(endDate);
+  const duration = moment.duration(end.diff(startDate));
+  return duration.asMinutes() - customBufferTime;
+};
 
 class SelectedDay extends Component {
   constructor(props) {
@@ -35,7 +42,7 @@ class SelectedDay extends Component {
       <div key={index} className={styles.appointment} style={appointmentStyles}
            onClick={()=>{
             selectAppointment({
-                appointment: appointment.app.toJS(),
+                appointment: appointment.app,
                 patient: appointment.patient
               })
            }}>
@@ -63,24 +70,39 @@ class SelectedDay extends Component {
           return currentDoctorsAppointment && theSameDate;
         })
         .map((app) => {
+          const { note, startDate, endDate, practitionerId, customBufferTime } = app;
+
           const patient = patientsArray.filter(pt => pt.id === app.patientId)[0];
           const patientName = patient && `${patient.firstName} ${patient.lastName}`;
-          const { note, startDate, endDate, practitionerId } = app;
-          const addPatient = Object.assign({}, patient.toJS(), { patientData: patient.toJS(), note: app.note });
+
+          const addPatient = Object.assign({}, patient.toJS(), {
+            patientData: patient.toJS(),
+            note: app.note
+          });
+
+          const addToApp = Object.assign({}, app.toJS(), {
+            time: setTime(startDate),
+            date: moment(startDate).format('L'),
+            duration: [getDuration(startDate, endDate, customBufferTime), customBufferTime]
+          });
+
           const appObject = {
-            app: app,
+            app: addToApp,
             patient: addPatient,
             title: note,
             startTime: moment(startDate),
             endTime: moment(endDate),
             practitionerId,
           };
+
           return Object.assign({}, appObject, { name: patientName });
         });
+
     if (appointmentType) {
       apps = apps.filter(app => app.title === appointmentType);
     }
     if (typeof apps !== 'object') apps = [];
+
     const doctorAppointments = apps.filter(app => app.practitionerId === doctor.id);
     const doctorScheduleColumn = {
       display: 'inline-block',

@@ -28,6 +28,8 @@ export default function DisplayForm(props) {
   const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
 
+  console.log(selectedAppointment)
+
   return (
     <Form
       form={formName}

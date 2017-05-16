@@ -23,13 +23,13 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values);
     const {
       createEntityRequest,
       reinitializeState,
       reset,
       formName,
     } = this.props;
+
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
 
@@ -47,11 +47,12 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
-    const totalDurationMin = (duration[0] + (duration[1] - duration[0]));
+    const bufferTime = duration[1] - duration[0]
+    const totalDurationMin = (duration[0] + bufferTime);
     const startDate = mergeTime(new Date(date), new Date(time));
     const endDate = moment(startDate).minute(totalDurationMin);
 
-    const appointment = {
+    const newAppointment = {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
       patientId: patientData.id,
@@ -60,9 +61,10 @@ class AddNewAppointment extends Component {
       chairId,
       note,
       isSyncedWithPMS: false,
+      customBufferTime: bufferTime,
     };
 
-    createEntityRequest({ key: 'appointments', entityData: appointment });
+    createEntityRequest({ key: 'appointments', entityData: newAppointment });
     reinitializeState();
     reset(formName);
   }
@@ -72,10 +74,8 @@ class AddNewAppointment extends Component {
       .then((searchData) => {
         return searchData.patients;
       }).then((searchedPatients) => {
-        const results = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
+        return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
           (key) => { return searchedPatients[key]; }) : [];
-        this.setState({ patientResult: results })
-        return results;
       });
   }
 

@@ -12,6 +12,7 @@ const AppointmentsSchema = {
   chairId: null,
   isPatientConfirmed: null,
   note: null,
+  customBufferTime: null,
 };
 
 export default class Appointments extends createModel(AppointmentsSchema) {
