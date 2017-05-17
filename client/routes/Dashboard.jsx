@@ -14,33 +14,35 @@ import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
 import loadReputatuion from 'bundle-loader?lazy!./Dashboard/Reputation';
+import loadEnterprises from 'bundle-loader?lazy!./Dashboard/Enterprises';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
 
 const DashboardRouter = ({ history, isAuth }) => {
   const getAuthorizedRoutes = () =>
     <div>
-      <Route exact path="/" component={DashboardComponent} />
-      <Route path="/profile" component={Profile} />
-      <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
-      <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
-      <LazyRoute path="/patients" load={loadPatients} name="patients" />
-      <LazyRoute path="/social" load={loadSocial} name="social" />
-      <LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />
-      <LazyRoute path="/settings" load={loadSettings} name="settings" />
+      <Switch>
+        <Route exact path="/" component={DashboardComponent} />
+        <Route path="/profile" component={Profile} />
+        <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
+        <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
+        <LazyRoute path="/patients" load={loadPatients} name="patients" />
+        <LazyRoute path="/social" load={loadSocial} name="social" />
+        <LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />
+        <LazyRoute path="/settings" load={loadSettings} name="settings" />
+        <LazyRoute path="/enterprises" load={loadEnterprises} name="enterprises" />
+        <Route component={FourZeroFour} />
+      </Switch>
     </div>;
 
   const Dashboard = props =>
     <DashboardApp {...props}>
-      <Switch>
-        <Route
-          render={() => (isAuth ?
-              getAuthorizedRoutes() :
-              <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-          )}
-        />
-        <Route component={FourZeroFour} />
-      </Switch>
+      <Route
+        render={() => (isAuth ?
+            getAuthorizedRoutes() :
+            <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+        )}
+      />
     </DashboardApp>;
 
   return (

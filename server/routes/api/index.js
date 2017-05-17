@@ -1,23 +1,28 @@
 
-const apiRouter = require('express').Router();
-const accountsRouter = require('./accounts');
-const appointmentRouter = require('./appointment');
-const reputationRouter = require('./reputation');
-const patientsRouter = require('./patients');
-const practitionersRouter = require('./practitioners');
-const requestRouter = require('./request');
-const userRouter = require('./users');
-const textMessagesRouter = require('./textMessages');
-const chairsRouter = require('./chair');
-const chatsRouter = require('./chats');
-const servicesRouter = require('./services');
-const availabilitiesRouter = require('./availabilities');
-const syncErrorRouter = require('./syncClientError');
-const timeOffsRouter = require('./practitionerTimeOffs');
-const updaterRouter = require('./updater');
-const weeklySchedulesRouter = require('./weeklySchedules');
-const authMiddleware = require('../../middleware/auth');
-const createJoinObject = require('../../middleware/createJoinObject');
+import { Router } from 'express';
+
+import accountsRouter from './accounts';
+import appointmentRouter from './appointment';
+import reputationRouter from './reputation';
+import patientsRouter from './patients';
+import practitionersRouter from './practitioners';
+import requestRouter from './request';
+import userRouter from './users';
+import textMessagesRouter from './textMessages';
+import chairsRouter from './chair';
+import chatsRouter from './chats';
+import servicesRouter from './services';
+import availabilitiesRouter from './availabilities';
+import syncErrorRouter from './syncClientError';
+import timeOffsRouter from './practitionerTimeOffs';
+import updaterRouter from './updater';
+import weeklySchedulesRouter from './weeklySchedules';
+import enterprisesRouter from './enterprises';
+
+import authMiddleware from '../../middleware/auth';
+import createJoinObject from '../../middleware/createJoinObject';
+
+const apiRouter = Router();
 
 apiRouter.all('*', authMiddleware, createJoinObject);
 apiRouter.use('/accounts', accountsRouter);
@@ -36,5 +41,6 @@ apiRouter.use('/syncClientError', syncErrorRouter);
 apiRouter.use('/timeOffs', timeOffsRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/updater', updaterRouter);
+apiRouter.use('/enterprises', enterprisesRouter);
 
-module.exports = apiRouter;
+export default apiRouter;

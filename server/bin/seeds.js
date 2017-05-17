@@ -1068,7 +1068,7 @@ const SEEDS = {
     {
       userId: justinUserId,
       accountId,
-      role: 'OWNER',
+      role: 'SUPERADMIN',
       permissions: {},
     },
     {
@@ -1290,15 +1290,27 @@ const SEEDS = {
     },
   ],
 
-  SyncClientVersion: [
+  Enterprise: [
     {
-      version: 2.0,
-      url: 'http://carecru.dev:8080/api/updater/download',
-      key: '',
-      secret: '',
-      build: 1,
+      name: 'Absolute Dental',
+    },
+    {
+      name: 'ACCESS',
+    },
+    {
+      name: 'AFFORDABLE Dentures',
     },
   ],
+
+  // SyncClientVersion: [
+  //   {
+  //     version: 2.0,
+  //     url: 'http://carecru.dev:8080/api/updater/download',
+  //     key: 'key',
+  //     secret: '',
+  //     build: 1,
+  //   },
+  // ],
 };
 
 seedDatabase(SEEDS)
