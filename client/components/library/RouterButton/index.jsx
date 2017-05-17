@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { compose, withHandlers } from 'recompose';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import Button from '../Button';
 
 function RouterButton(props) {

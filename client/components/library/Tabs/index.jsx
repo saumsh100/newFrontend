@@ -6,39 +6,43 @@ import TabContent from './TabContent';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
+// Workaround to be able compare class with type
+// https://github.com/gaearon/react-hot-loader/issues/304
+const tabType = (<Tab />).type;
+
 class Tabs extends Component {
   constructor(props) {
     super(props);
-  
+
     this.handleTabClick = this.handleTabClick.bind(this);
     this.parseChildren = this.parseChildren.bind(this);
     this.renderHeaders = this.renderHeaders.bind(this);
     this.renderContents = this.renderContents.bind(this);
   }
-  
+
   handleTabClick(index) {
     this.props.onChange && this.props.onChange(index);
   }
-  
+
   parseChildren(children) {
     const headers = [];
     const contents = [];
-    
+
     Children.forEach(children, (item) => {
-      if (item.type === Tab) {
+      if (item.type === tabType) {
         headers.push(item);
         if (item.props.children) {
           contents.push(<TabContent children={item.props.children} />);
         }
       }
     });
-    
+
     return {
       headers,
       contents,
     };
   }
-  
+
   renderHeaders(headers) {
     return headers.map((item, idx) => {
       return React.cloneElement(item, {
@@ -53,7 +57,7 @@ class Tabs extends Component {
       });
     });
   }
-  
+
   renderContents(contents) {
     const contentElements = contents.map((item, idx) => {
       return React.cloneElement(item, {
@@ -62,10 +66,10 @@ class Tabs extends Component {
         tabIndex: idx,
       });
     });
-  
+
     return contentElements.filter((item, idx) => (idx === this.props.index));
   }
-  
+
   render() {
     const {
       children,
@@ -73,10 +77,10 @@ class Tabs extends Component {
     } = this.props;
 
     const newProps = omit(this.props,['index']);
-  
+
     const classes = classNames(className, styles.tabs);
     const { headers, contents } = this.parseChildren(children);
-  
+
     return (
       // Order is important, classNames={classes} needs to override props.className
       <div {...newProps} className={classes}>

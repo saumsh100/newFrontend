@@ -5,76 +5,63 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import includes from 'lodash/includes';
 import { bindActionCreators } from 'redux';
-import { Button, Form, Field, Checkbox } from '../../library';
+import { Button, Icon, Form, Field, Checkbox } from '../../library';
 import WaitListPreferences from './WaitListPreferences';
-import AvailabilitiesPreferencesForm from './AvailabilitiesPreferencesForm';
-import AvailabilitiesDisplay from './AvailabilitiesDIsplay/index';
+import AvailabilitiesPreferences from './AvailabilitiesPreferences';
+import AvailabilitiesDisplay from './AvailabilitiesDisplay';
 import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
 
 class SelectionView extends Component {
   render() {
-    const { practitionerId, availabilities, defaultValues } = this.props.params;
-    const { props, upperState, services, practitioners, setRegistrationStep } = this.props;
-
-    const startsAt = props.practitionersStartEndDate.get('startsAt');
+    const {
+      services,
+      practitioners,
+      selectedServiceId,
+      selectedPractitionerId,
+      selectedStartDate,
+      selectedAvailability,
+      setRegistrationStep,
+    } = this.props;
 
     let waitListPreferences = null;
-    if (upperState.checked) {
-      waitListPreferences = (
-        <WaitListPreferences
-          startsAt={startsAt}
-          setRegistrationStep={props.setRegistrationStep}
-          color={props.bookingWidgetPrimaryColor}
-        />
-      );
-    }
-
-    const { logo, address, clinicName } = props;
     return (
       <div>
         <div className={styles.appointment__body_header}>
-          <AvailabilitiesPreferencesForm
+          <AvailabilitiesPreferences
             services={services}
             practitioners={practitioners}
-            onChange={values => alert(JSON.stringify(values))}
+            selectedServiceId={selectedServiceId}
+            selectedPractitionerId={selectedPractitionerId}
+            selectedStartDate={selectedStartDate}
           />
         </div>
-        <AvailabilitiesDisplay
-          startsAt={startsAt}
-          onSelect={this.props.selectAvailability}
-          onSixDaysBack={this.props.sixDaysBack}
-          onSixDaysForward={this.props.sixDaysForward}
-          availabilities={availabilities}
-        />
+        <AvailabilitiesDisplay />
         <div className={styles.appointment__footer}>
-          <div className={styles.appointment__footer_wrapper}>
-            <div className={styles.appointment__footer_title}>
-              BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
-            </div>
-            {/* TODO: Remove Form, only need CheckBox component and ContinueButton */}
-            <form className={styles.appointment__footer_confirm}>
-              <div className={styles.appointment__footer_select}>
-                <Checkbox
-                  id="yes"
-                  value="yes"
-                  checked={this.props.upperState.checked}
-                  onChange={this.props.handleChange}
-                />
-              </div>
-              <Button
-                className={this.props.upperState.checked ? styles.appointment__footer_btndisabled : styles.appointment__footer_btn}
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log('working');
-                  setRegistrationStep(2);
-                }}
-              >
-                Continue
-              </Button>
-            </form>
-          </div>
-          {waitListPreferences}
+          {/*<div className={styles.appointment__footer_title}>
+           BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
+           </div>*/}
+          {/* TODO: Remove Form, only need CheckBox component and ContinueButton */}
+          {/*<div className={styles.appointment__footer_select}>
+           <Checkbox
+           id="yes"
+           value="yes"
+           checked={this.props.upperState.checked}
+           onChange={this.props.handleChange}
+           />
+           </div>*/}
+          {/*<Button
+            icon="arrow-right"
+            disabled={!selectedAvailability}
+            className={styles.continueButton}
+            onClick={(e) => {
+              e.preventDefault();
+              setRegistrationStep(2);
+            }}
+          >
+            <span>Continue</span>
+          </Button>*/}
+          {/*waitListPreferences*/}
         </div>
       </div>
     );
@@ -84,12 +71,21 @@ class SelectionView extends Component {
 SelectionView.propTypes = {
   services: ImmutablePropTypes.map.isRequired,
   practitioners: ImmutablePropTypes.map.isRequired,
+  selectedServiceId: PropTypes.string.isRequired,
+  selectedPractitionerId: PropTypes.string,
+  selectedStartDate: PropTypes.string.isRequired,
+  selectedAvailability: PropTypes.object,
+  setRegistrationStep: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, availabilities }) {
   return {
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
+    selectedServiceId: availabilities.get('selectedServiceId'),
+    selectedPractitionerId: availabilities.get('selectedPractitionerId'),
+    selectedStartDate: availabilities.get('selectedStartDate'),
+    selectedAvailability: availabilities.get('selectedAvailability'),
   };
 }
 
@@ -100,3 +96,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectionView);
+
+/*if (upperState.checked) {
+ waitListPreferences = (
+ <WaitListPreferences
+ startsAt={startsAt}
+ setRegistrationStep={props.setRegistrationStep}
+ color={props.bookingWidgetPrimaryColor}
+ />
+ );
+ }*/

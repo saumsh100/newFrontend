@@ -1,30 +1,15 @@
 
 import React, { PropTypes } from 'react';
-import zxcvbn from 'zxcvbn';
 import { Form, Field, Button } from '../library';
-
-const validate = ({ password, confirmPassword }) => {
-  const errors = {};
-  if (password && confirmPassword && password !== confirmPassword) {
-    errors.confirmPassword = 'Password does not match';
-  }
-  
-  return errors;
-};
-
-const passwordStrength = (value) => {
-  if (!value) return;
-  
-  const result = zxcvbn(value);
-  const { score, feedback: { warning } } = result;
-  if (score < 2) {
-    return warning || 'New password not strong enough';
-  }
-};
+import { passwordsMatch, passwordStrength } from '../library/Form/validate';
 
 export default function ChangePasswordForm({ onSubmit }) {
   return (
-    <Form form="changePassword" onSubmit={onSubmit} validate={validate} >
+    <Form
+      form="changePassword"
+      onSubmit={onSubmit}
+      validate={passwordsMatch}
+    >
       <Field
         required
         type="password"

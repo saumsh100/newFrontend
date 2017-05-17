@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { Link as RRLink } from 'react-router';
+import { Link as RRLink } from 'react-router-dom';
 import styles from  './styles.scss';
 
 export default function Link(props) {
@@ -9,7 +9,7 @@ export default function Link(props) {
     className,
     disabled = false,
   } = props;
-  
+
   let classes = classNames(className, styles.link);
   let onClick = () => {};
   if (disabled) {

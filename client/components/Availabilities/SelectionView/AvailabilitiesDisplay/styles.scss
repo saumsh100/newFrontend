@@ -1,0 +1,152 @@
+
+@import '../../../../ui.scss';
+
+@mixin setBgColorAndHover($baseColor) {
+  color: $baseColor;
+  &:hover {
+    color: darken($baseColor, 5%);
+  }
+}
+
+.appointment {
+  &__table {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-self: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    &_btn {
+      //font-size: 18px;
+      opacity: 0.9;
+      color: var(--bookingWidgetPrimaryColor);
+      &:hover {
+        opacity: 1.0;
+        color: var(--bookingWidgetPrimaryColor) !important;
+      }
+
+      /*cursor: pointer;
+      &:focus {
+        outline: none;
+      }*/
+    }
+
+    &_elements {
+      display: flex;
+      // width: 100%;
+      min-width: 370px;
+      // height: 200px;
+      // overflow-y: scroll;
+
+
+    }
+  }
+
+  &__list {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0 5px;
+    font-size: 18px;
+    width: 20%;
+    @media screen and (max-width: 800px) {
+      margin: 0 2px;
+    }
+
+    .list__header {
+      margin-top: 5px;
+      &_day {
+        font-family: $medium-font;
+        font-size: 12px;
+        font-weight: 500;
+        color: #2e3945;
+        text-align: center;
+      }
+
+      &_number {
+        font-size: 10px;
+        color: #dddcdc;
+        text-align: center;
+      }
+    }
+
+    &_active {
+      background-color: #e6e6e6 !important;
+    }
+
+    &_item {
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px 0;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: $medium-font;
+      color: white;
+      text-align: center;
+      text-transform: lowercase;
+      list-style: none;
+      opacity: 0.9;
+      background-color: var(--bookingWidgetPrimaryColor);
+      flex-grow: 1;
+      &:hover {
+        opacity: 1.0;
+      }
+    }
+
+    &_selected {
+      // background-color: var(--bookingWidgetPrimaryColor) !important;
+      filter: grayscale(80%);
+      &:hover {
+
+      }
+    }
+
+  }
+}
+
+.centeredContent {
+  display: flex;
+  justify-content: center;
+}
+
+.columnsWrapper {
+  overflow-x: auto;
+}
+
+.headerWrapper {
+  height: 60px;
+}
+
+.displayWrapperForHorizontalScroll {
+  min-width: 370px;
+}
+
+.displayContainer {
+  overflow-y: scroll;
+  // height: 250px;
+  height: 240px;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.displayAvailabilitiesContainer {
+  overflow-y: scroll;
+  height: 225px;
+  min-height: 225px;
+}
+
+.loadingSpinnerIcon {
+  color: var(--bookingWidgetPrimaryColor);
+}
+
+.offsetScroll {
+  margin-right: 8px;
+}

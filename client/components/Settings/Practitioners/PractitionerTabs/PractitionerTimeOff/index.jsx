@@ -16,7 +16,7 @@ import TimeOffForm from './TimeOffForm';
 
 const mergeTime = (date, time, allDay) => {
   return allDay ? date : new Date(date.setHours(time.getHours()));
-}
+};
 
 class PractitionerTimeOff extends Component {
   constructor(props) {
