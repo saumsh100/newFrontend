@@ -24,6 +24,7 @@ class UpcomingPatientList extends Component {
     this.submit = this.submit.bind(this);
     this.resetState = this.resetState.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.userClick = this.userClick.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
   }
 
@@ -42,6 +43,10 @@ class UpcomingPatientList extends Component {
     }
   }
 
+  userClick(id) {
+    this.props.setSearchPatient(id);
+  }
+
   getSuggestions(value) {
     return this.props.submitSearch({
       patients: value,
@@ -52,7 +57,7 @@ class UpcomingPatientList extends Component {
       const searched = this.props.searchedPatients.map((userId) => {
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
-        const display = (<div className={styles.searchList}>
+        const display = (<div className={styles.searchList} onClick={this.userClick.bind(null, userId)}>
           <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
           <div className={styles.grow}>
             <div className={styles.users__header}>
