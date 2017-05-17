@@ -129,14 +129,14 @@ class AddNewAppointment extends Component {
         />
         <DisplayForm
           key={formName}
+          formName={formName}
           services={services}
           patients={patients}
           chairs={chairs}
           practitioners={practitioners}
+          selectedAppointment={selectedAppointment}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
-          formName={formName}
-          selectedAppointment={selectedAppointment}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton
