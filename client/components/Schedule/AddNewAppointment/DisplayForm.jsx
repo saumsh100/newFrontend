@@ -15,13 +15,14 @@ const generateEntityOptions = (entities, label) => {
 
 export default function DisplayForm(props) {
   const {
-    handleSubmit,
+    formName,
     services,
     chairs,
     practitioners,
     getSuggestions,
-    formName,
     selectedAppointment,
+    handleSubmit,
+    handleAutoSuggest,
   } = props;
 
   const serviceOptions = generateEntityOptions(services, 'name');
@@ -53,7 +54,7 @@ export default function DisplayForm(props) {
               <PatientForm
                 getSuggestions={getSuggestions}
                 handleSubmit={handleSubmit}
-                formName={formName}
+                handleAutoSuggest={handleAutoSuggest}
               />
             </FormSection>
           </Col>

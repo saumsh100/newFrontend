@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
-import { reset } from 'redux-form';
+import { change, reset } from 'redux-form';
 import moment from 'moment';
 import DisplayForm from './DisplayForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
@@ -25,6 +25,7 @@ class AddNewAppointment extends Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
+    this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
   }
 
   handleSubmit(values) {
@@ -95,6 +96,19 @@ class AddNewAppointment extends Component {
       });
   }
 
+  handleAutoSuggest(newValue) {
+    const {
+      change,
+      formName,
+    } = this.props;
+
+    if (typeof newValue === 'object') {
+      change(formName, 'patient.phoneNumber', newValue.phoneNumber);
+      change(formName, 'patient.email', newValue.email);
+    }
+  }
+
+
   render() {
     const {
       formName,
@@ -137,6 +151,7 @@ class AddNewAppointment extends Component {
           selectedAppointment={selectedAppointment}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
+          handleAutoSuggest={this.handleAutoSuggest}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton
@@ -158,6 +173,7 @@ function mapDispatchToProps(dispatch) {
     updateEntityRequest,
     deleteEntityRequest,
     reset,
+    change,
   }, dispatch);
 }
 

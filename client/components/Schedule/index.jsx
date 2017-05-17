@@ -89,9 +89,9 @@ class ScheduleComponent extends Component {
     };
 
     let formName = 'NewAppointmentForm';
-    if( selectedAppointment ) {
+    if (selectedAppointment) {
       const app = selectedAppointment.appointment;
-      formName = `EditAppointment_${app.id}`
+      formName = `EditAppointment_${app.id}`;
     }
     return (
       <Grid className={styles.schedule}>
