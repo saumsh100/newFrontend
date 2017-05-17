@@ -14,6 +14,7 @@ export default function Input(props) {
     min,
     borderColor,
   } = props;
+
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
 
@@ -40,9 +41,7 @@ export default function Input(props) {
 
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
-  const content = min ?
-    <input type={type || "text"} className={inputClassName} {...inputProps} ref={(input) => { if (inputProps.refCallback) inputProps.refCallback(input) } } />
-    :
+  return (
     <div className={styles.group}>
       <input type={type} className={inputClassName} {...inputProps} />
       <span className={styles.bar} />
@@ -51,8 +50,7 @@ export default function Input(props) {
       </label>
       {errorComponent}
     </div>
-
-    return content;
+  );
 }
 
 Input.propTypes = {
@@ -62,4 +60,7 @@ Input.propTypes = {
     React.PropTypes.string,
     React.PropTypes.number,
   ]),
+
+  type: PropTypes.string,
+  icon: PropTypes.string,
 };

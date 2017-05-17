@@ -1,3 +1,4 @@
+
 $container-padding: 10px 15px 15px 10px;
 
 $color-black: rgb(0,0,0);
@@ -5,6 +6,8 @@ $color-white: rgb(255,255,255);
 
 $primary-color: #FF715A;
 $primary-color-hover: darken($primary-color, 5%);
+
+$widget-primary-color: var(--bookingWidgetPrimaryColor);
 
 $secondary-color1: #CAEBF2;
 $secondary-color2: #CAEBF2;
@@ -28,6 +31,7 @@ $primary-red: #FF715C;
 $primary-star: #FBF174;
 // $primary-color-dark: black;
 $box-shadow: 1px 1px 16px 0.1px rgba(0,0,0,0.3);
+$widget-box-shadow: 0 1px rgba(0,0,0,0.05);
 $disabled-color: lighten($primary-darkgrey, 25%);
 $empty-grey: darken(lightgrey, 5%);
 

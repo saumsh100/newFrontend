@@ -1,34 +1,22 @@
 
 import React, { PropTypes } from 'react';
-import { Router, Route, IndexRoute, IndexRedirect } from 'react-router';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter as Router } from 'react-router-redux';
 import PatientApp from '../containers/PatientApp';
 import FourZeroFour from '../components/FourZeroFour';
 
-let counter = 0;
-
-function onError(error) {
-  console.log('router error', error);
-}
-
-export default function Routes({ history }) {
+const PatientRouter = ({ history }) => {
   return (
-    <Router
-      history={history}
-      key={counter}
-      onError={onError}
-    >
-      <Route path="/" component={PatientApp}>
-        <Route path="*" component={FourZeroFour} />
-      </Route>
+    <Router history={history}>
+      <div>
+        <Route component={PatientApp} />
+      </div>
     </Router>
   );
-}
+};
 
-if (module.hot) {
-  counter++;
-  module.hot.accept();
-}
-
-Routes.propTypes = {
+PatientRouter.propTypes = {
   history: PropTypes.object.isRequired,
 };
+
+export default PatientRouter;

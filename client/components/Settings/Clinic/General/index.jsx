@@ -9,8 +9,6 @@ import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { Grid, Row, Col, Header} from '../../../library';
 import styles from './styles.scss';
 
-
-
 class General extends React.Component {
 
   constructor(props) {
@@ -64,8 +62,9 @@ class General extends React.Component {
 }
 
 General.propTypes = {
+  activeAccount: PropTypes.object,
   updateEntityRequest: PropTypes.func,
-}
+};
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
@@ -73,6 +72,12 @@ function mapDispatchToProps(dispatch){
   }, dispatch);
 }
 
-const enhance = connect(null, mapDispatchToProps);
+function mapStateToProps({ entities }) {
+  return {
+    activeAccount: entities.getIn(['accounts', 'models']).first(),
+  };
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(General);

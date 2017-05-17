@@ -1,7 +1,7 @@
 
 import createModel from '../createModel';
 
-const ServicesSchema = {
+const ServiceSchema = {
   id: null,
   createdAt: null,
   accountId: null,
@@ -14,7 +14,7 @@ const ServicesSchema = {
   allowedPractitioners: null,
 };
 
-export default class Services extends createModel(ServicesSchema) {
+export default class Service extends createModel(ServiceSchema) {
   /**
    * Add all TextMessage specific member functions here
    */

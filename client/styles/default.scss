@@ -2,18 +2,17 @@
 @import '../ui.scss';
 @import '../fonts.scss';
 
-html {
-  height: 100%;
-}
-
-body {
-  height: 100%;
-  background-color: $primary-grey;
-  font-size: 14px;
-}
-
-
 :global {
+  html.Dashboard {
+    height: 100%;
+  }
+
+  body.Dashboard {
+    height: 100%;
+    background-color: $primary-grey;
+    font-size: 14px;
+  }
+
   #root {
     height: 100%;
     > div {
@@ -21,7 +20,7 @@ body {
     }
   }
 
-  ::-webkit-scrollbar {
+  /*::-webkit-scrollbar {
     width:9px;
   }
 
@@ -43,7 +42,7 @@ body {
 
   ::-webkit-scrollbar-thumb:window-inactive {
     background:rgba(0,0,0,0.05);
-  }
+  }*/
 
   .CareCruToggle.react-toggle--checked {
     &:hover {

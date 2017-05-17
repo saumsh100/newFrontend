@@ -5,8 +5,7 @@ import SettingsSubNav from './SettingsSubNav';
 import styles from './styles.scss';
 
 export default function Settings(props) {
-  const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
-  const { location } = props;
+  const { location, children } = props;
 
   let showNav = null;
 
