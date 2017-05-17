@@ -22,11 +22,16 @@
     }
 
     &__link {
+        display: flex;
         position: absolute;
         right: 20px;
         cursor: pointer;
         color: #b4b4b4;
         font-size: 12px;
+        cursor: pointer;
+        &__text{
+          padding-right: 10px;
+        }
     }
 }
 

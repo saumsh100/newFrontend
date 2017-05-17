@@ -16,7 +16,7 @@ const getDuration = (startDate, endDate, customBufferTime) => {
   return duration.asMinutes() - customBufferTime;
 };
 
-class SelectedDay extends Component {
+class DayView extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -34,8 +34,8 @@ class SelectedDay extends Component {
     const appointmentStyles = {
       height: `${minutesDuration * scale}px`,
       top: `${positionTop}px`,
-      cursor: 'pointer';
-  };
+      cursor: 'pointer',
+    };
     const format = 'MMMM Do YYYY, h:mm:ss a';
     const displayStartDate = appointment.startTime.format(format);
     const displayEndDate = appointment.endTime.format(format);
@@ -187,7 +187,7 @@ class SelectedDay extends Component {
   }
 }
 
-SelectedDay.PropTypes = {
+DayView.PropTypes = {
   fetchEntities: PropTypes.func,
   patients: PropTypes.object,
   appointments: PropTypes.object,
@@ -195,4 +195,4 @@ SelectedDay.PropTypes = {
   currentDate: PropTypes.object,
 };
 
-export default SelectedDay;
+export default DayView;
