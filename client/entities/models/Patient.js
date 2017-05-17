@@ -21,7 +21,7 @@ const PatientSchema = {
   birthDate: null,
   status: null,
   id: null,
-  insurance: null,
+  insurance: {},
   appointments: null,
 };
 

@@ -41,7 +41,6 @@ ul {
 .rightCon {
   flex: 1;
   max-height: calc(62vh - 75px);
-  overflow-y: auto;
 }
 
 .upcoming{
@@ -240,12 +239,12 @@ ul {
 }
 
 .userIcon {
-  width: 30%;
   height: 100%;
+  margin-right: 7%;
 
   i {
     margin: 55% 20% 30% 0;
-    font-size: 2.4em;
+    font-size: 2.6em;
     color: #8cbcd6;
   }
 }
@@ -348,8 +347,9 @@ ul {
 
 .background {
   background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
-  background-size: auto auto;
   background-size: cover;
+  max-height: calc(62vh - 75px);
+  overflow-y: auto;
 }
 
 .tabdivs {

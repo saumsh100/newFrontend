@@ -5,7 +5,7 @@ import { Form, Field, Button } from '../../../library';
 export default function ContactPatientForm({ onSubmit, formName, styles, currentPatient }) {
 
   const key = currentPatient.id;
-  const initialValues = currentPatient.preferences;
+  const initialValues = Object.assign({}, currentPatient.preferences);
 
   const test = [
     {
@@ -17,13 +17,23 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
     ,
   ];
 
-  initialValues.newsletter = (initialValues.newsletter === true ? 'True' : 'False');
-  initialValues.birthdayMessage = (initialValues.birthdayMessage === true ? 'True' : 'False');
+  initialValues.newsletter = (currentPatient.preferences.newsletter === true ? 'True' : 'False');
+  initialValues.birthdayMessage = (currentPatient.preferences.birthdayMessage === true ? 'True' : 'False');
 
   function submit(values) {
-    values.newsletter = values.newsletter === 'True';
-    values.birthdayMessage = values.birthdayMessage === 'True';
-    onSubmit({ preferences: values });
+    values.preferences = {};
+    values.preferences.newsletter = values.newsletter === 'True';
+    values.preferences.birthdayMessage = values.birthdayMessage === 'True';
+    values.preferences.morning = values.morning;
+    values.preferences.afternoon = values.afternoon;
+    values.preferences.evening = values.evening;
+    values.preferences.weekends = values.weekends;
+    values.preferences.reminders = values.reminders;
+    values.preferences.weekdays = values.weekdays;
+    values.preferences.sms = values.sms;
+    values.preferences.phone = values.phone;
+    values.preferences.emailNotifications = values.emailNotifications;
+    onSubmit(values);
   }
 
   return (

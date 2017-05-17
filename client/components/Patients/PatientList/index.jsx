@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import _ from 'lodash';
+import { Map } from 'immutable';
 import MainContainer from './MainContainer';
 import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
 import * as Actions from '../../../actions/patientList';
@@ -120,16 +121,13 @@ class PatientList extends Component {
       values.key = 'patient';
     }
 
-    values.address = {
-      country: values.country,
-      province: values.province,
-      street: values.street,
-      city: values.city,
-    };
+    const valuesMap = Map(values);
+    const modifiedPatient = currentPatient.merge(valuesMap);
 
+    console.log(modifiedPatient)
     this.props.updateEntityRequest({
-      key,
-      values,
+      key: 'patients',
+      model: modifiedPatient,
       url: `/api/patients/${currentPatient.id}`,
     }).then((result) => {
       this.props.setSelectedPatient(Object.keys(result.patients)[0]);
@@ -204,6 +202,8 @@ class PatientList extends Component {
       currentPatient = selectedPatient;
 
       let userAppointments = currentPatient.get('appointments');
+
+      userAppointments = (userAppointments ? userAppointments : {});
 
       userAppointments = (!userAppointments.toArray ? [] : userAppointments.toArray());
 

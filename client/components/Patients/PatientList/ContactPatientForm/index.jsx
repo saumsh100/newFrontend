@@ -7,7 +7,6 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
 
   const key = currentPatient.id;
 
-
   const initialValues = {
     email: currentPatient.email,
     phoneNumber: currentPatient.phoneNumber,
@@ -23,22 +22,24 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
     initialValues.province = currentPatient.address.province;
   }
 
-  const gender = [
-    {
-      value: 'Male',
-    },
-    {
-      value: 'Female',
-    }
-    ,
-  ];
+  function submit(values) {
+    values.address = {};
+    values.address.postalCode = values.postalCode;
+    values.address.country = values.country;
+    values.address.city = values.city;
+    values.address.street = values.street;
+    values.address.province = values.province;
+    onSubmit(values);
+  }
+
 
   const prov = [...usStates, ...caProvinces];
+
   return (
     <Form
       key={key}
       form={formName}
-      onSubmit={onSubmit}
+      onSubmit={submit}
       className={styles.form}
       initialValues={initialValues}
     >
