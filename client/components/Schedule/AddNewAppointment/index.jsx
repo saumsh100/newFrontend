@@ -112,6 +112,10 @@ class AddNewAppointment extends Component {
       form: formName,
     };
 
+    console.log(formName);
+
+
+
     return (
       <div className={styles.formContainer}>
         <IconButton

@@ -34,7 +34,8 @@ class SelectedDay extends Component {
     const appointmentStyles = {
       height: `${minutesDuration * scale}px`,
       top: `${positionTop}px`,
-    };
+      cursor: 'pointer';
+  };
     const format = 'MMMM Do YYYY, h:mm:ss a';
     const displayStartDate = appointment.startTime.format(format);
     const displayEndDate = appointment.endTime.format(format);
