@@ -1,5 +1,5 @@
 
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700");
+@import '../../ui.scss';
 
 .appointment {
     overflow-x: auto;
@@ -7,7 +7,6 @@
     &__wrapper {
         display: flex;
         width: 730px;
-        min-height: 610px;
         margin: 0 auto;
         flex-direction: column;
         background: #fafafa;
@@ -452,8 +451,8 @@
   overflow: auto;
   &__wrapper {
     display: flex;
-    width: 730px;
-    min-height: 610px;
+    max-height: 600px; // really only used for development to ensure it doesnt fill full body
+    height: 100%;
     margin: 0 auto;
     overflow: hidden;
     flex-direction: column;
@@ -726,6 +725,42 @@
 }
 
 .widgetBody {
-  max-height: 500px;
+  height: calc(100% - 40px - 60px);
   overflow-y: auto;
+}
+
+.widgetBodyNoFooter {
+  height: calc(100% - 40px);
+}
+
+.dayPickerIcon {
+  &:hover {
+    color: var(--bookingWidgetPrimaryColor) !important;
+  }
+}
+
+.widgetStickyFooter {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  box-shadow: $widget-box-shadow;
+}
+
+.continueButton {
+  opacity: 0.9;
+  color: white;
+  margin-left: auto;
+  margin-right: 15px;
+  background-color: var(--bookingWidgetPrimaryColor);
+  &:hover {
+    opacity: 1.0;
+    background-color: var(--bookingWidgetPrimaryColor) !important;
+  }
+}
+
+.rightIcon {
+  font-weight: bolder;
+  margin-top: -3px;
+  margin-left: 8px;
 }

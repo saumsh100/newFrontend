@@ -2,12 +2,11 @@
 require('../config/initializeCodeTranspiler');
 
 const globals = require('../config/globals');
-const applyWebpack = require('../config/webpack/applyWebpack');
 const handleErrors = require('../middleware/handleErrors');
 const chalk = require('chalk');
 const app = require('../config/express');
-require('../models')
-require('../models/relations')
+require('../models');
+require('../models/relations');
 
 // require('../config/kue');
 
@@ -15,8 +14,7 @@ require('../models/relations')
 app.set('showStackError', true);
 
 // Load in webpack configurations
-applyWebpack(app);
-
+// applyWebpack(app);
 
 // Set the Handlebars templating engine
 app.set('views', `${globals.root}/views`);

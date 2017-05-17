@@ -2,9 +2,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import TopBar from '../components/TopBar';
 import { setIsCollapsed } from '../actions/toolbar';
-import { logout } from '../actions/auth';
+import { logout } from '../thunks/auth';
 import runOnDemandSync from '../thunks/runOnDemandSync';
 
 function TopBarContainer(props) {

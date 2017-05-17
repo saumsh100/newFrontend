@@ -12,7 +12,7 @@ const {
   createIntervalsFromWeeklySchedule,
   isDuringEachother,
   getISOSortPredicate,
-} = require('../server/util/time');
+} = require('../../server/util/time');
 
 // Monday -> Friday 9 to 5 by default
 const createWeeklySchedule = (custom = {}) => {
