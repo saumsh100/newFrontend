@@ -5,13 +5,15 @@ import { Provider } from 'react-redux';
 
 
 // input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.name;
+const getSuggestionValue = suggestion => suggestion;
 
-const renderSuggestion = suggestion => (
-  <div>
-    {suggestion.name}
-  </div>
-);
+const renderSuggestion = suggestion => {
+  return (
+    <div>
+      {suggestion.firstName}
+    </div>
+  );
+}
 
 
 class AutoCompleteForm extends Component {
@@ -61,7 +63,6 @@ class AutoCompleteForm extends Component {
     const { value, inputProps } = this.props;
 
     // Autosuggest will pass through all these props to the input element.
-
     // Finally, render it!
     return (
         <Autosuggest

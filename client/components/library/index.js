@@ -12,6 +12,7 @@ import Checkbox from './Checkbox';
 import CheckboxImage from './CheckboxImage';
 import Collapsible from './Collapsible';
 import DayPicker from './DayPicker';
+import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
 import DashboardStats from './DashboardStats';
 import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
@@ -33,6 +34,7 @@ import Tabs, { Tab } from './Tabs';
 import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import Search from './Search';
+import RangeSlider from './RangeSlider';
 import Star from './Star';
 import Timer from './Timer';
 import Toggle from './Toggle';
@@ -62,6 +64,7 @@ export {
   ChartStats,
   Collapsible,
   DayPicker,
+  DialogBox,
   DropdownSelect,
   DashboardStats,
   DoubleIcon,
@@ -87,6 +90,7 @@ export {
   RouterTabs,
   SaveButton,
   Search,
+  RangeSlider,
   Star,
   Stats,
   FlexGrid,

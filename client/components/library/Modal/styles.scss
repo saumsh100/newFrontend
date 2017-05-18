@@ -56,9 +56,8 @@
   min-width: 250px;
   max-height: 96%;
   flex-direction: column;
-  padding: 1.2rem;
   z-index: 301;
-  border-radius: .2rem;
+  border-radius: .5rem;
   box-shadow: 0 19px 60px rgba(0,0,0,.3), 0 15px 20px rgba(0,0,0,.22);
   animation: slidein 0.5s;
   &__modalHeader{
