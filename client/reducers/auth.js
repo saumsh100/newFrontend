@@ -1,3 +1,4 @@
+
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
@@ -11,9 +12,9 @@ const initialState = fromJS({
 });
 
 export default handleActions({
-  [LOGIN_SUCCESS](state, { token }) {
+  [LOGIN_SUCCESS](state, action) {
     return state.merge({
-      token,
+      token: action.payload,
       isAuthenticated: true,
     });
   },
