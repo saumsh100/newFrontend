@@ -88,6 +88,7 @@ class PatientList extends Component {
     this.setState({
       currentPatient: { id: null },
       showNewUser: false,
+      initialUser: true,
     });
 
     const ids = [];

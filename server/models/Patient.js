@@ -7,6 +7,7 @@ const PreferencesSchema = require('./schemas/Preferences');
 
 const Patient = createModel('Patient', {
   accountId: type.string(),
+  avatar: type.string(),
   pmsId: type.string(),
   firstName: type.string().required(),
   lastName: type.string().required(),

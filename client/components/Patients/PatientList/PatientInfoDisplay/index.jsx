@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import styles from '../main.scss';
 import {
-  Avatar,
+  Avatar, IconButton,
 } from '../../../library';
 import moment from 'moment';
 
@@ -14,6 +14,7 @@ class PatientInfoDisplay extends Component {
   render() {
     const { currentPatient } = this.props;
     const id = (currentPatient.get ? currentPatient.get('id') : null);
+    const avatar = (currentPatient.get ? currentPatient.get('avatar') : null);
 
     let showDate = null;
 
@@ -46,10 +47,8 @@ class PatientInfoDisplay extends Component {
         {( display ? (
           <div className={styles.flex}>
             <div className={styles.patient_profile}>
-              <div className={styles.deleteInfo} onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}}>
-                <i className="fa fa-trash-o" />
-              </div>
-              <Avatar className={styles.patient_profile__photo} url="https://placeimg.com/640/480/people" />
+              <IconButton className={styles.deleteInfo} icon="trash-o" onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}} />
+              <Avatar className={styles.patient_profile__photo} url={avatar} />
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
                 <p className={styles.name}>
                   <span>{currentPatient.firstName} {currentPatient.lastName}</span>

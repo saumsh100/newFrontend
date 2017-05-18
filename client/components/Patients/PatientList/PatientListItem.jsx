@@ -20,10 +20,8 @@ class PatientListItem extends Component {
     const { user, currentPatient } = this.props;
     const { startDate } = user.appointment;
     let showDate = startDate;
-    let showTime;
 
     if (moment(showDate)._d.toString() !== "Invalid Date") {
-      showTime = moment(startDate).format('h:mm a');
       showDate = moment(startDate).format('MMMM Do YYYY');
     }
 
@@ -37,7 +35,7 @@ class PatientListItem extends Component {
     );
     return (
       <ListItem onClick={this.goToDialogue} className={usersActiveClassName}>
-        <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
+        <img className={styles.users__photo} src={user.avatar} alt="photo" />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
             <div className={styles.users__name}>
@@ -47,9 +45,9 @@ class PatientListItem extends Component {
           </div>
           <div className={styles.users__body}>
             <div className={styles.users__text}>
-              <strong>Next Appt</strong> {showDate}
+              <strong>Next Appt</strong>
               <br />
-              {showTime}
+              {showDate}
             </div>
           </div>
         </div>

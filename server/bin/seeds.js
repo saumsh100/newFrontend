@@ -87,6 +87,7 @@ for (let i = 0; i < 10000; i++) {
   const lastName = faker.name.lastName()
   randomPatients.push({
     id,
+    avatar: faker.image.avatar(),
     accountId,
     firstName,
     lastName,
@@ -446,6 +447,7 @@ const SEEDS = {
     {
       id: justinPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Justin',
       lastName: 'Sharp',
       email: 'justin@carecru.com',
@@ -467,6 +469,7 @@ const SEEDS = {
     {
       id: sergeyPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       email: 'sergey@carecru.com',
@@ -488,6 +491,7 @@ const SEEDS = {
     {
       id: markPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Mark',
       lastName: 'Joseph',
       phoneNumber: markPhoneNumber,
@@ -501,6 +505,7 @@ const SEEDS = {
     {
       id: alexPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Alex',
       lastName: 'Bashliy',
       phoneNumber: alexPhoneNumber,
@@ -516,6 +521,7 @@ const SEEDS = {
     // account 2
     {
       id: alexPatientId2,
+      avatar: faker.image.avatar(),
       accountId: accountId2,
       firstName: 'Alex2',
       lastName: 'Bashliy2',

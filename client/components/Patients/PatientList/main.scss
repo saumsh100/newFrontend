@@ -403,6 +403,7 @@ ul {
 .deleteInfo {
   float: right;
   color: red;
+  height: 20px;
   margin: 20px 20px 0 0;
   i {
   font-size: 1.7em;
@@ -707,7 +708,7 @@ ul {
     &__photo {
       width: 100px;
       height: 100px;
-      margin: -50px auto 0 auto;
+      margin: -50px 38% 0 auto;
       display: table;
 
       img {
