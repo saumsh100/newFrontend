@@ -124,7 +124,6 @@ class PatientList extends Component {
     const valuesMap = Map(values);
     const modifiedPatient = currentPatient.merge(valuesMap);
 
-    console.log(modifiedPatient)
     this.props.updateEntityRequest({
       key: 'patients',
       model: modifiedPatient,
