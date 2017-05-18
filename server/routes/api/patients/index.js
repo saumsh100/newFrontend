@@ -74,16 +74,14 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
   const search = searchString.split(' ');
 
   // making search case insensitive as
-  search[0] = `(?i)${search[0]}` || '';
-  search[1] = `(?i)${search[1]}` || '';
+  const searchReg = (search[1] ? `(?i)(${search[0]}|${search[1]})` : `(?i)${search[0]}`);
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
   Patient.filter((patient) => {
     return patient('accountId').eq(req.accountId).and(
-      patient('firstName').match(search[0])
-        .or(patient('lastName').match(search[0]))
-        .or(patient('lastName').match(search[1]))
+      patient('firstName').match(searchReg)
+        .or(patient('lastName').match(searchReg))
         .or(patient('email').match(search[0])));
   }).limit(20)
     .getJoin({ appointments: {

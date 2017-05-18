@@ -51,7 +51,10 @@ class UpcomingPatientList extends Component {
     return this.props.submitSearch({
       patients: value,
     }).then(() => {
-      const inputValue = new RegExp(value, 'i');
+      value = value.split(' ');
+      const inputValue = [];
+      inputValue[0] = new RegExp(value[0], 'i');
+      inputValue[1] = new RegExp(value[1], 'i');
       const inputLength = inputValue.length;
 
       const searched = this.props.searchedPatients.map((userId) => {
@@ -77,7 +80,7 @@ class UpcomingPatientList extends Component {
       });
 
       const results = inputLength === 0 ? [] : searched.filter((person) => {
-        return inputValue.test(person.fullName) || inputValue.test(person.email);
+        return inputValue[1].test(person.fullName) || inputValue[0].test(person.fullName) || inputValue[0].test(person.email);
       });
 
       this.setState({
