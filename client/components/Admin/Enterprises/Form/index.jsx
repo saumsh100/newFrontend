@@ -5,11 +5,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
-import { fetchEntities, createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
-import { Card, CardHeader, Icon, Form, Field } from '../../library';
+import { fetchEntities, createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
+import { Card, CardHeader, Icon, Form, Field } from '../../../library/index';
 import styles from './styles.scss';
 
-const enterprisesListPath = '/enterprises/list';
+const enterprisesListPath = '/admin/enterprises/list';
 
 class EnterpriseForm extends Component {
 

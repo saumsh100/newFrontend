@@ -1,6 +1,6 @@
 import React from 'react';
-import { ListItem, Button } from '../../library';
-import withHoverable from '../../../hocs/withHoverable';
+import { ListItem, Button } from '../../../library/index';
+import withHoverable from '../../../../hocs/withHoverable';
 import styles from './styles.scss';
 
 const confirmDelete = fn => () =>

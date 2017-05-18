@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { pick } from 'lodash';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-const Enterprise = require('../../../models/Enterprise');
-const loaders = require('../../util/loaders');
+import Enterprise from '../../../models/Enterprise';
+import loaders from '../../util/loaders';
 
 const router = Router();
 

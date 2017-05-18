@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { fetchEntities, deleteEntityRequest } from '../../../thunks/fetchEntities';
-import { Card, CardHeader, List as LList, Button } from '../../library';
+import { fetchEntities, deleteEntityRequest } from '../../../../thunks/fetchEntities';
+import { Card, CardHeader, List as LList, Button } from '../../../library/index';
 import EnterpriseListItem from './ListItem';
 import styles from './styles.scss';
 
@@ -18,7 +18,7 @@ class List extends Component {
     const { enterprises } = this.props;
     const deleteRequest = id => this.props.deleteEntityRequest({ key: 'enterprises', id });
 
-    const baseUrl = (path = '') => `/enterprises${path}`;
+    const baseUrl = (path = '') => `/admin/enterprises${path}`;
     const navigateToCreatePage = () => this.props.navigate(baseUrl('/create'));
     const navigateToEditPage = uuid => this.props.navigate(baseUrl(`/${uuid}/edit`));
 
