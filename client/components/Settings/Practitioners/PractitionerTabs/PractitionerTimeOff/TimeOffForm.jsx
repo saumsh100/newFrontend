@@ -98,7 +98,8 @@ function TimeOffForm(props) {
   const endTimeComponent = !values.allDay ? (
     <Field
       component="DropdownSelect"
-      options={timeOptions} name="endTime"
+      options={timeOptions}
+      name="endTime"
       label="End Time"
       className={styles.inlineBlock}
     />) : null;

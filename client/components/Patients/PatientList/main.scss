@@ -599,12 +599,8 @@ ul {
     padding: 20px;
     border-bottom: 1px solid #e6e6e6;
 
-    &:hover {
-      background: #E7E7E7;
-    }
-
     &__active {
-      background: #E7E7E7;
+      background: lighten(#E7E7E7, 2.6%);
     }
 
     &__photo {

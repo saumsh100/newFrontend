@@ -11,12 +11,14 @@ export default function Input(props) {
     error,
     icon,
     type = 'text',
+    min,
+    borderColor,
   } = props;
 
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
 
-  const inputProps = omit(props, ['error']);
+  const inputProps = omit(props, ['error', 'borderColor']);
 
   const valuePresent = value !== null && value !== undefined && value !== '' &&
     !(typeof value === 'number' && isNaN(value));
@@ -31,6 +33,10 @@ export default function Input(props) {
   if (error) {
     labelClassName = classNames(styles.erroredLabel, labelClassName);
     inputClassName = classNames(styles.erroredInput, inputClassName);
+  }
+
+  if (borderColor) {
+    inputClassName = classNames(styles[`${borderColor}Border`], inputClassName);
   }
 
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;

@@ -1,0 +1,32 @@
+$empty-grey: darken(lightgrey, 5%);
+$primary-color: #FF715A;
+
+
+.label {
+  display: flex;
+  color: $empty-grey;
+  font-weight: normal;
+  pointer-events: none;
+  font-size: 16px;
+  padding-bottom: 5px;
+
+  &_labelBuffer{
+    color: $empty-grey;
+    text-decoration: none;
+  }
+
+  &_valueUnit {
+    display: flex;
+    color: $primary-color;
+    padding-left: 10px;
+    &_duration {
+      padding-right: 20px;
+      text-decoration: underline;
+    }
+
+    &_buffer {
+      padding-left: 10px;
+      text-decoration: underline;
+    }
+  }
+}
