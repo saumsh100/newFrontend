@@ -1,6 +1,8 @@
 @import '../../../ui';
 
-
+html {
+  background: #e6e6e6;
+}
 body {
   margin: 0;
   padding: 0;
@@ -15,6 +17,16 @@ ul {
 .tabs {
   padding: 8px;
   border-bottom-color: #8cbcd6;
+  overflow-x: auto;
+}
+
+.nav {
+  min-width: calc(33vw - 222px);
+  overflow-x: hidden;
+  white-space: nowrap;
+  &:hover {
+    overflow-x: auto;
+  }
 }
 
 .grow {
@@ -366,10 +378,14 @@ ul {
   margin-top: 25px;
 }
 
+.text {
+  text-align: center;
+}
+
 .names2 {
   display: flex;
   justify-content: space-between;
-  height: 53px;
+  height: 60px;
 }
 
 .names3 {
@@ -382,6 +398,15 @@ ul {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
+}
+
+.deleteInfo {
+  float: right;
+  color: red;
+  margin: 20px 20px 0 0;
+  i {
+  font-size: 1.7em;
+  }
 }
 
 .name {
@@ -478,6 +503,8 @@ ul {
   position: absolute;
   display: flex;
   padding: 10px;
+  background-color: #e6e6e6;
+  box-sizing: unset;
 }
 
 .topRow {

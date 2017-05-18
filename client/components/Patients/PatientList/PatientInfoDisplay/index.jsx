@@ -13,6 +13,7 @@ class PatientInfoDisplay extends Component {
 
   render() {
     const { currentPatient } = this.props;
+    const id = (currentPatient.get ? currentPatient.get('id') : null);
 
     let showDate = null;
 
@@ -39,12 +40,15 @@ class PatientInfoDisplay extends Component {
         <div onClick={this.props.onClick} className={styles.patients_content__addUser}>
           Add New Patient
           <span>
-                        <i className="fa fa-plus" />
-                      </span>
+            <i className="fa fa-plus" />
+          </span>
         </div>
         {( display ? (
           <div className={styles.flex}>
             <div className={styles.patient_profile}>
+              <div className={styles.deleteInfo} onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}}>
+                <i className="fa fa-trash-o" />
+              </div>
               <Avatar className={styles.patient_profile__photo} url="https://placeimg.com/640/480/people" />
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
                 <p className={styles.name}>
@@ -130,5 +134,6 @@ class PatientInfoDisplay extends Component {
 
 PatientInfoDisplay.propTypes = {
   currentPatient: PropTypes.object,
+  onDelete: PropTypes.func,
 };
 export default PatientInfoDisplay;

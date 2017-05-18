@@ -78,9 +78,8 @@ class PatientList extends Component {
     });
   }
 
-  deletePatient() {
-    const key = (this.state.showNewUser ? 'patient' : 'patients');
-    const currentPatient = ((this.state.showNewUser) ? this.props.patient : this.state.currentPatient);
+  deletePatient(id) {
+    const key = 'patients';
 
     this.setState({
       currentPatient: { id: null },
@@ -90,15 +89,15 @@ class PatientList extends Component {
     const ids = [];
 
     this.props.appointments.toArray().forEach((appointment) => {
-      if (appointment.patientId === currentPatient.id) {
+      if (appointment.patientId === id) {
         ids.push(appointment.id);
       }
     });
 
     this.props.deleteEntityCascade({
       key,
-      id: currentPatient.id,
-      url: `/api/patients/${currentPatient.id}`,
+      id,
+      url: `/api/patients/${id}`,
       cascadeKey: 'appointments',
       ids,
     });
