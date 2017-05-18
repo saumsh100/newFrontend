@@ -99,7 +99,6 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
           <i className="fa fa-globe" />
         </div>
         <Field
-          required
           className={styles.langaugeInput}
           name="language"
           label="Language"
