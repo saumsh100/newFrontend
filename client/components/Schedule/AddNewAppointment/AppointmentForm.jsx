@@ -24,6 +24,7 @@ export default function AppointmentForm(props) {
     serviceOptions,
     practitionerOptions,
     chairOptions,
+    handleDayChange,
   } = props;
 
   return (
@@ -35,6 +36,7 @@ export default function AppointmentForm(props) {
             name="date"
             label="Date"
             borderColor="primaryColor"
+            onChange={handleDayChange}
             required
           />
         </Col>

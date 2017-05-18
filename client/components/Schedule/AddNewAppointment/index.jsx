@@ -27,6 +27,7 @@ class AddNewAppointment extends Component {
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
+    this.handleDayChange = this.handleDayChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -132,6 +133,10 @@ class AddNewAppointment extends Component {
     }
   }
 
+  handleDayChange(e, newValue) {
+   this.props.setCurrentDay(moment(newValue));
+  }
+
   render() {
     const {
       formName,
@@ -165,6 +170,7 @@ class AddNewAppointment extends Component {
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
+          handleDayChange={this.handleDayChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton

@@ -33,13 +33,13 @@ class ScheduleComponent extends Component {
       selectedAppointment: null,
     };
 
-    this.handleDayPicker = this.handleDayPicker.bind(this);
+    this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
     this.selectAppointment = this.selectAppointment.bind(this);
   }
 
-  handleDayPicker(day) {
+  setCurrentDay(day) {
     this.props.setScheduleDate({ scheduleDate: moment(day) });
   }
 
@@ -103,7 +103,7 @@ class ScheduleComponent extends Component {
                 <CurrentDate currentDate={currentDate}>
                   <DayPicker
                     target="icon"
-                    onChange={this.handleDayPicker}
+                    onChange={this.setCurrentDay}
                   />
                   <HeaderButtons
                     addNewAppointment={this.addNewAppointment}
@@ -120,7 +120,6 @@ class ScheduleComponent extends Component {
                   custom
                 >
                   <AddNewAppointment
-                    currentDate={currentDate}
                     formName={formName}
                     chairs={chairs.get('models').toArray()}
                     practitioners={practitioners.get('models').toArray()}
@@ -128,6 +127,7 @@ class ScheduleComponent extends Component {
                     patients={patients.get('models').toArray()}
                     selectedAppointment={selectedAppointment}
                     reinitializeState={this.reinitializeState}
+                    setCurrentDay={this.setCurrentDay}
                   />
                 </Modal>
               </div>
