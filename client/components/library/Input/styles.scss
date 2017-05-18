@@ -33,6 +33,8 @@ $empty-grey: darken(lightgrey, 5%);
   }
 }
 
+
+
 .erroredInput {
   border-bottom: 1px solid $error-color;
 }
@@ -53,6 +55,10 @@ $empty-grey: darken(lightgrey, 5%);
   transition: 0.2s ease all;
   top: 35px;
   font-size: 16px;
+}
+
+.primaryColorBorder {
+  border-bottom: 1px solid $primary-color;
 }
 
 .erroredLabel {

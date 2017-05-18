@@ -13,7 +13,7 @@ import {
   Button,
   Form,
   Field,
-  Modal,
+  DialogBox,
   Grid,
   Row,
   Tabs,
@@ -67,7 +67,7 @@ class MainContainer extends Component {
 
     return (
       <Grid>
-        <Modal
+        <DialogBox
           actions={actions}
           title="New Patient"
           type="small"
@@ -81,7 +81,7 @@ class MainContainer extends Component {
             birthday={this.state.birthday}
             saveBirthday={this.saveBirthday}
           />
-        </Modal>
+        </DialogBox>
         <Row className={styles.patients}>
           <Col xs={12} sm={4} md={4} lg={3}>
             <UpcomingPatientsList

@@ -8,6 +8,7 @@ import {
   InfiniteScroll,
   Row,
   Card,
+  List,
   CardHeader,
 } from '../../../library';
 
@@ -147,7 +148,7 @@ class UpcomingPatientList extends Component {
             <div className={styles.header}>
               <CardHeader title="Upcoming Patients" />
             </div>
-            <div className={styles.patients_list__users}>
+            <List className={styles.patients_list__users}>
               <InfiniteScroll
                 loadMore={this.props.loadMore}
                 loader={<div style={{ clear: 'both' }}>Loading...</div>}
@@ -158,7 +159,7 @@ class UpcomingPatientList extends Component {
               >
                 {display}
               </InfiniteScroll>
-            </div>
+            </List>
           </Card>
         </Row>
       </div>

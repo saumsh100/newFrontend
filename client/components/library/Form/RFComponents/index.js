@@ -5,6 +5,9 @@ import RFSelect from './RFSelect';
 import RFDropdownSelect from './RFDropdownSelect';
 import RFToggle from './RFToggle';
 import RFCheckbox from './RFCheckbox';
+import RFRangeSlider from './RFRangeSlider';
+import RFTextArea from './RFTextArea';
+import RFAutoComplete from './RFAutoComplete';
 
 export default {
   Input: RFInput,
@@ -14,4 +17,7 @@ export default {
   DayPicker: RFDayPicker,
   // DropDown: RFDropDown.
   Checkbox: RFCheckbox,
+  RangeSlider: RFRangeSlider,
+  TextArea: RFTextArea,
+  AutoComplete: RFAutoComplete,
 };

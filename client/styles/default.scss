@@ -84,6 +84,49 @@
     background-color: $primary-lightgrey !important;
   }
 
+  .rc-slider {
+    .rc-slider-rail {
+      position: absolute;
+      width: 100%;
+      background-color: #fafafa;
+      height: 25px;
+      border: 1px solid #ff715a;
+      border-radius: 0px;
+      cursor: pointer;
+    }
+    .rc-slider-track {
+      position: absolute;
+      left: 0;
+      height: 25px;
+      border-radius: 0px;
+      background-color: #b4b4b4;
+    }
+    .rc-slider-handle {
+      position: absolute;
+      margin-left: -5px;
+      margin-top: -5px;
+      width: 10px;
+      height: 10px;
+      cursor: pointer;
+      cursor: -webkit-grab;
+      cursor: grab;
+      border-radius: 50%;
+      border: solid 1px #ff715a;
+      background-color: #fff;
+
+    }
+    .rc-slider-mark {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      width: 100%;
+      font-size: 12px;
+    }
+    .rc-slider-dot {
+      display: none,
+    }
+  }
+
   .react-autosuggest__container {
     position: relative;
   }
