@@ -22,7 +22,7 @@ export function login(redirectedFrom = '/') {
       .then(({ data }) => {
         // set data in local storage
         localStorage.setItem('token', data.token);
-        dispatch(loginSuccess(jwt(data.token)));
+        dispatch(loginSuccess({ token: data.token, role: jwt(data.token).role }));
         dispatch(push(redirectedFrom));
       })
       .catch((err) => {
@@ -56,7 +56,7 @@ export function load() {
       const decodedToken = jwt(token);
       const expired = (decodedToken.exp - (Date.now() / 1000)) < 0;
 
-      expired ? logout()(dispatch) : dispatch(loginSuccess(decodedToken));
+      expired ? logout()(dispatch) : dispatch(loginSuccess({ token, role: decodedToken.role }));
     } catch (error) {
       logout()(dispatch);
     }
