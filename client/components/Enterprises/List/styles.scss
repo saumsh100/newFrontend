@@ -1,28 +1,7 @@
-@import '../../../ui.scss';
-
-$default-table-space: 20px;
-
-.mainContainer {
-  padding: $container-padding;
-}
-
-.card {
-  border-top: $card-border-size $primary-light-blue;
-  overflow: inherit;
-  padding-bottom: $default-table-space;
-}
-
-.cardHeader {
-  padding: $default-table-space $default-table-space 0 $default-table-space;
-  margin-bottom: $default-table-space;
-}
-
-.list {
-  margin: $default-table-space $default-table-space 0 $default-table-space;
-}
+@import "../styles.scss";
 
 .listItem{
-  padding: 0 $default-table-space/2;
+  padding: 0 1em;
   position: relative;
 
   &:first-child {
@@ -32,5 +11,5 @@ $default-table-space: 20px;
 
 .listItemButtons {
   position: absolute;
-  right: 0;
+  right: 1em;
 }

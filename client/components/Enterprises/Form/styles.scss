@@ -1,0 +1,16 @@
+@import "../styles.scss";
+
+.caret {
+  padding: 0 .5em;
+}
+
+.headerLink {
+  color: $primary-dark;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
