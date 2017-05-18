@@ -1,7 +1,9 @@
+import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Form, Field, Button } from '../../../library';
 import { maxLength } from '../../../library/Form/validate';
 import { languages } from '../../../Settings/Clinic/Address/selectConstants';
+
 export default function EditPatientForm({ onSubmit, formName, styles, currentPatient }) {
 
   const key = currentPatient.id;
@@ -87,7 +89,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
         </div>
         <Field
           required
-          className={styles.genderInput}
+          className={classNames(styles.genderInput, 'dropDownOverwrite')}
           name="gender"
           component="DropdownSelect"
           label="Gender"

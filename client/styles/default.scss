@@ -43,6 +43,11 @@
   ::-webkit-scrollbar-thumb:window-inactive {
     background:rgba(0,0,0,0.05);
   }*/
+  .dropDownOverwrite.dd-menu.dd-menu-left {
+    .dd-menu-items {
+      left: -100%;
+    }
+  }
 
   .CareCruToggle.react-toggle--checked {
     &:hover {

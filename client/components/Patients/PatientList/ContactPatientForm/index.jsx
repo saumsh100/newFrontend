@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Form, Field, Button } from '../../../library';
 import { languages, countrySelector, usStates, caProvinces } from '../../../Settings/Clinic/Address/selectConstants';
+import classNames from 'classnames';
 import { maxLength, emailValidate, phoneValidate, postalCodeValidate, phoneValidateNullOkay } from '../../../library/Form/validate';
 
 export default function ContactPatientForm({ onSubmit, formName, styles, currentPatient }) {
@@ -121,7 +122,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
           />
         </div>
         <Field
-          className={styles.genderInput}
+          className={classNames(styles.genderInput, 'dropDownOverwrite')}
           name="province"
           component="DropdownSelect"
           label="Province"
