@@ -74,6 +74,7 @@ class Tabs extends Component {
     const {
       children,
       className,
+      navClass,
     } = this.props;
 
     const newProps = omit(this.props,['index']);
@@ -84,7 +85,7 @@ class Tabs extends Component {
     return (
       // Order is important, classNames={classes} needs to override props.className
       <div {...newProps} className={classes}>
-        <nav className={styles.nav}>
+        <nav className={navClass}>
           {this.renderHeaders(headers)}
         </nav>
         <div className={styles.content}>

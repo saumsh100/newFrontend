@@ -54,6 +54,7 @@ class MainContainer extends Component {
       <PatientInfoDisplay
         currentPatient={this.props.currentPatient}
         onClick={this.props.newUserForm}
+        onDelete={this.props.deletePatient}
       />
     );
 
@@ -113,6 +114,7 @@ class MainContainer extends Component {
                         <Tabs
                           index={this.state.index}
                           onChange={(index) => this.handleTabChange(index)}
+                          navClass={styles.nav}
                         >
                           <Tab
                             label="Personal"
@@ -125,12 +127,6 @@ class MainContainer extends Component {
                                 formName={'editPatient'}
                                 styles={styles}
                               />
-                              <Button
-                                className={styles.deleteButton}
-                                onClick={this.props.deletePatient}
-                              >
-                                Delete Patient
-                              </Button>
                             </div>
                           </Tab>
                           <Tab
@@ -150,8 +146,8 @@ class MainContainer extends Component {
                             label="Insurance"
                             className={styles.tabs}
                           >
-                            <div>
-                              Coming Soon!
+                            <div className={styles.text}>
+                              Coming Soon
                             </div>
                           </Tab>
                           <Tab
@@ -171,8 +167,8 @@ class MainContainer extends Component {
                             label="Family"
                             className={styles.tabs}
                           >
-                            <div>
-                              Coming Soon!
+                            <div className={styles.text}>
+                              Coming Soon
                             </div>
                           </Tab>
                         </Tabs>
