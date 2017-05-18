@@ -81,7 +81,7 @@ const clinicPhoneNumber = '+17786558613';
 const randomAppointments = [];
 const randomPatients = [];
 
-for (let i = 0; i < 40; i++) {
+for (let i = 0; i < 10000; i++) {
   let id = uuid();
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName()
