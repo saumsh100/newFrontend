@@ -14,7 +14,7 @@ import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
 import loadReputatuion from 'bundle-loader?lazy!./Dashboard/Reputation';
-import loadEnterprises from 'bundle-loader?lazy!./Dashboard/Enterprises';
+import loadAdmin from 'bundle-loader?lazy!./Dashboard/Admin';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
 
@@ -30,7 +30,7 @@ const DashboardRouter = ({ history, isAuth }) => {
         <LazyRoute path="/social" load={loadSocial} name="social" />
         <LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />
         <LazyRoute path="/settings" load={loadSettings} name="settings" />
-        <LazyRoute path="/enterprises" load={loadEnterprises} name="enterprises" />
+        <LazyRoute path="/admin" load={loadAdmin} name="admin" />
         <Route component={FourZeroFour} />
       </Switch>
     </div>;

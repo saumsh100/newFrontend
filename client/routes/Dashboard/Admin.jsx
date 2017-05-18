@@ -5,7 +5,7 @@ import Container from '../../containers/EnterprisesContainer';
 import List from '../../components/Enterprises/List';
 import Create from '../../components/Enterprises/Form';
 
-const base = (path = '') => `/enterprises${path}`;
+const base = (path = '') => `/admin/enterprises${path}`;
 
 const Enterprises = () =>
   <Container>
@@ -17,4 +17,13 @@ const Enterprises = () =>
     </Switch>
   </Container>;
 
-export default Enterprises;
+const Admin = () =>
+  <div>
+    <Switch>
+      <Redirect exact from="/admin" to={base()} />
+
+      <Route path={base()} component={Enterprises} />
+    </Switch>
+  </div>;
+
+export default Admin;

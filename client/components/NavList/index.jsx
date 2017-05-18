@@ -132,6 +132,9 @@ export default function NavList({ location, isCollapsed }) {
           <SubNavItem path="/settings/services" label="Services" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
         </MultiNavItem>
+        <MultiNavItem path="/admin" icon="desktop" label="Admin Panel">
+          <SubNavItem path="/admin/enterprises" label="Enterprises" />
+        </MultiNavItem>
       </Nav>
     </div>
   );
