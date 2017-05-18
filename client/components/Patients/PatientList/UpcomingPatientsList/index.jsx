@@ -154,7 +154,7 @@ class UpcomingPatientList extends Component {
                 hasMore={this.props.moreData}
                 initialLoad={false}
                 useWindow={false}
-                threshold={100}
+                threshold={1}
               >
                 {display}
               </InfiniteScroll>

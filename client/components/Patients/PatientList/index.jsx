@@ -18,7 +18,7 @@ class PatientList extends Component {
       people: HOW_MANY_TO_SKIP,
       moreData: true,
       patients: null,
-      roll: 0,
+      roll: 1,
       currentPatient: { id: null },
       active: false,
       showNewUser: false,
@@ -43,7 +43,11 @@ class PatientList extends Component {
       params: {
         limit: HOW_MANY_TO_SKIP,
       },
-    });
+    }).then((result) => {
+      if (Object.keys(result).length === 0) {
+        this.setState({ moreData: false });
+      }
+    });;
   }
 
   setCurrentPatient(currentPatient) {
@@ -151,30 +155,22 @@ class PatientList extends Component {
 
   loadMore() {
     const newState = {};
-    newState.roll = this.state.roll;
 
-    //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
 
-    if (this.state.roll === 2) {
-      newState.roll = 0;
-    } else if (this.state.roll === 1) {
+    this.props.fetchEntities({
+      key: 'appointments',
+      join: ['patient'],
+      params: {
+        skip: this.state.people,
+        limit: HOW_MANY_TO_SKIP,
+      },
+    }).then((result) => {
+      if (Object.keys(result).length === 0) {
+        this.setState({ moreData: false });
+      }
+    });
 
-      this.props.fetchEntities({
-        key: 'appointments',
-        join: ['patient'],
-        params: {
-          skip: this.state.people,
-          limit: HOW_MANY_TO_SKIP,
-        },
-      });
-
-      newState.people = this.state.people + HOW_MANY_TO_SKIP;
-      newState.roll += 1;
-    } else {
-      newState.roll += 1;
-    }
-
-    newState.patients = this.props.patients;
+    newState.people = this.state.people + HOW_MANY_TO_SKIP;
 
     this.setState(newState);
   }
