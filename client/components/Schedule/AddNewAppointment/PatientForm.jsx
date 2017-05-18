@@ -25,6 +25,7 @@ export default function PatientForm(props) {
             getSuggestions={getSuggestions}
             onChange={(e, newValue) => handleAutoSuggest(newValue)}
             validate={[validatePatient]}
+            theme="primaryGrey"
             required
           />
         </Col>
@@ -34,6 +35,7 @@ export default function PatientForm(props) {
           <Field
             name="phoneNumber"
             label="Phone #"
+            theme="primaryGrey"
             disabled
           />
         </Col>
@@ -43,16 +45,17 @@ export default function PatientForm(props) {
           <Field
             name="email"
             label="Email"
+            theme="primaryGrey"
             disabled
           />
         </Col>
       </Row>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
         <Col xs={12} className={styles.addNewAppt_col_textArea} >
+          <div className={styles.addNewAppt_comment_label}>Comment</div>
           <Field
             component="TextArea"
             name="note"
-            label="Comment"
             rows={6}
             className={styles.addNewAppt_comment}
           />

@@ -26,6 +26,7 @@ class AddNewAppointment extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
+    this.deleteAppointment = this.deleteAppointment.bind(this);
   }
 
   handleSubmit(values) {
@@ -55,7 +56,7 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
-    const bufferTime = duration[1] - duration[0]
+    const bufferTime = duration[1] - duration[0];
     const totalDurationMin = duration[0] + bufferTime;
 
     const startDate = mergeTime(new Date(date), new Date(time));
@@ -108,6 +109,28 @@ class AddNewAppointment extends Component {
     }
   }
 
+  deleteAppointment() {
+    const {
+      formName,
+      selectedAppointment,
+      reset,
+      reinitializeState,
+      deleteEntityRequest,
+    } = this.props;
+
+    if (!selectedAppointment) {
+      reset(formName);
+      reinitializeState();
+    } else {
+      const id = selectedAppointment.appointment.id;
+      const deleteApp = confirm('Are you sure you want to delete this appointment?');
+
+      if (deleteApp) {
+        deleteEntityRequest({ key: 'appointments', id });
+      }
+      reinitializeState();
+    }
+  }
 
   render() {
     const {
@@ -116,9 +139,7 @@ class AddNewAppointment extends Component {
       patients,
       chairs,
       practitioners,
-      reset,
       selectedAppointment,
-      deleteEntityRequest,
     } = this.props;
 
     const remoteButtonProps = {
@@ -129,16 +150,8 @@ class AddNewAppointment extends Component {
     return (
       <div className={styles.formContainer}>
         <IconButton
-          icon={selectedAppointment ? "trash" : "times-circle-o"}
-          onClick={()=>{
-            if (!selectedAppointment) {
-              reset(formName);
-              return this.props.reinitializeState();
-            } else {
-              deleteEntityRequest({ key: 'appointments', id: selectedAppointment.appointment.id });
-              return this.props.reinitializeState();
-            }
-          }}
+          icon={selectedAppointment ? 'trash' : 'times-circle-o'}
+          onClick={this.deleteAppointment}
           className={styles.trashIcon}
         />
         <DisplayForm
@@ -175,7 +188,20 @@ function mapDispatchToProps(dispatch) {
     reset,
     change,
   }, dispatch);
-}
+};
+
+AddNewAppointment.PropTypes = {
+  formName: PropTypes.string,
+  services: PropTypes.object,
+  patients: PropTypes.object,
+  chairs: PropTypes.object,
+  practitioners: PropTypes.object,
+  selectedAppointment: PropTypes.object,
+  deleteEntityRequest: PropTypes.func,
+  reset: PropTypes.func,
+  change: PropTypes.func,
+  reinitializeState: PropTypes.func,
+};
 
 const enhance = connect(null, mapDispatchToProps);
 

@@ -34,6 +34,7 @@ class RFAutoComplete extends Component {
       error,
       meta,
       input,
+      theme,
     } = this.props;
 
     const { touched, asyncValidating, dirty } = meta;
@@ -42,7 +43,7 @@ class RFAutoComplete extends Component {
 
     let propsValue = this.state.value;
     if (typeof propsValue === 'object') {
-      propsValue = input.value.firstName
+      propsValue = input.value.firstName;
     }
 
     const inputProps = {
@@ -53,6 +54,7 @@ class RFAutoComplete extends Component {
       label,
       error: finalError,
       icon: finalIcon,
+      theme,
     };
 
     return (
