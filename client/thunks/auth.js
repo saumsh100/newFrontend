@@ -65,7 +65,6 @@ export function load() {
     try {
       const decodedToken = jwt(token);
       const expired = (decodedToken.exp - (Date.now() / 1000)) < 0;
-      debugger;
       expired ? logout()(dispatch) : dispatch(loginSuccess(decodedToken));
     } catch (error) {
       logout()(dispatch);

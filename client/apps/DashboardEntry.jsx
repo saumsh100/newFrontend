@@ -15,8 +15,7 @@ import configure from '../store';
 import { load } from '../thunks/auth';
 import connectSocketToStore from '../socket/connectSocketToStore';
 
-// TODO: setup env variables so that we get the correct logrocket app
-LogRocket.init('7mbzb4/carecru');
+LogRocket.init(process.env.LOGROCKET_APP_ID);
 
 const browserHistory = createBrowserHistory();
 const store = configure({ browserHistory });
@@ -27,7 +26,7 @@ load()(store.dispatch);
 const { auth } = store.getState();
 
 if (auth.get('isAuthenticated')) {
-  const token = auth.get('token');
+  const token = auth.get('token').toJS();
   LogRocket.identify(token.userId, {
     name: `${token.firstName} ${token.lastName}`,
     email: token.username,
