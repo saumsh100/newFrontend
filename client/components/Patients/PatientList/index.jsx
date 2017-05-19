@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import _ from 'lodash';
+import { Map } from 'immutable';
 import MainContainer from './MainContainer';
 import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
 import * as Actions from '../../../actions/patientList';
 
-const HOW_MANY_TO_SKIP = 10;
+const HOW_MANY_TO_SKIP = 15;
 
 class PatientList extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class PatientList extends Component {
       people: HOW_MANY_TO_SKIP,
       moreData: true,
       patients: null,
-      roll: 0,
+      roll: 1,
       currentPatient: { id: null },
       active: false,
       showNewUser: false,
@@ -42,7 +43,11 @@ class PatientList extends Component {
       params: {
         limit: HOW_MANY_TO_SKIP,
       },
-    });
+    }).then((result) => {
+      if (Object.keys(result).length === 0) {
+        this.setState({ moreData: false });
+      }
+    });;
   }
 
   setCurrentPatient(currentPatient) {
@@ -54,13 +59,11 @@ class PatientList extends Component {
   }
 
   setSearchPatient(currentPatientId) {
-    if (this.props.patients.get(currentPatientId)) {
-      this.props.setSelectedPatient(this.props.patients.get(currentPatientId).get('id'));
-      this.setState({
-        showNewUser: true,
-        initialUser: true,
-      });
-    }
+    this.props.setSelectedPatient(currentPatientId);
+    this.setState({
+      showNewUser: true,
+      initialUser: true,
+    });
   }
 
   newPatient(values) {
@@ -70,45 +73,49 @@ class PatientList extends Component {
     };
 
     this.setState(newState);
+
     this.props.createEntityRequest({
-      key: 'patient',
+      key: 'patients',
       entityData: values,
     }).then((result) => {
         this.props.setSelectedPatient(Object.keys(result.patients)[0]);
     });
   }
 
-  deletePatient() {
-    const key = (this.state.showNewUser ? 'patient' : 'patients');
-    const currentPatient = ((this.state.showNewUser) ? this.props.patient : this.state.currentPatient);
+  deletePatient(id) {
+    const key = 'patients';
 
     this.setState({
       currentPatient: { id: null },
       showNewUser: false,
+      initialUser: true,
     });
 
     const ids = [];
 
     this.props.appointments.toArray().forEach((appointment) => {
-      if (appointment.patientId === currentPatient.id) {
+      if (appointment.patientId === id) {
         ids.push(appointment.id);
       }
     });
 
     this.props.deleteEntityCascade({
       key,
-      id: currentPatient.id,
-      url: `/api/patients/${currentPatient.id}`,
+      id,
+      url: `/api/patients/${id}`,
       cascadeKey: 'appointments',
       ids,
     });
   }
 
   submitSearch(value){
-    return this.props.fetchEntities({ url: '/api/patients/search', params: value })
-      .then(result => {
-        this.props.searchPatient(Object.keys(result.patients));
-      });
+    if (value.patients.length >= 2) {
+      return this.props.fetchEntities({url: '/api/patients/search', params: value})
+        .then(result => {
+          this.props.searchPatient(Object.keys(result.patients));
+        });
+    }
+    return new Promise((resolve) => { resolve(); });
   }
 
   submitEdit(currentPatient, values) {
@@ -118,9 +125,12 @@ class PatientList extends Component {
       values.key = 'patient';
     }
 
+    const valuesMap = Map(values);
+    const modifiedPatient = currentPatient.merge(valuesMap);
+
     this.props.updateEntityRequest({
-      key,
-      values,
+      key: 'patients',
+      model: modifiedPatient,
       url: `/api/patients/${currentPatient.id}`,
     }).then((result) => {
       this.props.setSelectedPatient(Object.keys(result.patients)[0]);
@@ -145,35 +155,22 @@ class PatientList extends Component {
 
   loadMore() {
     const newState = {};
-    newState.roll = this.state.roll;
 
-    //Infinite scrolling calls this twice when scrolled down, so making sure we only do one fetch.
 
-    if (this.state.roll === 2) {
-      if (this.state.patients === this.props.patients) {
-        this.setState({
-          moreData: false,
-        });
+    this.props.fetchEntities({
+      key: 'appointments',
+      join: ['patient'],
+      params: {
+        skip: this.state.people,
+        limit: HOW_MANY_TO_SKIP,
+      },
+    }).then((result) => {
+      if (Object.keys(result).length === 0) {
+        this.setState({ moreData: false });
       }
-      newState.roll = 0;
-    } else if (this.state.roll === 1) {
+    });
 
-      this.props.fetchEntities({
-        key: 'appointments',
-        join: ['patient'],
-        params: {
-          skip: this.state.people,
-          limit: HOW_MANY_TO_SKIP,
-        },
-      });
-
-      newState.people = this.state.people + HOW_MANY_TO_SKIP;
-      newState.roll += 1;
-    } else {
-      newState.roll += 1;
-    }
-
-    newState.patients = this.props.patients;
+    newState.people = this.state.people + HOW_MANY_TO_SKIP;
 
     this.setState(newState);
   }
@@ -200,7 +197,10 @@ class PatientList extends Component {
       currentPatient = selectedPatient;
 
       let userAppointments = currentPatient.get('appointments');
-      userAppointments = userAppointments.toArray();
+
+      userAppointments = (userAppointments ? userAppointments : {});
+
+      userAppointments = (!userAppointments.toArray ? [] : userAppointments.toArray());
 
       if (userAppointments[0]) {
         userAppointments = userAppointments

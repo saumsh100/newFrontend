@@ -7,24 +7,22 @@ import omit from 'lodash/omit';
 
 
 // input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion;
-
+//const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = suggestion => {
-  return (
-    <div>
-      {suggestion.firstName}
-    </div>
-  );
-}
-
+  const display = suggestion.display || suggestion.firstName || suggestion.name;
+  return (<div>
+    {display}
+  </div>);
+};
 
 class AutoCompleteForm extends Component {
   constructor() {
     super();
 
     this.state = {
-      suggestions: []
+      suggestions: [],
     };
+
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     this.displayField = this.displayField.bind(this);
@@ -50,14 +48,13 @@ class AutoCompleteForm extends Component {
   displayField(props) {
     delete props.className;
 
-    if (this.props.className) {
+    if (props.className) {
       props.className = this.props.className;
     }
 
     props.value = this.props.value;
 
-    return (<Input {...props} />
-    );
+    return <Input {...props} />;
   };
 
   render() {
@@ -72,7 +69,6 @@ class AutoCompleteForm extends Component {
           renderInputComponent={this.displayField}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           {...newProps}
         />

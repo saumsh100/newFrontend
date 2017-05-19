@@ -57,10 +57,13 @@ class RFAutoComplete extends Component {
       theme,
     };
 
+    const getSuggestionValue = suggestion => suggestion;
+
     return (
       <AutoComplete
         value={propsValue}
         focusInputOnSuggestionClick={false}
+        getSuggestionValue={getSuggestionValue}
         {...this.props}
         inputProps={inputProps}
       />

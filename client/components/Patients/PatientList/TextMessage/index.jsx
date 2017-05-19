@@ -6,9 +6,23 @@ import { bindActionCreators } from 'redux';
 class TextMessage extends Component {
 
   render() {
+    //TODO Make messages page and remove inline styles.
+    const style = {
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'center',
+      height: '100%',
+    };
+
+    const style2 = {
+      'max-width': '50%',
+      'max-height': '50%',
+    };
 
     return (
-      <img src="http://images.mysafetysign.com/img/lg/S/under-construction-caution-sign-s-0816.png" height='100%' width='100%' />
+      <div style={style}>
+        <div style={style2}>Coming Soon</div>
+      </div>
         );
   }
 }

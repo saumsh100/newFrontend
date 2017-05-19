@@ -5,8 +5,9 @@ import Checkbox from '../../Checkbox';
 class RFCheckbox extends Component {
   constructor(props) {
     super(props);
+    const checked = this.props.input.value || false;
     this.state = {
-      checked: false,
+      checked,
     };
     this.handleChange = this.handleChange.bind(this);
   }
