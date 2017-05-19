@@ -428,6 +428,7 @@ ul {
 .name {
   font-family: "Gotham-Medium";
   font-size: 1.8em;
+  margin: 5px 0;
 }
 
 .statInfo {
@@ -484,13 +485,18 @@ ul {
 
 
 .info {
+  font-family: "Gotham-Medium";
+  font-size: 1em;
+  color: #bfbfbf;
+}
+.info2 {
   font-family: "Gotham-Book";
   font-size: 1em;
   color: #bfbfbf;
 }
 
 .contact {
-  font-family: "Gotham-Book";
+  font-family: "Gotham-Medium";
   font-size: 1.1em;
   color: #bfbfbf;
 }
