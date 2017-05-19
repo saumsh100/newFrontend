@@ -18,7 +18,7 @@
     "start": "nf start -w -j Procfile_dev",
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
-    "storybook": "start-storybook -p 9001 -c .storybook ",
+    "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "npm run test:cypress && npm run test:jest",
     "test:cypress": "cypress run",
     "test:jest": "jest",
