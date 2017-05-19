@@ -7,6 +7,7 @@ const Chat = require('./Chat');
 const WeeklySchedule = require('./WeeklySchedule');
 const Invite = require('./Invite');
 const Patient = require('./Patient');
+const Family = require('./Family');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
 const Practitioner_Service = require('./Practitioner_Service');
@@ -29,6 +30,7 @@ module.exports = {
   WeeklySchedule,
   Invite,
   Patient,
+  Family,
   Permission,
   Practitioner,
   Practitioner_Service,

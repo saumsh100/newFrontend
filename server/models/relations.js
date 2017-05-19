@@ -5,6 +5,7 @@ const Chair = require('./Chair');
 const Chat = require('./Chat');
 const WeeklySchedule = require('./WeeklySchedule');
 const Patient = require('./Patient');
+const Family = require('./Family');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
 const PractitionerTimeOff = require('./PractitionerTimeOff');
@@ -38,6 +39,10 @@ Request.belongsTo(Account, 'account', 'accountId', 'id');
 Request.belongsTo(Service, 'service', 'serviceId', 'id');
 Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Request.belongsTo(Chair, 'chair', 'chairId', 'id');
+
+// One to many: family has multiple patients, but patient can be in one family
+Family.hasMany(Patient, 'patients', 'id', 'familyId');
+Patient.belongsTo(Family, 'family', 'familyId', 'id');
 
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
 Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId')
