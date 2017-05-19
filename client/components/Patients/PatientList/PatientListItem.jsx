@@ -22,7 +22,7 @@ class PatientListItem extends Component {
     let showDate = startDate;
 
     if (moment(showDate)._d.toString() !== "Invalid Date") {
-      showDate = moment(startDate).format('MMMM Do YYYY, h:mm:ss a');
+      showDate = moment(startDate).format('MMMM Do YYYY, h:mm a');
     }
 
     const age = moment().diff(user.birthDate, 'years');
