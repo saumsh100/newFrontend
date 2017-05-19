@@ -1,6 +1,8 @@
 @import '../../../ui';
 
-
+html {
+  background: #e6e6e6;
+}
 body {
   margin: 0;
   padding: 0;
@@ -12,15 +14,93 @@ ul {
   list-style: none;
 }
 
+.tabs {
+  padding: 8px;
+  border-bottom-color: #8cbcd6;
+  overflow-x: auto;
+}
+
+.nav {
+  min-width: calc(33vw - 222px);
+  overflow-x: hidden;
+  white-space: nowrap;
+  &:hover {
+    overflow-x: auto;
+  }
+}
+
+.grow {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
 .appointment {
   display: flex;
   justify-content: space-between;
-  margin: 20px;
-  padding-bottom: 20px;
+  margin: 20px 20px 30px 20px;
+}
+
+.headerInput {
+  width: 100%;
+}
+
+.input {
+  margin-right: 5%;
+  margin-left: 5%;
+  width: 90%;
+}
+
+.rightCon {
+  flex: 1;
+  max-height: calc(56vh - 75px);
+}
+
+.upcoming{
+  background-color: white;
+  margin-bottom: 1px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  div {
+    text-align: center;
+  }
+}
+
+.header {
+  width: 100%;
+  margin-bottom: 10px;
+  padding-left: 15px;
+}
+
+.upcomingHead {
+  width: 100%;
+  &::before {
+    padding-left: 0px;
+    display: block;
+    height: 5px;
+    content: '';
+    background: #8cbcd6;
+  }
+}
+
+.searchList{
+  display: flex;
+  justify-content: space-between;
+  img {
+    margin-right: 20px;
+  }
+  div {
+    text-align: left;
+    font-family: "Gotham-Medium";
+  }
 }
 
 .end {
   text-align: end;
+}
+
+.listRow {
+  margin-top: 20px;
+  flex: 1;
 }
 
 .flex {
@@ -38,11 +118,297 @@ ul {
   margin-left: 10px;
 }
 
+.nameFields{
+  font-size: 16px;
+  font-family: Gotham-Book;
+  padding: 10px 0px 10px 0px;
+  display: block;
+  width: 95%;
+  border: none;
+  border-bottom-width: medium;
+  border-bottom-style: none;
+  border-bottom-color: currentcolor;
+  border-bottom: 1px solid #c6c6c6;
+  background-color: #fafafa;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus ~ label {
+    top: 10px;
+    left: 0px;
+    font-size: 12px;
+  }
+}
+
+.birthFields{
+  margin-left: 4%;
+  width: 100%;
+}
+
+.middleField {
+  width: 20%;
+  margin-right: 1%;
+}
+.firstField {
+  flex-grow: 1;
+}
+
+.twoFields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.drop {
+
+}
+
+.langaugeInput{
+  position: relative;
+  font-size: 16px;
+  font-family: Gotham-Book;
+  height: 28.89px;
+  width: 95%;
+  padding: 5px 5px 5px 0px;
+  margin-right: 2%;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: border 500ms ease-out;
+
+}
+.prefInput{
+  position: relative;
+  font-size: 16px;
+  font-family: Gotham-Book;
+  height: 28.89px;
+  width: 95%;
+  padding: 5px 5px 5px 0px;
+  margin-left: 2.5%;
+  margin-right: 2%;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: border 500ms ease-out;
+}
+.genderInput{
+  position: relative;
+  font-size: 16px;
+  font-family: Gotham-Book;
+  height: 28.89px;
+  width: 90%;
+  padding: 5px 5px 5px 0px;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: border 500ms ease-out;
+  margin: 20px 2.5% 0 .5%;
+}
+
+.countryInput{
+  position: relative;
+  font-size: 16px;
+  font-family: Gotham-Book;
+  height: 28.89px;
+  width: 95%;
+  padding: 5px 5px 5px 0px;
+  cursor: pointer;
+  border-bottom: 1px solid #d5d5d5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  transition: border 500ms ease-out;
+  margin: 20px 0 0 .5%;
+}
+
+.langaugeIcon {
+  width: 17%;
+  height: 100%;
+  i {
+    margin: 10% 20% 30% 0;
+    font-size: 2.2em;
+    color: #8cbcd6;
+  }
+}
+
+.userIcon {
+  height: 100%;
+  margin-right: 7%;
+
+  i {
+    margin: 55% 20% 30% 0;
+    font-size: 2.6em;
+    color: #8cbcd6;
+  }
+}
+
+.noIcon {
+  width: 40%;
+  height: 100%;
+
+  i {
+    margin: 55% 20% 30% 0;
+    font-size: 2.4em;
+    color: #8cbcd6;
+  }
+}
+.noIcon2 {
+  width: 52%;
+  height: 100%;
+
+  i {
+    margin: 55% 20% 30% 0;
+    font-size: 2.4em;
+    color: #8cbcd6;
+  }
+}
+
+.mailIcon {
+  width: 20%;
+  height: 100%;
+
+  i {
+    margin: 55% 10% 30% 0;
+    font-size: 2.4em;
+    color: #8cbcd6;
+  }
+}
+
+.compref {
+  margin-top: 30px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.toggle{
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  margin: auto 0;
+}
+
+.checkbox{
+  display: flex;
+  justify-content: space-between;
+  margin: auto 0;
+}
+
+.morning{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.marginZero {
+  label {
+    margin: 0 5px 5px 5px;
+  }
+}
+
+.comprestitle {
+  flex-grow: 1;
+}
+
+.calendarIcon {
+  width: 25%;
+  height: 100%;
+
+  i {
+    margin: 55% 20% 30% 0;
+    font-size: 2.2em;
+    color: #8cbcd6;
+  }
+}
+
 .form {
   margin-right: 30px;
   margin-left: 30px;
+  button {
+    position: absolute;
+    right:    10px;
+    margin: 15px;
+  }
 }
 
+.deleteButton {
+  position: absolute;
+  margin: 15px;
+}
+
+
+.background {
+  background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
+  background-size: cover;
+  max-height: calc(56vh - 75px);
+  overflow-y: auto;
+}
+
+.tabdivs {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(51vh - 110px);
+  height: calc(51vh - 110px);
+}
+
+.names {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.text {
+  text-align: center;
+}
+
+.names2 {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.names3 {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.status {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.deleteInfo {
+  float: right;
+  color: red;
+  height: 20px;
+  margin: 20px 20px 0 24%;
+  i {
+  font-size: 1.7em;
+  }
+}
 
 .name {
   display:flex;
@@ -62,18 +428,20 @@ ul {
 .name {
   font-family: "Gotham-Medium";
   font-size: 1.8em;
+  margin: 5px 0;
 }
 
 .statInfo {
   font-family: "Gotham-Book";
   color: grey;
-  font-size: 0.9em;
+  font-size: .85em;
+  font-weight: 600;
 }
 
 .statData {
   font-family: "Gotham-Book";
   color: white;
-  font-size: 1.1em;
+  font-size: 1.4em;
   font-weight: bold;
 }
 
@@ -117,13 +485,18 @@ ul {
 
 
 .info {
+  font-family: "Gotham-Medium";
+  font-size: 1em;
+  color: #bfbfbf;
+}
+.info2 {
   font-family: "Gotham-Book";
   font-size: 1em;
   color: #bfbfbf;
 }
 
 .contact {
-  font-family: "Gotham-Book";
+  font-family: "Gotham-Medium";
   font-size: 1.1em;
   color: #bfbfbf;
 }
@@ -133,18 +506,29 @@ ul {
   color: #959596;
 }
 
+.spacing {
+  margin: 10px 0;
+}
+
 .patients {
-  height: 895px;
-  max-height: 895px;
+  height: 91%;
   display: flex;
-  width: 100%;
   padding: 10px;
+  background-color: #e6e6e6;
+  box-sizing: unset;
+}
+
+.topRow {
+  background: #f7f7f7;
+  min-height: 115px;
+  max-height: 115px;
 }
 
 .patients_list {
-  background: #f7f7f7;
-  height: 100%;
-
+  background: #e6e6e6;
+  max-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
   &_title {
     padding-top: 20px;
     padding-left: 30px;
@@ -204,18 +588,20 @@ ul {
     position: relative;
     z-index: 0;
     overflow-y: auto;
-    max-height: 720px;
+    max-height: calc(96vh - 230px);
     margin: 0;
     padding: 0;
-  }
-  .patients_list__users2 {
-    position: relative;
     width: 100%;
-    z-index: 2;
+  }
+  .patients_list__users_loading {
+    position: relative;
+    z-index: 0;
     overflow-y: auto;
-    max-height: 720px;
+    max-height: calc(96vh - 230px);
     margin: 0;
     padding: 0;
+    width: 100%;
+    background-color: #E0E0E0;
   }
 
   .users {
@@ -224,16 +610,8 @@ ul {
     padding: 20px;
     border-bottom: 1px solid #e6e6e6;
 
-    &:hover {
-      background: #E7E7E7;
-    }
-
-    &:not(:hover){
-      background: white;
-    }
-
     &__active {
-      background: #E7E7E7;
+      background: lighten(#E7E7E7, 2.6%);
     }
 
     &__photo {
@@ -253,6 +631,7 @@ ul {
     &__name {
       color: #2e3845;
       font-size: 14px;
+      font-family: Gotham-Medium;
       font-weight: 600;
     }
 
@@ -286,7 +665,10 @@ ul {
   position: relative;
   margin-left: 10px;
   background: #fafafa;
-  height: 100%;
+  height: calc(99vh - 75px);
+  display: flex;
+  width: calc(77vw - 222px);
+  flex-direction: column;
 
   &__addUser {
     position: absolute;
@@ -316,18 +698,18 @@ ul {
   }
 
   &__header {
-    height: 430px;
-    min-height: 310px;
     padding: 50px;
-    background: url("https://s27.postimg.org/ovwezwahf/patients_bg.png") no-repeat;
-    background-size: cover;
   }
 
   .patient_profile {
     width: 500px;
     background: #fafafa;
-    margin-top: 50px;
+    margin-bottom: 10px;
     margin-left: 30px;
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+
 
 
     &::before {
@@ -341,7 +723,7 @@ ul {
     &__photo {
       width: 100px;
       height: 100px;
-      margin: -50px auto 0 auto;
+      margin: -50px 0 0 auto;
       display: table;
 
       img {
@@ -354,11 +736,11 @@ ul {
   &__wrapper {
     display: flex;
     flex-direction: row;
-    height: 345px;
     background: #cdcaca;
+    height: 100%;
     width: 100%;
     .left {
-      height: 345px;
+      height: 100%;
       min-width: 250px;
       background-color: $primary-white;
       border-right: 2px solid $primary-grey;
@@ -371,7 +753,7 @@ ul {
       }
     }
     .middle {
-      height: 345px;
+      height: 465px;
       min-width: 250px;
       background-color: $primary-white;
       &::before {
@@ -383,8 +765,7 @@ ul {
       }
     }
     .right {
-      height: 345px;
-      min-width: 250px;
+      height: 100%;
       background: #fafafa;
       font-size: 12px;
       margin-left: 5px;
@@ -420,9 +801,8 @@ ul {
 
   &__table {
     position: relative;
-    padding: 10px 20px;
+    padding: 10px 20px 0 20px;
     margin: auto;
-    width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;

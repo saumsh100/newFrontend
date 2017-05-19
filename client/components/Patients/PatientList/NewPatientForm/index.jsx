@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Form, Field, DayPicker } from '../../../library';
+import styles from '../main.scss';
 
 import { maxLength, asyncEmailValidateUser, emailValidate, phoneValidate } from '../../../library/Form/validate';
 
@@ -29,6 +30,7 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
         validate={[maxLength(15)]}
         label="Last Name"
       />
+      <div className={styles.spacing}>
       <Field
         required
         name="gender"
@@ -36,6 +38,7 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
         component="DropdownSelect"
         options={options}
       />
+      </div>
       <Field
         required
         name="phoneNumber"

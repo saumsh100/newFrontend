@@ -15,8 +15,8 @@ import {
 } from '../constants';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
-import patients from '../entities/collections/patients';
 import Patient from '../entities/models/Patient';
+import patients from '../entities/collections/patients';
 import textMessages from '../entities/collections/textMessages';
 import TextMessage from '../entities/models/TextMessage';
 import Appointments from '../entities/models/Appointments';
@@ -33,8 +33,6 @@ import Requests from '../entities/models/Request';
 import requests from '../entities/collections/requests';
 import Dialogs from '../entities/models/Dialogs';
 import dialogs from '../entities/collections/dialogs';
-import PatientList from '../entities/models/PatientList';
-import patientList from '../entities/collections/patientList';
 import Service from '../entities/models/Service';
 import services from '../entities/collections/services';
 import Chairs from '../entities/models/Chair';
@@ -60,8 +58,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     practitioners: new practitioners(),
     availabilities: new availabilities(),
     dialogs: new dialogs(),
-    patient: new patients(),
-    patients: new patientList(),
+    patients: new patients(),
     chairs: new chairs(),
     weeklySchedules: new weeklySchedules(),
     users: new users(),
@@ -82,8 +79,7 @@ const Models = {
   practitioners: Practitioners,
   timeOffs: TimeOff,
   dialogs: Dialogs,
-  patient: Patient,
-  patients: PatientList,
+  patients: Patient,
   chairs: Chairs,
   availabilities: Availability,
   weeklySchedules: WeeklySchedule,
@@ -191,7 +187,7 @@ function receiveEntities(state, entities) {
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
-      if (!model || key === 'weeklySchedules') {
+      if (!model || key === 'weeklySchedules' || key === 'patients') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);

@@ -31,6 +31,18 @@ const phoneNumberValidate = (value) => {
   }
 };
 
+const phoneValidateNullOkay = (value) => {
+  if (!/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(value) && value !== null && value !== '') {
+    return 'Invalid phone number';
+  }
+};
+
+const postalCodeValidate = (value) => {
+  const can = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+  if (!can.test(value) && value !== undefined) {
+    return 'Invalid Postal Code';
+  }
+}
 
 const passwordsValidate = (value, values) => {
   if (values.password !== values.confirmPassword) {
@@ -98,4 +110,6 @@ export {
   passwordStrength,
   numDigitsValidate,
   phoneValidate,
+  postalCodeValidate,
+  phoneValidateNullOkay
 };

@@ -71,24 +71,24 @@ if (globals.env !== 'production') {
 
 patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next) => {
   const searchString = req.query.patients || '';
-  const search = searchString.toLowerCase().split(' ');
+  const search = searchString.split(' ');
 
-  search[1] = search[1] || '';
+  // making search case insensitive as
+  const searchReg = (search[1] ? `(?i)(${search[0]}|${search[1]})` : `(?i)${search[0]}`);
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
-
   Patient.filter((patient) => {
     return patient('accountId').eq(req.accountId).and(
-      patient('firstName').downcase().eq(search[0])
-        .or(patient('lastName').downcase().eq(search[0]))
-        .or(patient('lastName').downcase().eq(search[1]))
-        .or(patient('email').downcase().eq(search[0])));
-  }).getJoin({ appointments: {
-    _apply: (appointment) => {
-      return appointment.filter((request) => {
-        return generateDuringFilter(request, startDate, endDate);
-      });
+      patient('firstName').match(searchReg)
+        .or(patient('lastName').match(searchReg))
+        .or(patient('email').match(search[0])));
+  }).limit(20)
+    .getJoin({ appointments: {
+      _apply: (appointment) => {
+        return appointment.filter((request) => {
+          return generateDuringFilter(request, startDate, endDate);
+        });
     } } })
     .run()
     .then((patients) => {
@@ -162,16 +162,18 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
 /**
  * Update a patient
  */
-patientsRouter.put('/:joinPatientId', checkPermissions('patients:read'), (req, res, next) => {
+patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
   return req.patient.merge(req.body).save()
-    .then(patient => res.send(normalize('patient', patient)))
+    .then(patient => {
+      res.send(normalize('patient', patient));
+    })
     .catch(next);
 });
 
 /**
  * Delete a patient
  */
-patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
+patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => {
    return req.patient.deleteAll()
     .then(() => res.send(204))
     .catch(next);
