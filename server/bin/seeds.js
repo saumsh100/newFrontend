@@ -102,7 +102,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: patientPhone,
       from: clinicPhone,
       body: 'How were you doing yesterday?',
-        createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
+      createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
       read: true,
     },
     {
@@ -137,6 +137,67 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
     };
   });
 };
+
+const generateDefaultServices = (_accountId) => {
+  const createService = serviceData => Object.assign({}, {
+    id: uuid(),
+    accountId: _accountId,
+  }, serviceData);
+
+  return [
+    createService({
+      name: 'New Patient Consultation',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'New Patient Checkup & Cleaning',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Toothache',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Lost Filling',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Emergency Appointment',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Regular Checkup & Cleaning',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Regular Consultation',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Child Dental Exam',
+      duration: 30,
+    }),
+  ];
+};
+
+const generatePracServJoin = (services, _practitionerId) => {
+  return services.map((service) => {
+    return {
+      Service_id: service.id,
+      Practitioner_id: _practitionerId,
+    };
+  });
+};
+
+const donnaServices = generateDefaultServices(accountId);
+const sunshineServices = generateDefaultServices(accountId2);
 
 const SEEDS = {
   Reservation: [
@@ -1196,46 +1257,27 @@ const SEEDS = {
       Practitioner_id: practitionerId2,
       Service_id: serviceId2,
     },
-    // Mark's services
+
+    // Availabilities Test
     {
       Practitioner_id: practitionerId3,
       Service_id: cleanupServiceId,
     },
-    // Justin's services
     {
       Practitioner_id: practitionerId4,
       Service_id: cleanupServiceId,
     },
+
+    ...generatePracServJoin(donnaServices, practitionerId),
+    ...generatePracServJoin(donnaServices, practitionerId2),
+
+    ...generatePracServJoin(sunshineServices, practitionerId3),
+    ...generatePracServJoin(sunshineServices, practitionerId4),
+    ...generatePracServJoin(sunshineServices, practitionerId5),
+    ...generatePracServJoin(sunshineServices, practitionerId6),
   ],
 
   Service: [
-    {
-      id: serviceId,
-      accountId,
-      name: 'Routine Checkup',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      // See Practitioner_Service, but essentially it is this...
-      // practitioners: [ practitionerId ],
-    },
-    {
-      id: serviceId2,
-      accountId,
-      name: 'Another service',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      // See Practitioner_Service, but essentially it is this...
-      // practitioners: [ practitionerId2 ],
-    },
-    {
-      accountId,
-      name: 'Lost Filling',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-    },
     {
       id: cleanupServiceId,
       accountId: accountId2,
@@ -1244,6 +1286,9 @@ const SEEDS = {
       bufferTime: 0,
       unitCost: 40,
     },
+
+    ...donnaServices,
+    ...sunshineServices,
   ],
 
   Chat: [
