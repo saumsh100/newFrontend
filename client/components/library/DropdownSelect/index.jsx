@@ -85,6 +85,7 @@ export default class DropdownSelect extends Component {
       options,
       label,
       template,
+      borderColor,
     } = this.props;
 
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
@@ -101,11 +102,16 @@ export default class DropdownSelect extends Component {
 
     let toggleClassName = styles.toggleDiv;
     let caretIconClassName = styles.caretIcon;
+    if (borderColor) {
+      toggleClassName = classNames(styles[`${borderColor}Border`], toggleClassName);
+    }
     if (this.state.isOpen) {
       toggleClassName = classNames(styles.active, toggleClassName);
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
       labelClassName = classNames(styles.activeLabel, labelClassName);
     }
+
+
 
     return (
       <div

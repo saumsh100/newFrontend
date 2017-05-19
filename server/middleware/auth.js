@@ -45,7 +45,6 @@ module.exports = function authMiddleware(req, res, next) {
     req.decodedToken = decoded;
     req.accountId = decoded.activeAccountId;
     req.role = decoded.role;
-
     // Pull in the role's permissions and extend the extra permissions ontop
     req.permissions = { ...permissions[decoded.role], ...decoded.permissions };
     return next();

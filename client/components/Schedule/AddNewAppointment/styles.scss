@@ -1,0 +1,100 @@
+@import '../../../ui.scss';
+
+
+.formContainer {
+  position: relative;
+  border: .5px solid #ff715a;
+  border-radius: .5rem;
+  width: 900px;
+  height: 600px;
+}
+
+.title {
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  font-size: $extra-medium-size;
+  font-weight: $jumbo-weight;
+  color: $primary-color;
+}
+
+.remoteSubmit {
+  display: flex;
+  padding-right: 130px;
+  &_button {
+    margin-left: auto;
+  }
+}
+
+.trashIcon {
+  position: absolute;
+  left: 845px;
+  top: 5px;
+  font-size: 1.4em;
+  color: $inactive-color;
+}
+
+.addNewAppt {
+  border-radius: .5rem;
+  width: 900px;
+  height: 545px;
+
+  &_mainContainer {
+    min-width: 200px;
+    &_left {
+      width: 450px;
+      padding-left: 60px;
+    }
+
+    &_right {
+      padding-top: 65px;
+      background-color: #ff755e;
+      height: 536px;
+      width: 301px;
+      border-bottom-right-radius: .3rem;
+      border-top-right-radius: .3rem;
+      &_row {
+        height: 95px;
+        padding-left: 20px;
+        width: 250px;
+      }
+    }
+  }
+
+  &_row {
+    height: 95px;
+  }
+
+  &_col {
+    display: flex;
+    align-items: center;
+
+    &_nearFields {
+      width: 100%;
+    }
+
+    &_select {
+      display: flex;
+      align-items: center;
+      height: 80px;
+    }
+
+    &_textArea {
+      padding-top: 25px;
+    }
+  }
+
+  &_comment {
+    width: 240px;
+    max-width: 240px;
+    max-height: 95px;
+    border-color: $empty-grey;
+    background-color: $primary-color;
+    &:after{
+      border-color: $primary-grey
+    }
+  }
+}
+
+
+

@@ -26,7 +26,7 @@ export default function CardHeader(props) {
   let titleComponent = null;
   if (title) {
     titleComponent = (
-      <div className={styles.title}>
+      <div className={classes.title || styles.title}>
         {title}
       </div>
     );

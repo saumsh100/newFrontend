@@ -43,6 +43,12 @@ const patientSchema = () => {
   return new schema.Entity('patients');
 };
 
+const familySchema = () => {
+  return new schema.Entity('families', {
+    patients: [patientSchema()],
+  });
+};
+
 const permissionSchema = () => {
   return new schema.Entity('permissions', {
     users: [userSchema()],
@@ -113,6 +119,7 @@ const SCHEMAS = {
   chat: chatSchema(),
   invite: inviteSchema(),
   patient: patientSchema(),
+  family: familySchema(),
   request: requestSchema(),
   service: serviceSchema(),
   textMessage: textMessageSchema(),
@@ -131,6 +138,7 @@ const SCHEMAS = {
   enterprises: [enterpriseSchema()],
   invites: [inviteSchema()],
   patients: [patientSchema()],
+  families: [familySchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],
   textMessages: [textMessageSchema()],

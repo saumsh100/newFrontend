@@ -1,0 +1,31 @@
+
+@import '../../../ui.scss';
+
+
+.dialogBody {
+  display: flex;
+  padding: 1.2rem;
+  min-width: 250px;
+  max-height: 96%;
+  flex-direction: column;
+  &__header{
+    display: flex;
+    align-items: center;
+  }
+  &__closeIcon {
+    font-size: 1rem;
+    color: grey;
+    font-weight: 900;
+    margin-left: auto;
+    cursor: pointer;
+  }
+  &__footer {
+    margin-left: auto;
+  }
+
+  &__action {
+    margin-left: 5px;
+  }
+
+}
+

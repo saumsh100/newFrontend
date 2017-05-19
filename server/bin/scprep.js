@@ -1,7 +1,7 @@
 const models = require('../models');
 
 // Will default to this list of tables if there are no arguments to the script
-const defaultTables = ['Patient', 'Appointment', 'Chair', 'Practitioner', 'SyncClientError'];
+const defaultTables = ['Patient', 'Appointment', 'Chair', 'Practitioner', 'SyncClientError', 'Family'];
 
 /**
  * Remove these tables because sync client expects them to be empty

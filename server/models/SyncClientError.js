@@ -12,7 +12,7 @@ const SyncClientError = createModel('SyncClientError', {
   success: type.boolean(),
 
   model: type.string(),
-  documentId: type.string().uuid(4),
+  documentId: type.string(),
   payload: type.string(),
 
   errorMessage: type.string(),
