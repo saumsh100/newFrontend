@@ -20,7 +20,6 @@ const marks = {
 };
 
 export default function AppointmentForm(props) {
-
   const {
     serviceOptions,
     practitionerOptions,
@@ -56,7 +55,7 @@ export default function AppointmentForm(props) {
           <Field
             options={serviceOptions}
             component="DropdownSelect"
-            name="service"
+            name="serviceId"
             label="Service"
             borderColor="primaryColor"
             required
@@ -70,7 +69,7 @@ export default function AppointmentForm(props) {
               <Field
                 options={practitionerOptions}
                 component="DropdownSelect"
-                name="practitioner"
+                name="practitionerId"
                 label="Practitioner"
                 borderColor="primaryColor"
                 required
@@ -121,7 +120,7 @@ export default function AppointmentForm(props) {
           <Field
             options={chairOptions}
             component="DropdownSelect"
-            name="chair"
+            name="chairId"
             label="Chair"
             borderColor="primaryColor"
             required
@@ -146,6 +145,7 @@ export default function AppointmentForm(props) {
             name="duration"
             label="Duration"
             unit="m"
+            defaultValues={[60, 60]}
             min={15}
             max={180}
             marks={marks}

@@ -1,6 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import omit from 'lodash/omit';
+import classNames from 'classnames';
 import TextArea from '../../TextArea';
 
 export default function RFTextArea(props) {
@@ -8,13 +9,14 @@ export default function RFTextArea(props) {
     input,
     error,
     label,
+    value,
     meta,
+    theme,
   } = props;
 
   const { touched, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
-  const newProps = omit(props, ['input', 'meta', 'error']);
-
+  const newProps = omit(props, ['input', 'meta', 'error', 'va']);
   return (
     <TextArea
       {...newProps}

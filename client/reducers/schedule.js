@@ -13,8 +13,6 @@ import {
 
 const initialState = fromJS({
   scheduleDate: moment(),
-
-  practitioners: [],
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
@@ -29,7 +27,7 @@ export default handleActions({
   },
   [ADD_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
-    const filterEntities= state.toJS()[key];
+    const filterEntities = state.toJS()[key];
     filterEntities.push(action.payload.id);
     const mergeObj = {};
     mergeObj[key] = filterEntities;
@@ -47,7 +45,7 @@ export default handleActions({
   [ADD_ALL_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const entities = action.payload.entities;
-    const filterEntities= state.toJS()[key];
+    const filterEntities = state.toJS()[key];
 
     entities.map((entity) => {
       const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
@@ -62,7 +60,7 @@ export default handleActions({
 
   [CLEAR_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
-    const temp={};
+    const temp = {};
     temp[key] = [];
     return state.merge(temp);
   },

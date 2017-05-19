@@ -24,6 +24,7 @@ export default function RFRangeSlider(props) {
       {...newInput}
       error={finalError}
       onChange={(value)=>{input.onChange(value)}}
+      setRangeState={input.value}
     />
   );
 }

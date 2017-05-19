@@ -61,6 +61,26 @@ $empty-grey: darken(lightgrey, 5%);
   border-bottom: 1px solid $primary-color;
 }
 
+.theme {
+  &_primaryWhiteLabel {
+    color: $primary-white;
+  }
+  &_primaryWhiteInput{
+    border-bottom: 1px solid $primary-white;
+  }
+
+  &_primaryGreyLabel {
+    color: $primary-grey;
+  }
+  &_primaryGreyInput{
+    border-bottom: 1px solid $primary-grey;
+  }
+
+  &_primaryWhiteBorder{
+    border-color: $primary-white;
+  }
+}
+
 .erroredLabel {
   color: $error-color;
 }

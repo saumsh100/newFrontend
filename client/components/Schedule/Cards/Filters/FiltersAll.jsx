@@ -20,6 +20,7 @@ class FiltersAll extends Component {
     this.handleAllCheck = this.handleAllCheck.bind(this);
     this.isAllChecked = this.isAllChecked.bind(this);
     this.handleClearAll = this.handleClearAll.bind(this);
+    this.handleSelectAll = this.handleSelectAll.bind(this);
   }
 
   handleEntityCheck(checked, id, filterKey) {
@@ -55,12 +56,16 @@ class FiltersAll extends Component {
   }
 
   handleAllCheck(filterKey) {
-    const { entities } = this.props
+    const {
+      entities,
+      clearScheduleFilter,
+      addAllScheduleFilter,
+    } = this.props;
 
     if (this.state[filterKey]) {
-      this.props.clearScheduleFilter({ key: filterKey });
+      clearScheduleFilter({ key: filterKey });
     } else {
-      this.props.addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
+      addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
     }
 
     const temp = {};
@@ -79,6 +84,22 @@ class FiltersAll extends Component {
     });
   }
 
+  handleSelectAll() {
+    const {
+      entities,
+      addAllScheduleFilter,
+    } = this.props;
+
+    const objArr = Object.keys(this.state);
+
+    objArr.map((filterKey) => {
+      addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
+      const temp = {};
+      temp[filterKey] = true;
+      this.setState(temp);
+    });
+  }
+
   render() {
     return (
       <FiltersDisplay
@@ -87,6 +108,7 @@ class FiltersAll extends Component {
         handleAllCheck={this.handleAllCheck}
         handleEntityCheck={this.handleEntityCheck}
         handleClearAll={this.handleClearAll}
+        handleSelectAll={this.handleSelectAll}
       />
     );
   }

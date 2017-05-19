@@ -1,7 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import Textarea from 'react-textarea-autosize';
-import styles from './styles.scss';
 
 class TextArea extends Component {
   constructor(props) {
@@ -9,17 +8,10 @@ class TextArea extends Component {
   }
 
   render() {
-    const {
-      label,
-    } = this.props;
-
     return (
-      <div>
-        <div className={styles.label}>{label}</div>
-        <Textarea
-          {...this.props}
-        />
-      </div>
+      <Textarea
+        {...this.props}
+      />
     );
   }
 }
