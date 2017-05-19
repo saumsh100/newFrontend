@@ -36,6 +36,10 @@ class RangeSlider extends Component {
         value: newValue,
       });
       this.props.onChange(newValue);
+    } else if (value[1] === (value[0] + 1)) {
+      this.setState({
+        value: [value[0], value[0]],
+      });
     } else {
       this.setState({
         value,
@@ -73,6 +77,7 @@ class RangeSlider extends Component {
         <Range
           value={[this.state.value[0], this.state.value[1]]}
           pushable
+          allowCross
           count={1}
           onChange={this.onRangeChange}
           maximumTrackStyle={maximumTrackStyle}
@@ -82,5 +87,11 @@ class RangeSlider extends Component {
     );
   }
 }
+
+RangeSlider.PropTypes = {
+  onChange: PropTypes.func,
+  defaultValues: PropTypes.array,
+  setRangeState: PropTypes.func,
+};
 
 export default RangeSlider;
