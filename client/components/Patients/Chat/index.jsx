@@ -29,8 +29,9 @@ class Chat extends Component {
     }
     const textMessages = currentDialog.messages;
     if (!dialogList.length) {
-      return <div>Loading...</div>;
+       return <div>Loading...</div>;
     }
+
     const userNameFilterText = filters && filters.values && filters.values.dialogs;
     if (userNameFilterText) {
       const pattern = new RegExp(userNameFilterText, 'i');

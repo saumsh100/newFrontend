@@ -5,11 +5,11 @@ import { fetchEntities } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Chat from '../components/Patients/Chat/';
-import { 
+import {
   setCurrentDialog,
   setDialogScrollPermission,
 } from '../thunks/dialogs';
-import { 
+import {
   sendMessageOnClient,
   readMessagesInCurrentDialog,
 } from '../thunks/fetchEntities';

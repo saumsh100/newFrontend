@@ -44,7 +44,10 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
     .limit(limit)
     .getJoin(joinObject)
     .run()
-    .then(chats => res.send(normalize('chats', chats)))
+    .then(chats => {
+      console.log(chats)
+      res.send(normalize('chats', chats));
+    })
     .catch(next);
 });
 
