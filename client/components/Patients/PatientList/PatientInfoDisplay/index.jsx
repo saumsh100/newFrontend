@@ -71,20 +71,20 @@ class PatientInfoDisplay extends Component {
                 </div>
               </div>
               <div className={styles.appointment}>
-                <div className={styles.info}>
+                <div className={styles.info2}>
                   <div>
                     <span>Last Appointment</span>
                   </div>
                   <div>
-                    <span><strong>{lastApp}</strong></span>
+                    <span className={styles.info}><strong>{lastApp}</strong></span>
                   </div>
                 </div>
-                <div className={styles.info}>
+                <div className={styles.info2}>
                   <div>
                     <span>Next Appointment</span>
                   </div>
                   <div className={styles.end}>
-                    <span><strong>{nextApp}</strong></span>
+                    <span className={styles.info}><strong>{nextApp}</strong></span>
                   </div>
                 </div>
               </div>
