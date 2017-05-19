@@ -404,7 +404,7 @@ ul {
   float: right;
   color: red;
   height: 20px;
-  margin: 20px 20px 0 0;
+  margin: 20px 20px 0 24%;
   i {
   font-size: 1.7em;
   }
@@ -497,6 +497,10 @@ ul {
 .loading {
   text-align: center;
   color: #959596;
+}
+
+.spacing {
+  margin: 10px 0;
 }
 
 .patients {
@@ -707,7 +711,7 @@ ul {
     &__photo {
       width: 100px;
       height: 100px;
-      margin: -50px 38% 0 auto;
+      margin: -50px 0 0 auto;
       display: table;
 
       img {
