@@ -19,7 +19,7 @@ class RangeSlider extends Component {
 
   componentWillMount() {
     const {
-      setRangeState
+      setRangeState,
     } = this.props;
     if (setRangeState) {
       this.setState({ value: setRangeState });

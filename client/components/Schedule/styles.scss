@@ -15,11 +15,13 @@
 
     &__sidebar {
         padding-left: 15px;
-
+        display: flex;
+        flex-direction: column;
       &_rowCalendar {
           margin-top: 10px;
         }
         &_rowRequest {
+          flex-grow: 1;
           margin-top: 15px;
           background-color: $primary-white;
         }
