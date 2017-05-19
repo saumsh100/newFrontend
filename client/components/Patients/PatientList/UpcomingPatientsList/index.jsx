@@ -139,6 +139,7 @@ class UpcomingPatientList extends Component {
                 getSuggestions={this.getSuggestions}
                 inputProps={inputProps}
                 focusInputOnSuggestionClick={false}
+                getSuggestionValue={suggestion => suggestion.name}
               />
             </div>
           </Card>

@@ -11,33 +11,36 @@ const generateEntityOptions = (entities, label) => {
     options.push({ label: entity[label], value: entity.id });
   });
   return options;
-}
+};
 
 export default function DisplayForm(props) {
   const {
-    handleSubmit,
+    formName,
     services,
     chairs,
     practitioners,
     getSuggestions,
-    formName,
+    selectedAppointment,
+    handleSubmit,
+    handleAutoSuggest,
   } = props;
 
   const serviceOptions = generateEntityOptions(services, 'name');
   const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
-
+  const title = selectedAppointment ? 'Edit Appointment' : 'Create New Appointment';
 
   return (
     <Form
       form={formName}
       onSubmit={handleSubmit}
       ignoreSaveButton
+      initialValues={selectedAppointment}
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>
-          <Col xs={12} sm={6} md={8}>
-            <div className={styles.title}>Create New Appoinment</div>
+          <Col xs={8} sm={8} md={8}>
+            <div className={styles.title}>{title}</div>
             <FormSection name="appointment">
               <AppointmentForm
                 serviceOptions={serviceOptions}
@@ -46,12 +49,12 @@ export default function DisplayForm(props) {
               />
             </FormSection>
           </Col>
-          <Col xs={12} sm={6} md={4}>
+          <Col xs={4} sm={4} md={4}>
             <FormSection name="patient">
               <PatientForm
                 getSuggestions={getSuggestions}
                 handleSubmit={handleSubmit}
-                formName={formName}
+                handleAutoSuggest={handleAutoSuggest}
               />
             </FormSection>
           </Col>

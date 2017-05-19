@@ -12,11 +12,17 @@ const AppointmentsSchema = {
   chairId: null,
   isPatientConfirmed: null,
   note: null,
+  customBufferTime: null,
+  isDeleted: null,
+  isSyncedWithPMS: null,
 };
 
 export default class Appointments extends createModel(AppointmentsSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
+  getUrlRoot() {
+    return `/api/appointments/${this.getId()}`;
+  }
 
 }

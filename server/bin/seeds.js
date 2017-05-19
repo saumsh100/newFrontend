@@ -42,6 +42,8 @@ const markPatientId = uuid();
 const justinPatientId = uuid();
 const sergeyPatientId = uuid();
 
+const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
+
 const practitionerId = uuid();
 const practitionerId2 = uuid();
 const practitionerId3 = uuid();
@@ -440,7 +442,15 @@ const SEEDS = {
       password: bcrypt.hashSync('sync', saltRounds),
       id: syncUserId,
       activeAccountId: syncTestAccId,
-    }
+    },
+  ],
+
+  Family: [
+    {
+      id: justinFamilyId,
+      accountId,
+      headId: justinPatientId,
+    },
   ],
 
   Patient: [
@@ -465,6 +475,7 @@ const SEEDS = {
         sin: 'dsasdasdasdadsasad',
       },
       isSyncedWithPMS: false,
+      familyId: justinFamilyId,
     },
     {
       id: sergeyPatientId,
@@ -501,6 +512,7 @@ const SEEDS = {
       status: 'Active',
       language: 'English',
       isSyncedWithPMS: false,
+      familyId: justinFamilyId,
     },
     {
       id: alexPatientId,

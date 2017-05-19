@@ -23,7 +23,7 @@ class DayPicker extends Component {
   }
 
   handleDayClick(day, { selected }) {
-    this.props.onChange(day.toISOString());
+    this.props.onChange(day.toDateString());
     this.setState({ isOpen: false, selectedDay: day });
   }
 
