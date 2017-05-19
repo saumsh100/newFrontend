@@ -158,6 +158,8 @@ export function fetchAvailabilities() {
         dispatch(setIsFetching(false));
       })
       .catch((err) => {
+        dispatch(setAvailabilities([]));
+        dispatch(setIsFetching(false));
         throw err;
       });
   };

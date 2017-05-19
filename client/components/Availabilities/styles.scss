@@ -447,6 +447,7 @@
 }
 
 .signup {
+  height: 100%;
   z-index: 9999;
   overflow: auto;
   &__wrapper {
@@ -474,7 +475,6 @@
     flex-direction: column;
     width: 25%;
     padding: 0 20px;
-    background-color: #f3715c;
     background-color: var(--bookingWidgetPrimaryColor);
     position: relative;
     @media screen and (max-width: 800px) {
