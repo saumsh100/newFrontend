@@ -8,6 +8,9 @@ const StatusError = require('../../util/StatusError');
 
 // TODO: find a better way to do Model.findOne
 
+const getEmailDomain = email => (([, domain]) => domain)(/@(.+)$/.exec(email));
+const isCarecruEmail = email => getEmailDomain(email) === 'carecru.com';
+
 authRouter.post('/', (req, res, next) => {
   // Get user by the unique username
   return User
@@ -39,8 +42,9 @@ authRouter.post('/', (req, res, next) => {
             }
 
             const { role, permissions = {} } = permission[0];
-            const tokenData = { role, permissions, userId: id, activeAccountId };
 
+            const userRole = isCarecruEmail(req.body.username) ? 'SUPERADMIN' : role;
+            const tokenData = { role: userRole, permissions, userId: id, activeAccountId };
             console.log('signing token', tokenData);
 
             return jwt.sign(tokenData, globals.tokenSecret, { expiresIn: globals.tokenExpiry }, (error, token) => {
