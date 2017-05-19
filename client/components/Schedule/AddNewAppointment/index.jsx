@@ -27,7 +27,6 @@ class AddNewAppointment extends Component {
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
-    this.handleDayChange = this.handleDayChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -81,8 +80,9 @@ class AddNewAppointment extends Component {
       reset(formName);
     } else {
       const appModel = selectedAppointment.appointment.appModel;
+      const appModelSynced = appModel.set('isSyncedWithPMS', false);
       const valuesMap = Map(newAppointment);
-      const modifiedAppointment = appModel.merge(valuesMap);
+      const modifiedAppointment = appModelSynced.merge(valuesMap);
       updateEntityRequest({ key: 'appointments', model: modifiedAppointment });
       reinitializeState();
     }
@@ -116,7 +116,7 @@ class AddNewAppointment extends Component {
       selectedAppointment,
       reset,
       reinitializeState,
-      deleteEntityRequest,
+      updateEntityRequest,
     } = this.props;
 
     if (!selectedAppointment) {
@@ -127,14 +127,12 @@ class AddNewAppointment extends Component {
       const deleteApp = confirm('Are you sure you want to delete this appointment?');
 
       if (deleteApp) {
-        deleteEntityRequest({ key: 'appointments', id });
+        const appModel = selectedAppointment.appointment.appModel;
+        const deletedModel = appModel.set('isDeleted', true);
+        updateEntityRequest({ key: 'appointments', model: deletedModel });
       }
       reinitializeState();
     }
-  }
-
-  handleDayChange(e, newValue) {
-   this.props.setCurrentDay(moment(newValue));
   }
 
   render() {
@@ -155,7 +153,7 @@ class AddNewAppointment extends Component {
     return (
       <div className={styles.formContainer}>
         <IconButton
-          icon={selectedAppointment ? 'trash' : 'times-circle-o'}
+          icon={selectedAppointment ? 'trash' : 'times'}
           onClick={this.deleteAppointment}
           className={styles.trashIcon}
         />
@@ -170,7 +168,6 @@ class AddNewAppointment extends Component {
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
-          handleDayChange={this.handleDayChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton

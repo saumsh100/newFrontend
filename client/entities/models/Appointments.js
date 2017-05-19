@@ -13,6 +13,8 @@ const AppointmentsSchema = {
   isPatientConfirmed: null,
   note: null,
   customBufferTime: null,
+  isDeleted: null,
+  isSyncedWithPMS: null,
 };
 
 export default class Appointments extends createModel(AppointmentsSchema) {

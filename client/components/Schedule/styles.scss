@@ -1,32 +1,30 @@
 @import "../../ui.scss";
 
-.rowTest {
+.rowMainContainer {
   padding: $container-padding;
+
 }
 .schedule {
-
   &__container {
 
       &_content {
-        max-height: 760px;
+        max-height: calc(100vh - 145px);
         overflow-y: auto;
       }
     }
 
     &__sidebar {
-        max-height: 700px;
         padding-left: 15px;
 
-        &_rowCalendar {
+      &_rowCalendar {
           margin-top: 10px;
         }
         &_rowRequest {
-          margin-top: 10px;
-          height: 340px;
-          max-height: 340px;
+          margin-top: 15px;
           background-color: $primary-white;
         }
         &_request {
+
         }
         &_calendar {
           border-top: $card-border-size $primary-dark-blue;

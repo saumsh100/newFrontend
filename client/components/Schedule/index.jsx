@@ -1,6 +1,5 @@
 
 import React, { Component, PropTypes } from 'react';
-import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import {
   Grid,
@@ -13,17 +12,11 @@ import {
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
-import TestDayView from './DayView/TestDayView';
-
 import CurrentDate from './Cards/CurrentDate';
 import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
 import HeaderButtons from './Cards/HeaderButtons';
 import Filters from './Cards/Filters';
 import styles from './styles.scss';
-
-// Setup the localizer by providing the moment (or globalize) Object
-// to the correct localizer.
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 class ScheduleComponent extends Component {
   constructor(props) {
@@ -95,8 +88,8 @@ class ScheduleComponent extends Component {
     }
 
     return (
-      <Grid className={styles.schedule}>
-        <Row className={styles.rowTest}>
+      <Grid >
+        <Row className={styles.rowMainContainer}>
           <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
             <Card>
               <div className={`${styles.schedule__title} ${styles.title}`}>
@@ -127,7 +120,6 @@ class ScheduleComponent extends Component {
                     patients={patients.get('models').toArray()}
                     selectedAppointment={selectedAppointment}
                     reinitializeState={this.reinitializeState}
-                    setCurrentDay={this.setCurrentDay}
                   />
                 </Modal>
               </div>
@@ -146,7 +138,7 @@ class ScheduleComponent extends Component {
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
-                {/* <RequestsContainer className={styles.schedule__sidebar_request}  /> */}
+                <RequestsContainer className={styles.schedule__sidebar_request}  />
               </Col>
             </Row>
           </Col>

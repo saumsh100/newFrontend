@@ -24,7 +24,6 @@ export default function AppointmentForm(props) {
     serviceOptions,
     practitionerOptions,
     chairOptions,
-    handleDayChange,
   } = props;
 
   return (
@@ -36,7 +35,6 @@ export default function AppointmentForm(props) {
             name="date"
             label="Date"
             borderColor="primaryColor"
-            onChange={handleDayChange}
             required
           />
         </Col>
@@ -147,6 +145,7 @@ export default function AppointmentForm(props) {
             name="duration"
             label="Duration"
             unit="m"
+            defaultValues={[60, 60]}
             min={15}
             max={180}
             marks={marks}

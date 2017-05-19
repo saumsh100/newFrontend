@@ -12,7 +12,7 @@ class RangeSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: [30,45],
+      value: this.props.defaultValues,
     };
     this.onRangeChange = this.onRangeChange.bind(this);
   }
