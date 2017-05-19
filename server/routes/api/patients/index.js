@@ -123,8 +123,7 @@ patientsRouter.get('/', (req, res, next) => {
  */
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
-
-  const patientData = Object.assign({}, req.body, { accountId: accountId });
+  const patientData = Object.assign({}, req.body, { accountId });
   patientData.isSyncedWithPMS = false;
   return Patient.save(patientData)
     .then((patient) => {
