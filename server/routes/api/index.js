@@ -26,7 +26,7 @@ apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/requests', requestRouter);
 apiRouter.use('/reputation', reputationRouter);
 apiRouter.use('/patients', patientsRouter);
-apiRouter.use('/family', familyRouter);
+apiRouter.use('/families', familyRouter);
 apiRouter.use('/chairs', chairsRouter);
 apiRouter.use('/chats', chatsRouter);
 apiRouter.use('/services', servicesRouter);
