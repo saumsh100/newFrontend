@@ -111,9 +111,9 @@ ScheduleContainer.propTypes = {
 
 function mapStateToProps({ entities, schedule }) {
   return {
-    practitioners: entities.get('practitioners'),
     schedule,
     currentDate: schedule.toJS().scheduleDate,
+    practitioners: entities.get('practitioners'),
     appointments: entities.get('appointments'),
     patients: entities.get('patients'),
     services: entities.get('services'),

@@ -73,11 +73,13 @@ class ScheduleComponent extends Component {
     const currentDate = moment(schedule.toJS().scheduleDate);
 
     const params = {
+      currentDate,
       practitioners,
       patients,
+      chairs,
+      services,
       appointments,
       schedule,
-      currentDate,
       selectAppointment: this.selectAppointment,
     };
 
@@ -138,7 +140,8 @@ class ScheduleComponent extends Component {
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
-                <RequestsContainer className={styles.schedule__sidebar_request}  />
+                <RequestsContainer
+                  className={styles.schedule__sidebar_request} />
               </Col>
             </Row>
           </Col>
