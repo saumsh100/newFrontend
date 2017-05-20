@@ -80,47 +80,6 @@ const clinicPhoneNumber = '+17786558613';
 
 // TODO: order of seeding matters...
 
-const randomAppointments = [];
-const randomPatients = [];
-
-for (let i = 0; i < 10000; i++) {
-  let id = uuid();
-  const firstName = faker.name.firstName();
-  const lastName = faker.name.lastName();
-  randomPatients.push({
-    id,
-    avatar: faker.image.avatar(),
-    accountId,
-    firstName,
-    lastName,
-    email: `${firstName}.${lastName}@google.ca`,
-    phoneNumber: faker.phone.phoneNumberFormat(0),
-    birthDate: faker.date.past(),
-    gender: 'male',
-    langauge: 'English',
-    lastAppointmentDate: faker.date.past(),
-    insurance: {
-      insurance: 'Lay Health Insurance',
-      memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-      contract: '4234rerwefsdfsd',
-      carrier: 'sadasadsadsads',
-      sin: 'dsasdasdasdadsasad',
-    },
-    isSyncedWithPMS: false,
-  });
-
-  randomAppointments.push({
-    accountId,
-    startDate: recentStartTime.add(49 * oneHour),
-    endDate: recentStartTime.add(50 * oneHour),
-    patientId: id,
-    serviceId,
-    practitionerId,
-    chairId,
-    note: 'First',
-  });
-}
-
 const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
   return [
     {
@@ -179,6 +138,60 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
     };
   });
 };
+
+
+const randomAppointments = [];
+const randomPatients = [];
+let randomMessages = [];
+const randomChats = [];
+
+for (let i = 0; i < 100; i++) {
+  let id = uuid();
+  const firstName = faker.name.firstName();
+  const lastName = faker.name.lastName();
+  const phoneNumber = faker.phone.phoneNumberFormat(0);
+  const chatId = uuid();
+  randomPatients.push({
+    id,
+    avatar: faker.image.avatar(),
+    accountId,
+    firstName,
+    lastName,
+    email: `${firstName}.${lastName}@google.ca`,
+    phoneNumber: phoneNumber,
+    birthDate: faker.date.past(),
+    gender: 'male',
+    langauge: 'English',
+    lastAppointmentDate: faker.date.past(),
+    insurance: {
+      insurance: 'Lay Health Insurance',
+      memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+      contract: '4234rerwefsdfsd',
+      carrier: 'sadasadsadsads',
+      sin: 'dsasdasdasdadsasad',
+    },
+    isSyncedWithPMS: false,
+  });
+
+  randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber));
+
+  randomChats.push({
+    id: chatId,
+    accountId,
+    patientId: id,
+  });
+
+  randomAppointments.push({
+    accountId,
+    startDate: recentStartTime.add(49 * oneHour),
+    endDate: recentStartTime.add(50 * oneHour),
+    patientId: id,
+    serviceId,
+    practitionerId,
+    chairId,
+    note: 'First',
+  });
+}
 
 const SEEDS = {
   Reservation: [
@@ -853,6 +866,7 @@ const SEEDS = {
       accountId,
       patientId: markPatientId,
     },
+    ...randomChats,
   ],
 
   TextMessage: [
@@ -861,6 +875,7 @@ const SEEDS = {
     ...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
     ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
     ...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    ...randomMessages,
   ],
 
   Chair: [

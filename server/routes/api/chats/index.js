@@ -21,9 +21,12 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
   } = req;
 
   const {
-    limit = 10,
-    skip = 0,
+    limit,
+    skip,
   } = req.query;
+
+  const skipped = skip || 0;
+  const limitted = limit || 25;
 
   // Some default code to ensure we don't pull the entire conversation for each chat
   if (joinObject.textMessages) {
@@ -40,12 +43,11 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
   // TODO: add orderBy for lastMessageDate
   return Chat
     .filter({ accountId })
-    .skip(parseInt(skip))
-    .limit(limit)
+    .skip(parseInt(skipped))
+    .limit(parseInt(limitted))
     .getJoin(joinObject)
     .run()
     .then(chats => {
-      console.log(chats)
       res.send(normalize('chats', chats));
     })
     .catch(next);

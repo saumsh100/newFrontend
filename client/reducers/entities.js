@@ -37,6 +37,8 @@ import Service from '../entities/models/Service';
 import services from '../entities/collections/services';
 import Chairs from '../entities/models/Chair';
 import chairs from '../entities/collections/chairs';
+import chat from '../entities/collections/chat';
+import Chat from '../entities/models/Chat';
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
 import weeklySchedules from '../entities/collections/weeklySchedules';
@@ -60,6 +62,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     dialogs: new dialogs(),
     patients: new patients(),
     chairs: new chairs(),
+    chats: new chat(),
     weeklySchedules: new weeklySchedules(),
     users: new users(),
     timeOffs: new timeOffs(),
@@ -81,6 +84,7 @@ const Models = {
   dialogs: Dialogs,
   patients: Patient,
   chairs: Chairs,
+  chats: Chat,
   availabilities: Availability,
   weeklySchedules: WeeklySchedule,
   users: User,

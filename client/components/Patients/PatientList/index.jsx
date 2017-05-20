@@ -47,7 +47,7 @@ class PatientList extends Component {
       if (Object.keys(result).length === 0) {
         this.setState({ moreData: false });
       }
-    });;
+    });
   }
 
   setCurrentPatient(currentPatient) {
