@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, Button } from '../../../library/index';
+import { ListItem, VButton } from '../../../library/index';
 import withHoverable from '../../../../hocs/withHoverable';
 import styles from './styles.scss';
 
@@ -14,10 +14,21 @@ const EnterprisesListItem = ({ isHovered, name, id, onDelete, onEdit }) =>
 
     {renderIf(isHovered, () => (
       <div className={styles.listItemButtons}>
-        <Button icon="pencil" default onClick={() => onEdit(id)}>Edit</Button>
-        <Button icon="trash-o" onClick={confirmDelete(() => onDelete(id))}>
-          Delete
-        </Button>
+        <VButton
+          icon="pencil"
+          rounded
+          compact
+          title="Edit"
+          onClick={() => onEdit(id)}
+        />
+        <VButton
+          icon="trash-o"
+          negative
+          rounded
+          compact
+          title="Delete"
+          onClick={confirmDelete(() => onDelete(id))}
+        />
       </div>
     ))}
   </ListItem>;

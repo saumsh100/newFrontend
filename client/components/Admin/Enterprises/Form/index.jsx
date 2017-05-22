@@ -3,10 +3,21 @@ import { Record } from 'immutable';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import { filter } from 'lodash';
 import { fetchEntities, createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
-import { Card, CardHeader, Icon, Form, Field } from '../../../library/index';
+import {
+  Card,
+  CardHeader,
+  Form,
+  Field,
+  List,
+  ListItem,
+  Row,
+  Col,
+  VButton,
+  Breadcrumbs,
+} from '../../../library/index';
 import styles from './styles.scss';
 
 const enterprisesListPath = '/admin/enterprises/list';
@@ -14,11 +25,15 @@ const enterprisesListPath = '/admin/enterprises/list';
 class EnterpriseForm extends Component {
 
   componentWillMount() {
-    const { isFetching } = this.props;
+    const { isFetching, isCreate, enterpriseId } = this.props;
 
     // Enterprises not fetched yet
     if (isFetching) {
       this.props.fetchEntities({ key: 'enterprises' });
+
+      if (!isCreate) {
+        this.props.fetchEntities({ key: 'accounts', url: `/api/enterprises/${enterpriseId}/accounts` });
+      }
     }
   }
 
@@ -34,45 +49,65 @@ class EnterpriseForm extends Component {
   }
 
   render() {
-    const { enterprise, isFetching, isCreate } = this.props;
+    const { enterprise, isFetching, isCreate, accounts } = this.props;
 
-    const renderEditTitle = () => (isFetching ?
-      (<span>Loading...</span>) :
+    const breadcrumbs = () => [
+      { icon: 'home', key: 'home', home: true, link: '/admin' },
+      { title: 'Enterprises', key: 'enterprises', link: '/admin/enterprises' },
 
-      (<span>
-        <span>{enterprise.get('name')}</span>
-        <Icon icon="caret-right" className={styles.caret} />
-        <span>Edit</span>
-      </span>));
-
-    const renderTitle = () =>
-      <span>
-        <Link to={enterprisesListPath} className={styles.headerLink}>
-          <Icon icon="level-up" /> {' '}
-          Enterprises
-        </Link>
-        <Icon icon="caret-right" className={styles.caret} />
-        {isCreate ? (<span>Create</span>) : renderEditTitle()}
-      </span>;
+      ...(isCreate ? [
+        { title: 'Add', key: 'add' },
+      ] : [
+        { title: `${enterprise.get('name')} » edit`, key: enterprise.get('id') },
+      ]),
+    ];
 
     return (
       <div className={styles.mainContainer}>
         <Card className={styles.card}>
-          <CardHeader className={styles.cardHeader} title={renderTitle()} />
+          {!isFetching ? (
+            <div>
+              <CardHeader
+                className={styles.cardHeader}
+                title={isCreate ? 'Add enterprise' : `Edit: ${enterprise.get('name')}`}
+              />
 
-          <div className={styles.cardContent}>
-            {!isFetching ? (
-              <Form
-                form="enterpriseForm"
-                initialValues={{ name: enterprise && enterprise.get('name') }}
-                onSubmit={model => this.onSubmit(model)}
-              >
-                <Field required name="name" label="Name" />
-              </Form>
-            ) :
-              <div>Loading...</div>
-            }
-          </div>
+              <div className={styles.cardContent}>
+
+                <div>
+                  <Breadcrumbs items={breadcrumbs()} />
+                </div>
+
+                <Form
+                  form="enterpriseForm"
+                  initialValues={{ name: enterprise && enterprise.get('name') }}
+                  onSubmit={model => this.onSubmit(model)}
+                >
+                  <Field required name="name" label="Name" />
+
+                  <Row middle="md">
+                    <Col md={8}><h3>Accounts</h3></Col>
+                    <Col md={4} className={styles.headerButtons} >
+                      <VButton
+                        icon="plus-circle"
+                        rounded
+                        compact
+                        positive
+                      >Add Accout</VButton>
+                    </Col>
+                  </Row>
+                  <List>
+                    { accounts.map(({ name, logo, id }) => (
+                      <ListItem key={id} >
+                        <img src={logo} alt={name} className={styles.accoutLogo}/>
+                        { name }
+                      </ListItem>
+                    )) }
+                  </List>
+                </Form>
+              </div>
+            </div>
+          ) : <div>Loading...</div>}
         </Card>
       </div>
     );
@@ -83,10 +118,12 @@ EnterpriseForm.propTypes = {
   isCreate: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   enterprise: PropTypes.instanceOf(Record),
+  accounts: PropTypes.arrayOf(PropTypes.object),
   fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
+  enterpriseId: PropTypes.string,
 };
 
 const stateToProps = (state, { match: { params: { enterpriseId } } }) => {
@@ -94,9 +131,15 @@ const stateToProps = (state, { match: { params: { enterpriseId } } }) => {
     state.entities.getIn(['enterprises', 'models', enterpriseId]) :
     null;
 
+  const accounts = enterpriseId ?
+    filter(state.entities.getIn(['accounts', 'models']).toJS(), { enterpriseId }) :
+    [];
+
   return {
+    enterpriseId,
     isCreate: !enterpriseId,
     enterprise,
+    accounts,
     isFetching: !!(enterpriseId && !enterprise),
   };
 };

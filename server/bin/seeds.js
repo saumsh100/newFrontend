@@ -77,6 +77,11 @@ const markPhoneNumber = '+17788654451';
 
 const clinicPhoneNumber = '+17786558613';
 
+const mainEnterprise = {
+  id: uuid(),
+  name: 'General enterprise',
+};
+
 // TODO: order of seeding matters...
 
 const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
@@ -139,6 +144,19 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 };
 
 const SEEDS = {
+  Enterprise: [
+    mainEnterprise,
+    {
+      name: 'Absolute Dental',
+    },
+    {
+      name: 'ACCESS',
+    },
+    {
+      name: 'AFFORDABLE Dentures',
+    },
+  ],
+
   Reservation: [
     {
       // TODO: make a reservation in a certain timeslot
@@ -1038,6 +1056,7 @@ const SEEDS = {
       logo: '/images/beckett_dental.png',
       address: '#101 – 1312 Marine Drive',
       bookingWidgetPrimaryColor: '#f29b12',
+      enterpriseId: mainEnterprise.id,
     },
     {
       id: accountId2,
@@ -1051,6 +1070,7 @@ const SEEDS = {
 
       logo: '/images/liberty_logo.png',
       address: '10204 112th St.',
+      enterpriseId: mainEnterprise.id,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       // smsPhoneNumber: clinicPhoneNumber,
@@ -1073,6 +1093,7 @@ const SEEDS = {
       logo: '/images/beckett_dental.png',
       address: '#101 – 1312 Random Drive',
       bookingWidgetPrimaryColor: '#f29b12',
+      enterpriseId: mainEnterprise.id,
     },
   ],
 
@@ -1299,18 +1320,6 @@ const SEEDS = {
     },
     {
       appointmentId: appointmentId2,
-    },
-  ],
-
-  Enterprise: [
-    {
-      name: 'Absolute Dental',
-    },
-    {
-      name: 'ACCESS',
-    },
-    {
-      name: 'AFFORDABLE Dentures',
     },
   ],
 
