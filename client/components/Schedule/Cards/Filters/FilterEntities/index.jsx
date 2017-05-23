@@ -23,7 +23,7 @@ export default function FilterEntities(props) {
       <div className={styles.filter_options__checkLabel}>
         <Checkbox
           checked={allChecked}
-          onChange={ () => handleAllCheck(filterKey)}
+          onChange={() => handleAllCheck(filterKey)}
         />
         <span className={styles.filter_options__checkLabel__all}>All</span>
       </div>

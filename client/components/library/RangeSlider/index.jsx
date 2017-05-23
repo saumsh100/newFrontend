@@ -30,16 +30,20 @@ class RangeSlider extends Component {
     const duration = this.state.value[0];
     const buffer = this.state.value[1];
 
-    if(buffer === value[1]) {
+    if (buffer === value[1]) {
       const newValue = [value[0], value[0] + (buffer - duration)];
       this.setState({
         value: newValue,
       });
       this.props.onChange(newValue);
+
     } else if (value[1] === (value[0] + 1)) {
+      const newValue = [value[0], value[0]];
       this.setState({
-        value: [value[0], value[0]],
+        value: newValue,
       });
+      this.props.onChange(newValue);
+
     } else {
       this.setState({
         value,

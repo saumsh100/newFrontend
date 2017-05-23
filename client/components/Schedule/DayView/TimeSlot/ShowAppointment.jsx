@@ -4,7 +4,6 @@ import moment from 'moment';
 import styles from '../styles.scss';
 import { setTime } from '../../../library/util/TimeOptions';
 
-
 const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
   const duration = moment.duration(end.diff(startDate));
@@ -21,6 +20,7 @@ class ShowAppointment extends Component {
       appointment,
       bgColor,
       selectAppointment,
+      scale,
     } = this.props;
 
     const {
@@ -33,13 +33,11 @@ class ShowAppointment extends Component {
       patientData,
     } = appointment;
 
-
     const patient = patientData.toJS();
     const age = moment().diff(patient.birthDate, 'years');
 
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-
     const addToApp = Object.assign({}, appointment, {
       time: setTime(startDate),
       date: moment(startDate).format('L'),
@@ -52,9 +50,9 @@ class ShowAppointment extends Component {
     });
 
     const appStyle = {
-      top: '0px',
+      top: `${moment(startDate).minutes() * scale}px`,
       backgroundColor: bgColor,
-      height: `${(durationTime + customBufferTime) * 2}px`,
+      height: `${(durationTime + customBufferTime) * scale}px`,
     };
 
     return (
@@ -79,7 +77,7 @@ class ShowAppointment extends Component {
           {moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}
         </div>
         <div className={styles.showAppointment_serviceChair}>
-          <span className={styles.paddingText}>{serviceData}</span>
+          <span className={styles.paddingText}>{serviceData},</span>
           <span>{chairData}</span>
         </div>
       </div>

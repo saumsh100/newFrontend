@@ -29,14 +29,13 @@ class DayViewBody extends Component {
     return (
       <div className={styles.dayView_body}>
         <TimeColumn
-          key="timeColumns"
           timeSlots={timeSlots}
           timeSlotHeight={timeSlotHeight}
         />
         <TimeSlot
-          key="timeSlots"
           timeSlots={timeSlots}
           timeSlotHeight={timeSlotHeight}
+          scale={scale}
           {...this.props}
         />
       </div>

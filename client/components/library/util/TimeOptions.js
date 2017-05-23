@@ -24,5 +24,6 @@ export const setTime = (time) => {
   const tempTime = new Date(time);
   const mergeTime = new Date(1970, 1, 0);
   mergeTime.setHours(tempTime.getHours());
+  mergeTime.setMinutes(tempTime.getMinutes());
   return mergeTime.toISOString();
 };

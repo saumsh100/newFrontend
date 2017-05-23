@@ -19,6 +19,7 @@ class TimeSlotBlock extends Component {
       patients,
       bgColor,
       selectAppointment,
+      scale,
     } = this.props;
 
     const apps = slotData.appointments;
@@ -46,6 +47,7 @@ class TimeSlotBlock extends Component {
               appointment={app}
               bgColor={bgColor}
               selectAppointment={selectAppointment}
+              scale={scale}
             />
           );
         })}

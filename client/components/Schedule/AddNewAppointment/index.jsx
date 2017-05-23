@@ -17,7 +17,9 @@ import { IconButton } from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
-  return new Date(date.setHours(time.getHours()));
+  date.setHours(time.getHours());
+  date.setMinutes(time.getMinutes());
+  return new Date(date);
 };
 
 class AddNewAppointment extends Component {
@@ -56,11 +58,21 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
-    const bufferTime = duration[1] - duration[0];
-    const totalDurationMin = duration[0] + bufferTime;
 
+    let bufferTime = 0;
+
+    if (duration[1] !== duration[0]) {
+      bufferTime = duration[1] - duration[0];
+    }
     const startDate = mergeTime(new Date(date), new Date(time));
-    const endDate = moment(startDate).minute(totalDurationMin);
+
+    let totalDurationMin = duration[0];
+
+    if (bufferTime > 0) {
+      totalDurationMin = duration[0] + bufferTime;
+    }
+
+    const endDate = moment(startDate).add(totalDurationMin, 'minutes');
 
     const newAppointment = {
       startDate: startDate.toISOString(),
@@ -123,7 +135,6 @@ class AddNewAppointment extends Component {
       reset(formName);
       reinitializeState();
     } else {
-      const id = selectedAppointment.appointment.id;
       const deleteApp = confirm('Are you sure you want to delete this appointment?');
 
       if (deleteApp) {
@@ -131,6 +142,7 @@ class AddNewAppointment extends Component {
         const deletedModel = appModel.set('isDeleted', true);
         updateEntityRequest({ key: 'appointments', model: deletedModel });
       }
+
       reinitializeState();
     }
   }
