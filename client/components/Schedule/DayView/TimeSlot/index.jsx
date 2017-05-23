@@ -46,6 +46,8 @@ class TimeSlot extends Component {
       return slot;
     });
 
+    const colorArray = [ '#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6' ];
+
     return (
       <Grid>
         <Row>
@@ -61,6 +63,7 @@ class TimeSlot extends Component {
                         slotData={slotData}
                         timeSlotHeight={timeSlotHeight}
                         {...this.props}
+                        bgColor={colorArray[i]}
                       />
                     );
                   } else {

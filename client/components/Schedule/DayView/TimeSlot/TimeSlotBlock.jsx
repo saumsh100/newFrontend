@@ -16,6 +16,7 @@ class TimeSlotBlock extends Component {
       services,
       chairs,
       patients,
+      bgColor,
     } = this.props;
 
     const apps = slotData.appointments;
@@ -40,6 +41,7 @@ class TimeSlotBlock extends Component {
             <ShowAppointment
               key={index}
               appointment={app}
+              bgColor={bgColor}
             />
           );
         })}
