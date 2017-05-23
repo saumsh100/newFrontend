@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import TimeColumn from './TimeColumn';
 import TimeSlot from './TimeSlot/index';
+import TimeSlotBlock from "./TimeSlot/TimeSlotBlock";
 import styles from './styles.scss';
 
 class DayViewBody extends Component {
@@ -13,6 +14,8 @@ class DayViewBody extends Component {
     const {
       startHour,
       endHour,
+      schedule,
+      practitioners,
     } = this.props;
 
     const timeSlots = [];
@@ -26,6 +29,15 @@ class DayViewBody extends Component {
       height: `${scale * rowHeight}px`,
     };
 
+    let practitionersArray = practitioners;
+    const checkedPractitioners = schedule.toJS().practitionersFilter;
+
+    if (checkedPractitioners.length) {
+      practitionersArray = practitionersArray.toArray().filter((pr) => {
+        return checkedPractitioners.indexOf(pr.id) > -1;
+      });
+    }
+
     return (
       <div className={styles.dayView_body}>
         <TimeColumn
@@ -36,8 +48,9 @@ class DayViewBody extends Component {
           timeSlots={timeSlots}
           timeSlotHeight={timeSlotHeight}
           scale={scale}
-          {...this.props}
+          practitionersArray={practitionersArray}
         />
+       
       </div>
     );
   }

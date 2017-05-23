@@ -1,8 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
-import {Grid, Row, Col} from '../../../library/index';
-import TimeSlotBlock from "./TimeSlotBlock";
+
 import styles from '../styles.scss';
 
 class TimeSlot extends Component {
@@ -12,76 +10,35 @@ class TimeSlot extends Component {
 
   render() {
     const {
-      appointments,
-      schedule,
-      practitioners,
+      practitionersArray,
       timeSlots,
       timeSlotHeight,
-      currentDate,
     } = this.props;
 
-    let practitionersArray = practitioners;
-    const checkedPractitioners = schedule.toJS().practitionersFilter;
 
-    if (checkedPractitioners.length) {
-      practitionersArray = practitionersArray.toArray().filter((pr) => {
-        return checkedPractitioners.indexOf(pr.id) > -1;
-      });
-    }
 
-    for (let i = practitionersArray.length; i <= 3; i += 1) {
-      practitionersArray.push('');
-    }
-
-    const slottedAppointments = timeSlots.map((slot) => {
-      const appData = appointments.filter((app) => {
-        const startDate = moment(app.startDate);
-        const isSameDate = startDate.isSame(currentDate, 'day');
-        const startHour = startDate.hour();
-         if (slot.position === startHour && isSameDate) {
-           return app;
-         }
-      });
-      slot.appointments = appData;
-      return slot;
-    });
-
-    const colorArray = [ '#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6' ];
+    // TODO: get rid of Grid, Row, Col
+    // TODO: separate column, timeslot grid rendering from appointment rendering
+    // TODO: appointment rendering should be based on a percentage top left not hardcoded px value
+    // TODO: (16 - startTime) / totalHours * 100 (4:00pm)
+    // TODO:
 
     return (
-      <Grid>
-        <Row>
-          {practitionersArray.map((practitioner, i) => {
-            return (
-              <Col key={i} xs={3} >
-                {slottedAppointments.map((slotData, index) => {
-                  if (slotData.appointments.length && practitioner !== '') {
-                    return (
-                      <TimeSlotBlock
-                        practitioner={practitioner}
-                        key={index}
-                        slotData={slotData}
-                        timeSlotHeight={timeSlotHeight}
-                        bgColor={colorArray[i]}
-                        {...this.props}
-                      />
-                    );
-                  }
-                  return (
-                    <div
-                      key={index}
-                      className={styles.dayView_body_timeSlot}
-                      style={timeSlotHeight}
-                    >
-                      {''}
-                    </div>
-                  );
-                })}
-              </Col>
-            );
-          })}
-        </Row>
-      </Grid>
+      <div style={{ position: 'relative', display: 'flex', width: '100%' }}>
+        {practitionersArray.map((pract, i, arr)=> {
+          return (
+            <div key={i} style={{ width: `${100 / (arr.length)}%` }}>
+              {timeSlots.map((slot, index) => {
+                return (
+                  <div key={index} className={styles.dayView_body_timeSlot} style={timeSlotHeight}>
+                    {''}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     );
   }
 }
