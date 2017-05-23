@@ -1,3 +1,4 @@
+
 const authRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -22,7 +23,7 @@ authRouter.post('/', (req, res, next) => {
       }
 
       // Make sure the password is a match
-      const { id, activeAccountId, password } = users[0];
+      const { id, activeAccountId, password, firstName, lastName, username } = users[0];
       return bcrypt.compare(req.body.password, password, (err, match) => {
         if (err) {
           return next(StatusError(500, 'Error comparing passwords'));
@@ -42,10 +43,16 @@ authRouter.post('/', (req, res, next) => {
             }
 
             const { role, permissions = {} } = permission[0];
-
             const userRole = isCarecruEmail(req.body.username) ? 'SUPERADMIN' : role;
-            const tokenData = { role: userRole, permissions, userId: id, activeAccountId };
-            console.log('signing token', tokenData);
+            const tokenData = {
+              role: userRole,
+              permissions,
+              userId: id,
+              activeAccountId,
+              firstName,
+              lastName,
+              username,
+            };
 
             return jwt.sign(tokenData, globals.tokenSecret, { expiresIn: globals.tokenExpiry }, (error, token) => {
               if (error) {

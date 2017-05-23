@@ -6,7 +6,10 @@ import UserSearchList from './UserSearchList';
 import {
   AutoCompleteForm,
   InfiniteScroll,
-  Form,
+  Row,
+  Card,
+  List,
+  CardHeader,
 } from '../../../library';
 
 class UpcomingPatientList extends Component {
@@ -22,6 +25,7 @@ class UpcomingPatientList extends Component {
     this.submit = this.submit.bind(this);
     this.resetState = this.resetState.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.userClick = this.userClick.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
   }
 
@@ -40,22 +44,45 @@ class UpcomingPatientList extends Component {
     }
   }
 
+  userClick(id) {
+    this.props.setSearchPatient(id);
+  }
+
   getSuggestions(value) {
     return this.props.submitSearch({
       patients: value,
     }).then(() => {
-      const inputValue = value.trim().toLowerCase();
+      value = value.split(' ');
+      const inputValue = [];
+      inputValue[0] = new RegExp(value[0], 'i');
+      inputValue[1] = new RegExp(value[1], 'i');
       const inputLength = inputValue.length;
+
       const searched = this.props.searchedPatients.map((userId) => {
+        const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
+        const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
+        const display = (<div className={styles.searchList} onClick={this.userClick.bind(null, userId)}>
+          <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
+          <div className={styles.grow}>
+            <div className={styles.users__header}>
+              <div className={styles.users__name}>
+                {name}, {age}
+              </div>
+            </div>
+          </div>
+        </div>);
+
         return {
           id: this.props.patients.get(userId).get('id'),
-          name: `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`,
+          display: display,
+          name,
           email: this.props.patients.get(userId).get('email'),
         };
       });
 
-      const results = inputLength === 0 ? [] : searched.filter(lang =>
-      lang.name.toLowerCase().slice(0, inputLength) === inputValue);
+      const results = inputLength === 0 ? [] : searched.filter((person) => {
+        return inputValue[1].test(person.fullName) || inputValue[0].test(person.fullName) || inputValue[0].test(person.email);
+      });
 
       this.setState({
         results,
@@ -81,50 +108,61 @@ class UpcomingPatientList extends Component {
 
   render() {
     const inputProps = {
-      placeholder: 'Patient Search',
+      placeholder: 'Search...',
       value: this.state.value,
       onChange: this.onChange,
       onKeyDown: this.submit,
       name: 'patients',
     };
+    const display = (this.props.patientList[0] ? (this.props.patientList.map((user, i) => {
+      return (
+        <PatientListItem
+          key={user.appointment.id + i}
+          user={user}
+          currentPatient={this.props.currentPatient}
+          setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
+        />
+      );
+    })) : (<div className={styles.patients_list__users_loading} />)
+    );
 
     return (
       <div className={styles.patients_list}>
-        <div className={styles.patients_list_title}>Patients</div>
-        <div className={`${styles.patients_list__search} ${styles.search}`}>
-          <label className={styles.search__label} htmlFor="search__input">
-            <i className="fa fa-search" />
-          </label>
-          <AutoCompleteForm
-            value={this.state.value}
-            getSuggestions={this.getSuggestions}
-            inputProps={inputProps}
-          />
-          <div className={styles.search__edit}>
-            <i className="fa fa-pencil" />
-          </div>
-        </div>
-        <div className={styles.patients_list__users}>
-          <InfiniteScroll
-            loadMore={this.props.loadMore}
-            loader={<div style={{ clear: 'both' }}>Loading...</div>}
-            hasMore={this.props.moreData}
-            initialLoad={false}
-            useWindow={false}
-            threshold={50}
-          >
-            {this.props.patientList.map((user, i) => {
-              return (
-                <PatientListItem
-                  key={user.appointment.id + i}
-                  user={user}
-                  currentPatient={this.props.currentPatient}
-                  setCurrentPatient={this.props.setCurrentPatient.bind(null, user)}
-                />
-              );
-            })}
-          </InfiniteScroll>
-        </div>
+        <Row className={styles.topRow}>
+          <Card className={styles.headerInput}>
+            <div className={styles.header}>
+              <CardHeader title="Patient Search" />
+            </div>
+            <div className={styles.input}>
+              <AutoCompleteForm
+                value={this.state.value}
+                getSuggestions={this.getSuggestions}
+                inputProps={inputProps}
+                focusInputOnSuggestionClick={false}
+                getSuggestionValue={suggestion => suggestion.name}
+              />
+            </div>
+          </Card>
+        </Row>
+        <Row className={styles.listRow}>
+          <Card className={styles.upcomingHead}>
+            <div className={styles.header}>
+              <CardHeader title="Upcoming Patients" />
+            </div>
+            <List className={styles.patients_list__users}>
+              <InfiniteScroll
+                loadMore={this.props.loadMore}
+                loader={<div style={{ clear: 'both' }}>Loading...</div>}
+                hasMore={this.props.moreData}
+                initialLoad={false}
+                useWindow={false}
+                threshold={1}
+              >
+                {display}
+              </InfiniteScroll>
+            </List>
+          </Card>
+        </Row>
       </div>
     );
   }
@@ -139,4 +177,5 @@ UpcomingPatientList.propTypes = {
   submitSearch: PropTypes.func,
   setSearchPatient: PropTypes.func,
 };
+
 export default UpcomingPatientList;

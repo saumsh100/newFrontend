@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
 const { r } = require('../config/thinky');
+const faker = require('faker');
 const fs = require('fs');
 const seedDatabase = require('../util/seedDatabase');
 const { time } = require('../util/time');
@@ -47,6 +48,8 @@ const practitionerId = uuid();
 const practitionerId2 = uuid();
 const practitionerId3 = uuid();
 const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
+const practitionerId5 = '5f439ff8-c55d-4423-9316-a41240c4d329';
+const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
 
 const chairId = uuid();
 
@@ -84,6 +87,47 @@ const mainEnterprise = {
 
 // TODO: order of seeding matters...
 
+const randomAppointments = [];
+const randomPatients = [];
+
+for (let i = 0; i < 10000; i++) {
+  let id = uuid();
+  const firstName = faker.name.firstName();
+  const lastName = faker.name.lastName()
+  randomPatients.push({
+    id,
+    avatar: faker.image.avatar(),
+    accountId,
+    firstName,
+    lastName,
+    email: `${firstName}.${lastName}@google.ca`,
+    phoneNumber: faker.phone.phoneNumber(),
+    birthDate: faker.date.past(),
+    gender: 'male',
+    langauge: 'English',
+    lastAppointmentDate: faker.date.past(),
+    insurance: {
+      insurance: 'Lay Health Insurance',
+      memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+      contract: '4234rerwefsdfsd',
+      carrier: 'sadasadsadsads',
+      sin: 'dsasdasdasdadsasad',
+    },
+    isSyncedWithPMS: false,
+  });
+
+  randomAppointments.push({
+    accountId,
+    startDate: recentStartTime.add(49 * oneHour),
+    endDate: recentStartTime.add(50 * oneHour),
+    patientId: id,
+    serviceId,
+    practitionerId,
+    chairId,
+    note: 'First',
+  });
+}
+
 const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
   return [
     {
@@ -107,7 +151,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: patientPhone,
       from: clinicPhone,
       body: 'How were you doing yesterday?',
-        createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
+      createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
       read: true,
     },
     {
@@ -142,6 +186,67 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
     };
   });
 };
+
+const generateDefaultServices = (_accountId) => {
+  const createService = serviceData => Object.assign({}, {
+    id: uuid(),
+    accountId: _accountId,
+  }, serviceData);
+
+  return [
+    createService({
+      name: 'New Patient Consultation',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'New Patient Checkup & Cleaning',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Toothache',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Lost Filling',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Emergency Appointment',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Regular Checkup & Cleaning',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Regular Consultation',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Child Dental Exam',
+      duration: 30,
+    }),
+  ];
+};
+
+const generatePracServJoin = (services, _practitionerId) => {
+  return services.map((service) => {
+    return {
+      Service_id: service.id,
+      Practitioner_id: _practitionerId,
+    };
+  });
+};
+
+const donnaServices = generateDefaultServices(accountId);
+const sunshineServices = generateDefaultServices(accountId2);
 
 const SEEDS = {
   Enterprise: [
@@ -218,165 +323,6 @@ const SEEDS = {
       isPatientConfirmed: true,
       isSyncedWithPMS: true,
       isCancelled: false,
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(50 * oneHour),
-      endDate: recentStartTime.add(51 * oneHour),
-      patientId: "e8950859-6903-426f-9b52-efabd483f8dd",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(52 * oneHour),
-      endDate: recentStartTime.add(54 * oneHour),
-      patientId: "c7a04662-35be-448c-bb63-83f94713b9b5",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(53 * oneHour),
-      endDate: recentStartTime.add(55 * oneHour),
-      patientId: "2ac72466-5c52-4a14-8f60-4341516b7d0a",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(54 * oneHour),
-      endDate: recentStartTime.add(55 * oneHour),
-      patientId: "b6ee696e-41c9-42bb-886c-0637ec54896f",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(55 * oneHour),
-      endDate: recentStartTime.add(56 * oneHour),
-      patientId: "9917e3f5-c558-44fa-8f32-e3cd1adde9ab",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(57 * oneHour),
-      endDate: recentStartTime.add(58 * oneHour),
-      patientId: "d729f619-34d7-4979-8970-327940541053",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(58 * oneHour),
-      endDate: recentStartTime.add(59 * oneHour),
-      patientId: "05415c97-c38a-4ad0-867a-87ee561cd173",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(59 * oneHour),
-      endDate: recentStartTime.add(60 * oneHour),
-      patientId: "4b0d43f7-db99-4f0d-8d20-9210893d4553",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(60 * oneHour),
-      endDate: recentStartTime.add(61 * oneHour),
-      patientId: "4b0d43f7-db99-4f0d-8d20-9210893d4553",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(62 * oneHour),
-      endDate: recentStartTime.add(63 * oneHour),
-      patientId: "374e2080-eefe-4f8d-952c-006b2404b0e6",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(64 * oneHour),
-      endDate: recentStartTime.add(65 * oneHour),
-      patientId: "dff8be6c-a1af-43f6-b75b-46e55723a00d",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(66 * oneHour),
-      endDate: recentStartTime.add(67 * oneHour),
-      patientId: "8bcfd355-a063-4cd0-a7a0-4435a0609392",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(67 * oneHour),
-      endDate: recentStartTime.add(68 * oneHour),
-      patientId: "d7d646b4-9e89-4209-8309-e45595e359bf",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },{
-      accountId,
-      startDate: recentStartTime.add(69 * oneHour),
-      endDate: recentStartTime.add(70 * oneHour),
-      patientId: "a96e1d9a-533e-4df7-8e34-3bfe8e34ee53",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(71 * oneHour),
-      endDate: recentStartTime.add(72 * oneHour),
-      patientId: "ce58576c-574d-4b9c-9797-985d30d3d16f",
-      serviceId,
-      practitionerId,
-      chairId,
-      note: 'Fifth',
-    },
-    {
-      accountId,
-      startDate: recentStartTime.add(73 * oneHour),
-      endDate: recentStartTime.add(74 * oneHour),
-      patientId: "5d16aefd-0695-4bee-a44e-1f67f16ede62",
       serviceId,
       practitionerId,
       chairId,
@@ -485,6 +431,7 @@ const SEEDS = {
       serviceId: cleanupServiceId,
       patientId: justinPatientId,
     },
+    ...randomAppointments,
   ],
 
   Request: [
@@ -591,6 +538,7 @@ const SEEDS = {
     {
       id: justinPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Justin',
       lastName: 'Sharp',
       email: 'justin@carecru.com',
@@ -613,6 +561,7 @@ const SEEDS = {
     {
       id: sergeyPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       email: 'sergey@carecru.com',
@@ -634,6 +583,7 @@ const SEEDS = {
     {
       id: markPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Mark',
       lastName: 'Joseph',
       phoneNumber: markPhoneNumber,
@@ -648,6 +598,7 @@ const SEEDS = {
     {
       id: alexPatientId,
       accountId,
+      avatar: faker.image.avatar(),
       firstName: 'Alex',
       lastName: 'Bashliy',
       phoneNumber: alexPhoneNumber,
@@ -663,6 +614,7 @@ const SEEDS = {
     // account 2
     {
       id: alexPatientId2,
+      avatar: faker.image.avatar(),
       accountId: accountId2,
       firstName: 'Alex2',
       lastName: 'Bashliy2',
@@ -676,306 +628,7 @@ const SEEDS = {
       appointmentPreference: 'both',
       isSyncedWithPMS: false,
     },
-    {
-      id:"c7a04662-35be-448c-bb63-83f94713b9b5",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Giavani",
-      lastName:"Lidington",
-      email:"glidington0@nhs.uk",
-      gender:"Male",
-      phoneNumber:"420-(903)866-7999",
-      language:"Hungarian",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"2ac72466-5c52-4a14-8f60-4341516b7d0a",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Sibelle",
-      lastName:"McCamish",
-      email:"smccamish1@chicagotribune.com",
-      gender:"Female",
-      phoneNumber:"380-(402)435-3833",
-      language:"Malayalam",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"b6ee696e-41c9-42bb-886c-0637ec54896f",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Amber",
-      lastName:"Quincee",
-      email:"aquincee2@goo.ne.jp",
-      gender:"Female",
-      phoneNumber:"63-(783)921-5707",
-      language:"Bosnian",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"9917e3f5-c558-44fa-8f32-e3cd1adde9ab",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Nannie",
-      lastName:"Lundbech",
-      email:"nlundbech3@howstuffworks.com",
-      gender:"Female",
-      phoneNumber:"48-(373)231-0455",
-      language:"Bosnian",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"d729f619-34d7-4979-8970-327940541053",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Barret",
-      lastName:"Fitchett",
-      email:"bfitchett4@google.es",
-      gender:"Male",
-      phoneNumber:"7-(572)971-8381",
-      language:"Hebrew",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"05415c97-c38a-4ad0-867a-87ee561cd173",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Claybourne",
-      lastName:"Grimsdale",
-      email:"cgrimsdale5@angelfire.com",
-      gender:"Male",
-      phoneNumber:"995-(194)950-2203",
-      language:"Pashto",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"4b0d43f7-db99-4f0d-8d20-9210893d4553",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Cross",
-      lastName:"Grenkov",
-      email:"cgrenkov6@google.cn",
-      gender:"Male",
-      phoneNumber:"55-(848)778-9962",
-      language:"Czech",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"374e2080-eefe-4f8d-952c-006b2404b0e6",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Dorthea",
-      lastName:"Strewthers",
-      email:"dstrewthers7@sbwire.com",
-      gender:"Female",
-      phoneNumber:"502-(500)473-8915",
-      language:"Tetum",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"dff8be6c-a1af-43f6-b75b-46e55723a00d",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Lavina",
-      lastName:"Tipping",
-      email:"ltipping8@youtube.com",
-      gender:"Female",
-      phoneNumber:"374-(668)347-3210",
-      language:"Albanian",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"8bcfd355-a063-4cd0-a7a0-4435a0609392",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Gill",
-      lastName:"Ambrosoli",
-      email:"gambrosoli9@cbsnews.com",
-      gender:"Female",
-      phoneNumber:"61-(142)394-4200",
-      language:"Kazakh",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"d7d646b4-9e89-4209-8309-e45595e359bf",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Valerie",
-      lastName:"Presdie",
-      email:"vpresdiea@cocolog-nifty.com",
-      gender:"Female",
-      phoneNumber:"86-(146)244-3303",
-      language:"Korean",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"a96e1d9a-533e-4df7-8e34-3bfe8e34ee53",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Kerrin",
-      lastName:"Borrel",
-      email:"kborrelb@dmoz.org",
-      gender:"Female",
-      phoneNumber:"86-(768)393-8626",
-      language:"Latvian",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"ce58576c-574d-4b9c-9797-985d30d3d16f",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Margalit",
-      lastName:"Kettleson",
-      email:"mkettlesonc@unc.edu",
-      gender:"Female",
-      phoneNumber:"351-(336)922-8509",
-      language:"Hebrew",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"5d16aefd-0695-4bee-a44e-1f67f16ede62",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName:"Roderick",
-      lastName:"Chazelle",
-      email:"rchazelled@mashable.com",
-      gender:"Male",
-      phoneNumber:"57-(542)199-5799",
-      language:"Amharic",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
-    {
-      id:"e8950859-6903-426f-9b52-efabd483f8dd",
-      accountId,
-      isSyncedWithPMS: false,
-      firstName: "Seamus",
-      lastName: "Penvarden",
-      email: "spenvardene@php.net",
-      gender: "Male",
-      phoneNumber: "249-(286)574-7400",
-      langauge: "Hebrew",
-      birthDate: moment({year: 1983, month: 2, day: 6})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
-      insurance: {
-        insurance: 'Lay Health Insurance',
-        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-        contract: '4234rerwefsdfsd',
-        carrier: 'sadasadsadsads',
-        sin: 'dsasdasdasdadsasad',
-      },
-    },
+    ...randomPatients,
   ],
 
   WeeklySchedule: [
@@ -1045,31 +698,29 @@ const SEEDS = {
     {
       id: accountId,
       weeklyScheduleId,
-      name: 'Beckett Dental',
-      street: '#101 – 1312 Marine Drive',
-      country: 'Canada',
-      state: 'BC',
-      city: 'North Vancouver',
+      name: 'Donna Dental',
+      address: '#202 - 404 Chesapeake Bay',
+      country: 'US',
+      state: 'CA',
+      city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
-      logo: '/images/beckett_dental.png',
-      address: '#101 – 1312 Marine Drive',
+      logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: mainEnterprise.id,
     },
     {
       id: accountId2,
       weeklyScheduleId: weeklyScheduleId2,
-      name: 'Liberty Dental',
-      street: 'Street Adress',
-      country: 'US',
-      state: 'CA',
-      city: 'Los Angeles',
+      name: 'Sunshine Smiles Dental',
+      street: '10405 King St.',
+      country: 'CA',
+      state: 'ON',
+      city: 'Toronto',
       zipCode: '90210',
 
       logo: '/images/liberty_logo.png',
-      address: '10204 112th St.',
       enterpriseId: mainEnterprise.id,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
@@ -1185,8 +836,8 @@ const SEEDS = {
     {
       id: practitionerId3,
       accountId: accountId2,
-      firstName: 'Mark',
-      lastName: 'Joseph',
+      firstName: 'Jennifer',
+      lastName: 'Love-Hewitt',
       // weeklyScheduleId: weeklyScheduleId2,
       isCustomSchedule: false,
       // services: [],
@@ -1194,10 +845,26 @@ const SEEDS = {
     {
       id: practitionerId4,
       accountId: accountId2,
-      firstName: 'Justin',
-      lastName: 'Sharp',
+      firstName: 'Chelsea',
+      lastName: 'Handler',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
+      // services: [],
+    },
+    {
+      id: practitionerId5,
+      accountId: accountId2,
+      firstName: 'Will',
+      lastName: 'Ferrel',
+      isCustomSchedule: false,
+      // services: [],
+    },
+    {
+      id: practitionerId6,
+      accountId: accountId2,
+      firstName: 'Joe',
+      lastName: 'Montana',
+      isCustomSchedule: false,
       // services: [],
     },
   ],
@@ -1213,46 +880,27 @@ const SEEDS = {
       Practitioner_id: practitionerId2,
       Service_id: serviceId2,
     },
-    // Mark's services
+
+    // Availabilities Test
     {
       Practitioner_id: practitionerId3,
       Service_id: cleanupServiceId,
     },
-    // Justin's services
     {
       Practitioner_id: practitionerId4,
       Service_id: cleanupServiceId,
     },
+
+    ...generatePracServJoin(donnaServices, practitionerId),
+    ...generatePracServJoin(donnaServices, practitionerId2),
+
+    ...generatePracServJoin(sunshineServices, practitionerId3),
+    ...generatePracServJoin(sunshineServices, practitionerId4),
+    ...generatePracServJoin(sunshineServices, practitionerId5),
+    ...generatePracServJoin(sunshineServices, practitionerId6),
   ],
 
   Service: [
-    {
-      id: serviceId,
-      accountId,
-      name: 'Routine Checkup',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      // See Practitioner_Service, but essentially it is this...
-      // practitioners: [ practitionerId ],
-    },
-    {
-      id: serviceId2,
-      accountId,
-      name: 'Another service',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      // See Practitioner_Service, but essentially it is this...
-      // practitioners: [ practitionerId2 ],
-    },
-    {
-      accountId,
-      name: 'Lost Filling',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-    },
     {
       id: cleanupServiceId,
       accountId: accountId2,
@@ -1261,6 +909,9 @@ const SEEDS = {
       bufferTime: 0,
       unitCost: 40,
     },
+
+    ...donnaServices,
+    ...sunshineServices,
   ],
 
   Chat: [

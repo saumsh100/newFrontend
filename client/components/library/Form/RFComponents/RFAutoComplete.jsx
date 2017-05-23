@@ -6,7 +6,7 @@ class RFAutoComplete extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: '',
+      value: this.props.input.value,
     };
     this.setValue = this.setValue.bind(this);
   }
@@ -19,9 +19,11 @@ class RFAutoComplete extends Component {
     if (typeof newValue === 'string') {
       input.onChange(newValue);
       return this.setState({ value: newValue });
-    } else {
+    } else if (typeof newValue === 'object') {
       this.setState({ value: newValue.firstName });
       return input.onChange(newValue);
+    } else {
+      return null;
     }
   }
 
@@ -31,28 +33,39 @@ class RFAutoComplete extends Component {
       label,
       error,
       meta,
+      input,
+      theme,
     } = this.props;
 
     const { touched, asyncValidating, dirty } = meta;
     const finalError = error || ((touched || dirty) ? meta.error : null);
     const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
 
+    let propsValue = this.state.value;
+    if (typeof propsValue === 'object') {
+      propsValue = input.value.firstName;
+    }
+
     const inputProps = {
-      value: this.state.value,
+      value: propsValue,
       onChange: (e, { newValue }) => {
         return this.setValue(newValue);
       },
       label,
       error: finalError,
       icon: finalIcon,
+      theme,
     };
+
+    const getSuggestionValue = suggestion => suggestion;
 
     return (
       <AutoComplete
-        value={this.state.value}
+        value={propsValue}
+        focusInputOnSuggestionClick={false}
+        getSuggestionValue={getSuggestionValue}
         {...this.props}
         inputProps={inputProps}
-        focusInputOnSuggestionClick={false}
       />
     );
   }

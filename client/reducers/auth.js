@@ -12,11 +12,10 @@ const initialState = fromJS({
 });
 
 export default handleActions({
-  [LOGIN_SUCCESS](state, { payload: { token, role } }) {
+  [LOGIN_SUCCESS](state, { payload }) {
     return state.merge({
-      token,
+      token: payload,
       isAuthenticated: true,
-      role,
     });
   },
 

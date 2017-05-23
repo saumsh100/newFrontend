@@ -31,7 +31,7 @@
   left: 845px;
   top: 5px;
   font-size: 1.4em;
-  color: $inactive-color;
+  color: $primary-grey;
 }
 
 .addNewAppt {
@@ -88,10 +88,15 @@
     width: 240px;
     max-width: 240px;
     max-height: 95px;
-    border-color: $empty-grey;
     background-color: $primary-color;
-    &:after{
-      border-color: $primary-grey
+    border-color: $primary-grey;
+
+    &_label {
+      color: $primary-grey;
+      font-weight: normal;
+      pointer-events: none;
+      font-size: 16px;
+      padding-bottom: 5px;
     }
   }
 }

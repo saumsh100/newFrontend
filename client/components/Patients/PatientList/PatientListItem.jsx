@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import styles from './main.scss';
+import {
+  ListItem,
+} from '../../library';
 
 class PatientListItem extends Component {
   constructor(props) {
@@ -19,7 +22,7 @@ class PatientListItem extends Component {
     let showDate = startDate;
 
     if (moment(showDate)._d.toString() !== "Invalid Date") {
-      showDate = moment(startDate).format('MMMM Do YYYY, h:mm:ss a')
+      showDate = moment(startDate).format('MMMM Do YYYY, h:mm a');
     }
 
     const age = moment().diff(user.birthDate, 'years');
@@ -31,8 +34,8 @@ class PatientListItem extends Component {
         styles.users__noactive
     );
     return (
-      <div onClick={this.goToDialogue} className={usersActiveClassName}>
-        <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
+      <ListItem onClick={this.goToDialogue} className={usersActiveClassName}>
+        <img className={styles.users__photo} src={user.avatar} alt="photo" />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
             <div className={styles.users__name}>
@@ -42,11 +45,13 @@ class PatientListItem extends Component {
           </div>
           <div className={styles.users__body}>
             <div className={styles.users__text}>
-              <strong>Next Appt</strong> {showDate}
+              <strong>Next Appt</strong>
+              <br />
+              {showDate}
             </div>
           </div>
         </div>
-      </div>
+      </ListItem>
     );
   }
 }

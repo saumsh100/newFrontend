@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import styles from '../main.scss';
 import {
-  Avatar,
+  Avatar, IconButton,
 } from '../../../library';
 import moment from 'moment';
 
@@ -13,6 +13,8 @@ class PatientInfoDisplay extends Component {
 
   render() {
     const { currentPatient } = this.props;
+    const id = (currentPatient.get ? currentPatient.get('id') : null);
+    const avatar = (currentPatient.get ? currentPatient.get('avatar') : null);
 
     let showDate = null;
 
@@ -39,13 +41,14 @@ class PatientInfoDisplay extends Component {
         <div onClick={this.props.onClick} className={styles.patients_content__addUser}>
           Add New Patient
           <span>
-                        <i className="fa fa-plus" />
-                      </span>
+            <i className="fa fa-plus" />
+          </span>
         </div>
         {( display ? (
           <div className={styles.flex}>
             <div className={styles.patient_profile}>
-              <Avatar className={styles.patient_profile__photo} url="https://placeimg.com/640/480/people" />
+              <IconButton className={styles.deleteInfo} icon="trash-o" onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}} />
+              <Avatar className={styles.patient_profile__photo} url={avatar} />
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
                 <p className={styles.name}>
                   <span>{currentPatient.firstName} {currentPatient.lastName}</span>
@@ -68,20 +71,20 @@ class PatientInfoDisplay extends Component {
                 </div>
               </div>
               <div className={styles.appointment}>
-                <div className={styles.info}>
+                <div className={styles.info2}>
                   <div>
                     <span>Last Appointment</span>
                   </div>
                   <div>
-                    <span><strong>{lastApp}</strong></span>
+                    <span className={styles.info}><strong>{lastApp}</strong></span>
                   </div>
                 </div>
-                <div className={styles.info}>
+                <div className={styles.info2}>
                   <div>
                     <span>Next Appointment</span>
                   </div>
                   <div className={styles.end}>
-                    <span><strong>{nextApp}</strong></span>
+                    <span className={styles.info}><strong>{nextApp}</strong></span>
                   </div>
                 </div>
               </div>
@@ -130,5 +133,6 @@ class PatientInfoDisplay extends Component {
 
 PatientInfoDisplay.propTypes = {
   currentPatient: PropTypes.object,
+  onDelete: PropTypes.func,
 };
 export default PatientInfoDisplay;
