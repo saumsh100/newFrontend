@@ -14,7 +14,7 @@ import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
 import loadReputatuion from 'bundle-loader?lazy!./Dashboard/Reputation';
-import loadAdmin from 'bundle-loader?lazy!./Dashboard/Admin';
+import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
 

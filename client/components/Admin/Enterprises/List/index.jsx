@@ -5,19 +5,13 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { fetchEntities, deleteEntityRequest } from '../../../../thunks/fetchEntities';
-import {
-  Card,
-  CardHeader,
-  List as LList,
-  VButton as Button,
-  Breadcrumbs,
-  Row,
-  Col,
-} from '../../../library/index';
-import EnterpriseListItem from './ListItem';
+import { VButton } from '../../../library/index';
+import PageContainer from '../../General/PageContainer';
+import EditableList from '../../General/EditableList';
+import { getCollection } from '../../../Utils';
 import styles from './styles.scss';
 
-class List extends Component {
+class EnterpriseList extends Component {
 
   componentWillMount() {
     this.props.fetchEntities({ key: 'enterprises' });
@@ -25,57 +19,44 @@ class List extends Component {
 
   render() {
     const { enterprises } = this.props;
-    const deleteRequest = id => this.props.deleteEntityRequest({ key: 'enterprises', id });
-
     const baseUrl = (path = '') => `/admin/enterprises${path}`;
-    const navigateToEditPage = uuid => this.props.navigate(baseUrl(`/${uuid}/edit`));
+
+    const deleteRequest = ({ id }) => this.props.deleteEntityRequest({ key: 'enterprises', id });
+    const navigateToEditPage = ({ id }) => this.props.navigate(baseUrl(`/${id}/edit`));
 
     const breadcrumbs = [
       { icon: 'home', key: 'home', home: true, link: '/admin' },
       { title: 'Enterprises', key: 'enterprises', link: '/admin/enterprises' },
     ];
 
+    const renderAddButton = () =>
+      <VButton
+        as={Link}
+        icon="plus"
+        positive
+        rounded
+        compact
+        to={baseUrl('/create')}
+      >Add Enterprise</VButton>;
+
+    const renderListItem = ({ id, name }) =>
+      <strong><Link to={baseUrl(`/${id}/accounts`)} className={styles.link}>{name}</Link></strong>;
+
     return (
-      <div className={styles.mainContainer}>
-        <Card className={styles.card}>
-          <CardHeader className={styles.cardHeader} title="Enterprises" />
-          <div className={styles.cardContent}>
-            <Row middle="md" className={styles.headerPanel}>
-              <Col md={8}>
-                <Breadcrumbs items={breadcrumbs} />
-              </Col>
-              <Col md={4} style={{ textAlign: 'right' }}>
-                <Button
-                  as={Link}
-                  icon="plus"
-                  positive
-                  rounded
-                  compact
-                  to={baseUrl('/create')}
-                >Add more</Button>
-              </Col>
-            </Row>
-
-
-            <LList>
-              {enterprises.map(({ name, id }) => (
-                <EnterpriseListItem
-                  key={id}
-                  name={name}
-                  id={id}
-                  onDelete={deleteRequest}
-                  onEdit={navigateToEditPage}
-                />
-              ))}
-            </LList>
-          </div>
-        </Card>
-      </div>
+      <PageContainer title="Enterprises" breadcrumbs={breadcrumbs} renderButtons={renderAddButton}>
+        <EditableList
+          items={enterprises}
+          render={renderListItem}
+          confirm={item => `Do you really want to delete "${item.name}" Enterprise?`}
+          onDelete={deleteRequest}
+          onEdit={navigateToEditPage}
+        />
+      </PageContainer>
     );
   }
 }
 
-List.propTypes = {
+EnterpriseList.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
@@ -85,9 +66,7 @@ List.propTypes = {
 };
 
 const stateToProps = state => ({
-  enterprises: Object.values(state.entities
-    .getIn(['enterprises', 'models'])
-    .toJS()),
+  enterprises: getCollection(state, 'enterprises'),
 });
 
 const dispatchToProps = dispatch =>
@@ -97,5 +76,5 @@ const dispatchToProps = dispatch =>
     navigate: push,
   }, dispatch);
 
-export default connect(stateToProps, dispatchToProps)(List);
+export default connect(stateToProps, dispatchToProps)(EnterpriseList);
 

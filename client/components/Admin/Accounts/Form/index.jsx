@@ -8,38 +8,50 @@ import { Form, Field } from '../../../library/index';
 import PageContainer from '../../General/PageContainer';
 import { getModel } from '../../../Utils';
 
-const enterprisesListPath = '/admin/enterprises/list';
+const enterprisesPath = (path = '') => `/admin/enterprises${path}`;
+
 
 const EnterpriseForm = (props) => {
-  const { enterprise, isCreate, navigate } = props;
+  const { enterprise, isCreate, navigate, account } = props;
+
+  const accountsPath = (path = '') => enterprisesPath(`/${enterprise.id}${path}`);
 
   const onSubmit = (entityData) => {
-    const key = 'enterprises';
+    const key = 'accounts';
 
     const promise = isCreate ?
-      props.createEntityRequest({ key, entityData }) :
-      props.updateEntityRequest({ key, values: entityData, url: `/api/enterprises/${enterprise.id}` });
+      props.createEntityRequest({
+        key,
+        entityData,
+        url: `/api/enterprises/${enterprise.id}/accounts`,
+      }) :
+      props.updateEntityRequest({
+        key,
+        values: entityData,
+        url: `/api/enterprises/${enterprise.id}/accounts/${account.id}`
+      });
 
-    promise.then(() => navigate(enterprisesListPath));
+    promise.then(() => navigate(accountsPath('/accounts')));
   };
 
   const pageTitle = () => (isCreate ?
-    'Add Enterprise' :
-    `${enterprise.name} » Edit`
+      'Add Account' :
+      `${account.name} » Edit`
   );
 
   const breadcrumbs = () => [
     { icon: 'home', key: 'home', home: true, link: '/admin' },
-    { title: 'Enterprises', key: 'enterprises', link: enterprisesListPath },
-    { title: pageTitle(), key: isCreate ? 'add' : enterprise.id },
+    { title: 'Enterprises', key: 'enterprises', link: enterprisesPath('/list') },
+    { title: enterprise.name, key: enterprise.id, link: accountsPath('/accounts') },
+    { title: pageTitle(), key: isCreate ? 'add' : account.id },
   ];
 
   return (
-    (enterprise || isCreate) ? (
+    (account || isCreate) ? (
       <PageContainer title={pageTitle()} breadcrumbs={breadcrumbs()}>
         <Form
-          form="enterpriseForm"
-          initialValues={{ name: enterprise && enterprise.name }}
+          form="accountForm"
+          initialValues={{ name: account && account.name }}
           onSubmit={onSubmit}
         >
           <Field required name="name" label="Name" />
@@ -51,24 +63,29 @@ const EnterpriseForm = (props) => {
   );
 };
 
+const modelType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+});
+
 EnterpriseForm.propTypes = {
   isCreate: PropTypes.bool.isRequired,
-  enterprise: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }),
-  accounts: PropTypes.arrayOf(PropTypes.object),
+  enterprise: modelType,
+  account: modelType,
   fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
-  enterpriseId: PropTypes.string,
+  enterpriseId: PropTypes.string.isRequired,
+  accountId: PropTypes.string,
 };
 
-const stateToProps = (state, { match: { params: { enterpriseId } } }) => ({
+const stateToProps = (state, { match: { params: { enterpriseId, accountId } } }) => ({
   enterpriseId,
-  isCreate: !enterpriseId,
+  accountId,
+  isCreate: !accountId,
   enterprise: getModel(state, 'enterprises', enterpriseId),
+  account: getModel(state, 'accounts', accountId),
 });
 
 const dispatchToProps = dispatch =>
@@ -80,4 +97,3 @@ const dispatchToProps = dispatch =>
   }, dispatch);
 
 export default connect(stateToProps, dispatchToProps)(EnterpriseForm);
-

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { isArray, pick, omit as lOmit } from 'lodash';
+import { isArray, pick, omit as lOmit, isFunction } from 'lodash';
 
 /**
  * Conver camelCase names to dashed-names
@@ -87,3 +87,14 @@ export const omitTypes = (Class, props) =>
   (Class.propTypes ?
     lOmit(props, Object.keys(Class.propTypes)) :
     props);
+
+export const getModel = (state, entityType, id) => {
+  const model = state.entities.getIn([entityType, 'models', id]);
+  return model ? model.toJS() : model;
+};
+
+export const getCollection = (state, entityType, filter = false) => {
+  const collection = state.entities.getIn([entityType, 'models']);
+  const filteredCollection = isFunction(filter) ? collection.filter(filter) : collection;
+  return Object.values(filteredCollection.toJS());
+};

@@ -27,8 +27,8 @@ const VButton = (props) => {
         <i className={`fa fa-${props.icon} ${styles.icon}`} />
       ) : null }
 
-      { props.children ? (
-        <span className={styles.text}>{props.children}</span>
+      { (props.children || props.title) ? (
+        <span className={styles.text}>{props.children || props.title}</span>
       ) : null }
     </props.as>
   );
@@ -46,6 +46,7 @@ VButton.propTypes = {
     PropTypes.func,
   ]),
   icon: PropTypes.string,
+  title: PropTypes.string,
 };
 
 export default VButton;

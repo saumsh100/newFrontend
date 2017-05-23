@@ -1,19 +1,10 @@
-@import "../styles";
+@import '../../../../ui.scss';
 
-.listItem{
-  padding: 0 1em;
-  position: relative;
+.link {
+  color: $color-black;
+  text-decoration: none;
 
-  &:first-child {
-    border-top: 1px solid $primary-grey;
+  &:hover {
+    text-decoration: underline;
   }
-}
-
-.listItemButtons {
-  position: absolute;
-  right: 1em;
-}
-
-.headerPanel {
-  margin-bottom: 1em;
 }

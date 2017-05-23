@@ -1,6 +1,6 @@
 @import '../../../ui';
 
-$default-table-space: 20px;
+$default-table-space: 1.5em;
 
 .mainContainer {
   padding: $container-padding;
@@ -19,4 +19,8 @@ $default-table-space: 20px;
 
 .cardContent {
   margin: $default-table-space $default-table-space 0 $default-table-space;
+}
+
+.headerPanel {
+  margin-bottom: $default-table-space;
 }
