@@ -87,7 +87,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: patientPhone,
       from: clinicPhone,
       body: 'Hey! Just testing out our new messaging service.',
-      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+      createdAt: faker.date.past(),
       read: true,
     },
     {
@@ -95,7 +95,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: clinicPhone,
       from: patientPhone,
       body: 'Hi there!',
-      createdAt: new Date(2017, 0, 1, 12, 45, 0, 0),
+      createdAt: faker.date.past(),
       read: true,
     },
     {
@@ -103,7 +103,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: patientPhone,
       from: clinicPhone,
       body: 'How were you doing yesterday?',
-        createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
+        createdAt: faker.date.past(),
       read: true,
     },
     {
@@ -111,7 +111,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: clinicPhone,
       from: patientPhone,
       body: 'I was good thanks! And you?',
-      createdAt: new Date(2017, 0, 1, 13, 45, 0, 0),
+      createdAt: faker.date.past(),
       read: false,
     },
   ];

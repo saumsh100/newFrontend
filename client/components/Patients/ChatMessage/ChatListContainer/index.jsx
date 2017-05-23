@@ -7,7 +7,13 @@ import { ListItem } from '../../../library';
 class ChatListContainer extends Component {
   constructor(props) {
     super(props);
+    this.setPatient = this.setPatient.bind(this);
   }
+
+  setPatient(id) {
+    this.props.onClick(id);
+  }
+
   render() {
 
     const everyone = (this.props.chats.size ? (this.props.chats.toArray().map((chats) => {
@@ -26,14 +32,26 @@ class ChatListContainer extends Component {
         }
       }
 
-      const usersActiveClassName = classNames(
-        styles.users, styles.users__noactive
-      );
+      let userActiveClassName;
+
+      if (this.props.currentPatient) {
+        userActiveClassName = classNames(
+          styles.users,
+          chat.user.id === this.props.currentPatient.id ?
+            styles.users__active :
+            styles.users__noactive
+        );
+      } else {
+        userActiveClassName = classNames(
+          styles.users,
+          styles.users__noactive
+        );
+      }
 
       const age = moment().diff(user.birthDate, 'years');
 
 
-      return (<ListItem className={usersActiveClassName}>
+      return (<ListItem className={userActiveClassName} onClick={this.setPatient.bind(null, chat.user.id)} key={chat.user.id}>
         <img className={styles.users__photo}  src={chat.user.avatar} alt="photo" />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>

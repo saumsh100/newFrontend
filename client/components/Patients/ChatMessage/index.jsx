@@ -1,14 +1,18 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './styles.scss';
 import ChatListContainer from './ChatListContainer';
-import { Row, Col, CardHeader, Card, Input, List, Grid, InfiniteScroll } from '../../library';
+import MessageContainer from './MessageContainer';
+import { Row, Col, CardHeader, Card, Input, List, Grid, InfiniteScroll, Avatar } from '../../library';
 
 class ChatMessage extends Component {
 
   constructor(props) {
     super(props);
   }
+
+
   render() {
+    const info = (this.props.currentPatient ? `To: ${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.phoneNumber}` : null);
 
     return (
       <Grid>
@@ -43,6 +47,8 @@ class ChatMessage extends Component {
                         textMessages={this.props.textMessages}
                         chats={this.props.chats}
                         patients={this.props.patients}
+                        onClick={this.props.setCurrentPatient}
+                        currentPatient={this.props.currentPatient}
                       />
                     </InfiniteScroll>
                   </List>
@@ -50,7 +56,25 @@ class ChatMessage extends Component {
               </Row>
             </div>
           </Col>
-          <Col xs={12} sm={8} md={8} lg={9}>
+          <Col xs={12} sm={8} md={8} lg={9} className={styles.messages}>
+            <div className={styles.topInfo}>
+              {info}
+            </div>
+            <div className={styles.main}>
+              <MessageContainer
+                selectedChat={this.props.selectedChat}
+                currentPatient={this.props.currentPatient}
+                textMessages={this.props.textMessages}
+              />
+              <div className={styles.rightInfo}>
+                <div className={styles.patInfo}>
+
+                </div>
+                <div className={styles.bottomInfo}>
+
+                </div>
+              </div>
+            </div>
           </Col>
         </Row>
       </Grid>

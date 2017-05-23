@@ -102,6 +102,112 @@
   }
 }
 
+.topInfo {
+  min-width: 100%;
+  border-bottom: thin solid lightgrey;
+  height: 13.5%;
+
+  &::before {
+    display: block;
+    width: 100%;
+    height: 5px;
+    content: '';
+    background: #ff715a;
+  }
+}
+
+.time {
+  flex: 1 0 100%;
+  text-align: center;
+  margin-top: 10px;
+  font-family: 'Gotham-Medium';
+  color: $inactive-color;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  background-color: #fafafa;
+  flex-wrap: wrap;
+  min-width: 100%;
+}
+
+.patientName {
+  font-family: 'Gotham-Medium';
+  color: #2e3845;
+  font-size: 1.4em;
+  margin: 15px;
+}
+
+.allMessages {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 70%;
+  border-right: thin solid lightgrey;
+}
+
+.text {
+  padding: 20px;
+  border-radius: 15px;
+  background-color: #FF715A;
+  color: #fafafa;
+  font-family: 'Gotham-Book';
+  width: 50%;
+  margin: 10px 0;
+}
+
+.margin {
+  margin: 20px;
+}
+
+.marginText {
+  margin: 20px;
+  font-family: 'Gotham-Medium';
+  color: $inactive-color;
+}
+
+.textTime {
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.textFrom {
+  padding: 20px;
+  border-radius: 15px;
+  color: darkgrey;
+  font-family: 'Gotham-Book';
+  background-color: #efefef;
+  width: 50%;
+  margin: 10px 0;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  background-clip: content-box;
+  background-color: #fafafa;
+}
+
+.rightInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.patInfo {
+  flex: 1;
+  border-bottom: thin solid lightgrey;
+}
+
+.bottomInfo {
+  flex: 1;
+}
+
 
 .patients_list__users {
   position: relative;

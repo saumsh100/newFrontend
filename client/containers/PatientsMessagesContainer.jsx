@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
+import immutable from 'immutable';
 import { bindActionCreators } from 'redux';
 import ChatMessage from '../components/Patients/ChatMessage/';
 import {
@@ -13,6 +14,7 @@ import {
   readMessagesInCurrentDialog,
 } from '../thunks/fetchEntities';
 import moment from 'moment';
+import * as Actions from '../actions/patientList';
 
 const HOW_MANY_TO_SKIP = 15;
 
@@ -68,15 +70,25 @@ class PatientsMessagesContainer extends Component {
       textMessages,
       patients,
     } = this.props;
-    console.log(chats.toArray()[0], patients.toArray()[0], textMessages.toArray()[0])
+    const chatOrder = chats.sort((a, b) => {
+      return moment(textMessages.get(a.textMessages[a.textMessages.length - 1]).createdAt)
+        .diff(textMessages.get(b.textMessages[b.textMessages.length - 1]).createdAt);
+    });
+
+    const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
+
+    const currentPatient = (this.props.selectedPatient ? this.props.selectedPatient : patients.get(firstId));
 
     return (
       <ChatMessage
         textMessages={textMessages}
-        chats={chats}
+        chats={chatOrder}
         patients={patients}
         moreData={this.state.moreData}
         loadMore={this.loadMore}
+        currentPatient={currentPatient}
+        setCurrentPatient={this.props.setSelectedPatient}
+        selectedChat={this.props.selectedChat}
       />
     );
   }
@@ -84,15 +96,25 @@ class PatientsMessagesContainer extends Component {
 
 PatientsMessagesContainer.propTypes = {};
 
-function mapStateToProps({ entities, currentDialog, form }) {
-    return {
-      chats: entities.getIn(['chats', 'models']),
-      textMessages: entities.getIn(['textMessages', 'models']),
-      patients: entities.getIn(['patients', 'models']),
-      currentDialogId: currentDialog.toJS().currentDialog,
-      allowDialogScroll: currentDialog.toJS().allowDialogScroll,
-      filters: form.dialogs,
-    };
+function mapStateToProps({ entities, currentDialog, patientList, form }) {
+  const patients = entities.getIn(['patients', 'models']);
+  const chats = entities.getIn(['chats', 'models']);
+  const selectedPatientId = patientList.get('selectedPatientId');
+  const selectedPatient = patients.get(selectedPatientId);
+  const map = Immutable.fromJS(chats);
+  const selectedChat = map.filter( (chat) => {
+    return chat.get('patientId') === selectedPatientId;
+  }).first();
+  return {
+    chats,
+    textMessages: entities.getIn(['textMessages', 'models']),
+    selectedPatient,
+    patients,
+    selectedChat,
+    currentDialogId: currentDialog.toJS().currentDialog,
+    allowDialogScroll: currentDialog.toJS().allowDialogScroll,
+    filters: form.dialogs,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -102,6 +124,7 @@ function mapDispatchToProps(dispatch) {
     sendMessageOnClient,
     readMessagesInCurrentDialog,
     setDialogScrollPermission,
+    setSelectedPatient: Actions.setSelectedPatientIdAction,
   }, dispatch);
 }
 
