@@ -32,11 +32,10 @@ class ScheduleContainer extends React.Component {
     };
 
     Promise.all([
-      this.props.fetchEntities({ key: 'appointments', params: query }),
+      this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
       this.props.fetchEntities({ key: 'practitioners'}),
       this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
-      this.props.fetchEntities({ key: 'patients' }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
       this.setState({ loaded: true });
@@ -57,7 +56,7 @@ class ScheduleContainer extends React.Component {
         startDate,
         endDate,
       };
-      this.props.fetchEntities({ key: 'appointments', params: query });
+      this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query });
     }
   }
 
