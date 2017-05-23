@@ -11,7 +11,7 @@ export default function TimeColumn(props) {
 
   return (
     <div>
-      {timeSlots.map((slot) => {
+      {timeSlots.map((slot, index) => {
         let hour = slot.position ;
         let period = 'am';
 
@@ -25,7 +25,7 @@ export default function TimeColumn(props) {
         }
 
         return (
-          <div className={styles.dayView_body_timeColumn} style={timeSlotHeight}>
+          <div key={index} className={styles.dayView_body_timeColumn} style={timeSlotHeight}>
             {`${hour}:00${period}`}
           </div>
         );
