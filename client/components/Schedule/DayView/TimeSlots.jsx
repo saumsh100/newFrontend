@@ -27,7 +27,6 @@ class TimeSlots extends Component {
          return app.practitionerId === practitioner.toJS().id;
       });
 
-      console.log(column, slotData.position, filteredApps);
       showSlot = (
         <div className={styles.dayView_body_timeSlot} style={timeSlotHeight}>
           slot Position: {slotData.position}
