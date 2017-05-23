@@ -14,25 +14,33 @@ class ShowAppointment extends Component {
       bgColor,
     } = this.props;
 
-    const duration =  moment(appointment.endDate).minutes();
-    console.log(bgColor)
+    const duration = moment(appointment.endDate).minutes();
+
     const appStyle = {
-      position: 'absolute',
       top: '0px',
-      width: '100%',
       backgroundColor: bgColor,
       height: `${duration * 2}px`,
-      boxShadow: '0px 5px 2px 1px rgba(180,180,181,1)',
     };
 
-
     const patient = appointment.patientData.toJS();
+    const age = moment().diff(patient.birthDate, 'years');
     return (
-      <div style={appStyle}>
-        {moment(appointment.endDate).minutes()}
-        {patient.firstName}
-        {appointment.serviceData}
-        {appointment.chairData}
+      <div className={styles.showAppointment} style={appStyle}>
+        <div className={styles.showAppointment_nameAge}>
+          <div className={styles.showAppointment_nameAge_name} >
+            <span className={styles.paddingText}>{patient.firstName}</span>
+            <span className={styles.paddingText}>{patient.lastName},</span>
+            <span>{age}</span>
+          </div>
+        </div>
+
+        <div className={styles.showAppointment_duration}>
+          {moment(appointment.startDate).format('h:mm')}-{moment(appointment.endDate).format('h:mm a')}
+        </div>
+        <div className={styles.showAppointment_serviceChair}>
+          <span className={styles.paddingText}>{appointment.serviceData}</span>
+          <span>{appointment.chairData}</span>
+        </div>
       </div>
     );
   }

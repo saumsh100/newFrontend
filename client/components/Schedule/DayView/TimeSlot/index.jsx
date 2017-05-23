@@ -55,7 +55,7 @@ class TimeSlot extends Component {
             return (
               <Col key={i} xs={3} >
                 {slottedAppointments.map((slotData, index) => {
-                  if(slotData.appointments.length && practitioner !== '') {
+                  if (slotData.appointments.length && practitioner !== '') {
                     return (
                       <TimeSlotBlock
                         practitioner={practitioner}
@@ -66,13 +66,16 @@ class TimeSlot extends Component {
                         bgColor={colorArray[i]}
                       />
                     );
-                  } else {
-                    return (
-                      <div key={index} className={styles.dayView_body_timeSlot} style={timeSlotHeight}>
-                        {''}
-                      </div>
-                    );
                   }
+                  return (
+                    <div
+                      key={index}
+                      className={styles.dayView_body_timeSlot}
+                      style={timeSlotHeight}
+                    >
+                      {''}
+                    </div>
+                  );
                 })}
               </Col>
             );

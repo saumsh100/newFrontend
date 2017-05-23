@@ -1,7 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
+import ShowAppointment from './ShowAppointment';
 import styles from '../styles.scss';
-import ShowAppointment from "./ShowAppointment";
+
 
 class TimeSlotBlock extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class TimeSlotBlock extends Component {
     const apps = slotData.appointments;
     const filteredApps = apps.filter((app) => {
        return app.practitionerId === practitioner.toJS().id;
-    }).map((app)=>{
+    }).map((app) => {
       const service = services.get(app.get('serviceId'));
       const patient = patients.get(app.get('patientId'));
       const chair = chairs.get(app.get('chairId'));
@@ -37,7 +38,7 @@ class TimeSlotBlock extends Component {
     return (
       <div className={styles.dayView_body_timeSlot} style={timeSlotHeight}>
         {filteredApps.map((app, index)=>{
-          return(
+          return (
             <ShowAppointment
               key={index}
               appointment={app}
