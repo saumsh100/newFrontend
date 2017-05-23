@@ -19,13 +19,14 @@ class DayView extends Component  {
       selectAppointment,
     } = this.props;
 
+    const filteredAppointments= appointments.get('models').toArray().filter((app) => !app.isDeleted);
 
     return (
       <DayViewBody
         schedule={schedule}
         currentDate={currentDate}
         selectAppointment={selectAppointment}
-        appointments={appointments.get('models')}
+        appointments={filteredAppointments}
         chairs={chairs.get('models')}
         services={services.get('models')}
         patients={patients.get('models')}

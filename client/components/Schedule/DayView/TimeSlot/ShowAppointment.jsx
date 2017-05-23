@@ -2,6 +2,14 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from '../styles.scss';
+import { setTime } from '../../../library/util/TimeOptions';
+
+
+const getDuration = (startDate, endDate, customBufferTime) => {
+  const end = moment(endDate);
+  const duration = moment.duration(end.diff(startDate));
+  return duration.asMinutes() - customBufferTime;
+};
 
 class ShowAppointment extends Component {
   constructor(props) {
@@ -12,20 +20,54 @@ class ShowAppointment extends Component {
     const {
       appointment,
       bgColor,
+      selectAppointment,
     } = this.props;
 
-    const duration = moment(appointment.endDate).minutes();
+    const {
+      note,
+      startDate,
+      endDate,
+      customBufferTime,
+      serviceData,
+      chairData,
+      patientData,
+    } = appointment;
+
+
+    const patient = patientData.toJS();
+    const age = moment().diff(patient.birthDate, 'years');
+
+    const durationTime = getDuration(startDate, endDate, customBufferTime);
+    const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
+
+    const addToApp = Object.assign({}, appointment, {
+      time: setTime(startDate),
+      date: moment(startDate).format('L'),
+      duration: [durationTime, bufferTime],
+    });
+
+    const addToPatient = Object.assign({}, patient, {
+      patientSelected: patient,
+      note,
+    });
 
     const appStyle = {
       top: '0px',
       backgroundColor: bgColor,
-      height: `${duration * 2}px`,
+      height: `${(durationTime + customBufferTime) * 2}px`,
     };
 
-    const patient = appointment.patientData.toJS();
-    const age = moment().diff(patient.birthDate, 'years');
     return (
-      <div className={styles.showAppointment} style={appStyle}>
+      <div
+        onClick={() => {
+          selectAppointment({
+            appointment: addToApp,
+            patient: addToPatient,
+          });
+        }}
+        className={styles.showAppointment}
+        style={appStyle}
+      >
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} >
             <span className={styles.paddingText}>{patient.firstName}</span>
@@ -33,13 +75,12 @@ class ShowAppointment extends Component {
             <span>{age}</span>
           </div>
         </div>
-
         <div className={styles.showAppointment_duration}>
-          {moment(appointment.startDate).format('h:mm')}-{moment(appointment.endDate).format('h:mm a')}
+          {moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}
         </div>
         <div className={styles.showAppointment_serviceChair}>
-          <span className={styles.paddingText}>{appointment.serviceData}</span>
-          <span>{appointment.chairData}</span>
+          <span className={styles.paddingText}>{serviceData}</span>
+          <span>{chairData}</span>
         </div>
       </div>
     );

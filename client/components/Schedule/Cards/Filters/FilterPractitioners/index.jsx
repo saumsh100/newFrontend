@@ -28,7 +28,7 @@ export default function FilterPractitioners(props) {
         />
         {practitioners.map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
-          const label = (<div className={styles.filter_practitioner__name}>{pr.firstName}</div>);
+          const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
 
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>

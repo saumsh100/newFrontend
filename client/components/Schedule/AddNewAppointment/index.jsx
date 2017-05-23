@@ -52,7 +52,7 @@ class AddNewAppointment extends Component {
     } = appointmentValues;
 
     const {
-      patientData,
+      patientSelected,
       note,
     } = patientValues;
 
@@ -65,7 +65,7 @@ class AddNewAppointment extends Component {
     const newAppointment = {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
-      patientId: patientData.id,
+      patientId: patientSelected.id,
       serviceId,
       practitionerId,
       chairId,

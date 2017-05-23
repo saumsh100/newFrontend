@@ -34,7 +34,7 @@ class TimeSlot extends Component {
     }
 
     const slottedAppointments = timeSlots.map((slot) => {
-      const appData = appointments.toArray().filter((app) => {
+      const appData = appointments.filter((app) => {
         const startDate = moment(app.startDate);
         const isSameDate = startDate.isSame(currentDate, 'day');
         const startHour = startDate.hour();
@@ -62,8 +62,8 @@ class TimeSlot extends Component {
                         key={index}
                         slotData={slotData}
                         timeSlotHeight={timeSlotHeight}
-                        {...this.props}
                         bgColor={colorArray[i]}
+                        {...this.props}
                       />
                     );
                   }

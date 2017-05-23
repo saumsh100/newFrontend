@@ -20,20 +20,25 @@ export default function FilterEntities(props) {
   return (
     <div className={styles.filter_options__item}>
       <div className={styles.filter_options__title}>{label}</div>
-      <Checkbox
-        label={'All'}
-        checked={allChecked}
-        onChange={ () => handleAllCheck(filterKey)}
-      />
+      <div className={styles.filter_options__checkLabel}>
+        <Checkbox
+          checked={allChecked}
+          onChange={ () => handleAllCheck(filterKey)}
+        />
+        <span className={styles.filter_options__checkLabel__all}>All</span>
+      </div>
       {entities.map((entity) => {
         const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
         return (
-          <Checkbox
-            key={entity.get(display)}
-            label={entity.get(display)}
-            checked={checked}
-            onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
-          />
+          <div className={styles.filter_options__checkLabel}>
+            <Checkbox
+              key={entity.get(display)}
+              checked={checked}
+              onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+            />
+            {entity.get(display)}
+          </div>
+
         );
       })}
     </div>

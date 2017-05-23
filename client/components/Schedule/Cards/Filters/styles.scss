@@ -15,9 +15,12 @@
     justify-content: center;
     &__title {
         justify-content: center;
+        padding-right: 10px;
+        font-weight: $large-weight;
     }
 
     &__icon {
+        padding-top: 5px;
         margin-left: 5px;
     }
 
@@ -42,7 +45,10 @@
     max-height: 250px;
     overflow: auto;
 
-
+    &__name {
+      font-size: $small-size;
+      font-weight: $large-weight;
+    }
     &__title {
         margin-left: 5px;
         text-transform: uppercase;
@@ -81,6 +87,17 @@
         text-transform: uppercase;
         color: #b4b4b4;
         font-size: 9px;
+    }
+
+    &__checkLabel {
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+      font-size: $extra-small-size;
+      font-weight: $medium-weight;
+      &__all {
+        font-weight: $large-weight;
+      }
     }
 
     &__item {
