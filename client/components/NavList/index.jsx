@@ -144,8 +144,11 @@ function NavList({ location, isCollapsed, isSuperAdmin }) {
   );
 }
 
-const stateToProps = state => ({
-  isSuperAdmin: state.auth.getIn(['token', 'role']) === 'SUPERADMIN',
-});
+const stateToProps = (state) => {
+  const token = state.auth.get('token');
+  return {
+    isSuperAdmin: (token && token.get('role')) === 'SUPERADMIN',
+  };
+};
 
 export default connect(stateToProps)(NavList);
