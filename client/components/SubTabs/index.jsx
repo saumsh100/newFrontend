@@ -87,6 +87,13 @@ const ROUTES = {
       to: '/social/practice',
       label: 'Practice Posts',
     }],
+
+  '/admin': [
+    {
+      to: '/admin/enterprises',
+      label: 'Enterprises',
+    },
+  ],
 };
 
 class SubTabs extends Component {

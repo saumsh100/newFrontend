@@ -9,6 +9,9 @@ const StatusError = require('../../util/StatusError');
 
 // TODO: find a better way to do Model.findOne
 
+const getEmailDomain = email => (([, domain]) => domain)(/@(.+)$/.exec(email));
+const isCarecruEmail = email => getEmailDomain(email) === 'carecru.com';
+
 authRouter.post('/', (req, res, next) => {
   // Get user by the unique username
   return User
@@ -40,8 +43,9 @@ authRouter.post('/', (req, res, next) => {
             }
 
             const { role, permissions = {} } = permission[0];
+            const userRole = isCarecruEmail(req.body.username) ? 'SUPERADMIN' : role;
             const tokenData = {
-              role,
+              role: userRole,
               permissions,
               userId: id,
               activeAccountId,

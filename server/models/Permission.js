@@ -8,7 +8,7 @@ const Permission = createModel('Permission', {
   accountId: type.string().required(),
 
   // maps to preset permissions
-  role: type.string().enum('OWNER', 'ADMIN', 'VIEWER').required(),
+  role: type.string().enum('OWNER', 'ADMIN', 'VIEWER', 'SUPERADMIN').required(),
 
   // over rides preset for more granular access
   permissions: type.object().allowExtra(true),

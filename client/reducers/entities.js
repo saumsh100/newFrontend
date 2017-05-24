@@ -15,6 +15,8 @@ import {
 } from '../constants';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
+import Enterprise from '../entities/models/Enterprise';
+import enterprises from '../entities/collections/enterprises';
 import Patient from '../entities/models/Patient';
 import patients from '../entities/collections/patients';
 import textMessages from '../entities/collections/textMessages';
@@ -49,6 +51,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     // KEYs must map to the response object
     // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
     accounts: new accounts(),
+    enterprises: new enterprises(),
     textMessages: new textMessages(),
     appointments: new appointments(),
     requests: new requests(),
@@ -70,6 +73,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
 
 const Models = {
   accounts: Account,
+  enterprises: Enterprise,
   textMessages: TextMessage,
   appointments: Appointments,
   requests: Requests,

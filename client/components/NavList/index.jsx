@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Nav, NavItem, Link, Icon, Tooltip } from '../library';
 import styles from './styles.scss';
@@ -11,7 +12,7 @@ const PATHS = {
 
 };
 
-export default function NavList({ location, isCollapsed }) {
+function NavList({ location, isCollapsed, isSuperAdmin }) {
   const {
     navItem,
     activeItem,
@@ -132,7 +133,22 @@ export default function NavList({ location, isCollapsed }) {
           <SubNavItem path="/settings/services" label="Services" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
         </MultiNavItem>
+
+        {isSuperAdmin ? (
+          <MultiNavItem path="/admin" icon="desktop" label="Admin Panel">
+            <SubNavItem path="/admin/enterprises" label="Enterprises" />
+          </MultiNavItem>
+        ) : null}
       </Nav>
     </div>
   );
 }
+
+const stateToProps = (state) => {
+  const token = state.auth.get('token');
+  return {
+    isSuperAdmin: (token && token.get('role')) === 'SUPERADMIN',
+  };
+};
+
+export default connect(stateToProps)(NavList);

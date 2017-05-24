@@ -43,6 +43,7 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "basic-auth-connect": "^1.0.0",
     "bcrypt": "^0.8.7",
     "body-parser": "^1.14.2",
