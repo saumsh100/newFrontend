@@ -1,5 +1,4 @@
-import Enterprise from './Enterprise';
-
+const Enterprise = require('./Enterprise');
 const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
