@@ -62,8 +62,6 @@ export default function ShowAppointment(props) {
   const width = `${columnWidth}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
-  const heightCalcBuffer = `${((customBufferTime / 60) / totalHours) * 100}%`;
-
   const appStyle = {
     top,
     left,
@@ -72,6 +70,8 @@ export default function ShowAppointment(props) {
     backgroundColor: bgColor,
   };
 
+  // calculating the buffer position and height
+  const heightCalcBuffer = `${((customBufferTime / 60) / totalHours) * 100}%`;
   const bufferStyle = {
     top: `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`,
     left,
@@ -81,14 +81,15 @@ export default function ShowAppointment(props) {
   };
 
   return (
-    <div>
+    <div
+      onClick={() => {
+        selectAppointment({
+          appointment: addToApp,
+          patient: addToPatient,
+         });
+      }}
+    >
       <div
-        onClick={() => {
-          selectAppointment({
-            appointment: addToApp,
-            patient: addToPatient,
-          });
-        }}
         className={styles.showAppointment}
         style={appStyle}
       >

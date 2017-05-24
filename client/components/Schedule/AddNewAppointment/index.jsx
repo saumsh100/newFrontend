@@ -43,15 +43,19 @@ class AddNewAppointment extends Component {
 
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
-
     const {
       date,
       time,
       serviceId,
       practitionerId,
       chairId,
-      duration,
     } = appointmentValues;
+
+    let duration = appointmentValues.duration;
+
+    if (!duration) {
+      duration = [60, 60];
+    }
 
     const {
       patientSelected,
@@ -60,10 +64,11 @@ class AddNewAppointment extends Component {
 
 
     let bufferTime = 0;
-
+    // check if the buffer equals the duration if it doesn't set the buffer time
     if (duration[1] !== duration[0]) {
       bufferTime = duration[1] - duration[0];
     }
+
     const startDate = mergeTime(new Date(date), new Date(time));
 
     let totalDurationMin = duration[0];
@@ -86,6 +91,7 @@ class AddNewAppointment extends Component {
       customBufferTime: bufferTime,
     };
 
+    // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment) {
       createEntityRequest({ key: 'appointments', entityData: newAppointment });
       reinitializeState();
@@ -131,6 +137,7 @@ class AddNewAppointment extends Component {
       updateEntityRequest,
     } = this.props;
 
+    // clicking on the trash can will delete the appointment and clicking on the x icon will reset the form
     if (!selectedAppointment) {
       reset(formName);
       reinitializeState();

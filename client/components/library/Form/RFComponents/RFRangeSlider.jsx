@@ -8,6 +8,7 @@ export default function RFRangeSlider(props) {
     input,
     error,
     meta,
+    defaultValues,
   } = props;
 
   const {
@@ -18,13 +19,16 @@ export default function RFRangeSlider(props) {
   const newProps = omit(props, ['input', 'meta']);
   const newInput = omit(input, ['value', 'onChange']);
 
+  const initialState = input.value ? input.value : defaultValues;
+  console.log(initialState);
+
   return (
     <RangeSlider
       {...newProps}
       {...newInput}
       error={finalError}
       onChange={(value)=>{input.onChange(value)}}
-      setRangeState={input.value}
+      setRangeState={initialState}
     />
   );
 }
