@@ -50,7 +50,6 @@ class DayViewBody extends Component {
           scale={scale}
           practitionersArray={practitionersArray}
         />
-       
       </div>
     );
   }
