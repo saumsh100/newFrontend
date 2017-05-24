@@ -1,6 +1,5 @@
 
 import React, { Component, PropTypes } from 'react';
-import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import {
   Grid,
@@ -13,43 +12,46 @@ import {
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
-import TestDayView from './DayView/TestDayView';
-
 import CurrentDate from './Cards/CurrentDate';
 import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
 import HeaderButtons from './Cards/HeaderButtons';
 import Filters from './Cards/Filters';
 import styles from './styles.scss';
 
-// Setup the localizer by providing the moment (or globalize) Object
-// to the correct localizer.
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
-
 class ScheduleComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       addNewAppointment: false,
+      selectedAppointment: null,
     };
 
-    this.handleDayPicker = this.handleDayPicker.bind(this);
+    this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
-    this.addNewAppointment = this.addNewAppointment.bind(this)
+    this.addNewAppointment = this.addNewAppointment.bind(this);
+    this.selectAppointment = this.selectAppointment.bind(this);
   }
 
-  handleDayPicker(day) {
+  setCurrentDay(day) {
     this.props.setScheduleDate({ scheduleDate: moment(day) });
   }
 
   reinitializeState() {
     this.setState({
       addNewAppointment: false,
+      selectedAppointment: null,
     });
   }
 
   addNewAppointment() {
     this.setState({
       addNewAppointment: true,
+    });
+  }
+
+  selectAppointment(app) {
+    this.setState({
+      selectedAppointment: app,
     });
   }
 
@@ -63,6 +65,11 @@ class ScheduleComponent extends Component {
       chairs,
     } = this.props;
 
+    const {
+      addNewAppointment,
+      selectedAppointment,
+    } = this.state;
+
     const currentDate = moment(schedule.toJS().scheduleDate);
 
     const params = {
@@ -71,18 +78,25 @@ class ScheduleComponent extends Component {
       appointments,
       schedule,
       currentDate,
+      selectAppointment: this.selectAppointment,
     };
 
+    let formName = 'NewAppointmentForm';
+    if (selectedAppointment) {
+      const app = selectedAppointment.appointment;
+      formName = `EditAppointment_${app.id}`;
+    }
+
     return (
-      <Grid className={styles.schedule}>
-        <Row className={styles.rowTest}>
+      <Grid >
+        <Row className={styles.rowMainContainer}>
           <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
             <Card>
               <div className={`${styles.schedule__title} ${styles.title}`}>
                 <CurrentDate currentDate={currentDate}>
                   <DayPicker
                     target="icon"
-                    onChange={this.handleDayPicker}
+                    onChange={this.setCurrentDay}
                   />
                   <HeaderButtons
                     addNewAppointment={this.addNewAppointment}
@@ -93,17 +107,18 @@ class ScheduleComponent extends Component {
                 <CurrentDateCalendar currentDate={currentDate} />
                 <DayView {...params} />
                 <Modal
-                  active={this.state.addNewAppointment}
+                  active={addNewAppointment || !!selectedAppointment}
                   onEscKeyDown={this.reinitializeState}
                   onOverlayClick={this.reinitializeState}
                   custom
                 >
                   <AddNewAppointment
-                    currentDate={currentDate}
+                    formName={formName}
                     chairs={chairs.get('models').toArray()}
                     practitioners={practitioners.get('models').toArray()}
                     services={services.get('models').toArray()}
                     patients={patients.get('models').toArray()}
+                    selectedAppointment={selectedAppointment}
                     reinitializeState={this.reinitializeState}
                   />
                 </Modal>
@@ -123,7 +138,7 @@ class ScheduleComponent extends Component {
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
               <Col xs={12}>
-                {/* <RequestsContainer className={styles.schedule__sidebar_request}  /> */}
+                <RequestsContainer className={styles.schedule__sidebar_request}  />
               </Col>
             </Row>
           </Col>

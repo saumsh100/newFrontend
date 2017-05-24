@@ -1,7 +1,6 @@
-
+import apiRouter from './api';
 const rootRouter = require('express').Router();
 const subdomain = require('express-subdomain');
-const apiRouter = require('./api');
 const authRouter = require('./auth');
 const myRouter = require('./my');
 const twilioRouter = require('./twilio');

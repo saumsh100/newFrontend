@@ -34,6 +34,9 @@ module.exports = {
   compress: true,
   historyApiFallback: true,
 
+  // Allows the my.carecru.dev:5100 to not throw Invalid Host header
+  disableHostCheck: true,
+
   hot: true,
 
   watchOptions: {

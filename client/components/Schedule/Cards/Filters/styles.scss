@@ -22,18 +22,26 @@
     }
 
     &__link {
+        display: flex;
         position: absolute;
         right: 20px;
         cursor: pointer;
         color: #b4b4b4;
         font-size: 12px;
+        cursor: pointer;
+        &__text{
+          padding-right: 10px;
+        }
     }
 }
 
 
 .filter_practitioner {
-    margin: 0 5px;
-    padding: 10px;
+   // margin: 0 5px;
+    padding: 5px 0px 10px 10px;
+    max-height: 250px;
+    overflow: auto;
+
 
     &__title {
         margin-left: 5px;

@@ -24,6 +24,8 @@ const chairSchema = () => {
   return new schema.Entity('chairs');
 };
 
+const enterpriseSchema = () =>
+  new schema.Entity('enterprises');
 
 const chatSchema = () => {
   return new schema.Entity('chats', {
@@ -113,6 +115,7 @@ const SCHEMAS = {
   account: accountSchema(),
   appointment: appointmentSchema(),
   chair: chairSchema(),
+  enterprise: enterpriseSchema(),
   chat: chatSchema(),
   invite: inviteSchema(),
   patient: patientSchema(),
@@ -132,6 +135,7 @@ const SCHEMAS = {
   appointments: [appointmentSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
+  enterprises: [enterpriseSchema()],
   invites: [inviteSchema()],
   patients: [patientSchema()],
   families: [familySchema()],

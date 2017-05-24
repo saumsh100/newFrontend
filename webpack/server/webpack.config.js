@@ -21,7 +21,7 @@ module.exports = {
 
   context: projectRoot,
 
-  entry: entries('server', 'cron', 'reminders'),
+  entry: entries('server', 'cron', 'reminders', 'seeds'),
 
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -45,6 +45,7 @@ module.exports = {
             presets: [
               ['env', { targets: { node: 6.2 } }],
               'react',
+              'stage-2',
             ],
           },
         },

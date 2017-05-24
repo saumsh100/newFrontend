@@ -1,3 +1,4 @@
+
 const cssnext = require('postcss-cssnext');
 const path = require('path');
 const { projectRoot } = require('../utils');
@@ -26,7 +27,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
+            cacheDirectory: true,
           },
         },
         exclude: /node_modules/,

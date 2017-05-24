@@ -1,0 +1,15 @@
+.buttons {
+  visibility: hidden;
+  text-align: right;
+}
+
+.row {
+  width: 100%;
+  padding: 0 .5em;
+}
+
+.item:hover .buttons {
+  visibility: visible;
+}
+
+
