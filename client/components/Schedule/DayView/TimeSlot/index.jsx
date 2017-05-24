@@ -40,8 +40,13 @@ class TimeSlot extends Component {
     });
     const colorArray = [ '#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6' ];
 
+    const timeSlotContentStyle = {
+      width: `${columnWidth}%`,
+      boxSizing: 'border-box',
+    };
+
     return (
-      <div style={{ width: `${columnWidth}%`, boxSizing: 'border-box'}}>
+      <div style={timeSlotContentStyle}>
         <TimeSlotColumn
           key={`column_${practIndex}`}
           index={practIndex}
@@ -67,5 +72,18 @@ class TimeSlot extends Component {
     );
   }
 }
+
+TimeSlot.PropTypes = {
+  startHour: PropTypes.number,
+  endHour: PropTypes.number,
+  appointments: PropTypes.object,
+  patients: PropTypes.object,
+  services: PropTypes.object,
+  chairs: PropTypes.object,
+  timeSlots: PropTypes.array,
+  timeSlotHeight: PropTypes.object,
+  practitioner: PropTypes.object,
+  selectAppointment: PropTypes.func.isRequired,
+};
 
 export default TimeSlot;

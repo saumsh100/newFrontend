@@ -73,4 +73,16 @@ class DayViewBody extends Component {
   }
 }
 
+DayViewBody.PropTypes = {
+  startHour: PropTypes.number,
+  endHour: PropTypes.number,
+  appointments: PropTypes.object,
+  patients: PropTypes.object,
+  services: PropTypes.object,
+  chairs: PropTypes.object,
+  practitioners: PropTypes.object,
+  schedule: PropTypes.object,
+  selectAppointment: PropTypes.func.isRequired,
+};
+
 export default DayViewBody;

@@ -20,7 +20,7 @@ class DayView extends Component  {
       selectAppointment,
     } = this.props;
 
-    const filteredAppointments= appointments.get('models').toArray().filter((app) => {
+    const filteredAppointments = appointments.get('models').toArray().filter((app) => {
       const startDate = moment(app.startDate);
       const isSameDate = startDate.isSame(currentDate, 'day');
 
@@ -28,7 +28,6 @@ class DayView extends Component  {
         return app;
       }
     });
-
     return (
       <DayViewBody
         schedule={schedule}
@@ -38,7 +37,7 @@ class DayView extends Component  {
         services={services.get('models')}
         patients={patients.get('models')}
         practitioners={practitioners.get('models')}
-        startHour={0}
+        startHour={6}
         endHour={24}
       />
     );
@@ -46,4 +45,16 @@ class DayView extends Component  {
 
 }
 
+DayView.PropTypes = {
+  appointments: PropTypes.object,
+  patients: PropTypes.object,
+  services: PropTypes.object,
+  chairs: PropTypes.object,
+  practitioners: PropTypes.object,
+  currentDate: PropTypes.object,
+  schedule: PropTypes.object,
+  selectAppointment: PropTypes.func.isRequired,
+};
+
 export default DayView;
+

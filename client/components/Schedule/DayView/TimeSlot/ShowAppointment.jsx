@@ -10,100 +10,106 @@ const getDuration = (startDate, endDate, customBufferTime) => {
   return duration.asMinutes() - customBufferTime;
 };
 
-class ShowAppointment extends Component {
-  constructor(props) {
-    super(props);
-  }
+export default function ShowAppointment(props) {
+  const {
+    appointment,
+    bgColor,
+    practIndex,
+    selectAppointment,
+    startHour,
+    endHour,
+    columnWidth,
+  } = props;
 
-  render() {
-    const {
-      appointment,
-      bgColor,
-      practIndex,
-      selectAppointment,
-      startHour,
-      endHour,
-      columnWidth,
-    } = this.props;
+  const {
+    note,
+    startDate,
+    endDate,
+    customBufferTime,
+    serviceData,
+    chairData,
+    patientData,
+  } = appointment;
 
-    const {
-      note,
-      startDate,
-      endDate,
-      customBufferTime,
-      serviceData,
-      chairData,
-      patientData,
-    } = appointment;
+  const patient = patientData.toJS();
+  const age = moment().diff(patient.birthDate, 'years');
 
-    const patient = patientData.toJS();
-    const age = moment().diff(patient.birthDate, 'years');
+  const durationTime = getDuration(startDate, endDate, customBufferTime);
+  const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
 
-    const durationTime = getDuration(startDate, endDate, customBufferTime);
-    const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-    const addToApp = Object.assign({}, appointment, {
-      time: setTime(startDate),
-      date: moment(startDate).format('L'),
-      duration: [durationTime, bufferTime],
-    });
+  // Setting up an appointment object that can set the initial values of the edit form.
+  const addToApp = Object.assign({}, appointment, {
+    time: setTime(startDate),
+    date: moment(startDate).format('L'),
+    duration: [durationTime, bufferTime],
+  });
 
-    const addToPatient = Object.assign({}, patient, {
-      patientSelected: patient,
-      note,
-    });
+  const addToPatient = Object.assign({}, patient, {
+    patientSelected: patient,
+    note,
+  });
 
-    const startDateHours = moment(startDate).hours();
-    const startDateMinutes = moment(startDate).minutes();
-    const topCalc = ((startDateHours - startHour) + startDateMinutes)
+  // Calculating the top position and height of the appointment.
+  const startDateHours = moment(startDate).hours();
+  const startDateMinutes = moment(startDate).minutes();
+  const topCalc = ((startDateHours - startHour) + (startDateMinutes / 60));
 
-    const endDateHours = moment(endDate).hours();
-    const endDateMinutes = moment(endDate).minutes();
-    const heightCalc = (endDateHours - startDateHours);
+  const heightCalc = (durationTime) / 60;
+  const totalHours = (endHour - startHour) + 1;
 
-    const totalHours = (endHour - startHour);
+  const top = `${(topCalc / totalHours) * 100}%`;
+  const left = `${(columnWidth * practIndex)}%`;
+  const width = `${columnWidth}%`;
+  const height = `${(heightCalc/ totalHours) * 100}%`;
 
-    const top = `${(topCalc / (totalHours + 1)) * 100}%`;
-    const left = `${(columnWidth * practIndex)}%`;
-    const width = `${columnWidth}%`;
-    const height = `${((moment(endDate).hours() - moment(startDate).hours()) / (totalHours + 1)) * 100}%`;
-    console.log(height);
 
-    const appStyle = {
-      top,
-      left,
-      height,
-      width,
-      backgroundColor: bgColor,
-    };
+  const heightCalcBuffer = `${((customBufferTime / 60) / totalHours) * 100}%`;
 
-    return (
-      <div
-        onClick={() => {
-          selectAppointment({
-            appointment: addToApp,
-            patient: addToPatient,
-          });
-        }}
-        className={styles.showAppointment}
-        style={appStyle}
-      >
-        <div className={styles.showAppointment_nameAge}>
-          <div className={styles.showAppointment_nameAge_name} >
-            <span className={styles.paddingText}>{patient.firstName}</span>
-            <span className={styles.paddingText}>{patient.lastName},</span>
-            <span>{age}</span>
-          </div>
-        </div>
-        <div className={styles.showAppointment_duration}>
-          {moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}
-        </div>
-        <div className={styles.showAppointment_serviceChair}>
-          <span className={styles.paddingText}>{serviceData},</span>
-          <span>{chairData}</span>
+  const appStyle = {
+    top,
+    left,
+    height,
+    width,
+    backgroundColor: bgColor,
+  };
+
+  const bufferStyle = {
+    top: `${((topCalc / totalHours) * 100) + ((heightCalc/ totalHours) * 100)}%`,
+    left,
+    width,
+    height: heightCalcBuffer,
+    backgroundColor: 'grey',
+  };
+  return (
+    <div>
+    <div
+      onClick={() => {
+        selectAppointment({
+          appointment: addToApp,
+          patient: addToPatient,
+        });
+      }}
+      className={styles.showAppointment}
+      style={appStyle}
+    >
+      <div className={styles.showAppointment_nameAge}>
+        <div className={styles.showAppointment_nameAge_name} >
+          <span className={styles.paddingText}>{patient.firstName}</span>
+          <span className={styles.paddingText}>{patient.lastName},</span>
+          <span>{age}</span>
         </div>
       </div>
-    );
-  }
+      <div className={styles.showAppointment_duration}>
+        {moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}
+      </div>
+      <div className={styles.showAppointment_serviceChair}>
+        <span className={styles.paddingText}>{serviceData},</span>
+        <span>{chairData}</span>
+      </div>
+    </div>
+      <div className={styles.showAppointment} style={bufferStyle}>
+        {''}
+      </div>
+    </div>
+  );
 }
-
-export default ShowAppointment;
