@@ -28,7 +28,7 @@ class DayViewBody extends Component {
     }
 
     const timeSlotHeight = {
-      height: `${100 / (endHour - startHour)}% `
+      height: '100px',
     };
 
     let practitionersArray = practitioners;
@@ -40,24 +40,34 @@ class DayViewBody extends Component {
       });
     }
 
+
     return (
       <div className={styles.dayView_body}>
         <TimeColumn
           timeSlots={timeSlots}
           timeSlotHeight={timeSlotHeight}
         />
-        <TimeSlot
-          timeSlots={timeSlots}
-          timeSlotHeight={timeSlotHeight}
-          practitionersArray={practitionersArray}
-          startHour={startHour}
-          endHour={endHour}
-          patients={patients}
-          appointments={appointments}
-          services={services}
-          chairs={chairs}
-          selectAppointment={selectAppointment}
-        />
+        <div className={styles.dayView_body_timeSlot}>
+          {practitionersArray.map((pract, i, arr) => {
+            const columnWidth = 100 / arr.length;
+            return (
+              <TimeSlot
+                timeSlots={timeSlots}
+                timeSlotHeight={timeSlotHeight}
+                practitioner={pract}
+                practIndex={i}
+                columnWidth={columnWidth}
+                startHour={startHour}
+                endHour={endHour}
+                patients={patients}
+                appointments={appointments}
+                services={services}
+                chairs={chairs}
+                selectAppointment={selectAppointment}
+              />
+            );
+          })}
+        </div>
       </div>
     );
   }

@@ -2,13 +2,19 @@
 
 
 .dayView {
-
   &_body {
     display: flex;
     width: 100%;
     height: 100%;
-
+    &_timeSlot {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box
+    }
     &_timeColumn {
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -19,7 +25,8 @@
       font-weight: $large-weight;
     }
 
-    &_timeSlot {
+    &_timeSlotColumn {
+      box-sizing: border-box;
       justify-content: center;
       align-items: center;
       border: 1px solid $primary-grey;
@@ -30,6 +37,7 @@
 
 .showAppointment {
   position: absolute;
+  box-sizing: border-box;
   &_nameAge {
     display: flex;
     color: $primary-white;

@@ -52,15 +52,27 @@ class ShowAppointment extends Component {
       note,
     });
 
-    const slotHeight = 100 / (endHour - startHour);
+    const startDateHours = moment(startDate).hours();
+    const startDateMinutes = moment(startDate).minutes();
+    const topCalc = ((startDateHours - startHour) + startDateMinutes)
+
+    const endDateHours = moment(endDate).hours();
+    const endDateMinutes = moment(endDate).minutes();
+    const heightCalc = (endDateHours - startDateHours);
+
+    const totalHours = (endHour - startHour);
+
+    const top = `${(topCalc / (totalHours + 1)) * 100}%`;
     const left = `${(columnWidth * practIndex)}%`;
-    const appointmentHeight = ((durationTime + customBufferTime) / 60) * slotHeight
-    console.log(slotHeight * (moment(startDate).hours() - startHour))
+    const width = `${columnWidth}%`;
+    const height = `${((moment(endDate).hours() - moment(startDate).hours()) / (totalHours + 1)) * 100}%`;
+    console.log(height);
+
     const appStyle = {
-      top: `${slotHeight * (moment(startDate).hours() - startHour)}%`,
+      top,
       left,
-      width: `${columnWidth}%`,
-      height: `${appointmentHeight}%`,
+      height,
+      width,
       backgroundColor: bgColor,
     };
 
