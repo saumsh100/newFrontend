@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 
 export default function TimeColumn(props) {
   const {

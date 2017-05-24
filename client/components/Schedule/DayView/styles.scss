@@ -15,6 +15,8 @@
       align-items: center;
       border: 1px solid $primary-grey;
       width: 100px;
+      color: $primary-dark;
+      font-weight: $large-weight;
     }
 
     &_timeSlot {
@@ -28,7 +30,6 @@
 
 .showAppointment {
   position: absolute;
-  width: 100%;
   &_nameAge {
     display: flex;
     color: $primary-white;

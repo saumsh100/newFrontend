@@ -1,8 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
-import TimeColumn from './TimeColumn';
+import TimeColumn from './TimeColumn/TimeColumn';
 import TimeSlot from './TimeSlot/index';
-import TimeSlotBlock from "./TimeSlot/TimeSlotBlock";
 import styles from './styles.scss';
 
 class DayViewBody extends Component {
@@ -16,6 +15,11 @@ class DayViewBody extends Component {
       endHour,
       schedule,
       practitioners,
+      patients,
+      appointments,
+      services,
+      chairs,
+      selectAppointment,
     } = this.props;
 
     const timeSlots = [];
@@ -23,10 +27,8 @@ class DayViewBody extends Component {
       timeSlots.push({ position: i });
     }
 
-    const scale = 2;
-    const rowHeight = 60;
     const timeSlotHeight = {
-      height: `${scale * rowHeight}px`,
+      height: `${100 / (endHour - startHour)}% `
     };
 
     let practitionersArray = practitioners;
@@ -47,10 +49,15 @@ class DayViewBody extends Component {
         <TimeSlot
           timeSlots={timeSlots}
           timeSlotHeight={timeSlotHeight}
-          scale={scale}
           practitionersArray={practitionersArray}
+          startHour={startHour}
+          endHour={endHour}
+          patients={patients}
+          appointments={appointments}
+          services={services}
+          chairs={chairs}
+          selectAppointment={selectAppointment}
         />
-       
       </div>
     );
   }
