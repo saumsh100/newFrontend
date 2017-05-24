@@ -38,7 +38,7 @@ class TimeSlot extends Component {
         patientData: patient,
       });
     });
-    const colorArray = [ '#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6' ];
+    const colorArray = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6'];
 
     const timeSlotContentStyle = {
       width: `${columnWidth}%`,

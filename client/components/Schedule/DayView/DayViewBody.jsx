@@ -52,6 +52,7 @@ class DayViewBody extends Component {
             const columnWidth = 100 / arr.length;
             return (
               <TimeSlot
+                key={i}
                 timeSlots={timeSlots}
                 timeSlotHeight={timeSlotHeight}
                 practitioner={pract}

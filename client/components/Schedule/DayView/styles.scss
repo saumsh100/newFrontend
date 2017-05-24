@@ -40,12 +40,12 @@
 .showAppointment {
   position: absolute;
   box-sizing: border-box;
-  overflow: auto;
 
   &_nameAge {
     display: flex;
     color: $primary-white;
     width: auto;
+    padding-top: 15px;
     padding-left: 5px;
     &_name {
       font-weight: $large-weight;
