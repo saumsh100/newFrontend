@@ -1,17 +1,26 @@
-import React, { PropTypes } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import RequestsContainer from "../../containers/RequestContainer";
-import fetchReputationData from "../../thunks/fetchReputationData";
-import fetchReviewsData from "../../thunks/fetchReviewsData";
-import { Grid, Row, Col, Card, CardHeader, DashboardStats, BigCommentBubble  } from "../library";
+import RequestsContainer from '../../containers/RequestContainer';
+import fetchReputationData from '../../thunks/fetchReputationData';
+import fetchReviewsData from '../../thunks/fetchReviewsData';
+import {
+  Grid,
+  Row,
+  Col,
+  Card,
+  CardHeader,
+  DashboardStats,
+  BigCommentBubble,
+} from '../library';
 import RemindersList from './Cards/RemindersList';
+import DigitalWaitList from './Cards/DigitalWaitList';
 import Table from './Cards/Table';
 import Referrals from './Cards/Referrals';
-import colorMap from "../library/util/colorMap";
-import styles from "./styles.scss";
-
+import colorMap from '../library/util/colorMap';
+import styles from './styles.scss';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -174,7 +183,18 @@ class Dashboard extends React.Component {
         days: [ "Morning weekdays", "Arternoon"  ],
         except: [ moment()._d, moment()._d ]
       }
+    },{
+      img: "images/patient_5.png",
+      name: "Astrid Spady",
+      age: "19",
+      phone: "123 456 7890",
+      email: "Kaia81@gmail.com",
+      status: "Seminder Sent",
+      date: "01/13/1988",
+      time: "6:32pm",
+      icon: "phone"
     }];
+
     const {
       listingCount,
       errorCount,
@@ -187,7 +207,6 @@ class Dashboard extends React.Component {
       fetchReviewsData,
       ratingCounts,
     } = this.props;
-
 
     const data = [
       {count: 10, title: "Appointment Booked", icon: "calendar", size: 6, color: 'primaryColor' },
@@ -284,11 +303,16 @@ class Dashboard extends React.Component {
               </div>
             </Card>
           </Col>
-          <Col className={styles.padding}
-               xs={12} md={4}>
-            <Referrals className={styles.dashboard__body_table}
-                         data={hardcodedReferralData}
-                         cardTitle="Unconfirmed Referrals"/>
+          <Col
+            className={styles.padding}
+            xs={12}
+            md={4}
+          >
+            <Referrals
+              className={styles.dashboard__body_table}
+              data={hardcodedReferralData}
+              cardTitle="Unconfirmed Referrals"
+            />
           </Col>
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
@@ -307,11 +331,7 @@ class Dashboard extends React.Component {
                 />
               </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
-                <RemindersList
-                  key="Waitlist"
-                  data={DataRemindersList2}
-                  cardTitle="Digital Waitlist"
-                />
+                <DigitalWaitList />
               </Col>
             </Row>
           </Col>

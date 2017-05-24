@@ -1,9 +1,10 @@
-import Enterprise from './Enterprise';
+
 
 const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
+const Enterprise = require('./Enterprise');
 const WeeklySchedule = require('./WeeklySchedule');
 const Patient = require('./Patient');
 const Family = require('./Family');
@@ -16,6 +17,7 @@ const TextMessage = require('./TextMessage');
 const Token = require('./Token');
 const User = require('./User');
 const Reservation = require('./Reservation');
+const WaitSpot = require('./WaitSpot');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
@@ -80,3 +82,7 @@ Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 
 Service.hasMany(Reservation, 'reservations', 'id', 'serviceId');
 Service.hasMany(Request, 'requests', 'id', 'serviceId');
+
+/* WaitSpot */
+WaitSpot.hasOne(Patient, 'patient', 'patientId', 'id');
+WaitSpot.hasOne(Account, 'account', 'accountId', 'id');

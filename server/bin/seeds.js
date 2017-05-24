@@ -1,4 +1,4 @@
-1
+
 const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
@@ -983,6 +983,13 @@ const SEEDS = {
   //     build: 1,
   //   },
   // ],
+
+  WaitSpot: [
+    {
+      accountId,
+      patientId: justinPatientId,
+    },
+  ],
 };
 
 seedDatabase(SEEDS)
