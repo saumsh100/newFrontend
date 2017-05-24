@@ -9,10 +9,6 @@ import {
   setCurrentDialog,
   setDialogScrollPermission,
 } from '../thunks/dialogs';
-import {
-  sendMessageOnClient,
-  readMessagesInCurrentDialog,
-} from '../thunks/fetchEntities';
 import moment from 'moment';
 import * as Actions from '../actions/patientList';
 
@@ -70,14 +66,26 @@ class PatientsMessagesContainer extends Component {
       textMessages,
       patients,
     } = this.props;
+
     const chatOrder = chats.sort((a, b) => {
-      return moment(textMessages.get(a.textMessages[a.textMessages.length - 1]).createdAt)
-        .diff(textMessages.get(b.textMessages[b.textMessages.length - 1]).createdAt);
+      if (a.textMessages.length === 0 && b.textMessages.length === 0) {
+        return 0;
+      }
+      if (b.textMessages.length === 0) {
+        return 1;
+      }
+      if (a.textMessages.length === 0) {
+        return -1;
+      }
+
+      return moment(textMessages.get(b.textMessages[b.textMessages.length - 1]).createdAt)
+        .diff(textMessages.get(a.textMessages[a.textMessages.length - 1]).createdAt);
     });
 
     const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
 
     const currentPatient = (this.props.selectedPatient ? this.props.selectedPatient : patients.get(firstId));
+    const currentChat = (this.props.selectedPatient ?  this.props.selectedChat: chatOrder.toArray()[0]);
 
     return (
       <ChatMessage
@@ -88,7 +96,7 @@ class PatientsMessagesContainer extends Component {
         loadMore={this.loadMore}
         currentPatient={currentPatient}
         setCurrentPatient={this.props.setSelectedPatient}
-        selectedChat={this.props.selectedChat}
+        selectedChat={currentChat}
       />
     );
   }
@@ -106,8 +114,8 @@ function mapStateToProps({ entities, currentDialog, patientList, form }) {
     return chat.get('patientId') === selectedPatientId;
   }).first();
   return {
-    chats,
     textMessages: entities.getIn(['textMessages', 'models']),
+    chats,
     selectedPatient,
     patients,
     selectedChat,
@@ -121,8 +129,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     setCurrentDialog,
-    sendMessageOnClient,
-    readMessagesInCurrentDialog,
     setDialogScrollPermission,
     setSelectedPatient: Actions.setSelectedPatientIdAction,
   }, dispatch);

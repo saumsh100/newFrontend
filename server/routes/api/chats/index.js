@@ -42,6 +42,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
 
   // TODO: add orderBy for lastMessageDate
   return Chat
+    .orderBy(r.desc('lastTextMessageDate'))
     .filter({ accountId })
     .skip(parseInt(skipped))
     .limit(parseInt(limitted))

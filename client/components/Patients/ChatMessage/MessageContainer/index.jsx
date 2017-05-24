@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import styles from '../styles.scss';
-import { Avatar } from '../../../library';
+import { Avatar, Form, Field } from '../../../library';
 
 
 class MessageContainer extends Component {
@@ -65,6 +65,18 @@ class MessageContainer extends Component {
       <div className={styles.allMessages}>
         <div className={styles.patientName}> {name} </div>
         {display}
+        <div className={styles.sendMessage}>
+          <Form
+            form="chatMessageForm"
+            ignoreSaveButton
+          >
+            <Field
+              type="text"
+              name="message"
+              label="Type a message"
+            />
+          </Form>
+        </div>
       </div>
       );
   }

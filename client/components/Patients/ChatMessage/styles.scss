@@ -106,6 +106,20 @@
   min-width: 100%;
   border-bottom: thin solid lightgrey;
   height: 13.5%;
+  font-family: 'Gotham-Medium';
+  font-size: 1.2em;
+  color: #b4b4b5;
+
+  span {
+    color: #2e3845;
+  }
+
+  div{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 10px;
+  }
 
   &::before {
     display: block;
@@ -142,9 +156,20 @@
 .allMessages {
   display: flex;
   align-items: center;
+  overflow-y: auto;
   flex-direction: column;
+  position: relative;
   width: 70%;
   border-right: thin solid lightgrey;
+  max-height: 80vh;
+}
+
+.sendMessage {
+  background-color: #fafafa;
+  position: sticky;
+  bottom: 0;
+  width: 95%;
+  margin-top: auto;
 }
 
 .text {

@@ -12,7 +12,7 @@ class ChatMessage extends Component {
 
 
   render() {
-    const info = (this.props.currentPatient ? `To: ${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.phoneNumber}` : null);
+    const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.phoneNumber}` : null);
 
     return (
       <Grid>
@@ -58,7 +58,9 @@ class ChatMessage extends Component {
           </Col>
           <Col xs={12} sm={8} md={8} lg={9} className={styles.messages}>
             <div className={styles.topInfo}>
-              {info}
+              <div>
+                <span>To: </span>{info}
+              </div>
             </div>
             <div className={styles.main}>
               <MessageContainer

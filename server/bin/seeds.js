@@ -78,16 +78,20 @@ const markPhoneNumber = '+17788654451';
 
 const clinicPhoneNumber = '+17786558613';
 
+
 // TODO: order of seeding matters...
 
-const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
+const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) => {
+  const time1 = lastDate || faker.date.past();
+
+
   return [
     {
       chatId,
       to: patientPhone,
       from: clinicPhone,
       body: 'Hey! Just testing out our new messaging service.',
-      createdAt: faker.date.past(),
+      createdAt: moment(time1).subtract(3, 'days')._d,
       read: true,
     },
     {
@@ -95,7 +99,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: clinicPhone,
       from: patientPhone,
       body: 'Hi there!',
-      createdAt: faker.date.past(),
+      createdAt: moment(time1).subtract(2, 'days')._d,
       read: true,
     },
     {
@@ -103,7 +107,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: patientPhone,
       from: clinicPhone,
       body: 'How were you doing yesterday?',
-        createdAt: faker.date.past(),
+      createdAt: moment(time1).subtract(1, 'days')._d,
       read: true,
     },
     {
@@ -111,7 +115,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: clinicPhone,
       from: patientPhone,
       body: 'I was good thanks! And you?',
-      createdAt: faker.date.past(),
+      createdAt: moment(time1)._d,
       read: false,
     },
   ];
@@ -146,7 +150,8 @@ let randomMessages = [];
 const randomChats = [];
 
 for (let i = 0; i < 100; i++) {
-  let id = uuid();
+  const id = uuid();
+  const lastDate = faker.date.past();
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
   const phoneNumber = faker.phone.phoneNumberFormat(0);
@@ -173,12 +178,14 @@ for (let i = 0; i < 100; i++) {
     isSyncedWithPMS: false,
   });
 
-  randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber));
+  randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate));
+
 
   randomChats.push({
     id: chatId,
     accountId,
     patientId: id,
+    lastTextMessageDate: lastDate,
   });
 
   randomAppointments.push({

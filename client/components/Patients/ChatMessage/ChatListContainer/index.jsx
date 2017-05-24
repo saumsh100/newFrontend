@@ -15,7 +15,6 @@ class ChatListContainer extends Component {
   }
 
   render() {
-
     const everyone = (this.props.chats.size ? (this.props.chats.toArray().map((chats) => {
       const chat = JSON.parse(JSON.stringify(chats));
       const user = this.props.patients.get(chat.patientId);
@@ -25,7 +24,7 @@ class ChatListContainer extends Component {
 
       for (let i = 0; i < chat.textMessages.length; i++) {
         if (i === chat.textMessages.length - 1) {
-          messageRecent = this.props.textMessages.get(chat.textMessages[0]).body;
+          messageRecent = this.props.textMessages.get(chat.textMessages[i]).body;
         }
         if (!this.props.textMessages.get(chat.textMessages[i]).read) {
           chat.newMessages++;
@@ -47,7 +46,6 @@ class ChatListContainer extends Component {
           styles.users__noactive
         );
       }
-
       const age = moment().diff(user.birthDate, 'years');
 
 
@@ -68,6 +66,8 @@ class ChatListContainer extends Component {
         </div>
       </ListItem>);
     })) : null);
+
+
 
     return <div>{everyone}</div>;
   }
