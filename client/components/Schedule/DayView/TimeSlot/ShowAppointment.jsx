@@ -19,8 +19,11 @@ class ShowAppointment extends Component {
     const {
       appointment,
       bgColor,
+      practIndex,
       selectAppointment,
-      scale,
+      startHour,
+      endHour,
+      columnWidth,
     } = this.props;
 
     const {
@@ -49,10 +52,16 @@ class ShowAppointment extends Component {
       note,
     });
 
+    const slotHeight = 100 / (endHour - startHour);
+    const left = `${(columnWidth * practIndex)}%`;
+    const appointmentHeight = ((durationTime + customBufferTime) / 60) * slotHeight
+    console.log(slotHeight * (moment(startDate).hours() - startHour))
     const appStyle = {
-      top: `${moment(startDate).minutes() * scale}px`,
+      top: `${slotHeight * (moment(startDate).hours() - startHour)}%`,
+      left,
+      width: `${columnWidth}%`,
+      height: `${appointmentHeight}%`,
       backgroundColor: bgColor,
-      height: `${(durationTime + customBufferTime) * scale}px`,
     };
 
     return (

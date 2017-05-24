@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import DayViewBody from './DayViewBody';
 
 class DayView extends Component  {
@@ -19,19 +20,25 @@ class DayView extends Component  {
       selectAppointment,
     } = this.props;
 
-    const filteredAppointments= appointments.get('models').toArray().filter((app) => !app.isDeleted);
+    const filteredAppointments= appointments.get('models').toArray().filter((app) => {
+      const startDate = moment(app.startDate);
+      const isSameDate = startDate.isSame(currentDate, 'day');
+
+      if (!app.isDeleted && isSameDate) {
+        return app;
+      }
+    });
 
     return (
       <DayViewBody
         schedule={schedule}
-        currentDate={currentDate}
         selectAppointment={selectAppointment}
         appointments={filteredAppointments}
         chairs={chairs.get('models')}
         services={services.get('models')}
         patients={patients.get('models')}
         practitioners={practitioners.get('models')}
-        startHour={0}
+        startHour={6}
         endHour={24}
       />
     );

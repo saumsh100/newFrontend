@@ -5,10 +5,11 @@
 
 }
 .schedule {
-  &__container {
+    &__container {
 
-      &_content {
+    &_content {
         max-height: calc(100vh - 145px);
+        height: calc(100vh - 145px);
         overflow-y: auto;
       }
     }

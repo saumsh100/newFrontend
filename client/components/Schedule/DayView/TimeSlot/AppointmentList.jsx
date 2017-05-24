@@ -3,8 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import ShowAppointment from './ShowAppointment';
 import styles from '../styles.scss';
 
-
-class TimeSlotBlock extends Component {
+class AppointmentList extends Component {
   constructor(props) {
     super(props);
   }
@@ -12,18 +11,19 @@ class TimeSlotBlock extends Component {
   render() {
     const {
       practitioner,
-      slotData,
-      timeSlotHeight,
+      practIndex,
+      columnWidth,
+      startHour,
+      endHour,
       services,
       chairs,
       patients,
-      bgColor,
+      appointments,
       selectAppointment,
-      scale,
+      bgColor,
     } = this.props;
 
-    const apps = slotData.appointments;
-    const filteredApps = apps.filter((app) => {
+    const filteredApps = appointments.filter((app) => {
       return app.practitionerId === practitioner.toJS().id;
     }).map((app) => {
       const service = services.get(app.get('serviceId'));
@@ -39,15 +39,18 @@ class TimeSlotBlock extends Component {
     });
 
     return (
-      <div className={styles.dayView_body_timeSlot} style={timeSlotHeight}>
+      <div>
         {filteredApps.map((app, index) => {
           return (
             <ShowAppointment
               key={index}
+              practIndex={practIndex}
               appointment={app}
               bgColor={bgColor}
               selectAppointment={selectAppointment}
-              scale={scale}
+              startHour={startHour}
+              endHour={endHour}
+              columnWidth={columnWidth}
             />
           );
         })}
@@ -56,4 +59,4 @@ class TimeSlotBlock extends Component {
   }
 }
 
-export default TimeSlotBlock;
+export default AppointmentList;

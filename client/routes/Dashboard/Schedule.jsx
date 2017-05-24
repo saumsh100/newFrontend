@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import ScheduleDayView from '../../components/Schedule/DayViewPrevious';
+import ScheduleDayView from '../../components/Schedule/DayView';
 import ScheduleContainer from '../../containers/ScheduleContainer';
 
 const Schedule = () =>
