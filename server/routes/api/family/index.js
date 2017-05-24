@@ -64,7 +64,7 @@ familyRouter.put('/:familyId', checkPermissions('family:read'), (req, res, next)
  */
 familyRouter.delete('/:familyId', checkPermissions('family:delete'), (req, res, next) => {
   return req.family.delete()
-    .then(() => res.status(204))
+    .then(() => res.sendStatus(204))
     .catch(next);
 });
 
