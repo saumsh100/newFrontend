@@ -55,7 +55,9 @@ class ShowAppointment extends Component {
     const slotHeight = 100 / (endHour - startHour);
     const left = `${(columnWidth * practIndex)}%`;
     const appointmentHeight = ((durationTime + customBufferTime) / 60) * slotHeight
-    console.log(slotHeight * (moment(startDate).hours() - startHour))
+    console.log(slotHeight)
+    console.log(slotHeight * (moment(startDate).hours() - startHour));
+
     const appStyle = {
       top: `${slotHeight * (moment(startDate).hours() - startHour)}%`,
       left,
