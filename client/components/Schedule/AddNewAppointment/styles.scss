@@ -20,9 +20,12 @@
 
 .remoteSubmit {
   display: flex;
-  padding-right: 130px;
+  padding-right: 100px;
   &_button {
     margin-left: auto;
+  }
+  &_buttonDelete {
+    padding-left: 10px;
   }
 }
 
