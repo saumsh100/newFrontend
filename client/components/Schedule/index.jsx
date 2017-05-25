@@ -13,7 +13,7 @@ import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
 import CurrentDate from './Cards/CurrentDate';
-import CurrentDateCalendar from './Cards/CurrentDate/CurrentDateCalendar';
+import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
 import Filters from './Cards/Filters';
 import styles from './styles.scss';
@@ -106,7 +106,6 @@ class ScheduleComponent extends Component {
                 </CurrentDate>
               </div>
               <div className={styles.schedule__container_content}>
-                {/*<CurrentDateCalendar currentDate={currentDate} />*/}
                 <DayView {...params} />
                 <Modal
                   active={addNewAppointment || !!selectedAppointment}
@@ -146,6 +145,9 @@ class ScheduleComponent extends Component {
               </Col>
             </Row>
           </Col>
+          <Row>
+            <Legend />
+          </Row>
         </Row>
       </Grid>
     );

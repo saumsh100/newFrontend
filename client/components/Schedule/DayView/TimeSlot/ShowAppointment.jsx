@@ -100,7 +100,7 @@ export default function ShowAppointment(props) {
     left,
     width,
     height: heightCalcBuffer,
-    backgroundColor: 'grey',
+    backgroundColor: '#b4b4b5',
   };
 
   return (
