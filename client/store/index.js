@@ -4,6 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import { enableBatching } from 'redux-batched-actions';
 import thunkMiddleware from 'redux-thunk';
+import LogRocket from 'logrocket';
 import rootReducer from '../reducers';
 
 export default function configure({ initialState, browserHistory }) {
@@ -14,6 +15,7 @@ export default function configure({ initialState, browserHistory }) {
   const createStoreWithMiddleware = applyMiddleware(
     thunkMiddleware,
     routerMiddleware(browserHistory),
+    LogRocket.reduxMiddleware(),
   )(create);
 
   const store = createStoreWithMiddleware(enableBatching(rootReducer), initialState);

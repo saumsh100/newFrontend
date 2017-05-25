@@ -3,6 +3,7 @@ import axios from 'axios';
 import jwt from 'jwt-decode';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
+import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout } from '../actions/auth';
 
 export function login(redirectedFrom = '/') {
@@ -22,7 +23,16 @@ export function login(redirectedFrom = '/') {
       .then(({ data }) => {
         // set data in local storage
         localStorage.setItem('token', data.token);
-        dispatch(loginSuccess(jwt(data.token)));
+
+        // Decode and set
+        const decodedToken = jwt(data.token);
+        console.log(decodedToken);
+        LogRocket.identify(decodedToken.userId, {
+          name: `${decodedToken.firstName} ${decodedToken.lastName}`,
+          email: decodedToken.username,
+        });
+
+        dispatch(loginSuccess(decodedToken));
         dispatch(push(redirectedFrom));
       })
       .catch((err) => {
@@ -55,7 +65,6 @@ export function load() {
     try {
       const decodedToken = jwt(token);
       const expired = (decodedToken.exp - (Date.now() / 1000)) < 0;
-
       expired ? logout()(dispatch) : dispatch(loginSuccess(decodedToken));
     } catch (error) {
       logout()(dispatch);

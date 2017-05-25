@@ -40,12 +40,14 @@
     this.overlay.className = `${this.overlay.className} active`;
     this.inner.className = `${this.inner.className} active`;
     document.body.style.setProperty('overflow', 'hidden');
+    document.body.style.setProperty('position', 'fixed');
   };
 
   CareCruBookingModal.prototype.close = function() {
     this.overlay.className = this.overlay.className.replace('active', '');
     this.inner.className = this.inner.className.replace('active', '');
     document.body.style.setProperty('overflow', '');
+    document.body.style.setProperty('position', '');
   };
 
   window.document.addEventListener('DOMContentLoaded', function() {

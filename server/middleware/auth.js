@@ -1,68 +1,8 @@
 
-const jwt = require('jsonwebtoken');
-const globals = require('../config/globals');
-const StatusError = require('../util/StatusError');
-
-const CRUD = {
-  create: true,
-  read: true,
-  update: true,
-  delete: true,
-};
-
-const OWNER = {
-  accounts: CRUD,
-  appointments: CRUD,
-  chairs: CRUD,
-  chats: CRUD,
-  users: CRUD,
-
-  listings: {
-    read: true,
-  },
-
-  patients: CRUD,
-  family: CRUD,
-  practitioners: CRUD,
-  requests: CRUD,
-  reviews: {
-    read: true,
-  },
-
-  textMessages: Object.assign({}, CRUD, {
-    update: false,
-  }),
-
-  services: CRUD,
-
-  syncClientError: {
-    read: true,
-    create: true,
-  },
-
-  syncClientVersion: {
-    read: true,
-    create: true,
-  },
-
-  timeOffs: CRUD,
-  weeklySchedules: CRUD,
-};
-
-const ADMIN = Object.assign({}, OWNER, {
-
-});
-
-const USER = Object.assign({}, ADMIN, {
-
-});
-
-const permissions = {
-  // Account Types
-  OWNER,
-  ADMIN,
-  USER,
-};
+import jwt from 'jsonwebtoken';
+import { tokenSecret } from '../config/globals';
+import permissions from '../config/permissions';
+import StatusError from '../util/StatusError';
 
 function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
@@ -95,7 +35,7 @@ module.exports = function authMiddleware(req, res, next) {
     return next(StatusError(401, 'Unauthorized. Could not decode token.'));
   }
 
-  return jwt.verify(token, globals.tokenSecret, {}, (err, decoded) => {
+  return jwt.verify(token, tokenSecret, {}, (err, decoded) => {
     if (err) {
       return next(StatusError(401, 'Unauthorized. Error verifying token.'));
     }
@@ -106,7 +46,7 @@ module.exports = function authMiddleware(req, res, next) {
     req.accountId = decoded.activeAccountId;
     req.role = decoded.role;
     // Pull in the role's permissions and extend the extra permissions ontop
-    req.permissions = Object.assign({}, permissions[decoded.role], decoded.permissions);
+    req.permissions = { ...permissions[decoded.role], ...decoded.permissions };
     return next();
   });
 };

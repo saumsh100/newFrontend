@@ -18,12 +18,14 @@ const AccountSchema = {
   id: null,
   name: null,
   street: null,
+  logo: null,
   country: null,
   state: null,
   city: null,
   zipCode: null,
   vendastaId: null,
   smsPhoneNumber: null,
+  enterpriseId: null,
   weeklyScheduleId: null, //new OfficeHoursRecord(),
 };
 
