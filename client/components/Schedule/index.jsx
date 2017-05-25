@@ -106,7 +106,7 @@ class ScheduleComponent extends Component {
                 </CurrentDate>
               </div>
               <div className={styles.schedule__container_content}>
-                <CurrentDateCalendar currentDate={currentDate} />
+                {/*<CurrentDateCalendar currentDate={currentDate} />*/}
                 <DayView {...params} />
                 <Modal
                   active={addNewAppointment || !!selectedAppointment}

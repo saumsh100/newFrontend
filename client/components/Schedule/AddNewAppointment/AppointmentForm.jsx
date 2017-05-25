@@ -41,6 +41,10 @@ const marks = {
   180: '180',
 };
 
+const statusOptions = [
+  { label: 'Confirmed', value: true },
+];
+
 export default function AppointmentForm(props) {
   const {
     serviceOptions,
@@ -151,12 +155,11 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={[]}
+            options={statusOptions}
             component="DropdownSelect"
-            name="status"
+            name="isPatientConfirmed"
             label="Status"
             borderColor="primaryColor"
-            disabled
           />
         </Col>
       </Row>
