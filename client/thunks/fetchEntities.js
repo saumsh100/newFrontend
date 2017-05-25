@@ -47,19 +47,20 @@ export function fetchEntitiesRequest({ id, key, join, params = {}, url }) {
     url = url || entity.getUrlRoot();
 
     // Create record for request
-    dispatch(createRequest(id));
+    dispatch(createRequest({ id }));
 
     return axios.get(url, { params })
       .then((response) => {
         const { data } = response;
-        debugger;
         dispatch(receiveRequest({ id, data }));
+        console.log(data);
         dispatch(receiveEntities({ key, entities: data.entities }));
         return data.entities;
       })
-      .catch((err) => {
+      .catch((error) => {
         // TODO: set didInvalidate=true of entity and dispatch alert action
-        console.log(err);
+        errorRequest({ id, error });
+        throw error;
       });
   };
 }

@@ -25,10 +25,10 @@ waitSpotsRouter.post('/', (req, res, next) => {
  * Get all waitSpots under a clinic
  */
 waitSpotsRouter.get('/', (req, res, next) => {
-  const { accountId } = req;
+  const { accountId, joinObject } = req;
 
   // There is no joinData for waitSpot, no need to put...
-  return WaitSpot.filter({ accountId }).run()
+  return WaitSpot.filter({ accountId }).getJoin(joinObject).run()
     .then(waitSpots => res.send(normalize('waitSpots', waitSpots)))
     .catch(next);
 });

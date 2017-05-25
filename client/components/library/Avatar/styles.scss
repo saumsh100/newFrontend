@@ -1,17 +1,33 @@
 
 @import '../../../ui.scss';
 
+$medium-size: 2rem;
+$large-size: 3rem;
+
 .avatar {
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
+  display: inline-flex;
+  width: $medium-size;
+  height: $medium-size;
   border-radius: 50%;
   overflow: hidden;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
   text-align: center;
+  background-color: darken($primary-grey, 20%);
 }
 
 .img {
   max-width: 100%;
   height: auto;
+}
+
+.large {
+  width: $large-size;
+  height: $large-size;
+}
+
+.text {
+  font-size: 20px;
+  color: white;
 }

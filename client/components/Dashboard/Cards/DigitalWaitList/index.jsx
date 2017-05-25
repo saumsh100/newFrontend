@@ -1,40 +1,42 @@
 
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
+import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { List, ListItem, Card, CardHeader, Icon } from '../../../library';
 import Search from '../../../library/Search';
-import { fetchEntities } from '../../../../thunks/fetchEntities';
+import withEntitiesRequest from '../../../../hocs/withEntities';
 import DigitalWaitListItem from './DigitalWaitListItem';
 import styles from './styles.scss';
 
 class DigitalWaitList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentWillMount() {
-    this.props.fetchEntities({ key: 'waitSpots', join: ['patient'] });
-  }
-
   render() {
     const {
       borderColor,
       cardTitle,
       waitSpots,
+      patients,
+      isFetching,
     } = this.props;
 
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
-          <CardHeader count={waitSpots.length} title="Digital Waitlist">
+          <CardHeader count={waitSpots.get('models').size} title="Digital Waitlist">
             <Search />
           </CardHeader>
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {waitSpots.get('models').toArray().map((obj, index) => {
-              return <DigitalWaitListItem obj={obj} index={index} />;
+            {waitSpots.get('models').toArray().map((waitSpot) => {
+              const patient = patients.getIn(['models', waitSpot.get('patientId')]);
+              return (
+                <DigitalWaitListItem
+                  key={waitSpot.get('id')}
+                  waitSpot={waitSpot}
+                  patient={patient}
+                />
+              );
             })}
           </List>
         </div>
@@ -44,22 +46,26 @@ class DigitalWaitList extends Component {
 }
 
 DigitalWaitList.propTypes = {
-  waitSpots: PropTypes.object,
-  patients: PropTypes.object,
+  waitSpots: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
   fetchEntities: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps({ entities }) {
   return {
-    waitSpots: entities.get('waitSpots'),
     patients: entities.get('patients'),
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-  }, dispatch);
-}
+const enhance = compose(
+  withEntitiesRequest({
+    id: 'waitSpots',
+    key: 'waitSpots',
+    join: ['patient'],
+  }),
 
-export default connect(mapStateToProps, mapDispatchToProps)(DigitalWaitList);
+  connect(mapStateToProps, null),
+);
+
+export default enhance(DigitalWaitList);
