@@ -2,6 +2,7 @@
 import createModel from '../createModel';
 
 const WaitSpotSchema = {
+  id: null,
   patientId: null,
   accountId: null,
   preferences: null,

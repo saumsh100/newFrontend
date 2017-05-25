@@ -1,5 +1,5 @@
 
-@import "../../../../ui";
+@import "../../../ui";
 
 .fa-envelope {
   color: $primary-blue;
@@ -40,7 +40,7 @@
   padding: 0;
   margin: 0;
   &__item {
-    padding: 0 40px 0 15px;
+    padding: 10px 25px 10px 25px;
     display: flex;
     align-items: center;
     position: relative;
@@ -57,13 +57,14 @@
       height: 100%;
       flex-direction: column;
     }
+
     &_wrapper {
       display: flex;
-      width: 100%;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       color: $primary-darkgrey;
+      margin-left: 15px;
       @media screen and (max-width: 450px) {
         display: flex;
         width: 100%;
@@ -72,14 +73,13 @@
         justify-content: center;
       }
     }
+
     &_left {
       @media screen and (max-width: 450px) {
         margin-top: 10px;
       }
+
       div {
-        max-width: 200px;
-        overflow: hidden;
-        white-space: nowrap;
         text-align: left;
         text-overflow: ellipsis;
         @media screen and (max-width: 450px) {
@@ -87,7 +87,9 @@
         }
       }
     }
+
     &_right {
+      margin-left: auto;
       text-align: right;
       @media screen and (max-width: 450px) {
         text-align: center;
@@ -95,10 +97,14 @@
         margin-top: 10px;
       }
     }
+
     &_days {
       color: $primary-dark;
       padding: 2px 0;
       white-space: pre-line;
+      max-width: 140px;
+      margin-top: 5px;
+      margin-bottom: 5px;
       @media screen and (max-width: 450px) {
         color: $primary-darkgrey;
       }
@@ -114,7 +120,9 @@
 
     &_name {
       color: $primary-dark;
+      margin-bottom: 7px;
     }
+
     &_icon {
       cursor: pointer;
       color: $primary-darkgrey;
@@ -128,4 +136,26 @@
       }
     }
   }
+}
+
+.data {
+  color: $primary-darkgrey;
+  text-transform: capitalize;
+  display: inline;
+  &:after {
+    content: ', ';
+  }
+
+  &:last-child {
+    &:after {
+      content: '';
+    }
+  }
+}
+
+// max-width was not working for some reason
+.name {
+  display: inline;
+  max-width: 50px;
+  text-overflow: ellipsis;
 }

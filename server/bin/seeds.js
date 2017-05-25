@@ -989,6 +989,19 @@ const SEEDS = {
       accountId,
       patientId: justinPatientId,
     },
+    {
+      accountId,
+      patientId: sergeyPatientId,
+      preferences: {
+        weekends: false,
+        evenings: false,
+      },
+
+      unavailableDays: [
+        moment().toISOString(),
+        moment().add(2, 'days').toISOString(),
+      ],
+    },
   ],
 };
 

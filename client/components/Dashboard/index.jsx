@@ -16,7 +16,7 @@ import {
   BigCommentBubble,
 } from '../library';
 import RemindersList from './Cards/RemindersList';
-import DigitalWaitList from './Cards/DigitalWaitList';
+import DigitalWaitList from '../DigitalWaitList';
 import Table from './Cards/Table';
 import Referrals from './Cards/Referrals';
 import colorMap from '../library/util/colorMap';

@@ -1,4 +1,5 @@
-@import "../../../../../ui";
+
+@import "../../ui";
 
 .fa-envelope {
   color: $primary-blue;
@@ -26,7 +27,7 @@
   height: 604px;
   margin-bottom: 20px;
   &__header {
-    padding: 0 45px 0 15px;
+    padding: 0 15px 0 15px;
   }
   &__body {
     overflow: auto;
@@ -39,7 +40,7 @@
   padding: 0;
   margin: 0;
   &__item {
-    padding: 0 25px 0 25px;
+    padding: 0 40px 0 15px;
     display: flex;
     align-items: center;
     position: relative;
@@ -56,14 +57,13 @@
       height: 100%;
       flex-direction: column;
     }
-
     &_wrapper {
       display: flex;
+      width: 100%;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       color: $primary-darkgrey;
-      margin-left: 25px;
       @media screen and (max-width: 450px) {
         display: flex;
         width: 100%;
@@ -72,7 +72,6 @@
         justify-content: center;
       }
     }
-
     &_left {
       @media screen and (max-width: 450px) {
         margin-top: 10px;
@@ -88,9 +87,7 @@
         }
       }
     }
-
     &_right {
-      margin-left: auto;
       text-align: right;
       @media screen and (max-width: 450px) {
         text-align: center;
@@ -98,7 +95,6 @@
         margin-top: 10px;
       }
     }
-
     &_days {
       color: $primary-dark;
       padding: 2px 0;
@@ -118,7 +114,6 @@
 
     &_name {
       color: $primary-dark;
-      margin-bottom: 7px;
     }
 
     &_icon {

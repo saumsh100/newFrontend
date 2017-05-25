@@ -22,4 +22,11 @@ storiesOf('DayPicker', module)
       target="icon"
       onChange={action('changed')}
     />
+  ))
+  .add('Mutiple Days', () => (
+    <DayPicker
+      multiple
+      target="icon"
+      onChange={action('changed')}
+    />
   ));
