@@ -1,15 +1,22 @@
-const StatusError = require('../util/StatusError');
+import { isArray } from 'lodash';
+import StatusError from '../util/StatusError';
 
 module.exports = function checkPermission(permission) {
-  // Example: permission = 'listings:read'
-  permission = permission.split(':');
-  const entity = permission[0];
-  const action = permission[1];
+  // Normalize to array
+  const requests = (isArray(permission) ? permission : [permission])
+    // Split each permission request
+    .map(request => request.split(':'));
+
+  // All requests should be passed
+  const check = permissions =>
+    requests.reduce((res, [resource, action]) =>
+      res && (permissions[resource] && permissions[resource][action]), true);
+
   return function middleware(req, res, next) {
-    if (req.permissions[entity] && req.permissions[entity][action]) {
+    if (check(req.permissions)) {
       return next();
     }
 
-    return next(StatusError(403, `Requesting user does not have ${action} permission for ${entity}.`));
+    return next(StatusError(403, 'The user does not have permission to perform this action.'));
   };
 };

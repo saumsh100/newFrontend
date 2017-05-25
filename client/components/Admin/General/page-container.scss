@@ -1,0 +1,26 @@
+@import '../../../ui';
+
+$default-table-space: 1.5em;
+
+.mainContainer {
+  padding: $container-padding;
+}
+
+.card {
+  border-top: $card-border-size $primary-light-blue;
+  overflow: inherit;
+  padding-bottom: $default-table-space;
+}
+
+.cardHeader {
+  padding: $default-table-space $default-table-space 0 $default-table-space;
+  margin-bottom: $default-table-space;
+}
+
+.cardContent {
+  margin: $default-table-space $default-table-space 0 $default-table-space;
+}
+
+.headerPanel {
+  margin-bottom: $default-table-space;
+}

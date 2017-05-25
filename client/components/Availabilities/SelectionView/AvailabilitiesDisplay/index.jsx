@@ -118,7 +118,7 @@ class AvailabilitiesDisplay extends Component {
                         onClick={() => setSelectedAvailability(availability)}
                         className={classes}
                       >
-                        {moment(availability.startDate).format('HH:mm A')}
+                        {moment(availability.startDate).format('h:mm a')}
                       </li>
                     );
                   })}

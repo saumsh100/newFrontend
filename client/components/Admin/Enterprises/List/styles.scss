@@ -1,0 +1,10 @@
+@import '../../../../ui.scss';
+
+.link {
+  color: $color-black;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

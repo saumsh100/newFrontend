@@ -46,6 +46,8 @@ import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
 import Filters from './Filters';
 import DoubleIcon from './DoubleIcon';
+import VButton from './VButton';
+import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 
 export {
   AppBar,
@@ -101,6 +103,9 @@ export {
   Toggle,
   Tooltip,
   TrendLine,
+  VButton,
+  Breadcrumbs,
+  BreadcrumbItem,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

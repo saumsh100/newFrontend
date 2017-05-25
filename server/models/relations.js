@@ -1,4 +1,4 @@
-
+const Enterprise = require('./Enterprise');
 const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
@@ -14,7 +14,7 @@ const Service = require('./Service');
 const TextMessage = require('./TextMessage');
 const Token = require('./Token');
 const User = require('./User');
-const Reservation = require('./Reservation')
+const Reservation = require('./Reservation');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
@@ -45,12 +45,15 @@ Family.hasMany(Patient, 'patients', 'id', 'familyId');
 Patient.belongsTo(Family, 'family', 'familyId', 'id');
 
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
-Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId')
+Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId');
 Service.belongsTo(Account, 'account', 'accountId', 'id');
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
 Chair.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
 
+Enterprise.hasMany(Account, 'accounts', 'id', 'enterpriseId');
+
+Account.belongsTo(Enterprise, 'enterprise', 'enterpriseId', 'id');
 Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Service, 'services', 'id', 'accountId');
