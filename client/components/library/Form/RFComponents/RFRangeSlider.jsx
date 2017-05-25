@@ -20,7 +20,6 @@ export default function RFRangeSlider(props) {
   const newInput = omit(input, ['value', 'onChange']);
 
   const initialState = input.value ? input.value : defaultValues;
-  console.log(initialState);
 
   return (
     <RangeSlider

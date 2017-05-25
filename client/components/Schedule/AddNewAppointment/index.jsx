@@ -49,27 +49,27 @@ class AddNewAppointment extends Component {
       serviceId,
       practitionerId,
       chairId,
+      isPatientConfirmed,
     } = appointmentValues;
 
-    let duration = appointmentValues.duration;
-
-    if (!duration) {
-      duration = [60, 60];
-    }
 
     const {
       patientSelected,
       note,
     } = patientValues;
+    console.log(isPatientConfirmed);
+    // setting initial duration and buffer if slider isn't used.
+    let duration = appointmentValues.duration;
+    if (!duration) {
+      duration = [60, 60];
+    }
 
-
-    let bufferTime = 0;
     // check if the buffer equals the duration if it doesn't set the buffer time
+    let bufferTime = 0;
     if (duration[1] !== duration[0]) {
       bufferTime = duration[1] - duration[0];
     }
 
-    const startDate = mergeTime(new Date(date), new Date(time));
 
     let totalDurationMin = duration[0];
 
@@ -77,6 +77,7 @@ class AddNewAppointment extends Component {
       totalDurationMin = duration[0] + bufferTime;
     }
 
+    const startDate = mergeTime(new Date(date), new Date(time));
     const endDate = moment(startDate).add(totalDurationMin, 'minutes');
 
     const newAppointment = {
@@ -87,6 +88,7 @@ class AddNewAppointment extends Component {
       practitionerId,
       chairId,
       note,
+      isPatientConfirmed,
       isSyncedWithPMS: false,
       customBufferTime: bufferTime,
     };

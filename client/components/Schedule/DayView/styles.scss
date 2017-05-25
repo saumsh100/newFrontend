@@ -40,13 +40,14 @@
 .showAppointment {
   position: absolute;
   box-sizing: border-box;
+  overflow: auto;
 
   &_nameAge {
     display: flex;
     color: $primary-white;
     width: auto;
-    padding-top: 15px;
     padding-left: 5px;
+    padding-top: 15px;
     &_name {
       font-weight: $large-weight;
       padding-right: 5px;
@@ -54,6 +55,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+
+  &_icon {
+    color: $primary-white;
+    opacity: 0.5;
+    float: right;
   }
 
   &_duration {
@@ -68,7 +75,8 @@
     display: flex;
     padding-left: 5px;
     color: $primary-dark;
-    font-size: $small-size;
+    font-family: $medium-font;
+    font-size: $extra-small-size;
   }
 }
 
