@@ -25,26 +25,33 @@ updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, r
  * saying whether the new version is available or not.
  */
 updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req, res, next) => {
-  const reqVersion = parseFloat(req.query.version);
+  const reqVersion = req.query.version.split('.');
+  const versionObject = Object.assign({}, {
+    major: reqVersion[0],
+    minor: reqVersion[1],
+    patch: reqVersion[2],
+    build: reqVersion[3],
+  });
+  console.log(`Update check by SyncClient accountId=${req.accountId} with version=${JSON.stringify(versionObject)}`);
 
-  if (isNaN(reqVersion)) {
+  if (!isValidVersionObject(versionObject)) {
     res.sendStatus(400);
-    console.log('Invalid version number sent by the sync client. Update cancelled.');
+    console.log(`Update cancelled. Invalid version number sent by SyncClient accountId=${req.accountId}.`);
     return;
   }
 
   Promise.resolve(SyncClientVersion.nth(0).run()
     .then((release) => {
-      if (release.version > reqVersion) {
-        const msg = Object.assign(
-          release,
-          { available: true },
-        );
-        res.send(msg);
+      if (isUpdateAvailable(versionObject, release)) {
+        res.send({
+          available: true,
+          url: release.url,
+          key: release.key,
+          secret: release.secret,
+        });
       } else {
         res.send({
-          available: false,
-          url: '',
+          available: false, url: '',
         });
       }
     })
@@ -52,11 +59,26 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
 });
 
 /**
- * @param
- * @return boolean
+ * Make sure version values are numbers
+ * @param versionObject with all 4 blocks of version
+ * @return boolean. True if object is valid (all values are numbers), false otherwise.
  */
-function isUpdateAvailable() {
+function isValidVersionObject(versionObject) {
+  return !isNaN(versionObject.major) && !isNaN(versionObject.minor)
+    && !isNaN(versionObject.patch) && !isNaN(versionObject.build);
+}
 
+/**
+ * @param versionObject with all 4 blocks of version
+ * @param releaseInfo a model that also contains 4 blocks of version as they are in the db
+ * @return boolean. True if update is available, false if not.
+ */
+function isUpdateAvailable(versionObject, releaseInfo) {
+  return releaseInfo.major > versionObject.major
+    || releaseInfo.minor > versionObject.minor
+    || releaseInfo.patch > versionObject.patch
+    || releaseInfo.build > versionObject.build
+    || false;
 }
 
 /**
