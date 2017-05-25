@@ -23,18 +23,19 @@ export default function TimeSlot(props) {
   const checkFilters = schedule.toJS();
 
   const filteredApps = appointments.filter((app) => {
+
     const service = services.get(app.get('serviceId'));
     const chair = chairs.get(app.get('chairId'));
-    const servicesFilter = checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
-    const chairsFilter = checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
+    const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
+    const chairsFilter = chair && checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
 
-    return ((app.practitionerId === practitioner.toJS().id) && servicesFilter && chairsFilter);
+    return ((app.practitionerId === practitioner.toJS().id) && chairsFilter && servicesFilter);
   }).map((app) => {
     return Object.assign({}, app.toJS(), {
       appModel: app,
-      serviceData: services.get(app.get('serviceId')).get('name'),
-      chairData: chairs.get(app.get('chairId')).get('name'),
-      patientData: patients.get(app.get('patientId')),
+      serviceData: services.get(app.get('serviceId')).get('name') || '',
+      chairData: chairs.get(app.get('chairId')).get('name') || '',
+      patientData: patients.get(app.get('patientId')) || '',
     });
   });
 

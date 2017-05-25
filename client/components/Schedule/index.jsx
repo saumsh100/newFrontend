@@ -124,6 +124,7 @@ class ScheduleComponent extends Component {
                   />
                 </Modal>
               </div>
+              <Legend />
             </Card>
           </Col>
           <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
@@ -145,9 +146,6 @@ class ScheduleComponent extends Component {
               </Col>
             </Row>
           </Col>
-          <Row>
-            <Legend />
-          </Row>
         </Row>
       </Grid>
     );

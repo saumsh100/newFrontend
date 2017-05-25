@@ -184,10 +184,13 @@
     }
 }
 
+
 .legend {
+  position: fixed;
+  bottom: 0;
+  right: 30%;
   display: flex;
   align-items: center;
-  float: right;
   padding-right: 5px;
 
   &_text {
@@ -206,11 +209,13 @@
       font-family: $medium-font;
     }
   }
+
   &_icon {
     padding-left: 5px;
 
     &_clock {
-      color: $primary-dark;
+      color: $inactive-color;
+      opacity: 0.5;
     }
 
     &_square {
