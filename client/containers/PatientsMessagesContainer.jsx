@@ -77,7 +77,6 @@ class PatientsMessagesContainer extends Component {
       if (a.textMessages.length === 0) {
         return -1;
       }
-
       return moment(textMessages.get(b.textMessages[b.textMessages.length - 1]).createdAt)
         .diff(textMessages.get(a.textMessages[a.textMessages.length - 1]).createdAt);
     });

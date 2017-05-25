@@ -40,6 +40,8 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
     };
   }
 
+  console.log(joinObject)
+
   // TODO: add orderBy for lastMessageDate
   return Chat
     .orderBy(r.desc('lastTextMessageDate'))

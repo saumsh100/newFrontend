@@ -1,18 +1,40 @@
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import styles from '../styles.scss';
 import { Avatar, Form, Field } from '../../../library';
+import * as Actions from '../../../../actions/entities';
 
 
 class MessageContainer extends Component {
   constructor(props) {
     super(props);
+    this.sendMessage = this.sendMessage.bind(this);
+
+    window.socket.on('newMessage', (data) => {
+      const result = JSON.parse(data);
+      this.props.receiveMessage({ key: 'chats', entities: result.entities });
+
+      const node = document.getElementById('scrollIntoView');
+
+      if (node) {
+        node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
+      }
+
+    });
+
   }
 
+  sendMessage(message) {
+    window.socket.emit('sendMessage', {
+      message: message.message,
+      patient: this.props.currentPatient,
+      chatId: this.props.selectedChat.id,
+    });
+  }
 
   render() {
-
-
     let display;
 
     if (this.props.selectedChat) {
@@ -62,13 +84,16 @@ class MessageContainer extends Component {
     const name = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName}` : null );
 
     return (
-      <div className={styles.allMessages}>
+      <div className={styles.allMessages} id="scrollIntoView">
         <div className={styles.patientName}> {name} </div>
         {display}
+        <div className={styles.raise}>
+        </div>
         <div className={styles.sendMessage}>
           <Form
             form="chatMessageForm"
             ignoreSaveButton
+            onSubmit={this.sendMessage}
           >
             <Field
               type="text"
@@ -87,4 +112,17 @@ MessageContainer.propTypes = {
   createEntityRequest: PropTypes.func.isRequired,
 };
 
-export default MessageContainer;
+function mapStateToProps() {
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    receiveMessage: Actions.receiveEntities,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(MessageContainer);
