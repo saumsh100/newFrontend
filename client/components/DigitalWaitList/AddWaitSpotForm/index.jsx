@@ -30,7 +30,11 @@ const initialValues = {
 
 function AddWaitSpotForm({ onSubmit, getSuggestions }) {
   return (
-    <Form form="addWaitSpot" onSubmit={onSubmit} initialValues={initialValues}>
+    <Form
+      form="addWaitSpot"
+      onSubmit={onSubmit}
+      initialValues={initialValues}
+    >
       <Field
         component="AutoComplete"
         name="patientData"
@@ -90,8 +94,8 @@ function AddWaitSpotForm({ onSubmit, getSuggestions }) {
 }
 
 AddWaitSpotForm.propTypes = {
-  fetchEntities: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  getSuggestions: PropTypes.func.isRequired,
 };
 
 export default AddWaitSpotForm;

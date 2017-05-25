@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
+import omit from 'lodash/omit';
+import { reset } from 'redux-form';
 import { List, Modal, Card, CardHeader, Icon, Button } from '../library';
 import {
   fetchEntities,
@@ -23,13 +25,9 @@ class DigitalWaitList extends Component {
       isAddingWaitSpot: false,
     };
 
-    this.addWaitSpot = this.addWaitSpot.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
+    this.addWaitSpot = this.addWaitSpot.bind(this);
     this.toggleWaitSpotForm = this.toggleWaitSpotForm.bind(this);
-  }
-
-  addWaitSpot(values) {
-    alert(JSON.stringify(values));
   }
 
   getSuggestions(value) {
@@ -39,6 +37,21 @@ class DigitalWaitList extends Component {
         return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
             (key) => { return searchedPatients[key]; }) : [];
       });
+  }
+
+  addWaitSpot(values) {
+    const newValues = Object.assign(
+      { patientId: values.patientData.id },
+      omit(values, ['patientData'])
+    );
+
+    this.props.createEntityRequest({
+      key: 'waitSpots',
+      entityData: newValues,
+    });
+
+    this.setState({ isAddingWaitSpot: false });
+    this.props.reset('addWaitSpot');
   }
 
   toggleWaitSpotForm() {
@@ -99,7 +112,9 @@ DigitalWaitList.propTypes = {
   waitSpots: PropTypes.object.isRequired,
   patients: PropTypes.object.isRequired,
   fetchEntities: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities }) {
@@ -111,6 +126,8 @@ function mapStateToProps({ entities }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    createEntityRequest,
+    reset,
   }, dispatch);
 }
 

@@ -12,11 +12,11 @@ waitSpotsRouter.param('waitSpotId', loaders('waitSpot', 'WaitSpot'));
  */
 waitSpotsRouter.post('/', (req, res, next) => {
   // Attach chair to the clinic of posting user
-  /*const chairData = Object.assign({}, req.body, {
+  const waitSpotData = Object.assign({}, req.body, {
     accountId: req.accountId,
-  });*/
+  });
 
-  return WaitSpot.save(req.body)
+  return WaitSpot.save(waitSpotData)
     .then(waitSpot => res.send(201, normalize('waitSpot', waitSpot)))
     .catch(next);
 });
