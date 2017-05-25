@@ -3,7 +3,6 @@ const updaterRouter = require('express').Router();
 const loaders = require('../../util/loaders');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const _ = require('lodash');
-const fs = require('fs');
 
 updaterRouter.param('syncClientVersionId', loaders('syncClientVersion', 'SyncClientVersion'));
 
@@ -53,22 +52,12 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
 });
 
 /**
- * Temporary. Will be replaced with S3 bucket.
+ * @param
+ * @return boolean
  */
-updaterRouter.get('/download', checkPermissions('syncClientVersion:read'), (req, res) => {
-  const filename = 'carecru_setup.exe';
-  try {
-    if (fs.existsSync()) {
-      const fileStream = fs.createReadStream(filename);
-      fileStream.pipe(res);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (err) {
-    console.log('[ERROR]', err);
-    res.sendStatus(404);
-  }
-});
+function isUpdateAvailable() {
+
+}
 
 /**
  * Get the latest sync client release info.
