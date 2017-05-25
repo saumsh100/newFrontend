@@ -54,6 +54,7 @@ export default function DayViewBody(props){
               columnWidth={columnWidth}
               startHour={startHour}
               endHour={endHour}
+              schedule={schedule}
               patients={patients}
               appointments={appointments}
               services={services}

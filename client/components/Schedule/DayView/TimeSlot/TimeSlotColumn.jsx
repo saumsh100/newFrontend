@@ -6,7 +6,6 @@ export default function TimeSlotColumn(props) {
   const {
     timeSlots,
     timeSlotHeight,
-    columnWidth,
     index,
   } = props;
 
@@ -22,3 +21,9 @@ export default function TimeSlotColumn(props) {
     </div>
   );
 }
+
+TimeSlotColumn.PropTypes = {
+  timeSlots: PropTypes.array,
+  timeSlotHeight: PropTypes.object,
+  index: PropTypes.number,
+};
