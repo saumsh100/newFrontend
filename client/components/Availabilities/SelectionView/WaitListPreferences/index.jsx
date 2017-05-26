@@ -37,9 +37,9 @@ class WaitListPreferences extends Component {
     const { waitSpot, updateWaitSpot } = this.props;
     const preferences = waitSpot.get('preferences');
     return (
-      <Grid>
+      <Grid className={styles.gridContainer}>
         <Row>
-          <Col xs={12} md={6}>
+          <Col xs={12} sm={6}>
             <Row>
               <Col xs={12}>
                 <div className={styles.label}>
@@ -48,30 +48,35 @@ class WaitListPreferences extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={6}>
+              <Col xs={6}>
                 <Checkbox
+                  className={styles.prefCheckBox}
                   checked={preferences.get('mornings')}
                   label="Mornings"
                   onChange={this.updatePreferencesField('mornings')}
                 />
                 <Checkbox
+                  className={styles.prefCheckBox}
                   checked={preferences.get('afternoons')}
                   label="Afternoons"
                   onChange={this.updatePreferencesField('afternoons')}
                 />
                 <Checkbox
+                  className={styles.prefCheckBox}
                   checked={preferences.get('evenings')}
                   label="Evenings"
                   onChange={this.updatePreferencesField('evenings')}
                 />
               </Col>
-              <Col xs={12} md={6}>
+              <Col xs={6}>
                 <Checkbox
+                  className={styles.prefCheckBox}
                   checked={preferences.get('weekdays')}
                   label="Weekdays"
                   onChange={this.updatePreferencesField('weekdays')}
                 />
                 <Checkbox
+                  className={styles.prefCheckBox}
                   checked={preferences.get('weekends')}
                   label="Weekends"
                   onChange={this.updatePreferencesField('weekends')}
@@ -79,7 +84,7 @@ class WaitListPreferences extends Component {
               </Col>
             </Row>
           </Col>
-          <Col xs={12} md={6}>
+          <Col xs={12} sm={6}>
             <Row>
               <Col xs={12}>
                 <div className={styles.label}>
@@ -87,6 +92,7 @@ class WaitListPreferences extends Component {
                   <DayPicker
                     multiple
                     target="icon"
+                    iconClassName={styles.unavailButton}
                     value={waitSpot.get('unavailableDays').toArray()}
                     onChange={dates => updateWaitSpot({ unavailableDays: dates })}
                   />

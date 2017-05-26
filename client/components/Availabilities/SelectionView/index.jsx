@@ -54,7 +54,7 @@ class SelectionView extends Component {
         <AvailabilitiesDisplay />
         <div className={styles.appointment__footer}>
           <div className={styles.waitSpotToggleWrapper} onClick={this.toggleWaitSpot}>
-            BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
+            <span>BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?</span>
             <Checkbox
               checked={!!hasWaitList}
               className={styles.toggleCheckBox}

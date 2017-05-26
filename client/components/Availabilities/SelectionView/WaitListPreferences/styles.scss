@@ -4,9 +4,35 @@
 .label {
   text-align: left;
   text-transform: uppercase;
-  font-size: 12px;
+  font-weight: bolder;
+  font-size: 10px;
   font-family: $medium-font;
   height: 30px;
   display: flex;
   align-items: center;
+}
+
+.gridContainer {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.prefCheckBox {
+  input[type=checkbox]:checked + label {
+    &:before {
+      background-color: var(--bookingWidgetPrimaryColor) !important;
+    }
+  }
+
+  label {
+    font-size: 14px;
+    color: $primary-darkgrey;
+  }
+}
+
+.unavailButton {
+  font-size: 1.2rem;
+  &:hover {
+    color: var(--bookingWidgetPrimaryColor) !important;
+  }
 }

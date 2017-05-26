@@ -378,7 +378,7 @@
 
   &__footer {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 30px;
     font-size: 10px;
     &_wrapper {
       position: relative;
@@ -471,15 +471,15 @@
   text-transform: uppercase;
   font-family: $medium-font;
   font-weight: bolder;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 10px;
   cursor: pointer;
+  width: 200px;
+  min-width: 75%;
+  margin: 0 auto;
 }
 
 .toggleCheckBox {
-  display: inline;
+  display: inline-block;
   input[type=checkbox]:checked + label {
     &:before {
       background-color: var(--bookingWidgetPrimaryColor) !important;
