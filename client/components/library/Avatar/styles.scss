@@ -8,6 +8,8 @@ $large-size: 3rem;
   display: inline-flex;
   width: $medium-size;
   height: $medium-size;
+  min-width: $medium-size;
+  min-height: $medium-size;
   border-radius: 50%;
   overflow: hidden;
   align-items: center;
@@ -25,6 +27,8 @@ $large-size: 3rem;
 .large {
   width: $large-size;
   height: $large-size;
+  min-width: $large-size;
+  min-height: $large-size;
 }
 
 .text {

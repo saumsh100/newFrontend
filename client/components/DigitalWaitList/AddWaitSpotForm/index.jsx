@@ -35,6 +35,7 @@ function AddWaitSpotForm({ onSubmit, getSuggestions }) {
       form="addWaitSpot"
       onSubmit={onSubmit}
       initialValues={initialValues}
+      ignoreSaveButton={true}
     >
       <Field
         component="AutoComplete"

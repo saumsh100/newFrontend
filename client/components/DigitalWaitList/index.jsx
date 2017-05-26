@@ -5,7 +5,16 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import omit from 'lodash/omit';
 import { reset } from 'redux-form';
-import { List, Modal, Card, CardHeader, Icon, Button } from '../library';
+import {
+  List,
+  DialogBox,
+  Card,
+  CardHeader,
+  Icon,
+  Button,
+  IconButton,
+  RemoteSubmitButton,
+} from '../library';
 import {
   fetchEntities,
   createEntityRequest,
@@ -69,14 +78,29 @@ class DigitalWaitList extends Component {
 
     return (
       <Card className={styles.reminders}>
-        <Modal
+        <DialogBox
+          title="Add Patient to Waitlist"
           active={this.state.isAddingWaitSpot}
           onEscKeyDown={this.toggleWaitSpotForm}
           onOverlayClick={this.toggleWaitSpotForm}
           className={styles.modalWrapper}
+          actions={[
+            {
+              props: { flat: true },
+              component: Button,
+              onClick: this.toggleWaitSpotForm,
+              label: 'CANCEL',
+            },
+            {
+              props: { flat: true, form: 'addWaitSpot' },
+              component: RemoteSubmitButton,
+              onClick: this.toggleWaitSpotForm,
+              label: 'SAVE',
+            },
+          ]}
         >
           <AddWaitSpotForm onSubmit={this.addWaitSpot} getSuggestions={this.getSuggestions} />
-        </Modal>
+        </DialogBox>
         <div className={styles.reminders__header}>
           <CardHeader
             count={waitSpots.get('models').size}
