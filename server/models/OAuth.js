@@ -1,3 +1,4 @@
+
 import thinky from '../config/thinky';
 import createModel from './createModel';
 
