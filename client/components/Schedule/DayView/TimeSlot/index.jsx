@@ -29,7 +29,7 @@ export default function TimeSlot(props) {
     const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
     const chairsFilter = chair && checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
 
-    return ((app.practitionerId === practitioner.toJS().id) && chairsFilter && servicesFilter);
+    return ((app.practitionerId === practitioner.id) && chairsFilter && servicesFilter);
   }).map((app) => {
     return Object.assign({}, app.toJS(), {
       appModel: app,
@@ -39,7 +39,6 @@ export default function TimeSlot(props) {
     });
   });
 
-  const colorArray = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6'];
 
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
@@ -61,7 +60,7 @@ export default function TimeSlot(props) {
             key={index}
             practIndex={practIndex}
             appointment={app}
-            bgColor={colorArray[practIndex]}
+            bgColor={practitioner.color}
             selectAppointment={selectAppointment}
             startHour={startHour}
             endHour={endHour}

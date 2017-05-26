@@ -26,15 +26,27 @@ export default function   DayViewBody(props){
     height: '100px',
   };
 
-  let practitionersArray = practitioners;
+  const colorArray = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6',];
+
+  let practitionersArray = practitioners.toArray().map((prac, index) => {
+    let defaultIndexColor = index;
+    if (!colorArray[defaultIndexColor]) {
+      defaultIndexColor = 0;
+    }
+    return Object.assign({}, prac.toJS(), {
+      color: colorArray[defaultIndexColor],
+    });
+  });
+
   const checkedPractitioners = schedule.toJS().practitionersFilter;
 
-  if (checkedPractitioners.length) {
-    practitionersArray = practitionersArray.toArray().filter((pr) => {
-      return checkedPractitioners.indexOf(pr.id) > -1;
-    });
-  }
 
+  practitionersArray = practitionersArray.filter((pr) => {
+    return checkedPractitioners.indexOf(pr.id) > -1;
+  });
+  
+
+  console.log(practitionersArray.length)
   return (
     <div className={styles.dayView_body}>
       <TimeColumn

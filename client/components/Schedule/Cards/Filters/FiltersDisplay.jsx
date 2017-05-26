@@ -2,7 +2,6 @@
 import React, { Component, PropTypes } from 'react';
 import FilterPractitioners from './FilterPractitioners';
 import FilterEntities from './FilterEntities';
-import FilterServices from './FilterServices';
 import { Card, Icon } from '../../../library';
 import styles from './styles.scss';
 
@@ -27,7 +26,12 @@ export default function FiltersDisplay(props) {
           <Icon size={2} icon="sliders" />
         </div>
         <div className={styles.filter_header__link} >
-          <div className={styles.filter_header__link__text}onClick={handleSelectAll}>Select All</div>
+          <div
+            className={styles.filter_header__link__text}
+            onClick={handleSelectAll}
+          >
+            Select All
+          </div>
           {/*<div onClick={handleClearAll} >Clear All</div>*/}
         </div>
       </div>
