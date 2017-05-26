@@ -82,7 +82,9 @@ export default function ShowAppointment(props) {
     left,
     height,
     width,
-    backgroundColor: bgColor,
+    border: '1px solid',
+    borderColor: bgColor,
+    backgroundColor: `${hexToRgbA(bgColor, 0.8)}`,
   };
 
   if (isPatientConfirmed) {

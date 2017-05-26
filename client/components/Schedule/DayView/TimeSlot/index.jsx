@@ -23,7 +23,6 @@ export default function TimeSlot(props) {
   const checkFilters = schedule.toJS();
 
   const filteredApps = appointments.filter((app) => {
-
     const service = services.get(app.get('serviceId'));
     const chair = chairs.get(app.get('chairId'));
     const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
@@ -38,7 +37,6 @@ export default function TimeSlot(props) {
       patientData: patients.get(app.get('patientId')) || '',
     });
   });
-
 
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,

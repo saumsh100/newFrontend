@@ -51,13 +51,45 @@ appointmentsRouter.get('/', (req, res, next) => {
     .catch(next);
 });
 
-appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) =>{
+appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) => {
+  const accountId = req.accountId;
+
   const appointmentData = Object.assign({}, req.body, {
-    accountId: req.accountId,
+    accountId,
   });
-  return Appointment.save(appointmentData)
-    .then(appt => res.status(201).send(normalize('appointment', appt)))
+
+  const {
+    practitionerId,
+    chairId,
+    patientId,
+  } = req.body;
+
+  const startDate = r.ISO8601(appointmentData.startDate);
+  const endDate = r.ISO8601(appointmentData.endDate);
+
+  Appointment.filter({ accountId })
+    .filter(r.row('startDate').during(startDate, endDate))
+    .filter({ isDeleted: false })
+    .run()
+    .then((appointments) => {
+      console.log(appointments);
+      return appointments.map((app) => ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)));
+    })
+    .then((data) => {
+      console.log(data);
+      const test = data.every((el) => el === true);
+      console.log(test)
+      if(data.length === 0 || test) {
+        console.log("zzzz")
+        return Appointment.save(appointmentData)
+          .then(appt => res.status(201).send(normalize('appointment', appt)))
+          .catch(next);
+      } else {
+        console.log("failed...")
+      }
+    })
     .catch(next);
+
 });
 
 /**
