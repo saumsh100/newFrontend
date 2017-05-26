@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './styles.scss';
 import ChatListContainer from './ChatListContainer';
 import MessageContainer from './MessageContainer';
+import UserInfo from './UserInfo';
 import { Row, Col, CardHeader, Card, Input, List, Grid, InfiniteScroll, Avatar } from '../../library';
 
 class ChatMessage extends Component {
@@ -13,6 +14,9 @@ class ChatMessage extends Component {
 
   render() {
     const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.phoneNumber}` : null);
+    const displayinfo = (this.props.currentPatient ? <UserInfo
+      currentPatient={this.props.currentPatient}
+    /> : null);
 
     return (
       <Grid>
@@ -69,9 +73,7 @@ class ChatMessage extends Component {
                 textMessages={this.props.textMessages}
               />
               <div className={styles.rightInfo}>
-                <div className={styles.patInfo}>
-
-                </div>
+                {displayinfo}
                 <div className={styles.bottomInfo}>
 
                 </div>
@@ -85,8 +87,13 @@ class ChatMessage extends Component {
 }
 
 ChatMessage.propTypes = {
-  textMessages: PropTypes.object.isRequired,
-  createEntityRequest: PropTypes.func.isRequired,
+  currentPatient: PropTypes.object,
+  chats: PropTypes.object,
+  patients: PropTypes.object,
+  moreData: PropTypes.bool,
+  textMessages: PropTypes.object,
+  loadMore: PropTypes.func.isRequired,
+  setCurrentPatient: PropTypes.func.isRequired,
 };
 
 export default ChatMessage;

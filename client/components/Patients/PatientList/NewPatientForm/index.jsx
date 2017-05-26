@@ -65,6 +65,6 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
 NewPatientForm.propTypes = {
   formName: PropTypes.string,
   birthday: PropTypes.instanceOf(Date),
-  saveBirthday: PropTypes.func.isRequired,
+  saveBirthday: PropTypes.func,
   onSubmit: PropTypes.func.isRequired,
 };

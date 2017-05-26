@@ -84,7 +84,7 @@ class PatientsMessagesContainer extends Component {
     const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
 
     const currentPatient = (this.props.selectedPatient ? this.props.selectedPatient : patients.get(firstId));
-    const currentChat = (this.props.selectedPatient ?  this.props.selectedChat: chatOrder.toArray()[0]);
+    const currentChat = (this.props.selectedPatient ?  this.props.selectedChat : chatOrder.toArray()[0]);
 
     return (
       <ChatMessage
@@ -101,7 +101,15 @@ class PatientsMessagesContainer extends Component {
   }
 }
 
-PatientsMessagesContainer.propTypes = {};
+PatientsMessagesContainer.propTypes = {
+  currentPatient: PropTypes.object,
+  chats: PropTypes.object,
+  selectedChat: PropTypes.object,
+  patients: PropTypes.object,
+  selectedPatient: PropTypes.object,
+  textMessages: PropTypes.object,
+  setSelectedPatient: PropTypes.func.isRequired,
+};
 
 function mapStateToProps({ entities, currentDialog, patientList, form }) {
   const patients = entities.getIn(['patients', 'models']);

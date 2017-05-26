@@ -18,22 +18,19 @@ function sendSocket(io, chatId) {
   const joinObject = { patient: true };
   joinObject.textMessages = {
     _apply: (sequence) => {
-      // TODO: confirm that the order is correct
       return sequence
-        .orderBy('createdAt')
+        .orderBy('createdAt');
     },
   };
-
-  console.log(chatId)
 
   Chat.get(chatId).getJoin(joinObject).run()
     .then((chat) => {
       const send = JSON.stringify(normalize('chat', chat));
       io.of(namespaces.dash).in(chat.patient.accountId).emit('newMessage', send)
     }).catch((err) => {
-    console.log(err)
-  });
-}
+      console.log(err);
+    });
+  }
 
 twilioRouter.post('/message', (req, res, next) => {
   const {
@@ -55,14 +52,8 @@ twilioRouter.post('/message', (req, res, next) => {
     ApiVersion,
   } = req.body;
 
-  // console.log(req.app.get('socketio'))
 
   const io = req.app.get('socketio');
-
-  console.log(req.body)
-
-  io.of(namespaces.dash).in('test').emit('message', 'asdads')
-  console.log(io.in('test'))
 
   const Body = req.body.Body.trim();
 
@@ -82,7 +73,6 @@ twilioRouter.post('/message', (req, res, next) => {
 
   const currentDate = thinky.r.now();
   const textMessageData = {
-    id: MessageSid,
     to: To,
     from: From,
     body: Body,
@@ -125,10 +115,20 @@ twilioRouter.post('/message', (req, res, next) => {
           textMessageData.chatId = test[0].id;
           TextMessage.save(textMessageData)
             .then(() => {
-              test[0].merge(mergeData).save().then((test2) => {
+              test[0].merge(mergeData).save().then(() => {
                 sendSocket(io, test[0].id);
               });
             });
+        } else {
+          mergeData.accountId = patient.accountId;
+          mergeData.patientId = patient.id;
+          Chat.save(mergeData).then((chat) => {
+            textMessageData.chatId = chat.id;
+            TextMessage.save(textMessageData)
+              .then(() => {
+                sendSocket(io, mergeData.accountId);
+              });
+          });
         }
       });
 

@@ -30,7 +30,7 @@ const OWNER = {
   },
 
   textMessages: Object.assign({}, CRUD, {
-    update: false,
+    update: true,
   }),
 
   services: CRUD,

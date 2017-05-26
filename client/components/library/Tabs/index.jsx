@@ -77,7 +77,7 @@ class Tabs extends Component {
       navClass,
     } = this.props;
 
-    const newProps = omit(this.props,['index']);
+    const newProps = omit(this.props,['index', 'navClass']);
 
     const classes = classNames(className, styles.tabs);
     const { headers, contents } = this.parseChildren(children);

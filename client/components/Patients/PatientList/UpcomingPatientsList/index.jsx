@@ -169,7 +169,7 @@ class UpcomingPatientList extends Component {
 }
 
 UpcomingPatientList.propTypes = {
-  patientList: PropTypes.object,
+  patientList: PropTypes.array,
   setCurrentPatient: PropTypes.func,
   loadMore: PropTypes.func,
   currentPatient: PropTypes.object,

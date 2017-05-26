@@ -6,6 +6,8 @@ const loaders = require('../../util/loaders');
 const normalize = require('../normalize');
 const Chat = require('../../../models/Chat');
 const TextMessage = require('../../../models/TextMessage');
+const twilio = require('../../../config/globals').twilio;
+const twilioClient = require('../../../config/twilio');
 
 chatsRouter.param('chatId', loaders('chat', 'Chat'));
 
@@ -32,7 +34,6 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
   if (joinObject.textMessages) {
     joinObject.textMessages = {
       _apply: (sequence) => {
-        // TODO: confirm that the order is correct
         return sequence
           .orderBy('createdAt')
           .limit(TEXT_MESSAGE_LIMIT);
@@ -40,9 +41,6 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
     };
   }
 
-  // console.log(req.app.get('socketio').sockets.clients().connected)
-
-  // TODO: add orderBy for lastMessageDate
   return Chat
     .orderBy(r.desc('lastTextMessageDate'))
     .filter({ accountId })
@@ -54,6 +52,44 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
       res.send(normalize('chats', chats));
     })
     .catch(next);
+});
+
+/**
+  * creates a new text message and sends it using twilio
+ */
+chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req, res, next) => {
+  const mergeData = {
+    lastTextMessageDate: new Date(),
+  };
+
+  const textMessages = {
+    body: req.body.message,
+    chatId: req.body.chatId,
+    to: req.body.patient.phoneNumber,
+    from: twilio.number,
+  };
+
+  const joinObject = { patient: true};
+  joinObject.textMessages = {
+    _apply: (sequence) => {
+      return sequence
+        .orderBy('createdAt');
+    },
+  };
+
+  return twilioClient.sendMessage(textMessages)
+    .then((result) => {
+      TextMessage.save(textMessages)
+        .then(() => {
+          Chat.get(req.body.chatId).getJoin(joinObject).run()
+            .then((chat) => {
+              chat.merge(mergeData).save().then((chats) => {
+                const send = normalize('chat', chats);
+                res.send(send);
+              });
+            });
+        }).catch(next);
+    }).catch(next);
 });
 
 /**
@@ -97,7 +133,7 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
 /**
  * Set all of a chat's unread textMessages to read
  */
-chatsRouter.post('/:_chatId/textMessages/read', checkPermissions('textMessages:update'), (req, res, next) => {
+chatsRouter.put('/:_chatId/textMessages/read', checkPermissions('textMessages:update'), (req, res, next) => {
   return TextMessage.filter({ chatId: req.params._chatId, read: false })
     .update({ read: true })
     .run()

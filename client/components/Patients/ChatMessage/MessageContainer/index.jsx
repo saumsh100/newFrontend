@@ -6,6 +6,8 @@ import moment from 'moment';
 import styles from '../styles.scss';
 import { Avatar, Form, Field } from '../../../library';
 import * as Actions from '../../../../actions/entities';
+import { createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
+
 
 
 class MessageContainer extends Component {
@@ -25,11 +27,6 @@ class MessageContainer extends Component {
 
     });
 
-    window.socket.on('message', (data) => {
-      console.log(data);
-      console.log('asdsads')
-    });
-
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
@@ -39,12 +36,21 @@ class MessageContainer extends Component {
   }
 
   sendMessage(message) {
-    window.socket.emit('say', 'asds');
-    // window.socket.emit('sendMessage', {
-    //   message: message.message,
-    //   patient: this.props.currentPatient,
-    //   chatId: this.props.selectedChat.id,
-    // });
+    const entityData = {
+      message: message.message,
+      patient: this.props.currentPatient,
+      chatId: this.props.selectedChat.id,
+    };
+
+    this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
+      .then(() => {
+        const node = document.getElementById('scrollIntoView');
+
+        if (node) {
+          node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
+        }
+      });
+    message.message = '';
   }
 
   render() {
@@ -53,6 +59,9 @@ class MessageContainer extends Component {
     if (this.props.selectedChat) {
       display = this.props.selectedChat.textMessages.map((text, i) => {
         const message = this.props.textMessages.get(this.props.selectedChat.textMessages[i]);
+        if (!message.get('read')) {
+          this.props.updateEntityRequest({ key: 'textMessages', values: {}, url: `/api/chats/${this.props.selectedChat.id}/textMessages/read` });
+        }
         let first;
         let second;
         let third;
@@ -65,20 +74,33 @@ class MessageContainer extends Component {
           sameElse: 'YYYY DD MM, h:mm a',
         })}</div>;
 
+        let nextMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i + 1]);
+        nextMessage = (nextMessage ? nextMessage.from : null);
+
         if (message.from === this.props.currentPatient.phoneNumber) {
           first = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.textFrom}>{message.body}</div>;
-          third = <Avatar className={styles.margin} url={this.props.currentPatient.avatar}/>;
+          third = <Avatar className={styles.margin}/>;
+
+          if (nextMessage !== message.from) {
+            third = <Avatar className={styles.margin} url={this.props.currentPatient.avatar}/>
+          }
+
           if (i !== 0) {
             const lastMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i - 1]);
-            if (message.from === lastMessage.from && moment(message.createdAt).diff(moment(lastMessage.createdAt), 'days') < 1) {
+            if (moment(message.createdAt).diff(moment(lastMessage.createdAt), 'days') < 1) {
               time = null;
             }
           }
         } else {
           third = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.text}>{message.body}</div>;
-          first = <Avatar className={styles.margin} url='https://placeimg.com/80/80/people'/>;
+          first = <Avatar className={styles.margin} />;
+
+          if (nextMessage !== message.from) {
+            first = <Avatar className={styles.margin} url='https://placeimg.com/80/80/people'/>
+          }
+
           if (i !== 0) {
             const lastMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i - 1]);
             if (message.from === lastMessage.from && moment(message.createdAt).diff(moment(lastMessage.createdAt), 'days') < 1) {
@@ -87,7 +109,7 @@ class MessageContainer extends Component {
           }
         }
 
-        return (<div className={styles.textTime}>
+        return (<div key={text} className={styles.textTime}>
           {time}
           {first}{second}{third}
         </div>);
@@ -123,8 +145,14 @@ class MessageContainer extends Component {
 }
 
 MessageContainer.propTypes = {
-  textMessages: PropTypes.object.isRequired,
+  currentPatient: PropTypes.object,
+  textMessages: PropTypes.object,
+  chats: PropTypes.object,
+  patients: PropTypes.object,
+  selectedChat: PropTypes.object,
   createEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  receiveMessage: PropTypes.func.isRequired,
 };
 
 function mapStateToProps() {
@@ -135,6 +163,8 @@ function mapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     receiveMessage: Actions.receiveEntities,
+    createEntityRequest,
+    updateEntityRequest,
   }, dispatch);
 }
 
