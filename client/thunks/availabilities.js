@@ -1,5 +1,6 @@
-
+import jwt from 'jwt-decode';
 import moment from 'moment';
+import { omit } from 'lodash';
 import axios from './axios';
 import {
   setIsFetching,
@@ -23,19 +24,49 @@ export function sixDaysShift(dayObj) {
 
 export function createPatient(values) {
   return function (dispatch) {
-    return axios.post('/patients', values)
-      .then(({ data }) => {
+    return axios.post('/auth/signup', values)
+      .then(({ data: { token } }) => {
         // TODO: dispatch function that successfully created patient, plug in, confirm code
         // TODO: then allow them to create the patient
         // dispatch(createPatientAction(params));
-        const patients = data.entities.patients;
-        const id = Object.keys(patients)[0];
-        const patient = patients[id];
 
         // Set the patient in state so other thunks can know the patient user
+        const patient = getPatientFromToken(token);
         dispatch(setPatientUser(patient));
-        return patient;
+        return token;
       });
+  };
+}
+
+const getPatientFromToken = (token) => {
+  try {
+    const decodedToken = jwt(token);
+
+    if ((decodedToken.exp - (Date.now() / 1000)) < 0) {
+      return null;
+    }
+
+    return omit(decodedToken, ['exp', 'iat']);
+  } catch (e) {
+    return null;
+  }
+};
+
+export function loginPatient(credentials) {
+  return dispatch =>
+    axios.post('/auth/login', credentials)
+      .then(({ data: { token } }) => {
+        const patient = getPatientFromToken(token);
+        dispatch(setPatientUser(patient));
+        return token;
+      });
+}
+
+export function loadPatient(token) {
+  return (dispatch) => {
+    const patient = getPatientFromToken(token);
+    dispatch(setPatientUser(patient));
+    return Promise.resolve(patient);
   };
 }
 
@@ -43,7 +74,7 @@ export function confirmCode(values) {
   return function (dispatch, getState) {
     const state = getState();
     const patientUser = state.availabilities.get('patientUser');
-    return axios.post(`/patients/${patientUser.id}/confirm`, values);
+    return axios.post(`/auth/signup/${patientUser.id}/confirm`, values);
   };
 }
 

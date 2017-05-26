@@ -7,6 +7,8 @@ const PreferencesSchema = require('./schemas/Preferences');
 
 const Patient = createModel('Patient', {
   accountId: type.string(),
+  email: type.string().email().required(),
+  password: type.string().required(),
   avatar: type.string(),
   pmsId: type.string(),
   firstName: type.string().required(),
@@ -15,7 +17,6 @@ const Patient = createModel('Patient', {
   phoneNumber: type.string(),
   mobileNumber: type.string(),
   workNumber: type.string(),
-  email: type.string(),
   lastAppointmentDate: type.date(),
   notes: type.string(),
   gender: type.string(),

@@ -1,3 +1,5 @@
+import OAuth from './OAuth';
+
 const Enterprise = require('./Enterprise');
 const Account = require('./Account');
 const Appointment = require('./Appointment');
@@ -18,6 +20,7 @@ const Reservation = require('./Reservation');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
+
 Permission.belongsTo(User, 'user', 'userId', 'id');
 Permission.belongsTo(Account, 'account', 'accountId', 'id');
 
@@ -45,6 +48,7 @@ Family.hasMany(Patient, 'patients', 'id', 'familyId');
 Patient.belongsTo(Family, 'family', 'familyId', 'id');
 
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
+Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
 Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId');
 Service.belongsTo(Account, 'account', 'accountId', 'id');
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
@@ -79,3 +83,5 @@ Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 
 Service.hasMany(Reservation, 'reservations', 'id', 'serviceId');
 Service.hasMany(Request, 'requests', 'id', 'serviceId');
+
+OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');

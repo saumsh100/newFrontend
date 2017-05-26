@@ -1,0 +1,20 @@
+@import '../../../ui.scss';
+
+.fb-button {
+  background-color: $fb-bg-color;
+  color: $fb-fg-color;
+  position: relative;
+
+  &:hover {
+    background-color: darken($fb-bg-color, 5%);
+    color: $fb-fg-color;
+  }
+}
+
+.icon {
+  position: absolute;
+  left: .3em;
+  top: 0;
+  bottom: 0;
+  line-height: 1.25em;
+}

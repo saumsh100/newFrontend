@@ -3,14 +3,31 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
-import { Button, Timer } from '../../library';
+import { Button, Timer, VButton, FBLoginButton } from '../../library';
 import SignUpForm from './SignUpForm';
 import ConfirmNumberForm from './ConfirmNumberForm';
+import LoginForm from './LoginForm';
 import * as Actions from '../../../actions/availabilities';
 import * as Thunks from '../../../thunks/availabilities';
 import styles from './styles.scss';
 
 const TOTAL_SECONDS_ALLOWED = 3 * 60;
+
+const token = {
+  key: 'auth_token',
+
+  save(value) {
+    localStorage.setItem(this.key, value);
+  },
+
+  remove() {
+    localStorage.removeItem(this.key);
+  },
+
+  get() {
+    return localStorage.getItem(this.key);
+  },
+};
 
 class SubmitView extends Component {
   constructor(props) {
@@ -20,12 +37,27 @@ class SubmitView extends Component {
     this.confirmAndBook = this.confirmAndBook.bind(this);
   }
 
-  signUpAndConfirm(values) {
-    // TODO: createPatient.then(createRequest).then(setSuccessful)
-    // alert(JSON.stringify(values));
-    this.props.createPatient(values)
-      .then(() => {
-        this.props.setIsConfirming(true);
+  componentWillMount() {
+    this.props.loadPatient(token.get())
+      .then(patient =>
+        (patient ?
+          this.props.createRequest() :
+          token.remove()
+        )
+      );
+  }
+
+  login(credentials) {
+    return this.props.loginPatient(credentials)
+      .then(t => token.save(t))
+      .then(() => this.props.createRequest())
+      .catch(({ data, status }) => {
+        if (status === 401) {
+          throw new SubmissionError({
+            email: data,
+            password: data,
+          });
+        }
       });
   }
 
@@ -41,9 +73,18 @@ class SubmitView extends Component {
       });
   }
 
+  signUpAndConfirm(values) {
+    // TODO: createPatient.then(createRequest).then(setSuccessful)
+    // alert(JSON.stringify(values));
+    this.props.createPatient(values)
+      .then(t => token.save(t))
+      .then(() => this.props.setIsConfirming(true));
+  }
+
   render() {
     const {
       isConfirming,
+      isLogin,
       isTimerExpired,
       setIsTimerExpired,
       isSuccessfulBooking,
@@ -66,6 +107,17 @@ class SubmitView extends Component {
             Please type in the code below and submit to complete your booking.
           </div>
           <ConfirmNumberForm onSubmit={this.confirmAndBook} />
+        </div>
+      );
+    }
+
+    if (isLogin) {
+      formComponent = (
+        <div>
+          <LoginForm
+            className={styles.loginForm}
+            onLogin={credentials => this.login(credentials)}
+          />
         </div>
       );
     }
@@ -124,24 +176,26 @@ class SubmitView extends Component {
       timerComponent = null;
     }
 
+    const showLoginButtons = !(isLogin || isSuccessfulBooking);
+
     return (
       <div className={styles.submitViewWrapper}>
         {timerComponent}
         <div className={styles.formWrapper}>
           {formComponent}
         </div>
-        {/*<div className={styles.signup__footer}>
-          <div className={styles.signup__footer_header}>
-            <div className={styles.signup__footer_title}>
-              ALREADY HAVE AN ACCOUNT?
+
+        { showLoginButtons ? (
+          <div className={styles.signup__footer}>
+            <div className={styles.signup__footer_header}>
+              <div className={styles.signup__footer_title}>
+                ALREADY HAVE AN ACCOUNT?
+              </div>
+
+              <VButton color="blue" compact size="tiny" onClick={() => this.props.setIsLogin(true)}>Login Here</VButton>
             </div>
-            <a className={styles.signup__footer_login} href="/login">Login here</a>
           </div>
-          <a href="//www.facebook.com/" className={styles.signup__footer_facebook}>
-            <span className="fa fa-facebook-official" />
-            LOG IN WITH FACEBOOK
-          </a>
-        </div>*/}
+        ) : null }
       </div>
     );
   }
@@ -151,11 +205,15 @@ SubmitView.propTypes = {
   createPatient: PropTypes.func.isRequired,
   confirmCode: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
+  loginPatient: PropTypes.func.isRequired,
+  loadPatient: PropTypes.func.isRequired,
   setIsConfirming: PropTypes.func.isRequired,
+  setIsLogin: PropTypes.func.isRequired,
   setIsTimerExpired: PropTypes.func.isRequired,
   restartBookingProcess: PropTypes.func.isRequired,
   isTimerExpired: PropTypes.bool.isRequired,
   isConfirming: PropTypes.bool.isRequired,
+  isLogin: PropTypes.bool.isRequired,
   isSuccessfulBooking: PropTypes.bool.isRequired,
   closeBookingModal: PropTypes.func.isRequired,
   bookingWidgetPrimaryColor: PropTypes.string,
@@ -165,6 +223,7 @@ SubmitView.propTypes = {
 function mapStateToProps({ availabilities }) {
   return {
     isConfirming: availabilities.get('isConfirming'),
+    isLogin: availabilities.get('isLogin'),
     isTimerExpired: availabilities.get('isTimerExpired'),
     isSuccessfulBooking: availabilities.get('isSuccessfulBooking'),
     patientUser: availabilities.get('patientUser'),
@@ -177,10 +236,13 @@ function mapStateToProps({ availabilities }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     createPatient: Thunks.createPatient,
+    loginPatient: Thunks.loginPatient,
+    loadPatient: Thunks.loadPatient,
     confirmCode: Thunks.confirmCode,
     createRequest: Thunks.createRequest,
     restartBookingProcess: Thunks.restartBookingProcess,
     setIsConfirming: Actions.setIsConfirming,
+    setIsLogin: Actions.setIsLogin,
     setIsTimerExpired: Actions.setIsTimerExpired,
     closeBookingModal: Thunks.closeBookingModal,
   }, dispatch);

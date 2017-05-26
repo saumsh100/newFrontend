@@ -21,6 +21,7 @@ const User = require('./User');
 const Token = require('./Token');
 const Reservation = require('./Reservation');
 const Enterprise = require('./Enterprise');
+const OAuth = require('./OAuth');
 
 module.exports = {
   Account,
@@ -45,4 +46,5 @@ module.exports = {
   SyncClientError,
   SyncClientVersion,
   Enterprise,
+  OAuth,
 };
