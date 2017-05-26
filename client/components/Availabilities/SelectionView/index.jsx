@@ -1,5 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
+// import ReactDOM from 'react-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import moment from 'moment';

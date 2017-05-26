@@ -480,6 +480,12 @@
 
 .toggleCheckBox {
   display: inline-block;
+  input[type=checkbox] + label {
+    &:before {
+      border: 1px solid var(--bookingWidgetPrimaryColor) !important;
+    }
+  }
+
   input[type=checkbox]:checked + label {
     &:before {
       background-color: var(--bookingWidgetPrimaryColor) !important;
