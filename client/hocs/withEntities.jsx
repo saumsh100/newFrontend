@@ -1,62 +1,52 @@
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 
 /**
- * withHoverable is a HOC that gives BasicComponent the following props
+ * withEntitiesRequest is a HOC that gives a BasicComponent
+ * its requested entities, as well as the apiRequest model
+ * to access isFetching props
  * {
  *    isHovered: BOOLEAN,
  * }
  * @param BasicComponent
- * @returns BasicComponent with the isHovered prop
+ * @returns BasicComponent with the new props
  */
-export default function withEntities(data) {
+export default function withEntitiesRequest(data) {
   return (BasicComponent) => {
     class LoadedComponent extends Component {
-      constructor(props) {
-        super(props);
-
-        this.fetchEntities = this.fetchEntities.bind(this);
-      }
-
       componentDidMount() {
-        this.fetchEntities();
-      }
-
-      componentWillReceiveProps(nextProps) {
-        this.fetchEntities(nextProps);
-      }
-
-      fetchEntities(newProps) {
-
+        this.props.fetchEntitiesRequest(data);
       }
 
       render() {
-        const { isHovered } = this.state;
-        return (
-          <div
-            onMouseOver={this.handleMouseOver}
-            onMouseLeave={this.handleMouseLeave}
-          >
-            <BasicComponent
-              {...this.props}
-              isHovered={isHovered}
-            />
-          </div>
-        );
+        return <BasicComponent {...this.props} />;
       }
     }
 
     LoadedComponent.propTypes = {
-      fetchEntities,
-      entities,
+      fetchEntitiesRequest: PropTypes.func.isRequired,
+      [data.key]: PropTypes.object.isRequired,
+      isFetching: PropTypes.bool.isRequired,
+      apiRequest: PropTypes.object,
     };
 
-    function mapStateToProps() {
-
+    function mapStateToProps({ entities, apiRequests }) {
+      const apiRequest = apiRequests.get(data.id);
+      const isFetching = !!apiRequest && apiRequest.get('isFetching');
+      return {
+        isFetching,
+        apiRequest,
+        [data.key]: entities.get(data.key),
+      };
     }
 
-    function mapDispatchToProps() {
-
+    function mapDispatchToProps(dispatch) {
+      return bindActionCreators({
+        fetchEntitiesRequest,
+      }, dispatch);
     }
 
     return connect(mapStateToProps, mapDispatchToProps)(LoadedComponent);

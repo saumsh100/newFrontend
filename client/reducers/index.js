@@ -12,6 +12,7 @@ import dialogs from './dialogs';
 import patientList from './patientList';
 import requests from './requests';
 import accountSettings from './accountSettings';
+import apiRequests from './apiRequests';
 
 import availabilities from './availabilities';
 
@@ -29,4 +30,5 @@ export default combineReducers({
   currentDialog: dialogs,
   patientList,
   availabilities,
+  apiRequests,
 });
