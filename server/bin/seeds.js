@@ -188,10 +188,12 @@ for (let i = 0; i < 100; i++) {
     lastTextMessageDate: lastDate,
   });
 
+  const appointmentTime = faker.date.future();
+
   randomAppointments.push({
     accountId,
-    startDate: recentStartTime.add(49 * oneHour),
-    endDate: recentStartTime.add(50 * oneHour),
+    startDate: moment(appointmentTime).subtract(1, 'hours')._d,
+    endDate: moment(appointmentTime)._d,
     patientId: id,
     serviceId,
     practitionerId,
