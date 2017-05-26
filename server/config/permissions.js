@@ -55,6 +55,8 @@ const OWNER = {
 
   services: allowAll,
 
+  family: allowAll,
+
   syncClientError: allow('read', 'create'),
   syncClientVersion: allow('read', 'create'),
 

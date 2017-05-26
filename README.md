@@ -95,6 +95,23 @@ Be sure that you start application with `npm start` command. In a new terminal d
 
 Server will be restarted automatically.
 
+### Running on custom `host:port`
+By default `npm start` will run the Node server on `localhost:5000`. Webpack then starts a proxy server that will run on `localhost:5100`, which is the address that we ultimately connect to.  However, it is possible to run both Webpack server and Node server on a different localhost:port. Changing Node's server host and port is not really needed, but if you run a VM or want to expose the Carecru application on your local network, you can use environment variables to set the host and port for Webpack. `npm` spins up Webpack in a new shell, so it does not care for `.env` file that the Node server sources. Hence, you can't put these vars in there. It has a global environment and environment vars that were part of the start command. Long story short, to set the host and port for Webpack, put the following into your `$HOME/.profile` file (or another bash file that is sourced when a login shell is created).
+
+```
+export SERVER_HOST="localhost"
+export SERVER_PORT=5000 
+export WP_PROXY_PORT=8080 
+export WP_PROXY_HOST="carecru.dev"
+```
+
+If you use `carecru.dev` for the proxy host in the code above, make sure that it resolves to something in `/etc/hosts`. Or just do this: `export WP_PROXY_HOST="192.168.56.1"`. Then in your browser you can access the application on `carecru.dev:8080` or `192.168.56.1:8080` respectively.
+
+If no environment variables are provided, then Node server defaults to `localhost:5000` and Webpack defaults to `localhost:5100`.
+
+#### Optional
+If you use tmux you can run `sh scripts/run-server.sh`. This will spin up 3 panes with the Node server and two Webpack processes in those panes.
+
 ## View on Heroku
 
 To view pull-request app on Heroku domain for it is created as follows:
