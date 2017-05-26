@@ -260,7 +260,7 @@ class Dashboard extends React.Component {
           </Col>
         </Row>
         <Row className={styles.dashboard__body}>
-          {/*<Col xs={12}>
+          <Col xs={12}>
             <DashboardStats data={data} />
           </Col>
           <Col className={styles.padding}
@@ -313,10 +313,10 @@ class Dashboard extends React.Component {
               data={hardcodedReferralData}
               cardTitle="Unconfirmed Referrals"
             />
-          </Col>*/}
+          </Col>
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
-              {/*<Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RemindersList
                   key="Reminders"
                   data={DataRemindersList}
@@ -329,7 +329,7 @@ class Dashboard extends React.Component {
                   data={DataRemindersList}
                   cardTitle="Recalls"
                 />
-              </Col>*/}
+              </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
                 <DigitalWaitList />
               </Col>
