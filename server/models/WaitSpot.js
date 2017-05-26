@@ -10,9 +10,9 @@ const PreferencesSchema = type.object().schema({
   weekdays: type.boolean().default(true),
   weekends: type.boolean().default(true),
 }).default({
-  morning: true,
-  afternoon: true,
-  evening: true,
+  mornings: true,
+  afternoons: true,
+  evenings: true,
   weekdays: true,
   weekends: true,
 });

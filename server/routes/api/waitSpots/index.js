@@ -12,8 +12,9 @@ waitSpotsRouter.param('waitSpotId', loaders('waitSpot', 'WaitSpot'));
  */
 waitSpotsRouter.post('/', (req, res, next) => {
   // Attach chair to the clinic of posting user
+  // TODO: the short circuit is here to suppor widget, NEEDS to be removed!
   const waitSpotData = Object.assign({}, req.body, {
-    accountId: req.accountId,
+    accountId: req.body.accountId || req.accountId,
   });
 
   return WaitSpot.save(waitSpotData)

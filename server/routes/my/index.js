@@ -3,6 +3,7 @@ const myRouter = require('express').Router();
 const fs = require('fs');
 const newAvailabilitiesRouter = require('./newAvailabilitiesRouter');
 const requestRouter = require('../api/request');
+const waitSpotsRouter = require('../api/waitSpots');
 const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
 const Patient = require('../../models/Patient');
@@ -12,6 +13,7 @@ const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
 myRouter.use('/requests', requestRouter);
+myRouter.use('/waitSpots', waitSpotsRouter);
 myRouter.use('/reservations', reservationsRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));

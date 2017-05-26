@@ -34,6 +34,7 @@ class SubmitView extends Component {
     // alert(JSON.stringify(values));
     return this.props.confirmCode(values)
       .then(() => {
+        this.props.hasWaitList && this.props.createWaitSpot();
         this.props.createRequest();
       })
       .catch(() => {
@@ -168,6 +169,7 @@ function mapStateToProps({ availabilities }) {
     isTimerExpired: availabilities.get('isTimerExpired'),
     isSuccessfulBooking: availabilities.get('isSuccessfulBooking'),
     patientUser: availabilities.get('patientUser'),
+    hasWaitList: availabilities.get('hasWaitList'),
 
     // TODO: shouldn't have to go to Redux to grab this...
     bookingWidgetPrimaryColor: availabilities.getIn(['account', 'bookingWidgetPrimaryColor']),
@@ -179,6 +181,7 @@ function mapDispatchToProps(dispatch) {
     createPatient: Thunks.createPatient,
     confirmCode: Thunks.confirmCode,
     createRequest: Thunks.createRequest,
+    createWaitSpot: Thunks.createWaitSpot,
     restartBookingProcess: Thunks.restartBookingProcess,
     setIsConfirming: Actions.setIsConfirming,
     setIsTimerExpired: Actions.setIsTimerExpired,

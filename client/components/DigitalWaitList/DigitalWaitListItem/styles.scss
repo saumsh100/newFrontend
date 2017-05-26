@@ -44,7 +44,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    height: 110px;
+    height: 120px;
     list-style: none;
     margin: 0;
     flex-direction: row;
@@ -139,7 +139,6 @@
 }
 
 .data {
-  color: $primary-darkgrey;
   text-transform: capitalize;
   display: inline;
   &:after {
@@ -158,4 +157,10 @@
   display: inline;
   max-width: 50px;
   text-overflow: ellipsis;
+}
+
+.availability {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: $primary-darkgrey;
 }

@@ -13,6 +13,16 @@ import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
 
 class SelectionView extends Component {
+  constructor(props) {
+    super(props);
+
+    this.toggleWaitSpot = this.toggleWaitSpot.bind(this);
+  }
+
+  toggleWaitSpot() {
+    this.props.setHasWaitList(!this.props.hasWaitList);
+  }
+
   render() {
     const {
       services,
@@ -22,9 +32,14 @@ class SelectionView extends Component {
       selectedStartDate,
       selectedAvailability,
       setRegistrationStep,
+      hasWaitList,
     } = this.props;
 
     let waitListPreferences = null;
+    if (hasWaitList) {
+      waitListPreferences = <WaitListPreferences />;
+    }
+
     return (
       <div>
         <div className={styles.appointment__body_header}>
@@ -38,30 +53,15 @@ class SelectionView extends Component {
         </div>
         <AvailabilitiesDisplay />
         <div className={styles.appointment__footer}>
-          {/*<div className={styles.appointment__footer_title}>
-           BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
-           </div>*/}
-          {/* TODO: Remove Form, only need CheckBox component and ContinueButton */}
-          {/*<div className={styles.appointment__footer_select}>
-           <Checkbox
-           id="yes"
-           value="yes"
-           checked={this.props.upperState.checked}
-           onChange={this.props.handleChange}
-           />
-           </div>*/}
-          {/*<Button
-            icon="arrow-right"
-            disabled={!selectedAvailability}
-            className={styles.continueButton}
-            onClick={(e) => {
-              e.preventDefault();
-              setRegistrationStep(2);
-            }}
-          >
-            <span>Continue</span>
-          </Button>*/}
-          {/*waitListPreferences*/}
+          <div className={styles.waitSpotToggleWrapper} onClick={this.toggleWaitSpot}>
+            BE NOTIFIED IF AN EARLIER TIME BECOMES AVAILABLE?
+            <Checkbox
+              checked={!!hasWaitList}
+              className={styles.toggleCheckBox}
+              onChange={this.toggleWaitSpot}
+            />
+          </div>
+          {waitListPreferences}
         </div>
       </div>
     );
@@ -76,6 +76,7 @@ SelectionView.propTypes = {
   selectedStartDate: PropTypes.string.isRequired,
   selectedAvailability: PropTypes.object,
   setRegistrationStep: PropTypes.func.isRequired,
+  hasWaitList: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps({ entities, availabilities }) {
@@ -86,12 +87,14 @@ function mapStateToProps({ entities, availabilities }) {
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
     selectedStartDate: availabilities.get('selectedStartDate'),
     selectedAvailability: availabilities.get('selectedAvailability'),
+    hasWaitList: availabilities.get('hasWaitList'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setRegistrationStep: Actions.setRegistrationStepAction,
+    setHasWaitList: Actions.setHasWaitList,
   }, dispatch);
 }
 

@@ -11,6 +11,7 @@ import {
   Row,
   Col,
 } from '../../library';
+import styles from './styles.scss';
 
 function validatePatient(value) {
   return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
@@ -43,52 +44,67 @@ function AddWaitSpotForm({ onSubmit, getSuggestions }) {
         validate={[validatePatient]}
         required
       />
-      <div>Preferences</div>
-      <FormSection name="preferences">
-        <Grid>
-          <Row>
-            <Col xs={6}>
-              <Field
-                name="mornings"
-                component="Checkbox"
-                label="Mornings"
-              />
-              <br/>
-              <Field
-                name="afternoons"
-                component="Checkbox"
-                label="Afternoons"
-              />
-              <br/>
-              <Field
-                name="evenings"
-                component="Checkbox"
-                label="Evenings"
-              />
-            </Col>
-            <Col xs={6}>
-              <Field
-                name="weekdays"
-                component="Checkbox"
-                label="Weekdays"
-              />
-              <br/>
-              <Field
-                name="weekends"
-                component="Checkbox"
-                label="Weekends"
-              />
-            </Col>
-          </Row>
-        </Grid>
-      </FormSection>
-      <div>Select Unavailable Days</div>
-      <Field
-        multiple
-        name="unavailableDays"
-        target="icon"
-        component="DayPicker"
-      />
+      <Grid>
+        <Row>
+          <Col xs={12} md={6}>
+            <Row>
+              <Col xs={12}>
+                <div className={styles.label}>
+                  Preferences
+                </div>
+              </Col>
+            </Row>
+            <FormSection name="preferences">
+              <Row>
+                <Col xs={12} md={6}>
+                  <Field
+                    name="mornings"
+                    component="Checkbox"
+                    label="Mornings"
+                  />
+                  <Field
+                    name="afternoons"
+                    component="Checkbox"
+                    label="Afternoons"
+                  />
+                  <Field
+                    name="evenings"
+                    component="Checkbox"
+                    label="Evenings"
+                  />
+                </Col>
+                <Col xs={12} md={6}>
+                  <Field
+                    name="weekdays"
+                    component="Checkbox"
+                    label="Weekdays"
+                  />
+                  <Field
+                    name="weekends"
+                    component="Checkbox"
+                    label="Weekends"
+                  />
+                </Col>
+              </Row>
+            </FormSection>
+          </Col>
+          <Col xs={12} md={6}>
+            <Row>
+              <Col xs={12}>
+                <div className={styles.label}>
+                  Select Unavailable Days
+                  <Field
+                    multiple
+                    name="unavailableDays"
+                    target="icon"
+                    component="DayPicker"
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Grid>
     </Form>
   );
 }

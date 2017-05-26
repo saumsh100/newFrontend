@@ -95,6 +95,7 @@
         margin-top: 10px;
       }
     }
+
     &_days {
       color: $primary-dark;
       padding: 2px 0;
@@ -106,6 +107,7 @@
         margin: 0 2px;
       }
     }
+
     &_img {
       width: 44px;
       border-radius: 50%;
@@ -129,4 +131,8 @@
       }
     }
   }
+}
+
+.modalWrapper {
+  padding: 20px;
 }

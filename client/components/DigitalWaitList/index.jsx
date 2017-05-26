@@ -73,6 +73,7 @@ class DigitalWaitList extends Component {
           active={this.state.isAddingWaitSpot}
           onEscKeyDown={this.toggleWaitSpotForm}
           onOverlayClick={this.toggleWaitSpotForm}
+          className={styles.modalWrapper}
         >
           <AddWaitSpotForm onSubmit={this.addWaitSpot} getSuggestions={this.getSuggestions} />
         </Modal>

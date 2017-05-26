@@ -96,8 +96,6 @@ class DayPicker extends Component {
     }
 
     // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
-
-
     return (
       <Popover
         preferPlace="below"
@@ -105,7 +103,7 @@ class DayPicker extends Component {
         isOpen={this.state.isOpen}
         body={[(
           <div className={styles.wrapper}>
-            <IconButton className={styles.closeButton} icon="close" onClick={this.togglePopOver} />
+            {/*<IconButton className={styles.closeButton} icon="close" onClick={this.togglePopOver} />*/}
             <RDayPicker
               onDayClick={this.handleDayClick}
               selectedDays={convertValueToDate(value)}
