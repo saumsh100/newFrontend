@@ -1,4 +1,4 @@
-1
+
 const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
@@ -48,6 +48,8 @@ const practitionerId = uuid();
 const practitionerId2 = uuid();
 const practitionerId3 = uuid();
 const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
+const practitionerId5 = '5f439ff8-c55d-4423-9316-a41240c4d329';
+const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
 
 const chairId = uuid();
 
@@ -78,6 +80,10 @@ const markPhoneNumber = '+17788654451';
 
 const clinicPhoneNumber = '+17786558613';
 
+const mainEnterprise = {
+  id: uuid(),
+  name: 'General enterprise',
+};
 
 // TODO: order of seeding matters...
 
@@ -143,7 +149,6 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
   });
 };
 
-
 const randomAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
@@ -202,7 +207,81 @@ for (let i = 0; i < 100; i++) {
   });
 }
 
+const generateDefaultServices = (_accountId) => {
+  const createService = serviceData => Object.assign({}, {
+    id: uuid(),
+    accountId: _accountId,
+  }, serviceData);
+
+  return [
+    createService({
+      name: 'New Patient Consultation',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'New Patient Checkup & Cleaning',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Toothache',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Lost Filling',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Emergency Appointment',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Regular Checkup & Cleaning',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Regular Consultation',
+      duration: 30,
+    }),
+
+    createService({
+      name: 'Child Dental Exam',
+      duration: 30,
+    }),
+  ];
+};
+
+const generatePracServJoin = (services, _practitionerId) => {
+  return services.map((service) => {
+    return {
+      Service_id: service.id,
+      Practitioner_id: _practitionerId,
+    };
+  });
+};
+
+const donnaServices = generateDefaultServices(accountId);
+const sunshineServices = generateDefaultServices(accountId2);
+
 const SEEDS = {
+  Enterprise: [
+    mainEnterprise,
+    {
+      name: 'Absolute Dental',
+    },
+    {
+      name: 'ACCESS',
+    },
+    {
+      name: 'AFFORDABLE Dentures',
+    },
+  ],
+
   Reservation: [
     {
       // TODO: make a reservation in a certain timeslot
@@ -639,30 +718,30 @@ const SEEDS = {
     {
       id: accountId,
       weeklyScheduleId,
-      name: 'Beckett Dental',
-      street: '#101 – 1312 Marine Drive',
-      country: 'Canada',
-      state: 'BC',
-      city: 'North Vancouver',
+      name: 'Donna Dental',
+      address: '#202 - 404 Chesapeake Bay',
+      country: 'US',
+      state: 'CA',
+      city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       smsPhoneNumber: clinicPhoneNumber,
-      logo: '/images/beckett_dental.png',
-      address: '#101 – 1312 Marine Drive',
+      logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
+      enterpriseId: mainEnterprise.id,
     },
     {
       id: accountId2,
       weeklyScheduleId: weeklyScheduleId2,
-      name: 'Liberty Dental',
-      street: 'Street Adress',
-      country: 'US',
-      state: 'CA',
-      city: 'Los Angeles',
+      name: 'Sunshine Smiles Dental',
+      street: '10405 King St.',
+      country: 'CA',
+      state: 'ON',
+      city: 'Toronto',
       zipCode: '90210',
 
       logo: '/images/liberty_logo.png',
-      address: '10204 112th St.',
+      enterpriseId: mainEnterprise.id,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       // smsPhoneNumber: clinicPhoneNumber,
@@ -685,6 +764,7 @@ const SEEDS = {
       logo: '/images/beckett_dental.png',
       address: '#101 – 1312 Random Drive',
       bookingWidgetPrimaryColor: '#f29b12',
+      enterpriseId: mainEnterprise.id,
     },
   ],
 
@@ -692,7 +772,7 @@ const SEEDS = {
     {
       userId: justinUserId,
       accountId,
-      role: 'OWNER',
+      role: 'SUPERADMIN',
       permissions: {},
     },
     {
@@ -776,8 +856,8 @@ const SEEDS = {
     {
       id: practitionerId3,
       accountId: accountId2,
-      firstName: 'Mark',
-      lastName: 'Joseph',
+      firstName: 'Jennifer',
+      lastName: 'Love-Hewitt',
       // weeklyScheduleId: weeklyScheduleId2,
       isCustomSchedule: false,
       // services: [],
@@ -785,10 +865,26 @@ const SEEDS = {
     {
       id: practitionerId4,
       accountId: accountId2,
-      firstName: 'Justin',
-      lastName: 'Sharp',
+      firstName: 'Chelsea',
+      lastName: 'Handler',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
+      // services: [],
+    },
+    {
+      id: practitionerId5,
+      accountId: accountId2,
+      firstName: 'Will',
+      lastName: 'Ferrel',
+      isCustomSchedule: false,
+      // services: [],
+    },
+    {
+      id: practitionerId6,
+      accountId: accountId2,
+      firstName: 'Joe',
+      lastName: 'Montana',
+      isCustomSchedule: false,
       // services: [],
     },
   ],
@@ -804,46 +900,27 @@ const SEEDS = {
       Practitioner_id: practitionerId2,
       Service_id: serviceId2,
     },
-    // Mark's services
+
+    // Availabilities Test
     {
       Practitioner_id: practitionerId3,
       Service_id: cleanupServiceId,
     },
-    // Justin's services
     {
       Practitioner_id: practitionerId4,
       Service_id: cleanupServiceId,
     },
+
+    ...generatePracServJoin(donnaServices, practitionerId),
+    ...generatePracServJoin(donnaServices, practitionerId2),
+
+    ...generatePracServJoin(sunshineServices, practitionerId3),
+    ...generatePracServJoin(sunshineServices, practitionerId4),
+    ...generatePracServJoin(sunshineServices, practitionerId5),
+    ...generatePracServJoin(sunshineServices, practitionerId6),
   ],
 
   Service: [
-    {
-      id: serviceId,
-      accountId,
-      name: 'Routine Checkup',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      // See Practitioner_Service, but essentially it is this...
-      // practitioners: [ practitionerId ],
-    },
-    {
-      id: serviceId2,
-      accountId,
-      name: 'Another service',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-      // See Practitioner_Service, but essentially it is this...
-      // practitioners: [ practitionerId2 ],
-    },
-    {
-      accountId,
-      name: 'Lost Filling',
-      duration: 30,
-      bufferTime: 0,
-      unitCost: 40,
-    },
     {
       id: cleanupServiceId,
       accountId: accountId2,
@@ -852,6 +929,9 @@ const SEEDS = {
       bufferTime: 0,
       unitCost: 40,
     },
+
+    ...donnaServices,
+    ...sunshineServices,
   ],
 
   Chat: [
@@ -918,11 +998,33 @@ const SEEDS = {
 
   SyncClientVersion: [
     {
-      version: 2.0,
-      url: 'http://carecru.dev:8080/api/updater/download',
+      major: 2,
+      minor: 0,
+      patch: 0,
+      build: 0,
+      url: '',
       key: '',
       secret: '',
-      build: 1,
+    },
+  ],
+
+  WaitSpot: [
+    {
+      accountId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId,
+      patientId: sergeyPatientId,
+      preferences: {
+        weekends: false,
+        evenings: false,
+      },
+
+      unavailableDays: [
+        moment().toISOString(),
+        moment().add(2, 'days').toISOString(),
+      ],
     },
   ],
 };

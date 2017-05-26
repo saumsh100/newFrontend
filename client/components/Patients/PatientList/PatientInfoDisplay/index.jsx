@@ -15,6 +15,9 @@ class PatientInfoDisplay extends Component {
     const { currentPatient } = this.props;
     const id = (currentPatient.get ? currentPatient.get('id') : null);
     const avatar = (currentPatient.get ? currentPatient.get('avatar') : null);
+    const user = {
+      url: avatar,
+    };
 
     let showDate = null;
 
@@ -48,7 +51,7 @@ class PatientInfoDisplay extends Component {
           <div className={styles.flex}>
             <div className={styles.patient_profile}>
               <IconButton className={styles.deleteInfo} icon="trash-o" onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}} />
-              <Avatar className={styles.patient_profile__photo} url={avatar} />
+              <Avatar className={styles.patient_profile__photo} user={user} />
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
                 <p className={styles.name}>
                   <span>{currentPatient.firstName} {currentPatient.lastName}</span>

@@ -15,7 +15,7 @@ import DayPicker from './DayPicker';
 import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
 import DashboardStats from './DashboardStats';
-import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
+import Form, { FormSection, Field, FieldArray, SaveButton, RemoteSubmitButton } from './Form';
 import Guage from './Guage';
 import Header from './Header';
 import Icon from './Icon';
@@ -46,6 +46,8 @@ import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
 import Filters from './Filters';
 import DoubleIcon from './DoubleIcon';
+import VButton from './VButton';
+import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 
 export {
   AppBar,
@@ -85,6 +87,7 @@ export {
   LineChart,
   Modal,
   PieChart,
+  RemoteSubmitButton,
   RouterButton,
   RouterList,
   RouterTabs,
@@ -101,6 +104,9 @@ export {
   Toggle,
   Tooltip,
   TrendLine,
+  VButton,
+  Breadcrumbs,
+  BreadcrumbItem,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

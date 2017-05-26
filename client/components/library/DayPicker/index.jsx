@@ -2,35 +2,59 @@
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
 import moment from 'moment';
-import { pick } from 'lodash';
-import Daypicker, { DateUtils } from 'react-day-picker';
+import pick from 'lodash/pick';
+import isArray from 'lodash/isArray';
+import RDayPicker, { DateUtils } from 'react-day-picker';
 import DayPickerStyles from './styles.css';
 import Input from '../Input';
 import IconButton from '../IconButton';
 import styles from './styles.scss';
+
+const convertValueToDate = (value) => {
+  if (isArray(value)) {
+    return value.map(v => new Date(v));
+  }
+
+  return new Date(value);
+};
 
 class DayPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isOpen: false,
-      selectedDay: new Date(),
     };
 
     this.handleDayClick = this.handleDayClick.bind(this);
-    this.handleInputClick = this.handleInputClick.bind(this);
+    this.togglePopOver = this.togglePopOver.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleDayClick(day, { selected }) {
-    this.props.onChange(day.toDateString());
-    this.setState({ isOpen: false, selectedDay: day });
+  handleDayClick(day) {
+    const {
+      multiple,
+      value,
+      onChange,
+    } = this.props;
+
+    if (!multiple) {
+      this.props.onChange(day.toISOString());
+      this.setState({ isOpen: false });
+    } else {
+      const selectedIndex = value.findIndex(v =>
+        DateUtils.isSameDay(new Date(v), day)
+      );
+
+      if (selectedIndex > -1) {
+        onChange(value.filter((v, i) => i !== selectedIndex));
+      } else {
+        onChange([...value, day.toISOString()]);
+      }
+    }
   }
 
-  handleInputClick() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
+  togglePopOver() {
+    this.setState({ isOpen: !this.state.isOpen });
   }
 
   handleInputChange(e) {
@@ -47,13 +71,14 @@ class DayPicker extends Component {
     const {
       target,
       iconClassName,
+      value,
     } = this.props;
 
     let dayPickerTargetComponent = (
       <Input
         {...this.props}
         onChange={this.handleInputChange}
-        onFocus={this.handleInputClick}
+        onFocus={this.togglePopOver}
       />
     );
 
@@ -65,27 +90,26 @@ class DayPicker extends Component {
           icon="calendar"
           type="button"
           className={iconClassName}
-          onClick={this.handleInputClick}
+          onClick={this.togglePopOver}
         />
       );
     }
 
     // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
-    const selectedDays = new Date();
-
     return (
       <Popover
         preferPlace="below"
-        onOuterAction={this.handleInputClick}
+        onOuterAction={this.togglePopOver}
         isOpen={this.state.isOpen}
         body={[(
-          <Daypicker
-            ref={(el) => { this.state.dayPicker = el; }}
-            onDayClick={this.handleDayClick}
-            selectedDays={this.state.selectedDay}
-            // TODO: why do we spread props?
-            {...this.props}
-          />
+          <div className={styles.wrapper}>
+            {/*<IconButton className={styles.closeButton} icon="close" onClick={this.togglePopOver} />*/}
+            <RDayPicker
+              onDayClick={this.handleDayClick}
+              selectedDays={convertValueToDate(value)}
+              {...this.props}
+            />
+          </div>
         )]}
       >
         {dayPickerTargetComponent}
@@ -99,6 +123,7 @@ DayPicker.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
   iconClassName: PropTypes.string,
+  multiple: PropTypes.bool.isRequired,
 };
 
 export default DayPicker;

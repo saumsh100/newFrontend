@@ -3,7 +3,6 @@ const updaterRouter = require('express').Router();
 const loaders = require('../../util/loaders');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const _ = require('lodash');
-const fs = require('fs');
 
 updaterRouter.param('syncClientVersionId', loaders('syncClientVersion', 'SyncClientVersion'));
 
@@ -26,26 +25,33 @@ updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, r
  * saying whether the new version is available or not.
  */
 updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req, res, next) => {
-  const reqVersion = parseFloat(req.query.version);
+  const reqVersion = req.query.version.split('.');
+  const versionObject = Object.assign({}, {
+    major: reqVersion[0],
+    minor: reqVersion[1],
+    patch: reqVersion[2],
+    build: reqVersion[3],
+  });
+  console.log(`Update check by SyncClient accountId=${req.accountId} with version=${JSON.stringify(versionObject)}`);
 
-  if (isNaN(reqVersion)) {
+  if (!isValidVersionObject(versionObject)) {
     res.sendStatus(400);
-    console.log('Invalid version number sent by the sync client. Update cancelled.');
+    console.log(`Update cancelled. Invalid version number sent by SyncClient accountId=${req.accountId}.`);
     return;
   }
 
   Promise.resolve(SyncClientVersion.nth(0).run()
     .then((release) => {
-      if (release.version > reqVersion) {
-        const msg = Object.assign(
-          release,
-          { available: true },
-        );
-        res.send(msg);
+      if (isUpdateAvailable(versionObject, release)) {
+        res.send({
+          available: true,
+          url: release.url,
+          key: release.key,
+          secret: release.secret,
+        });
       } else {
         res.send({
-          available: false,
-          url: '',
+          available: false, url: '',
         });
       }
     })
@@ -53,22 +59,27 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
 });
 
 /**
- * Temporary. Will be replaced with S3 bucket.
+ * Make sure version values are numbers
+ * @param versionObject with all 4 blocks of version
+ * @return boolean. True if object is valid (all values are numbers), false otherwise.
  */
-updaterRouter.get('/download', checkPermissions('syncClientVersion:read'), (req, res) => {
-  const filename = 'carecru_setup.exe';
-  try {
-    if (fs.existsSync()) {
-      const fileStream = fs.createReadStream(filename);
-      fileStream.pipe(res);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (err) {
-    console.log('[ERROR]', err);
-    res.sendStatus(404);
-  }
-});
+function isValidVersionObject(versionObject) {
+  return !isNaN(versionObject.major) && !isNaN(versionObject.minor)
+    && !isNaN(versionObject.patch) && !isNaN(versionObject.build);
+}
+
+/**
+ * @param versionObject with all 4 blocks of version
+ * @param releaseInfo a model that also contains 4 blocks of version as they are in the db
+ * @return boolean. True if update is available, false if not.
+ */
+function isUpdateAvailable(versionObject, releaseInfo) {
+  return releaseInfo.major > versionObject.major
+    || releaseInfo.minor > versionObject.minor
+    || releaseInfo.patch > versionObject.patch
+    || releaseInfo.build > versionObject.build
+    || false;
+}
 
 /**
  * Get the latest sync client release info.

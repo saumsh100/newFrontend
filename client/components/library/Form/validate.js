@@ -12,7 +12,7 @@ const asyncEmailValidatePatient = (values) => {
 };
 
 const phoneValidate = (value) => {
-  if (!/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s.]{0,1}[0-9]{3}[-\s.]{0,1}[0-9]{4}$/i.test(value)) {
+  if (!/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(value)) {
     return 'Invalid phone Number';
   }
 

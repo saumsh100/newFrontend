@@ -4,12 +4,14 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import styles from './styles.scss';
 
-export default function CardHeader(props) {
+export default function
+  CardHeader(props) {
   const {
     className,
     children,
     title,
     count,
+    buttons,
   } = props;
 
   const classes = classNames(className, styles.cardHeader);

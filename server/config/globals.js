@@ -45,6 +45,10 @@ const loader = {
   token: environmentVariables.LOADERIO,
 };
 
+const logrocket = {
+  appId: environmentVariables.LOGROCKET_APP_ID,
+};
+
 const staticPath = path.normalize(path.join(root, '../statics'));
 
 module.exports = {
@@ -64,4 +68,5 @@ module.exports = {
   mandrill,
   namespaces,
   loader,
+  logrocket,
 };

@@ -15,6 +15,8 @@ import {
 } from '../constants';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
+import Enterprise from '../entities/models/Enterprise';
+import enterprises from '../entities/collections/enterprises';
 import Patient from '../entities/models/Patient';
 import patients from '../entities/collections/patients';
 import textMessages from '../entities/collections/textMessages';
@@ -41,6 +43,8 @@ import chat from '../entities/collections/chat';
 import Chat from '../entities/models/Chat';
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
+import waitSpots from '../entities/collections/waitSpots';
+import WaitSpot from '../entities/models/WaitSpot';
 import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
 import User from '../entities/models/User';
@@ -51,6 +55,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     // KEYs must map to the response object
     // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
     accounts: new accounts(),
+    enterprises: new enterprises(),
     textMessages: new textMessages(),
     appointments: new appointments(),
     requests: new requests(),
@@ -63,6 +68,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     patients: new patients(),
     chairs: new chairs(),
     chats: new chat(),
+    waitSpots: new waitSpots(),
     weeklySchedules: new weeklySchedules(),
     users: new users(),
     timeOffs: new timeOffs(),
@@ -73,6 +79,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
 
 const Models = {
   accounts: Account,
+  enterprises: Enterprise,
   textMessages: TextMessage,
   appointments: Appointments,
   requests: Requests,
@@ -86,6 +93,7 @@ const Models = {
   chairs: Chairs,
   chats: Chat,
   availabilities: Availability,
+  waitSpots: WaitSpot,
   weeklySchedules: WeeklySchedule,
   users: User,
 };

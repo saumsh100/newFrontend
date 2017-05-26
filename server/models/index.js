@@ -20,6 +20,8 @@ const TextMessage = require('./TextMessage');
 const User = require('./User');
 const Token = require('./Token');
 const Reservation = require('./Reservation');
+const Enterprise = require('./Enterprise');
+const WaitSpot = require('./WaitSpot');
 
 module.exports = {
   Account,
@@ -27,7 +29,7 @@ module.exports = {
   Appointment,
   Chair,
   Chat,
-  WeeklySchedule,
+  Enterprise,
   Invite,
   Patient,
   Family,
@@ -43,4 +45,6 @@ module.exports = {
   Token,
   SyncClientError,
   SyncClientVersion,
+  WaitSpot,
+  WeeklySchedule,
 };

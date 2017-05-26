@@ -24,6 +24,8 @@ const chairSchema = () => {
   return new schema.Entity('chairs');
 };
 
+const enterpriseSchema = () =>
+  new schema.Entity('enterprises');
 
 const chatSchema = () => {
   return new schema.Entity('chats', {
@@ -102,7 +104,13 @@ const reservationSchema = () => {
 
 const timeOffSchema = () => {
   return new schema.Entity('timeOffs');
-}
+};
+
+const waitSpotSchema = () => {
+  return new schema.Entity('waitSpots', {
+    patient: patientSchema(),
+  });
+};
 
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
@@ -113,6 +121,7 @@ const SCHEMAS = {
   account: accountSchema(),
   appointment: appointmentSchema(),
   chair: chairSchema(),
+  enterprise: enterpriseSchema(),
   chat: chatSchema(),
   invite: inviteSchema(),
   patient: patientSchema(),
@@ -126,12 +135,14 @@ const SCHEMAS = {
   practitionerTimeOff: timeOffSchema(),
   syncClientError: syncClientErrorSchema(),
   reservation: reservationSchema(),
+  waitSpot: waitSpotSchema(),
   weeklySchedule: weeklyScheduleSchema(),
   // Collections (list/find)
   accounts: [accountSchema()],
   appointments: [appointmentSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
+  enterprises: [enterpriseSchema()],
   invites: [inviteSchema()],
   patients: [patientSchema()],
   families: [familySchema()],
@@ -143,6 +154,7 @@ const SCHEMAS = {
   permissions: [permissionSchema()],
   practitioners: [practitionerSchema()],
   practitionerTimeOffs: [timeOffSchema()],
+  waitSpots: [waitSpotSchema()],
   weeklySchedules: [weeklyScheduleSchema()],
   reservations: [reservationSchema()],
 };

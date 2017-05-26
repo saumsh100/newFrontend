@@ -9,12 +9,15 @@ export default function Icon(props) {
     size,
     className,
     onClick,
+    style,
   } = props;
 
   const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
 
-  return <i className={classes} style={{fontSize: size + 'em'}} onClick={onClick} />;
+  const finalStyles = Object.assign({}, { fontSize: size + 'em' }, style);
+
+  return <i className={classes} style={finalStyles} onClick={onClick} />;
 }
 
 Icon.defaultProps = {
@@ -26,4 +29,5 @@ Icon.propTypes = {
   size: PropTypes.number,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  style: PropTypes.object,
 };

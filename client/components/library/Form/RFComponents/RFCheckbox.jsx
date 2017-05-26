@@ -5,24 +5,17 @@ import Checkbox from '../../Checkbox';
 class RFCheckbox extends Component {
   constructor(props) {
     super(props);
-    const checked = this.props.input.value || false;
-    this.state = {
-      checked,
-    };
+
     this.handleChange = this.handleChange.bind(this);
   }
 
 
-  handleChange(e) {
+  handleChange() {
     const {
       input,
     } = this.props;
 
-    input.onChange(!this.state.checked);
-
-    this.setState({
-      checked: !this.state.checked,
-    });
+    input.onChange(!input.value);
   }
 
   render() {
@@ -32,7 +25,6 @@ class RFCheckbox extends Component {
       label,
       error,
       meta,
-      flipped,
     } = this.props;
 
     const { touched, asyncValidating, dirty } = meta;
@@ -43,7 +35,7 @@ class RFCheckbox extends Component {
       <Checkbox
         {...this.props}
         {...input}
-        checked={this.state.checked}
+        checked={input.value}
         label={label}
         error={finalError}
         icon={finalIcon}

@@ -3,6 +3,7 @@ const myRouter = require('express').Router();
 const fs = require('fs');
 const newAvailabilitiesRouter = require('./newAvailabilitiesRouter');
 const requestRouter = require('../api/request');
+const waitSpotsRouter = require('../api/waitSpots');
 const reservationsRouter = require('../api/reservations');
 const Account = require('../../models/Account');
 const Patient = require('../../models/Patient');
@@ -12,6 +13,7 @@ const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
 myRouter.use('/requests', requestRouter);
+myRouter.use('/waitSpots', waitSpotsRouter);
 myRouter.use('/reservations', reservationsRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
@@ -42,18 +44,6 @@ myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   }
 });
 
-myRouter.get('/test', (req, res, next) => {
-  try {
-    return res.render('widget', {
-      host: `${req.protocol}://${req.headers.host}`,
-      account: req.account,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-
 function replaceIndex(string, regex, index, repl) {
   let nth = -1;
   return string.replace(regex, (match) => {
@@ -65,12 +55,13 @@ function replaceIndex(string, regex, index, repl) {
 
 const toString = str => `"${str}"`;
 const toTemplateString = str => `\`${str}\``;
+const getPath = filename => `${__dirname}/../../routes/my/${filename}`;
 
 myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
   try {
-    fs.readFile(`${__dirname}/widget.js`, 'utf8', (err, widgetJS) => {
+    fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
       if (err) throw err;
-      fs.readFile(`${__dirname}/widget.css`, 'utf8', (_err, widgetCSS) => {
+      fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {
         if (_err) throw _err;
         const color = req.account.bookingWidgetPrimaryColor || '#FF715A';
         const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${req.account.id}/embed`;

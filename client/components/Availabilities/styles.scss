@@ -111,6 +111,7 @@
     }
 
     &__main {
+      height: 100%;
         width: 75%;
         @media screen and (max-width: 800px) {
             width: 100%;
@@ -447,6 +448,7 @@
 }
 
 .signup {
+  height: 100%;
   z-index: 9999;
   overflow: auto;
   &__wrapper {
@@ -474,7 +476,6 @@
     flex-direction: column;
     width: 25%;
     padding: 0 20px;
-    background-color: #f3715c;
     background-color: var(--bookingWidgetPrimaryColor);
     position: relative;
     @media screen and (max-width: 800px) {
@@ -725,11 +726,17 @@
 }
 
 .widgetBody {
-  height: calc(100% - 40px - 60px);
   overflow-y: auto;
+  height: 90%;
+  height: -webkit-calc(100% - 40px - 60px);
+  height: -moz-calc(100% - 40px - 60px);
+  height: calc(100% - 40px - 60px);
 }
 
 .widgetBodyNoFooter {
+  height: 90%;
+  height: -webkit-calc(100% - 40px);
+  height: -moz-calc(100% - 40px);
   height: calc(100% - 40px);
 }
 

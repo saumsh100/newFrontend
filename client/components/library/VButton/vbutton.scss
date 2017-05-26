@@ -1,0 +1,71 @@
+@import '../../../ui.scss';
+
+.default {
+  font-size: 14px;
+
+  font-family: $dashboard-font;
+  background-color: $background-color;
+  color: $primary-dark;
+
+  vertical-align: middle;
+  cursor: pointer;
+  font-weight: bold;
+  outline: none;
+  text-decoration: none;
+  border: none;
+
+  border-radius: 2px;
+  padding: .78571429em 1.5em;
+  margin: 0 .25em 0 0;
+  line-height: 1em;
+  text-align: center;
+
+  transition: background-color .1s ease, color .1s ease;
+}
+
+.default:hover {
+  background-color: darken($background-color, 5%);
+  color: darken($primary-dark, 5%);
+}
+
+.color-red { color: $primary-white; background-color: $primary-color; }
+.color-red:hover { color: $primary-white; background-color: $primary-color-hover; }
+
+.color-green { color: $primary-white; background-color: $primary-green; }
+.color-green:hover { color: $primary-white; background-color: darken($primary-green, 5%); }
+
+.color-blue { color: $primary-white; background-color: $primary-light-blue; }
+.color-blue:hover { color: $primary-white; background-color: darken($primary-light-blue, 5%); }
+
+.color-yellow { color: $primary-white; background-color: $primary-yellow; }
+.color-yellow:hover { color: $primary-white; background-color: darken($primary-yellow, 5%); }
+
+.positive { composes: color-green; }
+.negative { composes: color-red; }
+
+.icon {
+  margin-right: .5em;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.text {
+  display: inline-block;
+}
+
+.compact {
+  padding: .5em .78571429em;
+}
+
+.size-sm { font-size: 11px; }
+.size-md { font-size: 14px; }
+.size-lg { font-size: 15px; }
+.size-xlg { font-size: 16px; }
+
+.rounded {
+  border-radius: 2em;
+}
+
+.upper-case { text-transform: uppercase; }

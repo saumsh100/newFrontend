@@ -49,6 +49,7 @@ class Modal extends Component {
       title,
       type,
       custom,
+      className,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
@@ -56,7 +57,7 @@ class Modal extends Component {
       modalContainerClassName = classNames(styles.active, modalContainerClassName);
     }
 
-    let modalBodyClassName = styles.modalBody;
+    let modalBodyClassName = classNames(className, styles.modalBody);
 
     if (!custom) {
       modalBodyClassName = type ? classNames(styles[type], modalBodyClassName) : classNames(styles.medium, modalBodyClassName);

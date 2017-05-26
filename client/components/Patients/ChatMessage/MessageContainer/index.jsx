@@ -83,7 +83,7 @@ class MessageContainer extends Component {
           third = <Avatar className={styles.margin}/>;
 
           if (nextMessage !== message.from) {
-            third = <Avatar className={styles.margin} url={this.props.currentPatient.avatar}/>
+            third = <Avatar className={styles.margin} user={{url: this.props.currentPatient.avatar}} />
           }
 
           if (i !== 0) {
@@ -98,7 +98,7 @@ class MessageContainer extends Component {
           first = <Avatar className={styles.margin} />;
 
           if (nextMessage !== message.from) {
-            first = <Avatar className={styles.margin} url='https://placeimg.com/80/80/people'/>
+            first = <Avatar className={styles.margin} user={{url: 'https://placeimg.com/80/80/people'}}/>
           }
 
           if (i !== 0) {
