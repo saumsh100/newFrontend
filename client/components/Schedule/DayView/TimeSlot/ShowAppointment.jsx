@@ -11,16 +11,15 @@ const getDuration = (startDate, endDate, customBufferTime) => {
   return duration.asMinutes() - customBufferTime;
 };
 
-
-function hexToRgbA(hex, opacity){
-  var c;
-  if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-    c= hex.substring(1).split('');
-    if(c.length== 3){
-      c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+function hexToRgbA(hex, opacity) {
+  let c;
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('');
+    if (c.length === 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
-    c= '0x'+c.join('');
-    return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255, ].join(',')+`, ${opacity})`;
+    c = `0x${c.join('')}`;
+    return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c &255].join(',')}, ${opacity})`;
   }
   throw new Error('Bad Hex');
 }
@@ -64,6 +63,7 @@ export default function ShowAppointment(props) {
     patientSelected: patient,
     note,
   });
+
   // Calculating the top position and height of the appointment.
   const startDateHours = moment(startDate).hours();
   const startDateMinutes = moment(startDate).minutes();
@@ -100,7 +100,7 @@ export default function ShowAppointment(props) {
     left,
     width,
     height: heightCalcBuffer,
-    backgroundColor: 'grey',
+    backgroundColor: '#b4b4b5',
   };
 
 
@@ -118,7 +118,7 @@ export default function ShowAppointment(props) {
         style={appStyle}
       >
         <div className={styles.showAppointment_icon}>
-          {(isPatientConfirmed  && <Icon icon="check-circle-o" />)}
+          {(isPatientConfirmed && <Icon icon="check-circle-o" />)}
         </div>
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} >
@@ -140,4 +140,14 @@ export default function ShowAppointment(props) {
       </div>
     </div>
   );
+}
+
+ShowAppointment.PropTypes = {
+  appointment: PropTypes.object.isRequired,
+  bgColor: PropTypes.string,
+  practIndex: PropTypes.number,
+  selectAppointment: PropTypes.func.isRequired,
+  startHour: PropTypes.number,
+  endHour: PropTypes.number,
+  columnWidth: PropTypes.number,
 }

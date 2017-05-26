@@ -1,16 +1,26 @@
 const path = require('path');
 const fs = require('fs');
 
-const { PORT = 5100 } = process.env;
+const SERVER_HOST = process.env.SERVER_HOST || 'localhost';
+const SERVER_PORT = process.env.SERVER_PORT || '5000';
+
+const WP_PROXY_HOST = process.env.WP_PROXY_HOST || 'localhost';
+const WP_PROXY_PORT = process.env.WP_PROXY_PORT || '5100';
+
+console.log(`1 server ${SERVER_HOST}:${SERVER_PORT}; proxy ${WP_PROXY_HOST}:${WP_PROXY_PORT}`);
 
 const {
-  host = 'localhost',
-  serverHost = 'localhost',
-  serverPort = 5000,
+  webpackProxyPort = WP_PROXY_PORT,
+  webpackProxyHost = WP_PROXY_HOST,
+  serverHost = SERVER_HOST,
+  serverPort = SERVER_PORT,
 } = require('yargs').argv;
 
+console.log(`2 server ${serverHost}:${serverPort}; proxy ${webpackProxyHost}:${webpackProxyPort}`);
+
 const projectRoot = process.cwd();
-const target = `http://${serverHost}:${serverPort}`;
+// targetToProxy is the node server that webpack will proxy
+const targetToProxy = `http://${serverHost}:${serverPort}`;
 const contentBase = path.resolve(projectRoot, 'statics');
 // const publicPath = '/';
 
@@ -18,8 +28,8 @@ module.exports = {
   contentBase,
   // publicPath,
 
-  port: PORT,
-  host,
+  port: webpackProxyPort,
+  host: webpackProxyHost,
 
   compress: true,
   historyApiFallback: true,
@@ -38,7 +48,7 @@ module.exports = {
   noInfo: true,
 
   proxy: [{
-    target,
+    target: targetToProxy,
     prependPath: true,
     ws: true,
     // Proxy all requests except HMR ws connection

@@ -4,11 +4,13 @@ const createModel = require('./createModel');
 const type = thinky.type;
 
 const SyncClientVersion = createModel('SyncClientVersion', {
-  version: type.number().required(),
+  major: type.number(),
+  minor: type.number(),
+  patch: type.number(),
   build: type.number(),
-  url: type.string().required(),
-  key: type.string().required(),
-  secret: type.string().required(),
+  url: type.string(),
+  key: type.string(),
+  secret: type.string(),
 });
 
 module.exports = SyncClientVersion;

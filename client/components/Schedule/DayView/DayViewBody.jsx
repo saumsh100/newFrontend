@@ -4,7 +4,7 @@ import TimeColumn from './TimeColumn/TimeColumn';
 import TimeSlot from './TimeSlot/index';
 import styles from './styles.scss';
 
-export default function DayViewBody(props){
+export default function   DayViewBody(props){
   const {
     startHour,
     endHour,
@@ -54,6 +54,7 @@ export default function DayViewBody(props){
               columnWidth={columnWidth}
               startHour={startHour}
               endHour={endHour}
+              schedule={schedule}
               patients={patients}
               appointments={appointments}
               services={services}

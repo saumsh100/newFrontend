@@ -10,6 +10,7 @@ export default function TimeSlot(props) {
     timeSlotHeight,
     startHour,
     endHour,
+    schedule,
     patients,
     appointments,
     services,
@@ -19,20 +20,25 @@ export default function TimeSlot(props) {
     practIndex,
   } = props;
 
-  const filteredApps = appointments.filter((app) => {
-    return app.practitionerId === practitioner.toJS().id;
-  }).map((app) => {
-    const service = services.get(app.get('serviceId'));
-    const patient = patients.get(app.get('patientId'));
-    const chair = chairs.get(app.get('chairId'));
+  const checkFilters = schedule.toJS();
 
+  const filteredApps = appointments.filter((app) => {
+
+    const service = services.get(app.get('serviceId'));
+    const chair = chairs.get(app.get('chairId'));
+    const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
+    const chairsFilter = chair && checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
+
+    return ((app.practitionerId === practitioner.toJS().id) && chairsFilter && servicesFilter);
+  }).map((app) => {
     return Object.assign({}, app.toJS(), {
       appModel: app,
-      serviceData: service.get('name'),
-      chairData: chair.get('name'),
-      patientData: patient,
+      serviceData: services.get(app.get('serviceId')).get('name') || '',
+      chairData: chairs.get(app.get('chairId')).get('name') || '',
+      patientData: patients.get(app.get('patientId')) || '',
     });
   });
+
   const colorArray = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6'];
 
   const timeSlotContentStyle = {
@@ -70,13 +76,15 @@ export default function TimeSlot(props) {
 TimeSlot.PropTypes = {
   startHour: PropTypes.number,
   endHour: PropTypes.number,
-  appointments: PropTypes.object,
-  patients: PropTypes.object,
-  services: PropTypes.object,
-  chairs: PropTypes.object,
+  practIndex: PropTypes.number,
+  columnWidth: PropTypes.number,
+  appointments: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
   timeSlots: PropTypes.array,
   timeSlotHeight: PropTypes.object,
-  practitioner: PropTypes.object,
+  practitioner: PropTypes.object.isRequired,
   selectAppointment: PropTypes.func.isRequired,
 };
 

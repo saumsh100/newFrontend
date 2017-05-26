@@ -13,7 +13,7 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { IconButton } from '../../library';
+import { Button, IconButton } from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
@@ -57,7 +57,7 @@ class AddNewAppointment extends Component {
       patientSelected,
       note,
     } = patientValues;
-    console.log(isPatientConfirmed);
+
     // setting initial duration and buffer if slider isn't used.
     let duration = appointmentValues.duration;
     if (!duration) {
@@ -132,28 +132,20 @@ class AddNewAppointment extends Component {
 
   deleteAppointment() {
     const {
-      formName,
       selectedAppointment,
-      reset,
       reinitializeState,
       updateEntityRequest,
     } = this.props;
 
-    // clicking on the trash can will delete the appointment and clicking on the x icon will reset the form
-    if (!selectedAppointment) {
-      reset(formName);
-      reinitializeState();
-    } else {
-      const deleteApp = confirm('Are you sure you want to delete this appointment?');
+    const deleteApp = confirm('Are you sure you want to delete this appointment?');
 
-      if (deleteApp) {
-        const appModel = selectedAppointment.appointment.appModel;
-        const deletedModel = appModel.set('isDeleted', true);
-        updateEntityRequest({ key: 'appointments', model: deletedModel });
-      }
-
-      reinitializeState();
+    if (deleteApp) {
+      const appModel = selectedAppointment.appointment.appModel;
+      const deletedModel = appModel.set('isDeleted', true);
+      updateEntityRequest({ key: 'appointments', model: deletedModel });
     }
+
+    reinitializeState();
   }
 
   render() {
@@ -164,6 +156,7 @@ class AddNewAppointment extends Component {
       chairs,
       practitioners,
       selectedAppointment,
+      reinitializeState,
     } = this.props;
 
     const remoteButtonProps = {
@@ -174,8 +167,8 @@ class AddNewAppointment extends Component {
     return (
       <div className={styles.formContainer}>
         <IconButton
-          icon={selectedAppointment ? 'trash' : 'times'}
-          onClick={this.deleteAppointment}
+          icon="times"
+          onClick={reinitializeState}
           className={styles.trashIcon}
         />
         <DisplayForm
@@ -197,6 +190,13 @@ class AddNewAppointment extends Component {
           >
             Save
           </RemoteSubmitButton>
+          {selectedAppointment && (
+            <div className={styles.remoteSubmit_buttonDelete}>
+              <Button onClick={this.deleteAppointment} >
+                Delete
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     );

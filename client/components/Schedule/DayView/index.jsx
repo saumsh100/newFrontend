@@ -23,7 +23,6 @@ class DayView extends Component  {
     const filteredAppointments = appointments.get('models').toArray().filter((app) => {
       const startDate = moment(app.startDate);
       const isSameDate = startDate.isSame(currentDate, 'day');
-
       if (!app.isDeleted && isSameDate) {
         return app;
       }
