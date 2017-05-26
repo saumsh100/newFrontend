@@ -53,6 +53,7 @@ export default handleActions({
         filterEntities.push(entity.get('id'));
       }
     });
+
     const mergeObj = {};
     mergeObj[key] = filterEntities;
     return state.merge(mergeObj);

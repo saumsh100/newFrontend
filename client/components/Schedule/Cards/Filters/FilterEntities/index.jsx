@@ -17,16 +17,20 @@ export default function FilterEntities(props) {
     handleEntityCheck,
   } = props;
 
+  let showAllCheck = '';
+  if (entities.length) {
+    showAllCheck = (<div className={styles.filter_options__checkLabel}>
+      <Checkbox
+        checked={allChecked}
+        onChange={() => handleAllCheck(filterKey)}
+      />
+      <span className={styles.filter_options__checkLabel__all}>All</span>
+    </div>);
+  }
   return (
     <div className={styles.filter_options__item}>
       <div className={styles.filter_options__title}>{label}</div>
-      <div className={styles.filter_options__checkLabel}>
-        <Checkbox
-          checked={allChecked}
-          onChange={() => handleAllCheck(filterKey)}
-        />
-        <span className={styles.filter_options__checkLabel__all}>All</span>
-      </div>
+      {showAllCheck}
       {entities.map((entity) => {
         const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
         return (

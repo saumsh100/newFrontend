@@ -26,7 +26,7 @@ export default function FilterPractitioners(props) {
           checked={allChecked}
           onChange={() => handleAllCheck(filterKey)}
         />
-        {practitioners.map((pr, i) => {
+        {practitioners.toArray().map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
           const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
 

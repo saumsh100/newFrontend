@@ -28,7 +28,7 @@ export default function FiltersDisplay(props) {
         </div>
         <div className={styles.filter_header__link} >
           <div className={styles.filter_header__link__text}onClick={handleSelectAll}>Select All</div>
-          <div onClick={handleClearAll} >Clear All</div>
+          {/*<div onClick={handleClearAll} >Clear All</div>*/}
         </div>
       </div>
       <div className={styles.filter_practitioner}>
@@ -41,14 +41,12 @@ export default function FiltersDisplay(props) {
           handleEntityCheck={handleEntityCheck}
         />
         <div className={styles.filter_options}>
-          <FilterServices
+          <FilterEntities
             display="name"
             label="Services"
             filterKey="servicesFilter"
-            practitioners={entities.practitionersFilter}
             allChecked={allChecked.servicesFilter}
             entities={entities.servicesFilter}
-            selectedPractitioners={selectedFilters.practitionersFilter}
             selectedFilterItem={selectedFilters.servicesFilter}
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
