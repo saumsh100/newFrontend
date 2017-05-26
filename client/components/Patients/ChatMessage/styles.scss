@@ -105,7 +105,7 @@
 .topInfo {
   min-width: 100%;
   border-bottom: thin solid lightgrey;
-  height: 13.5%;
+  height: 10vh;
   font-family: 'Gotham-Medium';
   font-size: 1.2em;
   color: #b4b4b5;
@@ -117,7 +117,7 @@
   div{
     position: relative;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate(0, -50%);
     margin-left: 10px;
   }
 
@@ -150,18 +150,26 @@
   font-family: 'Gotham-Medium';
   color: #2e3845;
   font-size: 1.4em;
-  margin: 15px;
+  text-align: center;
+  margin: 15px auto 15px auto;
 }
 
 .allMessages {
-  display: flex;
   align-items: center;
   overflow-y: auto;
   flex-direction: column;
   position: relative;
-  width: 70%;
+  width: 100%;
   border-right: thin solid lightgrey;
   max-height: 80vh;
+  min-height: 80vh;
+}
+
+.container {
+  position: relative;
+  width: 70%;
+  max-height: 80vh;
+  min-height: 80vh;
 }
 
 .raise {
@@ -170,10 +178,10 @@
 
 .sendMessage {
   background-color: #fafafa;
-  position: sticky;
+  position: absolute;
   bottom: 0;
-  width: 95%;
-  margin-top: auto;
+  width: 94%;
+  margin: auto 2% 0 2%;
 }
 
 .text {
@@ -202,6 +210,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .textFrom {

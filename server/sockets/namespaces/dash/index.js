@@ -16,7 +16,21 @@ function setupDashboardNamespace(io) {
     console.log('socket authenticated!');
     runDashboardFeeds(socket);
 
-    socket.on('sendMessage', (data) => {
+      socket.on('room', (room) => {
+        socket.join(room.id);
+      });
+
+    socket.on('say',function(data){
+      io.of(namespaces.dash).in('test').emit('message', 'asdads');
+      console.log('test2')
+    })
+
+      socket.on('sendMessage', (data) => {
+      var clients_in_the_room = io.sockets.clients();
+      console.log(socket.decoded_token);
+      for (var clientId in clients_in_the_room.connected ) {
+        console.log('client: %s', clientId); //Seeing is believing
+      }
       const mergeData = {
         lastTextMessageDate: new Date(),
       };

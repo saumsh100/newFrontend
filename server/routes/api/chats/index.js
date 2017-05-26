@@ -40,7 +40,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
     };
   }
 
-  console.log(joinObject)
+  // console.log(req.app.get('socketio').sockets.clients().connected)
 
   // TODO: add orderBy for lastMessageDate
   return Chat

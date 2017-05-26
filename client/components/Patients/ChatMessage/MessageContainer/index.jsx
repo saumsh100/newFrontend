@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import jwt from 'jwt-decode';
 import moment from 'moment';
 import styles from '../styles.scss';
 import { Avatar, Form, Field } from '../../../library';
@@ -24,14 +25,26 @@ class MessageContainer extends Component {
 
     });
 
+    window.socket.on('message', (data) => {
+      console.log(data);
+      console.log('asdsads')
+    });
+
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
+    window.socket.emit('room', {
+      id: decodedToken.activeAccountId,
+    });
   }
 
   sendMessage(message) {
-    window.socket.emit('sendMessage', {
-      message: message.message,
-      patient: this.props.currentPatient,
-      chatId: this.props.selectedChat.id,
-    });
+    window.socket.emit('say', 'asds');
+    // window.socket.emit('sendMessage', {
+    //   message: message.message,
+    //   patient: this.props.currentPatient,
+    //   chatId: this.props.selectedChat.id,
+    // });
   }
 
   render() {
@@ -84,11 +97,13 @@ class MessageContainer extends Component {
     const name = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName}` : null );
 
     return (
+      <div className={styles.container}>
       <div className={styles.allMessages} id="scrollIntoView">
         <div className={styles.patientName}> {name} </div>
         {display}
         <div className={styles.raise}>
         </div>
+      </div>
         <div className={styles.sendMessage}>
           <Form
             form="chatMessageForm"
