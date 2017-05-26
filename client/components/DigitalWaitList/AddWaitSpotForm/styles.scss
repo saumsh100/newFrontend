@@ -1,0 +1,12 @@
+
+@import '../../../ui';
+
+.label {
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $medium-font;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}

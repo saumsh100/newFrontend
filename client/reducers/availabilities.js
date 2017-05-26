@@ -19,6 +19,8 @@ import {
   SET_PATIENT_USER,
   SET_IS_SUCCESSFUL_BOOKING,
   REFRESH_AVAILABILITIES_STATE,
+  SET_HAS_WAITLIST,
+  UPDATE_WAITSPOT,
   SET_IS_LOGIN,
 } from '../constants';
 
@@ -33,6 +35,19 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
   isLogin: false,
   isTimerExpired: false,
   isSuccessfulBooking: false,
+  hasWaitList: false,
+  waitSpot: {
+    preferences: {
+      mornings: true,
+      afternoons: true,
+      evenings: true,
+      weekdays: true,
+      weekends: true,
+    },
+
+    unavailableDays: [],
+  },
+
   selectedAvailability: null,
   selectedServiceId: null, // Will be set by the initialState from server
   selectedPractitionerId: '',
@@ -54,6 +69,8 @@ export default handleActions({
       isSuccessfulBooking: false,
       registrationStep: 1,
       reservationId: null,
+      hasWaitList: false,
+      waitSpot: null,
     });
   },
 
@@ -79,6 +96,14 @@ export default handleActions({
 
   [SET_IS_TIMER_EXPIRED](state, action) {
     return state.set('isTimerExpired', action.payload);
+  },
+
+  [SET_HAS_WAITLIST](state, action) {
+    return state.set('hasWaitList', action.payload);
+  },
+
+  [UPDATE_WAITSPOT](state, action) {
+    return state.mergeIn(['waitSpot'], action.payload);
   },
 
   [SET_PATIENT_USER](state, action) {

@@ -1,13 +1,13 @@
-import OAuth from './OAuth';
 
-const Enterprise = require('./Enterprise');
 const Account = require('./Account');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
+const Enterprise = require('./Enterprise');
 const WeeklySchedule = require('./WeeklySchedule');
 const Patient = require('./Patient');
 const Family = require('./Family');
+const OAuth = require('./OAuth');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
 const PractitionerTimeOff = require('./PractitionerTimeOff');
@@ -17,10 +17,10 @@ const TextMessage = require('./TextMessage');
 const Token = require('./Token');
 const User = require('./User');
 const Reservation = require('./Reservation');
+const WaitSpot = require('./WaitSpot');
 
 // define relations
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
-
 Permission.belongsTo(User, 'user', 'userId', 'id');
 Permission.belongsTo(Account, 'account', 'accountId', 'id');
 
@@ -85,3 +85,7 @@ Service.hasMany(Reservation, 'reservations', 'id', 'serviceId');
 Service.hasMany(Request, 'requests', 'id', 'serviceId');
 
 OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');
+
+/* WaitSpot */
+WaitSpot.hasOne(Patient, 'patient', 'patientId', 'id');
+WaitSpot.hasOne(Account, 'account', 'accountId', 'id');

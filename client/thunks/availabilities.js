@@ -112,6 +112,31 @@ export function createRequest() {
   };
 }
 
+export function createWaitSpot() {
+  return function (dispatch, getState) {
+    const state = getState();
+    const {
+      account,
+      patientUser,
+      waitSpot,
+    } = state.availabilities.toJS();
+
+    const params = {
+      accountId: account.id,
+      patientId: patientUser.id,
+      preferences: waitSpot.preferences,
+      unavailableDays: waitSpot.unavailableDays,
+    };
+
+    return axios.post('/waitSpots', params)
+      .then(({ data }) => {
+        const waitSpots = data.entities.waitSpots;
+        const id = Object.keys(waitSpots)[0];
+        return waitSpots[id];
+      });
+  };
+}
+
 export function restartBookingProcess() {
   return function (dispatch, getState) {
     // This is a thunk because we may need to do some other maintanence here...

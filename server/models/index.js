@@ -22,6 +22,7 @@ const Token = require('./Token');
 const Reservation = require('./Reservation');
 const Enterprise = require('./Enterprise');
 const OAuth = require('./OAuth');
+const WaitSpot = require('./WaitSpot');
 
 module.exports = {
   Account,
@@ -29,10 +30,11 @@ module.exports = {
   Appointment,
   Chair,
   Chat,
-  WeeklySchedule,
+  Enterprise,
   Invite,
   Patient,
   Family,
+  OAuth,
   Permission,
   Practitioner,
   Practitioner_Service,
@@ -45,6 +47,6 @@ module.exports = {
   Token,
   SyncClientError,
   SyncClientVersion,
-  Enterprise,
-  OAuth,
+  WaitSpot,
+  WeeklySchedule,
 };

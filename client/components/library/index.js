@@ -15,7 +15,7 @@ import DayPicker from './DayPicker';
 import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
 import DashboardStats from './DashboardStats';
-import Form, { FormSection, Field, FieldArray, SaveButton, } from './Form';
+import Form, { FormSection, Field, FieldArray, SaveButton, RemoteSubmitButton } from './Form';
 import Guage from './Guage';
 import Header from './Header';
 import Icon from './Icon';
@@ -88,6 +88,7 @@ export {
   LineChart,
   Modal,
   PieChart,
+  RemoteSubmitButton,
   RouterButton,
   RouterList,
   RouterTabs,

@@ -7,10 +7,11 @@ import Field from './Field';
 import FieldArray from './FieldArray';
 import FormSection from './FormSection';
 import SaveButton from './SaveButton';
+import RemoteSubmitButton from './RemoteSubmitButton';
 import styles from './styles.scss';
 
 
-import { asyncEmailValidate } from './validate'
+import { asyncEmailValidate } from './validate';
 /**
  * Given the requiredFields it will generate a validate function to return errors if
  * a field is empty. Note that this is note fired if the form is pristine.
@@ -104,4 +105,5 @@ export {
   FieldArray,
   FormSection,
   SaveButton,
+  RemoteSubmitButton,
 };

@@ -136,7 +136,7 @@ export default class DropdownSelect extends Component {
     const menuOptions = {
       children,
       toggle,
-      align: 'left',
+      align: this.props.align,
       isOpen: this.state.isOpen,
       close: this.close,
       animAlign: 'right',
@@ -147,6 +147,10 @@ export default class DropdownSelect extends Component {
   }
 }
 
+DropdownSelect.defaultProps = {
+  align: 'left',
+};
+
 DropdownSelect.propTypes = {
   label: PropTypes.string,
   template: PropTypes.func,
@@ -155,4 +159,5 @@ DropdownSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
+  align: PropTypes.string,
 };

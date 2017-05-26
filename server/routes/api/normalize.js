@@ -104,7 +104,13 @@ const reservationSchema = () => {
 
 const timeOffSchema = () => {
   return new schema.Entity('timeOffs');
-}
+};
+
+const waitSpotSchema = () => {
+  return new schema.Entity('waitSpots', {
+    patient: patientSchema(),
+  });
+};
 
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
@@ -129,6 +135,7 @@ const SCHEMAS = {
   practitionerTimeOff: timeOffSchema(),
   syncClientError: syncClientErrorSchema(),
   reservation: reservationSchema(),
+  waitSpot: waitSpotSchema(),
   weeklySchedule: weeklyScheduleSchema(),
   // Collections (list/find)
   accounts: [accountSchema()],
@@ -147,6 +154,7 @@ const SCHEMAS = {
   permissions: [permissionSchema()],
   practitioners: [practitionerSchema()],
   practitionerTimeOffs: [timeOffSchema()],
+  waitSpots: [waitSpotSchema()],
   weeklySchedules: [weeklyScheduleSchema()],
   reservations: [reservationSchema()],
 };

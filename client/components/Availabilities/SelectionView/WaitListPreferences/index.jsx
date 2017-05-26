@@ -1,82 +1,126 @@
 
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
-import DayPicker, { DateUtils } from 'react-day-picker';
-import { Checkbox } from '../../../library';
-import 'react-day-picker/lib/style.css';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+  Checkbox,
+  Grid,
+  Row,
+  Col,
+  DayPicker,
+} from '../../../library';
+import * as Actions from '../../../../actions/availabilities';
 import styles from './styles.scss';
 
-class Preferences extends Component {
+class WaitListPreferences extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedStartDay: new Date(),
-      selectedEndDay: moment().add(4, 'd')._d,
-      modalIsOpen: false,
-      practitionersStartEndDate: {},
-      checked: false,
+
+    this.updatePreferencesField = this.updatePreferencesField.bind(this);
+  }
+
+  updatePreferencesField(name) {
+    return () => {
+      this.props.updateWaitSpot({
+        preferences: Object.assign(
+          {},
+          this.props.waitSpot.get('preferences').toJS(),
+          {
+            [name]: !this.props.waitSpot.getIn(['preferences', name]),
+          },
+        ),
+      });
     };
-
-    this.openModal = this.openModal.bind(this);
-    this.handleSaveClick = this.handleSaveClick.bind(this);
-  }
-
-  openModal() {
-    this.setState({ modalIsOpen: !this.state.modalIsOpen });
-  }
-
-  handleSaveClick(e) {
-    e.preventDefault();
-    const { setRegistrationStep } = this.props;
-    setRegistrationStep(2);
   }
 
   render() {
+    const { waitSpot, updateWaitSpot } = this.props;
+    const preferences = waitSpot.get('preferences');
     return (
-      <div className={styles.appointment__footer_preferences}>
-        <div className={styles.appointment__preferences}>
-          <div className={styles.appointment__preferences_left}>
-            <div className={styles.appointment__preferences_title}>
-              PREFERENCES
-            </div>
-            <div className={styles.appointment__preferences_checkbox}>
-              <div>
-                <Checkbox id="morning" value="morning" label="Morning"/>
-                <Checkbox id="afternoon" value="afternoon" label="Afternoon"/>
-                <Checkbox id="evenings" value="evenings" label="Evenings"/>
-              </div>
-              <div>
-                <Checkbox id="weekdays" value="weekdays" label="Weekdays"/>
-                <Checkbox id="weekends" value="weekends" label="Weekends"/>
-              </div>
-            </div>
-          </div>
-          <div className={styles.appointment__preferences_right}>
-            <div className={styles.appointment__daypicker}>
-              <div className={styles.appointment__preferences_title}>
-                Appointment scheduler
-                <div onClick={this.openModal}
-                     className={styles.appointment__daypicker_icon}>
-                  <i className="fa fa-calendar"/>
+      <Grid className={styles.gridContainer}>
+        <Row>
+          <Col xs={12} sm={6}>
+            <Row>
+              <Col xs={12}>
+                <div className={styles.label}>
+                  Preferences
                 </div>
-              </div>
-              {this.state.modalIsOpen ?
-                (
-                  <div onClick={this.openModal} className={styles.appointment__daypicker_modal}>
-                    <DayPicker
-                      className={styles.appointment__daypicker_select}
-                      onDayClick={ this.handleDayClick }
-                      selectedDays={ this.isDaySelected }/>
-                  </div>
-                ) : null
-              }
-            </div>
-            <button disabled={!this.props.startsAt} onClick={this.handleSaveClick} className={styles.appointment__preferences_btn} type="submit">Continue</button>
-          </div>
-        </div>
-      </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={6}>
+                <Checkbox
+                  className={styles.prefCheckBox}
+                  checked={preferences.get('mornings')}
+                  label="Mornings"
+                  onChange={this.updatePreferencesField('mornings')}
+                />
+                <Checkbox
+                  className={styles.prefCheckBox}
+                  checked={preferences.get('afternoons')}
+                  label="Afternoons"
+                  onChange={this.updatePreferencesField('afternoons')}
+                />
+                <Checkbox
+                  className={styles.prefCheckBox}
+                  checked={preferences.get('evenings')}
+                  label="Evenings"
+                  onChange={this.updatePreferencesField('evenings')}
+                />
+              </Col>
+              <Col xs={6}>
+                <Checkbox
+                  className={styles.prefCheckBox}
+                  checked={preferences.get('weekdays')}
+                  label="Weekdays"
+                  onChange={this.updatePreferencesField('weekdays')}
+                />
+                <Checkbox
+                  className={styles.prefCheckBox}
+                  checked={preferences.get('weekends')}
+                  label="Weekends"
+                  onChange={this.updatePreferencesField('weekends')}
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Row>
+              <Col xs={12}>
+                <div className={styles.label}>
+                  Select Unavailable Days
+                  <DayPicker
+                    multiple
+                    target="icon"
+                    iconClassName={styles.unavailButton}
+                    value={waitSpot.get('unavailableDays').toArray()}
+                    onChange={dates => updateWaitSpot({ unavailableDays: dates })}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
 
-export default Preferences;
+WaitListPreferences.propTypes = {
+  waitSpot: PropTypes.object,
+  updateWaitSpot: PropTypes.func.isRequired,
+};
+
+function mapStateToProps({ availabilities }) {
+  return {
+    waitSpot: availabilities.get('waitSpot'),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    updateWaitSpot: Actions.updateWaitSpot,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WaitListPreferences);

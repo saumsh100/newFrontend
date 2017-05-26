@@ -10,6 +10,7 @@ import {
   sendMessageOnClientAction,
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
+import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequests';
 
 export function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {
@@ -30,6 +31,36 @@ export function fetchEntities({ key, join, params = {}, url }) {
       .catch((err) => {
         // TODO: set didInvalidate=true of entity and dispatch alert action
         console.log(err);
+      });
+  };
+}
+
+export function fetchEntitiesRequest({ id, key, join, params = {}, url }) {
+  return (dispatch, getState) => {
+    const { entities } = getState();
+    const entity = entities.get(key);
+    // Add onto the query param for join if passed in
+    if (join && join.length) {
+      params.join = join.join(',');
+    }
+
+    url = url || entity.getUrlRoot();
+
+    // Create record for request
+    dispatch(createRequest({ id }));
+
+    return axios.get(url, { params })
+      .then((response) => {
+        const { data } = response;
+        dispatch(receiveRequest({ id, data }));
+        console.log(data);
+        dispatch(receiveEntities({ key, entities: data.entities }));
+        return data.entities;
+      })
+      .catch((error) => {
+        // TODO: set didInvalidate=true of entity and dispatch alert action
+        errorRequest({ id, error });
+        throw error;
       });
   };
 }
