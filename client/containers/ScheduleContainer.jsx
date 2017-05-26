@@ -33,8 +33,7 @@ class ScheduleContainer extends React.Component {
 
     Promise.all([
       this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
-      this.props.fetchEntities({ key: 'practitioners'}),
-      this.props.fetchEntities({ key: 'services' }),
+      this.props.fetchEntities({ key: 'practitioners', join: ['services']}),
       this.props.fetchEntities({ key: 'chairs' }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);

@@ -134,8 +134,8 @@ class ScheduleComponent extends Component {
                 <Filters
                   schedule={schedule}
                   chairs={chairs.get('models').toArray()}
-                  practitioners={practitioners.get('models').toArray()}
-                  services={services.get('models').toArray()}
+                  practitioners={practitioners.get('models')}
+                  services={services.get('models')}
                 />
               </Col>
             </Row>

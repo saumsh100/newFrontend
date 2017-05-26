@@ -55,7 +55,7 @@ export default function TimeSlot(props) {
         timeSlotHeight={timeSlotHeight}
         columnWidth={columnWidth}
       />
-      {filteredApps.map((app, index) => {
+      {filteredApps && filteredApps.map((app, index) => {
         return (
           <ShowAppointment
             key={index}

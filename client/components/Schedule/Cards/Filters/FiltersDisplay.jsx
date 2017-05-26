@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import FilterPractitioners from './FilterPractitioners';
 import FilterEntities from './FilterEntities';
+import FilterServices from './FilterServices';
 import { Card, Icon } from '../../../library';
 import styles from './styles.scss';
 
@@ -40,12 +41,14 @@ export default function FiltersDisplay(props) {
           handleEntityCheck={handleEntityCheck}
         />
         <div className={styles.filter_options}>
-          <FilterEntities
+          <FilterServices
             display="name"
             label="Services"
             filterKey="servicesFilter"
+            practitioners={entities.practitionersFilter}
             allChecked={allChecked.servicesFilter}
             entities={entities.servicesFilter}
+            selectedPractitioners={selectedFilters.practitionersFilter}
             selectedFilterItem={selectedFilters.servicesFilter}
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}

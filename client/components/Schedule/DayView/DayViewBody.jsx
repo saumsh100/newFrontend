@@ -42,7 +42,7 @@ export default function   DayViewBody(props){
         timeSlotHeight={timeSlotHeight}
       />
       <div className={styles.dayView_body_timeSlot}>
-        {practitionersArray.map((pract, i, arr) => {
+        {practitionersArray.length && practitionersArray.map((pract, i, arr) => {
           const columnWidth = 100 / arr.length;
           return (
             <TimeSlot
