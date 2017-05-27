@@ -41,6 +41,8 @@ import Chairs from '../entities/models/Chair';
 import chairs from '../entities/collections/chairs';
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
+import waitSpots from '../entities/collections/waitSpots';
+import WaitSpot from '../entities/models/WaitSpot';
 import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
 import User from '../entities/models/User';
@@ -63,6 +65,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     dialogs: new dialogs(),
     patients: new patients(),
     chairs: new chairs(),
+    waitSpots: new waitSpots(),
     weeklySchedules: new weeklySchedules(),
     users: new users(),
     timeOffs: new timeOffs(),
@@ -86,6 +89,7 @@ const Models = {
   patients: Patient,
   chairs: Chairs,
   availabilities: Availability,
+  waitSpots: WaitSpot,
   weeklySchedules: WeeklySchedule,
   users: User,
 };

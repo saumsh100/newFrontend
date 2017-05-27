@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import createModel from '../createModel';
 
 const PatientSchema = {
@@ -32,6 +33,10 @@ export default class Patient extends createModel(PatientSchema) {
    */
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
+  }
+
+  getAge() {
+    return moment().diff(this.get('birthDate'), 'years');
   }
 
   getInsurance(){

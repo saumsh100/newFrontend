@@ -20,10 +20,16 @@ const UserMenu = (props) => {
     <Button flat {...props} className={styles.userMenuButton}>
       <div className={styles.userMenuGreeting}>
         <span>Hello Corina,</span>
-        <br/>
+        <br />
         <span className={styles.userRole}>Office Manager</span>
       </div>
-      <Avatar className={styles.userAvatar} url="https://placeimg.com/80/80/animals" title="Cats" />
+      <Avatar
+        className={styles.userAvatar}
+        user={{
+          url: 'https://placeimg.com/80/80/animals',
+          firstName: 'Test',
+        }}
+      />
       <Icon icon="caret-down" />
     </Button>
   );

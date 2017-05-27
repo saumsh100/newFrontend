@@ -1,4 +1,4 @@
-1
+
 const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
@@ -984,6 +984,26 @@ const SEEDS = {
       url: '',
       key: '',
       secret: '',
+    },
+  ],
+
+  WaitSpot: [
+    {
+      accountId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId,
+      patientId: sergeyPatientId,
+      preferences: {
+        weekends: false,
+        evenings: false,
+      },
+
+      unavailableDays: [
+        moment().toISOString(),
+        moment().add(2, 'days').toISOString(),
+      ],
     },
   ],
 };

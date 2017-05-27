@@ -1,7 +1,7 @@
 
 import React, { PropTypes, Component, defaultProps } from 'react';
-import styles from './styles.scss';
 import classNames from 'classnames/bind';
+import styles from './styles.scss';
 
 const cx = classNames.bind(styles);
 

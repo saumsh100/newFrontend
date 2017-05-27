@@ -40,6 +40,7 @@ function AvailabilitiesPreferences(props) {
         <Col className={styles.dsCol} xs={6}>
           <span className={styles.label}>Practitioner</span>
           <DropdownSelect
+            align="right"
             options={practitionerOptions}
             value={selectedPractitionerId}
             onChange={value => setSelectedPractitionerId(value)}

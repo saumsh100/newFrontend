@@ -8,6 +8,7 @@ class Calendar extends Component {
     this.state = {
       selectedDay: null,
     };
+
     this.handleDayClick = this.handleDayClick.bind(this);
   }
 

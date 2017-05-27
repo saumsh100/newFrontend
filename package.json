@@ -2,7 +2,7 @@
   "name": "carecru",
   "version": "0.0.0",
   "description": "Dental Practice Dashboard",
-  "author": "Justin Sharp <justin.d.sharp@gmail.com>",
+  "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
     "node": "~6.10.3",
     "npm": "~3.10.10"
@@ -44,6 +44,7 @@
     "babel-preset-env": "^1.4.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
     "basic-auth-connect": "^1.0.0",
     "bcrypt": "^0.8.7",
     "body-parser": "^1.14.2",
@@ -193,6 +194,7 @@
   "devDependencies": {
     "@kadira/storybook": "^2.35.3",
     "@kadira/storybook-addon-knobs": "^1.7.1",
+    "babel-jest": "^20.0.3",
     "chai": "^3.5.0",
     "eslint": "^3.5.0",
     "eslint-config-airbnb": "^11.1.0",

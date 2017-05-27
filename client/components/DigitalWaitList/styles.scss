@@ -1,0 +1,138 @@
+
+@import "../../ui";
+
+.fa-envelope {
+  color: $primary-blue;
+  &:hover {
+    color: darken($primary-blue, 5%);
+  }
+}
+
+.fa-phone {
+  color: $primary-yellow;
+  &:hover {
+    color: darken($primary-yellow, 5%);
+  }
+}
+
+.fa-comment {
+  color: $primary-color;
+  &:hover {
+    color: darken($primary-color, 5%);
+  }
+}
+
+.reminders {
+  border-top: $card-border-size $primary-darkgrey;
+  height: 604px;
+  margin-bottom: 20px;
+  &__header {
+    padding: 0 15px 0 15px;
+  }
+  &__body {
+    overflow: auto;
+    max-height: 604px;
+  }
+}
+
+.patients {
+  border-top: 1px solid $primary-grey;
+  padding: 0;
+  margin: 0;
+  &__item {
+    padding: 0 40px 0 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 110px;
+    list-style: none;
+    margin: 0;
+    flex-direction: row;
+    border-bottom: 1px solid $primary-lightgrey;
+    @media screen and (max-width: 400px) {
+      padding: 0 5px;
+    }
+    @media screen and (max-width: 450px) {
+      padding: 10px;
+      height: 100%;
+      flex-direction: column;
+    }
+    &_wrapper {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      color: $primary-darkgrey;
+      @media screen and (max-width: 450px) {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    &_left {
+      @media screen and (max-width: 450px) {
+        margin-top: 10px;
+      }
+      div {
+        max-width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        text-overflow: ellipsis;
+        @media screen and (max-width: 450px) {
+          text-align: center;
+        }
+      }
+    }
+    &_right {
+      text-align: right;
+      @media screen and (max-width: 450px) {
+        text-align: center;
+        margin-left: 0;
+        margin-top: 10px;
+      }
+    }
+
+    &_days {
+      color: $primary-dark;
+      padding: 2px 0;
+      white-space: pre-line;
+      @media screen and (max-width: 450px) {
+        color: $primary-darkgrey;
+      }
+      span {
+        margin: 0 2px;
+      }
+    }
+
+    &_img {
+      width: 44px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    &_name {
+      color: $primary-dark;
+    }
+
+    &_icon {
+      cursor: pointer;
+      color: $primary-darkgrey;
+      display: flex;
+      position: absolute;
+      right: 10px;
+      @media screen and (max-width: 450px) {
+        margin-top: 5px;
+        position: relative;
+        right: 0;
+      }
+    }
+  }
+}
+
+.modalWrapper {
+  //padding: 20px;
+}
