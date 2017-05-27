@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
-import { Button, Timer, VButton, FBLoginButton } from '../../library';
+import { Button, Timer, VButton, Avatar, DropdownMenu, MenuItem } from '../../library';
 import SignUpForm from './SignUpForm';
 import ConfirmNumberForm from './ConfirmNumberForm';
 import LoginForm from './LoginForm';
@@ -39,12 +39,7 @@ class SubmitView extends Component {
 
   componentWillMount() {
     this.props.loadPatient(token.get())
-      .then(patient =>
-        (patient ?
-          this.props.createRequest() :
-          token.remove()
-        )
-      );
+      .then(patient => (!patient) && token.remove());
   }
 
   login(credentials) {
@@ -59,6 +54,11 @@ class SubmitView extends Component {
           });
         }
       });
+  }
+
+  logout() {
+    token.remove();
+    this.props.setPatientUser(null);
   }
 
   confirmAndBook(values) {
@@ -162,41 +162,56 @@ class SubmitView extends Component {
       );
     }
 
-    let timerComponent = (
-      <div className={styles.timerWrapper}>
-        <Timer
-          className={styles.signup__header_timer}
-          totalSeconds={TOTAL_SECONDS_ALLOWED}
-          color={bookingWidgetPrimaryColor}
-          onEnd={() => setIsTimerExpired(true)}
-        />
-      </div>
+    const showTimer = !(isSuccessfulBooking || isTimerExpired);
+
+    const PatientAvatar = () =>
+      <Avatar user={patientUser} className={styles.avatar} onClick={() => this.ddMenu.toggle()} />;
+
+    const avatarComponent = () => (
+      <DropdownMenu labelComponent={PatientAvatar} ref={(ddMenu) => { this.ddMenu = ddMenu; }}>
+        <MenuItem icon="power-off" onClick={() => this.logout()}>Sign Out</MenuItem>
+      </DropdownMenu>
     );
-
-    if (isSuccessfulBooking || isTimerExpired) {
-      timerComponent = null;
-    }
-
-    const showLoginButtons = !(isLogin || isSuccessfulBooking);
 
     return (
       <div className={styles.submitViewWrapper}>
-        {timerComponent}
-        <div className={styles.formWrapper}>
-          {formComponent}
-        </div>
+        <div className={styles.timerWrapper}>
+          { showTimer ? (
+            <Timer
+              className={styles.signup__header_timer}
+              totalSeconds={TOTAL_SECONDS_ALLOWED}
+              color={bookingWidgetPrimaryColor}
+              onEnd={() => setIsTimerExpired(true)}
+            />
+          ) : null }
 
-        { showLoginButtons ? (
-          <div className={styles.signup__footer}>
-            <div className={styles.signup__footer_header}>
-              <div className={styles.signup__footer_title}>
-                ALREADY HAVE AN ACCOUNT?
-              </div>
-
-              <VButton color="blue" compact size="tiny" onClick={() => this.props.setIsLogin(true)}>Login Here</VButton>
+          { !isLogin ? (
+            <div className={styles['user-component']}>
+              { patientUser ?
+                avatarComponent() :
+                <VButton
+                  icon="user"
+                  color="red"
+                  className={styles['login-button']}
+                  onClick={() => this.props.setIsLogin(true)}
+                />
+              }
             </div>
-          </div>
-        ) : null }
+          ) : null }
+        </div>
+        <div className={styles.formWrapper}>
+
+          { (!isSuccessfulBooking && patientUser) ? (
+            <div style={{ textAlign: 'center' }}>
+              <div className={styles.messageWrapper}>
+                Do you really want to requested your appointment?
+              </div>
+              <VButton color="red" onClick={() => this.props.createRequest()}>
+                Request
+              </VButton>
+            </div>
+          ) : formComponent }
+        </div>
       </div>
     );
   }
@@ -206,7 +221,9 @@ SubmitView.propTypes = {
   createPatient: PropTypes.func.isRequired,
   confirmCode: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
+  createWaitSpot: PropTypes.func.isRequired,
   loginPatient: PropTypes.func.isRequired,
+  setPatientUser: PropTypes.func.isRequired,
   loadPatient: PropTypes.func.isRequired,
   setIsConfirming: PropTypes.func.isRequired,
   setIsLogin: PropTypes.func.isRequired,
@@ -218,7 +235,11 @@ SubmitView.propTypes = {
   isSuccessfulBooking: PropTypes.bool.isRequired,
   closeBookingModal: PropTypes.func.isRequired,
   bookingWidgetPrimaryColor: PropTypes.string,
-  patientUser: PropTypes.object,
+  patientUser: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+  }),
+  hasWaitList: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps({ availabilities }) {
@@ -240,6 +261,7 @@ function mapDispatchToProps(dispatch) {
     createPatient: Thunks.createPatient,
     loginPatient: Thunks.loginPatient,
     loadPatient: Thunks.loadPatient,
+    setPatientUser: Actions.setPatientUser,
     confirmCode: Thunks.confirmCode,
     createRequest: Thunks.createRequest,
     createWaitSpot: Thunks.createWaitSpot,

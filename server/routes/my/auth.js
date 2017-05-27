@@ -1,11 +1,10 @@
 import { Router } from 'express';
-import { omit } from 'lodash';
 import { PatientAuth } from '../../lib/auth';
 
 const authRouter = Router();
 
-const signTokenAndSend = res => ({ id }) =>
-  PatientAuth.signToken({ id })
+const signTokenAndSend = res => ({ id, firstName }) =>
+  PatientAuth.signToken({ id, firstName })
     .then(token => res.json({ token }));
 
 authRouter.post('/signup', ({ body: patient }, res, next) => {
