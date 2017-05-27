@@ -80,7 +80,7 @@ class MessageContainer extends Component {
         if (message.from === this.props.currentPatient.phoneNumber) {
           first = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.textFrom}>{message.body}</div>;
-          third = <Avatar className={styles.margin}/>;
+          third = <div className={styles.margin2} > </div>;
 
           if (nextMessage !== message.from) {
             third = <Avatar className={styles.margin} user={{url: this.props.currentPatient.avatar}} />
@@ -95,7 +95,7 @@ class MessageContainer extends Component {
         } else {
           third = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.text}>{message.body}</div>;
-          first = <Avatar className={styles.margin} />;
+          first = <div className={styles.margin2} > </div>;
 
           if (nextMessage !== message.from) {
             first = <Avatar className={styles.margin} user={{url: 'https://placeimg.com/80/80/people'}}/>
