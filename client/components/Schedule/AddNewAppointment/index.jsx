@@ -95,9 +95,15 @@ class AddNewAppointment extends Component {
 
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment) {
-      createEntityRequest({ key: 'appointments', entityData: newAppointment });
-      reinitializeState();
-      reset(formName);
+      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then((result)=>{
+        if(!result) {
+          alert('This appointment is invalid')
+        } else {
+          reinitializeState();
+          reset(formName);
+        }
+      }).catch(error=>error);
+
     } else {
       const appModel = selectedAppointment.appointment.appModel;
       const appModelSynced = appModel.set('isSyncedWithPMS', false);

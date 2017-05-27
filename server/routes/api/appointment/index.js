@@ -64,7 +64,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = req.body;
 
-  console.log(appointmentData,"--------------------------------------------")
+ // console.log(appointmentData,"--------------------------------------------")
   const startDate = r.ISO8601(appointmentData.startDate);
   const endDate = r.ISO8601(appointmentData.endDate);
 
@@ -73,20 +73,18 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     .filter({ isDeleted: false })
     .run()
     .then((appointments) => {
-      console.log(appointments);
+      //console.log(appointments);
       return appointments.map((app) => ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)));
     })
     .then((data) => {
-      console.log(data);
-      const test = data.every((el) => el ===true);
-      console.log(test)
-      if(data.length === 0 || test) {
-        console.log("zzzz")
+      //console.log(data);
+      const testIfOverlap = data.every((el) => el ===true);
+      if(data.length === 0 || testIfOverlap) {
         return Appointment.save(appointmentData)
           .then(appt => res.status(201).send(normalize('appointment', appt)))
           .catch(next);
       } else {
-        console.log("failed...")
+        return res.sendStatus(404);
       }
     })
     .catch(next);
