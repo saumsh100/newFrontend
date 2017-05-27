@@ -27,7 +27,6 @@ class DayView extends Component  {
         return app;
       }
     });
-
     return (
       <DayViewBody
         schedule={schedule}

@@ -64,6 +64,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = req.body;
 
+  console.log(appointmentData,"--------------------------------------------")
   const startDate = r.ISO8601(appointmentData.startDate);
   const endDate = r.ISO8601(appointmentData.endDate);
 
@@ -77,7 +78,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     })
     .then((data) => {
       console.log(data);
-      const test = data.every((el) => el === true);
+      const test = data.every((el) => el ===true);
       console.log(test)
       if(data.length === 0 || test) {
         console.log("zzzz")

@@ -38,6 +38,7 @@ export default function TimeSlot(props) {
     });
   });
 
+  console.log(filteredApps)
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
     boxSizing: 'border-box',
