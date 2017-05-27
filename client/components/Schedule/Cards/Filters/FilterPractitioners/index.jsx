@@ -21,8 +21,6 @@ export default function FilterPractitioners(props) {
 
   const colorArray = ['primaryColor', 'primaryYellow', 'primaryGreen', 'primaryBlueGreen' ];
 
-  const sortedPractitioners = practitioners.sort(sortPractitionersAlphabetical);
-
   return (
     <div>
       <div className={styles.filter_practitioner__title}>
@@ -35,7 +33,7 @@ export default function FilterPractitioners(props) {
           checked={allChecked}
           onChange={() => handleAllCheck(filterKey)}
         />
-        {sortedPractitioners.toArray().map((pr, i) => {
+        {practitioners.toArray().map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
           const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
 

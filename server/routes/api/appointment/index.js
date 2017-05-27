@@ -64,7 +64,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = req.body;
 
- // console.log(appointmentData,"--------------------------------------------")
+ console.log(appointmentData,"--------------------------------------------")
   const startDate = r.ISO8601(appointmentData.startDate);
   const endDate = r.ISO8601(appointmentData.endDate);
 
@@ -73,17 +73,28 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     .filter({ isDeleted: false })
     .run()
     .then((appointments) => {
-      //console.log(appointments);
-      return appointments.map((app) => ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)));
+      console.log(appointments);
+      return appointments.map((app) => {
+          if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            return true;
+          } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      );
     })
     .then((data) => {
-      //console.log(data);
+      console.log(data);
       const testIfOverlap = data.every((el) => el ===true);
       if(data.length === 0 || testIfOverlap) {
+        console.log("passed")
         return Appointment.save(appointmentData)
           .then(appt => res.status(201).send(normalize('appointment', appt)))
           .catch(next);
       } else {
+        console.log("failed")
         return res.sendStatus(404);
       }
     })
@@ -174,8 +185,53 @@ appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'),
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
-  return req.appointment.merge(req.body).save()
-    .then(appointment => res.send(normalize('appointment', appointment)))
+
+  const accountId = req.accountId;
+
+  const {
+    practitionerId,
+    chairId,
+    patientId,
+  } = req.body;
+
+  const appointmentData = req.body;
+
+  console.log(appointmentData,"--------------------------------------------")
+  const startDate = r.ISO8601(appointmentData.startDate);
+  const endDate = r.ISO8601(appointmentData.endDate);
+
+  Appointment.filter({ accountId })
+    .filter(r.row('startDate').during(startDate, endDate))
+    .filter({ isDeleted: false })
+    .run()
+    .then((appointments) => {
+     console.log(appointments)
+      const filterAppointments = appointments.filter((app) => !(app.id === appointmentData.id));
+      console.log("------------------",filterAppointments);
+      return filterAppointments.map((app) => {
+          if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            return true;
+          } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      );
+    })
+    .then((data) => {
+      console.log(data);
+      const testIfOverlap = data.every((el) => el ===true);
+      if(data.length === 0 || testIfOverlap) {
+        console.log("passed")
+        return req.appointment.merge(req.body).save()
+          .then(appointment => res.send(normalize('appointment', appointment)))
+          .catch(next);
+      } else {
+        console.log("failed")
+        return res.sendStatus(404);
+      }
+    })
     .catch(next);
 });
 
