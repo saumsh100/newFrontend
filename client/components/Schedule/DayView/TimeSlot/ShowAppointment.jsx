@@ -44,6 +44,7 @@ export default function ShowAppointment(props) {
     chairData,
     patientData,
     isPatientConfirmed,
+    isSplit,
   } = appointment;
 
   const patient = patientData.toJS();
@@ -97,7 +98,7 @@ export default function ShowAppointment(props) {
 
   // calculating the buffer position and height
   const heightCalcBuffer = `${((customBufferTime / 60) / totalHours) * 100}%`;
-  const bufferStyle = {
+  let bufferStyle = {
     top: `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`,
     left,
     width,
@@ -105,7 +106,21 @@ export default function ShowAppointment(props) {
     backgroundColor: '#b4b4b5',
   };
 
-
+  if (isSplit) {
+    const leftSplit = `${(columnWidth * practIndex) + (columnWidth * 0.5)}%`;
+    const widthSplit = `${columnWidth * 0.5}%`;
+    appStyle = Object.assign({}, appStyle, {
+      left: leftSplit,
+      width: widthSplit,
+    });
+    bufferStyle = {
+      top: `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`,
+      left: leftSplit,
+      width: widthSplit,
+      height: heightCalcBuffer,
+      backgroundColor: '#b4b4b5',
+    };
+  }
   return (
     <div
       onClick={() => {
@@ -139,6 +154,9 @@ export default function ShowAppointment(props) {
       </div>
       <div className={styles.showAppointment} style={bufferStyle}>
         {''}
+      </div>
+      <div>
+        {isSplit}
       </div>
     </div>
   );
