@@ -109,8 +109,13 @@ class AddNewAppointment extends Component {
       const appModelSynced = appModel.set('isSyncedWithPMS', false);
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
-      updateEntityRequest({ key: 'appointments', model: modifiedAppointment });
-      reinitializeState();
+      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then((result)=>{
+        if(!result) {
+          alert('This appointment edit is invalid')
+        } else {
+          reinitializeState();
+        }
+      }).catch(error=>error);
     }
   }
 

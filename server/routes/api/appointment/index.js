@@ -12,6 +12,15 @@ const moment = require('moment');
 
 appointmentsRouter.param('appointmentId', loaders('appointment', 'Appointment'));
 
+function checkOverLapping(appointments, startDate, endDate) {
+  return appointments.filter((app)=>{
+    if((startDate.isSame(moment(app.startDate))) ||
+      (startDate.isBetween(moment(app.startDate), moment(app.endDate))) ||
+      (endDate.isBetween(moment(app.startDate), moment(app.endDate)))) {
+      return app;
+    };
+  });
+}
 appointmentsRouter.get('/', (req, res, next) => {
   const {
     accountId,
@@ -64,47 +73,26 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = req.body;
 
-  const startDate2 = moment(appointmentData.startDate).startOf('day').toISOString();
-  const endDate2 = moment(appointmentData.endDate).endOf('day').toISOString();
-
- console.log(appointmentData,"--------------------------------------------")
-  const startDate = r.ISO8601(startDate2);
-  const endDate = r.ISO8601(endDate2);
+  const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
+  const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate))
     .filter({ isDeleted: false })
     .run()
     .then((appointments) => {
-
-    const filteredApps = appointments.filter((app)=>{
-      if((moment(appointmentData.startDate).isSame(moment(app.startDate))) ||
-      (moment(appointmentData.startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
-        (moment(appointmentData.endDate).isBetween(moment(app.startDate), moment(app.endDate)))) {
-         return app;
-       };
-      });
-      return filteredApps.map((app) => {
-          if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
-            return true;
-          } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
-            return true;
-          } else {
-            return false;
-          }
-        }
+      const filteredApps = checkOverLapping(appointments,moment(appointmentData.startDate), moment(appointmentData.endDate));
+      return filteredApps.map((app) => ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) ||
+        ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId))
       );
     })
     .then((data) => {
-      //console.log(data);
       const testIfOverlap = data.every((el) => el ===true);
       if(data.length === 0 || testIfOverlap) {
-        console.log("passed")
         return Appointment.save(appointmentData)
           .then(appt => res.status(201).send(normalize('appointment', appt)))
           .catch(next);
       } else {
-        console.log("failed")
         return res.sendStatus(404);
       }
     })
@@ -206,31 +194,21 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
   const appointmentData = req.body;
 
-  console.log(appointmentData,"--------------------------------------------")
-  const startDate = r.ISO8601(appointmentData.startDate);
-  const endDate = r.ISO8601(appointmentData.endDate);
+  const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
+  const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate))
     .filter({ isDeleted: false })
     .run()
     .then((appointments) => {
-     console.log(appointments)
-      const filterAppointments = appointments.filter((app) => !(app.id === appointmentData.id));
-      console.log("------------------",filterAppointments);
-      return filterAppointments.map((app) => {
-          if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
-            return true;
-          } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
-            return true;
-          } else {
-            return false;
-          }
-        }
+      const filterSameIdApps = appointments.filter((app) => !(app.id === appointmentData.id));
+      const filteredApps = checkOverLapping(filterSameIdApps,moment(appointmentData.startDate), moment(appointmentData.endDate));
+      return filteredApps.map((app) => ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) ||
+        ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId))
       );
     })
     .then((data) => {
-      console.log(data);
       const testIfOverlap = data.every((el) => el ===true);
       if(data.length === 0 || testIfOverlap) {
         console.log("passed")
