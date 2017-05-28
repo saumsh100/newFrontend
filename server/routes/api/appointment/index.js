@@ -74,7 +74,6 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = req.body;
 
-
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
   Appointment.filter({ accountId })
@@ -191,7 +190,6 @@ appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'),
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
-
   const accountId = req.accountId;
 
   const {
@@ -201,7 +199,6 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
   } = req.body;
 
   const appointmentData = req.body;
-
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
@@ -227,7 +224,6 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
             }
             return true
           } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
-            console.log(app)
             appointmentData.isSplit = true;
             return true;
           } else {

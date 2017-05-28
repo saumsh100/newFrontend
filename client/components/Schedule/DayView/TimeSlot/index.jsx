@@ -4,16 +4,6 @@ import ShowAppointment from './ShowAppointment';
 import TimeSlotColumn from './TimeSlotColumn';
 import moment from 'moment';
 
-function checkOverLapping(appointments, startDate, endDate) {
-  return appointments.filter((app)=>{
-    if((moment(startDate).isSame(moment(app.startDate))) ||
-      (moment(startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
-      (moment(endDate).isSame(moment(app.endDate))) ||
-      (moment(endDate).isBetween(moment(app.startDate), moment(app.endDate)))) {
-      return app;
-    };
-  });
-}
 export default function TimeSlot(props) {
   const {
     practitioner,
@@ -33,7 +23,7 @@ export default function TimeSlot(props) {
 
   //filter appointments based on selections from the filters panel
   const checkFilters = schedule.toJS();
-  const filteredApps = appointments.filter((app) => {
+  let filteredApps = appointments.filter((app) => {
     const service = services.get(app.get('serviceId'));
     const chair = chairs.get(app.get('chairId'));
     const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
@@ -47,6 +37,25 @@ export default function TimeSlot(props) {
       chairData: chairs.get(app.get('chairId')).get('name') || '',
       patientData: patients.get(app.get('patientId')) || '',
     });
+  });
+
+
+  const splitAppointments = filteredApps.filter((app) => app.isSplit);
+  
+  //find Split appointments and their adjacent appointments and set isSplit true
+  splitAppointments.map((sApp) => {
+    filteredApps=filteredApps.map((app) => {
+      if (((moment(sApp.startDate).isSame(moment(app.startDate))) ||
+        (moment(sApp.startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
+        (moment(sApp.endDate).isSame(moment(app.endDate))) ||
+        (moment(sApp.endDate).isBetween(moment(app.startDate), moment(app.endDate)))) && (app.id !== sApp.id)) {
+        return Object.assign({}, app, {
+          isSplit: true,
+          adjacent: true,
+        });
+      } else {
+        return app;
+      }});
   });
 
   const timeSlotContentStyle = {
