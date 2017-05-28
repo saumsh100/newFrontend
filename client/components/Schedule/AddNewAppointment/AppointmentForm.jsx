@@ -61,6 +61,7 @@ export default function AppointmentForm(props) {
             name="date"
             label="Date"
             borderColor="primaryColor"
+            multiple={false}
             required
           />
         </Col>

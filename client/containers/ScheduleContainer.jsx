@@ -72,7 +72,6 @@ class ScheduleContainer extends React.Component {
     } = this.props;
 
     let loadComponent = null;
-
     if (this.state.loaded) {
       loadComponent = (
         <ScheduleComponent

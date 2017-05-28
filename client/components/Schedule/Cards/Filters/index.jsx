@@ -23,17 +23,21 @@ export default function Filters(props) {
   };
 
   const filteredServices = [];
+
   if (practitionersFilter.length) {
     practitionersFilter.map((pracId) => {
       if (pracId) {
         const selectedPrac = practitioners.get(pracId);
         const serviceIds = selectedPrac.get('services');
         serviceIds.map((sid) => {
-          filteredServices.push(services.get(sid));
+          if(filteredServices.indexOf(services.get(sid)) === -1){
+            filteredServices.push(services.get(sid));
+          }
         });
       }
     });
   }
+
   const entities = {
     chairsFilter: chairs,
     practitionersFilter: practitioners,
@@ -51,8 +55,6 @@ export default function Filters(props) {
     servicesFilter: true,
     remindersFilter: true,
   };
-
-
 
   return (
     <FiltersAll

@@ -64,17 +64,27 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = req.body;
 
+  const startDate2 = moment(appointmentData.startDate).startOf('day').toISOString();
+  const endDate2 = moment(appointmentData.endDate).endOf('day').toISOString();
+
  console.log(appointmentData,"--------------------------------------------")
-  const startDate = r.ISO8601(appointmentData.startDate);
-  const endDate = r.ISO8601(appointmentData.endDate);
+  const startDate = r.ISO8601(startDate2);
+  const endDate = r.ISO8601(endDate2);
 
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate))
     .filter({ isDeleted: false })
     .run()
     .then((appointments) => {
-      console.log(appointments);
-      return appointments.map((app) => {
+
+    const filteredApps = appointments.filter((app)=>{
+      if((moment(appointmentData.startDate).isSame(moment(app.startDate))) ||
+      (moment(appointmentData.startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
+        (moment(appointmentData.endDate).isBetween(moment(app.startDate), moment(app.endDate)))) {
+         return app;
+       };
+      });
+      return filteredApps.map((app) => {
           if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
             return true;
           } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
@@ -86,7 +96,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       );
     })
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       const testIfOverlap = data.every((el) => el ===true);
       if(data.length === 0 || testIfOverlap) {
         console.log("passed")
