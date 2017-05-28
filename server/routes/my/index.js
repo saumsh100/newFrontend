@@ -98,6 +98,8 @@ myRouter.post('/patientCheck', (req, res, next) => {
     .catch(next);
 });
 
+myRouter.get('/patients/:patientId', ({ patient }, res) => res.json(patient));
+
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares
 myRouter.use('(/*)?', (req, res, next) => {

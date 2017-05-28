@@ -95,7 +95,6 @@ class SubmitView extends Component {
       bookingWidgetPrimaryColor,
     } = this.props;
 
-
     let formComponent = (
       <SignUpForm onSubmit={this.signUpAndConfirm} />
     );
@@ -204,10 +203,18 @@ class SubmitView extends Component {
           { (!isSuccessfulBooking && patientUser) ? (
             <div style={{ textAlign: 'center' }}>
               <div className={styles.messageWrapper}>
-                Do you really want to requested your appointment?
+                <span>You are currently logged in as <strong>{patientUser.getFullName()}</strong>.
+                  <br /><br />
+                  If this is not you, and you would like to logout
+                  and signin/signup as another user,
+                  click
+                  <a href="#logout" onClick={(e) => { e.preventDefault(); this.logout(); }}>here</a>.
+                  <br /><br /> If it is you and you would
+                  like to complete the booking, click the button below.
+                </span>
               </div>
               <VButton color="red" onClick={() => this.props.createRequest()}>
-                Request
+                Book This Appointment
               </VButton>
             </div>
           ) : formComponent }

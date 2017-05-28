@@ -1,6 +1,5 @@
 import jwt from 'jwt-decode';
 import moment from 'moment';
-import { omit } from 'lodash';
 import axios from './axios';
 import {
   setIsFetching,
@@ -15,6 +14,7 @@ import {
   removeReservationAction,
   refreshAvailabilitiesState,
 } from '../actions/availabilities';
+import Patient from '../entities/models/Patient';
 
 export function sixDaysShift(dayObj) {
   return function (dispatch) {
@@ -22,52 +22,45 @@ export function sixDaysShift(dayObj) {
   };
 }
 
-export function createPatient(values) {
-  return function (dispatch) {
-    return axios.post('/auth/signup', values)
-      .then(({ data: { token } }) => {
-        // TODO: dispatch function that successfully created patient, plug in, confirm code
-        // TODO: then allow them to create the patient
-        // dispatch(createPatientAction(params));
-
-        // Set the patient in state so other thunks can know the patient user
-        const patient = getPatientFromToken(token);
-        dispatch(setPatientUser(patient));
-        return token;
-      });
-  };
-}
-
-const getPatientFromToken = (token) => {
+const getPatientIdFromToken = (token) => {
   try {
-    const decodedToken = jwt(token);
+    const { id, exp } = jwt(token);
 
-    if ((decodedToken.exp - (Date.now() / 1000)) < 0) {
+    if ((exp - (Date.now() / 1000)) < 0) {
       return null;
     }
 
-    return omit(decodedToken, ['exp', 'iat']);
+    return id;
   } catch (e) {
     return null;
   }
 };
 
+const fetchPatient = id => (id ?
+  axios.get(`/patients/${id}`).then(({ data }) => data) :
+  Promise.resolve(null));
+
+const setPatientByToken = (token, dispatch) =>
+  fetchPatient(getPatientIdFromToken(token))
+    .then(patient => dispatch(setPatientUser(new Patient(patient))));
+
+export function createPatient(values) {
+  return function (dispatch) {
+    return axios.post('/auth/signup', values)
+      // TODO: dispatch function that successfully created patient, plug in, confirm code
+      // TODO: then allow them to create the patient
+      .then(({ data: { token } }) => setPatientByToken(token, dispatch).then(() => token));
+  };
+}
+
 export function loginPatient(credentials) {
   return dispatch =>
     axios.post('/auth/login', credentials)
-      .then(({ data: { token } }) => {
-        const patient = getPatientFromToken(token);
-        dispatch(setPatientUser(patient));
-        return token;
-      });
+      .then(({ data: { token } }) => setPatientByToken(token, dispatch).then(() => token));
 }
 
 export function loadPatient(token) {
-  return (dispatch) => {
-    const patient = getPatientFromToken(token);
-    dispatch(setPatientUser(patient));
-    return Promise.resolve(patient);
-  };
+  return dispatch => setPatientByToken(token, dispatch);
 }
 
 export function confirmCode(values) {
