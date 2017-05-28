@@ -78,6 +78,7 @@ export default function ShowAppointment(props) {
   const width = `${columnWidth}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
+  //main app style
   let appStyle = {
     top,
     left,
@@ -96,7 +97,7 @@ export default function ShowAppointment(props) {
     });
   }
 
-  // calculating the buffer position and height
+  // calculating the buffer position and height styling
   const heightCalcBuffer = `${((customBufferTime / 60) / totalHours) * 100}%`;
   let bufferStyle = {
     top: `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`,
@@ -106,6 +107,7 @@ export default function ShowAppointment(props) {
     backgroundColor: '#b4b4b5',
   };
 
+  //dealing with split appointment styling
   if (isSplit) {
     const leftSplit = `${(columnWidth * practIndex) + (columnWidth * 0.5)}%`;
     const widthSplit = `${columnWidth * 0.5}%`;
@@ -121,6 +123,7 @@ export default function ShowAppointment(props) {
       backgroundColor: '#b4b4b5',
     };
   }
+
   return (
     <div
       onClick={() => {
@@ -162,7 +165,7 @@ export default function ShowAppointment(props) {
   );
 }
 
-ShowAppointment.PropTypes = {
+ShowAppointment.propTypes = {
   appointment: PropTypes.object.isRequired,
   bgColor: PropTypes.string,
   practIndex: PropTypes.number,

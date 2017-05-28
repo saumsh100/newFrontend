@@ -22,7 +22,7 @@ export default function TimeSlotColumn(props) {
   );
 }
 
-TimeSlotColumn.PropTypes = {
+TimeSlotColumn.propTypes = {
   timeSlots: PropTypes.array,
   timeSlotHeight: PropTypes.object,
   index: PropTypes.number,

@@ -81,7 +81,7 @@ export default function FiltersDisplay(props) {
   );
 }
 
-FiltersDisplay.PropTypes = {
+FiltersDisplay.propTypes = {
   selectedFilters: PropTypes.object,
   entities: PropTypes.object,
   allChecked: PropTypes.object,

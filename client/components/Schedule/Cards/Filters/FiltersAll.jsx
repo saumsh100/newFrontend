@@ -125,7 +125,7 @@ function mapDispatchToProps(dispatch) {
 
 const enhance = connect(null, mapDispatchToProps);
 
-FiltersAll.PropTypes = {
+FiltersAll.propTypes = {
   services: PropTypes.Object,
   selectedFilterServices: PropTypes.arrayOf(Object),
   entities: PropTypes.Object,

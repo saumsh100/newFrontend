@@ -66,7 +66,7 @@ export default function Filters(props) {
   );
 }
 
-Filters.PropTypes = {
+Filters.propTypes = {
   addPractitionerToFilter: PropTypes.func,
   selectAppointmentType: PropTypes.func,
   removePractitionerFromFilter: PropTypes.func,

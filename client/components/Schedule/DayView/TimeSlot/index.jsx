@@ -31,10 +31,9 @@ export default function TimeSlot(props) {
     practIndex,
   } = props;
 
+  //filter appointments based on selections from the filters panel
   const checkFilters = schedule.toJS();
-
   const filteredApps = appointments.filter((app) => {
-
     const service = services.get(app.get('serviceId'));
     const chair = chairs.get(app.get('chairId'));
     const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
@@ -82,7 +81,7 @@ export default function TimeSlot(props) {
   );
 }
 
-TimeSlot.PropTypes = {
+TimeSlot.propTypes = {
   startHour: PropTypes.number,
   endHour: PropTypes.number,
   practIndex: PropTypes.number,

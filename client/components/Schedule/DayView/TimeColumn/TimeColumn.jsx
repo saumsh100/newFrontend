@@ -33,3 +33,8 @@ export default function TimeColumn(props) {
     </div>
   );
 }
+
+TimeColumn.propTypes = {
+  timeSlots: PropTypes.array,
+  timeSlotHeight: PropTypes.object,
+};

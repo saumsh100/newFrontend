@@ -44,7 +44,7 @@ class DayView extends Component  {
 
 }
 
-DayView.PropTypes = {
+DayView.propTypes = {
   appointments: PropTypes.object,
   patients: PropTypes.object,
   services: PropTypes.object,

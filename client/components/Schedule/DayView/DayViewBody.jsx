@@ -76,7 +76,7 @@ export default function   DayViewBody(props){
   );
 }
 
-DayViewBody.PropTypes = {
+DayViewBody.propTypes = {
   startHour: PropTypes.number,
   endHour: PropTypes.number,
   appointments: PropTypes.object,

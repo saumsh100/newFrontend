@@ -95,8 +95,8 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       });
     })
     .then((data) => {
-      const testIfOverlap = data.every((el) => el ===true);
-      if(data.length === 0 || testIfOverlap) {
+      const testIfNoOverlap = data.every((el) => el ===true);
+      if(data.length === 0 || testIfNoOverlap) {
         return Appointment.save(appointmentData)
           .then(appt => res.status(201).send(normalize('appointment', appt)))
           .catch(next);
@@ -217,11 +217,17 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       .then((appointments) => {
         const filterSameIdApps = appointments.filter((app) => !(app.id === appointmentData.id));
         const filteredApps = checkOverLapping(filterSameIdApps, appointmentData.startDate, appointmentData.endDate);
-        console.log(filteredApps)
+        if(filteredApps.length === 0 && appointmentData.isSplit) {
+          appointmentData.isSplit = false;
+        }
         return filteredApps.map((app) => {
           if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            if (appointmentData.isSplit) {
+              appointmentData.isSplit = false;
+            }
             return true
           } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            console.log(app)
             appointmentData.isSplit = true;
             return true;
           } else {
@@ -230,14 +236,12 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
         });
       })
       .then((data) => {
-        const testIfOverlap = data.every((el) => el === true);
-        if (data.length === 0 || testIfOverlap) {
-          console.log("passed")
+        const testIfNoOverlap = data.every((el) => el === true);
+        if (data.length === 0 || testIfNoOverlap) {
           return req.appointment.merge(req.body).save()
             .then(appointment => res.send(normalize('appointment', appointment)))
             .catch(next);
         } else {
-          console.log("failed")
           return res.sendStatus(404);
         }
       })
