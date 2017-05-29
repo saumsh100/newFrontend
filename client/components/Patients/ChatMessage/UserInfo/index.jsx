@@ -12,7 +12,7 @@ class UserInfo extends Component {
 
   render() {
 
-    const avatar = (this.props.currentPatient.avatar ? this.props.currentPatient.avatar : 'https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png');
+    const avatar = (this.props.currentPatient.avatar ? this.props.currentPatient.avatar : '/images/avatar.png');
     const user = {
       url: avatar,
     };

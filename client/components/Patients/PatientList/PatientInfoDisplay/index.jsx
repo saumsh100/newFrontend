@@ -15,7 +15,7 @@ class PatientInfoDisplay extends Component {
     const { currentPatient } = this.props;
     const id = (currentPatient.get ? currentPatient.get('id') : null);
     let avatar = (currentPatient.get ? currentPatient.get('avatar') : null);
-    avatar = (avatar ? avatar : 'https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png');
+    avatar = (avatar ? avatar : '/images/avatar.png');
     const user = {
       url: avatar,
     };
