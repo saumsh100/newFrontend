@@ -197,7 +197,7 @@ class Users extends Component{
             onChange={this.editDropdown}
             className={styles.dropdown}
             options={[
-            { value: 'OWNER' },
+            { value: 'SUPERADMIN' },
             { value: 'ADMIN' },
             { value: 'VIEWER' },
           ]}
