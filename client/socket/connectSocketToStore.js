@@ -9,7 +9,7 @@ export default function connectSocketToStore(socket, store) {
   const decodedToken = jwt(jwtToken);
   console.log(`[INFO] account=${decodedToken.activeAccountId}`);
   console.log('[INFO] jwt token: ', jwtToken);
-
+  console.log(socket)
   socket.on('connect', () => {
     socket
       .emit('authenticate', { token: jwtToken })
@@ -21,6 +21,16 @@ export default function connectSocketToStore(socket, store) {
         throw new Error(msg.data.type);
       });
   });
+
+  socket
+    .emit('authenticate', { token: jwtToken })
+    .on('authenticated', () => {
+      console.log('Socket connected and authenticated');
+    })
+    .on('unauthorized', (msg) => {
+      console.log('unauthorized: ', JSON.stringify(msg.data));
+      throw new Error(msg.data.type);
+    });
 
   socket.on('addRequest', (data) => {
     console.log('request received');
