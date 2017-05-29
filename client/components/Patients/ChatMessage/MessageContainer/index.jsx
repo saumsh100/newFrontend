@@ -77,13 +77,15 @@ class MessageContainer extends Component {
         let nextMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i + 1]);
         nextMessage = (nextMessage ? nextMessage.from : null);
 
+        const avatar = (this.props.currentPatient.avatar ? this.props.currentPatient.avatar : 'https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png');
+
         if (message.from === this.props.currentPatient.phoneNumber) {
           first = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.textFrom}>{message.body}</div>;
           third = <div className={styles.margin2} > </div>;
 
           if (nextMessage !== message.from) {
-            third = <Avatar className={styles.margin} user={{url: this.props.currentPatient.avatar}} />
+            third = <Avatar className={styles.margin} user={{url: avatar}} />
           }
 
           if (i !== 0) {
