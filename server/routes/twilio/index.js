@@ -114,7 +114,7 @@ twilioRouter.post('/message', (req, res, next) => {
 
   // For twilio... needs a response
   // TODO: Do we need to res.send on successful saving?
-  res.send();
+  res.end();
 });
 
 // Receive all status updates to a message
@@ -135,7 +135,7 @@ twilioRouter.post('/status', (req, res, next) => {
     .catch(next);
 
   // For twilio... needs a response
-  res.send();
+  res.end();
 });
 
 module.exports = twilioRouter;

@@ -4,6 +4,7 @@ const Account_Patient = require('./Account_Patient');
 const Appointment = require('./Appointment');
 const Chair = require('./Chair');
 const Chat = require('./Chat');
+const Call = require('./Call');
 const WeeklySchedule = require('./WeeklySchedule');
 const Invite = require('./Invite');
 const Patient = require('./Patient');
@@ -29,6 +30,7 @@ module.exports = {
   Appointment,
   Chair,
   Chat,
+  Call,
   Enterprise,
   Invite,
   Patient,
