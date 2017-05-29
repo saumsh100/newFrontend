@@ -57,10 +57,9 @@ class UpcomingPatientList extends Component {
       inputValue[0] = new RegExp(value[0], 'i');
       inputValue[1] = new RegExp(value[1], 'i');
       const inputLength = inputValue.length;
-      const avatar = (this.props.patients.get(userId).get('avatar') ? this.props.patients.get(userId).get('avatar') : 'https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png');
-
 
       const searched = this.props.searchedPatients.map((userId) => {
+        const avatar = (this.props.patients.get(userId).get('avatar') ? this.props.patients.get(userId).get('avatar') : 'https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png');
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={styles.searchList} onClick={this.userClick.bind(null, userId)}>

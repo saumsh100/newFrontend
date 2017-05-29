@@ -36,7 +36,7 @@ export function login(redirectedFrom = '/') {
 
         const decodedToken = jwt(data.token);
 
-        // connectSocketToStore(socket, store);
+        connectSocketToStore(socket, store);
 
 
         // Decode and set
