@@ -22,6 +22,7 @@ const User = require('./User');
 const Token = require('./Token');
 const Reservation = require('./Reservation');
 const Enterprise = require('./Enterprise');
+const OAuth = require('./OAuth');
 const WaitSpot = require('./WaitSpot');
 
 module.exports = {
@@ -35,6 +36,7 @@ module.exports = {
   Invite,
   Patient,
   Family,
+  OAuth,
   Permission,
   Practitioner,
   Practitioner_Service,
