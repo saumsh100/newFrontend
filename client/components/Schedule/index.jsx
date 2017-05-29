@@ -99,6 +99,7 @@ class ScheduleComponent extends Component {
                   <DayPicker
                     target="icon"
                     onChange={this.setCurrentDay}
+                    multiple={false}
                   />
                   <HeaderButtons
                     addNewAppointment={this.addNewAppointment}
@@ -117,8 +118,8 @@ class ScheduleComponent extends Component {
                   <AddNewAppointment
                     formName={formName}
                     chairs={chairs.get('models').toArray()}
-                    practitioners={practitioners.get('models').toArray()}
-                    services={services.get('models').toArray()}
+                    practitioners={practitioners.get('models')}
+                    services={services.get('models')}
                     patients={patients.get('models').toArray()}
                     selectedAppointment={selectedAppointment}
                     reinitializeState={this.reinitializeState}

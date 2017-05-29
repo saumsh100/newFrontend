@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { setScheduleDate } from '../actions/schedule';
@@ -19,9 +20,7 @@ class ScheduleContainer extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      currentDate,
-    } = this.props;
+    const currentDate = moment(this.props.currentDate);
 
     const startDate = currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
@@ -43,11 +42,9 @@ class ScheduleContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {
-      currentDate,
-    } = this.props;
+    const currentDate = moment(this.props.currentDate);
 
-    const nextPropsDate = nextProps.schedule.toJS().scheduleDate;
+    const nextPropsDate = moment(nextProps.schedule.toJS().scheduleDate);
 
     if (!nextPropsDate.isSame(currentDate)) {
       const startDate = nextPropsDate.startOf('day').toISOString();

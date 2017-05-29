@@ -114,6 +114,13 @@ class FiltersAll extends Component {
   }
 }
 
+FiltersAll.propTypes = {
+  selectedFilterServices: PropTypes.arrayOf(Object),
+  clearScheduleFilter: PropTypes.func,
+  addAllScheduleFilter: PropTypes.func,
+  removeScheduleFilter: PropTypes.func,
+};
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addScheduleFilter,
@@ -124,12 +131,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 const enhance = connect(null, mapDispatchToProps);
-
-FiltersAll.propTypes = {
-  services: PropTypes.Object,
-  selectedFilterServices: PropTypes.arrayOf(Object),
-  entities: PropTypes.Object,
-  clearScheduleFilter: PropTypes.func,
-};
 
 export default enhance(FiltersAll);

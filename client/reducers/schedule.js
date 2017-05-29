@@ -12,7 +12,7 @@ import {
 } from '../constants';
 
 const initialState = fromJS({
-  scheduleDate: moment(),
+  scheduleDate: new Date(),
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],

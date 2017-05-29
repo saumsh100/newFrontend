@@ -41,10 +41,10 @@ export default function TimeSlot(props) {
 
 
   const splitAppointments = filteredApps.filter((app) => app.isSplit);
-  
+
   //find Split appointments and their adjacent appointments and set isSplit true
-  splitAppointments.map((sApp) => {
-    filteredApps=filteredApps.map((app) => {
+  splitAppointments && splitAppointments.map((sApp) => {
+    filteredApps =filteredApps.map((app) => {
       if (((moment(sApp.startDate).isSame(moment(app.startDate))) ||
         (moment(sApp.startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
         (moment(sApp.endDate).isSame(moment(app.endDate))) ||
@@ -95,7 +95,7 @@ TimeSlot.propTypes = {
   endHour: PropTypes.number,
   practIndex: PropTypes.number,
   columnWidth: PropTypes.number,
-  appointments: PropTypes.object.isRequired,
+  appointments: PropTypes.arrayOf(PropTypes.object).isRequired,
   patients: PropTypes.object.isRequired,
   services: PropTypes.object.isRequired,
   chairs: PropTypes.object.isRequired,

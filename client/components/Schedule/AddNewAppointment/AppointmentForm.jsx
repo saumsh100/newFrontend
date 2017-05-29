@@ -50,6 +50,7 @@ export default function AppointmentForm(props) {
     serviceOptions,
     practitionerOptions,
     chairOptions,
+    handlePractitionerChange,
   } = props;
 
   return (
@@ -78,40 +79,17 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={12} className={styles.addNewAppt_col}>
-          <Field
-            options={serviceOptions}
-            component="DropdownSelect"
-            name="serviceId"
-            label="Service"
-            borderColor="primaryColor"
-            required
-            onChange={(e, newValue)=> {console.log(newValue)}}
-          />
-        </Col>
-      </Row>
-      <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={9} >
+            <Col xs={12} >
               <Field
                 options={practitionerOptions}
                 component="DropdownSelect"
                 name="practitionerId"
                 label="Practitioner"
                 borderColor="primaryColor"
+                onChange={(e, newValue) => handlePractitionerChange(newValue)}
                 required
-              />
-            </Col>
-            <Col xs={1} />
-            <Col xs={2} >
-              <Field
-                options={[]}
-                component="DropdownSelect"
-                name="buffer"
-                label=""
-                borderColor="primaryColor"
-                disabled
               />
             </Col>
           </Row>
@@ -119,7 +97,7 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={9} >
+            <Col xs={12} >
               <Field
                 options={[]}
                 component="DropdownSelect"
@@ -129,18 +107,19 @@ export default function AppointmentForm(props) {
                 disabled
               />
             </Col>
-            <Col xs={1} />
-            <Col xs={2}>
-              <Field
-                options={[]}
-                component="DropdownSelect"
-                name="empty"
-                label=""
-                borderColor="primaryColor"
-                disabled
-              />
-            </Col>
           </Row>
+        </Col>
+      </Row>
+      <Row className={styles.addNewAppt_row}>
+        <Col xs={12} md={12} className={styles.addNewAppt_col}>
+          <Field
+            options={serviceOptions}
+            component="DropdownSelect"
+            name="serviceId"
+            label="Service"
+            borderColor="primaryColor"
+            required
+          />
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>

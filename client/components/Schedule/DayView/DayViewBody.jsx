@@ -79,7 +79,7 @@ export default function   DayViewBody(props){
 DayViewBody.propTypes = {
   startHour: PropTypes.number,
   endHour: PropTypes.number,
-  appointments: PropTypes.object,
+  appointments: PropTypes.arrayOf(PropTypes.object),
   patients: PropTypes.object,
   services: PropTypes.object,
   chairs: PropTypes.object,

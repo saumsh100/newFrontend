@@ -25,10 +25,14 @@ const mergeTime = (date, time) => {
 class AddNewAppointment extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      servicesAllowed: this.props.services,
+    }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
+    this.handlePractitionerChange = this.handlePractitionerChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -95,14 +99,14 @@ class AddNewAppointment extends Component {
 
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment) {
-      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then((result)=>{
-        if(!result) {
-          alert('This appointment is invalid')
+      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then((result) => {
+        if (!result) {
+          alert('This appointment is invalid');
         } else {
           reinitializeState();
           reset(formName);
         }
-      }).catch(error=>error);
+      }).catch(error => error);
 
     } else {
       const appModel = selectedAppointment.appointment.appModel;
@@ -110,12 +114,12 @@ class AddNewAppointment extends Component {
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
       updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then((result)=>{
-        if(!result) {
+        if (!result) {
           alert('This appointment edit is invalid')
         } else {
           reinitializeState();
         }
-      }).catch(error=>error);
+      }).catch(error => error);
     }
   }
 
@@ -125,7 +129,7 @@ class AddNewAppointment extends Component {
         return searchData.patients;
       }).then((searchedPatients) => {
         return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          (key) => { return searchedPatients[key]; }) : [];
+          (key) => searchedPatients[key]) : [];
       });
   }
 
@@ -139,6 +143,25 @@ class AddNewAppointment extends Component {
       change(formName, 'patient.phoneNumber', newValue.phoneNumber);
       change(formName, 'patient.email', newValue.email);
     }
+  }
+
+  handlePractitionerChange(id) {
+    const {
+      services,
+      practitioners,
+    } = this.props;
+
+    const selectedPractitioner = practitioners.get(id);
+    const practitionerServiceIds = selectedPractitioner.get('services');
+
+    const servicesAllowed = [];
+    practitionerServiceIds.map((serviceId) => {
+      servicesAllowed.push(services.get(serviceId));
+    });
+
+    this.setState({
+      servicesAllowed,
+    });
   }
 
   deleteAppointment() {
@@ -185,7 +208,7 @@ class AddNewAppointment extends Component {
         <DisplayForm
           key={formName}
           formName={formName}
-          services={services}
+          services={this.state.servicesAllowed}
           patients={patients}
           chairs={chairs}
           practitioners={practitioners}
@@ -193,6 +216,7 @@ class AddNewAppointment extends Component {
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
+          handlePractitionerChange={this.handlePractitionerChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton
