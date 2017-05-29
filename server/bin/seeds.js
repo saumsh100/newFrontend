@@ -213,11 +213,22 @@ const generateDefaultServices = (_accountId) => {
     accountId: _accountId,
   }, serviceData);
 
-  return [
-    createService({
+  let first = createService({
+    name: 'New Patient Consultation',
+    duration: 30,
+  });
+
+  if (_accountId === accountId) {
+    first = {
+      id: serviceId,
+      accountId: _accountId,
       name: 'New Patient Consultation',
       duration: 30,
-    }),
+    };
+  }
+
+  return [
+    first,
 
     createService({
       name: 'New Patient Checkup & Cleaning',

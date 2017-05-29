@@ -5,6 +5,11 @@ import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout } from '../actions/auth';
+import socket from '../socket';
+import { createBrowserHistory } from 'history';
+import configure from '../store';
+import connectSocketToStore from '../socket/connectSocketToStore';
+
 
 export function login(redirectedFrom = '/') {
   return function (dispatch, getState) {
@@ -24,8 +29,17 @@ export function login(redirectedFrom = '/') {
         // set data in local storage
         localStorage.setItem('token', data.token);
 
-        // Decode and set
+        const browserHistory = createBrowserHistory();
+        const store = configure({ browserHistory });
+
+        const { auth } = store.getState();
+
         const decodedToken = jwt(data.token);
+
+        // connectSocketToStore(socket, store);
+
+
+        // Decode and set
         console.log(decodedToken);
         LogRocket.identify(decodedToken.userId, {
           name: `${decodedToken.firstName} ${decodedToken.lastName}`,

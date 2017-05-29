@@ -6,6 +6,7 @@ const loaders = require('../../util/loaders');
 const normalize = require('../normalize');
 const Chat = require('../../../models/Chat');
 const TextMessage = require('../../../models/TextMessage');
+const { namespaces } = require('../../../config/globals');
 const twilio = require('../../../config/globals').twilio;
 const twilioClient = require('../../../config/twilio');
 
@@ -77,6 +78,8 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     },
   };
 
+  const io = req.app.get('socketio');
+
   return twilioClient.sendMessage(textMessages)
     .then((result) => {
       TextMessage.save(textMessages)
@@ -85,6 +88,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
             .then((chat) => {
               chat.merge(mergeData).save().then((chats) => {
                 const send = normalize('chat', chats);
+                io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', send)
                 res.send(send);
               });
             });
