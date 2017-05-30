@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../library';
 import styles from './styles.scss';
+import FBLoginButton from '../library/FBLoginButton';
 
 export default function Login({ onSubmit }) {
   return (

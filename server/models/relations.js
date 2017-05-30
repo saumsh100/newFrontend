@@ -7,6 +7,7 @@ const Enterprise = require('./Enterprise');
 const WeeklySchedule = require('./WeeklySchedule');
 const Patient = require('./Patient');
 const Family = require('./Family');
+const OAuth = require('./OAuth');
 const Permission = require('./Permission');
 const Practitioner = require('./Practitioner');
 const PractitionerTimeOff = require('./PractitionerTimeOff');
@@ -47,6 +48,7 @@ Family.hasMany(Patient, 'patients', 'id', 'familyId');
 Patient.belongsTo(Family, 'family', 'familyId', 'id');
 
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
+Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
 Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId');
 Service.belongsTo(Account, 'account', 'accountId', 'id');
 Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
@@ -81,6 +83,8 @@ Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 
 Service.hasMany(Reservation, 'reservations', 'id', 'serviceId');
 Service.hasMany(Request, 'requests', 'id', 'serviceId');
+
+OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');
 
 /* WaitSpot */
 WaitSpot.hasOne(Patient, 'patient', 'patientId', 'id');

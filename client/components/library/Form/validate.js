@@ -66,14 +66,12 @@ const passwordsMatch = (values) => {
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
 
-const asyncEmailValidateUser = (values) => {
-  return axios.post('/userCheck', { email: values.email })
-    .then((response) => {
-      if (response.data.exists === true) {
-        throw { email: `User with ${values.email} already exists...` };
-      }
-    });
-};
+const asyncEmailValidateUser = values =>
+  axios.post('/userCheck', { email: values.email })
+    .then(response =>
+      (response.data.exists !== true) ||
+        Promise.reject({ email: `User with ${values.email} already exists...` })
+    );
 
 const numDigitsValidate = max => (value) => {
   if (!value || value.length >= max) return;

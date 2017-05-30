@@ -25,7 +25,10 @@ function Header(props) {
       <IconButton
         icon="arrow-left"
         className={styles.iconButton}
-        onClick={() => setRegistrationStep(1)}
+        onClick={() => {
+          setRegistrationStep(1);
+          props.refreshAvailabilitiesState();
+        }}
       />
     );
   }
@@ -68,6 +71,7 @@ Header.defaultProps = {
 Header.propTypes = {
   closeBookingModal: PropTypes.func.isRequired,
   setRegistrationStep: PropTypes.func.isRequired,
+  refreshAvailabilitiesState: PropTypes.func.isRequired,
   registrationStep: PropTypes.number.isRequired,
   isConfirming: PropTypes.bool.isRequired,
   isTimerExpired: PropTypes.bool.isRequired,
@@ -87,6 +91,7 @@ function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
     closeBookingModal: WidgetThunks.closeBookingModal,
     setRegistrationStep: WidgetActions.setRegistrationStepAction,
+    refreshAvailabilitiesState: WidgetActions.refreshAvailabilitiesState,
   }, dispatch);
 }
 
