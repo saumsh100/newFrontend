@@ -1,9 +1,11 @@
 
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
-const type = thinky.type;
 const AddressSchema = require('./schemas/Address');
 const PreferencesSchema = require('./schemas/Preferences');
+const validators = require('../util/validators');
+
+const type = thinky.type;
 
 const Patient = createModel('Patient', {
   accountId: type.string(),
@@ -12,16 +14,21 @@ const Patient = createModel('Patient', {
   firstName: type.string().required(),
   lastName: type.string().required(),
   middleName: type.string(),
+
   phoneNumber: type.string(),
+  homePhoneNumber: type.string(),
   mobileNumber: type.string(),
   workNumber: type.string(),
+  otherPhoneNumber: type.string(),
+  prefContactPhone: type.string(),
+
   email: type.string(),
+
   lastAppointmentDate: type.date(),
   notes: type.string(),
   gender: type.string(),
   prefName: type.string(),
   language: type.string(),
-  prefContactPhone: type.string(),
   address: AddressSchema,
   preferences: PreferencesSchema,
   type: type.string(),
@@ -40,5 +47,15 @@ const Patient = createModel('Patient', {
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
   return this.filter({ phoneNumber }).nth(0).run();
 });
+
+// Fires on document create and update
+Patient.docOn('saving', validatePatient);
+
+function validatePatient(doc) {
+  validators.validatePhoneNumber(doc.phoneNumber);
+  validators.validatePhoneNumber(doc.mobileNumber);
+  validators.validatePhoneNumber(doc.workNumber);
+  validators.validatePhoneNumber(doc.otherPhoneNumber);
+}
 
 module.exports = Patient;

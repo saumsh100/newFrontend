@@ -189,10 +189,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
-  const patientData = Object.assign({}, req.body);
-  patientData.phoneNumber = phoneValidate(req.body.phoneNumber);
-
-  return req.patient.merge(patientData).save()
+  return req.patient.merge(req.body).save()
     .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });
