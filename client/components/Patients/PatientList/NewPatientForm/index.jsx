@@ -16,7 +16,7 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
     <Form
       form={formName}
       onSubmit={onSubmit}
-      ignoreSaveButton={true}
+      ignoreSaveButton
     >
       <Field
         required

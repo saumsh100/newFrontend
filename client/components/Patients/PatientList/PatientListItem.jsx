@@ -34,7 +34,7 @@ class PatientListItem extends Component {
         styles.users__noactive
     );
 
-    const avatar = (user.avatar ? user.avatar : 'https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png');
+    const avatar = (user.avatarUrl ? user.avatarUrl : '/images/avatar.png');
 
     return (
       <ListItem onClick={this.goToDialogue} className={usersActiveClassName}>

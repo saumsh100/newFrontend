@@ -12,10 +12,6 @@ class UserInfo extends Component {
 
   render() {
 
-    const avatar = (this.props.currentPatient.avatar ? this.props.currentPatient.avatar : 'https://upload.wikimedia.org/wikipedia/commons/f/f4/User_Avatar_2.png');
-    const user = {
-      url: avatar,
-    };
     const age = moment().diff(this.props.currentPatient.birthDate, 'years');
     const name = `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName}`;
 
@@ -26,7 +22,7 @@ class UserInfo extends Component {
     }
 
     return (<div className={styles.patInfo}>
-        <Avatar className={styles.infoAvatar} user={user} />
+        <Avatar className={styles.infoAvatar} user={this.props.currentPatient} />
         <div className={styles.fullName}>{name}, {age}</div>
         <div className={styles.fonts}>{showDate}</div>
         <div className={styles.fonts}>{this.props.currentPatient.gender}</div>

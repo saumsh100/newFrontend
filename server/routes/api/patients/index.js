@@ -18,6 +18,21 @@ const generateDuringFilter = (m, startDate, endDate) => {
   );
 };
 
+function phoneValidate(phone) {
+  const phoneNumber = phone.replace(/\D/g, '');
+  const length = phoneNumber.length;
+  if (length === 10) {
+    return '+1'.concat(phoneNumber);
+  }
+  if (length === 11) {
+    return '+'.concat(phoneNumber);
+  }
+  if (phone && length === 0) {
+    return phoneNumber;
+  }
+  return null;
+}
+
 /**
  * Batch creation
  */
@@ -124,7 +139,12 @@ patientsRouter.get('/', (req, res, next) => {
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
-  patientData.isSyncedWithPMS = false;
+  patientData.phoneNumber = phoneValidate(req.body.phoneNumber);
+
+  if (!patientData.phoneNumber) {
+    return res.sendStatus(400);
+  }
+
   return Patient.save(patientData)
     .then((patient) => {
       res.status(201).send(normalize('patient', patient));
@@ -163,7 +183,12 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
-  console.log('PUT.patient', req.body);
+  const patientData = Object.assign({}, req.body);
+  patientData.phoneNumber = phoneValidate(req.body.phoneNumber);
+
+  if (!patientData.phoneNumber) {
+    return res.status(400);
+  }
   return req.patient.merge(req.body).save()
     .then(patient => {
       res.send(normalize('patient', patient));
