@@ -1,6 +1,7 @@
 
-import thinky from '../config/thinky';
-import createModel from './createModel';
+const thinky = require('../config/thinky');
+const createModel = require('./createModel');
+
 
 const type = thinky.type;
 
