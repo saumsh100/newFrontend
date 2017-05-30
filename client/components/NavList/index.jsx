@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Nav, NavItem, Link, Icon, Tooltip } from '../library';
+import withAuthProps from '../../hocs/withAuthProps';
 import styles from './styles.scss';
 
 const PATHS = {
@@ -12,7 +13,7 @@ const PATHS = {
 
 };
 
-function NavList({ location, isCollapsed, isSuperAdmin }) {
+function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
   const {
     navItem,
     activeItem,
@@ -99,9 +100,16 @@ function NavList({ location, isCollapsed, isSuperAdmin }) {
     </div>
   );
 
+  const renderIf = (cond, render) => cond ? render() : null;
+
   return (
     <div className={styles.navListWrapper}>
       <Nav>
+        {renderIf(withEnterprise, () =>
+          <MultiNavItem path="/enterprise" icon="building-o" label="Enterprise">
+            <SubNavItem path="/enterprise/patients" label="Patients" />
+          </MultiNavItem>
+        )}
         <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
         <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
@@ -134,21 +142,14 @@ function NavList({ location, isCollapsed, isSuperAdmin }) {
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
         </MultiNavItem>
 
-        {isSuperAdmin ? (
+        {renderIf(isSuperAdmin, () =>
           <MultiNavItem path="/admin" icon="desktop" label="Admin Panel">
             <SubNavItem path="/admin/enterprises" label="Enterprises" />
           </MultiNavItem>
-        ) : null}
+        )}
       </Nav>
     </div>
   );
 }
 
-const stateToProps = (state) => {
-  const token = state.auth.get('token');
-  return {
-    isSuperAdmin: (token && token.get('role')) === 'SUPERADMIN',
-  };
-};
-
-export default connect(stateToProps)(NavList);
+export default withAuthProps(NavList);
