@@ -91,7 +91,8 @@ const mainEnterprise = {
 const randomAppointments = [];
 const randomPatients = [];
 
-for (let i = 0; i < 10000; i++) {
+
+for (let i = 0; i < 100; i++) {
   let id = uuid();
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName()

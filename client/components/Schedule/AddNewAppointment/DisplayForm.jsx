@@ -23,6 +23,7 @@ export default function DisplayForm(props) {
     selectedAppointment,
     handleSubmit,
     handleAutoSuggest,
+    handlePractitionerChange,
   } = props;
 
   const serviceOptions = generateEntityOptions(services, 'name');
@@ -46,6 +47,7 @@ export default function DisplayForm(props) {
                 serviceOptions={serviceOptions}
                 practitionerOptions={practitionerOptions}
                 chairOptions={chairOptions}
+                handlePractitionerChange={handlePractitionerChange}
               />
             </FormSection>
           </Col>

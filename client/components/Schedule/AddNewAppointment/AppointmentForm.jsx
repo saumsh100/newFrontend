@@ -1,8 +1,30 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Grid, Row, Col, Field, } from '../../library';
-import { timeOptions } from '../../library/util/TimeOptions';
 import styles from './styles.scss';
+
+
+const generateTimeOptions = () => {
+  const timeOptions = [];
+  const totalHours = 24;
+  const increment = 30;
+  const increments = 60 / increment;
+
+  let i;
+  for (i = 6; i < totalHours; i++) {
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const value = time.toISOString();
+      const label = time.format('LT');
+      timeOptions.push({ value, label });
+    }
+  }
+
+  return timeOptions;
+};
+
+export const timeOptions = generateTimeOptions();
 
 const marks = {
   15: '15',
@@ -19,11 +41,16 @@ const marks = {
   180: '180',
 };
 
+const statusOptions = [
+  { label: 'Confirmed', value: true },
+];
+
 export default function AppointmentForm(props) {
   const {
     serviceOptions,
     practitionerOptions,
     chairOptions,
+    handlePractitionerChange,
   } = props;
 
   return (
@@ -35,6 +62,7 @@ export default function AppointmentForm(props) {
             name="date"
             label="Date"
             borderColor="primaryColor"
+            multiple={false}
             required
           />
         </Col>
@@ -51,39 +79,17 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={12} className={styles.addNewAppt_col}>
-          <Field
-            options={serviceOptions}
-            component="DropdownSelect"
-            name="serviceId"
-            label="Service"
-            borderColor="primaryColor"
-            required
-          />
-        </Col>
-      </Row>
-      <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={9} >
+            <Col xs={12} >
               <Field
                 options={practitionerOptions}
                 component="DropdownSelect"
                 name="practitionerId"
                 label="Practitioner"
                 borderColor="primaryColor"
+                onChange={(e, newValue) => handlePractitionerChange(newValue)}
                 required
-              />
-            </Col>
-            <Col xs={1} />
-            <Col xs={2} >
-              <Field
-                options={[]}
-                component="DropdownSelect"
-                name="buffer"
-                label=""
-                borderColor="primaryColor"
-                disabled
               />
             </Col>
           </Row>
@@ -91,7 +97,7 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={9} >
+            <Col xs={12} >
               <Field
                 options={[]}
                 component="DropdownSelect"
@@ -101,18 +107,19 @@ export default function AppointmentForm(props) {
                 disabled
               />
             </Col>
-            <Col xs={1} />
-            <Col xs={2}>
-              <Field
-                options={[]}
-                component="DropdownSelect"
-                name="empty"
-                label=""
-                borderColor="primaryColor"
-                disabled
-              />
-            </Col>
           </Row>
+        </Col>
+      </Row>
+      <Row className={styles.addNewAppt_row}>
+        <Col xs={12} md={12} className={styles.addNewAppt_col}>
+          <Field
+            options={serviceOptions}
+            component="DropdownSelect"
+            name="serviceId"
+            label="Service"
+            borderColor="primaryColor"
+            required
+          />
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>
@@ -129,9 +136,9 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={[]}
+            options={statusOptions}
             component="DropdownSelect"
-            name="status"
+            name="isPatientConfirmed"
             label="Status"
             borderColor="primaryColor"
             disabled
