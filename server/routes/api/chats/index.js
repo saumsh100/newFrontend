@@ -56,6 +56,34 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
 });
 
 /**
+ * creates a new chat
+ */
+
+chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
+  const chatMerge = {
+    lastTextMessageDate: new Date(),
+  };
+
+  chatMerge.accountId = req.body.patient.accountId;
+  chatMerge.patientId = req.body.patient.id;
+
+  Chat.save(chatMerge).then((chat) => {
+    const joinObject = { patient: true };
+    joinObject.textMessages = {
+      _apply: (sequence) => {
+        return sequence
+          .orderBy('createdAt');
+      },
+    };
+    Chat.get(chat.id).getJoin(joinObject).run()
+      .then((chats) => {
+        const sendChat = normalize('chat', chats);
+        res.send(sendChat);
+      });
+    });
+});
+
+/**
   * creates a new text message and sends it using twilio
  */
 chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req, res, next) => {
@@ -84,20 +112,20 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     lastTextMessageDate: new Date(),
   };
 
-  chatMerge.accountId = req.body.accountId;
-  chatMerge.patientId = req.body.id;
+
+  chatMerge.accountId = req.body.patient.accountId;
+  chatMerge.patientId = req.body.patient.id;
 
   return twilioClient.sendMessage(textMessages)
     .then((result) => {
       if (!req.body.chatId) {
         Chat.save(chatMerge).then((chat) => {
-          const textMessageData = req.body;
-          textMessageData.chatId = chat.id;
-          TextMessage.save(textMessageData)
+          textMessages.chatId = chat.id;
+          TextMessage.save(textMessages)
             .then((chats) => {
               const sendChat = normalize('chat', chats);
-              io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', sendChat)
-              res.send(send);
+              io.of(namespaces.dash).in(req.body.patient.accountId).emit('newMessage', sendChat)
+              res.send(sendChat);
             });
         });
 

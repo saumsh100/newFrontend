@@ -68,6 +68,9 @@ class PatientsMessagesContainer extends Component {
     } = this.props;
 
     const chatOrder = chats.sort((a, b) => {
+      if (!a.textMessages || !b.textMessages) {
+        return 0;
+      }
       if (a.textMessages.length === 0 && b.textMessages.length === 0) {
         return 0;
       }
@@ -83,8 +86,8 @@ class PatientsMessagesContainer extends Component {
 
     const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
 
-    const currentPatient = (this.props.selectedPatient ? this.props.selectedPatient : patients.get(firstId));
-    const currentChat = (this.props.selectedPatient ?  this.props.selectedChat : chatOrder.toArray()[0]);
+    const currentPatient = (this.props.selectedChatPatient ? this.props.selectedChatPatient : patients.get(firstId));
+    const currentChat = (this.props.selectedChatPatient ? this.props.selectedChat : chatOrder.toArray()[0]);
 
     return (
       <ChatMessage
@@ -96,6 +99,8 @@ class PatientsMessagesContainer extends Component {
         currentPatient={currentPatient}
         setCurrentPatient={this.props.setSelectedPatient}
         selectedChat={currentChat}
+        searchPatient={this.props.searchPatient}
+        searchedPatients={this.props.searchedPatients}
       />
     );
   }
@@ -106,8 +111,10 @@ PatientsMessagesContainer.propTypes = {
   chats: PropTypes.object,
   selectedChat: PropTypes.object,
   patients: PropTypes.object,
-  selectedPatient: PropTypes.object,
+  selectedChatPatient: PropTypes.object,
+  searchedPatients: PropTypes.object,
   textMessages: PropTypes.object,
+  searchPatient: PropTypes.func.isRequired,
   setSelectedPatient: PropTypes.func.isRequired,
 };
 
@@ -115,7 +122,7 @@ function mapStateToProps({ entities, currentDialog, patientList, form }) {
   const patients = entities.getIn(['patients', 'models']);
   const chats = entities.getIn(['chats', 'models']);
   const selectedPatientId = patientList.get('selectedPatientId');
-  const selectedPatient = patients.get(selectedPatientId);
+  const selectedChatPatient = patients.get(selectedPatientId);
   const map = Immutable.fromJS(chats);
   const selectedChat = map.filter( (chat) => {
     return chat.get('patientId') === selectedPatientId;
@@ -123,9 +130,10 @@ function mapStateToProps({ entities, currentDialog, patientList, form }) {
   return {
     textMessages: entities.getIn(['textMessages', 'models']),
     chats,
-    selectedPatient,
+    selectedChatPatient,
     patients,
     selectedChat,
+    searchedPatients: patientList.get('searchedPatients'),
     currentDialogId: currentDialog.toJS().currentDialog,
     allowDialogScroll: currentDialog.toJS().allowDialogScroll,
     filters: form.dialogs,
@@ -138,6 +146,7 @@ function mapDispatchToProps(dispatch) {
     setCurrentDialog,
     setDialogScrollPermission,
     setSelectedPatient: Actions.setSelectedPatientIdAction,
+    searchPatient: Actions.searchPatientAction,
   }, dispatch);
 }
 

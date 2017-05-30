@@ -39,17 +39,35 @@ class MessageContainer extends Component {
     const entityData = {
       message: message.message,
       patient: this.props.currentPatient,
-      chatId: this.props.selectedChat.id,
     };
 
-    this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
-      .then(() => {
-        const node = document.getElementById('scrollIntoView');
+    entityData.chatId = (this.props.selectedChat ? this.props.selectedChat.id : null);
 
-        if (node) {
-          node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
-        }
-      });
+    if (!entityData.chatId) {
+      this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/'})
+        .then((chat) => {
+          entityData.chatId = Object.keys(chat.chats)[0];
+          const patientId = Object.keys(chat.patients)[0];
+          this.props.setSelectedPatient(patientId);
+          this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
+            .then(() => {
+              const node = document.getElementById('scrollIntoView');
+
+              if (node) {
+                node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
+              }
+            });
+        });
+    } else {
+      this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
+        .then(() => {
+          const node = document.getElementById('scrollIntoView');
+
+          if (node) {
+            node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
+          }
+        });
+    }
     message.message = '';
   }
 
