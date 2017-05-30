@@ -2,7 +2,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import RequestsContainer from '../../containers/RequestContainer';
 import fetchReputationData from '../../thunks/fetchReputationData';
@@ -34,8 +33,7 @@ class Dashboard extends React.Component {
   }
 
   renderCards() {
-    const browserHistory = createBrowserHistory();
-    console.log(browserHistory.location.pathname);
+
     const DataBigComment = [{
       icon: "facebook",
       iconColor: '#ffffff',
@@ -275,7 +273,7 @@ class Dashboard extends React.Component {
           </Col>
           <Col className={styles.padding}
                xs={12}  md={4}>
-            <RequestsContainer className={styles.dashboard__body_request}
+            <RequestsContainer key="dashBoardRequests" className={styles.dashboard__body_request}
                                borderColor={colorMap.darkblue}/>
           </Col>
           <Col className={styles.padding}

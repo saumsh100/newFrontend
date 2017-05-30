@@ -1,22 +1,16 @@
 
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
+
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
 import { setHoverRequestId } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
-import { setTime } from '../library/util/TimeOptions';
 
-
-const getDuration = (startDate, endDate, customBufferTime) => {
-  const end = moment(endDate);
-  const duration = moment.duration(end.diff(startDate));
-  return duration.asMinutes() - customBufferTime;
-};
 
 class RequestList extends Component {
   constructor(props) {
@@ -28,8 +22,12 @@ class RequestList extends Component {
   confirmAppointment(request) {
     const {
       selectAppointment,
+      location,
     } = this.props;
 
+    if(location === '/') {
+      this.props.push('/schedule');
+    }
     const modifiedRequest = request.set('isCancelled', true);
 
     const appointment = {
@@ -92,6 +90,7 @@ function mapActionsToProps(dispatch) {
     createEntityRequest,
     setHoverRequestId,
     selectAppointment,
+    push,
   }, dispatch);
 }
 
