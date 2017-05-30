@@ -111,7 +111,6 @@ twilioRouter.post('/message', (req, res, next) => {
       };
 
       Chat.filter({patientId: patient.id}).run().then((test) => {
-        console.log(test);
         if (test[0]) {
           textMessageData.chatId = test[0].id;
           TextMessage.save(textMessageData)

@@ -78,7 +78,7 @@ chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
     Chat.get(chat.id).getJoin(joinObject).run()
       .then((chats) => {
         const sendChat = normalize('chat', chat);
-        io.of(namespaces.dash).in(chat.patient.accountId).emit('newMessage', send)
+        res.send(sendChat);
       }).catch((err) => {
       console.log(err);
     });
