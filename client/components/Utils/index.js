@@ -65,13 +65,17 @@ export const getClassMapper = (scheme, styles) => {
     const mapKeys = (key, value) =>
       ((index[key] === true) ? toDashName(key) : mapKeysWithValues(key, value));
 
-    return keys
+    const classes = keys
       .map(key => mapKeys(key, props[key]))
       .filter(i => i)
       .map(key => styles[key])
       .concat(rest)
       .filter(i => (i && i.length))
       .join(' ');
+
+    console.log(classes);
+
+    return classes;
   };
 
   const omit = (props, ...other) => lOmit(props, indexKeys.concat(other));

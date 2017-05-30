@@ -49,6 +49,7 @@ import DoubleIcon from './DoubleIcon';
 import VButton from './VButton';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
+import VCard from './VCard';
 
 export {
   AppBar,
@@ -109,6 +110,7 @@ export {
   Breadcrumbs,
   BreadcrumbItem,
   FBLoginButton,
+  VCard,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

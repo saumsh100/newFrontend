@@ -1,6 +1,10 @@
 import React from 'react';
+import Page from '../Page';
+import Table from '../Table';
 
 const PatientsPage = () =>
-  <h1>Patients</h1>;
+  <Page>
+    <Table />
+  </Page>;
 
 export default PatientsPage;
