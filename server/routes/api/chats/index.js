@@ -80,19 +80,40 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
 
   const io = req.app.get('socketio');
 
+  const chatMerge = {
+    lastTextMessageDate: new Date(),
+  };
+
+  chatMerge.accountId = req.body.accountId;
+  chatMerge.patientId = req.body.id;
+
   return twilioClient.sendMessage(textMessages)
     .then((result) => {
-      TextMessage.save(textMessages)
-        .then(() => {
-          Chat.get(req.body.chatId).getJoin(joinObject).run()
-            .then((chat) => {
-              chat.merge(mergeData).save().then((chats) => {
-                const send = normalize('chat', chats);
-                io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', send)
-                res.send(send);
-              });
+      if (!req.body.chatId) {
+        Chat.save(chatMerge).then((chat) => {
+          const textMessageData = req.body;
+          textMessageData.chatId = chat.id;
+          TextMessage.save(textMessageData)
+            .then((chats) => {
+              const sendChat = normalize('chat', chats);
+              io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', sendChat)
+              res.send(send);
             });
-        }).catch(next);
+        });
+
+      } else {
+        TextMessage.save(textMessages)
+          .then(() => {
+            Chat.get(req.body.chatId).getJoin(joinObject).run()
+              .then((chat) => {
+                chat.merge(mergeData).save().then((chats) => {
+                  const send = normalize('chat', chats);
+                  io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', send)
+                  res.send(send);
+                });
+              });
+          }).catch(next);
+      }
     }).catch(next);
 });
 

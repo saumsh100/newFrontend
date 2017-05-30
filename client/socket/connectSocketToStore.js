@@ -9,7 +9,7 @@ export default function connectSocketToStore(socket, store) {
   const decodedToken = jwt(jwtToken);
   console.log(`[INFO] account=${decodedToken.activeAccountId}`);
   console.log('[INFO] jwt token: ', jwtToken);
-  console.log(socket)
+
   socket.on('connect', () => {
     socket
       .emit('authenticate', { token: jwtToken })
