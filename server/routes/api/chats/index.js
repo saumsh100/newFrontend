@@ -77,9 +77,11 @@ chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
     };
     Chat.get(chat.id).getJoin(joinObject).run()
       .then((chats) => {
-        const sendChat = normalize('chat', chats);
-        res.send(sendChat);
-      });
+        const sendChat = normalize('chat', chat);
+        io.of(namespaces.dash).in(chat.patient.accountId).emit('newMessage', send)
+      }).catch((err) => {
+      console.log(err);
+    });
     });
 });
 
@@ -153,6 +155,48 @@ chatsRouter.get('/:chatId', checkPermissions('chats:read'), (req, res, next) => 
     .then(chat => res.send(normalize('chat', chat)))
     .catch(next);
 });
+
+chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res, next) => {
+  const {
+    accountId,
+  } = req;
+
+  const {
+    limit,
+    skip,
+  } = req.query;
+
+  const skipped = skip || 0;
+  const limitted = limit || 25;
+  const joinObject = {};
+
+  // Some default code to ensure we don't pull the entire conversation for each chat
+  joinObject.textMessages = {
+    _apply: (sequence) => {
+      return sequence
+        .orderBy('createdAt')
+        .limit(limitted);
+    },
+  };
+
+  return Chat
+    .orderBy(r.desc('lastTextMessageDate'))
+    .filter({
+      accountId,
+      patientId: req.params.patientId })
+    .skip(parseInt(skipped))
+    .limit(parseInt(limitted))
+    .getJoin(joinObject)
+    .run()
+    .then(chats => {
+      console.log(chats)
+      res.send(normalize('chats', chats));
+    })
+    .catch(next);
+
+});
+
+
 
 /**
  * Get a chat's textMessages

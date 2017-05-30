@@ -50,7 +50,10 @@ class PatientList extends Component {
     });
   }
 
-  setCurrentPatient(currentPatient) {
+  setCurrentPatient(id) {
+    const currentPatient = {
+      id,
+    };
     this.setState({
       currentPatient,
       showNewUser: false,
@@ -131,7 +134,7 @@ class PatientList extends Component {
 
     const valuesMap = Map(values);
     const modifiedPatient = currentPatient.merge(valuesMap);
-    
+
     this.props.updateEntityRequest({
       key: 'patients',
       model: modifiedPatient,
@@ -218,7 +221,7 @@ class PatientList extends Component {
     } else {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
-        currentPatient.appointment = appointments.get(this.state.currentPatient.appointment.id);
+        currentPatient.appointment = (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
       }
     }
 

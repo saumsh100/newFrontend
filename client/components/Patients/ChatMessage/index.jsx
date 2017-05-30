@@ -39,13 +39,17 @@ class ChatMessage extends Component {
       });
 
       if (id) {
-        this.props.setCurrentPatient(id);
+        return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
+          this.props.setCurrentPatient(id);
+        });
       }
     }
   }
 
   userClick(id) {
-    this.props.setCurrentPatient(id);
+    return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
+      this.props.setCurrentPatient(id);
+    });
   }
 
   resetState() {
