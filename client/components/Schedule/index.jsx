@@ -23,13 +23,11 @@ class ScheduleComponent extends Component {
     super(props);
     this.state = {
       addNewAppointment: false,
-      selectedAppointment: null,
     };
 
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
-    this.selectAppointment = this.selectAppointment.bind(this);
   }
 
   setCurrentDay(day) {
@@ -37,21 +35,25 @@ class ScheduleComponent extends Component {
   }
 
   reinitializeState() {
+    const {
+      selectedAppointment,
+      selectAppointment,
+    } = this.props;
+
+    if (selectedAppointment.flag === 'Appointment Created') {
+      selectAppointment({ appointment: null, flag: selectedAppointment.flag });
+    } else {
+      selectAppointment({ appointment: null, flag: '' });
+    }
+
     this.setState({
       addNewAppointment: false,
-      selectedAppointment: null,
     });
   }
 
   addNewAppointment() {
     this.setState({
       addNewAppointment: true,
-    });
-  }
-
-  selectAppointment(app) {
-    this.setState({
-      selectedAppointment: app,
     });
   }
 
@@ -63,11 +65,12 @@ class ScheduleComponent extends Component {
       patients,
       services,
       chairs,
+      selectAppointment,
+      selectedAppointment,
     } = this.props;
 
     const {
       addNewAppointment,
-      selectedAppointment,
     } = this.state;
 
     const currentDate = moment(schedule.toJS().scheduleDate);
@@ -80,17 +83,20 @@ class ScheduleComponent extends Component {
       services,
       appointments,
       schedule,
-      selectAppointment: this.selectAppointment,
+      selectAppointment,
     };
 
+    console.log(selectedAppointment.flag);
+    
     let formName = 'NewAppointmentForm';
-    if (selectedAppointment) {
-      const app = selectedAppointment.appointment;
-      formName = `EditAppointment_${app.id}`;
+    if (selectedAppointment.flag === 'edit') {
+      formName = `EditAppointment_${selectedAppointment.appointment.id}`;
+    } else if (selectedAppointment.flag === 'request') {
+      formName = `requestAppointment_${selectedAppointment.appointment.requestId}`;
     }
 
     return (
-      <Grid >
+      <Grid>
         <Row className={styles.rowMainContainer}>
           <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
             <Card>
@@ -110,7 +116,7 @@ class ScheduleComponent extends Component {
                 <DayView {...params} />
                 <Legend />
                 <Modal
-                  active={addNewAppointment || !!selectedAppointment}
+                  active={addNewAppointment || !!selectedAppointment.appointment}
                   onEscKeyDown={this.reinitializeState}
                   onOverlayClick={this.reinitializeState}
                   custom
@@ -120,8 +126,9 @@ class ScheduleComponent extends Component {
                     chairs={chairs.get('models').toArray()}
                     practitioners={practitioners.get('models')}
                     services={services.get('models')}
-                    patients={patients.get('models').toArray()}
+                    patients={patients.get('models')}
                     selectedAppointment={selectedAppointment}
+                    selectAppointment={selectAppointment}
                     reinitializeState={this.reinitializeState}
                   />
                 </Modal>
@@ -163,6 +170,8 @@ ScheduleComponent.propTypes = {
   chairs: PropTypes.object,
   services: PropTypes.object,
   setScheduleDate: PropTypes.func,
+  selectAppointment: PropTypes.func,
+  selectedAppointment: PropTypes.object,
 };
 
 export default ScheduleComponent;

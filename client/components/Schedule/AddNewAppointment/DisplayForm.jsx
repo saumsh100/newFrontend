@@ -1,9 +1,17 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { Grid, Row, Col, Form, FormSection } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import PatientForm from './PatientForm';
+import { setTime } from '../../library/util/TimeOptions';
 import styles from './styles.scss';
+
+const getDuration = (startDate, endDate, customBufferTime) => {
+  const end = moment(endDate);
+  const duration = moment.duration(end.diff(startDate));
+  return duration.asMinutes() - customBufferTime;
+};
 
 const generateEntityOptions = (entities, label) => {
   const options = [];
@@ -16,6 +24,7 @@ const generateEntityOptions = (entities, label) => {
 export default function DisplayForm(props) {
   const {
     formName,
+    patients,
     services,
     chairs,
     practitioners,
@@ -26,17 +35,57 @@ export default function DisplayForm(props) {
     handlePractitionerChange,
   } = props;
 
+  let initialValues = null;
+
+  const appointment = selectedAppointment.appointment;
+
+  if (appointment) {
+    const {
+      startDate,
+      endDate,
+      customBufferTime,
+      patientId,
+      serviceId,
+      chairId,
+      practitionerId,
+      note,
+    } = appointment;
+
+
+    const patient = patients.get(patientId);
+    const durationTime = getDuration(startDate, endDate, customBufferTime);
+    const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
+
+    initialValues = {
+      appointment: {
+        time: setTime(startDate),
+        date: moment(startDate).format('L'),
+        serviceId,
+        practitionerId: practitionerId || '',
+        chairId: chairId || '',
+        duration: [durationTime, bufferTime],
+      },
+      patient: {
+        patientSelected: patient.toJS(),
+        phoneNumber: patient.phoneNumber,
+        email: patient.email,
+        note,
+      },
+    };
+
+  }
+
   const serviceOptions = generateEntityOptions(services, 'name');
   const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
-  const title = selectedAppointment ? 'Edit Appointment' : 'Create New Appointment';
+  const title = selectedAppointment.flag === 'edit' ? 'Edit Appointment' : 'Create New Appointment';
 
   return (
     <Form
       form={formName}
       onSubmit={handleSubmit}
       ignoreSaveButton
-      initialValues={selectedAppointment}
+      initialValues={initialValues}
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>

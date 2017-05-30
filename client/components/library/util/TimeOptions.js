@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const generateTimeOptions = () => {
   const timeOptions = [];
   const totalHours = 24;

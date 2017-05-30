@@ -27,7 +27,8 @@ class AddNewAppointment extends Component {
     super(props);
     this.state = {
       servicesAllowed: this.props.services,
-    }
+    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
@@ -43,6 +44,7 @@ class AddNewAppointment extends Component {
       reinitializeState,
       reset,
       formName,
+      selectAppointment,
     } = this.props;
 
     const appointmentValues = values.appointment;
@@ -55,7 +57,6 @@ class AddNewAppointment extends Component {
       chairId,
       isPatientConfirmed,
     } = appointmentValues;
-
 
     const {
       patientSelected,
@@ -73,7 +74,6 @@ class AddNewAppointment extends Component {
     if (duration[1] !== duration[0]) {
       bufferTime = duration[1] - duration[0];
     }
-
 
     let totalDurationMin = duration[0];
 
@@ -98,11 +98,14 @@ class AddNewAppointment extends Component {
     };
 
     // if an appointment is not selected then create the appointment else update the appointment
-    if (!selectedAppointment) {
+    if (!selectedAppointment.appointment || selectedAppointment.flag === 'request') {
       createEntityRequest({ key: 'appointments', entityData: newAppointment }).then((result) => {
         if (!result) {
           alert('This appointment is invalid');
         } else {
+          if (selectedAppointment.flag === 'request') {
+            selectAppointment({ appointment: null, flag: 'Appointment Created' });
+          }
           reinitializeState();
           reset(formName);
         }
@@ -115,7 +118,7 @@ class AddNewAppointment extends Component {
       const modifiedAppointment = appModelSynced.merge(valuesMap);
       updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then((result)=>{
         if (!result) {
-          alert('This appointment edit is invalid')
+          alert('This appointment edit is invalid');
         } else {
           reinitializeState();
         }
@@ -185,7 +188,6 @@ class AddNewAppointment extends Component {
   render() {
     const {
       formName,
-      services,
       patients,
       chairs,
       practitioners,
@@ -225,7 +227,7 @@ class AddNewAppointment extends Component {
           >
             Save
           </RemoteSubmitButton>
-          {selectedAppointment && (
+          {(selectedAppointment.flag === 'edit') && (
             <div className={styles.remoteSubmit_buttonDelete}>
               <Button onClick={this.deleteAppointment} >
                 Delete

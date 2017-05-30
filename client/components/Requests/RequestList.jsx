@@ -1,13 +1,22 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
-
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
 import { setHoverRequestId } from '../../actions/requests';
+import { selectAppointment } from '../../actions/schedule';
+import { setTime } from '../library/util/TimeOptions';
+
+
+const getDuration = (startDate, endDate, customBufferTime) => {
+  const end = moment(endDate);
+  const duration = moment.duration(end.diff(startDate));
+  return duration.asMinutes() - customBufferTime;
+};
 
 class RequestList extends Component {
   constructor(props) {
@@ -17,25 +26,34 @@ class RequestList extends Component {
   }
 
   confirmAppointment(request) {
-    const { updateEntityRequest, createEntityRequest } = this.props;
+    const {
+      updateEntityRequest,
+      createEntityRequest,
+      patients,
+      selectAppointment,
+      selectedAppointment,
+    } = this.props;
+
     const appointment = {
+      requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
       patientId: request.get('patientId'),
       serviceId: request.get('serviceId'),
-      practitionerId: request.get('practitionerId'),
-      chairId: request.get('chairId'),
       note: request.note,
       isSyncedWithPMS: false,
+      customBufferTime: 0,
     };
 
-    createEntityRequest({ key: 'appointments', entityData: appointment })
-      .then(() => {
-        // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
-        console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
-        const modifiedRequest = request.set('isCancelled', true);
-        updateEntityRequest({ key: 'requests', model: modifiedRequest });
-      }).catch(err => console.log(err));
+    selectAppointment({ appointment, flag: 'request' });
+
+    console.log("zzzzz", selectedAppointment.flag);
+
+    /*
+    // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
+    console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
+    const modifiedRequest = request.set('isCancelled', true);
+    updateEntityRequest({ key: 'requests', model: modifiedRequest });*/
   }
 
   removeRequest(request) {
@@ -78,16 +96,17 @@ function mapActionsToProps(dispatch) {
     deleteEntityRequest,
     createEntityRequest,
     setHoverRequestId,
+    selectAppointment,
   }, dispatch);
 }
 
-/*
-function mapStateToProps({requests}){
-  return {
-    clickedId: requests.get('clickedId'),
-  }
-}*/
 
-const enhance = connect(null, mapActionsToProps);
+function mapStateToProps({schedule}){
+  return {
+    selectedAppointment: schedule.toJS().selectedAppointment,
+  };
+}
+
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(RequestList);

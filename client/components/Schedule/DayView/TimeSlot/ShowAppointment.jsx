@@ -3,7 +3,6 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from '../styles.scss';
 import { Icon } from '../../../library';
-import { setTime } from '../../../library/util/TimeOptions';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -36,7 +35,6 @@ export default function ShowAppointment(props) {
   } = props;
 
   const {
-    note,
     startDate,
     endDate,
     customBufferTime,
@@ -51,22 +49,8 @@ export default function ShowAppointment(props) {
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
 
-  const durationTime = getDuration(startDate, endDate, customBufferTime);
-  const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-
-  // Setting up an appointment object that can set the initial values of the edit form.
-  const addToApp = Object.assign({}, appointment, {
-    time: setTime(startDate),
-    date: moment(startDate).format('L'),
-    duration: [durationTime, bufferTime],
-  });
-
-  const addToPatient = Object.assign({}, patient, {
-    patientSelected: patient,
-    note,
-  });
-
   // Calculating the top position and height of the appointment.
+  const durationTime = getDuration(startDate, endDate, customBufferTime);
   const startDateHours = moment(startDate).hours();
   const startDateMinutes = moment(startDate).minutes();
   const topCalc = ((startDateHours - startHour) + (startDateMinutes / 60));
@@ -79,13 +63,13 @@ export default function ShowAppointment(props) {
   const width = `${columnWidth}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
-  //main app style
+  // main app style
   let appStyle = {
     top,
     left,
     height,
     width,
-    border: '1px solid',
+    border: '1  px solid',
     borderColor: bgColor,
     backgroundColor: `${hexToRgbA(bgColor, 0.8)}`,
   };
@@ -109,7 +93,7 @@ export default function ShowAppointment(props) {
     backgroundColor: '#b4b4b5',
   };
 
-  //dealing with split appointment styling
+  // dealing with split appointment styling
   if (isSplit) {
     const adjacentSplit = !adjacent ? (columnWidth * 0.5) : 0;
     const leftSplit = `${(columnWidth * practIndex) + adjacentSplit}%`;
@@ -122,17 +106,13 @@ export default function ShowAppointment(props) {
     bufferStyle = Object.assign({}, bufferStyle, {
       left: leftSplit,
       width: widthSplit,
-
     });
   }
 
   return (
     <div
       onClick={() => {
-        selectAppointment({
-          appointment: addToApp,
-          patient: addToPatient,
-         });
+        selectAppointment({appointment, flag: 'edit'});
       }}
     >
       <div

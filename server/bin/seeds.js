@@ -194,16 +194,35 @@ const generateDefaultServices = (_accountId) => {
     accountId: _accountId,
   }, serviceData);
 
-  return [
-    createService({
-      name: 'New Patient Consultation',
-      duration: 30,
-    }),
+  let first = createService({
+    name: 'New Patient Consultation',
+    duration: 30,
+  });
 
-    createService({
+  let second = createService({
       name: 'New Patient Checkup & Cleaning',
       duration: 30,
-    }),
+  });
+
+  if (_accountId === accountId) {
+    first = {
+      id: serviceId,
+      accountId: _accountId,
+      name: 'New Patient Consultation',
+      duration: 30,
+    };
+    second = {
+      id: serviceId2,
+      accountId: _accountId,
+      name: 'New Patient Checkup & Cleaning',
+      duration: 30,
+    };
+  }
+
+  return [
+    first,
+
+    second,
 
     createService({
       name: 'Toothache',

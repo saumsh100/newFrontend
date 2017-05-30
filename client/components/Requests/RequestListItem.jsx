@@ -39,7 +39,7 @@ class RequestListItem extends Component {
       active,
     } = this.props;
 
-    if (!service || !patient || !request) {
+    if (!service) {
       return null;
     }
 
@@ -49,7 +49,7 @@ class RequestListItem extends Component {
       name: patient.getFullName(),
       nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
       email: patient.email,
-      service: service.name,
+      serviceName: service.name,
       phoneNumber: patient.phoneNumber,
       note: request.note,
       month: request.getMonth(),
@@ -86,7 +86,7 @@ class RequestListItem extends Component {
             <AppointmentShowData
               nameAge={data.nameAge}
               time={data.time}
-              service={data.service}
+              service={data.serviceName}
               phoneNumber={data.phoneNumber}
               email={data.email}
               note={data.note}
