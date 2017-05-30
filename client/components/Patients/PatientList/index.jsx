@@ -72,6 +72,8 @@ class PatientList extends Component {
       showNewUser: true,
     };
 
+    values.isSyncedWithPMS = false;
+
     this.setState(newState);
 
     this.props.createEntityRequest({
@@ -125,9 +127,11 @@ class PatientList extends Component {
       values.key = 'patient';
     }
 
+    values.isSyncedWithPMS = false;
+
     const valuesMap = Map(values);
     const modifiedPatient = currentPatient.merge(valuesMap);
-
+    
     this.props.updateEntityRequest({
       key: 'patients',
       model: modifiedPatient,
