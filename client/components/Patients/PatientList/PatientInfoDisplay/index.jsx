@@ -66,7 +66,7 @@ class PatientInfoDisplay extends Component {
               </div>
               <div className={`${styles.patient_profile__language} ${styles.personal__table}`}>
                 <div className={styles.contact}>
-                  <span><i className="fa fa-phone" style={{ color: '#ff715a' }} />&emsp; {currentPatient.phoneNumber}</span>
+                  <span><i className="fa fa-phone" style={{ color: '#ff715a' }} />&emsp; {currentPatient.mobilePhoneNumber}</span>
                   <br />
                   <span><i className="fa fa-flag" style={{ color: '#ff715a' }} />&emsp;{currentPatient.email}</span>
                 </div>

@@ -10,9 +10,9 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
 
   const initialValues = {
     email: currentPatient.email,
-    phoneNumber: currentPatient.phoneNumber,
-    mobileNumber: currentPatient.mobileNumber,
-    workNumber: currentPatient.workNumber,
+    homePhoneNumber: currentPatient.homePhoneNumber,
+    mobilePhoneNumber: currentPatient.mobilePhoneNumber,
+    workPhoneNumber: currentPatient.workPhoneNumber,
   };
 
   if (currentPatient.address) {
@@ -63,7 +63,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
         </div>
         <div className={styles.firstField}>
           <Field
-            name="phoneNumber"
+            name="mobilePhoneNumber"
             className={styles.nameFields}
             validate={[phoneValidate]}
             label="Phone #"
