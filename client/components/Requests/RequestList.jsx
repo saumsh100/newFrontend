@@ -27,14 +27,13 @@ class RequestList extends Component {
 
   confirmAppointment(request) {
     const {
-      updateEntityRequest,
-      createEntityRequest,
-      patients,
       selectAppointment,
-      selectedAppointment,
     } = this.props;
 
+    const modifiedRequest = request.set('isCancelled', true);
+
     const appointment = {
+      requestModel: modifiedRequest,
       requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
@@ -48,12 +47,8 @@ class RequestList extends Component {
 
     selectAppointment(appointment);
 
-
-    /*
     // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
     console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
-    const modifiedRequest = request.set('isCancelled', true);
-    updateEntityRequest({ key: 'requests', model: modifiedRequest });*/
   }
 
   removeRequest(request) {

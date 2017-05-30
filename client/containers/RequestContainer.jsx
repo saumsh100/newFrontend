@@ -10,7 +10,7 @@ class RequestContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'requests', join: ['service', 'patient', 'chair', 'practitioner'] });
+    this.props.fetchEntities({ key: 'requests', join: ['service', 'patient',] });
   }
 
   render() {

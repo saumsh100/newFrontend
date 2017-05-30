@@ -99,11 +99,13 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     .then((data) => {
       const testIfNoOverlap = data.every((el) => el === true);
       if (data.length === 0 || testIfNoOverlap) {
+        console.log("passed");
         return Appointment.save(appointmentData)
           .then(appt => res.status(201).send(normalize('appointment', appt)))
           .catch(next);
+      } else {
+        return res.sendStatus(400);
       }
-      return res.sendStatus(400);
     })
     .catch(next);
 

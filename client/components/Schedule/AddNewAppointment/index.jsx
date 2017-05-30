@@ -97,20 +97,25 @@ class AddNewAppointment extends Component {
     };
 
     // if an appointment is not selected then create the appointment else update the appointment
-    if (!selectedAppointment || selectedAppointment.request) {
+    if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
+
       createEntityRequest({ key: 'appointments', entityData: newAppointment }).then(() => {
+        if(selectedAppointment && selectedAppointment.request) {
+          updateEntityRequest({ key: 'requests', model: selectedAppointment.requestModel });
+        }
         reinitializeState();
         reset(formName);
-      }).catch(error => alert('Appointment was invalid'));
+      }).catch(e => alert('Appointment was invalid'));
 
     } else {
       const appModel = selectedAppointment.appModel;
       const appModelSynced = appModel.set('isSyncedWithPMS', false);
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
+
       updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(()=>{
         reinitializeState();
-      }).catch(error => alert('Update Failed'));
+      }).catch((e) => alert('Update Failed'));
     }
   }
 
@@ -173,6 +178,7 @@ class AddNewAppointment extends Component {
     reinitializeState();
   }
 
+
   render() {
     const {
       formName,
@@ -187,6 +193,7 @@ class AddNewAppointment extends Component {
       onClick: this.handleSubmit,
       form: formName,
     };
+
 
     return (
       <div className={styles.formContainer}>
