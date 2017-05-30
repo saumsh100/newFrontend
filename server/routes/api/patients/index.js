@@ -18,19 +18,27 @@ const generateDuringFilter = (m, startDate, endDate) => {
   );
 };
 
+/**
+ * Validates phone number.
+ * @param phone string phone number. Can be empty, null, undefined - anything.
+ * @return valid phone number of null if can't be valid.
+ */
 function phoneValidate(phone) {
+  if (undefined === phone || phone.length === 0) return null;
+
+  let result = '';
   const phoneNumber = phone.replace(/\D/g, '');
   const length = phoneNumber.length;
   if (length === 10) {
-    return '+1'.concat(phoneNumber);
+    result = '+1'.concat(phoneNumber);
   }
   if (length === 11) {
-    return '+'.concat(phoneNumber);
+    result = '+'.concat(phoneNumber);
   }
   if (phone && length === 0) {
-    return phoneNumber;
+    result = phoneNumber;
   }
-  return null;
+  return result;
 }
 
 /**
@@ -186,13 +194,11 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
   const patientData = Object.assign({}, req.body);
   patientData.phoneNumber = phoneValidate(req.body.phoneNumber);
 
-  if (!patientData.phoneNumber) {
-    return res.status(400);
-  }
+  // if (!patientData.phoneNumber) {
+  //   return res.sendStatus(400);
+  // }
   return req.patient.merge(req.body).save()
-    .then(patient => {
-      res.send(normalize('patient', patient));
-    })
+    .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });
 

@@ -44,7 +44,7 @@ function runDashboardFeeds(socket) {
 
         console.log('DASH FEED.PATIENT');
 
-        if (doc.isSyncedWithPms) {
+        if (doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             console.log('sync.feed.delete', doc);
             socket.emit('remove:Patient', normalize('patient', doc));

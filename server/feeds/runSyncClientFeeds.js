@@ -17,7 +17,7 @@ function runSyncClientFeeds(socket) {
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
 
-        if (!doc.isSyncedWithPms) {
+        if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             socket.emit('remove:Appointment', normalize('appointment', doc));
           } else if (isCreated(doc)) {
@@ -40,7 +40,7 @@ function runSyncClientFeeds(socket) {
 
         console.log('SYNC FEED.PATIENT');
 
-        if (!doc.isSyncedWithPms) {
+        if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             console.log('sync.feed.delete', doc);
             socket.emit('remove:Patient', normalize('patient', doc));
