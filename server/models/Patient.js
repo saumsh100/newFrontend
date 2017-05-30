@@ -17,8 +17,8 @@ const Patient = createModel('Patient', {
 
   phoneNumber: type.string(),
   homePhoneNumber: type.string(),
-  mobileNumber: type.string(),
-  workNumber: type.string(),
+  mobilePhoneNumber: type.string(),
+  workPhoneNumber: type.string(),
   otherPhoneNumber: type.string(),
   prefContactPhone: type.string(),
 
@@ -48,7 +48,17 @@ Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
   return this.filter({ phoneNumber }).nth(0).run();
 });
 
-// Fires on document create and update
+/**
+ * Return preferred phone number of this patient
+ */
+Patient.define('getPreferredPhoneNumber', () => {
+  const prefPhone = this.prefContactPhone;
+  return this[prefPhone];
+});
+
+/**
+ * Fires on document create and update
+ */
 Patient.docOn('saving', validatePatient);
 
 function validatePatient(doc) {

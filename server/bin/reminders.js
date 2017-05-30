@@ -99,7 +99,7 @@ function emailConfirmation(params) {
 function smsConfirmation(a) {
   return twilioClient.sendMessage({
     from: twilio.number,
-    to: a.patient.phoneNumber,
+    to: a.patient.mobilePhoneNumber,
     body: `Your ${a.service.name} appointment with ${a.practitioner.firstName} ${a.practitioner.lastName} from ${a.account.name} is less than 24 hours away. Press 'C' to confirm that you can make it.`,
   });
 }
