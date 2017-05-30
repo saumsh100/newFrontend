@@ -163,6 +163,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+  console.log('PUT.patient', req.body);
   return req.patient.merge(req.body).save()
     .then(patient => {
       res.send(normalize('patient', patient));

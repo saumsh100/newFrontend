@@ -12,7 +12,7 @@ function runDashboardFeeds(socket) {
 
   // ASSUMPTION: These are the changes coming from the SYNC client...
   Appointment
-    .filter({ accountId: activeAccountId, isSyncedWithPMS: true })
+    .filter({ accountId: activeAccountId })
     .changes({ squash: true })
     .then((feed) => {
       // TODO should be shutting all feeds associated with this socket, not just one. In one place.
@@ -20,12 +20,40 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-        if (isDeleted(doc)) {
-          socket.emit('remove:Appointment', normalize('appointment', doc));
-        } else if (isCreated(doc)) {
-          socket.emit('create:Appointment', normalize('appointment', doc));
-        } else {
-          socket.emit('update:Appointment', normalize('appointment', doc));
+        
+        if (doc.isSyncedWithPMS) {
+          if (isDeleted(doc)) {
+            socket.emit('remove:Appointment', normalize('appointment', doc));
+          } else if (isCreated(doc)) {
+            socket.emit('create:Appointment', normalize('appointment', doc));
+          } else {
+            socket.emit('update:Appointment', normalize('appointment', doc));
+          }
+        }
+      });
+    });
+
+  Patient
+    .filter({ accountId: activeAccountId })
+    .changes({ squash: true })
+    .then((feed) => {
+      feed.each((error, doc) => {
+        setupFeedShutdown(socket, feed);
+
+        if (error) throw new Error('Feed error');
+        console.log('DASH FEED.PATIENT');
+
+        if (doc.isSyncedWithPms) {
+          if (isDeleted(doc)) {
+            console.log('sync.feed.delete', doc);
+            socket.emit('remove:Patient', normalize('patient', doc));
+          } else if (isCreated(doc)) {
+            console.log('sync.feed.create', doc);
+            socket.emit('create:Patient', normalize('patient', doc));
+          } else {
+            console.log('sync.feed.update', doc);
+            socket.emit('update:Patient', normalize('patient', doc));
+          }
         }
       });
     });
