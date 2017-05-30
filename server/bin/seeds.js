@@ -74,7 +74,7 @@ const hour8 = new Date(1970, 1, 1, 8, 0);
 const hour5 = new Date(1970, 1, 1, 17, 0);
 
 const justinPhoneNumber = '+17808508886';
-const sergeyPhoneNumber = '+17787130050';
+const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
