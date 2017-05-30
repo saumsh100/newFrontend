@@ -28,7 +28,7 @@ const Patient = createModel('Patient', {
   type: type.string(),
   birthDate: type.date(),
   insurance: type.object().allowNull(),
-  isDeleted: type.boolean(),
+  isDeleted: type.boolean().default(false),
   isSyncedWithPMS: type.boolean().default(false),
   familyId: type.string(),
 
