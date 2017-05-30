@@ -59,7 +59,7 @@ class UpcomingPatientList extends Component {
       const inputLength = inputValue.length;
 
       const searched = this.props.searchedPatients.map((userId) => {
-        const avatar = (this.props.patients.get(userId).get('avatar') ? this.props.patients.get(userId).get('avatar') : '/images/avatar.png');
+        const avatar = (this.props.patients.get(userId).get('avatarUrl') ? this.props.patients.get(userId).get('avatarUrl') : '/images/avatar.png');
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={styles.searchList} onClick={this.userClick.bind(null, userId)}>

@@ -9,10 +9,9 @@ export default function Avatar({ user, className, size }) {
     classes = classNames(styles.large, classes);
   }
 
-  const centerContent = user.url ?
-    <img className={styles.img} src={user.url} alt={`Image of ${user.firstName}`} /> :
-    <span className={styles.text}>{user.firstName && user.firstName[0]}</span>;
-
+  const centerContent = user.avatarUrl ?
+    <img className={styles.img} src={user.avatarUrl} alt={`Image of ${user.firstName}`} /> :
+    <img className={styles.img} src={'/images/avatar.png'} alt={`Image of ${user.firstName}`} /> ;
   return (
     <div className={classes}>
       {centerContent}
