@@ -15,12 +15,12 @@ function runDashboardFeeds(socket) {
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
     .then((feed) => {
-      // TODO should be shutting all feeds associated with this socket, not just one. In one place.
+      // TODO should be shutting all feeds associated with this socket, not just one. In one place
       setupFeedShutdown(socket, feed);
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-        
+
         if (doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             socket.emit('remove:Appointment', normalize('appointment', doc));
@@ -37,10 +37,11 @@ function runDashboardFeeds(socket) {
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
     .then((feed) => {
-      feed.each((error, doc) => {
-        setupFeedShutdown(socket, feed);
+      setupFeedShutdown(socket, feed);
 
+      feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
+
         console.log('DASH FEED.PATIENT');
 
         if (doc.isSyncedWithPms) {

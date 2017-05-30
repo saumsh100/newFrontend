@@ -33,11 +33,14 @@ function runSyncClientFeeds(socket) {
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
     .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
+
         console.log('SYNC FEED.PATIENT');
 
-        if (doc.isSyncedWithPms) {
+        if (!doc.isSyncedWithPms) {
           if (isDeleted(doc)) {
             console.log('sync.feed.delete', doc);
             socket.emit('remove:Patient', normalize('patient', doc));
