@@ -98,11 +98,13 @@ export default function ShowAppointment(props) {
     const adjacentSplit = !adjacent ? (columnWidth * 0.5) : 0;
     const leftSplit = `${(columnWidth * practIndex) + adjacentSplit}%`;
     const widthSplit = `${columnWidth * 0.5}%`;
+
     appStyle = Object.assign({}, appStyle, {
       left: leftSplit,
       width: widthSplit,
       overflow: 'auto',
     });
+
     bufferStyle = Object.assign({}, bufferStyle, {
       left: leftSplit,
       width: widthSplit,
@@ -112,7 +114,7 @@ export default function ShowAppointment(props) {
   return (
     <div
       onClick={() => {
-        selectAppointment({appointment, flag: 'edit'});
+        selectAppointment(appointment);
       }}
     >
       <div
@@ -152,4 +154,4 @@ ShowAppointment.propTypes = {
   startHour: PropTypes.number,
   endHour: PropTypes.number,
   columnWidth: PropTypes.number,
-}
+};

@@ -43,11 +43,11 @@ class RequestList extends Component {
       note: request.note,
       isSyncedWithPMS: false,
       customBufferTime: 0,
+      request: true,
     };
 
-    selectAppointment({ appointment, flag: 'request' });
+    selectAppointment(appointment);
 
-    console.log("zzzzz", selectedAppointment.flag);
 
     /*
     // TODO possibly do something here to trigger creating of a "submitted" popup or dialog

@@ -35,17 +35,7 @@ class ScheduleComponent extends Component {
   }
 
   reinitializeState() {
-    const {
-      selectedAppointment,
-      selectAppointment,
-    } = this.props;
-
-    if (selectedAppointment.flag === 'Appointment Created') {
-      selectAppointment({ appointment: null, flag: selectedAppointment.flag });
-    } else {
-      selectAppointment({ appointment: null, flag: '' });
-    }
-
+    this.props.selectAppointment(null);
     this.setState({
       addNewAppointment: false,
     });
@@ -86,13 +76,9 @@ class ScheduleComponent extends Component {
       selectAppointment,
     };
 
-    console.log(selectedAppointment.flag);
-    
     let formName = 'NewAppointmentForm';
-    if (selectedAppointment.flag === 'edit') {
-      formName = `EditAppointment_${selectedAppointment.appointment.id}`;
-    } else if (selectedAppointment.flag === 'request') {
-      formName = `requestAppointment_${selectedAppointment.appointment.requestId}`;
+    if (selectedAppointment) {
+      formName = `editAppointment_${selectedAppointment.serviceId}`;
     }
 
     return (
@@ -116,7 +102,7 @@ class ScheduleComponent extends Component {
                 <DayView {...params} />
                 <Legend />
                 <Modal
-                  active={addNewAppointment || !!selectedAppointment.appointment}
+                  active={addNewAppointment || !!selectedAppointment}
                   onEscKeyDown={this.reinitializeState}
                   onOverlayClick={this.reinitializeState}
                   custom
@@ -128,7 +114,6 @@ class ScheduleComponent extends Component {
                     services={services.get('models')}
                     patients={patients.get('models')}
                     selectedAppointment={selectedAppointment}
-                    selectAppointment={selectAppointment}
                     reinitializeState={this.reinitializeState}
                   />
                 </Modal>

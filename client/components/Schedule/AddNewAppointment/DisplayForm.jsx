@@ -37,9 +37,7 @@ export default function DisplayForm(props) {
 
   let initialValues = null;
 
-  const appointment = selectedAppointment.appointment;
-
-  if (appointment) {
+  if (selectedAppointment) {
     const {
       startDate,
       endDate,
@@ -49,7 +47,7 @@ export default function DisplayForm(props) {
       chairId,
       practitionerId,
       note,
-    } = appointment;
+    } = selectedAppointment;
 
 
     const patient = patients.get(patientId);
@@ -78,7 +76,7 @@ export default function DisplayForm(props) {
   const serviceOptions = generateEntityOptions(services, 'name');
   const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
   const chairOptions = generateEntityOptions(chairs, 'name');
-  const title = selectedAppointment.flag === 'edit' ? 'Edit Appointment' : 'Create New Appointment';
+  const title = selectedAppointment ? 'Edit Appointment' : 'Create New Appointment';
 
   return (
     <Form

@@ -44,7 +44,6 @@ class AddNewAppointment extends Component {
       reinitializeState,
       reset,
       formName,
-      selectAppointment,
     } = this.props;
 
     const appointmentValues = values.appointment;
@@ -98,31 +97,20 @@ class AddNewAppointment extends Component {
     };
 
     // if an appointment is not selected then create the appointment else update the appointment
-    if (!selectedAppointment.appointment || selectedAppointment.flag === 'request') {
-      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then((result) => {
-        if (!result) {
-          alert('This appointment is invalid');
-        } else {
-          if (selectedAppointment.flag === 'request') {
-            selectAppointment({ appointment: null, flag: 'Appointment Created' });
-          }
-          reinitializeState();
-          reset(formName);
-        }
-      }).catch(error => error);
+    if (!selectedAppointment || selectedAppointment.request) {
+      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then(() => {
+        reinitializeState();
+        reset(formName);
+      }).catch(error => alert('Appointment was invalid'));
 
     } else {
-      const appModel = selectedAppointment.appointment.appModel;
+      const appModel = selectedAppointment.appModel;
       const appModelSynced = appModel.set('isSyncedWithPMS', false);
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
-      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then((result)=>{
-        if (!result) {
-          alert('This appointment edit is invalid');
-        } else {
-          reinitializeState();
-        }
-      }).catch(error => error);
+      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(()=>{
+        reinitializeState();
+      }).catch(error => alert('Update Failed'));
     }
   }
 
@@ -177,7 +165,7 @@ class AddNewAppointment extends Component {
     const deleteApp = confirm('Are you sure you want to delete this appointment?');
 
     if (deleteApp) {
-      const appModel = selectedAppointment.appointment.appModel;
+      const appModel = selectedAppointment.appModel;
       const deletedModel = appModel.set('isDeleted', true);
       updateEntityRequest({ key: 'appointments', model: deletedModel });
     }
@@ -227,7 +215,7 @@ class AddNewAppointment extends Component {
           >
             Save
           </RemoteSubmitButton>
-          {(selectedAppointment.flag === 'edit') && (
+          {(selectedAppointment && !selectedAppointment.request) && (
             <div className={styles.remoteSubmit_buttonDelete}>
               <Button onClick={this.deleteAppointment} >
                 Delete

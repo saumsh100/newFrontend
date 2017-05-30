@@ -77,7 +77,6 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
-  console.log(appointmentData);
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate))
     .filter({ isDeleted: false })
@@ -85,27 +84,26 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     .then((appointments) => {
       const filteredApps = checkOverLapping(appointments, appointmentData.startDate, appointmentData.endDate);
       return filteredApps.map((app) => {
-        if((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+        if ((practitionerId !== app.practitionerId) &&
+          (chairId !== app.chairId) && (patientId !== app.patientId)) {
           return true;
-        } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)){
+        }
+        if ((practitionerId === app.practitionerId) &&
+          (chairId !== app.chairId) && (patientId !== app.patientId)){
           appointmentData.isSplit = true;
           return true;
-        } else {
-          return false;
         }
+        return false;
       });
     })
     .then((data) => {
-    console.log(data);
-      const testIfNoOverlap = data.every((el) => el ===true);
-      if(data.length === 0 || testIfNoOverlap) {
-        console.log("passed");
+      const testIfNoOverlap = data.every((el) => el === true);
+      if (data.length === 0 || testIfNoOverlap) {
         return Appointment.save(appointmentData)
           .then(appt => res.status(201).send(normalize('appointment', appt)))
           .catch(next);
-      } else {
-        return res.sendStatus(404);
       }
+      return res.sendStatus(400);
     })
     .catch(next);
 
@@ -206,7 +204,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
-  if(appointmentData.isDeleted) {
+  if (appointmentData.isDeleted) {
     return req.appointment.merge(req.body).save()
       .then(appointment => res.send(normalize('appointment', appointment)))
       .catch(next);
@@ -218,21 +216,26 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       .then((appointments) => {
         const filterSameIdApps = appointments.filter((app) => !(app.id === appointmentData.id));
         const filteredApps = checkOverLapping(filterSameIdApps, appointmentData.startDate, appointmentData.endDate);
-        if(filteredApps.length === 0 && appointmentData.isSplit) {
+        if (filteredApps.length === 0 && appointmentData.isSplit) {
           appointmentData.isSplit = false;
         }
         return filteredApps.map((app) => {
-          if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+
+          if ((practitionerId !== app.practitionerId) &&
+            (chairId !== app.chairId) && (patientId !== app.patientId)) {
+
             if (appointmentData.isSplit) {
               appointmentData.isSplit = false;
             }
-            return true
-          } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            return true;
+          }
+
+          if ((practitionerId === app.practitionerId) &&
+            (chairId !== app.chairId) && (patientId !== app.patientId)) {
             appointmentData.isSplit = true;
             return true;
-          } else {
-            return false;
           }
+          return false;
         });
       })
       .then((data) => {
@@ -243,7 +246,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
             .catch(next);
         } else {
           console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
-          return res.sendStatus(404);
+          return res.sendStatus(400);
         }
       })
       .catch(next);

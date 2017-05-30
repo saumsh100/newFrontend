@@ -18,7 +18,7 @@ const initialState = fromJS({
   practitionersFilter: [],
   servicesFilter: [],
   remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
-  selectedAppointment: { appointment: null, flag: '' },
+  selectedAppointment: null,
 });
 
 export default handleActions({
