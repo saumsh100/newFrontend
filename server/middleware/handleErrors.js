@@ -9,6 +9,7 @@ function logError(err, req, res, next) {
 }
 
 function sendError(err, req, res, next) {
+  console.log(err.message);
   return res.status(err.status || 500).send(err.message || 'Not a StatusError');
 }
 

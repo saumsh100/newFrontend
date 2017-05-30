@@ -18,7 +18,7 @@ import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
 
-const DashboardRouter = ({ history, isAuth }) => {
+const DashboardRouter = ({ history, isAuth, isSuperAdmin }) => {
   const getAuthorizedRoutes = () =>
     <div>
       <Switch>
@@ -30,7 +30,7 @@ const DashboardRouter = ({ history, isAuth }) => {
         <LazyRoute path="/social" load={loadSocial} name="social" />
         <LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />
         <LazyRoute path="/settings" load={loadSettings} name="settings" />
-        <LazyRoute path="/admin" load={loadAdmin} name="admin" />
+        { isSuperAdmin ? (<LazyRoute path="/admin" load={loadAdmin} name="admin" />) : null }
         <Route component={FourZeroFour} />
       </Switch>
     </div>;
@@ -61,7 +61,15 @@ const DashboardRouter = ({ history, isAuth }) => {
 DashboardRouter.propTypes = {
   history: PropTypes.object.isRequired,
   isAuth: PropTypes.bool.isRequired,
+  isSuperAdmin: PropTypes.bool.isRequired,
 };
 
-const mapStoreToProps = state => ({ isAuth: state.auth.get('isAuthenticated') });
+const mapStoreToProps = (state) => {
+  const token = state.auth.get('token');
+
+  return {
+    isAuth: state.auth.get('isAuthenticated'),
+    isSuperAdmin: (token && token.get('role')) === 'SUPERADMIN',
+  };
+};
 export default connect(mapStoreToProps)(DashboardRouter);

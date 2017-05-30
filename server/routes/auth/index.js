@@ -1,69 +1,31 @@
+import { Router } from 'express';
+import { pick } from 'lodash';
+import { UserAuth } from '../../lib/auth';
+import { Permission } from '../../models';
+import StatusError from '../../util/StatusError';
 
-const authRouter = require('express').Router();
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const globals = require('../../config/globals');
-const User = require('../../models/User');
-const Permission = require('../../models/Permission');
-const StatusError = require('../../util/StatusError');
-
-// TODO: find a better way to do Model.findOne
-
+const authRouter = Router();
 const getEmailDomain = email => (([, domain]) => domain)(/@(.+)$/.exec(email));
 const isCarecruEmail = email => getEmailDomain(email) === 'carecru.com';
 
-authRouter.post('/', (req, res, next) => {
-  // Get user by the unique username
-  return User
-    .filter({ username: req.body.username })
-    .run()
-    .then((users) => {
-      if (!users.length) {
-        return next(StatusError(500, 'No user found'));
-      }
+authRouter.post('/', ({ body: { username, password } }, res, next) => {
+  // TODO: we could load permissions with joins
+  const loadPermissions = userId =>
+    Permission.filter({ userId }).run()
+      .then(([permission]) => permission || StatusError(500, 'User has no account permissions'));
 
-      // Make sure the password is a match
-      const { id, activeAccountId, password, firstName, lastName, username } = users[0];
-      return bcrypt.compare(req.body.password, password, (err, match) => {
-        if (err) {
-          return next(StatusError(500, 'Error comparing passwords'));
-        }
-
-        if (!match) {
-          return next(StatusError(401, 'Invalid credentials'));
-        }
-
-        // Pull the permission to add role and extra permissions to token
-        return Permission
-          .filter({ userId: id })
-          .run()
-          .then((permission) => {
-            if (!permission || !permission[0]) {
-              return next(StatusError(500, 'User has no account permissions'));
-            }
-
-            const { role, permissions = {} } = permission[0];
-            const userRole = isCarecruEmail(req.body.username) ? 'SUPERADMIN' : role;
-            const tokenData = {
-              role: userRole,
-              permissions,
-              userId: id,
-              activeAccountId,
-              firstName,
-              lastName,
-              username,
-            };
-
-            return jwt.sign(tokenData, globals.tokenSecret, { expiresIn: globals.tokenExpiry }, (error, token) => {
-              if (error) {
-                return next(StatusError(500, 'Error signing the token'));
-              }
-
-              return res.json({ token });
-            });
-          });
-      });
-    })
+  return UserAuth.login(username, password)
+    .then(user => loadPermissions(user.id)
+      // Prepare token
+      .then(({ role, permissions = {} }) => ({
+        role: isCarecruEmail(username) ? 'SUPERADMIN' : role,
+        permissions,
+        userId: user.id,
+        ...(pick(user, ['activeAccountId', 'firstName', 'lastName', 'username'])),
+      }))
+    )
+    .then(tokenData => UserAuth.signToken(tokenData))
+    .then(token => res.json({ token }))
     .catch(err => next(err));
 });
 

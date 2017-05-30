@@ -1,6 +1,6 @@
 
 // TODO: remove stage-2 and used a better babel pack
-/*import reducer, {
+import reducer, {
   CREATE_REQUEST,
   RECEIVE_REQUEST,
   ERROR_REQUEST,
@@ -23,12 +23,5 @@ describe('Reducer - apiRequests', () => {
     it('should be a function', () => {
       expect(typeof reducer).toBe('function');
     });
-  });
-});*/
-
-describe('Fake Test', () => {
-  it('should be a function', () => {
-    const a = () => {};
-    expect(typeof a).toBe('function');
   });
 });

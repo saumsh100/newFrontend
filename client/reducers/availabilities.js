@@ -21,6 +21,7 @@ import {
   REFRESH_AVAILABILITIES_STATE,
   SET_HAS_WAITLIST,
   UPDATE_WAITSPOT,
+  SET_IS_LOGIN,
 } from '../constants';
 
 export const createInitialWidgetState = state => fromJS(Object.assign({
@@ -31,6 +32,7 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
   patientUser: null,
   isFetching: true,
   isConfirming: false,
+  isLogin: false,
   isTimerExpired: false,
   isSuccessfulBooking: false,
   hasWaitList: false,
@@ -61,6 +63,7 @@ export default handleActions({
     return state.merge({
       selectedAvailability: null,
       isFetching: true,
+      isLogin: false,
       isConfirming: false,
       isTimerExpired: false,
       isSuccessfulBooking: false,
@@ -85,6 +88,10 @@ export default handleActions({
 
   [SET_IS_CONFIRMING](state, action) {
     return state.set('isConfirming', action.payload);
+  },
+
+  [SET_IS_LOGIN](state, action) {
+    return state.set('isLogin', action.payload);
   },
 
   [SET_IS_TIMER_EXPIRED](state, action) {

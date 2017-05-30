@@ -13,6 +13,7 @@ const scheme = [
 
   'positive',
   'negative',
+  'fluid',
 ];
 
 const mapper = getClassMapper(scheme, styles);
@@ -21,7 +22,7 @@ const VButton = (props) => {
   return (
     <props.as
       {...mapper.omit(props, 'as', 'icon')}
-      className={mapper.map(props, styles.default)}
+      className={mapper.map(props, styles.default, props.className)}
     >
       { props.icon ? (
         <i className={`fa fa-${props.icon} ${styles.icon}`} />
@@ -45,6 +46,7 @@ VButton.propTypes = {
     PropTypes.string,
     PropTypes.func,
   ]),
+  className: PropTypes.string,
   icon: PropTypes.string,
   title: PropTypes.string,
 };
