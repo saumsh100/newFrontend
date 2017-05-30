@@ -21,24 +21,22 @@ const generateDuringFilter = (m, startDate, endDate) => {
 /**
  * Validates phone number.
  * @param phone string phone number. Can be empty, null, undefined - anything.
- * @return valid phone number of null if can't be valid.
+ * @return string phone number or undefined if the param is invalid or empty.
  */
 function phoneValidate(phone) {
-  if (undefined === phone || phone.length === 0) return null;
+  if (phone === undefined || phone === null || phone.length === 0) return;
 
-  let result = '';
   const phoneNumber = phone.replace(/\D/g, '');
   const length = phoneNumber.length;
   if (length === 10) {
-    result = '+1'.concat(phoneNumber);
+    return '+1'.concat(phoneNumber);
   }
   if (length === 11) {
-    result = '+'.concat(phoneNumber);
+    return '+'.concat(phoneNumber);
   }
   if (phone && length === 0) {
-    result = phoneNumber;
+    return phoneNumber;
   }
-  return result;
 }
 
 /**
@@ -194,10 +192,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
   const patientData = Object.assign({}, req.body);
   patientData.phoneNumber = phoneValidate(req.body.phoneNumber);
 
-  // if (!patientData.phoneNumber) {
-  //   return res.sendStatus(400);
-  // }
-  return req.patient.merge(req.body).save()
+  return req.patient.merge(patientData).save()
     .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });
