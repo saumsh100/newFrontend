@@ -77,7 +77,7 @@ chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
     };
     Chat.get(chat.id).getJoin(joinObject).run()
       .then((chats) => {
-        const sendChat = normalize('chat', chat);
+        const sendChat = normalize('chat', chats);
         res.send(sendChat);
       }).catch((err) => {
       console.log(err);
