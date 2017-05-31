@@ -34,7 +34,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
   }
 
 
-  const prov = [...usStates, ...caProvinces];
+  const prov = [...caProvinces, ...usStates];
 
   return (
     <Form
