@@ -54,6 +54,8 @@ export default function DisplayForm(props) {
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
 
+    console.log(patient.get('mobilePhoneNumber'));
+
     initialValues = {
       appointment: {
         time: setTime(startDate),
@@ -65,8 +67,8 @@ export default function DisplayForm(props) {
       },
       patient: {
         patientSelected: patient.toJS(),
-        phoneNumber: patient.phoneNumber,
-        email: patient.email,
+        mobilePhoneNumber: patient.get('mobilePhoneNumber') || patient.get('homePhoneNumber'),
+        email: patient.get('email'),
         note,
       },
     };

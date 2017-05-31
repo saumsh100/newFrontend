@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import RequestsContainer from '../../containers/RequestContainer';
-import fetchReputationData from '../../thunks/fetchReputationData';
-import fetchReviewsData from '../../thunks/fetchReviewsData';
+import { fetchEntities } from '../../thunks/fetchEntities';
 import {
   Grid,
   Row,
@@ -28,12 +27,26 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.fetchReputationData();
-    // this.props.fetchReviewsData();
+    const currentDate = moment(this.props.currentDate);
+
+    const startDate = currentDate.startOf('day').toISOString();
+    const endDate = currentDate.endOf('day').toISOString();
+
+    const query = {
+      startDate,
+      endDate,
+      limit: 100,
+    };
+
+    Promise.all([
+      this.props.fetchEntities({ key: 'appointments', params: query }),
+    ]).then(() => {
+      this.props.setAllFilters(['chairs', 'practitioners', 'services']);
+      this.setState({ loaded: true });
+    }).catch(e => console.log(e));
   }
 
   renderCards() {
-
     const DataBigComment = [{
       icon: "facebook",
       iconColor: '#ffffff',
@@ -197,20 +210,12 @@ class Dashboard extends React.Component {
     }];
 
     const {
-      listingCount,
-      errorCount,
-      missingCount,
-      lastFetchedListings,
-      statusListings,
-      fetchReputationData,
-      statusReviews,
-      lastFetchedReviews,
-      fetchReviewsData,
-      ratingCounts,
+      appointments,
     } = this.props;
 
+    console.log(appointments.get('models'))
     const data = [
-      {count: 10, title: "Appointment Booked", icon: "calendar", size: 6, color: 'primaryColor' },
+      {count: appointments.size, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
       {count: 12, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
       {count: 13, title: "Unconfirmed Refferals", icon: "bullhorn", size: 6, color: 'primaryGreen' },
       {count: 16, title: "Unresponded Reviews", icon: "star", size: 6, color: 'primaryYellow' },
@@ -278,6 +283,7 @@ class Dashboard extends React.Component {
                                borderColor={colorMap.darkblue}/>
             </div>
           </Col>
+          {/*
           <Col className={styles.padding}
                xs={12} md={8}>
             <Card className={styles.dashboard__body_comments} >
@@ -317,6 +323,7 @@ class Dashboard extends React.Component {
               cardTitle="Unconfirmed Referrals"
             />
           </Col>
+
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
               <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
@@ -338,6 +345,7 @@ class Dashboard extends React.Component {
               </Col>
             </Row>
           </Col>
+           */}
         </Row>
       </Grid>
     );
@@ -352,24 +360,16 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps({ reputation, reviews }) {
+function mapStateToProps({ entities, schedule }) {
   return {
-    lastFetchedListings: reputation.get('lastFetched'),
-    statusListings: reputation.get('status'),
-    listingCount: reputation.getIn(['data', 'sourcesFound']),
-    errorCount: reputation.getIn(['data', 'sourcesFoundWithErrors']),
-    missingCount: reputation.getIn(['data', 'sourcesNotFound']),
-
-    statusReviews: reviews.get('status'),
-    lastFetchedReviews: reviews.get('lastFetched'),
-    ratingCounts: reviews.getIn(['data', 'ratingCounts'])
+    currentDate: schedule.toJS().scheduleDate,
+    appointments: entities.get('appointments'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchReputationData,
-    fetchReviewsData,
+  fetchEntities,
   }, dispatch);
 }
 

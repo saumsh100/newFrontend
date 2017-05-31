@@ -464,7 +464,7 @@ const SEEDS = {
     {
       accountId,
       startDate: moment({ hour: 11, minute: 10 })._d,
-      endDate: moment({ hour: 22, minute: 50 })._d,
+      endDate: moment({ hour: 12, minute: 50 })._d,
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -478,7 +478,7 @@ const SEEDS = {
       startDate: moment({hour: 13, minute: 10})._d,
       endDate: moment({hour: 13, minute: 50})._d,
       patientId: justinPatientId,
-      serviceId: serviceId2,
+      serviceId: serviceId,
       practitionerId: practitionerId2,
       chairId,
       isConfirmed: false,
