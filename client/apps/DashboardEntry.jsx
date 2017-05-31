@@ -13,7 +13,6 @@ import socket from '../socket';
 import App from './Dashboard';
 import configure from '../store';
 import { load } from '../thunks/auth';
-import connectSocketToStore from '../socket/connectSocketToStore';
 
 LogRocket.init(process.env.LOGROCKET_APP_ID);
 
@@ -31,8 +30,6 @@ if (auth.get('isAuthenticated')) {
     name: `${token.firstName} ${token.lastName}`,
     email: token.username,
   });
-
-  connectSocketToStore(socket, store);
 }
 
 // TODO: define globals with webpack ProvidePlugin

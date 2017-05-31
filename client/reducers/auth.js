@@ -23,6 +23,7 @@ export default handleActions({
       email: token.username,
     });
 
+    console.log('asdsad')
     connectSocketToStoreLogin(socket);
 
 
