@@ -46,7 +46,7 @@ function DigitalWaitListItem ({ patient, waitSpot }) {
             </b>
           </div>
           <div className={styles.patients__item_phone}>
-            {patient.get('phoneNumber')}
+            {patient.get('mobilePhoneNumber')}
           </div>
           <div className={styles.patients__item_email}>
             {patient.get('email')}

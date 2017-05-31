@@ -50,10 +50,7 @@ class PatientList extends Component {
     });
   }
 
-  setCurrentPatient(id) {
-    const currentPatient = {
-      id,
-    };
+  setCurrentPatient(currentPatient) {
     this.setState({
       currentPatient,
       showNewUser: false,
@@ -217,11 +214,11 @@ class PatientList extends Component {
       } else {
         currentPatient.appointment = {};
       }
-
     } else {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
-        currentPatient.appointment = (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
+
+        currentPatient.appointment = currentPatient.appointment || (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
       }
     }
 

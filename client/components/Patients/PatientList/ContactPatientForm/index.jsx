@@ -10,9 +10,9 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
 
   const initialValues = {
     email: currentPatient.email,
-    phoneNumber: currentPatient.phoneNumber,
-    mobileNumber: currentPatient.mobileNumber,
-    workNumber: currentPatient.workNumber,
+    homePhoneNumber: currentPatient.homePhoneNumber,
+    mobilePhoneNumber: currentPatient.mobilePhoneNumber,
+    workPhoneNumber: currentPatient.workPhoneNumber,
   };
 
   if (currentPatient.address) {
@@ -34,7 +34,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
   }
 
 
-  const prov = [...usStates, ...caProvinces];
+  const prov = [...caProvinces, ...usStates];
 
   return (
     <Form
@@ -63,10 +63,10 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
         </div>
         <div className={styles.firstField}>
           <Field
-            name="phoneNumber"
+            name="homePhoneNumber"
             className={styles.nameFields}
-            validate={[phoneValidate]}
-            label="Phone #"
+            validate={[phoneValidateNullOkay]}
+            label="Home #"
           />
         </div>
       </div>
@@ -76,9 +76,9 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
         </div>
         <div className={styles.firstField}>
           <Field
-            name="mobileNumber"
+            name="mobilePhoneNumber"
             className={styles.nameFields}
-            validate={[phoneValidateNullOkay]}
+            validate={[phoneValidate]}
             label="Mobile #"
           />
         </div>
@@ -89,7 +89,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
         </div>
         <div className={styles.firstField}>
           <Field
-            name="workNumber"
+            name="workPhoneNumber"
             className={styles.nameFields}
             validate={[phoneValidateNullOkay]}
             label="Work #"

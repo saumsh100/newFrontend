@@ -18,26 +18,6 @@ const generateDuringFilter = (m, startDate, endDate) => {
 );
 };
 
-/**
- * Validates phone number.
- * @param phone string phone number. Can be empty, null, undefined - anything.
- * @return string phone number or undefined if the param is invalid or empty.
- */
-function phoneValidate(phone) {
-  if (phone === undefined || phone === null || phone.length === 0) return;
-
-  const phoneNumber = phone.replace(/\D/g, '');
-  const length = phoneNumber.length;
-  if (length === 10) {
-    return '+1'.concat(phoneNumber);
-  }
-  if (length === 11) {
-    return '+'.concat(phoneNumber);
-  }
-  if (phone && length === 0) {
-    return phoneNumber;
-  }
-}
 
 /**
  * Batch creation
@@ -113,7 +93,6 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
     } } })
     .run()
     .then((patients) => {
-      console.log(patients)
       const normPatients = normalize('patients', patients);
       normPatients.entities.patients = normPatients.entities.patients || {};
       res.send(normPatients);
@@ -146,16 +125,9 @@ patientsRouter.get('/', (req, res, next) => {
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
-  patientData.phoneNumber = phoneValidate(req.body.phoneNumber);
-
-  if (!patientData.phoneNumber) {
-    return res.sendStatus(400);
-  }
 
   return Patient.save(patientData)
-    .then((patient) => {
-      res.status(201).send(normalize('patient', patient));
-    })
+    .then(patient => res.status(201).send(normalize('patient', patient)))
     .catch(next);
 });
 
@@ -190,10 +162,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
-  const patientData = Object.assign({}, req.body);
-  patientData.phoneNumber = phoneValidate(req.body.phoneNumber);
-
-  return req.patient.merge(patientData).save()
+  return req.patient.merge(req.body).save()
     .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });

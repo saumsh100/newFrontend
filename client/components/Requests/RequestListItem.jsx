@@ -50,8 +50,8 @@ class RequestListItem extends Component {
       name: patient.getFullName(),
       nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
       email: patient.email,
-      serviceName: service.name,
-      phoneNumber: patient.phoneNumber,
+      service: service.name,
+      mobilePhoneNumber: patient.mobilePhoneNumber,
       note: request.note,
       month: request.getMonth(),
       day: request.getDay(),
@@ -87,8 +87,8 @@ class RequestListItem extends Component {
             <AppointmentShowData
               nameAge={data.nameAge}
               time={data.time}
-              service={data.serviceName}
-              phoneNumber={data.phoneNumber}
+              service={data.service}
+              phoneNumber={data.mobilePhoneNumber}
               email={data.email}
               note={data.note}
             />
@@ -106,7 +106,7 @@ class RequestListItem extends Component {
           name={data.name}
           age={data.age}
           nameAge={data.nameAge}
-          phoneNumber={data.phoneNumber}
+          phoneNumber={data.mobilePhoneNumber}
           service={data.service}
         />
         {showHoverComponents}

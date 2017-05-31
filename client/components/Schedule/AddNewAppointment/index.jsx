@@ -136,7 +136,7 @@ class AddNewAppointment extends Component {
     } = this.props;
 
     if (typeof newValue === 'object') {
-      change(formName, 'patient.phoneNumber', newValue.phoneNumber);
+      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
       change(formName, 'patient.email', newValue.email);
     }
   }
