@@ -100,7 +100,7 @@ class ScheduleComponent extends Component {
               </div>
               <div className={styles.schedule__container_content}>
                 <DayView {...params} />
-                <Legend />
+
                 <Modal
                   active={addNewAppointment || !!selectedAppointment}
                   onEscKeyDown={this.reinitializeState}
@@ -117,8 +117,8 @@ class ScheduleComponent extends Component {
                     reinitializeState={this.reinitializeState}
                   />
                 </Modal>
-
               </div>
+              <Legend />
             </Card>
           </Col>
           <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
