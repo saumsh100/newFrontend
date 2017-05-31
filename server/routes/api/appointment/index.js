@@ -83,7 +83,6 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)))
-    
     .run()
     .then((appointments) => {
       const intersectingApps = intersectingAppointments(appointments, appointmentData.startDate, appointmentData.endDate);

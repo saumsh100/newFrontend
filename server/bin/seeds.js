@@ -199,10 +199,6 @@ const generateDefaultServices = (_accountId) => {
     duration: 30,
   });
 
-  let second = createService({
-      name: 'New Patient Checkup & Cleaning',
-      duration: 30,
-  });
 
   if (_accountId === accountId) {
     first = {
@@ -211,19 +207,11 @@ const generateDefaultServices = (_accountId) => {
       name: 'New Patient Consultation',
       duration: 30,
     };
-    second = {
-      id: serviceId2,
-      accountId: _accountId,
-      name: 'New Patient Checkup & Cleaning',
-      duration: 30,
-    };
   }
 
   return [
     first,
-
-    second,
-
+    
     createService({
       name: 'Toothache',
       duration: 30,
