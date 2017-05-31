@@ -22,7 +22,7 @@ export default function connectSocketToStoreLogin(socket, store) {
       console.log('request received');
       store.dispatch(addSocketEntity({ key: 'requests', entity: data }));
     })
-    .on('add:Appointment', (data) => {
+    .on('create:Appointment', (data) => {
       console.log('EVENT:addAppointment: data=', data);
     })
     .on('update:Appointment', (data) => {
