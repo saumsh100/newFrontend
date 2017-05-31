@@ -63,10 +63,10 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
         </div>
         <div className={styles.firstField}>
           <Field
-            name="mobilePhoneNumber"
+            name="homePhoneNumber"
             className={styles.nameFields}
-            validate={[phoneValidate]}
-            label="Phone #"
+            validate={[phoneValidateNullOkay]}
+            label="Home #"
           />
         </div>
       </div>
@@ -76,9 +76,9 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
         </div>
         <div className={styles.firstField}>
           <Field
-            name="mobileNumber"
+            name="mobilePhoneNumber"
             className={styles.nameFields}
-            validate={[phoneValidateNullOkay]}
+            validate={[phoneValidate]}
             label="Mobile #"
           />
         </div>

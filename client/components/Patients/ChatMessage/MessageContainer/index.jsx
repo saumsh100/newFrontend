@@ -77,7 +77,7 @@ class MessageContainer extends Component {
         let nextMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i + 1]);
         nextMessage = (nextMessage ? nextMessage.from : null);
 
-        if (message.from === this.props.currentPatient.phoneNumber) {
+        if (message.from === this.props.currentPatient.mobilePhoneNumber) {
           first = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.textFrom}>{message.body}</div>;
           third = <div className={styles.margin2} > </div>;

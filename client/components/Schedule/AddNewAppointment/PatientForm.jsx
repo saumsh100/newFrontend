@@ -33,7 +33,7 @@ export default function PatientForm(props) {
       <Row className={styles.addNewAppt_mainContainer_right_row}>
         <Col xs={12}>
           <Field
-            name="phoneNumber"
+            name="mobilePhoneNumber"
             label="Phone #"
             theme="primaryGrey"
             disabled

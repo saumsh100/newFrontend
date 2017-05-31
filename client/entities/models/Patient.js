@@ -10,7 +10,7 @@ const PatientSchema = {
   middleName: null,
   lastName: null,
   startDate: null,
-  phoneNumber: null,
+  //phoneNumber: null,
   homePhoneNumber: null,
   mobilePhoneNumber: null,
   workPhoneNumber: null,
