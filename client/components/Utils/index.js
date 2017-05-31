@@ -70,6 +70,7 @@ export const getClassMapper = (scheme, styles) => {
       .filter(i => i)
       .map(key => styles[key])
       .concat(rest)
+      .filter(i => (i && i.length))
       .join(' ');
   };
 

@@ -11,6 +11,7 @@ import time from '../../server/util/time';
 import socket from '../socket';
 import App from './Patient';
 import configure from '../store/availabilitiesStore';
+import { load } from '../thunks/auth';
 
 const browserHistory = createBrowserHistory();
 const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });

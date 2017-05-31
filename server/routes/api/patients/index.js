@@ -93,6 +93,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
     } } })
     .run()
     .then((patients) => {
+      console.log(patients)
       const normPatients = normalize('patients', patients);
       normPatients.entities.patients = normPatients.entities.patients || {};
       res.send(normPatients);

@@ -8,6 +8,7 @@ import { ListItem } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 
 
+
 class ChatListContainer extends Component {
   constructor(props) {
     super(props);
@@ -26,8 +27,9 @@ class ChatListContainer extends Component {
       chat.user = user;
       chat.newMessages = 0;
       let messageRecent = '';
+      const length = (chat.textMessages ? chat.textMessages.length : 0);
 
-      for (let i = 0; i < chat.textMessages.length; i++) {
+      for (let i = 0; i < length; i++) {
         if (i === chat.textMessages.length - 1) {
           messageRecent = this.props.textMessages.get(chat.textMessages[i]);
         }

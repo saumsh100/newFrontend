@@ -35,6 +35,7 @@ const alexUserId = uuid();
 const sergeyUserId = uuid();
 const jdUserId = uuid();
 const syncUserId = uuid();
+const vstUserId = uuid();
 
 const alexPatientId = uuid();
 const alexPatientId2 = uuid();
@@ -89,7 +90,6 @@ const mainEnterprise = {
 
 const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) => {
   const time1 = lastDate || faker.date.past();
-
 
   return [
     {
@@ -555,6 +555,14 @@ const SEEDS = {
       id: syncUserId,
       activeAccountId: syncTestAccId,
     },
+    {
+      firstName: 'Valerij',
+      lastName: 'Stukanov',
+      username: 'vst@carecru.com',
+      password: bcrypt.hashSync('vst', saltRounds),
+      id: vstUserId,
+      activeAccountId: accountId,
+    },
   ],
 
   Family: [
@@ -810,6 +818,12 @@ const SEEDS = {
       role: 'OWNER',
       permissions: {},
     },
+    {
+      userId: vstUserId,
+      accountId,
+      role: 'SUPERADMIN',
+      permissions: {},
+    },
   ],
 
   Invite: [
@@ -1004,6 +1018,14 @@ const SEEDS = {
     },
     {
       appointmentId: appointmentId2,
+    },
+  ],
+
+  OAuth: [
+    {
+      provider: 'FACEBOOK',
+      providerUserId: '1924667691151876',
+      patientId: justinPatientId,
     },
   ],
 

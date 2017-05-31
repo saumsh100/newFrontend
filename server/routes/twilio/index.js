@@ -126,7 +126,7 @@ twilioRouter.post('/message', (req, res, next) => {
             textMessageData.chatId = chat.id;
             TextMessage.save(textMessageData)
               .then(() => {
-                sendSocket(io, mergeData.accountId);
+                sendSocket(io, chat.id);
               });
           });
         }

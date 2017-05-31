@@ -10,6 +10,8 @@ const type = thinky.type;
 const Patient = createModel('Patient', {
   accountId: type.string(),
   avatarUrl: type.string(),
+  email: type.string(),
+  password: type.string(),
   pmsId: type.string(),
   firstName: type.string().required(),
   lastName: type.string().required(),

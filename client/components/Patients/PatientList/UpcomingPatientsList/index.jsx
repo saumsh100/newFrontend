@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import styles from '../main.scss';
 import PatientListItem from '../PatientListItem';
-import UserSearchList from './UserSearchList';
 import {
   AutoCompleteForm,
   InfiniteScroll,
@@ -11,6 +12,8 @@ import {
   List,
   CardHeader,
 } from '../../../library';
+import { fetchEntities } from '../../../../thunks/fetchEntities';
+
 
 class UpcomingPatientList extends Component {
   constructor(props) {
@@ -39,13 +42,17 @@ class UpcomingPatientList extends Component {
       });
 
       if (id) {
-        this.props.setSearchPatient(id);
+        return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
+          this.props.setCurrentPatient(id);
+        });
       }
     }
   }
 
   userClick(id) {
-    this.props.setSearchPatient(id);
+    return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
+      this.props.setCurrentPatient(id);
+    });
   }
 
   getSuggestions(value) {
@@ -179,4 +186,17 @@ UpcomingPatientList.propTypes = {
   setSearchPatient: PropTypes.func,
 };
 
-export default UpcomingPatientList;
+function mapStateToProps() {
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntities,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(UpcomingPatientList);

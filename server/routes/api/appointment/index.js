@@ -12,6 +12,16 @@ const moment = require('moment');
 
 appointmentsRouter.param('appointmentId', loaders('appointment', 'Appointment'));
 
+function checkOverLapping(appointments, startDate, endDate) {
+  return appointments.filter((app)=>{
+    if((moment(startDate).isSame(moment(app.startDate))) ||
+      (moment(startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
+      (moment(endDate).isSame(moment(app.endDate))) ||
+      (moment(endDate).isBetween(moment(app.startDate), moment(app.endDate)))) {
+      return app;
+    };
+  });
+}
 appointmentsRouter.get('/', (req, res, next) => {
   const {
     accountId,
@@ -51,13 +61,50 @@ appointmentsRouter.get('/', (req, res, next) => {
     .catch(next);
 });
 
-appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) =>{
+appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) => {
+  const accountId = req.accountId;
+
   const appointmentData = Object.assign({}, req.body, {
-    accountId: req.accountId,
+    accountId,
   });
-  return Appointment.save(appointmentData)
-    .then(appt => res.status(201).send(normalize('appointment', appt)))
+
+  const {
+    practitionerId,
+    chairId,
+    patientId,
+  } = req.body;
+
+  const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
+  const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
+  Appointment.filter({ accountId })
+    .filter(r.row('startDate').during(startDate, endDate))
+    .filter({ isDeleted: false })
+    .run()
+    .then((appointments) => {
+      const filteredApps = checkOverLapping(appointments, appointmentData.startDate, appointmentData.endDate);
+      return filteredApps.map((app) => {
+        if((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+          return true
+        } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)){
+          appointmentData.isSplit = true;
+          return true;
+        } else {
+          return false;
+        }
+      });
+    })
+    .then((data) => {
+      const testIfNoOverlap = data.every((el) => el ===true);
+      if(data.length === 0 || testIfNoOverlap) {
+        return Appointment.save(appointmentData)
+          .then(appt => res.status(201).send(normalize('appointment', appt)))
+          .catch(next);
+      } else {
+        return res.sendStatus(404);
+      }
+    })
     .catch(next);
+
 });
 
 /**
@@ -143,9 +190,59 @@ appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'),
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
-  return req.appointment.merge(req.body).save()
-    .then(appointment => res.send(normalize('appointment', appointment)))
-    .catch(next);
+  const accountId = req.accountId;
+
+  const {
+    practitionerId,
+    chairId,
+    patientId,
+  } = req.body;
+
+  const appointmentData = req.body;
+  const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
+  const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
+
+  if(appointmentData.isDeleted) {
+    return req.appointment.merge(req.body).save()
+      .then(appointment => res.send(normalize('appointment', appointment)))
+      .catch(next);
+  } else {
+    Appointment.filter({accountId})
+      .filter(r.row('startDate').during(startDate, endDate))
+      .filter({isDeleted: false})
+      .run()
+      .then((appointments) => {
+        const filterSameIdApps = appointments.filter((app) => !(app.id === appointmentData.id));
+        const filteredApps = checkOverLapping(filterSameIdApps, appointmentData.startDate, appointmentData.endDate);
+        if(filteredApps.length === 0 && appointmentData.isSplit) {
+          appointmentData.isSplit = false;
+        }
+        return filteredApps.map((app) => {
+          if ((practitionerId !== app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            if (appointmentData.isSplit) {
+              appointmentData.isSplit = false;
+            }
+            return true
+          } else if ((practitionerId === app.practitionerId) && (chairId !== app.chairId) && (patientId !== app.patientId)) {
+            appointmentData.isSplit = true;
+            return true;
+          } else {
+            return false;
+          }
+        });
+      })
+      .then((data) => {
+        const testIfNoOverlap = data.every((el) => el === true);
+        if (data.length === 0 || testIfNoOverlap) {
+          return req.appointment.merge(req.body).save()
+            .then(appointment => res.send(normalize('appointment', appointment)))
+            .catch(next);
+        } else {
+          return res.sendStatus(404);
+        }
+      })
+      .catch(next);
+  }
 });
 
 /**

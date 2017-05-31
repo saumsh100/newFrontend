@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { setScheduleDate } from '../actions/schedule';
@@ -19,9 +20,7 @@ class ScheduleContainer extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      currentDate,
-    } = this.props;
+    const currentDate = moment(this.props.currentDate);
 
     const startDate = currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
@@ -32,11 +31,10 @@ class ScheduleContainer extends React.Component {
     };
 
     Promise.all([
-      this.props.fetchEntities({ key: 'appointments', params: query }),
-      this.props.fetchEntities({ key: 'practitioners'}),
-      this.props.fetchEntities({ key: 'services' }),
+      this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
+      this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
+      this.props.fetchEntities({ key: 'services', join: ['practitioners'] }),
       this.props.fetchEntities({ key: 'chairs' }),
-      this.props.fetchEntities({ key: 'patients' }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
       this.setState({ loaded: true });
@@ -44,11 +42,9 @@ class ScheduleContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {
-      currentDate,
-    } = this.props;
+    const currentDate = moment(this.props.currentDate);
 
-    const nextPropsDate = nextProps.schedule.toJS().scheduleDate;
+    const nextPropsDate = moment(nextProps.schedule.toJS().scheduleDate);
 
     if (!nextPropsDate.isSame(currentDate)) {
       const startDate = nextPropsDate.startOf('day').toISOString();
@@ -57,7 +53,7 @@ class ScheduleContainer extends React.Component {
         startDate,
         endDate,
       };
-      this.props.fetchEntities({ key: 'appointments', params: query });
+      this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query });
     }
   }
 
@@ -73,7 +69,6 @@ class ScheduleContainer extends React.Component {
     } = this.props;
 
     let loadComponent = null;
-
     if (this.state.loaded) {
       loadComponent = (
         <ScheduleComponent
@@ -111,9 +106,9 @@ ScheduleContainer.propTypes = {
 
 function mapStateToProps({ entities, schedule }) {
   return {
-    practitioners: entities.get('practitioners'),
     schedule,
     currentDate: schedule.toJS().scheduleDate,
+    practitioners: entities.get('practitioners'),
     appointments: entities.get('appointments'),
     patients: entities.get('patients'),
     services: entities.get('services'),
