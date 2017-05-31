@@ -20,14 +20,12 @@ class RequestContainer extends React.Component {
     const browserHistory = createBrowserHistory();
     const location = browserHistory.location.pathname;
     return (
-      <div className={this.props.className}>
-        <Requests
-          requests={this.props.requests}
-          patients={this.props.patients}
-          services={this.props.services}
-          location={location}
-        />
-      </div>
+      <Requests
+        requests={this.props.requests}
+        patients={this.props.patients}
+        services={this.props.services}
+        location={location}
+      />
     );
   }
 }

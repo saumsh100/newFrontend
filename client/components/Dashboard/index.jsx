@@ -273,8 +273,10 @@ class Dashboard extends React.Component {
           </Col>
           <Col className={styles.padding}
                xs={12}  md={4}>
-            <RequestsContainer key="dashBoardRequests" className={styles.dashboard__body_request}
+            <div className={styles.dashboard__body_request}>
+            <RequestsContainer key="dashBoardRequests"
                                borderColor={colorMap.darkblue}/>
+            </div>
           </Col>
           <Col className={styles.padding}
                xs={12} md={8}>

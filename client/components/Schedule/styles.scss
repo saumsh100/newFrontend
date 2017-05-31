@@ -23,11 +23,11 @@
         }
         &_rowRequest {
           flex-grow: 1;
+          overflow: auto;
           margin-top: 15px;
-          background-color: $primary-white;
+          background-color: lighten($primary-lightgrey, 2%);
         }
         &_request {
-
         }
         &_calendar {
           border-top: $card-border-size $primary-dark-blue;

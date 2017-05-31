@@ -65,17 +65,6 @@ class ScheduleComponent extends Component {
 
     const currentDate = moment(schedule.toJS().scheduleDate);
 
-    const params = {
-      currentDate,
-      practitioners,
-      patients,
-      chairs,
-      services,
-      appointments,
-      schedule,
-      selectAppointment,
-    };
-
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
       formName = `editAppointment_${selectedAppointment.serviceId}`;
@@ -99,8 +88,16 @@ class ScheduleComponent extends Component {
                 </CurrentDate>
               </div>
               <div className={styles.schedule__container_content}>
-                <DayView {...params} />
-
+                <DayView
+                  currentDate={currentDate}
+                  practitioners={practitioners}
+                  patients={patients}
+                  chairs={chairs}
+                  services={services}
+                  appointments={appointments}
+                  schedule={schedule}
+                  selectAppointment={selectAppointment}
+                />
                 <Modal
                   active={addNewAppointment || !!selectedAppointment}
                   onEscKeyDown={this.reinitializeState}
@@ -133,7 +130,7 @@ class ScheduleComponent extends Component {
               </Col>
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
-              <Col xs={12}>
+              <Col xs={12} >
                 <RequestsContainer
                   key={'scheduleRequests'}
                   className={styles.schedule__sidebar_request}

@@ -27,18 +27,16 @@ class Requests extends Component {
 
     return (
       <Card className={styles.requestCard}>
-        <div className={`${this.props.className} ${styles.requestCard__wrapper}`}>
-          <div className={styles.requestHeader}>
-            <CardHeader count={sortedRequests.length} title={'New Appointment Requests'} />
-          </div>
-          <div className={styles.requestBody}>
-            <RequestList
-              sortedRequests={sortedRequests}
-              patients={patients}
-              services={services}
-              location={location}
-            />
-          </div>
+        <div className={styles.requestHeader}>
+          <CardHeader count={sortedRequests.length} title={'New Appointment Requests'} />
+        </div>
+        <div className={styles.requestBody}>
+          <RequestList
+            sortedRequests={sortedRequests}
+            patients={patients}
+            services={services}
+            location={location}
+          />
         </div>
       </Card>
     );

@@ -56,22 +56,30 @@ class RequestList extends Component {
 
   render() {
     const { sortedRequests, patients, services, setHoverRequestId } = this.props;
+
+    const showComponent = sortedRequests.length ? (
+      sortedRequests.map((request) => {
+        //const active = request.get('id') === this.props.setHoverRequestId;
+        return (
+          <RequestListItem
+            key={request.id}
+            request={request}
+            patient={patients.get(request.get('patientId'))}
+            service={services.get(request.get('serviceId'))}
+            confirmAppointment={this.confirmAppointment}
+            removeRequest={this.removeRequest}
+            setClickedId={setHoverRequestId}
+          />
+        );
+      })
+    ) : (
+      <div className={styles.emptyList}>
+        NO APPOINTMENT REQUESTS AVAILABLE
+      </div>
+    )
     return (
       <List className={styles.requestList}>
-        {sortedRequests.map((request) => {
-          //const active = request.get('id') === this.props.setHoverRequestId;
-          return (
-            <RequestListItem
-              key={request.id}
-              request={request}
-              patient={patients.get(request.get('patientId'))}
-              service={services.get(request.get('serviceId'))}
-              confirmAppointment={this.confirmAppointment}
-              removeRequest={this.removeRequest}
-              setClickedId={setHoverRequestId}
-            />
-          );
-        })}
+        {showComponent}
       </List>
     );
   }
@@ -82,6 +90,7 @@ RequestList.propTypes = {
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
   setHoverRequestId: PropTypes.func,
+  push: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {

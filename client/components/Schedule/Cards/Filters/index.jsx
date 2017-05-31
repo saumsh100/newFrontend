@@ -4,7 +4,6 @@ import { Map } from 'immutable';
 import styles from './styles.scss';
 import FiltersAll from './FiltersAll';
 
-
 export default function Filters(props) {
   const {
     practitioners,
@@ -22,7 +21,7 @@ export default function Filters(props) {
     remindersFilter: schedule.toJS().remindersFilter,
   };
 
-  const filteredServices = [];
+  let filteredServices = [];
 
   if (practitionersFilter.length) {
     practitionersFilter.map((pracId) => {

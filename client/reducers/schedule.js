@@ -57,7 +57,7 @@ export default handleActions({
 
     entities.map((entity) => {
       const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
-      if(!checkFilter) {
+      if (!checkFilter) {
         filterEntities.push(entity.get('id'));
       }
     });

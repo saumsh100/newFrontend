@@ -16,11 +16,11 @@ class RequestListItem extends Component {
     this.onClickRemove = this.onClickRemove.bind(this);
   }
 
-  onClickConfirm(){
+  onClickConfirm() {
     this.props.confirmAppointment(this.props.request);
   }
 
-  onClickRemove(){
+  onClickRemove() {
     this.props.removeRequest(this.props.request);
   }
 

@@ -32,7 +32,7 @@ export default function FiltersDisplay(props) {
           >
             Select All
           </div>
-          {/*<div onClick={handleClearAll} >Clear All</div>*/}
+          <div onClick={handleClearAll} >Clear All</div>
         </div>
       </div>
       <div className={styles.filter_practitioner}>
