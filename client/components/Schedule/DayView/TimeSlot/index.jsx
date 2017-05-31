@@ -21,41 +21,43 @@ export default function TimeSlot(props) {
     practIndex,
   } = props;
 
-  //filter appointments based on selections from the filters panel
+  // filter appointments based on selections from the filters panel
   const checkFilters = schedule.toJS();
+
   let filteredApps = appointments.filter((app) => {
     const service = services.get(app.get('serviceId'));
     const chair = chairs.get(app.get('chairId'));
     const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
     const chairsFilter = chair && checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
 
-    return ((app.practitionerId === practitioner.id) && chairsFilter && servicesFilter);
+    return ((app.practitionerId === practitioner.id) && chairsFilter && servicesFilter );
   }).map((app) => {
     return Object.assign({}, app.toJS(), {
       appModel: app,
-      serviceData: services.get(app.get('serviceId')).get('name') || '',
-      chairData: chairs.get(app.get('chairId')).get('name') || '',
-      patientData: patients.get(app.get('patientId')) || '',
+      serviceData: services.get(app.get('serviceId')).get('name'),
+      chairData: chairs.get(app.get('chairId')).get('name'),
+      patientData: patients.get(app.get('patientId')),
     });
   });
 
 
   const splitAppointments = filteredApps.filter((app) => app.isSplit);
 
-  //find Split appointments and their adjacent appointments and set isSplit true
+  // find Split appointments and their adjacent appointments and set isSplit true
   splitAppointments && splitAppointments.map((sApp) => {
-    filteredApps =filteredApps.map((app) => {
+    filteredApps = filteredApps.map((app) => {
       if (((moment(sApp.startDate).isSame(moment(app.startDate))) ||
         (moment(sApp.startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
         (moment(sApp.endDate).isSame(moment(app.endDate))) ||
-        (moment(sApp.endDate).isBetween(moment(app.startDate), moment(app.endDate)))) && (app.id !== sApp.id)) {
+        (moment(sApp.endDate).isBetween(moment(app.startDate), moment(app.endDate))))
+        && (app.id !== sApp.id)) {
         return Object.assign({}, app, {
           isSplit: true,
           adjacent: true,
         });
-      } else {
-        return app;
-      }});
+      }
+      return app;
+    });
   });
 
   const timeSlotContentStyle = {
@@ -96,6 +98,7 @@ TimeSlot.propTypes = {
   practIndex: PropTypes.number,
   columnWidth: PropTypes.number,
   appointments: PropTypes.arrayOf(PropTypes.object).isRequired,
+  schedule: PropTypes.object.isRequired,
   patients: PropTypes.object.isRequired,
   services: PropTypes.object.isRequired,
   chairs: PropTypes.object.isRequired,

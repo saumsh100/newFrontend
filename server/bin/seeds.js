@@ -231,11 +231,6 @@ const generateDefaultServices = (_accountId) => {
     first,
 
     createService({
-      name: 'New Patient Checkup & Cleaning',
-      duration: 30,
-    }),
-
-    createService({
       name: 'Toothache',
       duration: 30,
     }),

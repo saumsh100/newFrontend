@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
-import { setScheduleDate } from '../actions/schedule';
+import { setScheduleDate, selectAppointment } from '../actions/schedule';
 
 import {
   setAllFilters,
@@ -33,7 +33,7 @@ class ScheduleContainer extends React.Component {
     Promise.all([
       this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
-      this.props.fetchEntities({ key: 'services', join: ['practitioners'] }),
+      this.props.fetchEntities({ key: 'services' }),
       this.props.fetchEntities({ key: 'chairs' }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
@@ -63,6 +63,8 @@ class ScheduleContainer extends React.Component {
       schedule,
       appointments,
       setScheduleDate,
+      selectedAppointment,
+      selectAppointment,
       services,
       patients,
       chairs,
@@ -76,6 +78,8 @@ class ScheduleContainer extends React.Component {
           schedule={schedule}
           appointments={appointments}
           setScheduleDate={setScheduleDate}
+          selectedAppointment={selectedAppointment}
+          selectAppointment={selectAppointment}
           services={services}
           patients={patients}
           chairs={chairs}
@@ -108,6 +112,7 @@ function mapStateToProps({ entities, schedule }) {
   return {
     schedule,
     currentDate: schedule.toJS().scheduleDate,
+    selectedAppointment: schedule.toJS().selectedAppointment,
     practitioners: entities.get('practitioners'),
     appointments: entities.get('appointments'),
     patients: entities.get('patients'),
@@ -121,6 +126,7 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     setAllFilters,
     setScheduleDate,
+    selectAppointment,
 }, dispatch);
 }
 

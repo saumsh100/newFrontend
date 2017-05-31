@@ -14,8 +14,8 @@ patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointmen
 
 const generateDuringFilter = (m, startDate, endDate) => {
   return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
-    m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
-  );
+  m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
+);
 };
 
 

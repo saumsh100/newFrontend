@@ -1,6 +1,7 @@
+
 import React, {Component, PropTypes } from 'react';
 import Popover from 'react-popover';
-import { ListItem, IconButton } from '../library';
+import { ListItem, IconButton, Icon } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
@@ -15,11 +16,11 @@ class RequestListItem extends Component {
     this.onClickRemove = this.onClickRemove.bind(this);
   }
 
-  onClickConfirm(){
+  onClickConfirm() {
     this.props.confirmAppointment(this.props.request);
   }
 
-  onClickRemove(){
+  onClickRemove() {
     this.props.removeRequest(this.props.request);
   }
 
@@ -39,7 +40,7 @@ class RequestListItem extends Component {
       active,
     } = this.props;
 
-    if (!service || !patient || !request) {
+    if (!service) {
       return null;
     }
 
@@ -59,7 +60,7 @@ class RequestListItem extends Component {
     let showHoverComponents = (<div className={styles.clickHandlers__newreqText}>New</div>);
 
     if (isHovered) {
-      showHoverComponents = (
+     showHoverComponents = (
         <div>
           <div className={styles.clickHandlers}>
             <IconButton
@@ -67,7 +68,7 @@ class RequestListItem extends Component {
               className={styles.clickHandlers__remove}
               onClick={this.onClickRemove}
             />
-            <IconButton
+            <Icon
               icon={'check-circle'}
               className={styles.clickHandlers__confirm}
               onClick={this.onClickConfirm}
