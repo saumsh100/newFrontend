@@ -141,6 +141,7 @@ export default function AppointmentForm(props) {
             name="isPatientConfirmed"
             label="Status"
             borderColor="primaryColor"
+            disabled
           />
         </Col>
       </Row>

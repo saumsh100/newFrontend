@@ -95,8 +95,9 @@
   width: 44px;
   position: absolute;
   color: #b5b5b5;
-  font-size: .9rem;
+  font-size: 22px;
   top: 50%;
+  align-items: center;
   transform: translateY(-50%);    right: 20px;
   &__newreqText{
     @extend .font-small-dark;
@@ -115,7 +116,6 @@
 
   &__confirm{
     padding: 5px;
-    font-size: 22px;
     color: $primary-green;
     &:hover {
       color: darken($primary-green, 10%);

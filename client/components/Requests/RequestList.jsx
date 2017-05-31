@@ -23,10 +23,11 @@ class RequestList extends Component {
     const {
       selectAppointment,
       location,
+      push,
     } = this.props;
 
     if(location === '/') {
-      this.props.push('/schedule');
+      push('/schedule');
     }
     const modifiedRequest = request.set('isCancelled', true);
 
