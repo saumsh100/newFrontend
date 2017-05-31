@@ -32,7 +32,8 @@
   padding-top: 35%;
   background-color: lighten($primary-lightgrey, 2%);
   text-align: center;
-  font-size: $extra-medium-size;
+  color: lighten($primary-darkgrey, 5%);
+  font-size: $medium-size;
   font-weight: $large-weight;
   font-family: $medium-font;
 }

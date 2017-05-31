@@ -51,7 +51,10 @@ class RequestList extends Component {
   }
 
   removeRequest(request) {
-    this.props.deleteEntityRequest({ key: 'requests', id: request.get('id') });
+    const confirmRemove = confirm('Are you sure you want to remove this request?');
+    if (confirmRemove) {
+      this.props.deleteEntityRequest({ key: 'requests', id: request.get('id') });
+    }
   }
 
   render() {
@@ -74,7 +77,7 @@ class RequestList extends Component {
       })
     ) : (
       <div className={styles.emptyList}>
-        NO APPOINTMENT REQUESTS AVAILABLE
+        YOU HAVE NO APPOINTMENT REQUESTS
       </div>
     )
     return (
