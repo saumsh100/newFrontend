@@ -26,7 +26,7 @@ export function login(redirectedFrom = '/') {
 
         // Decode and set
         const decodedToken = jwt(data.token);
-        console.log(decodedToken);
+
         LogRocket.identify(decodedToken.userId, {
           name: `${decodedToken.firstName} ${decodedToken.lastName}`,
           email: decodedToken.username,

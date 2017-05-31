@@ -51,7 +51,7 @@ const OWNER = {
   requests: allowAll,
   reviews: allow('read'),
 
-  textMessages: allow('*', '-update'),
+  textMessages: allow('*', 'update'),
 
   services: allowAll,
 

@@ -4,10 +4,12 @@ const path = require('path');
 const root = path.normalize(path.join(__dirname, (process.env.BUNDLED ? '/../..' : '/..')));
 const tokenSecret = 'notsosecret';
 const tokenExpiry = '1d';
+const passwordHashSaltRounds = 10;
 
 const environmentVariables = process.env;
 const env = environmentVariables.NODE_ENV || 'development';
 const port = environmentVariables.PORT || '5000';
+const host = environmentVariables.HOST || 'carecru.dev';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const db = {
   authKey: environmentVariables.RETHINKDB_AUTHKEY || '',
@@ -56,10 +58,12 @@ module.exports = {
   root,
   tokenSecret,
   tokenExpiry,
+  passwordHashSaltRounds,
 
   // Enivornment Variable Related
   env,
   port,
+  host,
   bundlePort,
   db,
   redis,

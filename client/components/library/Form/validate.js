@@ -12,7 +12,7 @@ const asyncEmailValidatePatient = (values) => {
 };
 
 const phoneValidate = (value) => {
-  if (!/^[(]{0,1}[0-9]{3}[)]{0,1}[-\s.]{0,1}[0-9]{3}[-\s.]{0,1}[0-9]{4}$/i.test(value)) {
+  if (!/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(value)) {
     return 'Invalid phone Number';
   }
 
@@ -66,14 +66,12 @@ const passwordsMatch = (values) => {
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
 
-const asyncEmailValidateUser = (values) => {
-  return axios.post('/userCheck', { email: values.email })
-    .then((response) => {
-      if (response.data.exists === true) {
-        throw { email: `User with ${values.email} already exists...` };
-      }
-    });
-};
+const asyncEmailValidateUser = values =>
+  axios.post('/userCheck', { email: values.email })
+    .then(response =>
+      (response.data.exists !== true) ||
+        Promise.reject({ email: `User with ${values.email} already exists...` })
+    );
 
 const numDigitsValidate = max => (value) => {
   if (!value || value.length >= max) return;

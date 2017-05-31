@@ -6,7 +6,7 @@ const PatientSchema = {
   lastAppointmentDate: null,
   nextAppointmentTitle: null,
   firstName: null,
-  avatar: null,
+  avatarUrl: null,
   middleName: null,
   lastName: null,
   startDate: null,
@@ -16,6 +16,7 @@ const PatientSchema = {
   gender: null,
   address: null,
   preferences: null,
+  accountId: null,
   photo: null,
   email: null,
   patientId: null,
@@ -24,6 +25,8 @@ const PatientSchema = {
   status: null,
   id: null,
   insurance: {},
+  isDeleted: null,
+  isSyncedWithPMS: null,
   appointments: null,
 };
 

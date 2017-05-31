@@ -47,10 +47,13 @@ class PatientList extends Component {
       if (Object.keys(result).length === 0) {
         this.setState({ moreData: false });
       }
-    });;
+    });
   }
 
-  setCurrentPatient(currentPatient) {
+  setCurrentPatient(id) {
+    const currentPatient = {
+      id,
+    };
     this.setState({
       currentPatient,
       showNewUser: false,
@@ -71,6 +74,8 @@ class PatientList extends Component {
       active: false,
       showNewUser: true,
     };
+
+    values.isSyncedWithPMS = false;
 
     this.setState(newState);
 
@@ -124,6 +129,8 @@ class PatientList extends Component {
     if (key === 'patients') {
       values.key = 'patient';
     }
+
+    values.isSyncedWithPMS = false;
 
     const valuesMap = Map(values);
     const modifiedPatient = currentPatient.merge(valuesMap);
@@ -214,7 +221,7 @@ class PatientList extends Component {
     } else {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
-        currentPatient.appointment = appointments.get(this.state.currentPatient.appointment.id);
+        currentPatient.appointment = (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
       }
     }
 
