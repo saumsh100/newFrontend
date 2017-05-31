@@ -1,4 +1,3 @@
-
 import jwt from 'jsonwebtoken';
 import { tokenSecret } from '../config/globals';
 import permissions from '../config/permissions';

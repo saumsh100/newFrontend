@@ -39,6 +39,8 @@ import Service from '../entities/models/Service';
 import services from '../entities/collections/services';
 import Chairs from '../entities/models/Chair';
 import chairs from '../entities/collections/chairs';
+import chat from '../entities/collections/chat';
+import Chat from '../entities/models/Chat';
 import availabilities from '../entities/collections/availabilities';
 import Availability from '../entities/models/Availability';
 import waitSpots from '../entities/collections/waitSpots';
@@ -65,6 +67,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     dialogs: new dialogs(),
     patients: new patients(),
     chairs: new chairs(),
+    chats: new chat(),
     waitSpots: new waitSpots(),
     weeklySchedules: new weeklySchedules(),
     users: new users(),
@@ -88,6 +91,7 @@ const Models = {
   dialogs: Dialogs,
   patients: Patient,
   chairs: Chairs,
+  chats: Chat,
   availabilities: Availability,
   waitSpots: WaitSpot,
   weeklySchedules: WeeklySchedule,
@@ -195,7 +199,7 @@ function receiveEntities(state, entities) {
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
-      if (!model || key === 'weeklySchedules' || key === 'patients') {
+      if (!model || key === 'weeklySchedules' || key === 'patients' || key === 'chats') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);

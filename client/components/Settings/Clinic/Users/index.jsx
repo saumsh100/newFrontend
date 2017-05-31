@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { fetchEntities, deleteEntityRequest, createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
-import { List, ListItem, Grid, Header, Modal, Row, Button, DropdownSelect } from '../../../library';
+import { List, ListItem, Grid, Header, DialogBox, Row, Button, DropdownSelect } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
@@ -169,7 +169,7 @@ class Users extends Component{
     return (
       <Grid>
         <Header title={'Users'} />
-        <Modal
+        <DialogBox
           actions={actions}
           title="Email Invite"
           type="small"
@@ -183,8 +183,8 @@ class Users extends Component{
             sendInvite={this.sendInvite}
             formName={formName}
           />
-        </Modal>
-        <Modal
+        </DialogBox>
+        <DialogBox
           actions={editActions}
           title="Edit User Rights"
           type="small"
@@ -197,12 +197,12 @@ class Users extends Component{
             onChange={this.editDropdown}
             className={styles.dropdown}
             options={[
-            { value: 'OWNER' },
+            { value: 'SUPERADMIN' },
             { value: 'ADMIN' },
             { value: 'VIEWER' },
           ]}
           />
-        </Modal>
+        </DialogBox>
         <Row className={styles.mainHead}>
           <h2 className={styles.mainHeader}>Users in {clinicName}</h2>
           <Button className={styles.inviteUser} onClick={this.addUser} >Invite a User</Button>

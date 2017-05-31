@@ -14,6 +14,8 @@ const io = createSocketIOServer(server);
 // Setup socket connections and event handlers
 bindSocketHandlers(io);
 
+app.set('socketio', io);
+
 // Bind to supplied port
 server.listen(globals.port, () => {
   console.log(`CareCru HTTP Server is running on port ${globals.port}`);

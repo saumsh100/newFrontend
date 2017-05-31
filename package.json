@@ -199,6 +199,7 @@
     "@kadira/storybook-addon-knobs": "^1.7.1",
     "babel-jest": "^20.0.3",
     "chai": "^3.5.0",
+    "cypress-cli": "^0.13.1",
     "eslint": "^3.5.0",
     "eslint-config-airbnb": "^11.1.0",
     "eslint-plugin-import": "^1.15.0",
