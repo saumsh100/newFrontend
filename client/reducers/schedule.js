@@ -12,7 +12,7 @@ import {
 } from '../constants';
 
 const initialState = fromJS({
-  scheduleDate: moment(),
+  scheduleDate: new Date(),
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
@@ -53,6 +53,7 @@ export default handleActions({
         filterEntities.push(entity.get('id'));
       }
     });
+
     const mergeObj = {};
     mergeObj[key] = filterEntities;
     return state.merge(mergeObj);

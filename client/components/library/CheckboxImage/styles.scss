@@ -47,14 +47,18 @@
 }
 
 .primaryColor {
-  box-shadow: 0 0 4px 2px $primary-color;
+  border: 2px solid;
+  border-color: $primary-color;
 }
 .primaryYellow {
-  box-shadow: 0 0 4px 2px $primary-yellow;
+  border: 2px solid;
+  border-color: $primary-yellow;
 }
 .primaryGreen {
-  box-shadow: 0 0 4px 2px $primary-green;
+  border: 2px solid;
+  border-color: $primary-green;
 }
 .primaryBlueGreen {
-  box-shadow: 0 0 4px 2px $primary-blue-green;
+  border: 2px solid;
+  border-color: $primary-blue-green;
 }

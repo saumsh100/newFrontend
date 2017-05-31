@@ -89,7 +89,7 @@ export default function Routes({ history }) {
             path="calendar"
             getComponent={(location, callback) => {
               require.ensure(['../components/Schedule/DayView'], (require) => {
-                callback(null, require('../components/Schedule/DayView/index').default);
+                callback(null, require('../components/Schedule/DayViewPrevious/index').default);
               });
             }}
           />
@@ -318,7 +318,7 @@ export default function Routes({ history }) {
           path="dayview"
           getComponent={(location, callback) => {
             require.ensure(['../components/Schedule/DayView'], (require) => {
-              callback(null, require('../components/Schedule/DayView/index').default);
+              callback(null, require('../components/Schedule/DayViewPrevious/index').default);
             });
           }}
         />

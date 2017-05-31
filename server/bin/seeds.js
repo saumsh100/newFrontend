@@ -91,7 +91,6 @@ const mainEnterprise = {
 const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) => {
   const time1 = lastDate || faker.date.past();
 
-
   return [
     {
       chatId,

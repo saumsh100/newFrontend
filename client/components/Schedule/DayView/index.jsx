@@ -1,71 +1,60 @@
 
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import TimeColumns from './TimeColumns';
-import PractitionerSchedule from './PractitionerSchedule';
-import styles from '../styles.scss';
+import DayViewBody from './DayViewBody';
 
-function DayView(props) {
-  const {
-    patients,
-    appointments,
-    schedule,
-    currentDate,
-    practitioners,
-    selectAppointment
-  } = props;
-  const start = currentDate.hour(0).minute(0);
-  const end = moment({ hour: 23, minute: 59 });
-  const workingMinutes = end.diff(start, 'minutes');
-  const startHours = start.get('hours');
-  const endHours = end.get('hours');
-  const workingHours = [];
-  for (let i = startHours; i <= endHours; i += 1) {
-    workingHours.push(i);
+class DayView extends Component  {
+  constructor(props) {
+    super(props);
   }
 
-  let practitionersArray = practitioners.get('models').toArray();
-  const checkedPractitioners = schedule.toJS().practitionersFilter;
-  if (checkedPractitioners.length) {
-    practitionersArray = practitionersArray.filter(pr => checkedPractitioners.indexOf(pr.id) > -1);
-  }
-  const tablesCount = (100 / (practitionersArray.length + 1)) ;
-  const scale = 1.5;
+  render() {
+    const {
+      currentDate,
+      practitioners,
+      patients,
+      appointments,
+      services,
+      chairs,
+      schedule,
+      selectAppointment,
+    } = this.props;
 
-  return (
-    <div className={styles.schedule}>
-      <TimeColumns
-        workingHours={workingHours}
-        scale={scale}
-        tablesCount={tablesCount}
-        totalColumns={practitionersArray.length + 1}
+    const filteredAppointments = appointments.get('models').toArray().filter((app) => {
+      const startDate = moment(app.startDate);
+      const isSameDate = startDate.isSame(currentDate, 'day');
+      if (!app.isDeleted && isSameDate) {
+        return app;
+      }
+    });
+
+    return (
+      <DayViewBody
+        schedule={schedule}
+        selectAppointment={selectAppointment}
+        appointments={filteredAppointments}
+        chairs={chairs.get('models')}
+        services={services.get('models')}
+        patients={patients.get('models')}
+        practitioners={practitioners.get('models')}
+        startHour={6}
+        endHour={24}
       />
-      {practitionersArray.map((prac,index) => (
-        <PractitionerSchedule
-          key={index}
-          doctor={prac}
-          startDay={start}
-          workingHours={workingHours}
-          scale={scale}
-          tablesCount={tablesCount}
-          divIndex={index}
-          patients={patients}
-          appointments={appointments}
-          schedule={schedule}
-          currentDate={currentDate}
-          selectAppointment={selectAppointment}
-        />
-      ))}
-    </div>
-  );
+    );
+  }
+
 }
 
-DayView.PropTypes = {
-  fetchEntities: PropTypes.func,
-  patients: PropTypes.object,
+DayView.propTypes = {
   appointments: PropTypes.object,
-  schedule: PropTypes.object,
+  patients: PropTypes.object,
+  services: PropTypes.object,
+  chairs: PropTypes.object,
+  practitioners: PropTypes.object,
   currentDate: PropTypes.object,
+  schedule: PropTypes.object,
+  selectAppointment: PropTypes.func.isRequired,
 };
 
 export default DayView;
+

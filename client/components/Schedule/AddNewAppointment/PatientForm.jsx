@@ -20,7 +20,7 @@ export default function PatientForm(props) {
         <Col xs={12}>
           <Field
             component="AutoComplete"
-            name="patientData"
+            name="patientSelected"
             label="Enter Patient Name"
             getSuggestions={getSuggestions}
             onChange={(e, newValue) => handleAutoSuggest(newValue)}

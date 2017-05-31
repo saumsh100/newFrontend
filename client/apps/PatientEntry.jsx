@@ -12,20 +12,10 @@ import socket from '../socket';
 import App from './Patient';
 import configure from '../store/availabilitiesStore';
 import { load } from '../thunks/auth';
-import connectSocketToStore from '../socket/connectSocketToStore';
 
 const browserHistory = createBrowserHistory();
 const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
 
-/*
-// TODO: move to Auth service layer?
-load()(store.dispatch);
-
-const { auth } = store.getState();
-
-if (auth.get('isAuthenticated')) {
-  connectSocketToStore(socket, store);
-}*/
 
 // TODO: define globals with webpack ProvidePlugin
 window.store = store;
