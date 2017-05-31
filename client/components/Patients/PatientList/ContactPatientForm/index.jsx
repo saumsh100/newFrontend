@@ -89,7 +89,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
         </div>
         <div className={styles.firstField}>
           <Field
-            name="workNumber"
+            name="workPhoneNumber"
             className={styles.nameFields}
             validate={[phoneValidateNullOkay]}
             label="Work #"
