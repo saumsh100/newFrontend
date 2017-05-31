@@ -24,8 +24,6 @@ const Patient = createModel('Patient', {
   otherPhoneNumber: type.string(),
   prefContactPhone: type.string(),
 
-  email: type.string(),
-
   lastAppointmentDate: type.date(),
   notes: type.string(),
   gender: type.string(),
@@ -47,7 +45,7 @@ const Patient = createModel('Patient', {
 
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
-  return this.filter({ phoneNumber }).nth(0).run();
+  return this.filter({ mobilePhoneNumber: phoneNumber }).nth(0).run();
 });
 
 /**
