@@ -35,7 +35,7 @@
   &__body {
     &_table {
       border-top: $card-border-size $inactive-color;
-      height: 638px;
+      height: 635px;
     }
     &_comments {
       border-top: $card-border-size $primary-yellow;
@@ -43,7 +43,7 @@
     }
     &_request {
       height: 640px;
-      background-color: $primary-white;
+      background-color: lighten($primary-lightgrey, 2%);
     }
     @media screen and (max-width: 450px) {
       padding: 0 5px 45px 5px;

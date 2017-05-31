@@ -1,5 +1,8 @@
+
 import React, { PropTypes } from 'react';
 import Requests from '../components/Requests';
+import { push } from 'react-router-redux';
+import { createBrowserHistory } from 'history';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../thunks/fetchEntities';
@@ -10,18 +13,19 @@ class RequestContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'requests', join: ['service', 'patient'] });
+    this.props.fetchEntities({ key: 'requests', join: ['service', 'patient',] });
   }
 
   render() {
+    const browserHistory = createBrowserHistory();
+    const location = browserHistory.location.pathname;
     return (
-      <div className={this.props.className}>
-        <Requests
-          requests={this.props.requests}
-          patients={this.props.patients}
-          services={this.props.services}
-        />
-      </div>
+      <Requests
+        requests={this.props.requests}
+        patients={this.props.patients}
+        services={this.props.services}
+        location={location}
+      />
     );
   }
 }

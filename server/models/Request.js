@@ -12,6 +12,7 @@ const Request = createModel('Request', {
   patientId: type.string().uuid(4).required(),
   accountId: type.string().uuid(4).required(),
   serviceId: type.string().uuid(4).required(),
+  chairId: type.string().uuid(4),
 
   // Practitioner doesn't have to be selected in Online Booking
   practitionerId: type.string().uuid(4),

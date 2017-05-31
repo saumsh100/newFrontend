@@ -23,13 +23,11 @@ class ScheduleComponent extends Component {
     super(props);
     this.state = {
       addNewAppointment: false,
-      selectedAppointment: null,
     };
 
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
-    this.selectAppointment = this.selectAppointment.bind(this);
   }
 
   setCurrentDay(day) {
@@ -37,21 +35,15 @@ class ScheduleComponent extends Component {
   }
 
   reinitializeState() {
+    this.props.selectAppointment(null);
     this.setState({
       addNewAppointment: false,
-      selectedAppointment: null,
     });
   }
 
   addNewAppointment() {
     this.setState({
       addNewAppointment: true,
-    });
-  }
-
-  selectAppointment(app) {
-    this.setState({
-      selectedAppointment: app,
     });
   }
 
@@ -63,34 +55,23 @@ class ScheduleComponent extends Component {
       patients,
       services,
       chairs,
+      selectAppointment,
+      selectedAppointment,
     } = this.props;
 
     const {
       addNewAppointment,
-      selectedAppointment,
     } = this.state;
 
     const currentDate = moment(schedule.toJS().scheduleDate);
 
-    const params = {
-      currentDate,
-      practitioners,
-      patients,
-      chairs,
-      services,
-      appointments,
-      schedule,
-      selectAppointment: this.selectAppointment,
-    };
-
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
-      const app = selectedAppointment.appointment;
-      formName = `EditAppointment_${app.id}`;
+      formName = `editAppointment_${selectedAppointment.serviceId}`;
     }
 
     return (
-      <Grid >
+      <Grid>
         <Row className={styles.rowMainContainer}>
           <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
             <Card>
@@ -107,8 +88,16 @@ class ScheduleComponent extends Component {
                 </CurrentDate>
               </div>
               <div className={styles.schedule__container_content}>
-                <DayView {...params} />
-                <Legend />
+                <DayView
+                  currentDate={currentDate}
+                  practitioners={practitioners}
+                  patients={patients}
+                  chairs={chairs}
+                  services={services}
+                  appointments={appointments}
+                  schedule={schedule}
+                  selectAppointment={selectAppointment}
+                />
                 <Modal
                   active={addNewAppointment || !!selectedAppointment}
                   onEscKeyDown={this.reinitializeState}
@@ -120,13 +109,13 @@ class ScheduleComponent extends Component {
                     chairs={chairs.get('models').toArray()}
                     practitioners={practitioners.get('models')}
                     services={services.get('models')}
-                    patients={patients.get('models').toArray()}
+                    patients={patients.get('models')}
                     selectedAppointment={selectedAppointment}
                     reinitializeState={this.reinitializeState}
                   />
                 </Modal>
-
               </div>
+              <Legend />
             </Card>
           </Col>
           <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
@@ -141,8 +130,9 @@ class ScheduleComponent extends Component {
               </Col>
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
-              <Col xs={12}>
+              <Col xs={12} >
                 <RequestsContainer
+                  key={'scheduleRequests'}
                   className={styles.schedule__sidebar_request}
                 />
               </Col>
@@ -163,6 +153,8 @@ ScheduleComponent.propTypes = {
   chairs: PropTypes.object,
   services: PropTypes.object,
   setScheduleDate: PropTypes.func,
+  selectAppointment: PropTypes.func,
+  selectedAppointment: PropTypes.object,
 };
 
 export default ScheduleComponent;

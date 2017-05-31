@@ -8,7 +8,7 @@
     &__container {
 
     &_content {
-        max-height: calc(100vh - 145px);
+        max-height: calc(98vh - 145px);
         //height: calc(100vh - 145px);
         overflow-y: auto;
       }
@@ -23,11 +23,11 @@
         }
         &_rowRequest {
           flex-grow: 1;
+          overflow: auto;
           margin-top: 15px;
-          background-color: $primary-white;
+          background-color: lighten($primary-lightgrey, 2%);
         }
         &_request {
-
         }
         &_calendar {
           border-top: $card-border-size $primary-dark-blue;
@@ -186,12 +186,15 @@
 
 
 .legend {
-  position: fixed;
-  bottom: 0;
-  right: 30%;
   display: flex;
-  align-items: center;
   padding-right: 5px;
+  background-color: $primary-lightgrey;
+
+  &_container {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+  }
 
   &_text {
     padding-left: 5px;
