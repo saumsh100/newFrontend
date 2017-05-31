@@ -82,8 +82,8 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
   Appointment.filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
-    .filter({ isDeleted: false })
+    .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)))
+    
     .run()
     .then((appointments) => {
       const intersectingApps = intersectingAppointments(appointments, appointmentData.startDate, appointmentData.endDate);
@@ -215,11 +215,10 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate))
-    .filter({ isDeleted: false })
+    .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appointmentData.id)))
     .run()
     .then((appointments) => {
-      const filterSameIdApps = appointments.filter((app) => !(app.id === appointmentData.id));
-      const intersectingApps = intersectingAppointments(filterSameIdApps, appointmentData.startDate, appointmentData.endDate);
+      const intersectingApps = intersectingAppointments(appointments, appointmentData.startDate, appointmentData.endDate);
 
       if (intersectingApps.length === 0 && appointmentData.isSplit) {
         appointmentData.isSplit = false;
