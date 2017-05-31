@@ -198,8 +198,7 @@ const generateDefaultServices = (_accountId) => {
     name: 'New Patient Consultation',
     duration: 30,
   });
-
-
+  
   if (_accountId === accountId) {
     first = {
       id: serviceId,
@@ -211,7 +210,7 @@ const generateDefaultServices = (_accountId) => {
 
   return [
     first,
-    
+
     createService({
       name: 'Toothache',
       duration: 30,
