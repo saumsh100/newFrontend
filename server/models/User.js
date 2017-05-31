@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const type = thinky.type;
+const { passwordHashSaltRounds } = require('../config/globals');
 
 const User = createModel('User', {
   firstName: type.string(),
@@ -26,7 +27,7 @@ User.define('isValidPasswordAsync', function(password) {
 // NOTE: this function does not save the model!
 User.define('setPasswordAsync', function(password) {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, 10, (err, hashedPassword) => {
+    bcrypt.hash(password, passwordHashSaltRounds, (err, hashedPassword) => {
       if (err) reject(err);
       this.password = hashedPassword;
       return resolve(this);

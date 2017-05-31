@@ -23,6 +23,7 @@ const Reservation = require('./Reservation');
 const Enterprise = require('./Enterprise');
 const OAuth = require('./OAuth');
 const WaitSpot = require('./WaitSpot');
+const AuthToken = require('./AuthToken');
 
 module.exports = {
   Account,
@@ -49,4 +50,5 @@ module.exports = {
   SyncClientVersion,
   WaitSpot,
   WeeklySchedule,
+  AuthToken,
 };

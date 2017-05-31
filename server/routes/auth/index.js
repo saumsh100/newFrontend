@@ -1,32 +1,23 @@
 import { Router } from 'express';
-import { pick } from 'lodash';
 import { UserAuth } from '../../lib/auth';
-import { Permission } from '../../models';
-import StatusError from '../../util/StatusError';
 
 const authRouter = Router();
-const getEmailDomain = email => (([, domain]) => domain)(/@(.+)$/.exec(email));
-const isCarecruEmail = email => getEmailDomain(email) === 'carecru.com';
 
-authRouter.post('/', ({ body: { username, password } }, res, next) => {
-  // TODO: we could load permissions with joins
-  const loadPermissions = userId =>
-    Permission.filter({ userId }).run()
-      .then(([permission]) => permission || StatusError(500, 'User has no account permissions'));
+authRouter.delete('/token/:tokenId', ({ tokenId }, res, next) =>
+  UserAuth.logout(tokenId)
+    .then(() => res.send(200))
+    .catch(next)
+);
 
-  return UserAuth.login(username, password)
-    .then(user => loadPermissions(user.id)
-      // Prepare token
-      .then(({ role, permissions = {} }) => ({
-        role: isCarecruEmail(username) ? 'SUPERADMIN' : role,
-        permissions,
-        userId: user.id,
-        ...(pick(user, ['activeAccountId', 'firstName', 'lastName', 'username'])),
-      }))
-    )
-    .then(tokenData => UserAuth.signToken(tokenData))
+authRouter.post('/', ({ body: { username, password } }, res, next) =>
+  UserAuth.login(username, password)
+    .then(({ model: user, token }) => UserAuth.signToken({
+      userId: user.id,
+      tokenId: token.id,
+      activeAccountId: user.activeAccountId,
+    }))
     .then(token => res.json({ token }))
-    .catch(err => next(err));
-});
+    .catch(err => next(err))
+);
 
 module.exports = authRouter;

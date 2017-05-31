@@ -73,8 +73,6 @@ export const getClassMapper = (scheme, styles) => {
       .filter(i => (i && i.length))
       .join(' ');
 
-    console.log(classes);
-
     return classes;
   };
 

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import globals from '../config/globals';
-import { User, Patient } from '../models';
+import { User, Patient, AuthToken } from '../models';
 
 export const error = (status, message) =>
   Promise.reject({ status, message });
@@ -38,6 +38,8 @@ export const Auth = (Model, primaryKey) => ({
               model :
               error(401, 'Invalid Credentials')
           ))
+          .then(() => AuthToken.save({ modelId: model.id }))
+          .then(token => ({ token, model }))
       );
   },
 
@@ -50,7 +52,18 @@ export const Auth = (Model, primaryKey) => ({
 
     return this.load(model[primaryKey])
       .then(existedModel => (!existedModel) || error(400, 'Email Already in Use'))
-      .then(() => Model.save(model));
+      .then(() => Model.save(model))
+      .then(savedModel =>
+        AuthToken.save({ modelId: savedModel.id })
+          .then(token => ({ savedModel, token }))
+      );
+  },
+
+  /**
+   * @param {string} token
+   */
+  logout(token) {
+    return AuthToken.get(token).then(authToken => authToken.delete());
   },
 
   /**

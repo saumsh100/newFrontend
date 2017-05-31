@@ -21,9 +21,9 @@ signupRouter.post('/:token', ({ body, params: { token } }, res, next) => {
     .then(([invite]) => invite || error(401, 'Bad invite'))
     .then(({ accountId, id }) =>
       UserAuth.signup({ ...newUser, activeAccountId: accountId })
-        .then(user => ({ user, inviteId: id }))
+        .then(({ model: user, authToken }) => ({ user, inviteId: id, tokenId: authToken.id }))
     )
-    .then(({ user: { id, activeAccountId }, inviteId }) =>
+    .then(({ user: { id, activeAccountId }, inviteId, tokenId }) =>
       Promise.all([
         // Create permissions for new user
         Permission.save({
@@ -35,8 +35,9 @@ signupRouter.post('/:token', ({ body, params: { token } }, res, next) => {
 
         Invite.get(inviteId).then(invite => invite.delete()),
       ])
+        .then(() => UserAuth.signToken({ userId: id, tokenId }))
     )
-    .then(() => res.send(200))
+    .then(authToken => res.json({ token: authToken }))
     .catch(next);
 });
 

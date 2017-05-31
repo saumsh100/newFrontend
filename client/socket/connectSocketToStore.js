@@ -1,18 +1,18 @@
-
-import jwt from 'jwt-decode';
 import {
   addSocketEntity,
 } from '../actions/entities';
 
 export default function connectSocketToStore(socket, store) {
-  const jwtToken = localStorage.getItem('token');
-  const decodedToken = jwt(jwtToken);
-  console.log(`[INFO] account=${decodedToken.activeAccountId}`);
-  console.log('[INFO] jwt token: ', jwtToken);
+  const { auth } = store.getState();
+
+  const token = localStorage.getItem('token');
+
+  console.log(`[INFO] account=${auth.get('accountId')}`);
+  console.log('[INFO] jwt token: ', token);
 
   socket.on('connect', () => {
     socket
-      .emit('authenticate', { token: jwtToken })
+      .emit('authenticate', { token })
       .on('authenticated', () => {
         console.log('Socket connected and authenticated');
       })

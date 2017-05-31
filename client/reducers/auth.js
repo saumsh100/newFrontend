@@ -6,15 +6,17 @@ import {
 } from '../constants';
 
 const initialState = fromJS({
-  token: null,
   isAuthenticated: false,
   role: null,
+  accountId: null,
+  user: null,
+  tokenId: null,
 });
 
 export default handleActions({
   [LOGIN_SUCCESS](state, { payload }) {
     return state.merge({
-      token: payload,
+      ...payload,
       isAuthenticated: true,
     });
   },

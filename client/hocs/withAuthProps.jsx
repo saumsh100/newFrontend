@@ -7,14 +7,14 @@ const InnerComponent = props =>
   <props.el {...omit(props, 'el')} />;
 
 const ConnectedInnerComponent = connect((state) => {
-  const token = state.auth.get('token');
-  const isSuperAdmin = (token && token.get('role')) === 'SUPERADMIN';
-  const isEnterpriseOwner = () => true;
+  const session = state.auth.toJS();
+  const isSuperAdmin = session.role === 'SUPERADMIN';
+  const isEnterpriseOwner = () => isSuperAdmin;
 
   return {
-    isAuth: state.auth.get('isAuthenticated'),
+    isAuth: session.isAuthenticated,
     isSuperAdmin,
-    withEnterprise: isSuperAdmin || isEnterpriseOwner(),
+    withEnterprise: isEnterpriseOwner(),
   };
 })(InnerComponent);
 

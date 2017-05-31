@@ -10,6 +10,18 @@ const normalize = require('../normalize');
 
 userRouter.param('userId', loaders('profile', 'User'));
 
+userRouter.get('/me', ({ currentUser: user, role, accountId }, res) =>
+  res.json({
+    user: {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+    },
+    role,
+    accountId,
+  })
+);
 
 userRouter.get('/',checkPermissions('users:read'), (req, res, next) => {
   const {

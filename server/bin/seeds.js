@@ -9,7 +9,8 @@ const seedDatabase = require('../util/seedDatabase');
 const { time } = require('../util/time');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
-const saltRounds = 10;
+const config = require('../config/globals');
+const saltRounds = config.passwordHashSaltRounds;
 
 
 /**
@@ -791,6 +792,12 @@ const SEEDS = {
     {
       userId: vstUserId,
       accountId,
+      role: 'SUPERADMIN',
+      permissions: {},
+    },
+    {
+      userId: vstUserId,
+      accountId2,
       role: 'SUPERADMIN',
       permissions: {},
     },
