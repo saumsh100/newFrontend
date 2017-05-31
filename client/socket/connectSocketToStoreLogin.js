@@ -19,11 +19,11 @@ export default function connectSocketToStoreLogin(socket, store) {
       throw new Error(msg.data.type);
     })
     .on('addRequest', (data) => {
-      console.log('request received');
       store.dispatch(addSocketEntity({ key: 'requests', entity: data }));
     })
     .on('create:Appointment', (data) => {
       console.log('EVENT:addAppointment: data=', data);
+      store.dispatch(addSocketEntity({ key: 'appointments', entity: data }));
     })
     .on('update:Appointment', (data) => {
       console.log('EVENT:update:Appointment: data=', data);
