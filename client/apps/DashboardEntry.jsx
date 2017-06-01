@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { createBrowserHistory } from 'history';
+import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
@@ -30,6 +31,9 @@ if (auth.get('isAuthenticated')) {
     name: `${token.firstName} ${token.lastName}`,
     email: token.username,
   });
+
+  connectSocketToStoreLogin(store, socket);
+
 }
 
 // TODO: define globals with webpack ProvidePlugin

@@ -21,7 +21,7 @@ function runDashboardFeeds(socket) {
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
 
-        if (doc.isSyncedWithPMS) {
+        //if (doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             socket.emit('remove:Appointment', normalize('appointment', doc));
           } else if (isCreated(doc)) {
@@ -29,7 +29,7 @@ function runDashboardFeeds(socket) {
           } else {
             socket.emit('update:Appointment', normalize('appointment', doc));
           }
-        }
+        //}
       });
     });
 
@@ -69,12 +69,16 @@ function runDashboardFeeds(socket) {
       setupFeedShutdown(socket, feed);
 
       feed.each((error, doc) => {
-        // console.log('[[INFO]] accountId', accountIdFromSocket);
         if (error) throw new Error('Feed error');
-        if (doc.getOldValue() === null) {
-          // console.log('[[INFO]] sending', doc);
-          console.log('request added');
-          socket.emit('addRequest', doc);
+        if (isCreated(doc)) {
+          console.log('New Request');
+          socket.emit('new:Request', normalize('request', doc));
+        } else if (isDeleted(doc)) {
+          console.log('Delete Request', doc.id);
+          socket.emit('delete:Request', doc.id);
+        } else {
+          console.log('Confirm Request');
+          socket.emit('confirm:Request', normalize('request', doc));
         }
       });
     });

@@ -23,7 +23,8 @@
         }
         &_rowRequest {
           flex-grow: 1;
-          overflow: auto;
+          max-height: 440px;
+          overflow: hidden;
           margin-top: 15px;
           background-color: lighten($primary-lightgrey, 2%);
         }

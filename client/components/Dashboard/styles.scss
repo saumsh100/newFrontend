@@ -42,7 +42,8 @@
       height: 640px;
     }
     &_request {
-      height: 640px;
+      height: 604px;
+      margin-bottom: 20px;
       background-color: lighten($primary-lightgrey, 2%);
     }
     @media screen and (max-width: 450px) {

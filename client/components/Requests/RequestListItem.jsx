@@ -9,9 +9,8 @@ import AppointmentShowData from '../Appointment/AppointmentShowData';
 import withHoverable from '../../hocs/withHoverable';
 
 class RequestListItem extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.onClickConfirm = this.onClickConfirm.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
   }

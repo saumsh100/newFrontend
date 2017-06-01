@@ -33,7 +33,6 @@ appointmentsRouter.get('/', (req, res, next) => {
     query,
   } = req;
 
-
   const {
     limit,
     skip,
@@ -102,7 +101,9 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       const noOverLap = checkOverlapping.every((el) => el === true);
       if (checkOverlapping.length === 0 || noOverLap) {
         return Appointment.save(appointmentData)
-          .then(appt => res.status(201).send(normalize('appointment', appt)))
+          .then(appt => {
+            res.status(201).send(normalize('appointment', appt))
+          })
           .catch(next);
       }
       return res.sendStatus(400);

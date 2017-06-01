@@ -27,7 +27,7 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    const currentDate = moment(this.props.currentDate);
+    const currentDate = moment();
 
     const startDate = currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
@@ -38,12 +38,8 @@ class Dashboard extends React.Component {
       limit: 100,
     };
 
-    Promise.all([
-      this.props.fetchEntities({ key: 'appointments', params: query }),
-    ]).then(() => {
-      this.props.setAllFilters(['chairs', 'practitioners', 'services']);
-      this.setState({ loaded: true });
-    }).catch(e => console.log(e));
+    this.props.fetchEntities({ key: 'appointments', params: query });
+    this.props.fetchEntities({ key: 'requests' });
   }
 
   renderCards() {
@@ -211,14 +207,23 @@ class Dashboard extends React.Component {
 
     const {
       appointments,
+      requests,
     } = this.props;
 
-    console.log(appointments.get('models'))
+    const today = moment();
+
+    const appointmentCount = appointments.toArray().filter((app) => {
+      const sDate = moment(app.startDate);
+      const isSameDate = today.isSame(sDate, 'day');
+      return (isSameDate && !app.isDeleted);
+    });
+    const filterConfirmedRequests = requests.toArray().filter((req) => !req.get('isCancelled'));
+    
     const data = [
-      {count: appointments.size, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
-      {count: 12, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
-      {count: 13, title: "Unconfirmed Refferals", icon: "bullhorn", size: 6, color: 'primaryGreen' },
-      {count: 16, title: "Unresponded Reviews", icon: "star", size: 6, color: 'primaryYellow' },
+      {count: appointmentCount.length, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
+      {count: filterConfirmedRequests.length, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
+      {count: '?', title: "Unconfirmed Refferals", icon: "bullhorn", size: 6, color: 'primaryGreen' },
+      {count: '?', title: "Unresponded Reviews", icon: "star", size: 6, color: 'primaryYellow' },
     ];
 
     const hardcodedReferralData = [{
@@ -269,18 +274,15 @@ class Dashboard extends React.Component {
           <Col xs={12}>
             <DashboardStats data={data} />
           </Col>
-          <Col className={styles.padding}
-               xs={12} md={8}>
-            <Table className={styles.dashboard__body_table}
-                   borderColor={colorMap.grey}
-                   cardCount="7"
-                   cardTitle="Phone / SMS / Email"/>
+          <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={6}>
+            <DigitalWaitList />
           </Col>
-          <Col className={styles.padding}
-               xs={12}  md={4}>
+          <Col className={styles.padding} xs={12}  md={12} lg={6}>
             <div className={styles.dashboard__body_request}>
-            <RequestsContainer key="dashBoardRequests"
-                               borderColor={colorMap.darkblue}/>
+              <RequestsContainer
+                key="dashBoardRequests"
+                borderColor={colorMap.darkblue}
+              />
             </div>
           </Col>
           {/*
@@ -323,29 +325,26 @@ class Dashboard extends React.Component {
               cardTitle="Unconfirmed Referrals"
             />
           </Col>
-
+          */}
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
-                <RemindersList
-                  key="Reminders"
-                  data={DataRemindersList}
-                  cardTitle="Reminders"
-                />
-              </Col>
-              <Col  className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
+
+              <Col  className={styles.dashboard__patientList_item} xs={12} md={6} lg={6}>
                 <RemindersList
                   key="Recalls"
                   data={DataRemindersList}
                   cardTitle="Recalls"
                 />
               </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
-                <DigitalWaitList />
+              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={6}>
+                <RemindersList
+                  key="Reminders"
+                  data={DataRemindersList}
+                  cardTitle="Reminders"
+                />
               </Col>
             </Row>
           </Col>
-           */}
         </Row>
       </Grid>
     );
@@ -360,16 +359,16 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps({ entities, schedule }) {
+function mapStateToProps({ entities, requests }) {
   return {
-    currentDate: schedule.toJS().scheduleDate,
-    appointments: entities.get('appointments'),
+    requests: entities.getIn(['requests','models']),
+    appointments: entities.getIn(['appointments','models']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-  fetchEntities,
+    fetchEntities,
   }, dispatch);
 }
 

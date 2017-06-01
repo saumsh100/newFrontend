@@ -108,19 +108,25 @@ export default handleActions({
   },
 
   [DELETE_ENTITY](state, { payload: { key, id } }) {
-    return state.deleteIn([key, 'models', id]);
+    const newState = state;
+    const model = newState.getIn([key, 'models', id]);
+    if (model) {
+      return newState.deleteIn([key, 'models', id]);
+    } else {
+      return state;
+    }
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity[key])[0];
-    const addEntity = entity[key][id];
+    const id = Object.keys(entity['entities'][key])[0];
+    const addEntity = entity['entities'][key][id];
     const newModel = new Models[key](addEntity);
     return state.setIn([key, 'models', id], newModel);
   },
 
   [UPDATE_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity[key])[0];
-    const updatedEntity = entity[key][id];
+    const id = Object.keys(entity['entities'][key])[0];
+    const updatedEntity = entity['entities'][key][id];
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
   },
