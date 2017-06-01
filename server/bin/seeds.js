@@ -797,7 +797,13 @@ const SEEDS = {
     },
     {
       userId: vstUserId,
-      accountId2,
+      accountId: accountId2,
+      role: 'SUPERADMIN',
+      permissions: {},
+    },
+    {
+      userId: vstUserId,
+      accountId: syncTestAccId,
       role: 'SUPERADMIN',
       permissions: {},
     },

@@ -79,10 +79,6 @@ module.exports = function authMiddleware(req, res, next) {
         req.permissions = { ...permissions[role], ...userPermissions };
       })
 
-      .then(() => {
-        console.log('[middleware/auth]: ', pick(req, ['authToken', 'currentUser', 'accountId', 'role', 'permissions']));
-      })
-
       // Done
       .then(next)
       .catch(next);

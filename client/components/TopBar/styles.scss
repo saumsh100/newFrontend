@@ -143,3 +143,30 @@ $padding-size-border: 10px;
 .userAvatar {
   margin-right: 10px;
 }
+
+.activeAccountButton {
+  border-right: 1.5px solid darkgray;
+  padding-right: 1em;
+  cursor: pointer;
+  line-height: 47px;
+
+  &:hover {
+    color: $primary-red;
+  }
+}
+
+.activeAccountTitle {
+  padding-right: .5em;
+}
+
+.menuItemSelected {
+  background-color: $primary-green;
+  cursor: default;
+  color: white;
+
+  &:hover {
+    background-color: $primary-green!important;
+    cursor: default;
+    color: white!important;
+  }
+}

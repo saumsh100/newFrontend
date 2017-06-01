@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import RDropdownMenu, { NestedDropdownMenu as RNestedDropdownMenu } from 'react-dd-menu';
 import Button from '../Button';
@@ -28,7 +29,7 @@ export class DropdownMenu extends Component {
   }
 
   render() {
-    const { children, className } = this.props;
+    const { children, className, labelProps } = this.props;
     const classes = classNames(className, styles.dropdownContainer);
 
     const menuOptions = {
@@ -36,7 +37,7 @@ export class DropdownMenu extends Component {
       children,
       isOpen: this.state.isOpen,
       close: this.close,
-      toggle: <this.props.labelComponent onClick={this.toggle} />,
+      toggle: <this.props.labelComponent {...labelProps} onClick={this.toggle} />,
 
       // Default
       className: classes,
@@ -47,14 +48,24 @@ export class DropdownMenu extends Component {
   }
 }
 
+DropdownMenu.defaultProps = {
+  labelProps: {},
+};
+
+DropdownMenu.propTypes = {
+  labelProps: PropTypes.object,
+};
+
 export function MenuItem(props) {
   let icon = null;
   if (props.icon) {
     icon = <Icon icon={props.icon} className={styles.menuIcon} />;
   }
 
+  const classes = classNames(props.className, styles.menuItemLi);
+
   return (
-    <ListItem className={styles.menuItemLi} onClick={props.onClick}>
+    <ListItem className={classes} onClick={props.onClick}>
       <div className={`dd-item-ignore ${styles.menuItemContent}`}>
         {icon}
         {props.children}

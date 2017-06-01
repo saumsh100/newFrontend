@@ -1,5 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import {
   AppBar,
@@ -35,6 +36,12 @@ const UserMenu = (props) => {
   );
 };
 
+const ActiveAccountButton = ({ account, onClick }) =>
+  <div onClick={onClick} className={styles.activeAccountButton}>
+    <span className={styles.activeAccountTitle}>{ account.name }</span>
+    <Icon icon="caret-down" />
+  </div>;
+
 class TopBar extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +59,14 @@ class TopBar extends Component {
   }
 
   render() {
-    const { isCollapsed, setIsCollapsed } = this.props;
+    const {
+      isCollapsed,
+      setIsCollapsed,
+      accounts,
+      activeAccount,
+      location,
+    } = this.props;
+
     const topBarClassName = classNames(
       styles.topBarContainer,
       isCollapsed ?
@@ -87,6 +101,23 @@ class TopBar extends Component {
       </div>
     );
 
+    const renderAccountItem = (account) => {
+      const isActive = account.id === activeAccount.id;
+      const setActive = () => {
+        this.props.switchActiveAccount(account.id, location.pathname);
+      };
+
+      return (
+        <MenuItem
+          key={account.id}
+          className={(isActive ? styles.menuItemSelected : false)}
+          onClick={isActive ? false : setActive}
+        >
+          {account.name}
+        </MenuItem>
+      );
+    };
+
     return (
       <AppBar className={topBarClassName}>
         {logoComponent}
@@ -97,6 +128,19 @@ class TopBar extends Component {
         />
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
+
+            {activeAccount ?
+              <li>
+                <DropdownMenu
+                  labelComponent={ActiveAccountButton}
+                  labelProps={{ account: activeAccount }}
+                >
+                  {accounts.map(renderAccountItem)}
+                </DropdownMenu>
+              </li> :
+              null
+            }
+
             <li>
               <IconButton icon="heart" onClick={() => alert('Implement Sharing')} />
             </li>
@@ -135,6 +179,10 @@ TopBar.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   runOnDemandSync: PropTypes.func.isRequired,
+  switchActiveAccount: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }),
 };
 
-export default TopBar;
+export default withRouter(TopBar);
