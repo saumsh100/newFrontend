@@ -37,11 +37,24 @@
 
 }
 
+.floatRight {
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.formDrop {
+  padding: 10px;
+  button {
+    margin-left: auto;
+  }
+}
+
 
 .intelligence {
   &__header {
     @extend .header;
     &_title {
+      justify-content: space-between;
       @extend .title;
       &_cards {
         @extend .cards;
@@ -77,6 +90,10 @@
 .cardHeader {
   border-top: $card-border-size $inactive-color;
   padding: 20px;
+}
+
+.dropdown {
+  height: 100%;
 }
 
 .maleVsFamale {

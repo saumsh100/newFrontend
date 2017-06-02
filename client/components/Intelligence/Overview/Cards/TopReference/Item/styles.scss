@@ -20,7 +20,7 @@
         display: flex;
         align-items: center;
         position: relative;
-        height: 110px;
+        height: 98.5px;
         list-style: none;
         margin: 0;
         border-bottom: 1px solid $primary-lightgrey;
@@ -62,7 +62,7 @@
 }
 
 .paddingFill {
-    padding: 5px 15px 5px 5px;
+    //padding: 0px 15px 5px 5px;
     min-width: 100%;
 
   span:last-child {

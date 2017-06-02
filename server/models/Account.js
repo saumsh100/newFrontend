@@ -16,9 +16,6 @@ const Account = createModel('Account', {
   clinicName: type.string(),
   bookingWidgetPrimaryColor: type.string(),
   weeklyScheduleId: type.string().uuid(4),
-  googleAnalytics: type.boolean().default(false),
-  loyality: type.boolean().default(false),
-  referals: type.boolean().default(false),
   enterpriseId: type.string().uuid(4).required(),
 
   // Application "Addons"

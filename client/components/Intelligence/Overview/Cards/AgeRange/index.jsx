@@ -18,7 +18,7 @@ export default function AgeRange(props) {
             displayTooltips
             labels={['Under 18', "18-24", "25-34", "35-44", "45-54", "55+"]}
             dataSets={[{
-              label: 'Appointments Booked',
+              label: 'Appointments Percentage',
               color: ['yellow', 'red', 'green', 'blue', 'darkblue'],
               data: chartData
             }]}

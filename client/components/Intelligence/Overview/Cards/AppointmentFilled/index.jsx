@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { Guage, Card } from '../../../../library';
 import styles from './styles.scss';
 
@@ -19,7 +20,7 @@ class AppointmentFilled extends Component {
               Productivity Hours Not Filled
             </div>
             <div className={styles.appointmentFilled__header_date}>
-              02/01/2017 - 02/25/2017
+              {moment(startDate).format('MM/DD/YYYY')} - {moment(endDate).format('MM/DD/YYYY')}
             </div>
           </div>
           <Guage percentage={percentage} width={100} height={100}/>
