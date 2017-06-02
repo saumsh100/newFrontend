@@ -10,24 +10,17 @@ import sendReminder from './sendReminder';
  */
 export async function sendRemindersForAccount(account, date) {
   const { reminders } = account;
-  console.log('Account.id=', account.id);
-  console.log(reminders.length, 'reminder alerts set up');
   for (const reminder of reminders) {
     // Get appointments that this reminder deals with
-    console.log('reminders.lengthSeconds', reminder.lengthSeconds);
     const appointments = await getAppointmentsFromReminder({ reminder, account, date });
-    console.log(`${appointments.length} appointments to send reminders to`);
     for (const appointment of appointments) {
       const { patient } = appointment;
       const { primaryType } = reminder;
-      console.log(`Sending ${primaryType} reminder for appointment w/ note: ${appointment.note}`);
       await sendReminder[primaryType]({
         patient,
         account,
         appointment,
       }).then((data) => {
-        console.log(`Sent ${primaryType} reminder to ${patient.firstName}`);
-        // console.log('data', data);
         // We might want to wait on this to ensure it is written into DB before next
         // pull of appointments
         return SentReminder.save({
