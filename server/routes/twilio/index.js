@@ -5,8 +5,11 @@ const Appointment = require('../../models/Appointment');
 const Token = require('../../models/Token');
 const Patient = require('../../models/Patient');
 const thinky = require('../../config/thinky');
-const twilio = require('../../config/globals').twilio;
+const voiceRouter = require('./voice');
 const twilioClient = require('../../config/twilio');
+
+// Set up automated Call interaction
+twilioRouter.use('/voice', voiceRouter);
 
 // Receive all incoming SMS traffic to the Twilio number
 
