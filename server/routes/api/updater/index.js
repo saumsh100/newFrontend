@@ -110,7 +110,7 @@ updaterRouter.put('/bump', checkPermissions('syncClientVersion:create'), (req, r
 /**
  * Decrement build version by 1
  */
-updaterRouter.put('/debump', checkPermissions('syncClientVersion:create'), (req, res, next) => {
+updaterRouter.put('/unbump', checkPermissions('syncClientVersion:create'), (req, res, next) => {
   return SyncClientVersion
     .nth(0)
     .run()
