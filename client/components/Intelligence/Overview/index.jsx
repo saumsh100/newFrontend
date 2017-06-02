@@ -1,5 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
+import moment from 'moment';
+import { connect } from 'react-redux';
+import jwt from 'jwt-decode';
+import { bindActionCreators } from 'redux';
+import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import {
   Card, CardHeader, Col, Grid, Row, PieChart,
   DashboardStats, ContainerList,
@@ -20,8 +25,30 @@ import VisitorsByDevice from './Cards/VisitorsByDevice';
 import BusiestTimeOfWeek from './Cards/BusiestTimeOfWeek';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
+import stats from '../../../thunks/stats';
+
 
 class Overview extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      endDate: moment(new Date()),
+      startDate: moment(new Date()).subtract(30, 'days'),
+    };
+  }
+
+  componentDidMount() {
+    const params = {
+      startDate: this.state.startDate._d,
+      endDate: this.state.endDate._d,
+    };
+
+    this.props.fetchEntities({
+      key: 'accounts',
+    });
+    this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params})
+  }
+
   render() {
     const mostLoyalData = [{
       img: '/images/practitioner_1.png',
@@ -73,68 +100,110 @@ class Overview extends Component {
       appointmentNumber: 54,
     }];
 
-    const hardcodeData = [{
-      img: '/images/practitioner_1.png',
-      name: 'Dr. Chelsea',
-      profession: 'Hygienist',
-      appointmentBooked: 77,
-      appointmentNotFiltred: 83,
-      newPatients: 12,
-      percentage: 80,
-    }, {
-      img: '/images/practitioner_1.png',
-      name: 'Dr. Chelsea',
-      profession: 'Hygienist',
-      appointmentBooked: 77,
-      appointmentNotFiltred: 83,
-      newPatients: 12,
-      percentage: 46,
-    }, {
-      img: '/images/practitioner_1.png',
-      name: 'Dr. Chelsea',
-      profession: 'Hygienist',
-      appointmentBooked: 77,
-      appointmentNotFiltred: 83,
-      newPatients: 12,
-      percentage: 21,
-    }, {
-      img: '/images/practitioner_1.png',
-      name: 'Dr. Chelsea',
-      profession: 'Hygienist',
-      appointmentBooked: 77,
-      appointmentNotFiltred: 83,
-      newPatients: 12,
-      percentage: 10,
-    }];
+    const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toObject(): null);
+
+    const prac = (appointmentStats ? appointmentStats.practitioner : {});
+    const serve = (appointmentStats ? appointmentStats.services : {});
+    const patients = (appointmentStats ? appointmentStats.patients: {});
+    let male = (appointmentStats ? appointmentStats.male : 0);
+    let female = (appointmentStats ? appointmentStats.female : 0);
+    let ageRange = (appointmentStats ? appointmentStats.ageData.toArray() : []);
+    const newVisitors = (appointmentStats ? appointmentStats.newPatients : 0);
+    const allApp = (appointmentStats ? appointmentStats.notConfirmedAppointments : 0);
+    const returning = allApp - newVisitors;
+    const newVisitorPercent = Math.floor(newVisitors * 100 / allApp + 0.5);
+    const returningPercent = 100 - newVisitorPercent;
+
+    male = Math.floor(male * 100 / (male + female) + 0.5);
+    female = 100-male;
+
+    const totalData = {
+      appointmentBooked: 0,
+      appointmentNotFiltred: 0,
+    };
+
+    console.log(prac, ageRange)
+
+    const serviceData = (appointmentStats ? serve.map((key) => {
+      return {
+        title: key.toObject().name,
+        hours: Math.round(key.toObject().time * 10 / 600),
+      };
+    }) : []);
+
+
+    let realData = (appointmentStats ? (
+      prac.toArray().map((key) => {
+        const data = {};
+        data.appointmentBooked = Math.floor(key.toObject().appointmentTime / 60);
+        data.appointmentNotFiltred = Math.floor(key.toObject().totalTime / 60) - data.appointmentBooked;
+        data.percentage = Math.floor(100 * data.appointmentBooked / data.appointmentNotFiltred);
+        data.name = `Dr. ${key.toObject().lastName}`;
+        data.img = '/images/avatar.png';
+        totalData.appointmentBooked += data.appointmentBooked;
+        totalData.appointmentNotFiltred += data.appointmentNotFiltred;
+        data.newPatients = key.toObject().newPatients;
+
+        return (
+          <PractitionersList
+            img={data.img}
+            name={data.name}
+            profession="Dentist"
+            appointmentBooked={data.appointmentBooked}
+            appointmentNotFiltred={data.appointmentNotFiltred}
+            newPatients={data.newPatients}
+            percentage={data.percentage}
+          />);
+      })) : <div></div>);
+
+    const notConfirmedAppointments = (appointmentStats ? appointmentStats.notConfirmedAppointments : 0);
+    const confirmedAppointments = (appointmentStats ? appointmentStats.confirmedAppointments : 0);
+
+    let sortedPatients = (appointmentStats ? patients.toArray().map((key) => {
+      return {
+        img: key.toObject().avatarUrl,
+        name: `${key.toObject().firstName} ${key.toObject().lastName}`,
+        age: key.toObject().age,
+        number: key.toObject().numAppointments,
+      }
+    }) : []);
+
+    sortedPatients = sortedPatients.sort((a,b) => {
+      return b.number - a.number;
+    });
+
+    sortedPatients = sortedPatients.slice(0,4);
 
     const data = [
-      { count: 388, title: 'Appointment Booked', icon: 'calendar', size: 6, color: 'primaryColor' },
-      { count: '116K', title: 'Estimated Revenue', icon: 'line-chart', size: 6, color: 'primaryBlue' },
-      { count: 39, title: 'New Patients', icon: 'user', size: 6, color: 'primaryGreen' },
-      { count: 311, title: 'Confirmed Appointments', icon: 'check-circle', size: 6, color: 'primaryYellow' },
+      { count: notConfirmedAppointments, title: 'Appointment Booked', icon: 'calendar', size: 6, color: 'primaryColor' },
+      { count: 'N/A', title: 'Estimated Revenue', icon: 'line-chart', size: 6, color: 'primaryBlue' },
+      { count: newVisitors, title: 'New Patients', icon: 'user', size: 6, color: 'primaryGreen' },
+      { count: confirmedAppointments, title: 'Confirmed Appointments', icon: 'check-circle', size: 6, color: 'primaryYellow' },
     ];
 
-    const referenceData = [{
-      img: '/images/practitioner_1.png',
-      name: 'Jehn Frue',
-      age: '30',
-      number: 7,
-    }, {
-      img: '/images/practitioner_1.png',
-      name: 'Liz Mcmahon',
-      age: '21',
-      number: 5,
-    }, {
-      img: '/images/practitioner_1.png',
-      name: 'Issac Brune',
-      age: '47',
-      number: 5,
-    }, {
-      img: '/images/practitioner_1.png',
-      name: 'Monica Lee',
-      age: '54',
-      number: 4,
-    }];
+
+    // const referenceData = []
+    //   [{
+    //   img: sortedPatients[0].avatarUrl,
+    //   name: `${sortedPatients[0].firstName} ${sortedPatients[0].lastName}`,
+    //   age: '30',
+    //   number: {sortedPatients[0].numAppointments},
+    // },{
+    //   img: sortedPatients[1].avatarUrl,
+    //   name: `${sortedPatients[1].firstName} ${sortedPatients[0].lastName}`,
+    //   age: '30',
+    //   number: {sortedPatients[1].numAppointments},
+    // },{
+    //   img: sortedPatients[2].avatarUrl,
+    //   name: `${sortedPatients[2].firstName} ${sortedPatients[0].lastName}`,
+    //   age: '30',
+    //   number: {sortedPatients[2].numAppointments},
+    // },{
+    //   img: sortedPatients[3].avatarUrl,
+    //   name: `${sortedPatients[3].firstName} ${sortedPatients[0].lastName}`,
+    //   age: '30',
+    //   number: {sortedPatients[4].numAppointments},
+    // }];
 
     return (
       <Grid className={styles.intelligence}>
@@ -150,68 +219,22 @@ class Overview extends Component {
             <DashboardStats data={data} />
           </Col>
           <Col xs={12} sm={6}>
-            <AppointmentFilled borderColor={colorMap.grey} />
+            <AppointmentFilled
+              appointmentFilled={totalData.appointmentBooked}
+              appointmentNotFilled={totalData.appointmentNotFiltred}
+              borderColor={colorMap.grey}
+            />
           </Col>
           <Col xs={12} sm={6}>
             <ContainerList
               cardTitle="Top Services by Hours"
-              data={[{
-                title: 'Invisalign',
-                hours: 35,
-              }, {
-                title: 'Teeth Whitening',
-                hours: 28,
-              }, {
-                title: 'Regular Checkup',
-                hours: 19.5,
-              }, {
-                title: 'Lost Fillings',
-                hours: 11,
-              }, {
-                title: 'Emergency Appointments',
-                hours: 5,
-              }]}
+              data={serviceData}
             />
           </Col>
           <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
-            <PractitionersList
-              img="/images/practitioner_1.png"
-              name="Dr. Chelsea"
-              profession="Dentist"
-              appointmentBooked="118"
-              appointmentNotFiltred="42"
-              newPatients="12"
-              percentage={70}
-            />
-            <PractitionersList
-              img="/images/practitioner_1.png"
-              name="Dr. Mike"
-              profession="Dentist"
-              appointmentBooked="142"
-              appointmentNotFiltred="18"
-              newPatients="14"
-              percentage={85}
-            />
-            <PractitionersList
-              img="/images/practitioner_1.png"
-              name="Dr. Jennifer"
-              profession="CDA"
-              appointmentBooked="77"
-              appointmentNotFiltred="83"
-              newPatients="8"
-              percentage={45}
-            />
-            <PractitionersList
-              img="/images/practitioner_1.png"
-              name="John"
-              profession="Hygienist"
-              appointmentBooked="40"
-              appointmentNotFiltred="110"
-              newPatients="14"
-              percentage={15}
-            />
+            {realData}
           </FlexGrid>
-          <FlexGrid borderColor={colorMap.grey} title="Appoinment Types" >
+          <FlexGrid borderColor={colorMap.grey} title="Appointment Types" >
             <Stats
               count={107}
               details="via phone"
@@ -225,12 +248,12 @@ class Overview extends Component {
           </FlexGrid>
           <FlexGrid borderColor={colorMap.grey} title="New vs Returning Patients" >
             <Stats
-              count={102}
+              count={newVisitors}
               details="new"
               icon="user"
             />
             <Stats
-              count={349}
+              count={returning}
               details="returning"
               icon="users"
             />
@@ -284,7 +307,7 @@ class Overview extends Component {
           </Col>
           <Col xs={12}>
             <TopReference
-              data={referenceData}
+              data={sortedPatients}
               borderColor={colorMap.grey}
             />
           </Col>
@@ -299,20 +322,20 @@ class Overview extends Component {
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <NewVsReturning
-              newVisitors={68}
-              returningVisitors={32}
-              chartData={[{ value: 32, color: 'blue' }, { value: 68, color: 'green' }]}
+              newVisitors={newVisitorPercent}
+              returningVisitors={returningPercent}
+              chartData={[{ value: newVisitorPercent, color: 'green' }, { value: returning, color: 'blue' }]}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <MaleVsFemale
-              male={45}
-              female={55}
+              male={male}
+              female={female}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <AgeRange
-              chartData={[18, 25, 35, 45, 55]}
+              chartData={ageRange}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
@@ -375,7 +398,7 @@ class Overview extends Component {
               chartData={[
                 { label: 'Appointments Booked',
                   color: ['yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
-                  data: [18, 25, 35, 45, 55, 4],
+                  data: [18, 25, 35, 45, 100, 4],
                 },
               ]}
             />
@@ -386,6 +409,27 @@ class Overview extends Component {
   }
 }
 Overview.propTypes = {
+  fetchEntities: PropTypes.func,
   location: PropTypes.object
 }
-export default Overview;
+
+function mapStateToProps({ entities, apiRequests }) {
+  let appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
+
+  return {
+    accounts: entities.getIn(['accounts', 'models']),
+    appointmentStats,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    stats,
+    fetchEntities,
+    fetchEntitiesRequest,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(Overview);

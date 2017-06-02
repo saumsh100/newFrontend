@@ -12,7 +12,7 @@ export default function MaleVsFemale(props) {
 
   return (
     <Card >
-      <CardHeader className={styles.cardHeader} title="Male vs Famale" />
+      <CardHeader className={styles.cardHeader} title="Male vs Female" />
       <div className={styles.maleVsFamale}>
         <div className={styles.maleVsFamale__menContainer}>
           <div className={styles.maleVsFamale__menContainer__item}>

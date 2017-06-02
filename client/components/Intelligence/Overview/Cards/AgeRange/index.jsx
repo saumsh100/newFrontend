@@ -16,10 +16,10 @@ export default function AgeRange(props) {
           <BarChart
             type="horizontal"
             displayTooltips
-            labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+            labels={['Under 18', "18-24", "25-34", "35-44", "45-54", "55+"]}
             dataSets={[{
               label: 'Appointments Booked',
-              color: ['yellow', 'red', 'green', 'blue'],
+              color: ['yellow', 'red', 'green', 'blue', 'darkblue'],
               data: chartData
             }]}
           />

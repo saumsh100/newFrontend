@@ -25,6 +25,9 @@ const AccountSchema = {
   zipCode: null,
   vendastaId: null,
   smsPhoneNumber: null,
+  googleAnalytics: null,
+  loyality: null,
+  referals: null,
   enterpriseId: null,
   weeklyScheduleId: null, //new OfficeHoursRecord(),
 };

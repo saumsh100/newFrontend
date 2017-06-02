@@ -30,12 +30,12 @@ class PractitionersList extends Component {
           </div>
           <div className={styles.practitioner__item_footer}>
             <div className={styles.practitioner__item_text}>
-              <span>Appointments Booked</span>
-              <span>{appointmentBooked}</span>
+              <span>Productivity Hours Booked</span>
+              <span>{appointmentBooked}h</span>
             </div>
             <div className={styles.practitioner__item_text}>
-              <span>Appointments Not Filled</span>
-              <span>{appointmentNotFiltred}</span>
+              <span>Productivity Hours Not Filled</span>
+              <span>{appointmentNotFiltred}h</span>
             </div>
             <div className={styles.practitioner__item_text}>
               <span>New Patients</span>

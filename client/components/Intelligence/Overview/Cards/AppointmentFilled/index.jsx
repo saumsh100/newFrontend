@@ -5,22 +5,24 @@ import styles from './styles.scss';
 
 class AppointmentFilled extends Component {
   render() {
-    const { borderColor } = this.props;
+    const { borderColor, appointmentFilled, appointmentNotFilled, startDate, endDate } = this.props;
+    const percentage = Math.floor(100 * appointmentFilled / appointmentNotFilled);
+
     return (
       <Card className={styles.appointmentFilled} >
         <div className={styles.appointmentFilled__wrapper}>
           <div className={styles.appointmentFilled__header}>
             <div className={styles.appointmentFilled__header_number}>
-              160
+              {appointmentNotFilled}
             </div>
             <div className={styles.appointmentFilled__header_title}>
-              Appointments Not Filled
+              Productivity Hours Not Filled
             </div>
             <div className={styles.appointmentFilled__header_date}>
               02/01/2017 - 02/25/2017
             </div>
           </div>
-          <Guage percentage={34} width={100} height={100}/>
+          <Guage percentage={percentage} width={100} height={100}/>
         </div>
       </Card>
     );

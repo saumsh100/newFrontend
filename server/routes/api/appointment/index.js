@@ -6,6 +6,8 @@ const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
+const WeeklySchedule = require('../../../models/WeeklySchedule');
+const Practitioner = require('../../../models/Practitioner');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
 const moment = require('moment');
@@ -22,6 +24,185 @@ function checkOverLapping(appointments, startDate, endDate) {
     };
   });
 }
+
+function getDiffInMin(startDate, endDate){
+  return moment(endDate).diff(moment(startDate), 'minutes');
+}
+
+function ageRange(age, array) {
+  if (age < 18) {
+    array[0]++;
+  } else if(age >= 18 && age < 25) {
+    array[1]++;
+  } else if(age >= 25 && age < 35) {
+    array[2]++;
+  } else if(age >= 35 && age < 45) {
+    array[3]++;
+  } else if(age >= 45 && age < 55) {
+    array[4]++;
+  } else {
+    array[5]++;
+  }
+  return array;
+}
+function ageRangePercent(array) {
+  array[0] = 100 * array[0] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]);
+  array[1] = 100 * array[1] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]);
+  array[2] = 100 * array[2] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]);
+  array[3] = 100 * array[3] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]);
+  array[4] = 100 * array[4] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]);
+  array[5] = 100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]);
+  return array;
+}
+
+const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+/* appointment Stats for intelligece overview */
+
+appointmentsRouter.get('/stats', (req, res, next) => {
+  const {
+    accountId,
+    joinObject,
+    query,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = query;
+
+  console.log(moment(startDate)._d)
+
+  // By default this will list upcoming appointments
+
+  const start = moment(startDate)._d;
+  const end = moment(endDate)._d;
+
+  startDate = startDate ? r.ISO8601(startDate) : r.now();
+  endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
+
+  const b = Practitioner
+    .filter({ accountId })
+    //TODO remove getJoin and replace with practionor weekly schedule
+    .getJoin({weeklySchedule: true})
+    .run();
+
+  const a = Appointment
+    .filter({ accountId })
+    .filter(r.row('startDate').during(startDate, endDate))
+    .getJoin({
+      patient: true,
+      practitioner: true,
+      service: true,
+    })
+    .run();
+
+
+
+  return Promise.all([a, b])
+    .then((values) => {
+      const sendStats = {};
+      sendStats.practitioner = {};
+      sendStats.services = {};
+      sendStats.patients = {};
+      sendStats.male = 0;
+      sendStats.female = 0;
+      sendStats.newPatients = 0;
+      const male = /^male/i;
+      sendStats.ageData = new Array(6).fill(0);
+      const range = moment().range(moment(start), moment(end))
+
+      const numberOfDays = moment(end).diff(moment(start), 'days');
+      const dayOfWeek = moment(start).day();
+      const weeks = Math.floor(numberOfDays/7);
+      const remainingDays = numberOfDays % 7;
+
+
+      values[1].map((practitioner) => {
+        const data = {};
+        let timeOpen = 0;
+
+        daysOfWeek.map((day) => {
+          if (!practitioner.weeklySchedule[day].isClosed) {
+            timeOpen += getDiffInMin(practitioner.weeklySchedule[day].startTime, practitioner.weeklySchedule[day].endTime);
+            if (practitioner.weeklySchedule[day].breaks) {
+              timeOpen -= getDiffInMin(practitioner.weeklySchedule[day].breaks[0].startTime, practitioner.weeklySchedule[day].breaks[0].endTime);
+            }
+          }
+        });
+
+        timeOpen = timeOpen * weeks;
+
+        for (let i = 0; i < remainingDays; i++) {
+          if (!practitioner.weeklySchedule[daysOfWeek[i + dayOfWeek]].isClosed) {
+            timeOpen += getDiffInMin(practitioner.weeklySchedule[daysOfWeek[i + dayOfWeek]].startTime, practitioner.weeklySchedule[daysOfWeek[i + dayOfWeek]].endTime);
+            if (practitioner.weeklySchedule[daysOfWeek[i + dayOfWeek]].breaks) {
+              timeOpen -= getDiffInMin(practitioner.weeklySchedule[daysOfWeek[i + dayOfWeek]].breaks[0].startTime, practitioner.weeklySchedule[daysOfWeek[i + dayOfWeek]].breaks[0].endTime);
+            }
+          }
+        }
+
+        data.firstName = practitioner.firstName;
+        data.lastName = practitioner.lastName;
+        data.id = practitioner.id;
+        data.totalTime = timeOpen;
+        data.appointmentTime = 0;
+        data.newPatients = 0;
+        sendStats.practitioner[practitioner.id] = data;
+      });
+
+      let confirmedAppointments = 0;
+      let notConfirmedAppointments = 0;
+      let time = 0;
+
+      values[0].map((appointment) => {
+        if (range.contains(moment(appointment.patient.createdAt))){
+          sendStats.newPatients++;
+          sendStats.practitioner[appointment.practitioner.id].newPatients++;
+        }
+        if (!sendStats.services[appointment.service.id]){
+          sendStats.services[appointment.service.id] = {
+            time: 0,
+            id: appointment.service.id,
+            name: appointment.service.name,
+          };
+        }
+
+        if (!sendStats.patients[appointment.patient.id]){
+          sendStats.patients[appointment.patient.id] = {
+            numAppointments: 0,
+            id: appointment.patient.id,
+            firstName: appointment.patient.firstName,
+            lastName: appointment.patient.lastName,
+            age: moment().diff(moment(appointment.patient.birthDate), 'years'),
+            avatarUrl: appointment.patient.avatarUrl,
+          };
+        }
+
+        time += moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
+        notConfirmedAppointments++;
+        if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
+          if (male.test(appointment.patient.gender)){
+            sendStats.male++;
+          } else {
+            sendStats.female++;
+          }
+          sendStats.ageData = ageRange(sendStats.patients[appointment.patient.id].age, sendStats.ageData);
+          sendStats.patients[appointment.patient.id].numAppointments++;
+          sendStats.services[appointment.service.id].time +=  moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
+          sendStats.practitioner[appointment.practitioner.id].appointmentTime += moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
+
+          confirmedAppointments++;
+        }
+      });
+      sendStats.ageData = ageRangePercent(sendStats.ageData);
+      sendStats.confirmedAppointments = confirmedAppointments;
+      sendStats.notConfirmedAppointments = notConfirmedAppointments;
+      res.send(sendStats);
+    })
+    .catch(next);
+});
+
 appointmentsRouter.get('/', (req, res, next) => {
   const {
     accountId,
