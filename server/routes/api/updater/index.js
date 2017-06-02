@@ -107,4 +107,19 @@ updaterRouter.put('/bump', checkPermissions('syncClientVersion:create'), (req, r
     .catch(next);
 });
 
+/**
+ * Decrement build version by 1
+ */
+updaterRouter.put('/debump', checkPermissions('syncClientVersion:create'), (req, res, next) => {
+  return SyncClientVersion
+    .nth(0)
+    .run()
+    .then((_dbVersion) => {
+      _dbVersion.build -= 1;
+      _dbVersion.patch = _dbVersion.build; // for now
+      _dbVersion.merge(_dbVersion).save().then(_dbv => res.send(_dbv));
+    })
+    .catch(next);
+});
+
 module.exports = updaterRouter;
