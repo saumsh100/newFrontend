@@ -29,9 +29,6 @@
     },
     "TWILIO_AUTH_TOKEN": {
       "required": true
-    },
-    "TWILIO_NUMBER": {
-      "required": true
     }
   },
   "formation": {

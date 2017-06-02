@@ -271,7 +271,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
             avatarUrl: appointment.patient.avatarUrl,
           };
         }
-        
+
         time += moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
         notConfirmedAppointments++;
         if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
