@@ -14,6 +14,7 @@ function validatePhoneNumber(phoneNumber) {
   if (pn.length === 11) {
     return '+'.concat(pn);
   }
+
   return null;
 }
 

@@ -13,28 +13,28 @@ const createReminderText = ({ patient, account, appointment }) => (`
 
 export default {
   // Send Appointment Reminder text via Twilio
-  sms: ({ patient, account, appointment }) => {
+  sms({ patient, account, appointment }) {
     // TODO: add phoneNumber logic for patient
     return twilio.sendMessage({
-      to: patient.phoneNumber,
+      to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
       body: createReminderText({ patient, account, appointment }),
     });
   },
 
   // Send Appointment Reminder call via Twilio
-  phone: ({ patient, account }) => {
+  phone({ patient, account }) {
     // TODO: add phoneNumber logic for patient
     // TODO; add appointment and account data to URL
     return twilio.makeCall({
-      to: patient.phoneNumber,
+      to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
       url: PHONE_CALLBACK_URL,
     });
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email: ({ patient, account, appointment }) => {
+  email({ patient, account, appointment }) {
     // TODO: create token, then send reminder with tokenId
     return sendConfirmationReminder({
       toEmail: patient.email,
