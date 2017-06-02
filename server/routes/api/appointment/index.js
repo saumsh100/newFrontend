@@ -106,6 +106,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
           })
           .catch(next);
       }
+      console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
       return res.sendStatus(400);
     })
     .catch(next);

@@ -15,9 +15,7 @@ class RemindersList extends Component {
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
-          <CardHeader count={data.length} title={cardTitle}>
-            <Search />
-          </CardHeader>
+          <CardHeader count={data.length} title={cardTitle} />
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>

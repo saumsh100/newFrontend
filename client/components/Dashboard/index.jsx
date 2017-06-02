@@ -218,7 +218,7 @@ class Dashboard extends React.Component {
       return (isSameDate && !app.isDeleted);
     });
     const filterConfirmedRequests = requests.toArray().filter((req) => !req.get('isCancelled'));
-    
+
     const data = [
       {count: appointmentCount.length, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
       {count: filterConfirmedRequests.length, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
@@ -281,7 +281,6 @@ class Dashboard extends React.Component {
             <div className={styles.dashboard__body_request}>
               <RequestsContainer
                 key="dashBoardRequests"
-                borderColor={colorMap.darkblue}
               />
             </div>
           </Col>
@@ -328,8 +327,7 @@ class Dashboard extends React.Component {
           */}
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
-
-              <Col  className={styles.dashboard__patientList_item} xs={12} md={6} lg={6}>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={6}>
                 <RemindersList
                   key="Recalls"
                   data={DataRemindersList}
@@ -359,7 +357,7 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps({ entities, requests }) {
+function mapStateToProps({ entities }) {
   return {
     requests: entities.getIn(['requests','models']),
     appointments: entities.getIn(['appointments','models']),
