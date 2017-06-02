@@ -1,74 +1,51 @@
 import React, { Component } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../../library';
-import Search from '../../../library/Search';
+import { List, Card, CardHeader, } from '../../../library';
+import ReminderData from './ReminderData';
 import styles from './styles.scss';
-import classNames from 'classnames';
-import moment from 'moment';
 
 class RemindersList extends Component {
+  constructor(props) {
+    super(props)
+    this.handleReminderClick = this.handleReminderClick.bind(this);
+  }
+
+  handleReminderClick(id) {
+    const {
+      setSelectedPatientId,
+      push,
+    } = this.props;
+
+    setSelectedPatientId(id);
+    push('/patients/list');
+  }
+
   render() {
     const {
-      borderColor,
-      cardTitle,
-      data,
+      appointments,
+      patients,
+      reminders,
+      sentReminders,
     } = this.props;
+
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
-          <CardHeader count={data.length} title={cardTitle} />
+          <CardHeader count={sentReminders.size} title="Reminders" />
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {data.map((obj,index) => {
-              const rightContent = obj.appointment && typeof obj.appointment === "object" ?
-                <div key={`appointments${index}`} className={styles.patients__item_right}>
-                  <div className={styles.availability}>
-                    Availability
-                  </div>
-                  <div className={styles.patients__item_days}>
-                    {obj.appointment.days.map((d,i) => (<span key={i}>{d}</span>))}
-                  </div>
-                  Except
-                  <div className={styles.patients__item_days}>
-                    {obj.appointment.except.map((e,i) => (
-                      <span key={i}>{moment(e).format("m/d")}</span>))}
-                  </div>
-                </div>
-                :
-                <div key={`patients${index}`} className={styles.patients__item_right}>
-                  <div className={styles.patients__item_status}>
-                    {obj.status}
-                  </div>
-                  <div className={styles.patients__item_date}>
-                    {obj.date}
-                  </div>
-                  <div className={styles.patients__item_time}>
-                    {obj.time}
-                  </div>
-                </div>
-
+            {sentReminders.toArray().map((sentReminder,index) => {
               return (
-                <ListItem key={`patientsItem${index}`} className={styles.patients__item}>
-                  <img className={styles.patients__item_img} src={obj.img} alt=""/>
-                  <div className={styles.patients__item_wrapper}>
-                    <div className={styles.patients__item_left}>
-                      <div className={styles.patients__item_name}>
-                        <b>{obj.name}, <span>{obj.age}</span></b>
-                      </div>
-                      <div className={styles.patients__item_phone}>
-                        {obj.phone}
-                      </div>
-                      <div className={styles.patients__item_email}>
-                        {obj.email}
-                      </div>
-                    </div>
-                    {rightContent}
-                  </div>
-                  <div className={styles.patients__item_icon}>
-                    <Icon className={styles[`fa-${obj.icon}`]} icon={obj.icon} size={1.5}/>
-                  </div>
-                </ListItem>
-              )
+                <ReminderData
+                  key={index}
+                  index={index}
+                  appointment={appointments.get(sentReminder.get('appointmentId')).toJS()}
+                  reminder={reminders.get(sentReminder.get('reminderId')).toJS()}
+                  patient={patients.get(sentReminder.get('patientId')).toJS()}
+                  sentReminder={sentReminder}
+                  handleReminderClick={this.handleReminderClick}
+                />
+              );
             })}
           </List>
         </div>
@@ -76,6 +53,5 @@ class RemindersList extends Component {
     );
   }
 }
-
 
 export default RemindersList;

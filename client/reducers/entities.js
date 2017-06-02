@@ -49,6 +49,14 @@ import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
 import User from '../entities/models/User';
 import users from '../entities/collections/users';
+import Reminder from '../entities/models/Reminder';
+import reminders from '../entities/collections/reminders'
+import SentReminder from '../entities/models/SentReminder';
+import sentReminders from '../entities/collections/sentReminders';
+import Recall from '../entities/models/Recall';
+import recalls from '../entities/collections/recalls';
+import SentRecall from '../entities/models/SentRecall';
+import sentRecalls from '../entities/collections/sentRecalls';
 
 export const createInitialEntitiesState = (initialEntitiesState = {}) => {
   return receiveEntities(Map({
@@ -72,6 +80,11 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     weeklySchedules: new weeklySchedules(),
     users: new users(),
     timeOffs: new timeOffs(),
+    reminders: new reminders(),
+    sentReminders: new sentReminders(),
+    recalls: new recalls(),
+    sentRecalls: new sentRecalls(),
+
     // reviews: Reviews(), MODEL
     // listings: Listings(),
   }), initialEntitiesState);
@@ -96,6 +109,10 @@ const Models = {
   waitSpots: WaitSpot,
   weeklySchedules: WeeklySchedule,
   users: User,
+  reminders: Reminder,
+  sentReminders: SentReminder,
+  recalls: Recall,
+  sentRecalls: SentRecall,
 };
 
 export default handleActions({

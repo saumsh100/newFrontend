@@ -83,6 +83,8 @@ const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
 const clinicPhoneNumber = '+17786558613';
+const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
+const recallId = uuid();
 
 const mainEnterprise = {
   id: uuid(),
@@ -461,7 +463,7 @@ const SEEDS = {
       patientId: justinPatientId,
     },
 
-    // For the Reminders Tests
+    // For the RemindersList Tests
     ...appointmentFixtures,
 
     // For the patientsManagementTab
@@ -1067,6 +1069,35 @@ const SEEDS = {
   ],
 
   Reminder,
+
+  SentReminder: [
+    {
+      reminderId,
+      accountId,
+      appointmentId: appointmentId1,
+      patientId: justinPatientId,
+      lengthSeconds: 30,
+    },
+  ],
+
+  Recall: [
+    {
+      id: recallId,
+      accountId,
+      primaryType: 'PHONE',
+      lengthSeconds: 30,
+    },
+  ],
+
+  SentRecall: [
+    {
+      accountId,
+      recallId,
+      patientId: sergeyPatientId,
+      lengthSeconds: 30,
+    },
+  ],
+
 };
 
 seedDatabase(SEEDS)
