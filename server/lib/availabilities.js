@@ -1,11 +1,9 @@
 
-require('../../server/models/relations');
 const isEmpty = require('lodash/isEmpty');
 const isUndefined = require('lodash/isUndefined');
 const unionBy = require('lodash/unionBy');
 const { r } = require('../config/thinky');
-const Service = require('../models/Service');
-const Practitioner = require('../models/Practitioner');
+const { Service, Practitioner } = require('../models');
 const StatusError = require('../util/StatusError');
 const {
   isDuringEachother,

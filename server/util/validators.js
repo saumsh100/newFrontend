@@ -4,7 +4,6 @@
  * @return phone number String or null if invalid.
  */
 function validatePhoneNumber(phoneNumber) {
-  console.log('...... validating phone number', phoneNumber);
   if (!phoneNumber || phoneNumber.length < 10) return null;
 
   const pn = phoneNumber.replace(/\D/g, '');
@@ -15,6 +14,7 @@ function validatePhoneNumber(phoneNumber) {
   if (pn.length === 11) {
     return '+'.concat(pn);
   }
+
   return null;
 }
 

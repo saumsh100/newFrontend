@@ -3,8 +3,7 @@
  * MAJOR DISCLAIMER: this assumes the DB is seeded with seeds!
  */
 
-require('../../../server/models/relations');
-const Practitioner = require('../../../server/models/Practitioner');
+const { Practitioner } = require('../../../server/models');
 
 // TODO: make seeds more modular so we can see here
 const practitionerId = '4f439ff8-c55d-4423-9316-a41240c4d329';

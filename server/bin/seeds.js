@@ -11,6 +11,9 @@ const { time } = require('../util/time');
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
 
+import Reminder from '../fixtures/reminders';
+import appointmentFixtures from '../fixtures/appointments';
+
 
 /**
  * Seeds Map is organized by:
@@ -40,7 +43,7 @@ const vstUserId = uuid();
 const alexPatientId = uuid();
 const alexPatientId2 = uuid();
 const markPatientId = uuid();
-const justinPatientId = uuid();
+const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
 const sergeyPatientId = uuid();
 
 const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
@@ -52,7 +55,7 @@ const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId5 = '5f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
 
-const chairId = uuid();
+const chairId = '7f439ff8-c55d-4423-9316-a41240c4d329';
 
 const serviceId = uuid();
 const serviceId2 = uuid();
@@ -457,6 +460,11 @@ const SEEDS = {
       serviceId: cleanupServiceId,
       patientId: justinPatientId,
     },
+
+    // For the Reminders Tests
+    ...appointmentFixtures,
+
+    // For the patientsManagementTab
     ...randomAppointments,
   ],
 
@@ -739,7 +747,7 @@ const SEEDS = {
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      smsPhoneNumber: clinicPhoneNumber,
+      twilioPhoneNumber: clinicPhoneNumber,
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: mainEnterprise.id,
@@ -753,12 +761,13 @@ const SEEDS = {
       state: 'ON',
       city: 'Toronto',
       zipCode: '90210',
+      twilioPhoneNumber: clinicPhoneNumber,
 
       logo: '/images/liberty_logo.png',
       enterpriseId: mainEnterprise.id,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      // smsPhoneNumber: clinicPhoneNumber,
+      // twilioPhoneNumber: clinicPhoneNumber,
       // logo: 'images/availabilies_sidebar_logo_2.png',
       // address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
       // clinicName: 'PACIFIC HEART DENTAL',
@@ -774,7 +783,7 @@ const SEEDS = {
       city: 'North Vancouver',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      smsPhoneNumber: clinicPhoneNumber,
+      twilioPhoneNumber: clinicPhoneNumber,
       logo: '/images/beckett_dental.png',
       address: '#101 – 1312 Random Drive',
       bookingWidgetPrimaryColor: '#f29b12',
@@ -975,6 +984,7 @@ const SEEDS = {
       accountId,
       patientId: markPatientId,
     },
+
     ...randomChats,
   ],
 
@@ -1055,6 +1065,8 @@ const SEEDS = {
       ],
     },
   ],
+
+  Reminder,
 };
 
 seedDatabase(SEEDS)
