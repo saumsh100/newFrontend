@@ -11,13 +11,16 @@ const Account = createModel('Account', {
   city: type.string(),
   zipCode: type.string(),
   vendastaId: type.string(),
-  smsPhoneNumber: type.string(),
+  twilioPhoneNumber: type.string(),
   logo: type.string(),
   clinicName: type.string(),
   bookingWidgetPrimaryColor: type.string(),
   weeklyScheduleId: type.string().uuid(4),
   enterpriseId: type.string().uuid(4).required(),
-  // users: []
+
+  // Application "Addons"
+  canSendReminders: type.boolean().default(true),
+  canSendRecalls: type.boolean().default(true),
 });
 
 module.exports = Account;

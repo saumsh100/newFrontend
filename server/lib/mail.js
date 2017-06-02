@@ -22,6 +22,8 @@ function sendTemplate(config) {
     toEmail,
     templateName,
     mergeVars,
+    fromName,
+    attachments,
   } = config;
 
   return new Promise((resolve, reject) => {
@@ -39,13 +41,14 @@ function sendTemplate(config) {
           from: from,
           subject: subject,
           from_email: from,
-          from_name: 'CareCru',
+          from_name: fromName,
           to: [{
             email: toEmail,
             type: 'to',
           }],
 
           global_merge_vars: mergeVars,
+          attachments,
         },
       },
 

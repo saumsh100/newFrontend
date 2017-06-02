@@ -34,28 +34,29 @@ const maxLength25 = maxLength(25);
 export default function GeneralForm({ onSubmit, activeAccount }) {
   const initialValues = {
     name: activeAccount.get('name'),
-    smsPhoneNumber: activeAccount.get('smsPhoneNumber'),
+    twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
   };
 
   return (
     <div className={styles.generalRow}>
-        <Form form="generalSettingsForm"
-              onSubmit={onSubmit}
-              initialValues={initialValues}
-        >
-            <Field
-              required
-              name="name"
-              label="Name"
-              validate={[maxLength25]}
-            />
-            <Field
-              required
-              name="smsPhoneNumber"
-              label="SMS Phone Number"
-              normalize={normalizePhone}
-            />
-        </Form>
+      <Form
+        form="generalSettingsForm"
+        onSubmit={onSubmit}
+        initialValues={initialValues}
+      >
+        <Field
+          required
+          name="name"
+          label="Name"
+          validate={[maxLength25]}
+        />
+        <Field
+          required
+          name="twilioPhoneNumber"
+          label="Twilio Phone Number"
+          normalize={normalizePhone}
+        />
+      </Form>
     </div>
   );
 }

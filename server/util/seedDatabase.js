@@ -1,6 +1,5 @@
 
 const models = require('../models');
-require('../models/relations');
 const _ = require('lodash');
 const thinky = require('../config/thinky');
 
