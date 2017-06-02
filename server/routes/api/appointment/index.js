@@ -67,7 +67,6 @@ const monthsYear = ['January', 'February', 'March', 'April', 'May', 'June', 'Jul
 appointmentsRouter.get('/statsdate', (req, res, next) => {
 
   const {
-    accountId,
     joinObject,
     query,
   } = req;
@@ -75,7 +74,9 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
   let {
     startDate,
     endDate,
+    accountId,
   } = query;
+
 
   if (!startDate || !endDate) {
     return res.send(400);
@@ -108,8 +109,12 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
 });
 appointmentsRouter.get('/statslastyear', (req, res, next) => {
   const {
-    accountId,
+    query,
   } = req;
+
+  const {
+    accountId,
+  } = query;
 
   const date = moment(new Date()).subtract(moment(new Date()).get('date') + 1, 'days');
 
@@ -143,7 +148,6 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
 
 appointmentsRouter.get('/stats', (req, res, next) => {
   const {
-    accountId,
     joinObject,
     query,
   } = req;
@@ -151,6 +155,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
   let {
     startDate,
     endDate,
+    accountId,
   } = query;
 
   if (!startDate || !endDate) {

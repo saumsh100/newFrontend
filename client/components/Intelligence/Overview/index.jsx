@@ -42,9 +42,13 @@ class Overview extends Component {
   }
 
   componentDidMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
     const params = {
       startDate: this.state.startDate._d,
       endDate: this.state.endDate._d,
+      accountId: decodedToken.activeAccountId,
     };
 
     this.props.fetchEntities({
@@ -52,7 +56,7 @@ class Overview extends Component {
     });
     this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params});
     this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params});
-    this.props.fetchEntitiesRequest({id: 'appointmentStatsLastYear', url: '/api/appointments/statslastyear'});
+    this.props.fetchEntitiesRequest({id: 'appointmentStatsLastYear', url: '/api/appointments/statslastyear', params});
   }
 
   reinitializeState() {
@@ -64,9 +68,13 @@ class Overview extends Component {
   }
 
   submit(values) {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
     const params = {
       startDate: moment(values.startDate)._d,
       endDate: moment(values.endDate)._d,
+      accountId: decodedToken.activeAccountId,
     };
 
     this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params});
