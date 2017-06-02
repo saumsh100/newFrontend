@@ -277,7 +277,10 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           };
         }
 
-        time += moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
+        let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
+        timeApp = (timeApp > 0 ? timeApp : 0);
+
+        time += timeApp;
         notConfirmedAppointments++;
         if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
           if (male.test(appointment.patient.gender)){
@@ -287,8 +290,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           }
           sendStats.ageData = ageRange(sendStats.patients[appointment.patient.id].age, sendStats.ageData);
           sendStats.patients[appointment.patient.id].numAppointments++;
-          sendStats.services[appointment.service.id].time +=  moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
-          sendStats.practitioner[appointment.practitioner.id].appointmentTime += moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
+          sendStats.services[appointment.service.id].time +=  timeApp;
+          sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
           confirmedAppointments++;
         }
