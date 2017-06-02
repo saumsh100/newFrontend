@@ -43,7 +43,10 @@ class UpcomingPatientList extends Component {
 
       if (id) {
         return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
-          this.props.setCurrentPatient(id);
+          const currentPatientId = {
+            id,
+          };
+          this.props.setCurrentPatient(currentPatientId);
         });
       }
     }
@@ -51,7 +54,10 @@ class UpcomingPatientList extends Component {
 
   userClick(id) {
     return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
-      this.props.setCurrentPatient(id);
+      const currentPatientId = {
+        id,
+      };
+      this.props.setCurrentPatient(currentPatientId);
     });
   }
 

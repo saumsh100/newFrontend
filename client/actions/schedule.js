@@ -6,9 +6,11 @@ import {
   CLEAR_SCHEDULE_FILTER,
   ADD_ALL_SCHEDULE_FILTER,
   SET_SCHEDULE_DATE,
+  SELECT_APPOINTMENT,
 } from '../constants';
 
-export const setScheduleDate = createAction(SET_SCHEDULE_DATE)
+export const setScheduleDate = createAction(SET_SCHEDULE_DATE);
+export const selectAppointment = createAction(SELECT_APPOINTMENT);
 export const addScheduleFilter = createAction(ADD_SCHEDULE_FILTER);
 export const removeScheduleFilter = createAction(REMOVE_SCHEDULE_FILTER);
 export const addAllScheduleFilter = createAction(ADD_ALL_SCHEDULE_FILTER);

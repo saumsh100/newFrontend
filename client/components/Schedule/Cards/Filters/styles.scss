@@ -43,7 +43,8 @@
    // margin: 0 5px;
     padding: 5px 0px 10px 10px;
     max-height: 250px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     &__name {
       font-size: $small-size;
@@ -95,6 +96,7 @@
       text-transform: uppercase;
       font-size: $extra-small-size;
       font-weight: $medium-weight;
+      text-overflow: ellipsis;
       &__all {
         font-weight: $large-weight;
       }
@@ -105,13 +107,11 @@
         flex-direction: column;
         width: 45%;
         margin-bottom: 30px;
-
         select {
             border: none;
             border-bottom: 1px #ff715a solid;
             background: none;
-            font-size: inital;
-
+            font-size: initial;
             &:focus {
                 outline: none;
             }

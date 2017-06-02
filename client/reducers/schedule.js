@@ -9,6 +9,7 @@ import {
   ADD_SCHEDULE_FILTER,
   REMOVE_SCHEDULE_FILTER,
   SET_SCHEDULE_DATE,
+  SELECT_APPOINTMENT,
 } from '../constants';
 
 const initialState = fromJS({
@@ -17,6 +18,7 @@ const initialState = fromJS({
   practitionersFilter: [],
   servicesFilter: [],
   remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
+  selectedAppointment: null,
 });
 
 export default handleActions({
@@ -25,6 +27,12 @@ export default handleActions({
       scheduleDate: action.payload.scheduleDate,
     });
   },
+
+  [SELECT_APPOINTMENT](state, action) {
+    const appointment = action.payload;
+    return state.set('selectedAppointment', appointment);
+  },
+
   [ADD_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const filterEntities = state.toJS()[key];
@@ -49,7 +57,7 @@ export default handleActions({
 
     entities.map((entity) => {
       const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
-      if(!checkFilter) {
+      if (!checkFilter) {
         filterEntities.push(entity.get('id'));
       }
     });

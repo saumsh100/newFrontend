@@ -108,10 +108,7 @@ function NavList({ location, isCollapsed, isSuperAdmin }) {
           <SubNavItem path="/intelligence/business" label="Business" />
           <SubNavItem path="/intelligence/social" label="Social" />
         </MultiNavItem>
-        <MultiNavItem path="/schedule" icon="calendar" label="Schedule">
-          <SubNavItem path="/schedule/calendar" label="Calendar View" />
-          <SubNavItem path="/schedule/appointments" label="Appointments List" disabled />
-        </MultiNavItem>
+        <SingleNavItem path="/schedule" icon="calendar" label="Schedule"/>
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />

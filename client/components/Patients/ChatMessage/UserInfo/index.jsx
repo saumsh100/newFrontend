@@ -17,8 +17,8 @@ class UserInfo extends Component {
 
     let showDate = null;
 
-    if (moment(this.props.currentPatient.birthDate)._d.toString() !== "Invalid Date") {
-      showDate = moment(this.props.currentPatient.birthDate).format('MMMM Do YYYY')
+    if (moment(this.props.currentPatient.birthDate)._d.toString() !== 'Invalid Date') {
+      showDate = moment(this.props.currentPatient.birthDate).format('MMMM Do YYYY');
     }
 
     return (<div className={styles.patInfo}>
@@ -27,7 +27,7 @@ class UserInfo extends Component {
         <div className={styles.fonts}>{showDate}</div>
         <div className={styles.fonts}>{this.props.currentPatient.gender}</div>
         <div className={styles.contact}>
-          <span><i className="fa fa-phone" style={{ color: '#ff715a' }} />&emsp; {this.props.currentPatient.phoneNumber}</span>
+          <span><i className="fa fa-phone" style={{ color: '#ff715a' }} />&emsp; {this.props.currentPatient.mobilePhoneNumber}</span>
           <br />
           <span><i className="fa fa-flag" style={{ color: '#ff715a' }} />&emsp;{this.props.currentPatient.email}</span>
         </div>

@@ -11,6 +11,9 @@ const { time } = require('../util/time');
 // TODO: pull fromm global config, cause needs to be reused with deserialization
 const saltRounds = 10;
 
+import Reminder from '../fixtures/reminders';
+import appointmentFixtures from '../fixtures/appointments';
+
 
 /**
  * Seeds Map is organized by:
@@ -40,7 +43,7 @@ const vstUserId = uuid();
 const alexPatientId = uuid();
 const alexPatientId2 = uuid();
 const markPatientId = uuid();
-const justinPatientId = uuid();
+const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
 const sergeyPatientId = uuid();
 
 const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
@@ -52,7 +55,7 @@ const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId5 = '5f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
 
-const chairId = uuid();
+const chairId = '7f439ff8-c55d-4423-9316-a41240c4d329';
 
 const serviceId = uuid();
 const serviceId2 = uuid();
@@ -168,7 +171,7 @@ for (let i = 0; i < 100; i++) {
     firstName,
     lastName,
     email: `${firstName}.${lastName}@google.ca`,
-    phoneNumber: phoneNumber,
+    mobilePhoneNumber: phoneNumber,
     birthDate: faker.date.past(),
     gender: 'male',
     langauge: 'English',
@@ -231,11 +234,6 @@ const generateDefaultServices = (_accountId) => {
 
   return [
     first,
-
-    createService({
-      name: 'New Patient Checkup & Cleaning',
-      duration: 30,
-    }),
 
     createService({
       name: 'Toothache',
@@ -464,6 +462,11 @@ const SEEDS = {
       serviceId: cleanupServiceId,
       patientId: justinPatientId,
     },
+
+    // For the Reminders Tests
+    ...appointmentFixtures,
+
+    // For the patientsManagementTab
     ...randomAppointments,
   ],
 
@@ -583,7 +586,7 @@ const SEEDS = {
       firstName: 'Justin',
       lastName: 'Sharp',
       email: 'justin@carecru.com',
-      phoneNumber: justinPhoneNumber,
+      mobilePhoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
@@ -606,7 +609,7 @@ const SEEDS = {
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       email: 'sergey@carecru.com',
-      phoneNumber: sergeyPhoneNumber,
+      mobilePhoneNumber: sergeyPhoneNumber,
       birthDate: moment({year: 1983, month: 2, day: 6})._d,
       gender: 'male',
       status: 'Active',
@@ -627,7 +630,7 @@ const SEEDS = {
       avatarUrl: faker.image.avatar(),
       firstName: 'Mark',
       lastName: 'Joseph',
-      phoneNumber: markPhoneNumber,
+      mobilePhoneNumber: markPhoneNumber,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       gender: 'male',
@@ -642,7 +645,7 @@ const SEEDS = {
       avatarUrl: faker.image.avatar(),
       firstName: 'Alex',
       lastName: 'Bashliy',
-      phoneNumber: alexPhoneNumber,
+      mobilePhoneNumber: alexPhoneNumber,
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'female',
       status: 'Active',
@@ -659,7 +662,7 @@ const SEEDS = {
       accountId: accountId2,
       firstName: 'Alex2',
       lastName: 'Bashliy2',
-      phoneNumber: alexPhoneNumber,
+      mobilePhoneNumber: alexPhoneNumber,
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
@@ -746,7 +749,7 @@ const SEEDS = {
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      smsPhoneNumber: clinicPhoneNumber,
+      twilioPhoneNumber: clinicPhoneNumber,
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: mainEnterprise.id,
@@ -760,12 +763,13 @@ const SEEDS = {
       state: 'ON',
       city: 'Toronto',
       zipCode: '90210',
+      twilioPhoneNumber: clinicPhoneNumber,
 
       logo: '/images/liberty_logo.png',
       enterpriseId: mainEnterprise.id,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      // smsPhoneNumber: clinicPhoneNumber,
+      // twilioPhoneNumber: clinicPhoneNumber,
       // logo: 'images/availabilies_sidebar_logo_2.png',
       // address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
       // clinicName: 'PACIFIC HEART DENTAL',
@@ -781,7 +785,7 @@ const SEEDS = {
       city: 'North Vancouver',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      smsPhoneNumber: clinicPhoneNumber,
+      twilioPhoneNumber: clinicPhoneNumber,
       logo: '/images/beckett_dental.png',
       address: '#101 – 1312 Random Drive',
       bookingWidgetPrimaryColor: '#f29b12',
@@ -982,6 +986,7 @@ const SEEDS = {
       accountId,
       patientId: markPatientId,
     },
+
     ...randomChats,
   ],
 
@@ -1062,6 +1067,8 @@ const SEEDS = {
       ],
     },
   ],
+
+  Reminder,
 };
 
 seedDatabase(SEEDS)

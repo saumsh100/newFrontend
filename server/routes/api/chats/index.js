@@ -96,7 +96,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
   const textMessages = {
     body: req.body.message,
     chatId: req.body.chatId,
-    to: req.body.patient.phoneNumber,
+    to: req.body.patient.mobilePhoneNumber,
     from: twilio.number,
   };
 

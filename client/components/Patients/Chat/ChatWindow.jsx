@@ -58,7 +58,7 @@ export default class ChatWindow extends Component {
 		    <div className={styles.chat__header}>
 		      <div className={styles.chat__address}>
 		        <span className={styles.address__to}>To:</span>
-		        <span className={styles.address__name}>{patient.lastName} {patient.phoneNumber}</span>
+		        <span className={styles.address__name}>{patient.lastName} {patient.mobilePhoneNumber}</span>
 		      </div>
 		    </div>
 		    <div className={styles.chat__wrapper}>
@@ -103,9 +103,9 @@ export default class ChatWindow extends Component {
 		          </div>
 		          <div className={styles.partner__main}>
 		            <div className={styles.partner__phone}>
-		              <a href={`tel: ${patient.phoneNumber}`}>
+		              <a href={`tel: ${patient.mobilePhoneNumber}`}>
 		                <i className="fa fa-phone" />
-		                {patient.phoneNumber}
+		                {patient.mobilePhoneNumber}
 		              </a>
 		            </div>
 		            <div className={styles.partner__email}>

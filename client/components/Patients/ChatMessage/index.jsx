@@ -123,7 +123,7 @@ class ChatMessage extends Component {
   }
 
   render() {
-    const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.phoneNumber}` : null);
+    const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.mobilePhoneNumber}` : null);
     const displayinfo = (this.props.currentPatient ? <UserInfo
       currentPatient={this.props.currentPatient}
     /> : null);

@@ -41,7 +41,7 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
       </div>
       <Field
         required
-        name="phoneNumber"
+        name="mobilePhoneNumber"
         validate={[phoneValidate]}
         label="Phone Number"
       />

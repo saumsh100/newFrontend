@@ -14,7 +14,7 @@ class TestFormContainer extends React.Component{
       patient: {
         firstName: 'Justin',
         lastName: 'Sharp',
-        phoneNumber: '+17808508886',
+        mobilePhoneNumber: '+17808508886',
         id: justinPatientId,
         accountId,
         birthday: moment({year: 1993, month: 6, day: 15})._d,

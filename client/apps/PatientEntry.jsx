@@ -16,7 +16,6 @@ import { load } from '../thunks/auth';
 const browserHistory = createBrowserHistory();
 const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
 
-
 // TODO: define globals with webpack ProvidePlugin
 window.store = store;
 window.browserHistory = browserHistory;

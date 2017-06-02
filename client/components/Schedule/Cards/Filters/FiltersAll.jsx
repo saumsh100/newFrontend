@@ -11,6 +11,10 @@ import {
   addAllScheduleFilter,
 } from '../../../../actions/schedule';
 
+import {
+  setAllFilters
+} from '../../../../thunks/schedule'
+
 class FiltersAll extends Component {
   constructor(props) {
     super(props);
@@ -80,7 +84,7 @@ class FiltersAll extends Component {
       this.props.clearScheduleFilter({ key: filterKey });
       const temp = {};
       temp[filterKey] = false;
-      this.setState(temp)
+      this.setState(temp);
     });
   }
 
@@ -88,16 +92,18 @@ class FiltersAll extends Component {
     const {
       entities,
       addAllScheduleFilter,
+      setAllFilters,
     } = this.props;
 
-    const objArr = Object.keys(this.state);
+   const objArr = Object.keys(this.state);
+   setAllFilters(['services']);
 
-    objArr.map((filterKey) => {
-      addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
-      const temp = {};
-      temp[filterKey] = true;
-      this.setState(temp);
-    });
+   objArr.map((filterKey) => {
+    addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
+    const temp = {};
+    temp[filterKey] = true;
+    this.setState(temp);
+  });
   }
 
   render() {
@@ -127,6 +133,7 @@ function mapDispatchToProps(dispatch) {
     removeScheduleFilter,
     clearScheduleFilter,
     addAllScheduleFilter,
+    setAllFilters,
   }, dispatch);
 }
 

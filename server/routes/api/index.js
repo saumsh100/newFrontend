@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import accountsRouter from './accounts';
 import appointmentRouter from './appointment';
+import callsRouter from './calls';
 import reputationRouter from './reputation';
 import patientsRouter from './patients';
 import familyRouter from './family';
@@ -27,6 +28,7 @@ const apiRouter = Router();
 apiRouter.all('*', authMiddleware, createJoinObject);
 apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/appointments', appointmentRouter);
+apiRouter.use('/calls', callsRouter);
 apiRouter.use('/requests', requestRouter);
 apiRouter.use('/reputation', reputationRouter);
 apiRouter.use('/patients', patientsRouter);

@@ -11,7 +11,7 @@ const Account = createModel('Account', {
   city: type.string(),
   zipCode: type.string(),
   vendastaId: type.string(),
-  smsPhoneNumber: type.string(),
+  twilioPhoneNumber: type.string(),
   logo: type.string(),
   clinicName: type.string(),
   bookingWidgetPrimaryColor: type.string(),
@@ -20,7 +20,10 @@ const Account = createModel('Account', {
   loyality: type.boolean().default(false),
   referals: type.boolean().default(false),
   enterpriseId: type.string().uuid(4).required(),
-  // users: []
+
+  // Application "Addons"
+  canSendReminders: type.boolean().default(true),
+  canSendRecalls: type.boolean().default(true),
 });
 
 module.exports = Account;

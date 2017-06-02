@@ -20,7 +20,7 @@ export default function AddPatientForm({ onSubmit }) {
       <Field
         required
         type="text"
-        name="phoneNumber"
+        name="mobilePhoneNumber"
         label="Phone Number"
       />
       <Button type="submit">Add Patient</Button>
