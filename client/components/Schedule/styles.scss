@@ -5,10 +5,11 @@
 
 }
 .schedule {
-  &__container {
+    &__container {
 
-      &_content {
-        max-height: calc(100vh - 145px);
+    &_content {
+        max-height: calc(98vh - 145px);
+        //height: calc(100vh - 145px);
         overflow-y: auto;
       }
     }
@@ -22,11 +23,11 @@
         }
         &_rowRequest {
           flex-grow: 1;
+          overflow: auto;
           margin-top: 15px;
-          background-color: $primary-white;
+          background-color: lighten($primary-lightgrey, 2%);
         }
         &_request {
-
         }
         &_calendar {
           border-top: $card-border-size $primary-dark-blue;
@@ -165,7 +166,6 @@
   }
 }
 .appointment {
-
     position: absolute;
     width: 99%;
     padding: 5px;
@@ -183,3 +183,71 @@
         color: #434f61;
     }
 }
+
+
+.legend {
+  display: flex;
+  padding-right: 5px;
+  background-color: $primary-lightgrey;
+
+  &_container {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+  }
+
+  &_text {
+    padding-left: 5px;
+    color: $primary-dark;
+    text-align: center;
+    font-size: $extra-small-size;
+    font-weight: $medium-weight;
+    font-family: $medium-font;
+
+    &_newAppt {
+      padding-left: 5px;
+      padding-right: 5px;
+      font-size: $extra-small-size;
+      font-weight: $medium-weight;
+      font-family: $medium-font;
+    }
+  }
+
+  &_icon {
+    padding-left: 5px;
+
+    &_clock {
+      color: $inactive-color;
+      opacity: 0.5;
+    }
+
+    &_square {
+      padding-left: 5px;
+      color: $primary-color;
+      opacity: 0.6;
+    }
+
+    &_check {
+      padding-left: 5px;
+      color: $inactive-color;
+      opacity: 0.5;
+    }
+
+    &_squareO {
+      position: relative;
+    }
+
+    &_gradient {
+      position: absolute;
+      width: 100%;
+      height: 70%;
+      background: linear-gradient(135deg, rgba(255,138,117,1) 0%, rgba(255,138,117,1) 8%,
+        rgba(255,113,90,1) 16%, rgba(255,113,90,1) 17%, rgba(255,113,90,1) 22%,
+        rgba(255,113,90,1) 27%, rgba(255,113,90,1) 28%, rgba(255,113,90,1) 34%,
+        rgba(255,149,133,1) 44%, rgba(255,171,158,1) 50%, rgba(255,93,71,1) 51%,
+        rgba(255,97,77,1) 52%, rgba(255,97,77,1) 62%, rgba(255,97,77,1) 65%,
+        rgba(255,189,179,1) 82%, rgba(255,189,179,1) 100%);
+    }
+  }
+}
+

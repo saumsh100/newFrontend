@@ -2,16 +2,38 @@
 const twilioRouter = require('express').Router();
 const TextMessage = require('../../models/TextMessage');
 const Appointment = require('../../models/Appointment');
+const Chat = require('../../models/Chat');
 const Token = require('../../models/Token');
 const Patient = require('../../models/Patient');
 const thinky = require('../../config/thinky');
 const voiceRouter = require('./voice');
 const twilioClient = require('../../config/twilio');
+const { namespaces } = require('../../config/globals');
+const normalize = require('../api/normalize');
+
 
 // Set up automated Call interaction
 twilioRouter.use('/voice', voiceRouter);
 
 // Receive all incoming SMS traffic to the Twilio number
+
+function sendSocket(io, chatId) {
+  const joinObject = { patient: true };
+  joinObject.textMessages = {
+    _apply: (sequence) => {
+      return sequence
+        .orderBy('createdAt');
+    },
+  };
+
+  Chat.get(chatId).getJoin(joinObject).run()
+    .then((chat) => {
+      const send = JSON.stringify(normalize('chat', chat));
+      io.of(namespaces.dash).in(chat.patient.accountId).emit('newMessage', send)
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
 
 twilioRouter.post('/message', (req, res, next) => {
   const {
@@ -33,7 +55,12 @@ twilioRouter.post('/message', (req, res, next) => {
     ApiVersion,
   } = req.body;
 
+
+  const io = req.app.get('socketio');
+
   const Body = req.body.Body.trim();
+
+
 
   // Easily parse mediaData
   let mediaData = {};
@@ -49,7 +76,6 @@ twilioRouter.post('/message', (req, res, next) => {
 
   const currentDate = thinky.r.now();
   const textMessageData = {
-    id: MessageSid,
     to: To,
     from: From,
     body: Body,
@@ -77,11 +103,38 @@ twilioRouter.post('/message', (req, res, next) => {
     mediaData,
   };
 
+
   Patient.findByPhoneNumber(From)
     .then((patient) => {
       console.log(`Received communication from ${patient.firstName}`);
       textMessageData.patientId = patient.id;
-      TextMessage.save(textMessageData);
+
+      const mergeData = {
+        lastTextMessageDate: new Date(),
+      };
+
+      Chat.filter({patientId: patient.id}).run().then((test) => {
+        if (test[0]) {
+          textMessageData.chatId = test[0].id;
+          TextMessage.save(textMessageData)
+            .then(() => {
+              test[0].merge(mergeData).save().then(() => {
+                sendSocket(io, test[0].id);
+              });
+            });
+        } else {
+          mergeData.accountId = patient.accountId;
+          mergeData.patientId = patient.id;
+          Chat.save(mergeData).then((chat) => {
+            textMessageData.chatId = chat.id;
+            TextMessage.save(textMessageData)
+              .then(() => {
+                sendSocket(io, chat.id);
+              });
+          });
+        }
+      });
+
       if (Body === 'C') {
         Appointment.filter({ patientId: patient.id, confirmed: false })
           .getJoin({
@@ -94,7 +147,7 @@ twilioRouter.post('/message', (req, res, next) => {
               console.log(appArray[0]);
               twilioClient.sendMessage({
                 from: twilio.number,
-                to: patient.phoneNumber,
+                to: patient.mobilePhoneNumber,
                 body: `Thank you! We have confirmed that you will be attending your ${appArray[0].service.name} appointment with ${appArray[0].practitioner.firstName} ${appArray[0].practitioner.lastName} from ${appArray[0].account.name}`,
               })
               .then(() => {

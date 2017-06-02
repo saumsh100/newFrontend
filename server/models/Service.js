@@ -1,6 +1,7 @@
 
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
+
 const type = thinky.type;
 
 const Service = createModel('Service', {
@@ -13,6 +14,7 @@ const Service = createModel('Service', {
   bufferTime: type.number().integer(),
   unitCost: type.number(),
   customCosts: type.object().allowNull(),
+  pmsId: type.string(),
 
   //allowedPractitioners: [ type.string().uuid(4) ],
 

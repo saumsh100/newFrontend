@@ -4,7 +4,6 @@ import { Map } from 'immutable';
 import styles from './styles.scss';
 import FiltersAll from './FiltersAll';
 
-
 export default function Filters(props) {
   const {
     practitioners,
@@ -13,6 +12,8 @@ export default function Filters(props) {
     chairs,
   } = props;
 
+  const practitionersFilter = schedule.toJS().practitionersFilter;
+
   const selectedFilters = {
     chairsFilter: schedule.toJS().chairsFilter,
     practitionersFilter: schedule.toJS().practitionersFilter,
@@ -20,10 +21,26 @@ export default function Filters(props) {
     remindersFilter: schedule.toJS().remindersFilter,
   };
 
+  let filteredServices = [];
+
+  if (practitionersFilter.length) {
+    practitionersFilter.map((pracId) => {
+      if (pracId) {
+        const selectedPrac = practitioners.get(pracId);
+        const serviceIds = selectedPrac.get('services');
+        serviceIds.map((sid) => {
+          if(filteredServices.indexOf(services.get(sid)) === -1){
+            filteredServices.push(services.get(sid));
+          }
+        });
+      }
+    });
+  }
+
   const entities = {
     chairsFilter: chairs,
     practitionersFilter: practitioners,
-    servicesFilter: services,
+    servicesFilter: filteredServices,
     remindersFilter: [
       Map({ id: 'Reminder Sent' }),
       Map({ id: 'PMS Not Synced' }),
@@ -48,7 +65,7 @@ export default function Filters(props) {
   );
 }
 
-Filters.PropTypes = {
+Filters.propTypes = {
   addPractitionerToFilter: PropTypes.func,
   selectAppointmentType: PropTypes.func,
   removePractitionerFromFilter: PropTypes.func,

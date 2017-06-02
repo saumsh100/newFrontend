@@ -28,7 +28,7 @@ export default class Requests extends createModel(RequestsSchema) {
 
   getFormattedTime() {
     const startHourMinute = moment(this.get('startDate')).format('h:mm');
-    const endHourMinute = moment(this.get('endDate')).format('h:mm');
+    const endHourMinute = moment(this.get('endDate')).format('h:mm a');
     return startHourMinute.concat('-', endHourMinute);
   }
 

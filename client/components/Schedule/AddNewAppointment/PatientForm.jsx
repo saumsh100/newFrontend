@@ -20,7 +20,7 @@ export default function PatientForm(props) {
         <Col xs={12}>
           <Field
             component="AutoComplete"
-            name="patientData"
+            name="patientSelected"
             label="Enter Patient Name"
             getSuggestions={getSuggestions}
             onChange={(e, newValue) => handleAutoSuggest(newValue)}
@@ -33,7 +33,7 @@ export default function PatientForm(props) {
       <Row className={styles.addNewAppt_mainContainer_right_row}>
         <Col xs={12}>
           <Field
-            name="phoneNumber"
+            name="mobilePhoneNumber"
             label="Phone #"
             theme="primaryGrey"
             disabled

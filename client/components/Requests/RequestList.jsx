@@ -1,13 +1,16 @@
 
 import React, { Component, PropTypes } from 'react';
+
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
-
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
 import { setHoverRequestId } from '../../actions/requests';
+import { selectAppointment } from '../../actions/schedule';
+
 
 class RequestList extends Component {
   constructor(props) {
@@ -17,49 +20,69 @@ class RequestList extends Component {
   }
 
   confirmAppointment(request) {
-    const { updateEntityRequest, createEntityRequest } = this.props;
+    const {
+      selectAppointment,
+      location,
+      push,
+    } = this.props;
+
+    if(location === '/') {
+      push('/schedule');
+    }
+    const modifiedRequest = request.set('isCancelled', true);
+
     const appointment = {
+      requestModel: modifiedRequest,
+      requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
       patientId: request.get('patientId'),
       serviceId: request.get('serviceId'),
-      practitionerId: request.get('practitionerId'),
-      chairId: request.get('chairId'),
       note: request.note,
       isSyncedWithPMS: false,
+      customBufferTime: 0,
+      request: true,
     };
 
-    createEntityRequest({ key: 'appointments', entityData: appointment })
-      .then(() => {
-        // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
-        console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
-        const modifiedRequest = request.set('isCancelled', true);
-        updateEntityRequest({ key: 'requests', model: modifiedRequest });
-      }).catch(err => console.log(err));
+    selectAppointment(appointment);
+
+    // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
+    console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
   }
 
   removeRequest(request) {
-    this.props.deleteEntityRequest({ key: 'requests', id: request.get('id') });
+    const confirmRemove = confirm('Are you sure you want to remove this request?');
+    if (confirmRemove) {
+      this.props.deleteEntityRequest({ key: 'requests', id: request.get('id') });
+    }
   }
 
   render() {
     const { sortedRequests, patients, services, setHoverRequestId } = this.props;
+
+    const showComponent = sortedRequests.length ? (
+      sortedRequests.map((request) => {
+        //const active = request.get('id') === this.props.setHoverRequestId;
+        return (
+          <RequestListItem
+            key={request.id}
+            request={request}
+            patient={patients.get(request.get('patientId'))}
+            service={services.get(request.get('serviceId'))}
+            confirmAppointment={this.confirmAppointment}
+            removeRequest={this.removeRequest}
+            setClickedId={setHoverRequestId}
+          />
+        );
+      })
+    ) : (
+      <div className={styles.emptyList}>
+        YOU HAVE NO APPOINTMENT REQUESTS
+      </div>
+    )
     return (
       <List className={styles.requestList}>
-        {sortedRequests.map((request) => {
-          //const active = request.get('id') === this.props.setHoverRequestId;
-          return (
-            <RequestListItem
-              key={request.id}
-              request={request}
-              patient={patients.get(request.get('patientId'))}
-              service={services.get(request.get('serviceId'))}
-              confirmAppointment={this.confirmAppointment}
-              removeRequest={this.removeRequest}
-              setClickedId={setHoverRequestId}
-            />
-          );
-        })}
+        {showComponent}
       </List>
     );
   }
@@ -70,6 +93,7 @@ RequestList.propTypes = {
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
   setHoverRequestId: PropTypes.func,
+  push: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
@@ -78,16 +102,18 @@ function mapActionsToProps(dispatch) {
     deleteEntityRequest,
     createEntityRequest,
     setHoverRequestId,
+    selectAppointment,
+    push,
   }, dispatch);
 }
 
-/*
-function mapStateToProps({requests}){
-  return {
-    clickedId: requests.get('clickedId'),
-  }
-}*/
 
-const enhance = connect(null, mapActionsToProps);
+function mapStateToProps({schedule}){
+  return {
+    selectedAppointment: schedule.toJS().selectedAppointment,
+  };
+}
+
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(RequestList);

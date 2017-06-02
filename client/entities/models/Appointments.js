@@ -15,6 +15,7 @@ const AppointmentsSchema = {
   customBufferTime: null,
   isDeleted: null,
   isSyncedWithPMS: null,
+  isSplit: null,
 };
 
 export default class Appointments extends createModel(AppointmentsSchema) {
@@ -24,5 +25,6 @@ export default class Appointments extends createModel(AppointmentsSchema) {
   getUrlRoot() {
     return `/api/appointments/${this.getId()}`;
   }
+
 
 }

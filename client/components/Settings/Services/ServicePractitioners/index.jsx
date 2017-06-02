@@ -24,11 +24,10 @@ class ServicePractitioners extends Component {
   render() {
     const { service, practitioners, practitionerIds } = this.props;
 
-
     let showComponent = null;
 
     if (service) {
-      
+
       const practitionerIds = service.get('practitioners');
 
       showComponent = (

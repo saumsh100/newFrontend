@@ -1,0 +1,373 @@
+@import '../../../ui';
+
+.patients {
+  height: 91%;
+  display: flex;
+  padding: 10px;
+  background-color: #e6e6e6;
+  box-sizing: unset;
+}
+
+.topRow {
+  background: #f7f7f7;
+  min-height: 115px;
+  max-height: 115px;
+}
+
+.headerInput {
+  width: 100%;
+}
+
+.header {
+  width: 100%;
+  margin-bottom: 10px;
+  padding-left: 15px;
+}
+
+.input {
+  margin-right: 5%;
+  margin-left: 5%;
+  width: 90%;
+}
+
+.listRow {
+  margin-top: 20px;
+  flex: 1;
+}
+
+.upcomingHead {
+  width: 100%;
+  &::before {
+    padding-left: 0px;
+    display: block;
+    height: 5px;
+    content: '';
+    background: #b4b4b5;
+  }
+}
+
+.users {
+  position: relative;
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid #e6e6e6;
+
+  &__active {
+    background: lighten(#E7E7E7, 2.6%);
+  }
+
+  &__photo {
+    width: 100%;
+    max-width: 50px;
+    height: auto;
+    max-height: 50px;
+    margin-right: 10px;
+    border-radius: 50%;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__name {
+    color: #2e3845;
+    font-size: 14px;
+    font-family: Gotham-Medium;
+    font-weight: 600;
+    max-width: 90%;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__text {
+    padding-top: 10px;
+    padding-right: 40px;
+    padding-bottom: 10px;
+    color: #969696;
+    font-size: 12px;
+  }
+
+  &__appointment {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #969696;
+    font-size: 12px;
+  }
+
+  span {
+    margin: auto;
+  }
+}
+
+.messageNote {
+  position: absolute;
+  right: 10px;
+  bottom: 35%;
+  padding: 2px 6px 0px 6px;
+  background-color: #FF715A;
+  border-radius: 4px;
+  color: #fafafa;
+}
+
+.topInfo {
+  min-width: 100%;
+  border-bottom: thin solid lightgrey;
+  height: 10vh;
+  font-family: 'Gotham-Medium';
+  font-size: 1.2em;
+  color: #b4b4b5;
+
+  span {
+    color: #2e3845;
+  }
+
+  div{
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+    margin-left: 10px;
+  }
+
+  &::before {
+    display: block;
+    width: 100%;
+    height: 5px;
+    content: '';
+    background: #ff715a;
+  }
+}
+
+.time {
+  flex: 1 0 100%;
+  text-align: center;
+  margin-top: 10px;
+  font-family: 'Gotham-Medium';
+  color: $inactive-color;
+}
+
+.timeChat {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  font-size: 0.8em;
+  font-family: 'Gotham-Medium';
+  color: $inactive-color;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  background-color: #fafafa;
+  flex-wrap: wrap;
+  min-width: 100%;
+}
+
+.patientName {
+  font-family: 'Gotham-Medium';
+  color: #2e3845;
+  font-size: 1.4em;
+  text-align: center;
+  margin: 15px auto 15px auto;
+}
+
+.allMessages {
+  align-items: center;
+  overflow-y: auto;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  border-right: thin solid lightgrey;
+  max-height: 80vh;
+  min-height: 80vh;
+}
+
+.container {
+  position: relative;
+  width: 70%;
+  max-height: 80vh;
+  min-height: 80vh;
+}
+
+.raise {
+  padding: 42px;
+}
+
+.sendMessage {
+  background-color: #fafafa;
+  position: absolute;
+  bottom: 0;
+  width: 94%;
+  margin: auto 2% 0 2%;
+}
+
+.text {
+  padding: 20px;
+  border-radius: 15px;
+  background-color: #FF715A;
+  color: #fafafa;
+  font-family: 'Gotham-Book';
+  width: 50%;
+  margin: 10px 0;
+}
+
+.margin {
+  margin: 20px;
+}
+
+.margin2 {
+  margin: 35px;
+}
+
+.marginText {
+  margin: 20px;
+  width: 14%;
+  font-family: 'Gotham-Medium';
+  color: $inactive-color;
+}
+
+.textTime {
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.textFrom {
+  padding: 20px;
+  border-radius: 15px;
+  color: darkgrey;
+  font-family: 'Gotham-Book';
+  background-color: #efefef;
+  width: 50%;
+  margin: 10px 0;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  background-clip: content-box;
+  background-color: #fafafa;
+}
+
+.rightInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fullName {
+  font-family: "Gotham-Medium";
+  font-size: 1.3em;
+  margin: 10px 0;
+
+}
+
+.contact {
+  margin-top: 20px;
+  font-family: "Gotham-Medium";
+  font-size: 1.1em;
+  color: #bfbfbf;
+}
+
+.fonts {
+  font-family: "Gotham-Medium";
+  font-size: 1em;
+  color: #bfbfbf;
+}
+
+.patInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: thin solid lightgrey;
+}
+
+.infoAvatar {
+  margin-top: 20px;
+  height: 90px;
+  width: 90px;
+}
+
+.bottomInfo {
+  flex: 1;
+}
+
+
+.patients_list__users {
+  position: relative;
+  z-index: 0;
+  overflow-y: auto;
+  max-height: calc(96vh - 230px);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.patients_list {
+  background: #e6e6e6;
+  max-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  &_title {
+    padding-top: 20px;
+    padding-left: 30px;
+    font-size: 18px;
+    font-weight: $large-weight;
+  }
+  &::before {
+    display: block;
+    width: 100%;
+    height: 5px;
+    content: '';
+    background: #b4b4b5;
+  }
+
+  &__search {
+    display: flex;
+    height: 70px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    justify-content: center;
+    align-items: center;
+
+    .search {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &__label {
+        position: relative;
+        left: 15px;
+        top: -10px;
+        cursor: pointer;
+        color: #b3b2b1;
+      }
+
+      &__input {
+        width: 100%;
+        height: 30px;
+        font-size: 12px;
+        border: none;
+        border-bottom: 2px solid #8cbcd6;
+        background-color: inherit;
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &__edit {
+        margin-left: auto;
+        cursor: pointer;
+        color: #b3b2b1;
+      }
+    }
+  }
+}

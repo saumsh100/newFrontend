@@ -91,56 +91,16 @@ const mainEnterprise = {
 
 // TODO: order of seeding matters...
 
-const randomAppointments = [];
-const randomPatients = [];
+const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) => {
+  const time1 = lastDate || faker.date.past();
 
-for (let i = 0; i < 10000; i++) {
-  let id = uuid();
-  const firstName = faker.name.firstName();
-  const lastName = faker.name.lastName()
-  randomPatients.push({
-    id,
-    avatar: faker.image.avatar(),
-    accountId,
-    firstName,
-    lastName,
-    email: `${firstName}.${lastName}@google.ca`,
-    phoneNumber: faker.phone.phoneNumber(),
-    birthDate: faker.date.past(),
-    gender: 'male',
-    langauge: 'English',
-    lastAppointmentDate: faker.date.past(),
-    insurance: {
-      insurance: 'Lay Health Insurance',
-      memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
-      contract: '4234rerwefsdfsd',
-      carrier: 'sadasadsadsads',
-      sin: 'dsasdasdasdadsasad',
-    },
-
-    isSyncedWithPMS: false,
-  });
-
-  randomAppointments.push({
-    accountId,
-    startDate: recentStartTime.add(49 * oneHour),
-    endDate: recentStartTime.add(50 * oneHour),
-    patientId: id,
-    serviceId,
-    practitionerId,
-    chairId,
-    note: 'First',
-  });
-}
-
-const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
   return [
     {
       chatId,
       to: patientPhone,
       from: clinicPhone,
       body: 'Hey! Just testing out our new messaging service.',
-      createdAt: new Date(2017, 0, 1, 12, 30, 0, 0),
+      createdAt: moment(time1).subtract(3, 'days')._d,
       read: true,
     },
     {
@@ -148,7 +108,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: clinicPhone,
       from: patientPhone,
       body: 'Hi there!',
-      createdAt: new Date(2017, 0, 1, 12, 45, 0, 0),
+      createdAt: moment(time1).subtract(2, 'days')._d,
       read: true,
     },
     {
@@ -156,7 +116,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: patientPhone,
       from: clinicPhone,
       body: 'How were you doing yesterday?',
-      createdAt: new Date(2017, 0, 1, 13, 30, 0, 0),
+      createdAt: moment(time1).subtract(1, 'days')._d,
       read: true,
     },
     {
@@ -164,7 +124,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
       to: clinicPhone,
       from: patientPhone,
       body: 'I was good thanks! And you?',
-      createdAt: new Date(2017, 0, 1, 13, 45, 0, 0),
+      createdAt: moment(time1)._d,
       read: false,
     },
   ];
@@ -192,22 +152,86 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
   });
 };
 
+const randomAppointments = [];
+const randomPatients = [];
+let randomMessages = [];
+const randomChats = [];
+
+for (let i = 0; i < 100; i++) {
+  const id = uuid();
+  const lastDate = faker.date.past();
+  const firstName = faker.name.firstName();
+  const lastName = faker.name.lastName();
+  const phoneNumber = faker.phone.phoneNumberFormat(0);
+  const chatId = uuid();
+  randomPatients.push({
+    id,
+    avatarUrl: faker.image.avatar(),
+    accountId,
+    firstName,
+    lastName,
+    email: `${firstName}.${lastName}@google.ca`,
+    mobilePhoneNumber: phoneNumber,
+    birthDate: faker.date.past(),
+    gender: 'male',
+    langauge: 'English',
+    lastAppointmentDate: faker.date.past(),
+    insurance: {
+      insurance: 'Lay Health Insurance',
+      memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+      contract: '4234rerwefsdfsd',
+      carrier: 'sadasadsadsads',
+      sin: 'dsasdasdasdadsasad',
+    },
+    isSyncedWithPMS: false,
+  });
+
+  randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate));
+
+
+  randomChats.push({
+    id: chatId,
+    accountId,
+    patientId: id,
+    lastTextMessageDate: lastDate,
+  });
+
+  const appointmentTime = faker.date.future();
+
+  randomAppointments.push({
+    accountId,
+    startDate: moment(appointmentTime).subtract(1, 'hours')._d,
+    endDate: moment(appointmentTime)._d,
+    patientId: id,
+    serviceId,
+    practitionerId,
+    chairId,
+    note: 'First',
+  });
+}
+
 const generateDefaultServices = (_accountId) => {
   const createService = serviceData => Object.assign({}, {
     id: uuid(),
     accountId: _accountId,
   }, serviceData);
 
-  return [
-    createService({
+  let first = createService({
+    name: 'New Patient Consultation',
+    duration: 30,
+  });
+
+  if (_accountId === accountId) {
+    first = {
+      id: serviceId,
+      accountId: _accountId,
       name: 'New Patient Consultation',
       duration: 30,
-    }),
+    };
+  }
 
-    createService({
-      name: 'New Patient Checkup & Cleaning',
-      duration: 30,
-    }),
+  return [
+    first,
 
     createService({
       name: 'Toothache',
@@ -556,11 +580,11 @@ const SEEDS = {
     {
       id: justinPatientId,
       accountId,
-      avatar: faker.image.avatar(),
+      avatarUrl: faker.image.avatar(),
       firstName: 'Justin',
       lastName: 'Sharp',
       email: 'justin@carecru.com',
-      phoneNumber: justinPhoneNumber,
+      mobilePhoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
@@ -579,11 +603,11 @@ const SEEDS = {
     {
       id: sergeyPatientId,
       accountId,
-      avatar: faker.image.avatar(),
+      avatarUrl: faker.image.avatar(),
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       email: 'sergey@carecru.com',
-      phoneNumber: sergeyPhoneNumber,
+      mobilePhoneNumber: sergeyPhoneNumber,
       birthDate: moment({year: 1983, month: 2, day: 6})._d,
       gender: 'male',
       status: 'Active',
@@ -601,10 +625,10 @@ const SEEDS = {
     {
       id: markPatientId,
       accountId,
-      avatar: faker.image.avatar(),
+      avatarUrl: faker.image.avatar(),
       firstName: 'Mark',
       lastName: 'Joseph',
-      phoneNumber: markPhoneNumber,
+      mobilePhoneNumber: markPhoneNumber,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       gender: 'male',
@@ -616,10 +640,10 @@ const SEEDS = {
     {
       id: alexPatientId,
       accountId,
-      avatar: faker.image.avatar(),
+      avatarUrl: faker.image.avatar(),
       firstName: 'Alex',
       lastName: 'Bashliy',
-      phoneNumber: alexPhoneNumber,
+      mobilePhoneNumber: alexPhoneNumber,
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
@@ -632,11 +656,11 @@ const SEEDS = {
     // account 2
     {
       id: alexPatientId2,
-      avatar: faker.image.avatar(),
+      avatarUrl: faker.image.avatar(),
       accountId: accountId2,
       firstName: 'Alex2',
       lastName: 'Bashliy2',
-      phoneNumber: alexPhoneNumber,
+      mobilePhoneNumber: alexPhoneNumber,
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
@@ -960,6 +984,8 @@ const SEEDS = {
       accountId,
       patientId: markPatientId,
     },
+
+    ...randomChats,
   ],
 
   TextMessage: [
@@ -968,6 +994,7 @@ const SEEDS = {
     ...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
     ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
     ...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    ...randomMessages,
   ],
 
   Chair: [
