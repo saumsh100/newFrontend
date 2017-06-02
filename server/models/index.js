@@ -24,6 +24,7 @@ const Enterprise = require('./Enterprise');
 const OAuth = require('./OAuth');
 const WaitSpot = require('./WaitSpot');
 const AuthToken = require('./AuthToken');
+const EnterprisePermission = require('./EnterprisePermission');
 
 module.exports = {
   Account,
@@ -51,4 +52,5 @@ module.exports = {
   WaitSpot,
   WeeklySchedule,
   AuthToken,
+  EnterprisePermission,
 };

@@ -11,6 +11,7 @@ const User = createModel('User', {
   username: type.string().email().required(),
   password: type.string().required(),
   activeAccountId: type.string().uuid(4),
+  enterpriseId: type.string().uuid(4),
   permissionId: type.string().uuid(4),
 });
 

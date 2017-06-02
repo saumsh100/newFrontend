@@ -76,6 +76,14 @@ export const Auth = (Model, primaryKey) => ({
       );
     });
   },
+
+  updateToken(tokenId, session, updates) {
+    return AuthToken.get(tokenId).then(
+      prevToken => prevToken.delete()
+    ).then(
+      () => AuthToken.save({ ...session, ...updates, modelId: session.userId })
+    );
+  },
 });
 
 export const UserAuth = Auth(User, 'username');

@@ -533,6 +533,7 @@ const SEEDS = {
       password: bcrypt.hashSync('vst', saltRounds),
       id: vstUserId,
       activeAccountId: accountId,
+      enterpriseId: mainEnterprise.id,
     },
   ],
 
@@ -806,6 +807,22 @@ const SEEDS = {
       accountId: syncTestAccId,
       role: 'SUPERADMIN',
       permissions: {},
+    },
+  ],
+
+  // Keep to wipe table on seed
+  AuthToken: [],
+
+  EnterprisePermission: [
+    {
+      userId: vstUserId,
+      enterpriseId: mainEnterprise.id,
+      role: 'OWNER',
+    },
+    {
+      userId: justinUserId,
+      enterpriseId: mainEnterprise.id,
+      role: 'OWNER',
     },
   ],
 

@@ -1,10 +1,8 @@
 
 import jwt from 'jsonwebtoken';
-import { pick } from 'lodash';
 import { tokenSecret } from '../config/globals';
-import permissions from '../config/permissions';
 import StatusError from '../util/StatusError';
-import { AuthToken, User, Permission } from '../models';
+import { AuthToken } from '../models';
 
 function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
@@ -46,38 +44,33 @@ module.exports = function authMiddleware(req, res, next) {
     req.decodedToken = decoded;
     req.tokenId = decoded.tokenId;
 
-    const loadPermissions = (userId, accountId) =>
-      Permission.filter({ userId, accountId }).run()
-        .then(([permission]) => permission || Promise.reject(StatusError(500, 'User has no account permissions')));
-
-    const getEmailDomain = email => (([, domain]) => domain)(/@(.+)$/.exec(email));
-    const isCarecruEmail = email => getEmailDomain(email) === 'carecru.com';
-
     const checkValidity = (message = '') => value =>
       (value || Promise.reject(StatusError(401, `Unauthorized. ${message}`)));
 
     // Load Token
     AuthToken.get(decoded.tokenId).run()
       .then(checkValidity('Token not found.'))
-      .then((authToken) => { req.authToken = authToken; })
+      .then(({ modelId: userId, permissions, role, enterpriseId, enterpriseRole, accountId }) => {
+        const sessionData = {
+          userId,
+          permissions,
+          role,
+          enterpriseId,
+          enterpriseRole,
+          accountId,
+        };
+
+        Object.assign(req, sessionData);
+        req.sessionData = sessionData;
+      })
 
       // TODO: Check is token expired
-
-      // Load User
-      .then(() => User.get(decoded.userId).run())
-      .then(checkValidity('User not found'))
-      .then((currentUser) => { req.currentUser = currentUser; })
-
-      // Set Account ID
-      .then(() => (req.authToken.accountId || req.currentUser.activeAccountId))
-      .then((accountId) => { req.accountId = accountId; })
-
-      // Load Permissions
-      .then(() => loadPermissions(req.currentUser.id, req.accountId))
-      .then(({ role, userPermissions = {} }) => {
-        req.role = isCarecruEmail(req.currentUser.username) ? 'SUPERADMIN' : role;
-        req.permissions = { ...permissions[role], ...userPermissions };
-      })
+      .catch(e =>
+        (e.name === 'DocumentNotFoundError' ?
+            StatusError(401, 'Unauthorized.') :
+            e
+        )
+      )
 
       // Done
       .then(next)

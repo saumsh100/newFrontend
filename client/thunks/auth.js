@@ -61,6 +61,13 @@ export function switchActiveAccount(accountId, redirectTo = '/') {
       .then(() => dispatch(push(redirectTo)));
 }
 
+export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
+  return dispatch =>
+    axios.post('/api/enterprises/switch', { enterpriseId })
+      .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
+      .then(() => dispatch(push(redirectTo)));
+}
+
 export function logout() {
   return (dispatch, getState) => {
     localStorage.removeItem('token');

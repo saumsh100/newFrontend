@@ -17,9 +17,9 @@ accountsRouter.param('inviteId', loaders('invite', 'Invite'));
 accountsRouter.param('permissionId', loaders('permission', 'Permission'));
 
 // List of all available accounts to switch
-accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role }, res, next) =>
-  ((role === 'SUPERADMIN') ?
-    Account.run() :
+accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, enterpriseRole, enterpriseId, sessionData }, res, next) =>
+  (((role === 'SUPERADMIN') || (enterpriseRole === 'OWNER')) ?
+    Account.filter({ enterpriseId }).run() :
     Account.filter({ id: accountId }).run())
 
     .then(accounts => res.send(normalize('accounts', accounts)))
@@ -27,18 +27,21 @@ accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role },
 );
 
 // TODO: add proper permissions check
-accountsRouter.post('/:accountId/switch', ({ account, role, tokenId, currentUser }, res, next) => {
+accountsRouter.post('/:accountId/switch', ({ account, role, tokenId, userId, sessionData }, res, next) => {
+
+  // TODO: or enterprise OWNER
   if (role !== 'SUPERADMIN') {
     return next(StatusError(403, 'Operation not permitted.'));
   }
-  const accountId = account.id;
-  const modelId = currentUser.id;
 
-  return Permission.filter({ accountId, userId: currentUser.id }).run()
+  const accountId = account.id;
+  const modelId = userId;
+
+  // TODO: check is account related to current enterprise
+
+  return Permission.filter({ accountId, userId }).run()
     .then(([permission]) => permission || Promise.reject(StatusError(403, 'User don\'t have permissions for this account.')))
-    .then(() => AuthToken.get(tokenId).run())
-    .then(token => token.delete())
-    .then(() => AuthToken.save({ accountId, modelId }))
+    .then(() => UserAuth.updateToken(tokenId, sessionData, { accountId }))
     .then(newToken => UserAuth.signToken({
       userId: modelId,
       activeAccountId: accountId,

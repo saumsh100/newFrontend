@@ -15,6 +15,7 @@ const ConnectedInnerComponent = connect((state) => {
     isAuth: session.isAuthenticated,
     isSuperAdmin,
     withEnterprise: isEnterpriseOwner(),
+    enterpriseId: session.enterpriseId,
   };
 })(InnerComponent);
 

@@ -33,7 +33,7 @@ TopBarContainer.propTypes = {
 
 const mapStateToProps = state => ({
   isCollapsed: state.toolbar.get('isCollapsed'),
-  accounts: getCollection(state, 'accounts'),
+  accounts: getCollection(state, 'accounts', account => (account.enterpriseId === state.auth.get('enterpriseId'))),
   activeAccount: getModel(state, 'accounts', state.auth.get('accountId')),
 });
 

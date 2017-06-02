@@ -4,6 +4,7 @@ import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Enterprise, Account } from '../../../models';
 import loaders from '../../util/loaders';
+import { UserAuth } from '../../../lib/auth';
 
 const router = Router();
 
@@ -22,7 +23,21 @@ router.post('/', checkPermissions('enterprises:create'), (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:enterpriseId', checkPermissions('enterprises:read'), (req, res, next) => {
+router.post('/switch', checkPermissions('enterprises:read'), ({ body: { enterpriseId }, sessionData, tokenId }, res, next) => {
+  Account.filter({ enterpriseId }).run()
+    .then(([{ id: accountId }]) => (
+      UserAuth.updateToken(tokenId, sessionData, { accountId, enterpriseId }))
+        .then(({ id: newTokenId }) => UserAuth.signToken({
+          userId: sessionData.userId,
+          tokenId: newTokenId,
+          accountId,
+        }))
+    )
+    .then(token => res.json({ token }))
+    .catch(next);
+});
+
+router.get('/:enterpriseId', checkPermissions('enterprises:read'), (req, res) => {
   res.send(normalize('enterprise', req.enterprise));
 });
 
