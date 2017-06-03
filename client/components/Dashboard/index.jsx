@@ -20,14 +20,28 @@ import Table from './Cards/Table';
 import Referrals from './Cards/Referrals';
 import colorMap from '../library/util/colorMap';
 import styles from './styles.scss';
+import jwt from 'jwt-decode';
+
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+
+    window.socket.on('appointmentCreatedToday', (data) => {
+      const result = JSON.parse(data);
+      console.log("zzzzzz");
+    });
+
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
+    window.socket.emit('room', {
+      id: decodedToken.activeAccountId,
+    });
   }
 
   componentDidMount() {
-    const currentDate = moment(this.props.currentDate);
+    const currentDate = moment();
 
     const startDate = currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
@@ -38,12 +52,7 @@ class Dashboard extends React.Component {
       limit: 100,
     };
 
-    Promise.all([
-      this.props.fetchEntities({ key: 'appointments', params: query }),
-    ]).then(() => {
-      this.props.setAllFilters(['chairs', 'practitioners', 'services']);
-      this.setState({ loaded: true });
-    }).catch(e => console.log(e));
+    this.props.fetchEntities({ key: 'appointments', params: query });
   }
 
   renderCards() {
@@ -213,7 +222,6 @@ class Dashboard extends React.Component {
       appointments,
     } = this.props;
 
-    console.log(appointments.get('models'))
     const data = [
       {count: appointments.size, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
       {count: 12, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
@@ -360,10 +368,9 @@ class Dashboard extends React.Component {
   }
 }
 
-function mapStateToProps({ entities, schedule }) {
+function mapStateToProps({ entities }) {
   return {
-    currentDate: schedule.toJS().scheduleDate,
-    appointments: entities.get('appointments'),
+    appointments: entities.getIn(['appointments', 'models']),
   };
 }
 
