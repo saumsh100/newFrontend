@@ -6,6 +6,7 @@ import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { setScheduleDate, selectAppointment } from '../actions/schedule';
+import Loader from 'react-loader';
 
 import {
   setAllFilters,
@@ -32,8 +33,7 @@ class ScheduleContainer extends React.Component {
 
     Promise.all([
       this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
-      this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
-      this.props.fetchEntities({ key: 'services' }),
+      this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services', 'timeOffs'] }),
       this.props.fetchEntities({ key: 'chairs' }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
@@ -68,11 +68,12 @@ class ScheduleContainer extends React.Component {
       services,
       patients,
       chairs,
+      weeklySchedules,
+      timeOffs,
     } = this.props;
-
-    let loadComponent = null;
-    if (this.state.loaded) {
-      loadComponent = (
+    
+    return (
+      <Loader loaded={this.state.loaded}>
         <ScheduleComponent
           practitioners={practitioners}
           schedule={schedule}
@@ -83,14 +84,10 @@ class ScheduleContainer extends React.Component {
           services={services}
           patients={patients}
           chairs={chairs}
+          weeklySchedules={weeklySchedules}
+          timeOffs={timeOffs}
         />
-      )
-    }
-
-    return (
-      <div>
-        {loadComponent}
-      </div>
+      </Loader>
     );
   }
 }
@@ -109,6 +106,21 @@ ScheduleContainer.propTypes = {
 };
 
 function mapStateToProps({ entities, schedule }) {
+
+  const practitioners = entities.getIn(['practitioners', 'models']);
+
+  const weeklyScheduleIds = practitioners.toArray().map((practitioner) => {
+    if (practitioner.get('isCustomSchedule')) {
+      return practitioner.get('weeklyScheduleId');
+    }
+  });
+
+  const weeklySchedules = entities.getIn(['weeklySchedules', 'models']).filter((schedule) => {
+    return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
+  });
+
+  const timeOffs = entities.getIn(['timeOffs', 'models']);
+
   return {
     schedule,
     currentDate: schedule.toJS().scheduleDate,
@@ -118,6 +130,8 @@ function mapStateToProps({ entities, schedule }) {
     patients: entities.get('patients'),
     services: entities.get('services'),
     chairs: entities.get('chairs'),
+    weeklySchedules,
+    timeOffs,
   };
 }
 

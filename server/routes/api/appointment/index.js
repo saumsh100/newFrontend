@@ -34,7 +34,6 @@ appointmentsRouter.get('/', (req, res, next) => {
     query,
   } = req;
 
-
   const {
     limit,
     skip,
@@ -110,14 +109,11 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
         return Appointment.save(appointmentData)
           .then(appt => {
-            const sendAppt = normalize('appointment', appt);
-            if (isSameDate) {
-              io.of(namespaces.dash).in(accountId).emit('appointmentCreatedToday', sendAppt)
-            }
-            res.status(201).send(sendAppt)
+            res.status(201).send(normalize('appointment', appt))
           })
           .catch(next);
       }
+      console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
       return res.sendStatus(400);
     })
     .catch(next);

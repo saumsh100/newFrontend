@@ -21,6 +21,7 @@ const db = {
 const redis = {
   host: environmentVariables.REDIS_HOST || 'localhost',
   port: environmentVariables.REDIS_PORT || '6379',
+  uri: environmentVariables.REDIS_URL || 'redis://localhost:6379',
 };
 
 const namespaces = {
@@ -34,7 +35,6 @@ const vendasta = {
 };
 
 const twilio = {
-  number: environmentVariables.TWILIO_NUMBER,
   accountSid: environmentVariables.TWILIO_ACCOUNT_SID,
   authToken: environmentVariables.TWILIO_AUTH_TOKEN,
 };

@@ -1,28 +1,33 @@
 
-const Account = require('./Account');
-const Account_Patient = require('./Account_Patient');
-const Appointment = require('./Appointment');
-const Chair = require('./Chair');
-const Chat = require('./Chat');
-const WeeklySchedule = require('./WeeklySchedule');
-const Invite = require('./Invite');
-const Patient = require('./Patient');
-const Family = require('./Family');
-const Permission = require('./Permission');
-const Practitioner = require('./Practitioner');
-const Practitioner_Service = require('./Practitioner_Service');
-const PractitionerTimeOff = require('./PractitionerTimeOff');
-const Request = require('./Request');
-const Service = require('./Service');
-const SyncClientError = require('./SyncClientError');
-const SyncClientVersion = require('./SyncClientVersion');
-const TextMessage = require('./TextMessage');
-const User = require('./User');
-const Token = require('./Token');
-const Reservation = require('./Reservation');
-const Enterprise = require('./Enterprise');
-const OAuth = require('./OAuth');
-const WaitSpot = require('./WaitSpot');
+import Account from './Account';
+import Account_Patient from './Account_Patient';
+import Appointment from './Appointment';
+import Call from './Call';
+import Chair from './Chair';
+import Chat from './Chat';
+import Enterprise from './Enterprise';
+import Family from './Family';
+import Invite from './Invite';
+import OAuth from './OAuth';
+import Patient from './Patient';
+import Permission from './Permission';
+import Practitioner from './Practitioner';
+import Practitioner_Service from './Practitioner_Service';
+import PractitionerTimeOff from './PractitionerTimeOff';
+import Recall from './Recall';
+import Reminder from './Reminder';
+import Request from './Request';
+import Reservation from './Reservation';
+import SentRecall from './SentRecall';
+import SentReminder from './SentReminder';
+import Service from './Service';
+import SyncClientError from './SyncClientError';
+import SyncClientVersion from './SyncClientVersion';
+import TextMessage from './TextMessage';
+import Token from './Token';
+import User from './User';
+import WaitSpot from './WaitSpot';
+import WeeklySchedule from './WeeklySchedule';
 
 module.exports = {
   Account,
@@ -30,6 +35,7 @@ module.exports = {
   Appointment,
   Chair,
   Chat,
+  Call,
   Enterprise,
   Invite,
   Patient,
@@ -40,13 +46,159 @@ module.exports = {
   Practitioner_Service,
   PractitionerTimeOff,
   Request,
+  Reminder,
+  Recall,
   Reservation,
+  SentReminder,
+  SentRecall,
   Service,
-  TextMessage,
-  User,
-  Token,
   SyncClientError,
   SyncClientVersion,
+  TextMessage,
+  Token,
+  User,
   WaitSpot,
   WeeklySchedule,
 };
+
+/**
+ * Account Relations
+ */
+
+Account.belongsTo(Enterprise, 'enterprise', 'enterpriseId', 'id');
+Account.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
+Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
+Account.hasMany(Service, 'services', 'id', 'accountId');
+Account.hasMany(Practitioner, 'practitioners', 'id', 'accountId');
+Account.hasMany(Reminder, 'reminders', 'id', 'accountId');
+Account.hasAndBelongsToMany(Patient, 'patients', 'id', 'id');
+//Account.hasMany(User, 'users', 'id', 'activeAccountId');
+
+/**
+ * Appointment Relations
+ */
+
+Appointment.belongsTo(Patient, 'patient', 'patientId', 'id');
+Appointment.belongsTo(Account, 'account', 'accountId', 'id');
+Appointment.belongsTo(Service, 'service', 'serviceId', 'id');
+Appointment.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
+Appointment.belongsTo(Chair, 'chair', 'chairId', 'id');
+Appointment.hasMany(SentReminder, 'sentReminders', 'id', 'appointmentId');
+
+/**
+ * Chair Relations
+ */
+
+Chair.belongsTo(Account, 'account', 'accountId', 'id');
+
+/**
+ * Chat Relations
+ */
+
+Chat.hasOne(Account, 'account', 'accountId', 'id');
+Chat.hasOne(Patient, 'patient', 'patientId', 'id');
+Chat.hasMany(TextMessage, 'textMessages', 'id', 'chatId');
+
+/**
+ * Enterprise Relations
+ */
+
+Enterprise.hasMany(Account, 'accounts', 'id', 'enterpriseId');
+
+/**
+ * Family Relations
+ */
+
+// One to many: family has multiple patients, but patient can be in one family
+Family.hasMany(Patient, 'patients', 'id', 'familyId');
+
+/**
+ * OAuth Relations
+ */
+
+OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');
+
+/**
+ * Patient Relations
+ */
+
+Patient.belongsTo(Family, 'family', 'familyId', 'id');
+Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
+Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
+Patient.belongsTo(Account, 'account', 'accountId', 'id');
+Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
+Patient.hasMany(SentReminder, 'sentReminders', 'id', 'patientId');
+Patient.hasMany(SentRecall, 'sentRecalls', 'id', 'patientId');
+
+/**
+ * Permission Relations
+ */
+
+Permission.belongsTo(User, 'user', 'userId', 'id');
+Permission.belongsTo(Account, 'account', 'accountId', 'id');
+Permission.hasMany(User, 'users', 'userId', 'id');
+
+/**
+ * Practitioner Relations
+ */
+
+Practitioner.hasMany(Appointment, 'appointments', 'id', 'practitionerId');
+Practitioner.belongsTo(Account, 'account', 'accountId', 'id');
+Practitioner.hasMany(Reservation, 'reservations', 'id', 'practitionerId');
+Practitioner.hasMany(Request, 'requests', 'id', 'practitionerId');
+Practitioner.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
+Practitioner.hasMany(PractitionerTimeOff, 'timeOffs', 'id', 'practitionerId');
+Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
+
+/**
+ * Request Relations
+ */
+
+Request.belongsTo(Patient, 'patient', 'patientId', 'id');
+Request.belongsTo(Account, 'account', 'accountId', 'id');
+Request.belongsTo(Service, 'service', 'serviceId', 'id');
+Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
+Request.belongsTo(Chair, 'chair', 'chairId', 'id');
+
+/**
+ * Service Relations
+ */
+
+Service.belongsTo(Account, 'account', 'accountId', 'id');
+Service.hasAndBelongsToMany(Practitioner, 'practitioners', 'id', 'id');
+Service.hasMany(Reservation, 'reservations', 'id', 'serviceId');
+Service.hasMany(Request, 'requests', 'id', 'serviceId');
+
+/**
+ * Token Relations
+ */
+
+Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
+
+/**
+ * User Relations
+ */
+
+User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
+
+/**
+ * WaitSpot Relations
+ */
+
+WaitSpot.hasOne(Patient, 'patient', 'patientId', 'id');
+WaitSpot.hasOne(Account, 'account', 'accountId', 'id');
+
+/**
+ * SentReminder Relations
+ */
+SentReminder.belongsTo(Account, 'account', 'accountId', 'id');
+SentReminder.belongsTo(Reminder, 'reminder', 'reminderId', 'id');
+SentReminder.belongsTo(Appointment, 'appointment', 'appointmentId', 'id');
+SentReminder.belongsTo(Patient, 'patient', 'patientId', 'id');
+
+/**
+ * SentRecall Relations
+ */
+SentRecall.belongsTo(Account, 'account', 'accountId', 'id');
+SentRecall.belongsTo(Recall, 'recall', 'recallId', 'id');
+SentRecall.belongsTo(Patient, 'patient', 'patientId', 'id');

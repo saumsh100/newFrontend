@@ -16,16 +16,6 @@ const initialState = fromJS({
 
 export default handleActions({
   [LOGIN_SUCCESS](state, { payload }) {
-
-    const token = payload;
-    LogRocket.identify(token.userId, {
-      name: `${token.firstName} ${token.lastName}`,
-      email: token.username,
-    });
-
-    connectSocketToStoreLogin(socket);
-
-
     return state.merge({
       token: payload,
       isAuthenticated: true,

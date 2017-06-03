@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import accountsRouter from './accounts';
 import appointmentRouter from './appointment';
+import callsRouter from './calls';
 import reputationRouter from './reputation';
 import patientsRouter from './patients';
 import familyRouter from './family';
@@ -21,12 +22,15 @@ import weeklySchedulesRouter from './weeklySchedules';
 import enterprisesRouter from './enterprises';
 import authMiddleware from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
+import sentRemindersRouter from './sentReminders';
+import sentRecallsRouter from './sentRecalls';
 
 const apiRouter = Router();
 
 apiRouter.all('*', authMiddleware, createJoinObject);
 apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/appointments', appointmentRouter);
+apiRouter.use('/calls', callsRouter);
 apiRouter.use('/requests', requestRouter);
 apiRouter.use('/reputation', reputationRouter);
 apiRouter.use('/patients', patientsRouter);
@@ -44,5 +48,7 @@ apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
+apiRouter.use('/sentReminders', sentRemindersRouter);
+apiRouter.use('/sentRecalls', sentRecallsRouter);
 
 export default apiRouter;

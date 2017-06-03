@@ -54,8 +54,6 @@ export default function DisplayForm(props) {
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
 
-    console.log(patient.get('mobilePhoneNumber'));
-
     initialValues = {
       appointment: {
         time: setTime(startDate),

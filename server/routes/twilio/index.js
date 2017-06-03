@@ -6,11 +6,14 @@ const Chat = require('../../models/Chat');
 const Token = require('../../models/Token');
 const Patient = require('../../models/Patient');
 const thinky = require('../../config/thinky');
-const twilio = require('../../config/globals').twilio;
+const voiceRouter = require('./voice');
 const twilioClient = require('../../config/twilio');
 const { namespaces } = require('../../config/globals');
 const normalize = require('../api/normalize');
 
+
+// Set up automated Call interaction
+twilioRouter.use('/voice', voiceRouter);
 
 // Receive all incoming SMS traffic to the Twilio number
 
@@ -167,7 +170,7 @@ twilioRouter.post('/message', (req, res, next) => {
 
   // For twilio... needs a response
   // TODO: Do we need to res.send on successful saving?
-  res.send();
+  res.end();
 });
 
 // Receive all status updates to a message
@@ -188,7 +191,7 @@ twilioRouter.post('/status', (req, res, next) => {
     .catch(next);
 
   // For twilio... needs a response
-  res.send();
+  res.end();
 });
 
 module.exports = twilioRouter;

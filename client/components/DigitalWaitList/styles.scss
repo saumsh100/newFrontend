@@ -26,8 +26,10 @@
   border-top: $card-border-size $primary-darkgrey;
   height: 604px;
   margin-bottom: 20px;
+  background-color: lighten($primary-lightgrey, 2%);
   &__header {
     padding: 0 15px 0 15px;
+    background-color: $primary-white;
   }
   &__body {
     overflow: auto;
@@ -39,6 +41,7 @@
   border-top: 1px solid $primary-grey;
   padding: 0;
   margin: 0;
+  max-height: 555px;
   &__item {
     padding: 0 40px 0 15px;
     display: flex;

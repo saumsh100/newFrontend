@@ -39,10 +39,13 @@
     }
     &_comments {
       border-top: $card-border-size $primary-yellow;
-      height: 640px;
+      height: 604px;
     }
     &_request {
-      height: 640px;
+      border-top: $card-border-size $primary-blue-green;
+      padding: 0;
+      height: 604px;
+      margin-bottom: 20px;
       background-color: lighten($primary-lightgrey, 2%);
     }
     @media screen and (max-width: 450px) {
@@ -94,7 +97,7 @@
 }
 .padding {
   padding: 0 5px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
   }
