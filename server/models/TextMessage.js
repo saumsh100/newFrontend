@@ -5,12 +5,12 @@ const type = thinky.type;
 
 const TextMessage = createModel('TextMessage', {
   // Twilio MessageSID
-//  chatId: type.string().uuid(4).required(),
+  chatId: type.string().uuid(4).required(),
 
   // Twilio Data
-//  to: type.string().required(),
-  //from: type.string().required(),
-  // body: type.string().required(),
+  to: type.string().required(),
+  from: type.string().required(),
+  body: type.string().required(),
   smsStatus: type.string(),
   dateCreated: type.date(),
   dateUpdated: type.date(),

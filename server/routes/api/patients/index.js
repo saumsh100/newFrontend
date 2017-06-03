@@ -14,9 +14,10 @@ patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointmen
 
 const generateDuringFilter = (m, startDate, endDate) => {
   return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
-    m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
-  );
+  m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
+);
 };
+
 
 /**
  * Batch creation
@@ -124,11 +125,9 @@ patientsRouter.get('/', (req, res, next) => {
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
-  patientData.isSyncedWithPMS = false;
+
   return Patient.save(patientData)
-    .then((patient) => {
-      res.status(201).send(normalize('patient', patient));
-    })
+    .then(patient => res.status(201).send(normalize('patient', patient)))
     .catch(next);
 });
 
@@ -164,9 +163,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
   return req.patient.merge(req.body).save()
-    .then(patient => {
-      res.send(normalize('patient', patient));
-    })
+    .then(patient => res.send(normalize('patient', patient)))
     .catch(next);
 });
 

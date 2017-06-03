@@ -20,13 +20,18 @@ export default function FiltersDisplay(props) {
     <Card className={styles.schedule_filter}>
       <div className={styles.filter_header}>
         <div className={styles.filter_header__title}>
-          Filter
+          Filters
         </div>
         <div className={styles.filter_header__icon}>
-          <Icon icon="sliders" />
+          <Icon size={2} icon="sliders" />
         </div>
         <div className={styles.filter_header__link} >
-          <div className={styles.filter_header__link__text}onClick={handleSelectAll}>Select All</div>
+          <div
+            className={styles.filter_header__link__text}
+            onClick={handleSelectAll}
+          >
+            Select All
+          </div>
           <div onClick={handleClearAll} >Clear All</div>
         </div>
       </div>
@@ -76,7 +81,7 @@ export default function FiltersDisplay(props) {
   );
 }
 
-FiltersDisplay.PropTypes = {
+FiltersDisplay.propTypes = {
   selectedFilters: PropTypes.object,
   entities: PropTypes.object,
   allChecked: PropTypes.object,

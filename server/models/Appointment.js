@@ -20,6 +20,7 @@ const Appointment = createModel('Appointment', {
   pmsId: type.string(),
 
   // Lifecycle Attributes
+  isReminderSent: type.boolean().default(false),
   isPatientConfirmed: type.boolean().default(false),
   isSyncedWithPMS: type.boolean().default(false).required(),
   isCancelled: type.boolean().default(false),

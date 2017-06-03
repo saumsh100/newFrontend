@@ -85,7 +85,7 @@ accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => 
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
-  if (req.role !== 'OWNER') {
+  if (req.role !== 'SUPERADMIN') {
     return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
   }
 

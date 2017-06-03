@@ -9,7 +9,7 @@ storiesOf('Avatar', module)
   .addDecorator(withKnobs)
   .add('with image URL', () => (
     <Avatar
-      user={{ url: 'https://placeimg.com/80/80/animals', firstName: 'Justin' }}
+      user={{ avatarUrl: 'https://placeimg.com/80/80/animals', firstName: 'Justin' }}
     />
   ))
   .add('with text as backup', () => (

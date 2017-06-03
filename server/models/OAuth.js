@@ -2,6 +2,7 @@
 import thinky from '../config/thinky';
 import createModel from './createModel';
 
+
 const type = thinky.type;
 
 module.exports = createModel('OAuth', {

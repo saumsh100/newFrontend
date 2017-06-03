@@ -1,7 +1,5 @@
 
-const Queue = require('rethinkdb-job-queue');
-const globals = require('../globals');
+import kue from 'kue';
+import { redis } from '../globals';
 
-module.exports = function createQueue(name) {
-  return new Queue(globals.db, { name });
-};
+export default kue.createQueue({ redis: redis.uri });

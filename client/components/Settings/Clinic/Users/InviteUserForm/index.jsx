@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Form, Field } from '../../../../library';
-import { validate } from '../../../../library/Form/validate'
+import { emailValidate } from '../../../../library/Form/validate';
 
 class InviteUserForm extends Component {
 
@@ -10,12 +10,12 @@ class InviteUserForm extends Component {
       <Form
         className={formStyle}
         form={formName}
-        validate={validate}
         onSubmit={sendInvite}
         ignoreSaveButton
       >
         <Field
           required
+          validate={[emailValidate]}
           type="email"
           name="email"
           label="Email"

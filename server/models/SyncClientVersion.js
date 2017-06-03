@@ -11,6 +11,8 @@ const SyncClientVersion = createModel('SyncClientVersion', {
   url: type.string(),
   key: type.string(),
   secret: type.string(),
+  filename: type.string(),
+  path: type.string(),
 });
 
 module.exports = SyncClientVersion;

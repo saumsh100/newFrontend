@@ -13,20 +13,27 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { IconButton } from '../../library';
+import { Button, IconButton } from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
-  return new Date(date.setHours(time.getHours()));
+  date.setHours(time.getHours());
+  date.setMinutes(time.getMinutes());
+  return new Date(date);
 };
 
 class AddNewAppointment extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      servicesAllowed: this.props.services,
+    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
+    this.handlePractitionerChange = this.handlePractitionerChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -41,50 +48,74 @@ class AddNewAppointment extends Component {
 
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
-
     const {
       date,
       time,
       serviceId,
       practitionerId,
       chairId,
-      duration,
+      isPatientConfirmed,
     } = appointmentValues;
 
     const {
-      patientData,
+      patientSelected,
       note,
     } = patientValues;
 
-    const bufferTime = duration[1] - duration[0];
-    const totalDurationMin = duration[0] + bufferTime;
+    // setting initial duration and buffer if slider isn't used.
+    let duration = appointmentValues.duration;
+    if (!duration) {
+      duration = [60, 60];
+    }
+
+    // check if the buffer equals the duration if it doesn't set the buffer time
+    let bufferTime = 0;
+    if (duration[1] !== duration[0]) {
+      bufferTime = duration[1] - duration[0];
+    }
+
+    let totalDurationMin = duration[0];
+
+    if (bufferTime > 0) {
+      totalDurationMin = duration[0] + bufferTime;
+    }
 
     const startDate = mergeTime(new Date(date), new Date(time));
-    const endDate = moment(startDate).minute(totalDurationMin);
+    const endDate = moment(startDate).add(totalDurationMin, 'minutes');
 
     const newAppointment = {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
-      patientId: patientData.id,
+      patientId: patientSelected.id,
       serviceId,
       practitionerId,
       chairId,
       note,
+      isPatientConfirmed,
       isSyncedWithPMS: false,
       customBufferTime: bufferTime,
     };
 
-    if (!selectedAppointment) {
-      createEntityRequest({ key: 'appointments', entityData: newAppointment });
-      reinitializeState();
-      reset(formName);
+    // if an appointment is not selected then create the appointment else update the appointment
+    if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
+
+      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then(() => {
+        if(selectedAppointment && selectedAppointment.request) {
+          updateEntityRequest({ key: 'requests', model: selectedAppointment.requestModel });
+        }
+        reinitializeState();
+        reset(formName);
+      }).catch(e => alert('Appointment was invalid'));
+
     } else {
-      const appModel = selectedAppointment.appointment.appModel;
+      const appModel = selectedAppointment.appModel;
       const appModelSynced = appModel.set('isSyncedWithPMS', false);
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
-      updateEntityRequest({ key: 'appointments', model: modifiedAppointment });
-      reinitializeState();
+
+      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(()=>{
+        reinitializeState();
+      }).catch((e) => alert('Update Failed'));
     }
   }
 
@@ -94,7 +125,7 @@ class AddNewAppointment extends Component {
         return searchData.patients;
       }).then((searchedPatients) => {
         return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          (key) => { return searchedPatients[key]; }) : [];
+          (key) => searchedPatients[key]) : [];
       });
   }
 
@@ -105,44 +136,57 @@ class AddNewAppointment extends Component {
     } = this.props;
 
     if (typeof newValue === 'object') {
-      change(formName, 'patient.phoneNumber', newValue.phoneNumber);
+      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
       change(formName, 'patient.email', newValue.email);
     }
   }
 
+  handlePractitionerChange(id) {
+    const {
+      services,
+      practitioners,
+    } = this.props;
+
+    const selectedPractitioner = practitioners.get(id);
+    const practitionerServiceIds = selectedPractitioner.get('services');
+
+    const servicesAllowed = [];
+    practitionerServiceIds.map((serviceId) => {
+      servicesAllowed.push(services.get(serviceId));
+    });
+
+    this.setState({
+      servicesAllowed,
+    });
+  }
+
   deleteAppointment() {
     const {
-      formName,
       selectedAppointment,
-      reset,
       reinitializeState,
       updateEntityRequest,
     } = this.props;
 
-    if (!selectedAppointment) {
-      reset(formName);
-      reinitializeState();
-    } else {
-      const id = selectedAppointment.appointment.id;
-      const deleteApp = confirm('Are you sure you want to delete this appointment?');
+    const deleteApp = confirm('Are you sure you want to delete this appointment?');
 
-      if (deleteApp) {
-        const appModel = selectedAppointment.appointment.appModel;
-        const deletedModel = appModel.set('isDeleted', true);
-        updateEntityRequest({ key: 'appointments', model: deletedModel });
-      }
-      reinitializeState();
+    if (deleteApp) {
+      const appModel = selectedAppointment.appModel;
+      const deletedModel = appModel.set('isDeleted', true);
+      updateEntityRequest({ key: 'appointments', model: deletedModel });
     }
+
+    reinitializeState();
   }
+
 
   render() {
     const {
       formName,
-      services,
       patients,
       chairs,
       practitioners,
       selectedAppointment,
+      reinitializeState,
     } = this.props;
 
     const remoteButtonProps = {
@@ -150,17 +194,18 @@ class AddNewAppointment extends Component {
       form: formName,
     };
 
+
     return (
       <div className={styles.formContainer}>
         <IconButton
-          icon={selectedAppointment ? 'trash' : 'times'}
-          onClick={this.deleteAppointment}
+          icon="times"
+          onClick={reinitializeState}
           className={styles.trashIcon}
         />
         <DisplayForm
           key={formName}
           formName={formName}
-          services={services}
+          services={this.state.servicesAllowed}
           patients={patients}
           chairs={chairs}
           practitioners={practitioners}
@@ -168,6 +213,7 @@ class AddNewAppointment extends Component {
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
+          handlePractitionerChange={this.handlePractitionerChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton
@@ -176,6 +222,13 @@ class AddNewAppointment extends Component {
           >
             Save
           </RemoteSubmitButton>
+          {(selectedAppointment && !selectedAppointment.request) && (
+            <div className={styles.remoteSubmit_buttonDelete}>
+              <Button onClick={this.deleteAppointment} >
+                Delete
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     );

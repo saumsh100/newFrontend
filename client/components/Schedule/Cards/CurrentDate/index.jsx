@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from '../../styles.scss';
@@ -9,7 +10,7 @@ const CurrentDate = (props) => {
   const currentMonth = currentDate.format("MMMM");
   const currentYear = currentDate.format("YYYY");
   return (
-    <div style={{display: 'flex'}}>
+    <div style={{display: 'flex', alignItems: 'center'}}>
       <div className={styles.title__month}>{currentMonth}</div>
       <div className={styles.title__number}>&nbsp;{dayOftheMonth}</div>
       <div className={styles.title__day}>, {currentYear}</div>

@@ -24,7 +24,7 @@ const AccountSchema = {
   city: null,
   zipCode: null,
   vendastaId: null,
-  smsPhoneNumber: null,
+  twilioPhoneNumber: null,
   enterpriseId: null,
   weeklyScheduleId: null, //new OfficeHoursRecord(),
 };

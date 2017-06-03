@@ -1,8 +1,7 @@
 import {
 	setCurrentDialogAction,
 	sendMessageOnClientAction,
-	setDialogsFilterAction,
-	setDialogScrollPermissionAction,
+  setDialogScrollPermissionAction,
 } from '../actions/dialogs';
 
 export function setCurrentDialog(currentDialogId) {

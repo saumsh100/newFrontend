@@ -108,8 +108,7 @@ export function createEntityRequest({ key, entityData, url }) {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
         return data.entities;
-      })
-      .catch(err => console.log(err));
+      });
   };
 }
 
@@ -124,8 +123,7 @@ export function updateEntityRequest({ key, model, values, url }) {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
         return data.entities;
-      })
-      .catch(err => console.log(err));
+      });
   };
 }
 

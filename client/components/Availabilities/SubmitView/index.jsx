@@ -103,7 +103,7 @@ class SubmitView extends Component {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
-            We have sent a confirmation code via SMS to {patientUser.phoneNumber}.
+            We have sent a confirmation code via SMS to {patientUser.mobilePhoneNumber}.
             Please type in the code below and submit to complete your booking.
           </div>
           <ConfirmNumberForm onSubmit={this.confirmAndBook} />

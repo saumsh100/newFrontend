@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import styles from '../main.scss';
 import PatientListItem from '../PatientListItem';
-import UserSearchList from './UserSearchList';
 import {
   AutoCompleteForm,
   InfiniteScroll,
@@ -11,6 +12,8 @@ import {
   List,
   CardHeader,
 } from '../../../library';
+import { fetchEntities } from '../../../../thunks/fetchEntities';
+
 
 class UpcomingPatientList extends Component {
   constructor(props) {
@@ -39,13 +42,23 @@ class UpcomingPatientList extends Component {
       });
 
       if (id) {
-        this.props.setSearchPatient(id);
+        return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
+          const currentPatientId = {
+            id,
+          };
+          this.props.setCurrentPatient(currentPatientId);
+        });
       }
     }
   }
 
   userClick(id) {
-    this.props.setSearchPatient(id);
+    return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
+      const currentPatientId = {
+        id,
+      };
+      this.props.setCurrentPatient(currentPatientId);
+    });
   }
 
   getSuggestions(value) {
@@ -59,10 +72,11 @@ class UpcomingPatientList extends Component {
       const inputLength = inputValue.length;
 
       const searched = this.props.searchedPatients.map((userId) => {
+        const avatar = (this.props.patients.get(userId).get('avatarUrl') ? this.props.patients.get(userId).get('avatarUrl') : '/images/avatar.png');
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={styles.searchList} onClick={this.userClick.bind(null, userId)}>
-          <img className={styles.users__photo} src="https://placeimg.com/80/80/animals" alt="photo" />
+          <img className={styles.users__photo} src={avatar} alt="photo" />
           <div className={styles.grow}>
             <div className={styles.users__header}>
               <div className={styles.users__name}>
@@ -169,7 +183,7 @@ class UpcomingPatientList extends Component {
 }
 
 UpcomingPatientList.propTypes = {
-  patientList: PropTypes.object,
+  patientList: PropTypes.array,
   setCurrentPatient: PropTypes.func,
   loadMore: PropTypes.func,
   currentPatient: PropTypes.object,
@@ -178,4 +192,17 @@ UpcomingPatientList.propTypes = {
   setSearchPatient: PropTypes.func,
 };
 
-export default UpcomingPatientList;
+function mapStateToProps() {
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntities,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(UpcomingPatientList);

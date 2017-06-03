@@ -15,9 +15,12 @@
     justify-content: center;
     &__title {
         justify-content: center;
+        padding-right: 10px;
+        font-weight: $large-weight;
     }
 
     &__icon {
+        padding-top: 5px;
         margin-left: 5px;
     }
 
@@ -40,9 +43,13 @@
    // margin: 0 5px;
     padding: 5px 0px 10px 10px;
     max-height: 250px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 
-
+    &__name {
+      font-size: $small-size;
+      font-weight: $large-weight;
+    }
     &__title {
         margin-left: 5px;
         text-transform: uppercase;
@@ -83,18 +90,28 @@
         font-size: 9px;
     }
 
+    &__checkLabel {
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+      font-size: $extra-small-size;
+      font-weight: $medium-weight;
+      text-overflow: ellipsis;
+      &__all {
+        font-weight: $large-weight;
+      }
+    }
+
     &__item {
         display: flex;
         flex-direction: column;
         width: 45%;
         margin-bottom: 30px;
-
         select {
             border: none;
             border-bottom: 1px #ff715a solid;
             background: none;
-            font-size: inital;
-
+            font-size: initial;
             &:focus {
                 outline: none;
             }

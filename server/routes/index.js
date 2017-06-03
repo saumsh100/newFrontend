@@ -1,8 +1,10 @@
+
 import apiRouter from './api';
 const rootRouter = require('express').Router();
 const subdomain = require('express-subdomain');
 const authRouter = require('./auth');
 const myRouter = require('./my');
+const callrailRouter = require('./callrail');
 const twilioRouter = require('./twilio');
 const signupRouter = require('./signup');
 const Token = require('../models/Token');
@@ -26,8 +28,9 @@ rootRouter.get('/atoms', (req, res, next) => {
 // Bind REST API
 rootRouter.use('/api', apiRouter);
 
-// Twilio REST handlers to receive incoming comms
+// Webhooks!
 rootRouter.use('/twilio', twilioRouter);
+rootRouter.use('/callrail', callrailRouter);
 
 // Booking Widget IFRAME Embed
 rootRouter.get('/embed', (req, res, next) => {

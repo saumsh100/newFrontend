@@ -9,14 +9,14 @@ class TextMessage extends Component {
     //TODO Make messages page and remove inline styles.
     const style = {
       display: 'flex',
-      'align-items': 'center',
-      'justify-content': 'center',
+      'alignItems': 'center',
+      'justifyContent': 'center',
       height: '100%',
     };
 
     const style2 = {
-      'max-width': '50%',
-      'max-height': '50%',
+      'maxWidth': '50%',
+      'maxHeight': '50%',
     };
 
     return (
