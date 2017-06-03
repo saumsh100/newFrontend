@@ -16,12 +16,16 @@ const loadPermissions = (user, customParams = {}) => {
     EnterprisePermission.filter({ enterpriseId, userId: id }).run(),
   ])
     .then(([[accountPermissions], [enterprisePermission]]) => {
-      if (!accountPermissions) {
+      const isSuperAdmin = isCarecruEmail(username);
+
+      if (!isSuperAdmin && !accountPermissions) {
         return Promise.reject({ name: 'NoUserRole', message: 'User have not account permissions.' });
       }
 
-      const role = isCarecruEmail(username) ? 'SUPERADMIN' : accountPermissions.role;
-      const permissions = { ...rolePermissions[role], ...(accountPermissions.permissions || {}) };
+      const role = isSuperAdmin ? 'SUPERADMIN' : accountPermissions.role;
+      const additionalPermissions = isSuperAdmin ? {} : (accountPermissions.permissions || {});
+
+      const permissions = { ...rolePermissions[role], ...(additionalPermissions) };
       const enterpriseRole = (enterprisePermission && enterprisePermission.role) || null;
 
       return { role, permissions, enterpriseId, enterpriseRole };

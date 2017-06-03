@@ -26,10 +26,7 @@ accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, e
     .catch(next)
 );
 
-// TODO: add proper permissions check
 accountsRouter.post('/:accountId/switch', ({ account, role, tokenId, userId, sessionData }, res, next) => {
-
-  // TODO: or enterprise OWNER
   if (role !== 'SUPERADMIN') {
     return next(StatusError(403, 'Operation not permitted.'));
   }
@@ -37,10 +34,8 @@ accountsRouter.post('/:accountId/switch', ({ account, role, tokenId, userId, ses
   const accountId = account.id;
   const modelId = userId;
 
-  // TODO: check is account related to current enterprise
-
   return Permission.filter({ accountId, userId }).run()
-    .then(([permission]) => permission || Promise.reject(StatusError(403, 'User don\'t have permissions for this account.')))
+    .then(([permission]) => (permission || (role === 'SUPERADMIN')) || Promise.reject(StatusError(403, 'User don\'t have permissions for this account.')))
     .then(() => UserAuth.updateToken(tokenId, sessionData, { accountId }))
     .then(newToken => UserAuth.signToken({
       userId: modelId,

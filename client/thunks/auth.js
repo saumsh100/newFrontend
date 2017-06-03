@@ -6,13 +6,25 @@ import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout } from '../actions/auth';
 
-const updateSessionByToken = (token, dispatch) => {
+const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   localStorage.setItem('token', token);
   const { tokenId } = jwt(token);
 
-  return axios.get('/api/users/me')
-    .then(({ data }) => {
-      const userSession = { ...data, tokenId };
+  if (invalidateSession) {
+    localStorage.removeItem('session');
+  }
+
+  const getSession = () => {
+    const cachedValue = localStorage.getItem('session');
+
+    return cachedValue ?
+      (Promise.resolve(JSON.parse(cachedValue))) :
+      (axios.get('/api/users/me').then(({ data }) => data));
+  };
+
+  return getSession()
+    .then((session) => {
+      const userSession = { ...session, tokenId };
       localStorage.setItem('session', JSON.stringify(userSession));
       dispatch(loginSuccess(userSession));
       return userSession;
@@ -54,18 +66,24 @@ export function login(redirectedFrom = '/') {
   };
 }
 
+const reloadPage = () => {
+  window.location = window.location.pathname;
+};
+
 export function switchActiveAccount(accountId, redirectTo = '/') {
   return dispatch =>
     axios.post(`/api/accounts/${accountId}/switch`, {})
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
-      .then(() => dispatch(push(redirectTo)));
+      .then(() => dispatch(push(redirectTo)))
+      .then(reloadPage);
 }
 
 export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
   return dispatch =>
     axios.post('/api/enterprises/switch', { enterpriseId })
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
-      .then(() => dispatch(push(redirectTo)));
+      .then(() => dispatch(push(redirectTo)))
+      .then(reloadPage);
 }
 
 export function logout() {
@@ -90,6 +108,6 @@ export function load() {
       return Promise.resolve(null);
     }
 
-    return updateSessionByToken(token, dispatch);
+    return updateSessionByToken(token, dispatch, false);
   };
 }
