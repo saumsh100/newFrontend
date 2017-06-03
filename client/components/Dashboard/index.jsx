@@ -41,15 +41,14 @@ class Dashboard extends React.Component {
       limit: 100,
     };
 
-  //  Promise.all([
-      this.props.fetchEntities({ key: 'appointments', params: query });
-      this.props.fetchEntities({ key: 'requests' });
-      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] });
-      this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] });
-    //]).then(() => {
-    //  this.setState({ loaded: true
-    ///  });
-    //}).catch(e => console.log(e));
+    Promise.all([
+      this.props.fetchEntities({ key: 'appointments', params: query }),
+      this.props.fetchEntities({ key: 'requests' }),
+      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
+      this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] }),
+    ]).then(() => {
+      this.setState({ loaded: true });
+    }).catch(e => console.log(e));
 
   }
 
@@ -78,8 +77,8 @@ class Dashboard extends React.Component {
     const data = [
       {count: appointmentCount.length, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
       {count: filterConfirmedRequests.length, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
-      {count: '?', title: "Unconfirmed Refferals", icon: "bullhorn", size: 6, color: 'primaryGreen' },
-      {count: '?', title: "Unresponded Reviews", icon: "star", size: 6, color: 'primaryYellow' },
+      {count: sentReminders.size, title: "Reminders", icon: "bullhorn", size: 6, color: 'primaryGreen' },
+      {count: sentRecalls.size, title: "Recalls", icon: "star", size: 6, color: 'primaryYellow' },
     ];
 
     return (

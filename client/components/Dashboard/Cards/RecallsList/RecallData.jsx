@@ -1,17 +1,15 @@
 
 import React, { Component } from 'react';
-import moment from 'moment';
 import { ListItem,  Icon } from '../../../library';
 import styles from './styles.scss';
 
 export default function RecallData(props) {
-
   const {
     patient,
     recall,
     sentRecall,
     index,
-    handleRecallClick
+    handleRecallClick,
   } = props;
 
   const displayStatus = sentRecall.isConfirmed ? 'Recall Confirmed' : 'Recall Sent';
