@@ -18,6 +18,7 @@ import {
 import RemindersList from './Cards/RemindersList';
 import RecallsList from './Cards/RecallsList';
 import DigitalWaitList from '../DigitalWaitList';
+import AppointmentsList from './Cards/AppointmentsList';
 import * as Actions from '../../actions/patientList';
 import styles from './styles.scss';
 import Loader from 'react-loader';
@@ -42,8 +43,9 @@ class Dashboard extends React.Component {
     };
 
     Promise.all([
-      this.props.fetchEntities({ key: 'appointments', join: ['patients', 'services'], params: query }),
       this.props.fetchEntities({ key: 'requests' }),
+      this.props.fetchEntities({ key: 'appointments', join: ['patient', 'service'], params: query }),
+      this.props.fetchEntities({ key: 'practitioners' }),
       this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
       this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] }),
     ]).then(()=>{
@@ -56,9 +58,11 @@ class Dashboard extends React.Component {
       requests,
       reminders,
       patients,
+      services,
+      practitioners,
+      push,
       sentReminders,
       setSelectedPatientId,
-      push,
       recalls,
       sentRecalls,
     } = this.props;
@@ -97,7 +101,12 @@ class Dashboard extends React.Component {
               <CardHeader className={styles.cardHeader} title="Appointments" count={appointmentCount}/>
               <div className={styles.underspondedReviews}>
                 <div className={styles.underspondedReviews__mainContainer}>
-
+                  <AppointmentsList
+                    appointments={appointments}
+                    patients={patients}
+                    services={services}
+                    practitioners={practitioners}
+                  />
                 </div>
               </div>
             </Card>
@@ -153,9 +162,11 @@ class Dashboard extends React.Component {
 
 function mapStateToProps({ entities }) {
   return {
-    requests: entities.getIn(['requests', 'models']),
     appointments: entities.getIn(['appointments', 'models']),
     patients: entities.getIn(['patients', 'models']),
+    practitioners: entities.getIn(['practitioners', 'models']),
+    services: entities.getIn(['services', 'models']),
+    requests: entities.getIn(['requests', 'models']),
     reminders: entities.getIn(['reminders', 'models']),
     sentReminders: entities.getIn(['sentReminders', 'models']),
     recalls: entities.getIn(['recalls', 'models']),

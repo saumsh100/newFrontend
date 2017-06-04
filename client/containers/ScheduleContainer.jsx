@@ -71,7 +71,7 @@ class ScheduleContainer extends React.Component {
       weeklySchedules,
       timeOffs,
     } = this.props;
-    
+
     return (
       <Loader loaded={this.state.loaded}>
         <ScheduleComponent
