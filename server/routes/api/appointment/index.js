@@ -236,15 +236,17 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
       //practitioner data
       values[1].map((practitioner) => {
-        const data = {};
+        if (practitioner.isActive) {
+          const data = {};
 
-        data.firstName = practitioner.firstName;
-        data.lastName = practitioner.lastName;
-        data.id = practitioner.id;
-        data.totalTime = timeOpen;
-        data.appointmentTime = 0;
-        data.newPatients = 0;
-        sendStats.practitioner[practitioner.id] = data;
+          data.firstName = practitioner.firstName;
+          data.lastName = practitioner.lastName;
+          data.id = practitioner.id;
+          data.totalTime = timeOpen;
+          data.appointmentTime = 0;
+          data.newPatients = 0;
+          sendStats.practitioner[practitioner.id] = data;
+        }
       });
 
       let confirmedAppointments = 0;
@@ -252,49 +254,51 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       let time = 0;
 
       values[0].map((appointment) => {
-        if (range.contains(moment(appointment.patient.createdAt))){
-          sendStats.newPatients++;
-          sendStats.practitioner[appointment.practitioner.id].newPatients++;
-        }
-        //create time counter for a service if never used before.
-        if (appointment.service && !sendStats.services[appointment.service.id]){
-          sendStats.services[appointment.service.id] = {
-            time: 0,
-            id: appointment.service.id,
-            name: appointment.service.name,
-          };
-        }
-
-        //create patient if never exist for the most seen
-        if (!sendStats.patients[appointment.patient.id]){
-          sendStats.patients[appointment.patient.id] = {
-            numAppointments: 0,
-            id: appointment.patient.id,
-            firstName: appointment.patient.firstName,
-            lastName: appointment.patient.lastName,
-            age: moment().diff(moment(appointment.patient.birthDate), 'years'),
-            avatarUrl: appointment.patient.avatarUrl,
-          };
-        }
-        let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
-        timeApp = (timeApp > 0 ? timeApp : 0);
-
-        time += timeApp;
-        notConfirmedAppointments++;
-        if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
-          if (male.test(appointment.patient.gender)){
-            sendStats.male++;
-          } else {
-            sendStats.female++;
+        if (appointment.practitioner.isActive) {
+          if (range.contains(moment(appointment.patient.createdAt))) {
+            sendStats.newPatients++;
+            sendStats.practitioner[appointment.practitioner.id].newPatients++;
           }
-          sendStats.ageData = ageRange(sendStats.patients[appointment.patient.id].age, sendStats.ageData);
-          sendStats.patients[appointment.patient.id].numAppointments++;
-          if (appointment.service) {
-            sendStats.services[appointment.service.id].time += timeApp;
+          //create time counter for a service if never used before.
+          if (appointment.service && !sendStats.services[appointment.service.id]) {
+            sendStats.services[appointment.service.id] = {
+              time: 0,
+              id: appointment.service.id,
+              name: appointment.service.name,
+            };
           }
-          sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
-          confirmedAppointments++;
+          //create patient if never exist for the most seen
+          if (!sendStats.patients[appointment.patient.id]) {
+            sendStats.patients[appointment.patient.id] = {
+              numAppointments: 0,
+              id: appointment.patient.id,
+              firstName: appointment.patient.firstName,
+              lastName: appointment.patient.lastName,
+              age: moment().diff(moment(appointment.patient.birthDate), 'years'),
+              avatarUrl: appointment.patient.avatarUrl,
+            };
+          }
+          let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
+          timeApp = (timeApp > 0 ? timeApp : 0);
+
+          time += timeApp;
+          notConfirmedAppointments++;
+          if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
+            if (male.test(appointment.patient.gender)) {
+              sendStats.male++;
+            } else {
+              sendStats.female++;
+            }
+            sendStats.ageData = ageRange(sendStats.patients[appointment.patient.id].age, sendStats.ageData);
+            sendStats.patients[appointment.patient.id].numAppointments++;
+            if (appointment.service) {
+              sendStats.services[appointment.service.id].time += timeApp;
+            }
+            sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
+
+            confirmedAppointments++;
+          }
         }
       });
 

@@ -873,6 +873,7 @@ const SEEDS = {
       lastName: 'Mansfield',
       weeklyScheduleId: weeklyScheduleId2,
       isCustomSchedule: true,
+      isActive: true,
       // services: [],
     },
     {
@@ -882,6 +883,7 @@ const SEEDS = {
       lastName: 'Cox',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
+      isActive: false,
       // services: [],
     },
     {
