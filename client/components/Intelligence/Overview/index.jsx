@@ -122,13 +122,16 @@ class Overview extends Component {
       appointmentNotFiltred: 0,
     };
 
-    const serviceData = (appointmentStats ? serve.map((key) => {
+    let serviceData = (appointmentStats ? serve.map((key) => {
       return {
         title: key.toObject().name,
         hours: Math.round(key.toObject().time * 10 / 600),
       };
     }) : []);
 
+    serviceData = serviceData.sort((a, b) => {
+      return b.hours - a.hours;
+    });
 
     let realData = (appointmentStats ? (
       prac.toArray().map((key) => {

@@ -197,13 +197,15 @@ for (let i = 0; i < 100; i++) {
   });
 
   const appointmentTime = faker.date.future();
+  const random_boolean = Math.random() >= 0.5;
+  const service = (random_boolean ? serviceId : serviceId2)
 
   randomAppointments.push({
     accountId,
     startDate: moment(appointmentTime).subtract(1, 'hours')._d,
     endDate: moment(appointmentTime)._d,
     patientId: id,
-    serviceId,
+    serviceId: service,
     practitionerId,
     isPatientConfirmed: true,
     isCancelled: false,
@@ -223,6 +225,11 @@ const generateDefaultServices = (_accountId) => {
     duration: 30,
   });
 
+  let second = createService({
+    name: 'Toothache',
+    duration: 30,
+  });
+
   if (_accountId === accountId) {
     first = {
       id: serviceId,
@@ -230,15 +237,19 @@ const generateDefaultServices = (_accountId) => {
       name: 'New Patient Consultation',
       duration: 30,
     };
+    second = {
+      id: serviceId2,
+      accountId: _accountId,
+      name: 'Toothache',
+      duration: 30,
+    };
+
   }
 
   return [
     first,
 
-    createService({
-      name: 'Toothache',
-      duration: 30,
-    }),
+    second,
 
     createService({
       name: 'Lost Filling',
