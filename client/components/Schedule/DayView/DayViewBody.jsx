@@ -5,12 +5,6 @@ import TimeSlot from './TimeSlot/index';
 import styles from './styles.scss';
 import { SortByFirstName } from '../../library/util/SortEntities';
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
 export default function   DayViewBody(props){
   const {
     startHour,
@@ -35,20 +29,19 @@ export default function   DayViewBody(props){
 
   const sortedPractitioners = practitioners.toArray().sort(SortByFirstName);
 
-  const colors = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6',];
+  const colors = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6'];
   const colorLen = colors.length;
-  const colorArray = [];
   const reset = Math.ceil(( sortedPractitioners.length - colorLen) / colorLen);
 
-  for(let j = 0 ; j <= reset; j++) {
-    for(let i = 0; i < colorLen;  i++) {
-      colorArray.push(colors[i])
+  for (let j = 1 ; j <= reset; j++) {
+    for (let i = 0; i < (sortedPractitioners.length - colorLen);  i++) {
+      colors.push(colors[i]);
     }
   }
 
   let practitionersArray = sortedPractitioners.map((prac, index) => {
     return Object.assign({}, prac.toJS(), {
-      color: colorArray[index],
+      color: colors[index],
     });
   });
 

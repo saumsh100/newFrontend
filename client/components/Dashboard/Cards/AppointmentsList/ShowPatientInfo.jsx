@@ -3,7 +3,6 @@ import moment from 'moment';
 import styles from './styles.scss';
 
 export default function ShowPatientInfo(props) {
-
   const {
     appointment,
     patient,
@@ -18,7 +17,9 @@ export default function ShowPatientInfo(props) {
   const currentYear = new Date().getFullYear();
   const birthday = moment(patient.birthDate).year();
   const age = currentYear - birthday;
+
   const fullName = `${patient.firstName} ${patient.lastName}`;
+
   return (
     <div className={styles.patientContainer}>
       <div className={styles.patientContainer_name}>
@@ -31,6 +32,5 @@ export default function ShowPatientInfo(props) {
         <span>{service.name}, {chair.name}</span>
       </div>
     </div>
-  )
-
+  );
 }

@@ -5,6 +5,9 @@
   height: 556px;
   border-top: 1px solid #efefef;
   overflow: auto;
+  @media screen and (max-width: 450px){
+    max-width: 270px;
+  }
 }
 
 .appointmentListItem {
@@ -45,6 +48,9 @@
     font-family: $medium-font;
     font-size: $extra-medium-size;
     padding-bottom: 10px;
+    @media screen and (max-width: 850px){
+      font-size: $medium-size;
+    }
   }
 
   &_appTime {
@@ -52,7 +58,9 @@
   }
 
   &_service {
-
+    @media screen and (max-width: 850px){
+      font-size: $medium-size;
+    }
   }
 }
 
@@ -63,4 +71,7 @@
   border-right: 2px solid;
   border-right-color: $inactive-color;
   color: darken($primary-grey, 15%);
+  @media screen and (max-width: 850px){
+    word-break: break-all;
+  }
 }

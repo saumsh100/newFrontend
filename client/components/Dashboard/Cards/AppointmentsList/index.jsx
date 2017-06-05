@@ -6,7 +6,19 @@ import styles from './styles.scss';
 
 class AppointmentsList extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.handleAppointmentClick = this.handleAppointmentClick.bind(this);
+  }
+
+  handleAppointmentClick(id) {
+    const {
+      push,
+      selectAppointment,
+      appointments,
+    } = this.props;
+
+    push('/schedule');
+    selectAppointment(appointments.get(id).toJS());
   }
 
   render() {
@@ -23,21 +35,19 @@ class AppointmentsList extends Component {
 
     const colors = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6',];
     const colorLen = colors.length;
-    const colorArray = [];
-    const reset = Math.ceil(( sortedPractitioners.length - colorLen) / colorLen);
+    const reset = Math.ceil((sortedPractitioners.length - colorLen) / colorLen);
 
-    for(let j = 0 ; j <= reset; j++) {
-      for(let i = 0; i < colorLen;  i++) {
-        colorArray.push(colors[i])
+    for (let j = 1; j <= reset; j++) {
+      for (let i = 0; i < colorLen; i++) {
+        colors.push(colors[i]);
       }
     }
 
-    let practitionersArray = sortedPractitioners.map((prac, index) => {
+    const practitionersArray = sortedPractitioners.map((prac, index) => {
       return Object.assign({}, prac.toJS(), {
-        color: colorArray[index],
+        color: colors[index],
       });
     });
-
 
     return (
       <List className={styles.appointmentList}>
@@ -48,14 +58,15 @@ class AppointmentsList extends Component {
               key={`appointmentsList${index}`}
               appointment={app}
               chair={chairs.get(app.chairId)}
-              patient={patients.get(app.patientId).toJS()}
-              service={services.get(app.serviceId).toJS()}
+              patient={patients.get(app.patientId)}
+              service={services.get(app.serviceId)}
               practitioner={practitioner}
+              handleAppointmentClick={this.handleAppointmentClick}
             />
-          )
+          );
         })}
       </List>
-    )
+    );
   }
 
 }

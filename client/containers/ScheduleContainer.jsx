@@ -73,7 +73,7 @@ class ScheduleContainer extends React.Component {
     } = this.props;
 
     return (
-      <Loader loaded={this.state.loaded}>
+      <Loader loaded={this.state.loaded} color="#FF715A">
         <ScheduleComponent
           practitioners={practitioners}
           schedule={schedule}

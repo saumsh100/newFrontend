@@ -148,7 +148,6 @@ class AddNewAppointment extends Component {
     } = this.props;
 
     const selectedPractitioner = practitioners.get(id);
-    console.log(selectedPractitioner)
     const practitionerServiceIds = selectedPractitioner.get('services');
 
     const servicesAllowed = [];

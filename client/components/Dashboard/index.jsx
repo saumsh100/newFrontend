@@ -2,10 +2,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Loader from 'react-loader';
 import moment from 'moment';
 import RequestsContainer from '../../containers/RequestContainer';
 import { push } from 'react-router-redux';
 import { fetchEntities } from '../../thunks/fetchEntities';
+import { selectAppointment } from '../../actions/schedule';
 import {
   Grid,
   Row,
@@ -21,7 +23,6 @@ import DigitalWaitList from '../DigitalWaitList';
 import AppointmentsList from './Cards/AppointmentsList';
 import * as Actions from '../../actions/patientList';
 import styles from './styles.scss';
-import Loader from 'react-loader';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class Dashboard extends React.Component {
       this.props.fetchEntities({ key: 'chairs' }),
       this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
       this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] }),
-    ]).then(()=>{
+    ]).then(() => {
       this.setState({ loaded: true });
     }).catch(e => console.log(e));
   }
@@ -64,21 +65,24 @@ class Dashboard extends React.Component {
       chairs,
       push,
       sentReminders,
-      setSelectedPatientId,
       recalls,
       sentRecalls,
+      setSelectedPatientId,
+      selectAppointment,
     } = this.props;
 
     const today = moment();
-    const appointmentCount = appointments.toArray().filter((app) => {
+
+    const appointmentFilter = appointments.filter((app) => {
       const sDate = moment(app.startDate);
       const isSameDate = today.isSame(sDate, 'day');
       return (isSameDate && !app.isDeleted);
-    }).length;
+    });
+
     const filterConfirmedRequests = requests.toArray().filter((req) => !req.get('isCancelled'));
 
     const data = [
-      {count: appointmentCount, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
+      {count: appointmentFilter.size, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
       {count: filterConfirmedRequests.length, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
       {count: sentReminders.size, title: "Reminders", icon: "bullhorn", size: 6, color: 'primaryGreen' },
       {count: sentRecalls.size, title: "Recalls", icon: "star", size: 6, color: 'primaryYellow' },
@@ -97,20 +101,21 @@ class Dashboard extends React.Component {
           <Col xs={12}>
             <DashboardStats data={data} />
           </Col>
-          <Col className={styles.padding}
-               xs={12} md={8}>
+          <Col className={styles.padding} xs={12} md={12} lg={8}>
             <Card className={styles.dashboard__body_comments} >
-              <CardHeader className={styles.cardHeader} title="Appointments" count={appointmentCount}/>
-                <AppointmentsList
-                  appointments={appointments}
-                  chairs={chairs}
-                  patients={patients}
-                  services={services}
-                  practitioners={practitioners}
-                />
+              <CardHeader className={styles.cardHeader} title="Appointments" count={appointmentFilter.size} />
+              <AppointmentsList
+                appointments={appointmentFilter}
+                chairs={chairs}
+                patients={patients}
+                services={services}
+                practitioners={practitioners}
+                selectAppointment={selectAppointment}
+                push={push}
+              />
             </Card>
           </Col>
-          <Col className={styles.padding} xs={12}  md={12} lg={4}>
+          <Col className={styles.padding} xs={12} md={12} lg={4}>
             <div className={styles.dashboard__body_request}>
               <RequestsContainer
                 key="dashBoardRequests"
@@ -151,7 +156,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className={styles.dashboardContainer}>
-        <Loader loaded={this.state.loaded}>
+        <Loader loaded={this.state.loaded} color="#FF715A">
           {this.renderCards()}
         </Loader>
       </div>
@@ -179,6 +184,7 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     push,
     setSelectedPatientId: Actions.setSelectedPatientIdAction,
+    selectAppointment,
   }, dispatch);
 }
 
