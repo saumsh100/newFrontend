@@ -243,6 +243,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           data.lastName = practitioner.lastName;
           data.id = practitioner.id;
           data.totalTime = timeOpen;
+          data.type = practitioner.type;
           data.appointmentTime = 0;
           data.newPatients = 0;
           sendStats.practitioner[practitioner.id] = data;

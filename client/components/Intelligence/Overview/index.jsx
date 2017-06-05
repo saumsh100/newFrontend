@@ -146,7 +146,7 @@ class Overview extends Component {
           <PractitionersList
             img={data.img}
             name={data.name}
-            profession="Dentist"
+            profession={key.toObject().type}
             appointmentBooked={data.appointmentBooked}
             appointmentNotFiltred={data.appointmentNotFiltred}
             newPatients={data.newPatients}
