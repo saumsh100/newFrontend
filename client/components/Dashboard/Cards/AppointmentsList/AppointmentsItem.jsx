@@ -1,5 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { ListItem } from '../../../library'
+import ShowDateInfo from './ShowDateInfo';
+import ShowPatientInfo from './ShowPatientInfo';
+import ShowOtherInfo from './ShowOtherInfo';
+import styles from './styles.scss';
 
 class AppointmentsItem extends Component {
   constructor(props) {
@@ -12,12 +16,29 @@ class AppointmentsItem extends Component {
       service,
       patient,
       practitioner,
+      chair,
     } = this.props;
+
+    const borderStyle = {
+      borderLeft: '10px solid',
+      borderLeftColor: practitioner.color,
+    };
+
     return (
-      <ListItem>
-        {patient.firstName}
-        {service.name}
-        {practitioner.firstName}
+      <ListItem className={styles.appointmentListItem} style={borderStyle}>
+        <ShowDateInfo
+          appointment={appointment}
+        />
+        <ShowPatientInfo
+          patient={patient}
+          appointment={appointment}
+          service={service}
+          chair={chair}
+        />
+        <ShowOtherInfo
+          patient={patient}
+          appointment={appointment}
+        />
       </ListItem>
     );
   }

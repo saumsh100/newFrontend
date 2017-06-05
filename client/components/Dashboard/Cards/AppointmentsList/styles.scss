@@ -1,0 +1,66 @@
+@import'../../../../ui';
+
+
+.appointmentList {
+  height: 556px;
+  border-top: 1px solid #efefef;
+  overflow: auto;
+}
+
+.appointmentListItem {
+  display: flex;
+  padding: 50px;
+}
+
+.dateContainer {
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid;
+  border-right-color: $inactive-color;
+
+  padding-right: 20px;
+  color: $primary-dark;
+  align-items: center;
+  justify-content: center;
+
+  &_month {
+    font-family: $medium-font;
+  }
+
+  &_day {
+    font-family: $medium-font;
+    font-size: $large-size;
+  }
+
+  &_year {
+    font-family: $medium-font;
+  }
+}
+
+.patientContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  &_name {
+    font-family: $medium-font;
+    font-size: $extra-medium-size;
+    padding-bottom: 10px;
+  }
+
+  &_appTime {
+    font-family: $medium-font;
+  }
+
+  &_service {
+
+  }
+}
+
+.otherContainer {
+  margin-left: auto;
+  text-align: end ;
+  padding: 20px;
+  border-right: 2px solid;
+  border-right-color: $inactive-color;
+  color: darken($primary-grey, 15%);
+}
