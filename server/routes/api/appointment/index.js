@@ -257,7 +257,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           sendStats.practitioner[appointment.practitioner.id].newPatients++;
         }
         //create time counter for a service if never used before.
-        if (!sendStats.services[appointment.service.id]){
+        if (appointment.service && !sendStats.services[appointment.service.id]){
           sendStats.services[appointment.service.id] = {
             time: 0,
             id: appointment.service.id,
@@ -276,7 +276,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
             avatarUrl: appointment.patient.avatarUrl,
           };
         }
-
         let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
         timeApp = (timeApp > 0 ? timeApp : 0);
 
@@ -290,12 +289,16 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           }
           sendStats.ageData = ageRange(sendStats.patients[appointment.patient.id].age, sendStats.ageData);
           sendStats.patients[appointment.patient.id].numAppointments++;
-          sendStats.services[appointment.service.id].time +=  timeApp;
+          if (appointment.service) {
+            sendStats.services[appointment.service.id].time += timeApp;
+          }
           sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
           confirmedAppointments++;
         }
       });
+
+
       sendStats.ageData = ageRangePercent(sendStats.ageData);
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;

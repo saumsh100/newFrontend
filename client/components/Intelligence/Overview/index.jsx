@@ -25,8 +25,6 @@ import VisitorsByDevice from './Cards/VisitorsByDevice';
 import BusiestTimeOfWeek from './Cards/BusiestTimeOfWeek';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
-import stats from '../../../thunks/stats';
-
 
 class Overview extends Component {
   constructor(props) {
@@ -367,7 +365,6 @@ function mapStateToProps({ entities, apiRequests }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    stats,
     fetchEntities,
     fetchEntitiesRequest,
   }, dispatch);
