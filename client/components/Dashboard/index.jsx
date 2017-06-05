@@ -83,9 +83,9 @@ class Dashboard extends React.Component {
 
     const data = [
       {count: appointmentFilter.size, title: "Appointments Today", icon: "calendar", size: 6, color: 'primaryColor' },
-      {count: filterConfirmedRequests.length, title: "New Appt Request", icon: "user", size: 6, color: 'primaryBlue' },
-      {count: sentReminders.size, title: "Reminders", icon: "bullhorn", size: 6, color: 'primaryGreen' },
-      {count: sentRecalls.size, title: "Recalls", icon: "star", size: 6, color: 'primaryYellow' },
+      {count: filterConfirmedRequests.length, title: "Appointment Requests", icon: "user", size: 6, color: 'primaryBlue' },
+      {count: sentReminders.size, title: "Reminders Sent", icon: "bullhorn", size: 6, color: 'primaryGreen' },
+      {count: sentRecalls.size, title: "Recalls Sent", icon: "star", size: 6, color: 'primaryYellow' },
     ];
 
     return (
@@ -124,9 +124,6 @@ class Dashboard extends React.Component {
           </Col>
           <Col xs={12}>
             <Row center="xs" className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
-                <DigitalWaitList />
-              </Col>
               <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
                 <RecallsList
                   patients={patients}
@@ -145,6 +142,9 @@ class Dashboard extends React.Component {
                   setSelectedPatientId={setSelectedPatientId}
                   push={push}
                 />
+              </Col>
+              <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
+                <DigitalWaitList />
               </Col>
             </Row>
           </Col>

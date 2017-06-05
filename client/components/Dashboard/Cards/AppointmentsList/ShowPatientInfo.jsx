@@ -14,22 +14,23 @@ export default function ShowPatientInfo(props) {
   const endHourMinute = moment(appointment.endDate).format('h:mm a');
   const time = startHourMinute.concat('-', endHourMinute);
 
-  const currentYear = new Date().getFullYear();
-  const birthday = moment(patient.birthDate).year();
-  const age = currentYear - birthday;
+  const age = patient.getAge();
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
 
   return (
     <div className={styles.patientContainer}>
-      <div className={styles.patientContainer_name}>
-        <span>{fullName.concat(', ', age)}</span>
-      </div>
-      <div className={styles.patientContainer_appTime}>
-        <span>{time}</span>
-      </div>
-      <div className={styles.patientContainer_service}>
-        <span>{service.name}, {chair.name}</span>
+      <img className={styles.patientContainer_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
+      <div className={styles.patientContainer_text}>
+        <div className={styles.patientContainer_name}>
+          <span>{fullName.concat(', ', age)}</span>
+        </div>
+        <div className={styles.patientContainer_appTime}>
+          <span>{time}</span>
+        </div>
+        <div className={styles.patientContainer_service}>
+          <span>{service.name}, {chair.name}</span>
+        </div>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ export default function RecallData(props) {
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_name} onClick={() => handleRecallClick(patient.id)}>
-            <b>{patient.firstName}, <span>{patient.lastName}</span></b>
+            <a href="#"><b>{patient.firstName}, <span>{patient.lastName}</span></b></a>
           </div>
           <div className={styles.patients__item_phone}>
             {patient.mobilePhoneNumber}

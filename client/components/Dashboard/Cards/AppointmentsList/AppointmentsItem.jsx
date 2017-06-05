@@ -16,20 +16,16 @@ export default function AppointmentsItem(props) {
     handleAppointmentClick,
   } = props;
 
-  const borderStyle = {
+  /*const borderStyle = {
     borderLeft: '10px solid',
     borderLeftColor: practitioner.color,
-  };
+  };*/
 
   return (
     <ListItem
       className={styles.appointmentListItem}
-      style={borderStyle}
       onClick={() => handleAppointmentClick(appointment.id)}
     >
-      <ShowDateInfo
-        appointment={appointment}
-      />
       <ShowPatientInfo
         patient={patient}
         appointment={appointment}
