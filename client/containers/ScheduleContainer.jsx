@@ -2,11 +2,11 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Loader from 'react-loader';
 import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { setScheduleDate, selectAppointment } from '../actions/schedule';
-import Loader from 'react-loader';
 
 import {
   setAllFilters,

@@ -3,6 +3,7 @@ const { type } = require('../config/thinky');
 const createModel = require('./createModel');
 
 const SentReminder = createModel('SentReminder', {
+  sentDate: type.date(),
   reminderId: type.string().uuid(4).required(),
   accountId: type.string().uuid(4).required(),
   patientId: type.string().uuid(4).required(),

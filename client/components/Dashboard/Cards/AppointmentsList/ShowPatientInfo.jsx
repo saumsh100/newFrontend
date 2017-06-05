@@ -1,3 +1,4 @@
+
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import styles from './styles.scss';
@@ -14,7 +15,7 @@ export default function ShowPatientInfo(props) {
   const endHourMinute = moment(appointment.endDate).format('h:mm a');
   const time = startHourMinute.concat('-', endHourMinute);
 
-  const age = patient.getAge();
+  const age = moment().diff(patient.birthDate, 'years');
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
 

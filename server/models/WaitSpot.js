@@ -4,9 +4,9 @@ const createModel = require('./createModel');
 const type = thinky.type;
 
 const PreferencesSchema = type.object().schema({
-  morning: type.boolean().default(true),
-  afternoon: type.boolean().default(true),
-  evening: type.boolean().default(true),
+  mornings: type.boolean().default(true),
+  afternoons: type.boolean().default(true),
+  evenings: type.boolean().default(true),
   weekdays: type.boolean().default(true),
   weekends: type.boolean().default(true),
 }).default({

@@ -23,7 +23,7 @@
 }
 
 .reminders {
-  border-top: $card-border-size $primary-darkgrey;
+  border-top: $card-border-size $primary-green;
   height: 604px;
   margin-bottom: 20px;
   background-color: lighten($primary-lightgrey, 2%);
@@ -119,6 +119,17 @@
 
     &_name {
       color: $primary-dark;
+      letter-spacing: normal;
+      &_first {
+        padding-right: 5px;
+      }
+      &:link {
+        color: $primary-dark;
+        text-decoration: none;
+      }
+      &:hover {
+        color: $primary-color;
+      }
     }
 
     &_icon {

@@ -3,12 +3,22 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import map from 'lodash/map';
 import some from 'lodash/some';
-import { Avatar, ListItem } from '../../library';
+import withHoverable from '../../../hocs/withHoverable';
+import { Avatar, ListItem, IconButton } from '../../library';
 import styles from './styles.scss';
 
 const notAllTrue = obj => some(obj, val => !val);
 
-function DigitalWaitListItem ({ patient, waitSpot }) {
+function DigitalWaitListItem(props) {
+  const {
+    patient,
+    waitSpot,
+    handlePatientClick,
+    setSelectedWaitSpot,
+    isHovered,
+    removeWaitSpot,
+  } = props;
+
   const { preferences, unavailableDays } = waitSpot.toJS();
 
   // Set Availability to All by default and then list selected if not...
@@ -34,16 +44,59 @@ function DigitalWaitListItem ({ patient, waitSpot }) {
     name = `${patient.get('firstName')[0]}. ${patient.get('lastName')}`;
   }
 
+  const waitSpotJS = Object.assign({}, waitSpot.toJS(), {
+    waitSpotModel: waitSpot,
+  });
+
+
+  let showHoverComponents = (
+    <div className={styles.patients__item_right}>
+      <div className={styles.availability}>
+        Availability
+      </div>
+      <div className={styles.patients__item_days}>
+        {availComponent}
+      </div>
+      <div className={styles.availability}>
+        Except
+      </div>
+      <div className={styles.patients__item_days}>
+        {exceptComponent}
+      </div>
+    </div>
+  );
+
+  if (isHovered) {
+    showHoverComponents = (
+      <div className={styles.patients__item_right}>
+        <IconButton
+          icon={'times-circle-o'}
+          onClick={(e) => {
+            e.stopPropagation();
+            removeWaitSpot(waitSpot.get('id'));
+          }}
+          size={2}
+        />
+      </div>
+    );
+  }
+
   return (
-    <ListItem className={styles.patients__item}>
+    <ListItem className={styles.patients__item} onClick={() => setSelectedWaitSpot(waitSpotJS)}>
       <Avatar size="lg" user={patient.toJS()} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_name}>
-            <b>
-              <div className={styles.name}>{name}</div>,
-              <span> {patient.getAge()}</span>
-            </b>
+            <a
+              className={styles.patients__item_name}
+              onClick={() => handlePatientClick(patient.id)}
+              href="#"
+            >
+              <b>
+                <span className={styles.name}>{name}</span>,
+                <span> {patient.getAge()}</span>
+              </b>
+            </a>
           </div>
           <div className={styles.patients__item_phone}>
             {patient.get('mobilePhoneNumber')}
@@ -53,20 +106,7 @@ function DigitalWaitListItem ({ patient, waitSpot }) {
           </div>
         </div>
       </div>
-      <div className={styles.patients__item_right}>
-        <div className={styles.availability}>
-          Availability
-        </div>
-        <div className={styles.patients__item_days}>
-          {availComponent}
-        </div>
-        <div className={styles.availability}>
-          Except
-        </div>
-        <div className={styles.patients__item_days}>
-          {exceptComponent}
-        </div>
-      </div>
+      {showHoverComponents}
     </ListItem>
   );
 }
@@ -76,4 +116,4 @@ DigitalWaitListItem.propTypes = {
   waitSpot: PropTypes.object.isRequired,
 };
 
-export default DigitalWaitListItem;
+export default withHoverable(DigitalWaitListItem);

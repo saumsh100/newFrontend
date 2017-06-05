@@ -12,12 +12,17 @@ export default function ReminderData(props) {
     appointment,
     sentReminder,
     index,
-    handleReminderClick
+    handleReminderClick,
   } = props;
 
   const displayStatus = sentReminder.isConfirmed ? 'Reminder Confirmed' : 'Reminder Sent';
-  const icon = (reminder.primaryType === 'sms') && 'comment';
 
+  let icon = reminder.primaryType.toLowerCase();
+  if (icon === 'sms') {
+    icon = 'comment';
+  }
+
+  const age = moment().diff(patient.birthDate, 'years');
   return (
     <ListItem
       key={`patientsItem${index}`}
@@ -26,8 +31,18 @@ export default function ReminderData(props) {
       <img className={styles.patients__item_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
-          <div className={styles.patients__item_name} onClick={() => handleRecallClick(patient.id)}>
-            <a href="#"><b>{patient.firstName}, <span>{patient.lastName}</span></b></a>
+          <div className={styles.patients__item_name}>
+            <a
+              className={styles.patients__item_name}
+              onClick={() => handleReminderClick(patient.id)}
+              href="#"
+            >
+              <b>
+                <span className={styles.patients__item_name_first}>{patient.firstName}</span>
+                <span>{patient.lastName}</span>
+                <span>, {age}</span>
+              </b>
+            </a>
           </div>
           <div className={styles.patients__item_phone}>
             {patient.mobilePhoneNumber}
@@ -41,15 +56,12 @@ export default function ReminderData(props) {
             {displayStatus}
           </div>
           <div className={styles.patients__item_date}>
-            {moment(appointment.startDate).format('L')}
-          </div>
-          <div className={styles.patients__item_time}>
-            {moment(appointment.endDate).format('L')}
+            {moment(sentReminder.sentDate).format('MM/DD/YYYY')}
           </div>
         </div>
       </div>
       <div className={styles.patients__item_icon}>
-        <Icon className={styles[`fa-${icon || reminder.primaryType}`]} icon={icon} size={1.5} />
+        <Icon className={styles[`fa-${icon}`]} icon={icon} size={1.5} />
       </div>
     </ListItem>
   );

@@ -10,6 +10,7 @@ import {
   REMOVE_SCHEDULE_FILTER,
   SET_SCHEDULE_DATE,
   SELECT_APPOINTMENT,
+  SELECT_WAITSPOT,
 } from '../constants';
 
 const initialState = fromJS({
@@ -19,6 +20,7 @@ const initialState = fromJS({
   servicesFilter: [],
   remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
   selectedAppointment: null,
+  selectedWaitSpot: null,
 });
 
 export default handleActions({
@@ -31,6 +33,11 @@ export default handleActions({
   [SELECT_APPOINTMENT](state, action) {
     const appointment = action.payload;
     return state.set('selectedAppointment', appointment);
+  },
+
+  [SELECT_WAITSPOT](state, action) {
+    const waitSpot = action.payload;
+    return state.set('selectedWaitSpot', waitSpot);
   },
 
   [ADD_SCHEDULE_FILTER](state, action) {
