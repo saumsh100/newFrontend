@@ -106,7 +106,6 @@
     &_clickIcons {
       display: flex;
       margin-left: auto;
-      text-align: center;
       align-items: center;
       @media screen and (max-width: 450px) {
         text-align: center;
@@ -114,7 +113,6 @@
         margin-top: 10px;
         align-items: center;
       }
-
     }
 
 

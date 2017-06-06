@@ -5,13 +5,13 @@
   height: 556px;
   border-top: 1px solid #efefef;
   overflow: auto;
+  background-color: lighten($primary-lightgrey, 2%);
   @media screen and (max-width: 450px){
     max-width: 270px;
   }
 }
 
 .appointmentListItem {
-  display: flex;
   padding: 50px 20px 50px 20px;
 }
 

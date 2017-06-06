@@ -96,9 +96,9 @@ class DigitalWaitList extends Component {
   }
 
   handlePatientClick(id) {
-    this.props.setSelectedWaitSpot(null);
     this.props.setSelectedPatientId(id);
     this.props.push('/patients/list');
+    this.reinitializeState();
   }
 
   removeWaitSpot(id) {
@@ -107,6 +107,8 @@ class DigitalWaitList extends Component {
     if (confirmDelete) {
       this.props.deleteEntityRequest({ key: 'waitSpots', id });
     }
+
+    this.reinitializeState();
   }
 
   render() {
@@ -197,6 +199,8 @@ DigitalWaitList.propTypes = {
   patients: PropTypes.object.isRequired,
   fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
   setSelectedPatientId: PropTypes.func.isRequired,

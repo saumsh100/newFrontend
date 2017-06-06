@@ -41,12 +41,17 @@ class MainContainer extends Component {
   }
 
   render() {
-    const patientsWithAppointments = this.props.appointments.toArray().map((appointment) => {
-      const patient = this.props.patients.get(appointment.patientId);
-      patient.appointment = appointment;
 
-      return patient;
-    });
+    const patientsWithAppointments = this.props.appointments.toArray()
+      .reduce((res, appointment) => {
+        const patient = this.props.patients.get(appointment.patientId) || null;
+        if (patient) {
+          patient.appointment = appointment;
+          res.push(patient);
+        }
+        return res;
+      }, []);
+
 
     const patientList = uniqBy(patientsWithAppointments, 'id');
 
