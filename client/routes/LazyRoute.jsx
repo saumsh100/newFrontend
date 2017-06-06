@@ -1,10 +1,11 @@
 
 import React, { PropTypes } from 'react';
+import Loader from 'react-loader';
 import { Route } from 'react-router-dom';
 import Bundle from './Bundle';
 
 const Loading = () =>
-  <div>Loading</div>;
+  <Loader loaded={false} color="#FF715A" />;
 
 const LazyRoute = ({ path, load, component = null, name = '' }) => {
   const bundleComponent = props =>
