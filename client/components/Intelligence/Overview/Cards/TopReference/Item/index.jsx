@@ -10,7 +10,7 @@ class Item extends Component {
       cardTitle,
     } = this.props;
     return (
-      <Col className={styles.padding} xs={12} sm={6} md={3}>
+      <Col className={styles.paddingFill} xs={12} sm={6} md={3}>
         <Card className={styles.userItem}>
           <div className={styles.userItem__header}>
             <CardHeader title={cardTitle}/>

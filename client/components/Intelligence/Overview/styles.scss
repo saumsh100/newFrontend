@@ -37,11 +37,24 @@
 
 }
 
+.floatRight {
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.formDrop {
+  padding: 10px;
+  button {
+    margin-left: auto;
+  }
+}
+
 
 .intelligence {
   &__header {
     @extend .header;
     &_title {
+      justify-content: space-between;
       @extend .title;
       &_cards {
         @extend .cards;
@@ -77,6 +90,10 @@
 .cardHeader {
   border-top: $card-border-size $inactive-color;
   padding: 20px;
+}
+
+.dropdown {
+  height: 100%;
 }
 
 .maleVsFamale {
@@ -371,6 +388,9 @@
   height: 400px;
   overflow: hidden;
     &__content {
+      canvas {
+        max-width: 98%;
+      }
       display: flex;
       flex-direction: row;
       width: 100%;
@@ -383,6 +403,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  canvas {
+    max-width: 100%;
+    max-height: 70%;
+  }
 }
 
 
@@ -473,6 +497,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  canvas {
+    max-width: 99%;
+  }
+
 
   &__mainContent {
     display: flex;

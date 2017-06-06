@@ -5,6 +5,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const normalize = require('../normalize');
 const Chat = require('../../../models/Chat');
+const Account = require('../../../models/Account');
 const TextMessage = require('../../../models/TextMessage');
 const { namespaces } = require('../../../config/globals');
 const twilio = require('../../../config/globals').twilio;
@@ -118,33 +119,43 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
   chatMerge.accountId = req.body.patient.accountId;
   chatMerge.patientId = req.body.patient.id;
 
-  return twilioClient.sendMessage(textMessages)
+  return Account.filter({id: chatMerge.accountId}).run()
     .then((result) => {
-      if (!req.body.chatId) {
-        Chat.save(chatMerge).then((chat) => {
-          textMessages.chatId = chat.id;
-          TextMessage.save(textMessages)
-            .then((chats) => {
-              const sendChat = normalize('chat', chats);
-              io.of(namespaces.dash).in(req.body.patient.accountId).emit('newMessage', sendChat)
-              res.send(sendChat);
-            });
-        });
-
-      } else {
-        TextMessage.save(textMessages)
-          .then(() => {
-            Chat.get(req.body.chatId).getJoin(joinObject).run()
-              .then((chat) => {
-                chat.merge(mergeData).save().then((chats) => {
-                  const send = normalize('chat', chats);
-                  io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', send)
-                  res.send(send);
+      const textMessages = {
+        body: req.body.message,
+        chatId: req.body.chatId,
+        to: req.body.patient.mobilePhoneNumber,
+        from: result[0].twilioPhoneNumber,
+      };
+      twilioClient.sendMessage(textMessages)
+        .then((result) => {
+          if (!req.body.chatId) {
+            Chat.save(chatMerge).then((chat) => {
+              textMessages.chatId = chat.id;
+              TextMessage.save(textMessages)
+                .then((chats) => {
+                  const sendChat = normalize('chat', chats);
+                  io.of(namespaces.dash).in(req.body.patient.accountId).emit('newMessage', sendChat)
+                  res.send(sendChat);
                 });
-              });
-          }).catch(next);
-      }
-    }).catch(next);
+            });
+
+          } else {
+            TextMessage.save(textMessages)
+              .then(() => {
+                Chat.get(req.body.chatId).getJoin(joinObject).run()
+                  .then((chat) => {
+                    chat.merge(mergeData).save().then((chats) => {
+                      const send = normalize('chat', chats);
+                      io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', send)
+                      res.send(send);
+                    });
+                  });
+              }).catch(next);
+          }
+        });
+    })
+    .catch(next);
 });
 
 /**

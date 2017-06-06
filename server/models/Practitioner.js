@@ -11,6 +11,7 @@ const Practitioner = createModel('Practitioner', {
   lastName: type.string().required(),
   pmsId: type.string(),
   type: type.string(),
+  isActive: type.boolean().default(true),
 
   // If false we use Clinic's sechedule as default
   isCustomSchedule: type.boolean().default(false),
