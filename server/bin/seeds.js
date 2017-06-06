@@ -199,14 +199,18 @@ for (let i = 0; i < 100; i++) {
   });
 
   const appointmentTime = faker.date.future();
+  const random_boolean = Math.random() >= 0.5;
+  const service = (random_boolean ? serviceId : serviceId2)
 
   randomAppointments.push({
     accountId,
     startDate: moment(appointmentTime).subtract(1, 'hours')._d,
     endDate: moment(appointmentTime)._d,
     patientId: id,
-    serviceId,
+    serviceId: service,
     practitionerId,
+    isPatientConfirmed: true,
+    isCancelled: false,
     chairId,
     note: 'First',
   });
@@ -319,7 +323,7 @@ const SEEDS = {
       startDate: recentStartTime,
       endDate: recentStartTime.add(oneHour),
       patientId: alexPatientId,
-      serviceId: serviceId2,
+      serviceId: serviceId,
       practitionerId,
       chairId,
       note: 'First',
@@ -656,7 +660,7 @@ const SEEDS = {
       lastName: 'Bashliy',
       mobilePhoneNumber: alexPhoneNumber,
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
-      gender: 'male',
+      gender: 'female',
       status: 'Active',
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
@@ -880,8 +884,10 @@ const SEEDS = {
       accountId,
       firstName: 'Chelsea',
       lastName: 'Mansfield',
+      type: 'Dentist',
       weeklyScheduleId: weeklyScheduleId2,
       isCustomSchedule: true,
+      isActive: true,
       // services: [],
     },
     {
@@ -889,8 +895,10 @@ const SEEDS = {
       accountId,
       firstName: 'Perry',
       lastName: 'Cox',
+      type: 'Dentist',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
+      isActive: false,
       // services: [],
     },
     {

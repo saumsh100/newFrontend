@@ -17,6 +17,7 @@
     "console": "node server/bin/console.js",
     "seeds": "node_modules/.bin/babel-node ./server/bin/seeds.js",
     "start": "nf start -w -j Procfile_dev",
+    "startdev": "nf start -w -j Procfile_dev_no_reminders",
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "storybook": "start-storybook -p 9001 -c .storybook",

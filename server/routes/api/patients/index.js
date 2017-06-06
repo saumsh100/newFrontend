@@ -1,16 +1,45 @@
 
 const _ = require('lodash');
+const moment = require('moment');
 const patientsRouter = require('express').Router();
 const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const checkIsArray = require('../../../middleware/checkIsArray');
 const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
+const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
 patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
+
+function ageRange(age, array) {
+  if (age < 18) {
+    array[0]++;
+  } else if(age >= 18 && age < 25) {
+    array[1]++;
+  } else if(age >= 25 && age < 35) {
+    array[2]++;
+  } else if(age >= 35 && age < 45) {
+    array[3]++;
+  } else if(age >= 45 && age < 55) {
+    array[4]++;
+  } else {
+    array[5]++;
+  }
+  return array;
+}
+function ageRangePercent(array) {
+  const newArray = array.slice();
+  newArray[0] = Math.round(100 * array[0] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
+  newArray[1] = Math.round(100 * array[1] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
+  newArray[2] = Math.round(100 * array[2] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
+  newArray[3] = Math.round(100 * array[3] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
+  newArray[4] = Math.round(100 * array[4] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
+  newArray[5] = Math.round(100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
+  return newArray;
+}
 
 const generateDuringFilter = (m, startDate, endDate) => {
   return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
@@ -18,6 +47,48 @@ const generateDuringFilter = (m, startDate, endDate) => {
 );
 };
 
+patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next) => {
+  const {
+    query,
+  } = req;
+
+  const {
+    accountId,
+  } = query;
+
+  const male = /^male/i;
+
+  const startDate = r.now().add(365 * 24 * 60 * 60 * -1);
+  const endDate = r.now();
+
+  return Appointment
+    .filter({ accountId })
+    .filter(r.row('startDate').during(startDate, endDate))
+    .getJoin({
+      patient: true,
+    })
+    .run()
+    .then((appointments) => {
+      const send = {
+        male: 0,
+        female: 0,
+        ageData: new Array(6).fill(0),
+    };
+
+      appointments.map((appointment) => {
+        if (male.test(appointment.patient.gender)) {
+          send.male++;
+        } else {
+          send.female++;
+        }
+        send.ageData = ageRange(appointment.patient.age, send.ageData);
+        return 0;
+      });
+      send.ageData = ageRangePercent(send.ageData);
+      res.send(send);
+    })
+    .catch(next);
+});
 
 /**
  * Batch creation
