@@ -3,6 +3,7 @@ const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const AddressSchema = require('./schemas/Address');
 const PreferencesSchema = require('./schemas/Preferences');
+const PatientAux = require('./PatientAux');
 const validators = require('../util/validators');
 
 const type = thinky.type;
@@ -19,7 +20,7 @@ const Patient = createModel('Patient', {
 
   phoneNumber: type.string(),
   homePhoneNumber: type.string(),
-  mobilePhoneNumber: type.string(),
+  mobilePhoneNumber: type.string(), //.validator(validatorFn),
   workPhoneNumber: type.string(),
   otherPhoneNumber: type.string(),
   prefContactPhone: type.string(),
@@ -43,6 +44,46 @@ const Patient = createModel('Patient', {
   status: type.string().enum(['Active', 'InActive']).default('Active'),
 });
 
+/*
+function checkUniqueAttributes() {
+  for (every unique field in Patient model) {
+    check if field exists in the aux table;
+  }
+}
+
+- how to mark a field that it should be unique
+*/
+
+/**
+ * - check if PatientAux table has this phone number in it
+ * TODO create aux table
+ * Check aux patient table to see if the phone number is unique.
+ * @return boolean true if it is, false otherwise
+ */
+function isUnique(number) {
+  console.log('verifying uniqueness of the number:', number);
+  PatientMobilePhoneNumberAuxClinicIdTable
+    .get(mobilePhoneNumber)
+    //.filter(accountId)
+    .then((matches) => {
+      console.log('creating the aux table');
+      const patientAuxData = Object.assign({}, { mobilePhoneNumber: number });
+      PatientAux.save(patientAuxData);
+      return true;
+    })
+    .catch(error => console.log('TODO do something about the error', error));
+}
+
+/**
+ * @param phoneNumber String phoneNumber to validate
+ */
+/*
+ *function validatorFn(phoneNumber) {
+ *  console.log('...... validating field', phoneNumber);
+ *  return true;
+ *}
+ */
+
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
   return this.filter({ mobilePhoneNumber: phoneNumber }).nth(0).run();
@@ -60,12 +101,24 @@ Patient.define('getPreferredPhoneNumber', () => {
  * Fires on document create and update
  */
 Patient.docOn('saving', validatePatient);
+Patient.pre('save', validatePatient);
 
 function validatePatient(doc) {
-  validators.validatePhoneNumber(doc.phoneNumber);
-  validators.validatePhoneNumber(doc.mobileNumber);
-  validators.validatePhoneNumber(doc.workNumber);
-  validators.validatePhoneNumber(doc.otherPhoneNumber);
+  isUnique(doc.mobilePhoneNumber);
+  // validators.validatePhoneNumber(doc.phoneNumber);
+  // validators.validatePhoneNumber(doc.mobileNumber);
+  // validators.validatePhoneNumber(doc.workNumber);
+  // validators.validatePhoneNumber(doc.otherPhoneNumber);
 }
+
+// const PatientAux = createModel('PatientAux', {
+//   id: type.string(),
+// }, { pk: });
+
+
+Patient.docOn('saving', function(patient) {
+  // set primary key before saving
+  return patientAux.id = md5hash(patient.accountId, patient.phoneNumber);
+});
 
 module.exports = Patient;

@@ -10,10 +10,18 @@ function createModel(tableName, schema, config = {}) {
     enforce_extra: 'remove'
   };
 
+  console.log(`createModel ${tableName} config is `, config);
+
   const Model = thinky.createModel(tableName, schema, {
     ...defaultConfig,
     ...config,
   });
+
+  // for (each unique field in model) {
+  //  create aux tables
+  // }
+
+  // Model.preSave(validateUnique);
 
   // TODO: add Model helper functionss
   // Model.fetch({  }) filters and joiners to match API and controller requirements
