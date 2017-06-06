@@ -388,6 +388,9 @@
   height: 400px;
   overflow: hidden;
     &__content {
+      canvas {
+        max-width: 98%;
+      }
       display: flex;
       flex-direction: row;
       width: 100%;
@@ -494,6 +497,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  canvas {
+    max-width: 99%;
+  }
+
 
   &__mainContent {
     display: flex;

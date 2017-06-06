@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
+import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { bindActionCreators } from 'redux';
@@ -33,6 +34,7 @@ class Overview extends Component {
       endDate: moment(new Date()),
       startDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       active: false,
+      loader: false,
     };
     this.reinitializeState = this.reinitializeState.bind(this);
     this.modelOn = this.modelOn.bind(this);
@@ -52,9 +54,17 @@ class Overview extends Component {
     this.props.fetchEntities({
       key: 'accounts',
     });
-    this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params});
-    this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params});
-    this.props.fetchEntitiesRequest({id: 'appointmentStatsLastYear', url: '/api/appointments/statslastyear', params});
+    Promise.all([
+      this.props.fetchEntitiesRequest({id: 'patientStats', url: '/api/patients/stats', params}),
+      this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params}),
+      this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params}),
+      this.props.fetchEntitiesRequest({id: 'appointmentStatsLastYear', url: '/api/appointments/statslastyear', params}),
+    ])
+      .then(() => {
+        this.setState({
+          loader: true,
+        });
+      });
   }
 
   reinitializeState() {
@@ -66,6 +76,9 @@ class Overview extends Component {
   }
 
   submit(values) {
+    this.setState({
+      loader: false,
+    });
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
@@ -75,21 +88,22 @@ class Overview extends Component {
       accountId: decodedToken.activeAccountId,
     };
 
-    this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params});
+    Promise.all([
+      this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params}),
+      this.props.fetchEntities({
+        key: 'accounts',
+      }),
+      this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params})
+    ]).then(() => {
+      const newState = {
+        startDate: moment(values.startDate),
+        endDate: moment(values.endDate),
+        active: false,
+        loader: true,
+      };
 
-    this.props.fetchEntities({
-      key: 'accounts',
+      this.setState(newState);
     });
-    this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params})
-      .then(() => {
-        const newState = {
-          startDate: moment(values.startDate),
-          endDate: moment(values.endDate),
-          active: false,
-        };
-
-        this.setState(newState);
-      });
   }
 
   modelOn() {
@@ -101,13 +115,14 @@ class Overview extends Component {
   render() {
 
     const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toObject(): null);
+    const patientStats = (this.props.patientStats ? this.props.patientStats.toObject(): null);
 
     const prac = (appointmentStats ? appointmentStats.practitioner : {});
     const serve = (appointmentStats ? appointmentStats.services : {});
     const patients = (appointmentStats ? appointmentStats.patients: {});
-    let male = (appointmentStats ? appointmentStats.male : 0);
-    let female = (appointmentStats ? appointmentStats.female : 0);
-    let ageRange = (appointmentStats ? appointmentStats.ageData.toArray() : []);
+    let male = (patientStats ? patientStats.male : 0);
+    let female = (patientStats ? patientStats.female : 0);
+    const ageRange = (patientStats ? patientStats.ageData.toArray() : []);
     const newVisitors = (appointmentStats ? appointmentStats.newPatients : 0);
     const allApp = (appointmentStats ? appointmentStats.notConfirmedAppointments : 0);
     const returning = allApp - newVisitors;
@@ -176,7 +191,7 @@ class Overview extends Component {
     sortedPatients = sortedPatients.slice(0,4);
 
     const data = [
-      { count: notConfirmedAppointments, title: 'Appointment Booked', icon: 'calendar', size: 6, color: 'primaryColor' },
+      { count: notConfirmedAppointments, title: 'Appointments Booked', icon: 'calendar', size: 6, color: 'primaryColor' },
       { count: '?', title: 'Estimated Revenue', icon: 'line-chart', size: 6, color: 'primaryBlue' },
       { count: newVisitors, title: 'New Patients', icon: 'user', size: 6, color: 'primaryGreen' },
       { count: confirmedAppointments, title: 'Confirmed Appointments', icon: 'check-circle', size: 6, color: 'primaryYellow' },
@@ -268,6 +283,7 @@ class Overview extends Component {
             />
           </Form>
         </DialogBox>
+        <Loader loaded={this.state.loader} color='#FF715C'>
         <Row className={styles.intelligence__body}>
           <Col xs={12}>
             <DashboardStats data={data} />
@@ -344,6 +360,7 @@ class Overview extends Component {
             />
           </Col>
         </Row>
+        </Loader>
       </Grid>
     );
   }
@@ -357,12 +374,14 @@ function mapStateToProps({ entities, apiRequests }) {
   const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
   const appointmentStatsLastYear = (apiRequests.get('appointmentStatsLastYear') ? apiRequests.get('appointmentStatsLastYear').data : null);
   const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);
+  const patientStats = (apiRequests.get('patientStats') ? apiRequests.get('patientStats').data : null);
 
   return {
     accounts: entities.getIn(['accounts', 'models']),
     appointmentStats,
     appointmentStatsLastYear,
     dayStats,
+    patientStats,
   };
 }
 

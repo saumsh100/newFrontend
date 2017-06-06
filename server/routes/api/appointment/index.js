@@ -7,6 +7,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 const Account = require('../../../models/Account');
+const Service = require('../../../models/Service');
 const WeeklySchedule = require('../../../models/WeeklySchedule');
 const Practitioner = require('../../../models/Practitioner');
 const loaders = require('../../util/loaders');
@@ -32,33 +33,6 @@ function getDiffInMin(startDate, endDate){
   return moment(endDate).diff(moment(startDate), 'minutes');
 }
 
-function ageRange(age, array) {
-  if (age < 18) {
-    array[0]++;
-  } else if(age >= 18 && age < 25) {
-    array[1]++;
-  } else if(age >= 25 && age < 35) {
-    array[2]++;
-  } else if(age >= 35 && age < 45) {
-    array[3]++;
-  } else if(age >= 45 && age < 55) {
-    array[4]++;
-  } else {
-    array[5]++;
-  }
-  return array;
-}
-function ageRangePercent(array) {
-  const newArray = array.slice();
-  newArray[0] = Math.round(100 * array[0] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[1] = Math.round(100 * array[1] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[2] = Math.round(100 * array[2] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[3] = Math.round(100 * array[3] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[4] = Math.round(100 * array[4] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[5] = Math.round(100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  return newArray;
-}
-
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 const monthsYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -67,28 +41,27 @@ const monthsYear = ['January', 'February', 'March', 'April', 'May', 'June', 'Jul
 appointmentsRouter.get('/statsdate', (req, res, next) => {
 
   const {
-    joinObject,
     query,
   } = req;
 
   let {
-    startDate,
-    endDate,
-    accountId,
-  } = query;
+      startDate,
+        endDate,
+        accountId,
+      } = query;
 
 
-  if (!startDate || !endDate) {
-    return res.send(400);
-  }
+        if (!startDate || !endDate) {
+        return res.send(400);
+      }
 
-  // By default this will list upcoming appointments
+      // By default this will list upcoming appointments
 
-  const start = moment(startDate)._d;
-  const end = moment(endDate)._d;
+          const start = moment(startDate)._d;
+    const end = moment(endDate)._d;
 
-  startDate = startDate ? r.ISO8601(startDate) : r.now();
-  endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
+      startDate = startDate ? r.ISO8601(startDate) : r.now();
+    endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
 
   return Appointment
@@ -104,9 +77,8 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
       res.send({days});
     })
     .catch(next);
-
-
 });
+
 appointmentsRouter.get('/statslastyear', (req, res, next) => {
   const {
     query,
@@ -128,7 +100,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     months.push(monthsYear[moment(date).subtract(i - 1, 'months').get('months')])
     const startDate = r.ISO8601(start);
     const endDate = r.ISO8601(end);
-    Promises.push( Appointment
+    Promises.push(Appointment
       .filter({ accountId })
       .filter(r.row('startDate').during(startDate, endDate))
       .run());
@@ -139,7 +111,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
       data = values.map((value) => {
         return value.length;
       });
-      res.send({data: data.reverse(), months : months.reverse()});
+      res.send({data: data.reverse(), months: months.reverse()});
     })
     .catch(next);
 });
@@ -190,17 +162,17 @@ appointmentsRouter.get('/stats', (req, res, next) => {
     .getJoin({weeklySchedule: true})
     .run();
 
-  return Promise.all([a, b, c])
+  const d = Service
+    .filter({ accountId })
+    .run();
+
+  return Promise.all([a, b, c, d])
     .then((values) => {
       const sendStats = {};
       sendStats.practitioner = {};
       sendStats.services = {};
       sendStats.patients = {};
-      sendStats.male = 0;
-      sendStats.female = 0;
       sendStats.newPatients = 0;
-      const male = /^male/i;
-      sendStats.ageData = new Array(6).fill(0);
       const range = moment().range(moment(start), moment(end));
 
       const numberOfDays = moment(end).diff(moment(start), 'days');
@@ -209,6 +181,15 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       const remainingDays = numberOfDays % 7;
 
       let timeOpen = 0;
+
+      values[3].map((service) => {
+        //create time counter for a service
+        sendStats.services[service.id] = {
+          time: 0,
+          id: service.id,
+          name: service.name,
+        };
+      });
 
       //Calculate the amount of hours the office is open for a given range
       values[2].map((account) => {
@@ -260,14 +241,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
             sendStats.newPatients++;
             sendStats.practitioner[appointment.practitioner.id].newPatients++;
           }
-          //create time counter for a service if never used before.
-          if (appointment.service && !sendStats.services[appointment.service.id]) {
-            sendStats.services[appointment.service.id] = {
-              time: 0,
-              id: appointment.service.id,
-              name: appointment.service.name,
-            };
-          }
 
           //create patient if never exist for the most seen
           if (!sendStats.patients[appointment.patient.id]) {
@@ -280,18 +253,14 @@ appointmentsRouter.get('/stats', (req, res, next) => {
               avatarUrl: appointment.patient.avatarUrl,
             };
           }
+
           let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
           timeApp = (timeApp > 0 ? timeApp : 0);
 
           time += timeApp;
           notConfirmedAppointments++;
+
           if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
-            if (male.test(appointment.patient.gender)) {
-              sendStats.male++;
-            } else {
-              sendStats.female++;
-            }
-            sendStats.ageData = ageRange(sendStats.patients[appointment.patient.id].age, sendStats.ageData);
             sendStats.patients[appointment.patient.id].numAppointments++;
             if (appointment.service) {
               sendStats.services[appointment.service.id].time += timeApp;
@@ -304,7 +273,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       });
 
 
-      sendStats.ageData = ageRangePercent(sendStats.ageData);
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;
       res.send(sendStats);

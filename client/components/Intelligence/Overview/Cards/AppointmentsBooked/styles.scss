@@ -14,6 +14,9 @@
   }
   &__body {
     position: relative;
+    canvas {
+      max-width: 99%;
+    }
     @media screen and (max-width: 900px){
       position: relative;
       top: 50%;
