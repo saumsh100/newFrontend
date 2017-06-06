@@ -8,7 +8,7 @@ const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
 const Account = require('../../../models/Account');
 const Service = require('../../../models/Service');
-const WeeklySchedule = require('../../../models/WeeklySchedule');
+const Patient = require('../../../models/Patient');
 const Practitioner = require('../../../models/Practitioner');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
@@ -44,25 +44,12 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
     query,
   } = req;
 
-  let {
-      startDate,
-        endDate,
-        accountId,
-      } = query;
+  const {
+    accountId,
+  } = query;
 
-
-        if (!startDate || !endDate) {
-        return res.send(400);
-      }
-
-      // By default this will list upcoming appointments
-
-          const start = moment(startDate)._d;
-    const end = moment(endDate)._d;
-
-      startDate = startDate ? r.ISO8601(startDate) : r.now();
-    endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
-
+  const startDate = r.now().add(365 * 24 * 60 * 60 * -1);
+  const endDate = r.now();
 
   return Appointment
     .filter({ accountId })
@@ -166,7 +153,11 @@ appointmentsRouter.get('/stats', (req, res, next) => {
     .filter({ accountId })
     .run();
 
-  return Promise.all([a, b, c, d])
+  const e = Patient
+    .filter({ accountId })
+    .run();
+
+  return Promise.all([a, b, c, d, e])
     .then((values) => {
       const sendStats = {};
       sendStats.practitioner = {};
@@ -189,6 +180,20 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           id: service.id,
           name: service.name,
         };
+      });
+
+      values[4].map((patient) => {
+        //create patients
+        if (!sendStats.patients[patient.id]) {
+          sendStats.patients[patient.id] = {
+            numAppointments: 0,
+            id: patient.id,
+            firstName: patient.firstName,
+            lastName: patient.lastName,
+            age: moment().diff(moment(patient.birthDate), 'years'),
+            avatarUrl: patient.avatarUrl,
+          };
+        }
       });
 
       //Calculate the amount of hours the office is open for a given range
@@ -240,18 +245,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           if (range.contains(moment(appointment.patient.createdAt))) {
             sendStats.newPatients++;
             sendStats.practitioner[appointment.practitioner.id].newPatients++;
-          }
-
-          //create patient if never exist for the most seen
-          if (!sendStats.patients[appointment.patient.id]) {
-            sendStats.patients[appointment.patient.id] = {
-              numAppointments: 0,
-              id: appointment.patient.id,
-              firstName: appointment.patient.firstName,
-              lastName: appointment.patient.lastName,
-              age: moment().diff(moment(appointment.patient.birthDate), 'years'),
-              avatarUrl: appointment.patient.avatarUrl,
-            };
           }
 
           let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');

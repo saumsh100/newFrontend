@@ -89,7 +89,6 @@ class Overview extends Component {
     };
 
     Promise.all([
-      this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params}),
       this.props.fetchEntities({
         key: 'accounts',
       }),
@@ -213,7 +212,7 @@ class Overview extends Component {
       endDate: this.state.endDate._d,
       startDate: this.state.startDate._d,
     };
-    
+
     const UserMenu = (props) => {
       return (
         <Button flat {...props} className={styles.userMenuButton}>
@@ -328,7 +327,7 @@ class Overview extends Component {
           </Col>
           <Col className={styles.padding} xs={12} md={6}>
             <MaleVsFemale
-              title="Male vs Female Patients"
+              title="Male vs Female Patients for the Last 12 Months"
               male={male}
               female={female}
             />
@@ -349,7 +348,7 @@ class Overview extends Component {
           </Col>
           <Col className={styles.padding} xs={12}>
             <WebsiteTrafficSources
-              title="Appointments By Day"
+              title="Appointments By Day for the Last 12 Months"
               labels={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}
               chartData={[
                 { label: 'Appointments Booked',
