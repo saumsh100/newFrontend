@@ -22,6 +22,8 @@ import weeklySchedulesRouter from './weeklySchedules';
 import enterprisesRouter from './enterprises';
 import authMiddleware from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
+import sentRemindersRouter from './sentReminders';
+import sentRecallsRouter from './sentRecalls';
 
 const apiRouter = Router();
 
@@ -46,5 +48,7 @@ apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
+apiRouter.use('/sentReminders', sentRemindersRouter);
+apiRouter.use('/sentRecalls', sentRecallsRouter);
 
 export default apiRouter;

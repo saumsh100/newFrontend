@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import TimeColumn from './TimeColumn/TimeColumn';
 import TimeSlot from './TimeSlot/index';
 import styles from './styles.scss';
+import { SortByFirstName } from '../../library/util/SortEntities';
 
 export default function   DayViewBody(props){
   const {
@@ -26,15 +27,21 @@ export default function   DayViewBody(props){
     height: '100px',
   };
 
-  const colorArray = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6',];
+  const sortedPractitioners = practitioners.toArray().sort(SortByFirstName);
 
-  let practitionersArray = practitioners.toArray().map((prac, index) => {
-    let defaultIndexColor = index;
-    if (!colorArray[defaultIndexColor]) {
-      defaultIndexColor = 0;
+  const colors = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6'];
+  const colorLen = colors.length;
+  const reset = Math.ceil(( sortedPractitioners.length - colorLen) / colorLen);
+
+  for (let j = 1 ; j <= reset; j++) {
+    for (let i = 0; i < (sortedPractitioners.length - colorLen);  i++) {
+      colors.push(colors[i]);
     }
+  }
+
+  let practitionersArray = sortedPractitioners.map((prac, index) => {
     return Object.assign({}, prac.toJS(), {
-      color: colorArray[defaultIndexColor],
+      color: colors[index],
     });
   });
 

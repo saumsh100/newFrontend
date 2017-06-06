@@ -6,6 +6,7 @@ const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const Appointment = require('../../../models/Appointment');
+const { namespaces } = require('../../../config/globals');
 const Account = require('../../../models/Account');
 const Service = require('../../../models/Service');
 const Patient = require('../../../models/Patient');
@@ -280,7 +281,6 @@ appointmentsRouter.get('/', (req, res, next) => {
     query,
   } = req;
 
-
   const {
     limit,
     skip,
@@ -300,7 +300,7 @@ appointmentsRouter.get('/', (req, res, next) => {
 
   return Appointment
     .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)))
     .orderBy('startDate')
     .skip(parseInt(skipped))
     .limit(parseInt(limitted))
@@ -325,6 +325,8 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = appointmentData;
 
+  const io = req.app.get('socketio');
+
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
@@ -348,10 +350,17 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
       const noOverLap = checkOverlapping.every((el) => el === true);
       if (checkOverlapping.length === 0 || noOverLap) {
+        const startDate = moment(appointmentData.startDate);
+        const currentDate = moment();
+        const isSameDate = startDate.isSame(currentDate, 'day');
+
         return Appointment.save(appointmentData)
-          .then(appt => res.status(201).send(normalize('appointment', appt)))
+          .then(appt => {
+            res.status(201).send(normalize('appointment', appt))
+          })
           .catch(next);
       }
+      console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
       return res.sendStatus(400);
     })
     .catch(next);
@@ -471,8 +480,10 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       }
 
       const checkOverlapping = intersectingApps.map((app) => {
+
         if ((practitionerId !== app.practitionerId) &&
           (chairId !== app.chairId) && (patientId !== app.patientId)) {
+
           if (appointmentData.isSplit) {
             appointmentData.isSplit = false;
           }

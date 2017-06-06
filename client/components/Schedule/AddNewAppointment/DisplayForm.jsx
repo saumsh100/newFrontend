@@ -49,7 +49,6 @@ export default function DisplayForm(props) {
       note,
     } = selectedAppointment;
 
-
     const patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
@@ -65,8 +64,8 @@ export default function DisplayForm(props) {
       },
       patient: {
         patientSelected: patient.toJS(),
-        phoneNumber: patient.phoneNumber,
-        email: patient.email,
+        mobilePhoneNumber: patient.get('mobilePhoneNumber') || patient.get('homePhoneNumber'),
+        email: patient.get('email'),
         note,
       },
     };

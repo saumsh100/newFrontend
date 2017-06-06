@@ -1,0 +1,89 @@
+@import'../../../../ui';
+
+
+.appointmentList {
+  height: 556px;
+  border-top: 1px solid #efefef;
+  overflow: auto;
+  background-color: lighten($primary-lightgrey, 2%);
+  @media screen and (max-width: 450px){
+    max-width: 270px;
+  }
+}
+
+.appointmentListItem {
+  padding: 50px 20px 50px 20px;
+}
+
+.dateContainer {
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid;
+  border-right-color: $inactive-color;
+
+  padding-right: 20px;
+  color: $primary-dark;
+  align-items: center;
+  justify-content: center;
+
+  &_month {
+    font-family: $medium-font;
+  }
+
+  &_day {
+    font-family: $medium-font;
+    font-size: $large-size;
+  }
+
+  &_year {
+    font-family: $medium-font;
+  }
+}
+
+.patientContainer {
+  display: flex;
+  align-items: center;
+
+  &_img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  &_item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_name {
+    font-family: $medium-font;
+    font-size: $medium-size;
+    padding-bottom: 10px;
+    @media screen and (max-width: 850px){
+      font-size: $medium-size;
+    }
+  }
+
+  &_appTime {
+    font-family: $medium-font;
+  }
+
+  &_service {
+    @media screen and (max-width: 850px){
+      font-size: $medium-size;
+    }
+  }
+}
+
+.otherContainer {
+  margin-left: auto;
+  text-align: end ;
+  padding: 10px;
+  //border-right: 2px solid;
+  //border-right-color: $inactive-color;
+  color: darken($primary-grey, 15%);
+  @media screen and (max-width: 850px){
+    word-break: break-all;
+  }
+}

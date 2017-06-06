@@ -44,7 +44,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    height: inherit;
+    height: 110px;
     list-style: none;
     margin: 0;
     flex-direction: row;
@@ -93,10 +93,45 @@
     &_right {
       margin-left: auto;
       text-align: right;
+      align-items: center;
       @media screen and (max-width: 450px) {
         text-align: center;
         margin-left: 0;
         margin-top: 10px;
+      }
+
+
+    }
+
+    &_clickIcons {
+      display: flex;
+      margin-left: auto;
+      align-items: center;
+      @media screen and (max-width: 450px) {
+        text-align: center;
+        margin-left: 0;
+        margin-top: 10px;
+        align-items: center;
+      }
+    }
+
+
+    &_pencilBorder {
+      position: relative;
+      border: 1px solid;
+      border-radius: 50%;
+      background: $primary-green;
+      border-color: $primary-green;
+      width: 18px;
+      height: 18px;
+      &:hover {
+        background: darken($primary-green, 10%);
+      }
+      &_pencil {
+        position: absolute;
+        top: 2px;
+        left: 3px;
+        color: $primary-lightgrey;
       }
     }
 
@@ -124,6 +159,13 @@
     &_name {
       color: $primary-dark;
       margin-bottom: 7px;
+      &:link {
+        color: $primary-dark;
+        text-decoration: none;
+      }
+      &:hover {
+        color: $primary-color;
+      }
     }
 
     &_icon {
