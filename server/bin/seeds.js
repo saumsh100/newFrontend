@@ -1100,9 +1100,10 @@ const SEEDS = {
     {
       reminderId,
       accountId,
-      sentDate: moment({hour: 13, minute: 10})._d,
+      createdAt: moment({hour: 13, minute: 10})._d,
       appointmentId: appointmentId1,
       patientId: justinPatientId,
+      primaryType: 'sms',
       lengthSeconds: 30,
     },
 
@@ -1113,7 +1114,7 @@ const SEEDS = {
     {
       id: recallId,
       accountId,
-      primaryType: 'SMS',
+      primaryType: 'sms',
       lengthSeconds: 30,
     },
   ],
@@ -1122,7 +1123,7 @@ const SEEDS = {
     {
       accountId,
       recallId,
-      sentDate: moment({hour: 13, minute: 10})._d,
+      createdAt: moment({hour: 13, minute: 10})._d,
       patientId: sergeyPatientId,
       lengthSeconds: 30,
     },

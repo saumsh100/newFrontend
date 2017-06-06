@@ -163,8 +163,17 @@ Request.belongsTo(Chair, 'chair', 'chairId', 'id');
 /**
  * SentReminder Relations
  */
+SentReminder.belongsTo(Account, 'account', 'accountId', 'id');
+SentReminder.belongsTo(Reminder, 'reminder', 'reminderId', 'id');
+SentReminder.belongsTo(Appointment, 'appointment', 'appointmentId', 'id');
+SentReminder.belongsTo(Patient, 'patient', 'patientId', 'id');
 
-SentReminder.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
+/**
+ * SentRecall Relations
+ */
+SentRecall.belongsTo(Account, 'account', 'accountId', 'id');
+SentRecall.belongsTo(Recall, 'recall', 'recallId', 'id');
+SentRecall.belongsTo(Patient, 'patient', 'patientId', 'id');
 
 /**
  * Service Relations
@@ -193,18 +202,3 @@ User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
 
 WaitSpot.hasOne(Patient, 'patient', 'patientId', 'id');
 WaitSpot.hasOne(Account, 'account', 'accountId', 'id');
-
-/**
- * SentReminder Relations
- */
-SentReminder.belongsTo(Account, 'account', 'accountId', 'id');
-SentReminder.belongsTo(Reminder, 'reminder', 'reminderId', 'id');
-SentReminder.belongsTo(Appointment, 'appointment', 'appointmentId', 'id');
-SentReminder.belongsTo(Patient, 'patient', 'patientId', 'id');
-
-/**
- * SentRecall Relations
- */
-SentRecall.belongsTo(Account, 'account', 'accountId', 'id');
-SentRecall.belongsTo(Recall, 'recall', 'recallId', 'id');
-SentRecall.belongsTo(Patient, 'patient', 'patientId', 'id');
