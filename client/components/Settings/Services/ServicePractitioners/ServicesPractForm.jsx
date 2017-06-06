@@ -81,7 +81,8 @@ class ServicesPractForm extends Component {
 
     return (
       <div className={styles.servicesPractForm}>
-        <div className={styles.servicesPractForm_allText}>All Practitioners
+        <div className={styles.servicesPractForm_allText}>
+          All Practitioners
           <div>
             <Toggle
               name="allPractitioners"
