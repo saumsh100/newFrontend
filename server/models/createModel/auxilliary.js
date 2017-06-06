@@ -40,12 +40,23 @@ export function createAuxilliaryTable(modelName, fieldName, config) {
   const tableName = createTableName(modelName, fieldName);
   const primaryKey = createPrimaryKey(dependencies, fieldName);
 
-  return thinky.createModel(tableName, {
-    [primaryKey]: type.string().required(),
+  const primaryKeyType = dependencies.length ?
+    type.array().required() :
+    type.string().required();
+
+  const AuxTable = thinky.createModel(tableName, {
+    [primaryKey]: primaryKeyType,
     [value]: type.string().required(),
   }, {
     pk: primaryKey,
   });
+
+  AuxTable.fieldName = fieldName;
+  AuxTable.tableName = tableName;
+  AuxTable.primaryKey = primaryKey;
+  AuxTable.config = config;
+
+  return AuxTable;
 }
 
 /**
@@ -59,31 +70,75 @@ export function createAuxilliaryTables(modelName, auxConfig) {
   ));
 }
 
-function preSavingUniqueValidator(doc) {
-  // Generate validators to ensure uniqueness on fields
-  const validators = map(auxilliaryConfig, (config, fieldName) => {
-    const { value, dependencies } = config;
-    const tableName = createTableName(fieldName);
+export function generateAuxValidators(auxTables) {
+  return map(auxTables, (AuxTable) => {
+    const {
+      config,
+      fieldName,
+      primaryKey,
+      tableName,
+    } = AuxTable;
+
+    const {
+      value,
+      dependencies = [],
+    } = config;
+
     return Promise((resolve, reject) => {
-      const dependencyValues = dependencies.map(d => doc[d]);
-      const fieldValue = doc[fieldName];
+      // FieldValue will either be a simple string or compounded with an array if dependencies
+      let fieldValue = doc[fieldName];
+      if (dependencies.length) {
+        const dependencyValues = dependencies.map(d => doc[d]);
+        fieldValue = [fieldValue, ...dependencyValues];
+      }
+
       // Now grab from aux table and see if value equals doc.id
-      auxModels[tableName].get(createPrimaryKey(dependencyValues, fieldValue))
+      AuxTable.get(fieldValue)
+      // Catch first cause errors
         .catch((err) => {
+          // TODO: should make sure it is a "document not found" error
           // assume errors means it does not exist
           // Create entry into this aux table
+          AuxTable.save({
+            [primaryKey]: fieldValue,
+            [value]: doc[value],
+          }).then((entry) => {
+            console.log(`Added unique fieldValue=${fieldValue} to ${tableName} table`);
+            resolve();
+          });
         })
         .then((auxDoc) => {
           if (auxDoc[value] === doc[value]) {
-            console.log('Passed!');
+            resolve();
           } else {
-            throw new Error(`Unique Field Validation Error: ${fieldName} field must be unique on Model ${modelName}`);
+            reject(new Error(`Unique Field Validation Error: ${fieldName} field must be unique on Model ${modelName}`));
           }
         });
     });
   });
+}
 
-  // Call validators tp throw errors or not
-  Promise.all(validators);
+export function generateUniqueValidator(auxTables) {
+  // Generate validators to ensure uniqueness on fields
+
+  /**
+   * Called on preSave & preUpdate hooks to ensure that the Model is not
+   * creating duplicates, if not and it doesn't exist it adds it.
+   *
+   * @type {Array}
+   */
+  return function (doc) {
+    // Run all aux validators
+    Promise.all(generateAuxValidators(auxTables))
+      .then(() => {
+        console.log(`Validation Passed!`);
+        // TODO: how do we handle this, do we call next() or what?
+      })
+      .catch((err) => {
+        console.error('Failed Validation!');
+        console.error(err);
+        // TODO: how do we handle this, do we throw the error or call next(err) or what?
+      });
+  };
 }
 
