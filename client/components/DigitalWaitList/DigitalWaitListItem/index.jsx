@@ -4,7 +4,7 @@ import moment from 'moment';
 import map from 'lodash/map';
 import some from 'lodash/some';
 import withHoverable from '../../../hocs/withHoverable';
-import { Avatar, ListItem, IconButton } from '../../library';
+import { Avatar, ListItem, IconButton, Icon } from '../../library';
 import styles from './styles.scss';
 
 const notAllTrue = obj => some(obj, val => !val);
@@ -68,28 +68,39 @@ function DigitalWaitListItem(props) {
 
   if (isHovered) {
     showHoverComponents = (
-      <div className={styles.patients__item_right}>
+      <div className={styles.patients__item_clickIcons}>
         <IconButton
           icon={'times-circle-o'}
           onClick={(e) => {
             e.stopPropagation();
             removeWaitSpot(waitSpot.get('id'));
           }}
-          size={2}
+          size={1.2}
         />
+        <div className={styles.patients__item_pencilBorder}>
+          <Icon
+            icon={'pencil'}
+            className={styles.patients__item_pencilBorder_pencil}
+            onClick={() => setSelectedWaitSpot(waitSpotJS)}
+            size={1}
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <ListItem className={styles.patients__item} onClick={() => setSelectedWaitSpot(waitSpotJS)}>
+    <ListItem className={styles.patients__item} >
       <Avatar size="lg" user={patient.toJS()} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_name}>
             <a
               className={styles.patients__item_name}
-              onClick={() => handlePatientClick(patient.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePatientClick(patient.id);
+              }}
               href="#"
             >
               <b>

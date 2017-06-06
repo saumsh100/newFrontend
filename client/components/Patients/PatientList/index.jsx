@@ -198,8 +198,7 @@ class PatientList extends Component {
       currentPatient.appointment = app.toArray()[0];
     }
 
-    if (this.state.showNewUser && selectedPatientShow.toObject || (this.state.initialUser && selectedPatientShow.toObject)) {
-      console.log(selectedPatientShow)
+    if (this.state.showNewUser && selectedPatientShow.toObject) {
       currentPatient = selectedPatientShow;
 
       let userAppointments = currentPatient.get('appointments');
@@ -218,9 +217,13 @@ class PatientList extends Component {
       }
     } else {
       if (this.state.currentPatient.id !== null) {
-        currentPatient = patients.get(this.state.currentPatient.id);
+        currentPatient = patients.get(this.state.currentPatient.id) || selectedPatientShow;
 
         currentPatient.appointment = currentPatient.appointment || (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
+      }
+      if (this.state.initialUser && selectedPatientShow.toObject) {
+        currentPatient = patients.get(this.state.currentPatient.id) || selectedPatientShow;
+        currentPatient.appointment = {};
       }
     }
 
