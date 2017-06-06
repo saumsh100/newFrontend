@@ -31,6 +31,12 @@ export function createPrimaryKey(dependencies, fieldName) {
     fieldName;
 }
 
+/**
+ *
+ * @param modelName model that this table is for
+ * @param fieldName name of the unique field that this table is for
+ * @param config is Object with {@code { value: '', dependencies: [] } }
+ */
 export function createAuxilliaryTable(modelName, fieldName, config) {
   const {
     value,

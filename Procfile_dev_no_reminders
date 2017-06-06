@@ -1,0 +1,1 @@
+web: nodemon --debug=5858 server/bin/build/server.bundle.js
