@@ -1,7 +1,6 @@
 
-import moment from 'moment';
 import { r } from '../../config/thinky';
-import { Appointment, SentReminder } from '../../models';
+import { Appointment } from '../../models';
 
 // Made an effort to throw all easily testable functions into here
 
@@ -44,27 +43,4 @@ export function shouldSendReminder({ appointment, reminder }) {
   });
 
   return patient.preferences.reminders && !reminderAlreadySentOrLongerAway;
-}
-
-/**
- *
- */
-export async function getValidSmsReminders({ accountId, patientId, date }) {
-  // Confirming valid SMS Reminder for patient
-  const sentReminders = await SentReminder
-    .filter({
-      accountId,
-      patientId,
-      isConfirmed: false,
-      primaryType: 'sms',
-    })
-    .orderBy('createdAt')
-    .getJoin({ appointment: true })
-    .run();
-
-  return sentReminders.filter(({ appointment }) => {
-    // - if appointment is upcoming or is cancelled
-    const isAfter = moment(appointment.startDate).isAfter(date);
-    return !appointment.isCancelled && isAfter ;
-  });
 }

@@ -159,6 +159,12 @@ Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Request.belongsTo(Chair, 'chair', 'chairId', 'id');
 
 /**
+ * SentReminder Relations
+ */
+
+SentReminder.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
+
+/**
  * Service Relations
  */
 

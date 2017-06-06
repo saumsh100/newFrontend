@@ -3,14 +3,17 @@
  * MAJOR DISCLAIMER: this assumes the DB is seeded with seeds!
  */
 
+import moment from 'moment';
 import { Reminder, Account } from '../../server/models';
 import {
   getAppointmentsFromReminder,
   shouldSendReminder,
+  getValidSmsReminders,
 } from '../../server/lib/reminders/helpers';
 
 // TODO: make seeds more modular so we can see here
-const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
+const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
+const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
 const oneDayReminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 
 describe('Reminders Calculation Library', () => {
@@ -116,5 +119,42 @@ describe('Reminders Calculation Library', () => {
         expect(shouldSendReminder({ appointment, reminder })).toBe(false);
       });
     });
+
+    describe('#getValidSmsReminders', () => {
+      it('Should be a function', () => {
+        expect(typeof getValidSmsReminders).toBe('function');
+      });
+
+      it('should return [] for no validSmsReminders', async () => {
+        const r = await getValidSmsReminders({
+          patientId: 'cat',
+          accountId: 'dog',
+          date: (new Date(2017, 5, 1)).toISOString(),
+        });
+
+        expect(r.length).toBe(0);
+      });
+
+      it('should ignore non-sms and already confirmed', async () => {
+        const r = await getValidSmsReminders({
+          patientId,
+          accountId,
+          date: (new Date(2017, 5, 1)).toISOString(),
+        });
+
+        expect(r.length).toBe(2);
+      });
+
+      it('should respect createdAt order', async () => {
+        const r = await getValidSmsReminders({
+          patientId,
+          accountId,
+          date: (new Date(2017, 5, 1)).toISOString(),
+        });
+
+        expect(moment(r[0].createdAt).isBefore(r[1].createdAt)).toBe(true);
+      });
+    });
   });
 });
+

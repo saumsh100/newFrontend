@@ -1,25 +1,25 @@
 
-import moment from 'moment';
 import twilio from '../../config/twilio';
 import { host } from '../../config/globals';
 import { sendConfirmationReminder } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
 const BASE_URL = `https://${host}/twilio/voice/reminders`;
-const createReminderText = ({ patient, account, appointment }) => {
-  const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('dddd, MMMM do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
-  return `${patient.firstName}, your next appointment with ${account.name} ` +
-    `is on ${startDate} at ${startTime}. Reply 'C' to ` +
-    'confirm your appointment.';
-};
+const createReminderText = ({ patient, account, appointment }) => (`
+  ${patient.firstName}, your next appointment with ${account.name}
+  is ${appointment.startDate} at ${appointment.startTime}. Reply 'C' to
+  confirm your appointment.
+`);
 
 const generateCallBackUrl = ({ account, appointment, patient }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('dddd, MMMM do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
-  return `${BASE_URL}?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;
+  return `${BASE_URL}
+      ?firstName=${patient.firstName},
+       clinicName=${account.name},
+       startDate=${startDate},
+       startTime=${startTime}`;
 };
 
 export default {
@@ -36,6 +36,7 @@ export default {
   // Send Appointment Reminder call via Twilio
   phone({ account, appointment, patient }) {
     // TODO: add phoneNumber logic for patient
+    // TODO; add appointment and account data to URL
     return twilio.makeCall({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
@@ -86,7 +87,7 @@ export default {
 
       attachments: [
         {
-          type: 'application/octet-stream',
+          type: 'text/calendar',
           name: 'appointment.ics',
           content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
         },

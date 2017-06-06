@@ -1,7 +1,7 @@
 
 import { Account, SentReminder } from '../../models';
 import { getAppointmentsFromReminder } from './helpers';
-import sendReminder from './sendReminder';
+import sendReminder from './sendRecall';
 
 /**
  *
@@ -26,10 +26,8 @@ export async function sendRemindersForAccount(account, date) {
         return SentReminder.save({
           reminderId: reminder.id,
           accountId: account.id,
-          patientId: patient.id,
           appointmentId: appointment.id,
           lengthSeconds: reminder.lengthSeconds,
-          primaryType: reminder.primaryType,
         }).then((sr) => {
           console.log('SentReminder saved', sr.id);
         });

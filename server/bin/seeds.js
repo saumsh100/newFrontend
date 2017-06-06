@@ -13,6 +13,7 @@ const saltRounds = 10;
 
 import Reminder from '../fixtures/reminders';
 import appointmentFixtures from '../fixtures/appointments';
+import SentReminder from '../fixtures/sentReminders';
 
 
 /**
@@ -91,11 +92,12 @@ const mainEnterprise = {
 
 // TODO: order of seeding matters...
 
-const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) => {
+const  genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) => {
   const time1 = lastDate || faker.date.past();
 
   return [
     {
+      id: uuid(),
       chatId,
       to: patientPhone,
       from: clinicPhone,
@@ -104,6 +106,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: clinicPhone,
       from: patientPhone,
@@ -112,6 +115,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: patientPhone,
       from: clinicPhone,
@@ -120,6 +124,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: clinicPhone,
       from: patientPhone,
@@ -183,17 +188,19 @@ for (let i = 0; i < 100; i++) {
       carrier: 'sadasadsadsads',
       sin: 'dsasdasdasdadsasad',
     },
+
     isSyncedWithPMS: false,
   });
 
-  randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate));
-
-
+  const newRandomMessages = genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate);
+  randomMessages = randomMessages.concat(newRandomMessages);
   randomChats.push({
     id: chatId,
     accountId,
     patientId: id,
+    patientPhoneNumber: phoneNumber,
     lastTextMessageDate: lastDate,
+    lastTextMessageId: newRandomMessages[newRandomMessages.length - 1].id,
   });
 
   const appointmentTime = faker.date.future();
@@ -964,36 +971,40 @@ const SEEDS = {
   ],
 
   Chat: [
-    {
+    /*{
       id: alexChatId,
       accountId,
       patientId: alexPatientId,
+      patientPhoneNumber: alexPhoneNumber,
     },
     {
       id: justinChatId,
       accountId,
       patientId: justinPatientId,
+      patientPhoneNumber: justinPhoneNumber,
     },
     {
       id: sergeyChatId,
       accountId,
       patientId: sergeyPatientId,
+      patientPhoneNumber: sergeyPhoneNumber,
     },
     {
       id: markChatId,
       accountId,
       patientId: markPatientId,
-    },
+      patientPhoneNumber: markPhoneNumber,
+    },*/
 
     ...randomChats,
   ],
 
   TextMessage: [
-    ...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
-    ...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
+    //...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...randomMessages,
   ],
 
@@ -1067,6 +1078,7 @@ const SEEDS = {
   ],
 
   Reminder,
+  SentReminder,
 };
 
 seedDatabase(SEEDS)
