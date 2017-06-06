@@ -29,7 +29,7 @@ import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
 
-module.exports = {
+export default {
   Account,
   Account_Patient,
   Appointment,

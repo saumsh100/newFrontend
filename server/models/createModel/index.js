@@ -1,13 +1,27 @@
 
-const thinky = require('../config/thinky');
+import thinky from '../../config/thinky';
+import {
+  createTableName,
+  createPrimaryKey,
+} from './auxilliary';
+
 const { r, type } = thinky;
 
+/**
+ * createModel is a wrapper function around thinky.createModel
+ * that will add our defaults on sugar functionality
+ *
+ * @param tableName
+ * @param schema
+ * @param config
+ * @returns {*}
+ */
 function createModel(tableName, schema, config = {}) {
   schema.id = schema.id || type.string().uuid(4);
   schema.createdAt = type.date().default(r.now());
   const defaultConfig = {
     // Helpful to create from req.body for API endpoints
-    enforce_extra: 'remove'
+    enforce_extra: 'remove',
   };
 
   console.log(`createModel ${tableName} config is `, config);
