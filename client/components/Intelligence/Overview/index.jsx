@@ -213,7 +213,7 @@ class Overview extends Component {
       endDate: this.state.endDate._d,
       startDate: this.state.startDate._d,
     };
-
+    
     const UserMenu = (props) => {
       return (
         <Button flat {...props} className={styles.userMenuButton}>
