@@ -40,7 +40,6 @@ class ServicesPractForm extends Component {
     this.props.dispatch(batchActions(actions));
   }
 
-
   setCheck(e) {
     e.stopPropagation;
     this.props.allPractitioners = checkValues(this.props.values);
@@ -82,12 +81,15 @@ class ServicesPractForm extends Component {
 
     return (
       <div className={styles.servicesPractForm}>
-        <div>All Practitioners</div>
-          <Toggle
-            name="allPractitioners"
-            onChange={this.setAllPractitioners}
-            checked={this.props.allPractitioners}
-          />
+        <div className={styles.servicesPractForm_allText}>All Practitioners
+          <div>
+            <Toggle
+              name="allPractitioners"
+              onChange={this.setAllPractitioners}
+              checked={this.props.allPractitioners}
+            />
+          </div>
+        </div>
           {showComponent}
       </div>
     );

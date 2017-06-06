@@ -10,8 +10,7 @@ import { Grid } from '../../../library';
 
 
 class Address extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
   }
@@ -25,7 +24,7 @@ class Address extends React.Component {
     updateEntityRequest({ key: 'accounts', model: modifiedAccount });
   }
 
-  render(){
+  render() {
     const { activeAccount } = this.props;
 
     let showComponent = null;

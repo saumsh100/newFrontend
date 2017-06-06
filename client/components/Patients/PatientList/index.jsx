@@ -194,8 +194,14 @@ class PatientList extends Component {
     const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
 
     if (this.state.initialUser && appointments.toArray()[0] && !selectedPatient) {
+      console.log(app, app.toArray()[0].patientId)
       currentPatient = patients.get(app.toArray()[0].patientId);
-      currentPatient.appointment = app.toArray()[0];
+      if (currentPatient) {
+        currentPatient.appointment = app.toArray()[0];
+      } else {
+        currentPatient = patients.toArray()[0];
+        currentPatient.appointment = {};
+      }
     }
 
     if (this.state.showNewUser && selectedPatientShow.toObject || (this.state.initialUser && selectedPatientShow.toObject)) {

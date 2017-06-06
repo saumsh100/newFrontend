@@ -80,7 +80,6 @@ class DigitalWaitList extends Component {
       updateEntityRequest({ key: 'waitSpots', model: modifiedWaitSpot });
       reset('editWaitSpot');
     }
-
     this.reinitializeState();
   }
 

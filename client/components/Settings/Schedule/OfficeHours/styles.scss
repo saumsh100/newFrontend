@@ -1,6 +1,10 @@
 
 @import '../../../../ui';
 
+.header {
+  padding-left: 15px;
+  border-bottom: 1px solid $primary-lightgrey;
+}
 .day {
   text-transform: capitalize;
 }
@@ -22,6 +26,8 @@
 
 .inlineBlock {
   display: inline-block;
+  margin-top: 7px;
+  margin-bottom: 9px;
 }
 
 .toDiv {
@@ -42,6 +48,8 @@
 }
 
 .dayRow {
+  margin-top: 7px;
+  margin-bottom: 9px;
   height: 40px;
 }
 
