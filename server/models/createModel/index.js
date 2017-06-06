@@ -1,8 +1,9 @@
 
 import thinky from '../../config/thinky';
+import pick from 'lodash/pick';
 import {
-  createTableName,
-  createPrimaryKey,
+  createAuxilliaryTables,
+  generateUniqueValidator,
 } from './auxilliary';
 
 const { r, type } = thinky;
@@ -24,18 +25,22 @@ function createModel(tableName, schema, config = {}) {
     enforce_extra: 'remove',
   };
 
-  console.log(`createModel ${tableName} config is `, config);
+  // Pluck off so that we can create model with appropriate config
+  const auxConfig = pick(config, 'aux');
 
+  // Create the thinky model/tabel
   const Model = thinky.createModel(tableName, schema, {
     ...defaultConfig,
     ...config,
   });
 
-  // for (each unique field in model) {
-  //  create aux tables
-  // }
 
-  // Model.preSave(validateUnique);
+  if (auxConfig) {
+    Model.auxModels = createAuxilliaryTables(auxConfig);
+
+    // TODO: is this the right hook?
+    Model.docOn('saving', generateUniqueValidator(Model.auxModels));
+  }
 
   // TODO: add Model helper functionss
   // Model.fetch({  }) filters and joiners to match API and controller requirements

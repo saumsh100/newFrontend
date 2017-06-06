@@ -12,7 +12,17 @@ describe('#createModel', () => {
   // TODO: test requireds, defaults, etc.
 
   describe('Unique Fields w/ Auxilliary Tables', () => {
+    it('should rep the API', () => {
+      const Model = createModel('Thing', {
 
+      }, {
+        aux: {
+          name: {
+            value: 'id',
+          },
+        },
+      });
+    });
 
   });
 
