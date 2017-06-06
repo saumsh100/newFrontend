@@ -21,7 +21,7 @@ export default [
     // 1 day sms
     id: reminderId,
     accountId,
-    primaryType: 'sms',
+    primaryType: 'phone',
     lengthSeconds: 24 * 60 * 60,
   },
   {

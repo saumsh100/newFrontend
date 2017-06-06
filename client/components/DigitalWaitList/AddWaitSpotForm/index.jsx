@@ -17,25 +17,33 @@ function validatePatient(value) {
   return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
 }
 
-const initialValues = {
-  preferences: {
-    mornings: true,
-    afternoons: true,
-    evenings: true,
-    weekdays: true,
-    weekends: true,
-  },
 
-  unavailableDays: [],
-};
 
-function AddWaitSpotForm({ onSubmit, getSuggestions }) {
+function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot, patients, }) {
+  let initialValues = {
+    preferences: {
+      mornings: true,
+      afternoons: true,
+      evenings: true,
+      weekdays: true,
+      weekends: true,
+    },
+
+    unavailableDays: [],
+  };
+
+  if (selectedWaitSpot) {
+    initialValues = selectedWaitSpot;
+    const patient = patients.getIn(['models', selectedWaitSpot.patientId]).toJS();
+    initialValues.patientData = patient;
+  }
+
   return (
     <Form
-      form="addWaitSpot"
+      form={formName}
       onSubmit={onSubmit}
       initialValues={initialValues}
-      ignoreSaveButton={true}
+      ignoreSaveButton
     >
       <Field
         component="AutoComplete"
@@ -111,8 +119,10 @@ function AddWaitSpotForm({ onSubmit, getSuggestions }) {
 }
 
 AddWaitSpotForm.propTypes = {
+  formName: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   getSuggestions: PropTypes.func.isRequired,
+  selectedWaitSpot: PropTypes.object,
 };
 
 export default AddWaitSpotForm;

@@ -48,7 +48,9 @@
     border-right: 1px solid #606060;
   }
   &__item {
-    min-width: 250px;
+    min-width: 300px;
+    flex: 1 1;
+    max-width: none;
   }
 
   &__vote_icons_block {

@@ -1,12 +1,8 @@
+
 import React, { Component, PropTypes } from 'react';
 import styles from '../styles.scss';
 import { Checkbox, CheckboxImage } from '../../../../library';
-
-const sortPractitionersAlphabetical = (a, b) => {
-  if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
-  if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
-  return 0;
-};
+import { SortByFirstName } from '../../../../library/util/SortEntities';
 
 export default function FilterPractitioners(props) {
 
@@ -19,7 +15,26 @@ export default function FilterPractitioners(props) {
     handleEntityCheck,
   } = props;
 
-  const colorArray = ['primaryColor', 'primaryYellow', 'primaryGreen', 'primaryBlueGreen' ];
+  const colors = ['primaryColor', 'primaryYellow', 'primaryGreen', 'primaryBlueGreen' ];
+  const colorLen = colors.length;
+  const colorArray = [];
+
+  let practitionersSort = practitioners.toArray().sort(SortByFirstName);
+
+  const reset = Math.ceil(( practitionersSort.length - colorLen) / colorLen);
+
+  for(let j = 0 ; j <= reset; j++) {
+    for(let i = 0; i < colorLen;  i++) {
+      colorArray.push(colors[i])
+    }
+  }
+
+
+  practitionersSort = practitionersSort.map((prac, index) => {
+    return Object.assign({}, prac.toJS(), {
+      color: colorArray[index],
+    });
+  });
 
   return (
     <div>
@@ -33,7 +48,7 @@ export default function FilterPractitioners(props) {
           checked={allChecked}
           onChange={() => handleAllCheck(filterKey)}
         />
-        {practitioners.toArray().map((pr, i) => {
+        {practitionersSort.map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
           const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
 
@@ -45,7 +60,7 @@ export default function FilterPractitioners(props) {
                 onChange={() => { handleEntityCheck(checked, pr.id, filterKey); }}
                 id={`checkbox-${i}`}
                 label={label}
-                imgColor={colorArray[i]}
+                imgColor={pr.color}
                 imageSrc="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner"
               />
             </div>

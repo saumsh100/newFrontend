@@ -9,16 +9,16 @@ updaterRouter.param('syncClientVersionId', loaders('syncClientVersion', 'SyncCli
 /**
  * Return the link to the latest version of the sync client
  */
-updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, res) => {
-  Promise.resolve(SyncClientVersion.nth(0).run()
-    .then((release) => {
-      const msg = Object.assign(
-        {},
-        _.pick(release, ['url']),
-      );
-      res.send(msg);
-    }));
-});
+// updaterRouter.get('/latest', checkPermissions('syncClientVersion:read'), (req, res) => {
+//   Promise.resolve(SyncClientVersion.nth(0).run()
+//     .then((release) => {
+//       const msg = Object.assign(
+//         {},
+//         _.pick(release, ['url']),
+//       );
+//       res.send(msg);
+//     }));
+// });
 
 /**
  * Compare the version of the sync client in the URL params and return JSON
@@ -43,9 +43,11 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
   Promise.resolve(SyncClientVersion.nth(0).run()
     .then((release) => {
       if (isUpdateAvailable(versionObject, release)) {
+        const filename = `carecru_setup_v${release.major}.${release.minor}.${release.patch}-${release.build}.exe`;
         res.send({
           available: true,
-          url: release.url,
+          path: release.path,
+          filename,
           key: release.key,
           secret: release.secret,
         });
@@ -91,17 +93,33 @@ updaterRouter.get('/release', checkPermissions('syncClientVersion:read'), (req, 
 });
 
 /**
- * Update current version of the sync client.
+ * Bump the build version of the sync client by 1.
  */
-updaterRouter.put('/release', checkPermissions('syncClientVersion:create'), (req, res, next) => {
-  const newVersion = Object.assign({}, req.body);
+updaterRouter.put('/bump', checkPermissions('syncClientVersion:create'), (req, res, next) => {
+  return SyncClientVersion
+    .nth(0)
+    .run()
+    .then((_dbVersion) => {
+      _dbVersion.build += 1;
+      _dbVersion.patch = _dbVersion.build; // for now
+      _dbVersion.merge(_dbVersion).save().then(_dbv => res.send(_dbv));
+    })
+    .catch(next);
+});
 
-  return Promise.resolve(
-    SyncClientVersion.nth(0).run()
-        .then(_dbVersion => _dbVersion.merge(newVersion).save())
-        .catch(next))
-      .then(_dbv => res.send(_dbv))
-      .catch(next);
+/**
+ * Decrement build version by 1
+ */
+updaterRouter.put('/unbump', checkPermissions('syncClientVersion:create'), (req, res, next) => {
+  return SyncClientVersion
+    .nth(0)
+    .run()
+    .then((_dbVersion) => {
+      _dbVersion.build -= 1;
+      _dbVersion.patch = _dbVersion.build; // for now
+      _dbVersion.merge(_dbVersion).save().then(_dbv => res.send(_dbv));
+    })
+    .catch(next);
 });
 
 module.exports = updaterRouter;

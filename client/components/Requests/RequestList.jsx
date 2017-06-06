@@ -26,7 +26,7 @@ class RequestList extends Component {
       push,
     } = this.props;
 
-    if(location === '/') {
+    if (location === '/') {
       push('/schedule');
     }
     const modifiedRequest = request.set('isCancelled', true);
@@ -107,13 +107,6 @@ function mapActionsToProps(dispatch) {
   }, dispatch);
 }
 
-
-function mapStateToProps({schedule}){
-  return {
-    selectedAppointment: schedule.toJS().selectedAppointment,
-  };
-}
-
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(null, mapActionsToProps);
 
 export default enhance(RequestList);

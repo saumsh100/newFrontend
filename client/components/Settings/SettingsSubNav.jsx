@@ -42,7 +42,7 @@ const PATHS = {
     },
     {
       to: '',
-      label: 'Reminders',
+      label: 'RemindersList',
       disabled: true,
     },
     {

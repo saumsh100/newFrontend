@@ -46,7 +46,7 @@ export async function sendRemindersForAccount(account, date) {
  * @returns {Promise.<Array|*>}
  */
 export async function computeRemindersAndSend({ date }) {
-  // - Fetch Reminders in order of shortest secondsAway
+  // - Fetch RemindersList in order of shortest secondsAway
   // - For each reminder, fetch the appointments that fall in this range
   // that do NOT have a reminder sent (type of reminder?)
   // - For each appointment, send the reminder

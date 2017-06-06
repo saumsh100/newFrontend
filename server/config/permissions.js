@@ -64,6 +64,10 @@ const OWNER = {
   weeklySchedules: allowAll,
 
   enterprises: denyAll,
+  sentReminders: allow('read'),
+  sentRecalls: allow('read'),
+
+  waitSpots: allowAll,
 };
 
 const SUPERADMIN = {

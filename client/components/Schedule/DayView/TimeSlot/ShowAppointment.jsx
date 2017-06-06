@@ -74,6 +74,8 @@ export default function ShowAppointment(props) {
     backgroundColor: `${hexToRgbA(bgColor, 0.8)}`,
   };
 
+  // Todo: this is disabled for now
+
   if (isPatientConfirmed) {
     appStyle = Object.assign({}, appStyle, {
       backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,

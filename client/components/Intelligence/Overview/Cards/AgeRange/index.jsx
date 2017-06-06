@@ -10,16 +10,16 @@ export default function AgeRange(props) {
 
   return (
     <Card  className={styles.card}>
-      <CardHeader className={styles.cardHeader} title="Age Range" />
+      <CardHeader className={styles.cardHeader} title="Age Range for the Last 12 Months" />
       <div className={styles.ageRange}>
         <div className={styles.ageRange__content}>
           <BarChart
             type="horizontal"
             displayTooltips
-            labels={["18-24", "25-34", "35-44", "45-54", "55+"]}
+            labels={['Under 18', '18-24', '25-34', '35-44', '45-54', '55+']}
             dataSets={[{
-              label: 'Appointments Booked',
-              color: ['yellow', 'red', 'green', 'blue'],
+              label: 'Appointments Percentage',
+              color: ['yellow', 'red', 'green', 'blue', 'darkblue'],
               data: chartData
             }]}
           />

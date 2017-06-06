@@ -16,7 +16,7 @@ const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
 const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
 const oneDayReminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 
-describe('Reminders Calculation Library', () => {
+describe('RemindersList Calculation Library', () => {
   describe('#computeRemindersAndSend', () => {
     it('should be a function', () => {
       const func = () => {};
