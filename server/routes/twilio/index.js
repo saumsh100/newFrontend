@@ -10,6 +10,7 @@ import {
   Token,
 } from '../../models';
 import { getValidSmsReminders } from '../../lib/reminders/helpers';
+import { createConfirmationText } from '../../lib/reminders/sendReminder';
 
 const thinky = require('../../config/thinky');
 const voiceRouter = require('./voice');
@@ -33,13 +34,12 @@ function sendSocket(io, chatId) {
     },
   };
 
-  Chat.get(chatId).getJoin(joinObject).run()
+  return Chat.get(chatId).getJoin(joinObject).run()
     .then((chat) => {
-      const send = JSON.stringify(normalize('chat', chat));
-      io.of(namespaces.dash).in(chat.patient.accountId).emit('newMessage', send)
-    }).catch((err) => {
-    console.log(err);
-  });
+      io.of(namespaces.dash)
+        .in(chat.patient.accountId)
+        .emit('newMessage', normalize('chat', chat));
+    });
 }
 
 twilioRouter.post('/_message', (req, res, next) => {
@@ -184,124 +184,135 @@ twilioRouter.post('/_message', (req, res, next) => {
 });
 
 twilioRouter.post('/message', async (req, res, next) => {
-  const {
-    AccountSid,
-    MessageSid,
-    To,
-    From,
-    ToZip,
-    ToCity,
-    ToState,
-    ToCountry,
-    FromZip,
-    FromCity,
-    FromState,
-    FromCountry,
-    SmsStatus,
-    NumMedia,
-    NumSegments,
-    ApiVersion,
-  } = req.body;
+  try {
+    // We close response fast, does this help?
+    res.end();
+
+    const {
+      AccountSid,
+      MessageSid,
+      To,
+      From,
+      ToZip,
+      ToCity,
+      ToState,
+      ToCountry,
+      FromZip,
+      FromCity,
+      FromState,
+      FromCountry,
+      SmsStatus,
+      NumMedia,
+      NumSegments,
+      ApiVersion,
+    } = req.body;
 
 
-  const io = req.app.get('socketio');
-  const Body = req.body.Body;
+    const io = req.app.get('socketio');
+    const Body = req.body.Body;
 
-  // Easily parse mediaData
-  let mediaData = {};
-  const numMedia = parseInt(NumMedia);
-  if (numMedia) {
-    for (let i = 0; i < numMedia; i++) {
-      mediaData[i] = {
-        url: req.body[`MediaUrl${i}`],
-        contentType: req.body[`MediaContentType${i}`],
-      };
+    // Easily parse mediaData
+    let mediaData = {};
+    const numMedia = parseInt(NumMedia);
+    if (numMedia) {
+      for (let i = 0; i < numMedia; i++) {
+        mediaData[i] = {
+          url: req.body[`MediaUrl${i}`],
+          contentType: req.body[`MediaContentType${i}`],
+        };
+      }
     }
-  }
 
-  const currentDate = thinky.r.now();
-  const textMessageData = {
-    to: To,
-    from: From,
-    body: Body,
-    smsStatus: SmsStatus,
+    const currentDate = thinky.r.now();
+    const textMessageData = {
+      id: MessageSid,
+      to: To,
+      from: From,
+      body: Body,
+      smsStatus: SmsStatus,
 
-    // TODO: fix unnecessary writing, fix defaults...
-    createdAt: currentDate,
-    dateCreated: currentDate,
-    dateUpdated: currentDate,
+      // TODO: fix unnecessary writing, fix defaults...
+      createdAt: currentDate,
+      dateCreated: currentDate,
+      dateUpdated: currentDate,
 
-    apiVersion: ApiVersion,
-    accountSid: AccountSid,
+      apiVersion: ApiVersion,
+      accountSid: AccountSid,
 
-    // Depends on carrier if populated
-    toZip: ToZip,
-    toCity: ToCity,
-    toState: ToState,
-    toCountry: ToCountry,
-    fromZip: FromZip,
-    fromCity: FromCity,
-    fromState: FromState,
-    fromCountry: FromCountry,
-    numMedia: NumMedia,
-    numSegments: NumSegments,
-    mediaData,
-  };
+      // Depends on carrier if populated
+      toZip: ToZip,
+      toCity: ToCity,
+      toState: ToState,
+      toCountry: ToCountry,
+      fromZip: FromZip,
+      fromCity: FromCity,
+      fromState: FromState,
+      fromCountry: FromCountry,
+      numMedia: NumMedia,
+      numSegments: NumSegments,
+      mediaData,
+    };
 
-  // TODO: perhaps we could make phoneNumber the primary key for Chat
+    // TODO: perhaps we could make phoneNumber the primary key for Chat
 
-  // Grab account from incoming number so that we can get accountId
-  // TODO: change to aux table fetch?
-  // TODO: perhaps we change the webhooks in the Twilio service to route to /:accountId/messages
-  const accounts = await Account.filter({ twilioPhoneNumber: To });
-  const account = accounts[0];
-  if (!account) {
-    console.log(`Received '${body}' from ${From}. The number is not associated with any Account.`);
-    return res.end();
-  }
+    // Grab account from incoming number so that we can get accountId
+    // TODO: change to aux table fetch?
+    // TODO: perhaps we change the webhooks in the Twilio service to route to /:accountId/messages
+    const accounts = await Account.filter({ twilioPhoneNumber: To });
+    const account = accounts[0];
+    if (!account) {
+      console.log(`Received '${body}' from ${From}. The number is not associated with any Account.`);
+      return;
+    }
 
-  const patients = await Patient.filter({ accountId: account.id, mobilePhoneNumber: From });//.getJoin({ sentReminders: true });
-  const patient = patients[0];
-  if (!patient) {
-    console.log(`Unknown Patient Number: ${From}`);
-  }
+    const patients = await Patient.filter({ accountId: account.id, mobilePhoneNumber: From });//.getJoin({ sentReminders: true });
+    const patient = patients[0];
+    if (!patient) {
+      console.log(`Unknown Patient Number: ${From}`);
+    }
 
-  const chats = await Chat.filter({ accountId: account.id, patientPhoneNumber: From });
+    const chats = await Chat.filter({ accountId: account.id, patientPhoneNumber: From });
 
-  let chat = chats[0];
-  if (!chat) {
-    chat = await Chat.save({
+    let chat = chats[0];
+    if (!chat) {
+      chat = await Chat.save({
+        accountId: account.id,
+        patientId: patient && patient.id,
+        patientPhoneNumber: From,
+        // lastTextMessageDate: new Date(),
+        // lastTextMessageId: textMessage.id
+      });
+    }
+
+    // Now save TM
+    const textMessage = await TextMessage.save(Object.assign({}, textMessageData, { chatId: chat.id }));
+
+    // Update Chat to have new textMessage
+    await chat.merge({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt }).save();
+
+    // If not patient or if not any valid sms sentReminders or if not proper response
+    if (!patient || Body.trim() !== 'C') return;
+
+    // Confirming valid SMS Reminder for patient
+    const validSmsReminders = await getValidSmsReminders({
+      patientId: patient.id,
       accountId: account.id,
-      patientId: patient && patient.id,
-      patientPhoneNumber: From,
-      // lastTextMessageDate: new Date(),
-      // lastTextMessageId: textMessage.id
     });
+
+    if (!validSmsReminders.length) return;
+
+    // Confirm first available reminder
+    const sentReminder = validSmsReminders[0];
+    const { appointment } = sentReminder;
+    await sentReminder.merge({ isConfirmed: true }).save();
+    await twilioClient.sendMessage({
+      from: account.twilioPhoneNumber,
+      to: patient.mobilePhoneNumber,
+      body: createConfirmationText({ patient, appointment, account }),
+    });
+  } catch (err) {
+    next(err);
   }
-
-  // Now save TM
-  const textMessage = await TextMessage.save(Object.assign({}, textMessageData, { chatId: chat.id }));
-  // If not patient or if not any valid sms sentReminders or if not proper response
-  if (!patient || Body.trim() !== 'C') {
-    return res.end();
-  }
-
-  // Confirming valid SMS Reminder for patient
-  const validSmsReminders = getValidSmsReminders({
-    patientId: patient.id,
-    accountId: account.id,
-  });
-
-  if (!validSmsReminders.length) {
-    return res.end();
-  }
-
-  // Confirm first available reminder
-  await validSmsReminders[0].merge({ isConfirmed: true }).save();
-
-  // For twilio... needs a response
-  // TODO: Do we need to res.send on successful saving?
-  res.end();
 });
 
 // Receive all status updates to a message
@@ -326,3 +337,11 @@ twilioRouter.post('/status', (req, res, next) => {
 });
 
 module.exports = twilioRouter;
+
+function delay(seconds) {
+  return Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, seconds);
+  });
+}

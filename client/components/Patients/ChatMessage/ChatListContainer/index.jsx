@@ -1,13 +1,12 @@
+
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import styles from '../styles.scss';
 import { ListItem } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
-
-
+import styles from '../styles.scss';
 
 class ChatListContainer extends Component {
   constructor(props) {
@@ -43,7 +42,8 @@ class ChatListContainer extends Component {
       let newMessage = null;
 
       if (chat.newMessages !== 0) {
-        newMessage = (<div className={styles.messageNote}>
+        newMessage = (
+          <div className={styles.messageNote}>
             {chat.newMessages}
           </div>
         );
@@ -76,26 +76,30 @@ class ChatListContainer extends Component {
       const avatar = (chat.user.avatarUrl ? chat.user.avatarUrl : '/images/avatar.png');
 
 
-      return (<ListItem className={userActiveClassName} onClick={this.setPatient.bind(null, chat.user.id, chat.id)} key={chat.user.id}>
-        <img className={styles.users__photo}  src={avatar} alt="photo" />
-        <div className={styles.users__wrapper}>
-          <div className={styles.users__header}>
-            <div className={styles.users__name}>
-              {chat.user.firstName} {chat.user.lastName}, {age}
+        return (
+          <ListItem
+            className={userActiveClassName}
+            onClick={this.setPatient.bind(null, chat.user.id, chat.id)}
+            key={chat.user.id}
+          >
+            <img className={styles.users__photo}  src={avatar} alt="photo" />
+            <div className={styles.users__wrapper}>
+              <div className={styles.users__header}>
+                <div className={styles.users__name}>
+                  {chat.user.firstName} {chat.user.lastName}, {age}
+                </div>
+              </div>
+              <div className={styles.users__body}>
+                <div className={styles.users__text}>
+                  {messageRecent.body}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className={styles.users__body}>
-            <div className={styles.users__text}>
-              {messageRecent.body}
-            </div>
-          </div>
-        </div>
-        {newMessage}
-        {time}
-      </ListItem>);
-    })) : null);
-
-
+            {newMessage}
+            {time}
+          </ListItem>
+        );
+      })) : null);
 
     return <div>{everyone}</div>;
   }

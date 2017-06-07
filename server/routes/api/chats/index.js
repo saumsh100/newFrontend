@@ -68,7 +68,7 @@ chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
   chatMerge.accountId = req.body.patient.accountId;
   chatMerge.patientId = req.body.patient.id;
 
-  Chat.save(chatMerge).then((chat) => {
+  return Chat.save(chatMerge).then((chat) => {
     const joinObject = { patient: true };
     joinObject.textMessages = {
       _apply: (sequence) => {
@@ -76,14 +76,13 @@ chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
           .orderBy('createdAt');
       },
     };
+
     Chat.get(chat.id).getJoin(joinObject).run()
       .then((chats) => {
         const sendChat = normalize('chat', chats);
         res.send(sendChat);
-      }).catch((err) => {
-      console.log(err);
-    });
-    });
+      });
+  });
 });
 
 /**

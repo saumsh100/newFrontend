@@ -1097,7 +1097,7 @@ const SEEDS = {
   Reminder,
 
   SentReminder: [
-    {
+    /*{
       reminderId,
       accountId,
       createdAt: moment({hour: 13, minute: 10})._d,
@@ -1105,7 +1105,7 @@ const SEEDS = {
       patientId: justinPatientId,
       primaryType: 'sms',
       lengthSeconds: 30,
-    },
+    },*/
 
     ...SentReminder,
   ],
