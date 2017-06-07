@@ -48,3 +48,16 @@
     }
   }
 }
+
+.lower {
+  position: absolute;
+  color: white;
+  font-size: 16px;
+  margin-top: 10px;
+  bottom: 5px;
+  margin-right: auto;
+  margin-left: auto;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+}

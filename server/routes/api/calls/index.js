@@ -35,6 +35,9 @@ callsRouter.get('/', (req, res, next) => {
     total: 0,
     pickup: 0,
     booked: 0,
+    webTotal: 0,
+    webPickup: 0,
+    webBooked: 0,
   };
 
   startDate = startDate ? r.ISO8601(startDate) : r.now();
@@ -53,6 +56,15 @@ callsRouter.get('/', (req, res, next) => {
           }
           if (call.wasApptBooked) {
             send.booked++;
+          }
+          if (call.callsource !== 'direct') {
+            send.webTotal++;
+            if (call.answered) {
+              send.webPickup++;
+            }
+            if (call.wasApptBooked) {
+              send.webBooked++;
+            }
           }
           return null;
         });

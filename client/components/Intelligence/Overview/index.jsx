@@ -38,7 +38,7 @@ class Overview extends Component {
     };
     this.reinitializeState = this.reinitializeState.bind(this);
     this.modelOn = this.modelOn.bind(this);
-    this.submit = this.submit.bind(this)
+    this.submit = this.submit.bind(this);
   }
 
   componentDidMount() {
@@ -362,8 +362,12 @@ class Overview extends Component {
   }
 }
 Overview.propTypes = {
-  fetchEntitiesRequest: PropTypes.func,
-  location: PropTypes.object
+  appointmentStats: PropTypes.object,
+  appointmentStatsLastYear: PropTypes.object,
+  dayStats: PropTypes.object,
+  appointmentStats: PropTypes.object,
+  patientStats: PropTypes.func,
+  location: PropTypes.object,
 }
 
 function mapStateToProps({ entities, apiRequests }) {
@@ -373,7 +377,6 @@ function mapStateToProps({ entities, apiRequests }) {
   const patientStats = (apiRequests.get('patientStats') ? apiRequests.get('patientStats').data : null);
 
   return {
-    accounts: entities.getIn(['accounts', 'models']),
     appointmentStats,
     appointmentStatsLastYear,
     dayStats,

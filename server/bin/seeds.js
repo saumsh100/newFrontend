@@ -189,11 +189,15 @@ for (let i = 0; i < 100; i++) {
     isSyncedWithPMS: false,
   });
 
+  const callsource = (faker.random.boolean() ? 'direct' : 'website');
+
+
   randomCalls.push({
     id: uuid(),
     datetime: faker.date.past(),
     customer_phone_number: phoneNumber,
     answered: faker.random.boolean(),
+    callsource,
     wasApptBooked: faker.random.boolean(),
     destinationnum: clinicPhoneNumber,
     duration: 157,
@@ -211,8 +215,7 @@ for (let i = 0; i < 100; i++) {
   });
 
   const appointmentTime = faker.date.future();
-  const random_boolean = Math.random() >= 0.5;
-  const service = (random_boolean ? serviceId : serviceId2);
+  const service = (faker.random.boolean() ? serviceId : serviceId2);
 
   randomAppointments.push({
     accountId,
@@ -222,7 +225,7 @@ for (let i = 0; i < 100; i++) {
     serviceId: service,
     practitionerId,
     isPatientConfirmed: true,
-    isCancelled: false,
+    isCancelled: faker.random.boolean(),
     chairId,
     note: 'First',
   });

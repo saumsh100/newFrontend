@@ -34,12 +34,24 @@
       }
       div:last-child {
         padding-right: 0;
-        padding-left: 5px;
+        // padding-left: 5px;
       }
 
     }
     &_list {
       margin: 0 0 20px !important;
     }
+  }
+}
+
+.checkbox{
+  display: flex;
+  justify-content: space-between;
+  margin: auto 0;
+}
+
+.marginZero {
+  label {
+    margin: 0 5px 5px 5px;
   }
 }

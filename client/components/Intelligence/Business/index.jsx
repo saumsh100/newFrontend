@@ -24,9 +24,12 @@ class Business extends Component {
     this.state = {
       endDate: moment(new Date()),
       startDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
-      active: false,
+      compareEndDate: moment(new Date()),
+      compareStartDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
+      compare: false,
       loader: false,
     };
+
     this.submit = this.submit.bind(this);
   }
 
@@ -44,6 +47,15 @@ class Business extends Component {
       this.props.fetchEntitiesRequest({
         id: 'callStats',
         url: '/api/calls/',
+        params }),
+      this.props.fetchEntitiesRequest({
+        id: 'appointmentStats',
+        url: '/api/appointments/stats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'businessStats',
+        url: '/api/appointments/business',
         params }),
     ])
       .then(() => {
@@ -66,25 +78,93 @@ class Business extends Component {
       accountId: decodedToken.activeAccountId,
     };
 
-    Promise.all([
+    if (values.compare) {
+      const paramsCompare = {
+        startDate: moment(values.compareStartDate)._d,
+        endDate: moment(values.compareEndDate)._d,
+        accountId: decodedToken.activeAccountId,
+      };
+
+      Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'callStatsCompare',
+        url: '/api/calls/',
+        params: paramsCompare }),
       this.props.fetchEntitiesRequest({
         id: 'callStats',
         url: '/api/calls/',
         params }),
-    ])
+      ])
       .then(() => {
         this.setState({
+          startDate: moment(values.startDate),
+          endDate: moment(values.endDate),
           loader: true,
+          compare: true,
         });
       });
+    } else {
+
+      Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'callStats',
+        url: '/api/calls/',
+        params }),
+      this.props.fetchEntitiesRequest({
+        id: 'appointmentStats',
+        url: '/api/appointments/stats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'businessStats',
+        url: '/api/appointments/business',
+        params }),
+      ])
+      .then(() => {
+        this.setState({
+          startDate: moment(values.startDate),
+          endDate: moment(values.endDate),
+          loader: true,
+          compare: false,
+        });
+      });
+    }
   }
 
   render() {
     const callStats = (this.props.callStats ? this.props.callStats.toJS() : {});
+    const businessStats = (this.props.businessStats ? this.props.businessStats.toJS() : {});
+    const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toJS() : {});
+    let activePatients = 0;
+    let unfilledHours = 0;
+    let filledHours = 0;
 
-    console.log(callStats)
+    if (appointmentStats.patients) {
+      Object.keys(appointmentStats.patients).map((key) => {
+        activePatients += appointmentStats.patients[key].numAppointments;
+      });
+    }
+
+    if (appointmentStats.practitioner) {
+      Object.keys(appointmentStats.practitioner).map((key) => {
+        unfilledHours += appointmentStats.practitioner[key].appointmentTime / 60;
+        filledHours += appointmentStats.practitioner[key].totalTime / 60;
+      });
+    }
+
+    let serviceData = (appointmentStats.services ? Object.keys(appointmentStats.services).map((key) => {
+      return {
+        title: appointmentStats.services[key].name,
+        hours: Math.round(appointmentStats.services[key].time * 10 / 600),
+      };
+    }) : []);
+
+    serviceData = serviceData.sort((a, b) => {
+      return b.hours - a.hours;
+    });
+
     const data = [
-      {percentage: 12, question: true, count: callStats.total, title: 'All Calls', icon: 'phone', color: 'primaryInactive' },
+      {percentage: null, question: true, count: callStats.total, title: 'All Calls', icon: 'phone', color: 'primaryInactive' },
       {percentage: Math.floor(100 * callStats.pickup / callStats.total), question: true, count: callStats.pickup, title: 'Pickups', icon: 'user', color: 'primaryNavyBlue' },
       {percentage: Math.floor(100 * callStats.booked / callStats.total), question: true, count: callStats.booked, title: 'Bookings', icon: 'calendar-o', color: 'primaryDarkBlue' },];
 
@@ -92,20 +172,20 @@ class Business extends Component {
       {label: 'Calls From Website', data: {count: 102, title: 'Online Booking', icon: 'users', color: 'primaryColor' }}, ];
 
     const patientsData1 = [
-      {count: 5433, title: 'Active Patients', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
-      {count: 39, title: 'New Patients', date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
-      {count: 1746, title: 'Patients with Hygiene Appts', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
-      {count: '$288', title: 'Average Hourly Production', date:  moment({year: 2015, month: 6, day: 15}).fromNow(), color: 'primaryGreen' },];
+      {count: activePatients, title: 'Active Patients', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
+      {count: appointmentStats.newPatients, title: 'New Patients', date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
+      {count: businessStats.hygieneAppts, title: 'Patients with Hygiene Appts', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
+      ];
     const patientsData2 = [
-      {count: 160, title: 'Unflled Hours', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
-      {count: 480, title: 'Schedule Hours', date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
-      {count: 13, title: 'Broken Appts Not Filled', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
-      {count: '$1300', title: 'Revenue Lost From Broken Appts', date:  moment({year: 2015, month: 6, day: 15}).fromNow(), color: 'primaryGreen' },];
+      {count: unfilledHours, title: 'Unflled Hours', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
+      {count: filledHours, title: 'Schedule Hours', date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
+      {count: businessStats.brokenAppts, title: 'Broken Appts Not Filled', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
+      ];
 
     const hardcodeData1 = [
-      {count: 202, icon: 'phone'},
-      {count: 141, icon: 'user'},
-      {count: 71, icon: 'calendar-o'},];
+      {count: callStats.webTotal, icon: 'phone'},
+      {count: callStats.webPickup, icon: 'user'},
+      {count: callStats.webBooked, icon: 'calendar-o'},];
     const hardcodeData2 = [
       {percentage: 2, subtitle: 'Calls From Website'},
       {percentage: 70, subtitle: 'Pickups'},
@@ -114,6 +194,8 @@ class Business extends Component {
     const initialValues = {
       endDate: this.state.endDate._d,
       startDate: this.state.startDate._d,
+      compareEndDate: this.state.compareEndDate._d,
+      compareStartDate: this.state.compareStartDate._d,
     };
 
     const UserMenu = (props) => {
@@ -135,7 +217,7 @@ class Business extends Component {
                 <DropdownMenu labelComponent={UserMenu} closeOnInsideClick={false}>
                   <Form
                     className={stylesOverview.formDrop}
-                    form='dates'
+                    form="dates"
                     onSubmit={this.submit}
                     initialValues={initialValues}
                   >
@@ -151,6 +233,24 @@ class Business extends Component {
                       name="endDate"
                       label="End Date"
                     />
+                    {/* <div className={styles.checkbox}>
+                        Compare
+                        <Field
+                          className={styles.marginZero}
+                          name="compare"
+                          component="Checkbox"
+                        />
+                    </div>
+                    <Field
+                      component="DayPicker"
+                      name="compareStartDate"
+                      label="Compare Start Date"
+                    />
+                    <Field
+                      component="DayPicker"
+                      name="compareEndDate"
+                      label="Compare End Date"
+                    />*/}
                   </Form>
                 </DropdownMenu>
               </div>
@@ -162,15 +262,6 @@ class Business extends Component {
                 <BusinessStats data={data} className={styles.business__body_arrows} />
               </Col>
               <Col xs={12}>
-                <DataStats
-                  data={tabStep}
-                  borderColor={colorMap.darkblue}
-                  className={styles.business__body_call}
-                  data1={hardcodeData1}
-                  data2={hardcodeData2}
-                />
-              </Col>
-              <Col xs={12}>
                 <Patients
                   className={styles.business__body_call}
                   data={patientsData1}
@@ -179,50 +270,12 @@ class Business extends Component {
                 />
               </Col>
               <Col xs={12} className={styles.business__body_select}>
-                <Col xs={12} sm={6}>
+                <Col xs={12} sm={12}>
                   <ContainerList
                     className={styles.business__body_list}
                     borderColor={colorMap.darkblue}
                     cardTitle="Procedure by Hours"
-                    data={[{
-                      title: 'Invisalign',
-                      hours: '33,487',
-                    }, {
-                      title: 'Teeth Whitening',
-                      hours: '3,617',
-                    }, {
-                      title: 'Regular Checkup',
-                      hours: '1,901',
-                    }, {
-                      title: 'Lost Fillings',
-                      hours: '13,717',
-                    }, {
-                      title: 'Emergency Appointments',
-                      hours: '33,487',
-                    }]}
-                  />
-                </Col>
-                <Col xs={12} sm={6}>
-                  <ContainerList
-                    className={styles.business__body_list}
-                    borderColor={colorMap.darkblue}
-                    cardTitle="Procedure by Production"
-                    data={[{
-                      title: 'Invisalign',
-                      hours: '33,487',
-                    }, {
-                      title: 'Teeth Whitening',
-                      hours: '3,617',
-                    }, {
-                      title: 'Regular Checkup',
-                      hours: '1,901',
-                    }, {
-                      title: 'Lost Fillings',
-                      hours: '13,717',
-                    }, {
-                      title: 'Emergency Appointments',
-                      hours: '33,487',
-                    }]}
+                    data={serviceData}
                   />
                 </Col>
               </Col>
@@ -242,11 +295,24 @@ class Business extends Component {
   }
 }
 
+Business.propTypes = {
+  callStatsCompare: PropTypes.object,
+  callStats: PropTypes.object,
+  businessStats: PropTypes.object,
+  appointmentStats: PropTypes.object,
+  fetchEntitiesRequest: PropTypes.func,
+}
+
 function mapStateToProps({ entities, apiRequests }) {
   const callStats = (apiRequests.get('callStats') ? apiRequests.get('callStats').data : null);
+  const businessStats = (apiRequests.get('businessStats') ? apiRequests.get('businessStats').data : null);
+  const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
+  const callStatsCompare = (apiRequests.get('callStatsCompare') ? apiRequests.get('callStatsCompare').data : null);
   return {
-    accounts: entities.getIn(['accounts', 'models']),
     callStats,
+    businessStats,
+    appointmentStats,
+    callStatsCompare,
   };
 }
 
