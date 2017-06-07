@@ -14,7 +14,7 @@ const Patients = () =>
       <Redirect exact from={base()} to={base('/overview')} />
       <Route path={base('/overview')} component={Overview} />
       <Route path={base('/business')} component={Business} />
-      <Route path={base('/social')} component={Social} />
+      {/*<Route path={base('/social')} component={Social} />*/}
     </Switch>
   </Container>;
 

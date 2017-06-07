@@ -2,7 +2,8 @@ import createModel from '../createModel';
 
 const SentReminderSchema = {
   id: null,
-  sentDate: null,
+  createdAt: null,
+  //sentDate: null,
   reminderId: null,
   accountId: null,
   patientId: null,
