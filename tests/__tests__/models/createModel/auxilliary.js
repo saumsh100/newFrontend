@@ -45,7 +45,7 @@ describe('createModel/auxilliary Helpers', () => {
       expect(typeof createAuxilliaryTable).toBe('function');
     });
 
-    it('should create the appropriate Model (table)', () => {
+    it('should create the appropriate aux Model (table)', () => {
       const auxTable = createAuxilliaryTable(
         'Thing1',
         'name',
@@ -82,4 +82,5 @@ describe('createModel/auxilliary Helpers', () => {
       //_.mapValues(auxTables, auxTable => auxTable.delete().then(() => done()))
     });
   });
+
 });

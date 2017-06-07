@@ -77,7 +77,7 @@ export function createAuxilliaryTables(modelName, auxConfig) {
 }
 
 export function generateAuxValidators(auxTables) {
-  return map(auxTables, (AuxTable) => {
+  return mapValues(auxTables, (AuxTable) => {
     const {
       config,
       fieldName,

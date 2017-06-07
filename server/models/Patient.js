@@ -20,7 +20,7 @@ const Patient = createModel('Patient', {
 
   phoneNumber: type.string(),
   homePhoneNumber: type.string(),
-  mobilePhoneNumber: type.string(), //.validator(validatorFn),
+  mobilePhoneNumber: type.string(),
   workPhoneNumber: type.string(),
   otherPhoneNumber: type.string(),
   prefContactPhone: type.string(),
@@ -60,29 +60,19 @@ function checkUniqueAttributes() {
  * Check aux patient table to see if the phone number is unique.
  * @return boolean true if it is, false otherwise
  */
-function isUnique(number) {
-  console.log('verifying uniqueness of the number:', number);
-  PatientMobilePhoneNumberAuxClinicIdTable
-    .get(mobilePhoneNumber)
-    //.filter(accountId)
-    .then((matches) => {
-      console.log('creating the aux table');
-      const patientAuxData = Object.assign({}, { mobilePhoneNumber: number });
-      PatientAux.save(patientAuxData);
-      return true;
-    })
-    .catch(error => console.log('TODO do something about the error', error));
-}
-
-/**
- * @param phoneNumber String phoneNumber to validate
- */
-/*
- *function validatorFn(phoneNumber) {
- *  console.log('...... validating field', phoneNumber);
- *  return true;
- *}
- */
+// function isUnique(number) {
+//   console.log('verifying uniqueness of the number:', number);
+//   PatientMobilePhoneNumberAuxClinicIdTable
+//     .get(mobilePhoneNumber)
+//     //.filter(accountId)
+//     .then((matches) => {
+//       console.log('creating the aux table');
+//       const patientAuxData = Object.assign({}, { mobilePhoneNumber: number });
+//       PatientAux.save(patientAuxData);
+//       return true;
+//     })
+//     .catch(error => console.log('TODO do something about the error', error));
+// }
 
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
@@ -101,7 +91,7 @@ Patient.define('getPreferredPhoneNumber', () => {
  * Fires on document create and update
  */
 Patient.docOn('saving', validatePatient);
-Patient.pre('save', validatePatient);
+// Patient.pre('save', validatePatient);
 
 function validatePatient(doc) {
   isUnique(doc.mobilePhoneNumber);
@@ -110,15 +100,5 @@ function validatePatient(doc) {
   // validators.validatePhoneNumber(doc.workNumber);
   // validators.validatePhoneNumber(doc.otherPhoneNumber);
 }
-
-// const PatientAux = createModel('PatientAux', {
-//   id: type.string(),
-// }, { pk: });
-
-
-Patient.docOn('saving', function(patient) {
-  // set primary key before saving
-  return patientAux.id = md5hash(patient.accountId, patient.phoneNumber);
-});
 
 module.exports = Patient;
