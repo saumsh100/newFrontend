@@ -177,7 +177,7 @@ class Business extends Component {
       {count: businessStats.hygieneAppts, title: 'Patients with Hygiene Appts', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
       ];
     const patientsData2 = [
-      {count: unfilledHours, title: 'Unflled Hours', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
+      {count: unfilledHours, title: 'Unfilled Hours', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
       {count: filledHours, title: 'Schedule Hours', date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
       {count: businessStats.brokenAppts, title: 'Broken Appts Not Filled', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
       ];
