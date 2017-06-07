@@ -21,8 +21,8 @@ export default function RFColorPicker(props) {
     <ColorPicker
       {...newProps}
       {...newInput}
-      color={input.value || '#FFF'}
-      onChange={(color,e) => input.onChange(color.hex)}
+      color={input.value}
+      onChange={(color) => input.onChange(color.hex)}
     />
   );
 }

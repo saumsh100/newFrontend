@@ -2,6 +2,7 @@
 @import '../../ui.scss';
 
 .rowContainer {
+  display: flex;
   height: calc(100vh - 65px);
   background-color: $primary-white;
   box-sizing: border-box;
@@ -11,6 +12,8 @@
   border-right: 1px solid;
   border-right-color: $primary-dark;
   padding-top: 15px;
+  max-width: 200px;
+  min-width: 200px;
   width: 200px;
   //padding-left: 15px;
 }
@@ -26,6 +29,7 @@
 }
 
 .settingsFormsCol {
+  width: 100%;
   padding-top: 15px;
   //padding-left: 15px;
 }

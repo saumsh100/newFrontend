@@ -11,27 +11,27 @@ export default function Settings(props) {
 
   if (location.pathname === '/settings/services' || location.pathname === '/settings/practitioners') {
     showNav = (
-      <Row className={styles.rowContainer}>
+      <div className={styles.rowContainer}>
         {children}
-      </Row>
+      </div>
     );
   } else {
     showNav = (
-      <Row className={styles.rowContainer}>
-        <Col xs={2} className={styles.subSettingsCol}>
+      <div className={styles.rowContainer}>
+        <div className={styles.subSettingsCol}>
           <Card className={styles.subSettingsCard}>
             <SettingsSubNav
               location={props.location}
               className={styles.subSettingsListItem}
             />
           </Card>
-        </Col>
-        <Col xs={10} className={styles.settingsFormsCol} >
+        </div>
+        <div className={styles.settingsFormsCol} >
           <Card className={styles.settingsFormsCard} >
             {children}
           </Card>
-        </Col>
-      </Row>
+        </div>
+      </div>
     );
   }
 

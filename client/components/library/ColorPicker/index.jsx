@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { ChromePicker } from 'react-color';
-import Button from '../Button';
+import Popover from 'react-popover';
+import Input from '../Input';
+import IconButton from '../IconButton';
+import styles from './styles.scss';
 
 class ColorPicker extends Component {
   constructor(props) {
@@ -12,7 +15,8 @@ class ColorPicker extends Component {
     this.handleClose = this.handleClose.bind(this);
   }
 
-  handleClick() {
+  handleClick(e) {
+    e.stopPropagation();
     this.setState({ displayColorPicker: !this.state.displayColorPicker });
   }
 
@@ -21,29 +25,34 @@ class ColorPicker extends Component {
   }
 
   render() {
-    const popover = {
-      position: 'absolute',
-      zIndex: '2',
-    };
-    const cover = {
-      position: 'fixed',
-      top: '0px',
-      right: '0px',
-      bottom: '0px',
-      left: '0px',
+
+    const swatchColor = {
+      background: this.props.color,
     };
 
     return (
-      <div>
-        <Button onClick={this.handleClick}>Pick Color</Button>
-        { this.state.displayColorPicker ?
-          <div style={popover}>
-            <div style={cover} onClick={ this.handleClose } />
+      <div className={styles.colorPickerContainer}>
+        <div className={styles.colorSwatch} style={swatchColor} />
+
+        <Popover
+          className={styles.colorPickerPopover}
+          onOuterAction={this.handleClose}
+          isOpen={this.state.displayColorPicker}
+          body={[(
             <ChromePicker
               {...this.props}
             />
-          </div>
-          : null }
+          )]}
+          preferPlace="below"
+          tipSize={12}
+        >
+          <Input
+            label={this.props.label}
+            value={this.props.color}
+            onChange={this.props.onChange}
+            onClick={this.handleClick}
+          />
+        </Popover>
       </div>
     );
   }

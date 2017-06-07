@@ -8,7 +8,7 @@ import {
 const initialState = fromJS({
   serviceId: null,
   practitionerId: null,
-})
+});
 
 export default handleActions({
   [SET_SERVICE_ID](state, action) {
