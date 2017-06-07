@@ -123,7 +123,7 @@ describe('#createModel', () => {
       });
 
       // mock ASYNC function to return a different name value
-      const fn = jest.fn((cb) => {
+      const mockValidate = jest.fn((cb) => {
         delay(2000, () => {
           return NOT_CARECRU;
         }).then((result) => {
@@ -133,10 +133,11 @@ describe('#createModel', () => {
 
       // ASYNC pre save call
       TestModel.pre('save', function(next) {
-        fn((newName) => {
+        mockValidate((newName) => {
           this.name = newName;
+          console.log('async pre save hook finishing');
+          next();
         });
-        next();
       });
 
       const testModelInstance = { name: CARECRU };
@@ -144,37 +145,32 @@ describe('#createModel', () => {
       // Model.save
       return TestModel.save(testModelInstance)
         .then((persistedModel) => {
-          expect(fn.mock.calls.length).toBe(1);
+          expect(mockValidate.mock.calls.length).toBe(1);
           expect(persistedModel.name).toBe(NOT_CARECRU);
         });
     });
 
     // it should be called before creating document then .save()
-    it('it should be called before creating document then .save()', () => {
+    it('it should be called before creating document.save()', () => {
       const TestModel = createModel(TEST_MODEL+3, {
         name: type.string(),
-      });
-
-      // SYNC mock pre save call
-      TestModel.pre('save', function(next) {
-        fn();
-        next();
       });
 
       // mock SYNC function
       const fn = jest.fn();
 
-      // create document
-      const testModelInstance = { name: CARECRU };
-      TestModel.save(testModelInstance)
-        .then((persistedModel) => {
-          console.log('ran: model.save');
+      // SYNC mock pre save call
+      TestModel.pre('save', function(next) {
+        fn();
+        this.name = NOT_CARECRU;
+        next();
+      });
 
-          persistedModel.merge({ name: NOT_CARECRU }).save()
-            .then((newPersistedModel) => {
-              expect(fn.mock.calls.length).toBe(2);
-              expect(newPersistedModel.name).toBe(NOT_CARECRU);
-            });
+      const newDoc = new TestModel({ name: CARECRU });
+      newDoc.save()
+        .then((newPersistedDoc) => {
+          expect(fn.mock.calls.length).toBe(1);
+          expect(newPersistedDoc.name).toBe(NOT_CARECRU);
         });
     });
 
@@ -187,6 +183,18 @@ describe('#createModel', () => {
     // this should work for us but gets called all the time
   }); */
 
+
+
+
+
+
+
+
+
+
+
+
+  // TODO old, broken
   // test('call docOn saving with Model.merge', (done) => {
   //   const TestModel = createModel(TEST_MODEL+2, {
   //     homePhoneNumber: type.string(),
