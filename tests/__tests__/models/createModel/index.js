@@ -13,13 +13,15 @@ const TEST_MODEL = 'TestModel';
 const CARECRU = 'carecru';
 const NOT_CARECRU = 'not_carecru';
 
-function delay(seconds, calculation) {
+// jasmine.DEFAULT_TIMEOUT_INTERVAL = 4000;
+
+function delay(milliseconds, calculation) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const val = calculation();
       if (val) return resolve(val);
       reject();
-    }, seconds);
+    }, milliseconds);
   });
 }
 
@@ -124,7 +126,7 @@ describe('#createModel', () => {
 
       // mock ASYNC function to return a different name value
       const mockValidate = jest.fn((cb) => {
-        delay(5000, () => {
+        delay(2000, () => {
           return NOT_CARECRU;
         }).then((result) => {
           cb(result);
@@ -175,11 +177,43 @@ describe('#createModel', () => {
     });
 
     // it should be called before fetching document, merging, then .save()
-    // it('it should be called before fetching document, merging, then .save()', () => {
-    //   const TestModel = createModel(TEST_MODEL+3, {
-    //     name: type.string(),
-    //   });
-    // });
+    /**
+     * will the hook be called on these:
+     * save on model: should be called
+     * do a get: should not be called
+     * do a merge and save: should be called
+     */
+    it('it should be called before fetching document, merging, then .save()', () => {
+      const TestModel = createModel(TEST_MODEL+4, {
+        name: type.string(),
+      });
+
+      const fn = jest.fn();
+      TestModel.pre('save', function(next) {
+        this.name = NOT_CARECRU;
+        fn();
+        next();
+      });
+
+      return TestModel.save({ name: CARECRU })
+        .then((newPersistedDoc) => {
+          expect(newPersistedDoc.name).toBe(NOT_CARECRU);
+          expect(fn.mock.calls.length).toBe(1);
+
+          // Not expect pre save to run here
+          TestModel.get(newPersistedDoc.id)
+            .then(() => {
+              expect(fn.mock.calls.length).toBe(1);
+
+              // Expect to pre save to run here
+              newPersistedDoc.merge({ name: 'newName' }).save()
+                .then((result) => {
+                  expect(fn.mock.calls.length).toBe(2);
+                  expect(result.name).toBe(NOT_CARECRU);
+                });
+            });
+        });
+    });
   });
 
   // TODO: Unique Fields

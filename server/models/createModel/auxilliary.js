@@ -90,7 +90,7 @@ export function generateAuxValidators(auxTables, doc) {
       dependencies = [],
     } = config;
 
-    return Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // FieldValue will either be a simple string or compounded with an array if dependencies
       let fieldValue = doc[fieldName];
       if (dependencies.length) {
