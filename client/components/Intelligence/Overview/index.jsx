@@ -51,9 +51,6 @@ class Overview extends Component {
       accountId: decodedToken.activeAccountId,
     };
 
-    this.props.fetchEntities({
-      key: 'accounts',
-    });
     Promise.all([
       this.props.fetchEntitiesRequest({id: 'patientStats', url: '/api/patients/stats', params}),
       this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params}),

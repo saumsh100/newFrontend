@@ -158,6 +158,7 @@ const randomAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
 const randomChats = [];
+const randomCalls = [];
 
 for (let i = 0; i < 100; i++) {
   const id = uuid();
@@ -188,6 +189,17 @@ for (let i = 0; i < 100; i++) {
     isSyncedWithPMS: false,
   });
 
+  randomCalls.push({
+    id: uuid(),
+    datetime: faker.date.past(),
+    customer_phone_number: phoneNumber,
+    answered: faker.random.boolean(),
+    wasApptBooked: faker.random.boolean(),
+    destinationnum: clinicPhoneNumber,
+    duration: 157,
+    first_call: true,
+  });
+
   randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate));
 
 
@@ -200,7 +212,7 @@ for (let i = 0; i < 100; i++) {
 
   const appointmentTime = faker.date.future();
   const random_boolean = Math.random() >= 0.5;
-  const service = (random_boolean ? serviceId : serviceId2)
+  const service = (random_boolean ? serviceId : serviceId2);
 
   randomAppointments.push({
     accountId,
@@ -687,6 +699,8 @@ const SEEDS = {
     },
     ...randomPatients,
   ],
+
+  Call: randomCalls,
 
   WeeklySchedule: [
     {
