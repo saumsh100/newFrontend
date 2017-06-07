@@ -76,7 +76,7 @@ export function createAuxilliaryTables(modelName, auxConfig) {
   ));
 }
 
-export function generateAuxValidators(auxTables) {
+export function generateAuxValidators(auxTables, doc) {
   return mapValues(auxTables, (AuxTable) => {
     const {
       config,
@@ -133,16 +133,19 @@ export function generateUniqueValidator(auxTables) {
    *
    * @type {Array}
    */
-  return function (doc) {
+  return function (next) {
     // Run all aux validators
-    Promise.all(generateAuxValidators(auxTables))
+    const self = this;
+    Promise.all(generateAuxValidators(auxTables, self))
       .then(() => {
         console.log(`Validation Passed!`);
+        next();
         // TODO: how do we handle this, do we call next() or what?
       })
       .catch((err) => {
         console.error('Failed Validation!');
         console.error(err);
+        next(err);
         // TODO: how do we handle this, do we throw the error or call next(err) or what?
       });
   };

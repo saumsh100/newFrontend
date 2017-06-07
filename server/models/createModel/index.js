@@ -39,7 +39,7 @@ function createModel(tableName, schema, config = {}) {
     Model.auxModels = createAuxilliaryTables(auxConfig);
 
     // TODO: is this the right hook?
-    Model.docOn('saving', generateUniqueValidator(Model.auxModels));
+    Model.pre('save', generateUniqueValidator(Model.auxModels));
   }
 
   // TODO: add Model helper functionss

@@ -124,7 +124,7 @@ describe('#createModel', () => {
 
       // mock ASYNC function to return a different name value
       const mockValidate = jest.fn((cb) => {
-        delay(2000, () => {
+        delay(5000, () => {
           return NOT_CARECRU;
         }).then((result) => {
           cb(result);
@@ -175,7 +175,20 @@ describe('#createModel', () => {
     });
 
     // it should be called before fetching document, merging, then .save()
+    // it('it should be called before fetching document, merging, then .save()', () => {
+    //   const TestModel = createModel(TEST_MODEL+3, {
+    //     name: type.string(),
+    //   });
+    // });
   });
+
+  // TODO: Unique Fields
+
+  // TODO: it should properly write into the auxilliary table
+  // TODO: it should properly update the auxilliary table
+
+  // TODO: it should FAIL if you are trying to save 2 docs with the same field w/ Model.save([ doc1, doc2 ])
+  // TODO: if should FAIL for consecutive saves doc1.save().then.doc2.save()
 
 
   // TODO this is next
