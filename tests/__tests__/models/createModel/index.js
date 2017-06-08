@@ -66,7 +66,7 @@ describe('#createModel', () => {
 
     test('should call docOn saving hook with Model.save - synchronous', () => {
       const TestModel = createModel(TEST_MODEL, {
-        name: type.string(),
+        nameField: type.string(),
       });
 
       const fn = jest.fn();
@@ -226,38 +226,71 @@ describe('#createModel', () => {
    // this should work for us but gets called all the time
    }); */
 
-  // describe('write, create, update aux tables on model create', () => {
-  //   it('should create model table and aux table', () => {
-  //
-  //     const TestModel = createModel(TEST_MODEL + 5, {
-  //       name: type.string(),
-  //     }, {
-  //       aux: {
-  //         name: {
-  //           value: 'id',
-  //         },
-  //         anotherField: {
-  //           phoneNumber: '7782422626',
-  //         },
-  //       },
-  //     });
-  //     const auxTableName = TEST_MODEL + 5 + '_name';
-  //
-  //     // thinky.r.tableList().run()
-  //     //   .then((result) => {
-  //     //     console.log('>>>> result', result);
-  //     //   });
-  //
-  //     // TestModelAux.save({ id: CARECRU })
-  //     //   .then(() => {
-  //     //     return checkTable(auxTableName);
-  //     //   })
-  //     //   .then((result) => {
-  //     //     expect(result).toBe(true);
-  //     //   });
-  //   });
-  // });
+describe.only('create aux table testing', () => {
 
+  afterEach(() => {
+    return thinky.r.tableDrop(TEST_MODEL)
+      .then(() => {
+        delete thinky.models[TEST_MODEL];
+      });
+  });
+
+  afterEach(() => {
+    return thinky.r.tableDrop(TEST_MODEL+'_mobilePhoneNumber')
+      .then(() => {
+        delete thinky.models[TEST_MODEL+'_mobilePhoneNumber'];
+      });
+  });
+
+  test('should create model table and aux table; no deps', () => {
+    const TestModel = createModel(TEST_MODEL, {
+      name: type.string(),
+    }, {
+      aux: {
+        mobilePhoneNumber: {
+          value: 'id',
+        },
+      },
+    });
+    const auxTableName = TEST_MODEL + '_mobilePhoneNumber';
+    const AuxTableModel = TestModel.auxModels['mobilePhoneNumber'];
+
+    expect(AuxTableModel).not.toBeNull();
+
+    return AuxTableModel.save({ id: 'some unique id', mobilePhoneNumber: '7782422626' })
+      .then((result) => {
+        expect(result.mobilePhoneNumber).toBe('7782422626');
+      });
+  });
+
+  test('should create model table and aux table - with single dependency', () => {
+    const TestModel = createModel(TEST_MODEL, {
+      fname: type.string(),
+      mobilePhoneNumber: type.string(),
+    }, {
+      aux: {
+        mobilePhoneNumber: {
+          value: 'id',                 // unique value we are trying to provide
+          dependencies: ['accountId'], // what we use to check for uniqueness
+        },
+      },
+    });
+
+    const AuxTableModel = TestModel.auxModels['mobilePhoneNumber'];
+    expect(AuxTableModel.getTableName()).toBe(TEST_MODEL + '_mobilePhoneNumber');
+    expect(AuxTableModel).not.toBeNull();
+
+    //                              value                               dependencies
+    //                                                              fieldName.[deps]join(DELIM)
+    return AuxTableModel.save({ id: 'some unique id', 'mobilePhoneNumber.accountId': ['7782422626', 'accountId1'] })
+      .then((result) => {
+        expect(result['mobilePhoneNumber.accountId'])
+          .toEqual(expect.arrayContaining(['7782422626', 'accountId1']));
+      });
+  });
+});
+
+// describe.only('write, create, update aux tables on model create', () => {
 
   // TODO: Unique Fields
 
