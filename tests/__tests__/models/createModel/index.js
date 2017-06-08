@@ -226,7 +226,7 @@ describe('#createModel', () => {
    // this should work for us but gets called all the time
    }); */
 
-describe.only('create aux table testing', () => {
+describe('create aux table testing', () => {
 
   afterEach(() => {
     return thinky.r.tableDrop(TEST_MODEL)
@@ -286,6 +286,35 @@ describe.only('create aux table testing', () => {
       .then((result) => {
         expect(result['mobilePhoneNumber.accountId'])
           .toEqual(expect.arrayContaining(['7782422626', 'accountId1']));
+      });
+  });
+
+  test('should create model table and aux table - with two dependencies', () => {
+    const TestModel = createModel(TEST_MODEL, {
+      fname: type.string(),
+      mobilePhoneNumber: type.string(),
+    }, {
+      aux: {
+        mobilePhoneNumber: {
+          value: 'id',
+          dependencies: ['accountId', 'familyId'],
+        },
+      },
+    });
+
+    const AuxTableModel = TestModel.auxModels['mobilePhoneNumber'];
+    expect(AuxTableModel.getTableName()).toBe(TEST_MODEL + '_mobilePhoneNumber');
+    expect(AuxTableModel).not.toBeNull();
+
+    //                              value                               dependencies
+    //                                                              fieldName.[deps]join(DELIM)
+    return AuxTableModel.save({
+      id: 'some unique id',
+      'mobilePhoneNumber.accountId.familyId': ['7782422626', 'accountId1', 'familyId1'],
+    })
+      .then((result) => {
+        expect(result['mobilePhoneNumber.accountId.familyId'])
+          .toEqual(expect.arrayContaining(['7782422626', 'accountId1', 'familyId1']));
       });
   });
 });
