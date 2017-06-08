@@ -9,33 +9,30 @@ import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntiti
 import {
   Card, DialogBox, Col, Grid, Row, Button,
   DashboardStats, ContainerList,
-  Form, RemoteSubmitButton, Field, ChartStats, FlexGrid,
-  Stats, DropdownMenu, Icon
+  Form, RemoteSubmitButton, Field, FlexGrid, DropdownMenu, Icon,
 } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import PractitionersList from './Cards/PractitionersList';
 import AppointmentsBooked from './Cards/AppointmentsBooked';
 import AppointmentFilled from './Cards/AppointmentFilled';
-import VisitorConversions from './Cards/VisitorConversions';
 import NewVsReturning from './Cards/NewVsReturning';
 import MaleVsFemale from './Cards/MaleVsFemale';
 import AgeRange from './Cards/AgeRange';
 import TopReference from './Cards/TopReference';
-import MostLoyal from './Cards/MostLoyal';
-import VisitorsByDevice from './Cards/VisitorsByDevice';
-import BusiestTimeOfWeek from './Cards/BusiestTimeOfWeek';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
 
 class Overview extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       endDate: moment(new Date()),
       startDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       active: false,
       loader: false,
     };
+
     this.reinitializeState = this.reinitializeState.bind(this);
     this.modelOn = this.modelOn.bind(this);
     this.submit = this.submit.bind(this);
@@ -52,10 +49,26 @@ class Overview extends Component {
     };
 
     Promise.all([
-      this.props.fetchEntitiesRequest({id: 'patientStats', url: '/api/patients/stats', params}),
-      this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params}),
-      this.props.fetchEntitiesRequest({id: 'dayStats', url: '/api/appointments/statsDate', params}),
-      this.props.fetchEntitiesRequest({id: 'appointmentStatsLastYear', url: '/api/appointments/statslastyear', params}),
+      this.props.fetchEntitiesRequest({
+        id: 'patientStats',
+        url: '/api/patients/stats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'appointmentStats',
+        url: '/api/appointments/stats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'dayStats',
+        url: '/api/appointments/statsDate',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'appointmentStatsLastYear',
+        url: '/api/appointments/statslastyear',
+        params,
+      }),
     ])
       .then(() => {
         this.setState({
@@ -86,10 +99,11 @@ class Overview extends Component {
     };
 
     Promise.all([
-      this.props.fetchEntities({
-        key: 'accounts',
+      this.props.fetchEntitiesRequest({
+        id: 'appointmentStats',
+        url: '/api/appointments/stats',
+        params,
       }),
-      this.props.fetchEntitiesRequest({id: 'appointmentStats', url: '/api/appointments/stats', params})
     ]).then(() => {
       const newState = {
         startDate: moment(values.startDate),
@@ -109,24 +123,24 @@ class Overview extends Component {
   }
 
   render() {
-
-    const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toObject(): null);
-    const patientStats = (this.props.patientStats ? this.props.patientStats.toObject(): null);
+    const appointmentStats = (this.props.appointmentStats ?
+      this.props.appointmentStats.toObject() : null);
+    const patientStats = (this.props.patientStats ? this.props.patientStats.toObject() : null);
 
     const prac = (appointmentStats ? appointmentStats.practitioner : {});
     const serve = (appointmentStats ? appointmentStats.services : {});
-    const patients = (appointmentStats ? appointmentStats.patients: {});
+    const patients = (appointmentStats ? appointmentStats.patients : {});
     let male = (patientStats ? patientStats.male : 0);
     let female = (patientStats ? patientStats.female : 0);
     const ageRange = (patientStats ? patientStats.ageData.toArray() : []);
     const newVisitors = (appointmentStats ? appointmentStats.newPatients : 0);
     const allApp = (appointmentStats ? appointmentStats.notConfirmedAppointments : 0);
     const returning = allApp - newVisitors;
-    const newVisitorPercent = Math.floor(newVisitors * 100 / allApp + 0.5);
+    const newVisitorPercent = Math.floor((newVisitors * 100 / allApp) + 0.5);
     const returningPercent = 100 - newVisitorPercent;
 
-    male = Math.floor(male * 100 / (male + female) + 0.5);
-    female = 100-male;
+    male = Math.floor((male * 100 / (male + female)) + 0.5);
+    female = 100 - male;
 
     const totalData = {
       appointmentBooked: 0,
@@ -140,11 +154,9 @@ class Overview extends Component {
       };
     }) : []);
 
-    serviceData = serviceData.sort((a, b) => {
-      return b.hours - a.hours;
-    });
+    serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
-    let realData = (appointmentStats ? (
+    const realData = (appointmentStats ? (
       prac.toArray().map((key) => {
         const data = {};
         data.appointmentBooked = Math.floor(key.toObject().appointmentTime / 60);
@@ -168,8 +180,11 @@ class Overview extends Component {
           />);
       })) : <div />);
 
-    const notConfirmedAppointments = (appointmentStats ? appointmentStats.notConfirmedAppointments : 0);
-    const confirmedAppointments = (appointmentStats ? appointmentStats.confirmedAppointments : 0);
+    const notConfirmedAppointments = (appointmentStats ?
+      appointmentStats.notConfirmedAppointments : 0);
+
+    const confirmedAppointments = (appointmentStats ?
+      appointmentStats.confirmedAppointments : 0);
 
     let sortedPatients = (appointmentStats ? patients.toArray().map((key) => {
       return {
@@ -177,20 +192,42 @@ class Overview extends Component {
         name: `${key.toObject().firstName} ${key.toObject().lastName}`,
         age: key.toObject().age,
         number: key.toObject().numAppointments,
-      }
+      };
     }) : []);
 
-    sortedPatients = sortedPatients.sort((a,b) => {
-      return b.number - a.number;
-    });
+    sortedPatients = sortedPatients.sort((a, b) => b.number - a.number);
 
-    sortedPatients = sortedPatients.slice(0,4);
+    sortedPatients = sortedPatients.slice(0, 4);
 
     const data = [
-      { count: notConfirmedAppointments, title: 'Appointments Booked', icon: 'calendar', size: 6, color: 'primaryColor' },
-      { count: '?', title: 'Estimated Revenue', icon: 'line-chart', size: 6, color: 'primaryBlue' },
-      { count: newVisitors, title: 'New Patients', icon: 'user', size: 6, color: 'primaryGreen' },
-      { count: confirmedAppointments, title: 'Confirmed Appointments', icon: 'check-circle', size: 6, color: 'primaryYellow' },
+      {
+        count: notConfirmedAppointments,
+        title: 'Appointments Booked',
+        icon: 'calendar',
+        size: 6,
+        color: 'primaryColor',
+      },
+      {
+        count: '?',
+        title: 'Estimated Revenue',
+        icon: 'line-chart',
+        size: 6,
+        color: 'primaryBlue',
+      },
+      {
+        count: newVisitors,
+        title: 'New Patients',
+        icon: 'user',
+        size: 6,
+        color: 'primaryGreen',
+      },
+      {
+        count: confirmedAppointments,
+        title: 'Confirmed Appointments',
+        icon: 'check-circle',
+        size: 6,
+        color: 'primaryYellow',
+      },
     ];
 
     const graphData = (this.props.appointmentStatsLastYear ? this.props.appointmentStatsLastYear.toObject() : null);
@@ -211,7 +248,7 @@ class Overview extends Component {
     };
 
     const UserMenu = (props) => {
-      return (
+      (
         <Button flat {...props} className={styles.userMenuButton}>
           <span className={styles.userRole}><i className="fa fa-calendar" /> {this.state.startDate.format('MMMM Do YYYY')} - {this.state.endDate.format('MMMM Do YYYY')}&nbsp;</span>
           <Icon icon="caret-down" />
@@ -229,7 +266,7 @@ class Overview extends Component {
                 <DropdownMenu labelComponent={UserMenu} closeOnInsideClick={false}>
                   <Form
                     className={styles.formDrop}
-                    form='dates'
+                    form="dates"
                     onSubmit={this.submit}
                     initialValues={initialValues}
                   >
@@ -260,7 +297,7 @@ class Overview extends Component {
           onOverlayClick={this.reinitializeState}
         >
           <Form
-            form='dates'
+            form="dates"
             onSubmit={this.submit}
             initialValues={initialValues}
             ignoreSaveButton
@@ -279,83 +316,85 @@ class Overview extends Component {
             />
           </Form>
         </DialogBox>
-        <Loader loaded={this.state.loader} color='#FF715C'>
-        <Row className={styles.intelligence__body}>
-          <Col xs={12}>
-            <DashboardStats data={data} />
-          </Col>
-          <Col xs={12} sm={6}>
-            <AppointmentFilled
-              appointmentFilled={totalData.appointmentBooked}
-              appointmentNotFilled={totalData.appointmentNotFiltred}
-              startDate={this.state.startDate._d}
-              endDate={this.state.endDate._d}
-              borderColor={colorMap.grey}
-            />
-          </Col>
-          <Col xs={12} sm={6}>
-            <ContainerList
-              cardTitle="Top Services by Hours"
-              data={serviceData}
-            />
-          </Col>
-          <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
-            {realData}
-          </FlexGrid>
-          <Col
-            className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}
-          >
-            <NewVsReturning
-              newVisitors={newVisitorPercent || 0}
-              returningVisitors={returningPercent || 0}
-              chartData={[{ value: newVisitorPercent, color: 'green' }, { value: returning, color: 'blue' }]}
-            />
-          </Col>
-          <Col className={styles.padding} xs={12} md={6}>
-            <TopReference
-              data={sortedPatients}
-              borderColor={colorMap.grey}
-            />
-          </Col>
-          <Col className={styles.padding} xs={12} md={6}>
-            <AgeRange
-              chartData={ageRange}
-            />
-          </Col>
-          <Col className={styles.padding} xs={12} md={6}>
-            <MaleVsFemale
-              title="Male vs Female Patients for the Last 12 Months"
-              male={male || 0}
-              female={female || 0}
-            />
-          </Col>
-          <Col xs={12}>
-            <AppointmentsBooked
-              borderColor={colorMap.grey}
-              cardTitle="Appointments Booked Last 12 Months"
-              labels={dataMonths}
-              dataSets={[
-                {
-                  label: 'Appointments Booked',
-                  color: 'yellow',
-                  data: dataPoints,
-                },
-              ]}
-            />
-          </Col>
-          <Col className={styles.padding} xs={12}>
-            <WebsiteTrafficSources
-              title="Appointments By Day for the Last 12 Months"
-              labels={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}
-              chartData={[
-                { label: 'Appointments Booked',
-                  color: ['lightgrey', 'yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
-                  data: dayStats,
-                },
-              ]}
-            />
-          </Col>
-        </Row>
+        <Loader loaded={this.state.loader} color="#FF715C">
+          <Row className={styles.intelligence__body}>
+            <Col xs={12}>
+              <DashboardStats data={data} />
+            </Col>
+            <Col xs={12} sm={6}>
+              <AppointmentFilled
+                appointmentFilled={totalData.appointmentBooked}
+                appointmentNotFilled={totalData.appointmentNotFiltred}
+                startDate={this.state.startDate._d}
+                endDate={this.state.endDate._d}
+                borderColor={colorMap.grey}
+              />
+            </Col>
+            <Col xs={12} sm={6}>
+              <ContainerList
+                cardTitle="Top Services by Hours"
+                data={serviceData}
+              />
+            </Col>
+            <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
+              {realData}
+            </FlexGrid>
+            <Col
+              className={classNames(styles.padding, styles.websiteVisitorConversions)}
+              xs={12}
+              md={6}
+            >
+              <NewVsReturning
+                newVisitors={newVisitorPercent || 0}
+                returningVisitors={returningPercent || 0}
+                chartData={[{ value: newVisitorPercent, color: 'green' }, { value: returning, color: 'blue' }]}
+              />
+            </Col>
+            <Col className={styles.padding} xs={12} md={6}>
+              <TopReference
+                data={sortedPatients}
+                borderColor={colorMap.grey}
+              />
+            </Col>
+            <Col className={styles.padding} xs={12} md={6}>
+              <AgeRange
+                chartData={ageRange}
+              />
+            </Col>
+            <Col className={styles.padding} xs={12} md={6}>
+              <MaleVsFemale
+                title="Male vs Female Patients for the Last 12 Months"
+                male={male || 0}
+                female={female || 0}
+              />
+            </Col>
+            <Col xs={12}>
+              <AppointmentsBooked
+                borderColor={colorMap.grey}
+                cardTitle="Appointments Booked Last 12 Months"
+                labels={dataMonths}
+                dataSets={[
+                  {
+                    label: 'Appointments Booked',
+                    color: 'yellow',
+                    data: dataPoints,
+                  },
+                ]}
+              />
+            </Col>
+            <Col className={styles.padding} xs={12}>
+              <WebsiteTrafficSources
+                title="Appointments By Day for the Last 12 Months"
+                labels={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}
+                chartData={[
+                  { label: 'Appointments Booked',
+                    color: ['lightgrey', 'yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
+                    data: dayStats,
+                  },
+                ]}
+              />
+            </Col>
+          </Row>
         </Loader>
       </Grid>
     );
@@ -367,10 +406,11 @@ Overview.propTypes = {
   dayStats: PropTypes.object,
   appointmentStats: PropTypes.object,
   patientStats: PropTypes.func,
+  fetchEntitiesRequest: PropTypes.func,
   location: PropTypes.object,
-}
+};
 
-function mapStateToProps({ entities, apiRequests }) {
+function mapStateToProps({ apiRequests }) {
   const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
   const appointmentStatsLastYear = (apiRequests.get('appointmentStatsLastYear') ? apiRequests.get('appointmentStatsLastYear').data : null);
   const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);

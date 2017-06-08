@@ -2,17 +2,15 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
-import { bindActionCreators } from 'redux';import moment from 'moment';
+import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import {
-  Card, DialogBox, Col, Grid, Row, Button,
-  DashboardStats, ContainerList,
-  Form, RemoteSubmitButton, Field, ChartStats, FlexGrid,
-  Stats, DropdownMenu, Icon,
+  Card, Col, Grid, Row, Button, ContainerList,
+  Form, Field, DropdownMenu, Icon,
 } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import BusinessStats from './Cards/BusinessStats';
-import DataStats from './Cards/DataStats';
 import Patients from './Cards/Patients';
 import styles from './styles.scss';
 import stylesOverview from '../Overview/styles.scss';
@@ -86,48 +84,47 @@ class Business extends Component {
       };
 
       Promise.all([
-      this.props.fetchEntitiesRequest({
-        id: 'callStatsCompare',
-        url: '/api/calls/',
-        params: paramsCompare }),
-      this.props.fetchEntitiesRequest({
-        id: 'callStats',
-        url: '/api/calls/',
-        params }),
+        this.props.fetchEntitiesRequest({
+          id: 'callStatsCompare',
+          url: '/api/calls/',
+          params: paramsCompare }),
+        this.props.fetchEntitiesRequest({
+          id: 'callStats',
+          url: '/api/calls/',
+          params }),
       ])
-      .then(() => {
-        this.setState({
-          startDate: moment(values.startDate),
-          endDate: moment(values.endDate),
-          loader: true,
-          compare: true,
+        .then(() => {
+          this.setState({
+            startDate: moment(values.startDate),
+            endDate: moment(values.endDate),
+            loader: true,
+            compare: true,
+          });
         });
-      });
     } else {
-
       Promise.all([
-      this.props.fetchEntitiesRequest({
-        id: 'callStats',
-        url: '/api/calls/',
-        params }),
-      this.props.fetchEntitiesRequest({
-        id: 'appointmentStats',
-        url: '/api/appointments/stats',
-        params,
-      }),
-      this.props.fetchEntitiesRequest({
-        id: 'businessStats',
-        url: '/api/appointments/business',
-        params }),
+        this.props.fetchEntitiesRequest({
+          id: 'callStats',
+          url: '/api/calls/',
+          params }),
+        this.props.fetchEntitiesRequest({
+          id: 'appointmentStats',
+          url: '/api/appointments/stats',
+          params,
+        }),
+        this.props.fetchEntitiesRequest({
+          id: 'businessStats',
+          url: '/api/appointments/business',
+          params }),
       ])
-      .then(() => {
-        this.setState({
-          startDate: moment(values.startDate),
-          endDate: moment(values.endDate),
-          loader: true,
-          compare: false,
+        .then(() => {
+          this.setState({
+            startDate: moment(values.startDate),
+            endDate: moment(values.endDate),
+            loader: true,
+            compare: false,
+          });
         });
-      });
     }
   }
 
@@ -159,37 +156,79 @@ class Business extends Component {
       };
     }) : []);
 
-    serviceData = serviceData.sort((a, b) => {
-      return b.hours - a.hours;
-    });
+    serviceData = serviceData.sort((a, b) => b.hours - a.hours);
+
+    const pickupPercent = Math.floor(100 * callStats.pickup / callStats.total) || 0;
+    const bookingPercent = Math.floor(100 * callStats.pickup / callStats.total) || 0;
 
     const data = [
-      {percentage: null, question: true, count: callStats.total, title: 'All Calls', icon: 'phone', color: 'primaryInactive' },
-      {percentage: Math.floor(100 * callStats.pickup / callStats.total), question: true, count: callStats.pickup, title: 'Pickups', icon: 'user', color: 'primaryNavyBlue' },
-      {percentage: Math.floor(100 * callStats.booked / callStats.total), question: true, count: callStats.booked, title: 'Bookings', icon: 'calendar-o', color: 'primaryDarkBlue' },];
-
-    const tabStep = [{label: 'Online Booking', data: {count: '10,104', title: 'Website Visits', icon: 'television', color: 'primaryColor' }},
-      {label: 'Calls From Website', data: {count: 102, title: 'Online Booking', icon: 'users', color: 'primaryColor' }}, ];
+      {
+        percentage: null,
+        question: true,
+        count: callStats.total,
+        title: 'All Calls',
+        icon: 'phone',
+        color: 'primaryInactive',
+      },
+      {
+        percentage: pickupPercent,
+        question: true,
+        count: callStats.pickup,
+        title: 'Pickups',
+        icon: 'user',
+        color: 'primaryNavyBlue',
+      },
+      {
+        percentage: bookingPercent,
+        question: true,
+        count: callStats.booked,
+        title: 'Bookings',
+        icon: 'calendar-o',
+        color: 'primaryDarkBlue',
+      },
+    ];
 
     const patientsData1 = [
-      {count: activePatients, title: 'Active Patients', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
-      {count: appointmentStats.newPatients, title: 'New Patients', date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
-      {count: businessStats.hygieneAppts, title: 'Patients with Hygiene Appts', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
-      ];
-    const patientsData2 = [
-      {count: unfilledHours, title: 'Unfilled Hours', date:  moment({year: 2017, month: 2, day: 15}).fromNow(), color: 'primaryColor' },
-      {count: filledHours, title: 'Schedule Hours', date:  moment({year: 2017, month: 1, day: 15}).fromNow(), color: 'primaryBlue' },
-      {count: businessStats.brokenAppts, title: 'Broken Appts Not Filled', date:  moment({year: 2016, month: 10, day: 10}).fromNow(), color: 'primaryGreen' },
-      ];
+      {
+        count: activePatients,
+        title: 'Active Patients',
+        date: moment({ year: 2017, month: 2, day: 15 }).fromNow(),
+        color: 'primaryColor',
+      },
+      {
+        count: appointmentStats.newPatients,
+        title: 'New Patients',
+        date: moment({ year: 2017, month: 1, day: 15 }).fromNow(),
+        color: 'primaryBlue',
+      },
+      {
+        count: businessStats.hygieneAppts,
+        title: 'Patients with Hygiene Appts',
+        date: moment({ year: 2016, month: 10, day: 10 }).fromNow(),
+        color: 'primaryGreen' },
+    ];
 
-    const hardcodeData1 = [
-      {count: callStats.webTotal, icon: 'phone'},
-      {count: callStats.webPickup, icon: 'user'},
-      {count: callStats.webBooked, icon: 'calendar-o'},];
-    const hardcodeData2 = [
-      {percentage: 2, subtitle: 'Calls From Website'},
-      {percentage: 70, subtitle: 'Pickups'},
-      {percentage: 53, subtitle: 'Booking'},];
+    const patientsData2 = [
+      {
+        count: unfilledHours,
+        title: 'Unfilled Hours',
+        date: moment({ year: 2017, month: 2, day: 15 }).fromNow(),
+        color: 'primaryColor',
+      },
+      {
+        count: filledHours,
+        title: 'Schedule Hours',
+        date: moment({ year: 2017, month: 1, day: 15 }).fromNow(),
+        color: 'primaryBlue',
+      },
+      {
+        count: businessStats.brokenAppts,
+        title: 'Broken Appts Not Filled',
+        date: moment({ year: 2016, month: 10, day: 10 }).fromNow(),
+        color: 'primaryGreen',
+      },
+    ];
+
 
     const initialValues = {
       endDate: this.state.endDate._d,
@@ -303,7 +342,7 @@ Business.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
 }
 
-function mapStateToProps({ entities, apiRequests }) {
+function mapStateToProps({ apiRequests }) {
   const callStats = (apiRequests.get('callStats') ? apiRequests.get('callStats').data : null);
   const businessStats = (apiRequests.get('businessStats') ? apiRequests.get('businessStats').data : null);
   const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
