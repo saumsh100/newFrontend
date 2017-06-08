@@ -1,6 +1,6 @@
 
 import each from 'lodash/each';
-import mapValues from 'lodash/mapValues';
+import mapValues from 'lodash/map';
 import thinky from '../../config/thinky';
 
 const { r, type } = thinky;
@@ -37,9 +37,7 @@ export function createPrimaryKey(dependencies, fieldName) {
  * @returns {{}}
  */
 export function createAuxilliaryTables(modelName, auxConfig) {
-  console.log('createAuxilliaryTable(s): auxConfig=', auxConfig);
   return mapValues(auxConfig, (config, fieldName) => {
-    console.log(`createAuxilliaryTables.map. auxConfig ${JSON.stringify(auxConfig)}; config ${JSON.stringify(config)}; fieldName=${fieldName};`);
     createAuxilliaryTable(modelName, fieldName, config);
   });
 }

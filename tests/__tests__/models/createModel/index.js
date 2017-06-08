@@ -1,18 +1,8 @@
 
-import createModel from '../../../../server/models/createModel';
-import dropTables from './dropTables';
-import {
-  createAuxilliaryTable,
-  createAuxilliaryTables,
-} from '../../../../server/models/createModel/auxilliary';
-
-
+const createModel = require('../../../../server/models/createModel');
 const thinky = require('../../../../server/config/thinky');
-const type = thinky.type;
 
-const dropTestModelTables = dropTables.dropTestModelTables;
-const listTables = dropTables.listTables;
-const checkTable = dropTables.checkTable;
+const type = thinky.type;
 
 const TEST_MODEL = 'TestModel';
 const CARECRU = 'carecru';
@@ -30,18 +20,7 @@ function delay(milliseconds, calculation) {
   });
 }
 
-describe('#createModel', () => {
-
-  // afterEach((done) => {
-  //   console.log('running after each');
-  //   dropTestModelTables(TEST_MODEL)
-  //     .then(() => {
-  //       console.log('Dropped FakeTable');
-  //       done();
-  //     })
-  //     .catch(error => console.log('kfdjghdkfjghdkjg', error));
-  //   // return deleteAllFrom(TEST_MODEL);
-  // });
+describe('#async mocks', () => {
 
   it('test1', () => {
     expect(2 + 2).toBe(4);
@@ -59,13 +38,13 @@ describe('#createModel', () => {
         return 2 * 3;
       }).then((num) => {
         expect(num).toBe(6);
-        console.log('test ran');
+        // console.log('math test 2 async async test ran');
         done();
       });
     });
 
   });
-
+});
   // it('should be a function', () => {
   //   expect(typeof createModel).toBe('function');
   // });
@@ -74,13 +53,19 @@ describe('#createModel', () => {
   // TODO: test validators...
   // TODO: test requireds, defaults, etc.
 
-  describe('Model.docOn(\'saving\')', () => {
-    // afterEach((done) => {
-    //   dropTestModelTables(TEST_MODEL).then(() => done());
-    // });
+describe('#createModel', () => {
 
-    it('should call docOn saving hook with Model.save - synchronous', () => {
-      const TestModel = createModel(TEST_MODEL+0, {
+  afterEach(() => {
+    return thinky.r.tableDrop(TEST_MODEL)
+      .then(() => {
+        delete thinky.models[TEST_MODEL];
+      });
+  });
+
+  describe('Model.docOn(\'saving\')', () => {
+
+    test('should call docOn saving hook with Model.save - synchronous', () => {
+      const TestModel = createModel(TEST_MODEL, {
         name: type.string(),
       });
 
@@ -91,7 +76,7 @@ describe('#createModel', () => {
         console.log('.>..... saving');
       });
 
-      const testModelInstance = { homePhoneNumber: '7782422626' };
+      const testModelInstance = {homePhoneNumber: '7782422626'};
 
       return TestModel.save(testModelInstance)
         .then((persistedModel) => {
@@ -104,20 +89,21 @@ describe('#createModel', () => {
    * will the hook be called on Model.save? expect yes
    */
   describe('Model.pre(\'save\')', () => {
-    it('it should be called before Model.save - sync', () => {
-      const TestModel = createModel(TEST_MODEL+1, {
+
+    test('it should be called before Model.save - sync', () => {
+      const TestModel = createModel(TEST_MODEL, {
         name: type.string(),
       });
 
       // SYNC pre save call
       const fn = jest.fn();
-      TestModel.pre('save', function(next) {
+      TestModel.pre('save', function (next) {
         fn();
         this.name = NOT_CARECRU;
         next();
       });
 
-      const testModelInstance = { name: CARECRU };
+      const testModelInstance = {name: CARECRU};
 
       // Model.save
       return TestModel.save(testModelInstance)
@@ -125,13 +111,16 @@ describe('#createModel', () => {
           expect(fn.mock.calls.length).toBe(1);
           expect(persistedModel.name).toBe(NOT_CARECRU);
         });
+      // .catch((error) => {
+      //   console.log('...... error', error);
+      // });
     });
 
     /**
      * will the hook be called with async function on Model.save? expect yes
      */
-    it('it should be called before Model.save - async', () => {
-      const TestModel = createModel(TEST_MODEL+2, {
+    test('it should be called before Model.save - async', () => {
+      const TestModel = createModel(TEST_MODEL, {
         name: type.string(),
       });
 
@@ -145,7 +134,7 @@ describe('#createModel', () => {
       });
 
       // ASYNC pre save call
-      TestModel.pre('save', function(next) {
+      TestModel.pre('save', function (next) {
         mockValidate((newName) => {
           this.name = newName;
           console.log('async pre save hook finishing');
@@ -153,7 +142,7 @@ describe('#createModel', () => {
         });
       });
 
-      const testModelInstance = { name: CARECRU };
+      const testModelInstance = {name: CARECRU};
 
       // Model.save
       return TestModel.save(testModelInstance)
@@ -169,8 +158,8 @@ describe('#createModel', () => {
      * - do document.save instead of model.save; expect yes
      */
     // it should be called before creating document then .save()
-    it('it should be called before creating document.save()', () => {
-      const TestModel = createModel(TEST_MODEL+3, {
+    test('it should be called before creating document.save()', () => {
+      const TestModel = createModel(TEST_MODEL, {
         name: type.string(),
       });
 
@@ -178,14 +167,14 @@ describe('#createModel', () => {
       const fn = jest.fn();
 
       // SYNC mock pre save call
-      TestModel.pre('save', function(next) {
+      TestModel.pre('save', function (next) {
         fn();
         this.name = NOT_CARECRU;
         next();
       });
 
-      const newDoc = new TestModel({ name: CARECRU });
-      newDoc.save()
+      const newDoc = new TestModel({name: CARECRU});
+      return newDoc.save()
         .then((newPersistedDoc) => {
           expect(fn.mock.calls.length).toBe(1);
           expect(newPersistedDoc.name).toBe(NOT_CARECRU);
@@ -200,18 +189,18 @@ describe('#createModel', () => {
      * do a merge and save: should be called
      */
     it('it should be called before fetching document, merging, then .save()', () => {
-      const TestModel = createModel(TEST_MODEL+4, {
+      const TestModel = createModel(TEST_MODEL, {
         name: type.string(),
       });
 
       const fn = jest.fn();
-      TestModel.pre('save', function(next) {
+      TestModel.pre('save', function (next) {
         this.name = NOT_CARECRU;
         fn();
         next();
       });
 
-      return TestModel.save({ name: CARECRU })
+      return TestModel.save({name: CARECRU})
         .then((newPersistedDoc) => {
           expect(newPersistedDoc.name).toBe(NOT_CARECRU);
           expect(fn.mock.calls.length).toBe(1);
@@ -222,7 +211,7 @@ describe('#createModel', () => {
               expect(fn.mock.calls.length).toBe(1);
 
               // Expect to pre save to run here
-              newPersistedDoc.merge({ name: 'newName' }).save()
+              newPersistedDoc.merge({name: 'newName'}).save()
                 .then((result) => {
                   expect(fn.mock.calls.length).toBe(2);
                   expect(result.name).toBe(NOT_CARECRU);
@@ -231,42 +220,43 @@ describe('#createModel', () => {
         });
     });
   });
+});
 
   /* describe('validateFn', () => {
    // this should work for us but gets called all the time
    }); */
 
-  describe('write, create, update aux tables on model create', () => {
-    it('should create model table and aux table', () => {
-
-      const TestModel = createModel(TEST_MODEL + 5, {
-        name: type.string(),
-      }, {
-        aux: {
-          name: {
-            value: 'id',
-          },
-          anotherField: {
-            phoneNumber: '7782422626',
-          },
-        },
-      });
-      const auxTableName = TEST_MODEL + 5 + '_name';
-
-      // thinky.r.tableList().run()
-      //   .then((result) => {
-      //     console.log('>>>> result', result);
-      //   });
-
-      // TestModelAux.save({ id: CARECRU })
-      //   .then(() => {
-      //     return checkTable(auxTableName);
-      //   })
-      //   .then((result) => {
-      //     expect(result).toBe(true);
-      //   });
-    });
-  });
+  // describe('write, create, update aux tables on model create', () => {
+  //   it('should create model table and aux table', () => {
+  //
+  //     const TestModel = createModel(TEST_MODEL + 5, {
+  //       name: type.string(),
+  //     }, {
+  //       aux: {
+  //         name: {
+  //           value: 'id',
+  //         },
+  //         anotherField: {
+  //           phoneNumber: '7782422626',
+  //         },
+  //       },
+  //     });
+  //     const auxTableName = TEST_MODEL + 5 + '_name';
+  //
+  //     // thinky.r.tableList().run()
+  //     //   .then((result) => {
+  //     //     console.log('>>>> result', result);
+  //     //   });
+  //
+  //     // TestModelAux.save({ id: CARECRU })
+  //     //   .then(() => {
+  //     //     return checkTable(auxTableName);
+  //     //   })
+  //     //   .then((result) => {
+  //     //     expect(result).toBe(true);
+  //     //   });
+  //   });
+  // });
 
 
   // TODO: Unique Fields
@@ -279,73 +269,3 @@ describe('#createModel', () => {
 
 
   // TODO this is next
-
-
-
-
-
-
-
-
-
-
-
-
-  // TODO old, broken
-  // test('call docOn saving with Model.merge', (done) => {
-  //   const TestModel = createModel(TEST_MODEL+2, {
-  //     homePhoneNumber: type.string(),
-  //   }, {
-  //     aux: {
-  //       name: {
-  //         value: 'id',
-  //       },
-  //     },
-  //   });
-  //
-  //   // setup validate function to replace the phone number
-  //   TestModel.docOn('saving', (doc) => {
-  //     doc.homePhoneNumber = '111';
-  //   });
-  //
-  //   const testModelInstance = Object.assign({}, { homePhoneNumber: '7782422626' });
-  //   let persistedTestModel = {};
-  //
-  //   const prom1 = TestModel.save(testModelInstance)
-  //     .then((testModel) => {
-  //       console.log('executing prom1');
-  //       persistedTestModel = testModel;
-  //       expect(testModel.id).not.toBeNull();
-  //       expect(testModel.homePhoneNumber).toBe('111');
-  //     });
-  //
-  //   // need to make sure these are are in order to test correctly
-  //   const modifiedPersistedTestModel = Object.assign({}, persistedTestModel, { homePhoneNumber: '6045700922' });
-  //   const prom2 = persistedTestModel.merge(modifiedPersistedTestModel).save()
-  //     .then((updatedTestModel) => {
-  //       console.log('executing prom2');
-  //       expect(testModel.id).not.toBeNull();
-  //       expect(testModel.homePhoneNumber).toBe('6045700922');
-  //     });
-  //
-  //   // Promise.all([prom1, prom2]).then(() => {
-  //   //   console.log('done');
-  //   //   done();
-  //   // });
-  // });
-});
-
-// function deleteFakeModelsForTests() {
-//   // const TM = createModel('TestModel', {
-//   //   homePhoneNumber: thinky.type.string(),
-//   // });
-//   // TM.delete().run();
-//   // // thinky.table('TestModel').delete().run();
-//
-// }
-
-// still needs a model
-// function del() {
-//   const query = new Query('TestModel', thinky)
-//   // ...
-// }
