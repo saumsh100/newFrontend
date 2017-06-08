@@ -22,9 +22,15 @@ function deleteAllFrom(tableName) {
   });
 }
 
-function checkTable(conn, tableName) {
-  console.log('checkTable: checking tables');
-  return r.db('carecru_development').tableList().contains(tableName).run(conn); // true|false
+/**
+ * Return true if the table exists.
+ * @param tableName
+ */
+function checkTable(tableName) {
+  const p = r.connect(dbConfig);
+  return p.then((conn) => {
+    return r.db('carecru_development').tableList().contains(tableName).run(conn);
+  });
 }
 
 /**
@@ -50,4 +56,5 @@ module.exports = {
   dropTestModelTables,
   listTables,
   deleteAllFrom,
+  checkTable,
 };

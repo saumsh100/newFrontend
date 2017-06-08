@@ -77,6 +77,7 @@ describe('createModel/auxilliary Helpers', () => {
       };
 
       const auxTables = createAuxilliaryTables(modelName, auxConfig);
+      console.log('>>>>>>>.', auxTables);
       expect(_.size(auxTables)).toBe(2);
 
       //_.mapValues(auxTables, auxTable => auxTable.delete().then(() => done()))

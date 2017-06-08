@@ -27,6 +27,7 @@ function createModel(tableName, schema, config = {}) {
 
   // Pluck off so that we can create model with appropriate config
   const auxConfig = pick(config, 'aux');
+  console.log('createModel: config=', auxConfig);
 
   // Create the thinky model/tabel
   const Model = thinky.createModel(tableName, schema, {
@@ -36,7 +37,7 @@ function createModel(tableName, schema, config = {}) {
 
 
   if (auxConfig) {
-    Model.auxModels = createAuxilliaryTables(auxConfig);
+    Model.auxModels = createAuxilliaryTables(tableName, auxConfig);
 
     // TODO: is this the right hook?
     Model.pre('save', generateUniqueValidator(Model.auxModels));

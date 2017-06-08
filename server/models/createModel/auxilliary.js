@@ -1,6 +1,6 @@
 
 import each from 'lodash/each';
-import mapValues from 'lodash/map';
+import mapValues from 'lodash/mapValues';
 import thinky from '../../config/thinky';
 
 const { r, type } = thinky;
@@ -32,12 +32,26 @@ export function createPrimaryKey(dependencies, fieldName) {
 }
 
 /**
+ * createAuxilliaryTables does...
+ *
+ * @returns {{}}
+ */
+export function createAuxilliaryTables(modelName, auxConfig) {
+  console.log('createAuxilliaryTable(s): auxConfig=', auxConfig);
+  return mapValues(auxConfig, (config, fieldName) => {
+    console.log(`createAuxilliaryTables.map. auxConfig ${JSON.stringify(auxConfig)}; config ${JSON.stringify(config)}; fieldName=${fieldName};`);
+    createAuxilliaryTable(modelName, fieldName, config);
+  });
+}
+
+/**
  *
  * @param modelName model that this table is for
  * @param fieldName name of the unique field that this table is for
  * @param config is Object with {@code { value: '', dependencies: [] } }
  */
 export function createAuxilliaryTable(modelName, fieldName, config) {
+  console.log('createAuxilliaryTable: config=', config);
   const {
     value,
     dependencies = [],
@@ -62,18 +76,8 @@ export function createAuxilliaryTable(modelName, fieldName, config) {
   AuxTable.primaryKey = primaryKey;
   AuxTable.config = config;
 
+  console.log('createAuxilliaryTable: AuxTable=', AuxTable);
   return AuxTable;
-}
-
-/**
- * createAuxilliaryTables does...
- *
- * @returns {{}}
- */
-export function createAuxilliaryTables(modelName, auxConfig) {
-  return mapValues(auxConfig, (config, fieldName) => (
-    createAuxilliaryTable(modelName, fieldName, config)
-  ));
 }
 
 export function generateAuxValidators(auxTables, doc) {

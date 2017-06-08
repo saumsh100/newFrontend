@@ -1,13 +1,18 @@
 
 import createModel from '../../../../server/models/createModel';
 import dropTables from './dropTables';
+import {
+  createAuxilliaryTable,
+  createAuxilliaryTables,
+} from '../../../../server/models/createModel/auxilliary';
+
 
 const thinky = require('../../../../server/config/thinky');
 const type = thinky.type;
 
 const dropTestModelTables = dropTables.dropTestModelTables;
 const listTables = dropTables.listTables;
-const deleteAllFrom = dropTables.deleteAllFrom;
+const checkTable = dropTables.checkTable;
 
 const TEST_MODEL = 'TestModel';
 const CARECRU = 'carecru';
@@ -95,6 +100,9 @@ describe('#createModel', () => {
     });
   });
 
+  /**
+   * will the hook be called on Model.save? expect yes
+   */
   describe('Model.pre(\'save\')', () => {
     it('it should be called before Model.save - sync', () => {
       const TestModel = createModel(TEST_MODEL+1, {
@@ -119,6 +127,9 @@ describe('#createModel', () => {
         });
     });
 
+    /**
+     * will the hook be called with async function on Model.save? expect yes
+     */
     it('it should be called before Model.save - async', () => {
       const TestModel = createModel(TEST_MODEL+2, {
         name: type.string(),
@@ -152,6 +163,11 @@ describe('#createModel', () => {
         });
     });
 
+    /**
+     * will the hook be called on these:
+     * - save model; expect yes
+     * - do document.save instead of model.save; expect yes
+     */
     // it should be called before creating document then .save()
     it('it should be called before creating document.save()', () => {
       const TestModel = createModel(TEST_MODEL+3, {
@@ -216,6 +232,43 @@ describe('#createModel', () => {
     });
   });
 
+  /* describe('validateFn', () => {
+   // this should work for us but gets called all the time
+   }); */
+
+  describe('write, create, update aux tables on model create', () => {
+    it('should create model table and aux table', () => {
+
+      const TestModel = createModel(TEST_MODEL + 5, {
+        name: type.string(),
+      }, {
+        aux: {
+          name: {
+            value: 'id',
+          },
+          anotherField: {
+            phoneNumber: '7782422626',
+          },
+        },
+      });
+      const auxTableName = TEST_MODEL + 5 + '_name';
+
+      // thinky.r.tableList().run()
+      //   .then((result) => {
+      //     console.log('>>>> result', result);
+      //   });
+
+      // TestModelAux.save({ id: CARECRU })
+      //   .then(() => {
+      //     return checkTable(auxTableName);
+      //   })
+      //   .then((result) => {
+      //     expect(result).toBe(true);
+      //   });
+    });
+  });
+
+
   // TODO: Unique Fields
 
   // TODO: it should properly write into the auxilliary table
@@ -226,9 +279,6 @@ describe('#createModel', () => {
 
 
   // TODO this is next
-  /* describe('validateFn', () => {
-    // this should work for us but gets called all the time
-  }); */
 
 
 
