@@ -912,10 +912,10 @@ const SEEDS = {
       accountId,
       firstName: 'Perry',
       lastName: 'Cox',
-      type: 'Dentist',
+      type: 'Hygienist',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
-      isActive: false,
+      isActive: true,
       // services: [],
     },
     {

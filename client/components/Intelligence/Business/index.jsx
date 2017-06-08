@@ -158,8 +158,8 @@ class Business extends Component {
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
-    const pickupPercent = Math.floor(100 * callStats.pickup / callStats.total) || 0;
-    const bookingPercent = Math.floor(100 * callStats.pickup / callStats.total) || 0;
+    const pickupPercent = Math.floor(100 * callStats.pickup / callStats.total) || null;
+    const bookingPercent = Math.floor(100 * callStats.pickup / callStats.total) || null;
 
     const data = [
       {
@@ -210,7 +210,7 @@ class Business extends Component {
 
     const patientsData2 = [
       {
-        count: unfilledHours,
+        count: filledHours - unfilledHours,
         title: 'Unfilled Hours',
         date: moment({ year: 2017, month: 2, day: 15 }).fromNow(),
         color: 'primaryColor',
