@@ -59,8 +59,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
     brokenAppts: 0,
   };
 
-  const test1 = /regular/i;
-  const test2 = /clean/i;
+  const testHygien = /hygien/i;
 
   startDate = startDate ? r.ISO8601(startDate) : r.now();
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
@@ -77,6 +76,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       .filter(r.row('startDate').during(startDate, endDate))
       .getJoin({
         patient: true,
+        practitioner: true,
         service: true,
       })
       .run()
@@ -84,7 +84,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
         let filter = null;
 
         appointments.map((appointment) => {
-          if (appointment.service && (test2.test(appointment.service.name) || test1.test(appointment.service.name)) && !appointment.isCancelled) {
+          if (testHygien.test(appointment.practitioner.type)) {
             send.hygieneAppts++;
           }
           if (appointment.isCancelled) {
