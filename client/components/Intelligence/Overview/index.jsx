@@ -306,8 +306,8 @@ class Overview extends Component {
             className={classNames(styles.padding, styles.websiteVisitorConversions)} xs={12} md={6}
           >
             <NewVsReturning
-              newVisitors={newVisitorPercent}
-              returningVisitors={returningPercent}
+              newVisitors={newVisitorPercent || 0}
+              returningVisitors={returningPercent || 0}
               chartData={[{ value: newVisitorPercent, color: 'green' }, { value: returning, color: 'blue' }]}
             />
           </Col>
@@ -325,8 +325,8 @@ class Overview extends Component {
           <Col className={styles.padding} xs={12} md={6}>
             <MaleVsFemale
               title="Male vs Female Patients for the Last 12 Months"
-              male={male}
-              female={female}
+              male={male || 0}
+              female={female || 0}
             />
           </Col>
           <Col xs={12}>
