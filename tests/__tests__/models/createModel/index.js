@@ -319,6 +319,73 @@ describe('create aux table testing', () => {
   });
 });
 
+describe.only('test aux tables use cases', () => {
+
+  afterEach(() => {
+    return thinky.r.tableDrop(TEST_MODEL)
+      .then(() => {
+        delete thinky.models[TEST_MODEL];
+      });
+  });
+
+  afterEach(() => {
+    return thinky.r.tableDrop(TEST_MODEL+'_mobilePhoneNumber')
+      .then(() => {
+        delete thinky.models[TEST_MODEL+'_mobilePhoneNumber'];
+      });
+  });
+
+  test('create TestModel, insert the same value twice into it', () => {
+    const TestModel = createModel(TEST_MODEL, {
+      fname: type.string(),
+      mobilePhoneNumber: type.string(),
+    }, {
+      aux: {
+        mobilePhoneNumber: {
+          value: 'id',
+        },
+      },
+    });
+
+    return TestModel.save({ mobilePhoneNumber: '7782422626' })
+      .then((savedDoc1) => {
+        expect(savedDoc1.mobilePhoneNumber).toBe('7782422626');
+
+        return TestModel.save({ mobilePhoneNumber: '7782422626' });
+      })
+      .then((result) => {
+        throw new Error('Test is incorrect. Should not be able to write in this test.');
+      })
+      .catch((error) => {
+        expect(error.message).toBe('Unique Field Validation Error');
+      });
+  });
+
+  test('create TestModel, insert different values into it', () => {
+    const TestModel = createModel(TEST_MODEL, {
+      fname: type.string(),
+      mobilePhoneNumber: type.string(),
+    }, {
+      aux: {
+        mobilePhoneNumber: {
+          value: 'id',
+        },
+      },
+    });
+
+    return TestModel.save({ mobilePhoneNumber: '7782422626' })
+      .then((savedDoc1) => {
+        expect(savedDoc1.mobilePhoneNumber).toBe('7782422626');
+
+        return TestModel.save({ mobilePhoneNumber: '6041112233' });
+      })
+      .then((result) => {
+        expect(result.mobilePhoneNumber).toBe('6041112233');
+      });
+  });
+});
+
+
 // describe.only('write, create, update aux tables on model create', () => {
 
   // TODO: Unique Fields

@@ -1,5 +1,6 @@
 
-import each from 'lodash/each';
+import { v4 as uuid } from 'uuid';
+import map from 'lodash/map';
 import mapValues from 'lodash/mapValues';
 import thinky from '../../config/thinky';
 
@@ -77,7 +78,7 @@ export function createAuxilliaryTable(modelName, fieldName, config) {
 }
 
 export function generateAuxValidators(auxTables, doc) {
-  return mapValues(auxTables, (AuxTable) => {
+  return map(auxTables, (AuxTable) => {
     const {
       config,
       fieldName,
@@ -94,31 +95,44 @@ export function generateAuxValidators(auxTables, doc) {
       // FieldValue will either be a simple string or compounded with an array if dependencies
       let fieldValue = doc[fieldName];
       if (dependencies.length) {
+        // d is a field name in doc
         const dependencyValues = dependencies.map(d => doc[d]);
         fieldValue = [fieldValue, ...dependencyValues];
       }
 
+
       // Now grab from aux table and see if value equals doc.id
       AuxTable.get(fieldValue)
-      // Catch first cause errors
+        .then((auxDoc) => {
+          console.log('auxDoc', auxDoc);
+          if (auxDoc[value] === doc[value]) {
+            resolve();
+          } else {
+            // reject(new Error(`Unique Field Validation Error: ${fieldName} field must be unique on Model ${modelName}`));
+            console.log('>>>>>>>>>>>> rejecting write', doc);
+            // reject(new Error('Unique Field Validation Error'));
+            reject(new Error('Unique Field Validation Error'));
+          }
+        })
         .catch((err) => {
           // TODO: should make sure it is a "document not found" error
           // assume errors means it does not exist
           // Create entry into this aux table
+          console.log('caught error in AuxTable.get', err);
+          let storeValue = doc[value];
+          if (!doc.isSaved() && value === 'id' && !storeValue) {
+            storeValue = uuid();
+            doc.id = storeValue;
+            console.log('after saving. doc', doc);
+          }
+
           AuxTable.save({
             [primaryKey]: fieldValue,
-            [value]: doc[value],
+            [value]: storeValue,
           }).then((entry) => {
             console.log(`Added unique fieldValue=${fieldValue} to ${tableName} table`);
             resolve();
           });
-        })
-        .then((auxDoc) => {
-          if (auxDoc[value] === doc[value]) {
-            resolve();
-          } else {
-            reject(new Error(`Unique Field Validation Error: ${fieldName} field must be unique on Model ${modelName}`));
-          }
         });
     });
   });
