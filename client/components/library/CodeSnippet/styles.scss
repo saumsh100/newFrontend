@@ -1,0 +1,18 @@
+@import '../../../ui';
+
+.codeSnippet {
+  height: auto;
+  background-color: #fefbf3;
+  border: 1px solid;
+  border-color: $primary-darkgrey;
+  padding: 10px;
+  border-radius: 8px;
+
+  &_code {
+    font-size: 12px;
+    font-weight: $medium-weight;
+    white-space: pre-wrap;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+}

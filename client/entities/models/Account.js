@@ -25,6 +25,7 @@ const AccountSchema = {
   zipCode: null,
   vendastaId: null,
   twilioPhoneNumber: null,
+  bookingWidgetPrimaryColor: null,
   enterpriseId: null,
   weeklyScheduleId: null, //new OfficeHoursRecord(),
 };

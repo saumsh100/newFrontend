@@ -8,6 +8,7 @@ import RFCheckbox from './RFCheckbox';
 import RFRangeSlider from './RFRangeSlider';
 import RFTextArea from './RFTextArea';
 import RFAutoComplete from './RFAutoComplete';
+import RFColorPicker from './RFColorPicker';
 
 export default {
   Input: RFInput,
@@ -20,4 +21,5 @@ export default {
   RangeSlider: RFRangeSlider,
   TextArea: RFTextArea,
   AutoComplete: RFAutoComplete,
+  ColorPicker: RFColorPicker,
 };

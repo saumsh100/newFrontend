@@ -15,14 +15,14 @@ const ROUTES = {
       to: '/patients/messages',
       label: 'Messages',
     },
-    {
+   /* {
       to: '/patients/phone',
       label: 'Phone',
-    },
+    }, */
   ],
 
   '/schedule': [
-    {
+   /* {
       to: '/schedule/calendar',
       label: 'Calendar View',
     },
@@ -30,7 +30,7 @@ const ROUTES = {
       to: '/schedule/appointments',
       label: 'Appointments List',
       disabled: true,
-    },
+    },*/
   ],
 
   '/settings': [
@@ -61,13 +61,13 @@ const ROUTES = {
       to: '/intelligence/business',
       label: 'Business',
     },
-    {
+    /*{
       to: '/intelligence/social',
       label: 'Social',
-    },
+    },*/
   ],
 
-  '/reputation': [
+  /*'/reputation': [
     {
       to: '/reputation/listings',
       label: 'Listings',
@@ -87,7 +87,7 @@ const ROUTES = {
       to: '/social/practice',
       label: 'Practice Posts',
     }],
-
+*/
   '/admin': [
     {
       to: '/admin/enterprises',

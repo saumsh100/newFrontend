@@ -27,6 +27,7 @@ export default function   DayViewBody(props){
     height: '100px',
   };
 
+  // Setting the colors for each practitioner
   const sortedPractitioners = practitioners.toArray().sort(SortByFirstName);
 
   const colors = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6'];
@@ -45,6 +46,8 @@ export default function   DayViewBody(props){
     });
   });
 
+
+  // Display the practitioners that have been checked on the filters card.
   const checkedPractitioners = schedule.toJS().practitionersFilter;
   practitionersArray = practitionersArray.filter((pr) => {
     return checkedPractitioners.indexOf(pr.id) > -1;
@@ -57,7 +60,7 @@ export default function   DayViewBody(props){
         timeSlotHeight={timeSlotHeight}
       />
       <div className={styles.dayView_body_timeSlot}>
-        {practitionersArray.length && practitionersArray.map((pract, i, arr) => {
+        {practitionersArray.length ? practitionersArray.map((pract, i, arr) => {
           const columnWidth = 100 / arr.length;
           return (
             <TimeSlot
@@ -77,7 +80,7 @@ export default function   DayViewBody(props){
               selectAppointment={selectAppointment}
             />
           );
-        })}
+        }) : null}
       </div>
     </div>
   );

@@ -36,9 +36,8 @@ const PATHS = {
       label: 'Office Hours',
     },
     {
-      to: '',
+      to: '/settings/schedule/onlinebooking',
       label: 'Online Booking',
-      disabled: true,
     },
     {
       to: '',

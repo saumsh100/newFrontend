@@ -77,11 +77,16 @@ function DigitalWaitListItem(props) {
           }}
           size={1.2}
         />
-        <div className={styles.patients__item_pencilBorder}>
+        <div
+          className={styles.patients__item_pencilBorder}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedWaitSpot(waitSpotJS);
+          }}
+        >
           <Icon
             icon={'pencil'}
             className={styles.patients__item_pencilBorder_pencil}
-            onClick={() => setSelectedWaitSpot(waitSpotJS)}
             size={1}
           />
         </div>
