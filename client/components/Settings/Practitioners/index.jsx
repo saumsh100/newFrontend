@@ -21,7 +21,12 @@ class Practitioners extends Component {
   }
 
   render() {
-    const { practitioners, weeklySchedules, timeOffs } = this.props;
+    const {
+      practitioners,
+      weeklySchedules,
+      timeOffs,
+      services
+    } = this.props;
 
     let showComponent = null;
     if (practitioners) {
@@ -31,6 +36,7 @@ class Practitioners extends Component {
           practitioners={filteredPractitioners}
           weeklySchedules={weeklySchedules}
           timeOffs={timeOffs}
+          services={services}
         />
       );
     }
@@ -47,6 +53,8 @@ Practitioners.propTypes = {
   practitioners: PropTypes.object,
   weeklySchedules: PropTypes.object,
   fetchEntities: PropTypes.func,
+  timeOffs: PropTypes.object,
+  services: PropTypes.object,
 };
 
 function mapStateToProps({ entities }) {
@@ -69,6 +77,7 @@ function mapStateToProps({ entities }) {
     practitioners,
     weeklySchedules,
     timeOffs,
+    services: entities.getIn(['services', 'models'])
   };
 }
 

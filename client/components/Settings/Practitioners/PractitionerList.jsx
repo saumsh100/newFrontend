@@ -2,7 +2,8 @@
 import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { createEntityRequest } from '../../../thunks/fetchEntities';
+import { Map } from 'immutable';
+import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
 import { IconButton, CardHeader, Col } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
@@ -23,7 +24,7 @@ class PractitionerList extends Component {
   }
 
   componentWillMount() {
-    this.props.setPractitionerId({ id: null })
+    this.props.setPractitionerId({ id: null });
   }
 
   setActive() {
@@ -32,14 +33,28 @@ class PractitionerList extends Component {
   }
 
   createPractitioner(values) {
+
+    const { services } = this.props;
+
     values.firstName = values.firstName.trim();
     values.lastName = values.lastName.trim();
 
     const key = 'practitioners';
 
+    let serviceIds = [];
+    if (services) {
+      serviceIds = services.toArray().map((service) => service.get('id'));
+    }
     this.props.createEntityRequest({ key, entityData: values })
       .then((entities) => {
         const id = Object.keys(entities[key])[0];
+        let savedPrac = entities[key][id];
+
+        savedPrac.id = id;
+        savedPrac.services = serviceIds;
+        const modifiedPrac = Map(savedPrac);
+
+        this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPrac, url: `/api/practitioners/${id}` });
         this.props.setPractitionerId({ id });
       });
 
@@ -127,6 +142,7 @@ function mapStateToProps({ accountSettings }) {
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     createEntityRequest,
+    updateEntityRequest,
     setPractitionerId,
   }, dispatch);
 }

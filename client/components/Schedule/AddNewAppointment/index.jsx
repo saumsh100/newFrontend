@@ -55,6 +55,7 @@ class AddNewAppointment extends Component {
       practitionerId,
       chairId,
       isPatientConfirmed,
+      isCancelled,
     } = appointmentValues;
 
     const {
@@ -62,6 +63,7 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
+    console.log(isCancelled);
     // setting initial duration and buffer if slider isn't used.
     let duration = appointmentValues.duration;
     if (!duration) {
@@ -92,6 +94,7 @@ class AddNewAppointment extends Component {
       chairId,
       note,
       isPatientConfirmed,
+      isCancelled,
       isSyncedWithPMS: false,
       customBufferTime: bufferTime,
     };
@@ -105,7 +108,7 @@ class AddNewAppointment extends Component {
         }
         reinitializeState();
         reset(formName);
-      }).catch(e => alert('Appointment was invalid'));
+      }).catch(() => alert('Appointment was invalid'));
 
     } else {
       const appModel = selectedAppointment.appModel;
@@ -115,7 +118,7 @@ class AddNewAppointment extends Component {
 
       updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(() => {
         reinitializeState();
-      }).catch((e) => alert('Update Failed'));
+      }).catch(() => alert('Update Failed'));
     }
   }
 
