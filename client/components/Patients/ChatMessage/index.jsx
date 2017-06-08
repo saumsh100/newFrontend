@@ -1,18 +1,17 @@
+
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import main from '../PatientList/main.scss';
-import styles from './styles.scss';
 import ChatListContainer from './ChatListContainer';
 import MessageContainer from './MessageContainer';
 import UserInfo from './UserInfo';
 import { Row, Col, CardHeader, Card, List, Grid, InfiniteScroll, AutoCompleteForm } from '../../library';
 import { fetchEntities } from '../../../thunks/fetchEntities';
-
+import styles from './styles.scss';
 
 class ChatMessage extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -21,6 +20,7 @@ class ChatMessage extends Component {
       searched: [],
       results: [],
     };
+
     this.submit = this.submit.bind(this);
     this.resetState = this.resetState.bind(this);
     this.submitSearch = this.submitSearch.bind(this);
@@ -149,10 +149,10 @@ class ChatMessage extends Component {
                   <div className={styles.input}>
                     <AutoCompleteForm
                       value={this.state.value}
-                      getSuggestions={this.getSuggestions}
-                      inputProps={inputProps}
-                      focusInputOnSuggestionClick={false}
-                      getSuggestionValue={suggestion => suggestion.name}
+                    getSuggestions={this.getSuggestions}
+                    inputProps={inputProps}
+                    focusInputOnSuggestionClick={false}
+                    getSuggestionValue={suggestion => suggestion.name}
                     />
                   </div>
                 </Card>

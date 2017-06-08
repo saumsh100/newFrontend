@@ -20,7 +20,7 @@ export default function Patients(props) {
             <Card className={styles.patients__item} >
               <div className={styles.patients__item_count}>{d.count}</div>
               <div className={styles.patients__item_subtitle}>{d.title}</div>
-              <div className={styles.patients__item_date}>{d.date}</div>
+              {/*<div className={styles.patients__item_date}>{d.date}</div>*/}
               <Icon className={styles.patients__item_icon} icon="question-circle" size={1.5} />
             </Card>
           </Col>

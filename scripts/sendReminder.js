@@ -10,21 +10,23 @@ const sampleData = {
   patient: {
     firstName: 'Justin',
     email: 'justin.d.sharp@gmail.com',
+    mobilePhoneNumber: '+16048557738',
   },
 
   account: {
     name: 'Donna Dental',
-    phoneNumber: '+17808508886',
+    // phoneNumber: '+17808508886',
+    twilioPhoneNumber: '+17786558613',
     website: 'http://donnadental.com',
   },
 };
 
 sendReminder.email(sampleData)
-  .then((call) => {
-    console.log('call.sid', call.sid);
+  .then((data) => {
+    console.log('success');
+    console.log('data', data);
   }).catch((err) => {
-    console.log(err);
+    console.error('error!');
+    console.error(err);
     throw err;
   });
-
-

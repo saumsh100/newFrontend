@@ -5,7 +5,7 @@ import styles from "./styles.scss";
 
 class Arrow extends Component {
   render() {
-    const {className, percentage, question, count, title, icon} = this.props;
+    const {className, percentage, question, count, title, icon, difference} = this.props;
     return (
       <div className={classNames(styles.arrow, className)}>
         <Row>
@@ -28,6 +28,9 @@ class Arrow extends Component {
               <Icon icon={icon} size={3.75} />
             </div>
           </Col>
+          <div className={styles.lower}>
+            {difference}
+          </div>
         </Row>
       </div>
     );

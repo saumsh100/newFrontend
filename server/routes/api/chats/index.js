@@ -68,7 +68,7 @@ chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
   chatMerge.accountId = req.body.patient.accountId;
   chatMerge.patientId = req.body.patient.id;
 
-  Chat.save(chatMerge).then((chat) => {
+  return Chat.save(chatMerge).then((chat) => {
     const joinObject = { patient: true };
     joinObject.textMessages = {
       _apply: (sequence) => {
@@ -76,36 +76,36 @@ chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
           .orderBy('createdAt');
       },
     };
+
     Chat.get(chat.id).getJoin(joinObject).run()
       .then((chats) => {
         const sendChat = normalize('chat', chats);
         res.send(sendChat);
-      }).catch((err) => {
-      console.log(err);
-    });
-    });
+      });
+  });
 });
 
 /**
   * creates a new text message and sends it using twilio
  */
 chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req, res, next) => {
+  const {
+    chatId,
+    message,
+    patient,
+  } = req.body;
+
   const mergeData = {
     lastTextMessageDate: new Date(),
   };
 
-  const textMessages = {
-    body: req.body.message,
-    chatId: req.body.chatId,
-    to: req.body.patient.mobilePhoneNumber,
-    from: twilio.number,
-  };
-
-  const joinObject = { patient: true};
-  joinObject.textMessages = {
-    _apply: (sequence) => {
-      return sequence
-        .orderBy('createdAt');
+  const joinObject = {
+    patient: true,
+    textMessages: {
+      _apply: (sequence) => {
+        return sequence
+          .orderBy('createdAt');
+      },
     },
   };
 
@@ -113,45 +113,51 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
 
   const chatMerge = {
     lastTextMessageDate: new Date(),
+    accountId: patient.accountId,
+    patientId: patient.id,
   };
 
-
-  chatMerge.accountId = req.body.patient.accountId;
-  chatMerge.patientId = req.body.patient.id;
-
-  return Account.filter({id: chatMerge.accountId}).run()
-    .then((result) => {
+  return Account.get(chatMerge.accountId).run()
+    .then((account) => {
       const textMessages = {
-        body: req.body.message,
-        chatId: req.body.chatId,
-        to: req.body.patient.mobilePhoneNumber,
-        from: result[0].twilioPhoneNumber,
+        body: message,
+        chatId,
+        to: '+17808508886',// patient.mobilePhoneNumber,
+        from: account.twilioPhoneNumber,
       };
-      twilioClient.sendMessage(textMessages)
-        .then((result) => {
-          if (!req.body.chatId) {
+
+      return twilioClient.sendMessage(textMessages)
+        .then((sms) => {
+          // Add twilio sid as our uniqueId
+          textMessages.id = sms.sid;
+          if (!chatId) {
             Chat.save(chatMerge).then((chat) => {
-              textMessages.chatId = chat.id;
               TextMessage.save(textMessages)
                 .then((chats) => {
-                  const sendChat = normalize('chat', chats);
-                  io.of(namespaces.dash).in(req.body.patient.accountId).emit('newMessage', sendChat)
-                  res.send(sendChat);
+                  const send = normalize('chat', chats);
+                  io.of(namespaces.dash)
+                    .in(account.id)
+                    .emit('newMessage', send);
+
+                  res.send(send);
                 });
             });
-
           } else {
             TextMessage.save(textMessages)
               .then(() => {
-                Chat.get(req.body.chatId).getJoin(joinObject).run()
+                Chat.get(chatId).getJoin(joinObject).run()
                   .then((chat) => {
                     chat.merge(mergeData).save().then((chats) => {
                       const send = normalize('chat', chats);
-                      io.of(namespaces.dash).in(chats.patient.accountId).emit('newMessage', send)
+                      io.of(namespaces.dash)
+                        .in(account.id)
+                        .emit('newMessage', send);
+
                       res.send(send);
                     });
                   });
-              }).catch(next);
+              })
+              .catch(next);
           }
         });
     })
