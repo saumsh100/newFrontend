@@ -11,7 +11,8 @@ export default function Avatar({ user, className, size, onClick = () => {} }) {
 
   const centerContent = user.avatarUrl ?
     <img className={styles.img} src={user.avatarUrl} alt={`Image of ${user.firstName}`} /> :
-    <img className={styles.img} src={'/images/avatar.png'} alt={`Image of ${user.firstName}`} /> ;
+    <span className={styles.text}>{user.firstName && user.firstName[0]}</span>;
+
   return (
     <div className={classes} onClick={onClick}>
       {centerContent}
@@ -20,12 +21,11 @@ export default function Avatar({ user, className, size, onClick = () => {} }) {
 }
 
 Avatar.propTypes = {
-  url: PropTypes.string,
-  user: PropTypes.shape({
-    url: PropTypes.string,
-    firstName: PropTypes.string.isRequired,
-  }),
   title: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  user: PropTypes.shape({
+    avatarUrl: PropTypes.string,
+    firstName: PropTypes.string.isRequired,
+  }),
 };
