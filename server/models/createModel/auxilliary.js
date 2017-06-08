@@ -37,10 +37,10 @@ export function createPrimaryKey(dependencies, fieldName) {
  * @returns {{}}
  */
 export function createAuxilliaryTables(modelName, auxConfig) {
-  console.log('createAuxilliaryTable(s): auxConfig=', auxConfig);
+  //console.log('createAuxilliaryTable(s): auxConfig=', auxConfig);
   return mapValues(auxConfig, (config, fieldName) => {
-    console.log(`createAuxilliaryTables.map. auxConfig ${JSON.stringify(auxConfig)}; config ${JSON.stringify(config)}; fieldName=${fieldName};`);
-    createAuxilliaryTable(modelName, fieldName, config);
+    //console.log(`createAuxilliaryTables.map. auxConfig ${JSON.stringify(auxConfig)}; config ${JSON.stringify(config)}; fieldName=${fieldName};`);
+    return createAuxilliaryTable(modelName, fieldName, config);
   });
 }
 
@@ -51,7 +51,7 @@ export function createAuxilliaryTables(modelName, auxConfig) {
  * @param config is Object with {@code { value: '', dependencies: [] } }
  */
 export function createAuxilliaryTable(modelName, fieldName, config) {
-  console.log('createAuxilliaryTable: config=', config);
+  // console.log('createAuxilliaryTable: config=', config);
   const {
     value,
     dependencies = [],
@@ -64,6 +64,7 @@ export function createAuxilliaryTable(modelName, fieldName, config) {
     type.array().required() :
     type.string().required();
 
+  console.log(`created auxilliray table named ${tableName}`);
   const AuxTable = thinky.createModel(tableName, {
     [primaryKey]: primaryKeyType,
     [value]: type.string().required(),
@@ -76,7 +77,7 @@ export function createAuxilliaryTable(modelName, fieldName, config) {
   AuxTable.primaryKey = primaryKey;
   AuxTable.config = config;
 
-  console.log('createAuxilliaryTable: AuxTable=', AuxTable);
+  // console.log('createAuxilliaryTable: AuxTable=', AuxTable);
   return AuxTable;
 }
 

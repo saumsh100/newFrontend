@@ -246,11 +246,13 @@ describe('#createModel', () => {
           name: {
             value: 'id',
           },
+
           anotherField: {
             phoneNumber: '7782422626',
           },
         },
       });
+
       const auxTableName = TEST_MODEL + 5 + '_name';
 
       // thinky.r.tableList().run()
