@@ -62,17 +62,14 @@ appointmentsRouter.get('/business', (req, res, next) => {
   const test1 = /regular/i;
   const test2 = /clean/i;
 
-  const start = moment(startDate)._d;
-  const end = moment(endDate)._d;
-
   startDate = startDate ? r.ISO8601(startDate) : r.now();
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
-  function addtoFilter(rowTest, start, end) {
+  function addtoFilter(rowTest, startTime, endTime) {
     if (!rowTest) {
-      return r.row('startDate').during(start, end);
+      return r.row('startDate').during(startTime, endTime);
     }
-    return rowTest.or(r.row('startDate').during(start, end));
+    return rowTest.or(r.row('startDate').during(startTime, endTime));
   }
 
   Appointment
@@ -85,13 +82,14 @@ appointmentsRouter.get('/business', (req, res, next) => {
       .run()
       .then((appointments) => {
         let filter = null;
-        let testing = 0;
+
         appointments.map((appointment) => {
           if (appointment.service && (test2.test(appointment.service.name) || test1.test(appointment.service.name)) && !appointment.isCancelled) {
             send.hygieneAppts++;
           }
           if (appointment.isCancelled) {
             send.brokenAppts++;
+            // add filter to for query to find out if a cancelled appointment has been refilled
             filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()));
           }
           return null;
@@ -105,10 +103,12 @@ appointmentsRouter.get('/business', (req, res, next) => {
                 if (!appointment.isCancelled) {
                   send.brokenAppts--;
                 }
-              })
+                return null;
+              });
               res.send(send);
             });
-      }).catch(next);
+      })
+      .catch(next);
 });
 
 //data for most popular day of the week.
@@ -399,8 +399,6 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     patientId,
   } = appointmentData;
 
-  const io = req.app.get('socketio');
-
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
@@ -415,7 +413,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
           return true;
         }
         if ((practitionerId === app.practitionerId) &&
-          (chairId !== app.chairId) && (patientId !== app.patientId)){
+          (chairId !== app.chairId) && (patientId !== app.patientId)) {
           appointmentData.isSplit = true;
           return true;
         }
@@ -430,7 +428,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
         return Appointment.save(appointmentData)
           .then(appt => {
-            res.status(201).send(normalize('appointment', appt))
+            res.status(201).send(normalize('appointment', appt));
           })
           .catch(next);
       }
