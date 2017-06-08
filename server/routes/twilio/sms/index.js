@@ -1,23 +1,18 @@
 
 import { Router } from 'express';
 import {
-  Appointment,
   Account,
   Chat,
   Patient,
-  SentReminder,
   TextMessage,
-  Token,
 } from '../../../models';
 import { getValidSmsReminders } from '../../../lib/reminders/helpers';
 import { createConfirmationText } from '../../../lib/reminders/sendReminder';
 import loaders from '../../util/loaders';
 import { sanitizeTwilioSmsData } from '../util';
-
-const thinky = require('../../../config/thinky');
-const twilioClient = require('../../../config/twilio');
-const { namespaces } = require('../../../config/globals');
-const normalize = require('../../api/normalize');
+import twilioClient from '../../../config/twilio';
+import namespaces from '../../../config/globals';
+import normalize from '../../api/normalize';
 
 const smsRouter = Router();
 
@@ -53,8 +48,6 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
       From,
       Body,
     } = req.body;
-
-    console.log(account.id);
 
     const io = req.app.get('socketio');
     const textMessageData = sanitizeTwilioSmsData(req.body);
