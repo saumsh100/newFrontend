@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import twilio from '../../config/twilio';
-import { host } from '../../config/globals';
+import { host, protocol } from '../../config/globals';
 import { sendConfirmationReminder } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
@@ -13,7 +13,7 @@ export const createConfirmationText = ({ patient, account, appointment }) => {
     `on ${startDate} at ${startTime} is confirmed. `;
 };
 
-const BASE_URL = `https://${host}/twilio/voice/reminders`;
+const BASE_URL = `https://${host}/twilio/voice/sentReminders`;
 const createReminderText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('dddd, MMMM do'); // Saturday, July 9th
@@ -23,11 +23,11 @@ const createReminderText = ({ patient, account, appointment }) => {
     'confirm your appointment.';
 };
 
-const generateCallBackUrl = ({ account, appointment, patient }) => {
+const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('dddd, MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
-  return `${BASE_URL}?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;
+  return `${BASE_URL}/${sentReminder.id}/?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;
 };
 
 export default {
@@ -42,25 +42,25 @@ export default {
   },
 
   // Send Appointment Reminder call via Twilio
-  phone({ account, appointment, patient }) {
+  phone({ account, appointment, patient, sentReminder }) {
     // TODO: add phoneNumber logic for patient
     return twilio.makeCall({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
-      url: generateCallBackUrl({ account, appointment, patient }),
+      url: generateCallBackUrl({ account, appointment, patient, sentReminder }),
     });
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, appointment, patient }) {
-    // TODO: create token, then send reminder with tokenId
+  email({ account, appointment, patient, sentReminder }) {
     return sendConfirmationReminder({
       toEmail: patient.email,
       fromName: account.name,
       mergeVars: [
         {
           name: 'CONFIRMATION_URL',
-          content: `https://${host}/confirmation/${123123123123}`,
+          // TODO: we might have to make this a token if UUID is too easy to guess...
+          content: `${protocol}://${host}/sentReminders/${sentReminder.id}/confirm`,
         },
         {
           name: 'ACCOUNT_NAME',

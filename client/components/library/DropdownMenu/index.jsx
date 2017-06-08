@@ -60,8 +60,9 @@ export function MenuItem(props) {
     icon = <Icon icon={props.icon} className={styles.menuIcon} />;
   }
 
+  const classes = classNames(props.className, styles.menuItemLi);
   return (
-    <ListItem className={styles.menuItemLi} onClick={props.onClick}>
+    <ListItem className={classes} onClick={props.onClick}>
       <div className={`dd-item-ignore ${styles.menuItemContent}`}>
         {icon}
         {props.children}

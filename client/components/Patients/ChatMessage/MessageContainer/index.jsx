@@ -24,12 +24,12 @@ class MessageContainer extends Component {
     entityData.chatId = (this.props.selectedChat ? this.props.selectedChat.id : null);
 
     if (!entityData.chatId) {
-      this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/'})
+      this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/' })
         .then((chat) => {
           entityData.chatId = Object.keys(chat.chats)[0];
           const patientId = Object.keys(chat.patients)[0];
           this.props.setSelectedPatient(patientId);
-          this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
+          this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
             .then(() => {
               const node = document.getElementById('careCruChatScrollIntoView');
 
@@ -39,7 +39,7 @@ class MessageContainer extends Component {
             });
         });
     } else {
-      this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
+      this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
         .then(() => {
           const node = document.getElementById('careCruChatScrollIntoView');
 

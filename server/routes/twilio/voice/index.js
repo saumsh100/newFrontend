@@ -1,9 +1,10 @@
 
 import { Router } from 'express';
 import twilio from 'twilio';
-import Appointment from '../../../models/Appointment';
+import loaders from '../../util/loaders';
 
 const voiceRouter = Router();
+voiceRouter.param('sentReminderId', loaders('sentReminder', 'SentReminder', { appointment: true }));
 
 const actionMessage = () => {
   return 'Press one now to confirm that you can make your appointment. To ' +
@@ -19,7 +20,11 @@ const createReminderMessage = (config) => {
 
 
 // Handle all automated Call interaction with twilio numbers
-voiceRouter.post('/reminders', (req, res, next) => {
+voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
+  const {
+    sentReminder,
+  } = req;
+
   const { Digits } = req.body;
   const {
     firstName,
@@ -27,6 +32,7 @@ voiceRouter.post('/reminders', (req, res, next) => {
     startDate,
     startTime,
   } = req.query;
+
 
   // Use the Twilio Node.js SDK to build an XML response
   const twiml = new twilio.TwimlResponse();
@@ -46,11 +52,14 @@ voiceRouter.post('/reminders', (req, res, next) => {
       gatherNode.say({ voice: 'alice' }, text);
     });
 
-    twiml.redirect({ method: 'POST' }, '/twilio/voice/reminders');
+    twiml.redirect({ method: 'POST' }, req.originalUrl);
   } else if (Digits === '1') {
     twiml.say({ voice: 'alice' }, 'Thank you for confirming your appointment. Goodbye.');
     twiml.hangup();
-    // TODO: confirm the appointment!
+
+    // Confirm the appointment if any one sentReminder is confirmed
+    await sentReminder.merge({ isConfirmed: true }).save();
+    await sentReminder.appointment.merge({ isConfirmed: true }).save();
   } else {
     twiml.gather({
       timeout: 30,

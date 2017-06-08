@@ -156,7 +156,8 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
                       res.send(send);
                     });
                   });
-              }).catch(next);
+              })
+              .catch(next);
           }
         });
     })

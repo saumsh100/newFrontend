@@ -114,10 +114,13 @@ class TopBar extends Component {
             </li>
             <li>
               <DropdownMenu labelComponent={UserMenu}>
-                <Link to="/profile"><MenuItem icon="user">User Profile</MenuItem></Link>
-                <Link to="/settings"><MenuItem icon="cogs">Account Settings</MenuItem></Link>
-                <MenuSeparator />
-                <MenuItem icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
+                <Link to="/profile">
+                  <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
+                </Link>
+                <Link to="/settings">
+                  <MenuItem className={styles.userMenuLi} icon="cogs">Account Settings</MenuItem>
+                </Link>
+                <MenuItem className={styles.userMenuLi} icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
               </DropdownMenu>
             </li>
             <li className={styles.logoutPill}>

@@ -13,6 +13,7 @@ const SentReminder = createModel('SentReminder', {
   patientId: type.string().uuid(4).required(),
   appointmentId: type.string().uuid(4).required(),
   isConfirmed: type.boolean().default(false),
+  isSent: type.boolean().default(false),
 
   // Hacky fix for RemindersList algo so that we don't send farther away reminders
   // after sending the short ones

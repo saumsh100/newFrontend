@@ -83,7 +83,7 @@ const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
-const clinicPhoneNumber = '+17786558613';
+const clinicPhoneNumber = '+16479307984';
 const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallId = uuid();
 
@@ -767,7 +767,7 @@ const SEEDS = {
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      twilioPhoneNumber: clinicPhoneNumber,
+      twilioPhoneNumber: '+14243638279',
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: mainEnterprise.id,

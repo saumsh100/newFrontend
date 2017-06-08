@@ -55,23 +55,23 @@ export default [
    */
   {
     accountId,
-    startDate: new Date(2017, 5, 6, 8, 0),
-    endDate: new Date(2017, 5, 6, 9, 0),
+    startDate: new Date(2017, 5, 9, 8, 0),
+    endDate: new Date(2017, 5, 9, 9, 0),
     patientId,
     serviceId,
     practitionerId,
     chairId,
-    note: 'Justin Friday Appt (1 day)',
+    note: 'Justin Thursday Morning',
   },
   {
     accountId,
-    startDate: new Date(2017, 5, 7, 8, 0),
-    endDate: new Date(2017, 5, 7, 9, 0),
+    startDate: new Date(2017, 5, 10, 8, 0),
+    endDate: new Date(2017, 5, 10, 9, 0),
     patientId,
     serviceId,
     practitionerId,
     chairId,
-    note: 'Justin Saturday Appt (7 day)',
+    note: 'Justin Friday Morning Appt',
   },
   {
     accountId,
@@ -81,6 +81,6 @@ export default [
     serviceId,
     practitionerId,
     chairId,
-    note: 'Justin 16 day away Appt (21 day)',
+    note: 'Justin (21 day)',
   },
 ];
