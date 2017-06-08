@@ -248,7 +248,7 @@ class Overview extends Component {
     };
 
     const UserMenu = (props) => {
-      (
+      return (
         <Button flat {...props} className={styles.userMenuButton}>
           <span className={styles.userRole}><i className="fa fa-calendar" /> {this.state.startDate.format('MMMM Do YYYY')} - {this.state.endDate.format('MMMM Do YYYY')}&nbsp;</span>
           <Icon icon="caret-down" />
