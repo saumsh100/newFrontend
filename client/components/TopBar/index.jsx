@@ -98,21 +98,6 @@ class TopBar extends Component {
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
             <li>
-              <IconButton icon="heart" onClick={() => alert('Implement Sharing')} />
-            </li>
-            <li>
-              <IconButton icon="bell" onClick={() => alert('Implement Notifications')} />
-            </li>
-            <li>
-              <IconButton icon="comments" onClick={() => alert('Implement Messages')} />
-            </li>
-            <li>
-              <IconButton
-                icon="refresh"
-                onClick={this.sync}
-              />
-            </li>
-            <li>
               <DropdownMenu labelComponent={UserMenu}>
                 <Link to="/profile">
                   <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>

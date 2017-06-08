@@ -2,7 +2,8 @@ import createModel from '../createModel';
 
 const SentRecallSchema = {
   id: null,
-  sentDate: null,
+  createdAt: null,
+  //sentDate: null,
   recallId: null,
   accountId: null,
   patientId: null,

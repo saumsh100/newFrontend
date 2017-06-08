@@ -163,6 +163,7 @@ const randomAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
 const randomChats = [];
+const randomCalls = [];
 
 for (let i = 0; i < 100; i++) {
   const id = uuid();
@@ -194,8 +195,25 @@ for (let i = 0; i < 100; i++) {
     isSyncedWithPMS: false,
   });
 
+  const callsource = (faker.random.boolean() ? 'direct' : 'website');
+
+
+  randomCalls.push({
+    id: uuid(),
+    datetime: faker.date.past(),
+    customer_phone_number: phoneNumber,
+    answered: faker.random.boolean(),
+    callsource,
+    wasApptBooked: faker.random.boolean(),
+    destinationnum: clinicPhoneNumber,
+    duration: 157,
+    first_call: true,
+  });
+
   const newRandomMessages = genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate);
   randomMessages = randomMessages.concat(newRandomMessages);
+
+
   randomChats.push({
     id: chatId,
     accountId,
@@ -206,8 +224,7 @@ for (let i = 0; i < 100; i++) {
   });
 
   const appointmentTime = faker.date.future();
-  const random_boolean = Math.random() >= 0.5;
-  const service = (random_boolean ? serviceId : serviceId2)
+  const service = (faker.random.boolean() ? serviceId : serviceId2);
 
   randomAppointments.push({
     accountId,
@@ -217,7 +234,7 @@ for (let i = 0; i < 100; i++) {
     serviceId: service,
     practitionerId,
     isPatientConfirmed: true,
-    isCancelled: false,
+    isCancelled: faker.random.boolean(),
     chairId,
     note: 'First',
   });
@@ -693,6 +710,8 @@ const SEEDS = {
     ...randomPatients,
   ],
 
+  Call: randomCalls,
+
   WeeklySchedule: [
     {
       id: weeklyScheduleId,
@@ -900,10 +919,10 @@ const SEEDS = {
       accountId,
       firstName: 'Perry',
       lastName: 'Cox',
-      type: 'Dentist',
+      type: 'Hygienist',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
-      isActive: false,
+      isActive: true,
       // services: [],
     },
     {

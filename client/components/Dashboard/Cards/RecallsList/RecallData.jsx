@@ -55,7 +55,7 @@ export default function RecallData(props) {
             {displayStatus}
           </div>
           <div className={styles.patients__item_date}>
-            {moment(sentRecall.sentDate).format('MM/DD/YYYY')}
+            {moment(sentRecall.createdAt).format('MM/DD/YYYY')}
           </div>
         </div>
       </div>

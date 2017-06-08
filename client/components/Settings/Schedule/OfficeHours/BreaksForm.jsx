@@ -68,7 +68,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
     return ({ fields, meta: { touched, error } }) => {
       return (
         <Grid className={styles.dayGrid}>
-          <Row>
+          <Row className={styles.breakRow}>
             <Col
               xs={3}
               className={styles.breaksDay}
