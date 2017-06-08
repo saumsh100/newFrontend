@@ -11,6 +11,7 @@ import {
 } from '../../models';
 import { getValidSmsReminders } from '../../lib/reminders/helpers';
 import { createConfirmationText } from '../../lib/reminders/sendReminder';
+import { sanitizeTwilioSmsData } from './util';
 
 const thinky = require('../../config/thinky');
 const voiceRouter = require('./voice');
@@ -42,216 +43,19 @@ function sendSocket(io, chatId) {
     });
 }
 
-twilioRouter.post('/_message', (req, res, next) => {
-  const {
-    AccountSid,
-    MessageSid,
-    To,
-    From,
-    ToZip,
-    ToCity,
-    ToState,
-    ToCountry,
-    FromZip,
-    FromCity,
-    FromState,
-    FromCountry,
-    SmsStatus,
-    NumMedia,
-    NumSegments,
-    ApiVersion,
-  } = req.body;
-
-
-  const io = req.app.get('socketio');
-  const Body = req.body.Body;
-
-  // Easily parse mediaData
-  let mediaData = {};
-  const numMedia = parseInt(NumMedia);
-  if (numMedia) {
-    for (let i = 0; i < numMedia; i++) {
-      mediaData[i] = {
-        url: req.body[`MediaUrl${i}`],
-        contentType: req.body[`MediaContentType${i}`],
-      };
-    }
-  }
-
-  const currentDate = thinky.r.now();
-  const textMessageData = {
-    to: To,
-    from: From,
-    body: Body,
-    smsStatus: SmsStatus,
-
-    // TODO: fix unnecessary writing, fix defaults...
-    createdAt: currentDate,
-    dateCreated: currentDate,
-    dateUpdated: currentDate,
-
-    apiVersion: ApiVersion,
-    accountSid: AccountSid,
-
-    // Depends on carrier if populated
-    toZip: ToZip,
-    toCity: ToCity,
-    toState: ToState,
-    toCountry: ToCountry,
-    fromZip: FromZip,
-    fromCity: FromCity,
-    fromState: FromState,
-    fromCountry: FromCountry,
-    numMedia: NumMedia,
-    numSegments: NumSegments,
-    mediaData,
-  };
-
-  Patient.findByPhoneNumber(From)
-    .then((patient) => {
-      console.log(`Received communication from ${patient.firstName}`);
-      textMessageData.patientId = patient.id;
-
-      const mergeData = {
-        lastTextMessageDate: new Date(),
-      };
-
-      // TODO: change this
-      Chat.filter({ patientId: patient.id }).run().then((test) => {
-        if (test[0]) {
-          textMessageData.chatId = test[0].id;
-          TextMessage.save(textMessageData)
-            .then(() => {
-              test[0].merge(mergeData).save().then(() => {
-                sendSocket(io, test[0].id);
-              });
-            });
-        } else {
-          mergeData.accountId = patient.accountId;
-          mergeData.patientId = patient.id;
-          Chat.save(mergeData).then((chat) => {
-            textMessageData.chatId = chat.id;
-            TextMessage.save(textMessageData)
-              .then(() => {
-                sendSocket(io, chat.id);
-              });
-          });
-        }
-      });
-
-      if (Body.trim() === 'C') {
-        // TODO: change this to check if last sms reminder !isConfirmed
-
-
-
-        /*Appointment.filter({ patientId: patient.id, confirmed: false })
-          .getJoin({
-            account: true,
-            practitioner: { services: false },
-            service: { practitioners: false },
-          })
-          .orderBy('startTime')
-          .then((appArray) => {
-            appArray[0].merge({ confirmed: true }).save().then((confApp) => {
-              console.log(appArray[0]);
-              twilioClient.sendMessage({
-                from: twilio.number,
-                to: patient.mobilePhoneNumber,
-                // TODO: change to a short Thank you...
-                body: `Thank you! We have confirmed that you will be attending your ${appArray[0].service.name} appointment with ${appArray[0].practitioner.firstName} ${appArray[0].practitioner.lastName} from ${appArray[0].account.name}`,
-              })
-              .then(() => {
-                Token.filter({ appointmentId: confApp.id }).run().then((t) => {
-                  t[0].delete().then((deletedToken) => {
-                    console.log(`Token ${deletedToken} was deleted`);
-                  });
-                }).catch(next);
-              });
-            })
-            .catch(err => console.log(err));
-          });*/
-      }
-    })
-    .catch(() => {
-      // Assume the Patient does not exist.
-      console.log(`Received communication from unknown number: ${From}.`);
-      TextMessage.save(textMessageData);
-    });
-
-  // For twilio... needs a response
-  // TODO: Do we need to res.send on successful saving?
-  res.end();
-});
-
 twilioRouter.post('/message', async (req, res, next) => {
   try {
     // We close response fast, does this help?
     res.end();
 
     const {
-      AccountSid,
-      MessageSid,
       To,
       From,
-      ToZip,
-      ToCity,
-      ToState,
-      ToCountry,
-      FromZip,
-      FromCity,
-      FromState,
-      FromCountry,
-      SmsStatus,
-      NumMedia,
-      NumSegments,
-      ApiVersion,
+      Body,
     } = req.body;
 
-
     const io = req.app.get('socketio');
-    const Body = req.body.Body;
-
-    // Easily parse mediaData
-    let mediaData = {};
-    const numMedia = parseInt(NumMedia);
-    if (numMedia) {
-      for (let i = 0; i < numMedia; i++) {
-        mediaData[i] = {
-          url: req.body[`MediaUrl${i}`],
-          contentType: req.body[`MediaContentType${i}`],
-        };
-      }
-    }
-
-    const currentDate = thinky.r.now();
-    const textMessageData = {
-      id: MessageSid,
-      to: To,
-      from: From,
-      body: Body,
-      smsStatus: SmsStatus,
-
-      // TODO: fix unnecessary writing, fix defaults...
-      createdAt: currentDate,
-      dateCreated: currentDate,
-      dateUpdated: currentDate,
-
-      apiVersion: ApiVersion,
-      accountSid: AccountSid,
-
-      // Depends on carrier if populated
-      toZip: ToZip,
-      toCity: ToCity,
-      toState: ToState,
-      toCountry: ToCountry,
-      fromZip: FromZip,
-      fromCity: FromCity,
-      fromState: FromState,
-      fromCountry: FromCountry,
-      numMedia: NumMedia,
-      numSegments: NumSegments,
-      mediaData,
-    };
+    const textMessageData = sanitizeTwilioSmsData(req.body);
 
     // TODO: perhaps we could make phoneNumber the primary key for Chat
 
@@ -261,7 +65,7 @@ twilioRouter.post('/message', async (req, res, next) => {
     const accounts = await Account.filter({ twilioPhoneNumber: To });
     const account = accounts[0];
     if (!account) {
-      console.log(`Received '${body}' from ${From}. The number is not associated with any Account.`);
+      console.log(`Received '${Body}' from ${From}. The number is not associated with any Account.`);
       return;
     }
 
@@ -291,25 +95,44 @@ twilioRouter.post('/message', async (req, res, next) => {
     await chat.merge({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt }).save();
 
     // If not patient or if not any valid sms sentReminders or if not proper response
-    if (!patient || Body.trim() !== 'C') return;
+    if (!patient || Body.trim() !== 'C') {
+      await sendSocket(io, chat.id);
+      return;
+    }
 
     // Confirming valid SMS Reminder for patient
-    const validSmsReminders = await getValidSmsReminders({
+    /*const validSmsReminders = await getValidSmsReminders({
       patientId: patient.id,
       accountId: account.id,
     });
 
-    if (!validSmsReminders.length) return;
+    if (!validSmsReminders.length) {
+      await sendSocket(io, chat.id);
+      return;
+    }*/
 
     // Confirm first available reminder
-    const sentReminder = validSmsReminders[0];
-    const { appointment } = sentReminder;
-    await sentReminder.merge({ isConfirmed: true }).save();
-    await twilioClient.sendMessage({
+    //const sentReminder = validSmsReminders[0];
+    //const { appointment } = sentReminder;
+    //await sentReminder.merge({ isConfirmed: true }).save();
+
+    // Mark this as read cause we are auto-responding to it
+    await textMessage.merge({ read: true }).save();
+
+    const responseMessage = await twilioClient.sendMessage({
       from: account.twilioPhoneNumber,
       to: patient.mobilePhoneNumber,
-      body: createConfirmationText({ patient, appointment, account }),
+      body: createConfirmationText({ patient, appointment: {}, account }),
     });
+
+    const responseTextMessageData = sanitizeTwilioSmsData(responseMessage);
+    const responseTextMessage = await TextMessage.save(Object.assign({}, responseTextMessageData, { chatId: chat.id, read: true }));
+    await chat.merge({
+      lastTextMessageId: responseTextMessage.id,
+      lastTextMessageDate: responseTextMessage.createdAt,
+    }).save();
+
+    await sendSocket(io, chat.id);
   } catch (err) {
     next(err);
   }

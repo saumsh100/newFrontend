@@ -82,7 +82,11 @@ class ChatListContainer extends Component {
             onClick={this.setPatient.bind(null, chat.user.id, chat.id)}
             key={chat.user.id}
           >
-            <img className={styles.users__photo}  src={avatar} alt="photo" />
+            <img
+              className={styles.users__photo}
+              src={avatar}
+              alt="photo"
+            />
             <div className={styles.users__wrapper}>
               <div className={styles.users__header}>
                 <div className={styles.users__name}>

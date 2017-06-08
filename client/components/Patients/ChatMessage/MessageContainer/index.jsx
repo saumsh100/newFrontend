@@ -11,20 +11,8 @@ import styles from '../styles.scss';
 class MessageContainer extends Component {
   constructor(props) {
     super(props);
+
     this.sendMessage = this.sendMessage.bind(this);
-
-    window.socket.on('newMessage', (data) => {
-      const result = JSON.parse(data);
-      // dispatch(receiveEntities({ key: 'chats', entities: result.entities }));
-      this.props.receiveMessage({ key: 'chats', entities: result.entities });
-
-      const node = document.getElementById('careCruChatScrollIntoView');
-
-      if (node) {
-        node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
-      }
-
-    });
   }
 
   sendMessage(message) {
