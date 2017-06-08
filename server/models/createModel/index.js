@@ -1,6 +1,6 @@
 
 import thinky from '../../config/thinky';
-import pick from 'lodash/pick';
+import omit from 'lodash/omit';
 import {
   createAuxilliaryTables,
   generateUniqueValidator,
@@ -26,19 +26,19 @@ function createModel(tableName, schema, config = {}) {
   };
 
   // Pluck off so that we can create model with appropriate config
-  const auxConfig = pick(config, 'aux');
+  const auxConfig = config.aux;
+  const thinkyConfig = omit(config, 'aux');
 
   // Create the thinky model/tabel
   const Model = thinky.createModel(tableName, schema, {
     ...defaultConfig,
-    ...config,
+    ...thinkyConfig,
   });
 
 
   if (auxConfig) {
-    Model.auxModels = createAuxilliaryTables(auxConfig);
-
-    // TODO: is this the right hook?
+    console.log('createModel: auxConfig=', auxConfig);
+    Model.auxModels = createAuxilliaryTables(tableName, auxConfig);
     Model.pre('save', generateUniqueValidator(Model.auxModels));
   }
 
