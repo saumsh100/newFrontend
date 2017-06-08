@@ -54,6 +54,8 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
       Body,
     } = req.body;
 
+    console.log(account.id);
+
     const io = req.app.get('socketio');
     const textMessageData = sanitizeTwilioSmsData(req.body);
 
