@@ -26,8 +26,8 @@ const UserMenu = (props) => {
       <Avatar
         className={styles.userAvatar}
         user={{
-          url: 'https://placeimg.com/80/80/animals',
-          firstName: 'Test',
+          avatarUrl: 'https://placeimg.com/80/80/animals',
+          firstName: 'Justin',
         }}
       />
       <Icon icon="caret-down" />
