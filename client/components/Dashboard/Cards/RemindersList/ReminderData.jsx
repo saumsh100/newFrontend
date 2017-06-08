@@ -24,7 +24,6 @@ export default function ReminderData(props) {
 
   const age = moment().diff(patient.birthDate, 'years');
 
-  console.log(moment(sentReminder.createdAt).format('MM/DD/YYYY'));
   return (
     <ListItem
       key={`patientsItem${index}`}
