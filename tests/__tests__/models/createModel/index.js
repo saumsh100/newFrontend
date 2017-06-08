@@ -1,12 +1,18 @@
 
+import { v4 as uuid } from 'uuid';
+import { omit as omit } from 'lodash';
+
 const createModel = require('../../../../server/models/createModel');
 const thinky = require('../../../../server/config/thinky');
+
 
 const type = thinky.type;
 
 const TEST_MODEL = 'TestModel';
 const CARECRU = 'carecru';
 const NOT_CARECRU = 'not_carecru';
+
+const testAccountId = uuid();
 
 // jasmine.DEFAULT_TIMEOUT_INTERVAL = 4000;
 
@@ -319,7 +325,7 @@ describe('create aux table testing', () => {
   });
 });
 
-describe.only('test aux tables use cases', () => {
+describe('test aux tables use cases - simple inserts', () => {
 
   afterEach(() => {
     return thinky.r.tableDrop(TEST_MODEL)
@@ -361,7 +367,7 @@ describe.only('test aux tables use cases', () => {
       });
   });
 
-  test('create TestModel, insert different values into it', () => {
+  test('create TestModel, insert different values into it - should pass', () => {
     const TestModel = createModel(TEST_MODEL, {
       fname: type.string(),
       mobilePhoneNumber: type.string(),
@@ -381,6 +387,95 @@ describe.only('test aux tables use cases', () => {
       })
       .then((result) => {
         expect(result.mobilePhoneNumber).toBe('6041112233');
+      });
+  });
+});
+
+describe
+('test aux tables use cases - 1 unique fields, 3 deps', () => {
+
+  afterEach(() => {
+    return thinky.r.tableDrop(TEST_MODEL)
+      .then(() => {
+        delete thinky.models[TEST_MODEL];
+      });
+  });
+
+  afterEach(() => {
+    return thinky.r.tableDrop(TEST_MODEL+'_mobilePhoneNumber')
+      .then(() => {
+        delete thinky.models[TEST_MODEL+'_mobilePhoneNumber'];
+      });
+  });
+
+  /*
+   {
+   "id":  "f9bfc706-b99d-4f3b-8664-85fa42f3adff" ,
+     "mobilePhoneNumber.accountId.email.homePhoneNumber": [
+     "7782422626" ,
+     "uniqueAccId" ,
+     sergey@carecru.com, »
+     "6045700922"
+     ]
+   }
+   */
+  test('create TestModel, insert different values into it', () => {
+    const TestModel = createModel(TEST_MODEL, {
+      fname: type.string(),
+      mobilePhoneNumber: type.string(),
+      homePhoneNumber: type.string(),
+      email: type.string(),
+      accountId: type.string(),
+    }, {
+      aux: {
+        mobilePhoneNumber: {
+          value: 'id',
+          dependencies: ['accountId', 'email', 'homePhoneNumber'],
+        },
+      },
+    });
+
+    const primaryKeyArray = ['mobilePhoneNumber', 'accountId', 'email', 'homePhoneNumber'];
+    const pkField = primaryKeyArray.join('.');
+
+    const TestModelAux = TestModel.auxModels.mobilePhoneNumber;
+
+    return TestModel
+      .save({
+        mobilePhoneNumber: '7782422626',
+        homePhoneNumber: '6045700922',
+        email: 'sergey@carecru.com',
+        accountId: 'uniqueAccId',
+      })
+      .then((savedDoc1) => {
+        console.log('>>>>', savedDoc1);
+        expect(savedDoc1.mobilePhoneNumber).toBe('7782422626');
+        expect(savedDoc1.homePhoneNumber).toBe('6045700922');
+        expect(savedDoc1.email).toBe('sergey@carecru.com');
+        expect(savedDoc1.accountId).toBe('uniqueAccId');
+
+        // order of elements in the array is important here
+        const primaryKeyArray = ['7782422626', 'uniqueAccId', 'sergey@carecru.com', '6045700922'];
+
+        return TestModelAux
+          .get(primaryKeyArray)
+          .then((result) => {
+            console.log('TestModelAux result ', result);
+            console.log('result id', result.id);
+            console.log('pkFieldName', pkField);
+            expect(result.id).toBe(savedDoc1.id);
+            expect(Array.isArray(result[pkField])).toBe(true);
+
+            const sameDocAgain = omit(savedDoc1, ['id', 'createdAt']);
+            console.log('writing same doc again', sameDocAgain);
+            return TestModel.save(sameDocAgain);
+          });
+      })
+      .then((result) => {
+        throw new Error('Test is incorrect. Should not be able to write in this test.');
+      })
+      .catch((error) => {
+        expect(error.message).toBe('Unique Field Validation Error');
       });
   });
 });

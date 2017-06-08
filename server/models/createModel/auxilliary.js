@@ -109,8 +109,7 @@ export function generateAuxValidators(auxTables, doc) {
             resolve();
           } else {
             // reject(new Error(`Unique Field Validation Error: ${fieldName} field must be unique on Model ${modelName}`));
-            console.log('>>>>>>>>>>>> rejecting write', doc);
-            // reject(new Error('Unique Field Validation Error'));
+            console.log('ERROR rejecting write', doc);
             reject(new Error('Unique Field Validation Error'));
           }
         })
@@ -123,7 +122,6 @@ export function generateAuxValidators(auxTables, doc) {
           if (!doc.isSaved() && value === 'id' && !storeValue) {
             storeValue = uuid();
             doc.id = storeValue;
-            console.log('after saving. doc', doc);
           }
 
           AuxTable.save({
