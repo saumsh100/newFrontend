@@ -10,7 +10,9 @@ import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
 import CheckboxImage from './CheckboxImage';
+import CodeSnippet from './CodeSnippet';
 import Collapsible from './Collapsible';
+import ColorPicker from './ColorPicker';
 import DayPicker from './DayPicker';
 import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
@@ -66,7 +68,9 @@ export {
   Checkbox,
   CheckboxImage,
   ChartStats,
+  CodeSnippet,
   Collapsible,
+  ColorPicker,
   DayPicker,
   DialogBox,
   DropdownSelect,

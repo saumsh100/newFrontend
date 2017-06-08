@@ -114,22 +114,26 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
         <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
           <SubNavItem path="/intelligence/business" label="Business" />
-          <SubNavItem path="/intelligence/social" label="Social" />
+          {/*<SubNavItem path="/intelligence/social" label="Social" />*/}
         </MultiNavItem>
-        <SingleNavItem path="/schedule" icon="calendar" label="Schedule"/>
+        <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
-          <SubNavItem path="/patients/phone" label="Phone Calls"/>
+          {/*<SubNavItem path="/patients/phone" label="Phone Calls"/>*/}
         </MultiNavItem>
-        <MultiNavItem path="/reputation" icon="star" label="Reputation">
+
+        <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />
+        <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />
+        {/*
+        <MultiNavItem path="/reputation" icon="star" label="Reputation" disabled>
           <SubNavItem path="/reputation/listings" label="Listings" />
           <SubNavItem path="/reputation/reviews" label="Reviews" />
         </MultiNavItem>
-        <MultiNavItem path="/social" icon="thumbs-up" label="Social Media">
-          <SubNavItem path="/social/patient" label="Patient Posts" />
-          <SubNavItem path="/social/practice" label="Practice Posts" />
-        </MultiNavItem>
+        <MultiNavItem path="/social" icon="thumbs-up" label="Social Media" disabled>
+          <SubNavItem path="/social/patient" label="Patient Posts" disabled/>
+          <SubNavItem path="/social/practice" label="Practice Posts" disabled/>
+        </MultiNavItem>*/}
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">

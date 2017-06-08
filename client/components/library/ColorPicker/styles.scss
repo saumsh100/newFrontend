@@ -1,0 +1,17 @@
+.colorPickerPopover > :global(svg.Popover-tip) {
+  fill: white;
+}
+
+.colorPickerContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.colorSwatch {
+  position: absolute;
+  left: 172px;
+  border: 1px solid;
+  width: 15px;
+  height: 15px;
+}

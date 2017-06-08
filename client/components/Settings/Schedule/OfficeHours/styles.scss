@@ -1,6 +1,9 @@
 
 @import '../../../../ui';
 
+.header {
+  padding-left: 15px;
+}
 .day {
   text-transform: capitalize;
 }
@@ -8,6 +11,11 @@
 .breaksDay {
   @extend .day;
   padding-top: 12px;
+  padding-left: 15px;
+}
+
+.breakRow {
+  align-items: flex-start;
 }
 
 .disabledDay {
@@ -18,10 +26,13 @@
 .flexCentered {
   display: flex;
   align-items: center;
+  padding-left: 15px;
 }
 
 .inlineBlock {
   display: inline-block;
+  margin-top: 7px;
+  margin-bottom: 14px;
 }
 
 .toDiv {
@@ -42,6 +53,9 @@
 }
 
 .dayRow {
+  align-items: center;
+  margin-top: 7px;
+  margin-bottom: 9px;
   height: 40px;
 }
 

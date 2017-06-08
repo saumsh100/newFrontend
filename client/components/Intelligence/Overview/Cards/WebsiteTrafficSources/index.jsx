@@ -7,16 +7,18 @@ import styles from '../../styles.scss';
 export default function WebsiteTrafficSources(props) {
   const {
     chartData,
+    labels,
+    title,
   } = props;
 
   return (
     <Card >
-      <CardHeader className={styles.cardHeader} title="Website Traffic Sources" />
+      <CardHeader className={styles.cardHeader} title={title} />
       <div className={styles.websiteTrafikSources}>
         <div className={styles.websiteTrafikSources__mainContent}>
           <BarChart
             displayTooltips
-            labels={['Direct', 'Referrals', 'Search', 'Social', 'Mail', 'Display']}
+            labels={labels}
             dataSets={chartData}
           />
         </div>

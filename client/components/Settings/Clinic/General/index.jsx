@@ -29,26 +29,22 @@ class General extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-        <div>
+        <div style={{ display: 'inlineBlock' }}>
           <Header
             title="Basic"
             className={styles.generalHeader}
           />
-          <div>
-            <GeneralForm
-              onSubmit={this.updateName}
-              activeAccount={activeAccount}
-            />
-          </div>
+          <GeneralForm
+            onSubmit={this.updateName}
+            activeAccount={activeAccount}
+          />
           <Header
             title="Address"
             className={styles.generalHeader}
           />
-          <div>
-            <Address
-              activeAccount={activeAccount}
-            />
-          </div>
+          <Address
+            activeAccount={activeAccount}
+          />
         </div>
       );
     }

@@ -29,8 +29,8 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
         <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
         <LazyRoute path="/patients" load={loadPatients} name="patients" />
-        <LazyRoute path="/social" load={loadSocial} name="social" />
-        <LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />
+        {/*<LazyRoute path="/social" load={loadSocial} name="social" />*/}
+        {/*<LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />*/}
         <LazyRoute path="/settings" load={loadSettings} name="settings" />
         { isSuperAdmin ? (<LazyRoute path="/admin" load={loadAdmin} name="admin" />) : null }
         { withEnterprise ? (<LazyRoute path="/enterprise" load={loadEnterprise} name="enterprise" />) : null }

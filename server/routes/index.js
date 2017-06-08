@@ -1,16 +1,23 @@
 
+import { Router } from 'express';
+import subdomain from 'express-subdomain';
 import apiRouter from './api';
-const rootRouter = require('express').Router();
-const subdomain = require('express-subdomain');
-const authRouter = require('./auth');
-const myRouter = require('./my');
-const callrailRouter = require('./callrail');
-const twilioRouter = require('./twilio');
-const signupRouter = require('./signup');
-const Token = require('../models/Token');
-const Invite = require('../models/Invite');
-const User = require('../models/User');
-const Appointment = require('../models/Appointment');
+import authRouter from './auth';
+import myRouter from './my';
+import callrailRouter from './callrail';
+import twilioRouter from './twilio';
+import signupRouter from './signup';
+import {
+  Appointment,
+  Invite,
+  Token,
+  User,
+} from '../models';
+import loaders from './util/loaders';
+
+const rootRouter = Router();
+
+rootRouter.param('sentReminderId', loaders('sentReminder', 'SentReminder', { appointment: true }));
 
 // Bind subdomain capturing
 // Will be removed once microservices are in full effect
@@ -54,27 +61,26 @@ rootRouter.post('/userCheck', (req, res, next) => {
   const username = req.body.email.toLowerCase();
   User.filter({ username }).run()
     .then((user) => {
-      console.log(user)
-      if (user[0]) {
-        res.send({exists: true});
-      } else {
-        res.send({exists: false});
-      }
+      res.send({ exists: !!user[0] });
     })
     .catch(next);
 });
 
-rootRouter.get('/confirmation/:tokenId', (req, res, next) => {
-  Token.filter({ id: req.params.tokenId }).run().then((token) => {
-    Appointment.get(token[0].appointmentId).run().then((a) => {
-      a.merge({ confirmed: true }).save().then(() => {
-        res.render('confirmation-success');
-        token[0].delete().then((t) => {
-          console.log(`Token ${t} was deleted`);
-        }).catch(next);
-      }).catch(next);
-    }).catch(next);
-  }).catch(next);
+rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
+  try {
+    const sentReminder = req.sentReminder;
+    await sentReminder.merge({ isConfirmed: true }).save();
+
+    // For any confirmed reminder we confirm appointment
+    const { appointment } = sentReminder;
+    if (appointment) {
+      await appointment.merge({ isConfirmed: true }).save();
+    }
+
+    res.render('confirmation-success');
+  } catch (err) {
+    next(err);
+  }
 });
 
 rootRouter.get('/patients', (req, res, next) => {

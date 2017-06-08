@@ -14,6 +14,7 @@ const SyncClientError = createModel('SyncClientError', {
   model: type.string(),
   documentId: type.string(),
   payload: type.string(),
+  customErrorMsg: type.string(),
 
   errorMessage: type.string(),
   stackTrace: type.string(),

@@ -14,8 +14,9 @@
   }
   &__body {
     position: relative;
-    overflow: auto;
-    max-height: 450px;
+    canvas {
+      max-width: 99%;
+    }
     @media screen and (max-width: 900px){
       position: relative;
       top: 50%;

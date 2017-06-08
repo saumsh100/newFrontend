@@ -49,6 +49,14 @@ import weeklySchedules from '../entities/collections/weeklySchedules';
 import WeeklySchedule from '../entities/models/WeeklySchedule';
 import User from '../entities/models/User';
 import users from '../entities/collections/users';
+import Reminder from '../entities/models/Reminder';
+import reminders from '../entities/collections/reminders'
+import SentReminder from '../entities/models/SentReminder';
+import sentReminders from '../entities/collections/sentReminders';
+import Recall from '../entities/models/Recall';
+import recalls from '../entities/collections/recalls';
+import SentRecall from '../entities/models/SentRecall';
+import sentRecalls from '../entities/collections/sentRecalls';
 
 export const createInitialEntitiesState = (initialEntitiesState = {}) => {
   return receiveEntities(Map({
@@ -72,6 +80,11 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     weeklySchedules: new weeklySchedules(),
     users: new users(),
     timeOffs: new timeOffs(),
+    reminders: new reminders(),
+    sentReminders: new sentReminders(),
+    recalls: new recalls(),
+    sentRecalls: new sentRecalls(),
+
     // reviews: Reviews(), MODEL
     // listings: Listings(),
   }), initialEntitiesState);
@@ -96,6 +109,10 @@ const Models = {
   waitSpots: WaitSpot,
   weeklySchedules: WeeklySchedule,
   users: User,
+  reminders: Reminder,
+  sentReminders: SentReminder,
+  recalls: Recall,
+  sentRecalls: SentRecall,
 };
 
 export default handleActions({
@@ -108,19 +125,25 @@ export default handleActions({
   },
 
   [DELETE_ENTITY](state, { payload: { key, id } }) {
-    return state.deleteIn([key, 'models', id]);
+    const newState = state;
+    const model = newState.getIn([key, 'models', id]);
+    if (model) {
+      return newState.deleteIn([key, 'models', id]);
+    } else {
+      return state;
+    }
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity[key])[0];
-    const addEntity = entity[key][id];
+    const id = Object.keys(entity['entities'][key])[0];
+    const addEntity = entity['entities'][key][id];
     const newModel = new Models[key](addEntity);
     return state.setIn([key, 'models', id], newModel);
   },
 
   [UPDATE_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity[key])[0];
-    const updatedEntity = entity[key][id];
+    const id = Object.keys(entity['entities'][key])[0];
+    const updatedEntity = entity['entities'][key][id];
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
   },

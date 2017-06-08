@@ -131,7 +131,9 @@ class PractitionerTimeOff extends Component {
     }
 
     let showAddOrListComponent = (
-      <Button onClick={this.addTimeOff}>Add Time Off</Button>
+      <div style={{ paddingLeft: '15px' }}>
+        <Button onClick={this.addTimeOff} >Add Time Off</Button>
+      </div>
     );
 
     if (timeOffs.size > 0) {
@@ -162,10 +164,11 @@ class PractitionerTimeOff extends Component {
           key={'addTimeOff'}
           actions={actions}
           title="Add Time Off"
-          type="small"
+          type="medium"
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
+          custom
         >
           <TimeOffForm
             key={formName}

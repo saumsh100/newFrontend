@@ -38,26 +38,29 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
   };
 
   return (
-    <div className={styles.generalRow}>
-      <Form
-        form="generalSettingsForm"
-        onSubmit={onSubmit}
-        initialValues={initialValues}
-      >
+    <Form
+      form="generalSettingsForm"
+      onSubmit={onSubmit}
+      initialValues={initialValues}
+      className={styles.generalRow}
+    >
+      <div className={styles.paddingField}>
         <Field
           required
           name="name"
           label="Name"
           validate={[maxLength25]}
         />
+      </div>
+      <div className={styles.paddingField}>
         <Field
           required
           name="twilioPhoneNumber"
           label="Twilio Phone Number"
           normalize={normalizePhone}
         />
-      </Form>
-    </div>
+      </div>
+    </Form>
   );
 }
 

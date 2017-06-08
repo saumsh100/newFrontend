@@ -27,8 +27,8 @@ const UserMenu = (props) => {
       <Avatar
         className={styles.userAvatar}
         user={{
-          url: 'https://placeimg.com/80/80/animals',
-          firstName: 'Test',
+          avatarUrl: 'https://placeimg.com/80/80/animals',
+          firstName: 'Justin',
         }}
       />
       <Icon icon="caret-down" />
@@ -142,26 +142,14 @@ class TopBar extends Component {
             }
 
             <li>
-              <IconButton icon="heart" onClick={() => alert('Implement Sharing')} />
-            </li>
-            <li>
-              <IconButton icon="bell" onClick={() => alert('Implement Notifications')} />
-            </li>
-            <li>
-              <IconButton icon="comments" onClick={() => alert('Implement Messages')} />
-            </li>
-            <li>
-              <IconButton
-                icon="refresh"
-                onClick={this.sync}
-              />
-            </li>
-            <li>
               <DropdownMenu labelComponent={UserMenu}>
-                <Link to="/profile"><MenuItem icon="user">User Profile</MenuItem></Link>
-                <Link to="/settings"><MenuItem icon="cogs">Account Settings</MenuItem></Link>
-                <MenuSeparator />
-                <MenuItem icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
+                <Link to="/profile">
+                  <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
+                </Link>
+                <Link to="/settings">
+                  <MenuItem className={styles.userMenuLi} icon="cogs">Account Settings</MenuItem>
+                </Link>
+                <MenuItem className={styles.userMenuLi} icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
               </DropdownMenu>
             </li>
             <li className={styles.logoutPill}>

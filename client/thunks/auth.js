@@ -5,6 +5,8 @@ import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout } from '../actions/auth';
+import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
+import socket from '../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   localStorage.setItem('token', token);
@@ -54,6 +56,9 @@ export function login(redirectedFrom = '/') {
           email: user.username,
         });
 
+        connectSocketToStoreLogin({ dispatch, getState }, socket);
+
+        // dispatch(loginSuccess(decodedToken));
         dispatch(push(redirectedFrom));
       })
       .catch((err) => {

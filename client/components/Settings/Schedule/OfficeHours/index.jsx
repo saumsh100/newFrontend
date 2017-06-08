@@ -6,6 +6,7 @@ import OfficeHoursForm from './OfficeHoursForm';
 import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { Header } from '../../../library';
+import styles from './styles.scss';
 
 function OfficeHours(props) {
   const { weeklySchedule } = props;
@@ -16,13 +17,13 @@ function OfficeHours(props) {
 
   return (
     <div>
-      <Header title="Weekly Schedule" />
+      <Header title="Weekly Schedule" className={styles.header} />
       <OfficeHoursForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}
         formName="officeHours"
       />
-      <Header title="Breaks" />
+      <Header title="Breaks" className={styles.header} />
       <BreaksForm
         weeklySchedule={weeklySchedule}
         onSubmit={handleSubmit}

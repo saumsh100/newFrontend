@@ -131,6 +131,8 @@ Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
 Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
+Patient.hasMany(SentReminder, 'sentReminders', 'id', 'patientId');
+Patient.hasMany(SentRecall, 'sentRecalls', 'id', 'patientId');
 
 /**
  * Permission Relations
@@ -161,6 +163,21 @@ Request.belongsTo(Account, 'account', 'accountId', 'id');
 Request.belongsTo(Service, 'service', 'serviceId', 'id');
 Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Request.belongsTo(Chair, 'chair', 'chairId', 'id');
+
+/**
+ * SentReminder Relations
+ */
+SentReminder.belongsTo(Account, 'account', 'accountId', 'id');
+SentReminder.belongsTo(Reminder, 'reminder', 'reminderId', 'id');
+SentReminder.belongsTo(Appointment, 'appointment', 'appointmentId', 'id');
+SentReminder.belongsTo(Patient, 'patient', 'patientId', 'id');
+
+/**
+ * SentRecall Relations
+ */
+SentRecall.belongsTo(Account, 'account', 'accountId', 'id');
+SentRecall.belongsTo(Recall, 'recall', 'recallId', 'id');
+SentRecall.belongsTo(Patient, 'patient', 'patientId', 'id');
 
 /**
  * Service Relations

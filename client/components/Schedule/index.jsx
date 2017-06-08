@@ -57,6 +57,8 @@ class ScheduleComponent extends Component {
       chairs,
       selectAppointment,
       selectedAppointment,
+      weeklySchedules,
+      timeOffs,
     } = this.props;
 
     const {

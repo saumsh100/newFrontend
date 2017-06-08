@@ -113,7 +113,7 @@ class AddNewAppointment extends Component {
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
 
-      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(()=>{
+      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(() => {
         reinitializeState();
       }).catch((e) => alert('Update Failed'));
     }
@@ -190,10 +190,9 @@ class AddNewAppointment extends Component {
     } = this.props;
 
     const remoteButtonProps = {
-      onClick: this.handleSubmit,
+      onClick: reinitializeState,
       form: formName,
     };
-
 
     return (
       <div className={styles.formContainer}>

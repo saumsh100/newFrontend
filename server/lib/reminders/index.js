@@ -1,7 +1,26 @@
 
-import { Account, SentReminder } from '../../models';
+import { Account, Chat, SentReminder, TextMessage } from '../../models';
+import normalize from '../../routes/api/normalize';
+import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { getAppointmentsFromReminder } from './helpers';
 import sendReminder from './sendReminder';
+
+function sendSocket(io, chatId) {
+  const joinObject = { patient: true };
+  joinObject.textMessages = {
+    _apply: (sequence) => {
+      return sequence
+        .orderBy('createdAt');
+    },
+  };
+
+  return Chat.get(chatId).getJoin(joinObject).run()
+    .then((chat) => {
+      io.of('/dash')
+        .in(chat.patient.accountId)
+        .emit('newMessage', normalize('chat', chat));
+    });
+}
 
 /**
  *
@@ -16,25 +35,55 @@ export async function sendRemindersForAccount(account, date) {
     for (const appointment of appointments) {
       const { patient } = appointment;
       const { primaryType } = reminder;
-      await sendReminder[primaryType]({
+
+      // Save sent reminder first so we can
+      // - use sentReminderId as token in email
+      // - keep track of failed reminders
+      const sentReminder = await SentReminder.save({
+        reminderId: reminder.id,
+        accountId: account.id,
+        patientId: patient.id,
+        appointmentId: appointment.id,
+        lengthSeconds: reminder.lengthSeconds,
+        primaryType: reminder.primaryType,
+      });
+
+      const data = await sendReminder[primaryType]({
         patient,
         account,
         appointment,
-      }).then((data) => {
-        // We might want to wait on this to ensure it is written into DB before next
-        // pull of appointments
-        return SentReminder.save({
-          reminderId: reminder.id,
-          accountId: account.id,
-          appointmentId: appointment.id,
-          lengthSeconds: reminder.lengthSeconds,
-        }).then((sr) => {
-          console.log('SentReminder saved', sr.id);
-        });
-      }).catch((err) => {
-        console.error(`Failed to send ${primaryType} reminder to ${patient.firstName}`);
-        console.error(err);
+        sentReminder,
       });
+
+      console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+      await sentReminder.merge({ isSent: true }).save();
+
+      if (primaryType === 'sms') {
+        const textMessageData = sanitizeTwilioSmsData(data);
+        const { to } = textMessageData;
+        const chats = await Chat.filter({ accountId: account.id, patientPhoneNumber: to });
+        let chat = chats[0];
+        if (!chat) {
+          chat = await Chat.save({
+            accountId: account.id,
+            patientId: patient.id,
+            patientPhoneNumber: to,
+          });
+        }
+
+        // Now save TM
+        const textMessage = await TextMessage.save(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
+
+        // Update Chat to have new textMessage
+        await chat.merge({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt }).save();
+
+        // TODO: global.io needs to change
+
+        // TODO: can we use createSocketServer() or should we use socket.io-emitter ?
+
+        console.log(global.io);
+        await sendSocket(global.io, chat.id);
+      }
     }
   }
 }
@@ -44,7 +93,7 @@ export async function sendRemindersForAccount(account, date) {
  * @returns {Promise.<Array|*>}
  */
 export async function computeRemindersAndSend({ date }) {
-  // - Fetch Reminders in order of shortest secondsAway
+  // - Fetch RemindersList in order of shortest secondsAway
   // - For each reminder, fetch the appointments that fall in this range
   // that do NOT have a reminder sent (type of reminder?)
   // - For each appointment, send the reminder

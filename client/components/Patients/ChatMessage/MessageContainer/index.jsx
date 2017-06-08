@@ -1,38 +1,18 @@
+
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import jwt from 'jwt-decode';
 import moment from 'moment';
-import styles from '../styles.scss';
 import { Avatar, Form, Field } from '../../../library';
 import * as Actions from '../../../../actions/entities';
 import { createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
-
-
+import styles from '../styles.scss';
 
 class MessageContainer extends Component {
   constructor(props) {
     super(props);
+
     this.sendMessage = this.sendMessage.bind(this);
-
-    window.socket.on('newMessage', (data) => {
-      const result = JSON.parse(data);
-      this.props.receiveMessage({ key: 'chats', entities: result.entities });
-
-      const node = document.getElementById('scrollIntoView');
-
-      if (node) {
-        node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
-      }
-
-    });
-
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-
-    window.socket.emit('room', {
-      id: decodedToken.activeAccountId,
-    });
   }
 
   sendMessage(message) {
@@ -44,14 +24,14 @@ class MessageContainer extends Component {
     entityData.chatId = (this.props.selectedChat ? this.props.selectedChat.id : null);
 
     if (!entityData.chatId) {
-      this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/'})
+      this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/' })
         .then((chat) => {
           entityData.chatId = Object.keys(chat.chats)[0];
           const patientId = Object.keys(chat.patients)[0];
           this.props.setSelectedPatient(patientId);
-          this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
+          this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
             .then(() => {
-              const node = document.getElementById('scrollIntoView');
+              const node = document.getElementById('careCruChatScrollIntoView');
 
               if (node) {
                 node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
@@ -59,9 +39,9 @@ class MessageContainer extends Component {
             });
         });
     } else {
-      this.props.createEntityRequest({key: 'chats', entityData, url: '/api/chats/textMessages'})
+      this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
         .then(() => {
-          const node = document.getElementById('scrollIntoView');
+          const node = document.getElementById('careCruChatScrollIntoView');
 
           if (node) {
             node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
@@ -80,6 +60,7 @@ class MessageContainer extends Component {
         if (!message.get('read')) {
           this.props.updateEntityRequest({ key: 'textMessages', values: {}, url: `/api/chats/${this.props.selectedChat.id}/textMessages/read` });
         }
+
         let first;
         let second;
         let third;
@@ -138,12 +119,12 @@ class MessageContainer extends Component {
 
     return (
       <div className={styles.container}>
-      <div className={styles.allMessages} id="scrollIntoView">
-        <div className={styles.patientName}> {name} </div>
-        {display}
-        <div className={styles.raise}>
+        <div className={styles.allMessages} id="careCruChatScrollIntoView">
+          <div className={styles.patientName}> {name} </div>
+          {display}
+          <div className={styles.raise}>
+          </div>
         </div>
-      </div>
         <div className={styles.sendMessage}>
           <Form
             form="chatMessageForm"
@@ -158,7 +139,7 @@ class MessageContainer extends Component {
           </Form>
         </div>
       </div>
-      );
+    );
   }
 }
 

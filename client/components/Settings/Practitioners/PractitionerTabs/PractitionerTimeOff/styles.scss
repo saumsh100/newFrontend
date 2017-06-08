@@ -5,21 +5,26 @@
   min-width: 300px;
   &_item {
     height: 50px;
+    padding-left: 10px;
   }
   &_date {
 
   }
   &_note {
     color: $primary-darkgrey;
+    max-width: 750px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &_allDay{
     margin-left: auto;
     color: $primary-darkgrey;
   }
   &_delete {
-    margin-left: auto;
+    justify-content: center;
   }
   &_addTimeOffText {
+    padding-left: 10px;
     margin-left: auto;
     font-weight: $large-weight;
   }
@@ -44,7 +49,7 @@
 
 .inlineBlock {
   padding-left: 10px;
-  padding-bottom: 5px;
+  padding-bottom: 1px;
 }
 
 .displayTimeOff {

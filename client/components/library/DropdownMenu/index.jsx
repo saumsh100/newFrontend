@@ -24,12 +24,18 @@ export class DropdownMenu extends Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-  close() {
-    this.setState({ isOpen: false });
+  close(test) {
+    const className = test.target.className;
+
+    if (className !== 'DayPicker-NavButton DayPicker-NavButton--prev'
+      && className !== 'DayPicker-NavButton DayPicker-NavButton--next'
+      && className !== 'DayPicker-Day DayPicker-Day--selected') {
+      this.setState({isOpen: false});
+    }
   }
 
   render() {
-    const { children, className, labelProps } = this.props;
+    const { children, className, labelProps, closeOnInsideClick } = this.props;
     const classes = classNames(className, styles.dropdownContainer);
 
     const menuOptions = {
@@ -40,6 +46,7 @@ export class DropdownMenu extends Component {
       toggle: <this.props.labelComponent {...labelProps} onClick={this.toggle} />,
 
       // Default
+      closeOnInsideClick,
       className: classes,
       align: 'right',
     };
@@ -63,7 +70,6 @@ export function MenuItem(props) {
   }
 
   const classes = classNames(props.className, styles.menuItemLi);
-
   return (
     <ListItem className={classes} onClick={props.onClick}>
       <div className={`dd-item-ignore ${styles.menuItemContent}`}>

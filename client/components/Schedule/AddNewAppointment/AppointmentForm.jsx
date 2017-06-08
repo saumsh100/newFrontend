@@ -7,7 +7,7 @@ import styles from './styles.scss';
 const generateTimeOptions = () => {
   const timeOptions = [];
   const totalHours = 24;
-  const increment = 30;
+  const increment = 15;
   const increments = 60 / increment;
 
   let i;

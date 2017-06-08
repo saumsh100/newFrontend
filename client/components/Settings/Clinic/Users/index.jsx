@@ -168,7 +168,7 @@ class Users extends Component{
 
     return (
       <Grid>
-        <Header title={'Users'} />
+        <Header title={'Users'} className={styles.userHeaderTitle} />
         <DialogBox
           actions={actions}
           title="Email Invite"
