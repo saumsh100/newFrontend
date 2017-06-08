@@ -13,6 +13,7 @@ const saltRounds = 10;
 
 import Reminder from '../fixtures/reminders';
 import appointmentFixtures from '../fixtures/appointments';
+import SentReminder from '../fixtures/sentReminders';
 
 
 /**
@@ -82,7 +83,7 @@ const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
-const clinicPhoneNumber = '+17786558613';
+const clinicPhoneNumber = '+16479307984';
 const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallId = uuid();
 
@@ -98,6 +99,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
 
   return [
     {
+      id: uuid(),
       chatId,
       to: patientPhone,
       from: clinicPhone,
@@ -106,6 +108,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: clinicPhone,
       from: patientPhone,
@@ -114,6 +117,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: patientPhone,
       from: clinicPhone,
@@ -122,6 +126,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: clinicPhone,
       from: patientPhone,
@@ -186,6 +191,7 @@ for (let i = 0; i < 100; i++) {
       carrier: 'sadasadsadsads',
       sin: 'dsasdasdasdadsasad',
     },
+
     isSyncedWithPMS: false,
   });
 
@@ -204,14 +210,17 @@ for (let i = 0; i < 100; i++) {
     first_call: true,
   });
 
-  randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate));
+  const newRandomMessages = genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate);
+  randomMessages = randomMessages.concat(newRandomMessages);
 
 
   randomChats.push({
     id: chatId,
     accountId,
     patientId: id,
+    patientPhoneNumber: phoneNumber,
     lastTextMessageDate: lastDate,
+    lastTextMessageId: newRandomMessages[newRandomMessages.length - 1].id,
   });
 
   const appointmentTime = faker.date.future();
@@ -265,9 +274,7 @@ const generateDefaultServices = (_accountId) => {
 
   return [
     first,
-
     second,
-
     createService({
       name: 'Lost Filling',
       duration: 30,
@@ -491,7 +498,7 @@ const SEEDS = {
       patientId: justinPatientId,
     },
 
-    // For the RemindersList Tests
+    // For the Reminders Tests
     ...appointmentFixtures,
 
     // For the patientsManagementTab
@@ -779,7 +786,7 @@ const SEEDS = {
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      twilioPhoneNumber: clinicPhoneNumber,
+      twilioPhoneNumber: '+14243638279',
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: mainEnterprise.id,
@@ -1000,36 +1007,40 @@ const SEEDS = {
   ],
 
   Chat: [
-    {
+    /*{
       id: alexChatId,
       accountId,
       patientId: alexPatientId,
+      patientPhoneNumber: alexPhoneNumber,
     },
     {
       id: justinChatId,
       accountId,
       patientId: justinPatientId,
+      patientPhoneNumber: justinPhoneNumber,
     },
     {
       id: sergeyChatId,
       accountId,
       patientId: sergeyPatientId,
+      patientPhoneNumber: sergeyPhoneNumber,
     },
     {
       id: markChatId,
       accountId,
       patientId: markPatientId,
-    },
+      patientPhoneNumber: markPhoneNumber,
+    },*/
 
     ...randomChats,
   ],
 
   TextMessage: [
-    ...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
-    ...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
+    //...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...randomMessages,
   ],
 
@@ -1105,21 +1116,24 @@ const SEEDS = {
   Reminder,
 
   SentReminder: [
-    {
+    /*{
       reminderId,
       accountId,
-      sentDate: moment({hour: 13, minute: 10})._d,
+      createdAt: moment({hour: 13, minute: 10})._d,
       appointmentId: appointmentId1,
       patientId: justinPatientId,
+      primaryType: 'sms',
       lengthSeconds: 30,
-    },
+    },*/
+
+    ...SentReminder,
   ],
 
   Recall: [
     {
       id: recallId,
       accountId,
-      primaryType: 'SMS',
+      primaryType: 'sms',
       lengthSeconds: 30,
     },
   ],
@@ -1128,7 +1142,7 @@ const SEEDS = {
     {
       accountId,
       recallId,
-      sentDate: moment({hour: 13, minute: 10})._d,
+      createdAt: moment({hour: 13, minute: 10})._d,
       patientId: sergeyPatientId,
       lengthSeconds: 30,
     },

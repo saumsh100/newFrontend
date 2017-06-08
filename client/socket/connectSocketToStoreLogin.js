@@ -4,11 +4,13 @@ import {
   addEntity,
   updateEntity,
   deleteEntity,
+  receiveEntities,
 } from '../actions/entities';
 
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
+  const { dispatch, getState } = store;
 
   socket
     .emit('authenticate', { token: jwtToken })
@@ -24,42 +26,47 @@ export default function connectSocketToStoreLogin(store, socket) {
      * Request Socket
      */
     .on('create:Request', (data) => {
-      store.dispatch(addEntity({ key: 'requests', entity: data }));
+      dispatch(addEntity({ key: 'requests', entity: data }));
     })
     .on('update:Request', (data) => {
-      store.dispatch(updateEntity({ key: 'requests', entity: data }));
+      dispatch(updateEntity({ key: 'requests', entity: data }));
     })
     .on('remove:Request', (data) => {
-      store.dispatch(deleteEntity({ key: 'requests', id: data }));
+      dispatch(deleteEntity({ key: 'requests', id: data }));
     })
 
     /**
      * Appointment Socket
      */
     .on('create:Appointment', (data) => {
-      store.dispatch(addEntity({ key: 'appointments', entity: data }));
+      dispatch(addEntity({ key: 'appointments', entity: data }));
     })
     .on('update:Appointment', (data) => {
-      store.dispatch(updateEntity({ key: 'appointments', entity: data }));
+      dispatch(updateEntity({ key: 'appointments', entity: data }));
     })
     .on('remove:Appointment', (data) => {
-      store.dispatch(deleteEntity({ key: 'appointments', id: data }));
+      dispatch(deleteEntity({ key: 'appointments', id: data }));
     })
 
     /**
      * Patient Socket
      */
     .on('create:Patient', (data) => {
-      store.dispatch(addEntity({ key: 'appointments', entity: data }));
+      dispatch(addEntity({ key: 'appointments', entity: data }));
     })
     .on('update:Patient', (data) => {
-      store.dispatch(updateEntity({ key: 'appointments', entity: data }));
+      dispatch(updateEntity({ key: 'appointments', entity: data }));
     })
     .on('remove:Patient', (data) => {
-      store.dispatch(deleteEntity({ key: 'appointments', id: data }));
+      dispatch(deleteEntity({ key: 'appointments', id: data }));
     })
-
-
+    .on('newMessage', (data) => {
+      dispatch(receiveEntities({ key: 'chats', entities: data.entities }));
+      const node = document.getElementById('careCruChatScrollIntoView');
+      if (node) {
+        node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
+      }
+    })
     .on('syncClientError', (data) => {
       console.log('[ TEMP ] normalized logEntry', data);
     });

@@ -5,6 +5,7 @@ const type = thinky.type;
 
 const TextMessage = createModel('TextMessage', {
   // Twilio MessageSID
+  id: type.string().required(),
   chatId: type.string().uuid(4).required(),
 
   // Twilio Data

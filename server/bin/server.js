@@ -11,6 +11,9 @@ const server = http.createServer(app);
 // Pass in server so socket.io can bind necessary paths to it
 const io = createSocketIOServer(server);
 
+// TODO: For the love of god remove this...
+global.io = io;
+
 // Setup socket connections and event handlers
 bindSocketHandlers(io);
 

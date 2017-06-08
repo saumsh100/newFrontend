@@ -10,6 +10,7 @@ const environmentVariables = process.env;
 const env = environmentVariables.NODE_ENV || 'development';
 const port = environmentVariables.PORT || '5000';
 const host = environmentVariables.HOST || 'carecru.dev';
+const protocol = env === 'production' ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const db = {
   authKey: environmentVariables.RETHINKDB_AUTHKEY || '',
@@ -64,6 +65,7 @@ module.exports = {
   env,
   port,
   host,
+  protocol,
   bundlePort,
   db,
   redis,
