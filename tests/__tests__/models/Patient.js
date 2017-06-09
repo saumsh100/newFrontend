@@ -28,23 +28,22 @@ describe('Simple patients write test', () => {
     };
   });
 
-  // afterEach(() => {
-  //   console.log('afterEach: removing test patient: ', patientDocGlobal.id
-  //   );
-  //   return patientDocGlobal.deleteAll().then(() => {
-  //     const PatientMobilePhoneNumber = Patient.auxModels['mobilePhoneNumber'];
-  //     return PatientMobilePhoneNumber
-  //       .delete()
-  //       .then(() => {
-  //         console.log('All cleaned up.');
-  //       })
-  //       .catch((error) => {
-  //         if (error.name === 'ValidationError') {
-  //           console.log('all good, this still means the test should pass.');
-  //         }
-  //       });
-  //   });
-  // });
+  afterEach(() => {
+    console.log('afterEach: removing test patient: ', patientDocGlobal.id);
+    return patientDocGlobal.deleteAll().then(() => {
+      const PatientMobilePhoneNumber = Patient.auxModels['mobilePhoneNumber'];
+      return PatientMobilePhoneNumber
+        .delete()
+        .then(() => {
+          console.log('All cleaned up.');
+        })
+        .catch((error) => {
+          if (error.name === 'ValidationError') {
+            console.log('all good, this still means the test should pass.');
+          }
+        });
+    });
+  });
 
   afterEach(() => {
     if (patientDoc2) {
@@ -115,7 +114,7 @@ describe('Simple patients write test', () => {
    * - change phone number of patient 1
    * - change phone number of patient 1 back to original
    */
-  test.only('Create patient, change phone number to diff, change back to the same again.', () => {
+  test('Create patient, change phone number to diff, change back to the same again.', () => {
     // write patient and check it and its aux table doc
     return Patient.save(testPatientObject1)
       .then((firstSaveResult) => {
