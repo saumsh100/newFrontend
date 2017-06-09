@@ -533,8 +533,7 @@ describe('test aux tables use cases - 1 unique fields, 3 deps', () => {
       });
   });
 
-  test
-  ('create TestModel, insert two same mobilePhoneNumber values into it, but diff other field', () => {
+  test('create TestModel, insert two same mobilePhoneNumber values into it, but diff other field', () => {
     const TestModel = createModel(TEST_MODEL, {
       fname: type.string(),
       mobilePhoneNumber: type.string(),
@@ -550,8 +549,8 @@ describe('test aux tables use cases - 1 unique fields, 3 deps', () => {
       },
     });
 
-    const primaryKeyArray = ['mobilePhoneNumber', 'accountId', 'email', 'homePhoneNumber'];
-    const pkField = primaryKeyArray.join('.');
+    const primaryKeyNameArray = ['mobilePhoneNumber', 'accountId', 'email', 'homePhoneNumber'];
+    const pkField = primaryKeyNameArray.join('.');
 
     const TestModelAux = TestModel.auxModels.mobilePhoneNumber;
 
@@ -575,9 +574,6 @@ describe('test aux tables use cases - 1 unique fields, 3 deps', () => {
         return TestModelAux
           .get(primaryKeyArray)
           .then((result) => {
-            // console.log('TestModelAux result ', result);
-            // console.log('result id', result.id);
-            // console.log('pkFieldName', pkField);
             expect(result.id).toBe(savedDoc1.id);
             expect(Array.isArray(result[pkField])).toBe(true);
 
