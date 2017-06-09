@@ -119,7 +119,7 @@ describe('Simple patients write test', () => {
     return Patient.save(testPatientObject1)
       .then((firstSaveResult) => {
         patientIdGlobal = firstSaveResult.id;
-        patientDocGlobal = new Patient(Object.assign({}, firstSaveResult));
+        patientDocGlobal = firstSaveResult;
 
         expect(firstSaveResult.firstName).toBe(testPatientObject1.firstName);
         expect(firstSaveResult.mobilePhoneNumber).toBe(testPatientObject1.mobilePhoneNumber);
