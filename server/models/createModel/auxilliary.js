@@ -126,31 +126,66 @@ export function generateAuxValidators(auxTables, doc) {
 
           if (!doc.getOldValue() && value === 'id' && !storeValue) {
             // handle create
-            console.log('>>>>>>>>>>>>> generateAuxValidators: create', doc);
+            console.log('generateAuxValidators: CREATE', doc);
             storeValue = uuid();
             doc.id = storeValue;
-          } else if (!doc.isSaved) {
-            // handle delete
-            console.log('>>>>>>>>>>>>> generateAuxValidators: delete', doc);
+            AuxTable.save({
+              [primaryKey]: fieldValue,
+              [value]: storeValue,
+            }).then((entry) => {
+              console.log(`Added unique fieldValue=${fieldValue} to ${tableName} table`);
+
+              resolve();
+            });
           } else {
             // handle update
-            console.log('>>>>>>>>>>>>> generateAuxValidators: update', doc);
-            console.log('>>>>>>>>>>>>> generateAuxValidators: update: oldValue', doc.getOldValue());
+
+            // according to this discussion RethinkDB does not allow changing of keys
+            // When I ran the code below, it would always create a new value with a new phone number
+            // https://github.com/rethinkdb/rethinkdb/issues/1570
+            // console.log('generateAuxValidators: UPDATE', doc);
+            // AuxTable.filter({ [value]: storeValue }).nth(0).run()
+            //   .then((auxDoc) => {
+            //     console.log('BEFORE updating primary key', auxDoc);
+            //     auxDoc.merge({
+            //       [primaryKey]: fieldValue,
+            //     }).save()
+            //       .then((newAuxDoc) => {
+            //         console.log('AFTER updated primary key', newAuxDoc);
+            //         resolve();
+            //       });
+            //   })
+            //   .catch(() => {
+            //     // Doesnt have one, doesn't have one, is that field required()?
+            //   });
+
+            // Hence: remove doc with old PK and insert new doc with new PK
+            console.log('generateAuxValidators: UPDATE', doc);
+            AuxTable.filter({ [value]: storeValue }).nth(0).run()
+              .then((auxDoc) => {
+                console.log('retreieved old auxdoc', auxDoc);
+                auxDoc.delete().then(() => {
+                  const newAuxDoc = Object.assign({}, auxDoc, { [primaryKey]: fieldValue });
+                  console.log('Removed old aux doc. saving new: ', newAuxDoc);
+
+                  AuxTable.save(newAuxDoc)
+                    .then((persistedNewAuxDoc) => {
+                      console.log('AFTER saved new auxDoc', persistedNewAuxDoc);
+                      resolve();
+                    });
+                });
+              })
+              .catch((error) => {
+                // Doesnt have one, doesn't have one, is that field required()?
+                console.log('ERROR during saving aux doc', error);
+              });
           }
-          console.log('..... doc old value', doc.getOldValue());
 
           // TODO handle doc updates by checking for `doc.isSaved && doc.getOldValue() !==null`
           // if (updating && fieldChanged) {
           //   AuxTable.get(oldPrimaryKey).then(update it)
           // }
 
-          AuxTable.save({
-            [primaryKey]: fieldValue,
-            [value]: storeValue,
-          }).then((entry) => {
-            console.log(`Added unique fieldValue=${fieldValue} to ${tableName} table`);
-            resolve();
-          });
         });
     });
   });

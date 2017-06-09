@@ -28,20 +28,23 @@ describe('Simple patients write test', () => {
     };
   });
 
-  // .get([patientDocGlobal.mobilePhoneNumber, patientDocGlobal.accountId])
-  afterEach(() => {
-    console.log('afterEach: removing test patient: ', patientIdGlobal);
-    return patientDocGlobal.deleteAll().then(() => {
-      const PatientMobilePhoneNumber = Patient.auxModels['mobilePhoneNumber'];
-      return PatientMobilePhoneNumber
-        .delete()
-        .catch((error) => {
-          if (error.name === 'ValidationError') {
-            console.log('all good, this still means the test should pass.');
-          }
-        });
-    });
-  });
+  // afterEach(() => {
+  //   console.log('afterEach: removing test patient: ', patientDocGlobal.id
+  //   );
+  //   return patientDocGlobal.deleteAll().then(() => {
+  //     const PatientMobilePhoneNumber = Patient.auxModels['mobilePhoneNumber'];
+  //     return PatientMobilePhoneNumber
+  //       .delete()
+  //       .then(() => {
+  //         console.log('All cleaned up.');
+  //       })
+  //       .catch((error) => {
+  //         if (error.name === 'ValidationError') {
+  //           console.log('all good, this still means the test should pass.');
+  //         }
+  //       });
+  //   });
+  // });
 
   afterEach(() => {
     if (patientDoc2) {
@@ -107,6 +110,7 @@ describe('Simple patients write test', () => {
   });
 
   /**
+   * Testing whether Aux table is updated correctly when a value of the key changes.
    * - write patient1
    * - change phone number of patient 1
    * - change phone number of patient 1 back to original
@@ -121,36 +125,66 @@ describe('Simple patients write test', () => {
         expect(firstSaveResult.firstName).toBe(testPatientObject1.firstName);
         expect(firstSaveResult.mobilePhoneNumber).toBe(testPatientObject1.mobilePhoneNumber);
 
-        // console.log('1 firstsave result', firstSaveResult);
-        // console.log('1 merge method exists', firstSaveResult.merge);
-
         // change mobile phone number of the doc to a new value and persist it
-        return firstSaveResult
-          .merge({ mobilePhoneNumber: '7780001122' })
-          .save()
-          .then((secondSaveResult) => {
-            // console.log('2 updated patient to', secondSaveResult);
-            expect(secondSaveResult.mobilePhoneNumber).toBe('7780001122');
-            expect(firstSaveResult.firstName).toBe(firstSaveResult.firstName);
-            expect(firstSaveResult.lastName).toBe(firstSaveResult.lastName);
-
-            // console.log('2 firstsave result', secondSaveResult);
-            // console.log('2 merge method exists', secondSaveResult.merge);
-
-            // change the phone number back to original and persist it
-            return secondSaveResult
-              .merge({ mobilePhoneNumber: patientDocGlobal
-                .mobilePhoneNumber })
+        return Patient.get(firstSaveResult.id)
+          .then((doc1) => {
+            return doc1.merge({ mobilePhoneNumber: '7780001122' })
               .save()
-              .then((thirdSaveResult) => {
-                // console.log('updated patient again to', thirdSaveResult);
-                // console.log('patient global is', patientDocGlobal);
+              .then((secondSaveResult) => {
+                expect(secondSaveResult.mobilePhoneNumber).toBe('7780001122');
+                expect(secondSaveResult.firstName).toBe(firstSaveResult.firstName);
+                expect(secondSaveResult.lastName).toBe(firstSaveResult.lastName);
 
-                expect(secondSaveResult.mobilePhoneNumber).toBe(firstSaveResult.mobilePhoneNumber);
-                expect(firstSaveResult.firstName).toBe(firstSaveResult.firstName);
-                expect(firstSaveResult.lastName).toBe(firstSaveResult.lastName);
+                // change the phone number back to original and persist it
+                return Patient.get(secondSaveResult.id)
+                  .then((doc2) => {
+                    return doc2.merge({ mobilePhoneNumber: patientDocGlobal.mobilePhoneNumber })
+                      .save()
+                      .then((thirdSaveResult) => {
+                        expect(thirdSaveResult.mobilePhoneNumber).toBe(firstSaveResult.mobilePhoneNumber);
+                        expect(thirdSaveResult.firstName).toBe(firstSaveResult.firstName);
+                        expect(thirdSaveResult.lastName).toBe(firstSaveResult.lastName);
+                      });
+                  });
               });
           });
       });
   });
+
+  // /**
+  //  * - write patient1
+  //  * - change phone number of patient 1
+  //  * - change phone number of patient 1 back to original
+  //  */
+  // test.only('Create patient, change phone number to diff, change back to the same again.', () => {
+  //   // write patient and check it and its aux table doc
+  //   return Patient.save(testPatientObject1)
+  //     .then((firstSaveResult) => {
+  //       patientIdGlobal = firstSaveResult.id;
+  //       patientDocGlobal = new Patient(Object.assign({}, firstSaveResult));
+  //
+  //       expect(firstSaveResult.firstName).toBe(testPatientObject1.firstName);
+  //       expect(firstSaveResult.mobilePhoneNumber).toBe(testPatientObject1.mobilePhoneNumber);
+  //
+  //       // change mobile phone number of the doc to a new value and persist it
+  //       return Patient.get(firstSaveResult.id)
+  //         .merge({ mobilePhoneNumber: '7780001122' })
+  //         .save()
+  //         .then((secondSaveResult) => {
+  //           expect(secondSaveResult.mobilePhoneNumber).toBe('7780001122');
+  //           expect(secondSaveResult.firstName).toBe(firstSaveResult.firstName);
+  //           expect(secondSaveResult.lastName).toBe(firstSaveResult.lastName);
+  //
+  //           // change the phone number back to original and persist it
+  //           return Patient.get(secondSaveResult.id)
+  //             .merge({ mobilePhoneNumber: patientDocGlobal.mobilePhoneNumber })
+  //             .save()
+  //             .then((thirdSaveResult) => {
+  //               expect(thirdSaveResult.mobilePhoneNumber).toBe(firstSaveResult.mobilePhoneNumber);
+  //               expect(thirdSaveResult.firstName).toBe(firstSaveResult.firstName);
+  //               expect(thirdSaveResult.lastName).toBe(firstSaveResult.lastName);
+  //             });
+  //         });
+  //     });
+  // });
 });
