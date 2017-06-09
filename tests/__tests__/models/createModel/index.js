@@ -419,7 +419,7 @@ describe
      ]
    }
    */
-  test('create TestModel, insert different values into it', () => {
+  test('create TestModel, insert two same mobilePhoneNumber values into it', () => {
     const TestModel = createModel(TEST_MODEL, {
       fname: type.string(),
       mobilePhoneNumber: type.string(),
@@ -448,7 +448,7 @@ describe
         accountId: 'uniqueAccId',
       })
       .then((savedDoc1) => {
-        console.log('>>>>', savedDoc1);
+        // console.log('>>>>', savedDoc1);
         expect(savedDoc1.mobilePhoneNumber).toBe('7782422626');
         expect(savedDoc1.homePhoneNumber).toBe('6045700922');
         expect(savedDoc1.email).toBe('sergey@carecru.com');
@@ -460,14 +460,14 @@ describe
         return TestModelAux
           .get(primaryKeyArray)
           .then((result) => {
-            console.log('TestModelAux result ', result);
-            console.log('result id', result.id);
-            console.log('pkFieldName', pkField);
+            // console.log('TestModelAux result ', result);
+            // console.log('result id', result.id);
+            // console.log('pkFieldName', pkField);
             expect(result.id).toBe(savedDoc1.id);
             expect(Array.isArray(result[pkField])).toBe(true);
 
             const sameDocAgain = omit(savedDoc1, ['id', 'createdAt']);
-            console.log('writing same doc again', sameDocAgain);
+            // console.log('writing same doc again', sameDocAgain);
             return TestModel.save(sameDocAgain);
           });
       })
@@ -476,6 +476,61 @@ describe
       })
       .catch((error) => {
         expect(error.message).toBe('Unique Field Validation Error');
+      });
+  });
+
+  test('create TestModel, insert two different mobilePhoneNumber values into it', () => {
+    const TestModel = createModel(TEST_MODEL, {
+      fname: type.string(),
+      mobilePhoneNumber: type.string(),
+      homePhoneNumber: type.string(),
+      email: type.string(),
+      accountId: type.string(),
+    }, {
+      aux: {
+        mobilePhoneNumber: {
+          value: 'id',
+          dependencies: ['accountId', 'email', 'homePhoneNumber'],
+        },
+      },
+    });
+
+    const primaryKeyArray = ['mobilePhoneNumber', 'accountId', 'email', 'homePhoneNumber'];
+    const pkField = primaryKeyArray.join('.');
+
+    const TestModelAux = TestModel.auxModels.mobilePhoneNumber;
+
+    return TestModel
+      .save({
+        mobilePhoneNumber: '7782422626',
+        homePhoneNumber: '6045700922',
+        email: 'sergey@carecru.com',
+        accountId: 'uniqueAccId',
+      })
+      .then((savedDoc1) => {
+        // console.log('>>>>', savedDoc1);
+        expect(savedDoc1.mobilePhoneNumber).toBe('7782422626');
+        expect(savedDoc1.homePhoneNumber).toBe('6045700922');
+        expect(savedDoc1.email).toBe('sergey@carecru.com');
+        expect(savedDoc1.accountId).toBe('uniqueAccId');
+
+        // order of elements in the array is important here
+        const primaryKeyArray = ['7782422626', 'uniqueAccId', 'sergey@carecru.com', '6045700922'];
+
+        return TestModelAux
+          .get(primaryKeyArray)
+          .then((result) => {
+            expect(result.id).toBe(savedDoc1.id);
+            expect(Array.isArray(result[pkField])).toBe(true);
+
+            const newDoc = omit(savedDoc1, ['id', 'createdAt']);
+            Object.assign(newDoc, { mobilePhoneNumber: '1112223344' });
+            console.log('writing new doc', newDoc);
+            return TestModel.save(newDoc);
+          });
+      })
+      .then((result) => {
+        expect(result.mobilePhoneNumber).toBe('1112223344');
       });
   });
 });
