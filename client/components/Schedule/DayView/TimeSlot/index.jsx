@@ -65,7 +65,7 @@ export default function TimeSlot(props) {
       return app;
     });
   });
-  
+
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
     boxSizing: 'border-box',
