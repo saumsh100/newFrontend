@@ -143,6 +143,7 @@ export function generateAuxValidators(auxTables, doc) {
             // according to this discussion RethinkDB does not allow changing of keys
             // When I ran the code below, it would always create a new value with a new phone number
             // https://github.com/rethinkdb/rethinkdb/issues/1570
+            //
             // console.log('generateAuxValidators: UPDATE', doc);
             // AuxTable.filter({ [value]: storeValue }).nth(0).run()
             //   .then((auxDoc) => {
