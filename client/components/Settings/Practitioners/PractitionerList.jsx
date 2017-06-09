@@ -46,7 +46,7 @@ class PractitionerList extends Component {
       serviceIds = services.toArray().map((service) => service.get('id'));
     }
 
-    //creates the practitioner and then updates with all services set to true 
+    //creates the practitioner and then updates with all services set to true
     this.props.createEntityRequest({ key, entityData: values })
       .then((entities) => {
         const id = Object.keys(entities[key])[0];

@@ -4,6 +4,7 @@ import ShowAppointment from './ShowAppointment';
 import TimeSlotColumn from './TimeSlotColumn';
 import moment from 'moment';
 
+
 export default function TimeSlot(props) {
   const {
     practitioner,
@@ -55,7 +56,7 @@ export default function TimeSlot(props) {
         (splitAppStartDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)) ||
         (splitAppEndDate.isSame(adjacentAppEndDate)) ||
         (splitAppEndDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)))
-        && (app.id !== sApp.id)) {
+        && (app.id !== sApp.id) ) {
         return Object.assign({}, app, {
           isSplit: true,
           adjacent: true,
@@ -64,7 +65,7 @@ export default function TimeSlot(props) {
       return app;
     });
   });
-
+  
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
     boxSizing: 'border-box',
