@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import immutable from 'immutable';
 import main from '../PatientList/main.scss';
 import ChatListContainer from './ChatListContainer';
 import MessageContainer from './MessageContainer';
@@ -38,17 +39,23 @@ class ChatMessage extends Component {
         }
       });
 
+      const map = Immutable.fromJS(this.props.chats);
+      const selectedChat = map.filter(chat => chat.get('patientId') === id).first();
+
       if (id) {
-        return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
-          this.props.setCurrentPatient(id);
+        return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
+          this.props.setCurrentPatient(id, selectedChat.id);
         });
       }
     }
   }
 
   userClick(id) {
-    return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
-      this.props.setCurrentPatient(id);
+    const map = Immutable.fromJS(this.props.chats);
+    const selectedChat = map.filter(chat => chat.get('patientId') === id).first();
+
+    return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
+      this.props.setCurrentPatient(id, selectedChat.id);
     });
   }
 
@@ -123,10 +130,12 @@ class ChatMessage extends Component {
   }
 
   render() {
-    const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.mobilePhoneNumber}` : null);
-    const displayinfo = (this.props.currentPatient ? <UserInfo
-      currentPatient={this.props.currentPatient}
-    /> : null);
+    // const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.mobilePhoneNumber}` : null);
+    // const displayinfo = (this.props.currentPatient ? <UserInfo
+    //   currentPatient={this.props.currentPatient}
+    // /> : null);
+    const displayinfo = null;
+    const info = null;
 
     const inputProps = {
       placeholder: 'Search...',
@@ -149,10 +158,10 @@ class ChatMessage extends Component {
                   <div className={styles.input}>
                     <AutoCompleteForm
                       value={this.state.value}
-                    getSuggestions={this.getSuggestions}
-                    inputProps={inputProps}
-                    focusInputOnSuggestionClick={false}
-                    getSuggestionValue={suggestion => suggestion.name}
+                      getSuggestions={this.getSuggestions}
+                      inputProps={inputProps}
+                      focusInputOnSuggestionClick={false}
+                      getSuggestionValue={suggestion => suggestion.name}
                     />
                   </div>
                 </Card>
@@ -175,6 +184,7 @@ class ChatMessage extends Component {
                         textMessages={this.props.textMessages}
                         chats={this.props.chats}
                         patients={this.props.patients}
+                        selectedChat={this.props.selectedChat}
                         onClick={this.props.setCurrentPatient}
                         currentPatient={this.props.currentPatient}
                       />
@@ -216,6 +226,7 @@ ChatMessage.propTypes = {
   searchedPatients: PropTypes.object,
   chats: PropTypes.object,
   patients: PropTypes.object,
+  selectedChat: PropTypes.object,
   moreData: PropTypes.bool,
   textMessages: PropTypes.object,
   loadMore: PropTypes.func.isRequired,

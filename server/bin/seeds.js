@@ -786,7 +786,7 @@ const SEEDS = {
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      twilioPhoneNumber: '+14243638279',
+      twilioPhoneNumber: clinicPhoneNumber,
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: mainEnterprise.id,
@@ -1007,13 +1007,12 @@ const SEEDS = {
   ],
 
   Chat: [
-    /*{
+    {
       id: alexChatId,
       accountId,
-      patientId: alexPatientId,
       patientPhoneNumber: alexPhoneNumber,
     },
-    {
+    /*{
       id: justinChatId,
       accountId,
       patientId: justinPatientId,
@@ -1036,6 +1035,15 @@ const SEEDS = {
   ],
 
   TextMessage: [
+    {
+      id: uuid(),
+      chatId: alexChatId,
+      to: clinicPhoneNumber,
+      from: alexPhoneNumber,
+      body: 'Hey! Just testing out our new messaging service.',
+      createdAt: moment(new Date())._d,
+      read: true,
+    },
     //...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),

@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
+import jwt from 'jwt-decode';
 import immutable from 'immutable';
 import { bindActionCreators } from 'redux';
 import ChatMessage from '../components/Patients/ChatMessage/';
@@ -22,9 +23,17 @@ class PatientsMessagesContainer extends Component {
       moreData: true,
     };
     this.loadMore = this.loadMore.bind(this);
+    this.setCurrentPatient = this.setCurrentPatient.bind(this);
   }
 
   componentDidMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: `/api/accounts/${decodedToken.activeAccountId}`,
+    });
     this.props.fetchEntities({
       key: 'chats',
       join: ['textMessages', 'patient'],
@@ -36,6 +45,12 @@ class PatientsMessagesContainer extends Component {
         this.setState({ moreData: false });
       }
     });
+  }
+
+  setCurrentPatient(id, chatId) {
+    console.log(id, chatId);
+    this.props.setSelectedPatient(id);
+    this.props.setChatPatient(chatId);
   }
 
   loadMore() {
@@ -67,6 +82,10 @@ class PatientsMessagesContainer extends Component {
       patients,
     } = this.props;
 
+    // chats.toArray().map((test) => {
+    //   console.log(test.toJS())
+    // })
+
     const chatOrder = chats.sort((a, b) => {
       if (!a.textMessages || !b.textMessages) {
         return 0;
@@ -86,8 +105,10 @@ class PatientsMessagesContainer extends Component {
 
     const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
 
+    console.log(this.props.selectedChat)
+
     const currentPatient = (this.props.selectedChatPatient ? this.props.selectedChatPatient : patients.get(firstId));
-    const currentChat = (this.props.selectedChatPatient ? this.props.selectedChat : chatOrder.toArray()[0]);
+    const currentChat = (this.props.selectedChat ? this.props.selectedChat : chatOrder.toArray()[0]);
 
     return (
       <ChatMessage
@@ -97,7 +118,7 @@ class PatientsMessagesContainer extends Component {
         moreData={this.state.moreData}
         loadMore={this.loadMore}
         currentPatient={currentPatient}
-        setCurrentPatient={this.props.setSelectedPatient}
+        setCurrentPatient={this.setCurrentPatient}
         selectedChat={currentChat}
         searchPatient={this.props.searchPatient}
         searchedPatients={this.props.searchedPatients}
@@ -113,8 +134,10 @@ PatientsMessagesContainer.propTypes = {
   patients: PropTypes.object,
   selectedChatPatient: PropTypes.object,
   searchedPatients: PropTypes.object,
+  fetchEntities: PropTypes.object,
   textMessages: PropTypes.object,
   searchPatient: PropTypes.func.isRequired,
+  setChatPatient: PropTypes.func.isRequired,
   setSelectedPatient: PropTypes.func.isRequired,
 };
 
@@ -123,10 +146,9 @@ function mapStateToProps({ entities, currentDialog, patientList, form }) {
   const chats = entities.getIn(['chats', 'models']);
   const selectedPatientId = patientList.get('selectedPatientId');
   const selectedChatPatient = patients.get(selectedPatientId);
-  const map = Immutable.fromJS(chats);
-  const selectedChat = map.filter( (chat) => {
-    return chat.get('patientId') === selectedPatientId;
-  }).first();
+  const selectedChatId = patientList.get('selectedChatId');
+  const selectedChat = chats.get(selectedChatId);
+
   return {
     textMessages: entities.getIn(['textMessages', 'models']),
     chats,
@@ -146,6 +168,7 @@ function mapDispatchToProps(dispatch) {
     setCurrentDialog,
     setDialogScrollPermission,
     setSelectedPatient: Actions.setSelectedPatientIdAction,
+    setChatPatient: Actions.setSelectedChatIdAction,
     searchPatient: Actions.searchPatientAction,
   }, dispatch);
 }

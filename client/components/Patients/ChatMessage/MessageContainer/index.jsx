@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import jwt from 'jwt-decode';
 import moment from 'moment';
 import { Avatar, Form, Field } from '../../../library';
 import * as Actions from '../../../../actions/entities';
@@ -54,6 +55,18 @@ class MessageContainer extends Component {
   render() {
     let display;
 
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
+    const user = {
+      firstName: decodedToken.firstName,
+      lastName: decodedToken.lastName,
+    };
+
+    const userAnon = {
+      avatarUrl: '/images/avatar.png',
+    };
+
     if (this.props.selectedChat) {
       display = this.props.selectedChat.textMessages.map((text, i) => {
         const message = this.props.textMessages.get(this.props.selectedChat.textMessages[i]);
@@ -73,16 +86,24 @@ class MessageContainer extends Component {
           sameElse: 'YYYY DD MM, h:mm a',
         })}</div>;
 
+        let userPhone = null;
+
+        if (message.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
+          userPhone = message.to;
+        } else {
+          userPhone = message.from;
+        }
+
         let nextMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i + 1]);
         nextMessage = (nextMessage ? nextMessage.from : null);
 
-        if (message.from === this.props.currentPatient.mobilePhoneNumber) {
+        if (message.from !== this.props.activeAccount.toJS().twilioPhoneNumber) {
           first = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.textFrom}>{message.body}</div>;
           third = <div className={styles.margin2} > </div>;
 
           if (nextMessage !== message.from) {
-            third = <Avatar className={styles.margin} user={this.props.currentPatient} />
+            third = <Avatar className={styles.margin} user={this.props.currentPatient || userAnon} />;
           }
 
           if (i !== 0) {
@@ -97,7 +118,7 @@ class MessageContainer extends Component {
           first = <div className={styles.margin2} > </div>;
 
           if (nextMessage !== message.from) {
-            first = <Avatar className={styles.margin} user={{}}/>
+            first = <Avatar className={styles.margin} user={user} />;
           }
 
           if (i !== 0) {
@@ -148,14 +169,17 @@ MessageContainer.propTypes = {
   textMessages: PropTypes.object,
   chats: PropTypes.object,
   patients: PropTypes.object,
+  activeAccount: PropTypes.object,
   selectedChat: PropTypes.object,
   createEntityRequest: PropTypes.func.isRequired,
+  setSelectedPatient: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   receiveMessage: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
+function mapStateToProps({ entities }) {
   return {
+    activeAccount: entities.getIn(['accounts', 'models']).first(),
   };
 }
 
