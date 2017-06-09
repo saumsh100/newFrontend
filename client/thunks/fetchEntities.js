@@ -10,6 +10,10 @@ import {
   sendMessageOnClientAction,
   readMessagesInCurrentDialogAction,
 } from '../actions/entities';
+
+import {
+  showAlertTimeout
+} from '../actions/alerts';
 import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequests';
 
 export function fetchEntities({ key, join, params = {}, url }) {
@@ -107,6 +111,7 @@ export function createEntityRequest({ key, entityData, url }) {
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
+        dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'success' }));
         return data.entities;
       });
   };
@@ -122,8 +127,9 @@ export function updateEntityRequest({ key, model, values, url }) {
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
+        dispatch(showAlertTimeout({ text: `Updated ${key}`, type: 'success' }));
         return data.entities;
-      });
+      }).catch(err => dispatch(showAlertTimeout({ text: `Update ${key} Failed`, type: 'error' })));
   };
 }
 

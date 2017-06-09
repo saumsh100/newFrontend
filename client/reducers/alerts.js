@@ -13,7 +13,6 @@ const initialState = {
 
 export default handleActions({
   [SHOW_ALERT](state, action) {
-    console.log(action)
     return {
       ...state,
       ...action.alert,
