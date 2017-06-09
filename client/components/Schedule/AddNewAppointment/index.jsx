@@ -13,6 +13,7 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
+import { showAlert }from '../../../actions/alerts';
 import { Button, IconButton } from '../../library';
 import styles from './styles.scss';
 
@@ -63,7 +64,6 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
-    console.log(isCancelled);
     // setting initial duration and buffer if slider isn't used.
     let duration = appointmentValues.duration;
     if (!duration) {
@@ -199,6 +199,8 @@ class AddNewAppointment extends Component {
 
     return (
       <div className={styles.formContainer}>
+
+
         <IconButton
           icon="times"
           onClick={reinitializeState}
@@ -244,6 +246,7 @@ function mapDispatchToProps(dispatch) {
     updateEntityRequest,
     deleteEntityRequest,
     reset,
+    showAlert,
     change,
   }, dispatch);
 };

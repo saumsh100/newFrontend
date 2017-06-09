@@ -13,8 +13,8 @@ class AppointmentsList extends Component {
   handleAppointmentClick(id) {
     const {
       push,
-      selectAppointment,
-      appointments,
+      //selectAppointment,
+      //appointments,
     } = this.props;
 
     push('/schedule');

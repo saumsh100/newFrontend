@@ -36,3 +36,10 @@ export default function ShowPatientInfo(props) {
     </div>
   );
 }
+
+ShowPatientInfo.propTypes = {
+  appointment: PropTypes.object.isRequired,
+  patient: PropTypes.object.isRequired,
+  service: PropTypes.object.isRequired,
+  chair: PropTypes.object.isRequired,
+};

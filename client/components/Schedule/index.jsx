@@ -85,6 +85,7 @@ class ScheduleComponent extends Component {
                     multiple={false}
                   />
                   <HeaderButtons
+                    showAlert={this.props.showAlert}
                     addNewAppointment={this.addNewAppointment}
                   />
                 </CurrentDate>

@@ -188,6 +188,7 @@ function mapDispatchToProps(dispatch) {
     push,
     setSelectedPatientId: Actions.setSelectedPatientIdAction,
     selectAppointment,
+
   }, dispatch);
 }
 

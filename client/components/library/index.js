@@ -1,4 +1,5 @@
 
+import Alert from './Alert';
 import AppBar from './AppBar';
 import Avatar from './Avatar';
 import AutoCompleteForm from './AutoCompleteForm';
@@ -53,6 +54,7 @@ import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
 
 export {
+  Alert,
   AppBar,
   Avatar,
   AutoCompleteForm,

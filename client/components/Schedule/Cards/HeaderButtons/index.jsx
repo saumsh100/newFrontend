@@ -20,6 +20,12 @@ export default function HeaderButtons(props) {
           />
         </span>
       </div>
+      <div>
+        <IconButton icon="plus" onClick={(e)=>{
+          e.stopPropagation()
+          props.showAlert({ text: 'Errrr!sssssssssssssssssssssssssssssssssss', type: 'success' });
+        }}/>
+      </div>
     </div>
   );
 }

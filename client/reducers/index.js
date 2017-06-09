@@ -2,6 +2,7 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 import { reducer as form } from 'redux-form';
+import alerts from './alerts';
 import toolbar from './toolbar';
 import reputation from './reputation';
 import reviews from './reviews';
@@ -17,6 +18,7 @@ import apiRequests from './apiRequests';
 import availabilities from './availabilities';
 
 export default combineReducers({
+  alerts,
   accountSettings,
   routing,
   form,
