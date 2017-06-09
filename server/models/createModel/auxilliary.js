@@ -135,7 +135,9 @@ export function generateAuxValidators(auxTables, doc) {
           } else {
             // handle update
             console.log('>>>>>>>>>>>>> generateAuxValidators: update', doc);
+            console.log('>>>>>>>>>>>>> generateAuxValidators: update: oldValue', doc.getOldValue());
           }
+          console.log('..... doc old value', doc.getOldValue());
 
           // TODO handle doc updates by checking for `doc.isSaved && doc.getOldValue() !==null`
           // if (updating && fieldChanged) {
