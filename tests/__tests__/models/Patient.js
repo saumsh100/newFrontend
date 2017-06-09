@@ -162,7 +162,7 @@ describe('Simple patients write test', () => {
    * - create two patients with different phone numbres
    * - update one patient with the phone number of another - should now allow that and throw Error
    */
-  test.only('Create two patients, update phone number with existing number', () => {
+  test('Create two patients, update phone number with existing number', () => {
     return Patient.save([testPatientObject1, testPatientObject2])
       .then((result) => {
         expect(Array.isArray(result)).toBe(true);
