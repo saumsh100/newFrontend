@@ -10,29 +10,30 @@ const NOT_CARECRU = 'not_carecru';
 const PATIENT_TEST_TABLE_NAME = 'PatientTest';
 
 const accountId = 'dc9bd17e-7152-4dbf-9c28-18b1bf5eb30d';
-let patientId = '';
-let patientDoc = {};
+let patientIdGlobal = '';
+let patientDocGlobal = {};
 let patientDoc2 = false;
 
-let testPatient1 = {};
+let testPatientObject1 = {};
 
 describe('Simple patients write test', () => {
 
   beforeEach(() => {
-    testPatient1 = {
-      firstName: 'John',
-      lastName: 'Doe',
+    testPatientObject1 = {
+      firstName: 'Han',
+      lastName: 'Solo',
       mobilePhoneNumber: '1112223344',
       homePhoneNumber: '9998887766',
       accountId,
     };
   });
 
+  // .get([patientDocGlobal.mobilePhoneNumber, patientDocGlobal.accountId])
   afterEach(() => {
-    console.log('afterEach: removing test patient: ', patientId);
-    return patientDoc.deleteAll().then(() => {
+    console.log('afterEach: removing test patient: ', patientIdGlobal);
+    return patientDocGlobal.deleteAll().then(() => {
       const PatientMobilePhoneNumber = Patient.auxModels['mobilePhoneNumber'];
-      return PatientMobilePhoneNumber.get([patientDoc.mobilePhoneNumber, patientDoc.accountId])
+      return PatientMobilePhoneNumber
         .delete()
         .catch((error) => {
           if (error.name === 'ValidationError') {
@@ -51,15 +52,23 @@ describe('Simple patients write test', () => {
   /**
    * - write single patient
    */
-  test('Single patient write test', () => {
-    console.log('creating testPatient1', testPatient1);
-    return Patient.save(testPatient1)
+  test('Single patient write test and check its aux model', () => {
+    console.log('creating testPatientObject1', testPatientObject1);
+    return Patient.save(testPatientObject1)
       .then((result) => {
-        patientId = result.id;
-        patientDoc = result;
+        patientIdGlobal = result.id;
+        patientDocGlobal = result;
         console.log('test: result', result);
-        expect(result.firstName).toBe(testPatient1.firstName);
-        expect(result.id).toBe(patientId);
+        expect(result.firstName).toBe(testPatientObject1.firstName);
+        expect(result.id).toBe(patientIdGlobal);
+
+        return Patient.auxModels.mobilePhoneNumber
+          .get([patientDocGlobal.mobilePhoneNumber, patientDocGlobal.accountId])
+          .then((patient1AuxDoc) => {
+            expect(patient1AuxDoc.id).toBe(result.id);
+            expect(patient1AuxDoc['mobilePhoneNumber.accountId'])
+              .toEqual(expect.arrayContaining([result.mobilePhoneNumber, result.accountId]));
+          });
       });
   });
 
@@ -68,23 +77,23 @@ describe('Simple patients write test', () => {
    * - write patient2 with the same phone number
    */
   test('Write two patients with same phone number', () => {
-    console.log('creating testPatient1', testPatient1);
+    console.log('creating testPatientObject1', testPatientObject1);
 
     // write first patient and check it and its aux table doc
-    return Patient.save(testPatient1)
+    return Patient.save(testPatientObject1)
       .then((result) => {
-        patientId = result.id;
-        patientDoc = result;
-        expect(result.firstName).toBe(testPatient1.firstName);
-        expect(result.mobilePhoneNumber).toBe(testPatient1.mobilePhoneNumber);
+        patientIdGlobal = result.id;
+        patientDocGlobal = result;
+        expect(result.firstName).toBe(testPatientObject1.firstName);
+        expect(result.mobilePhoneNumber).toBe(testPatientObject1.mobilePhoneNumber);
 
         return Patient.auxModels.mobilePhoneNumber
-          .get([patientDoc.mobilePhoneNumber, patientDoc.accountId])
+          .get([patientDocGlobal.mobilePhoneNumber, patientDocGlobal.accountId])
           .then((patient1AuxDoc) => {
             expect(patient1AuxDoc.id).toBe(result.id);
 
             // write the second patient with the same mobile phone number
-            const testPatient2 = omit(testPatient1, 'id');
+            const testPatient2 = omit(testPatientObject1, 'id');
 
             return Patient.save(testPatient2)
               .then((result2) => {
@@ -99,33 +108,47 @@ describe('Simple patients write test', () => {
 
   /**
    * - write patient1
-   * - write patient2 with the same phone number
+   * - change phone number of patient 1
+   * - change phone number of patient 1 back to original
    */
-  test('Write two patients with same phone number', () => {
-    console.log('creating testPatient1', testPatient1);
+  test.only('Create patient, change phone number to diff, change back to the same again.', () => {
+    // write patient and check it and its aux table doc
+    return Patient.save(testPatientObject1)
+      .then((firstSaveResult) => {
+        patientIdGlobal = firstSaveResult.id;
+        patientDocGlobal = new Patient(Object.assign({}, firstSaveResult));
 
-    // write first patient and check it and its aux table doc
-    return Patient.save(testPatient1)
-      .then((result) => {
-        patientId = result.id;
-        patientDoc = result;
-        expect(result.firstName).toBe(testPatient1.firstName);
-        expect(result.mobilePhoneNumber).toBe(testPatient1.mobilePhoneNumber);
+        expect(firstSaveResult.firstName).toBe(testPatientObject1.firstName);
+        expect(firstSaveResult.mobilePhoneNumber).toBe(testPatientObject1.mobilePhoneNumber);
 
-        return Patient.auxModels.mobilePhoneNumber
-          .get([patientDoc.mobilePhoneNumber, patientDoc.accountId])
-          .then((patient1AuxDoc) => {
-            expect(patient1AuxDoc.id).toBe(result.id);
+        // console.log('1 firstsave result', firstSaveResult);
+        // console.log('1 merge method exists', firstSaveResult.merge);
 
-            // write the second patient with the same mobile phone number
-            const testPatient2 = omit(testPatient1, 'id');
+        // change mobile phone number of the doc to a new value and persist it
+        return firstSaveResult
+          .merge({ mobilePhoneNumber: '7780001122' })
+          .save()
+          .then((secondSaveResult) => {
+            // console.log('2 updated patient to', secondSaveResult);
+            expect(secondSaveResult.mobilePhoneNumber).toBe('7780001122');
+            expect(firstSaveResult.firstName).toBe(firstSaveResult.firstName);
+            expect(firstSaveResult.lastName).toBe(firstSaveResult.lastName);
 
-            return Patient.save(testPatient2)
-              .then((result2) => {
-                throw new Error('Should not have been able to write this patient AGAIN.', testPatient2);
-              })
-              .catch((err) => {
-                expect(err.message).toBe('Unique Field Validation Error');
+            // console.log('2 firstsave result', secondSaveResult);
+            // console.log('2 merge method exists', secondSaveResult.merge);
+
+            // change the phone number back to original and persist it
+            return secondSaveResult
+              .merge({ mobilePhoneNumber: patientDocGlobal
+                .mobilePhoneNumber })
+              .save()
+              .then((thirdSaveResult) => {
+                // console.log('updated patient again to', thirdSaveResult);
+                // console.log('patient global is', patientDocGlobal);
+
+                expect(secondSaveResult.mobilePhoneNumber).toBe(firstSaveResult.mobilePhoneNumber);
+                expect(firstSaveResult.firstName).toBe(firstSaveResult.firstName);
+                expect(firstSaveResult.lastName).toBe(firstSaveResult.lastName);
               });
           });
       });

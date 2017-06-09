@@ -119,11 +119,24 @@ export function generateAuxValidators(auxTables, doc) {
           // Create entry into this aux table
           console.log('caught error in AuxTable.get', err);
           let storeValue = doc[value];
-          if (!doc.isSaved() && value === 'id' && !storeValue) {
+          // if (!doc.isSaved() && value === 'id' && !storeValue) {
+          //   storeValue = uuid();
+          //   doc.id = storeValue;
+          // }
+
+          if (!doc.getOldValue() && value === 'id' && !storeValue) {
+            // handle create
+            console.log('>>>>>>>>>>>>> generateAuxValidators: create', doc);
             storeValue = uuid();
             doc.id = storeValue;
+          } else if (!doc.isSaved) {
+            // handle delete
+            console.log('>>>>>>>>>>>>> generateAuxValidators: delete', doc);
+          } else {
+            // handle update
+            console.log('>>>>>>>>>>>>> generateAuxValidators: update', doc);
           }
-          console.log('generateAuxValidators: getOldvalue', doc.getOldValue());
+
           // TODO handle doc updates by checking for `doc.isSaved && doc.getOldValue() !==null`
           // if (updating && fieldChanged) {
           //   AuxTable.get(oldPrimaryKey).then(update it)
