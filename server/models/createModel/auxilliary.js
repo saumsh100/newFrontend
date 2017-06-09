@@ -123,6 +123,11 @@ export function generateAuxValidators(auxTables, doc) {
             storeValue = uuid();
             doc.id = storeValue;
           }
+          console.log('generateAuxValidators: getOldvalue', doc.getOldValue());
+          // TODO handle doc updates by checking for `doc.isSaved && doc.getOldValue() !==null`
+          // if (updating && fieldChanged) {
+          //   AuxTable.get(oldPrimaryKey).then(update it)
+          // }
 
           AuxTable.save({
             [primaryKey]: fieldValue,

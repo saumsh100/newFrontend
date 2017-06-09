@@ -586,6 +586,58 @@ describe('test aux tables use cases - 1 unique fields, 3 deps', () => {
         expect(result.email).toBe('justin@carecru.com');
       });
   });
+
+  // test('create TestModel, insert 2 different docs and then update one doc with existing phone number', () => {
+  //   const TestModel = createModel(TEST_MODEL, {
+  //     fname: type.string(),
+  //     mobilePhoneNumber: type.string(),
+  //     homePhoneNumber: type.string(),
+  //     email: type.string(),
+  //     accountId: type.string(),
+  //   }, {
+  //     aux: {
+  //       mobilePhoneNumber: {
+  //         value: 'id',
+  //         dependencies: ['accountId', 'email', 'homePhoneNumber'],
+  //       },
+  //     },
+  //   });
+  //
+  //   const primaryKeyNameArray = ['mobilePhoneNumber', 'accountId', 'email', 'homePhoneNumber'];
+  //   const pkField = primaryKeyNameArray.join('.');
+  //
+  //   const TestModelAux = TestModel.auxModels.mobilePhoneNumber;
+  //   return TestModel
+  //     .save({
+  //       mobilePhoneNumber: '7782422626',
+  //       homePhoneNumber: '6045700922',
+  //       email: 'sergey@carecru.com',
+  //       accountId: 'uniqueAccId',
+  //     })
+  //     .then((savedDoc1) => {
+  //       expect(savedDoc1.mobilePhoneNumber).toBe('7782422626');
+  //       expect(savedDoc1.homePhoneNumber).toBe('6045700922');
+  //       expect(savedDoc1.email).toBe('sergey@carecru.com');
+  //       expect(savedDoc1.accountId).toBe('uniqueAccId');
+  //
+  //       // order of elements in the array is important here
+  //       const primaryKeyArray = ['7782422626', 'uniqueAccId', 'sergey@carecru.com', '6045700922'];
+  //
+  //       return TestModelAux
+  //         .get(primaryKeyArray)
+  //         .then((result) => {
+  //           expect(result.id).toBe(savedDoc1.id);
+  //           expect(Array.isArray(result[pkField])).toBe(true);
+  //
+  //           const sameDocAgainDiffEmail = omit(savedDoc1, ['id', 'createdAt']);
+  //           Object.assign(sameDocAgainDiffEmail, { email: 'justin@carecru.com' });
+  //           return TestModel.save(sameDocAgainDiffEmail);
+  //         });
+  //     })
+  //     .then((result) => {
+  //       expect(result.email).toBe('justin@carecru.com');
+  //     });
+  // });
 });
 
 /*
