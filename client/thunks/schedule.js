@@ -11,7 +11,7 @@ export function setAllFilters(entityKeys) {
 
       let filterModel = [];
 
-      if(key === 'services') {
+      if (key === 'services') {
         const practitioners = entities.getIn(['practitioners', 'models']);
         practitioners.map((practitioner) => {
           const practitionerIds = practitioner.get('services');

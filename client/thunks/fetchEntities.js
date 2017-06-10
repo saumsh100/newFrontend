@@ -13,7 +13,8 @@ import {
 
 import {
   showAlertTimeout
-} from '../actions/alerts';
+} from './alerts';
+
 import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequests';
 
 export function fetchEntities({ key, join, params = {}, url }) {

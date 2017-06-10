@@ -21,19 +21,19 @@ export default function HeaderButtons(props) {
         </span>
       </div>
       <div>
-        <IconButton icon="plus" onClick={(e)=>{
+        {/* <IconButton icon="plus" onClick={(e)=>{
           e.stopPropagation()
           props.showAlert({ text: 'Created An Appointment', type: 'success' });
         }}/>
         <IconButton icon="plus" onClick={(e)=>{
           e.stopPropagation()
           props.showAlert({ text: 'Failed to Update', type: 'error' });
-        }}/>
+        }}/>*/}
       </div>
     </div>
   );
 }
 
 HeaderButtons.PropTypes = {
-  reinitializeState: PropTypes.func,
+  addNewAppointment: PropTypes.func,
 };

@@ -5,29 +5,27 @@ import { handleActions } from 'redux-actions';
 export const SHOW_ALERT = 'SHOW_ALERT';
 export const HIDE_ALERT = 'HIDE_ALERT';
 
-// TODO: Use Immutable!
-// TODO: intitalValues are always null if no default provided
-const initialState = {
-  text: '',
-  icon: '',
-  type: '',
-  status: 'hidden',
-};
+const initialState = fromJS ({
+  text: null,
+  icon: null,
+  type: null,
+  status: null,
+});
 
 export default handleActions({
-  [SHOW_ALERT](state, action) {
-    return {
-      ...state,
-      ...action.alert,
-      status: 'show',
-    };
+  [SHOW_ALERT](state, {payload : { text, type }}) {
+    return state.merge({
+      text,
+      type,
+      status: 'show'
+    })
   },
 
-  [HIDE_ALERT](state, action) {
-    return {
-      ...state,
-      ...action.alert,
+  [HIDE_ALERT](state, {payload : { text, type }}) {
+    return state.merge({
+      text,
+      type,
       status: 'hide',
-    };
+    });
   },
 }, initialState);

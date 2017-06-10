@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames/bind';
-import IconButton from '../IconButton';
+import Icon from '../Icon';
 import styles from './styles.scss';
 
 class Alert extends Component {
@@ -20,6 +20,11 @@ class Alert extends Component {
       alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
     }
 
+    let iconStyle = styles.iconContainer
+    if (alert.status === 'show') {
+      iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
+    }
+
     return (
       <div className={alertStyle}>
         <div className={styles.textContainer}>
@@ -28,10 +33,10 @@ class Alert extends Component {
           </div>
           <div>{alert.text}</div>
         </div>
-        <div className={styles.iconContainer}>
-          <IconButton
+        <div className={iconStyle}>
+          <Icon
             icon="times"
-            size={0.5}
+            size={0.8}
             onClick={(e) => {
               e.stopPropagation();
               hideAlert();
@@ -43,6 +48,9 @@ class Alert extends Component {
   }
 }
 
-// TODO: PropTypes!
+Alert.propTypes = {
+  alert: PropTypes.object.required,
+  hideAlert: PropTypes.func.required,
+};
 
 export default Alert;

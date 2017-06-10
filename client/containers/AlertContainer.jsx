@@ -14,14 +14,17 @@ class AlertContainer extends Component {
 
     return (
       <Alert
-        alert={alert}
+        alert={alert.toJS()}
         hideAlert={hideAlert}
       />
     );
   }
 }
 
-// TODO: propTypes!
+AlertContainer.propTypes = {
+  alert: PropTypes.object.required,
+  hideAlert: PropTypes.func.required,
+};
 
 function mapStateToProps({ alerts }) {
   return {
