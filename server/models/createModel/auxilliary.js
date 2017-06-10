@@ -177,7 +177,7 @@ export function generateAuxValidators(auxTables, doc) {
                 });
               })
               .catch((error) => {
-                // Doesnt have one, doesn't have one, is that field required()?
+                // TODO Doesnt have one, doesn't have one, is that field required()?
                 console.log('ERROR during saving aux doc', error);
               });
           }

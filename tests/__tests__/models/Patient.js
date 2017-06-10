@@ -185,4 +185,19 @@ describe('Simple patients write test', () => {
           });
       });
   });
+
+  /**
+   * - batch create two docs with the same phone number write away
+   */
+  test.skip('batch create two docs with the same phone number write away', () => {
+    Object.assign(testPatientObject2, { mobilePhoneNumber: testPatientObject1.mobilePhoneNumber });
+    console.log('modified testPatientObject2', testPatientObject2);
+    return Patient.save([testPatientObject1, testPatientObject2], { conflict: 'error' })
+      .then(() => {
+        throw Error('Should not happen');
+      })
+      .catch((err) => {
+        expect(err.message).toBe('Unique Field Validation Error');
+      });
+  });
 });
