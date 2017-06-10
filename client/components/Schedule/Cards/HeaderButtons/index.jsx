@@ -20,7 +20,7 @@ export default function HeaderButtons(props) {
           />
         </span>
       </div>
-      {/* <div>
+      <div>
         <IconButton icon="plus" onClick={(e)=>{
           e.stopPropagation()
           props.showAlert({ text: 'Created An Appointment', type: 'success' });
@@ -29,7 +29,7 @@ export default function HeaderButtons(props) {
           e.stopPropagation()
           props.showAlert({ text: 'Failed to Update', type: 'error' });
         }}/>
-      </div>*/}
+      </div>
     </div>
   );
 }

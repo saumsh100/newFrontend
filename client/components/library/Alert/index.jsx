@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import classNames from 'classNames/bind';
+import classNames from 'classnames/bind';
 import IconButton from '../IconButton';
 import styles from './styles.scss';
 
@@ -19,9 +19,9 @@ class Alert extends Component {
     if (alert.status === 'show') {
       alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
     }
+
     return (
       <div className={alertStyle}>
-
         <div className={styles.textContainer}>
           <div className={styles.title}>
             <span>{alert.type}!</span>
@@ -31,7 +31,7 @@ class Alert extends Component {
         <div className={styles.iconContainer}>
           <IconButton
             icon="times"
-            size={0.8}
+            size={0.5}
             onClick={(e) => {
               e.stopPropagation();
               hideAlert();
@@ -42,5 +42,7 @@ class Alert extends Component {
     );
   }
 }
+
+// TODO: PropTypes!
 
 export default Alert;
