@@ -10,11 +10,12 @@
 
 .topRow {
   background: #f7f7f7;
-  min-height: 115px;
-  max-height: 115px;
+  min-height: 110px;
+  max-height: 110px;
 }
 
 .headerInput {
+  border-bottom: 1.5px solid rgba(lightgrey, 0.5);
   width: 100%;
 }
 
@@ -31,19 +32,11 @@
 }
 
 .listRow {
-  margin-top: 20px;
   flex: 1;
 }
 
 .upcomingHead {
   width: 100%;
-  &::before {
-    padding-left: 0px;
-    display: block;
-    height: 5px;
-    content: '';
-    background: $primary-light-blue;
-  }
 }
 
 .users {
@@ -116,11 +109,13 @@
 
 .topInfo {
   min-width: 100%;
-  border-bottom: thin solid lightgrey;
+  border-bottom: 1.5px solid rgba(lightgrey, 0.5);
   height: 10vh;
   font-family: 'Gotham-Medium';
   font-size: 1.2em;
   color: #b4b4b5;
+  min-height: 94px;
+  max-height: 94px;
 
   span {
     color: #2e3845;
@@ -182,7 +177,6 @@
   flex-direction: column;
   position: relative;
   width: 100%;
-  border-right: thin solid lightgrey;
   max-height: 80vh;
   min-height: 80vh;
 }
@@ -294,7 +288,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-bottom: thin solid lightgrey;
+  border-left: 1.5px solid rgba(lightgrey, 0.5);
+  border-bottom: 1.5px solid rgba(lightgrey, 0.5);
 }
 
 .infoAvatar {
@@ -305,6 +300,7 @@
 
 .bottomInfo {
   flex: 1;
+  border-left: 1.5px solid rgba(lightgrey, 0.5);
 }
 
 
@@ -312,7 +308,7 @@
   position: relative;
   z-index: 0;
   overflow-y: auto;
-  max-height: calc(96vh - 230px);
+  max-height: calc(100vh - 200px);
   margin: 0;
   padding: 0;
   width: 100%;

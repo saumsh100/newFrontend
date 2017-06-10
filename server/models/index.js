@@ -125,6 +125,7 @@ OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');
 Patient.belongsTo(Family, 'family', 'familyId', 'id');
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
 Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
+Patient.hasOne(Chat, 'chat', 'id', 'patientId');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 Patient.hasMany(SentReminder, 'sentReminders', 'id', 'patientId');
@@ -189,6 +190,12 @@ Service.hasMany(Request, 'requests', 'id', 'serviceId');
  */
 
 Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
+
+/**
+ * Token Relations
+ */
+
+TextMessage.hasOne(User, 'user', 'userId', 'id');
 
 /**
  * User Relations

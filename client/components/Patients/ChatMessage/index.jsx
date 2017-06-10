@@ -39,7 +39,7 @@ class ChatMessage extends Component {
         }
       });
 
-      const map = Immutable.fromJS(this.props.chats);
+      const map = immutable.fromJS(this.props.chats);
       const selectedChat = map.filter(chat => chat.get('patientId') === id).first();
 
       if (id) {
@@ -51,8 +51,8 @@ class ChatMessage extends Component {
   }
 
   userClick(id) {
-    const map = Immutable.fromJS(this.props.chats);
-    const selectedChat = map.filter(chat => chat.get('patientId') === id).first();
+    const map = immutable.fromJS(this.props.chats);
+    const selectedChat = map.filter(chat => chat.get('patientId') === chat.patientId).first();
 
     return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
       this.props.setCurrentPatient(id, selectedChat.id);
@@ -130,12 +130,30 @@ class ChatMessage extends Component {
   }
 
   render() {
-    // const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.mobilePhoneNumber}` : null);
-    // const displayinfo = (this.props.currentPatient ? <UserInfo
-    //   currentPatient={this.props.currentPatient}
-    // /> : null);
-    const displayinfo = null;
-    const info = null;
+    const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.mobilePhoneNumber}` : null);
+    const displayinfo = (this.props.currentPatient ? <UserInfo
+      currentPatient={this.props.currentPatient}
+    /> : null);
+
+    let userPhone = null;
+    let displayAnonInfo = null;
+
+    if (this.props.selectedChat && !this.props.selectedChat.patientId) {
+      const firstMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[0]).toJS();
+
+      if (firstMessage.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
+        userPhone = firstMessage.to;
+      } else {
+        userPhone = firstMessage.from;
+      }
+
+      displayAnonInfo = <UserInfo
+        currentPatient={{
+          avatarUrl: '/images/avatar.png',
+          anonPhone: userPhone,
+        }}
+      />;
+    }
 
     const inputProps = {
       placeholder: 'Search...',
@@ -168,9 +186,6 @@ class ChatMessage extends Component {
               </Row>
               <Row className={styles.listRow}>
                 <Card className={styles.upcomingHead}>
-                  <div className={styles.header}>
-                    <CardHeader title="Messages" />
-                  </div>
                   <List className={styles.patients_list__users}>
                     <InfiniteScroll
                       loadMore={this.props.loadMore}
@@ -197,7 +212,7 @@ class ChatMessage extends Component {
           <Col xs={12} sm={8} md={8} lg={9} className={styles.messages}>
             <div className={styles.topInfo}>
               <div>
-                <span>To: </span>{info}
+                <span>To: </span>{info || userPhone}
               </div>
             </div>
             <div className={styles.main}>
@@ -208,7 +223,7 @@ class ChatMessage extends Component {
                 textMessages={this.props.textMessages}
               />
               <div className={styles.rightInfo}>
-                {displayinfo}
+                {displayinfo || displayAnonInfo}
                 <div className={styles.bottomInfo}>
 
                 </div>
@@ -227,6 +242,7 @@ ChatMessage.propTypes = {
   chats: PropTypes.object,
   patients: PropTypes.object,
   selectedChat: PropTypes.object,
+  activeAccount: PropTypes.object,
   moreData: PropTypes.bool,
   textMessages: PropTypes.object,
   loadMore: PropTypes.func.isRequired,
@@ -235,8 +251,9 @@ ChatMessage.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
+function mapStateToProps({ entities }) {
   return {
+    activeAccount: entities.getIn(['accounts', 'models']).first(),
   };
 }
 

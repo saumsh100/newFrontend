@@ -40,6 +40,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
           .orderBy('createdAt')
           .limit(TEXT_MESSAGE_LIMIT);
       },
+      user: true,
     };
   }
 
@@ -93,7 +94,10 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     chatId,
     message,
     patient,
+    userId,
   } = req.body;
+
+  console.log(userId)
 
   const mergeData = {
     lastTextMessageDate: new Date(),
@@ -106,6 +110,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
         return sequence
           .orderBy('createdAt');
       },
+      user: true,
     },
   };
 
@@ -122,7 +127,8 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
       const textMessages = {
         body: message,
         chatId,
-        to: '+17808508886',// patient.mobilePhoneNumber,
+        userId,
+        to: patient.mobilePhoneNumber,
         from: account.twilioPhoneNumber,
       };
 
@@ -149,6 +155,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
                   .then((chat) => {
                     chat.merge(mergeData).save().then((chats) => {
                       const send = normalize('chat', chats);
+                      console.log(chats)
                       io.of(namespaces.dash)
                         .in(account.id)
                         .emit('newMessage', send);
@@ -206,7 +213,6 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
     .getJoin(joinObject)
     .run()
     .then(chats => {
-      console.log(chats)
       res.send(normalize('chats', chats));
     })
     .catch(next);
@@ -233,6 +239,7 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
           .skip(parseInt(skip))
           .limit(Math.min(parseInt(limit), 100));
       },
+      user: true,
     },
   };
 
@@ -251,7 +258,12 @@ chatsRouter.put('/:_chatId/textMessages/read', checkPermissions('textMessages:up
   return TextMessage.filter({ chatId: req.params._chatId, read: false })
     .update({ read: true })
     .run()
-    .then(textMessages => res.send(normalize('textMessages', textMessages)))
+    .then(() => {
+      TextMessage.filter({ chatId: req.params._chatId })
+          .getJoin({ user: true })
+          .run()
+          .then(textMessages => res.send(normalize('textMessages', textMessages)));
+    })
     .catch(next);
 });
 

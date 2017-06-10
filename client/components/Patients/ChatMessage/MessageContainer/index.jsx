@@ -16,13 +16,22 @@ class MessageContainer extends Component {
     this.sendMessage = this.sendMessage.bind(this);
   }
 
-  sendMessage(message) {
+  sendMessage(mobilePhoneNumber, message) {
+    const accountId = this.props.activeAccount.id;
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
     const entityData = {
       message: message.message,
-      patient: this.props.currentPatient,
+      patient: this.props.currentPatient || { mobilePhoneNumber, accountId },
+      userId: decodedToken.userId,
     };
 
+    console.log(this.props.currentPatient.toJS())
+
     entityData.chatId = (this.props.selectedChat ? this.props.selectedChat.id : null);
+
+    console.log(entityData.chatId)
 
     if (!entityData.chatId) {
       this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/' })
@@ -55,17 +64,11 @@ class MessageContainer extends Component {
   render() {
     let display;
 
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-
-    const user = {
-      firstName: decodedToken.firstName,
-      lastName: decodedToken.lastName,
-    };
-
     const userAnon = {
       avatarUrl: '/images/avatar.png',
     };
+
+    let userPhone = null;
 
     if (this.props.selectedChat) {
       display = this.props.selectedChat.textMessages.map((text, i) => {
@@ -73,6 +76,8 @@ class MessageContainer extends Component {
         if (!message.get('read')) {
           this.props.updateEntityRequest({ key: 'textMessages', values: {}, url: `/api/chats/${this.props.selectedChat.id}/textMessages/read` });
         }
+
+        const user = (message.user ? message.user : { avatarUrl: '/images/Donna - Pop Up.png' })
 
         let first;
         let second;
@@ -85,8 +90,6 @@ class MessageContainer extends Component {
           lastWeek: '[Last] dddd h:mm a',
           sameElse: 'YYYY DD MM, h:mm a',
         })}</div>;
-
-        let userPhone = null;
 
         if (message.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
           userPhone = message.to;
@@ -150,7 +153,7 @@ class MessageContainer extends Component {
           <Form
             form="chatMessageForm"
             ignoreSaveButton
-            onSubmit={this.sendMessage}
+            onSubmit={this.sendMessage.bind(null, userPhone)}
           >
             <Field
               type="text"

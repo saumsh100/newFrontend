@@ -83,7 +83,7 @@ const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
-const clinicPhoneNumber = '+16479307984';
+const clinicPhoneNumber = '+17786558613';
 const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallId = uuid();
 
@@ -102,6 +102,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       id: uuid(),
       chatId,
       to: patientPhone,
+      userId: sergeyUserId,
       from: clinicPhone,
       body: 'Hey! Just testing out our new messaging service.',
       createdAt: moment(time1).subtract(3, 'days')._d,
@@ -1012,24 +1013,24 @@ const SEEDS = {
       accountId,
       patientPhoneNumber: alexPhoneNumber,
     },
-    /*{
-      id: justinChatId,
-      accountId,
-      patientId: justinPatientId,
-      patientPhoneNumber: justinPhoneNumber,
-    },
+    // {
+    //   id: justinChatId,
+    //   accountId,
+    //   patientId: justinPatientId,
+    //   patientPhoneNumber: justinPhoneNumber,
+    // },
     {
       id: sergeyChatId,
       accountId,
       patientId: sergeyPatientId,
       patientPhoneNumber: sergeyPhoneNumber,
     },
-    {
-      id: markChatId,
-      accountId,
-      patientId: markPatientId,
-      patientPhoneNumber: markPhoneNumber,
-    },*/
+    // {
+    //   id: markChatId,
+    //   accountId,
+    //   patientId: markPatientId,
+    //   patientPhoneNumber: markPhoneNumber,
+    // },
 
     ...randomChats,
   ],
@@ -1047,7 +1048,7 @@ const SEEDS = {
     //...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
-    //...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
+    ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
     //...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...randomMessages,
   ],

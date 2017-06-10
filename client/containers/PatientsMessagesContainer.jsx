@@ -82,10 +82,6 @@ class PatientsMessagesContainer extends Component {
       patients,
     } = this.props;
 
-    // chats.toArray().map((test) => {
-    //   console.log(test.toJS())
-    // })
-
     const chatOrder = chats.sort((a, b) => {
       if (!a.textMessages || !b.textMessages) {
         return 0;
@@ -104,8 +100,6 @@ class PatientsMessagesContainer extends Component {
     });
 
     const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
-
-    console.log(this.props.selectedChat)
 
     const currentPatient = (this.props.selectedChatPatient ? this.props.selectedChatPatient : patients.get(firstId));
     const currentChat = (this.props.selectedChat ? this.props.selectedChat : chatOrder.toArray()[0]);

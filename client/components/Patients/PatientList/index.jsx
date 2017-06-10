@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import jwt from 'jwt-decode';
 import _ from 'lodash';
 import { Map } from 'immutable';
 import MainContainer from './MainContainer';
@@ -37,6 +38,13 @@ class PatientList extends Component {
   }
 
   componentDidMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: `/api/accounts/${decodedToken.activeAccountId}`,
+    });
     this.props.fetchEntities({
       key: 'appointments',
       join: ['patient'],

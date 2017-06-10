@@ -5,6 +5,7 @@ const createModel = require('./createModel');
 const type = thinky.type;
 
 const User = createModel('User', {
+  avatarUrl: type.string(),
   firstName: type.string(),
   lastName: type.string(),
   username: type.string().email().required(),

@@ -7,6 +7,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const checkIsArray = require('../../../middleware/checkIsArray');
 const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
+const Chat = require('../../../models/Chat');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
@@ -161,10 +162,21 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
         return appointment.filter((request) => {
           return generateDuringFilter(request, startDate, endDate);
         });
-    } } })
+    } }, chat: {textMessages: { user: true }} })
     .run()
     .then((patients) => {
       const normPatients = normalize('patients', patients);
+
+      normPatients.entities.chats = {};
+      normPatients.entities.textMessages = {};
+
+      for (let i = 0; i < patients.length; i++) {
+        if (patients[i].chat) {
+          const chatNorm = normalize('chat', patients[i].chat);
+          normPatients.entities.chats = Object.assign(normPatients.entities.chats, chatNorm.entities.chats);
+          normPatients.entities.textMessages = Object.assign(normPatients.entities.textMessages, chatNorm.entities.textMessages);
+        }
+      }
       normPatients.entities.patients = normPatients.entities.patients || {};
       res.send(normPatients);
     })
