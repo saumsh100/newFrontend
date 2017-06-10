@@ -77,8 +77,12 @@ export function deleteEntityRequest({ key, id, url }) {
     axios.delete(url)
       .then(() => {
         dispatch(deleteEntity({ key, id }));
+        dispatch(showAlertTimeout({ text: `Deleted ${key}`, type: 'success' }));
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'error' }));
+      });
   };
 }
 
@@ -113,7 +117,7 @@ export function createEntityRequest({ key, entityData, url }) {
         dispatch(receiveEntities({ key, entities: data.entities }));
         dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'success' }));
         return data.entities;
-      });
+      }).catch(err => dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'error' })));
   };
 }
 
