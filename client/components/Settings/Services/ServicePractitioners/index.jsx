@@ -27,7 +27,6 @@ class ServicePractitioners extends Component {
     let showComponent = null;
 
     if (service) {
-
       const practitionerIds = service.get('practitioners');
 
       showComponent = (

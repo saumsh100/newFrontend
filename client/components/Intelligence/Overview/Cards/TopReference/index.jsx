@@ -10,10 +10,10 @@ class TopReference extends Component {
     } = this.props;
     return (
       <div className={styles.patients}>
-        <Item className={styles.patients__item} borderColor={borderColor} cardTitle="Top Referrers" data={data} />
-        <Item className={styles.patients__item} borderColor={borderColor} cardTitle="Most Confirmed Referrals" data={data} />
+        {/*<Item className={styles.patients__item} borderColor={borderColor} cardTitle="Top Referrers" data={data} />*/}
+        {/*<Item className={styles.patients__item} borderColor={borderColor} cardTitle="Most Confirmed Referrals" data={data} />*/}
         <Item className={styles.patients__item} borderColor={borderColor} cardTitle="Most Appointments" data={data} />
-        <Item className={styles.patients__item} borderColor={borderColor} cardTitle="Most Business" data={data} />
+        {/*<Item className={styles.patients__item} borderColor={borderColor} cardTitle="Most Business" data={data} />*/}
       </div>
     );
   }

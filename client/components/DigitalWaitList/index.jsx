@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
 import omit from 'lodash/omit';
 import { reset } from 'redux-form';
 import {
@@ -21,6 +22,7 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../thunks/fetchEntities';
+import { setSelectedWaitSpot } from '../../actions/schedule';
 import withEntitiesRequest from '../../hocs/withEntities';
 import DigitalWaitListItem from './DigitalWaitListItem';
 import AddWaitSpotForm from './AddWaitSpotForm';
@@ -37,6 +39,9 @@ class DigitalWaitList extends Component {
     this.getSuggestions = this.getSuggestions.bind(this);
     this.addWaitSpot = this.addWaitSpot.bind(this);
     this.toggleWaitSpotForm = this.toggleWaitSpotForm.bind(this);
+    this.handlePatientClick = this.handlePatientClick.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
+    this.removeWaitSpot = this.removeWaitSpot.bind(this);
   }
 
   getSuggestions(value) {
@@ -49,22 +54,60 @@ class DigitalWaitList extends Component {
   }
 
   addWaitSpot(values) {
+    const {
+      selectedWaitSpot,
+      updateEntityRequest,
+      createEntityRequest,
+      reset,
+    } = this.props;
+
     const newValues = Object.assign(
       { patientId: values.patientData.id },
       omit(values, ['patientData'])
     );
 
-    this.props.createEntityRequest({
-      key: 'waitSpots',
-      entityData: newValues,
-    });
+    if (!selectedWaitSpot) {
+      createEntityRequest({
+        key: 'waitSpots',
+        entityData: newValues,
+      });
+      reset('addWaitSpot');
+    } else {
+      const waitSpotModel = selectedWaitSpot.waitSpotModel;
+      const valuesMap = Map(newValues);
+      const modifiedWaitSpot = waitSpotModel.merge(valuesMap);
 
-    this.setState({ isAddingWaitSpot: false });
-    this.props.reset('addWaitSpot');
+      updateEntityRequest({ key: 'waitSpots', model: modifiedWaitSpot });
+      reset('editWaitSpot');
+    }
+    this.reinitializeState();
   }
 
   toggleWaitSpotForm() {
     this.setState({ isAddingWaitSpot: !this.state.isAddingWaitSpot });
+  }
+
+  reinitializeState() {
+    this.props.setSelectedWaitSpot(null);
+    this.setState({
+      isAddingWaitSpot: false,
+    });
+  }
+
+  handlePatientClick(id) {
+    this.props.setSelectedPatientId(id);
+    this.props.push('/patients/list');
+    this.reinitializeState();
+  }
+
+  removeWaitSpot(id) {
+    const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
+
+    if (confirmDelete) {
+      this.props.deleteEntityRequest({ key: 'waitSpots', id });
+    }
+
+    this.reinitializeState();
   }
 
   render() {
@@ -74,32 +117,46 @@ class DigitalWaitList extends Component {
       waitSpots,
       patients,
       isFetching,
+      setSelectedWaitSpot,
+      selectedWaitSpot,
     } = this.props;
+
+    let formName = 'addWaitSpot';
+    if (selectedWaitSpot) {
+      formName = 'editWaitSpot';
+    }
 
     return (
       <Card className={styles.reminders}>
         <DialogBox
           title="Add Patient to Waitlist"
-          active={this.state.isAddingWaitSpot}
-          onEscKeyDown={this.toggleWaitSpotForm}
-          onOverlayClick={this.toggleWaitSpotForm}
+          active={this.state.isAddingWaitSpot || !!selectedWaitSpot}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
           className={styles.modalWrapper}
           actions={[
             {
               props: { flat: true },
               component: Button,
-              onClick: this.toggleWaitSpotForm,
+              onClick: this.reinitializeState,
               label: 'CANCEL',
             },
             {
-              props: { flat: true, form: 'addWaitSpot' },
+              props: { flat: true, form: formName },
               component: RemoteSubmitButton,
-              onClick: this.toggleWaitSpotForm,
+              onClick: this.reinitializeState,
               label: 'SAVE',
             },
           ]}
         >
-          <AddWaitSpotForm onSubmit={this.addWaitSpot} getSuggestions={this.getSuggestions} />
+          <AddWaitSpotForm
+            key={formName}
+            formName={formName}
+            onSubmit={this.addWaitSpot}
+            getSuggestions={this.getSuggestions}
+            selectedWaitSpot={selectedWaitSpot}
+            patients={patients}
+          />
         </DialogBox>
         <div className={styles.reminders__header}>
           <CardHeader
@@ -123,6 +180,9 @@ class DigitalWaitList extends Component {
                   key={waitSpot.get('id')}
                   waitSpot={waitSpot}
                   patient={patient}
+                  setSelectedWaitSpot={setSelectedWaitSpot}
+                  handlePatientClick={this.handlePatientClick}
+                  removeWaitSpot={this.removeWaitSpot}
                 />
               );
             })}
@@ -138,12 +198,19 @@ DigitalWaitList.propTypes = {
   patients: PropTypes.object.isRequired,
   fetchEntities: PropTypes.func.isRequired,
   createEntityRequest: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
+  setSelectedPatientId: PropTypes.func.isRequired,
+  setSelectedWaitSpot: PropTypes.func.isRequired,
+  selectedWaitSpot: PropTypes.object.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, schedule }) {
   return {
+    selectedWaitSpot: schedule.toJS().selectedWaitSpot,
     patients: entities.get('patients'),
   };
 }
@@ -152,6 +219,9 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     createEntityRequest,
+    updateEntityRequest,
+    deleteEntityRequest,
+    setSelectedWaitSpot,
     reset,
   }, dispatch);
 }

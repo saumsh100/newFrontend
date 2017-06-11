@@ -13,6 +13,7 @@ const saltRounds = 10;
 
 import Reminder from '../fixtures/reminders';
 import appointmentFixtures from '../fixtures/appointments';
+import SentReminder from '../fixtures/sentReminders';
 
 
 /**
@@ -82,7 +83,9 @@ const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
-const clinicPhoneNumber = '+17786558613';
+const clinicPhoneNumber = '+16479307984';
+const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
+const recallId = uuid();
 
 const mainEnterprise = {
   id: uuid(),
@@ -96,6 +99,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
 
   return [
     {
+      id: uuid(),
       chatId,
       to: patientPhone,
       from: clinicPhone,
@@ -104,6 +108,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: clinicPhone,
       from: patientPhone,
@@ -112,6 +117,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: patientPhone,
       from: clinicPhone,
@@ -120,6 +126,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       read: true,
     },
     {
+      id: uuid(),
       chatId,
       to: clinicPhone,
       from: patientPhone,
@@ -156,6 +163,7 @@ const randomAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
 const randomChats = [];
+const randomCalls = [];
 
 for (let i = 0; i < 100; i++) {
   const id = uuid();
@@ -183,28 +191,50 @@ for (let i = 0; i < 100; i++) {
       carrier: 'sadasadsadsads',
       sin: 'dsasdasdasdadsasad',
     },
+
     isSyncedWithPMS: false,
   });
 
-  randomMessages = randomMessages.concat(genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate));
+  const callsource = (faker.random.boolean() ? 'direct' : 'website');
+
+
+  randomCalls.push({
+    id: uuid(),
+    datetime: faker.date.past(),
+    customer_phone_number: phoneNumber,
+    answered: faker.random.boolean(),
+    callsource,
+    wasApptBooked: faker.random.boolean(),
+    destinationnum: clinicPhoneNumber,
+    duration: 157,
+    first_call: true,
+  });
+
+  const newRandomMessages = genericTextMessageSeeds(chatId, phoneNumber, clinicPhoneNumber, lastDate);
+  randomMessages = randomMessages.concat(newRandomMessages);
 
 
   randomChats.push({
     id: chatId,
     accountId,
     patientId: id,
+    patientPhoneNumber: phoneNumber,
     lastTextMessageDate: lastDate,
+    lastTextMessageId: newRandomMessages[newRandomMessages.length - 1].id,
   });
 
   const appointmentTime = faker.date.future();
+  const service = (faker.random.boolean() ? serviceId : serviceId2);
 
   randomAppointments.push({
     accountId,
     startDate: moment(appointmentTime).subtract(1, 'hours')._d,
     endDate: moment(appointmentTime)._d,
     patientId: id,
-    serviceId,
+    serviceId: service,
     practitionerId,
+    isPatientConfirmed: true,
+    isCancelled: faker.random.boolean(),
     chairId,
     note: 'First',
   });
@@ -221,6 +251,11 @@ const generateDefaultServices = (_accountId) => {
     duration: 30,
   });
 
+  let second = createService({
+      name: 'Toothache',
+      duration: 30,
+  });
+
   if (_accountId === accountId) {
     first = {
       id: serviceId,
@@ -228,16 +263,18 @@ const generateDefaultServices = (_accountId) => {
       name: 'New Patient Consultation',
       duration: 30,
     };
+
+    second = {
+      id: serviceId2,
+      accountId: _accountId,
+      name: 'Toothache',
+      duration: 30,
+    };
   }
 
   return [
     first,
-
-    createService({
-      name: 'Toothache',
-      duration: 30,
-    }),
-
+    second,
     createService({
       name: 'Lost Filling',
       duration: 30,
@@ -308,7 +345,7 @@ const SEEDS = {
       startDate: recentStartTime,
       endDate: recentStartTime.add(oneHour),
       patientId: alexPatientId,
-      serviceId: serviceId2,
+      serviceId: serviceId,
       practitionerId,
       chairId,
       note: 'First',
@@ -472,7 +509,7 @@ const SEEDS = {
     {
       accountId,
       startDate: moment({ hour: 11, minute: 10 })._d,
-      endDate: moment({ hour: 22, minute: 50 })._d,
+      endDate: moment({ hour: 12, minute: 50 })._d,
       patientId: sergeyPatientId,
       serviceId,
       practitionerId,
@@ -486,7 +523,7 @@ const SEEDS = {
       startDate: moment({hour: 13, minute: 10})._d,
       endDate: moment({hour: 13, minute: 50})._d,
       patientId: justinPatientId,
-      serviceId: serviceId2,
+      serviceId: serviceId,
       practitionerId: practitionerId2,
       chairId,
       isConfirmed: false,
@@ -645,7 +682,7 @@ const SEEDS = {
       lastName: 'Bashliy',
       mobilePhoneNumber: alexPhoneNumber,
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
-      gender: 'male',
+      gender: 'female',
       status: 'Active',
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
@@ -672,6 +709,8 @@ const SEEDS = {
     },
     ...randomPatients,
   ],
+
+  Call: randomCalls,
 
   WeeklySchedule: [
     {
@@ -747,7 +786,7 @@ const SEEDS = {
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      twilioPhoneNumber: clinicPhoneNumber,
+      twilioPhoneNumber: '+14243638279',
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: mainEnterprise.id,
@@ -869,8 +908,10 @@ const SEEDS = {
       accountId,
       firstName: 'Chelsea',
       lastName: 'Mansfield',
+      type: 'Dentist',
       weeklyScheduleId: weeklyScheduleId2,
       isCustomSchedule: true,
+      isActive: true,
       // services: [],
     },
     {
@@ -878,8 +919,10 @@ const SEEDS = {
       accountId,
       firstName: 'Perry',
       lastName: 'Cox',
+      type: 'Hygienist',
       weeklyScheduleId: weeklyScheduleId3,
       isCustomSchedule: true,
+      isActive: true,
       // services: [],
     },
     {
@@ -964,36 +1007,40 @@ const SEEDS = {
   ],
 
   Chat: [
-    {
+    /*{
       id: alexChatId,
       accountId,
       patientId: alexPatientId,
+      patientPhoneNumber: alexPhoneNumber,
     },
     {
       id: justinChatId,
       accountId,
       patientId: justinPatientId,
+      patientPhoneNumber: justinPhoneNumber,
     },
     {
       id: sergeyChatId,
       accountId,
       patientId: sergeyPatientId,
+      patientPhoneNumber: sergeyPhoneNumber,
     },
     {
       id: markChatId,
       accountId,
       patientId: markPatientId,
-    },
+      patientPhoneNumber: markPhoneNumber,
+    },*/
 
     ...randomChats,
   ],
 
   TextMessage: [
-    ...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
-    ...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
+    //...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
+    //...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...randomMessages,
   ],
 
@@ -1067,6 +1114,40 @@ const SEEDS = {
   ],
 
   Reminder,
+
+  SentReminder: [
+    /*{
+      reminderId,
+      accountId,
+      createdAt: moment({hour: 13, minute: 10})._d,
+      appointmentId: appointmentId1,
+      patientId: justinPatientId,
+      primaryType: 'sms',
+      lengthSeconds: 30,
+    },*/
+
+    ...SentReminder,
+  ],
+
+  Recall: [
+    {
+      id: recallId,
+      accountId,
+      primaryType: 'sms',
+      lengthSeconds: 30,
+    },
+  ],
+
+  SentRecall: [
+    {
+      accountId,
+      recallId,
+      createdAt: moment({hour: 13, minute: 10})._d,
+      patientId: sergeyPatientId,
+      lengthSeconds: 30,
+    },
+  ],
+
 };
 
 seedDatabase(SEEDS)

@@ -26,4 +26,6 @@ exports.readEnv = envPath =>
     .split(EOL)
     .filter(l => l)
     .map(l => l.split('='))
-    .reduce((obj, [l, r]) => ((Object.assign(obj, { [l]: JSON.parse(r) })), {}));
+    .reduce((obj, [l, r]) => {
+      return Object.assign(obj, { [l]: JSON.parse(r) }), {}
+    });

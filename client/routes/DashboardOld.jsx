@@ -179,6 +179,7 @@ export default function Routes({ history }) {
               });
             }}
           />
+          /*
           <Route
             path="phone"
             getComponent={(location, callback) => {
@@ -186,7 +187,7 @@ export default function Routes({ history }) {
                 callback(null, require('../containers/PatientsPhoneContainer').default);
               });
             }}
-          />
+          />*/
         </Route>
         {/*<Route
          path="reputation"

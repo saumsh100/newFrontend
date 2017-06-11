@@ -16,7 +16,7 @@ export default function RFTextArea(props) {
 
   const { touched, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
-  const newProps = omit(props, ['input', 'meta', 'error', 'va']);
+  const newProps = omit(props, ['input', 'meta', 'error',]);
   return (
     <TextArea
       {...newProps}

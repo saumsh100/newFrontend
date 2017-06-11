@@ -27,7 +27,7 @@ function delay(t) {
 
 async function main() {
   try {
-    await computeRemindersAndSend();
+    await computeRemindersAndSend({ date: (new Date().toISOString()) });
     /*const arr = [1, 2, 3];
     for (const i of arr) {
       console.log('before', i);

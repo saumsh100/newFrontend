@@ -20,16 +20,15 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-
-        if (doc.isSyncedWithPMS) {
+        //if (doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
-            socket.emit('remove:Appointment', normalize('appointment', doc));
+            socket.emit('remove:Appointment', doc.id);
           } else if (isCreated(doc)) {
             socket.emit('create:Appointment', normalize('appointment', doc));
           } else {
             socket.emit('update:Appointment', normalize('appointment', doc));
           }
-        }
+        //}
       });
     });
 
@@ -46,10 +45,12 @@ function runDashboardFeeds(socket) {
 
         if (doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
-            socket.emit('remove:Patient', normalize('patient', doc));
+            socket.emit('remove:Patient', doc.id);
           } else if (isCreated(doc)) {
+            console.log('sync.feed.create', doc);
             socket.emit('create:Patient', normalize('patient', doc));
           } else {
+            console.log('sync.feed.update', doc);
             socket.emit('update:Patient', normalize('patient', doc));
           }
         }
@@ -66,12 +67,13 @@ function runDashboardFeeds(socket) {
       setupFeedShutdown(socket, feed);
 
       feed.each((error, doc) => {
-        // console.log('[[INFO]] accountId', accountIdFromSocket);
         if (error) throw new Error('Feed error');
-        if (doc.getOldValue() === null) {
-          // console.log('[[INFO]] sending', doc);
-          console.log('request added');
-          socket.emit('addRequest', doc);
+        if (isDeleted(doc)) {
+          socket.emit('remove:Request', doc.id);
+        } else if (isCreated(doc)) {
+          socket.emit('create:Request', normalize('request', doc));
+        } else {
+          socket.emit('update:Request', normalize('request', doc));
         }
       });
     });

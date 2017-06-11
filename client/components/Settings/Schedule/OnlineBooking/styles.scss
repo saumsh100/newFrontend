@@ -1,0 +1,33 @@
+@import '../../../../ui';
+
+.mainContainer {
+  display: inline-block;
+}
+
+.header {
+  padding-left: 15px;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-lightgrey;
+}
+
+.formContainer {
+  padding-left: 15px;
+  width: 100%;
+}
+
+.preferencesForm {
+  display: flex;
+  align-items: center;
+}
+.snippetContainer {
+  display: inline-block;
+  padding-left: 15px;
+}
+
+.label {
+  padding-top: 15px;
+  color: $primary-dark;
+  font-weight: $large-weight;
+  font-size: $medium-font;
+  padding-bottom: 5px;
+}

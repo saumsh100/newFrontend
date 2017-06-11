@@ -1,3 +1,4 @@
+
 @import "../../../../ui";
 
 .fa-envelope {
@@ -6,34 +7,41 @@
     color: darken($primary-blue, 5%);
   }
 }
+
 .fa-phone {
   color: $primary-yellow;
   &:hover {
     color: darken($primary-yellow, 5%);
   }
 }
+
 .fa-comment {
   color: $primary-color;
   &:hover {
     color: darken($primary-color, 5%);
   }
 }
+
 .reminders {
-  border-top: $card-border-size $primary-darkgrey;
+  border-top: $card-border-size $primary-green;
   height: 604px;
   margin-bottom: 20px;
+  background-color: lighten($primary-lightgrey, 2%);
   &__header {
-    padding: 0 45px 0 15px;
+    padding: 0 15px 0 15px;
+    background-color: $primary-white;
   }
   &__body {
     overflow: auto;
     max-height: 604px;
   }
 }
+
 .patients {
   border-top: 1px solid $primary-grey;
   padding: 0;
   margin: 0;
+  max-height: 555px;
   &__item {
     padding: 0 40px 0 15px;
     display: flex;
@@ -90,6 +98,7 @@
         margin-top: 10px;
       }
     }
+
     &_days {
       color: $primary-dark;
       padding: 2px 0;
@@ -101,6 +110,7 @@
         margin: 0 2px;
       }
     }
+
     &_img {
       width: 44px;
       border-radius: 50%;
@@ -109,7 +119,19 @@
 
     &_name {
       color: $primary-dark;
+      letter-spacing: normal;
+      &_first {
+        padding-right: 5px;
+      }
+      &:link {
+        color: $primary-dark;
+        text-decoration: none;
+      }
+      &:hover {
+        color: $primary-color;
+      }
     }
+
     &_icon {
       cursor: pointer;
       color: $primary-darkgrey;
@@ -123,4 +145,8 @@
       }
     }
   }
+}
+
+.modalWrapper {
+  //padding: 20px;
 }

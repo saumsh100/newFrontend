@@ -1,6 +1,7 @@
 
+import moment from 'moment';
 import { r } from '../../config/thinky';
-import { Appointment } from '../../models';
+import { Appointment, SentReminder } from '../../models';
 
 // Made an effort to throw all easily testable functions into here
 
@@ -14,6 +15,7 @@ import { Appointment } from '../../models';
  * @param date
  */
 export async function getAppointmentsFromReminder({ reminder, date }) {
+  console.log('date', date);
   const start = r.ISO8601(date);
   const end = start.add(reminder.lengthSeconds);
   const appointments = await Appointment
@@ -21,6 +23,10 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
     .filter(r.row('startDate').during(start, end))
     .getJoin({ patient: true, sentReminders: true })
     .run();
+
+  appointments.forEach((a) => {
+    console.log('appointment startDate', a.startDate);
+  });
 
   // .getJoin().filter() does not work in order, therefore we gotta filter after the fetch
   return appointments.filter(appointment => shouldSendReminder({ appointment, reminder }));
@@ -43,4 +49,27 @@ export function shouldSendReminder({ appointment, reminder }) {
   });
 
   return patient.preferences.reminders && !reminderAlreadySentOrLongerAway;
+}
+
+/**
+ *
+ */
+export async function getValidSmsReminders({ accountId, patientId, date }) {
+  // Confirming valid SMS Reminder for patient
+  const sentReminders = await SentReminder
+    .filter({
+      accountId,
+      patientId,
+      isConfirmed: false,
+      primaryType: 'sms',
+    })
+    .orderBy('createdAt')
+    .getJoin({ appointment: true })
+    .run();
+
+  return sentReminders.filter(({ appointment }) => {
+    // - if appointment is upcoming or is cancelled
+    const isAfter = moment(appointment.startDate).isAfter(date);
+    return !appointment.isCancelled && isAfter ;
+  });
 }

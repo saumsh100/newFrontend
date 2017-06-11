@@ -6,6 +6,8 @@ import { change } from 'redux-form';
 import _ from 'lodash';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
+import styles from './styles.scss';
+
 
 function checkValues(obj) {
   const allTrue = Object.keys(obj).every((key) => {
@@ -38,8 +40,8 @@ class PractServicesForm extends Component {
 
     if (services) {
       showComponent = (
-        <div>
-          <div>All Services</div>
+        <div className={styles.formContainer}>
+          <div className={styles.allText}>All Services</div>
             <Toggle
               name="allServices"
               onChange={this.setAllServices}

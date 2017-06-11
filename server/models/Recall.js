@@ -2,9 +2,9 @@
 const { type } = require('../config/thinky');
 const createModel = require('./createModel');
 
-const PHONE = 'PHONE';
-const EMAIL = 'EMAIL';
-const SMS = 'SMS';
+const PHONE = 'phone';
+const EMAIL = 'email';
+const SMS = 'sms';
 
 const Recall = createModel('Recall', {
   accountId: type.string().uuid(4).required(),

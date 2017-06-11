@@ -65,16 +65,6 @@ export default function FiltersDisplay(props) {
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
           />
-          <FilterEntities
-            display="id"
-            label="Reminders"
-            filterKey="remindersFilter"
-            allChecked={allChecked.remindersFilter}
-            entities={entities.remindersFilter}
-            selectedFilterItem={selectedFilters.remindersFilter}
-            handleAllCheck={handleAllCheck}
-            handleEntityCheck={handleEntityCheck}
-          />
         </div>
       </div>
     </Card>

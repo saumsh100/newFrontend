@@ -49,7 +49,7 @@ class PractitionerOfficeHours extends Component{
 
     if (practitioner.get('isCustomSchedule')) {
       showComponent = (
-        <div >
+        <div className={styles.toggleContainer_hours}>
           <Header title="Weekly Schedule"/>
           <OfficeHoursForm
             key={`${practitioner.get('id')}_Hours`}

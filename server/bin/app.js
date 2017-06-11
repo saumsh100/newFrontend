@@ -26,9 +26,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Bind the routes
-
 app.use(require('../routes'));
 
 // Catch errors, log and respond to client

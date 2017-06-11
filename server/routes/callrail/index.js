@@ -21,7 +21,7 @@ callsRouter.post('/inbound/pre-call', (req, res, next) => {
 
   Patient.findByPhoneNumber(customer_phone_number)
     .then((patient) => {
-      console.log(`Received a call from ${patient.getFullName()}`);
+      console.log(`Received a call from ${patient.firstName} ${patient.lastName}`);
       callData.patientId = patient.id;
       Call.save(Object.assign({}, req.body, callData));
     })

@@ -112,6 +112,29 @@ const waitSpotSchema = () => {
   });
 };
 
+const reminderSchema = () => {
+  return new schema.Entity('reminders');
+};
+
+const recallSchema = () => {
+  return new schema.Entity('recalls');
+};
+
+const sentReminderSchema = () => {
+  return new schema.Entity('sentReminders', {
+    appointment: appointmentSchema(),
+    reminder: reminderSchema(),
+    patient: patientSchema(),
+  });
+};
+
+const sentRecallSchema = () => {
+  return new schema.Entity('sentRecalls', {
+    recall: recallSchema(),
+    patient: patientSchema(),
+  });
+};
+
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
 var _timeOffSchema = timeOffSchema();
@@ -137,6 +160,8 @@ const SCHEMAS = {
   reservation: reservationSchema(),
   waitSpot: waitSpotSchema(),
   weeklySchedule: weeklyScheduleSchema(),
+  sentReminder: sentReminderSchema(),
+  sentRecall: sentRecallSchema(),
   // Collections (list/find)
   accounts: [accountSchema()],
   appointments: [appointmentSchema()],
@@ -157,6 +182,8 @@ const SCHEMAS = {
   waitSpots: [waitSpotSchema()],
   weeklySchedules: [weeklyScheduleSchema()],
   reservations: [reservationSchema()],
+  sentReminders: [sentReminderSchema()],
+  sentRecalls: [sentRecallSchema()],
 };
 
 module.exports = function normalize(key, data) {

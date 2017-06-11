@@ -125,7 +125,6 @@ function TimeOffForm(props) {
               component="DayPicker"
               name="startDate"
               label="Start Date"
-              validate={[maxLength10]}
             />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
@@ -138,7 +137,6 @@ function TimeOffForm(props) {
               component="DayPicker"
               name="endDate"
               label="End Date"
-              validate={[maxLength10]}
             />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
