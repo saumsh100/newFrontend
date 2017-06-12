@@ -92,7 +92,7 @@ class PractitionerList extends Component {
 
     return (
       <div className={styles.practMainContainer} >
-        <Col xs={2} className={styles.practListContainer}>
+        <div className={styles.practListContainer}>
           <div className={styles.modalContainer}>
             <CardHeader count={practitioners.size} title="Practitioners" />
             <IconButton
@@ -121,8 +121,8 @@ class PractitionerList extends Component {
                 />
               );
             })}
-        </Col>
-        <Col xs={10} className={styles.practDataContainer}>
+        </div>
+        <div className={styles.practDataContainer}>
           <PractitionerTabs
             key={this.props.practitionerId}
             practitioner={selectedPractitioner}
@@ -131,7 +131,7 @@ class PractitionerList extends Component {
             services={services}
             timeOffs={filteredTimeOffs}
           />
-        </Col>
+        </div>
       </div>
     );
   }

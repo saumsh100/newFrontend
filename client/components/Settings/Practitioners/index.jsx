@@ -42,9 +42,9 @@ class Practitioners extends Component {
     }
 
     return (
-      <Col xs={12}>
+      <div className={styles.practOuterContainer}>
         {showComponent}
-      </Col>
+      </div>
     );
   }
 }

@@ -7,8 +7,7 @@ const parseNum = value => value && parseInt(value);
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
-const maxLength25 = maxLength(25);
-
+const maxLength45 = maxLength(45);
 const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 
 
@@ -25,9 +24,12 @@ class ServiceDataItem extends Component {
 
     const valuesMap = Map(values);
 
-    const alert = { success: `${service.get('name')} was updated`, error: `${service.get('name')} update failed` }
-    const modifiedService = service.merge(valuesMap);
+    const alert = {
+      success: `${service.get('name')} service was updated`,
+      error: `${service.get('name')} service update failed`,
+    }
 
+    const modifiedService = service.merge(valuesMap);
     this.props.onSubmit(modifiedService, alert);
   }
 
@@ -71,7 +73,7 @@ class ServiceDataItem extends Component {
                 required
                 name="name"
                 label="Name"
-                validate={[maxLength25]}
+                validate={[maxLength45]}
               />
               <Field
                 required

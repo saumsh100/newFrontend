@@ -32,7 +32,7 @@ class PractitionerOfficeHours extends Component{
 
     const alert = {
       success: `${practitioner.get('firstName')} schedule updated.`,
-      error: `${practitioner.get('firstName')} schedule update failed.`
+      error: `${practitioner.get('firstName')} schedule update failed.`,
     };
 
     this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner, alert });
@@ -42,9 +42,15 @@ class PractitionerOfficeHours extends Component{
   }
 
   handleFormUpdate(values) {
-    const { weeklySchedule, } = this.props;
+    const { weeklySchedule, practitioner } = this.props;
     const newWeeklySchedule = weeklySchedule.merge(values);
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
+
+    const alert = {
+      success: `${practitioner.get('firstName')} schedule updated.`,
+      error: `${practitioner.get('firstName')} schedule update failed.`,
+    };
+
+    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
   }
 
   render() {

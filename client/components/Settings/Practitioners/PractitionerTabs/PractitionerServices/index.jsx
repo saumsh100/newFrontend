@@ -41,7 +41,7 @@ class PractitionerServices extends Component {
     const modifiedPractitioner = practitioner.set('services', storeServiceIds);
 
     const alert = {
-      success: `${practitioner.get('firstName')} added services.`,
+      success: `${practitioner.get('firstName')} updated services.`,
       error: `${practitioner.get('firstName')} services update failed.`,
     };
 

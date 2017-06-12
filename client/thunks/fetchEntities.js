@@ -77,7 +77,7 @@ export function deleteEntityRequest({ key, id, url }) {
     url = url || `${entity.getUrlRoot()}/${id}`;
 
     const keyStr = key.substring(0, key.length - 1);
-    
+
     axios.delete(url)
       .then(() => {
         dispatch(deleteEntity({ key, id }));

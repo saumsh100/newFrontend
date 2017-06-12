@@ -73,7 +73,6 @@ export default function DisplayForm(props) {
         note,
       },
     };
-
   }
 
   const serviceOptions = generateEntityOptions(services, 'name');
