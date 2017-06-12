@@ -26,7 +26,8 @@ accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, e
     .catch(next)
 );
 
-accountsRouter.post('/:accountId/switch', ({ account, role, tokenId, userId, sessionData }, res, next) => {
+accountsRouter.post('/:accountId/switch', (req, res, next) => {
+  const { account, role, sessionId, userId, sessionData } = req;
   if (role !== 'SUPERADMIN') {
     return next(StatusError(403, 'Operation not permitted.'));
   }
@@ -34,13 +35,14 @@ accountsRouter.post('/:accountId/switch', ({ account, role, tokenId, userId, ses
   const accountId = account.id;
   const modelId = userId;
 
-  return Permission.filter({ accountId, userId }).run()
+  // User.hasOne(permission)
+  return Permission.filter({ userId }).run()
     .then(([permission]) => (permission || (role === 'SUPERADMIN')) || Promise.reject(StatusError(403, 'User don\'t have permissions for this account.')))
-    .then(() => UserAuth.updateToken(tokenId, sessionData, { accountId }))
-    .then(newToken => UserAuth.signToken({
+    .then(() => UserAuth.updateSession(sessionId, sessionData, { accountId }))
+    .then(newSession => UserAuth.signToken({
       userId: modelId,
       activeAccountId: accountId,
-      tokenId: newToken.id,
+      sessionId: newSession.id,
     }))
     .then(signedToken => res.json({ token: signedToken }))
     .catch(next);

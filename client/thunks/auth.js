@@ -10,7 +10,7 @@ import socket from '../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   localStorage.setItem('token', token);
-  const { tokenId } = jwt(token);
+  const { sessionId } = jwt(token);
 
   if (invalidateSession) {
     localStorage.removeItem('session');
@@ -18,7 +18,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
 
   const getSession = () => {
     const cachedValue = localStorage.getItem('session');
-
     return cachedValue ?
       (Promise.resolve(JSON.parse(cachedValue))) :
       (axios.get('/api/users/me').then(({ data }) => data));
@@ -26,11 +25,18 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
 
   return getSession()
     .then((session) => {
-      const userSession = { ...session, tokenId };
+      const userSession = { ...session, sessionId };
       localStorage.setItem('session', JSON.stringify(userSession));
       console.log('userSession', userSession);
       dispatch(loginSuccess(userSession));
       return userSession;
+    })
+    .catch((err) => {
+      // Catch 401 from /api/users/me and logout
+      localStorage.removeItem('token');
+      localStorage.removeItem('session');
+      dispatch(authLogout());
+      dispatch(push('/login'));
     });
 };
 
@@ -98,7 +104,7 @@ export function logout() {
     localStorage.removeItem('session');
     const { auth } = getState();
 
-    return axios.delete(`/auth/token/${auth.get('tokenId')}`)
+    return axios.delete(`/auth/session/${auth.get('sessionId')}`)
       .then(() => {
         dispatch(authLogout());
         dispatch(push('/login'));

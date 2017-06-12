@@ -34,7 +34,7 @@ router.post('/switch', checkPermissions('enterprises:read'), (req, res, next) =>
           activeAccountId: accountId,
         }).save();
       }).then(() => {
-        return UserAuth.updateToken(sessionId, sessionData, { accountId, enterpriseId })
+        return UserAuth.updateSession(sessionId, sessionData, { accountId, enterpriseId })
           .then(({ id: newSessionId }) => UserAuth.signToken({
             userId: sessionData.userId,
             sessionId: newSessionId,

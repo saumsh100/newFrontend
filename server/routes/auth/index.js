@@ -13,11 +13,11 @@ authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) 
 
 authRouter.post('/', ({ body: { username, password } }, res, next) =>
   UserAuth.login(username, password)
-    .then(({ model: user, token }) =>
-    // TODO: add AuthToken creation after loading Permissions?
+    .then(({ model: user, session }) =>
+    // TODO: add AuthSession creation after loading Permissions?
       loadPermissions(user)
         .then(permissions =>
-          token.merge({
+          session.merge({
             ...permissions,
             accountId: user.activeAccountId,
             enterpriseId: user.enterpriseId,
@@ -26,7 +26,7 @@ authRouter.post('/', ({ body: { username, password } }, res, next) =>
         // TODO: Session model should match client token
         .then(() => UserAuth.signToken({
           userId: user.id,
-          tokenId: token.id,
+          sessionId: session.id,
           activeAccountId: user.activeAccountId,
         }))
     )

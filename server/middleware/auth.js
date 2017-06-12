@@ -1,5 +1,8 @@
+
 import jwt from 'jsonwebtoken';
+import merge from 'lodash/merge';
 import { tokenSecret } from '../config/globals';
+import rolePermissions from '../config/permissions';
 import StatusError from '../util/StatusError';
 import { AuthSession } from '../models';
 
@@ -42,18 +45,19 @@ module.exports = function authMiddleware(req, res, next) {
     // We use this for activeAccountId and userId to allow controllers to fetch appropriate data
     req.token = token;
     req.decodedToken = decoded;
-    req.tokenId = decoded.tokenId;
+    req.sessionId = decoded.sessionId;
 
     const checkValidity = (message = '') => value =>
       (value || Promise.reject(StatusError(401, `Unauthorized. ${message}`)));
 
     // Load Token
-    AuthSession.get(decoded.tokenId).run()
+    AuthSession.get(decoded.sessionId).run()
       .then(checkValidity('Session Token not found.'))
       .then(({ modelId: userId, permissions, role, enterpriseId, accountId }) => {
+        const mergedPermissions = merge({}, rolePermissions[role], permissions);
         const sessionData = {
           userId,
-          permissions,
+          permissions: mergedPermissions,
           role,
           enterpriseId,
           accountId,
@@ -62,7 +66,6 @@ module.exports = function authMiddleware(req, res, next) {
         Object.assign(req, sessionData);
         req.sessionData = sessionData;
       })
-
       // TODO: Check is token expired
       .catch(e =>
         (e.name === 'DocumentNotFoundError' ?
@@ -70,7 +73,6 @@ module.exports = function authMiddleware(req, res, next) {
             e
         )
       )
-
       // Done
       .then(next)
       .catch(next);

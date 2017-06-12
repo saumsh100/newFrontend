@@ -12,7 +12,7 @@ const initialState = fromJS({
   accountId: null,
   enterprise: null,
   user: null,
-  tokenId: null,
+  sessionId: null,
 });
 
 export default handleActions({
