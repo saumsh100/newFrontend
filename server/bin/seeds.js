@@ -26,7 +26,6 @@ import SentReminder from '../fixtures/sentReminders';
  * }
  *
  */
-
 const oneHour = 1 * 60 * 60;
 const recentStartTime = r.now().add(oneHour);
 

@@ -19,6 +19,7 @@ function runSyncClientFeeds(socket) {
 
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
+            console.log('syncClientFeeds: removing appointments', doc);
             socket.emit('remove:Appointment', normalize('appointment', doc));
           } else if (isCreated(doc)) {
             socket.emit('create:Appointment', normalize('appointment', doc));

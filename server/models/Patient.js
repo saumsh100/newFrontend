@@ -40,14 +40,14 @@ const Patient = createModel('Patient', {
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
   status: type.string().enum(['Active', 'InActive']).default('Active'),
-}, {
+}/* , {
   aux: {
     mobilePhoneNumber: {
       value: 'id',
       dependencies: ['accountId'],
     },
   },
-});
+} */);
 
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
