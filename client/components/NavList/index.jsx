@@ -100,17 +100,17 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
     </div>
   );
 
-  const renderIf = (cond, render) => cond ? render() : null;
+  const renderIf = (cond, render, alt) => cond ? render() : (alt && alt() || null);
 
   return (
     <div className={styles.navListWrapper}>
       <Nav>
         {renderIf(withEnterprise, () =>
-          <MultiNavItem path="/enterprise" icon="building-o" label="Enterprise">
+          <MultiNavItem path="/enterprise" icon="building-o" label="Enterprise Dashboard">
             <SubNavItem path="/enterprise/patients" label="Patients" />
           </MultiNavItem>
         )}
-        <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
+        <SingleNavItem path="/" icon="tachometer" label={renderIf(withEnterprise, () => 'Clinic Dashboard', () => 'Dashboard')} />
         <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
           <SubNavItem path="/intelligence/business" label="Business" />
@@ -144,7 +144,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
         </MultiNavItem>
 
         {renderIf(isSuperAdmin, () =>
-          <MultiNavItem path="/admin" icon="desktop" label="Admin Panel">
+          <MultiNavItem path="/admin" icon="superpowers" label="Super Admin">
             <SubNavItem path="/admin/enterprises" label="Enterprises" />
           </MultiNavItem>
         )}

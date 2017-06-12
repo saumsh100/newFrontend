@@ -1,8 +1,9 @@
+
 import { Router } from 'express';
 import { pick } from 'lodash';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Enterprise, Account } from '../../../models';
+import { Enterprise, Account, User } from '../../../models';
 import loaders from '../../util/loaders';
 import { UserAuth } from '../../../lib/auth';
 
@@ -23,16 +24,24 @@ router.post('/', checkPermissions('enterprises:create'), (req, res, next) => {
     .catch(next);
 });
 
-router.post('/switch', checkPermissions('enterprises:read'), ({ body: { enterpriseId }, sessionData, tokenId }, res, next) => {
+router.post('/switch', checkPermissions('enterprises:read'), (req, res, next) => {
+  const { userId, body: { enterpriseId }, sessionData, sessionId } = req;
   Account.filter({ enterpriseId }).run()
-    .then(([{ id: accountId }]) => (
-      UserAuth.updateToken(tokenId, sessionData, { accountId, enterpriseId }))
-        .then(({ id: newTokenId }) => UserAuth.signToken({
-          userId: sessionData.userId,
-          tokenId: newTokenId,
-          accountId,
-        }))
-    )
+    .then(([{ id: accountId }]) => {
+      return User.get(userId).then((user) => {
+        return user.merge({
+          enterpriseId,
+          activeAccountId: accountId,
+        }).save();
+      }).then(() => {
+        return UserAuth.updateToken(sessionId, sessionData, { accountId, enterpriseId })
+          .then(({ id: newSessionId }) => UserAuth.signToken({
+            userId: sessionData.userId,
+            sessionId: newSessionId,
+            accountId,
+          }));
+      });
+    })
     .then(token => res.json({ token }))
     .catch(next);
 });

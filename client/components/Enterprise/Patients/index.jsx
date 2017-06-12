@@ -25,13 +25,6 @@ class PatientsPage extends Component {
 
     return (
       <Page>
-        {enterprises ? (
-          <select onChange={e => this.selectEnterprise(e.target.value)} value={enterpriseId}>
-            { enterprises.map(enterprise =>
-              <option value={enterprise.id}>{enterprise.name}</option>
-            ) }
-          </select>
-        ) : null}
         <Table />
       </Page>
     );

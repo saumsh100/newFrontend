@@ -18,7 +18,6 @@ export default function ShowPatientInfo(props) {
   const age = moment().diff(patient.birthDate, 'years');
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
-
   return (
     <div className={styles.patientContainer}>
       <img className={styles.patientContainer_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
@@ -30,7 +29,7 @@ export default function ShowPatientInfo(props) {
           <span>{time}</span>
         </div>
         <div className={styles.patientContainer_service}>
-          <span>{service.name}, {chair.name}</span>
+          <span>{service.name}{/*chair.name*/}</span>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { UserAuth } from '../../../lib/auth';
-import { AuthToken } from '../../../models';
+import { AuthSession } from '../../../models';
 
 const accountsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');

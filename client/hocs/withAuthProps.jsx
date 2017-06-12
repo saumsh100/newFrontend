@@ -8,10 +8,14 @@ const InnerComponent = props =>
 
 const ConnectedInnerComponent = connect((state) => {
   const session = state.auth.toJS();
-  const isSuperAdmin = session.role === 'SUPERADMIN';
-  const isEnterpriseOwner = () => isSuperAdmin;
+  const { role, enterprise } = session;
+  const isSuperAdmin = role === 'SUPERADMIN';
+  const isOwner = role === 'OWNER' || isSuperAdmin;
+  const isEnterprisePlan = !!enterprise && enterprise.plan === 'ENTERPRISE';
+  const isEnterpriseOwner = () => isEnterprisePlan && isOwner;
 
   return {
+    role,
     isAuth: session.isAuthenticated,
     isSuperAdmin,
     withEnterprise: isEnterpriseOwner(),

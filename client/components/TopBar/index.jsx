@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
+import omit from 'lodash/omit';
 import {
   AppBar,
   Avatar,
@@ -13,23 +14,45 @@ import {
   MenuItem,
   MenuSeparator,
 } from '../library';
+import withAuthProps from '../../hocs/withAuthProps';
 import styles from './styles.scss';
 
+const ROLES_MAP = {
+  SUPERADMIN: 'Super Admin',
+  OWNER: 'Clinic Owner',
+  MANAGER: 'Office Manager',
+};
+
 const UserMenu = (props) => {
+  const {
+    user,
+    role,
+    activeAccount,
+    enterprise,
+  } = props;
+
+  const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
   // TODO: create a separate container for this to load in user data from 'currentUser'
+  const businessName = enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN') ?
+    enterprise.get('name') :
+    activeAccount && activeAccount.name;
+
   return (
-    <Button flat {...props} className={styles.userMenuButton}>
+    <Button flat {...newProps} className={styles.userMenuButton}>
       <div className={styles.userMenuGreeting}>
-        <span>Hello Corina,</span>
-        <br />
-        <span className={styles.userRole}>Office Manager</span>
+        <div className={styles.greeting}>
+          Hello, {user.get('firstName')}
+        </div>
+        <div className={styles.userRole}>
+          {ROLES_MAP[role]}
+        </div>
+        <div className={styles.businessName}>
+          {businessName}
+        </div>
       </div>
       <Avatar
         className={styles.userAvatar}
-        user={{
-          avatarUrl: 'https://placeimg.com/80/80/animals',
-          firstName: 'Justin',
-        }}
+        user={user.toJS()}
       />
       <Icon icon="caret-down" />
     </Button>
@@ -65,7 +88,15 @@ class TopBar extends Component {
       accounts,
       activeAccount,
       location,
+      withEnterprise,
+      enterprise,
+      user,
+      role,
+      isAuth,
     } = this.props;
+
+    // TODO: for some reason the DashbaordApp Container renders even if not logged in...
+    if (!isAuth) return null;
 
     const topBarClassName = classNames(
       styles.topBarContainer,
@@ -118,6 +149,13 @@ class TopBar extends Component {
       );
     };
 
+    const userMenuProps = {
+      user,
+      activeAccount,
+      enterprise,
+      role,
+    };
+
     return (
       <AppBar className={topBarClassName}>
         {logoComponent}
@@ -129,7 +167,7 @@ class TopBar extends Component {
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
 
-            {activeAccount ?
+            {withEnterprise && activeAccount ?
               <li>
                 <DropdownMenu
                   labelComponent={ActiveAccountButton}
@@ -142,7 +180,7 @@ class TopBar extends Component {
             }
 
             <li>
-              <DropdownMenu labelComponent={UserMenu}>
+              <DropdownMenu labelComponent={props => <UserMenu {...props} {...userMenuProps} />}>
                 <Link to="/profile">
                   <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
                 </Link>
@@ -173,4 +211,4 @@ TopBar.propTypes = {
   }),
 };
 
-export default withRouter(TopBar);
+export default withAuthProps(withRouter(TopBar));

@@ -12,10 +12,10 @@ const { omit } = require('lodash');
 userRouter.param('userId', loaders('profile', 'User'));
 
 userRouter.get('/me', ({ userId, role, accountId, sessionData }, res) =>
-  User.get(userId).then(user =>
+  User.get(userId).getJoin({ enterprise: true }).then(user =>
     res.json({
       ...(omit(sessionData, ['permissions'])),
-
+      enterprise: user.enterprise,
       user: {
         id: user.id,
         firstName: user.firstName,

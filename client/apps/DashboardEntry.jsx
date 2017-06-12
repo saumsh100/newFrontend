@@ -23,7 +23,6 @@ const store = configure({ browserHistory });
 // TODO: move to Auth service layer?
 load()(store.dispatch).then(() => {
   const { auth } = store.getState();
-
   if (auth.get('isAuthenticated')) {
     const user = auth.get('user').toJS();
     LogRocket.identify(user.id, {

@@ -35,6 +35,8 @@ const mapStateToProps = state => ({
   isCollapsed: state.toolbar.get('isCollapsed'),
   accounts: getCollection(state, 'accounts', account => (account.enterpriseId === state.auth.get('enterpriseId'))),
   activeAccount: getModel(state, 'accounts', state.auth.get('accountId')),
+  user: state.auth.get('user'),
+  enterprise: state.auth.get('enterprise'),
 });
 
 function mapActionsToProps(dispatch) {

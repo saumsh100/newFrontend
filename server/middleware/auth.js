@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { tokenSecret } from '../config/globals';
 import StatusError from '../util/StatusError';
-import { AuthToken } from '../models';
+import { AuthSession } from '../models';
 
 function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
@@ -27,6 +27,7 @@ module.exports = function authMiddleware(req, res, next) {
   }
 
   // Try decoding token
+  // TODO: eventually we need to remove this decoding step, it's unnecessary
   try {
     jwt.decode(token, { complete: true });
   } catch (err) {
@@ -47,15 +48,14 @@ module.exports = function authMiddleware(req, res, next) {
       (value || Promise.reject(StatusError(401, `Unauthorized. ${message}`)));
 
     // Load Token
-    AuthToken.get(decoded.tokenId).run()
-      .then(checkValidity('Token not found.'))
-      .then(({ modelId: userId, permissions, role, enterpriseId, enterpriseRole, accountId }) => {
+    AuthSession.get(decoded.tokenId).run()
+      .then(checkValidity('Session Token not found.'))
+      .then(({ modelId: userId, permissions, role, enterpriseId, accountId }) => {
         const sessionData = {
           userId,
           permissions,
           role,
           enterpriseId,
-          enterpriseRole,
           accountId,
         };
 

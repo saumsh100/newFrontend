@@ -28,6 +28,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     .then((session) => {
       const userSession = { ...session, tokenId };
       localStorage.setItem('session', JSON.stringify(userSession));
+      console.log('userSession', userSession);
       dispatch(loginSuccess(userSession));
       return userSession;
     });

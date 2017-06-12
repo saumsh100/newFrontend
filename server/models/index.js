@@ -2,6 +2,7 @@
 import Account from './Account';
 import Account_Patient from './Account_Patient';
 import Appointment from './Appointment';
+import AuthSession from './AuthSession';
 import Call from './Call';
 import Chair from './Chair';
 import Chat from './Chat';
@@ -28,13 +29,12 @@ import Token from './Token';
 import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
-const AuthToken = require('./AuthToken');
-const EnterprisePermission = require('./EnterprisePermission');
 
-module.exports = {
+export {
   Account,
   Account_Patient,
   Appointment,
+  AuthSession,
   Chair,
   Chat,
   Call,
@@ -61,8 +61,6 @@ module.exports = {
   User,
   WaitSpot,
   WeeklySchedule,
-  AuthToken,
-  EnterprisePermission,
 };
 
 /**
@@ -199,6 +197,7 @@ Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
  */
 
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
+User.hasOne(Enterprise, 'enterprise', 'enterpriseId', 'id');
 
 /**
  * WaitSpot Relations
