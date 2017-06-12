@@ -1,37 +1,8 @@
 
-import { batchActions } from 'redux-batched-actions';
+import { createAction } from 'redux-actions';
+
 const SHOW_ALERT = 'SHOW_ALERT';
 const HIDE_ALERT = 'HIDE_ALERT';
 
-export function showAlert(payload) {
-  return {
-    type: SHOW_ALERT,
-    alert: {
-      text: payload.text,
-      type: payload.type,
-    },
-  };
-};
-
-export function hideAlert(payload) {
-  return {
-    type: HIDE_ALERT,
-  };
-};
-
-export function showAlertTimeout(payload) {
-  return dispatch => {
-    dispatch({
-      type: SHOW_ALERT,
-      alert: {
-        text: payload.text,
-        type: payload.type,
-      },
-    });
-   window.setTimeout(() =>{
-      dispatch({
-        type: HIDE_ALERT,
-      });
-    }, 3000);
-  };
-}
+export const showAlert = createAction(SHOW_ALERT);
+export const hideAlert = createAction(HIDE_ALERT);

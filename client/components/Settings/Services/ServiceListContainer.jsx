@@ -17,7 +17,7 @@ class ServiceListContainer extends Component {
     this.createService = this.createService.bind(this);
     this.setActive = this.setActive.bind(this);
   }
-  
+
   setActive() {
     const active = (this.state.active !== true);
     this.setState({ active });
@@ -27,7 +27,8 @@ class ServiceListContainer extends Component {
     values.name = values.name.trim();
     values.customCosts = {};
     const key = 'services';
-    this.props.createEntityRequest({ key , entityData: values })
+    const alert = { success: `${values.name} service created.`, error: `${values.name} service could not be created.` }
+    this.props.createEntityRequest({ key , entityData: values, alert })
       .then((entities) => {
         const id = Object.keys(entities[key])[0];
         this.props.setServiceId({ id });

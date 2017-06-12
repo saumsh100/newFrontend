@@ -46,6 +46,11 @@ class PractitionerList extends Component {
       serviceIds = services.toArray().map((service) => service.get('id'));
     }
 
+    const alert = {
+      success: `${values.firstName} was added as a practitioner.`,
+      error: `${values.firstName} could not be added as a practitioner.`,
+    };
+
     //creates the practitioner and then updates with all services set to true
     this.props.createEntityRequest({ key, entityData: values })
       .then((entities) => {
@@ -56,7 +61,7 @@ class PractitionerList extends Component {
         savedPrac.services = serviceIds;
         const modifiedPrac = Map(savedPrac);
 
-        this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPrac, url: `/api/practitioners/${id}` });
+        this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPrac, url: `/api/practitioners/${id}`, alert: alert });
         this.props.setPractitionerId({ id });
       });
 

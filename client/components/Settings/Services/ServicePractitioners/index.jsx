@@ -17,8 +17,10 @@ class ServicePractitioners extends Component {
           storePractitionerIds.push(id);
         }
     }
+
+    const alert = { success: `${service.get('name')} updated practitioners.`, error: `${service.get('name')} could not update practitioners.` }
     const modifiedService = service.set('practitioners', storePractitionerIds);
-    updateService(modifiedService);
+    updateService(modifiedService, alert);
   }
 
   render() {

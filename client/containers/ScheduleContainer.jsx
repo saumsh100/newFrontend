@@ -87,7 +87,6 @@ class ScheduleContainer extends React.Component {
           chairs={chairs}
           weeklySchedules={weeklySchedules}
           timeOffs={timeOffs}
-          showAlert={this.props.showAlertTimeout}
         />
       </Loader>
     );
@@ -143,7 +142,6 @@ function mapDispatchToProps(dispatch) {
     setAllFilters,
     setScheduleDate,
     selectAppointment,
-    showAlertTimeout,
   }, dispatch);
 }
 

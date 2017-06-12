@@ -21,7 +21,8 @@ class Address extends React.Component {
     values.street = values.street.trim();
     const valuesMap = Map(values);
     const modifiedAccount =activeAccount.merge(valuesMap);
-    updateEntityRequest({ key: 'accounts', model: modifiedAccount });
+    const alert = { success: 'Updated Address Information', error: 'Address Information Update Failed' };
+    updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
   }
 
   render() {

@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes} from 'react';
 import styles from './styles.scss';
 import IconButton from '../IconButton';
@@ -43,5 +44,9 @@ class CodeSnippet extends Component {
     );
   }
 }
+
+CodeSnippet.propTypes = {
+  codeSnippet: PropTypes.string,
+};
 
 export default CodeSnippet;

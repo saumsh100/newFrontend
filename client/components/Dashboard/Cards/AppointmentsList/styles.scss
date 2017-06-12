@@ -63,11 +63,25 @@
     @media screen and (max-width: 850px){
       font-size: $medium-size;
     }
+
+    &_link {
+      text-decoration: none;
+      color: $primary-dark;
+      &:hover {
+        color: $primary-color;
+      }
+    }
   }
 
   &_appTime {
     font-family: $medium-font;
+    text-decoration: none;
+    color: $primary-dark;
+    &:hover {
+      color: $primary-color;
+    }
   }
+
 
   &_service {
     @media screen and (max-width: 850px){

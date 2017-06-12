@@ -30,7 +30,12 @@ class PractitionerOfficeHours extends Component{
     const modifiedPractitioner = ((value === 'off') ?
       practitioner.set('isCustomSchedule', true) : practitioner.set('isCustomSchedule', false));
 
-    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner });
+    const alert = {
+      success: `${practitioner.get('firstName')} schedule updated.`,
+      error: `${practitioner.get('firstName')} schedule update failed.`
+    };
+
+    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner, alert });
 
     const newValue = (value === 'off') ? 'on' : 'off';
     this.setState({ value: newValue });

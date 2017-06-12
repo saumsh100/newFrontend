@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,12 +14,17 @@ class AlertContainer extends Component {
 
     return (
       <Alert
-        alert={alert}
+        alert={alert.toJS()}
         hideAlert={hideAlert}
       />
     );
   }
 }
+
+AlertContainer.propTypes = {
+  alert: PropTypes.object.required,
+  hideAlert: PropTypes.func.required,
+};
 
 function mapStateToProps({ alerts }) {
   return {

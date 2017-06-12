@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { List, Card, CardHeader, } from '../../../library';
 import RecallData from './RecallData';
 import styles from './styles.scss';
@@ -26,6 +26,10 @@ class RecallsList extends Component {
       sentRecalls,
     } = this.props;
 
+    if (!patients || !recalls || !sentRecalls) {
+      return null;
+    }
+
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
@@ -51,5 +55,11 @@ class RecallsList extends Component {
     );
   }
 }
+
+RecallsList.propTypes = {
+  patients: PropTypes.object.required,
+  recalls: PropTypes.object.required,
+  sentRecalls: PropTypes.object.required,
+};
 
 export default RecallsList;

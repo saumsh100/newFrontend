@@ -18,7 +18,8 @@ class OnlineBooking extends Component {
     const { activeAccount, updateEntityRequest } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
-    updateEntityRequest({ key: 'accounts', model: modifiedAccount });
+    const alert = { success: 'Booking Widget Preferences Updated', error: 'Booking Widget Update Failed' };
+    updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
   }
 
   render() {
@@ -58,6 +59,11 @@ class OnlineBooking extends Component {
     );
   }
 }
+
+OnlineBooking.propTypes = {
+  activeAccount: PropTypes.object.required,
+  updateEntityRequest: PropTypes.func.required,
+};
 
 function mapStateToProps({ entities }) {
   const activeAccount = entities.getIn(['accounts', 'models']).first();

@@ -10,6 +10,7 @@ import styles from './styles.scss';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
 import { setHoverRequestId } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
+import * as Actions from '../../actions/patientList';
 
 
 class RequestList extends Component {
@@ -17,6 +18,7 @@ class RequestList extends Component {
     super(props);
     this.confirmAppointment = this.confirmAppointment.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
+    this.handlePatientClick = this.handlePatientClick.bind(this);
   }
 
   confirmAppointment(request) {
@@ -50,6 +52,17 @@ class RequestList extends Component {
     console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
   }
 
+  handlePatientClick(id) {
+    const {
+      setSelectedPatientId,
+      push,
+    } = this.props;
+
+    setSelectedPatientId(id);
+    push('/patients/list');
+  }
+
+
   removeRequest(request) {
     const confirmRemove = confirm('Are you sure you want to remove this request?');
     if (confirmRemove) {
@@ -58,7 +71,12 @@ class RequestList extends Component {
   }
 
   render() {
-    const { sortedRequests, patients, services, setHoverRequestId } = this.props;
+    const {
+      sortedRequests,
+      patients,
+      services,
+      setHoverRequestId,
+    } = this.props;
 
     const showComponent = sortedRequests.length ? (
       sortedRequests.map((request) => {
@@ -72,6 +90,7 @@ class RequestList extends Component {
             confirmAppointment={this.confirmAppointment}
             removeRequest={this.removeRequest}
             setClickedId={setHoverRequestId}
+            handlePatientClick={this.handlePatientClick}
           />
         );
       })
@@ -103,6 +122,7 @@ function mapActionsToProps(dispatch) {
     createEntityRequest,
     setHoverRequestId,
     selectAppointment,
+    setSelectedPatientId: Actions.setSelectedPatientIdAction,
     push,
   }, dispatch);
 }

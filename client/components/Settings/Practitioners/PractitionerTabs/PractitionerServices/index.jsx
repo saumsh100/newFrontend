@@ -39,7 +39,13 @@ class PractitionerServices extends Component {
         }
     }
     const modifiedPractitioner = practitioner.set('services', storeServiceIds);
-    updatePractitioner(modifiedPractitioner);
+
+    const alert = {
+      success: `${practitioner.get('firstName')} added services.`,
+      error: `${practitioner.get('firstName')} services update failed.`,
+    };
+
+    updatePractitioner(modifiedPractitioner, alert);
   }
 
   render() {

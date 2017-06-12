@@ -20,7 +20,8 @@ class General extends React.Component {
     const { activeAccount, updateEntityRequest } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
-    updateEntityRequest({ key: 'accounts', model: modifiedAccount });
+    const alert = { success: 'Updated Clinic Information', error: 'Clinic Information Update Failed' };
+    updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
   }
 
   render() {
