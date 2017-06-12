@@ -66,7 +66,13 @@ export const Auth = (Model, primaryKey) => ({
    * @param {string} token
    */
   logout(sessionId) {
-    return AuthSession.get(sessionId).then(authSession => authSession.delete());
+    return AuthSession.get(sessionId)
+      .then(authSession => authSession.delete())
+      .catch(e => (
+        e.name === 'DocumentNotFoundError' ?
+          Promise.resolve(null) :
+          Promise.reject(e)
+      ));
   },
 
   /**
@@ -83,11 +89,15 @@ export const Auth = (Model, primaryKey) => ({
 
   updateSession(sessionId, session, updates) {
     // TODO: does this need to be a delete then save new?
-    return AuthSession.get(sessionId).then(
-      prevSession => prevSession.delete()
-    ).then(
-      () => AuthSession.save({ ...session, ...updates, modelId: session.userId })
-    );
+    return AuthSession.get(sessionId)
+      .then((prevSession) => {
+        prevSession.delete();
+        return prevSession;
+      })
+      .then((prevSession) => {
+        delete prevSession.id;
+        return AuthSession.save({ ...prevSession, ...updates, modelId: session.userId });
+      });
   },
 });
 

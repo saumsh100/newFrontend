@@ -17,10 +17,11 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   }
 
   const getSession = () => {
-    const cachedValue = localStorage.getItem('session');
+    /*const cachedValue = localStorage.getItem('session');
     return cachedValue ?
       (Promise.resolve(JSON.parse(cachedValue))) :
-      (axios.get('/api/users/me').then(({ data }) => data));
+      (axios.get('/api/users/me').then(({ data }) => data));*/
+    return axios.get('/api/users/me').then(({ data }) => data);
   };
 
   return getSession()

@@ -1,5 +1,6 @@
 
 import { Router } from 'express';
+import omit from 'lodash/omit';
 import { UserAuth } from '../../lib/auth';
 import loadPermissions from '../../lib/permissions';
 
@@ -16,13 +17,14 @@ authRouter.post('/', ({ body: { username, password } }, res, next) =>
     .then(({ model: user, session }) =>
     // TODO: add AuthSession creation after loading Permissions?
       loadPermissions(user)
-        .then(permissions =>
-          session.merge({
-            ...permissions,
+        .then((permission) => {
+          delete permission.id;
+          return session.merge({
+            ...permission,
             accountId: user.activeAccountId,
             enterpriseId: user.enterpriseId,
-          }).save()
-        )
+          }).save();
+        })
         // TODO: Session model should match client token
         .then(() => UserAuth.signToken({
           userId: user.id,

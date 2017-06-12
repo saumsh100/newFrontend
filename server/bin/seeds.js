@@ -851,6 +851,20 @@ const SEEDS = {
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: dsoId,
     },
+    {
+      weeklyScheduleId,
+      name: 'Another Dental',
+      street: '#202 – 2423 Crazy Horse Drive',
+      country: 'Canada',
+      state: 'BC',
+      city: 'North Vancouver',
+      zipCode: '12323',
+      //vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      //twilioPhoneNumber: clinicPhoneNumber,
+      //logo: '/images/beckett_dental.png',
+      //bookingWidgetPrimaryColor: '#f29b12',
+      enterpriseId: dsoId,
+    },
   ],
 
   Permission: [
