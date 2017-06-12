@@ -217,8 +217,6 @@ class AddNewAppointment extends Component {
 
     return (
       <div className={styles.formContainer}>
-
-
         <IconButton
           icon="times"
           onClick={reinitializeState}

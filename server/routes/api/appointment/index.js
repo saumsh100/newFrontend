@@ -29,6 +29,7 @@ function intersectingAppointments(appointments, startDate, endDate) {
       eDate.isSame(appEndDate) || eDate.isBetween(appStartDate, appEndDate)) {
       return app;
     };
+
   });
 }
 
@@ -593,7 +594,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
                 .run()
                 .then((appointments) => {
                   const splitApps = intersectingAppointments(appointments, appSplit.startDate, appSplit.endDate);
-                  if (splitApps) {
+                  if (splitApps.length !== 0) {
                     splitApps.map((interApp) => {
                       const modifiedSplitApp = interApp;
                       modifiedSplitApp.isSplit = false;

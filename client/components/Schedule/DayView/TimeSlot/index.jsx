@@ -1,9 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
 import TimeSlotColumn from './TimeSlotColumn';
-import moment from 'moment';
-
 
 export default function TimeSlot(props) {
   const {
@@ -56,7 +55,7 @@ export default function TimeSlot(props) {
         (splitAppStartDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)) ||
         (splitAppEndDate.isSame(adjacentAppEndDate)) ||
         (splitAppEndDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)))
-        && (app.id !== sApp.id) ) {
+        && (app.id !== sApp.id)) {
         return Object.assign({}, app, {
           isSplit: true,
           adjacent: true,
