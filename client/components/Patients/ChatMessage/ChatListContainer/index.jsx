@@ -21,8 +21,14 @@ class ChatListContainer extends Component {
   }
 
   render() {
+
     const everyone = (this.props.chats.size ? (this.props.chats.toArray().map((chats) => {
       const chat = JSON.parse(JSON.stringify(chats));
+
+      if (!chat.textMessages[0]) {
+        return null;
+      }
+
       const user = this.props.patients.get(chat.patientId);
       chat.user = user || {};
       chat.newMessages = 0;
@@ -30,7 +36,10 @@ class ChatListContainer extends Component {
       const length = (chat.textMessages ? chat.textMessages.length : 0);
 
       let userPhone = null;
-      const firstMessage = this.props.textMessages.get(chat.textMessages[0]).toJS();
+      let firstMessage = {};
+      if (chat.textMessages[0]) {
+        firstMessage = this.props.textMessages.get(chat.textMessages[0]).toJS();
+      }
 
       if (firstMessage.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
         userPhone = firstMessage.to;
@@ -86,6 +95,8 @@ class ChatListContainer extends Component {
 
       const avatar = (chat.user.avatarUrl ? chat.user.avatarUrl : '/images/avatar.png');
 
+      const message = (messageRecent.body.length > 111 ? `${messageRecent.body.slice(0, 111)} ...` : messageRecent.body);
+
       return (<ListItem className={userActiveClassName} onClick={this.setPatient.bind(null, chat.user.id, chat.id)} key={chat.user.id}>
         <img className={styles.users__photo}  src={avatar} alt="photo" />
         <div className={styles.users__wrapper}>
@@ -96,7 +107,7 @@ class ChatListContainer extends Component {
           </div>
           <div className={styles.users__body}>
             <div className={styles.users__text}>
-              {messageRecent.body}
+              {message}
             </div>
           </div>
         </div>
@@ -104,8 +115,6 @@ class ChatListContainer extends Component {
         {time}
       </ListItem>);
     })) : null);
-
-
 
     return <div>{everyone}</div>;
   }

@@ -1019,12 +1019,12 @@ const SEEDS = {
     //   patientId: justinPatientId,
     //   patientPhoneNumber: justinPhoneNumber,
     // },
-    {
-      id: sergeyChatId,
-      accountId,
-      patientId: sergeyPatientId,
-      patientPhoneNumber: sergeyPhoneNumber,
-    },
+    // {
+    //   id: sergeyChatId,
+    //   accountId,
+    //   patientId: sergeyPatientId,
+    //   patientPhoneNumber: sergeyPhoneNumber,
+    // },
     // {
     //   id: markChatId,
     //   accountId,
@@ -1048,7 +1048,7 @@ const SEEDS = {
     //...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
-    ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
+    // ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
     //...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...randomMessages,
   ],

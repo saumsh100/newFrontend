@@ -40,7 +40,7 @@ class ChatMessage extends Component {
       });
 
       const map = immutable.fromJS(this.props.chats);
-      const selectedChat = map.filter(chat => chat.get('patientId') === id).first();
+      const selectedChat = map.filter(chat => chat.get('patientId') === id).first() || {};
 
       if (id) {
         return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
@@ -52,7 +52,7 @@ class ChatMessage extends Component {
 
   userClick(id) {
     const map = immutable.fromJS(this.props.chats);
-    const selectedChat = map.filter(chat => chat.get('patientId') === chat.patientId).first();
+    const selectedChat = map.filter(chat => chat.get('patientId') === id).first() || {};
 
     return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
       this.props.setCurrentPatient(id, selectedChat.id);
@@ -138,7 +138,7 @@ class ChatMessage extends Component {
     let userPhone = null;
     let displayAnonInfo = null;
 
-    if (this.props.selectedChat && !this.props.selectedChat.patientId) {
+    if (this.props.selectedChat && !this.props.selectedChat.patientId && this.props.selectedChat.textMessages[0]) {
       const firstMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[0]).toJS();
 
       if (firstMessage.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
@@ -180,6 +180,7 @@ class ChatMessage extends Component {
                       inputProps={inputProps}
                       focusInputOnSuggestionClick={false}
                       getSuggestionValue={suggestion => suggestion.name}
+                      classStyles={styles.chatSearch}
                     />
                   </div>
                 </Card>

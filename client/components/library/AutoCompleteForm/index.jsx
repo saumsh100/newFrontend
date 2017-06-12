@@ -52,6 +52,8 @@ class AutoCompleteForm extends Component {
       props.className = this.props.className;
     }
 
+    props.classStyles = this.props.classStyles;
+
     props.value = this.props.value;
 
     return <Input {...props} />;

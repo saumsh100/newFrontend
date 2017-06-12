@@ -64,10 +64,10 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
 chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
   const chatMerge = {
     lastTextMessageDate: new Date(),
+    accountId: req.body.patient.accountId,
+    patientId: req.body.patient.id,
+    patientPhoneNumber: req.body.patient.mobilePhoneNumber,
   };
-
-  chatMerge.accountId = req.body.patient.accountId;
-  chatMerge.patientId = req.body.patient.id;
 
   return Chat.save(chatMerge).then((chat) => {
     const joinObject = { patient: true };
@@ -96,8 +96,6 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     patient,
     userId,
   } = req.body;
-
-  console.log(userId)
 
   const mergeData = {
     lastTextMessageDate: new Date(),

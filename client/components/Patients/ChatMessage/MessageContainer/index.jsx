@@ -27,17 +27,14 @@ class MessageContainer extends Component {
       userId: decodedToken.userId,
     };
 
-    console.log(this.props.currentPatient.toJS())
-
     entityData.chatId = (this.props.selectedChat ? this.props.selectedChat.id : null);
-
-    console.log(entityData.chatId)
 
     if (!entityData.chatId) {
       this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/' })
         .then((chat) => {
+          console.log(chat)
           entityData.chatId = Object.keys(chat.chats)[0];
-          const patientId = Object.keys(chat.patients)[0];
+          const patientId = chat.chats.patientId;
           this.props.setSelectedPatient(patientId);
           this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
             .then(() => {
@@ -134,7 +131,7 @@ class MessageContainer extends Component {
 
         return (<div key={text} className={styles.textTime}>
           {time}
-          {first}{second}{third}
+          {third}{second}{first}
         </div>);
       });
     }

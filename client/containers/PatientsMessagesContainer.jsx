@@ -48,7 +48,6 @@ class PatientsMessagesContainer extends Component {
   }
 
   setCurrentPatient(id, chatId) {
-    console.log(id, chatId);
     this.props.setSelectedPatient(id);
     this.props.setChatPatient(chatId);
   }
@@ -80,7 +79,10 @@ class PatientsMessagesContainer extends Component {
       chats,
       textMessages,
       patients,
+      selectedChatPatient,
+      selectedChat,
     } = this.props;
+
 
     const chatOrder = chats.sort((a, b) => {
       if (!a.textMessages || !b.textMessages) {
@@ -101,8 +103,17 @@ class PatientsMessagesContainer extends Component {
 
     const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
 
-    const currentPatient = (this.props.selectedChatPatient ? this.props.selectedChatPatient : patients.get(firstId));
-    const currentChat = (this.props.selectedChat ? this.props.selectedChat : chatOrder.toArray()[0]);
+    const currentPatient = (selectedChatPatient ? selectedChatPatient : patients.get(firstId));
+
+    let currentChat;
+
+    //allow for patients with not chat messages be searched and messages can be sent
+
+    currentChat = (selectedChat ? selectedChat : chatOrder.toArray()[0]);
+
+    if (!selectedChat && selectedChatPatient) {
+      currentChat = null;
+    }
 
     return (
       <ChatMessage
@@ -142,6 +153,8 @@ function mapStateToProps({ entities, currentDialog, patientList, form }) {
   const selectedChatPatient = patients.get(selectedPatientId);
   const selectedChatId = patientList.get('selectedChatId');
   const selectedChat = chats.get(selectedChatId);
+
+  const test = (selectedChat ? selectedChat.toJS() : {})
 
   return {
     textMessages: entities.getIn(['textMessages', 'models']),
