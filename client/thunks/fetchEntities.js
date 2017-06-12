@@ -12,10 +12,6 @@ import {
 } from '../actions/entities';
 import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequests';
 
-console.log('foo');
-const a = fetchEntities();
-console.log('bar');
-
 export function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {
     const { entities } = getState();
