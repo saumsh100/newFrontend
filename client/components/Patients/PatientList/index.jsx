@@ -101,21 +101,13 @@ class PatientList extends Component {
       initialUser: true,
     });
 
-    const ids = [];
-
-    this.props.appointments.toArray().forEach((appointment) => {
-      if (appointment.patientId === id) {
-        ids.push(appointment.id);
-      }
-    });
-
-    const modifiedPatient = {
+    const values = {
       isDeleted: true,
     };
 
     this.props.updateEntityRequest({
-      key: 'patients',
-      model: modifiedPatient,
+      key,
+      values,
       alert: {
         success: 'Deleted patient',
         error: 'Patient not deleted',
