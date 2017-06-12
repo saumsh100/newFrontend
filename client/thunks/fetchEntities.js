@@ -117,7 +117,7 @@ export function createEntityRequest({ key, entityData, url }) {
         dispatch(receiveEntities({ key, entities: data.entities }));
         dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'success' }));
         return data.entities;
-      }).catch(err => dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'error' })));
+      }).catch(err => dispatch(showAlertTimeout({ text: `Failed to Create ${key} `, type: 'error' })));
   };
 }
 
