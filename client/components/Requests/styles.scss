@@ -67,21 +67,29 @@
   &__nameAge{
     font-family: $medium-font;
     display: flex;
+    text-decoration: none;
+    color: red;
+
   }
 
-  &__name{
+  &__name {
     @extend .font-medium-grey;
-
     width: auto;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    &:hover {
+      color: $primary-color;
+    }
   }
 
   &__age{
     @extend .font-medium-grey;
     margin-right: 0px;
     padding-right: 0px;
+    &:hover {
+      color: $primary-color;
+    }
   }
 
   &__phoneNumber{

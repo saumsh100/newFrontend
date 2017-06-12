@@ -99,16 +99,25 @@ class AddNewAppointment extends Component {
       customBufferTime: bufferTime,
     };
 
+    let appointmentAlert = { success: "Created a new Appointment!", error: "Appointment Creation Failed" }
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
-
-      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then(() => {
-        if(selectedAppointment && selectedAppointment.request) {
-          updateEntityRequest({ key: 'requests', model: selectedAppointment.requestModel });
+      return createEntityRequest({
+        key: 'appointments',
+        entityData: newAppointment,
+        alert: appointmentAlert,
+      }).then(() => {
+        if (selectedAppointment && selectedAppointment.request) {
+          return updateEntityRequest({ key: 'requests', model: selectedAppointment.requestModel })
+            .then(() => {
+              reinitializeState();
+              reset(formName);
+            });
+        } else {
+          reinitializeState();
+          reset(formName);
         }
-        reinitializeState();
-        reset(formName);
-      }).catch(() => alert('Appointment was invalid'));
+      })
 
     } else {
       const appModel = selectedAppointment.appModel;
@@ -116,9 +125,10 @@ class AddNewAppointment extends Component {
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
 
-      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(() => {
-        reinitializeState();
-      }).catch(() => alert('Update Failed'));
+      return updateEntityRequest({ key: 'appointments', model: modifiedAppointment })
+        .then(() => {
+          reinitializeState();
+        });
     }
   }
 
@@ -252,11 +262,11 @@ function mapDispatchToProps(dispatch) {
 };
 
 AddNewAppointment.PropTypes = {
-  formName: PropTypes.string,
-  services: PropTypes.object,
-  patients: PropTypes.object,
-  chairs: PropTypes.object,
-  practitioners: PropTypes.object,
+  formName: PropTypes.string.required,
+  services: PropTypes.object.required,
+  patients: PropTypes.object.required,
+  chairs: PropTypes.object.required,
+  practitioners: PropTypes.object.required,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,

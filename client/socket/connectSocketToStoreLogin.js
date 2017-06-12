@@ -14,7 +14,7 @@ export default function connectSocketToStoreLogin(store, socket) {
 
   socket
     .emit('authenticate', { token: jwtToken })
-    .on('authenticated', () => {
+    .on('authenticated', (socket) => {
       console.log('client/socket/connectSocketToStoreLogin.js: Socket connected and authenticated');
     })
     .on('unauthorized', (msg) => {

@@ -111,6 +111,7 @@ class Dashboard extends React.Component {
                 services={services}
                 practitioners={practitioners}
                 selectAppointment={selectAppointment}
+                setSelectedPatientId={setSelectedPatientId}
                 push={push}
               />
             </Card>
@@ -188,7 +189,6 @@ function mapDispatchToProps(dispatch) {
     push,
     setSelectedPatientId: Actions.setSelectedPatientIdAction,
     selectAppointment,
-
   }, dispatch);
 }
 

@@ -37,6 +37,7 @@ class RequestListItem extends Component {
       service,
       isHovered,
       active,
+      handlePatientClick,
     } = this.props;
 
     if (!service) {
@@ -107,6 +108,8 @@ class RequestListItem extends Component {
           nameAge={data.nameAge}
           phoneNumber={data.mobilePhoneNumber}
           service={data.service}
+          id={patient.id}
+          handlePatientClick={handlePatientClick}
         />
         {showHoverComponents}
       </ListItem>

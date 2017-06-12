@@ -82,7 +82,7 @@ export function deleteEntityRequest({ key, id, url }) {
       })
       .catch(err => {
         console.log(err);
-        dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'error' }));
+        dispatch(showAlertTimeout({ text: `Delete ${key} failed`, type: 'error' }));
       });
   };
 }
@@ -107,7 +107,7 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
 }
 
 
-export function createEntityRequest({ key, entityData, url }) {
+export function createEntityRequest({ key, entityData, url, alert }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -116,9 +116,13 @@ export function createEntityRequest({ key, entityData, url }) {
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
-        dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'success' }));
+        dispatch(showAlertTimeout({ text: (alert.success || `Created ${key}`), type: 'success' }));
         return data.entities;
-      }).catch(err => dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'error' })));
+      }).catch(err => {
+          dispatch(showAlertTimeout({ text: alert.error || `Created ${key} failed`, type: 'error' }))
+          throw err;
+        }
+      );
   };
 }
 
@@ -134,7 +138,11 @@ export function updateEntityRequest({ key, model, values, url }) {
         dispatch(receiveEntities({ key, entities: data.entities }));
         dispatch(showAlertTimeout({ text: `Updated ${key}`, type: 'success' }));
         return data.entities;
-      }).catch(err => dispatch(showAlertTimeout({ text: `Update ${key} Failed`, type: 'error' })));
+      })
+      .catch(err => {
+        dispatch(showAlertTimeout({ text: `Update ${key} failed`, type: 'error' }));
+        throw err;
+      });
   };
 }
 
