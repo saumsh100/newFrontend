@@ -109,13 +109,19 @@ class PatientList extends Component {
       }
     });
 
-    this.props.deleteEntityCascade({
-      key,
-      id,
+    const modifiedPatient = {
+      isDeleted: true,
+    };
+
+    this.props.updateEntityRequest({
+      key: 'patients',
+      model: modifiedPatient,
+      alert: {
+        success: 'Deleted patient',
+        error: 'Patient not deleted',
+      },
       url: `/api/patients/${id}`,
-      cascadeKey: 'appointments',
-      ids,
-    });
+    })
   }
 
   submitSearch(value){
