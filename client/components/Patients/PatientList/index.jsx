@@ -205,7 +205,14 @@ class PatientList extends Component {
 
     const patientSearch = this.props.searchedPatients || [] ;
     let currentPatient = this.state.currentPatient;
-    const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+    let app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+    app = app.filter((appointment) => {
+      if (moment(appointment.startDate).diff(new Date()) > 0) {
+        return true;
+      }
+      return false;
+    });
+
 
     if (this.state.initialUser && appointments.toArray()[0] && !selectedPatient) {
       console.log(app, app.toArray()[0].patientId)
