@@ -15,12 +15,16 @@
   border: none;
 
   border-radius: 2px;
-  padding: .78571429em 1.5em;
-  margin: 0 .25em 0 0;
+  padding: em(12px) 1.5em;
+  margin: 0 em(5px) 0 0;
   line-height: 1em;
   text-align: center;
 
   transition: background-color .1s ease, color .1s ease;
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .default:hover {
@@ -40,6 +44,9 @@
 .color-yellow { color: $primary-white; background-color: $primary-yellow; }
 .color-yellow:hover { color: $primary-white; background-color: darken($primary-yellow, 5%); }
 
+.color-darkgrey { color: $clr-dark-grey; background-color: $clr-bg-dark-grey; }
+.color-darkgrey:hover { color: darken($clr-dark-grey, 5%); background-color: darken($clr-bg-dark-grey, 5%); }
+
 .positive { composes: color-green; }
 .negative { composes: color-red; }
 
@@ -56,7 +63,7 @@
 }
 
 .compact {
-  padding: .5em .78571429em;
+  padding: em(8px) em(14px);
 }
 
 .size-sm { font-size: 11px; }

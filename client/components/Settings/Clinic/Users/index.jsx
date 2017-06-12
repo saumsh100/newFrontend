@@ -30,32 +30,33 @@ class Users extends Component{
   }
 
   componentWillMount() {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const url = `/api/accounts/${decodedToken.activeAccountId}/users`;
-    const urlInvites = `/api/accounts/${decodedToken.activeAccountId}/invites`;
+    const { accountId, role, userId } = this.props;
+
+    const url = `/api/accounts/${accountId}/users`;
+    const urlInvites = `/api/accounts/${accountId}/invites`;
+
     this.props.fetchEntities({ url });
     this.props.fetchEntities({ url: urlInvites });
 
     this.setState({
-      userId: decodedToken.userId,
-      role: decodedToken.role,
+      yep: userId,
+      role,
     });
   }
 
   deleteInvite(id) {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const url = `/api/accounts/${decodedToken.activeAccountId}/invites/${id}`;
+    const { accountId } = this.props;
+
+    const url = `/api/accounts/${accountId}/invites/${id}`;
     this.props.deleteEntityRequest({ key: 'invites', id, url });
   }
 
   sendInvite(entityData) {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const url = `/api/accounts/${decodedToken.activeAccountId}/invites/`;
-    entityData.accountId = decodedToken.activeAccountId;
-    entityData.sendingUserId = decodedToken.userId;
+    const { accountId, userId } = this.props;
+
+    const url = `/api/accounts/${accountId}/invites/`;
+    entityData.accountId = accountId;
+    entityData.sendingUserId = userId;
 
     this.setState({
       active: false,
@@ -66,8 +67,7 @@ class Users extends Component{
   }
 
   sendEdit() {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
+    const { accountId } = this.props;
 
     this.setState({
       editActive: false,
@@ -77,7 +77,7 @@ class Users extends Component{
       role: this.state.editValue,
     };
 
-    const url = `/api/accounts/${decodedToken.activeAccountId}/permissions/${this.state.editPermissionId}`
+    const url = `/api/accounts/${accountId}/permissions/${this.state.editPermissionId}`
 
     this.props.updateEntityRequest({ key: 'accounts', values, url });
   }
@@ -239,14 +239,20 @@ Users.propTypes = {
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
+  accountId: PropTypes.string,
+  userId: PropTypes.string,
+  role: PropTypes.string,
   users: PropTypes.object,
   permissions: PropTypes.object,
   accounts: PropTypes.object,
   invites: PropTypes.object,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, auth }) {
   return {
+    accountId: auth.get('accountId'),
+    userId: auth.getIn(['user', 'id']),
+    role: auth.get('role'),
     users: entities.getIn(['users', 'models']),
     permissions: entities.getIn(['permissions', 'models']),
     accounts: entities.getIn(['accounts', 'models']),

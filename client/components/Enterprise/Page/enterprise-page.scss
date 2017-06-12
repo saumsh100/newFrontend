@@ -1,0 +1,41 @@
+@import "../../../ui.scss";
+
+$page-padding: 20px;
+
+.header {
+  font-size: $font-size;
+  border-top: solid 2px $clr-border;
+  background-color: $primary-grey;
+  line-height: 2em;
+  height: 2em;
+  padding: 0 $page-padding;
+}
+
+.header-title {
+  text-align: right;
+  text-transform: uppercase;
+  color: $inactive-color;
+}
+
+.page-container {
+  padding: 0 $page-padding $page-padding $page-padding;
+}
+
+.filter-buttons {
+  text-align: right;
+}
+
+.page-title {
+  margin: 0 10px 0 0;
+  font-size: 1.9em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.btn-add-segment {
+  vertical-align: middle;
+}
+
+.filter-container {
+  margin: em(16px) 0;
+}

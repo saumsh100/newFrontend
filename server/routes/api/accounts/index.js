@@ -1,20 +1,52 @@
+import { UserAuth } from '../../../lib/auth';
+import { AuthSession } from '../../../models';
 
 const accountsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
-const Permission = require('../../../models/Permission');
 const Invite = require('../../../models/Invite');
 const User = require('../../../models/User');
 const StatusError = require('../../../util/StatusError');
-const Account = require('../../../models/Account');
+const { Account, Permission } = require('../../../models');
 const uuid = require('uuid').v4;
-const { sendInvite } = require('../../../lib/inviteMail')
+const { sendInvite } = require('../../../lib/inviteMail');
 
 accountsRouter.param('accountId', loaders('account', 'Account'));
 accountsRouter.param('inviteId', loaders('invite', 'Invite'));
 accountsRouter.param('permissionId', loaders('permission', 'Permission'));
 
+// List of all available accounts to switch
+accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, enterpriseRole, enterpriseId, sessionData }, res, next) =>
+  (((role === 'SUPERADMIN') || (enterpriseRole === 'OWNER')) ?
+    Account.filter({ enterpriseId }).run() :
+    Account.filter({ id: accountId }).run())
+
+    .then(accounts => res.send(normalize('accounts', accounts)))
+    .catch(next)
+);
+
+accountsRouter.post('/:accountId/switch', (req, res, next) => {
+  const { account, role, sessionId, userId, sessionData } = req;
+  if (role !== 'SUPERADMIN') {
+    return next(StatusError(403, 'Operation not permitted.'));
+  }
+
+  const accountId = account.id;
+  const modelId = userId;
+
+  // User.hasOne(permission)
+  return Permission.filter({ userId }).run()
+    .then(([permission]) => (permission || (role === 'SUPERADMIN')) || Promise.reject(StatusError(403, 'User don\'t have permissions for this account.')))
+    .then(() => UserAuth.updateSession(sessionId, sessionData, { accountId }))
+    .then(newSession => UserAuth.signToken({
+      userId: modelId,
+      activeAccountId: accountId,
+      sessionId: newSession.id,
+    }))
+    .then(signedToken => res.json({ token: signedToken }))
+    .catch(next);
+});
 
 accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, next) => {
   if (req.account.id !== req.accountId) {

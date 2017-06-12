@@ -24,9 +24,9 @@ SettingsContainer.propTypes = {
   fetchEntities: PropTypes.func,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, auth }) {
   return {
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
 

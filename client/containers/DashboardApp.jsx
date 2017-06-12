@@ -23,7 +23,7 @@ function DashboardApp(props) {
   if (!isCollapsed) {
     overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
   }
-  
+
   let AppContainer = (
     <div>
       <TopBarContainer />
@@ -41,9 +41,9 @@ function DashboardApp(props) {
       </MainRegionContainer>
     </div>
   );
-  
+
   const isLoginPage = location.pathname.includes('login');
-  
+
   if (isLoginPage) {
     AppContainer = (
       <div>
@@ -51,9 +51,9 @@ function DashboardApp(props) {
       </div>
     );
   }
-  
+
   return AppContainer;
-  
+
 }
 
 DashboardApp.propTypes = {

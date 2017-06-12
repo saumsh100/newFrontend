@@ -3,7 +3,7 @@ const path = require('path');
 
 const root = path.normalize(path.join(__dirname, (process.env.BUNDLED ? '/../..' : '/..')));
 const tokenSecret = 'notsosecret';
-const tokenExpiry = '1d';
+const tokenExpiry = '30d';
 const passwordHashSaltRounds = 10;
 
 const environmentVariables = process.env;

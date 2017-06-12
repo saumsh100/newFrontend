@@ -7,9 +7,24 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const StatusError = require('../../../util/StatusError');
 const normalize = require('../normalize');
+const { omit } = require('lodash');
 
 userRouter.param('userId', loaders('profile', 'User'));
 
+userRouter.get('/me', ({ userId, role, accountId, sessionData }, res) =>
+  User.get(userId).getJoin({ enterprise: true }).then(user =>
+    res.json({
+      ...(omit(sessionData, ['permissions'])),
+      enterprise: user.enterprise,
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+      },
+    })
+  )
+);
 
 userRouter.get('/',checkPermissions('users:read'), (req, res, next) => {
   const {

@@ -1,7 +1,8 @@
+
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import globals from '../config/globals';
-import { User, Patient } from '../models';
+import { User, Patient, AuthSession } from '../models';
 
 export const error = (status, message) =>
   Promise.reject({ status, message });
@@ -21,6 +22,7 @@ export const Auth = (Model, primaryKey) => ({
    * @param {string} key
    */
   load(key) {
+    // TODO: change to the uniqueFetch helper
     return Model.filter({ [primaryKey]: key }).run()
       .then(([model]) => model);
   },
@@ -38,6 +40,9 @@ export const Auth = (Model, primaryKey) => ({
               model :
               error(401, 'Invalid Credentials')
           ))
+          // TODO: remove AuthSession creation from here ?
+          .then(() => AuthSession.save({ modelId: model.id }))
+          .then(session => ({ session, model }))
       );
   },
 
@@ -50,7 +55,24 @@ export const Auth = (Model, primaryKey) => ({
 
     return this.load(model[primaryKey])
       .then(existedModel => (!existedModel) || error(400, 'Email Already in Use'))
-      .then(() => Model.save(model));
+      .then(() => Model.save(model))
+      .then(savedModel =>
+        AuthSession.save({ modelId: savedModel.id })
+          .then(authSession => ({ savedModel, authSession }))
+      );
+  },
+
+  /**
+   * @param {string} token
+   */
+  logout(sessionId) {
+    return AuthSession.get(sessionId)
+      .then(authSession => authSession.delete())
+      .catch(e => (
+        e.name === 'DocumentNotFoundError' ?
+          Promise.resolve(null) :
+          Promise.reject(e)
+      ));
   },
 
   /**
@@ -58,10 +80,24 @@ export const Auth = (Model, primaryKey) => ({
    */
   signToken(tokenData) {
     return new Promise((fulfill, reject) => {
+      // TODO: This needs to be slowly phased out as we move towards session storage
       jwt.sign(tokenData, globals.tokenSecret, { expiresIn: globals.tokenExpiry }, (err, token) =>
         (err ? reject(err) : fulfill(token))
       );
     });
+  },
+
+  updateSession(sessionId, session, updates) {
+    // TODO: does this need to be a delete then save new?
+    return AuthSession.get(sessionId)
+      .then((prevSession) => {
+        prevSession.delete();
+        return prevSession;
+      })
+      .then((prevSession) => {
+        delete prevSession.id;
+        return AuthSession.save({ ...prevSession, ...updates, modelId: session.userId });
+      });
   },
 });
 

@@ -1,0 +1,120 @@
+@import '../../../ui.scss';
+
+.table {
+  border-collapse: collapse;
+}
+
+.th {
+  white-space: nowrap;
+  text-align: left;
+  padding: 15px 20px;
+  border-right: 1px solid $clr-table-border;
+  border-bottom: 2px solid $clr-table-border;
+  position: relative;
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.th-icon {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  color: $clr-table-header-icons;
+  font-size: 60px;
+}
+
+.th-title {
+  font-size: 14px;
+  color: $clr-dark-blue;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.th-total {
+  margin: 0 0 13px 0;
+  font-size: 19px;
+  color: $clr-table-grey;
+}
+
+.tr {
+  border-bottom: 1px solid $clr-table-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.td {
+  border-right: 1px solid $clr-table-border;
+
+  &:first-child .col-content {
+    padding-left: 0;
+    text-align: left;
+  }
+
+  &:first-child .title-container {
+    padding-left: 0;
+  }
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.col-content {
+  white-space: nowrap;
+  padding: 12px 20px;
+  color: $clr-table-grey;
+  text-align: right;
+}
+
+.order-number {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100px;
+  text-align: center;
+  height: 35px;
+  line-height: 35px;
+}
+
+.col-title-base {
+  height: 38px;
+  line-height: 38px;
+  display: inline-block;
+  color: $clr-table-light-grey;
+}
+
+.order-number-title {
+  composes: col-title-base;
+  width: 100px;
+  text-align: center;
+}
+
+.col-title {
+  composes: col-title-base;
+  text-align: right;
+
+  &:last-child {
+    width: 80px;
+  }
+}
+
+.title-container {
+  padding: 0 20px;
+  white-space: nowrap;
+}
+
+.row-title {
+  color: $color-black;
+}
+
+.col-numbers {
+  display: inline-block;
+  vertical-align: middle;
+  width: 80px;
+  font-weight: bold;
+  text-align: right;
+  line-height: 35px;
+}

@@ -1,0 +1,16 @@
+@import '../../../ui.scss';
+
+.vcard {
+  border-top: 5px solid $clr-bg-dark-grey;
+  padding: $padding-card-base;
+  background-color: $color-white;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.default-title {
+  font-size: em(18px, 14px);
+  margin: 0 0 30px 0;
+}

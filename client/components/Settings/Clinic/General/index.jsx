@@ -68,9 +68,9 @@ function mapDispatchToProps(dispatch){
   }, dispatch);
 }
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, auth }) {
   return {
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
 
