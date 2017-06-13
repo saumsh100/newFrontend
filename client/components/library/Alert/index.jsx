@@ -29,9 +29,9 @@ class Alert extends Component {
       <div className={alertStyle}>
         <div className={styles.textContainer}>
           <div className={styles.title}>
-            <span>{alert.type}!</span>
+            <span>{alert.title}!</span>
           </div>
-          <div>{alert.text}</div>
+          <div>{alert.body}</div>
         </div>
         <div className={iconStyle}>
           <Icon

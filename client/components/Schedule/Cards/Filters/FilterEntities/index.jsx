@@ -43,6 +43,10 @@ export default function FilterEntities(props) {
       <div className={styles.filter_options__title}>{label}</div>
       {showAllCheck}
       {sortedEntities.map((entity, index) => {
+        if (!entity) {
+          return null;
+        }
+
         const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
         return (
           <div key={index} className={styles.filter_options__checkLabel}>

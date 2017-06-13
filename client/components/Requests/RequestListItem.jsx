@@ -40,7 +40,7 @@ class RequestListItem extends Component {
       handlePatientClick,
     } = this.props;
 
-    if (!service) {
+    if (!service || !patient || !request) {
       return null;
     }
 

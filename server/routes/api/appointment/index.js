@@ -20,13 +20,16 @@ appointmentsRouter.param('appointmentId', loaders('appointment', 'Appointment'))
 function intersectingAppointments(appointments, startDate, endDate) {
   const sDate = moment(startDate);
   const eDate = moment(endDate);
+
   return appointments.filter((app) => {
     const appStartDate = moment(app.startDate);
     const appEndDate = moment(app.endDate);
+
     if (sDate.isSame(appStartDate) || sDate.isBetween(appStartDate, appEndDate) ||
       eDate.isSame(appEndDate) || eDate.isBetween(appStartDate, appEndDate)) {
       return app;
     };
+
   });
 }
 
@@ -591,7 +594,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
                 .run()
                 .then((appointments) => {
                   const splitApps = intersectingAppointments(appointments, appSplit.startDate, appSplit.endDate);
-                  if (splitApps) {
+                  if (splitApps.length !== 0) {
                     splitApps.map((interApp) => {
                       const modifiedSplitApp = interApp;
                       modifiedSplitApp.isSplit = false;

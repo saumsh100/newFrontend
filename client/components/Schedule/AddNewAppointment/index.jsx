@@ -99,25 +99,45 @@ class AddNewAppointment extends Component {
       customBufferTime: bufferTime,
     };
 
-    let appointmentAlert = { success: "Created a new Appointment!", error: "Appointment Creation Failed" }
+    const alertCreate = {
+      success: {
+        body: `Added a new Appointment for ${patientSelected.firstName}`,
+      },
+      error: {
+        body: 'Appointment Creation Failed',
+      },
+    };
+
+    const alertUpdate = {
+      success: {
+        body: `Updated ${patientSelected.firstName}'s Appointment`,
+      },
+      error: {
+        body: `Appointment Update for ${patientSelected.firstName} Failed`,
+      },
+    };
+
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
       return createEntityRequest({
         key: 'appointments',
         entityData: newAppointment,
-        alert: appointmentAlert,
+        alert: alertCreate,
       }).then(() => {
         if (selectedAppointment && selectedAppointment.request) {
-          return updateEntityRequest({ key: 'requests', model: selectedAppointment.requestModel })
-            .then(() => {
-              reinitializeState();
-              reset(formName);
-            });
+          return updateEntityRequest({
+            key: 'requests',
+            model: selectedAppointment.requestModel,
+            alert: alertUpdate,
+          }).then(() => {
+            reinitializeState();
+            reset(formName);
+          });
         } else {
           reinitializeState();
           reset(formName);
         }
-      })
+      });
 
     } else {
       const appModel = selectedAppointment.appModel;
@@ -125,10 +145,13 @@ class AddNewAppointment extends Component {
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
 
-      return updateEntityRequest({ key: 'appointments', model: modifiedAppointment })
-        .then(() => {
-          reinitializeState();
-        });
+      return updateEntityRequest({
+        key: 'appointments',
+        model: modifiedAppointment,
+        alert: alertUpdate,
+      }).then(() => {
+        reinitializeState();
+      });
     }
   }
 
@@ -209,8 +232,6 @@ class AddNewAppointment extends Component {
 
     return (
       <div className={styles.formContainer}>
-
-
         <IconButton
           icon="times"
           onClick={reinitializeState}

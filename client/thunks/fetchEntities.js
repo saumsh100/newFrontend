@@ -70,19 +70,26 @@ export function fetchEntitiesRequest({ id, key, join, params = {}, url }) {
   };
 }
 
-export function deleteEntityRequest({ key, id, url }) {
+export function deleteEntityRequest({ key, id, url, alert }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
     url = url || `${entity.getUrlRoot()}/${id}`;
+
+    const keyStr = key.substring(0, key.length - 1);
+    const errorText = alert ? alert.error : { body: `Delete ${keyStr} failed` };
+
     axios.delete(url)
       .then(() => {
         dispatch(deleteEntity({ key, id }));
-        dispatch(showAlertTimeout({ text: `Deleted ${key}`, type: 'success' }));
+        if (alert && alert.success) {
+          dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
+        }
       })
       .catch(err => {
         console.log(err);
-        dispatch(showAlertTimeout({ text: `Delete ${key} failed`, type: 'error' }));
+        dispatch(showAlertTimeout({ alert: errorText, type: 'error' }));
+        throw err;
       });
   };
 }
@@ -93,6 +100,7 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
     const entity = entities.get(key);
 
     url = url || `${entity.getUrlRoot()}/${id}`;
+
     axios.delete(url)
       .then(() => {
         if (cascadeKey) {
@@ -112,36 +120,45 @@ export function createEntityRequest({ key, entityData, url, alert }) {
     const { entities } = getState();
     const entity = entities.get(key);
     url = url || entity.getUrlRoot();
-    //const alertText = { text: (alert.success || `Created ${key}`), type: 'success' }
+
+    const errorText = alert ? alert.error : { body: `${key} creation failed` };
+
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
-        dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'success' }));
-        return data.entities;
-      }).catch(err => {
-          dispatch(showAlertTimeout({ text: `Created ${key} failed`, type: 'error' }))
-          throw err;
+
+        if (alert && alert.success) {
+          dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
         }
-      );
+        return data.entities;
+      })
+      .catch((err) => {
+        dispatch(showAlertTimeout({ alert: errorText, type: 'error' }));
+        throw err;
+      });
   };
 }
 
-export function updateEntityRequest({ key, model, values, url }) {
-
+export function updateEntityRequest({ key, model, values, url, alert }) {
   url = url || model.getUrlRoot();
   values = values || model.toJSON();
+
+  const errorText = alert ? alert.error : { body: `Update ${key} failed` };
 
   return (dispatch) => {
     return axios.put(url, values)
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
-        dispatch(showAlertTimeout({ text: `Updated ${key}`, type: 'success' }));
+
+        if (alert && alert.success) {
+          dispatch(showAlertTimeout({ alert: alert.success , type: 'success' }));
+        }
         return data.entities;
       })
-      .catch(err => {
-        dispatch(showAlertTimeout({ text: `Update ${key} failed`, type: 'error' }));
+      .catch((err) => {
+        dispatch(showAlertTimeout({ alert: errorText, type: 'error' }));
         throw err;
       });
   };
