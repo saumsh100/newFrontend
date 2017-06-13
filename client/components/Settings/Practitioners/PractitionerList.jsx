@@ -58,7 +58,6 @@ class PractitionerList extends Component {
     //creates the practitioner and then updates with all services set to true
     this.props.createEntityRequest({ key, entityData: values })
       .then((entities) => {
-        console.log('zzzzzzzzzzzzzzzzzzzzzz');
         const id = Object.keys(entities[key])[0];
         let savedPrac = entities[key][id];
 
