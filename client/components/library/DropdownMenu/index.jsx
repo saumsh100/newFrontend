@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import RDropdownMenu, { NestedDropdownMenu as RNestedDropdownMenu } from 'react-dd-menu';
 import Button from '../Button';
@@ -34,7 +35,7 @@ export class DropdownMenu extends Component {
   }
 
   render() {
-    const { children, className, closeOnInsideClick } = this.props;
+    const { children, className, labelProps, closeOnInsideClick } = this.props;
     const classes = classNames(className, styles.dropdownContainer);
 
     const menuOptions = {
@@ -42,7 +43,7 @@ export class DropdownMenu extends Component {
       children,
       isOpen: this.state.isOpen,
       close: this.close,
-      toggle: <this.props.labelComponent onClick={this.toggle} />,
+      toggle: <this.props.labelComponent {...labelProps} onClick={this.toggle} />,
 
       // Default
       closeOnInsideClick,
@@ -53,6 +54,14 @@ export class DropdownMenu extends Component {
     return <RDropdownMenu {...menuOptions} />;
   }
 }
+
+DropdownMenu.defaultProps = {
+  labelProps: {},
+};
+
+DropdownMenu.propTypes = {
+  labelProps: PropTypes.object,
+};
 
 export function MenuItem(props) {
   let icon = null;

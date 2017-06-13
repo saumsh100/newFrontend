@@ -21,45 +21,43 @@ const browserHistory = createBrowserHistory();
 const store = configure({ browserHistory });
 
 // TODO: move to Auth service layer?
-load()(store.dispatch);
+load()(store.dispatch).then(() => {
+  const { auth } = store.getState();
+  if (auth.get('isAuthenticated')) {
+    const user = auth.get('user').toJS();
+    LogRocket.identify(user.id, {
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.username,
+    });
 
-const { auth } = store.getState();
+    connectSocketToStoreLogin(store, socket);
+  }
 
-if (auth.get('isAuthenticated')) {
-  const token = auth.get('token').toJS();
-  LogRocket.identify(token.userId, {
-    name: `${token.firstName} ${token.lastName}`,
-    email: token.username,
-  });
+  // TODO: define globals with webpack ProvidePlugin
+  window.store = store;
+  window.browserHistory = browserHistory;
+  window.socket = socket;
+  window.moment = extendMoment(moment);
+  window.time = time;
+  window._ = _;
+  window.Immutable = Immutable;
 
-  connectSocketToStoreLogin(store, socket);
+  // We have to create global objects only once
+  // And pass them to App on render
+  const appProps = { browserHistory, store };
 
-}
+  const render = (Component) => {
+    ReactDOM.render(
+      <AppContainer>
+        <Component {...appProps} />
+      </AppContainer>,
+      document.getElementById('root')
+    );
+  };
 
-// TODO: define globals with webpack ProvidePlugin
-window.store = store;
-window.browserHistory = browserHistory;
-window.socket = socket;
-window.moment = extendMoment(moment);
-window.time = time;
-window._ = _;
-window.Immutable = Immutable;
+  render(App);
 
-// We have to create global objects only once
-// And pass them to App on render
-const appProps = { browserHistory, store };
-
-const render = (Component) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Component {...appProps} />
-    </AppContainer>,
-    document.getElementById('root')
-  );
-};
-
-document.addEventListener('DOMContentLoaded', () => render(App));
-
-if (module.hot) {
-  module.hot.accept('./Dashboard', () => render(App));
-}
+  if (module.hot) {
+    module.hot.accept('./Dashboard', () => render(App));
+  }
+});

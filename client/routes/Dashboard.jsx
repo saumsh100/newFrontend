@@ -15,10 +15,12 @@ import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
 import loadReputatuion from 'bundle-loader?lazy!./Dashboard/Reputation';
 import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
+import loadEnterprise from 'bundle-loader?lazy!./Dashboard/Enterprise';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
+import withAuthProps from '../hocs/withAuthProps';
 
-const DashboardRouter = ({ history, isAuth, isSuperAdmin }) => {
+const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   const getAuthorizedRoutes = () =>
     <div>
       <Switch>
@@ -31,6 +33,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin }) => {
         {/*<LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />*/}
         <LazyRoute path="/settings" load={loadSettings} name="settings" />
         { isSuperAdmin ? (<LazyRoute path="/admin" load={loadAdmin} name="admin" />) : null }
+        { withEnterprise ? (<LazyRoute path="/enterprise" load={loadEnterprise} name="enterprise" />) : null }
         <Route component={FourZeroFour} />
       </Switch>
     </div>;
@@ -44,6 +47,8 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin }) => {
         )}
       />
     </DashboardApp>;
+
+  console.log(withEnterprise, isAuth, isSuperAdmin);
 
   return (
     <Router history={history}>
@@ -62,14 +67,7 @@ DashboardRouter.propTypes = {
   history: PropTypes.object.isRequired,
   isAuth: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
+  withEnterprise: PropTypes.bool.isRequired,
 };
 
-const mapStoreToProps = (state) => {
-  const token = state.auth.get('token');
-
-  return {
-    isAuth: state.auth.get('isAuthenticated'),
-    isSuperAdmin: (token && token.get('role')) === 'SUPERADMIN',
-  };
-};
-export default connect(mapStoreToProps)(DashboardRouter);
+export default withAuthProps(DashboardRouter);
