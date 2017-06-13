@@ -171,7 +171,7 @@ class ChatMessage extends Component {
               <Row className={styles.topRow}>
                 <Card className={styles.headerInput}>
                   <div className={styles.header}>
-                    <CardHeader title="Chat Search" />
+                    <CardHeader title="&nbsp;" />
                   </div>
                   <div className={styles.input}>
                     <AutoCompleteForm

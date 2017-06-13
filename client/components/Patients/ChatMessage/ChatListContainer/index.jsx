@@ -82,7 +82,9 @@ class ChatListContainer extends Component {
       }
       const age = (user ? moment().diff(user.birthDate, 'years') : null);
 
-      const userDisplay = (user ? `${chat.user.firstName} ${chat.user.lastName}, ${age}` : userPhone);
+      const userDisplay = (user ? (<div className={styles.users__name}>
+        <span>{`${chat.user.firstName} ${chat.user.lastName}`}</span><span>, {`${age}`}</span>
+      </div>) : <div className={styles.users__name}> userPhone </div>);
 
       const time = <div className={styles.timeChat}>{moment(messageRecent.createdAt).calendar(null, {
         sameDay: '[Today]',
@@ -101,9 +103,7 @@ class ChatListContainer extends Component {
         <img className={styles.users__photo}  src={avatar} alt="photo" />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
-            <div className={styles.users__name}>
-              {userDisplay}
-            </div>
+            {userDisplay}
           </div>
           <div className={styles.users__body}>
             <div className={styles.users__text}>
