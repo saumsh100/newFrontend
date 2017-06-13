@@ -1,4 +1,5 @@
 
+import Alert from './Alert';
 import AppBar from './AppBar';
 import Avatar from './Avatar';
 import AutoCompleteForm from './AutoCompleteForm';
@@ -54,6 +55,7 @@ import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
 
 export {
+  Alert,
   AppBar,
   Avatar,
   AutoCompleteForm,

@@ -7,6 +7,7 @@ import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { setScheduleDate, selectAppointment } from '../actions/schedule';
+import { showAlertTimeout } from '../actions/alerts';
 
 import {
   setAllFilters,
@@ -141,7 +142,7 @@ function mapDispatchToProps(dispatch) {
     setAllFilters,
     setScheduleDate,
     selectAppointment,
-}, dispatch);
+  }, dispatch);
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

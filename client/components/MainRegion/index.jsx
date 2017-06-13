@@ -10,7 +10,7 @@ export default function MainRegion({ children, isCollapsed }) {
       styles.mainRegionContainerCollapsed :
       styles.mainRegionContainer
   );
-  
+
   return (
     <div className={mainRegionClassName}>
       {children}

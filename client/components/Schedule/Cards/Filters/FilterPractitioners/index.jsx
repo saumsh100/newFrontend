@@ -15,6 +15,9 @@ export default function FilterPractitioners(props) {
     handleEntityCheck,
   } = props;
 
+  if (!practitioners) {
+    return null;
+  }
   const colors = ['primaryColor', 'primaryYellow', 'primaryGreen', 'primaryBlueGreen' ];
   const colorLen = colors.length;
   const colorArray = [];
@@ -51,6 +54,10 @@ export default function FilterPractitioners(props) {
         {practitionersSort.map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
           const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
+
+          if (!pr) {
+            return null;
+          }
 
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>

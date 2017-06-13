@@ -135,14 +135,20 @@ export default function AppointmentForm(props) {
         </Col>
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
-          <Field
-            options={statusOptions}
-            component="DropdownSelect"
-            name="isPatientConfirmed"
-            label="Status"
-            borderColor="primaryColor"
-            disabled
-          />
+          <div className={styles.addNewAppt_col_confirmCancel}>
+            <Field
+              component="Checkbox"
+              name="isPatientConfirmed"
+              label="Patient Confirmed"
+              className={styles.addNewAppt_col_confirmCancel_label}
+            />
+            <Field
+              component="Checkbox"
+              name="isCancelled"
+              label="Patient Cancelled"
+              className={styles.addNewAppt_col_confirmCancel_label}
+            />
+          </div>
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>

@@ -8,17 +8,29 @@ class AppointmentsList extends Component {
   constructor(props) {
     super(props);
     this.handleAppointmentClick = this.handleAppointmentClick.bind(this);
+    this.handlePatientClick = this.handlePatientClick.bind(this);
+
   }
 
   handleAppointmentClick(id) {
     const {
       push,
-      selectAppointment,
-      appointments,
+      //selectAppointment,
+      //appointments,
     } = this.props;
 
     push('/schedule');
     //selectAppointment(appointments.get(id).toJS());
+  }
+
+  handlePatientClick(id) {
+    const {
+      setSelectedPatientId,
+      push,
+    } = this.props;
+
+    setSelectedPatientId(id);
+    push('/patients/list');
   }
 
   render() {
@@ -66,6 +78,7 @@ class AppointmentsList extends Component {
               service={services.get(app.serviceId)}
               //practitioner={practitioner}
               handleAppointmentClick={this.handleAppointmentClick}
+              handlePatientClick={this.handlePatientClick}
             />
           );
         })}

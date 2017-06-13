@@ -1,0 +1,91 @@
+@import '../../../ui';
+
+.alert {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  max-width: 250px;
+  width: 250px;
+  height: auto;
+  border-radius: 3px;
+  top: 70px;
+  right: -78px;
+  z-index: 5002;
+  visibility: hidden;
+  box-shadow: 10px 10px 15px -10px rgba(0, 0, 0, 0.75);
+
+  padding-left: 20px;
+  padding-bottom: 15px;
+
+  transition-timing-function: ease-in;
+  transition: 0.1s;
+  transform: translateX(0);
+}
+
+
+.title {
+  padding-top: 15px;
+  text-transform: capitalize;
+  padding-bottom: 10px;
+  font-color: $primary-dark;
+  font-size: 16px;
+  font-family: $medium-font;
+}
+.textContainer {
+  max-width: 225px;
+  word-wrap: break-word;
+}
+
+.iconContainer {
+  position: absolute;
+  color: $inactive-color;
+  cursor: pointer;
+  top: 2px;
+  right: 15px;
+  margin-left: auto;
+}
+
+.successHover {
+  &:hover {
+    color: $primary-green;
+  }
+}
+
+.errorHover {
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.alert--show--error {
+  visibility: visible;
+  opacity: 1;
+  margin-top: 0px;
+  border: 1px solid $primary-color;
+  border-left: 10px solid $primary-color;
+  background-color: $primary-white;
+
+
+  transition-timing-function: ease-out;
+  transition: 0.1s;
+  transform: translateX(-5em);
+}
+
+.alert--show--success {
+  visibility: visible;
+  opacity: 1;
+  margin-top: 0px;
+  border: 1px solid $primary-green;
+  border-left: 10px solid $primary-green;
+  background-color: $primary-white;
+
+
+  transition-timing-function: ease-out;
+  transition: 0.1s;
+  transform: translateX(-5em);
+}
+
+
+.alert--hidden {
+  visibility: hidden;
+}

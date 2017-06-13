@@ -66,10 +66,31 @@ class DigitalWaitList extends Component {
       omit(values, ['patientData'])
     );
 
+    const alertCreate = {
+      success: {
+        body: `Added wait spot for ${values.patientData.firstName}.`,
+      },
+      error: {
+        title: 'Wait Spot Error',
+        body: `Wait spot for ${values.patientData.firstName} could not be added.`,
+      },
+    };
+
+    const alertUpdate = {
+      success: {
+        body: `Updated wait spot for ${values.patientData.firstName}.`,
+      },
+      error: {
+        title: 'Wait Spot Update Error',
+        body: `Wait spot for ${values.patientData.firstName} could not updated.`,
+      },
+    };
+
     if (!selectedWaitSpot) {
       createEntityRequest({
         key: 'waitSpots',
         entityData: newValues,
+        alert: alertCreate,
       });
       reset('addWaitSpot');
     } else {
@@ -77,7 +98,11 @@ class DigitalWaitList extends Component {
       const valuesMap = Map(newValues);
       const modifiedWaitSpot = waitSpotModel.merge(valuesMap);
 
-      updateEntityRequest({ key: 'waitSpots', model: modifiedWaitSpot });
+      updateEntityRequest({
+        key: 'waitSpots',
+        model: modifiedWaitSpot,
+        alert: alertUpdate,
+      });
       reset('editWaitSpot');
     }
     this.reinitializeState();

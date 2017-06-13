@@ -65,12 +65,30 @@ class PractitionerTimeOff extends Component {
     };
 
     if (this.state.isAdding) {
-      createEntityRequest({ key: 'timeOffs', entityData: trimValues });
+      const alert = {
+        success: {
+          body: `${practitioner.get('firstName')} added a time off.`,
+        },
+        error: {
+          body: `${practitioner.get('firstName')} time off could not be added`,
+        },
+      };
+
+      createEntityRequest({ key: 'timeOffs', entityData: trimValues, alert });
     } else if (selectedTimeOff) {
       // We assume selected practitioner is
+      const alert = {
+        success: {
+          body: `${practitioner.get('firstName')} updated a time off.`,
+        },
+        error: {
+          body: `${practitioner.get('firstName')} time off could not be updated`,
+        },
+      };
+
       const valuesMap = Map(trimValues);
       const modifiedAccount = selectedTimeOff.merge(valuesMap);
-      updateEntityRequest({ key: 'timeOffs', model: modifiedAccount });
+      updateEntityRequest({ key: 'timeOffs', model: modifiedAccount, alert });
     } else {
       throw new Error('Form was submitted without added or selected time off');
     }
