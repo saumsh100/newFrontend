@@ -13,6 +13,7 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
+import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
 import enterpriseFixtures, {
@@ -57,6 +58,7 @@ const alexPatientId = uuid();
 const alexPatientId2 = uuid();
 const markPatientId = uuid();
 const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
+const recallPatientId = '4fcab035-b72c-4f7a-ad73-09465cbf5654';
 const sergeyPatientId = uuid();
 
 const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
@@ -661,6 +663,21 @@ const SEEDS = {
       familyId: justinFamilyId,
     },
     {
+      id: recallPatientId,
+      accountId: accountId2,
+      avatarUrl: faker.image.avatar(),
+      firstName: 'Dylan',
+      lastName: 'Sharp',
+      email: 'justin.d.sharp@gmail.com',
+      mobilePhoneNumber: '+17804862090',
+      birthDate: moment({year: 1993, month: 6, day: 15})._d,
+      gender: 'male',
+      language: 'English',
+      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
+      status: 'Active',
+      isSyncedWithPMS: false,
+    },
+    {
       id: sergeyPatientId,
       accountId,
       avatarUrl: faker.image.avatar(),
@@ -1167,6 +1184,7 @@ const SEEDS = {
     },
   ],
 
+  Recall,
   Reminder,
 
   SentReminder: [
@@ -1183,25 +1201,7 @@ const SEEDS = {
     ...SentReminder,
   ],
 
-  Recall: [
-    {
-      id: recallId,
-      accountId,
-      primaryType: 'sms',
-      lengthSeconds: 30,
-    },
-  ],
-
-  SentRecall: [
-    {
-      accountId,
-      recallId,
-      createdAt: moment({hour: 13, minute: 10})._d,
-      patientId: sergeyPatientId,
-      lengthSeconds: 30,
-    },
-  ],
-
+  SentRecall: [],
 };
 
 seedDatabase(SEEDS)

@@ -73,6 +73,7 @@ Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Service, 'services', 'id', 'accountId');
 Account.hasMany(Practitioner, 'practitioners', 'id', 'accountId');
 Account.hasMany(Reminder, 'reminders', 'id', 'accountId');
+Account.hasMany(Recall, 'recalls', 'id', 'accountId');
 Account.hasAndBelongsToMany(Patient, 'patients', 'id', 'id');
 //Account.hasMany(User, 'users', 'id', 'activeAccountId');
 

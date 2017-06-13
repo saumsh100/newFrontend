@@ -2,6 +2,7 @@
 // TODO: replace this by importing account seeds and pulling
 const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
 const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
+const recallPatientId = '4fcab035-b72c-4f7a-ad73-09465cbf5654';
 const serviceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId = '4f439ff8-c55d-4423-9316-a41240c4d329';
 const chairId = '7f439ff8-c55d-4423-9316-a41240c4d329';
@@ -82,5 +83,16 @@ export default [
     practitionerId,
     chairId,
     note: 'Justin (21 day)',
+  },
+
+  {
+    accountId,
+    patientId: recallPatientId,
+    startDate: new Date(2015, 5, 1, 8, 0),
+    endDate: new Date(2015, 5, 1, 9, 0),
+    serviceId,
+    practitionerId,
+    chairId,
+    note: '2 year old appointment for recall',
   },
 ];

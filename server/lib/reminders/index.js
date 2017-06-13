@@ -77,11 +77,6 @@ export async function sendRemindersForAccount(account, date) {
         // Update Chat to have new textMessage
         await chat.merge({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt }).save();
 
-        // TODO: global.io needs to change
-
-        // TODO: can we use createSocketServer() or should we use socket.io-emitter ?
-
-        console.log(global.io);
         await sendSocket(global.io, chat.id);
       }
     }
