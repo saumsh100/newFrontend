@@ -3,6 +3,7 @@ const SyncClientError = require('../../../models/SyncClientError');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const normalize = require('../normalize');
+const { namespaces } = require('../../../config/globals');
 
 syncClientErrorRouter.param('syncClientErrorId', loaders('syncClientError', 'SyncClientError'));
 
@@ -27,6 +28,17 @@ syncClientErrorRouter.post('/', checkPermissions('syncClientError:create'), (req
   return SyncClientError.save(syncErrorData)
     .then(() => res.sendStatus(201))
     .catch(next);
+});
+
+
+syncClientErrorRouter.post('/runSync', checkPermissions('syncClientError:create'), (req, res, next) => {
+  const io = req.app.get('socketio');
+  console.log(`On demand sync. AccountId=${req.accountId}`);
+
+  res.send('On-demand sync trigger sent.');
+  io.of(namespaces.sync)
+    .in(req.accountId)
+    .emit('runSync', '');
 });
 
 module.exports = syncClientErrorRouter;
