@@ -1,12 +1,13 @@
-
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import styles from '../styles.scss';
 import { ListItem } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
-import styles from '../styles.scss';
+
+
 
 class ChatListContainer extends Component {
   constructor(props) {
@@ -15,18 +16,36 @@ class ChatListContainer extends Component {
   }
 
   setPatient(id, chatId) {
-    this.props.onClick(id);
+    this.props.onClick(id, chatId);
     this.props.updateEntityRequest({ key: 'textMessages', values: {}, url: `/api/chats/${chatId}/textMessages/read` });
   }
 
   render() {
+
     const everyone = (this.props.chats.size ? (this.props.chats.toArray().map((chats) => {
       const chat = JSON.parse(JSON.stringify(chats));
+
+      if (!chat.textMessages[0]) {
+        return null;
+      }
+
       const user = this.props.patients.get(chat.patientId);
-      chat.user = user;
+      chat.user = user || {};
       chat.newMessages = 0;
       let messageRecent = '';
       const length = (chat.textMessages ? chat.textMessages.length : 0);
+
+      let userPhone = null;
+      let firstMessage = {};
+      if (chat.textMessages[0]) {
+        firstMessage = this.props.textMessages.get(chat.textMessages[0]).toJS();
+      }
+
+      if (firstMessage.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
+        userPhone = firstMessage.to;
+      } else {
+        userPhone = firstMessage.from;
+      }
 
       for (let i = 0; i < length; i++) {
         if (i === chat.textMessages.length - 1) {
@@ -42,17 +61,16 @@ class ChatListContainer extends Component {
       let newMessage = null;
 
       if (chat.newMessages !== 0) {
-        newMessage = (
-          <div className={styles.messageNote}>
-            {chat.newMessages}
-          </div>
+        newMessage = (<div className={styles.messageNote}>
+          {chat.newMessages}
+        </div>
         );
       }
 
-      if (this.props.currentPatient) {
+      if (this.props.selectedChat) {
         userActiveClassName = classNames(
           styles.users,
-          chat.user.id === this.props.currentPatient.id ?
+          chat.id === this.props.selectedChat.id ?
             styles.users__active :
             styles.users__noactive
         );
@@ -62,7 +80,11 @@ class ChatListContainer extends Component {
           styles.users__noactive
         );
       }
-      const age = moment().diff(user.birthDate, 'years');
+      const age = (user ? moment().diff(user.birthDate, 'years') : null);
+
+      const userDisplay = (user ? (<div className={styles.users__name}>
+        <span>{`${chat.user.firstName} ${chat.user.lastName}`}</span><span>, {`${age}`}</span>
+      </div>) : <div className={styles.users__name}> {userPhone} </div>);
 
       const time = <div className={styles.timeChat}>{moment(messageRecent.createdAt).calendar(null, {
         sameDay: '[Today]',
@@ -75,35 +97,24 @@ class ChatListContainer extends Component {
 
       const avatar = (chat.user.avatarUrl ? chat.user.avatarUrl : '/images/avatar.png');
 
+      const message = (messageRecent.body.length > 111 ? `${messageRecent.body.slice(0, 111)} ...` : messageRecent.body);
 
-        return (
-          <ListItem
-            className={userActiveClassName}
-            onClick={this.setPatient.bind(null, chat.user.id, chat.id)}
-            key={chat.user.id}
-          >
-            <img
-              className={styles.users__photo}
-              src={avatar}
-              alt="photo"
-            />
-            <div className={styles.users__wrapper}>
-              <div className={styles.users__header}>
-                <div className={styles.users__name}>
-                  {chat.user.firstName} {chat.user.lastName}, {age}
-                </div>
-              </div>
-              <div className={styles.users__body}>
-                <div className={styles.users__text}>
-                  {messageRecent.body}
-                </div>
-              </div>
+      return (<ListItem className={userActiveClassName} onClick={this.setPatient.bind(null, chat.user.id, chat.id)} key={chat.user.id}>
+        <img className={styles.users__photo}  src={avatar} alt="photo" />
+        <div className={styles.users__wrapper}>
+          <div className={styles.users__header}>
+            {userDisplay}
+          </div>
+          <div className={styles.users__body}>
+            <div className={styles.users__text}>
+              {message}
             </div>
-            {newMessage}
-            {time}
-          </ListItem>
-        );
-      })) : null);
+          </div>
+        </div>
+        {newMessage}
+        {time}
+      </ListItem>);
+    })) : null);
 
     return <div>{everyone}</div>;
   }
@@ -112,13 +123,16 @@ class ChatListContainer extends Component {
 ChatListContainer.propTypes = {
   textMessages: PropTypes.object,
   chats: PropTypes.object,
+  selectedChat: PropTypes.object,
+  activeAccount: PropTypes.object,
   currentPatient: PropTypes.object,
   patients: PropTypes.object,
   updateEntityRequest: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
+function mapStateToProps({ entities }) {
   return {
+    activeAccount: entities.getIn(['accounts', 'models']).first(),
   };
 }
 

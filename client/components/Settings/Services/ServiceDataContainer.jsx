@@ -15,8 +15,8 @@ class ServiceDataContainer extends Component {
     this.deleteService = this.deleteService.bind(this);
   }
 
-  updateService(modifiedService) {
-    this.props.updateEntityRequest({ key: 'services', model: modifiedService });
+  updateService(modifiedService, alert) {
+    this.props.updateEntityRequest({ key: 'services', model: modifiedService, alert });
   }
 
   deleteService(id) {

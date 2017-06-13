@@ -10,12 +10,14 @@
 
 .topRow {
   background: #f7f7f7;
-  min-height: 115px;
-  max-height: 115px;
+  min-height: 110px;
+  max-height: 110px;
 }
 
 .headerInput {
+  border-bottom: 1.5px solid rgba(lightgrey, 0.5);
   width: 100%;
+  max-height: 94px;
 }
 
 .header {
@@ -31,19 +33,11 @@
 }
 
 .listRow {
-  margin-top: 20px;
   flex: 1;
 }
 
 .upcomingHead {
   width: 100%;
-  &::before {
-    padding-left: 0px;
-    display: block;
-    height: 5px;
-    content: '';
-    background: $primary-light-blue;
-  }
 }
 
 .users {
@@ -74,9 +68,21 @@
   &__name {
     color: #2e3845;
     font-size: 14px;
-    font-family: Gotham-Medium;
-    font-weight: 600;
+    font-family: Gotham-Book;
+    font-weight: 900;
     max-width: 90%;
+    display: flex;
+
+    span {
+      white-space: nowrap;
+    }
+
+    span:first-child {
+      -ms-flex-negative: 1;
+      flex-shrink: 1;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 
   &__body {
@@ -90,6 +96,7 @@
     padding-bottom: 10px;
     color: #969696;
     font-size: 12px;
+    word-break: break-all;
   }
 
   &__appointment {
@@ -116,11 +123,15 @@
 
 .topInfo {
   min-width: 100%;
-  border-bottom: thin solid lightgrey;
+  border-bottom: 1.5px solid rgba(211, 211, 211, .5);
   height: 10vh;
-  font-family: 'Gotham-Medium';
-  font-size: 1.2em;
+  font-family: 'Gotham-Book';
+  font-size: 16px;
   color: #b4b4b5;
+  min-height: 94px;
+  max-height: 94px;
+  border-top: 5px solid #ff715a;
+  font-weight: 900;
 
   span {
     color: #2e3845;
@@ -130,15 +141,7 @@
     position: relative;
     top: 50%;
     transform: translate(0, -50%);
-    margin-left: 10px;
-  }
-
-  &::before {
-    display: block;
-    width: 100%;
-    height: 5px;
-    content: '';
-    background: #ff715a;
+    margin-left: 30px;
   }
 }
 
@@ -169,11 +172,12 @@
 }
 
 .patientName {
-  font-family: 'Gotham-Medium';
+  font-family: 'Gotham-Book';
   color: #2e3845;
-  font-size: 1.4em;
+  font-size: 16px;
   text-align: center;
   margin: 15px auto 15px auto;
+  font-weight: 900;
 }
 
 .allMessages {
@@ -182,28 +186,29 @@
   flex-direction: column;
   position: relative;
   width: 100%;
-  border-right: thin solid lightgrey;
-  max-height: 80vh;
-  min-height: 80vh;
+  max-height: calc(100vh - 70px);
 }
 
 .container {
   position: relative;
   width: 70%;
-  max-height: 80vh;
-  min-height: 80vh;
 }
 
 .raise {
   padding: 42px;
 }
 
+.chatSearch {
+  padding: 0px;
+}
+
 .sendMessage {
   background-color: #fafafa;
+  border-top: 1px solid #e6e6e6;
   position: absolute;
   bottom: 0;
-  width: 94%;
-  margin: auto 2% 0 2%;
+  width: 96%;
+  padding: 0 2% 0 2%;
 }
 
 .text {
@@ -211,7 +216,7 @@
   border-radius: 15px;
   background-color: #FF715A;
   color: #fafafa;
-  font-size: 16px;
+  font-size: 14px;
   font-family: 'Gotham-Book';
   text-space: 2px;
   width: 50%;
@@ -270,23 +275,25 @@
 }
 
 .fullName {
-  font-family: "Gotham-Medium";
-  font-size: 1.3em;
+  font-family: "Gotham-Book";
+  font-size: 18px;
   margin: 10px 0;
-
+  font-weight: 900;
 }
 
 .contact {
-  margin-top: 20px;
+  margin-top: 10px;
   font-family: "Gotham-Medium";
-  font-size: 1.1em;
+  font-size: 14px;
   color: #bfbfbf;
+  font-weight: 200;
 }
 
 .fonts {
-  font-family: "Gotham-Medium";
-  font-size: 1em;
+  font-family: "Gotham-Book";
+  font-size: 12px;
   color: #bfbfbf;
+  font-weight: bold;
 }
 
 .patInfo {
@@ -294,7 +301,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-bottom: thin solid lightgrey;
+  border-left: 1.5px solid rgba(lightgrey, 0.5);
+  border-bottom: 1.5px solid rgba(lightgrey, 0.5);
 }
 
 .infoAvatar {
@@ -305,6 +313,7 @@
 
 .bottomInfo {
   flex: 1;
+  border-left: 1.5px solid rgba(lightgrey, 0.5);
 }
 
 
@@ -312,7 +321,7 @@
   position: relative;
   z-index: 0;
   overflow-y: auto;
-  max-height: calc(96vh - 230px);
+  max-height: calc(100vh - 200px);
   margin: 0;
   padding: 0;
   width: 100%;
@@ -323,18 +332,13 @@
   max-height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
+  border-top: 5px solid $primary-light-blue;
+
   &_title {
     padding-top: 20px;
     padding-left: 30px;
     font-size: 18px;
     font-weight: $large-weight;
-  }
-  &::before {
-    display: block;
-    width: 100%;
-    height: 5px;
-    content: '';
-    background: $primary-light-blue;
   }
 
   &__search {

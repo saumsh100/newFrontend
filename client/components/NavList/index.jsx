@@ -114,13 +114,13 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
         <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
           <SubNavItem path="/intelligence/business" label="Business" />
-          {/*<SubNavItem path="/intelligence/social" label="Social" />*/}
+          <SubNavItem path="/intelligence/social" label="Social" disabled/>
         </MultiNavItem>
         <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
-          {/*<SubNavItem path="/patients/phone" label="Phone Calls"/>*/}
+          <SubNavItem path="/patients/phone" label="Phone Calls" disabled/>
         </MultiNavItem>
 
         <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />

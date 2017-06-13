@@ -14,6 +14,7 @@ export default function AppointmentsItem(props) {
     practitioner,
     chair,
     handleAppointmentClick,
+    handlePatientClick,
   } = props;
 
   /*const borderStyle = {
@@ -24,13 +25,15 @@ export default function AppointmentsItem(props) {
   return (
     <ListItem
       className={styles.appointmentListItem}
-      onClick={() => handleAppointmentClick(appointment.id)}
+     // onClick={() => handleAppointmentClick(appointment.id)}
     >
       <ShowPatientInfo
         patient={patient}
         appointment={appointment}
         service={service}
         chair={chair}
+        handleAppointmentClick={handleAppointmentClick}
+        handlePatientClick={handlePatientClick}
       />
       <ShowOtherInfo
         patient={patient}

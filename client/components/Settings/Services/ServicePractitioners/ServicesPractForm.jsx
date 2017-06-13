@@ -16,7 +16,6 @@ function checkValues(obj) {
 }
 
 function createInitialValues(practitionerIds, practitioners) {
-  console.log(practitionerIds);
   return practitioners.map(p => {
     return practitionerIds.indexOf(p.get('id')) > -1;
   }).toJS();

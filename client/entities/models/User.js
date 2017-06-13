@@ -2,6 +2,7 @@
 import createModel from '../createModel';
 
 const UserSchema = {
+  avatarUrl: null,
   id: null,
   firstName: null,
   lastName: null,

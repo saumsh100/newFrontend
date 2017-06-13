@@ -15,10 +15,11 @@ const ROUTES = {
       to: '/patients/messages',
       label: 'Messages',
     },
-   /* {
+    {
       to: '/patients/phone',
       label: 'Phone',
-    }, */
+      disabled: true,
+    },
   ],
 
   '/schedule': [
@@ -61,10 +62,11 @@ const ROUTES = {
       to: '/intelligence/business',
       label: 'Business',
     },
-    /*{
+    {
       to: '/intelligence/social',
       label: 'Social',
-    },*/
+      disabled: true,
+    },
   ],
 
   /*'/reputation': [

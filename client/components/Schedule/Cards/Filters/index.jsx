@@ -27,9 +27,9 @@ export default function Filters(props) {
     practitionersFilter.map((pracId) => {
       if (pracId) {
         const selectedPrac = practitioners.get(pracId);
-        const serviceIds = selectedPrac.get('services');
+        const serviceIds = selectedPrac.get('services') || [];
         serviceIds.map((sid) => {
-          if(filteredServices.indexOf(services.get(sid)) === -1){
+          if(filteredServices.indexOf(services.get(sid)) === -1) {
             filteredServices.push(services.get(sid));
           }
         });

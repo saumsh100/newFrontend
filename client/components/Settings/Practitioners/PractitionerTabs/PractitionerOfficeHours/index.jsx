@@ -30,16 +30,35 @@ class PractitionerOfficeHours extends Component{
     const modifiedPractitioner = ((value === 'off') ?
       practitioner.set('isCustomSchedule', true) : practitioner.set('isCustomSchedule', false));
 
-    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner });
+    const alert = {
+      success: {
+        body: `${practitioner.get('firstName')} schedule updated.`,
+      },
+      error: {
+        body: `${practitioner.get('firstName')} schedule update failed.`,
+      },
+    };
+
+    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner, alert });
 
     const newValue = (value === 'off') ? 'on' : 'off';
     this.setState({ value: newValue });
   }
 
   handleFormUpdate(values) {
-    const { weeklySchedule, } = this.props;
+    const { weeklySchedule, practitioner } = this.props;
     const newWeeklySchedule = weeklySchedule.merge(values);
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
+
+    const alert = {
+      success: {
+        body: `${practitioner.get('firstName')} schedule updated.`,
+      },
+      error: {
+        body: `${practitioner.get('firstName')} schedule update failed.`,
+      },
+    };
+
+    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
   }
 
   render() {

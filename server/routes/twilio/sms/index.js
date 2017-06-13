@@ -11,7 +11,7 @@ import { createConfirmationText } from '../../../lib/reminders/sendReminder';
 import loaders from '../../util/loaders';
 import { sanitizeTwilioSmsData } from '../util';
 import twilioClient from '../../../config/twilio';
-import namespaces from '../../../config/globals';
+import { namespaces } from '../../../config/globals';
 import normalize from '../../api/normalize';
 
 const smsRouter = Router();
@@ -30,7 +30,7 @@ function sendSocket(io, chatId) {
   return Chat.get(chatId).getJoin(joinObject).run()
     .then((chat) => {
       io.of(namespaces.dash)
-        .in(chat.patient.accountId)
+        .in(chat.accountId)
         .emit('newMessage', normalize('chat', chat));
     });
 }

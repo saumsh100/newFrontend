@@ -1,8 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
 import TimeSlotColumn from './TimeSlotColumn';
-import moment from 'moment';
 
 export default function TimeSlot(props) {
   const {
@@ -46,10 +46,15 @@ export default function TimeSlot(props) {
   // find Split appointments and their adjacent appointments and set isSplit true
   splitAppointments && splitAppointments.map((sApp) => {
     filteredApps = filteredApps.map((app) => {
-      if (((moment(sApp.startDate).isSame(moment(app.startDate))) ||
-        (moment(sApp.startDate).isBetween(moment(app.startDate), moment(app.endDate))) ||
-        (moment(sApp.endDate).isSame(moment(app.endDate))) ||
-        (moment(sApp.endDate).isBetween(moment(app.startDate), moment(app.endDate))))
+      const splitAppStartDate = moment(sApp.startDate);
+      const splitAppEndDate = moment(sApp.endDate);
+      const adjacentAppStartDate = moment(app.startDate);
+      const adjacentAppEndDate = moment(app.endDate);
+
+      if (((splitAppStartDate.isSame(adjacentAppStartDate)) ||
+        (splitAppStartDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)) ||
+        (splitAppEndDate.isSame(adjacentAppEndDate)) ||
+        (splitAppEndDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)))
         && (app.id !== sApp.id)) {
         return Object.assign({}, app, {
           isSplit: true,

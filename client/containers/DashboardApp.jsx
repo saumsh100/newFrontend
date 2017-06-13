@@ -9,6 +9,7 @@ import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
 import SubTabs from '../components/SubTabs';
+import AlertContainer from '../containers/AlertContainer';
 import { setIsCollapsed } from '../actions/toolbar';
 import styles from './styles.scss';
 
@@ -19,6 +20,7 @@ function DashboardApp(props) {
     isCollapsed,
     setIsCollapsed,
   } = props;
+
   let overlay = null;
   if (!isCollapsed) {
     overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
@@ -37,6 +39,7 @@ function DashboardApp(props) {
         </div>
         <div className={styles.mainRegionChildren}>
           {children}
+          <AlertContainer />
         </div>
       </MainRegionContainer>
     </div>

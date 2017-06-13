@@ -26,8 +26,8 @@ class PractitionerTabs extends Component {
     this.setState({ index: 0 });
   }
 
-  updatePractitioner(modifiedPractitioner) {
-    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner });
+  updatePractitioner(modifiedPractitioner, alert) {
+    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner, alert });
   }
 
   deletePractitioner() {

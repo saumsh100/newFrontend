@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import jwt from 'jwt-decode';
 import moment from 'moment';
 import { Avatar, Form, Field } from '../../../library';
 import * as Actions from '../../../../actions/entities';
@@ -15,10 +16,15 @@ class MessageContainer extends Component {
     this.sendMessage = this.sendMessage.bind(this);
   }
 
-  sendMessage(message) {
+  sendMessage(mobilePhoneNumber, message) {
+    const accountId = this.props.activeAccount.id;
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
     const entityData = {
       message: message.message,
-      patient: this.props.currentPatient,
+      patient: this.props.currentPatient || { mobilePhoneNumber, accountId },
+      userId: decodedToken.userId,
     };
 
     entityData.chatId = (this.props.selectedChat ? this.props.selectedChat.id : null);
@@ -26,8 +32,9 @@ class MessageContainer extends Component {
     if (!entityData.chatId) {
       this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/' })
         .then((chat) => {
+          console.log(chat)
           entityData.chatId = Object.keys(chat.chats)[0];
-          const patientId = Object.keys(chat.patients)[0];
+          const patientId = chat.chats.patientId;
           this.props.setSelectedPatient(patientId);
           this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
             .then(() => {
@@ -54,12 +61,20 @@ class MessageContainer extends Component {
   render() {
     let display;
 
+    const userAnon = {
+      avatarUrl: '/images/avatar.png',
+    };
+
+    let userPhone = null;
+
     if (this.props.selectedChat) {
       display = this.props.selectedChat.textMessages.map((text, i) => {
         const message = this.props.textMessages.get(this.props.selectedChat.textMessages[i]);
         if (!message.get('read')) {
           this.props.updateEntityRequest({ key: 'textMessages', values: {}, url: `/api/chats/${this.props.selectedChat.id}/textMessages/read` });
         }
+
+        const user = (message.user ? message.user : { avatarUrl: '/images/Donna - Pop Up.png' })
 
         let first;
         let second;
@@ -73,16 +88,22 @@ class MessageContainer extends Component {
           sameElse: 'YYYY DD MM, h:mm a',
         })}</div>;
 
+        if (message.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
+          userPhone = message.to;
+        } else {
+          userPhone = message.from;
+        }
+
         let nextMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i + 1]);
         nextMessage = (nextMessage ? nextMessage.from : null);
 
-        if (message.from === this.props.currentPatient.mobilePhoneNumber) {
+        if (message.from !== this.props.activeAccount.toJS().twilioPhoneNumber) {
           first = <div className={styles.marginText}>{moment(message.createdAt).format('h:mm a')}</div>;
           second = <div className={styles.textFrom}>{message.body}</div>;
           third = <div className={styles.margin2} > </div>;
 
           if (nextMessage !== message.from) {
-            third = <Avatar className={styles.margin} user={this.props.currentPatient} />
+            third = <Avatar className={styles.margin} user={this.props.currentPatient || userAnon} />;
           }
 
           if (i !== 0) {
@@ -97,7 +118,7 @@ class MessageContainer extends Component {
           first = <div className={styles.margin2} > </div>;
 
           if (nextMessage !== message.from) {
-            first = <Avatar className={styles.margin} user={{}}/>
+            first = <Avatar className={styles.margin} user={user} />;
           }
 
           if (i !== 0) {
@@ -110,7 +131,7 @@ class MessageContainer extends Component {
 
         return (<div key={text} className={styles.textTime}>
           {time}
-          {first}{second}{third}
+          {third}{second}{first}
         </div>);
       });
     }
@@ -129,7 +150,7 @@ class MessageContainer extends Component {
           <Form
             form="chatMessageForm"
             ignoreSaveButton
-            onSubmit={this.sendMessage}
+            onSubmit={this.sendMessage.bind(null, userPhone)}
           >
             <Field
               type="text"
@@ -148,14 +169,17 @@ MessageContainer.propTypes = {
   textMessages: PropTypes.object,
   chats: PropTypes.object,
   patients: PropTypes.object,
+  activeAccount: PropTypes.object,
   selectedChat: PropTypes.object,
   createEntityRequest: PropTypes.func.isRequired,
+  setSelectedPatient: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   receiveMessage: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
+function mapStateToProps({ entities }) {
   return {
+    activeAccount: entities.getIn(['accounts', 'models']).first(),
   };
 }
 

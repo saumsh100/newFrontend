@@ -7,6 +7,7 @@ import {
   SET_PATIENTS_FILTER,
   UPDATE_EDITING_PATIENT_STATE,
   CHANGE_PATIENT_INFO,
+  SET_SELECTED_CHAT_ID,
   UPDATE_PATIENT_IN_PATIENT_LIST,
 } from '../constants';
 
@@ -24,6 +25,11 @@ export default handleActions({
   [SET_SELECTED_PATIENT_ID](state, action) {
     const id = action.payload;
     return state.set('selectedPatientId', id);
+  },
+
+  [SET_SELECTED_CHAT_ID](state, action) {
+    const id = action.payload;
+    return state.set('selectedChatId', id);
   },
 
   [SEARCH_PATIENT](state, action) {

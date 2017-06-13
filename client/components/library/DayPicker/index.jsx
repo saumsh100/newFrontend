@@ -30,13 +30,17 @@ class DayPicker extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleDayClick(day) {
+  handleDayClick(day, { selected , disabled }) {
     const {
       multiple,
       value,
       onChange,
     } = this.props;
 
+    if (disabled) {
+      console.log('zzz')
+      return ;
+    }
     if (!multiple) {
       this.props.onChange(day.toISOString());
       this.setState({ isOpen: false });
