@@ -16,7 +16,6 @@ patientsRouter.param('patientId', loaders('patient', 'Patient'));
 patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
 
 function ageRange(age, array) {
-  console.log(age)
   if (age < 18) {
     array[0]++;
   } else if(age >= 18 && age < 25) {
@@ -83,7 +82,6 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
         } else {
           send.female++;
         }
-        console.log(send.ageData)
         send.ageData = ageRange(moment().diff(moment(appointment.patient.birthDate), 'years'), send.ageData);
         return 0;
       });
