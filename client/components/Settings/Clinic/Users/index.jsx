@@ -132,11 +132,11 @@ class Users extends Component{
       clinicName = clinic.get('name');
     }
 
-    let usersInvited = <ListItem className={styles.userListItem}>
+    let usersInvited = <div className={styles.userListItem}>
       <div className={styles.main}>
         <p className={styles.name}>Users you have invited will show up here.</p>
       </div>
-    </ListItem>
+    </div>
     if (invites.size !== 0){
       usersInvited = invites.toArray().map((invite) => {
         return (
