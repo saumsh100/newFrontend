@@ -112,14 +112,15 @@ export function createEntityRequest({ key, entityData, url, alert }) {
     const { entities } = getState();
     const entity = entities.get(key);
     url = url || entity.getUrlRoot();
+    //const alertText = { text: (alert.success || `Created ${key}`), type: 'success' }
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
-        dispatch(showAlertTimeout({ text: (alert.success || `Created ${key}`), type: 'success' }));
+        dispatch(showAlertTimeout({ text: `Created ${key}`, type: 'success' }));
         return data.entities;
       }).catch(err => {
-          dispatch(showAlertTimeout({ text: alert.error || `Created ${key} failed`, type: 'error' }))
+          dispatch(showAlertTimeout({ text: `Created ${key} failed`, type: 'error' }))
           throw err;
         }
       );

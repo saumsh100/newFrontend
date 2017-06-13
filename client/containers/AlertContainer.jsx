@@ -23,7 +23,7 @@ class AlertContainer extends Component {
 
 AlertContainer.propTypes = {
   alert: PropTypes.object.required,
-  hideAlert: PropTypes.func.required,
+ // hideAlert: PropTypes.func,
 };
 
 function mapStateToProps({ alerts }) {
