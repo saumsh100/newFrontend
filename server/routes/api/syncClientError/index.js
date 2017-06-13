@@ -14,7 +14,7 @@ syncClientErrorRouter.get('/', checkPermissions('syncClientError:read'), (req, r
 
   return SyncClientError
     .filter({ accountId }).run()
-    .then(syncErrors => res.send(normalize('syncClientError', syncErrors)))
+    .then(syncErrors => res.send(normalize('syncClientErrors', syncErrors)))
     .catch(next);
 });
 
