@@ -217,6 +217,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
     accountId,
   } = query;
 
+  accountId = accountId || req.accountId;
+
   if (!startDate || !endDate) {
     return res.send(400);
   }

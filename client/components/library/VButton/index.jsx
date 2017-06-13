@@ -5,7 +5,7 @@ import styles from './vbutton.scss';
 
 const scheme = [
   ['size', ['sm', 'md', 'lg', 'xlg']],
-  ['color', ['red', 'grey', 'green', 'blue', 'yellow']],
+  ['color', ['red', 'grey', 'green', 'blue', 'yellow', 'darkgrey']],
 
   'rounded',
   'upperCase',

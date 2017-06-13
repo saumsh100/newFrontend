@@ -2,6 +2,7 @@
 import Account from './Account';
 import Account_Patient from './Account_Patient';
 import Appointment from './Appointment';
+import AuthSession from './AuthSession';
 import Call from './Call';
 import Chair from './Chair';
 import Chat from './Chat';
@@ -29,10 +30,11 @@ import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
 
-module.exports = {
+export {
   Account,
   Account_Patient,
   Appointment,
+  AuthSession,
   Chair,
   Chat,
   Call,
@@ -202,6 +204,7 @@ TextMessage.hasOne(User, 'user', 'userId', 'id');
  */
 
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
+User.hasOne(Enterprise, 'enterprise', 'enterpriseId', 'id');
 
 /**
  * WaitSpot Relations

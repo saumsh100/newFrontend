@@ -1,4 +1,5 @@
-import { has } from 'lodash';
+
+import has from 'lodash/has';
 
 const allow = (...rules) => {
   const allowAll = {
@@ -37,7 +38,7 @@ const allow = (...rules) => {
 const allowAll = allow('*');
 const denyAll = allow();
 
-const OWNER = {
+const SUPERADMIN = {
   accounts: allowAll,
   appointments: allowAll,
   chairs: allowAll,
@@ -63,31 +64,30 @@ const OWNER = {
   timeOffs: allowAll,
   weeklySchedules: allowAll,
 
-  enterprises: denyAll,
+  enterprises: allowAll,
   sentReminders: allow('read'),
   sentRecalls: allow('read'),
 
   waitSpots: allowAll,
 };
 
-const SUPERADMIN = {
-  ...OWNER,
+const OWNER = {
+  ...SUPERADMIN,
 
-  enterprises: allowAll,
+  enterprises: denyAll,
 };
 
-const ADMIN = {
+const MANAGER = {
   ...OWNER,
 };
 
 const USER = {
-  ...ADMIN,
+  ...MANAGER,
 };
 
 export default {
-  // Account Types
-  OWNER,
-  ADMIN,
-  USER,
   SUPERADMIN,
+  OWNER,
+  MANAGER,
+  USER,
 };

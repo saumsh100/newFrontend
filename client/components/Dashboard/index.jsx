@@ -45,9 +45,8 @@ class Dashboard extends React.Component {
 
     Promise.all([
       // this.props.fetchEntities({ key: 'requests' }),
-      this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
+      this.props.fetchEntities({ key: 'appointments', join: ['patient', 'chair'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
-      this.props.fetchEntities({ key: 'chairs' }),
       this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
       this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] }),
     ]).then(() => {

@@ -9,11 +9,17 @@ const seedDatabase = require('../util/seedDatabase');
 const { time } = require('../util/time');
 // For hashing passwords for User seeds
 // TODO: pull fromm global config, cause needs to be reused with deserialization
-const saltRounds = 10;
+const config = require('../config/globals');
+const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
+import enterpriseFixtures, {
+  sunshineSmilesId,
+  donnaDentalId,
+  dsoId,
+} from '../fixtures/enterprises';
 
 
 /**
@@ -35,11 +41,17 @@ const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
 const syncTestAccId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
 const justinUserId = uuid();
+const grantUserId = uuid();
+const markUserId = uuid();
 const alexUserId = uuid();
 const sergeyUserId = uuid();
 const jdUserId = uuid();
 const syncUserId = uuid();
 const vstUserId = uuid();
+
+const justinPermissionId = uuid();
+const markPermissionId = uuid();
+const grantPermissionId = uuid();
 
 const alexPatientId = uuid();
 const alexPatientId2 = uuid();
@@ -87,16 +99,10 @@ const clinicPhoneNumber = '+17786558613';
 const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallId = uuid();
 
-const mainEnterprise = {
-  id: uuid(),
-  name: 'General enterprise',
-};
-
 // TODO: order of seeding matters...
 
 const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) => {
   const time1 = lastDate || faker.date.past();
-
   return [
     {
       id: uuid(),
@@ -317,16 +323,7 @@ const sunshineServices = generateDefaultServices(accountId2);
 
 const SEEDS = {
   Enterprise: [
-    mainEnterprise,
-    {
-      name: 'Absolute Dental',
-    },
-    {
-      name: 'ACCESS',
-    },
-    {
-      name: 'AFFORDABLE Dentures',
-    },
+    ...enterpriseFixtures,
   ],
 
   Reservation: [
@@ -559,15 +556,37 @@ const SEEDS = {
       password: bcrypt.hashSync('justin', saltRounds),
       id: justinUserId,
       activeAccountId: accountId,
-      // accounts: [accountId],
+      enterpriseId: donnaDentalId,
+      permissionId: justinPermissionId,
     },
     {
+      firstName: 'Mark',
+      lastName: 'Joseph',
+      username: 'mark@carecru.com',
+      password: bcrypt.hashSync('mark', saltRounds),
+      id: markUserId,
+      activeAccountId: syncTestAccId,
+      enterpriseId: dsoId,
+      permissionId: markPermissionId,
+    },
+    {
+      firstName: 'Grant',
+      lastName: 'Guacamole',
+      username: 'grant@guacamole.ca',
+      password: bcrypt.hashSync('grant', saltRounds),
+      id: grantUserId,
+      activeAccountId: syncTestAccId,
+      enterpriseId: dsoId,
+      permissionId: grantPermissionId,
+    },
+    /*{
       firstName: 'Sergey',
       lastName: 'Skovorodnikov',
       username: 'sergey@carecru.com',
       password: bcrypt.hashSync('sergey', saltRounds),
       id: sergeyUserId,
       activeAccountId: accountId,
+      enterpriseId: sunshineSmilesId,
       // accounts: [accountId],
     },
     // account 2 user
@@ -578,6 +597,7 @@ const SEEDS = {
       password: bcrypt.hashSync('jd', saltRounds),
       id: jdUserId,
       activeAccountId: accountId2,
+      enterpriseId: sunshineSmilesId,
       // accounts: [accountId],
     },
     {
@@ -587,6 +607,7 @@ const SEEDS = {
       password: bcrypt.hashSync('alex', saltRounds),
       id: alexUserId,
       activeAccountId: accountId,
+      enterpriseId: sunshineSmilesId,
     },
     {
       firstName: 'SyncClient',
@@ -595,6 +616,7 @@ const SEEDS = {
       password: bcrypt.hashSync('sync', saltRounds),
       id: syncUserId,
       activeAccountId: syncTestAccId,
+      enterpriseId: sunshineSmilesId,
     },
     {
       firstName: 'Valerij',
@@ -603,7 +625,8 @@ const SEEDS = {
       password: bcrypt.hashSync('vst', saltRounds),
       id: vstUserId,
       activeAccountId: accountId,
-    },
+      enterpriseId: sunshineSmilesId,
+    },*/
   ],
 
   Family: [
@@ -790,7 +813,7 @@ const SEEDS = {
       twilioPhoneNumber: clinicPhoneNumber,
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
-      enterpriseId: mainEnterprise.id,
+      enterpriseId: donnaDentalId,
     },
     {
       id: accountId2,
@@ -804,7 +827,7 @@ const SEEDS = {
       twilioPhoneNumber: clinicPhoneNumber,
 
       logo: '/images/liberty_logo.png',
-      enterpriseId: mainEnterprise.id,
+      enterpriseId: sunshineSmilesId,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       // twilioPhoneNumber: clinicPhoneNumber,
@@ -827,48 +850,79 @@ const SEEDS = {
       logo: '/images/beckett_dental.png',
       address: '#101 – 1312 Random Drive',
       bookingWidgetPrimaryColor: '#f29b12',
-      enterpriseId: mainEnterprise.id,
+      enterpriseId: dsoId,
+    },
+    {
+      weeklyScheduleId,
+      name: 'Another Dental',
+      street: '#202 – 2423 Crazy Horse Drive',
+      country: 'Canada',
+      state: 'BC',
+      city: 'North Vancouver',
+      zipCode: '12323',
+      //vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      //twilioPhoneNumber: clinicPhoneNumber,
+      //logo: '/images/beckett_dental.png',
+      //bookingWidgetPrimaryColor: '#f29b12',
+      enterpriseId: dsoId,
     },
   ],
 
   Permission: [
     {
-      userId: justinUserId,
-      accountId,
+      id: justinPermissionId,
       role: 'SUPERADMIN',
       permissions: {},
     },
     {
+      id: markPermissionId,
+      role: 'SUPERADMIN',
+      permissions: {},
+    },
+    {
+      id: grantPermissionId,
+      role: 'OWNER',
+      permissions: {},
+    },
+    /*{
       userId: alexUserId,
-      accountId,
       role: 'VIEWER',
       permissions: {},
     },
     {
       userId: sergeyUserId,
-      accountId,
       role: 'ADMIN',
       permissions: {},
     },
     {
       userId: jdUserId,
-      accountId: accountId2,
       role: 'OWNER',
       permissions: {},
     },
     {
       userId: syncUserId,
-      accountId: syncTestAccId,
       role: 'OWNER',
       permissions: {},
     },
     {
       userId: vstUserId,
-      accountId,
       role: 'SUPERADMIN',
       permissions: {},
     },
+    {
+      userId: vstUserId,
+      role: 'SUPERADMIN',
+      permissions: {},
+    },
+    {
+      userId: vstUserId,
+      role: 'SUPERADMIN',
+      permissions: {},
+    },*/
   ],
+
+  // Keep to wipe table on seed
+  AuthSession: [],
 
   Invite: [
     {
