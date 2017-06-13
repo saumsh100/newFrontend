@@ -11,6 +11,7 @@ import Family from './Family';
 import Invite from './Invite';
 import OAuth from './OAuth';
 import Patient from './Patient';
+import PatientUser from './PatientUser';
 import Permission from './Permission';
 import Practitioner from './Practitioner';
 import Practitioner_Service from './Practitioner_Service';
@@ -43,6 +44,7 @@ export {
   Patient,
   Family,
   OAuth,
+  PatientUser,
   Permission,
   Practitioner,
   Practitioner_Service,
@@ -133,6 +135,13 @@ Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 Patient.hasMany(SentReminder, 'sentReminders', 'id', 'patientId');
 Patient.hasMany(SentRecall, 'sentRecalls', 'id', 'patientId');
+Patient.hasOne(PatientUser, 'patientUser', 'patientUserId', 'id');
+
+/**
+ * PatientUser Relations
+ */
+
+PatientUser.hasMany(Patient, 'patients', 'id', 'patientUserId');
 
 /**
  * Permission Relations
