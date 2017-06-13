@@ -925,12 +925,12 @@ const SEEDS = {
   AuthSession: [],
 
   Invite: [
-    {
-      sendingUserId: justinUserId,
-      accountId,
-      email: 'test@email.com',
-      token: uuid(),
-    },
+    // {
+    //   sendingUserId: justinUserId,
+    //   accountId,
+    //   email: 'test@email.com',
+    //   token: uuid(),
+    // },
   ],
 
   PractitionerTimeOff: [

@@ -49,13 +49,15 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
     </DashboardApp>;
 
   console.log(withEnterprise, isAuth, isSuperAdmin);
+  const signUp = /^\/signup\/.+\/$/i;
+  const urlTest = (signUp.test(history.location.pathname) ? history.location.pathname : '/signup');
 
   return (
     <Router history={history}>
       <div>
         <Switch>
           <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
-          <Route exact path="/signup" render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
+          <Route exact path={urlTest} render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
           <Route path="/" component={Dashboard} />
         </Switch>
       </div>
