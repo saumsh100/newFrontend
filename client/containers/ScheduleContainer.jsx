@@ -36,6 +36,7 @@ class ScheduleContainer extends React.Component {
       this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services', 'timeOffs'] }),
       this.props.fetchEntities({ key: 'chairs' }),
+      this.props.fetchEntities({ key: 'accounts', join: ['weeklySchedule'] }),
     ]).then(() => {
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
       this.setState({ loaded: true });
@@ -109,17 +110,7 @@ ScheduleContainer.propTypes = {
 function mapStateToProps({ entities, schedule }) {
 
   const practitioners = entities.getIn(['practitioners', 'models']);
-
-  const weeklyScheduleIds = practitioners.toArray().map((practitioner) => {
-    if (practitioner.get('isCustomSchedule')) {
-      return practitioner.get('weeklyScheduleId');
-    }
-  });
-
-  const weeklySchedules = entities.getIn(['weeklySchedules', 'models']).filter((schedule) => {
-    return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
-  });
-
+  const weeklySchedules = entities.getIn(['weeklySchedules', 'models'])
   const timeOffs = entities.getIn(['timeOffs', 'models']);
 
   return {

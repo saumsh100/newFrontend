@@ -16,6 +16,8 @@ export default function   DayViewBody(props){
     services,
     chairs,
     selectAppointment,
+    weeklySchedules,
+    currentDate,
   } = props;
 
   const timeSlots = [];
@@ -53,6 +55,7 @@ export default function   DayViewBody(props){
     return checkedPractitioners.indexOf(pr.id) > -1;
   });
 
+
   return (
     <div className={styles.dayView_body}>
       <TimeColumn
@@ -78,6 +81,8 @@ export default function   DayViewBody(props){
               services={services}
               chairs={chairs}
               selectAppointment={selectAppointment}
+              weeklySchedule={weeklySchedules.get(pract.weeklyScheduleId)}
+              currentDate={currentDate}
             />
           );
         }) : null}

@@ -40,9 +40,11 @@ class RequestListItem extends Component {
       handlePatientClick,
     } = this.props;
 
-    if (!service || !patient || !request) {
+    if (!patient || !request) {
       return null;
     }
+
+    const serviceName = service ? service.name : ''
 
     const data = {
       time: request.getFormattedTime(),
@@ -50,7 +52,7 @@ class RequestListItem extends Component {
       name: patient.getFullName(),
       nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
       email: patient.email,
-      service: service.name,
+      service: serviceName,
       mobilePhoneNumber: patient.mobilePhoneNumber,
       note: request.note,
       month: request.getMonth(),

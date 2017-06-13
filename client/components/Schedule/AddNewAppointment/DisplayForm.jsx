@@ -33,6 +33,7 @@ export default function DisplayForm(props) {
     handleSubmit,
     handleAutoSuggest,
     handlePractitionerChange,
+    handleDateChange,
   } = props;
 
   let initialValues = null;
@@ -97,6 +98,8 @@ export default function DisplayForm(props) {
                 practitionerOptions={practitionerOptions}
                 chairOptions={chairOptions}
                 handlePractitionerChange={handlePractitionerChange}
+                handleDateChange={handleDateChange}
+                selectedAppointment={selectedAppointment}
               />
             </FormSection>
           </Col>

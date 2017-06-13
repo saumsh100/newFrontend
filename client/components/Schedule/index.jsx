@@ -99,6 +99,7 @@ class ScheduleComponent extends Component {
                   appointments={appointments}
                   schedule={schedule}
                   selectAppointment={selectAppointment}
+                  weeklySchedules={weeklySchedules}
                 />
                 <Modal
                   active={addNewAppointment || !!selectedAppointment}
@@ -114,6 +115,7 @@ class ScheduleComponent extends Component {
                     patients={patients.get('models')}
                     selectedAppointment={selectedAppointment}
                     reinitializeState={this.reinitializeState}
+                    weeklySchedules={weeklySchedules}
                   />
                 </Modal>
               </div>

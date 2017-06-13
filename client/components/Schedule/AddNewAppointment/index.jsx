@@ -23,11 +23,16 @@ const mergeTime = (date, time) => {
   return new Date(date);
 };
 
+function dayOfWeekAsString(dayIndex) {
+  return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday",][dayIndex];
+}
+
 class AddNewAppointment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       servicesAllowed: this.props.services,
+      practitionersBySchedule: this.props.practitioners,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,6 +40,7 @@ class AddNewAppointment extends Component {
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
     this.handlePractitionerChange = this.handlePractitionerChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -155,6 +161,25 @@ class AddNewAppointment extends Component {
     }
   }
 
+  deleteAppointment() {
+    const {
+      selectedAppointment,
+      reinitializeState,
+      updateEntityRequest,
+    } = this.props;
+
+    const deleteApp = confirm('Are you sure you want to delete this appointment?');
+
+    if (deleteApp) {
+      const appModel = selectedAppointment.appModel;
+      const deletedModel = appModel.set('isDeleted', true);
+      updateEntityRequest({ key: 'appointments', model: deletedModel });
+    }
+
+    reinitializeState();
+  }
+
+
   getSuggestions(value) {
     return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
       .then((searchData) => {
@@ -181,6 +206,8 @@ class AddNewAppointment extends Component {
     const {
       services,
       practitioners,
+      change,
+      formName,
     } = this.props;
 
     const selectedPractitioner = practitioners.get(id);
@@ -191,36 +218,46 @@ class AddNewAppointment extends Component {
       servicesAllowed.push(services.get(serviceId));
     });
 
+    change(formName, 'appointment.serviceId', '');
     this.setState({
       servicesAllowed,
     });
   }
 
-  deleteAppointment() {
+  handleDateChange(day) {
     const {
-      selectedAppointment,
-      reinitializeState,
-      updateEntityRequest,
+      practitioners,
+      change,
+      formName,
+      weeklySchedules,
+      activeAccount
     } = this.props;
 
-    const deleteApp = confirm('Are you sure you want to delete this appointment?');
 
-    if (deleteApp) {
-      const appModel = selectedAppointment.appModel;
-      const deletedModel = appModel.set('isDeleted', true);
-      updateEntityRequest({ key: 'appointments', model: deletedModel });
-    }
+    const clinicSchedule = activeAccount ? weeklySchedules.get(activeAccount.get('weeklyScheduleId')) : null;
 
-    reinitializeState();
+    const dayOfWeek = dayOfWeekAsString(moment(day).weekday());
+
+    const filterBySchedulePract = practitioners.toArray().filter((pr) => {
+      const weeklySchedule = weeklySchedules.get(pr.get('weeklyScheduleId'));
+      if (weeklySchedule && !weeklySchedule.get(dayOfWeek).isClosed) {
+        return pr;
+      } else if (!weeklySchedule & clinicSchedule && !clinicSchedule.get(dayOfweek).isClosed) {
+        return pr
+      }
+    });
+
+    change(formName, 'appointment.practitionerId', '');
+    this.setState({
+      practitionersBySchedule: filterBySchedulePract,
+    });
   }
-
 
   render() {
     const {
       formName,
       patients,
       chairs,
-      practitioners,
       selectedAppointment,
       reinitializeState,
     } = this.props;
@@ -243,12 +280,13 @@ class AddNewAppointment extends Component {
           services={this.state.servicesAllowed}
           patients={patients}
           chairs={chairs}
-          practitioners={practitioners}
+          practitioners={this.state.practitionersBySchedule}
           selectedAppointment={selectedAppointment}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
           handlePractitionerChange={this.handlePractitionerChange}
+          handleDateChange={this.handleDateChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton
@@ -277,10 +315,21 @@ function mapDispatchToProps(dispatch) {
     updateEntityRequest,
     deleteEntityRequest,
     reset,
-    showAlert,
     change,
   }, dispatch);
 };
+
+function mapStateToProps({ entities, auth }) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+
+  if (!activeAccount) {
+    return {};
+  }
+
+  return {
+    activeAccount,
+  };
+}
 
 AddNewAppointment.PropTypes = {
   formName: PropTypes.string.required,
@@ -295,6 +344,6 @@ AddNewAppointment.PropTypes = {
   reinitializeState: PropTypes.func,
 };
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(AddNewAppointment);
