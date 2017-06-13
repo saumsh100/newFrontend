@@ -22,7 +22,15 @@ class PractitionerBasicData extends Component {
     const valuesMap = Map(values);
     const modifiedPractitioner = practitioner.merge(valuesMap);
 
-    const alert = { success: `${values.firstName} information updated.`, error: `${values.firstName} information update failed.` };
+    const alert = {
+      success: {
+        body: `${values.firstName}'s information updated.`,
+      },
+      error: {
+        body: `${values.firstName}'s information update failed.`,
+      },
+    };
+
     this.props.updatePractitioner(modifiedPractitioner, alert);
   }
 

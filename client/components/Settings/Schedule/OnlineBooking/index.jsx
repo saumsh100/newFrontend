@@ -18,7 +18,15 @@ class OnlineBooking extends Component {
     const { activeAccount, updateEntityRequest } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
-    const alert = { success: 'Booking Widget Preferences Updated', error: 'Booking Widget Update Failed' };
+    const alert = {
+      success: {
+        body: 'Booking Widget Preferences Updated',
+      },
+      error: {
+        Title: 'Preferences Error',
+        body: 'Booking Widget Update Failed',
+      },
+    };
     updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
   }
 

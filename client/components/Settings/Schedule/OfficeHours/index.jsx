@@ -13,7 +13,15 @@ function OfficeHours(props) {
   const handleSubmit = (values) => {
     const newWeeklySchedule = weeklySchedule.merge(values);
 
-    const alert = { success: 'Clinic Office Hours Updated', error: 'Clinic Office Hours Update Failed' };
+    const alert = {
+      success: {
+        body: 'Clinic Office Hours Updated',
+      },
+      error: {
+        body: 'Clinic Office Hours Update Failed',
+      },
+    };
+
     props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
   };
 

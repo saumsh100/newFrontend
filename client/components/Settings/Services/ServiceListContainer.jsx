@@ -27,7 +27,15 @@ class ServiceListContainer extends Component {
     values.name = values.name.trim();
     values.customCosts = {};
     const key = 'services';
-    const alert = { success: `${values.name} service created.`, error: `${values.name} service could not be created.` }
+    const alert = {
+      success: {
+        body: `${values.name} service created.`,
+      },
+      error: {
+        body: `${values.name} service could not be created.`,
+      },
+    };
+
     this.props.createEntityRequest({ key , entityData: values, alert })
       .then((entities) => {
         const id = Object.keys(entities[key])[0];

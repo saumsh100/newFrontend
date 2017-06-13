@@ -99,8 +99,23 @@ class AddNewAppointment extends Component {
       customBufferTime: bufferTime,
     };
 
-    const alertCreate = { success: `Added a new Appointment for ${patientSelected.firstName}`, error: 'Appointment Creation Failed' }
-    const alertUpdate = { success: `Updated ${patientSelected.firstName}'s Appointment`, error: 'Appointment Creation Failed' }
+    const alertCreate = {
+      success: {
+        body: `Added a new Appointment for ${patientSelected.firstName}`,
+      },
+      error: {
+        body: 'Appointment Creation Failed',
+      },
+    };
+
+    const alertUpdate = {
+      success: {
+        body: `Updated ${patientSelected.firstName}'s Appointment`,
+      },
+      error: {
+        body: `Appointment Update for ${patientSelected.firstName} Failed`,
+      },
+    };
 
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {

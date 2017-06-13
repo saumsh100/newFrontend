@@ -25,9 +25,13 @@ class ServiceDataItem extends Component {
     const valuesMap = Map(values);
 
     const alert = {
-      success: `${service.get('name')} service was updated`,
-      error: `${service.get('name')} service update failed`,
-    }
+      success: {
+        body: `${service.get('name')} service was updated`,
+      },
+      error: {
+        body: `${service.get('name')} service update failed`,
+      },
+    };
 
     const modifiedService = service.merge(valuesMap);
     this.props.onSubmit(modifiedService, alert);

@@ -47,8 +47,12 @@ class PractitionerList extends Component {
     }
 
     const alert = {
-      success: `${values.firstName} was added as a practitioner.`,
-      error: `${values.firstName} could not be added as a practitioner.`,
+      success: {
+        body: `${values.firstName} was added as a practitioner.`
+      },
+      error: {
+        body: `${values.firstName} could not be added as a practitioner.`
+      },
     };
 
     //creates the practitioner and then updates with all services set to true

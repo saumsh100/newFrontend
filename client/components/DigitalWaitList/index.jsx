@@ -67,13 +67,23 @@ class DigitalWaitList extends Component {
     );
 
     const alertCreate = {
-      success: `Added wait spot for ${values.patientData.firstName}.`,
-      error: `Wait spot for ${values.patientData.firstName} could not be added.`,
+      success: {
+        body: `Added wait spot for ${values.patientData.firstName}.`,
+      },
+      error: {
+        title: 'Wait Spot Error',
+        body: `Wait spot for ${values.patientData.firstName} could not be added.`,
+      },
     };
 
     const alertUpdate = {
-      success: `Updated wait spot for ${values.patientData.firstName}.`,
-      error: `Wait spot for ${values.patientData.firstName} could not be updated.`,
+      success: {
+        body: `Updated wait spot for ${values.patientData.firstName}.`,
+      },
+      error: {
+        title: 'Wait Spot Update Error',
+        body: `Wait spot for ${values.patientData.firstName} could not updated.`,
+      },
     };
 
     if (!selectedWaitSpot) {

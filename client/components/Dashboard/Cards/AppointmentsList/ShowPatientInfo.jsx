@@ -13,6 +13,10 @@ export default function ShowPatientInfo(props) {
     handlePatientClick,
   } = props;
 
+  if (!service || !patient || !chair || !appointment) {
+    return null;
+  }
+
   const startHourMinute = moment(appointment.startDate).format('h:mm');
   const endHourMinute = moment(appointment.endDate).format('h:mm a');
   const time = startHourMinute.concat('-', endHourMinute);
