@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import jwt from 'jwt-decode';
 import _ from 'lodash';
 import { Map } from 'immutable';
 import MainContainer from './MainContainer';
@@ -37,6 +38,13 @@ class PatientList extends Component {
   }
 
   componentDidMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: `/api/accounts/${decodedToken.activeAccountId}`,
+    });
     this.props.fetchEntities({
       key: 'appointments',
       join: ['patient'],
@@ -93,21 +101,19 @@ class PatientList extends Component {
       initialUser: true,
     });
 
-    const ids = [];
+    const values = {
+      isDeleted: true,
+    };
 
-    this.props.appointments.toArray().forEach((appointment) => {
-      if (appointment.patientId === id) {
-        ids.push(appointment.id);
-      }
-    });
-
-    this.props.deleteEntityCascade({
+    this.props.updateEntityRequest({
       key,
-      id,
+      values,
+      alert: {
+        success: 'Deleted patient',
+        error: 'Patient not deleted',
+      },
       url: `/api/patients/${id}`,
-      cascadeKey: 'appointments',
-      ids,
-    });
+    })
   }
 
   submitSearch(value){
@@ -191,7 +197,14 @@ class PatientList extends Component {
 
     const patientSearch = this.props.searchedPatients || [] ;
     let currentPatient = this.state.currentPatient;
-    const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+    let app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+    app = app.filter((appointment) => {
+      if (moment(appointment.startDate).diff(new Date()) > 0) {
+        return true;
+      }
+      return false;
+    });
+
 
     if (this.state.initialUser && appointments.toArray()[0] && !selectedPatient) {
       console.log(app, app.toArray()[0].patientId)

@@ -7,6 +7,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const checkIsArray = require('../../../middleware/checkIsArray');
 const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
+const Chat = require('../../../models/Chat');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
@@ -15,6 +16,7 @@ patientsRouter.param('patientId', loaders('patient', 'Patient'));
 patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
 
 function ageRange(age, array) {
+  console.log(age)
   if (age < 18) {
     array[0]++;
   } else if(age >= 18 && age < 25) {
@@ -81,7 +83,8 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
         } else {
           send.female++;
         }
-        send.ageData = ageRange(appointment.patient.age, send.ageData);
+        console.log(send.ageData)
+        send.ageData = ageRange(moment().diff(moment(appointment.patient.birthDate), 'years'), send.ageData);
         return 0;
       });
       send.ageData = ageRangePercent(send.ageData);
@@ -161,10 +164,21 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
         return appointment.filter((request) => {
           return generateDuringFilter(request, startDate, endDate);
         });
-    } } })
+    } }, chat: {textMessages: { user: true }} })
     .run()
     .then((patients) => {
       const normPatients = normalize('patients', patients);
+
+      normPatients.entities.chats = {};
+      normPatients.entities.textMessages = {};
+
+      for (let i = 0; i < patients.length; i++) {
+        if (patients[i].chat) {
+          const chatNorm = normalize('chat', patients[i].chat);
+          normPatients.entities.chats = Object.assign(normPatients.entities.chats, chatNorm.entities.chats);
+          normPatients.entities.textMessages = Object.assign(normPatients.entities.textMessages, chatNorm.entities.textMessages);
+        }
+      }
       normPatients.entities.patients = normPatients.entities.patients || {};
       res.send(normPatients);
     })

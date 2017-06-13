@@ -20,6 +20,13 @@
     }
   }
 
+  .loader {
+    width: 100%;
+    height: calc(100vh - 65px);
+    background: #E6E6E6;
+    z-index: 9999;
+  }
+
   /*::-webkit-scrollbar {
     width:9px;
   }
