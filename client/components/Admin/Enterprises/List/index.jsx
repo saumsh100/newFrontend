@@ -24,6 +24,7 @@ class EnterpriseList extends Component {
 
   render() {
     const { enterprises, enterpriseId } = this.props;
+
     const baseUrl = (path = '') => `/admin/enterprises${path}`;
 
     const deleteRequest = ({ id }) => this.props.deleteEntityRequest({ key: 'enterprises', id });

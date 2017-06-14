@@ -4,12 +4,14 @@ $default-table-space: 1.5em;
 
 .mainContainer {
   padding: $container-padding;
+  min-height: calc(100vh - 75px);
 }
 
 .card {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size #b4b4b5;
   overflow: inherit;
   padding-bottom: $default-table-space;
+  margin: auto;
 }
 
 .cardHeader {
@@ -23,4 +25,12 @@ $default-table-space: 1.5em;
 
 .headerPanel {
   margin-bottom: $default-table-space;
+}
+
+.form {
+  max-width: 400px;
+  position: relative;
+  button {
+    margin-left: auto
+  }
 }

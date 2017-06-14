@@ -1,15 +1,9 @@
 @import '../../../../ui.scss';
 
-.link {
+.list {
   color: $color-black;
   font-family: "Gotham-Book";
   font-size: 16px;
   font-weight: 900;
   text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-    color: #FF715A;
-    cursor: pointer;
-  }
 }

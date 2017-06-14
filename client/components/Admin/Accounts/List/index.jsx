@@ -8,6 +8,7 @@ import { fetchEntities, deleteEntityRequest } from '../../../../thunks/fetchEnti
 import PageContainer from '../../General/PageContainer';
 import EditableList from '../../General/EditableList';
 import { VButton } from '../../../library';
+import styles from './styles.scss';
 
 class AccountsList extends Component {
   componentWillMount() {
@@ -52,7 +53,7 @@ class AccountsList extends Component {
         >
           <EditableList
             items={accounts}
-            render={account => <strong>{account.name}</strong>}
+            render={account => <strong className={styles.list}>{account.name}</strong>}
             onEdit={navigateToEdit}
             onDelete={deleteAccount}
             confirm={({ name }) => `Do you really want to delete ${name} Account?`}
