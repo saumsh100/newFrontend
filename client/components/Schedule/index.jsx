@@ -24,7 +24,6 @@ class ScheduleComponent extends Component {
     this.state = {
       addNewAppointment: false,
     };
-
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
@@ -119,6 +118,7 @@ class ScheduleComponent extends Component {
                   />
                 </Modal>
               </div>
+              //Here is the legend
               <Legend />
             </Card>
           </Col>

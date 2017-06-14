@@ -43,6 +43,7 @@ class AddNewAppointment extends Component {
     this.handleDateChange = this.handleDateChange.bind(this);
   }
 
+
   handleSubmit(values) {
     const {
       selectedAppointment,
@@ -179,7 +180,6 @@ class AddNewAppointment extends Component {
     reinitializeState();
   }
 
-
   getSuggestions(value) {
     return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
       .then((searchData) => {
@@ -233,9 +233,7 @@ class AddNewAppointment extends Component {
       activeAccount
     } = this.props;
 
-
     const clinicSchedule = activeAccount ? weeklySchedules.get(activeAccount.get('weeklyScheduleId')) : null;
-
     const dayOfWeek = dayOfWeekAsString(moment(day).weekday());
 
     const filterBySchedulePract = practitioners.toArray().filter((pr) => {
@@ -278,9 +276,9 @@ class AddNewAppointment extends Component {
           key={formName}
           formName={formName}
           services={this.state.servicesAllowed}
+          practitioners={this.state.practitionersBySchedule}
           patients={patients}
           chairs={chairs}
-          practitioners={this.state.practitionersBySchedule}
           selectedAppointment={selectedAppointment}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
@@ -321,6 +319,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const patientUsers = entities.getIn(['patientUsers', 'models']);
 
   if (!activeAccount) {
     return {};

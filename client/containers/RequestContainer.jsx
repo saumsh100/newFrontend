@@ -45,7 +45,6 @@ function mapStateToProps({ entities }) {
     return patientIds.indexOf(patient.get('id')) > -1;
   });
 
-  console.log(patientUsers);
   return {
     requests,
     patients,

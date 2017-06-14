@@ -38,7 +38,10 @@ export default function DisplayForm(props) {
 
   let initialValues = null;
 
-  if (selectedAppointment) {
+  if (selectedAppointment && selectedAppointment.request) {
+    console.log('zzz')
+  }
+  if (selectedAppointment && !selectedAppointment.request) {
     const {
       startDate,
       endDate,
