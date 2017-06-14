@@ -132,7 +132,6 @@ class PatientList extends Component {
 
   submitEdit(currentPatient, values) {
     const key = (this.state.showNewUser ? 'patient' : 'patients');
-    console.log(currentPatient.firstName)
 
     if (key === 'patients') {
       values.key = 'patient';
