@@ -91,7 +91,7 @@ accountsRouter.post('/:accountId/newUser/', (req, res, next) => {
   }
 
   return Permission.save({
-    role: 'MANAGER',
+    role: req.body.role,
   }).then((permission) => {
     UserAuth.signup({
       ...req.body,
@@ -197,7 +197,13 @@ accountsRouter.get('/:accountId/users', (req, res, next) => {
   return User.filter({ enterpriseId: req.account.enterprise.id })
       .filter({ activeAccountId: req.account.id }).getJoin({ permission: true }).run()
       .then((permissions) => {
-        const obj = normalize('users', permissions);
+        const users = permissions.filter((user) => {
+          if (user.permission.role === 'SUPERADMIN') {
+            return false;
+          }
+          return true;
+        });
+        const obj = normalize('users', users);
         obj.entities.accounts = {
           [req.account.id]: req.account,
         };

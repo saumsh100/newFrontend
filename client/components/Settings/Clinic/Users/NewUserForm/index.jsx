@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Form, Field } from '../../../../library';
-import { emailValidate, maxLength, passwordsValidate, asyncEmailValidateUser } from '../../../../library/Form/validate';
+import { emailValidate, maxLength, passwordsValidate, passwordStrength, asyncEmailValidateUser } from '../../../../library/Form/validate';
 
 class NewUserForm extends Component {
 
@@ -35,16 +35,26 @@ class NewUserForm extends Component {
         />
         <Field
           required
+          name="role"
+          label="Role"
+          component="DropdownSelect"
+          options={[
+            { value: 'OWNER' },
+            { value: 'MANAGER' },
+          ]}
+        />
+        <Field
+          required
           type="password"
           name="password"
-          validate={[passwordsValidate]}
+          validate={[passwordsValidate, passwordStrength]}
           label="Password"
         />
         <Field
           required
           type="password"
           name="confirmPassword"
-          validate={[passwordsValidate]}
+          validate={[passwordsValidate, passwordStrength]}
           label="Password Confirmation"
         />
       </Form>

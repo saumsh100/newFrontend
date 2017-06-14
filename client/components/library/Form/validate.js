@@ -45,7 +45,7 @@ const postalCodeValidate = (value) => {
 }
 
 const passwordsValidate = (value, values) => {
-  if (values.password !== values.confirmPassword) {
+  if (values.password && values.confirmPassword && (values.password !== values.confirmPassword)) {
     return 'Password is not match';
   }
 
