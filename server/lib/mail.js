@@ -3,8 +3,14 @@ const mandrill = require('../config/mandrill');
 
 module.exports = {
   sendConfirmationReminder: (config) => {
-    config.subject = 'Appointment Confirmation';
-    config.templateName = 'Appointment Confirmation';
+    config.subject = 'Appointment Reminder';
+    config.templateName = 'Appointment Reminder';
+    return sendTemplate(config);
+  },
+
+  sendPatientRecall: (config) => {
+    config.subject = 'You are due for your next appointment';
+    config.templateName = 'Patient Recall';
     return sendTemplate(config);
   },
 };

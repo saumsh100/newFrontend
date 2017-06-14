@@ -7,7 +7,6 @@ const EMAIL = 'email';
 const SMS = 'sms';
 
 const SentReminder = createModel('SentReminder', {
-  sentDate: type.date(),
   reminderId: type.string().uuid(4).required(),
   accountId: type.string().uuid(4).required(),
   patientId: type.string().uuid(4).required(),
