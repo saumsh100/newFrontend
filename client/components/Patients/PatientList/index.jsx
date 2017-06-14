@@ -7,7 +7,7 @@ import jwt from 'jwt-decode';
 import _ from 'lodash';
 import { Map } from 'immutable';
 import MainContainer from './MainContainer';
-import { fetchEntities, createEntityRequest, updateEntityRequest, fetchEntitiesRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
+import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
 import * as Actions from '../../../actions/patientList';
 
 const HOW_MANY_TO_SKIP = 15;
@@ -109,11 +109,15 @@ class PatientList extends Component {
       key,
       values,
       alert: {
-        success: 'Deleted patient',
-        error: 'Patient not deleted',
+        success: {
+          body: 'Deleted patient',
+        },
+        error: {
+          body: 'Patient not deleted',
+        },
       },
       url: `/api/patients/${id}`,
-    })
+    });
   }
 
   submitSearch(value){
@@ -128,6 +132,7 @@ class PatientList extends Component {
 
   submitEdit(currentPatient, values) {
     const key = (this.state.showNewUser ? 'patient' : 'patients');
+    console.log(currentPatient.firstName)
 
     if (key === 'patients') {
       values.key = 'patient';
@@ -141,6 +146,14 @@ class PatientList extends Component {
     this.props.updateEntityRequest({
       key: 'patients',
       model: modifiedPatient,
+      alert: {
+        success: {
+          body: `${currentPatient.firstName}'s Info Updated`,
+        },
+        error: {
+          body: `${currentPatient.firstName}'s Info Not Updated`,
+        },
+      },
       url: `/api/patients/${currentPatient.id}`,
     }).then((result) => {
       this.props.setSelectedPatient(Object.keys(result.patients)[0]);
@@ -304,7 +317,6 @@ function mapDispatchToProps(dispatch) {
     createEntityRequest,
     updateEntityRequest,
     deleteEntityCascade,
-    fetchEntitiesRequest,
     setSelectedPatient: Actions.setSelectedPatientIdAction,
     searchPatient: Actions.searchPatientAction,
   }, dispatch);

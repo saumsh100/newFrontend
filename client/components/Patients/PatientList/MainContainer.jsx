@@ -1,6 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import uniqBy from 'lodash/uniqBy';
 import NewPatientForm from './NewPatientForm';
 import EditPatientForm from './EditPatientForm';
@@ -23,6 +25,8 @@ import {
 } from '../../library';
 import styles from './main.scss';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
+
 
 class MainContainer extends Component {
   constructor(props) {
@@ -34,6 +38,15 @@ class MainContainer extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentPatient.id !== this.props.currentPatient.id) {
+      this.props.fetchEntitiesRequest({
+        id: 'patientIdStats',
+        url: `/api/patients/${nextProps.currentPatient.id}/stats`,
+      });
+    }
+  }
+
   handleTabChange(index) {
     this.setState({
       index,
@@ -41,6 +54,8 @@ class MainContainer extends Component {
   }
 
   render() {
+
+    const patientIdStats = (this.props.patientIdStats ? this.props.patientIdStats.toJS() : {});
 
     const patientsWithAppointments = this.props.appointments.toArray()
       .reduce((res, appointment) => {
@@ -60,6 +75,7 @@ class MainContainer extends Component {
         currentPatient={this.props.currentPatient}
         onClick={this.props.newUserForm}
         onDelete={this.props.deletePatient}
+        patientIdStats={patientIdStats}
       />
     );
 
@@ -206,14 +222,32 @@ MainContainer.propTypes = {
   currentPatient: PropTypes.object,
   moreData: PropTypes.bool,
   appointments: PropTypes.object.isRequired,
+  patientIdStats: PropTypes.object,
   active: PropTypes.bool,
   initialUser: PropTypes.bool,
   newUserForm: PropTypes.func,
   deletePatient: PropTypes.func,
   reinitializeState: PropTypes.func,
+  fetchEntitiesRequest: PropTypes.func,
   editUser: PropTypes.func,
   newPatient: PropTypes.func,
   submitSearch: PropTypes.func,
 };
 
-export default MainContainer;
+function mapStateToProps({ apiRequests }) {
+  const patientIdStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
+  return {
+    patientIdStats,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntitiesRequest,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(MainContainer);
+
