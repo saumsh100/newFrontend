@@ -50,9 +50,7 @@ const familySchema = () => {
 };
 
 const permissionSchema = () => {
-  return new schema.Entity('permissions', {
-    users: [userSchema()],
-  });
+  return new schema.Entity('permissions');
 };
 
 const requestSchema = () => {
@@ -73,7 +71,9 @@ const textMessageSchema = () => {
 };
 
 const userSchema = () => {
-  return new schema.Entity('users');
+  return new schema.Entity('users', {
+    permission: permissionSchema(),
+  });
 };
 
 const syncClientErrorSchema = () => {

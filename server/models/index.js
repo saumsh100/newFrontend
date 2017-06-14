@@ -206,6 +206,7 @@ TextMessage.hasOne(User, 'user', 'userId', 'id');
 
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
 User.hasOne(Enterprise, 'enterprise', 'enterpriseId', 'id');
+User.hasOne(Permission, 'permission', 'permissionId', 'id');
 
 /**
  * WaitSpot Relations

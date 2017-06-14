@@ -29,6 +29,9 @@
     },
     "TWILIO_AUTH_TOKEN": {
       "required": true
+    },
+    "REDIS_URL": {
+      "required": true
     }
   },
   "formation": {

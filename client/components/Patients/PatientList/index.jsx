@@ -109,11 +109,15 @@ class PatientList extends Component {
       key,
       values,
       alert: {
-        success: 'Deleted patient',
-        error: 'Patient not deleted',
+        success: {
+          body: 'Deleted patient',
+        },
+        error: {
+          body: 'Patient not deleted',
+        },
       },
       url: `/api/patients/${id}`,
-    })
+    });
   }
 
   submitSearch(value){
@@ -141,6 +145,14 @@ class PatientList extends Component {
     this.props.updateEntityRequest({
       key: 'patients',
       model: modifiedPatient,
+      alert: {
+        success: {
+          body: `${currentPatient.firstName}'s Info Updated`,
+        },
+        error: {
+          body: `${currentPatient.firstName}'s Info Not Updated`,
+        },
+      },
       url: `/api/patients/${currentPatient.id}`,
     }).then((result) => {
       this.props.setSelectedPatient(Object.keys(result.patients)[0]);
@@ -239,9 +251,16 @@ class PatientList extends Component {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
 
-        currentPatient.appointment = currentPatient.appointment || (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
+        const appointments = (currentPatient.appointments ? currentPatient.appointments : []);
+
+        currentPatient.appointment = currentPatient.appointment || (appointments[0] ? appointments[0] : {});
       }
     }
+
+    // this.props.fetchEntitiesRequest({
+    //   id: 'patientStatsLastYear',
+    //   url: `/api/patients/${currentPatient.id}/appointmentstats`,
+    // })
 
     return (
       <MainContainer
@@ -275,6 +294,7 @@ PatientList.PropTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   deleteEntityCascade: PropTypes.func.isRequired,
   setSelectedPatient: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
   searchPatient: PropTypes.func.isRequired,
 };
 

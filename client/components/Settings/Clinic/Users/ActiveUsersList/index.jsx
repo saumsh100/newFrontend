@@ -16,7 +16,7 @@ class ActiveUsersList extends Component {
     return (
       <ListItem className={styles.userListItem}>
         <div className={styles.main}>
-          <Avatar className={styles.image} user={{url: "https://placeimg.com/640/480/people"}} />
+          <Avatar className={styles.image} user={activeUser} />
           <div className={styles.userName}>
             <div>
               <p className={styles.name}>{activeUser.getName()} {badge}</p>
