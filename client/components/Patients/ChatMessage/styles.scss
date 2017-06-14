@@ -342,6 +342,7 @@
 .patients_list {
   background: #e6e6e6;
   max-height: calc(100vh - 70px);
+  min-height: calc(100vh - 90px);
   display: flex;
   flex-direction: column;
   border-top: 5px solid $primary-light-blue;
