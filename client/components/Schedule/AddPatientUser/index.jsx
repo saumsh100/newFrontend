@@ -1,8 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-export default function CreatePatientUser (props) {
-
+export default function AddPatientUser(props) {
   return (
     <div>
       test

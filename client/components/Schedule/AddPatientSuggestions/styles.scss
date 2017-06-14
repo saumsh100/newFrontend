@@ -1,0 +1,65 @@
+@import '../../../ui';
+
+.suggestionsContainer {
+  width: 500px;
+  height: 500px;
+  background: $primary-darkgrey;
+}
+
+.suggestionsList {
+  margin: 0 auto;
+  width: 75%;
+  max-height: 400px;
+  height: auto;
+  border-top: 1px solid #efefef;
+  overflow: auto;
+  background-color: lighten($primary-lightgrey, 2%);
+  @media screen and (max-width: 450px){
+    max-width: 270px;
+  }
+}
+
+.suggestionsListItem {
+  display: flex;
+  padding: 20px 20px 20px 20px;
+}
+
+.title {
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  font-size: $extra-medium-size;
+  font-weight: $jumbo-weight;
+  color: $primary-color;
+}
+
+.patientContainer {
+  display: inline-block;
+  align-content: center;
+  align-items: center;
+  font-family: $medium-font;
+  font-size: $medium-size;
+
+  &_img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  &_fullName {
+    font-family: $medium-font;
+    font-size: $medium-size;
+    @media screen and (max-width: 850px){
+      font-size: $medium-size;
+    }
+  }
+
+  &_phone {
+
+  }
+
+  &_email {
+
+  }
+}

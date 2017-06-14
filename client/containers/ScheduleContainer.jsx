@@ -7,7 +7,6 @@ import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { setScheduleDate, selectAppointment, setMergingPatient } from '../actions/schedule';
-import { showAlertTimeout } from '../actions/alerts';
 
 import {
   setAllFilters,
@@ -122,7 +121,6 @@ ScheduleContainer.propTypes = {
 
 function mapStateToProps({ entities, schedule }) {
 
-  const practitioners = entities.getIn(['practitioners', 'models']);
   const weeklySchedules = entities.getIn(['weeklySchedules', 'models'])
   const timeOffs = entities.getIn(['timeOffs', 'models']);
 

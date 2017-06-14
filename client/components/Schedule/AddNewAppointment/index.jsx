@@ -13,7 +13,6 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { showAlert }from '../../../actions/alerts';
 import { Button, IconButton } from '../../library';
 import styles from './styles.scss';
 
@@ -229,7 +228,7 @@ class AddNewAppointment extends Component {
       change,
       formName,
       weeklySchedules,
-      activeAccount
+      activeAccount,
     } = this.props;
 
     const clinicSchedule = activeAccount ? weeklySchedules.get(activeAccount.get('weeklyScheduleId')) : null;
@@ -257,15 +256,12 @@ class AddNewAppointment extends Component {
       chairs,
       selectedAppointment,
       reinitializeState,
-      mergingPatientData,
     } = this.props;
 
     const remoteButtonProps = {
       onClick: reinitializeState,
       form: formName,
     };
-
-    console.log(mergingPatientData);
 
     return (
       <div className={styles.formContainer}>
@@ -319,9 +315,8 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 };
 
-function mapStateToProps({ entities, auth, schedule }) {
+function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const patientUsers = entities.getIn(['patientUsers', 'models']);
 
   if (!activeAccount) {
     return {};
@@ -329,16 +324,17 @@ function mapStateToProps({ entities, auth, schedule }) {
 
   return {
     activeAccount,
-    mergingPatientData: schedule.toJS().mergingPatientData,
   };
 }
 
-AddNewAppointment.PropTypes = {
+AddNewAppointment.propTypes = {
   formName: PropTypes.string.required,
   services: PropTypes.object.required,
   patients: PropTypes.object.required,
   chairs: PropTypes.object.required,
   practitioners: PropTypes.object.required,
+  weeklySchedule: PropTypes.object.required,
+  activeAccount: PropTypes.object.required,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,

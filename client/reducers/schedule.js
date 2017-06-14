@@ -13,8 +13,6 @@ import {
   SET_MERGING,
 } from '../constants';
 
-
-
 const initialState = fromJS({
   scheduleDate: new Date(),
   chairsFilter: [],
@@ -23,14 +21,17 @@ const initialState = fromJS({
   remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
   selectedAppointment: null,
   selectedWaitSpot: null,
-  mergingPatientData: { id: null, display: null },
-  mergeSuggestions: [],
+  mergingPatientData: {
+    patientUser: null,
+    requestData: null,
+    suggestions: [],
+  },
 });
 
 export default handleActions({
   [SET_MERGING](state, action) {
     return state.merge({
-      mergingPatientData: action.payload
+      mergingPatientData: action.payload,
     });
   },
 

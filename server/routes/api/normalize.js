@@ -63,7 +63,6 @@ const patientUserSchema = () => {
 
 const requestSchema = () => {
   return new schema.Entity('requests', {
-    patient: patientSchema(),
     service: serviceSchema(),
     practitioner: practitionerSchema(),
     chair: chairSchema(),

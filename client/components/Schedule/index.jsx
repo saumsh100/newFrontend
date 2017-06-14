@@ -12,6 +12,8 @@ import {
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
+import AddPatientUser from './AddPatientUser';
+import AddPatientSuggestions from './AddPatientSuggestions';
 import CurrentDate from './Cards/CurrentDate';
 import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
@@ -34,6 +36,11 @@ class ScheduleComponent extends Component {
   }
 
   reinitializeState() {
+    this.props.setMergingPatient({
+      patientUser: null,
+      request: null,
+      suggestions: [],
+    });
     this.props.selectAppointment(null);
     this.setState({
       addNewAppointment: false,
@@ -71,6 +78,34 @@ class ScheduleComponent extends Component {
       formName = `editAppointment_${selectedAppointment.serviceId}`;
     }
 
+    const mergingData = schedule.toJS().mergingPatientData;
+
+    console.log('state', schedule.toJS().mergingPatientData);
+    console.log('merging data: ', mergingData);
+
+    let displayModalComponent = (
+      <AddNewAppointment
+        formName={formName}
+        chairs={chairs.get('models').toArray()}
+        practitioners={practitioners.get('models')}
+        services={services.get('models')}
+        patients={patients.get('models')}
+        selectedAppointment={selectedAppointment}
+        reinitializeState={this.reinitializeState}
+        weeklySchedules={weeklySchedules}
+      />
+    );
+
+    if (mergingData.suggestions.length > 0) {
+      displayModalComponent = (
+        <AddPatientSuggestions
+          mergingData={mergingData}
+          reinitializeState={this.reinitializeState}
+          selectAppointment={selectAppointment}
+        />
+      );
+    }
+
     return (
       <Grid>
         <Row className={styles.rowMainContainer}>
@@ -101,24 +136,19 @@ class ScheduleComponent extends Component {
                   weeklySchedules={weeklySchedules}
                 />
                 <Modal
-                  active={addNewAppointment || !!selectedAppointment}
+                  active={
+                    addNewAppointment ||
+                    !!selectedAppointment ||
+                      !!mergingData.patientUser
+                  }
                   onEscKeyDown={this.reinitializeState}
                   onOverlayClick={this.reinitializeState}
                   custom
                 >
-                  <AddNewAppointment
-                    formName={formName}
-                    chairs={chairs.get('models').toArray()}
-                    practitioners={practitioners.get('models')}
-                    services={services.get('models')}
-                    patients={patients.get('models')}
-                    selectedAppointment={selectedAppointment}
-                    reinitializeState={this.reinitializeState}
-                    weeklySchedules={weeklySchedules}
-                  />
+                  {displayModalComponent}
                 </Modal>
               </div>
-              {/*Here is the legend*/}
+              {/* Here is the legend */}
               <Legend />
             </Card>
           </Col>

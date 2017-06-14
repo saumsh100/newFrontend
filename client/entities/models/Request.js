@@ -7,7 +7,6 @@ const RequestsSchema = {
   endDate: null,
   id: null,
   accountId: null,
-  patientId: null,
   serviceId: null,
   practitionerId: null,
   patientUserId: null,

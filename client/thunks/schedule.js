@@ -1,63 +1,57 @@
-
+import { set } from 'lodash';
 import axios from './axios';
 import {
   addAllScheduleFilter,
   setMergingPatient,
-  selectAppointment
+  selectAppointment,
 } from '../actions/schedule';
 import {
-  receiveEntities
-} from '../actions/entities'
+  receiveEntities,
+} from '../actions/entities';
 
-
-export function checkPatientUser(patientUser, request) {
-  return function (dispatch, getState)  {
-    // pull requestThatIsBeingConfirmed
-    // get patientUserId from request
-
-    //const url = `/api/patients/${patientInfo.id}`
+export function checkPatientUser(patientUser, requestData) {
+  return function (dispatch, getState) {
+    // AccountId passed up in the query
     const query = {
       patientUserId: patientUser.get('id'),
     };
 
     return axios.get('/api/patients', { params: query })
-      .then((response) => {
-        const { data } = response;
-        if (data.result.length > 0) {
-          dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
-          const patientId = Object.keys(data.entities['patients'])[0];
-          request.patientId = patientId;
-          dispatch(selectAppointment(request));
-          return data.entities;
-          // open Appointment modal
-          /*} else {
-           // No exact patients connected yet
-           // Let's check if there are any suggestions
-           r
-           }).then(({ data }) => {
-           setSuggestions(data);
-           dispatch(setMergingPatient({ isMerging: true }));
-           // open create patient modal
-           })
-           }*/
-        } else {
-          return axios.get('/api/patients/search', {
-            params: {
-                firstName: patientUser.get('firstName'),
-                lastName: patientUser.get('lastName'),
-                email: patientUser.get('email'),
-              }
-            }).then((response) => {
-                console.log(response.datat)
+    .then((response) => {
+      const { data } = response;
 
-              })
-        }
+      const checkObjEmpty = !_.values(data.entities['patients']).some(x => x !== undefined);
+      if (!checkObjEmpty) {
+        dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
 
-      });
+        let modifiedRequest = requestData;
+        set(modifiedRequest, 'patientId', Object.keys(data.entities['patients'])[0]);
+        dispatch(selectAppointment(modifiedRequest));
+      } else {
+        const params = {
+          firstName: patientUser.get('firstName'),
+          lastName: patientUser.get('lastName'),
+          email: patientUser.get('email'),
+          mobilePhoneNumber: patientUser.get('mobilePhoneNumber'),
+        };
+
+        return axios.get('/api/patients/suggestions', { params }).then((searchResponse) => {
+          const dataSuggest = searchResponse.data;
+
+          dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }))
+          const dataArray = getEntities(dataSuggest.entities);
+
+          dispatch(setMergingPatient({
+            patientUser,
+            requestData,
+            suggestions: dataArray,
+          }));
+
+        });
+      }
+    });
   };
 }
-
-
 
 export function setAllFilters(entityKeys) {
   return function (dispatch, getState) {
@@ -79,7 +73,6 @@ export function setAllFilters(entityKeys) {
             }
           });
         });
-
       } else {
         filterModel = model;
       }
@@ -91,4 +84,12 @@ export function setAllFilters(entityKeys) {
   };
 }
 
-
+function getEntities(entities) {
+  const data = [];
+  _.each(entities, (collectionMap) => {
+    _.each(collectionMap, (modelData) => {
+      data.push(modelData);
+    });
+  });
+  return data;
+}

@@ -31,14 +31,12 @@ class RequestList extends Component {
       push('/schedule');
     }
 
-    const modifiedRequest = request.set('isCancelled', true);
+    //const modifiedRequest = request.set('isCancelled', true);
 
     const appointment = {
-      requestModel: modifiedRequest,
-      requestId: request.get('id'),
+      //requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
-      //patientUserId: request.get('patientUserId'),
       serviceId: request.get('serviceId'),
       note: request.note,
       isSyncedWithPMS: false,

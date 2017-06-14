@@ -159,7 +159,6 @@ Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
  * Request Relations
  */
 
-Request.belongsTo(Patient, 'patient', 'patientId', 'id');
 Request.belongsTo(Account, 'account', 'accountId', 'id');
 Request.belongsTo(Service, 'service', 'serviceId', 'id');
 Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');

@@ -175,7 +175,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 /**
  * Get all patients under a clinic
  */
-patientsRouter.get('/', (req, res, next) => {
+patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
   const { accountId } = req;
   const { email, patientUserId } = req.query;
 
@@ -186,10 +186,7 @@ patientsRouter.get('/', (req, res, next) => {
     return Patient
       .filter({ accountId})
       .filter(r.row('patientUserId').eq(patientUserId)).run()
-      .then(p => {
-        console.log(p)
-        res.send(normalize('patients', p))
-      });
+      .then(patient => res.send(normalize('patients', patient)))
   } else {
     return Patient.filter({ accountId }).run()
       .then((patients) => {
@@ -197,6 +194,37 @@ patientsRouter.get('/', (req, res, next) => {
       })
       .catch(next);
   }
+});
+
+/**
+ * Get suggestions based on query
+ */
+patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res, next) => {
+  const { accountId } = req;
+
+  const {
+    firstName,
+    lastName,
+    email,
+    mobilePhoneNumber,
+  } = req.query;
+
+  let subStringPhoneNumber = mobilePhoneNumber;
+  if (mobilePhoneNumber && mobilePhoneNumber[0] === '+') {
+    subStringPhoneNumber = subStringPhoneNumber.substring(1);
+  }
+
+  Patient.filter((patient) => {
+    return patient('accountId').eq(req.accountId).and(
+      patient('firstName').match(firstName)
+        .or(patient('lastName').match(lastName))
+        .or(patient('email').match(email))
+        .or(patient('mobilePhoneNumber').match(subStringPhoneNumber)));
+  }).limit(10)
+    .run()
+    .then((patients) => {
+      res.send(normalize('patients', patients));
+    });
 });
 
 /**
