@@ -43,7 +43,6 @@ class AddNewAppointment extends Component {
     this.handleDateChange = this.handleDateChange.bind(this);
   }
 
-
   handleSubmit(values) {
     const {
       selectedAppointment,
@@ -258,12 +257,15 @@ class AddNewAppointment extends Component {
       chairs,
       selectedAppointment,
       reinitializeState,
+      mergingPatientData,
     } = this.props;
 
     const remoteButtonProps = {
       onClick: reinitializeState,
       form: formName,
     };
+
+    console.log(mergingPatientData);
 
     return (
       <div className={styles.formContainer}>
@@ -293,7 +295,7 @@ class AddNewAppointment extends Component {
           >
             Save
           </RemoteSubmitButton>
-          {(selectedAppointment && !selectedAppointment.request) && (
+          {selectedAppointment  && (
             <div className={styles.remoteSubmit_buttonDelete}>
               <Button onClick={this.deleteAppointment} >
                 Delete
@@ -317,7 +319,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 };
 
-function mapStateToProps({ entities, auth }) {
+function mapStateToProps({ entities, auth, schedule }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const patientUsers = entities.getIn(['patientUsers', 'models']);
 
@@ -327,6 +329,7 @@ function mapStateToProps({ entities, auth }) {
 
   return {
     activeAccount,
+    mergingPatientData: schedule.toJS().mergingPatientData,
   };
 }
 

@@ -680,6 +680,7 @@ const SEEDS = {
       email: 'justin@carecru.com',
       mobilePhoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
+      patientUserId: patientUserId2,
       gender: 'male',
       language: 'English',
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),

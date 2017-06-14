@@ -133,6 +133,7 @@ Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 Patient.hasMany(SentReminder, 'sentReminders', 'id', 'patientId');
 Patient.hasMany(SentRecall, 'sentRecalls', 'id', 'patientId');
+Patient.hasOne(PatientUser, 'patientUser', 'id', 'patientUserId');
 
 /**
  * Permission Relations

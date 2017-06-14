@@ -177,10 +177,19 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
  */
 patientsRouter.get('/', (req, res, next) => {
   const { accountId } = req;
-  const { email } = req.query;
+  const { email, patientUserId } = req.query;
+
   if (email) {
     return Patient.filter({ email }).run()
     .then(p => res.send({ length: p.length }));
+  } else if (patientUserId) {
+    return Patient
+      .filter({ accountId})
+      .filter(r.row('patientUserId').eq(patientUserId)).run()
+      .then(p => {
+        console.log(p)
+        res.send(normalize('patients', p))
+      });
   } else {
     return Patient.filter({ accountId }).run()
       .then((patients) => {

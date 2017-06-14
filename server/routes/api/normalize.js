@@ -40,7 +40,9 @@ const patientSingleSchema = () => {
 };
 
 const patientSchema = () => {
-  return new schema.Entity('patients');
+  return new schema.Entity('patients', {
+    patientUser: patientUserSchema(),
+  });
 };
 
 const familySchema = () => {
@@ -167,8 +169,10 @@ const SCHEMAS = {
   weeklySchedule: weeklyScheduleSchema(),
   sentReminder: sentReminderSchema(),
   sentRecall: sentRecallSchema(),
+  patientUser: patientUserSchema(),
   // Collections (list/find)
   accounts: [accountSchema()],
+  patientUsers: [patientUserSchema()],
   appointments: [appointmentSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],

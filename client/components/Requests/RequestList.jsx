@@ -10,6 +10,7 @@ import styles from './styles.scss';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
 import { setHoverRequestId } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
+import { checkPatientUser } from '../../thunks/schedule';
 
 class RequestList extends Component {
   constructor(props) {
@@ -23,19 +24,22 @@ class RequestList extends Component {
       selectAppointment,
       location,
       push,
+      checkPatientUser,
     } = this.props;
 
     if (location === '/') {
       push('/schedule');
     }
+
     const modifiedRequest = request.set('isCancelled', true);
+
 
     const appointment = {
       requestModel: modifiedRequest,
       requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
-      patientUserId: request.get('patientUserId'),
+      //patientUserId: request.get('patientUserId'),
       serviceId: request.get('serviceId'),
       note: request.note,
       isSyncedWithPMS: false,
@@ -43,7 +47,10 @@ class RequestList extends Component {
       request: true,
     };
 
-    selectAppointment(appointment);
+    checkPatientUser(request.get('patientUserId'), appointment);
+
+
+    //selectAppointment(appointment);
 
     // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
     console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
@@ -110,6 +117,7 @@ function mapActionsToProps(dispatch) {
     createEntityRequest,
     setHoverRequestId,
     selectAppointment,
+    checkPatientUser,
     push,
   }, dispatch);
 }

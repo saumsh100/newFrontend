@@ -118,7 +118,7 @@ class ScheduleComponent extends Component {
                   />
                 </Modal>
               </div>
-              //Here is the legend
+              {/*Here is the legend*/}
               <Legend />
             </Card>
           </Col>
