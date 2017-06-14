@@ -195,6 +195,38 @@ class Users extends Component{
         );
       })
     }
+    let options;
+    if (this.state.role === 'SUPERADMIN') {
+      options = [
+        { value: 'OWNER' },
+        { value: 'MANAGER' },
+      ];
+    }
+
+    switch (this.state.role) {
+      case 'SUPERADMIN':
+        options = [
+          { value: 'ADMIN' },
+          { value: 'OWNER' },
+          { value: 'MANAGER' },
+        ];
+        break;
+      case 'ADMIN':
+        options = [
+          { value: 'OWNER' },
+          { value: 'MANAGER' },
+        ];
+        break;
+      case 'OWNER':
+        options = [
+          { value: 'OWNER' },
+          { value: 'MANAGER' },
+        ];
+        break;
+      default:
+        options = [];
+        break;
+    }
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
@@ -259,10 +291,7 @@ class Users extends Component{
             value={this.state.editValue}
             onChange={this.editDropdown}
             className={styles.dropdown}
-            options={[
-            { value: 'OWNER' },
-            { value: 'MANAGER' },
-            ]}
+            options={options}
           />
         </DialogBox>
         <Row className={styles.mainHead}>

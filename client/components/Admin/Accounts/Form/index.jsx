@@ -13,6 +13,9 @@ const enterprisesPath = (path = '') => `/admin/enterprises${path}`;
 
 const EnterpriseForm = (props) => {
   const { enterprise, isCreate, navigate, account } = props;
+  if (!enterprise) {
+    return null;
+  }
 
   const accountsPath = (path = '') => enterprisesPath(`/${enterprise.id}${path}`);
 
@@ -28,7 +31,7 @@ const EnterpriseForm = (props) => {
       props.updateEntityRequest({
         key,
         values: entityData,
-        url: `/api/enterprises/${enterprise.id}/accounts/${account.id}`
+        url: `/api/enterprises/${enterprise.id}/accounts/${account.id}`,
       });
 
     promise.then(() => navigate(accountsPath('/accounts')));
@@ -51,9 +54,22 @@ const EnterpriseForm = (props) => {
       <PageContainer title={pageTitle()} breadcrumbs={breadcrumbs()}>
         <Form
           form="accountForm"
-          initialValues={{ name: account && account.name }}
+          initialValues={{
+            name: account && account.name,
+            plan: 'GROWTH',
+            }}
           onSubmit={onSubmit}
         >
+          <Field
+            required
+            name="plan"
+            label="Plan"
+            component="DropdownSelect"
+            options={[
+              { value: 'ENTERPRISE' },
+              { value: 'GROWTH' },
+            ]}
+          />
           <Field required name="name" label="Name" />
         </Form>
       </PageContainer>

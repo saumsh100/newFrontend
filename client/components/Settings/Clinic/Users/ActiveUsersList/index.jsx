@@ -9,7 +9,8 @@ class ActiveUsersList extends Component {
     const { activeUser, role, currentUserId, userId, currentUserRole, edit } = this.props;
     const badge = (userId === currentUserId ? <span className={styles.badge}>You</span> : null);
     let button = null;
-    if ((currentUserRole === 'SUPERADMIN' || role === 'SUPERADMIN') && role !== 'SUPERADMIN') {
+    if ((currentUserRole === 'SUPERADMIN' || currentUserRole === 'ADMIN'  || currentUserRole === 'OWNER' || role === 'SUPERADMIN')
+      && role !== 'SUPERADMIN' && !(currentUserRole === 'ADMIN' && role === 'ADMIN') && currentUserRole !== 'MANAGER' && !(currentUserRole === 'OWNER' && role === 'ADMIN')) {
       button = (userId !== currentUserId ? <Button className={styles.edit} onClick={edit}>Edit</Button> : null);
     }
 

@@ -39,6 +39,7 @@ class NewUserForm extends Component {
           label="Role"
           component="DropdownSelect"
           options={[
+            { value: 'ADMIN' },
             { value: 'OWNER' },
             { value: 'MANAGER' },
           ]}
