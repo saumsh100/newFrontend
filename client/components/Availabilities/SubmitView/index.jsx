@@ -38,6 +38,7 @@ class SubmitView extends Component {
   }
 
   componentWillMount() {
+    console.log(token.get());
     this.props.loadPatient(token.get())
       .then(patient => (!patient) && token.remove());
   }
@@ -93,10 +94,24 @@ class SubmitView extends Component {
       patientUser,
       closeBookingModal,
       bookingWidgetPrimaryColor,
+      setIsLogin,
     } = this.props;
 
+    console.log('isLogin', isLogin);
+
     let formComponent = (
-      <SignUpForm onSubmit={this.signUpAndConfirm} />
+      <div>
+        <SignUpForm onSubmit={this.signUpAndConfirm} />
+        <div className={styles.alreadyHaveWrapper}>
+          Already have an account?
+          <a
+            href="#login"
+            onClick={(e) => { e.preventDefault(); setIsLogin(true); }}
+          >
+             Login here
+          </a>
+        </div>
+      </div>
     );
 
     if (isConfirming) {
@@ -118,6 +133,15 @@ class SubmitView extends Component {
             className={styles.loginForm}
             onLogin={credentials => this.login(credentials)}
           />
+          <div className={styles.alreadyHaveWrapper}>
+            Don't have an account?
+            <a
+              href="#signup"
+              onClick={(e) => { e.preventDefault(); setIsLogin(false); }}
+            >
+              Signup here
+            </a>
+          </div>
         </div>
       );
     }
@@ -188,12 +212,7 @@ class SubmitView extends Component {
             <div className={styles['user-component']}>
               { patientUser ?
                 avatarComponent() :
-                <VButton
-                  icon="user"
-                  color="red"
-                  className={styles['login-button']}
-                  onClick={() => this.props.setIsLogin(true)}
-                />
+                null
               }
             </div>
           ) : null }
@@ -246,6 +265,7 @@ SubmitView.propTypes = {
     id: PropTypes.string,
     firstName: PropTypes.string,
   }),
+
   hasWaitList: PropTypes.bool.isRequired,
 };
 

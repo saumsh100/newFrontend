@@ -50,9 +50,7 @@ module.exports = function authMiddleware(req, res, next) {
     const checkValidity = (message = '') => value =>
       (value || Promise.reject(StatusError(401, `Unauthorized. ${message}`)));
 
-    console.log('decoded.sessionId', decoded.sessionId);
-
-    // Load Token
+    // Load Session
     AuthSession.get(decoded.sessionId).run()
       .then(checkValidity('Session Token not found.'))
       .then(({ modelId: userId, permissions, role, enterpriseId, accountId }) => {

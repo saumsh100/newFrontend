@@ -36,13 +36,17 @@ const getPatientIdFromToken = (token) => {
   }
 };
 
+// TODO: make this like the sync data
 const fetchPatient = id => (id ?
   axios.get(`/patients/${id}`).then(({ data }) => data) :
   Promise.resolve(null));
 
 const setPatientByToken = (token, dispatch) =>
   fetchPatient(getPatientIdFromToken(token))
-    .then(patient => dispatch(setPatientUser(new Patient(patient))));
+    .then((patient) => {
+      if (!patient) return;
+      dispatch(setPatientUser(new Patient(patient)));
+    });
 
 export function createPatient(values) {
   return function (dispatch) {
