@@ -16,7 +16,7 @@ class RequestListItem extends Component {
   }
 
   onClickConfirm() {
-    this.props.confirmAppointment(this.props.request);
+    this.props.confirmAppointment(this.props.request, this.props.patientUser);
   }
 
   onClickRemove() {

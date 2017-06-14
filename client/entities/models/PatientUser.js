@@ -1,6 +1,7 @@
 import createModel from '../createModel';
 
 const PatientUserSchema = {
+  id: null,
   email: null,
   firstName: null,
   lastName: null,

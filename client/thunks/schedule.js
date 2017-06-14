@@ -10,14 +10,14 @@ import {
 } from '../actions/entities'
 
 
-export function checkPatientUser(patientUserId, request) {
+export function checkPatientUser(patientUser, request) {
   return function (dispatch, getState)  {
     // pull requestThatIsBeingConfirmed
     // get patientUserId from request
 
     //const url = `/api/patients/${patientInfo.id}`
     const query = {
-      patientUserId,
+      patientUserId: patientUser.get('id'),
     };
 
     return axios.get('/api/patients', { params: query })
@@ -33,20 +33,26 @@ export function checkPatientUser(patientUserId, request) {
           /*} else {
            // No exact patients connected yet
            // Let's check if there are any suggestions
-           return axios.get('/api/patients/search', {
-           params: {
-           firstName,
-           lastName,
-           email,
-           passWord,
-           },
+           r
            }).then(({ data }) => {
            setSuggestions(data);
            dispatch(setMergingPatient({ isMerging: true }));
            // open create patient modal
            })
            }*/
+        } else {
+          return axios.get('/api/patients/search', {
+            params: {
+                firstName: patientUser.get('firstName'),
+                lastName: patientUser.get('lastName'),
+                email: patientUser.get('email'),
+              }
+            }).then((response) => {
+                console.log(response.datat)
+
+              })
         }
+
       });
   };
 }

@@ -19,7 +19,7 @@ class RequestList extends Component {
     this.removeRequest = this.removeRequest.bind(this);
   }
 
-  confirmAppointment(request) {
+  confirmAppointment(request, patientUser) {
     const {
       selectAppointment,
       location,
@@ -32,7 +32,6 @@ class RequestList extends Component {
     }
 
     const modifiedRequest = request.set('isCancelled', true);
-
 
     const appointment = {
       requestModel: modifiedRequest,
@@ -47,7 +46,7 @@ class RequestList extends Component {
       request: true,
     };
 
-    checkPatientUser(request.get('patientUserId'), appointment);
+    checkPatientUser(patientUser, appointment);
 
 
     //selectAppointment(appointment);
