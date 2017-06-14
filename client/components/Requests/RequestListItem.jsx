@@ -119,7 +119,6 @@ class RequestListItem extends Component {
 }
 
 RequestListItem.propTypes = {
-  patient: PropTypes.object,
   request: PropTypes.object.isRequired,
   service: PropTypes.object,
   updateEntityRequest: PropTypes.func,

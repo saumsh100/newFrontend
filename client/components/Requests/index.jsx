@@ -12,7 +12,6 @@ class Requests extends Component {
   render() {
     const {
       requests,
-      patients,
       services,
       patientUsers,
       location,
@@ -34,7 +33,6 @@ class Requests extends Component {
         <div className={styles.requestBody}>
           <RequestList
             sortedRequests={sortedRequests}
-            patients={patients}
             services={services}
             patientUsers={patientUsers}
             location={location}

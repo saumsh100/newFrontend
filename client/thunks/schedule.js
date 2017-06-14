@@ -46,7 +46,7 @@ export function checkPatientUser(patientUserId, request) {
            // open create patient modal
            })
            }*/
-        } 
+        }
       });
   };
 }

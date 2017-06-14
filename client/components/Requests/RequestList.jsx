@@ -67,7 +67,6 @@ class RequestList extends Component {
   render() {
     const {
       sortedRequests,
-      patients,
       services,
       patientUsers,
       setHoverRequestId,
@@ -80,7 +79,6 @@ class RequestList extends Component {
           <RequestListItem
             key={request.id}
             request={request}
-            patient={patients.get(request.get('patientId'))}
             service={services.get(request.get('serviceId'))}
             patientUser={patientUsers.get(request.get('patientUserId'))}
             confirmAppointment={this.confirmAppointment}
