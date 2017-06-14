@@ -7,7 +7,7 @@ import jwt from 'jwt-decode';
 import _ from 'lodash';
 import { Map } from 'immutable';
 import MainContainer from './MainContainer';
-import { fetchEntities, createEntityRequest, updateEntityRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
+import { fetchEntities, createEntityRequest, updateEntityRequest, fetchEntitiesRequest, deleteEntityCascade } from '../../../thunks/fetchEntities';
 import * as Actions from '../../../actions/patientList';
 
 const HOW_MANY_TO_SKIP = 15;
@@ -239,9 +239,16 @@ class PatientList extends Component {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
 
-        currentPatient.appointment = currentPatient.appointment || (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
+        const appointments = (currentPatient.appointments ? currentPatient.appointments : []);
+
+        currentPatient.appointment = currentPatient.appointment || (appointments[0] ? appointments[0] : {});
       }
     }
+
+    // this.props.fetchEntitiesRequest({
+    //   id: 'patientStatsLastYear',
+    //   url: `/api/patients/${currentPatient.id}/appointmentstats`,
+    // })
 
     return (
       <MainContainer
@@ -275,6 +282,7 @@ PatientList.PropTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   deleteEntityCascade: PropTypes.func.isRequired,
   setSelectedPatient: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
   searchPatient: PropTypes.func.isRequired,
 };
 
@@ -296,6 +304,7 @@ function mapDispatchToProps(dispatch) {
     createEntityRequest,
     updateEntityRequest,
     deleteEntityCascade,
+    fetchEntitiesRequest,
     setSelectedPatient: Actions.setSelectedPatientIdAction,
     searchPatient: Actions.searchPatientAction,
   }, dispatch);

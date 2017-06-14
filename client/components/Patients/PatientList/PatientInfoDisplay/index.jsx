@@ -92,7 +92,7 @@ class PatientInfoDisplay extends Component {
             </div>
             <div className={styles.stats}>
               <div className={styles.loyal}>
-                <div className={styles.container1}>
+                {/*<div className={styles.container1}>
                   <span className={styles.loyality1}>70</span>
                   <br />
                   <span className={styles.loyality2}>PATIENT</span>
@@ -123,7 +123,7 @@ class PatientInfoDisplay extends Component {
                   <span className={styles.statInfo}>REVIEWS</span>
                   <br />
                   <span className={styles.statData}>2</span>
-                </div>
+                </div>*/}
               </div>
             </div>
           </div>) : null) }

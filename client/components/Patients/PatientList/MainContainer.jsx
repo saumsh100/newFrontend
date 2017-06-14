@@ -70,6 +70,19 @@ class MainContainer extends Component {
       { label: 'Save', onClick: this.props.newPatient, component: RemoteSubmitButton, props: { form: formName }},
     ];
 
+    // Just for Coming Soon stuff
+    const style = {
+      display: 'flex',
+      'alignItems': 'center',
+      'justifyContent': 'center',
+      height: 'calc(51vh - 110px)',
+    };
+
+    const style2 = {
+      'maxWidth': '50%',
+      'maxHeight': '50%',
+    };
+
     return (
       <Grid>
         <DialogBox
@@ -110,10 +123,10 @@ class MainContainer extends Component {
               </Row>
               <Row className={styles.rightCon}>
                 <div className={styles.patients_content__wrapper}>
-                  <Col xs={8}>
+                  <Col xs={7}>
                     <TextMessage />
                   </Col>
-                  <Col xs={4}>
+                  <Col xs={5}>
                     <div className={styles.right}>
                       {(this.props.currentPatient ? (
                         <Tabs
@@ -151,9 +164,7 @@ class MainContainer extends Component {
                             label="Insurance"
                             className={styles.tabs}
                           >
-                            <div className={styles.text}>
-                              Coming Soon
-                            </div>
+                            <div style={style}>Coming Soon</div>
                           </Tab>
                           <Tab
                             label="Preferences"
@@ -172,9 +183,7 @@ class MainContainer extends Component {
                             label="Family"
                             className={styles.tabs}
                           >
-                            <div className={styles.text}>
-                              Coming Soon
-                            </div>
+                            <div style={style}>Coming Soon</div>
                           </Tab>
                         </Tabs>
                         ) : <div className={styles.loading}>Loading...</div>)}
