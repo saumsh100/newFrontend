@@ -10,15 +10,12 @@ import styles from './styles.scss';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
 import { setHoverRequestId } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
-import * as Actions from '../../actions/patientList';
-
 
 class RequestList extends Component {
   constructor(props) {
     super(props);
     this.confirmAppointment = this.confirmAppointment.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
-    this.handlePatientClick = this.handlePatientClick.bind(this);
   }
 
   confirmAppointment(request) {
@@ -38,7 +35,7 @@ class RequestList extends Component {
       requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
-      patientId: request.get('patientId'),
+      patientUserId: request.get('patientUserId'),
       serviceId: request.get('serviceId'),
       note: request.note,
       isSyncedWithPMS: false,
@@ -50,16 +47,6 @@ class RequestList extends Component {
 
     // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
     console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
-  }
-
-  handlePatientClick(id) {
-    const {
-      setSelectedPatientId,
-      push,
-    } = this.props;
-
-    setSelectedPatientId(id);
-    push('/patients/list');
   }
 
 
@@ -75,6 +62,7 @@ class RequestList extends Component {
       sortedRequests,
       patients,
       services,
+      patientUsers,
       setHoverRequestId,
     } = this.props;
 
@@ -87,10 +75,10 @@ class RequestList extends Component {
             request={request}
             patient={patients.get(request.get('patientId'))}
             service={services.get(request.get('serviceId'))}
+            patientUser={patientUsers.get(request.get('patientUserId'))}
             confirmAppointment={this.confirmAppointment}
             removeRequest={this.removeRequest}
             setClickedId={setHoverRequestId}
-            handlePatientClick={this.handlePatientClick}
           />
         );
       })
@@ -122,7 +110,6 @@ function mapActionsToProps(dispatch) {
     createEntityRequest,
     setHoverRequestId,
     selectAppointment,
-    setSelectedPatientId: Actions.setSelectedPatientIdAction,
     push,
   }, dispatch);
 }

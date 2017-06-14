@@ -20,6 +20,7 @@ const Request = createModel('Request', {
   // Lifecycle Attributes
   isCancelled: type.boolean().default(false),
   appointmentId: type.string().uuid(4),
+  patientUserId: type.string().uuid(4),
 });
 
 module.exports = Request;

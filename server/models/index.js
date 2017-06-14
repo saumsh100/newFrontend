@@ -29,6 +29,7 @@ import Token from './Token';
 import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
+import PatientUser from './PatientUser';
 
 export {
   Account,
@@ -43,6 +44,7 @@ export {
   Patient,
   Family,
   OAuth,
+  PatientUser,
   Permission,
   Practitioner,
   Practitioner_Service,
@@ -161,6 +163,7 @@ Request.belongsTo(Account, 'account', 'accountId', 'id');
 Request.belongsTo(Service, 'service', 'serviceId', 'id');
 Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Request.belongsTo(Chair, 'chair', 'chairId', 'id');
+Request.belongsTo(PatientUser, 'patientUser', 'patientUserId', 'id');
 
 /**
  * SentReminder Relations

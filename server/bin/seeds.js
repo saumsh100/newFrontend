@@ -49,6 +49,9 @@ const jdUserId = uuid();
 const syncUserId = uuid();
 const vstUserId = uuid();
 
+const patientUserId1 = uuid();
+const patientUserId2 = uuid();
+
 const justinPermissionId = uuid();
 const markPermissionId = uuid();
 const grantPermissionId = uuid();
@@ -503,7 +506,7 @@ const SEEDS = {
   ],
 
   Request: [
-    {
+    /*{
       accountId,
       startDate: moment({ hour: 11, minute: 10 })._d,
       endDate: moment({ hour: 12, minute: 50 })._d,
@@ -514,7 +517,7 @@ const SEEDS = {
       isConfirmed: false,
       isCancelled: false,
       note: 'Some note from patient here....',
-    },
+    },*/
     {
       accountId,
       startDate: moment({hour: 13, minute: 10})._d,
@@ -522,6 +525,20 @@ const SEEDS = {
       patientId: justinPatientId,
       serviceId: serviceId,
       practitionerId: practitionerId2,
+      patientUserId: patientUserId2,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
+    },
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 20})._d,
+      patientId: markPatientId,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      patientUserId: patientUserId1,
       chairId,
       isConfirmed: false,
       isCancelled: false,
@@ -544,6 +561,23 @@ const SEEDS = {
       endDate: new Date(2017, 3, 3, 15, 0),
       serviceId: cleanupServiceId,
       patientId: justinPatientId,
+    },
+  ],
+
+  PatientUser: [
+    {
+      id: patientUserId1,
+      firstName: 'Mark',
+      lastName: 'Sharp',
+      email: 'mark@carecru.com',
+      mobilePhoneNumber: markPhoneNumber,
+    },
+    {
+      id: patientUserId2,
+      firstName: 'Justin',
+      lastName: 'Sharp',
+      email: 'justin@carecru.com',
+      mobilePhoneNumber: justinPhoneNumber,
     },
   ],
 

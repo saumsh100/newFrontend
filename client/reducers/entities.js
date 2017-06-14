@@ -25,6 +25,8 @@ import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
 import invites from '../entities/collections/invites';
 import Invites from '../entities/models/Invites';
+import patientUsers from '../entities/collections/patientUsers';
+import PatientUser from '../entities/models/PatientUser';
 import practitioners from '../entities/collections/practitioners';
 import Practitioners from '../entities/models/Practitioners';
 import permissions from '../entities/collections/permissions';
@@ -84,6 +86,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     sentReminders: new sentReminders(),
     recalls: new recalls(),
     sentRecalls: new sentRecalls(),
+    patientUsers: new patientUsers(),
 
     // reviews: Reviews(), MODEL
     // listings: Listings(),
@@ -113,6 +116,7 @@ const Models = {
   sentReminders: SentReminder,
   recalls: Recall,
   sentRecalls: SentRecall,
+  patientUsers: PatientUser,
 };
 
 export default handleActions({

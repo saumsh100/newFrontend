@@ -55,12 +55,17 @@ const permissionSchema = () => {
   });
 };
 
+const patientUserSchema = () => {
+  return new schema.Entity('patientUsers')
+}
+
 const requestSchema = () => {
   return new schema.Entity('requests', {
     patient: patientSchema(),
     service: serviceSchema(),
     practitioner: practitionerSchema(),
     chair: chairSchema(),
+    patientUser: patientUserSchema(),
   });
 };
 
