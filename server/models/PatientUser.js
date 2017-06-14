@@ -1,4 +1,5 @@
 
+const { omit } = require('lodash');
 const bcrypt = require('bcrypt');
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
@@ -33,6 +34,11 @@ PatientUser.define('setPasswordAsync', function (password) {
       return resolve(this);
     });
   });
+});
+
+PatientUser.define('makeSafe', function () {
+  delete this.password;
+  return this;
 });
 
 module.exports = PatientUser;

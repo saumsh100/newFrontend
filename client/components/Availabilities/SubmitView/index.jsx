@@ -46,7 +46,6 @@ class SubmitView extends Component {
   login(credentials) {
     return this.props.loginPatient(credentials)
       .then(t => token.save(t))
-      .then(() => this.props.createRequest())
       .catch(({ data, status }) => {
         if (status === 401) {
           throw new SubmissionError({
@@ -97,6 +96,10 @@ class SubmitView extends Component {
       setIsLogin,
     } = this.props;
 
+    // If patient is authenticated, display <BookView />
+    // If patient is !authenticated, display <SignUpView />
+    // TODO: refactor this using Memory Router
+
     console.log('isLogin', isLogin);
 
     let formComponent = (
@@ -114,7 +117,7 @@ class SubmitView extends Component {
       </div>
     );
 
-    if (isConfirming) {
+    if (patientUser && isConfirming) {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
@@ -139,7 +142,7 @@ class SubmitView extends Component {
               href="#signup"
               onClick={(e) => { e.preventDefault(); setIsLogin(false); }}
             >
-              Signup here
+              Sign up here
             </a>
           </div>
         </div>
@@ -198,28 +201,26 @@ class SubmitView extends Component {
 
     return (
       <div className={styles.submitViewWrapper}>
-        <div className={styles.timerWrapper}>
-          { showTimer ? (
+        {showTimer ? (
+          <div className={styles.timerWrapper}>
             <Timer
               className={styles.signup__header_timer}
               totalSeconds={TOTAL_SECONDS_ALLOWED}
               color={bookingWidgetPrimaryColor}
               onEnd={() => setIsTimerExpired(true)}
             />
-          ) : null }
-
-          { !isLogin ? (
-            <div className={styles['user-component']}>
-              { patientUser ?
-                avatarComponent() :
-                null
-              }
+          </div>
+        ) : null}
+        {/*patientUser ? (
+            <div className={styles.avatarWrapper}>
+              <div className={styles['user-component']}>
+                {avatarComponent()}
+              </div>
             </div>
-          ) : null }
-        </div>
+          ) : null*/}
         <div className={styles.formWrapper}>
 
-          { (!isSuccessfulBooking && patientUser) ? (
+          { (!isSuccessfulBooking && patientUser && !isConfirming) ? (
             <div style={{ textAlign: 'center' }}>
               <div className={styles.messageWrapper}>
                 <span>You are currently logged in as <strong>{patientUser.getFullName()}</strong>.
@@ -227,7 +228,7 @@ class SubmitView extends Component {
                   If this is not you, and you would like to logout
                   and signin/signup as another user,
                   click
-                  <a href="#logout" onClick={(e) => { e.preventDefault(); this.logout(); }}>here</a>.
+                  <a href="#logout" onClick={(e) => { e.preventDefault(); this.logout(); }}> here</a>.
                   <br /><br /> If it is you and you would
                   like to complete the booking, click the button below.
                 </span>
