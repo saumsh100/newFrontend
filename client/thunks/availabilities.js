@@ -1,3 +1,4 @@
+
 import jwt from 'jwt-decode';
 import moment from 'moment';
 import axios from './axios';
@@ -14,7 +15,7 @@ import {
   removeReservationAction,
   refreshAvailabilitiesState,
 } from '../actions/availabilities';
-import Patient from '../entities/models/Patient';
+import PatientUser from '../entities/models/PatientUser';
 
 export function sixDaysShift(dayObj) {
   return function (dispatch) {
@@ -24,25 +25,25 @@ export function sixDaysShift(dayObj) {
 
 const getPatientIdFromToken = (token) => {
   try {
-    const { id, exp } = jwt(token);
-
-    if ((exp - (Date.now() / 1000)) < 0) {
-      return null;
-    }
-
-    return id;
+    const decodedToken = jwt(token);
+    return decodedToken.patientUserId;
   } catch (e) {
     return null;
   }
 };
 
+// TODO: make this like the sync data
 const fetchPatient = id => (id ?
-  axios.get(`/patients/${id}`).then(({ data }) => data) :
+  axios.get(`/patientUsers/${id}`).then(({ data }) => data) :
   Promise.resolve(null));
 
 const setPatientByToken = (token, dispatch) =>
   fetchPatient(getPatientIdFromToken(token))
-    .then(patient => dispatch(setPatientUser(new Patient(patient))));
+    .then((patientUser) => {
+      if (!patientUser) return;
+      console.log(patientUser);
+      dispatch(setPatientUser(new PatientUser(patientUser)));
+    });
 
 export function createPatient(values) {
   return function (dispatch) {
@@ -84,7 +85,7 @@ export function createRequest() {
 
     let params = {
       accountId: account.id,
-      patientId: patientUser.id,
+      patientUserId: patientUser.id,
       serviceId: selectedServiceId,
       startDate,
       endDate,

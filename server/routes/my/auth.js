@@ -1,11 +1,18 @@
+
 import { Router } from 'express';
 import { PatientAuth } from '../../lib/auth';
 
 const authRouter = Router();
 
-const signTokenAndSend = res => ({ id }) =>
-  PatientAuth.signToken({ id })
+const signTokenAndSend = res => ({ session, model }) => {
+  const tokenData = {
+    patientUserId: model.id,
+    sessionId: session.id,
+  };
+
+  return PatientAuth.signToken(tokenData)
     .then(token => res.json({ token }));
+};
 
 authRouter.post('/signup', ({ body: patient }, res, next) => {
   if (patient.password !== patient.confirmPassword) {

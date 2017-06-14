@@ -22,7 +22,7 @@ myRouter.use('/oauth', oauthRouter);
 myRouter.use('/auth', authRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
-myRouter.param('patientId', loaders('patient', 'Patient'));
+myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
@@ -98,7 +98,13 @@ myRouter.post('/patientCheck', (req, res, next) => {
     .catch(next);
 });
 
-myRouter.get('/patients/:patientId', ({ patient }, res) => res.json(patient));
+myRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
+  try {
+    res.json(req.patientUser.makeSafe());
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares

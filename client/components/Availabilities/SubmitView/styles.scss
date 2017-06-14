@@ -37,7 +37,7 @@
 
     &_timer {
       position: absolute;
-      left: 50px;
+      right: 40px;
     }
   }
 
@@ -157,8 +157,18 @@
 .timerWrapper {
   position: fixed;
   top: 20px;
-  left: 192px;
-  right: 0;
+  right: 0px;
+  // left: 192px;
+  // right: 0;
+  z-index: 105;
+}
+
+.avatarWrapper {
+  position: fixed;
+  top: 20px;
+  right: 0px;
+  // left: 192px;
+  // right: 0;
   z-index: 105;
 }
 
@@ -197,4 +207,8 @@
   height: 50px;
 
   cursor: pointer;
+}
+
+.alreadyHaveWrapper {
+  text-align: center;
 }
