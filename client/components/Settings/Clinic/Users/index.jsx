@@ -159,17 +159,16 @@ class Users extends Component{
       editActive,
       newActive,
     } = this.state;
-    let clinic;
 
-    accounts.toArray().map((account) => {
-      clinic = (account.id === this.props.accountId ? account : null);
-      return null;
-    });
+    let clinicName = null;
 
-    let clinicName = '';
-    if (clinic) {
-      clinicName = clinic.get('name');
+    for (let i = 0; i < accounts.toArray().length; i++) {
+      if (accounts.toArray()[i].id === this.props.accountId) {
+        clinicName = accounts.toArray()[i].name;
+        break;
+      }
     }
+
 
     let usersInvited = (<div className={styles.userListItem}>
       <div className={styles.main}>
@@ -195,38 +194,11 @@ class Users extends Component{
         );
       })
     }
-    let options;
-    if (this.state.role === 'SUPERADMIN') {
-      options = [
-        { value: 'OWNER' },
-        { value: 'MANAGER' },
-      ];
-    }
-
-    switch (this.state.role) {
-      case 'SUPERADMIN':
-        options = [
+    const options = [
           { value: 'ADMIN' },
           { value: 'OWNER' },
           { value: 'MANAGER' },
-        ];
-        break;
-      case 'ADMIN':
-        options = [
-          { value: 'OWNER' },
-          { value: 'MANAGER' },
-        ];
-        break;
-      case 'OWNER':
-        options = [
-          { value: 'OWNER' },
-          { value: 'MANAGER' },
-        ];
-        break;
-      default:
-        options = [];
-        break;
-    }
+    ];
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
