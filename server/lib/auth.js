@@ -2,7 +2,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import globals from '../config/globals';
-import { User, Patient, AuthSession } from '../models';
+import { User, PatientUser, AuthSession } from '../models';
 
 export const error = (status, message) =>
   Promise.reject({ status, message });
@@ -56,9 +56,9 @@ export const Auth = (Model, primaryKey) => ({
     return this.load(model[primaryKey])
       .then(existedModel => (!existedModel) || error(400, 'Email Already in Use'))
       .then(() => Model.save(model))
-      .then(savedModel =>
-        AuthSession.save({ modelId: savedModel.id })
-          .then(authSession => ({ savedModel, authSession }))
+      .then(model =>
+        AuthSession.save({ modelId: model.id })
+          .then(session => ({ model, session }))
       );
   },
 
@@ -102,4 +102,4 @@ export const Auth = (Model, primaryKey) => ({
 });
 
 export const UserAuth = Auth(User, 'username');
-export const PatientAuth = Auth(Patient, 'email');
+export const PatientAuth = Auth(PatientUser, 'email');

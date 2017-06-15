@@ -20,23 +20,28 @@ signupRouter.post('/:token', ({ body, params: { token } }, res, next) => {
 
   return Invite.filter({ token }).run()
     .then(([invite]) => invite || error(401, 'Bad invite'))
-    .then(({ accountId, id }) =>
-      UserAuth.signup({ ...newUser, activeAccountId: accountId })
-        .then(({ model: user, authSession }) => ({ user, inviteId: id, sessionIdId: authSession.id }))
-    )
-    .then(({ user: { id, activeAccountId }, inviteId, sessionId }) =>
-      Promise.all([
-        // Create permissions for new user
-        Permission.save({
-          userId: id,
-          accountId: activeAccountId,
-          role: 'VIEWER',
-          permissions: {},
-        }),
-
-        Invite.get(inviteId).then(invite => invite.delete()),
-      ])
+    .then(({ accountId, id, enterpriseId }) => {
+      return Permission.save({
+        role: 'MANAGER',
+      }).then((permission) => {
+        return UserAuth.signup({
+          ...newUser,
+          enterpriseId,
+          permissionId: permission.id,
+          activeAccountId: accountId,
+        })
+          .then(({ savedModel: user, authSession }) => {
+            return {
+            user,
+            inviteId: id,
+            sessionIdId: authSession.id,
+          }});
+      });
+    })
+    .then(({ user: { id, activeAccountId }, inviteId, sessionId }) => {
+       return Invite.get(inviteId).then(invite => invite.delete())
         .then(() => UserAuth.signToken({ userId: id, sessionId }))
+      }
     )
     .then(authToken => res.json({ token: authToken }))
     .catch(next);

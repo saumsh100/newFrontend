@@ -19,7 +19,7 @@ router.get('/', checkPermissions('enterprises:read'), (req, res, next) => {
 });
 
 router.post('/', checkPermissions('enterprises:create'), (req, res, next) => {
-  Enterprise.save(pick(req.body, ['name']))
+  Enterprise.save(pick(req.body, ['name', 'plan']))
     .then(enterprise => res.send(201, normalize('enterprise', enterprise)))
     .catch(next);
 });
@@ -51,7 +51,7 @@ router.get('/:enterpriseId', checkPermissions('enterprises:read'), (req, res) =>
 });
 
 router.put('/:enterpriseId', checkPermissions('enterprises:update'), (req, res, next) => {
-  req.enterprise.merge(pick(req.body, ['name'])).save()
+  req.enterprise.merge(pick(req.body, ['name', 'plan'])).save()
     .then(enterprise => res.send(normalize('enterprise', enterprise)))
     .catch(next);
 });

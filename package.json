@@ -200,6 +200,8 @@
     "@kadira/storybook": "^2.35.3",
     "@kadira/storybook-addon-knobs": "^1.7.1",
     "babel-jest": "^20.0.3",
+    "browser-sync": "^2.18.12",
+    "browser-sync-webpack-plugin": "^1.1.4",
     "chai": "^3.5.0",
     "cypress-cli": "^0.13.1",
     "eslint": "^3.5.0",

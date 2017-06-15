@@ -12,7 +12,7 @@ const { Account, Permission } = require('../../../models');
 const uuid = require('uuid').v4;
 const { sendInvite } = require('../../../lib/inviteMail');
 
-accountsRouter.param('accountId', loaders('account', 'Account'));
+accountsRouter.param('accountId', loaders('account', 'Account', { enterprise: true }));
 accountsRouter.param('inviteId', loaders('invite', 'Invite'));
 accountsRouter.param('permissionId', loaders('permission', 'Permission'));
 
@@ -80,6 +80,33 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .catch(next);
 });
 
+accountsRouter.post('/:accountId/newUser/', (req, res, next) => {
+
+  if (req.account.id !== req.accountId) {
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  if (req.role !== 'SUPERADMIN') {
+    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+  }
+
+  return Permission.save({
+    role: req.body.role,
+  }).then((permission) => {
+    UserAuth.signup({
+      ...req.body,
+      username: req.body.email,
+      activeAccountId: req.accountId,
+      enterpriseId: req.account.enterprise.id,
+      permissionId: permission.id,
+    }).then(({ savedModel: user }) => {
+      delete user.password;
+      user.permission = permission;
+      res.send(normalize('user', user));
+    });
+  }).catch(next);
+});
+
 accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => {
   const { permission } = req;
 
@@ -87,7 +114,15 @@ accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => 
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
-  if (req.role !== 'SUPERADMIN') {
+  if (req.role !== 'SUPERADMIN' && req.role !== 'ADMIN' && req.role !== 'OWNER') {
+    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+  }
+
+  if (req.role === 'ADMIN' && req.body === 'SUPERADMIN') {
+    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+  }
+
+  if (req.role === 'OWNER' && (req.body === 'SUPERADMIN' || req.body === 'ADMIN')) {
     return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
   }
 
@@ -118,6 +153,7 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
   const newInvite = req.body;
   newInvite.accountId = req.accountId;
   newInvite.token = uuid();
+  newInvite.enterpriseId = req.account.enterprise.id;
 
   return Invite.save(newInvite)
     .then((invite) => {
@@ -166,21 +202,22 @@ accountsRouter.delete('/:accountId/invites/:inviteId', (req, res, next) => {
 
 
 accountsRouter.get('/:accountId/users', (req, res, next) => {
-  return Permission.filter({ accountId: req.account.id }).getJoin({ users: true }).run()
-    .then((permissions) => {
-      const noPassword = permissions.map((permission) => {
-        delete permission.users[0].password;
-        return permission;
-      });
-
-      const obj = normalize('permissions', noPassword);
-      obj.entities.accounts = {
-        [req.account.id]: req.account,
-      };
-
-      res.send(obj);
-    })
-    .catch(next);
+  return User.filter({ enterpriseId: req.account.enterprise.id })
+      .filter({ activeAccountId: req.account.id }).getJoin({ permission: true }).run()
+      .then((permissions) => {
+        const users = permissions.filter((user) => {
+          if (user.permission.role === 'SUPERADMIN') {
+            return false;
+          }
+          return true;
+        });
+        const obj = normalize('users', users);
+        obj.entities.accounts = {
+          [req.account.id]: req.account,
+        };
+        res.send(obj);
+      })
+      .catch(next);
 });
 
 module.exports = accountsRouter;

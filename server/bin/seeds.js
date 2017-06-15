@@ -13,6 +13,8 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
+import PatientUser, { patientUserId } from '../fixtures/patientUsers';
+import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
 import enterpriseFixtures, {
@@ -60,6 +62,7 @@ const alexPatientId = uuid();
 const alexPatientId2 = uuid();
 const markPatientId = uuid();
 const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
+const recallPatientId = '4fcab035-b72c-4f7a-ad73-09465cbf5654';
 const sergeyPatientId = uuid();
 
 const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
@@ -98,7 +101,7 @@ const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
-const clinicPhoneNumber = '+16479307984';
+const clinicPhoneNumber = '+17786558613';
 const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallId = uuid();
 
@@ -111,6 +114,7 @@ const genericTextMessageSeeds = (chatId, patientPhone, clinicPhone, lastDate) =>
       id: uuid(),
       chatId,
       to: patientPhone,
+      userId: sergeyUserId,
       from: clinicPhone,
       body: 'Hey! Just testing out our new messaging service.',
       createdAt: moment(time1).subtract(3, 'days')._d,
@@ -510,7 +514,7 @@ const SEEDS = {
       accountId,
       startDate: moment({ hour: 11, minute: 10 })._d,
       endDate: moment({ hour: 12, minute: 50 })._d,
-      patientId: sergeyPatientId,
+      patientUserId,
       serviceId,
       practitionerId,
       chairId,
@@ -522,9 +526,9 @@ const SEEDS = {
       accountId,
       startDate: moment({hour: 13, minute: 10})._d,
       endDate: moment({hour: 13, minute: 50})._d,
+      patientUserId,
       serviceId: serviceId,
       practitionerId: practitionerId2,
-      patientUserId: patientUserId2,
       chairId,
       isConfirmed: false,
       isCancelled: false,
@@ -550,7 +554,7 @@ const SEEDS = {
       startDate: new Date(2017, 3, 3, 13, 0),
       endDate: new Date(2017, 3, 3, 14, 0),
       serviceId: cleanupServiceId,
-      patientId: justinPatientId,
+      patientUserId,
     },
     {
       accountId: accountId2,
@@ -558,24 +562,26 @@ const SEEDS = {
       startDate: new Date(2017, 3, 3, 14, 0),
       endDate: new Date(2017, 3, 3, 15, 0),
       serviceId: cleanupServiceId,
-      patientId: justinPatientId,
+      patientUserId,
     },
   ],
 
   PatientUser: [
     {
-      id: patientUserId1,
+      id: patientUserId,
       firstName: 'Mark',
       lastName: 'Joseph',
       email: 'mark@carecru.com',
-      mobilePhoneNumber: markPhoneNumber,
+      phoneNumber: markPhoneNumber,
+      password: bcrypt.hashSync('mark', saltRounds)
     },
     {
       id: patientUserId2,
       firstName: 'Justin',
       lastName: 'Sharp',
       email: 'justin@carecru.com',
-      mobilePhoneNumber: justinPhoneNumber,
+      phoneNumber: justinPhoneNumber,
+      password: bcrypt.hashSync('justin', saltRounds)
     },
   ],
 
@@ -692,6 +698,21 @@ const SEEDS = {
       },
       isSyncedWithPMS: false,
       familyId: justinFamilyId,
+    },
+    {
+      id: recallPatientId,
+      accountId: accountId2,
+      avatarUrl: faker.image.avatar(),
+      firstName: 'Dylan',
+      lastName: 'Sharp',
+      email: 'justin.d.sharp@gmail.com',
+      mobilePhoneNumber: '+17804862090',
+      birthDate: moment({year: 1993, month: 6, day: 15})._d,
+      gender: 'male',
+      language: 'English',
+      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
+      status: 'Active',
+      isSyncedWithPMS: false,
     },
     {
       id: sergeyPatientId,
@@ -842,7 +863,7 @@ const SEEDS = {
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      twilioPhoneNumber: '+14243638279',
+      twilioPhoneNumber: clinicPhoneNumber,
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: donnaDentalId,
@@ -957,12 +978,12 @@ const SEEDS = {
   AuthSession: [],
 
   Invite: [
-    {
-      sendingUserId: justinUserId,
-      accountId,
-      email: 'test@email.com',
-      token: uuid(),
-    },
+    // {
+    //   sendingUserId: justinUserId,
+    //   accountId,
+    //   email: 'test@email.com',
+    //   token: uuid(),
+    // },
   ],
 
   PractitionerTimeOff: [
@@ -1094,39 +1115,47 @@ const SEEDS = {
   ],
 
   Chat: [
-    /*{
+    {
       id: alexChatId,
       accountId,
-      patientId: alexPatientId,
       patientPhoneNumber: alexPhoneNumber,
     },
-    {
-      id: justinChatId,
-      accountId,
-      patientId: justinPatientId,
-      patientPhoneNumber: justinPhoneNumber,
-    },
-    {
-      id: sergeyChatId,
-      accountId,
-      patientId: sergeyPatientId,
-      patientPhoneNumber: sergeyPhoneNumber,
-    },
-    {
-      id: markChatId,
-      accountId,
-      patientId: markPatientId,
-      patientPhoneNumber: markPhoneNumber,
-    },*/
+    // {
+    //   id: justinChatId,
+    //   accountId,
+    //   patientId: justinPatientId,
+    //   patientPhoneNumber: justinPhoneNumber,
+    // },
+    // {
+    //   id: sergeyChatId,
+    //   accountId,
+    //   patientId: sergeyPatientId,
+    //   patientPhoneNumber: sergeyPhoneNumber,
+    // },
+    // {
+    //   id: markChatId,
+    //   accountId,
+    //   patientId: markPatientId,
+    //   patientPhoneNumber: markPhoneNumber,
+    // },
 
     ...randomChats,
   ],
 
   TextMessage: [
+    {
+      id: uuid(),
+      chatId: alexChatId,
+      to: clinicPhoneNumber,
+      from: alexPhoneNumber,
+      body: 'Hey! Just testing out our new messaging service.',
+      createdAt: moment(new Date())._d,
+      read: true,
+    },
     //...genericTextMessageSeeds(alexChatId, alexPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     //...genericTextMessageSeeds(markChatId, markPhoneNumber, clinicPhoneNumber),
-    //...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
+    // ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
     //...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...randomMessages,
   ],
@@ -1200,6 +1229,8 @@ const SEEDS = {
     },
   ],
 
+  PatientUser,
+  Recall,
   Reminder,
 
   SentReminder: [
@@ -1216,25 +1247,7 @@ const SEEDS = {
     ...SentReminder,
   ],
 
-  Recall: [
-    {
-      id: recallId,
-      accountId,
-      primaryType: 'sms',
-      lengthSeconds: 30,
-    },
-  ],
-
-  SentRecall: [
-    {
-      accountId,
-      recallId,
-      createdAt: moment({hour: 13, minute: 10})._d,
-      patientId: sergeyPatientId,
-      lengthSeconds: 30,
-    },
-  ],
-
+  SentRecall: [],
 };
 
 seedDatabase(SEEDS)

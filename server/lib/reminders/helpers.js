@@ -15,7 +15,6 @@ import { Appointment, SentReminder } from '../../models';
  * @param date
  */
 export async function getAppointmentsFromReminder({ reminder, date }) {
-  console.log('date', date);
   const start = r.ISO8601(date);
   const end = start.add(reminder.lengthSeconds);
   const appointments = await Appointment
@@ -23,10 +22,6 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
     .filter(r.row('startDate').during(start, end))
     .getJoin({ patient: true, sentReminders: true })
     .run();
-
-  appointments.forEach((a) => {
-    console.log('appointment startDate', a.startDate);
-  });
 
   // .getJoin().filter() does not work in order, therefore we gotta filter after the fetch
   return appointments.filter(appointment => shouldSendReminder({ appointment, reminder }));
@@ -43,12 +38,12 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
  * @returns {boolean}
  */
 export function shouldSendReminder({ appointment, reminder }) {
-  const { sentReminders, patient } = appointment;
+  const { sentReminders } = appointment;
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
     return (s.reminderId === reminder.id) || (reminder.lengthSeconds > s.lengthSeconds);
   });
 
-  return patient.preferences.reminders && !reminderAlreadySentOrLongerAway;
+  return !reminderAlreadySentOrLongerAway;
 }
 
 /**

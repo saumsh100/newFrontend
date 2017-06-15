@@ -1,7 +1,8 @@
 
 import twilio from '../../config/twilio';
+import moment from 'moment';
 import { host } from '../../config/globals';
-import { sendConfirmationReminder } from '../mail';
+import { sendPatientRecall } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
 const BASE_URL = `https://${host}/twilio/voice/reminders`;
@@ -23,37 +24,15 @@ const generateCallBackUrl = ({ account, appointment, patient }) => {
 };
 
 export default {
-  // Send Appointment Reminder text via Twilio
-  sms({ account, appointment, patient }) {
-    // TODO: add phoneNumber logic for patient
-    return twilio.sendMessage({
-      to: patient.mobilePhoneNumber,
-      from: account.twilioPhoneNumber,
-      body: createReminderText({ patient, account, appointment }),
-    });
-  },
-
-  // Send Appointment Reminder call via Twilio
-  phone({ account, appointment, patient }) {
-    // TODO: add phoneNumber logic for patient
-    // TODO; add appointment and account data to URL
-    return twilio.makeCall({
-      to: patient.mobilePhoneNumber,
-      from: account.twilioPhoneNumber,
-      url: generateCallBackUrl({ account, appointment, patient }),
-    });
-  },
-
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, appointment, patient }) {
-    // TODO: create token, then send reminder with tokenId
-    return sendConfirmationReminder({
+  email({ account, lastAppointment, patient }) {
+    return sendPatientRecall({
       toEmail: patient.email,
       fromName: account.name,
       mergeVars: [
         {
-          name: 'CONFIRMATION_URL',
-          content: `https://${host}/confirmation/${123123123123}`,
+          name: 'BOOK_URL',
+          content: `${account.website}?ccbw=1`,
         },
         {
           name: 'ACCOUNT_NAME',
@@ -72,24 +51,12 @@ export default {
           content: account.phoneNumber,
         },
         {
-          name: 'APPOINTMENT_DATE',
-          content: getAppointmentDate(appointment.startDate),
-        },
-        {
-          name: 'APPOINTMENT_TIME',
-          content: getAppointmentTime(appointment.startDate),
+          name: 'LAST_APPOINTMENT_TIMEAGO',
+          content: getTimeAgo(lastAppointment.startDate),
         },
         {
           name: 'PATIENT_FIRSTNAME',
           content: patient.firstName,
-        },
-      ],
-
-      attachments: [
-        {
-          type: 'text/calendar',
-          name: 'appointment.ics',
-          content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
         },
       ],
     });
@@ -105,6 +72,10 @@ export default {
 
 function getAppointmentDate(date) {
   return `${date.getFullYear()}/${(date.getMonth() + 1)}/${date.getDate()}`;
+}
+
+function getTimeAgo(date) {
+  return moment(date).from();
 }
 
 function getAppointmentTime(date) {

@@ -104,7 +104,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
           <Field
             name="street"
             className={styles.nameFields}
-            validate={[maxLength(25)]}
+            validate={[maxLength(40)]}
             label="Street"
           />
         </div>

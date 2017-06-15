@@ -7,6 +7,7 @@ const TextMessage = createModel('TextMessage', {
   // Twilio MessageSID
   id: type.string().required(),
   chatId: type.string().uuid(4).required(),
+  userId: type.string().uuid(4),
 
   // Twilio Data
   to: type.string().required(),

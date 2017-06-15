@@ -14,6 +14,7 @@ export default function Input(props) {
     min,
     borderColor,
     theme,
+    classStyles,
   } = props;
 
   // TODO: add support for hint attribute
@@ -48,7 +49,7 @@ export default function Input(props) {
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
   return (
-    <div className={styles.group}>
+    <div className={`${styles.group} ${classStyles}`}>
       <input type={type} className={inputClassName} {...inputProps} />
       <span className={styles.bar} />
       <label className={labelClassName}>

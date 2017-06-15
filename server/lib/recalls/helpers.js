@@ -1,6 +1,7 @@
 
+import moment from 'moment';
 import { r } from '../../config/thinky';
-import { Appointment } from '../../models';
+import { Appointment, Patient } from '../../models';
 
 // Made an effort to throw all easily testable functions into here
 
@@ -13,17 +14,28 @@ import { Appointment } from '../../models';
  * @param reminder
  * @param date
  */
-export async function getAppointmentsFromReminder({ reminder, date }) {
-  const start = r.ISO8601(date);
-  const end = start.add(reminder.lengthSeconds);
-  const appointments = await Appointment
-    .filter({ accountId: reminder.accountId })
-    .filter(r.row('startDate').during(start, end))
-    .getJoin({ patient: true, sentReminders: true })
-    .run();
+export async function getPatientsDueForRecall({ recall, account, date }) {
+  const filterObject = {
+    accountId: account.id,
+    // TODO: save the recall filtering until it computes recall
+    // This is because we want to be able to show the users which patients
+    // are due for recall even tho the communication was not sent
+    // preferences: { recalls: true },
+  };
 
-  // .getJoin().filter() does not work in order, therefore we gotta filter after the fetch
-  return appointments.filter(appointment => shouldSendReminder({ appointment, reminder }));
+
+  const joinObject = {
+    sentRecalls: true,
+    appointments: {
+      _apply(sequence) {
+        // TODO: This will order oldest appointment first, needs to be flipped!
+        return sequence.orderBy('startDate');
+      },
+    },
+  };
+
+  const patients = await Patient.filter(filterObject).getJoin(joinObject).run();
+  return patients.filter(patient => isDueForRecall({ recall, patient, date }));
 }
 
 /**
@@ -32,15 +44,23 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
  * - checks if reminder was already sent
  * - and if it is sendable according to patient preferences
  *
- * @param appointment
- * @param reminder
+ * @param recall
+ * @param patient
+ * @param date
  * @returns {boolean}
  */
-export function shouldSendReminder({ appointment, reminder }) {
-  const { sentReminders, patient } = appointment;
-  const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
-    return (s.reminderId === reminder.id) || (reminder.lengthSeconds > s.lengthSeconds);
+export function isDueForRecall({ recall, patient, date }) {
+  const { appointments, sentRecalls } = patient;
+  const numAppointments = appointments.length;
+  if (!numAppointments) return false;
+
+  // Check if latest appointment is within the recall window
+  const { startDate } = appointments[appointments.length - 1];
+  const isDue = moment(date).diff(startDate) > recall.lengthSeconds;
+
+  const recallAlreadySentOrLongerAway = sentRecalls.some((s) => {
+    return (s.recallId === recall.id) || (recall.lengthSeconds > s.lengthSeconds);
   });
 
-  return patient.preferences.reminders && !reminderAlreadySentOrLongerAway;
+  return isDue && !recallAlreadySentOrLongerAway;
 }

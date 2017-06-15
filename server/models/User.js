@@ -6,6 +6,7 @@ const type = thinky.type;
 const { passwordHashSaltRounds } = require('../config/globals');
 
 const User = createModel('User', {
+  avatarUrl: type.string(),
   firstName: type.string().required(),
   lastName: type.string().required(),
   username: type.string().email().required(),

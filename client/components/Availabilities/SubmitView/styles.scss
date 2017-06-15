@@ -37,7 +37,7 @@
 
     &_timer {
       position: absolute;
-      left: 50px;
+      right: 40px;
     }
   }
 
@@ -137,6 +137,10 @@
   position: relative;
 }
 
+.fullHeight {
+  height: 100%;
+}
+
 .formWrapper {
   padding: 0px 120px;
   @media screen and (max-width: 600px) {
@@ -157,16 +161,28 @@
 .timerWrapper {
   position: fixed;
   top: 20px;
-  left: 192px;
-  right: 0;
+  right: 0px;
+  // left: 192px;
+  // right: 0;
+  z-index: 105;
+}
+
+.avatarWrapper {
+  position: fixed;
+  top: 20px;
+  right: 0px;
+  // left: 192px;
+  // right: 0;
   z-index: 105;
 }
 
 .exitButton {
   width: 100%;
   opacity: 0.9;
+  color: white;
   background-color: var(--bookingWidgetPrimaryColor);
   &:hover {
+    color: white;
     opacity: 1.0;
     background-color: var(--bookingWidgetPrimaryColor) !important;
   }
@@ -197,4 +213,21 @@
   height: 50px;
 
   cursor: pointer;
+}
+
+.alreadyHaveWrapper {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.loadingWrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingSpinnerIcon {
+  color: var(--bookingWidgetPrimaryColor);
 }

@@ -7,12 +7,16 @@ import { fetchEntities, createEntityRequest, updateEntityRequest } from '../../.
 import { Form, Field } from '../../../library/index';
 import PageContainer from '../../General/PageContainer';
 import { getModel } from '../../../Utils';
+import styles from '../../General/page-container.scss';
 
 const enterprisesPath = (path = '') => `/admin/enterprises${path}`;
 
 
 const EnterpriseForm = (props) => {
   const { enterprise, isCreate, navigate, account } = props;
+  if (!enterprise) {
+    return null;
+  }
 
   const accountsPath = (path = '') => enterprisesPath(`/${enterprise.id}${path}`);
 
@@ -28,7 +32,7 @@ const EnterpriseForm = (props) => {
       props.updateEntityRequest({
         key,
         values: entityData,
-        url: `/api/enterprises/${enterprise.id}/accounts/${account.id}`
+        url: `/api/enterprises/${enterprise.id}/accounts/${account.id}`,
       });
 
     promise.then(() => navigate(accountsPath('/accounts')));
@@ -50,8 +54,11 @@ const EnterpriseForm = (props) => {
     (account || isCreate) ? (
       <PageContainer title={pageTitle()} breadcrumbs={breadcrumbs()}>
         <Form
+          className={styles.form}
           form="accountForm"
-          initialValues={{ name: account && account.name }}
+          initialValues={{
+            name: account && account.name,
+          }}
           onSubmit={onSubmit}
         >
           <Field required name="name" label="Name" />
