@@ -100,7 +100,6 @@ export function generateAuxValidators(auxTables, doc) {
         fieldValue = [fieldValue, ...dependencyValues];
       }
 
-
       // Now grab from aux table and see if value equals doc.id
       AuxTable.get(fieldValue)
         .then((auxDoc) => {
@@ -169,11 +168,14 @@ export function generateAuxValidators(auxTables, doc) {
                   const newAuxDoc = Object.assign({}, auxDoc, { [primaryKey]: fieldValue });
                   console.log('Removed old aux doc. saving new: ', newAuxDoc);
 
-                  AuxTable.save(newAuxDoc)
-                    .then((persistedNewAuxDoc) => {
-                      console.log('AFTER saved new auxDoc', persistedNewAuxDoc);
-                      resolve();
-                    });
+                  // if there is a number and it's updated to be empty
+                  if (fieldValue) {
+                    AuxTable.save(newAuxDoc)
+                      .then((persistedNewAuxDoc) => {
+                        console.log('AFTER saved new auxDoc', persistedNewAuxDoc);
+                        resolve();
+                      });
+                  }
                 });
               })
               .catch((error) => {

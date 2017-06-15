@@ -3,6 +3,7 @@ const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const AddressSchema = require('./schemas/Address');
 const PreferencesSchema = require('./schemas/Preferences');
+const { validatePhoneNumber } = require('../util/validators');
 
 const type = thinky.type;
 
@@ -40,14 +41,14 @@ const Patient = createModel('Patient', {
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
   status: type.string().enum(['Active', 'InActive']).default('Active'),
-}/* , {
+}, {
   aux: {
     mobilePhoneNumber: {
       value: 'id',
       dependencies: ['accountId'],
     },
   },
-} */);
+});
 
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
@@ -65,15 +66,20 @@ Patient.define('getPreferredPhoneNumber', () => {
 /**
  * Fires on document create and update
  */
-// Patient.docOn('saving', validatePatient);
-// Patient.pre('save', validatePatient);
+Patient.docOn('saving', validatePatient); // <<< doc is in `doc` param
+// Patient.pre('save', validatePatient); // <<< doc is in the scope
 
-// function validatePatient(doc) {
-//   isUnique(doc.mobilePhoneNumber);
-//   // validators.validatePhoneNumber(doc.phoneNumber);
-//   // validators.validatePhoneNumber(doc.mobileNumber);
-//   // validators.validatePhoneNumber(doc.workNumber);
-//   // validators.validatePhoneNumber(doc.otherPhoneNumber);
-// }
+function validatePatient(doc) {
+  console.log('validatePatient', doc);
+  validatePhoneNumbers(doc);
+}
+
+function validatePhoneNumbers(doc) {
+  console.log('validatePhoneNumbers: doc', JSON.stringify(doc));
+  doc.homePhoneNumber = validatePhoneNumber(doc.homePhoneNumber);
+  doc.mobilePhoneNumber = validatePhoneNumber(doc.mobilePhoneNumber);
+  doc.workPhoneNumber = validatePhoneNumber(doc.workPhoneNumber);
+  doc.otherPhoneNumber = validatePhoneNumber(doc.otherPhoneNumber);
+}
 
 module.exports = Patient;
