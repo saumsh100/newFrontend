@@ -1,19 +1,18 @@
 
 export function normalizePhone(value) {
-  if (!value) {
-    return '+1 ' + value;
-  }
 
   const onlyNums = value.replace(/[^(\d|+)]/g, '');
-  if (onlyNums === '+') {
-    return '+1 ';
+
+  if (/\+([2-9]|0)/g.test(value)) {
+    return '+1' + onlyNums.replace(/\+([2-9]|0)/, '');
   }
-  if (onlyNums.length === 1) {
-    return '+1 ' + onlyNums;
+
+  if (value.length < 3) {
+    return onlyNums;
   }
 
   if (onlyNums.length <= 5) {
-    return onlyNums;
+    return '+1' + onlyNums.replace(/\+1/g, '');
   }
 
   if (onlyNums.length <= 8) {
