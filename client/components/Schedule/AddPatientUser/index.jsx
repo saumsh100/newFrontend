@@ -16,6 +16,9 @@ class AddPatientUser extends Component {
   handleSubmit(values) {
     const {
       mergingPatientData,
+      reinitializeState,
+      selectAppointment,
+      createEntityRequest,
     } = this.props;
 
     const {
@@ -26,7 +29,7 @@ class AddPatientUser extends Component {
     values.isSyncedWithPMS = false;
     values.patientUserId = patientUser.id;
 
-    const modifiedRequest = {
+    const appointment = {
       startDate: requestData.startDate,
       endDate: requestData.endDate,
       serviceId: requestData.serviceId,
@@ -37,14 +40,14 @@ class AddPatientUser extends Component {
       request: true,
     };
 
-    this.props.createEntityRequest({
+    createEntityRequest({
       key: 'patients',
       entityData: values,
     }).then((result) => {
       const newPatientId = Object.keys(result.patients)[0];
-      modifiedRequest.patientId = newPatientId;
-      this.props.reinitializeState();
-      this.props.selectAppointment(requestAppoinment);
+      appointment.patientId = newPatientId;
+      reinitializeState();
+      selectAppointment(appointment);
     });
   }
 

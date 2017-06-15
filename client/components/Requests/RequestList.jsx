@@ -21,7 +21,6 @@ class RequestList extends Component {
 
   confirmAppointment(request, patientUser) {
     const {
-      selectAppointment,
       location,
       push,
       checkPatientUser,
@@ -32,7 +31,6 @@ class RequestList extends Component {
     }
 
     const modifiedRequest = request.set('isConfirmed', true);
-
     const appointment = {
       requestId: request.get('id'),
       startDate: request.get('startDate'),
@@ -46,9 +44,6 @@ class RequestList extends Component {
     };
 
     checkPatientUser(patientUser, appointment);
-
-
-    //selectAppointment(appointment);
 
     // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
     console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');

@@ -30,9 +30,7 @@ const initialState = fromJS({
 
 export default handleActions({
   [SET_MERGING](state, action) {
-    return state.merge({
-      mergingPatientData: action.payload,
-    });
+    return state.set('mergingPatientData', action.payload);
   },
 
   [SET_SCHEDULE_DATE](state, action) {

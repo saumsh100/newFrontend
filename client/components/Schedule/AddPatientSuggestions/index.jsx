@@ -1,13 +1,17 @@
 
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import PatientData from './PatientData';
 import { List, Button, IconButton } from '../../library';
+import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import styles from './styles.scss';
 
 class AddPatientSuggestions extends Component {
   constructor(props) {
     super(props);
     this.handleCreatePatient = this.handleCreatePatient.bind(this);
+    this.handleUpdatePatient = this.handleUpdatePatient.bind(this);
   }
 
   handleCreatePatient() {
@@ -23,6 +27,30 @@ class AddPatientSuggestions extends Component {
       suggestions: [],
     });
   }
+
+  handleUpdatePatient(appointment) {
+    const {
+      patients,
+      reinitializeState,
+      selectAppointment,
+      mergingPatientData,
+      updateEntityRequest,
+    } = this.props;
+
+    const patientModel = patients.get(appointment.patientId);
+    const patientUserId = mergingPatientData.patientUser.id;
+    const modifiedPatient = patientModel.set('patientUserId', patientUserId);
+    updateEntityRequest({
+      key: 'patients',
+      model: modifiedPatient,
+      url: `/api/patients/${modifiedPatient.get('id')}`,
+    })
+      .then(() => {
+        reinitializeState();
+        selectAppointment(appointment);
+      });
+  }
+
   render() {
     const {
       mergingPatientData,
@@ -53,10 +81,9 @@ class AddPatientSuggestions extends Component {
             return (
               <PatientData
                 key={patient.id}
-                reinitializeState={reinitializeState}
                 patient={patient}
                 requestData={mergingPatientData.requestData}
-                selectAppointment={selectAppointment}
+                handleUpdatePatient={this.handleUpdatePatient}
               />
             );
           })}
@@ -70,9 +97,25 @@ class AddPatientSuggestions extends Component {
     );
   }
 }
-
 AddPatientSuggestions.propTypes = {
   mergingData: PropTypes.object.required,
 };
 
-export default AddPatientSuggestions;
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    updateEntityRequest,
+  }, dispatch);
+};
+
+function mapStateToProps({ entities }) {
+  const patients = entities.getIn(['patients', 'models']);
+
+  return {
+    patients,
+  };
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(AddPatientSuggestions);

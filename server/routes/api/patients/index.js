@@ -215,9 +215,9 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
   }
 
   Patient.filter((patient) => {
-    return patient('accountId').eq(req.accountId).and(
-      patient('firstName').match(firstName)
-        .or(patient('lastName').match(lastName))
+    return patient('accountId').eq(req.accountId).and(!patient('patientUserId').exist).and(
+      (patient('firstName').match(firstName)
+        .and(patient('lastName').match(lastName)))
         .or(patient('email').match(email))
         .or(patient('mobilePhoneNumber').match(subStringPhoneNumber)));
   }).limit(10)

@@ -566,7 +566,7 @@ const SEEDS = {
     {
       id: patientUserId1,
       firstName: 'Mark',
-      lastName: 'Sharp',
+      lastName: 'Joseph',
       email: 'mark@carecru.com',
       mobilePhoneNumber: markPhoneNumber,
     },

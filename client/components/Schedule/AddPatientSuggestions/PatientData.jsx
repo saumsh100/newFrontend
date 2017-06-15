@@ -6,14 +6,13 @@ import styles from './styles.scss';
 export default function PatientData(props) {
   const {
     patient,
-    reinitializeState,
-    selectAppointment,
     requestData,
+    handleUpdatePatient,
   } = props;
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
 
-  const modifiedRequest = {
+  const appointment = {
     startDate: requestData.startDate,
     endDate: requestData.endDate,
     serviceId: requestData.serviceId,
@@ -41,8 +40,7 @@ export default function PatientData(props) {
       </div>
       <Button
         onClick={() => {
-          reinitializeState();
-          selectAppointment(modifiedRequest);
+          handleUpdatePatient(appointment);
         }}
         className={styles.connectButton}
       >

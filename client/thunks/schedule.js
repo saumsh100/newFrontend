@@ -19,8 +19,8 @@ export function checkPatientUser(patientUser, requestData) {
     return axios.get('/api/patients', { params: query })
     .then((response) => {
       const { data } = response;
-
       const checkObjEmpty = !_.values(data.entities['patients']).some(x => x !== undefined);
+
       if (!checkObjEmpty) {
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
         const modifiedRequest = requestData;
