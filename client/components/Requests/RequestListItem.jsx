@@ -55,7 +55,7 @@ class RequestListItem extends Component {
       nameAge: '',
       email: patientUser.email,
       service: serviceName,
-      mobilePhoneNumber: patientUser.mobilePhoneNumber,
+      mobilePhoneNumber: patientUser.phoneNumber,
       note: request.note,
       month: request.getMonth(),
       day: request.getDay(),

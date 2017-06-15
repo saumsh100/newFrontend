@@ -13,7 +13,7 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
-import PatientUser, { patientUserId } from '../fixtures/patientUsers';
+import PatientUser, { patientUserId, patientUserId2, patientUserId3 } from '../fixtures/patientUsers';
 import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
@@ -50,9 +50,6 @@ const sergeyUserId = uuid();
 const jdUserId = uuid();
 const syncUserId = uuid();
 const vstUserId = uuid();
-
-const patientUserId1 = uuid();
-const patientUserId2 = uuid();
 
 const justinPermissionId = uuid();
 const markPermissionId = uuid();
@@ -526,7 +523,7 @@ const SEEDS = {
       accountId,
       startDate: moment({hour: 13, minute: 10})._d,
       endDate: moment({hour: 13, minute: 50})._d,
-      patientUserId,
+      patientUserId: patientUserId,
       serviceId: serviceId,
       practitionerId: practitionerId2,
       chairId,
@@ -537,10 +534,22 @@ const SEEDS = {
     {
       accountId,
       startDate: moment({hour: 13, minute: 10})._d,
-      endDate: moment({hour: 13, minute: 20})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
       serviceId: serviceId,
       practitionerId: practitionerId2,
-      patientUserId: patientUserId1,
+      patientUserId: patientUserId2,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
+    },
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      patientUserId: patientUserId3,
       chairId,
       isConfirmed: false,
       isCancelled: false,
@@ -566,24 +575,7 @@ const SEEDS = {
     },
   ],
 
-  PatientUser: [
-    {
-      id: patientUserId,
-      firstName: 'Mark',
-      lastName: 'Joseph',
-      email: 'mark@carecru.com',
-      phoneNumber: markPhoneNumber,
-      password: bcrypt.hashSync('mark', saltRounds)
-    },
-    {
-      id: patientUserId2,
-      firstName: 'Justin',
-      lastName: 'Sharp',
-      email: 'justin@carecru.com',
-      phoneNumber: justinPhoneNumber,
-      password: bcrypt.hashSync('justin', saltRounds)
-    },
-  ],
+
 
   User: [
     {
@@ -684,7 +676,7 @@ const SEEDS = {
       email: 'justin@carecru.com',
       mobilePhoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
-      patientUserId: patientUserId2,
+      patientUserId: patientUserId3,
       gender: 'male',
       language: 'English',
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),

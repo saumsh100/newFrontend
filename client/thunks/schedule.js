@@ -34,7 +34,7 @@ export function checkPatientUser(patientUser, requestData) {
           firstName: patientUser.get('firstName'),
           lastName: patientUser.get('lastName'),
           email: patientUser.get('email'),
-          mobilePhoneNumber: patientUser.get('mobilePhoneNumber'),
+          phoneNumber: patientUser.get('phoneNumber'),
         };
 
         return axios.get('/api/patients/suggestions', { params }).then((searchResponse) => {

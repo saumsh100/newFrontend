@@ -237,11 +237,11 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
     firstName,
     lastName,
     email,
-    mobilePhoneNumber,
+    phoneNumber,
   } = req.query;
 
-  let subStringPhoneNumber = mobilePhoneNumber;
-  if (mobilePhoneNumber && mobilePhoneNumber[0] === '+') {
+  let subStringPhoneNumber = phoneNumber;
+  if (phoneNumber && phoneNumber[0] === '+') {
     subStringPhoneNumber = subStringPhoneNumber.substring(1);
   }
 
@@ -250,7 +250,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
       (patient('firstName').match(firstName)
         .and(patient('lastName').match(lastName)))
         .or(patient('email').match(email))
-        .or(patient('mobilePhoneNumber').match(subStringPhoneNumber)));
+        .or(patient('phoneNumber').match(subStringPhoneNumber)));
   }).limit(10)
     .run()
     .then((patients) => {

@@ -17,14 +17,14 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData 
     firstName,
     lastName,
     email,
-    mobilePhoneNumber,
+    phoneNumber,
   } = patientUser;
 
   const initialValues = {
     firstName,
     lastName,
     email,
-    mobilePhoneNumber,
+    mobilePhoneNumber: phoneNumber,
   };
 
   return (

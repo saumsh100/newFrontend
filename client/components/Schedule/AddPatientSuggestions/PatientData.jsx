@@ -35,7 +35,7 @@ export default function PatientData(props) {
           {patient.email}
         </div>
         <div className={styles.patientContainer_phone}>
-          {patient.mobilePhoneNumber}
+          {patient.phoneNumber}
         </div>
       </div>
       <Button

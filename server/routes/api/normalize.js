@@ -45,10 +45,6 @@ const patientSchema = () => {
   });
 };
 
-const patientUserSchema = () => {
-  return new schema.Entity('patientUsers');
-};
-
 const familySchema = () => {
   return new schema.Entity('families', {
     patients: [patientSchema()],

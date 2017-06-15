@@ -31,7 +31,7 @@ import Token from './Token';
 import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
-import PatientUser from './PatientUser';
+
 
 export {
   Account,
