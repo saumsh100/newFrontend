@@ -100,34 +100,42 @@ class AvailabilitiesDisplay extends Component {
     );
 
     if (!isFetching) {
-      availabilitiesDisplay = (
-        <div className={styles.displayAvailabilitiesContainer}>
-          <div className={styles.appointment__table_elements}>
-            {dayAvailabilities.map((a) => {
-              return (
-                <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
-                  {a.sortedAvailabilities.map((availability) => {
-                    let classes = styles.appointment__list_item;
-                    if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
-                      classes = `${classes} ${styles.appointment__list_selected}`;
-                    }
+      if (availabilities.length) {
+        availabilitiesDisplay = (
+          <div className={styles.displayAvailabilitiesContainer}>
+            <div className={styles.appointment__table_elements}>
+              {dayAvailabilities.map((a) => {
+                return (
+                  <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
+                    {a.sortedAvailabilities.map((availability) => {
+                      let classes = styles.appointment__list_item;
+                      if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
+                        classes = `${classes} ${styles.appointment__list_selected}`;
+                      }
 
-                    return (
-                      <li
-                        key={`${availability.startDate}_item`}
-                        onClick={() => setSelectedAvailability(availability)}
-                        className={classes}
-                      >
-                        {moment(availability.startDate).format('h:mm a')}
-                      </li>
-                    );
-                  })}
-                </ul>
-              );
-            })}
+                      return (
+                        <li
+                          key={`${availability.startDate}_item`}
+                          onClick={() => setSelectedAvailability(availability)}
+                          className={classes}
+                        >
+                          {moment(availability.startDate).format('h:mm a')}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        availabilitiesDisplay = (
+          <div className={styles.displayContainer}>
+            There are no available appointments
+          </div>
+        );
+      }
     }
 
     return (

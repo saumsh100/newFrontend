@@ -100,19 +100,20 @@ class SubmitView extends Component {
     // If patient is !authenticated, display <SignUpView />
     // TODO: refactor this using Memory Router
 
-    console.log('isLogin', isLogin);
+    const loginHereAnchor = (
+      <a
+        href="#login"
+        onClick={(e) => { e.preventDefault(); setIsLogin(true); }}
+      >
+        Login here
+      </a>
+    );
 
     let formComponent = (
       <div>
         <SignUpForm onSubmit={this.signUpAndConfirm} />
         <div className={styles.alreadyHaveWrapper}>
-          Already have an account?
-          <a
-            href="#login"
-            onClick={(e) => { e.preventDefault(); setIsLogin(true); }}
-          >
-             Login here
-          </a>
+          Already have an account? {loginHereAnchor}
         </div>
       </div>
     );
@@ -121,7 +122,7 @@ class SubmitView extends Component {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
-            We have sent a confirmation code via SMS to {patientUser.mobilePhoneNumber}.
+            We have sent a confirmation code via SMS to {patientUser.phoneNumber}.
             Please type in the code below and submit to complete your booking.
           </div>
           <ConfirmNumberForm onSubmit={this.confirmAndBook} />
@@ -130,6 +131,15 @@ class SubmitView extends Component {
     }
 
     if (isLogin) {
+      const signupHereAnchor = (
+        <a
+          href="#signup"
+          onClick={(e) => { e.preventDefault(); setIsLogin(false); }}
+        >
+          Sign up here
+        </a>
+      );
+
       formComponent = (
         <div>
           <LoginForm
@@ -137,13 +147,7 @@ class SubmitView extends Component {
             onLogin={credentials => this.login(credentials)}
           />
           <div className={styles.alreadyHaveWrapper}>
-            Don't have an account?
-            <a
-              href="#signup"
-              onClick={(e) => { e.preventDefault(); setIsLogin(false); }}
-            >
-              Sign up here
-            </a>
+            Don't have an account? {signupHereAnchor}
           </div>
         </div>
       );
@@ -155,7 +159,7 @@ class SubmitView extends Component {
           <div className={styles.messageWrapper}>
             Congratulations! You have successfully requested your appointment.
           </div>
-          <Button
+          <VButton
             icon="sign-out"
             className={styles.exitButton}
             onClick={() => {
@@ -164,7 +168,7 @@ class SubmitView extends Component {
             }}
           >
             Exit
-          </Button>
+          </VButton>
         </div>
       );
     }
@@ -177,13 +181,13 @@ class SubmitView extends Component {
             To start again, simply click on the button below to go back and select
             the availability you desire.
           </div>
-          <Button
+          <VButton
             icon="arrow-left"
             className={styles.exitButton}
             onClick={restartBookingProcess}
           >
             Go Back
-          </Button>
+          </VButton>
         </div>
       );
     }
@@ -227,13 +231,12 @@ class SubmitView extends Component {
                   <br /><br />
                   If this is not you, and you would like to logout
                   and signin/signup as another user,
-                  click
-                  <a href="#logout" onClick={(e) => { e.preventDefault(); this.logout(); }}> here</a>.
+                  click <a href="#logout" onClick={(e) => { e.preventDefault(); this.logout(); }}>here</a>.
                   <br /><br /> If it is you and you would
                   like to complete the booking, click the button below.
                 </span>
               </div>
-              <VButton color="red" onClick={() => this.props.createRequest()}>
+              <VButton className={styles.exitButton} onClick={() => this.props.createRequest()}>
                 Book This Appointment
               </VButton>
             </div>
