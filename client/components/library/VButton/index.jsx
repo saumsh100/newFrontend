@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getClassMapper } from '../../Utils';
@@ -46,6 +47,7 @@ VButton.propTypes = {
     PropTypes.string,
     PropTypes.func,
   ]),
+
   className: PropTypes.string,
   icon: PropTypes.string,
   title: PropTypes.string,

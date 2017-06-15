@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Button, Form, Field } from '../../../library';
+import { VButton, Form, Field } from '../../../library';
 import { numDigitsValidate } from '../../../library/Form/validate';
 import { maxDigits } from '../../../library/Form/normalize';
 import styles from './styles.scss';
@@ -21,12 +21,12 @@ export default function ConfirmNumberForm({ onSubmit }) {
         validate={[numDigitsValidate(MAX_DIGITS)]}
         normalize={maxDigits(MAX_DIGITS)}
       />
-      <Button
+      <VButton
         type="submit"
         className={styles.signup__footer_btn}
       >
-        Book an appointment
-      </Button>
+        Book This Appointment
+      </VButton>
     </Form>
   );
 }

@@ -38,6 +38,7 @@ const vendasta = {
 const twilio = {
   accountSid: environmentVariables.TWILIO_ACCOUNT_SID,
   authToken: environmentVariables.TWILIO_AUTH_TOKEN,
+  phoneNumber: environmentVariables.TWILIO_NUMBER,
 };
 
 const mandrill = {

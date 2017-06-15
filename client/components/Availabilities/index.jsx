@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
-import { Button, Icon } from '../library';
+import { VButton, Icon } from '../library';
 import SelectionView from './SelectionView';
 import SubmitView from './SubmitView';
 import SideBar from './SideBar';
@@ -28,7 +28,7 @@ class Availabilities extends Component {
     let currentView = <SelectionView />;
     let footer = (
       <div className={styles.widgetStickyFooter}>
-        <Button
+        <VButton
           disabled={!selectedAvailability}
           onClick={() => setRegistrationStep(2)}
           className={styles.continueButton}
@@ -38,7 +38,7 @@ class Availabilities extends Component {
             className={styles.rightIcon}
             icon="arrow-right"
           />
-        </Button>
+        </VButton>
       </div>
     );
 
@@ -48,14 +48,13 @@ class Availabilities extends Component {
       footer = null;
     }
 
-
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>
           <SideBar />
           <div className={styles.appointment__main}>
             <Header />
-            <div className={widgetBodyClasses}>
+            <div id="ccScrollID" className={widgetBodyClasses}>
               {currentView}
             </div>
             {footer}

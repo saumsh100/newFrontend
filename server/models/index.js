@@ -13,6 +13,7 @@ import OAuth from './OAuth';
 import Patient from './Patient';
 import PatientUser from './PatientUser';
 import Permission from './Permission';
+import PinCode from './PinCode';
 import Practitioner from './Practitioner';
 import Practitioner_Service from './Practitioner_Service';
 import PractitionerTimeOff from './PractitionerTimeOff';
@@ -46,6 +47,7 @@ export {
   OAuth,
   PatientUser,
   Permission,
+  PinCode,
   Practitioner,
   Practitioner_Service,
   PractitionerTimeOff,

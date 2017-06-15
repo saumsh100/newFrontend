@@ -5,14 +5,21 @@ const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const type = thinky.type;
 const { passwordHashSaltRounds } = require('../config/globals');
+const validators = require('../util/validators');
 
 const PatientUser = createModel('PatientUser', {
   avatarUrl: type.string(),
   firstName: type.string().required(),
   lastName: type.string().required(),
   email: type.string().email().required(),
+  phoneNumber: type.string().required(),
   password: type.string().required(),
   isPhoneNumberConfirmed: type.boolean().default(false),
+});
+
+PatientUser.docOn('saving', (doc) => {
+  console.log(validators.validatePhoneNumber(doc.phoneNumber));
+  doc.phoneNumber = validators.validatePhoneNumber(doc.phoneNumber);
 });
 
 PatientUser.define('isValidPasswordAsync', function (password) {

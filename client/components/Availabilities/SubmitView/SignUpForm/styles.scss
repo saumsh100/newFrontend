@@ -107,7 +107,6 @@
       //font-size: 10px;
       //position: relative;
       width: 100%;
-      padding: 6px 20px;
       // margin-top: 10px;
       margin-bottom: 5px;
       //height: inherit;
@@ -115,8 +114,10 @@
       //color: #fff;
       //border: none;
       opacity: 0.9;
+      color: white;
       background-color: var(--bookingWidgetPrimaryColor);
       &:hover {
+        color: white !important;
         background-color: var(--bookingWidgetPrimaryColor) !important;
         opacity: 1.0;
       }

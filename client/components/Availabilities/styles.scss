@@ -758,9 +758,10 @@
   opacity: 0.9;
   color: white;
   margin-left: auto;
-  margin-right: 15px;
+  margin-right: 15px !important;
   background-color: var(--bookingWidgetPrimaryColor);
   &:hover {
+    color: white;
     opacity: 1.0;
     background-color: var(--bookingWidgetPrimaryColor) !important;
   }

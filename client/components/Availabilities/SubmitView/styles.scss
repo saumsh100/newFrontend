@@ -175,8 +175,10 @@
 .exitButton {
   width: 100%;
   opacity: 0.9;
+  color: white;
   background-color: var(--bookingWidgetPrimaryColor);
   &:hover {
+    color: white;
     opacity: 1.0;
     background-color: var(--bookingWidgetPrimaryColor) !important;
   }
@@ -211,4 +213,6 @@
 
 .alreadyHaveWrapper {
   text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
