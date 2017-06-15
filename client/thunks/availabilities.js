@@ -192,7 +192,9 @@ export function fetchAvailabilities() {
     const { availabilities, entities } = getState();
     const account = entities.getIn(['accounts', 'models']).first();
     const startDate = availabilities.get('selectedStartDate');
-    const endDate = moment(startDate).add(5, 'days').toISOString();
+
+    // TODO: it should be calculating till end of endDate
+    const endDate = moment(startDate).add(4, 'days').toISOString();
     const params = {
       serviceId: availabilities.get('selectedServiceId'),
       practitionerId: availabilities.get('selectedPractitionerId'),

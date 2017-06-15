@@ -52,10 +52,12 @@ authRouter.post('/signup', ({ body: patient }, res, next) => {
 authRouter.post('/signup/:patientUserId/confirm', (req, res, next) => {
   const { body: { confirmCode }, patientUser } = req;
   return PinCode.get(confirmCode)
-    .then(({ pinCode, modelId }) => {
+    .then((pc) => {
+      const { pinCode, modelId } = pc;
       if (patientUser.id === modelId && pinCode === confirmCode) {
         patientUser.merge({ isPhoneNumberConfirmed: true }).save()
-          .then(p => res.send(p));
+          .then(p => res.send(p))
+          .then(() => pc.delete());
       }
     })
     .catch(() => {

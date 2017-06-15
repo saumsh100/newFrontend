@@ -43,12 +43,12 @@ class AvailabilitiesDisplay extends Component {
   }
 
   setDateBack() {
-    const newStartDate = moment(this.props.selectedStartDate).subtract(5, 'days').toISOString();
+    const newStartDate = moment(this.props.selectedStartDate).subtract(4, 'days').toISOString();
     this.props.setSelectedStartDate(newStartDate);
   }
 
   setDateForward() {
-    const newStartDate = moment(this.props.selectedStartDate).add(5, 'days').toISOString();
+    const newStartDate = moment(this.props.selectedStartDate).add(4, 'days').toISOString();
     this.props.setSelectedStartDate(newStartDate);
   }
 
