@@ -21,6 +21,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     return cachedValue ?
       (Promise.resolve(JSON.parse(cachedValue))) :
       (axios.get('/api/users/me').then(({ data }) => data));*/
+    // This adds req.header only because it's been added elsewhere
     return axios.get('/api/users/me').then(({ data }) => data);
   };
 
@@ -116,7 +117,6 @@ export function logout() {
 export function load() {
   return (dispatch) => {
     const token = localStorage.getItem('token');
-
     if (!token) {
       return Promise.resolve(null);
     }

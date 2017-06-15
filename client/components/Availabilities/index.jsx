@@ -12,7 +12,7 @@ import * as Actions from '../../actions/availabilities';
 import styles from './styles.scss';
 
 class Availabilities extends Component {
-  componentWillReceiveProps() {
+  componentWillMount() {
     const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
     document.body.style.setProperty('--bookingWidgetPrimaryColor', color);
   }
@@ -48,6 +48,7 @@ class Availabilities extends Component {
       footer = null;
     }
 
+    console.log('rendering top level availabilities');
     return (
       <div className={styles.signup}>
         <div className={styles.signup__wrapper}>
@@ -69,12 +70,14 @@ Availabilities.propTypes = {
   selectedAvailability: PropTypes.object,
   registrationStep: PropTypes.number.isRequired,
   setRegistrationStep: PropTypes.func.isRequired,
+  account: PropTypes.object,
 };
 
 function mapStateToProps({ availabilities }) {
   return {
     selectedAvailability: availabilities.get('selectedAvailability'),
     registrationStep: availabilities.get('registrationStep'),
+    account: availabilities.get('account'),
   };
 }
 

@@ -10,25 +10,10 @@ import ConfirmNumberForm from './ConfirmNumberForm';
 import LoginForm from './LoginForm';
 import * as Actions from '../../../actions/availabilities';
 import * as Thunks from '../../../thunks/availabilities';
+import * as AuthThunks from '../../../thunks/patientAuth';
 import styles from './styles.scss';
 
 const TOTAL_SECONDS_ALLOWED = 3 * 60;
-
-const token = {
-  key: 'auth_token',
-
-  save(value) {
-    localStorage.setItem(this.key, value);
-  },
-
-  remove() {
-    localStorage.removeItem(this.key);
-  },
-
-  get() {
-    return localStorage.getItem(this.key);
-  },
-};
 
 class SubmitView extends Component {
   constructor(props) {
@@ -40,18 +25,14 @@ class SubmitView extends Component {
 
     this.signUpAndConfirm = this.signUpAndConfirm.bind(this);
     this.confirmAndBook = this.confirmAndBook.bind(this);
-  }
-
-  componentWillMount() {
-    console.log(token.get());
-    this.props.loadPatient(token.get())
-      .then(patient => (!patient) && token.remove());
+    this.resendPinCode = this.resendPinCode.bind(this);
+    this.createRequest = this.createRequest.bind(this);
   }
 
   login(credentials) {
-    return this.props.loginPatient(credentials)
-      .then((t) => {
-        token.save(t);
+    return this.props.login(credentials)
+      .then(() => {
+        console.log('Login Successful, Check State');
       })
       .catch(({ data, status }) => {
         throw new SubmissionError({
@@ -62,24 +43,24 @@ class SubmitView extends Component {
   }
 
   logout() {
-    token.remove();
-    this.props.setPatientUser(null);
+    return this.props.logout();
   }
 
   confirmAndBook(values) {
     // TODO: createPatient.then(createRequest).then(setSuccessful)
     // alert(JSON.stringify(values));
-    this.setState({ loading: true });
     return this.props.confirmCode(values)
       .then(() => {
-        this.props.hasWaitList && this.props.createWaitSpot();
-        this.props.createRequest();
-        this.setState({ loading: false });
+        this.createRequest();
       })
       .catch(() => {
-        this.setState({ loading: false });
         throw new SubmissionError({ confirmCode: 'Invalid code' });
       });
+  }
+
+  createRequest() {
+    this.props.hasWaitList && this.props.createWaitSpot();
+    this.props.createRequest();
   }
 
   signUpAndConfirm(values) {
@@ -87,7 +68,6 @@ class SubmitView extends Component {
     // alert(JSON.stringify(values));
     this.setState({ loading: true });
     this.props.createPatient(values)
-      .then(t => token.save(t))
       .then(() => {
         this.props.setIsConfirming(true);
         this.setState({ loading: false });
@@ -101,8 +81,17 @@ class SubmitView extends Component {
       });
   }
 
+  resendPinCode() {
+    this.props.resendPinCode();
+  }
+
   render() {
     const {
+      resendPinCode,
+    } = this;
+
+    const {
+      isAuthenticated,
       isConfirming,
       isLogin,
       isTimerExpired,
@@ -137,12 +126,23 @@ class SubmitView extends Component {
       </div>
     );
 
-    if (patientUser && isConfirming) {
+    if (patientUser && !patientUser.get('isPhoneNumberConfirmed')) {
+      const resendAnchor = (
+        <a
+          href="#resend"
+          onClick={(e) => { e.preventDefault(); resendPinCode(); }}
+        >
+          here
+        </a>
+      );
+
+
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
             We have sent a confirmation code via SMS to {patientUser.get('phoneNumber')}.
             Please type in the code below and submit to complete your booking.
+            If you did not receive your SMS and want it sent again, click {resendAnchor}.
           </div>
           <ConfirmNumberForm onSubmit={this.confirmAndBook} />
         </div>
@@ -254,7 +254,7 @@ class SubmitView extends Component {
           ) : null*/}
         { !this.state.loading ?
           <div className={styles.formWrapper}>
-            { (!isSuccessfulBooking && patientUser && !isConfirming) ? (
+            { (!isSuccessfulBooking && !isTimerExpired && patientUser && patientUser.get('isPhoneNumberConfirmed')) ? (
                 <div style={{textAlign: 'center'}}>
                   <div className={styles.messageWrapper}>
                 <span>You are currently logged in as <strong>{patientUser.getFullName()}</strong>.
@@ -269,7 +269,7 @@ class SubmitView extends Component {
                   like to complete the booking, click the button below.
                 </span>
                   </div>
-                  <VButton className={styles.exitButton} onClick={() => this.props.createRequest()}>
+                  <VButton className={styles.exitButton} onClick={() => this.createRequest()}>
                     Book This Appointment
                   </VButton>
                 </div>
@@ -285,9 +285,10 @@ SubmitView.propTypes = {
   confirmCode: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
   createWaitSpot: PropTypes.func.isRequired,
-  loginPatient: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  resendPinCode: PropTypes.func.isRequired,
   setPatientUser: PropTypes.func.isRequired,
-  loadPatient: PropTypes.func.isRequired,
   setIsConfirming: PropTypes.func.isRequired,
   setIsLogin: PropTypes.func.isRequired,
   setIsTimerExpired: PropTypes.func.isRequired,
@@ -306,13 +307,14 @@ SubmitView.propTypes = {
   hasWaitList: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ availabilities }) {
+function mapStateToProps({ availabilities, auth }) {
   return {
     isConfirming: availabilities.get('isConfirming'),
     isLogin: availabilities.get('isLogin'),
     isTimerExpired: availabilities.get('isTimerExpired'),
     isSuccessfulBooking: availabilities.get('isSuccessfulBooking'),
-    patientUser: availabilities.get('patientUser'),
+    patientUser: auth.get('patientUser'),
+    isAuthenticated: auth.get('isAuthenticated'),
     hasWaitList: availabilities.get('hasWaitList'),
 
     // TODO: shouldn't have to go to Redux to grab this...
@@ -322,13 +324,14 @@ function mapStateToProps({ availabilities }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    createPatient: Thunks.createPatient,
-    loginPatient: Thunks.loginPatient,
-    loadPatient: Thunks.loadPatient,
+    login: AuthThunks.login,
+    logout: AuthThunks.logout,
+    createPatient: AuthThunks.createPatient,
     setPatientUser: Actions.setPatientUser,
     confirmCode: Thunks.confirmCode,
     createRequest: Thunks.createRequest,
     createWaitSpot: Thunks.createWaitSpot,
+    resendPinCode: Thunks.resendPinCode,
     restartBookingProcess: Thunks.restartBookingProcess,
     setIsConfirming: Actions.setIsConfirming,
     setIsLogin: Actions.setIsLogin,
