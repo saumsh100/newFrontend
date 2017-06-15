@@ -35,6 +35,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
   const initialValues = {
     name: activeAccount.get('name'),
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
+    destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
   };
 
   return (
@@ -57,6 +58,14 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
           required
           name="twilioPhoneNumber"
           label="Twilio Phone Number"
+          normalize={normalizePhone}
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          required
+          name="destinationPhoneNumber"
+          label="Destination Phone Number"
           normalize={normalizePhone}
         />
       </div>
