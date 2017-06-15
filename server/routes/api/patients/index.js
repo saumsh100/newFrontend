@@ -206,12 +206,18 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 /**
  * Get all patients under a clinic
  */
-patientsRouter.get('/', (req, res, next) => {
+patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
   const { accountId } = req;
-  const { email } = req.query;
+  const { email, patientUserId } = req.query;
+
   if (email) {
     return Patient.filter({ email }).run()
     .then(p => res.send({ length: p.length }));
+  } else if (patientUserId) {
+    return Patient
+      .filter({ accountId})
+      .filter(r.row('patientUserId').eq(patientUserId)).run()
+      .then(patient => res.send(normalize('patients', patient)))
   } else {
     return Patient.filter({ accountId }).run()
       .then((patients) => {
@@ -219,6 +225,33 @@ patientsRouter.get('/', (req, res, next) => {
       })
       .catch(next);
   }
+});
+
+/**
+ * Get suggestions based on query
+ */
+patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res, next) => {
+  const { accountId } = req;
+
+  const {
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+  } = req.query;
+
+  Patient
+    .filter({ accountId })
+    .run()
+    .then((patients) => {
+      const filteredPatients = patients.filter((patient) => {
+        if (!patient.patientUserId && ((patient.firstName === firstName && patient.lastName === lastName) ||
+            patient.email === email || patient.phoneNumber === phoneNumber)) {
+          return patient;
+        }
+      });
+      res.send(normalize('patients', filteredPatients));
+    });
 });
 
 /**

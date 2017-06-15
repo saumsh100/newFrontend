@@ -12,11 +12,7 @@ export default function ShowPatientInfo(props) {
     handleAppointmentClick,
     handlePatientClick,
   } = props;
-
-  if (!service || !patient || !chair || !appointment) {
-    return null;
-  }
-
+  const name = service ? service.name : ''
   const startHourMinute = moment(appointment.startDate).format('h:mm');
   const endHourMinute = moment(appointment.endDate).format('h:mm a');
   const time = startHourMinute.concat('-', endHourMinute);
@@ -47,7 +43,7 @@ export default function ShowPatientInfo(props) {
           </a>
         </div>
         <div className={styles.patientContainer_service}>
-          <span>{service.name}{/*chair.name*/}</span>
+          <span>{name}{/*chair.name*/}</span>
         </div>
       </div>
     </div>

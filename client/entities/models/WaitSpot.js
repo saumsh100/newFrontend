@@ -4,6 +4,7 @@ import createModel from '../createModel';
 const WaitSpotSchema = {
   id: null,
   patientId: null,
+  patientUserId: null,
   accountId: null,
   preferences: null,
   unavailableDays: null,

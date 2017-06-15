@@ -29,11 +29,6 @@ export default function ChangePasswordForm({ onSubmit }) {
         name="confirmPassword"
         label="Confirm Password"
       />
-      <Button
-        type="submit"
-      >
-        Submit
-      </Button>
     </Form>
   );
 }

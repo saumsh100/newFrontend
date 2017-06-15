@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { List } from '../../../library';
 import AppointmentsItem from './AppointmentsItem';
@@ -69,13 +70,17 @@ class AppointmentsList extends Component {
       <List className={styles.appointmentList}>
         {sortedAppointments.map((app, index) => {
           //const practitioner = practitionersArray.find(prac => prac.id === app.practitionerId);
+          const chair= chairs.get(app.chairId);
+          const patient= patients.get(app.patientId);
+          const service= services.get(app.serviceId);
+
           return (
             <AppointmentsItem
               key={`appointmentsList${index}`}
               appointment={app}
-              chair={chairs.get(app.chairId)}
-              patient={patients.get(app.patientId)}
-              service={services.get(app.serviceId)}
+              chair={chair}
+              patient={patient}
+              service={service}
               //practitioner={practitioner}
               handleAppointmentClick={this.handleAppointmentClick}
               handlePatientClick={this.handlePatientClick}
@@ -85,7 +90,13 @@ class AppointmentsList extends Component {
       </List>
     );
   }
-
 }
+
+AppointmentsList.propTypes = {
+  appointments: PropTypes.object.required,
+  patients: PropTypes.object.required,
+  services: PropTypes.object.required,
+  chairs: PropTypes.object.required,
+};
 
 export default AppointmentsList;

@@ -32,6 +32,7 @@ const PatientSchema = {
   isDeleted: null,
   isSyncedWithPMS: null,
   appointments: null,
+  patientUserId: null,
 };
 
 export default class Patient extends createModel(PatientSchema) {

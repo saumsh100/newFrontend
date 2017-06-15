@@ -40,11 +40,9 @@ const patientSingleSchema = () => {
 };
 
 const patientSchema = () => {
-  return new schema.Entity('patients');
-};
-
-const patientUserSchema = () => {
-  return new schema.Entity('patientUsers');
+  return new schema.Entity('patients', {
+    patientUser: patientUserSchema(),
+  });
 };
 
 const familySchema = () => {
@@ -56,6 +54,10 @@ const familySchema = () => {
 const permissionSchema = () => {
   return new schema.Entity('permissions');
 };
+
+const patientUserSchema = () => {
+  return new schema.Entity('patientUsers')
+}
 
 const requestSchema = () => {
   return new schema.Entity('requests', {
@@ -113,6 +115,7 @@ const timeOffSchema = () => {
 const waitSpotSchema = () => {
   return new schema.Entity('waitSpots', {
     patient: patientSchema(),
+    patientUser: patientUserSchema(),
   });
 };
 

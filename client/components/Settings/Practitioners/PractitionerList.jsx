@@ -11,6 +11,7 @@ import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
 import Modal  from '../../library/Modal';
 import styles from './styles.scss';
+import DialogBox from "../../library/DialogBox/index";
 
 class PractitionerList extends Component {
   constructor(props) {
@@ -104,7 +105,7 @@ class PractitionerList extends Component {
               onClick={this.setActive}
               className={styles.addPractitionerButton}
             />
-            <Modal
+            <DialogBox
               active={this.state.active}
               onEscKeyDown={this.setActive}
               onOverlayClick={this.setActive}
@@ -113,7 +114,7 @@ class PractitionerList extends Component {
               <CreatePractitionerForm
                 onSubmit={this.createPractitioner}
               />
-            </Modal>
+            </DialogBox>
           </div>
             {practitioners.toArray().map((practitioner) => {
               return (

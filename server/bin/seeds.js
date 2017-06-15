@@ -13,7 +13,7 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
-import PatientUser, { patientUserId } from '../fixtures/patientUsers';
+import PatientUser, { patientUserId, patientUserId2, patientUserId3 } from '../fixtures/patientUsers';
 import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
@@ -210,6 +210,7 @@ for (let i = 0; i < 100; i++) {
 
   randomCalls.push({
     id: uuid(),
+    accountId,
     datetime: faker.date.past(),
     customer_phone_number: phoneNumber,
     answered: faker.random.boolean(),
@@ -507,7 +508,7 @@ const SEEDS = {
   ],
 
   Request: [
-    {
+    /*{
       accountId,
       startDate: moment({ hour: 11, minute: 10 })._d,
       endDate: moment({ hour: 12, minute: 50 })._d,
@@ -518,14 +519,38 @@ const SEEDS = {
       isConfirmed: false,
       isCancelled: false,
       note: 'Some note from patient here....',
+    },*/
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
+      patientUserId: patientUserId,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
     },
     {
       accountId,
       startDate: moment({hour: 13, minute: 10})._d,
       endDate: moment({hour: 13, minute: 50})._d,
-      patientUserId,
       serviceId: serviceId,
       practitionerId: practitionerId2,
+      patientUserId: patientUserId2,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
+    },
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      patientUserId: patientUserId3,
       chairId,
       isConfirmed: false,
       isCancelled: false,
@@ -550,6 +575,8 @@ const SEEDS = {
       patientUserId,
     },
   ],
+
+
 
   User: [
     {
@@ -650,6 +677,7 @@ const SEEDS = {
       email: 'justin@carecru.com',
       mobilePhoneNumber: justinPhoneNumber,
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
+      patientUserId: patientUserId3,
       gender: 'male',
       language: 'English',
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
@@ -1177,11 +1205,12 @@ const SEEDS = {
   WaitSpot: [
     {
       accountId,
-      patientId: justinPatientId,
+      patientUserId,
     },
     {
       accountId,
-      patientId: sergeyPatientId,
+      patientId: justinPatientId,
+      patientUserId: patientUserId3,
       preferences: {
         weekends: false,
         evenings: false,

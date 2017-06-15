@@ -9,6 +9,7 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength45 = maxLength(45);
 const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 
 class ServiceDataItem extends Component {
@@ -85,7 +86,7 @@ class ServiceDataItem extends Component {
                 label="Duration"
                 type="number"
                 normalize={parseNum}
-                validate={[notNegative]}
+                validate={[notNegative, maxDuration]}
               />
               <Field
                 required
@@ -93,7 +94,7 @@ class ServiceDataItem extends Component {
                 label="Buffer Time"
                 type="number"
                 normalize={parseNum}
-                validate={[notNegative]}
+                validate={[notNegative, maxDuration]}
               />
             </Form>
           </div>

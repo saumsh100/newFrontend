@@ -12,6 +12,8 @@ import {
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
+import AddPatientUser from './AddPatientUser';
+import AddPatientSuggestions from './AddPatientSuggestions';
 import CurrentDate from './Cards/CurrentDate';
 import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
@@ -24,7 +26,6 @@ class ScheduleComponent extends Component {
     this.state = {
       addNewAppointment: false,
     };
-
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
@@ -35,6 +36,11 @@ class ScheduleComponent extends Component {
   }
 
   reinitializeState() {
+    this.props.setMergingPatient({
+      patientUser: null,
+      requestData: null,
+      suggestions: [],
+    });
     this.props.selectAppointment(null);
     this.setState({
       addNewAppointment: false,
@@ -57,6 +63,7 @@ class ScheduleComponent extends Component {
       chairs,
       selectAppointment,
       selectedAppointment,
+      setMergingPatient,
       weeklySchedules,
       timeOffs,
     } = this.props;
@@ -70,6 +77,40 @@ class ScheduleComponent extends Component {
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
       formName = `editAppointment_${selectedAppointment.serviceId}`;
+    }
+
+    const mergingPatientData = schedule.toJS().mergingPatientData;
+
+    let displayModalComponent = (
+      <AddNewAppointment
+        formName={formName}
+        chairs={chairs.get('models').toArray()}
+        practitioners={practitioners.get('models')}
+        services={services.get('models')}
+        patients={patients.get('models')}
+        selectedAppointment={selectedAppointment}
+        reinitializeState={this.reinitializeState}
+        weeklySchedules={weeklySchedules}
+      />
+    );
+
+    if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
+      displayModalComponent = (
+        <AddPatientSuggestions
+          mergingPatientData={mergingPatientData}
+          reinitializeState={this.reinitializeState}
+          selectAppointment={selectAppointment}
+          setMergingPatient={setMergingPatient}
+        />
+      );
+    } else if (mergingPatientData.patientUser) {
+      displayModalComponent = (
+        <AddPatientUser
+          mergingPatientData={mergingPatientData}
+          reinitializeState={this.reinitializeState}
+          selectAppointment={selectAppointment}
+        />
+      );
     }
 
     return (
@@ -99,24 +140,22 @@ class ScheduleComponent extends Component {
                   appointments={appointments}
                   schedule={schedule}
                   selectAppointment={selectAppointment}
+                  weeklySchedules={weeklySchedules}
                 />
                 <Modal
-                  active={addNewAppointment || !!selectedAppointment}
+                  active={
+                    addNewAppointment ||
+                    !!selectedAppointment ||
+                      !!mergingPatientData.patientUser
+                  }
                   onEscKeyDown={this.reinitializeState}
                   onOverlayClick={this.reinitializeState}
                   custom
                 >
-                  <AddNewAppointment
-                    formName={formName}
-                    chairs={chairs.get('models').toArray()}
-                    practitioners={practitioners.get('models')}
-                    services={services.get('models')}
-                    patients={patients.get('models')}
-                    selectedAppointment={selectedAppointment}
-                    reinitializeState={this.reinitializeState}
-                  />
+                  {displayModalComponent}
                 </Modal>
               </div>
+              {/* Here is the legend */}
               <Legend />
             </Card>
           </Col>
