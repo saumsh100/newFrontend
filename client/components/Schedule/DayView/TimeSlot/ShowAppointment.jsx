@@ -32,7 +32,6 @@ export default function ShowAppointment(props) {
     startHour,
     endHour,
     columnWidth,
-    displayPractApps,
   } = props;
 
   const {
@@ -47,9 +46,7 @@ export default function ShowAppointment(props) {
     adjacent,
   } = appointment;
 
-  if (!displayPractApps) {
-    return null;
-  }
+
 
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
@@ -74,8 +71,8 @@ export default function ShowAppointment(props) {
     left,
     height,
     width,
-    border: `1px solid ${bgColor}`,
-    backgroundColor: `${hexToRgbA(bgColor, 0.8)}`,
+    backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
+    border: `1.5px solid ${bgColor}`,
   };
 
   // calculating the buffer position and height styling
@@ -104,13 +101,6 @@ export default function ShowAppointment(props) {
     bufferStyle = Object.assign({}, bufferStyle, {
       left: leftSplit,
       width: widthSplit,
-    });
-  }
-
-  if (isPatientConfirmed) {
-    appStyle = Object.assign({}, appStyle, {
-      backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
-      border: `2px solid ${bgColor}`,
     });
   }
 
