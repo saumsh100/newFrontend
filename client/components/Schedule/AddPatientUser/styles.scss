@@ -1,5 +1,7 @@
+@import '../../../ui';
 
-.card {
+.cardContainer {
+  position: relative;
   display: inline-block;
   align-content: center;
   justify-content: center;
@@ -16,5 +18,17 @@
   }
 }
 
+.trashIcon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 1.4em;
+  color: $primary-darkgrey;
+
+  &:hover {
+    cursor: pointer;
+    color: $primary-color;
+  }
+}
 
 

@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import NewPatientForm from './NewPatientForm';
-import { Card, CardHeader } from '../../library';
+import { Card, CardHeader, Icon } from '../../library';
 import styles from './styles.scss';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
 
@@ -54,13 +54,19 @@ class AddPatientUser extends Component {
   render() {
     const {
       mergingPatientData,
+      reinitializeState,
     } = this.props;
 
     return (
-      <Card>
+      <Card className={styles.cardContainer}>
         <CardHeader
           className={styles.header}
           title="Create New Patient"
+        />
+        <Icon
+          icon="times"
+          onClick={reinitializeState}
+          className={styles.trashIcon}
         />
         <div className={styles.formContainer}>
           <NewPatientForm

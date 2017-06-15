@@ -239,22 +239,18 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
     email,
     phoneNumber,
   } = req.query;
-
-  let subStringPhoneNumber = phoneNumber;
-  if (phoneNumber && phoneNumber[0] === '+') {
-    subStringPhoneNumber = subStringPhoneNumber.substring(1);
-  }
-
-  Patient.filter((patient) => {
-    return patient('accountId').eq(req.accountId).and(!patient('patientUserId').exist).and(
-      (patient('firstName').match(firstName)
-        .and(patient('lastName').match(lastName)))
-        .or(patient('email').match(email))
-        .or(patient('phoneNumber').match(subStringPhoneNumber)));
-  }).limit(10)
+  
+  Patient
+    .filter({ accountId })
     .run()
     .then((patients) => {
-      res.send(normalize('patients', patients));
+      const filteredPatients = patients.filter((patient) => {
+        if (!patient.patientUserId && ((patient.firstName === firstName && patient.lastName === lastName) ||
+            patient.email === email || patient.phoneNumber === phoneNumber)) {
+          return patient;
+        }
+      });
+      res.send(normalize('patients', filteredPatients));
     });
 });
 
