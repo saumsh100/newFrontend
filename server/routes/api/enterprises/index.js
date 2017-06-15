@@ -1,9 +1,11 @@
+
 import { Router } from 'express';
 import { pick } from 'lodash';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Enterprise, Account } from '../../../models';
+import { Enterprise, Account, User } from '../../../models';
 import loaders from '../../util/loaders';
+import { UserAuth } from '../../../lib/auth';
 
 const router = Router();
 
@@ -17,17 +19,39 @@ router.get('/', checkPermissions('enterprises:read'), (req, res, next) => {
 });
 
 router.post('/', checkPermissions('enterprises:create'), (req, res, next) => {
-  Enterprise.save(pick(req.body, ['name']))
+  Enterprise.save(pick(req.body, ['name', 'plan']))
     .then(enterprise => res.send(201, normalize('enterprise', enterprise)))
     .catch(next);
 });
 
-router.get('/:enterpriseId', checkPermissions('enterprises:read'), (req, res, next) => {
+router.post('/switch', checkPermissions('enterprises:read'), (req, res, next) => {
+  const { userId, body: { enterpriseId }, sessionData, sessionId } = req;
+  Account.filter({ enterpriseId }).run()
+    .then(([{ id: accountId }]) => {
+      return User.get(userId).then((user) => {
+        return user.merge({
+          enterpriseId,
+          activeAccountId: accountId,
+        }).save();
+      }).then(() => {
+        return UserAuth.updateSession(sessionId, sessionData, { accountId, enterpriseId })
+          .then(({ id: newSessionId }) => UserAuth.signToken({
+            userId: sessionData.userId,
+            sessionId: newSessionId,
+            accountId,
+          }));
+      });
+    })
+    .then(token => res.json({ token }))
+    .catch(next);
+});
+
+router.get('/:enterpriseId', checkPermissions('enterprises:read'), (req, res) => {
   res.send(normalize('enterprise', req.enterprise));
 });
 
 router.put('/:enterpriseId', checkPermissions('enterprises:update'), (req, res, next) => {
-  req.enterprise.merge(pick(req.body, ['name'])).save()
+  req.enterprise.merge(pick(req.body, ['name', 'plan'])).save()
     .then(enterprise => res.send(normalize('enterprise', enterprise)))
     .catch(next);
 });

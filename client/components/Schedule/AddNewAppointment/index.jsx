@@ -13,6 +13,7 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
+import { showAlert }from '../../../actions/alerts';
 import { Button, IconButton } from '../../library';
 import styles from './styles.scss';
 
@@ -55,6 +56,7 @@ class AddNewAppointment extends Component {
       practitionerId,
       chairId,
       isPatientConfirmed,
+      isCancelled,
     } = appointmentValues;
 
     const {
@@ -92,20 +94,50 @@ class AddNewAppointment extends Component {
       chairId,
       note,
       isPatientConfirmed,
+      isCancelled,
       isSyncedWithPMS: false,
       customBufferTime: bufferTime,
     };
 
+    const alertCreate = {
+      success: {
+        body: `Added a new Appointment for ${patientSelected.firstName}`,
+      },
+      error: {
+        body: 'Appointment Creation Failed',
+      },
+    };
+
+    const alertUpdate = {
+      success: {
+        body: `Updated ${patientSelected.firstName}'s Appointment`,
+      },
+      error: {
+        body: `Appointment Update for ${patientSelected.firstName} Failed`,
+      },
+    };
+
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
-
-      createEntityRequest({ key: 'appointments', entityData: newAppointment }).then(() => {
-        if(selectedAppointment && selectedAppointment.request) {
-          updateEntityRequest({ key: 'requests', model: selectedAppointment.requestModel });
+      return createEntityRequest({
+        key: 'appointments',
+        entityData: newAppointment,
+        alert: alertCreate,
+      }).then(() => {
+        if (selectedAppointment && selectedAppointment.request) {
+          return updateEntityRequest({
+            key: 'requests',
+            model: selectedAppointment.requestModel,
+            alert: alertUpdate,
+          }).then(() => {
+            reinitializeState();
+            reset(formName);
+          });
+        } else {
+          reinitializeState();
+          reset(formName);
         }
-        reinitializeState();
-        reset(formName);
-      }).catch(e => alert('Appointment was invalid'));
+      });
 
     } else {
       const appModel = selectedAppointment.appModel;
@@ -113,9 +145,13 @@ class AddNewAppointment extends Component {
       const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
 
-      updateEntityRequest({ key: 'appointments', model: modifiedAppointment }).then(() => {
+      return updateEntityRequest({
+        key: 'appointments',
+        model: modifiedAppointment,
+        alert: alertUpdate,
+      }).then(() => {
         reinitializeState();
-      }).catch((e) => alert('Update Failed'));
+      });
     }
   }
 
@@ -241,16 +277,17 @@ function mapDispatchToProps(dispatch) {
     updateEntityRequest,
     deleteEntityRequest,
     reset,
+    showAlert,
     change,
   }, dispatch);
 };
 
 AddNewAppointment.PropTypes = {
-  formName: PropTypes.string,
-  services: PropTypes.object,
-  patients: PropTypes.object,
-  chairs: PropTypes.object,
-  practitioners: PropTypes.object,
+  formName: PropTypes.string.required,
+  services: PropTypes.object.required,
+  patients: PropTypes.object.required,
+  chairs: PropTypes.object.required,
+  practitioners: PropTypes.object.required,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,

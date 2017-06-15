@@ -20,7 +20,16 @@ class General extends React.Component {
     const { activeAccount, updateEntityRequest } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
-    updateEntityRequest({ key: 'accounts', model: modifiedAccount });
+    const alert = {
+      success: {
+        body: 'Updated Clinic Information',
+      },
+      error: {
+        title: 'Clinic Information Error',
+        body: 'Failed to update.',
+      },
+    };
+    updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
   }
 
   render() {
@@ -68,9 +77,9 @@ function mapDispatchToProps(dispatch){
   }, dispatch);
 }
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, auth }) {
   return {
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
 

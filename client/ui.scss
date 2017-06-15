@@ -18,6 +18,16 @@ $primary-dark-blue: #3a5199;
 $primary-navy-blue: #518493;
 $primary-light-blue: #8CBCD6;
 
+$clr-border: #DEDEDE;
+$clr-bg-dark-grey: #CDCDCD;
+$clr-dark-grey: #808080;
+$clr-dark-blue: #29313c;
+
+$clr-table-grey: #757575;
+$clr-table-light-grey: #c6c6c6;
+$clr-table-border: #f2f2f2;
+$clr-table-header-icons: #eff2f3;
+
 $primary-blue-green: #206477;
 
 $primary-dark: #2e3845;
@@ -59,6 +69,8 @@ $dashboard-font: Gotham-Book;
 
 $medium-font: Gotham-Medium;
 
+$padding-card-base: 30px;
+
 //header-sizes
 $count-size: 36px;
 $title-size: 16px;
@@ -84,3 +96,17 @@ $normall-weight: 200;
 // Facebook Colors
 $fb-bg-color: #3b5998;
 $fb-fg-color: #fff;
+
+$browser-context: 14;
+
+@function em($pixels, $context: $browser-context) {
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+
+  @return $pixels / $context * 1em;
+}

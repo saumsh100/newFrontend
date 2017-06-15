@@ -40,6 +40,10 @@
   box-sizing: border-box;
   overflow: auto;
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &_icon {
     color: $inactive-color;
     opacity: 0.5;

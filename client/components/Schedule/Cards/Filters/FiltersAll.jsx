@@ -95,15 +95,15 @@ class FiltersAll extends Component {
       setAllFilters,
     } = this.props;
 
-   const objArr = Object.keys(this.state);
-   setAllFilters(['services']);
+    const objArr = Object.keys(this.state);
+    setAllFilters(['services']);
 
-   objArr.map((filterKey) => {
-    addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
-    const temp = {};
-    temp[filterKey] = true;
-    this.setState(temp);
-  });
+    objArr.map((filterKey) => {
+      addAllScheduleFilter({ key: filterKey, entities: entities[filterKey] });
+      const temp = {};
+      temp[filterKey] = true;
+      this.setState(temp);
+    });
   }
 
   render() {

@@ -4,7 +4,7 @@ import { SubmissionError } from 'redux-form';
 // TODO: remove UX specific logic from here, just return request promise...
 export function changePassword(params) {
   return function (dispatch, getState) {
-    const id = getState().auth.getIn(['token', 'userId']);
+    const id = getState().auth.getIn(['user', 'id']);
     return axios
       .put(`/api/users/${id}`, params)
       .then(() => {

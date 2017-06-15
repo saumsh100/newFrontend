@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import jwt from 'jwt-decode';
 import _ from 'lodash';
 import { Map } from 'immutable';
 import MainContainer from './MainContainer';
@@ -37,6 +38,13 @@ class PatientList extends Component {
   }
 
   componentDidMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: `/api/accounts/${decodedToken.activeAccountId}`,
+    });
     this.props.fetchEntities({
       key: 'appointments',
       join: ['patient'],
@@ -93,20 +101,22 @@ class PatientList extends Component {
       initialUser: true,
     });
 
-    const ids = [];
+    const values = {
+      isDeleted: true,
+    };
 
-    this.props.appointments.toArray().forEach((appointment) => {
-      if (appointment.patientId === id) {
-        ids.push(appointment.id);
-      }
-    });
-
-    this.props.deleteEntityCascade({
+    this.props.updateEntityRequest({
       key,
-      id,
+      values,
+      alert: {
+        success: {
+          body: 'Deleted patient',
+        },
+        error: {
+          body: 'Patient not deleted',
+        },
+      },
       url: `/api/patients/${id}`,
-      cascadeKey: 'appointments',
-      ids,
     });
   }
 
@@ -135,6 +145,14 @@ class PatientList extends Component {
     this.props.updateEntityRequest({
       key: 'patients',
       model: modifiedPatient,
+      alert: {
+        success: {
+          body: `${currentPatient.firstName}'s Info Updated`,
+        },
+        error: {
+          body: `${currentPatient.firstName}'s Info Not Updated`,
+        },
+      },
       url: `/api/patients/${currentPatient.id}`,
     }).then((result) => {
       this.props.setSelectedPatient(Object.keys(result.patients)[0]);
@@ -191,7 +209,14 @@ class PatientList extends Component {
 
     const patientSearch = this.props.searchedPatients || [] ;
     let currentPatient = this.state.currentPatient;
-    const app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+    let app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
+    app = app.filter((appointment) => {
+      if (moment(appointment.startDate).diff(new Date()) > 0) {
+        return true;
+      }
+      return false;
+    });
+
 
     if (this.state.initialUser && appointments.toArray()[0] && !selectedPatient) {
       console.log(app, app.toArray()[0].patientId)
@@ -226,9 +251,16 @@ class PatientList extends Component {
       if (this.state.currentPatient.id !== null) {
         currentPatient = patients.get(this.state.currentPatient.id);
 
-        currentPatient.appointment = currentPatient.appointment || (currentPatient.appointments[0] ? currentPatient.appointments[0] : {});
+        const appointments = (currentPatient.appointments ? currentPatient.appointments : []);
+
+        currentPatient.appointment = currentPatient.appointment || (appointments[0] ? appointments[0] : {});
       }
     }
+
+    // this.props.fetchEntitiesRequest({
+    //   id: 'patientStatsLastYear',
+    //   url: `/api/patients/${currentPatient.id}/appointmentstats`,
+    // })
 
     return (
       <MainContainer
@@ -262,6 +294,7 @@ PatientList.PropTypes = {
   updateEntityRequest: PropTypes.func.isRequired,
   deleteEntityCascade: PropTypes.func.isRequired,
   setSelectedPatient: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
   searchPatient: PropTypes.func.isRequired,
 };
 

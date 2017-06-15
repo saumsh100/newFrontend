@@ -43,6 +43,10 @@ const patientSchema = () => {
   return new schema.Entity('patients');
 };
 
+const patientUserSchema = () => {
+  return new schema.Entity('patientUsers');
+};
+
 const familySchema = () => {
   return new schema.Entity('families', {
     patients: [patientSchema()],
@@ -50,14 +54,12 @@ const familySchema = () => {
 };
 
 const permissionSchema = () => {
-  return new schema.Entity('permissions', {
-    users: [userSchema()],
-  });
+  return new schema.Entity('permissions');
 };
 
 const requestSchema = () => {
   return new schema.Entity('requests', {
-    patient: patientSchema(),
+    patientUser: patientUserSchema(),
     service: serviceSchema(),
     practitioner: practitionerSchema(),
     chair: chairSchema(),
@@ -73,7 +75,9 @@ const textMessageSchema = () => {
 };
 
 const userSchema = () => {
-  return new schema.Entity('users');
+  return new schema.Entity('users', {
+    permission: permissionSchema(),
+  });
 };
 
 const syncClientErrorSchema = () => {
@@ -153,6 +157,7 @@ const SCHEMAS = {
   service: serviceSchema(),
   textMessage: textMessageSchema(),
   user: userSchema(),
+  patientUser: patientUserSchema(),
   permission: permissionSchema(),
   practitioner: practitionerSchema(),
   practitionerTimeOff: timeOffSchema(),
@@ -170,6 +175,7 @@ const SCHEMAS = {
   enterprises: [enterpriseSchema()],
   invites: [inviteSchema()],
   patients: [patientSchema()],
+  patientUsers: [patientUserSchema()],
   families: [familySchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],

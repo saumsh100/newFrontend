@@ -20,13 +20,16 @@ appointmentsRouter.param('appointmentId', loaders('appointment', 'Appointment'))
 function intersectingAppointments(appointments, startDate, endDate) {
   const sDate = moment(startDate);
   const eDate = moment(endDate);
+
   return appointments.filter((app) => {
     const appStartDate = moment(app.startDate);
     const appEndDate = moment(app.endDate);
+
     if (sDate.isSame(appStartDate) || sDate.isBetween(appStartDate, appEndDate) ||
       eDate.isSame(appEndDate) || eDate.isBetween(appStartDate, appEndDate)) {
       return app;
     };
+
   });
 }
 
@@ -64,11 +67,11 @@ appointmentsRouter.get('/business', (req, res, next) => {
   startDate = startDate ? r.ISO8601(startDate) : r.now();
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
-  function addtoFilter(rowTest, startTime, endTime) {
+  function addtoFilter(rowTest, startTime, endTime, practitionerId) {
     if (!rowTest) {
-      return r.row('startDate').during(startTime, endTime);
+      return r.row('startDate').during(startTime, endTime).and(r.row('practitionerId').eq(practitionerId));
     }
-    return rowTest.or(r.row('startDate').during(startTime, endTime));
+    return rowTest.or(r.row('startDate').during(startTime, endTime).and(r.row('practitionerId').eq(practitionerId)));
   }
 
   Appointment
@@ -90,7 +93,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
           if (appointment.isCancelled) {
             send.brokenAppts++;
             // add filter to for query to find out if a cancelled appointment has been refilled
-            filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()));
+            filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()), appointment.practitionerId);
           }
           return null;
         });
@@ -151,6 +154,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
   } = query;
 
   const date = moment(new Date()).subtract(moment(new Date()).get('date') + 1, 'days');
+  const age = new Array(6).fill(0);
 
   const Promises = [];
   const months = [];
@@ -159,21 +163,45 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
   for (let i = 0; i < 12; i++) {
     const end = moment(date).subtract(i - 1, 'months').toISOString();
     const start = moment(date).subtract(i, 'months').toISOString();
-    months.push(monthsYear[moment(date).subtract(i - 1, 'months').get('months')])
+    months.push(monthsYear[moment(date).subtract(i - 1, 'months').get('months')]);
     const startDate = r.ISO8601(start);
     const endDate = r.ISO8601(end);
     Promises.push(Appointment
       .filter({ accountId })
       .filter(r.row('startDate').during(startDate, endDate))
+      .getJoin({
+        patient: true,
+      })
       .run());
   }
 
   Promise.all(Promises)
     .then((values) => {
       data = values.map((value) => {
+        value.map((appointment) => {
+          const patientAge = moment().diff(moment(appointment.patient.birthDate), 'years');
+          if (patientAge < 18) {
+            age[0]++;
+          }
+          if (patientAge > 18 && patientAge < 25) {
+            age[1]++;
+          }
+          if (patientAge > 24 && patientAge < 35) {
+            age[2]++;
+          }
+          if (patientAge > 34 && patientAge < 45) {
+            age[3]++;
+          }
+          if (patientAge > 44 && patientAge < 55) {
+            age[4]++;
+          }
+          if (patientAge > 54) {
+            age[5]++;
+          }
+        });
         return value.length;
       });
-      res.send({data: data.reverse(), months: months.reverse()});
+      res.send({ data: data.reverse(), months: months.reverse(), age });
     })
     .catch(next);
 });
@@ -191,6 +219,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
     endDate,
     accountId,
   } = query;
+
+  accountId = accountId || req.accountId;
 
   if (!startDate || !endDate) {
     return res.send(400);
@@ -402,8 +432,9 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
+  //const splitApps = []
   Appointment.filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)))
+    .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)).and(r.row('isCancelled').ne(true)))
     .run()
     .then((appointments) => {
       const intersectingApps = intersectingAppointments(appointments, appointmentData.startDate, appointmentData.endDate);
@@ -415,6 +446,9 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
         if ((practitionerId === app.practitionerId) &&
           (chairId !== app.chairId) && (patientId !== app.patientId)) {
           appointmentData.isSplit = true;
+          /*if (!app.isSplit) {
+            splitApps.push(app);
+          }*/
           return true;
         }
         return false;
@@ -422,9 +456,12 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
       const noOverLap = checkOverlapping.every((el) => el === true);
       if (checkOverlapping.length === 0 || noOverLap) {
-        const startDate = moment(appointmentData.startDate);
-        const currentDate = moment();
-        const isSameDate = startDate.isSame(currentDate, 'day');
+
+        /*splitApps && splitApps.map((appSplit) => {
+          const modifiedSplitApp = appSplit;
+          modifiedSplitApp.isSplit = true;
+          appSplit.merge(modifiedSplitApp).save();
+        });*/
 
         return Appointment.save(appointmentData)
           .then(appt => {
@@ -542,7 +579,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate))
-    .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appointmentData.id)))
+    .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appointmentData.id)).and(r.row('isCancelled').ne(true)))
     .run()
     .then((appointments) => {
       const intersectingApps = intersectingAppointments(appointments, appointmentData.startDate, appointmentData.endDate);
@@ -573,6 +610,27 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       const testIfNoOverlap = checkOverlapping.every((el) => el === true);
 
       if (checkOverlapping.length === 0 || testIfNoOverlap) {
+          Appointment.get(appointmentData.id)
+            .run()
+            .then((appSplit) => {
+              const startDate = r.ISO8601(moment(appSplit.startDate).startOf('day').toISOString());
+              const endDate = r.ISO8601(moment(appSplit.endDate).endOf('day').toISOString());
+              Appointment.filter({ accountId })
+                .filter(r.row('startDate').during(startDate, endDate))
+                .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appSplit.id)).and(r.row('isCancelled').ne(true)))
+                .run()
+                .then((appointments) => {
+                  const splitApps = intersectingAppointments(appointments, appSplit.startDate, appSplit.endDate);
+                  if (splitApps.length !== 0) {
+                    splitApps.map((interApp) => {
+                      const modifiedSplitApp = interApp;
+                      modifiedSplitApp.isSplit = false;
+                      interApp.merge(modifiedSplitApp).save();
+                    });
+                  }
+                });
+            } );
+
         return req.appointment.merge(req.body).save()
           .then(appointment => res.send(normalize('appointment', appointment)))
           .catch(next);

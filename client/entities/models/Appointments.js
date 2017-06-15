@@ -14,6 +14,7 @@ const AppointmentsSchema = {
   note: null,
   customBufferTime: null,
   isDeleted: null,
+  isCancelled: null,
   isSyncedWithPMS: null,
   isSplit: null,
 };

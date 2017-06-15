@@ -12,7 +12,17 @@ function OfficeHours(props) {
   const { weeklySchedule } = props;
   const handleSubmit = (values) => {
     const newWeeklySchedule = weeklySchedule.merge(values);
-    props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule });
+
+    const alert = {
+      success: {
+        body: 'Clinic Office Hours Updated',
+      },
+      error: {
+        body: 'Clinic Office Hours Update Failed',
+      },
+    };
+
+    props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
   };
 
   return (
@@ -40,8 +50,8 @@ OfficeHours.propTypes = {
   updateEntityRequest: PropTypes.func,
 };
 
-function mapStateToProps({ entities }) {
-  const activeAccount = entities.getIn(['accounts', 'models']).first();
+function mapStateToProps({ entities, auth }) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
   if (!activeAccount) {
     return {};

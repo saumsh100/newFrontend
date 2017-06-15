@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getClassMapper } from '../../Utils';
@@ -5,7 +6,7 @@ import styles from './vbutton.scss';
 
 const scheme = [
   ['size', ['sm', 'md', 'lg', 'xlg']],
-  ['color', ['red', 'grey', 'green', 'blue', 'yellow']],
+  ['color', ['red', 'grey', 'green', 'blue', 'yellow', 'darkgrey']],
 
   'rounded',
   'upperCase',
@@ -46,6 +47,7 @@ VButton.propTypes = {
     PropTypes.string,
     PropTypes.func,
   ]),
+
   className: PropTypes.string,
   icon: PropTypes.string,
   title: PropTypes.string,

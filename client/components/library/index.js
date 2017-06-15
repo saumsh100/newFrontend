@@ -1,4 +1,5 @@
 
+import Alert from './Alert';
 import AppBar from './AppBar';
 import Avatar from './Avatar';
 import AutoCompleteForm from './AutoCompleteForm';
@@ -51,8 +52,10 @@ import DoubleIcon from './DoubleIcon';
 import VButton from './VButton';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
+import VCard from './VCard';
 
 export {
+  Alert,
   AppBar,
   Avatar,
   AutoCompleteForm,
@@ -113,6 +116,7 @@ export {
   Breadcrumbs,
   BreadcrumbItem,
   FBLoginButton,
+  VCard,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

@@ -1,7 +1,10 @@
+
 import jwt from 'jsonwebtoken';
+import merge from 'lodash/merge';
 import { tokenSecret } from '../config/globals';
-import permissions from '../config/permissions';
+import rolePermissions from '../config/permissions';
 import StatusError from '../util/StatusError';
+import { AuthSession } from '../models';
 
 function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
@@ -21,15 +24,15 @@ function getTokenFromReq(req) {
 }
 
 module.exports = function authMiddleware(req, res, next) {
-  const hostname = req.hostname;
   const token = getTokenFromReq(req);
   if (!token) {
     return next(StatusError(401, 'Unauthorized. No valid token on header.'));
   }
 
   // Try decoding token
+  // TODO: eventually we need to remove this decoding step, it's unnecessary
   try {
-    jwt.decode(token, { complete: true }) || {};
+    jwt.decode(token, { complete: true });
   } catch (err) {
     return next(StatusError(401, 'Unauthorized. Could not decode token.'));
   }
@@ -42,10 +45,38 @@ module.exports = function authMiddleware(req, res, next) {
     // We use this for activeAccountId and userId to allow controllers to fetch appropriate data
     req.token = token;
     req.decodedToken = decoded;
-    req.accountId = decoded.activeAccountId;
-    req.role = decoded.role;
-    // Pull in the role's permissions and extend the extra permissions ontop
-    req.permissions = { ...permissions[decoded.role], ...decoded.permissions };
-    return next();
+    req.sessionId = decoded.sessionId;
+
+    const checkValidity = (message = '') => value =>
+      (value || Promise.reject(StatusError(401, `Unauthorized. ${message}`)));
+
+    // Load Session
+    AuthSession.get(decoded.sessionId).run()
+      .then(checkValidity('Session Token not found.'))
+      .then(({ modelId: userId, permissions, role, enterpriseId, accountId }) => {
+        const mergedPermissions = merge({}, rolePermissions[role], permissions);
+        const sessionData = {
+          userId,
+          permissions: mergedPermissions,
+          role,
+          enterpriseId,
+          accountId,
+        };
+
+        Object.assign(req, sessionData);
+        req.sessionData = sessionData;
+      })
+      // TODO: Check is token expired
+      .catch((e) => {
+        const error = (e.name === 'DocumentNotFoundError' ?
+            StatusError(401, 'Unauthorized.') :
+            e
+        );
+
+        next(error);
+      })
+      // Done
+      .then(next)
+      .catch(next);
   });
 };

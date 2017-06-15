@@ -24,6 +24,13 @@ class SelectionView extends Component {
     this.props.setHasWaitList(!this.props.hasWaitList);
   }
 
+  componentDidUpdate() {
+    const element = document.getElementById('ccScrollID');
+    if (element && this.props.hasWaitList) {
+      element.scrollTop = element.scrollHeight;
+    }
+  }
+
   render() {
     const {
       services,
@@ -78,6 +85,7 @@ SelectionView.propTypes = {
   selectedAvailability: PropTypes.object,
   setRegistrationStep: PropTypes.func.isRequired,
   hasWaitList: PropTypes.bool.isRequired,
+  setHasWaitList: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps({ entities, availabilities }) {

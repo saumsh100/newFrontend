@@ -92,25 +92,25 @@ class PatientInfoDisplay extends Component {
             </div>
             <div className={styles.stats}>
               <div className={styles.loyal}>
-                <div className={styles.container1}>
-                  <span className={styles.loyality1}>70</span>
+                {/*<div className={styles.container1}>
+                  <span className={styles.loyality1}>{this.props.patientIdStats.allApps * this.props.patientIdStats.monthsApp}</span>
                   <br />
                   <span className={styles.loyality2}>PATIENT</span>
                   <br />
                   <span className={styles.loyality3}>LOYALTY</span>
-                </div>
-                <div className={styles.container2}>
+                </div>*/}
+                <div className={styles.container1}>
                   <span className={styles.statInfo}>TOTAL APPOINTMENTS</span>
                   <br />
-                  <span className={styles.statData}>15</span>
+                  <span className={styles.statData}>{this.props.patientIdStats.allApps}</span>
                   <br />
                   <br />
                   <span className={styles.statInfo}>APPOINTMENTS LAST YEAR</span>
                   <br />
-                  <span className={styles.statData}>2</span>
+                  <span className={styles.statData}>{this.props.patientIdStats.monthsApp}</span>
                   <br />
                   <br />
-                  <span className={styles.statInfo}>REFERRALS SENT</span>
+                  {/*<span className={styles.statInfo}>REFERRALS SENT</span>
                   <br />
                   <span className={styles.statData}>7</span>
                   <br />
@@ -122,7 +122,7 @@ class PatientInfoDisplay extends Component {
                   <br />
                   <span className={styles.statInfo}>REVIEWS</span>
                   <br />
-                  <span className={styles.statData}>2</span>
+                  <span className={styles.statData}>2</span>*/}
                 </div>
               </div>
             </div>
@@ -133,6 +133,7 @@ class PatientInfoDisplay extends Component {
 }
 
 PatientInfoDisplay.propTypes = {
+  patientIdStats: PropTypes.object,
   currentPatient: PropTypes.object,
   onDelete: PropTypes.func,
 };

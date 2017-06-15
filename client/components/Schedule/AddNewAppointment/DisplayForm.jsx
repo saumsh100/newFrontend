@@ -47,6 +47,8 @@ export default function DisplayForm(props) {
       chairId,
       practitionerId,
       note,
+      isPatientConfirmed,
+      isCancelled,
     } = selectedAppointment;
 
     const patient = patients.get(patientId);
@@ -61,6 +63,8 @@ export default function DisplayForm(props) {
         practitionerId: practitionerId || '',
         chairId: chairId || '',
         duration: [durationTime, bufferTime],
+        isPatientConfirmed,
+        isCancelled,
       },
       patient: {
         patientSelected: patient.toJS(),
@@ -69,7 +73,6 @@ export default function DisplayForm(props) {
         note,
       },
     };
-
   }
 
   const serviceOptions = generateEntityOptions(services, 'name');

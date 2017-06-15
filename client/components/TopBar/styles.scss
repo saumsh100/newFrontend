@@ -125,25 +125,71 @@ $padding-size-border: 10px;
   display: flex;
   align-items: center;
   margin-right: 10px;
+  &:hover {
+    color: $primary-color !important;
+  }
 }
 
 .userMenuGreeting {
   padding-right: 10px;
   font-weight: 600;
+  text-align: right;
   @media screen and (max-width: $medium-screen-width) {
     display: none;
   }
 }
 
+.greeting {
+  font-family: $medium-font;
+  color: black;
+}
+
 .userRole {
+  text-transform: uppercase;
   font-weight: 100;
-  font-size: 0.8rem;
+  font-size: 10px;
+  color: $primary-darkgrey;
+}
+
+.businessName {
+  font-weight: 100;
+  font-size: 10px;
+  color: $primary-darkgrey;
+
 }
 
 .userAvatar {
   margin-right: 10px;
 }
 
+.activeAccountButton {
+  border-right: 1.5px solid darkgray;
+  padding-right: 1em;
+  cursor: pointer;
+  line-height: 47px;
+
+  &:hover {
+    color: $primary-red;
+  }
+}
+
+.activeAccountTitle {
+  padding-right: .5em;
+}
+
+.menuItemSelected {
+  background-color: $primary-green;
+  cursor: default;
+  color: white;
+
+  &:hover {
+    background-color: $primary-green!important;
+    cursor: default;
+    color: white!important;
+  }
+}
+
 .userMenuLi {
   background-color: $primary-white;
 }
+

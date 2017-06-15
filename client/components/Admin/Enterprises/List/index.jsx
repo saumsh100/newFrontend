@@ -9,16 +9,22 @@ import { VButton } from '../../../library/index';
 import PageContainer from '../../General/PageContainer';
 import EditableList from '../../General/EditableList';
 import { getCollection } from '../../../Utils';
+import withAuthProps from '../../../../hocs/withAuthProps';
+import { switchActiveEnterprise } from '../../../../thunks/auth';
 import styles from './styles.scss';
 
 class EnterpriseList extends Component {
-
   componentWillMount() {
     this.props.fetchEntities({ key: 'enterprises' });
   }
 
+  selectEnterprise(enterpriseId) {
+    this.props.switchActiveEnterprise(enterpriseId, this.props.location.pathname);
+  }
+
   render() {
-    const { enterprises } = this.props;
+    const { enterprises, enterpriseId } = this.props;
+
     const baseUrl = (path = '') => `/admin/enterprises${path}`;
 
     const deleteRequest = ({ id }) => this.props.deleteEntityRequest({ key: 'enterprises', id });
@@ -51,6 +57,16 @@ class EnterpriseList extends Component {
           onDelete={deleteRequest}
           onEdit={navigateToEditPage}
         />
+        <br/><br/>
+        <br/><br/>
+        <span>Switch Enterprise  </span>
+        {enterprises ? (
+            <select onChange={e => this.selectEnterprise(e.target.value)} value={enterpriseId}>
+              { enterprises.map(enterprise =>
+                <option value={enterprise.id}>{enterprise.name}</option>
+              ) }
+            </select>
+          ) : null}
       </PageContainer>
     );
   }
@@ -73,8 +89,9 @@ const dispatchToProps = dispatch =>
   bindActionCreators({
     fetchEntities,
     deleteEntityRequest,
+    switchActiveEnterprise,
     navigate: push,
   }, dispatch);
 
-export default connect(stateToProps, dispatchToProps)(EnterpriseList);
+export default withAuthProps(connect(stateToProps, dispatchToProps)(EnterpriseList));
 

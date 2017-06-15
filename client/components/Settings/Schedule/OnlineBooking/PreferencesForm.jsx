@@ -24,5 +24,5 @@ export default function PreferencesForm({ handleSubmit, activeAccount, }) {
 }
 
 PreferencesForm.propTypes = {
-  handleSubmit: PropTypes.func.required,
+  handleSubmit: PropTypes.func,
 };

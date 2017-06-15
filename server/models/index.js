@@ -2,6 +2,7 @@
 import Account from './Account';
 import Account_Patient from './Account_Patient';
 import Appointment from './Appointment';
+import AuthSession from './AuthSession';
 import Call from './Call';
 import Chair from './Chair';
 import Chat from './Chat';
@@ -10,7 +11,9 @@ import Family from './Family';
 import Invite from './Invite';
 import OAuth from './OAuth';
 import Patient from './Patient';
+import PatientUser from './PatientUser';
 import Permission from './Permission';
+import PinCode from './PinCode';
 import Practitioner from './Practitioner';
 import Practitioner_Service from './Practitioner_Service';
 import PractitionerTimeOff from './PractitionerTimeOff';
@@ -29,10 +32,11 @@ import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
 
-module.exports = {
+export {
   Account,
   Account_Patient,
   Appointment,
+  AuthSession,
   Chair,
   Chat,
   Call,
@@ -41,7 +45,9 @@ module.exports = {
   Patient,
   Family,
   OAuth,
+  PatientUser,
   Permission,
+  PinCode,
   Practitioner,
   Practitioner_Service,
   PractitionerTimeOff,
@@ -71,6 +77,7 @@ Account.hasMany(TextMessage, 'textMessages', 'id', 'accountId');
 Account.hasMany(Service, 'services', 'id', 'accountId');
 Account.hasMany(Practitioner, 'practitioners', 'id', 'accountId');
 Account.hasMany(Reminder, 'reminders', 'id', 'accountId');
+Account.hasMany(Recall, 'recalls', 'id', 'accountId');
 Account.hasAndBelongsToMany(Patient, 'patients', 'id', 'id');
 //Account.hasMany(User, 'users', 'id', 'activeAccountId');
 
@@ -125,10 +132,18 @@ OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');
 Patient.belongsTo(Family, 'family', 'familyId', 'id');
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
 Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
+Patient.hasOne(Chat, 'chat', 'id', 'patientId');
 Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 Patient.hasMany(SentReminder, 'sentReminders', 'id', 'patientId');
 Patient.hasMany(SentRecall, 'sentRecalls', 'id', 'patientId');
+Patient.hasOne(PatientUser, 'patientUser', 'patientUserId', 'id');
+
+/**
+ * PatientUser Relations
+ */
+
+PatientUser.hasMany(Patient, 'patients', 'id', 'patientUserId');
 
 /**
  * Permission Relations
@@ -154,7 +169,7 @@ Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
  * Request Relations
  */
 
-Request.belongsTo(Patient, 'patient', 'patientId', 'id');
+Request.belongsTo(PatientUser, 'patientUser', 'patientUserId', 'id');
 Request.belongsTo(Account, 'account', 'accountId', 'id');
 Request.belongsTo(Service, 'service', 'serviceId', 'id');
 Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
@@ -191,10 +206,18 @@ Service.hasMany(Request, 'requests', 'id', 'serviceId');
 Token.hasOne(Appointment, 'appointment', 'appointmentId', 'id');
 
 /**
+ * Token Relations
+ */
+
+TextMessage.hasOne(User, 'user', 'userId', 'id');
+
+/**
  * User Relations
  */
 
 User.belongsTo(Account, 'activeAccount', 'activeAccountId', 'id');
+User.hasOne(Enterprise, 'enterprise', 'enterpriseId', 'id');
+User.hasOne(Permission, 'permission', 'permissionId', 'id');
 
 /**
  * WaitSpot Relations

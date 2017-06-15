@@ -44,10 +44,9 @@ class Dashboard extends React.Component {
     };
 
     Promise.all([
-      this.props.fetchEntities({ key: 'requests' }),
-      this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query }),
+      // this.props.fetchEntities({ key: 'requests' }),
+      this.props.fetchEntities({ key: 'appointments', join: ['patient', 'chair'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
-      this.props.fetchEntities({ key: 'chairs' }),
       this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
       this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] }),
     ]).then(() => {
@@ -76,7 +75,7 @@ class Dashboard extends React.Component {
     const appointmentFilter = appointments.filter((app) => {
       const sDate = moment(app.startDate);
       const isSameDate = today.isSame(sDate, 'day');
-      return (isSameDate && !app.isDeleted);
+      return (isSameDate && !app.isDeleted && !app.isCancelled);
     });
 
     const filterConfirmedRequests = requests.toArray().filter((req) => !req.get('isCancelled'));
@@ -111,6 +110,7 @@ class Dashboard extends React.Component {
                 services={services}
                 practitioners={practitioners}
                 selectAppointment={selectAppointment}
+                setSelectedPatientId={setSelectedPatientId}
                 push={push}
               />
             </Card>

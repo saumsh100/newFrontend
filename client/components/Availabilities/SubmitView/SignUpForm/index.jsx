@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Button, Form, Field } from '../../../library';
+import { VButton, Form, Field } from '../../../library';
 import { asyncEmailValidatePatient, passwordsMatch, passwordStrength } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
@@ -26,8 +26,8 @@ export default function SignUpForm({ onSubmit }) {
       />
       <Field
         required
+        name="phoneNumber"
         label="Phone Number"
-        name="phone"
         type="tel"
       />
       <Field
@@ -49,12 +49,12 @@ export default function SignUpForm({ onSubmit }) {
         name="confirmPassword"
         type="password"
       />
-      <Button
+      <VButton
         type="submit"
         className={styles.signup__footer_btn}
       >
-        Book an appointment
-      </Button>
+        Sign Up and Book
+      </VButton>
     </Form>
   );
 }

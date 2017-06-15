@@ -22,7 +22,7 @@ const sortServicesAlphabetical = (a, b) => {
 
 class Services extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   componentWillMount() {

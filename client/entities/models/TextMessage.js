@@ -11,6 +11,7 @@ const TextMessageSchema = {
   createdAt: null,
   body: null,
   read: null,
+  user: null,
 };
 
 export default class TextMessage extends createModel(TextMessageSchema) {

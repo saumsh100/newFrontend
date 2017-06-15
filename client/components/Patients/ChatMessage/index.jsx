@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import immutable from 'immutable';
 import main from '../PatientList/main.scss';
 import ChatListContainer from './ChatListContainer';
 import MessageContainer from './MessageContainer';
@@ -38,17 +39,23 @@ class ChatMessage extends Component {
         }
       });
 
+      const map = immutable.fromJS(this.props.chats);
+      const selectedChat = map.filter(chat => chat.get('patientId') === id).first() || {};
+
       if (id) {
-        return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
-          this.props.setCurrentPatient(id);
+        return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
+          this.props.setCurrentPatient(id, selectedChat.id);
         });
       }
     }
   }
 
   userClick(id) {
-    return this.props.fetchEntities({url: `/api/chats/patient/${id}`}).then((result) => {
-      this.props.setCurrentPatient(id);
+    const map = immutable.fromJS(this.props.chats);
+    const selectedChat = map.filter(chat => chat.get('patientId') === id).first() || {};
+
+    return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
+      this.props.setCurrentPatient(id, selectedChat.id);
     });
   }
 
@@ -128,6 +135,26 @@ class ChatMessage extends Component {
       currentPatient={this.props.currentPatient}
     /> : null);
 
+    let userPhone = null;
+    let displayAnonInfo = null;
+
+    if (this.props.selectedChat && !this.props.selectedChat.patientId && this.props.selectedChat.textMessages[0]) {
+      const firstMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[0]).toJS();
+
+      if (firstMessage.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
+        userPhone = firstMessage.to;
+      } else {
+        userPhone = firstMessage.from;
+      }
+
+      displayAnonInfo = <UserInfo
+        currentPatient={{
+          avatarUrl: '/images/avatar.png',
+          anonPhone: userPhone,
+        }}
+      />;
+    }
+
     const inputProps = {
       placeholder: 'Search...',
       value: this.state.value,
@@ -144,24 +171,22 @@ class ChatMessage extends Component {
               <Row className={styles.topRow}>
                 <Card className={styles.headerInput}>
                   <div className={styles.header}>
-                    <CardHeader title="Chat Search" />
+                    <CardHeader title="&nbsp;" />
                   </div>
                   <div className={styles.input}>
                     <AutoCompleteForm
                       value={this.state.value}
-                    getSuggestions={this.getSuggestions}
-                    inputProps={inputProps}
-                    focusInputOnSuggestionClick={false}
-                    getSuggestionValue={suggestion => suggestion.name}
+                      getSuggestions={this.getSuggestions}
+                      inputProps={inputProps}
+                      focusInputOnSuggestionClick={false}
+                      getSuggestionValue={suggestion => suggestion.name}
+                      classStyles={styles.chatSearch}
                     />
                   </div>
                 </Card>
               </Row>
               <Row className={styles.listRow}>
                 <Card className={styles.upcomingHead}>
-                  <div className={styles.header}>
-                    <CardHeader title="Messages" />
-                  </div>
                   <List className={styles.patients_list__users}>
                     <InfiniteScroll
                       loadMore={this.props.loadMore}
@@ -175,6 +200,7 @@ class ChatMessage extends Component {
                         textMessages={this.props.textMessages}
                         chats={this.props.chats}
                         patients={this.props.patients}
+                        selectedChat={this.props.selectedChat}
                         onClick={this.props.setCurrentPatient}
                         currentPatient={this.props.currentPatient}
                       />
@@ -187,7 +213,7 @@ class ChatMessage extends Component {
           <Col xs={12} sm={8} md={8} lg={9} className={styles.messages}>
             <div className={styles.topInfo}>
               <div>
-                <span>To: </span>{info}
+                <span>To: </span>{info || userPhone}
               </div>
             </div>
             <div className={styles.main}>
@@ -198,7 +224,7 @@ class ChatMessage extends Component {
                 textMessages={this.props.textMessages}
               />
               <div className={styles.rightInfo}>
-                {displayinfo}
+                {displayinfo || displayAnonInfo}
                 <div className={styles.bottomInfo}>
 
                 </div>
@@ -216,6 +242,8 @@ ChatMessage.propTypes = {
   searchedPatients: PropTypes.object,
   chats: PropTypes.object,
   patients: PropTypes.object,
+  selectedChat: PropTypes.object,
+  activeAccount: PropTypes.object,
   moreData: PropTypes.bool,
   textMessages: PropTypes.object,
   loadMore: PropTypes.func.isRequired,
@@ -224,8 +252,9 @@ ChatMessage.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
+function mapStateToProps({ entities }) {
   return {
+    activeAccount: entities.getIn(['accounts', 'models']).first(),
   };
 }
 

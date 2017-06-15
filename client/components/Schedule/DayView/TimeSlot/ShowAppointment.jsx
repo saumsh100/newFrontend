@@ -69,20 +69,9 @@ export default function ShowAppointment(props) {
     left,
     height,
     width,
-    border: '1  px solid',
-    borderColor: bgColor,
+    border: `1px solid ${bgColor}`,
     backgroundColor: `${hexToRgbA(bgColor, 0.8)}`,
   };
-
-  // Todo: this is disabled for now
-
-  if (isPatientConfirmed) {
-    appStyle = Object.assign({}, appStyle, {
-      backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
-      border: '2px solid',
-      borderColor: bgColor,
-    });
-  }
 
   // calculating the buffer position and height styling
   const heightCalcBuffer = ((customBufferTime / 60) / totalHours) * 100;
@@ -113,6 +102,13 @@ export default function ShowAppointment(props) {
     });
   }
 
+  if (isPatientConfirmed) {
+    appStyle = Object.assign({}, appStyle, {
+      backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
+      border: `2px solid ${bgColor}`,
+    });
+  }
+
   return (
     <div
       onClick={() => {
@@ -120,6 +116,7 @@ export default function ShowAppointment(props) {
       }}
     >
       <div
+        key={appointment.id}
         className={styles.showAppointment}
         style={appStyle}
       >
