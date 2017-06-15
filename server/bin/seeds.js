@@ -210,6 +210,7 @@ for (let i = 0; i < 100; i++) {
 
   randomCalls.push({
     id: uuid(),
+    accountId,
     datetime: faker.date.past(),
     customer_phone_number: phoneNumber,
     answered: faker.random.boolean(),
