@@ -137,6 +137,10 @@
   position: relative;
 }
 
+.fullHeight {
+  height: 100%;
+}
+
 .formWrapper {
   padding: 0px 120px;
   @media screen and (max-width: 600px) {
@@ -215,4 +219,15 @@
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.loadingWrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingSpinnerIcon {
+  color: var(--bookingWidgetPrimaryColor);
 }

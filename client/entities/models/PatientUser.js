@@ -6,6 +6,7 @@ const PatientUserSchema = {
   firstName: null,
   lastName: null,
   email: null,
+  phoneNumber: null,
   avatarUrl: null,
 };
 

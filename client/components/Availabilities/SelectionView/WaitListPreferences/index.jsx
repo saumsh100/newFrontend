@@ -92,6 +92,7 @@ class WaitListPreferences extends Component {
                   <DayPicker
                     multiple
                     target="icon"
+                    disabledDays={date => moment().isAfter(date)}
                     iconClassName={styles.unavailButton}
                     value={waitSpot.get('unavailableDays').toArray()}
                     onChange={dates => updateWaitSpot({ unavailableDays: dates })}

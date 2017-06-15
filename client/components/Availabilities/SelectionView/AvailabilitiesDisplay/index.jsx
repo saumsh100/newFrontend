@@ -138,15 +138,18 @@ class AvailabilitiesDisplay extends Component {
       }
     }
 
+    const canGoBack = moment(selectedStartDate).diff(Date.now(), 'days') > 0;
+
     return (
       <Grid>
         <Row>
           <Col xs={1} className={styles.centeredContent}>
-            <IconButton
-              icon="arrow-circle-o-left"
-              className={styles.appointment__table_btn}
-              onClick={this.setDateBack}
-            />
+            {canGoBack ?
+              <IconButton
+                icon="arrow-circle-o-left"
+                className={styles.appointment__table_btn}
+                onClick={this.setDateBack}
+              /> : null}
           </Col>
           <Col xs={10} className={styles.columnsWrapper}>
             <div className={styles.displayWrapperForHorizontalScroll}>

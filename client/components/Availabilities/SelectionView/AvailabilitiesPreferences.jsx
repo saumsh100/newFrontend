@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import moment from 'moment';
 import { Grid, Row, Col, DayPicker, DropdownSelect } from '../../library';
 import * as Actions from '../../../actions/availabilities';
 import styles from '../styles.scss';
@@ -32,6 +33,7 @@ function AvailabilitiesPreferences(props) {
         <Col className={styles.dsCol} xs={6}>
           <span className={styles.label}>Service</span>
           <DropdownSelect
+            className={styles.dropdown}
             options={serviceOptions}
             value={selectedServiceId}
             onChange={value => setSelectedServiceId(value)}
@@ -41,6 +43,7 @@ function AvailabilitiesPreferences(props) {
           <span className={styles.label}>Practitioner</span>
           <DropdownSelect
             align="right"
+            className={styles.dropdown}
             options={practitionerOptions}
             value={selectedPractitionerId}
             onChange={value => setSelectedPractitionerId(value)}
@@ -52,6 +55,7 @@ function AvailabilitiesPreferences(props) {
           <span className={styles.label}>Date Range</span>
           <DayPicker
             target="icon"
+            disabledDays={date => moment().isAfter(date)}
             iconClassName={styles.dayPickerIcon}
             value={selectedStartDate}
             onChange={value => setSelectedStartDate(value)}
