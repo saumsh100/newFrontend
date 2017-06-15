@@ -16,7 +16,7 @@ class RequestListItem extends Component {
   }
 
   onClickConfirm() {
-    this.props.confirmAppointment(this.props.request);
+    this.props.confirmAppointment(this.props.request, this.props.patientUser);
   }
 
   onClickRemove() {
@@ -33,25 +33,29 @@ class RequestListItem extends Component {
   render() {
     const {
       request,
-      patient,
+      //patient,
       service,
       isHovered,
       active,
-      handlePatientClick,
+      patientUser
     } = this.props;
 
-    if (!service || !patient || !request) {
+    if (!request || !patientUser) {
       return null;
     }
 
+    const serviceName = service ? service.name : ''
+
+    const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
+
     const data = {
       time: request.getFormattedTime(),
-      age: request.getAge(patient.birthDate),
-      name: patient.getFullName(),
-      nameAge: patient.getFullName().concat(', ', request.getAge(patient.birthDate)),
-      email: patient.email,
-      service: service.name,
-      mobilePhoneNumber: patient.mobilePhoneNumber,
+      age: '',
+      name: fullName,
+      nameAge: '',
+      email: patientUser.email,
+      service: serviceName,
+      mobilePhoneNumber: patientUser.phoneNumber,
       note: request.note,
       month: request.getMonth(),
       day: request.getDay(),
@@ -85,7 +89,7 @@ class RequestListItem extends Component {
           isOpen={isHovered}
           body={[(
             <AppointmentShowData
-              nameAge={data.nameAge}
+              nameAge={data.name}
               time={data.time}
               service={data.service}
               phoneNumber={data.mobilePhoneNumber}
@@ -105,11 +109,8 @@ class RequestListItem extends Component {
           time={data.time}
           name={data.name}
           age={data.age}
-          nameAge={data.nameAge}
           phoneNumber={data.mobilePhoneNumber}
           service={data.service}
-          id={patient.id}
-          handlePatientClick={handlePatientClick}
         />
         {showHoverComponents}
       </ListItem>
@@ -118,7 +119,6 @@ class RequestListItem extends Component {
 }
 
 RequestListItem.propTypes = {
-  patient: PropTypes.object,
   request: PropTypes.object.isRequired,
   service: PropTypes.object,
   updateEntityRequest: PropTypes.func,

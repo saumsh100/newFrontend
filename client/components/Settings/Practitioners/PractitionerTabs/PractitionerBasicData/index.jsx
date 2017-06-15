@@ -71,4 +71,8 @@ class PractitionerBasicData extends Component {
   }
 }
 
+PractitionerBasicData.propTypes = {
+  practitioner: PropTypes.object.required,
+}
+
 export default PractitionerBasicData;

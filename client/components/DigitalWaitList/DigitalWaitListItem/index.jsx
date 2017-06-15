@@ -11,7 +11,7 @@ const notAllTrue = obj => some(obj, val => !val);
 
 function DigitalWaitListItem(props) {
   const {
-    patient,
+    patientUser,
     waitSpot,
     handlePatientClick,
     setSelectedWaitSpot,
@@ -19,6 +19,9 @@ function DigitalWaitListItem(props) {
     removeWaitSpot,
   } = props;
 
+  if (!patientUser) {
+    return null;
+  }
   const { preferences, unavailableDays } = waitSpot.toJS();
 
   // Set Availability to All by default and then list selected if not...
@@ -39,9 +42,9 @@ function DigitalWaitListItem(props) {
   }
 
   // The max-width style was not working and so did this for longer names
-  let name = patient.getFullName();
+  let name = patientUser.getFullName();
   if (name.length > 12) {
-    name = `${patient.get('firstName')[0]}. ${patient.get('lastName')}`;
+    name = `${patientUser.get('firstName')[0]}. ${patientUser.get('lastName')}`;
   }
 
   const waitSpotJS = Object.assign({}, waitSpot.toJS(), {
@@ -77,7 +80,7 @@ function DigitalWaitListItem(props) {
           }}
           size={1.2}
         />
-        <div
+        {/*<div
           className={styles.patients__item_pencilBorder}
           onClick={(e) => {
             e.stopPropagation();
@@ -89,36 +92,26 @@ function DigitalWaitListItem(props) {
             className={styles.patients__item_pencilBorder_pencil}
             size={1}
           />
-        </div>
+        </div>*/}
       </div>
     );
   }
 
   return (
     <ListItem className={styles.patients__item} >
-      <Avatar size="lg" user={patient.toJS()} />
+      <Avatar size="lg" user={patientUser.toJS()} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_name}>
-            <a
-              className={styles.patients__item_name}
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePatientClick(patient.id);
-              }}
-              href="#"
-            >
-              <b>
-                <span className={styles.name}>{name}</span>,
-                <span> {patient.getAge()}</span>
-              </b>
-            </a>
+            <b>
+              <span className={styles.name}>{name}</span>,
+            </b>
           </div>
           <div className={styles.patients__item_phone}>
-            {patient.get('mobilePhoneNumber')}
+            {patientUser.get('phoneNumber')}
           </div>
           <div className={styles.patients__item_email}>
-            {patient.get('email')}
+            {patientUser.get('email')}
           </div>
         </div>
       </div>

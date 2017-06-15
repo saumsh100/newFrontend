@@ -1,4 +1,3 @@
-
 const { omit } = require('lodash');
 const bcrypt = require('bcrypt');
 const thinky = require('../config/thinky');

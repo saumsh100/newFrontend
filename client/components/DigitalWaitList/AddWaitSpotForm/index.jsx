@@ -10,6 +10,7 @@ import {
   Grid,
   Row,
   Col,
+  Header
 } from '../../library';
 import styles from './styles.scss';
 
@@ -17,9 +18,7 @@ function validatePatient(value) {
   return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
 }
 
-
-
-function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot, patients, }) {
+function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot, patientUsers, patients }) {
   let initialValues = {
     preferences: {
       mornings: true,
@@ -32,10 +31,32 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
     unavailableDays: [],
   };
 
+  let displayField = (
+    <Field
+      component="AutoComplete"
+      name="patientData"
+      label="Enter Patient Name"
+      getSuggestions={getSuggestions}
+      validate={[validatePatient]}
+      disable
+      required
+    />
+  );
+
   if (selectedWaitSpot) {
     initialValues = selectedWaitSpot;
-    const patient = patients.getIn(['models', selectedWaitSpot.patientId]).toJS();
-    initialValues.patientData = patient;
+
+    if (!selectedWaitSpot.patientId && selectedWaitSpot.patientUserId) {
+      const patientUser = patientUsers.getIn(['models', selectedWaitSpot.patientUserId]);
+      displayField = (
+        <Header title={patientUser.getFullName()} />
+      );
+    } else if (selectedWaitSpot.patientId) {
+      console.log(selectedWaitSpot.patientId);
+      const patient = patients.getIn(['models', selectedWaitSpot.patientId]);
+      console.log(patient);
+      initialValues.patientData = patient.toJS();
+    }
   }
 
   return (
@@ -45,14 +66,7 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
       initialValues={initialValues}
       ignoreSaveButton
     >
-      <Field
-        component="AutoComplete"
-        name="patientData"
-        label="Enter Patient Name"
-        getSuggestions={getSuggestions}
-        validate={[validatePatient]}
-        required
-      />
+      {displayField}
       <Grid>
         <Row>
           <Col xs={12} md={6}>

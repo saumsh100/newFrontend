@@ -32,6 +32,7 @@ const maxLength25 = maxLength(25);
 
 
 export default function GeneralForm({ onSubmit, activeAccount }) {
+
   const initialValues = {
     name: activeAccount.get('name'),
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
@@ -65,5 +66,6 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
 }
 
 GeneralForm.propTypes = {
+  activeAccount: PropTypes.object.required,
   onSubmit: PropTypes.func,
 }

@@ -1,0 +1,91 @@
+@import '../../../ui';
+
+.suggestionsContainer {
+  position: relative;
+  width: 500px;
+  height: 400px;
+  max-height: 450px;
+  overflow: auto;
+  background: $primary-white;
+  border-radius: 5px;
+}
+
+.suggestionsList {
+  margin: 0 auto;
+  width: 75%;
+  max-height: 200px;
+  height: auto;
+  border: 1px solid #efefef;
+  border-bottom: 0px;
+  overflow: auto;
+  background-color: lighten($primary-lightgrey, 2%);
+  @media screen and (max-width: 450px){
+    max-width: 270px;
+  }
+}
+
+.trashIcon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 1.4em;
+  color: $primary-darkgrey;
+}
+
+.suggestionsListItem {
+  display: flex;
+  padding: 20px 20px 20px 20px;
+}
+
+.title {
+  padding-top: 15px;
+  padding-left: 15px;
+  font-size: $extra-medium-size;
+  font-weight: $jumbo-weight;
+  color: $primary-color;
+}
+
+.patientSpeel {
+  padding: 15px;
+  font-size: $medium-size;
+}
+
+.patientContainer {
+  display: inline-block;
+  align-content: center;
+  align-items: center;
+  font-size: $medium-size;
+
+  &_img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  &_fullName {
+    font-family: $medium-font;
+    font-size: $medium-size;
+    @media screen and (max-width: 850px){
+      font-size: $medium-size;
+    }
+  }
+
+  &_phone {
+
+  }
+
+  &_email {
+
+  }
+}
+
+.createPatientButtonContainer {
+  padding-top: 35px;
+  display: flex;
+  justify-content: center;
+}
+
+.connectButton {
+  margin-left: auto;
+}
