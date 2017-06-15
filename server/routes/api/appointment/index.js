@@ -67,11 +67,11 @@ appointmentsRouter.get('/business', (req, res, next) => {
   startDate = startDate ? r.ISO8601(startDate) : r.now();
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
-  function addtoFilter(rowTest, startTime, endTime) {
+  function addtoFilter(rowTest, startTime, endTime, practitionerId) {
     if (!rowTest) {
-      return r.row('startDate').during(startTime, endTime);
+      return r.row('startDate').during(startTime, endTime).and(r.row('practitionerId').eq(practitionerId));
     }
-    return rowTest.or(r.row('startDate').during(startTime, endTime));
+    return rowTest.or(r.row('startDate').during(startTime, endTime).and(r.row('practitionerId').eq(practitionerId)));
   }
 
   Appointment
@@ -93,7 +93,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
           if (appointment.isCancelled) {
             send.brokenAppts++;
             // add filter to for query to find out if a cancelled appointment has been refilled
-            filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()));
+            filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()), appointment.practitionerId);
           }
           return null;
         });

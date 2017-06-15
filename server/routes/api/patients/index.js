@@ -48,6 +48,25 @@ const generateDuringFilter = (m, startDate, endDate) => {
 );
 };
 
+patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (req, res, next) => {
+  const startDate = r.now().add(365 * 24 * 60 * 60 * -1);
+  const endDate = r.now();
+
+  return Appointment
+      .filter({
+        accountId: req.accountId,
+        patientId: req.patient.id,
+      })
+      .filter(r.row('startDate').during(startDate, endDate))
+      .then((appointments) => {
+        res.send({
+          allApps: req.patient.appointments.length,
+          monthsApp: appointments.length,
+        });
+      })
+      .catch(next);
+});
+
 patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next) => {
   const {
     query,

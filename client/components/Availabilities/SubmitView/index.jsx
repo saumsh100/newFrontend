@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
+import classNames from 'classnames';
 import { Button, Timer, VButton, Avatar, DropdownMenu, MenuItem } from '../../library';
 import SignUpForm from './SignUpForm';
 import ConfirmNumberForm from './ConfirmNumberForm';
@@ -33,26 +34,30 @@ class SubmitView extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      loading: false,
+    };
+
     this.signUpAndConfirm = this.signUpAndConfirm.bind(this);
     this.confirmAndBook = this.confirmAndBook.bind(this);
   }
 
   componentWillMount() {
+    console.log(token.get());
     this.props.loadPatient(token.get())
       .then(patient => (!patient) && token.remove());
   }
 
   login(credentials) {
     return this.props.loginPatient(credentials)
-      .then(t => token.save(t))
-      .then(() => this.props.createRequest())
+      .then((t) => {
+        token.save(t);
+      })
       .catch(({ data, status }) => {
-        if (status === 401) {
-          throw new SubmissionError({
-            email: data,
-            password: data,
-          });
-        }
+        throw new SubmissionError({
+          email: data,
+          password: data,
+        });
       });
   }
 
@@ -64,12 +69,15 @@ class SubmitView extends Component {
   confirmAndBook(values) {
     // TODO: createPatient.then(createRequest).then(setSuccessful)
     // alert(JSON.stringify(values));
+    this.setState({ loading: true });
     return this.props.confirmCode(values)
       .then(() => {
         this.props.hasWaitList && this.props.createWaitSpot();
         this.props.createRequest();
+        this.setState({ loading: false });
       })
       .catch(() => {
+        this.setState({ loading: false });
         throw new SubmissionError({ confirmCode: 'Invalid code' });
       });
   }
@@ -77,9 +85,20 @@ class SubmitView extends Component {
   signUpAndConfirm(values) {
     // TODO: createPatient.then(createRequest).then(setSuccessful)
     // alert(JSON.stringify(values));
+    this.setState({ loading: true });
     this.props.createPatient(values)
       .then(t => token.save(t))
-      .then(() => this.props.setIsConfirming(true));
+      .then(() => {
+        this.props.setIsConfirming(true);
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        const { data } = err;
+        this.setState({ loading: false });
+        throw new SubmissionError({
+          _error: data,
+        });
+      });
   }
 
   render() {
@@ -93,17 +112,36 @@ class SubmitView extends Component {
       patientUser,
       closeBookingModal,
       bookingWidgetPrimaryColor,
+      setIsLogin,
     } = this.props;
 
-    let formComponent = (
-      <SignUpForm onSubmit={this.signUpAndConfirm} />
+    // If patient is authenticated, display <BookView />
+    // If patient is !authenticated, display <SignUpView />
+    // TODO: refactor this using Memory Router
+
+    const loginHereAnchor = (
+      <a
+        href="#login"
+        onClick={(e) => { e.preventDefault(); setIsLogin(true); }}
+      >
+        Login here
+      </a>
     );
 
-    if (isConfirming) {
+    let formComponent = (
+      <div>
+        <SignUpForm onSubmit={this.signUpAndConfirm} />
+        <div className={styles.alreadyHaveWrapper}>
+          Already have an account? {loginHereAnchor}
+        </div>
+      </div>
+    );
+
+    if (patientUser && isConfirming) {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
-            We have sent a confirmation code via SMS to {patientUser.mobilePhoneNumber}.
+            We have sent a confirmation code via SMS to {patientUser.get('phoneNumber')}.
             Please type in the code below and submit to complete your booking.
           </div>
           <ConfirmNumberForm onSubmit={this.confirmAndBook} />
@@ -112,12 +150,24 @@ class SubmitView extends Component {
     }
 
     if (isLogin) {
+      const signupHereAnchor = (
+        <a
+          href="#signup"
+          onClick={(e) => { e.preventDefault(); setIsLogin(false); }}
+        >
+          Sign up here
+        </a>
+      );
+
       formComponent = (
         <div>
           <LoginForm
             className={styles.loginForm}
             onLogin={credentials => this.login(credentials)}
           />
+          <div className={styles.alreadyHaveWrapper}>
+            Don't have an account? {signupHereAnchor}
+          </div>
         </div>
       );
     }
@@ -128,7 +178,7 @@ class SubmitView extends Component {
           <div className={styles.messageWrapper}>
             Congratulations! You have successfully requested your appointment.
           </div>
-          <Button
+          <VButton
             icon="sign-out"
             className={styles.exitButton}
             onClick={() => {
@@ -137,7 +187,7 @@ class SubmitView extends Component {
             }}
           >
             Exit
-          </Button>
+          </VButton>
         </div>
       );
     }
@@ -150,16 +200,22 @@ class SubmitView extends Component {
             To start again, simply click on the button below to go back and select
             the availability you desire.
           </div>
-          <Button
+          <VButton
             icon="arrow-left"
             className={styles.exitButton}
             onClick={restartBookingProcess}
           >
             Go Back
-          </Button>
+          </VButton>
         </div>
       );
     }
+
+    const loadingComponent = (
+      <div className={styles.loadingWrapper}>
+        <i className={`fa fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
+      </div>
+    );
 
     const showTimer = !(isSuccessfulBooking || isTimerExpired);
 
@@ -172,53 +228,53 @@ class SubmitView extends Component {
       </DropdownMenu>
     );
 
+    let classes = styles.submitViewWrapper;
+    if (this.state.loading) {
+      classes = classNames(classes, styles.fullHeight);
+    }
+
     return (
-      <div className={styles.submitViewWrapper}>
-        <div className={styles.timerWrapper}>
-          { showTimer ? (
+      <div className={classes}>
+        {showTimer ? (
+          <div className={styles.timerWrapper}>
             <Timer
               className={styles.signup__header_timer}
               totalSeconds={TOTAL_SECONDS_ALLOWED}
               color={bookingWidgetPrimaryColor}
               onEnd={() => setIsTimerExpired(true)}
             />
-          ) : null }
-
-          { !isLogin ? (
-            <div className={styles['user-component']}>
-              { patientUser ?
-                avatarComponent() :
-                <VButton
-                  icon="user"
-                  color="red"
-                  className={styles['login-button']}
-                  onClick={() => this.props.setIsLogin(true)}
-                />
-              }
+          </div>
+        ) : null}
+        {/*patientUser ? (
+            <div className={styles.avatarWrapper}>
+              <div className={styles['user-component']}>
+                {avatarComponent()}
+              </div>
             </div>
-          ) : null }
-        </div>
-        <div className={styles.formWrapper}>
-
-          { (!isSuccessfulBooking && patientUser) ? (
-            <div style={{ textAlign: 'center' }}>
-              <div className={styles.messageWrapper}>
+          ) : null*/}
+        { !this.state.loading ?
+          <div className={styles.formWrapper}>
+            { (!isSuccessfulBooking && patientUser && !isConfirming) ? (
+                <div style={{textAlign: 'center'}}>
+                  <div className={styles.messageWrapper}>
                 <span>You are currently logged in as <strong>{patientUser.getFullName()}</strong>.
                   <br /><br />
                   If this is not you, and you would like to logout
                   and signin/signup as another user,
-                  click
-                  <a href="#logout" onClick={(e) => { e.preventDefault(); this.logout(); }}>here</a>.
+                  click <a href="#logout" onClick={(e) => {
+                    e.preventDefault();
+                    this.logout();
+                  }}>here</a>.
                   <br /><br /> If it is you and you would
                   like to complete the booking, click the button below.
                 </span>
-              </div>
-              <VButton color="red" onClick={() => this.props.createRequest()}>
-                Book This Appointment
-              </VButton>
-            </div>
-          ) : formComponent }
-        </div>
+                  </div>
+                  <VButton className={styles.exitButton} onClick={() => this.props.createRequest()}>
+                    Book This Appointment
+                  </VButton>
+                </div>
+              ) : formComponent }
+          </div> : loadingComponent }
       </div>
     );
   }
@@ -246,6 +302,7 @@ SubmitView.propTypes = {
     id: PropTypes.string,
     firstName: PropTypes.string,
   }),
+
   hasWaitList: PropTypes.bool.isRequired,
 };
 

@@ -13,6 +13,7 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
+import PatientUser, { patientUserId } from '../fixtures/patientUsers';
 import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
@@ -509,7 +510,7 @@ const SEEDS = {
       accountId,
       startDate: moment({ hour: 11, minute: 10 })._d,
       endDate: moment({ hour: 12, minute: 50 })._d,
-      patientId: sergeyPatientId,
+      patientUserId,
       serviceId,
       practitionerId,
       chairId,
@@ -521,7 +522,7 @@ const SEEDS = {
       accountId,
       startDate: moment({hour: 13, minute: 10})._d,
       endDate: moment({hour: 13, minute: 50})._d,
-      patientId: justinPatientId,
+      patientUserId,
       serviceId: serviceId,
       practitionerId: practitionerId2,
       chairId,
@@ -537,7 +538,7 @@ const SEEDS = {
       startDate: new Date(2017, 3, 3, 13, 0),
       endDate: new Date(2017, 3, 3, 14, 0),
       serviceId: cleanupServiceId,
-      patientId: justinPatientId,
+      patientUserId,
     },
     {
       accountId: accountId2,
@@ -545,7 +546,7 @@ const SEEDS = {
       startDate: new Date(2017, 3, 3, 14, 0),
       endDate: new Date(2017, 3, 3, 15, 0),
       serviceId: cleanupServiceId,
-      patientId: justinPatientId,
+      patientUserId,
     },
   ],
 
@@ -941,12 +942,12 @@ const SEEDS = {
   AuthSession: [],
 
   Invite: [
-    {
-      sendingUserId: justinUserId,
-      accountId,
-      email: 'test@email.com',
-      token: uuid(),
-    },
+    // {
+    //   sendingUserId: justinUserId,
+    //   accountId,
+    //   email: 'test@email.com',
+    //   token: uuid(),
+    // },
   ],
 
   PractitionerTimeOff: [
@@ -1192,6 +1193,7 @@ const SEEDS = {
     },
   ],
 
+  PatientUser,
   Recall,
   Reminder,
 

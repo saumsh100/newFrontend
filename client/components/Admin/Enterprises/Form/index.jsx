@@ -7,6 +7,7 @@ import { fetchEntities, createEntityRequest, updateEntityRequest } from '../../.
 import { Form, Field } from '../../../library/index';
 import PageContainer from '../../General/PageContainer';
 import { getModel } from '../../../Utils';
+import styles from '../../General/page-container.scss';
 
 const enterprisesListPath = '/admin/enterprises/list';
 
@@ -39,9 +40,23 @@ const EnterpriseForm = (props) => {
       <PageContainer title={pageTitle()} breadcrumbs={breadcrumbs()}>
         <Form
           form="enterpriseForm"
-          initialValues={{ name: enterprise && enterprise.name }}
+          initialValues={{
+            name: enterprise && enterprise.name,
+            plan: enterprise && enterprise.plan,
+          }}
+          className={styles.form}
           onSubmit={onSubmit}
         >
+          <Field
+            required
+            name="plan"
+            label="Plan"
+            component="DropdownSelect"
+            options={[
+              { value: 'ENTERPRISE' },
+              { value: 'GROWTH' },
+            ]}
+          />
           <Field required name="name" label="Name" />
         </Form>
       </PageContainer>

@@ -10,8 +10,8 @@
 
 .topRow {
   background: #f7f7f7;
-  min-height: 110px;
-  max-height: 110px;
+  min-height: 96px;
+  max-height: 96px;
 }
 
 .headerInput {
@@ -281,6 +281,18 @@
   font-weight: 900;
 }
 
+.fullName2 {
+  font-family: "Gotham-Book";
+  font-size: 18px;
+  margin: 10px 0;
+  font-weight: 900;
+}
+
+.fullName:hover {
+  color: #FF715A;
+  cursor: pointer;
+}
+
 .contact {
   margin-top: 10px;
   font-family: "Gotham-Medium";
@@ -330,6 +342,7 @@
 .patients_list {
   background: #e6e6e6;
   max-height: calc(100vh - 70px);
+  min-height: calc(100vh - 90px);
   display: flex;
   flex-direction: column;
   border-top: 5px solid $primary-light-blue;

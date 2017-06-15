@@ -9,14 +9,15 @@ class ActiveUsersList extends Component {
     const { activeUser, role, currentUserId, userId, currentUserRole, edit } = this.props;
     const badge = (userId === currentUserId ? <span className={styles.badge}>You</span> : null);
     let button = null;
-    if ((currentUserRole === 'SUPERADMIN' || role === 'SUPERADMIN') && role !== 'SUPERADMIN') {
+    if ((currentUserRole === 'SUPERADMIN' || currentUserRole === 'ADMIN'  || currentUserRole === 'OWNER' || role === 'SUPERADMIN')
+      && role !== 'SUPERADMIN' && !(currentUserRole === 'ADMIN' && role === 'ADMIN') && currentUserRole !== 'MANAGER' && !(currentUserRole === 'OWNER' && role === 'ADMIN')) {
       button = (userId !== currentUserId ? <Button className={styles.edit} onClick={edit}>Edit</Button> : null);
     }
 
     return (
       <ListItem className={styles.userListItem}>
         <div className={styles.main}>
-          <Avatar className={styles.image} user={{url: "https://placeimg.com/640/480/people"}} />
+          <Avatar className={styles.image} user={activeUser} />
           <div className={styles.userName}>
             <div>
               <p className={styles.name}>{activeUser.getName()} {badge}</p>
