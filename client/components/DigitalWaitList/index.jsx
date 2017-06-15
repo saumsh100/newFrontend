@@ -39,7 +39,6 @@ class DigitalWaitList extends Component {
     this.getSuggestions = this.getSuggestions.bind(this);
     this.addWaitSpot = this.addWaitSpot.bind(this);
     this.toggleWaitSpotForm = this.toggleWaitSpotForm.bind(this);
-    this.handlePatientClick = this.handlePatientClick.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.removeWaitSpot = this.removeWaitSpot.bind(this);
   }
@@ -119,12 +118,6 @@ class DigitalWaitList extends Component {
     });
   }
 
-  handlePatientClick(id) {
-    this.props.setSelectedPatientId(id);
-    this.props.push('/patients/list');
-    this.reinitializeState();
-  }
-
   removeWaitSpot(id) {
     const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
 
@@ -141,20 +134,24 @@ class DigitalWaitList extends Component {
       cardTitle,
       waitSpots,
       patients,
+      patientUsers,
       isFetching,
       setSelectedWaitSpot,
       selectedWaitSpot,
     } = this.props;
 
+
     let formName = 'addWaitSpot';
+    let title = "Add Patient to Waitlist"
     if (selectedWaitSpot) {
       formName = 'editWaitSpot';
+      title = "Edit Patient Waitlist"
     }
 
     return (
       <Card className={styles.reminders}>
         <DialogBox
-          title="Add Patient to Waitlist"
+          title={title}
           active={this.state.isAddingWaitSpot || !!selectedWaitSpot}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
@@ -181,6 +178,7 @@ class DigitalWaitList extends Component {
             getSuggestions={this.getSuggestions}
             selectedWaitSpot={selectedWaitSpot}
             patients={patients}
+            patientUsers={patientUsers}
           />
         </DialogBox>
         <div className={styles.reminders__header}>
@@ -199,12 +197,19 @@ class DigitalWaitList extends Component {
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
             {waitSpots.get('models').toArray().map((waitSpot) => {
-              const patient = patients.getIn(['models', waitSpot.get('patientId')]);
+              let patientData = null;
+
+              if (waitSpot.patientUserId && !waitSpot.patientId) {
+                patientData = patientUsers.getIn(['models', waitSpot.get('patientUserId')]);
+              } else if (waitSpot.patientId) {
+                patientData = patients.getIn(['models', waitSpot.get('patientId')]);
+              }
+
               return (
                 <DigitalWaitListItem
                   key={waitSpot.get('id')}
                   waitSpot={waitSpot}
-                  patient={patient}
+                  patientUser={patientData}
                   setSelectedWaitSpot={setSelectedWaitSpot}
                   handlePatientClick={this.handlePatientClick}
                   removeWaitSpot={this.removeWaitSpot}
@@ -236,6 +241,7 @@ DigitalWaitList.propTypes = {
 function mapStateToProps({ entities, schedule }) {
   return {
     selectedWaitSpot: schedule.toJS().selectedWaitSpot,
+    patientUsers: entities.get('patientUsers'),
     patients: entities.get('patients'),
   };
 }
@@ -255,7 +261,7 @@ const enhance = compose(
   withEntitiesRequest({
     id: 'waitSpots',
     key: 'waitSpots',
-    join: ['patient'],
+    join: ['patientUser', 'patient'],
   }),
 
   connect(mapStateToProps, mapDispatchToProps),

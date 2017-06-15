@@ -17,4 +17,5 @@ export default class PatientUser extends createModel(PatientUserSchema) {
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
   }
+
 }

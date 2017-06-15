@@ -10,56 +10,43 @@ import styles from './styles.scss';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
 import { setHoverRequestId } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
-import * as Actions from '../../actions/patientList';
-
+import { checkPatientUser } from '../../thunks/schedule';
 
 class RequestList extends Component {
   constructor(props) {
     super(props);
     this.confirmAppointment = this.confirmAppointment.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
-    this.handlePatientClick = this.handlePatientClick.bind(this);
   }
 
-  confirmAppointment(request) {
+  confirmAppointment(request, patientUser) {
     const {
-      selectAppointment,
       location,
       push,
+      checkPatientUser,
     } = this.props;
 
     if (location === '/') {
       push('/schedule');
     }
-    const modifiedRequest = request.set('isCancelled', true);
 
+    const modifiedRequest = request.set('isConfirmed', true);
     const appointment = {
-      requestModel: modifiedRequest,
       requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
-      patientId: request.get('patientId'),
       serviceId: request.get('serviceId'),
       note: request.note,
       isSyncedWithPMS: false,
       customBufferTime: 0,
       request: true,
+      requestModel: modifiedRequest,
     };
 
-    selectAppointment(appointment);
+    checkPatientUser(patientUser, appointment);
 
     // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
     console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
-  }
-
-  handlePatientClick(id) {
-    const {
-      setSelectedPatientId,
-      push,
-    } = this.props;
-
-    setSelectedPatientId(id);
-    push('/patients/list');
   }
 
 
@@ -73,11 +60,13 @@ class RequestList extends Component {
   render() {
     const {
       sortedRequests,
-      patients,
       services,
+      patientUsers,
       setHoverRequestId,
     } = this.props;
 
+    console.log(sortedRequests)
+    console.log(patientUsers)
     const showComponent = sortedRequests.length ? (
       sortedRequests.map((request) => {
         //const active = request.get('id') === this.props.setHoverRequestId;
@@ -85,12 +74,11 @@ class RequestList extends Component {
           <RequestListItem
             key={request.id}
             request={request}
-            patient={patients.get(request.get('patientId'))}
             service={services.get(request.get('serviceId'))}
+            patientUser={patientUsers.get(request.get('patientUserId'))}
             confirmAppointment={this.confirmAppointment}
             removeRequest={this.removeRequest}
             setClickedId={setHoverRequestId}
-            handlePatientClick={this.handlePatientClick}
           />
         );
       })
@@ -122,7 +110,7 @@ function mapActionsToProps(dispatch) {
     createEntityRequest,
     setHoverRequestId,
     selectAppointment,
-    setSelectedPatientId: Actions.setSelectedPatientIdAction,
+    checkPatientUser,
     push,
   }, dispatch);
 }

@@ -4,6 +4,10 @@ import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
 import TimeSlotColumn from './TimeSlotColumn';
 
+function dayOfWeekAsString(dayIndex) {
+  return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday",][dayIndex];
+}
+
 export default function TimeSlot(props) {
   const {
     practitioner,
@@ -19,8 +23,16 @@ export default function TimeSlot(props) {
     selectAppointment,
     columnWidth,
     practIndex,
+    weeklySchedule,
+    currentDate,
   } = props;
 
+
+  const day = dayOfWeekAsString(moment(currentDate).weekday());
+  let displayPractApps = true;
+  if (weeklySchedule && weeklySchedule.get(day).isClosed) {
+    displayPractApps = false;
+  }
   // filter appointments based on selections from the filters panel
   const checkFilters = schedule.toJS();
 
@@ -41,8 +53,8 @@ export default function TimeSlot(props) {
   });
 
 
-  const splitAppointments = filteredApps.filter((app) => app.isSplit);
 
+  const splitAppointments = filteredApps.filter((app) => app.isSplit);
   // find Split appointments and their adjacent appointments and set isSplit true
   splitAppointments && splitAppointments.map((sApp) => {
     filteredApps = filteredApps.map((app) => {
@@ -79,7 +91,7 @@ export default function TimeSlot(props) {
         timeSlotHeight={timeSlotHeight}
         columnWidth={columnWidth}
       />
-      {filteredApps && filteredApps.map((app, index) => {
+      {(filteredApps.length > 0) && filteredApps.map((app, index) => {
         return (
           <ShowAppointment
             key={index}
@@ -90,6 +102,7 @@ export default function TimeSlot(props) {
             startHour={startHour}
             endHour={endHour}
             columnWidth={columnWidth}
+            displayPractApps={displayPractApps}
           />
         );
       })}

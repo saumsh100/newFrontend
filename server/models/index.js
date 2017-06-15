@@ -32,6 +32,7 @@ import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
 
+
 export {
   Account,
   Account_Patient,
@@ -137,13 +138,14 @@ Patient.belongsTo(Account, 'account', 'accountId', 'id');
 Patient.hasAndBelongsToMany(Account, 'accounts', 'id', 'id');
 Patient.hasMany(SentReminder, 'sentReminders', 'id', 'patientId');
 Patient.hasMany(SentRecall, 'sentRecalls', 'id', 'patientId');
-Patient.hasOne(PatientUser, 'patientUser', 'patientUserId', 'id');
+Patient.hasOne(PatientUser, 'patientUser', 'id', 'patientUserId');
 
 /**
  * PatientUser Relations
  */
 
 PatientUser.hasMany(Patient, 'patients', 'id', 'patientUserId');
+PatientUser.hasMany(WaitSpot, 'waitSpots', 'id', 'waitSpotId');
 
 /**
  * Permission Relations
@@ -169,11 +171,13 @@ Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
  * Request Relations
  */
 
+
 Request.belongsTo(PatientUser, 'patientUser', 'patientUserId', 'id');
 Request.belongsTo(Account, 'account', 'accountId', 'id');
 Request.belongsTo(Service, 'service', 'serviceId', 'id');
 Request.belongsTo(Practitioner, 'practitioner', 'practitionerId', 'id');
 Request.belongsTo(Chair, 'chair', 'chairId', 'id');
+
 
 /**
  * SentReminder Relations
@@ -223,5 +227,6 @@ User.hasOne(Permission, 'permission', 'permissionId', 'id');
  * WaitSpot Relations
  */
 
-WaitSpot.hasOne(Patient, 'patient', 'patientId', 'id');
+WaitSpot.belongsTo(Patient, 'patient', 'patientId', 'id');
+WaitSpot.belongsTo(PatientUser, 'patientUser', 'patientUserId', 'id');
 WaitSpot.hasOne(Account, 'account', 'accountId', 'id');
