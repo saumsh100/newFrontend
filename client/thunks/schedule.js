@@ -23,10 +23,12 @@ export function checkPatientUser(patientUser, requestData) {
       const checkObjEmpty = !_.values(data.entities['patients']).some(x => x !== undefined);
       if (!checkObjEmpty) {
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
+        const modifiedRequest = requestData;
 
-        let modifiedRequest = requestData;
         set(modifiedRequest, 'patientId', Object.keys(data.entities['patients'])[0]);
         dispatch(selectAppointment(modifiedRequest));
+
+        return data.entities;
       } else {
         const params = {
           firstName: patientUser.get('firstName'),
@@ -46,7 +48,6 @@ export function checkPatientUser(patientUser, requestData) {
             requestData,
             suggestions: dataArray,
           }));
-
         });
       }
     });

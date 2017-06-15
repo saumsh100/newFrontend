@@ -18,6 +18,7 @@ const Request = createModel('Request', {
   practitionerId: type.string().uuid(4),
 
   // Lifecycle Attributes
+  isConfirmed: type.boolean().default(false),
   isCancelled: type.boolean().default(false),
   appointmentId: type.string().uuid(4),
   patientUserId: type.string().uuid(4),

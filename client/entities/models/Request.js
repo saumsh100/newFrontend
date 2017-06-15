@@ -12,6 +12,7 @@ const RequestsSchema = {
   patientUserId: null,
   chairId: null,
   note: null,
+  isConfirmed: null,
   isCancelled: null,
 };
 

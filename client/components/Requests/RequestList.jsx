@@ -31,10 +31,10 @@ class RequestList extends Component {
       push('/schedule');
     }
 
-    //const modifiedRequest = request.set('isCancelled', true);
+    const modifiedRequest = request.set('isConfirmed', true);
 
     const appointment = {
-      //requestId: request.get('id'),
+      requestId: request.get('id'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
       serviceId: request.get('serviceId'),
@@ -42,6 +42,7 @@ class RequestList extends Component {
       isSyncedWithPMS: false,
       customBufferTime: 0,
       request: true,
+      requestModel: modifiedRequest,
     };
 
     checkPatientUser(patientUser, appointment);

@@ -18,7 +18,7 @@ class Requests extends Component {
     } = this.props;
 
     const filteredRequests = requests.toArray().filter((req) => {
-      return !req.get('isCancelled');
+      return !req.get('isCancelled') || !req.get('isConfirmed');
     })
 
     const sortedRequests = filteredRequests.sort((a, b) => {

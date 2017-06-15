@@ -38,7 +38,7 @@ class ScheduleComponent extends Component {
   reinitializeState() {
     this.props.setMergingPatient({
       patientUser: null,
-      request: null,
+      requestData: null,
       suggestions: [],
     });
     this.props.selectAppointment(null);
@@ -63,6 +63,7 @@ class ScheduleComponent extends Component {
       chairs,
       selectAppointment,
       selectedAppointment,
+      setMergingPatient,
       weeklySchedules,
       timeOffs,
     } = this.props;
@@ -78,10 +79,7 @@ class ScheduleComponent extends Component {
       formName = `editAppointment_${selectedAppointment.serviceId}`;
     }
 
-    const mergingData = schedule.toJS().mergingPatientData;
-
-    console.log('state', schedule.toJS().mergingPatientData);
-    console.log('merging data: ', mergingData);
+    const mergingPatientData = schedule.toJS().mergingPatientData;
 
     let displayModalComponent = (
       <AddNewAppointment
@@ -96,10 +94,19 @@ class ScheduleComponent extends Component {
       />
     );
 
-    if (mergingData.suggestions.length > 0) {
+    if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
       displayModalComponent = (
         <AddPatientSuggestions
-          mergingData={mergingData}
+          mergingPatientData={mergingPatientData}
+          reinitializeState={this.reinitializeState}
+          selectAppointment={selectAppointment}
+          setMergingPatient={setMergingPatient}
+        />
+      );
+    } else if (mergingPatientData.patientUser) {
+      displayModalComponent = (
+        <AddPatientUser
+          mergingPatientData={mergingPatientData}
           reinitializeState={this.reinitializeState}
           selectAppointment={selectAppointment}
         />
@@ -139,7 +146,7 @@ class ScheduleComponent extends Component {
                   active={
                     addNewAppointment ||
                     !!selectedAppointment ||
-                      !!mergingData.patientUser
+                      !!mergingPatientData.patientUser
                   }
                   onEscKeyDown={this.reinitializeState}
                   onOverlayClick={this.reinitializeState}

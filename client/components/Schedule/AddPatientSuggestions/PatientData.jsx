@@ -1,7 +1,7 @@
 import { set } from 'lodash'
 import React, { Component, PropTypes } from 'react';
-import { ListItem } from '../../library';
-import styles from './styles.scss'
+import { ListItem, Button } from '../../library';
+import styles from './styles.scss';
 
 export default function PatientData(props) {
   const {
@@ -22,16 +22,11 @@ export default function PatientData(props) {
     customBufferTime: 0,
     request: true,
     patientId: patient.id,
+    requestModel: requestData.requestModel,
   };
 
   return (
-    <ListItem
-      onClick={() => {
-        reinitializeState();
-        selectAppointment(modifiedRequest);
-      }}
-      className={styles.suggestionsListItem}
-    >
+    <ListItem className={styles.suggestionsListItem}>
       <img className={styles.patientContainer_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
       <div className={styles.patientContainer} >
         <div className={styles.patientContainer_fullName}>
@@ -44,6 +39,15 @@ export default function PatientData(props) {
           {patient.mobilePhoneNumber}
         </div>
       </div>
+      <Button
+        onClick={() => {
+          reinitializeState();
+          selectAppointment(modifiedRequest);
+        }}
+        className={styles.connectButton}
+      >
+        Connect
+      </Button>
     </ListItem>
   );
 }
