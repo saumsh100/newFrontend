@@ -239,7 +239,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
     email,
     phoneNumber,
   } = req.query;
-  
+
   Patient
     .filter({ accountId })
     .run()

@@ -115,6 +115,7 @@ const timeOffSchema = () => {
 const waitSpotSchema = () => {
   return new schema.Entity('waitSpots', {
     patient: patientSchema(),
+    patientUser: patientUserSchema(),
   });
 };
 
@@ -169,10 +170,8 @@ const SCHEMAS = {
   weeklySchedule: weeklyScheduleSchema(),
   sentReminder: sentReminderSchema(),
   sentRecall: sentRecallSchema(),
-  patientUser: patientUserSchema(),
   // Collections (list/find)
   accounts: [accountSchema()],
-  patientUsers: [patientUserSchema()],
   appointments: [appointmentSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],

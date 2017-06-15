@@ -145,6 +145,7 @@ Patient.hasOne(PatientUser, 'patientUser', 'id', 'patientUserId');
  */
 
 PatientUser.hasMany(Patient, 'patients', 'id', 'patientUserId');
+PatientUser.hasMany(WaitSpot, 'waitSpots', 'id', 'waitSpotId');
 
 /**
  * Permission Relations
@@ -226,5 +227,6 @@ User.hasOne(Permission, 'permission', 'permissionId', 'id');
  * WaitSpot Relations
  */
 
-WaitSpot.hasOne(Patient, 'patient', 'patientId', 'id');
+WaitSpot.belongsTo(Patient, 'patient', 'patientId', 'id');
+WaitSpot.belongsTo(PatientUser, 'patientUser', 'patientUserId', 'id');
 WaitSpot.hasOne(Account, 'account', 'accountId', 'id');

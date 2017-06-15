@@ -1204,11 +1204,12 @@ const SEEDS = {
   WaitSpot: [
     {
       accountId,
-      patientId: justinPatientId,
+      patientUserId,
     },
     {
       accountId,
-      patientId: sergeyPatientId,
+      patientId: justinPatientId,
+      patientUserId: patientUserId3,
       preferences: {
         weekends: false,
         evenings: false,

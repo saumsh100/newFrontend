@@ -159,13 +159,7 @@
     &_name {
       color: $primary-dark;
       margin-bottom: 7px;
-      &:link {
-        color: $primary-dark;
-        text-decoration: none;
-      }
-      &:hover {
-        color: $primary-color;
-      }
+      
     }
 
     &_icon {
