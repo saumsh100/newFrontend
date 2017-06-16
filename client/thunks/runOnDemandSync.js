@@ -1,6 +1,6 @@
 
+import axios from 'axios';
 import { receiveEntities } from '../actions/entities';
-import axios from './axios';
 
 export default function runOnDemandSync() {
   return (getState, dispatch) => {

@@ -51,7 +51,7 @@ export function createAuxilliaryTables(modelName, auxConfig) {
  */
 export function createAuxilliaryTable(modelName, fieldName, config) {
   const {
-    value,
+    value = 'id',
     dependencies = [],
   } = config;
 
@@ -87,7 +87,7 @@ export function generateAuxValidators(auxTables, doc) {
     } = AuxTable;
 
     const {
-      value,
+      value = 'id',
       dependencies = [],
     } = config;
 

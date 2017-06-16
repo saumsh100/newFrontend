@@ -1,5 +1,5 @@
 const r = require('rethinkdb');
-const globals = require('../../../../server/config/globals');
+const globals = require('../../server/config/globals');
 const dbConfig = globals.db;
 
 function clearTestTables() {

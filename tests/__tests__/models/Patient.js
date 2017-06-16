@@ -17,7 +17,7 @@ let patientDocGlobal2 = false;
 let testPatientObject1 = {};
 let testPatientObject2 = {};
 
-describe('Simple patients write test', () => {
+test.skip('Simple patients write test', () => {
 
   beforeEach(() => {
     testPatientObject1 = {
@@ -27,6 +27,7 @@ describe('Simple patients write test', () => {
       homePhoneNumber: '9998887766',
       accountId,
     };
+
     testPatientObject2 = {
       firstName: 'Master',
       lastName: 'Yoda',

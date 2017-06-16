@@ -26,7 +26,7 @@ function delay(milliseconds, calculation) {
   });
 }
 
-describe('#async mocks', () => {
+/*describe('#async mocks', () => {
 
   it('test1', () => {
     expect(2 + 2).toBe(4);
@@ -50,7 +50,7 @@ describe('#async mocks', () => {
     });
 
   });
-});
+});*/
   // it('should be a function', () => {
   //   expect(typeof createModel).toBe('function');
   // });
@@ -232,7 +232,7 @@ describe('#createModel', () => {
    // this should work for us but gets called all the time
    }); */
 
-describe('create aux table testing', () => {
+test.skip('create aux table testing', () => {
 
   afterEach(() => {
     return thinky.r.tableDrop(TEST_MODEL)
@@ -325,7 +325,7 @@ describe('create aux table testing', () => {
   });
 });
 
-describe('test aux tables use cases - simple inserts', () => {
+test.skip('test aux tables use cases - simple inserts', () => {
 
   afterEach(() => {
     return thinky.r.tableDrop(TEST_MODEL)
@@ -391,7 +391,7 @@ describe('test aux tables use cases - simple inserts', () => {
   });
 });
 
-describe('test aux tables use cases - 1 unique fields, 3 deps', () => {
+test.skip('test aux tables use cases - 1 unique fields, 3 deps', () => {
 
   afterEach(() => {
     return thinky.r.tableDrop(TEST_MODEL)

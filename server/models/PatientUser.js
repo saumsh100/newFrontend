@@ -1,3 +1,4 @@
+
 const { omit } = require('lodash');
 const bcrypt = require('bcrypt');
 const thinky = require('../config/thinky');
@@ -14,10 +15,15 @@ const PatientUser = createModel('PatientUser', {
   phoneNumber: type.string().required(),
   password: type.string().required(),
   isPhoneNumberConfirmed: type.boolean().default(false),
-});
+}/*, {
+  aux: {
+    // Unique emails and phoneNumbers
+    email: {},
+    phoneNumber: {},
+  },
+}*/);
 
 PatientUser.docOn('saving', (doc) => {
-  console.log(validators.validatePhoneNumber(doc.phoneNumber));
   doc.phoneNumber = validators.validatePhoneNumber(doc.phoneNumber);
 });
 
