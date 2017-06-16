@@ -65,8 +65,6 @@ class RequestList extends Component {
       setHoverRequestId,
     } = this.props;
 
-    console.log(sortedRequests)
-    console.log(patientUsers)
     const showComponent = sortedRequests.length ? (
       sortedRequests.map((request) => {
         //const active = request.get('id') === this.props.setHoverRequestId;

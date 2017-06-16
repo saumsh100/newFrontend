@@ -210,7 +210,6 @@ class DigitalWaitList extends Component {
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
             {waitSpots.get('models').toArray().map((waitSpot, index) => {
-              console.log(waitSpot);
               let patientData = null;
 
               if (waitSpot.patientUserId && !waitSpot.patientId) {
