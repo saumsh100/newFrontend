@@ -11,6 +11,8 @@ const _ = require('lodash');
 const fileUpload = require('express-fileupload');
 const uuid = require('uuid');
 const s3 = require('../../../config/s3');
+const sharp = require('sharp');
+const async = require('async');
 
 practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
@@ -78,20 +80,40 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
  * Upload a practitioner's avatar
  */
 practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practitioners:update'), fileUpload(), async (req, res, next) => {
-  const fileKey = `avatars/${req.practitioner.id}/${uuid.v4()}/${req.files.file.name}`;
-  console.log(req.files.file);
-  s3.upload({
-    Key: fileKey,
-    Body: req.files.file.data,
-    ACL: 'public-read',
-  }, async (err, response) => {
-    console.log(err);
-    if (err) {
-      return next(err);
+  const fileKey = `avatars/${req.practitioner.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
+  
+  function resizeImage(size, buffer) {
+    if (size === 'original') {
+      return Promise.resolve(buffer);
     }
+
+    return sharp(buffer)
+      .resize(size, size)
+      .toBuffer();
+  }
+
+  async.eachSeries([
+    'original',
+    400,
+    200,
+    100,
+  ], async (size, nextImage) => {
+    const file = req.files.file.data;
+    const resizedImage = await resizeImage(size, file);
+    s3.upload({
+      Key: fileKey.replace('[size]', size),
+      Body: resizedImage,
+      ACL: 'public-read',
+    }, async (err, response) => {
+      console.log(err, response);
+      if (err) {
+        return next(err);
+      }
+      nextImage();
+    });
+  }, async () => {
     try {
       req.practitioner.avatarUrl = fileKey;
-      console.log(req.practitioner);
         
       const savedPractitioner = await req.practitioner.save();
       res.send(normalize('practitioner', savedPractitioner));
@@ -100,6 +122,18 @@ practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practition
     }
   });
 });
+
+practitionersRouter.delete('/:practitionerId/avatar', checkPermissions('practitioners:update'), fileUpload(), async (req, res, next) => {
+  try {
+    req.practitioner.avatarUrl = null;
+        
+    const savedPractitioner = await req.practitioner.save();
+    res.send(normalize('practitioner', savedPractitioner));
+  } catch (error) {
+    next(error);
+  }
+});
+
 /**
  * Delete a practitioner
  */

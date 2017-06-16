@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { PractitionerAvatar, Form, Field, Dropzone, Header } from '../../../../library';
-import { uploadAvatar } from '../../../../../thunks/practitioners';
+import { PractitionerAvatar, Form, Field, Dropzone, Header, Button } from '../../../../library';
+import { uploadAvatar, deleteAvatar } from '../../../../../thunks/practitioners';
 import styles from '../../styles.scss';
 
 const maxLength = max => value =>
@@ -15,6 +15,7 @@ class PractitionerBasicData extends Component {
     super(props);
     this.updatePractitioner = this.updatePractitioner.bind(this);
     this.uploadAvatar = this.uploadAvatar.bind(this);
+    this.deleteAvatar = this.deleteAvatar.bind(this);
     this.state = {
       uploading: false,
     };
@@ -27,8 +28,16 @@ class PractitionerBasicData extends Component {
     this.props.uploadAvatar(this.props.practitioner.id, files[0]);
   }
 
+  deleteAvatar() {
+    this.props.deleteAvatar(this.props.practitioner.id);
+  }
+
   componentWillReceiveProps(props) {
-    console.log(props);
+    if (this.props.practitioner.avatarUrl !== props.practitioner.avatarUrl) {
+      this.setState({
+        uploading: false,
+      });
+    }
   }
 
   updatePractitioner(values) {
@@ -72,6 +81,7 @@ class PractitionerBasicData extends Component {
           <PractitionerAvatar practitioner={initialValues} size="extralg" />
           <p>Drop avatar here or click to select file.</p>
         </Dropzone>
+        {initialValues.fullAvatarUrl ? <Button className={styles.deleteAvatar} onClick={this.deleteAvatar}>Remove Avatar</Button> : null}
 
         <Header title="Personal Details" />
         <Form
@@ -104,6 +114,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     uploadAvatar,
+    deleteAvatar,
   }, dispatch);
 }
 

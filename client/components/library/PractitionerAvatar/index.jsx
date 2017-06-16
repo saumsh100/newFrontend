@@ -2,10 +2,22 @@ import Avatar from '../Avatar';
 import React, { PropTypes } from 'react';
 
 export default function PractitionerAvatar({ practitioner, className, size, onClick = () => {} }) {
+  let replaceSize = 100;
+  if (size === 'extralg') {
+    replaceSize = 400;
+  } else if (size === 'lg') {
+    replaceSize = 200;
+  }
+  let avatarUrl = null;
+
+  if (practitioner.fullAvatarUrl) {
+    avatarUrl = practitioner.fullAvatarUrl.replace('[size]', replaceSize);
+  }
+  
   return (
     <Avatar
       user={{
-        avatarUrl: practitioner.fullAvatarUrl,
+        avatarUrl,
         firstName: practitioner.firstName,
       }}
       className={className}

@@ -12,3 +12,13 @@ export function uploadAvatar(practitionerId, file) {
         });
   };
 }
+
+export function deleteAvatar(practitionerId) {
+  return function (dispatch, getState) {
+    return axios
+      .delete(`/api/practitioners/${practitionerId}/avatar`)
+        .then((response) => {
+          dispatch(receiveEntities({ key: 'practitioners', entities: response.data.entities }));
+        });
+  };
+}

@@ -4,11 +4,19 @@ import styles from './styles.scss';
 import Loading from 'react-loader';
 
 export default function DropzoneWrapper({ children, onDrop, multiple, loaded, accept }) {
-  return (<Dropzone onDrop={onDrop} multiple={multiple} accept={accept} className={styles.dropzone}>
-    <Loading loaded={loaded}>
-      {children}
-    </Loading>
-  </Dropzone>);
+  return (
+    <div onChange={e => e.stopPropagation()}><Dropzone
+      onDrop={onDrop}
+      multiple={multiple}
+      accept={accept}
+      className={styles.dropzone}
+    >
+      <Loading
+        loaded={loaded}
+      >
+        {children}
+      </Loading>
+    </Dropzone></div>);
 }
 
 DropzoneWrapper.propTypes = {
@@ -22,6 +30,7 @@ DropzoneWrapper.propTypes = {
 DropzoneWrapper.defaultProps = {
   onDrop: () => {},
   multiple: false,
-  accept: '.jpg, .png',
+  accept: 'image/jpeg, image/png',
   loaded: true,
 };
+
