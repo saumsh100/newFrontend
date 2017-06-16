@@ -255,11 +255,6 @@ class PatientList extends Component {
       }
     }
 
-    // this.props.fetchEntitiesRequest({
-    //   id: 'patientStatsLastYear',
-    //   url: `/api/patients/${currentPatient.id}/appointmentstats`,
-    // })
-
     return (
       <MainContainer
         loadMore={this.loadMore}
