@@ -16,7 +16,6 @@ const initialState = fromJS({
 export default handleActions({
   [SHOW_ALERT](state, { payload: { alert, type } }) {
     let title = alert.title;
-
     if (type === 'success') {
       title = 'Success';
     } else if (type === 'error' && !alert.title) {

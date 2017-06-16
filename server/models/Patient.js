@@ -41,14 +41,14 @@ const Patient = createModel('Patient', {
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
   status: type.string().enum(['Active', 'InActive']).default('Active'),
-}, {
+}/* , {
   aux: {
     mobilePhoneNumber: {
       value: 'id',
       dependencies: ['accountId'],
     },
   },
-});
+}*/);
 
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
@@ -70,12 +70,10 @@ Patient.docOn('saving', validatePatient); // <<< doc is in `doc` param
 // Patient.pre('save', validatePatient); // <<< doc is in the scope
 
 function validatePatient(doc) {
-  console.log('validatePatient', doc);
   validatePhoneNumbers(doc);
 }
 
 function validatePhoneNumbers(doc) {
-  console.log('validatePhoneNumbers: doc', JSON.stringify(doc));
   doc.homePhoneNumber = validatePhoneNumber(doc.homePhoneNumber);
   doc.mobilePhoneNumber = validatePhoneNumber(doc.mobilePhoneNumber);
   doc.workPhoneNumber = validatePhoneNumber(doc.workPhoneNumber);

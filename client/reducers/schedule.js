@@ -11,6 +11,7 @@ import {
   SET_SCHEDULE_DATE,
   SELECT_APPOINTMENT,
   SELECT_WAITSPOT,
+  SET_SYNCING,
 } from '../constants';
 
 const initialState = fromJS({
@@ -21,6 +22,7 @@ const initialState = fromJS({
   remindersFilter: ['Reminder Sent', 'PMS Not Synced', 'Patient Confirmed'],
   selectedAppointment: null,
   selectedWaitSpot: null,
+  syncingWithPMS: false,
 });
 
 export default handleActions({
@@ -80,4 +82,9 @@ export default handleActions({
     temp[key] = [];
     return state.merge(temp);
   },
+
+  [SET_SYNCING](state, action) {
+    return state.set('syncingWithPMS', action.payload.isSyncing);
+  },
+
 }, initialState);

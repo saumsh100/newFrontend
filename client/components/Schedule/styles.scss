@@ -150,21 +150,25 @@
     font-weight: 600;
     color: $primary-dark;
 
-    &_icon{
-      padding-top: 1px;
+    &:hover {
+      cursor: pointer;
+      color: $primary-color-hover;
     }
-    span {
-      display: flex;
-      width: 20px;
-      height: 20px;
-      margin-left: 5px;
-      border: 2px solid $primary-dark;
-      border-radius: 50%;
-      justify-content: center;
-      align-items: center;
+
+    &_text {
+      padding-left: 10px;
+    }
+    &_icon{
+      padding-left: 10px;
     }
   }
 }
+
+.disabledStyle {
+  color: $disabled-color;
+  pointer-events:none;
+}
+
 .appointment {
     position: absolute;
     width: 99%;

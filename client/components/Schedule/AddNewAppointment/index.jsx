@@ -13,7 +13,7 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { showAlert }from '../../../actions/alerts';
+import { showAlert } from '../../../actions/alerts';
 import { Button, IconButton } from '../../library';
 import styles from './styles.scss';
 

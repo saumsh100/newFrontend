@@ -15,5 +15,6 @@ export default [
     password: bcrypt.hashSync('justin', passwordHashSaltRounds),
     firstName: 'Justine',
     lastName: 'Franco',
+    phoneNumber: '+1231231233',
   },
 ];

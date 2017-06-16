@@ -8,7 +8,7 @@ import {
 } from '../actions/entities';
 
 import {
-  showAlertTimeout
+  showAlertTimeout,
 } from '../thunks/alerts';
 
 

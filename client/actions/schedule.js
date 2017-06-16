@@ -8,6 +8,7 @@ import {
   SET_SCHEDULE_DATE,
   SELECT_APPOINTMENT,
   SELECT_WAITSPOT,
+  SET_SYNCING,
 } from '../constants';
 
 export const setScheduleDate = createAction(SET_SCHEDULE_DATE);
@@ -17,5 +18,5 @@ export const addScheduleFilter = createAction(ADD_SCHEDULE_FILTER);
 export const removeScheduleFilter = createAction(REMOVE_SCHEDULE_FILTER);
 export const addAllScheduleFilter = createAction(ADD_ALL_SCHEDULE_FILTER);
 export const clearScheduleFilter = createAction(CLEAR_SCHEDULE_FILTER);
-
+export const setSyncingWithPMS = createAction(SET_SYNCING);
 
