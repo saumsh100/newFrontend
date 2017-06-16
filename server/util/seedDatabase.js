@@ -15,7 +15,6 @@ module.exports = function seedDatabase(seedJSON, config = { wipeTables: true }) 
   if (config.wipeTables) {
     console.log('Wiping tables...');
     wipes = _.map(seedJSON, (data, tableName) => {
-      console.log('removing model', tableName);
       return models[tableName].run()
         .then((results) => {
           // results.forEach(result => result.delete());

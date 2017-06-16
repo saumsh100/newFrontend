@@ -12,6 +12,8 @@ const invalidAppointmentId = '2beab035-b72c-4f7a-ad73-09465cbf5654';
 // Tomorrow at 8 o clock
 // const startDate = new Date(2017, 5, 1, 8, 0);
 
+// TODO: the tests need to be isolated away from the other seeds, same patientId should not be used across all
+
 export default [
   /**
    * For tests... leave this alone
@@ -74,17 +76,6 @@ export default [
     chairId,
     note: 'Justin Friday Morning Appt',
   },
-  {
-    accountId,
-    startDate: new Date(2017, 5, 17, 8, 0),
-    endDate: new Date(2017, 5, 17, 9, 0),
-    patientId,
-    serviceId,
-    practitionerId,
-    chairId,
-    note: 'Justin (21 day)',
-  },
-
   {
     accountId,
     patientId: recallPatientId,

@@ -18,7 +18,8 @@ const PreferencesSchema = type.object().schema({
 });
 
 const WaitSpot = createModel('WaitSpot', {
-  patientId: type.string().uuid(4).required(),
+  patientId: type.string().uuid(4),
+  patientUserId: type.string().uuid(4),
   accountId: type.string().uuid(4).required(),
   preferences: PreferencesSchema,
   unavailableDays: [type.date()],

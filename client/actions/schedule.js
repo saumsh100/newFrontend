@@ -9,8 +9,10 @@ import {
   SELECT_APPOINTMENT,
   SELECT_WAITSPOT,
   SET_SYNCING,
+  SET_MERGING
 } from '../constants';
 
+export const setMergingPatient = createAction(SET_MERGING);
 export const setScheduleDate = createAction(SET_SCHEDULE_DATE);
 export const selectAppointment = createAction(SELECT_APPOINTMENT);
 export const setSelectedWaitSpot = createAction(SELECT_WAITSPOT);

@@ -12,12 +12,15 @@ const port = environmentVariables.PORT || '5000';
 const host = environmentVariables.HOST || 'carecru.dev';
 const protocol = env === 'production' ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
+const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
 const db = {
   authKey: environmentVariables.RETHINKDB_AUTHKEY || '',
   host: environmentVariables.RETHINKDB_HOST || 'localhost',
   port: environmentVariables.RETHINKDB_PORT || '28015',
-  db: environmentVariables.RETHINKDB_DB || 'carecru_development',
+  db: environmentVariables.RETHINKDB_DB || 'carecru_development',//defaultDBName,
 };
+
+console.log('globals', env);
 
 const redis = {
   host: environmentVariables.REDIS_HOST || 'localhost',

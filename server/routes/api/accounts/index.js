@@ -99,7 +99,7 @@ accountsRouter.post('/:accountId/newUser/', (req, res, next) => {
       activeAccountId: req.accountId,
       enterpriseId: req.account.enterprise.id,
       permissionId: permission.id,
-    }).then(({ savedModel: user }) => {
+    }).then(({ model: user }) => {
       delete user.password;
       user.permission = permission;
       res.send(normalize('user', user));
@@ -114,15 +114,7 @@ accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => 
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
-  if (req.role !== 'SUPERADMIN' && req.role !== 'ADMIN' && req.role !== 'OWNER') {
-    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
-  }
-
-  if (req.role === 'ADMIN' && req.body === 'SUPERADMIN') {
-    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
-  }
-
-  if (req.role === 'OWNER' && (req.body === 'SUPERADMIN' || req.body === 'ADMIN')) {
+  if (req.role !== 'SUPERADMIN' && req.role !== 'OWNER') {
     return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
   }
 

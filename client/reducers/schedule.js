@@ -1,7 +1,6 @@
 
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
-import moment from 'moment';
 
 import {
   CLEAR_SCHEDULE_FILTER,
@@ -12,6 +11,7 @@ import {
   SELECT_APPOINTMENT,
   SELECT_WAITSPOT,
   SET_SYNCING,
+  SET_MERGING,
 } from '../constants';
 
 const initialState = fromJS({
@@ -23,9 +23,18 @@ const initialState = fromJS({
   selectedAppointment: null,
   selectedWaitSpot: null,
   syncingWithPMS: false,
+  mergingPatientData: {
+    patientUser: null,
+    requestData: null,
+    suggestions: [],
+  },
 });
 
 export default handleActions({
+  [SET_MERGING](state, action) {
+    return state.set('mergingPatientData', action.payload);
+  },
+
   [SET_SCHEDULE_DATE](state, action) {
     return state.merge({
       scheduleDate: action.payload.scheduleDate,

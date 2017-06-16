@@ -30,7 +30,7 @@ signupRouter.post('/:token', ({ body, params: { token } }, res, next) => {
           permissionId: permission.id,
           activeAccountId: accountId,
         })
-          .then(({ savedModel: user, authSession }) => {
+          .then(({ model: user, authSession }) => {
             return {
             user,
             inviteId: id,

@@ -7,6 +7,7 @@ const PatientUserSchema = {
   lastName: null,
   email: null,
   phoneNumber: null,
+  isPhoneNumberConfirmed: null,
   avatarUrl: null,
 };
 
@@ -17,4 +18,5 @@ export default class PatientUser extends createModel(PatientUserSchema) {
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
   }
+
 }

@@ -1,7 +1,7 @@
 
 import { showAlertTimeout } from '../thunks/alerts';
+import axios from 'axios';
 import { receiveEntities } from '../actions/entities';
-import axios from './axios';
 
 export function runOnDemandSync() {
   return (dispatch, getState) => {

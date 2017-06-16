@@ -11,6 +11,8 @@ const maxLength25 = maxLength(25);
 
 const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
+
 export default function CreateServiceForm(props) {
   const { onSubmit } = props;
   return (
@@ -40,7 +42,7 @@ export default function CreateServiceForm(props) {
               name="duration"
               label="Duration"
               type="number"
-              validate={[notNegative]}
+              validate={[notNegative, maxDuration]}
               normalize={parseNum}
             />
           </Col>
@@ -52,7 +54,7 @@ export default function CreateServiceForm(props) {
               name="bufferTime"
               label="Buffer Time"
               type="number"
-              validate={[notNegative]}
+              validate={[notNegative, maxDuration]}
               normalize={parseNum}
             />
           </Col>

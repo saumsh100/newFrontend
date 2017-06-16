@@ -10,7 +10,7 @@ import {
 
 const { r } = thinky;
 
-describe('createModel/auxilliary Helpers', () => {
+test.skip('createModel/auxilliary Helpers', () => {
   beforeEach((done) => {
     // Remove any tables with Thing after creating them, but tables are creating async, so
     // this is just to make sure...
@@ -77,10 +77,7 @@ describe('createModel/auxilliary Helpers', () => {
       };
 
       const auxTables = createAuxilliaryTables(modelName, auxConfig);
-      console.log('>>>>>>>.', auxTables);
       expect(_.size(auxTables)).toBe(2);
-
-      //_.mapValues(auxTables, auxTable => auxTable.delete().then(() => done()))
     });
   });
 

@@ -40,8 +40,10 @@ export const setAvailabilities = createAction(SET_AVAILABILITIES);
 export const setIsConfirming = createAction(SET_IS_CONFIRMING);
 export const setIsLogin = createAction(SET_IS_LOGIN);
 export const setIsTimerExpired = createAction(SET_IS_TIMER_EXPIRED);
-export const setPatientUser = createAction(SET_PATIENT_USER);
 export const setIsSuccessfulBooking = createAction(SET_IS_SUCCESSFUL_BOOKING);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 export const setHasWaitList = createAction(SET_HAS_WAITLIST);
 export const updateWaitSpot = createAction(UPDATE_WAITSPOT);
+
+// This is on the auth reducer!
+export const setPatientUser = createAction(SET_PATIENT_USER);

@@ -36,11 +36,10 @@ function createModel(tableName, schema, config = {}) {
   });
 
 
-  if (auxConfig) {
-    console.log('createModel: auxConfig=', auxConfig);
+  /*if (auxConfig) {
     Model.auxModels = createAuxilliaryTables(tableName, auxConfig);
     Model.pre('save', generateUniqueValidator(Model.auxModels));
-  }
+  }*/
 
   // TODO: add Model helper functionss
   // Model.fetch({  }) filters and joiners to match API and controller requirements

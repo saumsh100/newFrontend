@@ -73,11 +73,13 @@ OnlineBooking.propTypes = {
   updateEntityRequest: PropTypes.func.required,
 };
 
-function mapStateToProps({ entities }) {
-  const activeAccount = entities.getIn(['accounts', 'models']).first();
+function mapStateToProps({ entities, auth }) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+
   if (!activeAccount) {
     return {};
   }
+
   return {
     activeAccount,
   };
