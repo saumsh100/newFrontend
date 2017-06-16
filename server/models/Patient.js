@@ -23,6 +23,7 @@ const Patient = createModel('Patient', {
   workPhoneNumber: type.string(),
   otherPhoneNumber: type.string(),
   prefContactPhone: type.string(),
+  patientUserId: type.string(),
 
   lastAppointmentDate: type.date(),
   notes: type.string(),

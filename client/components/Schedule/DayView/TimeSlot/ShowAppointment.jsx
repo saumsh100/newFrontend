@@ -32,6 +32,7 @@ export default function ShowAppointment(props) {
     startHour,
     endHour,
     columnWidth,
+    displayPractApps,
   } = props;
 
   const {
@@ -45,6 +46,10 @@ export default function ShowAppointment(props) {
     isSplit,
     adjacent,
   } = appointment;
+
+  if (!displayPractApps) {
+    return null;
+  }
 
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');

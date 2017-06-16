@@ -1,10 +1,11 @@
 
 import { Router } from 'express';
 import { PatientAuth } from '../../lib/auth';
+import authMiddleware from '../../middleware/patientAuth';
 import twilio, { phoneNumber } from '../../config/twilio';
 import loaders from '../util/loaders';
 import StatusError from '../../util/StatusError';
-import { PinCode } from '../../models';
+import { PatientUser, PinCode } from '../../models';
 
 const authRouter = Router();
 
@@ -65,10 +66,46 @@ authRouter.post('/signup/:patientUserId/confirm', (req, res, next) => {
     });
 });
 
-authRouter.post('/login', ({ body: { email, password } }, res, next) =>
+authRouter.post('/:patientUserId/resend', (req, res, next) => {
+  const { patientUser, params } = req;
+  if (params.patientUserId !== patientUser.id) {
+    return next(StatusError(403, 'Requesting user does not have permission to resend another patients sms.'));
+  }
+
+  return PinCode.filter({ modelId: patientUser.id })
+    .then((pinCodes) => {
+      for (const pc of pinCodes) {
+        // Should we await these ?
+        pc.delete();
+      }
+
+      sendConfirmationMessage(patientUser);
+    })
+    .catch(next);
+});
+
+authRouter.post('/', ({ body: { email, password } }, res, next) =>
   PatientAuth.login(email, password)
     .then(signTokenAndSend(res))
     .catch(next)
 );
+
+authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
+  PatientAuth.logout(sessionId)
+    .then(() => res.send(200))
+    .catch(next)
+);
+
+authRouter.get('/me', authMiddleware, (req, res, next) => {
+  const { patientUserId, sessionId } = req;
+  return PatientUser.get(patientUserId)
+    .then(patientUser =>
+      res.json({
+        sessionId,
+        patientUser,
+      })
+    )
+    .catch(next);
+});
 
 export default authRouter;

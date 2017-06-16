@@ -12,6 +12,7 @@ const Account = createModel('Account', {
   zipCode: type.string(),
   vendastaId: type.string(),
   twilioPhoneNumber: type.string(),
+  destinationPhoneNumber: type.string(),
   logo: type.string(),
   clinicName: type.string(),
   bookingWidgetPrimaryColor: type.string(),

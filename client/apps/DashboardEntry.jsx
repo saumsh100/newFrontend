@@ -3,17 +3,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { createBrowserHistory } from 'history';
-import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
+import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import time from '../../server/util/time';
 import socket from '../socket';
 import App from './Dashboard';
 import configure from '../store';
 import { load } from '../thunks/auth';
+import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
+
+// Binds the token setting in header
+bindAxiosInterceptors();
 
 LogRocket.init(process.env.LOGROCKET_APP_ID);
 

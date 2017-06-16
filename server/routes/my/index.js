@@ -1,5 +1,6 @@
 
 import authRouter from './auth';
+import authMiddleware from '../../middleware/patientAuth';
 import { Account, PatientUser } from '../../models';
 
 const myRouter = require('express').Router();
@@ -15,8 +16,8 @@ const createJoinObject = require('../../middleware/createJoinObject');
 const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
-myRouter.use('/requests', requestRouter);
-myRouter.use('/waitSpots', waitSpotsRouter);
+myRouter.use('/requests', authMiddleware, requestRouter);
+myRouter.use('/waitSpots', authMiddleware, waitSpotsRouter);
 myRouter.use('/reservations', reservationsRouter);
 myRouter.use('/oauth', oauthRouter);
 myRouter.use('/auth', authRouter);

@@ -9,15 +9,22 @@ import Patient from '../../models/Patient';
 const callsRouter = Router();
 
 // requestsRouter.param('requestId', loaders('request', 'Request'));
+callsRouter.param('accountId', loaders('account', 'Account'));
+
 
 /**
  * Receive a new call from CallRail's webhook API
  */
-callsRouter.post('/inbound/pre-call', (req, res, next) => {
+callsRouter.post('/:accountId/inbound/pre-call', (req, res, next) => {
   const { customer_phone_number } = req.body;
   const callData = {
     id: JSON.stringify(req.body.id),
+    accountId: req.account.id,
   };
+
+  if (req.body.datetime) {
+    req.body.datetime = moment(req.body.datetime)._d;
+  }
 
   Patient.findByPhoneNumber(customer_phone_number)
     .then((patient) => {
@@ -37,10 +44,15 @@ callsRouter.post('/inbound/pre-call', (req, res, next) => {
 /**
  * Call has ended from CallRail's webhook API
  */
-callsRouter.post('/inbound/post-call', (req, res, next) => {
+callsRouter.post('/:accountId/inbound/post-call', (req, res, next) => {
   const callData = {
     id: JSON.stringify(req.body.id),
+    accountId: req.account.id,
   };
+
+  if (req.body.datetime) {
+    req.body.datetime = moment(req.body.datetime)._d;
+  }
 
   // Update that message with the new status
   Call.get(callData.id).run()
@@ -57,7 +69,7 @@ callsRouter.post('/inbound/post-call', (req, res, next) => {
 /**
  * Call has ended from CallRail's webhook API
  */
-callsRouter.post('/inbound/modified', (req, res, next) => {
+callsRouter.post('/:accountId/inbound/modified', (req, res, next) => {
   // Update that message with the new status
   /*Call.get(req.body.id).run()
     .then((call) => {

@@ -4,7 +4,7 @@ import { routerReducer as routing } from 'react-router-redux';
 import { reducer as form } from 'redux-form';
 import mapValues from 'lodash/mapValues';
 import toolbar from './toolbar';
-import auth from './auth';
+import auth from './patientAuth';
 import availabilities, { createInitialWidgetState } from './availabilities';
 import entities, { createInitialEntitiesState } from './entities';
 

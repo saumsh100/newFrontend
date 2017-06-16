@@ -7,6 +7,7 @@ import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
 import styles from './styles.scss';
+import DialogBox from "../../library/DialogBox/index";
 
 class ServiceListContainer extends Component {
   constructor(props) {
@@ -19,8 +20,7 @@ class ServiceListContainer extends Component {
   }
 
   setActive() {
-    const active = (this.state.active !== true);
-    this.setState({ active });
+    this.setState({ active: !this.state.active });
   }
 
   createService(values) {
@@ -60,7 +60,7 @@ class ServiceListContainer extends Component {
             onClick={this.setActive}
             className={styles.addServiceButton}
           />
-          <Modal
+          <DialogBox
             active={this.state.active}
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
@@ -68,7 +68,7 @@ class ServiceListContainer extends Component {
             <CreateServiceForm
               onSubmit={this.createService}
             />
-          </Modal>
+          </DialogBox>
         </div>
         {services.toArray().map((service) => {
           return (
