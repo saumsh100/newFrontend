@@ -58,8 +58,6 @@ export default function TimeSlot(props) {
     });
   });
 
-
-
   const splitAppointments = filteredApps.filter((app) => app.isSplit);
   // find Split appointments and their adjacent appointments and set isSplit true
   splitAppointments && splitAppointments.map((sApp) => {

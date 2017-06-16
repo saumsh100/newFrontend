@@ -12,7 +12,7 @@ import {
 } from '../actions/entities';
 
 import {
-  showAlertTimeout
+  showAlertTimeout,
 } from './alerts';
 
 import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequests';
@@ -156,7 +156,7 @@ export function updateEntityRequest({ key, model, values, url, alert }) {
         dispatch(receiveEntities({ key, entities: data.entities }));
 
         if (alert && alert.success) {
-          dispatch(showAlertTimeout({ alert: alert.success , type: 'success' }));
+          dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
         }
         return data.entities;
       })

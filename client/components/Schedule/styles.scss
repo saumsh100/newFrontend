@@ -152,25 +152,24 @@
     color: $primary-dark;
 
     &:hover {
-      color: $primary-color-hover;
       cursor: pointer;
+      color: $primary-color-hover;
     }
 
-    &_icon{
-      padding-left: 5px;
+    &_text {
+      padding-left: 10px;
     }
-    span {
-      display: flex;
-      width: 20px;
-      height: 20px;
-      margin-left: 5px;
-      border: 2px solid $primary-dark;
-      border-radius: 50%;
-      justify-content: center;
-      align-items: center;
+    &_icon{
+      padding-left: 10px;
     }
   }
 }
+
+.disabledStyle {
+  color: $disabled-color;
+  pointer-events:none;
+}
+
 .appointment {
     position: absolute;
     width: 99%;
