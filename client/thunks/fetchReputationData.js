@@ -1,5 +1,5 @@
 
-import axios from './axios';
+import axios from 'axios';
 import { fetchReputationStart, fetchReputationSuccess } from '../actions/reputation';
 
 export default function fetchReputation() {

@@ -70,7 +70,17 @@ export default handleActions({
       registrationStep: 1,
       reservationId: null,
       hasWaitList: false,
-      waitSpot: null,
+      waitSpot: {
+        preferences: {
+          mornings: true,
+          afternoons: true,
+          evenings: true,
+          weekdays: true,
+          weekends: true,
+        },
+
+        unavailableDays: [],
+      },
     });
   },
 

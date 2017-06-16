@@ -40,7 +40,9 @@ const patientSingleSchema = () => {
 };
 
 const patientSchema = () => {
-  return new schema.Entity('patients');
+  return new schema.Entity('patients', {
+    patientUser: patientUserSchema(),
+  });
 };
 
 const familySchema = () => {
@@ -50,14 +52,16 @@ const familySchema = () => {
 };
 
 const permissionSchema = () => {
-  return new schema.Entity('permissions', {
-    users: [userSchema()],
-  });
+  return new schema.Entity('permissions');
 };
+
+const patientUserSchema = () => {
+  return new schema.Entity('patientUsers')
+}
 
 const requestSchema = () => {
   return new schema.Entity('requests', {
-    patient: patientSchema(),
+    patientUser: patientUserSchema(),
     service: serviceSchema(),
     practitioner: practitionerSchema(),
     chair: chairSchema(),
@@ -73,7 +77,9 @@ const textMessageSchema = () => {
 };
 
 const userSchema = () => {
-  return new schema.Entity('users');
+  return new schema.Entity('users', {
+    permission: permissionSchema(),
+  });
 };
 
 const syncClientErrorSchema = () => {
@@ -109,6 +115,7 @@ const timeOffSchema = () => {
 const waitSpotSchema = () => {
   return new schema.Entity('waitSpots', {
     patient: patientSchema(),
+    patientUser: patientUserSchema(),
   });
 };
 
@@ -153,6 +160,7 @@ const SCHEMAS = {
   service: serviceSchema(),
   textMessage: textMessageSchema(),
   user: userSchema(),
+  patientUser: patientUserSchema(),
   permission: permissionSchema(),
   practitioner: practitionerSchema(),
   practitionerTimeOff: timeOffSchema(),
@@ -170,6 +178,7 @@ const SCHEMAS = {
   enterprises: [enterpriseSchema()],
   invites: [inviteSchema()],
   patients: [patientSchema()],
+  patientUsers: [patientUserSchema()],
   families: [familySchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],

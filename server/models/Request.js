@@ -9,7 +9,8 @@ const Request = createModel('Request', {
   note: type.string(),
 
   // Required relational data
-  patientId: type.string().uuid(4).required(),
+
+  patientUserId: type.string().uuid(4).required(),
   accountId: type.string().uuid(4).required(),
   serviceId: type.string().uuid(4).required(),
   chairId: type.string().uuid(4),
@@ -18,6 +19,7 @@ const Request = createModel('Request', {
   practitionerId: type.string().uuid(4),
 
   // Lifecycle Attributes
+  isConfirmed: type.boolean().default(false),
   isCancelled: type.boolean().default(false),
   appointmentId: type.string().uuid(4),
 });

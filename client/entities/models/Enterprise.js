@@ -5,6 +5,7 @@ const EnterpriseSchema = {
   id: null,
   createdAt: null,
   name: null,
+  plan: null,
 };
 
 export default class Enterprise extends createModel(EnterpriseSchema) {

@@ -1,13 +1,9 @@
 
 import React, { PropTypes } from 'react';
-import { compose, withState } from 'recompose';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import AvailabilityContainer from './AvailabilityContainer';
+import AvailabilityContainer from '../components/Availabilities';
 
-import styles from './styles.scss';
-
-function PatientApp(props) {
+// We will add a lot more to this in future when Patient site is built out more
+function PatientApp() {
   return <AvailabilityContainer />;
 }
 
@@ -18,18 +14,4 @@ PatientApp.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
-  return {
-
-  };
-}
-
-function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-
-  }, dispatch);
-}
-
-const enhance = connect(mapStateToProps, mapActionsToProps);
-
-export default enhance(PatientApp);
+export default PatientApp;

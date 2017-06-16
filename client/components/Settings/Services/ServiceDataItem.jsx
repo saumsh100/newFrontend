@@ -9,6 +9,7 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength45 = maxLength(45);
 const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 
 class ServiceDataItem extends Component {
@@ -57,6 +58,7 @@ class ServiceDataItem extends Component {
         name: service.get('name'),
         duration: service.get('duration'),
         bufferTime: service.get('bufferTime'),
+        isActive: service.get('isActive'),
       };
 
       showComponent = (
@@ -67,6 +69,7 @@ class ServiceDataItem extends Component {
               <IconButton icon="trash" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
             </div>
           </div>
+          <h2 className={styles.header}>Services</h2>
           <div className={styles.servicesFormRow}>
             <Form
               form={`${service.get('id')}Form`}
@@ -85,16 +88,25 @@ class ServiceDataItem extends Component {
                 label="Duration"
                 type="number"
                 normalize={parseNum}
-                validate={[notNegative]}
+                validate={[notNegative, maxDuration]}
               />
               <Field
-                required
                 name="bufferTime"
                 label="Buffer Time"
                 type="number"
                 normalize={parseNum}
-                validate={[notNegative]}
+                validate={[notNegative, maxDuration]}
               />
+              <div className={styles.servicesPractForm_service}>
+                Is Active:
+                <div>
+                  <Field
+                    name="isActive"
+                    component="Toggle"
+                  />
+                </div>
+              </div>
+
             </Form>
           </div>
         </div>

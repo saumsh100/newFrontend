@@ -1,11 +1,38 @@
+
 import { Router } from 'express';
 import { PatientAuth } from '../../lib/auth';
+import authMiddleware from '../../middleware/patientAuth';
+import twilio, { phoneNumber } from '../../config/twilio';
+import loaders from '../util/loaders';
+import StatusError from '../../util/StatusError';
+import { PatientUser, PinCode } from '../../models';
 
 const authRouter = Router();
 
-const signTokenAndSend = res => ({ id }) =>
-  PatientAuth.signToken({ id })
+authRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
+
+const signTokenAndSend = res => ({ session, model }) => {
+  const tokenData = {
+    patientUserId: model.id,
+    sessionId: session.id,
+  };
+
+  return PatientAuth.signToken(tokenData)
     .then(token => res.json({ token }));
+};
+
+const createConfirmationText = (pinCode) => {
+  return `${pinCode} is your CareCru verification code.`;
+};
+
+async function sendConfirmationMessage(patientUser) {
+  const { pinCode } = await PinCode.generateConfirmation(patientUser.id);
+  return twilio.sendMessage({
+    to: patientUser.phoneNumber,
+    from: phoneNumber,
+    body: createConfirmationText(pinCode),
+  });
+}
 
 authRouter.post('/signup', ({ body: patient }, res, next) => {
   if (patient.password !== patient.confirmPassword) {
@@ -15,20 +42,70 @@ authRouter.post('/signup', ({ body: patient }, res, next) => {
   // TODO: additional validation required
   // TODO: we have to use some form library for validations.
   return PatientAuth.signup(patient)
+    .then(async ({ session, model }) => {
+      await sendConfirmationMessage(model);
+      return { session, model };
+    })
     .then(signTokenAndSend(res))
     .catch(next);
 });
 
-authRouter.post('/signup/:patientId/confirm', ({ body: { confirmCode }, patient }, res, next) => (
-    (confirmCode === '8888') ?
-      res.send(patient) :
-      next({ status: 400, message: 'Invalid confirmation code' })
-));
+authRouter.post('/signup/:patientUserId/confirm', (req, res, next) => {
+  const { body: { confirmCode }, patientUser } = req;
+  return PinCode.get(confirmCode)
+    .then((pc) => {
+      const { pinCode, modelId } = pc;
+      if (patientUser.id === modelId && pinCode === confirmCode) {
+        patientUser.merge({ isPhoneNumberConfirmed: true }).save()
+          .then(p => res.send(p))
+          .then(() => pc.delete());
+      }
+    })
+    .catch(() => {
+      next(StatusError(400, 'Invalid confirmation code'));
+    });
+});
 
-authRouter.post('/login', ({ body: { email, password } }, res, next) =>
+authRouter.post('/:patientUserId/resend', (req, res, next) => {
+  const { patientUser, params } = req;
+  if (params.patientUserId !== patientUser.id) {
+    return next(StatusError(403, 'Requesting user does not have permission to resend another patients sms.'));
+  }
+
+  return PinCode.filter({ modelId: patientUser.id })
+    .then((pinCodes) => {
+      for (const pc of pinCodes) {
+        // Should we await these ?
+        pc.delete();
+      }
+
+      sendConfirmationMessage(patientUser);
+    })
+    .catch(next);
+});
+
+authRouter.post('/', ({ body: { email, password } }, res, next) =>
   PatientAuth.login(email, password)
     .then(signTokenAndSend(res))
     .catch(next)
 );
+
+authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
+  PatientAuth.logout(sessionId)
+    .then(() => res.send(200))
+    .catch(next)
+);
+
+authRouter.get('/me', authMiddleware, (req, res, next) => {
+  const { patientUserId, sessionId } = req;
+  return PatientUser.get(patientUserId)
+    .then(patientUser =>
+      res.json({
+        sessionId,
+        patientUser,
+      })
+    )
+    .catch(next);
+});
 
 export default authRouter;

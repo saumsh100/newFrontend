@@ -118,5 +118,9 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
+PractitionerBasicData.propTypes = {
+  practitioner: PropTypes.object.required,
+}
+
 export default connect(mapStateToProps, mapDispatchToProps)(PractitionerBasicData);
 

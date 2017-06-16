@@ -1,4 +1,7 @@
+
 import authRouter from './auth';
+import authMiddleware from '../../middleware/patientAuth';
+import { Account, PatientUser } from '../../models';
 
 const myRouter = require('express').Router();
 const fs = require('fs');
@@ -7,23 +10,26 @@ const requestRouter = require('../api/request');
 const waitSpotsRouter = require('../api/waitSpots');
 const reservationsRouter = require('../api/reservations');
 const oauthRouter = require('./oauth');
-const Account = require('../../models/Account');
-const Patient = require('../../models/Patient');
 
 const loaders = require('../util/loaders');
 const createJoinObject = require('../../middleware/createJoinObject');
 const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
-myRouter.use('/requests', requestRouter);
-myRouter.use('/waitSpots', waitSpotsRouter);
+myRouter.use('/requests', authMiddleware, requestRouter);
+myRouter.use('/waitSpots', authMiddleware, waitSpotsRouter);
 myRouter.use('/reservations', reservationsRouter);
 myRouter.use('/oauth', oauthRouter);
 myRouter.use('/auth', authRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
-myRouter.param('patientId', loaders('patient', 'Patient'));
-myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
+myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
+myRouter.param('accountIdJoin', loaders('account', 'Account', {
+  services: {
+    _apply: service => service.filter(row => row('isActive').eq(true)),
+  },
+  practitioners: true,
+}));
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
@@ -83,22 +89,21 @@ myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
   }
 });
 
-myRouter.get('/logo/:accountId', (req, res, next) => {
-	const { accountId } = req.params;
-	return Account.get(accountId).run().then(account => {
-		const { logo, address, clinicName, bookingWidgetPrimaryColor } = account;
-		res.send({ logo, address, clinicName, bookingWidgetPrimaryColor });
-	});
-});
-
 myRouter.post('/patientCheck', (req, res, next) => {
   const email = req.body.email.toLowerCase();
-  return Patient.filter({ email }).run()
+  const phoneNumber = req.body.phoneNumber;
+  return PatientUser.filter({ email, phoneNumber }).run()
     .then(p => res.send({ exists: !!p[0] }))
     .catch(next);
 });
 
-myRouter.get('/patients/:patientId', ({ patient }, res) => res.json(patient));
+myRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
+  try {
+    res.json(req.patientUser.makeSafe());
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares

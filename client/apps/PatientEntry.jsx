@@ -6,40 +6,57 @@ import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
+import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import time from '../../server/util/time';
-import socket from '../socket';
 import App from './Patient';
 import configure from '../store/availabilitiesStore';
-import { load } from '../thunks/auth';
+import { loadPatient } from '../thunks/patientAuth';
+import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
+
+// getToken function is custom
+bindAxiosInterceptors(() => localStorage.getItem('auth_token'));
+
+LogRocket.init(process.env.LOGROCKET_APP_ID);
 
 const browserHistory = createBrowserHistory();
 const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
 
-// TODO: define globals with webpack ProvidePlugin
-window.store = store;
-window.browserHistory = browserHistory;
-window.socket = socket;
-window.moment = extendMoment(moment);
-window.time = time;
-window._ = _;
-window.Immutable = Immutable;
+loadPatient()(store.dispatch).then(() => {
+  const { auth } = store.getState();
+  if (auth.get('isAuthenticated')) {
+    const patientUser = auth.get('patientUser').toJS();
+    LogRocket.identify(patientUser.id, {
+      name: `${patientUser.firstName} ${patientUser.lastName}`,
+      email: patientUser.email,
+    });
+  }
 
-// We have to create global objects only once
-// And pass them to App on render
-const appProps = { browserHistory, store };
+  console.log('loadPatient completed successfully');
 
-const render = (Component) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Component {...appProps} />
-    </AppContainer>,
-    document.getElementById('root')
-  );
-};
+  // TODO: define globals with webpack ProvidePlugin
+  window.store = store;
+  window.browserHistory = browserHistory;
+  window.moment = extendMoment(moment);
+  window.time = time;
+  window._ = _;
+  window.Immutable = Immutable;
 
-document.addEventListener('DOMContentLoaded', () => render(App));
+  // We have to create global objects only once
+  // And pass them to App on render
+  const appProps = { browserHistory, store };
+  const render = (Component) => {
+    ReactDOM.render(
+      <AppContainer>
+        <Component {...appProps} />
+      </AppContainer>,
+      document.getElementById('root')
+    );
+  };
 
-if (module.hot) {
-  module.hot.accept('./Patient', () => render(App));
-}
+  render(App);
+
+  if (module.hot) {
+    module.hot.accept('./Patient', () => render(App));
+  }
+});

@@ -8,6 +8,7 @@ const Invite = createModel('Invite', {
   accountId: type.string().required(),
   email: type.string().required(),
   token: type.string().uuid(4).required(),
+  enterpriseId: type.string().uuid(4).required(),
 });
 
 module.exports = Invite;

@@ -1,0 +1,34 @@
+@import '../../../ui';
+
+.cardContainer {
+  position: relative;
+  display: inline-block;
+  align-content: center;
+  justify-content: center;
+  height: auto
+}
+
+.header {
+  padding-left: 15px;
+}
+.formContainer {
+  padding: 15px;
+  &_spacing {
+    padding: 10px;
+  }
+}
+
+.trashIcon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 1.4em;
+  color: $primary-darkgrey;
+
+  &:hover {
+    cursor: pointer;
+    color: $primary-color;
+  }
+}
+
+

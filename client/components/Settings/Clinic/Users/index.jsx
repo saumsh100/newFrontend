@@ -6,6 +6,7 @@ import { fetchEntities, deleteEntityRequest, createEntityRequest, updateEntityRe
 import { List, ListItem, Grid, Header, DialogBox, Row, Button, DropdownSelect } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
+import NewUserForm from './NewUserForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import InviteUserForm from './InviteUserForm';
 import styles from './styles.scss';
@@ -16,6 +17,7 @@ class Users extends Component{
     this.state = {
       active: false,
       editActive: false,
+      newActive: false,
       editValue: 'VIEWER',
       roleChange: {},
     };
@@ -23,6 +25,8 @@ class Users extends Component{
     this.deleteInvite = this.deleteInvite.bind(this);
     this.sendInvite = this.sendInvite.bind(this);
     this.addUser = this.addUser.bind(this);
+    this.sendNewUser = this.sendNewUser.bind(this);
+    this.addNewUser = this.addNewUser.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.editUser = this.editUser.bind(this);
     this.editDropdown = this.editDropdown.bind(this);
@@ -49,6 +53,27 @@ class Users extends Component{
 
     const url = `/api/accounts/${accountId}/invites/${id}`;
     this.props.deleteEntityRequest({ key: 'invites', id, url });
+  }
+
+  sendNewUser(entityData) {
+    const { accountId, userId } = this.props;
+
+    const url = `/api/accounts/${accountId}/newUser/`;
+    entityData.accountId = accountId;
+    entityData.sendingUserId = userId;
+
+    this.setState({
+      newActive: false,
+    });
+
+    this.props.createEntityRequest({ key: 'user', entityData, url });
+
+    // reseting inputs to empty
+    entityData.firstName = '';
+    entityData.lastName = '';
+    entityData.username = '';
+    entityData.password = '';
+    entityData.confirmPassword = '';
   }
 
   sendInvite(entityData) {
@@ -87,6 +112,7 @@ class Users extends Component{
     const newState = {
       active: false,
       editActive: false,
+      newActive: false,
       roleChange: this.state.roleChange,
     };
 
@@ -98,6 +124,12 @@ class Users extends Component{
   addUser() {
     this.setState({
       active: true,
+    });
+  }
+
+  addNewUser() {
+    this.setState({
+      newActive: true,
     });
   }
 
@@ -125,19 +157,26 @@ class Users extends Component{
     const {
       active,
       editActive,
+      newActive,
     } = this.state;
-    const clinic = accounts.toArray()[0];
-    let clinicName = '';
-    if (clinic) {
-      clinicName = clinic.get('name');
+
+    let clinicName = null;
+
+    for (let i = 0; i < accounts.toArray().length; i++) {
+      if (accounts.toArray()[i].id === this.props.accountId) {
+        clinicName = accounts.toArray()[i].name;
+        break;
+      }
     }
 
-    let usersInvited = <div className={styles.userListItem}>
+
+    let usersInvited = (<div className={styles.userListItem}>
       <div className={styles.main}>
         <p className={styles.name}>Users you have invited will show up here.</p>
       </div>
-    </div>
-    if (invites.size !== 0){
+    </div>);
+
+    if (invites.size !== 0) {
       usersInvited = invites.toArray().map((invite) => {
         return (
           <InviteUsersList
@@ -155,16 +194,29 @@ class Users extends Component{
         );
       })
     }
+    const options = [
+          { value: 'ADMIN' },
+          { value: 'OWNER' },
+          { value: 'MANAGER' },
+    ];
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
       { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName }},
     ];
 
+    const actionsNewUser = [
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { form: 'newUser' }},
+    ];
+
     const editActions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
       { label: 'Edit', onClick: this.sendEdit, component: Button },
     ];
+
+    const addUserButton = (this.props.role === 'SUPERADMIN' ? (
+      <Button className={styles.inviteUser} onClick={this.addNewUser} >Add a User</Button>) : null);
 
     return (
       <Grid>
@@ -185,6 +237,21 @@ class Users extends Component{
           />
         </DialogBox>
         <DialogBox
+          actions={actionsNewUser}
+          title="Create New User"
+          type="small"
+          active={newActive}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
+        >
+          <NewUserForm
+            mainStyle={styles.emailInvite}
+            formStyle={styles.form}
+            sendNewUser={this.sendNewUser}
+            formName={'newUser'}
+          />
+        </DialogBox>
+        <DialogBox
           actions={editActions}
           title="Edit User Rights"
           type="small"
@@ -196,16 +263,15 @@ class Users extends Component{
             value={this.state.editValue}
             onChange={this.editDropdown}
             className={styles.dropdown}
-            options={[
-            { value: 'SUPERADMIN' },
-            { value: 'ADMIN' },
-            { value: 'VIEWER' },
-          ]}
+            options={options}
           />
         </DialogBox>
         <Row className={styles.mainHead}>
           <h2 className={styles.mainHeader}>Users in {clinicName}</h2>
-          <Button className={styles.inviteUser} onClick={this.addUser} >Invite a User</Button>
+          <div>
+            {addUserButton}
+            <Button className={styles.inviteUser} onClick={this.addUser} >Invite a User</Button>
+          </div>
         </Row>
         <List className={styles.userList}>
         {users.toArray().map((user, i) => {

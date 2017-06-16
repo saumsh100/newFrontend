@@ -35,7 +35,7 @@ Practitioner.define('getWeeklySchedule', function () {
       return WeeklySchedule.get(self.weeklyScheduleId)
         .then(ws => resolve(ws))
         .catch(err => reject(err));
-    }no;
+    }
 
     return Account.get(self.accountId).getJoin({ weeklySchedule: true })
       .then(account => resolve(account.weeklySchedule))

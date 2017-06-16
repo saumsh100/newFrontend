@@ -1,11 +1,10 @@
-import jwt from 'jwt-decode';
+
 import moment from 'moment';
-import axios from './axios';
+import axios from 'axios';
 import {
   setIsFetching,
   setAvailabilities,
   sixDaysShiftAction,
-  setPatientUser,
   setIsSuccessfulBooking,
   setStartingAppointmentTimeAction,
   setRegistrationStepAction,
@@ -13,8 +12,9 @@ import {
   setTemporaryReservationAction,
   removeReservationAction,
   refreshAvailabilitiesState,
+  setPatientUser,
 } from '../actions/availabilities';
-import Patient from '../entities/models/Patient';
+import PatientUser from '../entities/models/PatientUser';
 
 export function sixDaysShift(dayObj) {
   return function (dispatch) {
@@ -22,52 +22,22 @@ export function sixDaysShift(dayObj) {
   };
 }
 
-const getPatientIdFromToken = (token) => {
-  try {
-    const { id, exp } = jwt(token);
-
-    if ((exp - (Date.now() / 1000)) < 0) {
-      return null;
-    }
-
-    return id;
-  } catch (e) {
-    return null;
-  }
-};
-
-const fetchPatient = id => (id ?
-  axios.get(`/patients/${id}`).then(({ data }) => data) :
-  Promise.resolve(null));
-
-const setPatientByToken = (token, dispatch) =>
-  fetchPatient(getPatientIdFromToken(token))
-    .then(patient => dispatch(setPatientUser(new Patient(patient))));
-
-export function createPatient(values) {
-  return function (dispatch) {
-    return axios.post('/auth/signup', values)
-      // TODO: dispatch function that successfully created patient, plug in, confirm code
-      // TODO: then allow them to create the patient
-      .then(({ data: { token } }) => setPatientByToken(token, dispatch).then(() => token));
-  };
-}
-
-export function loginPatient(credentials) {
-  return dispatch =>
-    axios.post('/auth/login', credentials)
-      .then(({ data: { token } }) => setPatientByToken(token, dispatch).then(() => token));
-}
-
-export function loadPatient(token) {
-  return dispatch => setPatientByToken(token, dispatch);
-}
-
 export function confirmCode(values) {
   return function (dispatch, getState) {
     const state = getState();
-    const patientUser = state.availabilities.get('patientUser');
-    return axios.post(`/auth/signup/${patientUser.id}/confirm`, values);
+    const patientUser = state.auth.get('patientUser');
+    return axios.post(`/auth/signup/${patientUser.get('id')}/confirm`, values)
+      .then(({ data }) => {
+        dispatch(setPatientUser(new PatientUser(data)));
+      });
+  };
+}
+
+export function resendPinCode() {
+  return function (dispatch, getState) {
+    const state = getState();
+    const patientUser = state.auth.get('patientUser');
+    return axios.post(`/auth/${patientUser.get('id')}/resend`);
   };
 }
 
@@ -76,15 +46,18 @@ export function createRequest() {
     const state = getState();
     const {
       account,
-      patientUser,
       selectedAvailability: { startDate, endDate },
       selectedPractitionerId,
       selectedServiceId,
     } = state.availabilities.toJS();
 
+    const {
+      patientUser,
+    } = state.auth.toJS();
+
     let params = {
       accountId: account.id,
-      patientId: patientUser.id,
+      patientUserId: patientUser.id,
       serviceId: selectedServiceId,
       startDate,
       endDate,
@@ -110,9 +83,12 @@ export function createWaitSpot() {
     const state = getState();
     const {
       account,
-      patientUser,
       waitSpot,
     } = state.availabilities.toJS();
+
+    const {
+      patientUser,
+    } = state.auth.toJS();
 
     const params = {
       accountId: account.id,
@@ -191,7 +167,9 @@ export function fetchAvailabilities() {
     const { availabilities, entities } = getState();
     const account = entities.getIn(['accounts', 'models']).first();
     const startDate = availabilities.get('selectedStartDate');
-    const endDate = moment(startDate).add(5, 'days').toISOString();
+
+    // TODO: it should be calculating till end of endDate
+    const endDate = moment(startDate).add(4, 'days').toISOString();
     const params = {
       serviceId: availabilities.get('selectedServiceId'),
       practitionerId: availabilities.get('selectedPractitionerId'),

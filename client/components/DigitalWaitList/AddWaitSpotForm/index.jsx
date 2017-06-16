@@ -10,6 +10,7 @@ import {
   Grid,
   Row,
   Col,
+  Header
 } from '../../library';
 import styles from './styles.scss';
 
@@ -17,9 +18,7 @@ function validatePatient(value) {
   return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
 }
 
-
-
-function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot, patients, }) {
+function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot, patientUsers, patients }) {
   let initialValues = {
     preferences: {
       mornings: true,
@@ -32,10 +31,41 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
     unavailableDays: [],
   };
 
+  let displayField = (
+    <Field
+      component="AutoComplete"
+      name="patientData"
+      label="Enter Patient Name"
+      getSuggestions={getSuggestions}
+      validate={[validatePatient]}
+      disable
+      required
+    />
+  );
+
+
+  // Dealing with patientId and patientUserId
   if (selectedWaitSpot) {
-    initialValues = selectedWaitSpot;
-    const patient = patients.getIn(['models', selectedWaitSpot.patientId]).toJS();
-    initialValues.patientData = patient;
+    // If unavailabledays is set to null then set it to an empty array otherwise the daypicker throws an error.
+     if (selectedWaitSpot.unavailableDays === null) {
+       initialValues = selectedWaitSpot;
+       initialValues.unavailableDays = [];
+     } else {
+       initialValues = selectedWaitSpot;
+     }
+
+    if (!selectedWaitSpot.patientId && selectedWaitSpot.patientUserId) {
+      const patientUser = patientUsers.getIn(['models', selectedWaitSpot.patientUserId]);
+      displayField = (
+        <Header title={patientUser.getFullName()} />
+      );
+    } else if (selectedWaitSpot.patientId) {
+      const patient = patients.getIn(['models', selectedWaitSpot.patientId]);
+      initialValues.patientData = patient.toJS();
+      displayField = (
+        <Header title={patient.getFullName()} />
+      );
+    }
   }
 
   return (
@@ -45,14 +75,7 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
       initialValues={initialValues}
       ignoreSaveButton
     >
-      <Field
-        component="AutoComplete"
-        name="patientData"
-        label="Enter Patient Name"
-        getSuggestions={getSuggestions}
-        validate={[validatePatient]}
-        required
-      />
+      {displayField}
       <Grid>
         <Row>
           <Col xs={12} md={6}>

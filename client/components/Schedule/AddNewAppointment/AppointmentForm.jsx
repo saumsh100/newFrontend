@@ -51,6 +51,7 @@ export default function AppointmentForm(props) {
     practitionerOptions,
     chairOptions,
     handlePractitionerChange,
+    selectedAppointment,
   } = props;
 
   return (
@@ -147,6 +148,7 @@ export default function AppointmentForm(props) {
               name="isCancelled"
               label="Patient Cancelled"
               className={styles.addNewAppt_col_confirmCancel_label}
+              hidden={selectedAppointment && !selectedAppointment.request ? false : true}
             />
           </div>
         </Col>

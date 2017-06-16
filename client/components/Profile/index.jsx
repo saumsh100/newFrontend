@@ -7,14 +7,16 @@ import ChangePasswordForm from './ChangePasswordForm';
 import TestForm from '../demo/TestForm';
 import TooltipsTest from '../demo/TooltipsTest';
 import { changePassword } from '../../thunks/user';
+import styles from './styles.scss'
 
 function Profile(props) {
   return (
-    <Card>
-      <ChangePasswordForm onSubmit={props.changePassword} />
-      <br/><br/>
-      <TestForm patient={{ firstName: 'Justin', middleName: 'Daniel', lastName: 'Sharp' }} />
-      <TooltipsTest />
+    <Card className={styles.cardContainer}>
+      <div className={styles.passwordFormContainer}>
+        <ChangePasswordForm onSubmit={props.changePassword} />
+      </div>
+      {/*<TestForm patient={{ firstName: 'Justin', middleName: 'Daniel', lastName: 'Sharp' }} />*/}
+      {/*<TooltipsTest />*/}
     </Card>
   );
 }
@@ -26,7 +28,7 @@ Profile.propTypes = {
 
 function mapStateToProps() {
   return {
-    
+
   };
 }
 

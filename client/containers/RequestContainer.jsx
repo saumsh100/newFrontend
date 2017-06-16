@@ -12,7 +12,7 @@ class RequestContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEntities({ key: 'requests', join: ['service', 'patient'] });
+    this.props.fetchEntities({ key: 'requests', join: ['service', 'patientUser'] });
   }
 
   render() {
@@ -22,8 +22,8 @@ class RequestContainer extends React.Component {
     return (
       <Requests
         requests={this.props.requests}
-        patients={this.props.patients}
         services={this.props.services}
+        patientUsers={this.props.patientUsers}
         location={location}
       />
     );
@@ -35,18 +35,19 @@ RequestContainer.propTypes = {
 };
 
 function mapStateToProps({ entities }) {
+  const patientUsers = entities.getIn(['patientUsers', 'models']);
   const services = entities.getIn(['services', 'models']);
   const requests = entities.getIn(['requests', 'models']);
 
-  const patientIds = requests.toArray().map(request => request.get('patientId'));
-  const patients = entities.getIn(['patients', 'models']).filter((patient) => {
-    return patientIds.indexOf(patient.get('id')) > -1;
-  });
+  //const patientIds = requests.toArray().map(request => request.get('patientId'));
+ //const patients = entities.getIn(['patients', 'models']).filter((patient) => {
+  //  return patientIds.indexOf(patient.get('id')) > -1;
+  //});
 
   return {
     requests,
-    patients,
     services,
+    patientUsers,
   };
 }
 
