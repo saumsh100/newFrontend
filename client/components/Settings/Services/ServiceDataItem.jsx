@@ -58,7 +58,7 @@ class ServiceDataItem extends Component {
         name: service.get('name'),
         duration: service.get('duration'),
         bufferTime: service.get('bufferTime'),
-        isActive: service.get('isActive'),
+        isHidden: service.get('isHidden'),
       };
 
       showComponent = (
@@ -98,10 +98,10 @@ class ServiceDataItem extends Component {
                 validate={[notNegative, maxDuration]}
               />
               <div className={styles.servicesPractForm_service}>
-                Is Active:
+                Is Hidden:
                 <div>
                   <Field
-                    name="isActive"
+                    name="isHidden"
                     component="Toggle"
                   />
                 </div>
