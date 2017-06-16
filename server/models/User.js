@@ -14,6 +14,10 @@ const User = createModel('User', {
   activeAccountId: type.string().uuid(4).required(),
   enterpriseId: type.string().uuid(4).required(),
   permissionId: type.string().uuid(4).required(),
+}, {
+  aux: {
+    username: {},
+  },
 });
 
 User.define('isValidPasswordAsync', function(password) {

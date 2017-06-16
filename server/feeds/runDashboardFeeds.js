@@ -42,12 +42,17 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
+
+        console.log('DASH FEED.PATIENT');
+
         if (doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             socket.emit('remove:Patient', doc.id);
           } else if (isCreated(doc)) {
+            console.log('sync.feed.create', doc);
             socket.emit('create:Patient', normalize('patient', doc));
           } else {
+            console.log('sync.feed.update', doc);
             socket.emit('update:Patient', normalize('patient', doc));
           }
         }

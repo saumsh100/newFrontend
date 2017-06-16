@@ -1,5 +1,5 @@
-const { type } = require('../config/thinky');
-const createModel = require('./createModel');
+const { type } = require('../server/config/thinky');
+const createModel = require('./../server/models/createModel/index');
 
 const Teacher = createModel('Teacher', {
   name: type.string(),
