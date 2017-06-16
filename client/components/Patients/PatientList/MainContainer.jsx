@@ -38,6 +38,15 @@ class MainContainer extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.currentPatient.id) {
+      this.props.fetchEntitiesRequest({
+        id: 'patientIdStats',
+        url: `/api/patients/${this.props.currentPatient.id}/stats`,
+      });
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.currentPatient.id !== this.props.currentPatient.id) {
       this.props.fetchEntitiesRequest({
