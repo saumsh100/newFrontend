@@ -26,6 +26,12 @@ function delay(milliseconds, calculation) {
   });
 }
 
+const createTestModel = () => {
+  return createModel(TEST_MODEL, {
+    name: type.string(),
+  });
+};
+
 /*describe('#async mocks', () => {
 
   it('test1', () => {
@@ -60,7 +66,6 @@ function delay(milliseconds, calculation) {
   // TODO: test requireds, defaults, etc.
 
 describe('#createModel', () => {
-
   afterEach(() => {
     return thinky.r.tableDrop(TEST_MODEL)
       .then(() => {
@@ -69,7 +74,6 @@ describe('#createModel', () => {
   });
 
   describe('Model.docOn(\'saving\')', () => {
-
     test('should call docOn saving hook with Model.save - synchronous', () => {
       const TestModel = createModel(TEST_MODEL, {
         nameField: type.string(),
@@ -77,15 +81,14 @@ describe('#createModel', () => {
 
       const fn = jest.fn();
       // setup validate function to replace the phone number
-      TestModel.docOn('saving', (doc) => {
+      TestModel.docOn('saving', () => {
         fn();
-        console.log('.>..... saving');
       });
 
-      const testModelInstance = {homePhoneNumber: '7782422626'};
+      const testModelInstance = { homePhoneNumber: '7782422626' };
 
       return TestModel.save(testModelInstance)
-        .then((persistedModel) => {
+        .then(() => {
           expect(fn.mock.calls.length).toBe(1);
         });
     });
@@ -95,6 +98,30 @@ describe('#createModel', () => {
    * will the hook be called on Model.save? expect yes
    */
   describe('Model.pre(\'save\')', () => {
+    test('it should run after docOn(\'saving\')', async () => {
+      const TestModel = createTestModel();
+
+      let a;
+      const preSaveFn = jest.fn();
+      TestModel.pre('save', (next) => {
+        preSaveFn();
+        a = 2;
+        next();
+      });
+
+      const docOnFn = jest.fn();
+      TestModel.docOn('saving', (doc) => {
+        a = 1;
+        doc.name = 'Tester_modifed',
+        docOnFn();
+      });
+
+      const m = await TestModel.save({ name: 'Tester' });
+      expect(preSaveFn.mock.calls.length).toBe(1);
+      expect(docOnFn.mock.calls.length).toBe(1);
+      expect(a).toBe(2);
+      expect(m.name).toBe('Tester_modifed');
+    });
 
     test('it should be called before Model.save - sync', () => {
       const TestModel = createModel(TEST_MODEL, {
@@ -109,17 +136,12 @@ describe('#createModel', () => {
         next();
       });
 
-      const testModelInstance = {name: CARECRU};
-
-      // Model.save
+      const testModelInstance = { name: CARECRU };
       return TestModel.save(testModelInstance)
         .then((persistedModel) => {
           expect(fn.mock.calls.length).toBe(1);
           expect(persistedModel.name).toBe(NOT_CARECRU);
         });
-      // .catch((error) => {
-      //   console.log('...... error', error);
-      // });
     });
 
     /**
@@ -179,7 +201,7 @@ describe('#createModel', () => {
         next();
       });
 
-      const newDoc = new TestModel({name: CARECRU});
+      const newDoc = new TestModel({ name: CARECRU });
       return newDoc.save()
         .then((newPersistedDoc) => {
           expect(fn.mock.calls.length).toBe(1);
@@ -217,7 +239,7 @@ describe('#createModel', () => {
               expect(fn.mock.calls.length).toBe(1);
 
               // Expect to pre save to run here
-              newPersistedDoc.merge({name: 'newName'}).save()
+              newPersistedDoc.merge({ name: 'newName' }).save()
                 .then((result) => {
                   expect(fn.mock.calls.length).toBe(2);
                   expect(result.name).toBe(NOT_CARECRU);

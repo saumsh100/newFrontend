@@ -1,7 +1,128 @@
+
 import { v4 as uuid } from 'uuid';
 import { omit } from 'lodash';
 import Patient from '../../../server/models/Patient';
 import thinky from '../../../server/config/thinky';
+import wipeModel from '../../util/wipeModel';
+
+const accountId1 = uuid();
+const accountId2 = uuid();
+
+const makeData = (data = {}) => (Object.assign({
+  firstName: 'Justin',
+  lastName: 'Sharp',
+  email: 'justin@carecru.com',
+  mobilePhoneNumber: '+18887774444',
+  accountId: accountId1,
+}, data));
+
+describe('models/Patient', () => {
+  beforeEach(async () => {
+    await wipeModel(Patient);
+  });
+
+  test('should be able to save a Patient without id provided', async () => {
+    const data = makeData();
+    const patient = await Patient.save(data);
+    expect(patient).toMatchObject(data);
+  });
+
+  describe('Data Sanitization', () => {
+    test('should be able to sanitize Patient mobilePhoneNumber', async () => {
+      const data = makeData({ mobilePhoneNumber: '111 222 3333' });
+      const patient = await Patient.save(data);
+
+      data.mobilePhoneNumber = '+11112223333';
+      expect(patient).toMatchObject(data);
+    });
+  });
+
+
+  describe('Data Validation', () => {
+    test('should NOT throw Unique Field error', async () => {
+      // Save one, then try saving another with same data
+      await Patient.save(makeData());
+      const data = makeData({ mobilePhoneNumber: '+12222222222', email: 'justin@be.ca' });
+      const patient = await Patient.save(data);
+      expect(patient.isSaved()).toBe(true);
+    });
+
+    test('should NOT throw Unique Field error for diff accountId', async () => {
+      // Save one, then try saving another with same data
+      await Patient.save(makeData());
+      const data = makeData({ accountId: accountId2 });
+      const patient = await Patient.save(data);
+      expect(patient.isSaved()).toBe(true);
+    });
+
+    test('should be able to handle undefined values', async () => {
+      const patient = await Patient.save(makeData({ email: undefined }));
+      expect(patient.isSaved()).toBe(true);
+    });
+
+    test('should throw Unique Field error for 2 docs with same data', async () => {
+      // Save one, then try saving another with same data
+      await Patient.save(makeData());
+
+      // Couldn't get toThrowError working here...
+      try {
+        await Patient.save(makeData());
+        throw new Error('Did not pass');
+      } catch (err) {
+        expect(err.message).toBe('Unique Field Validation Error');
+      }
+    });
+
+    test('should throw Unique Field error for 3 docs with similar data (1 has same number, 1 has same email)', async () => {
+      // Save one, then try saving another with same data
+      const email = 'justin@be.ca';
+      const mobilePhoneNumber = '+18887774444';
+      await Patient.save(makeData());
+      await Patient.save(makeData({ mobilePhoneNumber: '+12222222222', email }));
+
+      // Couldn't get toThrowError working here...
+      try {
+        // Same phone number as first, same email as second
+        await Patient.save(makeData({ mobilePhoneNumber, email }));
+        throw new Error('Did not pass');
+      } catch (err) {
+        expect(err.message).toBe('Unique Field Validation Error');
+      }
+    });
+
+    test('should throw Unique Field error for 4 docs with similar data (1 has same number, 1 has same email)', async () => {
+      // Save one, then try saving another with same data
+      const email = 'justin@be.ca';
+      const mobilePhoneNumber = '+12226665555';
+      await Patient.save(makeData());
+      await Patient.save(makeData({ accountId: accountId2, email }));
+      await Patient.save(makeData({ mobilePhoneNumber, email }));
+
+      // Couldn't get toThrowError working here...
+      try {
+        // Same phone number as first, same email as second
+        await Patient.save(makeData({ email }));
+        throw new Error('Did not pass');
+      } catch (err) {
+        expect(err.message).toBe('Unique Field Validation Error');
+      }
+    });
+  });
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* OLD TESTS */
 
 const type = thinky.type;
 
@@ -18,7 +139,6 @@ let testPatientObject1 = {};
 let testPatientObject2 = {};
 
 test.skip('Simple patients write test', () => {
-
   beforeEach(() => {
     testPatientObject1 = {
       firstName: 'Han',
