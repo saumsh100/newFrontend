@@ -254,6 +254,30 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
       });
       res.send(normalize('patients', filteredPatients));
     });
+
+  /**
+   * Old Code
+   */
+  /*
+  let subStringPhoneNumber = phoneNumber;
+  if (phoneNumber && phoneNumber[0] === '+') {
+    subStringPhoneNumber = subStringPhoneNumber.substring(1);
+  }
+
+  Patient
+    .filter({ accountId })
+    .filter((patient) => {
+      return patient('accountId').eq(req.accountId).and(
+        (patient('firstName').match(firstName)
+          .and(patient('lastName').match(lastName)))
+          .or(patient('email').match(email))
+          .or(patient('phoneNumber').match(subStringPhoneNumber)));
+    }).limit(10)
+    .run()
+    .then((patients) => {
+      const filteredPatients = patients.filter((patient) => !patient.patientUserId);
+      res.send(normalize('patients', filteredPatients));
+    });*/
 });
 
 /**
