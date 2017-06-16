@@ -52,6 +52,17 @@ const logrocket = {
   appId: environmentVariables.LOGROCKET_APP_ID,
 };
 
+const aws = {
+  accessKeyId: environmentVariables.AWS_ACCESS_KEY_ID,
+  secretAccessKey: environmentVariables.AWS_SECRET_ACCESS_KEY,
+};
+
+const s3 = {
+  bucket: environmentVariables.S3_BUCKET || 'carecru-development',
+};
+
+s3.urlPrefix = environmentVariables.S3_URL_PREFIX || `https://${s3.bucket}.s3.amazonaws.com/`;
+
 const staticPath = path.normalize(path.join(root, '../statics'));
 
 module.exports = {
@@ -75,4 +86,6 @@ module.exports = {
   namespaces,
   loader,
   logrocket,
+  aws,
+  s3,
 };

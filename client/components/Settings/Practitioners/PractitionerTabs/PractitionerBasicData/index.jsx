@@ -1,16 +1,34 @@
-import React, {Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import {  Form, Field, } from '../../../../library';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { PractitionerAvatar, Form, Field, Dropzone, Header } from '../../../../library';
+import { uploadAvatar } from '../../../../../thunks/practitioners';
 import styles from '../../styles.scss';
 
 const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
+  value && value.length > max ? `Must be ${max} characters or less` : undefined;
 const maxLength25 = maxLength(25);
 
 class PractitionerBasicData extends Component {
   constructor(props) {
     super(props);
     this.updatePractitioner = this.updatePractitioner.bind(this);
+    this.uploadAvatar = this.uploadAvatar.bind(this);
+    this.state = {
+      uploading: false,
+    };
+  }
+
+  uploadAvatar(files) {
+    this.setState({
+      uploading: true,
+    });
+    this.props.uploadAvatar(this.props.practitioner.id, files[0]);
+  }
+
+  componentWillReceiveProps(props) {
+    console.log(props);
   }
 
   updatePractitioner(values) {
@@ -44,31 +62,50 @@ class PractitionerBasicData extends Component {
     const initialValues = {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
-    }
+      fullAvatarUrl: practitioner.get('fullAvatarUrl'),
+    };
 
     return (
       <div className={styles.practFormContainer}>
-          <Form
-            form={`${practitioner.get('id')}Form`}
-            onSubmit={this.updatePractitioner}
-            initialValues={initialValues}
-          >
-            <Field
-              required
-              name="firstName"
-              label="First Name"
-              validate={[maxLength25]}
-            />
-            <Field
-              required
-              name="lastName"
-              label="Last Name"
-              validate={[maxLength25]}
-            />
-          </Form>
+        <Header title="Avatar" />
+        <Dropzone onDrop={this.uploadAvatar} loaded={!this.state.uploading}>
+          <PractitionerAvatar practitioner={initialValues} size="extralg" />
+          <p>Drop avatar here or click to select file.</p>
+        </Dropzone>
+
+        <Header title="Personal Details" />
+        <Form
+          form={`${practitioner.get('id')}Form`}
+          onSubmit={this.updatePractitioner}
+          initialValues={initialValues}
+        >
+          <Field
+            required
+            name="firstName"
+            label="First Name"
+            validate={[maxLength25]}
+          />
+          <Field
+            required
+            name="lastName"
+            label="Last Name"
+            validate={[maxLength25]}
+          />
+        </Form>
       </div>
     );
   }
 }
 
-export default PractitionerBasicData;
+function mapStateToProps(state) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    uploadAvatar,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PractitionerBasicData);
+
