@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import { IconButton } from '../../../library';
+import { Icon } from '../../../library';
 import styles from '../../styles.scss';
 
 export default function HeaderButtons(props) {
@@ -12,23 +12,11 @@ export default function HeaderButtons(props) {
     <div className={styles.headerButtons}>
       <div className={styles.headerButtons__quickAdd} onClick={addNewAppointment}>
         Quick Add
-        <span>
-          <IconButton
-            icon="plus"
-            size={0.8}
-            className={styles.headerButtons__quickAdd_icon}
-          />
-        </span>
-      </div>
-      <div>
-        {/* <IconButton icon="plus" onClick={(e)=>{
-          e.stopPropagation()
-          props.showAlert({ text: 'Created An Appointment', type: 'success' });
-        }}/>
-        <IconButton icon="plus" onClick={(e)=>{
-          e.stopPropagation()
-          props.showAlert({ text: 'Failed to Update', type: 'error' });
-        }}/>*/}
+        <Icon
+          icon="plus"
+          size={1.5}
+          className={styles.headerButtons__quickAdd_icon}
+        />
       </div>
     </div>
   );

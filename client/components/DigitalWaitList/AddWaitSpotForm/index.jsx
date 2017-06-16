@@ -43,8 +43,16 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
     />
   );
 
+
+  // Dealing with patientId and patientUserId
   if (selectedWaitSpot) {
-    initialValues = selectedWaitSpot;
+    // If unavailabledays is set to null then set it to an empty array otherwise the daypicker throws an error.
+     if (selectedWaitSpot.unavailableDays === null) {
+       initialValues = selectedWaitSpot;
+       initialValues.unavailableDays = [];
+     } else {
+       initialValues = selectedWaitSpot;
+     }
 
     if (!selectedWaitSpot.patientId && selectedWaitSpot.patientUserId) {
       const patientUser = patientUsers.getIn(['models', selectedWaitSpot.patientUserId]);
@@ -52,10 +60,11 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
         <Header title={patientUser.getFullName()} />
       );
     } else if (selectedWaitSpot.patientId) {
-      console.log(selectedWaitSpot.patientId);
       const patient = patients.getIn(['models', selectedWaitSpot.patientId]);
-      console.log(patient);
       initialValues.patientData = patient.toJS();
+      displayField = (
+        <Header title={patient.getFullName()} />
+      );
     }
   }
 
