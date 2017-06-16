@@ -24,7 +24,12 @@ myRouter.use('/auth', authRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
 myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
-myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
+myRouter.param('accountIdJoin', loaders('account', 'Account', {
+  services: {
+    _apply: service => service.filter(row => row('isActive').eq(true)),
+  },
+  practitioners: true,
+}));
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {

@@ -79,18 +79,21 @@ class ServicesPractForm extends Component {
     }
 
     return (
-      <div className={styles.servicesPractForm}>
-        <div className={styles.servicesPractForm_allText}>
-          All Practitioners
-          <div>
-            <Toggle
-              name="allPractitioners"
-              onChange={this.setAllPractitioners}
-              checked={this.props.allPractitioners}
-            />
+      <div>
+        <h2 className={styles.header}>Practitioners</h2>
+        <div className={styles.servicesPractForm}>
+          <div className={styles.servicesPractForm_allText}>
+            All Practitioners
+            <div>
+              <Toggle
+                name="allPractitioners"
+                onChange={this.setAllPractitioners}
+                checked={this.props.allPractitioners}
+              />
+            </div>
           </div>
+            {showComponent}
         </div>
-          {showComponent}
       </div>
     );
   }
