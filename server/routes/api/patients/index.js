@@ -240,6 +240,8 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
     phoneNumber,
   } = req.query;
 
+  // Todo: This should not be pulling all the patients for the clinic. It needs to use Reql
+  // Todo: use https://www.rethinkdb.com/api/javascript/filter/
   Patient
     .filter({ accountId })
     .run()
