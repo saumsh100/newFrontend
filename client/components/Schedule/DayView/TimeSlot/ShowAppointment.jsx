@@ -46,8 +46,6 @@ export default function ShowAppointment(props) {
     adjacent,
   } = appointment;
 
-
-
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
 

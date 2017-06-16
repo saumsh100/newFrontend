@@ -35,6 +35,19 @@ export default function connectSocketToStoreLogin(store, socket) {
       });
 
       /**
+       * WaitSpot Socket
+       */
+      socket.on('create:WaitSpot', (data) => {
+        dispatch(addEntity({ key: 'waitSpots', entity: data }));
+      });
+      socket.on('update:WaitSpot', (data) => {
+        dispatch(updateEntity({ key: 'waitSpots', entity: data }));
+      });
+      socket.on('remove:WaitSpot', (data) => {
+        dispatch(deleteEntity({ key: 'waitSpots', id: data }));
+      });
+
+      /**
        * Appointment Socket
        */
       socket.on('create:Appointment', (data) => {

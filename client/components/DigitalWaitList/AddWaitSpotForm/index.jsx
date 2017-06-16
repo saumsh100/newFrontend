@@ -43,7 +43,7 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
     />
   );
 
-  
+
   // Dealing with patientId and patientUserId
   if (selectedWaitSpot) {
     // If unavailabledays is set to null then set it to an empty array otherwise the daypicker throws an error.
