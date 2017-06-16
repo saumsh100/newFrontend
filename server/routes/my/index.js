@@ -26,7 +26,9 @@ myRouter.param('accountId', loaders('account', 'Account'));
 myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', {
   services: {
-    _apply: service => service.filter(row => row('isActive').eq(true)),
+    _apply: service => service.filter(row => {
+      return row('isHidden').ne(true);
+    }),
   },
   practitioners: true,
 }));
@@ -40,7 +42,7 @@ myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
         account: req.account,
         services: req.account.services,
         practitioners: req.account.practitioners,
-        selectedServiceId: req.account.services[0].id,
+        selectedServiceId: (req.account.services[0] ? req.account.services[0].id : null),
       },
 
       entities,

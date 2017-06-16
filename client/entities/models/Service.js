@@ -12,7 +12,7 @@ const ServiceSchema = {
   customCosts: {},
   practitioners: [],
   allowedPractitioners: null,
-  isActive: null,
+  isHidden: null,
 };
 
 export default class Service extends createModel(ServiceSchema) {
