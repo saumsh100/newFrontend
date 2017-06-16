@@ -60,28 +60,41 @@ class DigitalWaitList extends Component {
       reset,
     } = this.props;
 
-    const newValues = Object.assign(
-      { patientId: values.patientData.id },
-      omit(values, ['patientData'])
-    );
+    let newValues = {}
+
+    if (!selectedWaitSpot) {
+      newValues = Object.assign(
+        { patientId: values.patientData.id },
+        omit(values, ['patientData'])
+      );
+    }
+    if (selectedWaitSpot && selectedWaitSpot.patientId) {
+      newValues = Object.assign({
+        patientId: selectedWaitSpot.patientId,
+      }, values);
+    } else if (selectedWaitSpot && selectedWaitSpot.patientUserId) {
+      newValues = Object.assign({
+        patientUserId: selectedWaitSpot.patientUserId,
+      }, values);
+    }
+
 
     const alertCreate = {
       success: {
-        body: `Added wait spot for ${values.patientData.firstName}.`,
+        body: 'Added wait spot.',
       },
       error: {
         title: 'Wait Spot Error',
-        body: `Wait spot for ${values.patientData.firstName} could not be added.`,
+        body: 'Wait spot could not be added.',
       },
     };
 
     const alertUpdate = {
       success: {
-        body: `Updated wait spot for ${values.patientData.firstName}.`,
+        body: 'Updated wait spot.',
       },
       error: {
-        title: 'Wait Spot Update Error',
-        body: `Wait spot for ${values.patientData.firstName} could not updated.`,
+        body: 'Wait spot could not updated.',
       },
     };
 
@@ -196,7 +209,8 @@ class DigitalWaitList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {waitSpots.get('models').toArray().map((waitSpot) => {
+            {waitSpots.get('models').toArray().map((waitSpot, index) => {
+              console.log(waitSpot);
               let patientData = null;
 
               if (waitSpot.patientUserId && !waitSpot.patientId) {
@@ -207,7 +221,8 @@ class DigitalWaitList extends Component {
 
               return (
                 <DigitalWaitListItem
-                  key={waitSpot.get('id')}
+                  key={waitSpot.id}
+                  index={index}
                   waitSpot={waitSpot}
                   patientUser={patientData}
                   setSelectedWaitSpot={setSelectedWaitSpot}

@@ -99,7 +99,7 @@ accountsRouter.post('/:accountId/newUser/', (req, res, next) => {
       activeAccountId: req.accountId,
       enterpriseId: req.account.enterprise.id,
       permissionId: permission.id,
-    }).then(({ savedModel: user }) => {
+    }).then(({ model: user }) => {
       delete user.password;
       user.permission = permission;
       res.send(normalize('user', user));

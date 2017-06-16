@@ -17,6 +17,7 @@ function DigitalWaitListItem(props) {
     setSelectedWaitSpot,
     isHovered,
     removeWaitSpot,
+    index,
   } = props;
 
   if (!patientUser) {
@@ -80,7 +81,7 @@ function DigitalWaitListItem(props) {
           }}
           size={1.2}
         />
-        {/*<div
+        <div
           className={styles.patients__item_pencilBorder}
           onClick={(e) => {
             e.stopPropagation();
@@ -92,13 +93,13 @@ function DigitalWaitListItem(props) {
             className={styles.patients__item_pencilBorder_pencil}
             size={1}
           />
-        </div>*/}
+        </div>
       </div>
     );
   }
 
   return (
-    <ListItem className={styles.patients__item} >
+    <ListItem key={index} className={styles.patients__item} >
       <Avatar size="lg" user={patientUser.toJS()} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>

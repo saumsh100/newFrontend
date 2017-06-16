@@ -718,8 +718,6 @@ ul {
     margin-top: 70px;
     margin-bottom: auto;
 
-
-
     &::before {
       display: block;
       width: 100%;
@@ -732,7 +730,11 @@ ul {
       width: 100px;
       height: 100px;
       margin: -50px 0 0 auto;
-      display: table;
+      display: flex;
+
+      span {
+        font-size: 3em;
+      }
 
       img {
         width: 100px;

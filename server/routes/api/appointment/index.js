@@ -45,12 +45,12 @@ appointmentsRouter.get('/business', (req, res, next) => {
   const {
     joinObject,
     query,
+    accountId,
   } = req;
 
   let {
     startDate,
     endDate,
-    accountId,
   } = query;
 
   if (!startDate || !endDate) {
@@ -120,11 +120,8 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
 
   const {
     query,
-  } = req;
-
-  const {
     accountId,
-  } = query;
+  } = req;
 
   const startDate = r.now().add(365 * 24 * 60 * 60 * -1);
   const endDate = r.now();
@@ -147,11 +144,9 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
 appointmentsRouter.get('/statslastyear', (req, res, next) => {
   const {
     query,
+    accountId,
   } = req;
 
-  const {
-    accountId,
-  } = query;
 
   const date = moment(new Date()).subtract(moment(new Date()).get('date') + 1, 'days');
   const age = new Array(6).fill(0);

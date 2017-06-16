@@ -22,6 +22,7 @@ const mergeTime = (date, time) => {
   return new Date(date);
 };
 
+// Disabled for handleDateChange
 function dayOfWeekAsString(dayIndex) {
   return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday",][dayIndex];
 }
@@ -222,8 +223,10 @@ class AddNewAppointment extends Component {
     });
   }
 
+
+  //ToDo: Feature is disabled for now
   handleDateChange(day) {
-    const {
+    /*const {
       practitioners,
       change,
       formName,
@@ -246,7 +249,7 @@ class AddNewAppointment extends Component {
     change(formName, 'appointment.practitionerId', '');
     this.setState({
       practitionersBySchedule: filterBySchedulePract,
-    });
+    });*/
   }
 
   render() {
@@ -282,7 +285,6 @@ class AddNewAppointment extends Component {
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
           handlePractitionerChange={this.handlePractitionerChange}
-          handleDateChange={this.handleDateChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton
@@ -333,7 +335,7 @@ AddNewAppointment.propTypes = {
   patients: PropTypes.object.required,
   chairs: PropTypes.object.required,
   practitioners: PropTypes.object.required,
-  weeklySchedule: PropTypes.object.required,
+  weeklySchedule: PropTypes.object,
   activeAccount: PropTypes.object.required,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,

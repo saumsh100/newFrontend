@@ -47,6 +47,13 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
           type="tel"
         />
       </div>
+      <div className={styles.paddingField}>
+        <Field
+          required
+          name="vendastaId"
+          label="Vendasta Id"
+        />
+      </div>
     </Form>
   );
 }
