@@ -20,8 +20,6 @@ const db = {
   db: environmentVariables.RETHINKDB_DB || 'carecru_development',//defaultDBName,
 };
 
-console.log('globals', env);
-
 const redis = {
   host: environmentVariables.REDIS_HOST || 'localhost',
   port: environmentVariables.REDIS_PORT || '6379',

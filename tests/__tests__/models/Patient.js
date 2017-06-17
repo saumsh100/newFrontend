@@ -107,6 +107,24 @@ describe('models/Patient', () => {
         expect(err.message).toBe('Unique Field Validation Error');
       }
     });
+
+    test('should NOT throw for undefined values', async () => {
+      // Save one, then try saving another with same data
+      const email = 'justin@be.ca';
+      const mobilePhoneNumber = '+12226665555';
+      await Patient.save(makeData({ email: undefined, mobilePhoneNumber: undefined }));
+      const p = await Patient.save(makeData({ email: undefined, mobilePhoneNumber: undefined }));
+      expect(p.isSaved()).toBe(true);
+    });
+
+    test('should NOT throw for null values', async () => {
+      // Save one, then try saving another with same data
+      const email = 'justin@be.ca';
+      const mobilePhoneNumber = '+12226665555';
+      await Patient.save(makeData({ email: null, mobilePhoneNumber: null }));
+      const p = await Patient.save(makeData({ email: null, mobilePhoneNumber: null }));
+      expect(p.isSaved()).toBe(true);
+    });
   });
 })
 

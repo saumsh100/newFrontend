@@ -68,21 +68,30 @@ Patient.docOn('saving', validatePatient); // <<< doc is in `doc` param
 Patient.pre('save', async function (next) {
   // Grab all patients in the account
   // let sequence;
+  if (!this.email && !this.mobilePhoneNumber) {
+    return next();
+  }
+
   let filterSequence = {};
   const emailFilter = r.row('email').eq(this.email);
   const phoneFilter = r.row('mobilePhoneNumber').eq(this.mobilePhoneNumber);
 
   if (this.email) {
+    console.log('email defined');
     filterSequence = emailFilter;
   }
 
   if (this.mobilePhoneNumber) {
+    console.log('phone defined');
     filterSequence = phoneFilter;
   }
 
   if (this.email && this.mobilePhoneNumber) {
+    console.log('both defined');
     filterSequence = emailFilter.or(phoneFilter);
   }
+
+  console.log(filterSequence);
 
   const patients = await Patient.filter({ accountId: this.accountId }).filter(filterSequence).run();
   if (!patients.length) {
