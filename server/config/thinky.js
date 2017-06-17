@@ -12,7 +12,7 @@ if (globals.env === 'production') {
   console.log(caCert);
   dbConfig = Object.assign({}, dbConfig, {
     ssl: {
-      ca: new Buffer(globals.caCert),
+      ca: caCert,
     },
   });
 }
