@@ -18,6 +18,9 @@
     "RETHINKDB_PORT": {
       "required": true
     },
+    "COMPOSE_CA_CERT": {
+      "required": true
+    },
     "VENDASTA_API_KEY": {
       "required": true
     },

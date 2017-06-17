@@ -19,6 +19,8 @@ const db = {
   db: environmentVariables.RETHINKDB_DB || 'carecru_development',
 };
 
+const caCert = environmentVariables.COMPOSE_CA_CERT;
+
 const redis = {
   host: environmentVariables.REDIS_HOST || 'localhost',
   port: environmentVariables.REDIS_PORT || '6379',
@@ -80,6 +82,7 @@ module.exports = {
   protocol,
   bundlePort,
   db,
+  caCert,
   redis,
   vendasta,
   twilio,
