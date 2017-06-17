@@ -5,8 +5,11 @@ const globals = require('./globals');
 
 let dbConfig = globals.db;
 
+
+
 if (globals.env === 'production') {
   // const caCert = fs.readFileSync(`${globals.root}/compose_ca_cert`);
+  console.log(globals.caCert);
   dbConfig = Object.assign({}, dbConfig, {
     ssl: {
       ca: globals.caCert,
