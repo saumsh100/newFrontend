@@ -1,4 +1,5 @@
 
+import AccountLogo from './AccountLogo';
 import Alert from './Alert';
 import AppBar from './AppBar';
 import Avatar from './Avatar';
@@ -57,6 +58,7 @@ import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
 
 export {
+  AccountLogo,
   Alert,
   AppBar,
   Avatar,
