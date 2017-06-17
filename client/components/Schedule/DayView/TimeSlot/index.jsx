@@ -79,12 +79,10 @@ export default function TimeSlot(props) {
       />
       {filteredApps && filteredApps.map((app, index, array) => {
 
-        //const notWithThisApp = filteredApps.filter((sameApp) => !(sameApp.id === app.id))
-        const widthSplit = intersectingAppointments(array, app.startDate, app.endDate)
-
-        const row = moment(app.startDate).hour() ;
-        const rowFilter = widthSplit.filter((w) => moment(w.startDate).hour() === row)
-        const testSort = rowFilter.sort(sortApps);
+        const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate)
+        const row = moment(app.startDate).hour();
+        const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row)
+        const rowSort = rowFilter.sort(sortApps);
 
         return (
           <ShowAppointment
@@ -96,9 +94,8 @@ export default function TimeSlot(props) {
             startHour={startHour}
             endHour={endHour}
             columnWidth={columnWidth}
-            widthIntersect={widthSplit.length}
-            thisIndex={index}
-            testSort={testSort}
+            widthIntersect={intersectingApps.length}
+            rowSort={rowSort}
           />
         );
       })}

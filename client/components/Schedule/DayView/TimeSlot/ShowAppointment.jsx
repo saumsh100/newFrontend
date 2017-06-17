@@ -33,7 +33,7 @@ export default function ShowAppointment(props) {
     endHour,
     columnWidth,
     widthIntersect,
-    testSort
+    rowSort,
   } = props;
 
   const {
@@ -44,18 +44,15 @@ export default function ShowAppointment(props) {
     chairData,
     patientData,
     isPatientConfirmed,
-    isSplit,
-    adjacent,
   } = appointment;
 
-  let indexPosition = 0;
-  testSort.map((app, index) =>{
+  let appPosition = 0;
+  rowSort.map((app, index) =>{
      if (appointment.id === app.id) {
-       indexPosition = index;
+       appPosition = index;
      }
   });
 
-  console.log(indexPosition);
 
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
@@ -69,11 +66,11 @@ export default function ShowAppointment(props) {
   const heightCalc = (durationTime) / 60;
   const totalHours = (endHour - startHour) + 1;
 
-  const testRow = testSort.length === 1 ? widthIntersect : testSort.length
-  const splitRow = testSort.length > 1 ? (columnWidth * (indexPosition / (testSort.length))) : 0;
+  const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
+  const splitRow = rowSort.length > 1 ? (columnWidth * (appPosition / (rowSort.length))) : 0;
   const top = `${(topCalc / totalHours) * 100}%`;
   const left = `${(columnWidth * practIndex) + splitRow}%`;
-  const width = `${columnWidth * ((100 / (testRow)) / 100)}%`;
+  const width = `${columnWidth * ((100 / rowSort.length) / 100)}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
   // main app style
@@ -96,24 +93,6 @@ export default function ShowAppointment(props) {
     height: `${heightCalcBuffer}%`,
     backgroundColor: '#b4b4b5',
   };
-
-  // dealing with split appointment styling
-  if (isSplit) {
-    const adjacentSplit = !adjacent ? (columnWidth * 0.5) : 0;
-    const leftSplit = `${(columnWidth * practIndex) + adjacentSplit}%`;
-    const widthSplit = `${columnWidth * 0.5}%`;
-
-    appStyle = Object.assign({}, appStyle, {
-      left: leftSplit,
-      width: widthSplit,
-      overflow: 'auto',
-    });
-
-    bufferStyle = Object.assign({}, bufferStyle, {
-      left: leftSplit,
-      width: widthSplit,
-    });
-  }
 
   return (
     <div
