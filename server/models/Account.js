@@ -1,6 +1,7 @@
 
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
+const globals = require('../config/globals');
 const type = thinky.type;
 
 const Account = createModel('Account', {
@@ -14,6 +15,9 @@ const Account = createModel('Account', {
   twilioPhoneNumber: type.string(),
   destinationPhoneNumber: type.string(),
   logo: type.string(),
+  fullLogoUrl: type.virtual().default(function () {
+    return this.logo ? `${globals.s3.urlPrefix}${this.logo}` : null;
+  }),
   clinicName: type.string(),
   bookingWidgetPrimaryColor: type.string(),
   weeklyScheduleId: type.string().uuid(4),
