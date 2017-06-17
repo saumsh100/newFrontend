@@ -18,6 +18,9 @@
     "RETHINKDB_PORT": {
       "required": true
     },
+    "COMPOSE_CA_CERT": {
+      "required": true
+    },
     "VENDASTA_API_KEY": {
       "required": true
     },
@@ -31,6 +34,15 @@
       "required": true
     },
     "REDIS_URL": {
+      "required": true
+    },
+    "AWS_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "required": true
+    },
+    "S3_BUCKET": {
       "required": true
     }
   },

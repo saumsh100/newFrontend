@@ -21,6 +21,8 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    border-bottom: 1px solid #fff;
+
     &_logo {
       margin: 0 auto;
       display: block;
@@ -84,7 +86,6 @@
     line-height: 1.25;
     padding: 25px 0;
     color: #fff;
-    border-top: 1px solid #fff;
     &_title {
       font-size: 11px;
       padding: 2px;

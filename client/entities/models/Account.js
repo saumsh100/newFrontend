@@ -19,6 +19,7 @@ const AccountSchema = {
   name: null,
   street: null,
   logo: null,
+  fullLogoUrl: null,
   country: null,
   state: null,
   city: null,

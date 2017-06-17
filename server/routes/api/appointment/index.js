@@ -28,12 +28,12 @@ function intersectingAppointments(appointments, startDate, endDate) {
     if (sDate.isSame(appStartDate) || sDate.isBetween(appStartDate, appEndDate) ||
       eDate.isSame(appEndDate) || eDate.isBetween(appStartDate, appEndDate)) {
       return app;
-    };
+    }
 
   });
 }
 
-function getDiffInMin(startDate, endDate){
+function getDiffInMin(startDate, endDate) {
   return moment(endDate).diff(moment(startDate), 'minutes');
 }
 
@@ -41,7 +41,6 @@ const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'sat
 const monthsYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 appointmentsRouter.get('/business', (req, res, next) => {
-
   const {
     joinObject,
     query,
@@ -114,10 +113,9 @@ appointmentsRouter.get('/business', (req, res, next) => {
       .catch(next);
 });
 
-//data for most popular day of the week.
+// data for most popular day of the week.
 
 appointmentsRouter.get('/statsdate', (req, res, next) => {
-
   const {
     query,
     accountId,
@@ -132,11 +130,11 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
     .run()
     .then((result) => {
       const days = new Array(6).fill(0);
-      //calculate the frequency of the day of the week
+      // calculate the frequency of the day of the week
       for (let i = 0; i < result.length; i++) {
         days[moment(result[i].startDate).get('day') - 1]++;
       }
-      res.send({days});
+      res.send({ days });
     })
     .catch(next);
 });
@@ -246,7 +244,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
   const c = Account
     .filter({ id: accountId })
-    .getJoin({weeklySchedule: true})
+    .getJoin({ weeklySchedule: true })
     .run();
 
   const d = Service
@@ -268,13 +266,13 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
       const numberOfDays = moment(end).diff(moment(start), 'days');
       const dayOfWeek = moment(start).day();
-      const weeks = Math.floor(numberOfDays/7);
+      const weeks = Math.floor(numberOfDays / 7);
       const remainingDays = numberOfDays % 7;
 
       let timeOpen = 0;
 
       values[3].map((service) => {
-        //create time counter for a service
+        // create time counter for a service
         sendStats.services[service.id] = {
           time: 0,
           id: service.id,
@@ -283,7 +281,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       });
 
       values[4].map((patient) => {
-        //create patients
+        // create patients
         if (!sendStats.patients[patient.id]) {
           sendStats.patients[patient.id] = {
             numAppointments: 0,
@@ -296,7 +294,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         }
       });
 
-      //Calculate the amount of hours the office is open for a given range
+      // Calculate the amount of hours the office is open for a given range
       values[2].map((account) => {
         daysOfWeek.map((day) => {
           if (!account.weeklySchedule[day].isClosed) {
@@ -307,7 +305,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           }
         });
 
-        timeOpen = timeOpen * weeks;
+        timeOpen *= weeks;
 
         for (let i = 0; i < remainingDays; i++) {
           const index = (i + dayOfWeek) % 7;
@@ -320,7 +318,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         }
       });
 
-      //practitioner data
+      // practitioner data
       values[1].map((practitioner) => {
         if (practitioner.isActive) {
           const data = {};
@@ -332,6 +330,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           data.type = practitioner.type;
           data.appointmentTime = 0;
           data.newPatients = 0;
+          data.avatarUrl = practitioner.avatarUrl,
+          data.fullAvatarUrl = practitioner.fullAvatarUrl,
           sendStats.practitioner[practitioner.id] = data;
         }
       });
@@ -427,7 +427,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
-  //const splitApps = []
+  // const splitApps = []
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)).and(r.row('isCancelled').ne(true)))
     .run()
@@ -441,7 +441,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
         if ((practitionerId === app.practitionerId) &&
           (chairId !== app.chairId) && (patientId !== app.patientId)) {
           appointmentData.isSplit = true;
-          /*if (!app.isSplit) {
+          /* if (!app.isSplit) {
             splitApps.push(app);
           }*/
           return true;
@@ -449,17 +449,16 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
         return false;
       });
 
-      const noOverLap = checkOverlapping.every((el) => el === true);
+      const noOverLap = checkOverlapping.every(el => el === true);
       if (checkOverlapping.length === 0 || noOverLap) {
-
-        /*splitApps && splitApps.map((appSplit) => {
+        /* splitApps && splitApps.map((appSplit) => {
           const modifiedSplitApp = appSplit;
           modifiedSplitApp.isSplit = true;
           appSplit.merge(modifiedSplitApp).save();
         });*/
 
         return Appointment.save(appointmentData)
-          .then(appt => {
+          .then((appt) => {
             res.status(201).send(normalize('appointment', appt));
           })
           .catch(next);
@@ -468,7 +467,6 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       return res.sendStatus(400);
     })
     .catch(next);
-
 });
 
 /**
@@ -476,13 +474,11 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
  */
 appointmentsRouter.post('/batch', checkPermissions('appointments:create'), checkIsArray('appointments'), (req, res, next) => {
   const { appointments } = req.body;
-  const cleanedAppointments = appointments.map((appointment) => {
-    return Object.assign(
+  const cleanedAppointments = appointments.map((appointment) => Object.assign(
       {},
       _.omit(appointment, ['id', 'dateCreated']),
       { accountId: req.accountId }
-    );
-  });
+    ));
 
   return Appointment.save(cleanedAppointments)
     .then(_appointments => res.send(normalize('appointments', _appointments)))
@@ -494,10 +490,8 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
  */
 appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkIsArray('appointments'), (req, res, next) => {
   const { appointments } = req.body;
-  const appointmentUpdates = appointments.map((appointment) => {
-    return Appointment.get(appointment.id).run()
-      .then(_appointment => _appointment.merge(appointment).save());
-  });
+  const appointmentUpdates = appointments.map((appointment) => Appointment.get(appointment.id).run()
+      .then(_appointment => _appointment.merge(appointment).save()));
 
   return Promise.all(appointmentUpdates)
     .then(_appointments => res.send(normalize('appointments', _appointments)))
@@ -511,10 +505,8 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
 appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (req, res, next) => {
   const appointmentIds = req.query.ids.split(',');
 
-  const appointmentsToDelete = appointmentIds.map((id) => {
-    return Appointment.get(id).run()
-      .then(_appointment => _appointment.delete());
-  });
+  const appointmentsToDelete = appointmentIds.map((id) => Appointment.get(id).run()
+      .then(_appointment => _appointment.delete()));
 
   return Promise.all(appointmentsToDelete)
     .then(() => {
@@ -544,11 +536,9 @@ if (globals.env !== 'production') {
 /**
  * Get an appointment
  */
-appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'), (req, res, next) => {
-  return Promise.resolve(req.appointment)
+appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'), (req, res, next) => Promise.resolve(req.appointment)
     .then(appointment => res.send(normalize('appointment', appointment)))
-    .catch(next);
-});
+    .catch(next));
 
 /**
  * Update a single appointment
@@ -584,15 +574,12 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       }
 
       const checkOverlapping = intersectingApps.map((app) => {
-
         if ((practitionerId !== app.practitionerId) &&
           (chairId !== app.chairId) && (patientId !== app.patientId)) {
-
           if (appointmentData.isSplit) {
             appointmentData.isSplit = false;
           }
           return true;
-
         } else if ((practitionerId === app.practitionerId) &&
           (chairId !== app.chairId) && (patientId !== app.patientId)) {
           appointmentData.isSplit = true;
@@ -602,10 +589,10 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
         return false;
       });
 
-      const testIfNoOverlap = checkOverlapping.every((el) => el === true);
+      const testIfNoOverlap = checkOverlapping.every(el => el === true);
 
       if (checkOverlapping.length === 0 || testIfNoOverlap) {
-          Appointment.get(appointmentData.id)
+        Appointment.get(appointmentData.id)
             .run()
             .then((appSplit) => {
               const startDate = r.ISO8601(moment(appSplit.startDate).startOf('day').toISOString());
@@ -624,7 +611,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
                     });
                   }
                 });
-            } );
+            });
 
         return req.appointment.merge(req.body).save()
           .then(appointment => res.send(normalize('appointment', appointment)))
@@ -640,14 +627,12 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 /**
  * Remove a single appointment
  */
-appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:delete'), (req, res, next) => {
-  return req.appointment.delete()
+appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:delete'), (req, res, next) => req.appointment.delete()
     .then(() => res.send(204))
-    .catch(next);
-});
+    .catch(next));
 
 // TODO: this is not used
-/*appointmentsRouter.get('/:patientId', (req, res, next) => {
+/* appointmentsRouter.get('/:patientId', (req, res, next) => {
   const {
     accountId,
     joinObject,
