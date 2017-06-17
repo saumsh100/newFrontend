@@ -53,6 +53,7 @@ class AddNewAppointment extends Component {
       formName,
     } = this.props;
 
+
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
     const {

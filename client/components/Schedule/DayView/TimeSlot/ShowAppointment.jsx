@@ -32,6 +32,8 @@ export default function ShowAppointment(props) {
     startHour,
     endHour,
     columnWidth,
+    widthIntersect,
+    testSort
   } = props;
 
   const {
@@ -46,6 +48,15 @@ export default function ShowAppointment(props) {
     adjacent,
   } = appointment;
 
+  let indexPosition = 0;
+  testSort.map((app, index) =>{
+     if (appointment.id === app.id) {
+       indexPosition = index;
+     }
+  });
+
+  console.log(indexPosition);
+
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
 
@@ -58,9 +69,11 @@ export default function ShowAppointment(props) {
   const heightCalc = (durationTime) / 60;
   const totalHours = (endHour - startHour) + 1;
 
+  const testRow = testSort.length === 1 ? widthIntersect : testSort.length
+  const splitRow = testSort.length > 1 ? (columnWidth * (indexPosition / (testSort.length))) : 0;
   const top = `${(topCalc / totalHours) * 100}%`;
-  const left = `${(columnWidth * practIndex)}%`;
-  const width = `${columnWidth}%`;
+  const left = `${(columnWidth * practIndex) + splitRow}%`;
+  const width = `${columnWidth * ((100 / (testRow)) / 100)}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
   // main app style
@@ -69,7 +82,7 @@ export default function ShowAppointment(props) {
     left,
     height,
     width,
-    backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
+    backgroundColor: `${hexToRgbA(bgColor, .6)}`,
     border: `1.5px solid ${bgColor}`,
   };
 
