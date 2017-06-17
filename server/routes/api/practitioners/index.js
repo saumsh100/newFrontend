@@ -1,4 +1,6 @@
 
+const sharp = require('sharp');
+const async = require('async');
 const practitionersRouter = require('express').Router();
 const authMiddleware = require('../../../middleware/auth');
 const checkPermissions = require('../../../middleware/checkPermissions');
@@ -11,8 +13,6 @@ const _ = require('lodash');
 const fileUpload = require('express-fileupload');
 const uuid = require('uuid');
 const s3 = require('../../../config/s3');
-const sharp = require('sharp');
-const async = require('async');
 
 practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
@@ -81,7 +81,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
  */
 practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practitioners:update'), fileUpload(), async (req, res, next) => {
   const fileKey = `avatars/${req.practitioner.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
-  
+
   function resizeImage(size, buffer) {
     if (size === 'original') {
       return Promise.resolve(buffer);
@@ -109,12 +109,13 @@ practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practition
       if (err) {
         return next(err);
       }
+
       nextImage();
     });
   }, async () => {
     try {
       req.practitioner.avatarUrl = fileKey;
-        
+
       const savedPractitioner = await req.practitioner.save();
       res.send(normalize('practitioner', savedPractitioner));
     } catch (error) {
@@ -126,7 +127,6 @@ practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practition
 practitionersRouter.delete('/:practitionerId/avatar', checkPermissions('practitioners:update'), fileUpload(), async (req, res, next) => {
   try {
     req.practitioner.avatarUrl = null;
-        
     const savedPractitioner = await req.practitioner.save();
     res.send(normalize('practitioner', savedPractitioner));
   } catch (error) {

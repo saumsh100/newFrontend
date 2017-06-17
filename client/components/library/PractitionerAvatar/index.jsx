@@ -1,3 +1,4 @@
+
 import Avatar from '../Avatar';
 import React, { PropTypes } from 'react';
 
@@ -13,13 +14,14 @@ export default function PractitionerAvatar({ practitioner, className, size, onCl
   if (practitioner.fullAvatarUrl) {
     avatarUrl = practitioner.fullAvatarUrl.replace('[size]', replaceSize);
   }
-  
+
   return (
     <Avatar
       user={{
         avatarUrl,
         firstName: practitioner.firstName,
       }}
+
       className={className}
       size={size}
       onClick={onClick}

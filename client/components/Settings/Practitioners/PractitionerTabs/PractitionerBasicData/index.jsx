@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -25,6 +26,7 @@ class PractitionerBasicData extends Component {
     this.setState({
       uploading: true,
     });
+
     this.props.uploadAvatar(this.props.practitioner.id, files[0]);
   }
 
