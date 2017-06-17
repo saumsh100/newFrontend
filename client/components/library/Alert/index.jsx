@@ -20,7 +20,7 @@ class Alert extends Component {
       alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
     }
 
-    let iconStyle = styles.iconContainer
+    let iconStyle = styles.iconContainer;
     if (alert.status === 'show') {
       iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
     }
@@ -49,8 +49,8 @@ class Alert extends Component {
 }
 
 Alert.propTypes = {
-  alert: PropTypes.object.required,
-  hideAlert: PropTypes.func.required,
+  alert: PropTypes.object.isRequired,
+  hideAlert: PropTypes.func.isRequired,
 };
 
 export default Alert;

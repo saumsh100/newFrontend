@@ -147,12 +147,10 @@ class Overview extends Component {
       appointmentNotFiltred: 0,
     };
 
-    let serviceData = (appointmentStats ? serve.map((key) => {
-      return {
-        title: key.toObject().name,
-        hours: Math.round(key.toObject().time * 10 / 600),
-      };
-    }) : []);
+    let serviceData = (appointmentStats ? serve.map(key => ({
+      title: key.toObject().name,
+      hours: Math.round(key.toObject().time * 10 / 600),
+    })) : []);
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
@@ -177,6 +175,7 @@ class Overview extends Component {
             appointmentNotFiltred={data.appointmentNotFiltred}
             newPatients={data.newPatients}
             percentage={data.percentage}
+            practitioner={key.toObject()}
           />);
       })) : <div />);
 
@@ -186,14 +185,12 @@ class Overview extends Component {
     const confirmedAppointments = (appointmentStats ?
       appointmentStats.confirmedAppointments : 0);
 
-    let sortedPatients = (appointmentStats ? patients.toArray().map((key) => {
-      return {
-        img: key.toObject().avatarUrl,
-        name: `${key.toObject().firstName} ${key.toObject().lastName}`,
-        age: key.toObject().age,
-        number: key.toObject().numAppointments,
-      };
-    }) : []);
+    let sortedPatients = (appointmentStats ? patients.toArray().map(key => ({
+      img: key.toObject().avatarUrl,
+      name: `${key.toObject().firstName} ${key.toObject().lastName}`,
+      age: key.toObject().age,
+      number: key.toObject().numAppointments,
+    })) : []);
 
     sortedPatients = sortedPatients.sort((a, b) => b.number - a.number);
 
@@ -239,7 +236,7 @@ class Overview extends Component {
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.submit, component: RemoteSubmitButton, props: { form: 'dates' }},
+      { label: 'Save', onClick: this.submit, component: RemoteSubmitButton, props: { form: 'dates' } },
     ];
 
     const initialValues = {
@@ -247,14 +244,12 @@ class Overview extends Component {
       startDate: this.state.startDate._d,
     };
 
-    const UserMenu = (props) => {
-      return (
-        <Button flat {...props} className={styles.userMenuButton}>
-          <span className={styles.userRole}><i className="fa fa-calendar" /> {this.state.startDate.format('MMMM Do YYYY')} - {this.state.endDate.format('MMMM Do YYYY')}&nbsp;</span>
-          <Icon icon="caret-down" />
-        </Button>
+    const UserMenu = props => (
+      <Button flat {...props} className={styles.userMenuButton}>
+        <span className={styles.userRole}><i className="fa fa-calendar" /> {this.state.startDate.format('MMMM Do YYYY')} - {this.state.endDate.format('MMMM Do YYYY')}&nbsp;</span>
+        <Icon icon="caret-down" />
+      </Button>
       );
-    };
 
     return (
       <Grid className={styles.intelligence}>

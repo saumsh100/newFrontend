@@ -9,7 +9,7 @@ class AlertContainer extends Component {
   render() {
     const {
       alert,
-      hideAlert
+      hideAlert,
     } = this.props;
 
     return (
@@ -22,7 +22,7 @@ class AlertContainer extends Component {
 }
 
 AlertContainer.propTypes = {
-  alert: PropTypes.object.required,
+  alert: PropTypes.object.isRequired,
  // hideAlert: PropTypes.func,
 };
 

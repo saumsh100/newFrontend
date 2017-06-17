@@ -61,7 +61,13 @@ module.exports = {
     ],
   },
 
-  externals: externalModules(path.resolve(projectRoot, 'node_modules')),
+  externals: Object.assign(
+    {},
+    externalModules(path.resolve(projectRoot, 'node_modules')),
+    {
+      sharp: 'commonjs sharp',
+    }
+  ),
 
   node: {
     console: false,
