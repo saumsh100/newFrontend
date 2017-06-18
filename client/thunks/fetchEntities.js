@@ -1,6 +1,6 @@
 
 import _ from 'lodash';
-import axios from './axios';
+import axios from 'axios';
 import {
   receiveEntities,
   fetchModel,
@@ -12,7 +12,7 @@ import {
 } from '../actions/entities';
 
 import {
-  showAlertTimeout
+  showAlertTimeout,
 } from './alerts';
 
 import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequests';
@@ -116,6 +116,7 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
 
 
 export function createEntityRequest({ key, entityData, url, alert }) {
+  console.log('inside createEntityRequest; url=', url);
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -123,9 +124,11 @@ export function createEntityRequest({ key, entityData, url, alert }) {
 
     const errorText = alert ? alert.error : { body: `${key} creation failed` };
 
+    console.log('before return');
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;
+        console.log('in then response=', response);
         dispatch(receiveEntities({ key, entities: data.entities }));
 
         if (alert && alert.success) {
@@ -153,7 +156,7 @@ export function updateEntityRequest({ key, model, values, url, alert }) {
         dispatch(receiveEntities({ key, entities: data.entities }));
 
         if (alert && alert.success) {
-          dispatch(showAlertTimeout({ alert: alert.success , type: 'success' }));
+          dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
         }
         return data.entities;
       })

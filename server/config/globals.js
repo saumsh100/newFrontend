@@ -12,12 +12,15 @@ const port = environmentVariables.PORT || '5000';
 const host = environmentVariables.HOST || 'carecru.dev';
 const protocol = env === 'production' ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
+const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
 const db = {
   authKey: environmentVariables.RETHINKDB_AUTHKEY || '',
   host: environmentVariables.RETHINKDB_HOST || 'localhost',
   port: environmentVariables.RETHINKDB_PORT || '28015',
-  db: environmentVariables.RETHINKDB_DB || 'carecru_development',
+  db: environmentVariables.RETHINKDB_DB || 'carecru_development',//defaultDBName,
 };
+
+const caCert = environmentVariables.COMPOSE_CA_CERT;
 
 const redis = {
   host: environmentVariables.REDIS_HOST || 'localhost',
@@ -53,6 +56,17 @@ const logrocket = {
   appId: environmentVariables.LOGROCKET_APP_ID,
 };
 
+const aws = {
+  accessKeyId: environmentVariables.AWS_ACCESS_KEY_ID,
+  secretAccessKey: environmentVariables.AWS_SECRET_ACCESS_KEY,
+};
+
+const s3 = {
+  bucket: environmentVariables.S3_BUCKET || 'carecru-development',
+};
+
+s3.urlPrefix = environmentVariables.S3_URL_PREFIX || `https://${s3.bucket}.s3.amazonaws.com/`;
+
 const staticPath = path.normalize(path.join(root, '../statics'));
 
 module.exports = {
@@ -69,6 +83,7 @@ module.exports = {
   protocol,
   bundlePort,
   db,
+  caCert,
   redis,
   vendasta,
   twilio,
@@ -76,4 +91,6 @@ module.exports = {
   namespaces,
   loader,
   logrocket,
+  aws,
+  s3,
 };

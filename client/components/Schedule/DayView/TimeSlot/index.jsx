@@ -4,7 +4,6 @@ import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
 import TimeSlotColumn from './TimeSlotColumn';
 
-
 function intersectingAppointments(appointments, startDate, endDate) {
   const sDate = moment(startDate);
   const eDate = moment(endDate);
@@ -18,6 +17,7 @@ function intersectingAppointments(appointments, startDate, endDate) {
     };
   });
 }
+
 const sortApps = (a, b) => {
   const aMoment = moment(a.startDate);
   const bMoment = moment(b.startDate);
@@ -62,7 +62,6 @@ export default function TimeSlot(props) {
     });
   });
 
-
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
     boxSizing: 'border-box',
@@ -82,7 +81,7 @@ export default function TimeSlot(props) {
         const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate)
         const row = moment(app.startDate).hour();
         const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row)
-        const rowSort = rowFilter.sort(sortApps);
+        const rowSort = intersectingApps.sort(sortApps);
 
         return (
           <ShowAppointment

@@ -23,12 +23,12 @@ callsRouter.post('/', (req, res, next) => {
 callsRouter.get('/', (req, res, next) => {
   const {
     query,
+    accountId,
   } = req;
 
   let {
     startDate,
     endDate,
-    accountId,
   } = query;
 
   const send = {
@@ -45,9 +45,13 @@ callsRouter.get('/', (req, res, next) => {
 
   Account.get(accountId)
     .then((account) => {
-      Call
-      .filter({ destinationnum: account.twilioPhoneNumber })
+      const destinationnum = account.destinationPhoneNumber;
+      if (!destinationnum) {
+        return res.send(send);
+      }
+      return Call
       .filter(r.row('datetime').during(startDate, endDate))
+      .filter({ destinationnum })
       .then((calls) => {
         calls.map((call) => {
           send.total++;

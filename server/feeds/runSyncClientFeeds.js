@@ -19,6 +19,7 @@ function runSyncClientFeeds(socket) {
 
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
+            console.log('syncClientFeeds: removing appointments', doc);
             socket.emit('remove:Appointment', normalize('appointment', doc));
           } else if (isCreated(doc)) {
             socket.emit('create:Appointment', normalize('appointment', doc));
@@ -42,13 +43,10 @@ function runSyncClientFeeds(socket) {
 
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
-            console.log('sync.feed.delete', doc);
             socket.emit('remove:Patient', normalize('patient', doc));
           } else if (isCreated(doc)) {
-            console.log('sync.feed.create', doc);
             socket.emit('create:Patient', normalize('patient', doc));
           } else {
-            console.log('sync.feed.update', doc);
             socket.emit('update:Patient', normalize('patient', doc));
           }
         }

@@ -69,12 +69,8 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
 
 patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next) => {
   const {
-    query,
-  } = req;
-
-  const {
     accountId,
-  } = query;
+  } = req;
 
   const male = /^male/i;
 

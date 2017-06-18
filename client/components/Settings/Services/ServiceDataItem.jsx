@@ -58,6 +58,7 @@ class ServiceDataItem extends Component {
         name: service.get('name'),
         duration: service.get('duration'),
         bufferTime: service.get('bufferTime'),
+        isHidden: service.get('isHidden'),
       };
 
       showComponent = (
@@ -68,6 +69,7 @@ class ServiceDataItem extends Component {
               <IconButton icon="trash" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
             </div>
           </div>
+          <h2 className={styles.header}>Services</h2>
           <div className={styles.servicesFormRow}>
             <Form
               form={`${service.get('id')}Form`}
@@ -89,13 +91,22 @@ class ServiceDataItem extends Component {
                 validate={[notNegative, maxDuration]}
               />
               <Field
-                required
                 name="bufferTime"
                 label="Buffer Time"
                 type="number"
                 normalize={parseNum}
                 validate={[notNegative, maxDuration]}
               />
+              <div className={styles.servicesPractForm_service}>
+                Is Hidden:
+                <div>
+                  <Field
+                    name="isHidden"
+                    component="Toggle"
+                  />
+                </div>
+              </div>
+
             </Form>
           </div>
         </div>

@@ -159,7 +159,7 @@ class Business extends Component {
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
     const pickupPercent = Math.floor(100 * callStats.pickup / callStats.total) || null;
-    const bookingPercent = Math.floor(100 * callStats.pickup / callStats.total) || null;
+    const bookingPercent = Math.floor(100 * callStats.booked / callStats.total) || null;
 
     const data = [
       {

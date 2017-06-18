@@ -4,6 +4,7 @@ const { type, r } = require('../config/thinky');
 const createModel = require('./createModel');
 const Account = require('./Account');
 const WeeklySchedule = require('./WeeklySchedule');
+const globals = require('../config/globals');
 
 const Practitioner = createModel('Practitioner', {
   accountId: type.string().uuid(4).required(),
@@ -12,6 +13,10 @@ const Practitioner = createModel('Practitioner', {
   pmsId: type.string(),
   type: type.string(),
   isActive: type.boolean().default(true),
+  avatarUrl: type.string(),
+  fullAvatarUrl: type.virtual().default(function () {
+    return this.avatarUrl ? `${globals.s3.urlPrefix}${this.avatarUrl}` : null;
+  }),
 
   // If false we use Clinic's sechedule as default
   isCustomSchedule: type.boolean().default(false),
@@ -33,7 +38,7 @@ Practitioner.define('getWeeklySchedule', function () {
     }
 
     return Account.get(self.accountId).getJoin({ weeklySchedule: true })
-      .then((account) => resolve(account.weeklySchedule))
+      .then(account => resolve(account.weeklySchedule))
       .catch(err => reject(err));
   });
 });
@@ -43,20 +48,14 @@ Practitioner.define('getWeeklySchedule', function () {
  */
 Practitioner.define('getTimeOff', function (startDate, endDate) {
   const self = this;
-  return new Promise((resolve, reject) => {
-    return Practitioner.get(self.id).getJoin({
-      timeOff: {
-        _apply: (sequence) => {
-          return sequence
-            .filter((t) => {
-              return t('startDate').during(startDate, endDate).or(
+  return new Promise((resolve, reject) => Practitioner.get(self.id).getJoin({
+    timeOff: {
+      _apply: sequence => sequence
+            .filter(t => t('startDate').during(startDate, endDate).or(
                 t('endDate').during(startDate, endDate)
-              );
-            });
-        },
-      },
-    }).then(p => resolve(p.timeOff));
-  });
+              )),
+    },
+  }).then(p => resolve(p.timeOff)));
 });
 
 /**
@@ -69,10 +68,8 @@ Practitioner.define('getAvailableTimeIntervals', function (startDate, endDate) {
       .then((weeklySchedule) => {
 
 
-
       });
   });
 });
-
 
 module.exports = Practitioner;

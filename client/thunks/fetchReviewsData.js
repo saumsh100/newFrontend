@@ -1,4 +1,5 @@
-import axios from './axios';
+
+import axios from 'axios';
 import { fetchReviewsStart, fetchReviewsSuccess } from '../actions/reviews';
 
 export default function fetchReviews() {

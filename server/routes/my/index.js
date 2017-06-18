@@ -1,5 +1,6 @@
 
 import authRouter from './auth';
+import authMiddleware from '../../middleware/patientAuth';
 import { Account, PatientUser } from '../../models';
 
 const myRouter = require('express').Router();
@@ -15,15 +16,22 @@ const createJoinObject = require('../../middleware/createJoinObject');
 const normalize = require('../api/normalize');
 
 myRouter.use('/', newAvailabilitiesRouter);
-myRouter.use('/requests', requestRouter);
-myRouter.use('/waitSpots', waitSpotsRouter);
+myRouter.use('/requests', authMiddleware, requestRouter);
+myRouter.use('/waitSpots', authMiddleware, waitSpotsRouter);
 myRouter.use('/reservations', reservationsRouter);
 myRouter.use('/oauth', oauthRouter);
 myRouter.use('/auth', authRouter);
 
 myRouter.param('accountId', loaders('account', 'Account'));
 myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
-myRouter.param('accountIdJoin', loaders('account', 'Account', { services: true, practitioners: true }));
+myRouter.param('accountIdJoin', loaders('account', 'Account', {
+  services: {
+    _apply: service => service.filter(row => {
+      return row('isHidden').ne(true);
+    }),
+  },
+  practitioners: true,
+}));
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
@@ -34,7 +42,7 @@ myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
         account: req.account,
         services: req.account.services,
         practitioners: req.account.practitioners,
-        selectedServiceId: req.account.services[0].id,
+        selectedServiceId: (req.account.services[0] ? req.account.services[0].id : null),
       },
 
       entities,

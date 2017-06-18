@@ -1,5 +1,6 @@
+
 import { set } from 'lodash';
-import axios from './axios';
+import axios from 'axios';
 import {
   addAllScheduleFilter,
   setMergingPatient,

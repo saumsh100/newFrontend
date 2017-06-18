@@ -65,6 +65,6 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
   return sentReminders.filter(({ appointment }) => {
     // - if appointment is upcoming or is cancelled
     const isAfter = moment(appointment.startDate).isAfter(date);
-    return !appointment.isCancelled && isAfter ;
+    return !appointment.isCancelled && isAfter;
   });
 }

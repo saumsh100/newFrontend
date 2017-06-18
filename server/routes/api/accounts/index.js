@@ -2,6 +2,8 @@ import { UserAuth } from '../../../lib/auth';
 import { AuthSession } from '../../../models';
 
 const accountsRouter = require('express').Router();
+const sharp = require('sharp');
+const async = require('async');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
@@ -11,6 +13,8 @@ const StatusError = require('../../../util/StatusError');
 const { Account, Permission } = require('../../../models');
 const uuid = require('uuid').v4;
 const { sendInvite } = require('../../../lib/inviteMail');
+const fileUpload = require('express-fileupload');
+const s3 = require('../../../config/s3');
 
 accountsRouter.param('accountId', loaders('account', 'Account', { enterprise: true }));
 accountsRouter.param('inviteId', loaders('invite', 'Invite'));
@@ -25,6 +29,64 @@ accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, e
     .then(accounts => res.send(normalize('accounts', accounts)))
     .catch(next)
 );
+
+/**
+ * Upload a accounts's logo
+ */
+accountsRouter.post('/:accountId/logo', checkPermissions('accounts:update'), fileUpload(), async (req, res, next) => {
+  const fileKey = `logos/${req.account.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
+
+  function resizeImage(size, buffer) {
+    if (size === 'original') {
+      return Promise.resolve(buffer);
+    }
+
+    return sharp(buffer)
+      .resize(size, size)
+      .toBuffer();
+  }
+
+  async.eachSeries([
+    'original',
+    400,
+    200,
+    100,
+  ], async (size, nextImage) => {
+    const file = req.files.file.data;
+    const resizedImage = await resizeImage(size, file);
+    s3.upload({
+      Key: fileKey.replace('[size]', size),
+      Body: resizedImage,
+      ACL: 'public-read',
+    }, async (err, response) => {
+      console.log(err, response);
+      if (err) {
+        return next(err);
+      }
+
+      nextImage();
+    });
+  }, async () => {
+    try {
+      req.account.logo = fileKey;
+
+      const savedAccount = await req.account.save();
+      res.send(normalize('account', savedAccount));
+    } catch (error) {
+      next(error);
+    }
+  });
+});
+
+accountsRouter.delete('/:accountId/logo', checkPermissions('accounts:update'), fileUpload(), async (req, res, next) => {
+  try {
+    req.account.logo = null;
+    const savedAccount = await req.account.save();
+    res.send(normalize('account', savedAccount));
+  } catch (error) {
+    next(error);
+  }
+});
 
 accountsRouter.post('/:accountId/switch', (req, res, next) => {
   const { account, role, sessionId, userId, sessionData } = req;
@@ -99,7 +161,7 @@ accountsRouter.post('/:accountId/newUser/', (req, res, next) => {
       activeAccountId: req.accountId,
       enterpriseId: req.account.enterprise.id,
       permissionId: permission.id,
-    }).then(({ savedModel: user }) => {
+    }).then(({ model: user }) => {
       delete user.password;
       user.permission = permission;
       res.send(normalize('user', user));
@@ -114,15 +176,7 @@ accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => 
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
-  if (req.role !== 'SUPERADMIN' && req.role !== 'ADMIN' && req.role !== 'OWNER') {
-    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
-  }
-
-  if (req.role === 'ADMIN' && req.body === 'SUPERADMIN') {
-    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
-  }
-
-  if (req.role === 'OWNER' && (req.body === 'SUPERADMIN' || req.body === 'ADMIN')) {
+  if (req.role !== 'SUPERADMIN' && req.role !== 'OWNER') {
     return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
   }
 

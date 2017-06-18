@@ -105,7 +105,10 @@ describe('RemindersList Calculation Library', () => {
         expect(shouldSendReminder({ appointment, reminder })).toBe(false);
       });
 
-      it('should return false if patient.preferences does not want them', () => {
+      // We put this test in originally when we would not create SentReminder based on prefs
+      // Now we still create it. But the communication will not esnd. Thus resulting in an isSent=false SentReminder
+      // Which lets the receptionist know that she has a failed reminder for an appointment.
+      test.skip('should return false if patient.preferences does not want them', () => {
         const reminder = {};
         const appointment = {
           sentReminders: [],

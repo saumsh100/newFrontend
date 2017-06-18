@@ -34,7 +34,6 @@ import enterpriseFixtures, {
  * }
  *
  */
-
 const oneHour = 1 * 60 * 60;
 const recentStartTime = r.now().add(oneHour);
 
@@ -210,6 +209,7 @@ for (let i = 0; i < 100; i++) {
 
   randomCalls.push({
     id: uuid(),
+    accountId,
     datetime: faker.date.past(),
     customer_phone_number: phoneNumber,
     answered: faker.random.boolean(),

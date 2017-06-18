@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Guage } from '../../../../library';
+import { Guage, PractitionerAvatar } from '../../../../library';
 import styles from './styles.scss';
 
 class PractitionersList extends Component {
@@ -11,13 +11,14 @@ class PractitionersList extends Component {
       appointmentBooked,
       appointmentNotFiltred,
       newPatients,
-      percentage  } = this.props;
+      practitioner,
+      percentage } = this.props;
     return (
       <li className={styles.practitioner__item}>
         <div className={styles.practitioner__item_wrapper}>
           <div className={styles.practitioner__item_header}>
             <div className={styles.practitioner__item_img}>
-              <img src={img} alt=""/>
+              <PractitionerAvatar size="lg" practitioner={practitioner} />
             </div>
             <div className={styles.practitioner__item_about}>
               <div className={styles.practitioner__item_name}>
@@ -42,7 +43,7 @@ class PractitionersList extends Component {
               <span>{newPatients}</span>
             </div>
           </div>
-          <Guage percentage={percentage} width={100} height={100}/>
+          <Guage percentage={percentage} width={100} height={100} />
         </div>
       </li>
     );

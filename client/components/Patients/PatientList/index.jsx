@@ -218,8 +218,7 @@ class PatientList extends Component {
     });
 
 
-    if (this.state.initialUser && appointments.toArray()[0] && !selectedPatient) {
-      console.log(app, app.toArray()[0].patientId)
+    if (this.state.initialUser && app.toArray()[0] && !selectedPatient) {
       currentPatient = patients.get(app.toArray()[0].patientId);
       if (currentPatient) {
         currentPatient.appointment = app.toArray()[0];
@@ -230,7 +229,6 @@ class PatientList extends Component {
     }
 
     if (this.state.showNewUser && selectedPatientShow.toObject || (this.state.initialUser && selectedPatientShow.toObject)) {
-      console.log(selectedPatientShow)
       currentPatient = selectedPatientShow;
 
       let userAppointments = currentPatient.get('appointments');
@@ -256,11 +254,6 @@ class PatientList extends Component {
         currentPatient.appointment = currentPatient.appointment || (appointments[0] ? appointments[0] : {});
       }
     }
-
-    // this.props.fetchEntitiesRequest({
-    //   id: 'patientStatsLastYear',
-    //   url: `/api/patients/${currentPatient.id}/appointmentstats`,
-    // })
 
     return (
       <MainContainer

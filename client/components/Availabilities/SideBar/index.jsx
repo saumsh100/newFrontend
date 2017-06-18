@@ -47,6 +47,7 @@ class SideBar extends Component {
       state,
       city,
       logo,
+      fullLogoUrl,
     } = account.toJS();
 
 
@@ -62,11 +63,13 @@ class SideBar extends Component {
       );
     }*/
 
+    const displayLogo = (fullLogoUrl ? (<div className={styles.sidebar__header}>
+      <img className={styles.sidebar__header_logo} src={fullLogoUrl.replace('[size]', 400)} alt="logo" />
+    </div>) : null);
+
     return (
       <div className={styles.sideBarWrapper}>
-        <div className={styles.sidebar__header}>
-          <img className={styles.sidebar__header_logo} src={logo} alt="logo" />
-        </div>
+        {displayLogo}
         <div className={styles.sidebar__body}>
           <div className={styles.sidebar__body_information}>
             <div className={styles.sidebar__information}>
