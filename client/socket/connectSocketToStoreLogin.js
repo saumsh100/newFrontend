@@ -86,16 +86,25 @@ export default function connectSocketToStoreLogin(store, socket) {
           model,
           operation,
         } = data;
-        const text = `SyncClientError: ${model} ${operation} failed in the PMS`
-        dispatch(showAlertTimeout({ text, type: 'error' }));
+        const text = `SyncClientError: ${model} ${operation} failed in the PMS`;
+        dispatch(showAlertTimeout({ alert: text, type: 'error' }));
 
         console.log('[ TEMP ] normalized logEntry', data);
+      });
+
+      socket.on('syncFinished', (data) => {
+        const alert = {
+          title: 'Sync update',
+          body: 'Sync finished',
+        };
+        console.log(alert.body);
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
     })
     .on('unauthorized', (msg) => {
       console.log('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
-    })
+    });
 
 }
 
