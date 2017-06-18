@@ -107,10 +107,7 @@ function runDashboardFeeds(socket) {
    */
   SyncClientError
     .filter({ accountId: activeAccountId })
-    .filter((entry) => {
-      return entry('operation').ne('sync');
-    })
-    .changes({ squash: true })
+    .changes()
     .then((feed) => {
       setupFeedShutdown(socket, feed);
 

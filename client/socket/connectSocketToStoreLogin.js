@@ -86,13 +86,14 @@ export default function connectSocketToStoreLogin(store, socket) {
           model,
           operation,
         } = data;
-        const text = `SyncClientError: ${model} ${operation} failed in the PMS`;
-        dispatch(showAlertTimeout({ alert: text, type: 'error' }));
-
-        console.log('[ TEMP ] normalized logEntry', data);
+        const alert = {
+          title: 'Sync Error',
+          body: `SyncClientError: ${model} ${operation} failed in the PMS`,
+        };
+        dispatch(showAlertTimeout({ alert, type: 'error' }));
       });
 
-      socket.on('syncFinished', (data) => {
+      socket.on('syncFinished', () => {
         const alert = {
           title: 'Sync update',
           body: 'Sync finished',
