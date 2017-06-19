@@ -438,8 +438,8 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
           (chairId !== app.chairId) && (patientId !== app.patientId)) {
           return true;
         }
-        if ((practitionerId === app.practitionerId) &&
-          (chairId !== app.chairId) && (patientId !== app.patientId)) {
+        if (/* (practitionerId === app.practitionerId) &&
+          (chairId !== app.chairId) && */ (patientId !== app.patientId)) {
           appointmentData.isSplit = true;
           /*if (!app.isSplit) {
             splitApps.push(app);

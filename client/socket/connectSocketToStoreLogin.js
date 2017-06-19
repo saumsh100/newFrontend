@@ -11,6 +11,9 @@ import {
   showAlertTimeout,
 } from '../thunks/alerts';
 
+import {
+  setSyncingWithPMS,
+} from '../actions/schedule';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
@@ -98,8 +101,9 @@ export default function connectSocketToStoreLogin(store, socket) {
           title: 'Sync update',
           body: 'Sync finished',
         };
-        console.log(alert.body);
+        // console.log(alert.body);
         dispatch(showAlertTimeout({ alert, type: 'success' }));
+        dispatch(setSyncingWithPMS({ isSyncing: false }));
       });
     })
     .on('unauthorized', (msg) => {
