@@ -1258,7 +1258,7 @@ const SEEDS = {
   Recall,
   Reminder,
 
-  SentReminder: [
+  /*SentReminder: [
     {
       reminderId,
       accountId,
@@ -1270,7 +1270,7 @@ const SEEDS = {
     },
 
     ...SentReminder,
-  ],
+  ],*/
 
   SentRecall: [],
 };

@@ -5,6 +5,8 @@ const Appointment = require('../models/Appointment');
 const Request = require('../models/Request');
 const Patient = require('../models/Patient');
 const WaitSpot = require('../models/WaitSpot');
+const SentReminder = require('../models/SentReminder');
+const SentRecall = require('../models/SentRecall');
 const SyncClientError = require('../models/SyncClientError');
 const normalize = require('../routes/api/normalize');
 
@@ -96,6 +98,47 @@ function runDashboardFeeds(socket) {
           socket.emit('create:WaitSpot', normalize('waitSpot', doc));
         } else {
           socket.emit('update:WaitSpot', normalize('waitSpot', doc));
+        }
+      });
+    });
+  /**
+   * Listen to changes on the sentRecall table and update dashboards in real time
+   */
+  SentReminder
+    .filter({ accountId: activeAccountId })
+    .changes({ squash: true })
+    .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
+      feed.each((error, doc) => {
+        if (error) throw new Error('Feed error');
+        if (isDeleted(doc)) {
+          socket.emit('remove:SentReminder', doc.id);
+        } else if (isCreated(doc)) {
+          socket.emit('create:SentReminder', normalize('sentReminder', doc));
+        } else {
+          socket.emit('update:SentReminder', normalize('sentReminder', doc));
+        }
+      });
+    });
+
+  /**
+   * Listen to changes on the sentRecall table and update dashboards in real time
+   */
+  SentRecall
+    .filter({ accountId: activeAccountId })
+    .changes({ squash: true })
+    .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
+      feed.each((error, doc) => {
+        if (error) throw new Error('Feed error');
+        if (isDeleted(doc)) {
+          socket.emit('remove:SentRecall', doc.id);
+        } else if (isCreated(doc)) {
+          socket.emit('create:SentRecall', normalize('sentRecall', doc));
+        } else {
+          socket.emit('update:SentRecall', normalize('sentRecall', doc));
         }
       });
     });

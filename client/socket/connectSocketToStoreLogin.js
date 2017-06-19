@@ -28,10 +28,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Request Socket
        */
       socket.on('create:Request', (data) => {
-        dispatch(addEntity({ key: 'requests', entity: data }));
+        dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
       });
       socket.on('update:Request', (data) => {
-        dispatch(updateEntity({ key: 'requests', entity: data }));
+        dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
       });
       socket.on('remove:Request', (data) => {
         dispatch(deleteEntity({ key: 'requests', id: data }));
@@ -41,13 +41,39 @@ export default function connectSocketToStoreLogin(store, socket) {
        * WaitSpot Socket
        */
       socket.on('create:WaitSpot', (data) => {
-        dispatch(addEntity({ key: 'waitSpots', entity: data }));
+        dispatch(receiveEntities({ key: 'waitSpots', entities: data.entities }));
       });
       socket.on('update:WaitSpot', (data) => {
-        dispatch(updateEntity({ key: 'waitSpots', entity: data }));
+        dispatch(receiveEntities({ key: 'waitSpots', entities: data.entities }));
       });
       socket.on('remove:WaitSpot', (data) => {
         dispatch(deleteEntity({ key: 'waitSpots', id: data }));
+      });
+
+      /**
+       * SentReminder Socket
+       */
+      socket.on('create:SentReminder', (data) => {
+        dispatch(receiveEntities({ key: 'sentReminders', entities: data.entities }));
+      });
+      socket.on('update:SentReminder', (data) => {
+        dispatch(receiveEntities({ key: 'sentReminders', entities: data.entities }));
+      });
+      socket.on('remove:SentReminder', (data) => {
+        dispatch(deleteEntity({ key: 'sentReminders', id: data }));
+      });
+
+      /**
+       * SentRecalls Socket
+       */
+      socket.on('create:SentRecall', (data) => {
+        dispatch(receiveEntities({ key: 'sentRecalls', entities: data.entities }));
+      });
+      socket.on('update:SentRecall', (data) => {
+        dispatch(receiveEntities({ key: 'sentRecalls', entities: data.entities }));
+      });
+      socket.on('remove:SentRecall', (data) => {
+        dispatch(deleteEntity({ key: 'sentRecalls', id: data }));
       });
 
       /**
@@ -68,13 +94,13 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
-        dispatch(receiveEntities({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
       socket.on('update:Patient', (data) => {
-        dispatch(receiveEntities({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
       socket.on('remove:Patient', (data) => {
-        dispatch(deleteEntity({ key: 'appointments', id: data }));
+        dispatch(deleteEntity({ key: 'patients', id: data }));
       });
 
       socket.on('newMessage', (data) => {
