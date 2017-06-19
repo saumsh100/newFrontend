@@ -8,7 +8,7 @@ import main from '../PatientList/main.scss';
 import ChatListContainer from './ChatListContainer';
 import MessageContainer from './MessageContainer';
 import UserInfo from './UserInfo';
-import { Row, Col, CardHeader, Card, List, Grid, InfiniteScroll, AutoCompleteForm } from '../../library';
+import { Row, Avatar, Col, CardHeader, Card, List, Grid, InfiniteScroll, AutoCompleteForm } from '../../library';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 import styles from './styles.scss';
 
@@ -84,15 +84,15 @@ class ChatMessage extends Component {
       const patientSearch = this.props.searchedPatients || [] ;
 
       const searched = patientSearch.map((userId) => {
-        const avatar = (this.props.patients.get(userId).get('avatarUrl') ? this.props.patients.get(userId).get('avatarUrl') : '/images/avatar.png');
+        const avatar = (this.props.patients.get(userId) ? this.props.patients.get(userId).toJS(): {} );
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={main.searchList} onClick={this.userClick.bind(null, userId)}>
-          <img className={styles.users__photo} src={avatar} alt="photo" />
+          <Avatar className={styles.users__photo} user={avatar} size="lg"/>
           <div className={main.grow}>
             <div className={main.users__header}>
               <div className={main.users__name}>
-                {name}, {age}
+                {name},&nbsp;{age}
               </div>
             </div>
           </div>

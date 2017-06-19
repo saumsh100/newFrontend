@@ -92,7 +92,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
     };
 
       appointments.map((appointment) => {
-        if (male.test(appointment.patient.gender)) {
+        if (appointment.patient.gender && male.test(appointment.patient.gender)) {
           send.male++;
         } else {
           send.female++;

@@ -6,6 +6,7 @@ import styles from '../main.scss';
 import PatientListItem from '../PatientListItem';
 import {
   AutoCompleteForm,
+  Avatar,
   InfiniteScroll,
   Row,
   Card,
@@ -72,11 +73,12 @@ class UpcomingPatientList extends Component {
       const inputLength = inputValue.length;
 
       const searched = this.props.searchedPatients.map((userId) => {
-        const avatar = (this.props.patients.get(userId).get('avatarUrl') ? this.props.patients.get(userId).get('avatarUrl') : '/images/avatar.png');
+        const avatar = (this.props.patients.get(userId) ? this.props.patients.get(userId).toJS() : {});
+        console.log(avatar)
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={styles.searchList} onClick={this.userClick.bind(null, userId)}>
-          <img className={styles.users__photo} src={avatar} alt="photo" />
+          <Avatar className={styles.users__photo} user={avatar} size="lg" />
           <div className={styles.grow}>
             <div className={styles.users__header}>
               <div className={styles.users__name}>
