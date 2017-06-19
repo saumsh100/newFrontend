@@ -5,6 +5,7 @@ import { tokenSecret } from '../config/globals';
 import rolePermissions from '../config/permissions';
 import StatusError from '../util/StatusError';
 import { AuthSession } from '../models';
+const chalk = require('chalk');
 
 function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
@@ -62,6 +63,8 @@ module.exports = function authMiddleware(req, res, next) {
           enterpriseId,
           accountId,
         };
+
+        console.log(chalk.blue(req.method, req.originalUrl, `accountId=${sessionData.accountId}`));
 
         Object.assign(req, sessionData);
         req.sessionData = sessionData;
