@@ -175,7 +175,7 @@ accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => 
   return User.get(req.sessionData.userId)
     .getJoin({permission: true})
     .then((user) => {
-      console.log(user.permission.role, req.role)
+
       if (user.permission.role !== req.role) {
         return next(StatusError(403, 'Access Denied!'));
       }

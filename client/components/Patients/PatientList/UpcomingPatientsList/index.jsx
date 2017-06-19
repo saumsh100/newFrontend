@@ -74,7 +74,6 @@ class UpcomingPatientList extends Component {
 
       const searched = this.props.searchedPatients.map((userId) => {
         const avatar = (this.props.patients.get(userId) ? this.props.patients.get(userId).toJS() : {});
-        console.log(avatar)
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
         const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
         const display = (<div className={styles.searchList} onClick={this.userClick.bind(null, userId)}>
