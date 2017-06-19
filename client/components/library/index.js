@@ -1,4 +1,5 @@
 
+import AccountLogo from './AccountLogo';
 import Alert from './Alert';
 import AppBar from './AppBar';
 import Avatar from './Avatar';
@@ -17,6 +18,7 @@ import ColorPicker from './ColorPicker';
 import DayPicker from './DayPicker';
 import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
+import Dropzone from './Dropzone';
 import DashboardStats from './DashboardStats';
 import Form, { FormSection, Field, FieldArray, SaveButton, RemoteSubmitButton } from './Form';
 import Guage from './Guage';
@@ -36,6 +38,7 @@ import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
 import TrendLine from './TrendLine';
 import IconCard from './IconCard';
+import PractitionerAvatar from './PractitionerAvatar';
 import Search from './Search';
 import RangeSlider from './RangeSlider';
 import Star from './Star';
@@ -55,6 +58,7 @@ import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
 
 export {
+  AccountLogo,
   Alert,
   AppBar,
   Avatar,
@@ -76,6 +80,7 @@ export {
   DayPicker,
   DialogBox,
   DropdownSelect,
+  Dropzone,
   DashboardStats,
   DoubleIcon,
   Filters,
@@ -100,6 +105,7 @@ export {
   RouterList,
   RouterTabs,
   SaveButton,
+  PractitionerAvatar,
   Search,
   RangeSlider,
   Star,

@@ -27,7 +27,6 @@ class DayView extends Component  {
       return (!app.isDeleted && isSameDate && !app.isCancelled);
     });
 
-
     return (
       <DayViewBody
         currentDate={currentDate}

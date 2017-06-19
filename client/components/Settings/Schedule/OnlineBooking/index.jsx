@@ -8,6 +8,19 @@ import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import PreferencesForm from './PreferencesForm';
 import styles from './styles.scss';
 
+function hexToRgbA(hex, opacity) {
+  let c;
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('');
+    if (c.length === 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    }
+    c = `0x${c.join('')}`;
+    return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c &255].join(',')}, ${opacity})`;
+  }
+  throw new Error('Bad Hex');
+}
+
 class OnlineBooking extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +29,7 @@ class OnlineBooking extends Component {
 
   handleSubmit(values) {
     const { activeAccount, updateEntityRequest } = this.props;
+    console.log(hexToRgbA(values.bookingWidgetPrimaryColor, 1))
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {

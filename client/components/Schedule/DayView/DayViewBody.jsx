@@ -48,13 +48,11 @@ export default function   DayViewBody(props){
     });
   });
 
-
   // Display the practitioners that have been checked on the filters card.
   const checkedPractitioners = schedule.toJS().practitionersFilter;
   practitionersArray = practitionersArray.filter((pr) => {
     return checkedPractitioners.indexOf(pr.id) > -1;
   });
-
 
   return (
     <div className={styles.dayView_body}>

@@ -1,0 +1,16 @@
+.dropzone {
+	padding: 10px;
+	text-align: center;
+	overflow: hidden;
+	position: relative;
+	width: 200px;
+	height: 200px;
+	border-radius: 5px;
+	border: 1px #666 dashed;
+	text-align: center;
+
+	:global .loader {
+		height: 100% !important;
+	}
+}
+

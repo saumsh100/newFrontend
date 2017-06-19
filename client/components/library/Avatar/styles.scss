@@ -3,6 +3,7 @@
 
 $medium-size: 2rem;
 $large-size: 3rem;
+$extraLarge-size: 10rem;
 
 .avatar {
   display: inline-flex;
@@ -29,6 +30,13 @@ $large-size: 3rem;
   height: $large-size;
   min-width: $large-size;
   min-height: $large-size;
+}
+
+.extraLarge {
+  width: $extraLarge-size;
+  height: $extraLarge-size;
+  min-width: $extraLarge-size;
+  min-height: $extraLarge-size;
 }
 
 .text {
