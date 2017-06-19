@@ -54,12 +54,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Appointment Socket
        */
       socket.on('create:Appointment', (data) => {
-        console.log('createAppointment', data);
-        dispatch(receiveEntities({ key: 'appointments', entity: data.entities }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('update:Appointment', (data) => {
-        console.log('update:Appointment', data);
-        dispatch(receiveEntities({ key: 'appointments', entity: data.entities }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
         dispatch(deleteEntity({ key: 'appointments', id: data.entities }));
@@ -69,10 +67,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
-        dispatch(addEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entity: data }));
       });
       socket.on('update:Patient', (data) => {
-        dispatch(updateEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entity: data }));
       });
       socket.on('remove:Patient', (data) => {
         dispatch(deleteEntity({ key: 'appointments', id: data }));
