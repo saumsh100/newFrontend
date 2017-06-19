@@ -420,43 +420,47 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
     accountId,
   });
 
-  const {
-    practitionerId,
-    patientId,
-  } = appointmentData;
+  // const {
+  //   practitionerId,
+  //   patientId,
+  // } = appointmentData;
+  //
+  // const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
+  // const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
+  //
+  // Appointment.filter({ accountId })
+  //   .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)).and(r.row('isCancelled').ne(true)))
+  //   .getJoin({ service: true })
+  //   .run()
+  //   .then((appointments) => {
+  //     const appWithService = appointments.filter(appService => appService.service);
+  //
+  //     const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
+  //
+  //     const checkOverlapping = intersectingApps.filter((app) => {
+  //       if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
+  //         return app;
+  //       }
+  //
+  //       if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
+  //         return app;
+  //       }
+  //     });
+  //
+  //     if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
+  //       return Appointment.save(appointmentData)
+  //         .then((appt) => {
+  //           res.status(201).send(normalize('appointment', appt));
+  //         })
+  //         .catch(next);
+  //     }
+  //     console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
+  //     return res.sendStatus(400);
+  //   })
+  //   .catch(next);
 
-  const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
-  const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
-
-  Appointment.filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)).and(r.row('isCancelled').ne(true)))
-    .getJoin({ service: true })
-    .run()
-    .then((appointments) => {
-      const appWithService = appointments.filter(appService => appService.service);
-
-      const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
-
-      const checkOverlapping = intersectingApps.filter((app) => {
-        if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
-          return app;
-        }
-
-        if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
-          return app;
-        }
-      });
-
-      if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
-        return Appointment.save(appointmentData)
-          .then((appt) => {
-            res.status(201).send(normalize('appointment', appt));
-          })
-          .catch(next);
-      }
-      console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
-      return res.sendStatus(400);
-    })
+  return Appointment.save(appointmentData)
+    .then(appointment => res.send(201).send(normalize('appointment', appointment)))
     .catch(next);
 });
 
@@ -535,51 +539,55 @@ appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'),
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
-  const accountId = req.accountId;
+  // const accountId = req.accountId;
 
-  const {
-    practitionerId,
-    patientId,
-  } = req.body;
+  // const {
+  //   practitionerId,
+  //   patientId,
+  // } = req.body;
+  //
+  // const appointmentData = req.body;
+  // const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
+  // const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
+  //
+  // if (appointmentData.isDeleted) {
+  //   return req.appointment.merge(req.body).save()
+  //     .then(appointment => res.send(normalize('appointment', appointment)))
+  //     .catch(next);
+  // }
+  //
+  // Appointment.filter({ accountId })
+  //   .filter(r.row('startDate').during(startDate, endDate))
+  //   .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appointmentData.id)).and(r.row('isCancelled').ne(true)))
+  //   .getJoin({ service: true })
+  //   .run()
+  //   .then((appointments) => {
+  //     const appWithService = appointments.filter(appService => appService.service);
+  //
+  //     const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
+  //
+  //     const checkOverlapping = intersectingApps.filter((app) => {
+  //       if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
+  //         return app;
+  //       }
+  //       if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
+  //         return app;
+  //       }
+  //     });
+  //
+  //     if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
+  //       return req.appointment.merge(req.body).save()
+  //         .then(appointment => res.send(normalize('appointment', appointment)))
+  //         .catch(next);
+  //     }
+  //
+  //     console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
+  //     return res.sendStatus(400);
+  //   })
+  //   .catch(next);
 
-  const appointmentData = req.body;
-  const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
-  const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
-
-  if (appointmentData.isDeleted) {
-    return req.appointment.merge(req.body).save()
-      .then(appointment => res.send(normalize('appointment', appointment)))
-      .catch(next);
-  }
-
-  Appointment.filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
-    .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appointmentData.id)).and(r.row('isCancelled').ne(true)))
-    .getJoin({ service: true })
-    .run()
-    .then((appointments) => {
-      const appWithService = appointments.filter(appService => appService.service);
-
-      const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
-
-      const checkOverlapping = intersectingApps.filter((app) => {
-        if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
-          return app;
-        }
-        if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
-          return app;
-        }
-      });
-
-      if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
-        return req.appointment.merge(req.body).save()
-          .then(appointment => res.send(normalize('appointment', appointment)))
-          .catch(next);
-      }
-
-      console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
-      return res.sendStatus(400);
-    })
+  return req.appointment.merge(req.body).save()
+    .then(appointment => res.send(normalize('appointment', appointment)))
     .catch(next);
 });
 
