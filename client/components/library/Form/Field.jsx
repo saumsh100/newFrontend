@@ -5,7 +5,7 @@ import { compose, withProps } from 'recompose';
 import { Field } from 'redux-form';
 import RFComponents from './RFComponents';
 import { normalizePhone } from './normalize';
-import { phoneNumberValidate } from './validate';
+import { phoneValidateNullOkay } from './validate';
 
 const requiredValidation = val => val ? undefined : 'Required';
 
@@ -22,7 +22,7 @@ function ReduxField(props) {
     // TODO: we are currently overriding the normalize for tel, they should be able to stack (compose)
     normalize = normalizePhone;
     validate = validate || [];
-    validate = [...validate, phoneNumberValidate];
+    validate = [...validate, phoneValidateNullOkay];
   }
 
   // need to remove required attribute from ReduxField as the Input component uses it
