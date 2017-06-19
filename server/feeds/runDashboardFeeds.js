@@ -14,7 +14,6 @@ function runDashboardFeeds(socket) {
   // ASSUMPTION: These are the changes coming from the SYNC client...
   Appointment
     .filter({ accountId: activeAccountId })
-    .getJoin({ patient: true })
     .changes({ squash: true })
     .then((feed) => {
       // TODO should be shutting all feeds associated with this socket, not just one. In one place

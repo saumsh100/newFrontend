@@ -125,6 +125,7 @@ export default handleActions({
   },
 
   [RECEIVE_ENTITIES](state, { payload: { entities } }) {
+    console.log(entities);
     return receiveEntities(state, entities);
   },
 

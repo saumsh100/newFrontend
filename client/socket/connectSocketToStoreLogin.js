@@ -8,7 +8,7 @@ import {
 } from '../actions/entities';
 
 import {
-  showAlertTimeout,
+  showAlertTimeout
 } from '../thunks/alerts';
 
 
@@ -51,10 +51,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Appointment Socket
        */
       socket.on('create:Appointment', (data) => {
-        dispatch(receiveEntities({ key: 'appointments', entities: data }));
+        dispatch(addEntity({ key: 'appointments', entity: data }));
       });
       socket.on('update:Appointment', (data) => {
-        dispatch(receiveEntities({ key: 'appointments', entities: data }));
+        dispatch(updateEntity({ key: 'appointments', entity: data }));
       });
       socket.on('remove:Appointment', (data) => {
         dispatch(deleteEntity({ key: 'appointments', id: data }));
