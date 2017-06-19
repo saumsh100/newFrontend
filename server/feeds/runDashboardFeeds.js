@@ -22,22 +22,19 @@ function runDashboardFeeds(socket) {
       feed.each((error, appointment) => {
         if (error) throw new Error('Feed error');
 
-        Appointment
-          .getJoin({ patient: true })
-          .filter({ id: appointment.id })
-          .then((doc) => {
-            //if (doc.isSyncedWithPMS) {
-              if (appointment.isSaved() === false) {
-                socket.emit('remove:Appointment', doc.id);
-              } else if (appointment.getOldValue() === null) {
-                console.log('>>>>> create:Appointment: ', doc);
-                socket.emit('create:Appointment', normalize('appointments', doc));
-              } else {
-                console.log('>>>>> update:Appointment: ', doc);
-                socket.emit('update:Appointment', normalize('appointments', doc));
-              }
-            //}
-          })
+        Patient.get(appointment.patientId)
+        .then((patient) => {
+          appointment.patient = patient;
+          if (appointment.isSaved() === false) {
+            socket.emit('remove:Appointment', appointment.id);
+          } else if (appointment.getOldValue() === null) {
+            console.log('>>>>> create:Appointment: ', appointment);
+            socket.emit('create:Appointment', normalize('appointment', appointment));
+          } else {
+            console.log('>>>>> update:Appointment: ', appointment);
+            socket.emit('update:Appointment', normalize('appointment', appointment));
+          }
+        });
       });
     });
 
