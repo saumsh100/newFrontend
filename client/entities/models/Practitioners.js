@@ -14,7 +14,6 @@ const PractitionerSchema = {
 };
 
 export default class Practitioner extends createModel(PractitionerSchema) {
-
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
   }

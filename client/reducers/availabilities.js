@@ -1,5 +1,6 @@
 
 import { fromJS } from 'immutable';
+import moment from 'moment';
 import { handleActions } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
@@ -51,7 +52,7 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
   selectedAvailability: null,
   selectedServiceId: null, // Will be set by the initialState from server
   selectedPractitionerId: '',
-  selectedStartDate: (new Date()).toISOString(),
+  selectedStartDate: moment().add(1, 'hours').toISOString(),
   registrationStep: 1,
   reservationId: null,
 }, state));
