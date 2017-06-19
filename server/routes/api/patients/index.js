@@ -276,6 +276,36 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
     });*/
 });
 
+patientsRouter.post('/emailCheck', checkPermissions('patients:read'), (req, res, next) => {
+  const { accountId } = req;
+  const email = req.body.email.toLowerCase();
+  Patient
+    .filter({ accountId })
+    .filter({ email })
+    .run()
+    .then((patient) => {
+      res.send({ exists: !!patient[0] });
+    })
+    .catch(next);
+});
+
+patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), (req, res, next) => {
+  const { accountId } = req;
+  const phoneNumber = req.body.phoneNumber;
+
+  const trimmedNumber = phoneNumber.replace(/ +/g, '');
+
+  Patient
+    .filter({ accountId })
+    .filter(r.row('mobilePhoneNumber').eq(trimmedNumber))
+    .run()
+    .then((patient) => {
+      res.send({ exists: !!patient[0] });
+    })
+    .catch(next);
+});
+
+
 /**
  * Create a patient
  */

@@ -49,8 +49,8 @@ class Dashboard extends React.Component {
       this.props.fetchEntities({ key: 'users' }),
       this.props.fetchEntities({ key: 'appointments', join: ['patient', 'chair'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
-      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
-      this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] }),
+      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'], params: query }),
+      this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'], params: query }),
     ]).then(() => {
       this.setState({ loaded: true });
     }).catch(e => console.log(e));
@@ -89,6 +89,7 @@ class Dashboard extends React.Component {
       { count: sentReminders.size, title: 'Reminders Sent', icon: 'clock-o', size: 6, color: 'primaryGreen' },
       { count: sentRecalls.size, title: 'Recalls Sent', icon: 'bullhorn', size: 6, color: 'primaryYellow' },
     ];
+
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
     const user = users.get(decodedToken.userId);

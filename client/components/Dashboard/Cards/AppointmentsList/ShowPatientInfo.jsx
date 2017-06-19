@@ -12,6 +12,8 @@ export default function ShowPatientInfo(props) {
     handleAppointmentClick,
     handlePatientClick,
   } = props;
+
+
   const name = service ? service.name : ''
   const startHourMinute = moment(appointment.startDate).format('h:mm');
   const endHourMinute = moment(appointment.endDate).format('h:mm a');

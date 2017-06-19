@@ -29,6 +29,8 @@
           background-color: lighten($primary-lightgrey, 2%);
         }
         &_request {
+          max-height: calc(100vh - 410px);
+          overflow: auto;
         }
         &_calendar {
           border-top: $card-border-size $primary-dark-blue;
