@@ -51,10 +51,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Appointment Socket
        */
       socket.on('create:Appointment', (data) => {
-        dispatch(addEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data }));
       });
       socket.on('update:Appointment', (data) => {
-        dispatch(updateEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data }));
       });
       socket.on('remove:Appointment', (data) => {
         dispatch(deleteEntity({ key: 'appointments', id: data }));

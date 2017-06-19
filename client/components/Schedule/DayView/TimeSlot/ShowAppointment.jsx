@@ -53,7 +53,6 @@ export default function ShowAppointment(props) {
      }
   });
 
-
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
 
@@ -66,7 +65,8 @@ export default function ShowAppointment(props) {
   const heightCalc = (durationTime) / 60;
   const totalHours = (endHour - startHour) + 1;
 
-  const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
+  // const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
+
   const splitRow = rowSort.length > 1 ? (columnWidth * (appPosition / (rowSort.length))) : 0;
   const top = `${(topCalc / totalHours) * 100}%`;
   const left = `${(columnWidth * practIndex) + splitRow}%`;
@@ -79,19 +79,22 @@ export default function ShowAppointment(props) {
     left,
     height,
     width,
-    backgroundColor: `${hexToRgbA(bgColor, .6)}`,
+    backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
     border: `1.5px solid ${bgColor}`,
+    zIndex: appPosition,
   };
 
   // calculating the buffer position and height styling
   const heightCalcBuffer = ((customBufferTime / 60) / totalHours) * 100;
-  const topBuffer = `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`
+  const topBuffer = `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`;
+
   let bufferStyle = {
     top: topBuffer,
     left,
     width,
     height: `${heightCalcBuffer}%`,
     backgroundColor: '#b4b4b5',
+    zIndex: appPosition,
   };
 
   return (
@@ -99,6 +102,7 @@ export default function ShowAppointment(props) {
       onClick={() => {
         selectAppointment(appointment);
       }}
+      className={styles.appointmentContainer}
     >
       <div
         key={appointment.id}

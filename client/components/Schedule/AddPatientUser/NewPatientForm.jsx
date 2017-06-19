@@ -5,7 +5,7 @@ import styles from '../styles.scss';
 import { maxLength, asyncEmailValidateUser, emailValidate, phoneValidate } from '../../library/Form/validate';
 
 
-export default function NewPatientForm({ onSubmit, formName, mergingPatientData }) {
+export default function NewPatientForm({ onSubmit, formName, mergingPatientData, handleDatePicker }) {
   const options = [
     { value: 'Male' },
     { value: 'Female' },
@@ -72,6 +72,8 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData 
         component="DayPicker"
         name="birthDate"
         label="Birth Date"
+        onChange={handleDatePicker}
+        handleThisInput
       />
     </Form>
   );
@@ -82,4 +84,6 @@ NewPatientForm.propTypes = {
   birthday: PropTypes.instanceOf(Date),
   saveBirthday: PropTypes.func,
   onSubmit: PropTypes.func.isRequired,
+  mergingPatientData: PropTypes.object,
+  handleDatePickeer: PropTypes.func,
 };
