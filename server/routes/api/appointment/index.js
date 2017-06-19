@@ -460,7 +460,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   //   .catch(next);
 
   return Appointment.save(appointmentData)
-    .then(appointment => res.send(201).send(normalize('appointment', appointment)))
+    .then(appointment => res.status(201).send(normalize('appointment', appointment)))
     .catch(next);
 });
 

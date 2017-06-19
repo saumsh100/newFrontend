@@ -14,23 +14,30 @@ function runDashboardFeeds(socket) {
   // ASSUMPTION: These are the changes coming from the SYNC client...
   Appointment
     .filter({ accountId: activeAccountId })
-    .getJoin({ patient: true })
     .changes({ squash: true })
     .then((feed) => {
       // TODO should be shutting all feeds associated with this socket, not just one. In one place
       setupFeedShutdown(socket, feed);
 
-      feed.each((error, doc) => {
+      feed.each((error, appointment) => {
         if (error) throw new Error('Feed error');
-        //if (doc.isSyncedWithPMS) {
-          if (isDeleted(doc)) {
-            socket.emit('remove:Appointment', doc.id);
-          } else if (isCreated(doc)) {
-            socket.emit('create:Appointment', normalize('appointment', doc));
-          } else {
-            socket.emit('update:Appointment', normalize('appointment', doc));
-          }
-        //}
+
+        Appointment
+          .getJoin({ patient: true })
+          .filter({ id: appointment.id })
+          .then((doc) => {
+            //if (doc.isSyncedWithPMS) {
+              if (appointment.isSaved() === false) {
+                socket.emit('remove:Appointment', doc.id);
+              } else if (appointment.getOldValue() === null) {
+                console.log('>>>>> create:Appointment: ', doc);
+                socket.emit('create:Appointment', normalize('appointments', doc));
+              } else {
+                console.log('>>>>> update:Appointment: ', doc);
+                socket.emit('update:Appointment', normalize('appointments', doc));
+              }
+            //}
+          })
       });
     });
 
