@@ -11,6 +11,9 @@ import {
   showAlertTimeout
 } from '../thunks/alerts';
 
+import {
+  setSyncingWithPMS,
+} from '../actions/schedule';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
@@ -51,12 +54,13 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Appointment Socket
        */
       socket.on('create:Appointment', (data) => {
-        dispatch(addEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('update:Appointment', (data) => {
-        dispatch(updateEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
+        console.log('remove:Appointment event, id=', data);
         dispatch(deleteEntity({ key: 'appointments', id: data }));
       });
 
@@ -64,10 +68,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
-        dispatch(addEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entity: data }));
       });
       socket.on('update:Patient', (data) => {
-        dispatch(updateEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entity: data }));
       });
       socket.on('remove:Patient', (data) => {
         dispatch(deleteEntity({ key: 'appointments', id: data }));
@@ -86,16 +90,27 @@ export default function connectSocketToStoreLogin(store, socket) {
           model,
           operation,
         } = data;
-        const text = `SyncClientError: ${model} ${operation} failed in the PMS`
-        dispatch(showAlertTimeout({ text, type: 'error' }));
+        const alert = {
+          title: 'Sync Error',
+          body: `SyncClientError: ${model} ${operation} failed in the PMS`,
+        };
+        dispatch(showAlertTimeout({ alert, type: 'error' }));
+      });
 
-        console.log('[ TEMP ] normalized logEntry', data);
+      socket.on('syncFinished', () => {
+        const alert = {
+          title: 'Sync update',
+          body: 'Sync finished',
+        };
+        // console.log(alert.body);
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
+        dispatch(setSyncingWithPMS({ isSyncing: false }));
       });
     })
     .on('unauthorized', (msg) => {
       console.log('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
-    })
+    });
 
 }
 

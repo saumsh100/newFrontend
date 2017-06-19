@@ -14,6 +14,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
     name: activeAccount.get('name'),
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
     destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
+    vendastaId: activeAccount.get('vendastaId'),
   };
 
   return (
@@ -25,7 +26,6 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
     >
       <div className={styles.paddingField}>
         <Field
-          required
           name="name"
           label="Name"
           validate={[maxLength25]}

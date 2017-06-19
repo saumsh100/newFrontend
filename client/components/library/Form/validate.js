@@ -32,7 +32,7 @@ const phoneNumberValidate = (value) => {
 };
 
 const phoneValidateNullOkay = (value) => {
-  if (!/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(value) && value !== null && value !== '') {
+  if (!/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value) && value !== null && value !== '') {
     return 'Invalid phone number';
   }
 };

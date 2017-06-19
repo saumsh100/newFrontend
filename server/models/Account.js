@@ -3,6 +3,7 @@ const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const globals = require('../config/globals');
 const type = thinky.type;
+const { validatePhoneNumber } = require('../util/validators');
 
 const Account = createModel('Account', {
   name: type.string().required(),
@@ -27,5 +28,16 @@ const Account = createModel('Account', {
   canSendReminders: type.boolean().default(true),
   canSendRecalls: type.boolean().default(true),
 });
+
+Account.docOn('saving', validatePatient); // <<< doc is in `doc` param
+
+function validatePatient(doc) {
+  validatePhoneNumbers(doc);
+}
+
+function validatePhoneNumbers(doc) {
+  doc.destinationPhoneNumber = validatePhoneNumber(doc.destinationPhoneNumber);
+  doc.twilioPhoneNumber = validatePhoneNumber(doc.twilioPhoneNumber);
+}
 
 module.exports = Account;

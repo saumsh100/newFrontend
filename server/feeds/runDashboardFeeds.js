@@ -19,17 +19,22 @@ function runDashboardFeeds(socket) {
       // TODO should be shutting all feeds associated with this socket, not just one. In one place
       setupFeedShutdown(socket, feed);
 
-      feed.each((error, doc) => {
+      feed.each((error, appointment) => {
         if (error) throw new Error('Feed error');
-        //if (doc.isSyncedWithPMS) {
-          if (isDeleted(doc)) {
-            socket.emit('remove:Appointment', doc.id);
-          } else if (isCreated(doc)) {
-            socket.emit('create:Appointment', normalize('appointment', doc));
+
+        Patient.get(appointment.patientId)
+        .then((patient) => {
+          appointment.patient = patient;
+          if (appointment.isSaved() === false) {
+            socket.emit('remove:Appointment', appointment.id);
+          } else if (appointment.getOldValue() === null) {
+            console.log('>>>>> create:Appointment: ', appointment);
+            socket.emit('create:Appointment', normalize('appointment', appointment));
           } else {
-            socket.emit('update:Appointment', normalize('appointment', doc));
+            console.log('>>>>> update:Appointment: ', appointment);
+            socket.emit('update:Appointment', normalize('appointment', appointment));
           }
-        //}
+        });
       });
     });
 
@@ -101,10 +106,7 @@ function runDashboardFeeds(socket) {
    */
   SyncClientError
     .filter({ accountId: activeAccountId })
-    .filter((entry) => {
-      return entry('operation').ne('sync');
-    })
-    .changes({ squash: true })
+    .changes()
     .then((feed) => {
       setupFeedShutdown(socket, feed);
 

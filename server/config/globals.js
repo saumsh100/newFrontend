@@ -1,5 +1,6 @@
 
 const path = require('path');
+const fs = require('fs');
 
 const root = path.normalize(path.join(__dirname, (process.env.BUNDLED ? '/../..' : '/..')));
 const tokenSecret = 'notsosecret';
@@ -20,7 +21,10 @@ const db = {
   db: environmentVariables.RETHINKDB_DB || 'carecru_development',//defaultDBName,
 };
 
-const caCert = environmentVariables.COMPOSE_CA_CERT;
+let caCert = environmentVariables.COMPOSE_CA_CERT;
+if (environmentVariables.CERT_PATH) {
+  caCert = fs.readFileSync(environmentVariables.CERT_PATH);
+}
 
 const redis = {
   host: environmentVariables.REDIS_HOST || 'localhost',
