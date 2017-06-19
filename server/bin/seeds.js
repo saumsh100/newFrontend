@@ -13,7 +13,14 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
-import PatientUser, { patientUserId, patientUserId2, patientUserId3 } from '../fixtures/patientUsers';
+import PatientUser,
+{
+  patientUserId,
+  patientUserId2,
+  patientUserId3,
+  patientUserId4,
+  patientUserId5,
+} from '../fixtures/patientUsers';
 import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
@@ -555,6 +562,30 @@ const SEEDS = {
       isCancelled: false,
       note: 'testing note 2....',
     },
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      patientUserId: patientUserId4,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
+    },
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      patientUserId: patientUserId5,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
+    },
 
     // Availabilities Test
     {
@@ -747,6 +778,7 @@ const SEEDS = {
       id: alexPatientId,
       accountId,
       avatarUrl: faker.image.avatar(),
+      patientUserId: patientUserId4,
       firstName: 'Alex',
       lastName: 'Bashliy',
       mobilePhoneNumber: alexPhoneNumber,
@@ -1227,7 +1259,7 @@ const SEEDS = {
   Reminder,
 
   SentReminder: [
-    /*{
+    {
       reminderId,
       accountId,
       createdAt: moment({hour: 13, minute: 10})._d,
@@ -1235,7 +1267,7 @@ const SEEDS = {
       patientId: justinPatientId,
       primaryType: 'sms',
       lengthSeconds: 30,
-    },*/
+    },
 
     ...SentReminder,
   ],

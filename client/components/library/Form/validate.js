@@ -3,7 +3,7 @@ import axios from 'axios';
 import zxcvbn from 'zxcvbn';
 
 const asyncEmailValidatePatient = (values) => {
-  return axios.post('/patientCheck', { email: values.email })
+  return axios.post('/api/patients/patientCheck', { email: values.email })
     .then((response) => {
       if (response.data.exists) {
         throw { email: 'There is already a user with that email' };

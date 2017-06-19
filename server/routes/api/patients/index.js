@@ -276,6 +276,19 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
     });*/
 });
 
+patientsRouter.post('/patientCheck', checkPermissions('patients:read'), (req, res, next) => {
+  const { accountId } = req;
+  const email = req.body.email.toLowerCase();
+  Patient
+    .filter({ accountId })
+    .filter({ email })
+    .run()
+    .then((patient) => {
+      res.send({ exists: !!patient[0] });
+    })
+    .catch(next);
+});
+
 /**
  * Create a patient
  */

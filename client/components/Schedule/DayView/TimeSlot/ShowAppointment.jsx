@@ -46,6 +46,10 @@ export default function ShowAppointment(props) {
     isPatientConfirmed,
   } = appointment;
 
+  if (!patientData) {
+    return null;
+  }
+
   let appPosition = 0;
   rowSort.map((app, index) =>{
      if (appointment.id === app.id) {
@@ -138,6 +142,7 @@ ShowAppointment.propTypes = {
   appointment: PropTypes.object,
   bgColor: PropTypes.string,
   practIndex: PropTypes.number,
+  patient: PropTypes.object.required,
   selectAppointment: PropTypes.func.isRequired,
   startHour: PropTypes.number,
   endHour: PropTypes.number,

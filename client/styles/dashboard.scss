@@ -21,7 +21,7 @@ body {
     }
   }
 
-  ::-webkit-scrollbar {
+  /*::-webkit-scrollbar {
     width:9px;
   }
 
@@ -43,7 +43,7 @@ body {
 
   ::-webkit-scrollbar-thumb:window-inactive {
     background:rgba(0,0,0,0.05);
-  }
+  }*/
 
   .CareCruToggle.react-toggle--checked {
     &:hover {

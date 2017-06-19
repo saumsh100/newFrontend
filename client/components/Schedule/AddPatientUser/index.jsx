@@ -1,7 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import NewPatientForm from './NewPatientForm';
 import { Card, CardHeader, Icon } from '../../library';
@@ -13,11 +12,6 @@ class AddPatientUser extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDatePicker = this.handleDatePicker.bind(this);
-  }
-
-  handleDatePicker(e, day) {
-    this.props.change('Create New Patient', 'birthDate', '');
   }
 
   handleSubmit(values) {
