@@ -60,7 +60,8 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
-        dispatch(deleteEntity({ key: 'appointments', id: data.entities }));
+        console.log('remove:Appointment event, id=', data);
+        dispatch(deleteEntity({ key: 'appointments', id: data }));
       });
 
       /**
