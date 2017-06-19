@@ -26,7 +26,7 @@ export default function AccountLogo({ account, className, size, onClick = () => 
       alt="Enter Logo Here"
       className={styles.logo}
       size={size}
-      // onClick={onClick}
+      onClick={onClick}
     />
   );
 }
