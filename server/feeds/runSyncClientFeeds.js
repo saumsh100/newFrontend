@@ -21,13 +21,13 @@ function runSyncClientFeeds(socket) {
 
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
-            console.log(`SYNC RM: NOT emitting. Removing appointments; id=${doc.id}; pmsId=${doc.pmsId}`);
+            console.log(`SYNC RM: NOT emitting. Removing appointments; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
             // socket.emit('remove:Appointment', normalize('appointment', doc));
           } else if (isCreated(doc)) {
-            console.log(`SYNC CREA: appointments; id=${doc.id}; pmsId=${doc.pmsId}`);
+            console.log(`SYNC CREA: appointments; account=${doc.accountId}, id=${doc.id}; pmsId=${doc.pmsId}`);
             socket.emit('create:Appointment', normalize('appointment', doc));
           } else {
-            console.log(`SYNC UPDT: appointments; id=${doc.id}; pmsId=${doc.pmsId}`);
+            console.log(`SYNC UPDT: appointments; account=${doc.accountId}, id=${doc.id}; pmsId=${doc.pmsId}`);
             socket.emit('update:Appointment', normalize('appointment', doc));
           }
         }
@@ -47,10 +47,13 @@ function runSyncClientFeeds(socket) {
 
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
-            socket.emit('remove:Patient', normalize('patient', doc));
+            console.log(`SYNC RM: NOT emitting. Removing patient; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
+            // socket.emit('remove:Patient', normalize('patient', doc));
           } else if (isCreated(doc)) {
+            console.log(`SYNC CREA: Creating patient; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
             socket.emit('create:Patient', normalize('patient', doc));
           } else {
+            console.log(`SYNC UPDT: Updating patient; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
             socket.emit('update:Patient', normalize('patient', doc));
           }
         }
