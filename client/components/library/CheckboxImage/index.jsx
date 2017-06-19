@@ -2,6 +2,7 @@
 import React, { PropTypes, Component, defaultProps } from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
+import Avatar from '../Avatar';
 
 export default function CheckboxImage(props) {
   const {
@@ -11,6 +12,8 @@ export default function CheckboxImage(props) {
     onChange,
     imgColor,
     imageSrc,
+    url,
+    firstName,
   } = props;
 
   let imgStyle = styles.checkBoxImage__photo;
@@ -29,7 +32,7 @@ export default function CheckboxImage(props) {
       />
       <label className={styles.checkBoxImage__label} htmlFor={id}>
         <li className={styles.checkBoxImage__list}>
-          <img className={imgStyle} src={imageSrc} />
+          <Avatar className={imgStyle} user={{ avatarUrl: url, firstName }} size="lg" />
           {label}
         </li>
       </label>
