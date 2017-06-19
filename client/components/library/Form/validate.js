@@ -23,7 +23,29 @@ const asyncPhoneNumberValidatePatient = (values) => {
     });
 };
 
+const asyncEmailValidateNewPatient = (values) => {
+  return axios.post('/api/patients/emailCheck', { email: values.email })
+    .then((response) => {
+      if (response.data.exists) {
+        throw { email: 'There is already a user with that email' };
+      }
+    });
+};
+
+const asyncPhoneNumberValidateNewPatient = (values) => {
+  if (!values.phoneNumber) return;
+  return axios.post('/api/patients/phoneNumberCheck', { phoneNumber: values.phoneNumber })
+    .then((response) => {
+      if (response.data.exists) {
+        console.log('throwing error');
+        throw { phoneNumber: 'There is already a user with that phone number' };
+      }
+    });
+};
+
+
 const asyncValidatePatient = composeAsyncValidators([asyncEmailValidatePatient, asyncPhoneNumberValidatePatient]);
+const asyncValidateNewPatient = composeAsyncValidators(([asyncEmailValidateNewPatient, asyncPhoneNumberValidateNewPatient]))
 
 function composeAsyncValidators(validatorFns) {
   return async (values, dispatch, props, field) => {
@@ -128,8 +150,11 @@ const passwordStrength = (value) => {
 export {
   composeAsyncValidators,
   asyncValidatePatient,
+  asyncValidateNewPatient,
   asyncEmailValidatePatient,
+  asyncEmailValidateNewPatient,
   asyncPhoneNumberValidatePatient,
+  asyncPhoneNumberValidateNewPatient,
   asyncEmailValidateUser,
   maxLength,
   emailValidate,
