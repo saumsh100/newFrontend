@@ -17,14 +17,17 @@ function runSyncClientFeeds(socket) {
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
 
+        console.log('SYNC feed doc', JSON.stringify(doc));
+
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
-            console.log('SYNC syncClientFeeds: removing appointments', doc);
-            socket.emit('remove:Appointment', normalize('appointment', doc));
+            console.log(`SYNC RM: NOT emitting. Removing appointments; id=${doc.id}; pmsId=${doc.pmsId}`);
+            // socket.emit('remove:Appointment', normalize('appointment', doc));
           } else if (isCreated(doc)) {
+            console.log(`SYNC CREA: appointments; id=${doc.id}; pmsId=${doc.pmsId}`);
             socket.emit('create:Appointment', normalize('appointment', doc));
           } else {
-            console.log('SYNC update:Appointment: updating appointments', doc);
+            console.log(`SYNC UPDT: appointments; id=${doc.id}; pmsId=${doc.pmsId}`);
             socket.emit('update:Appointment', normalize('appointment', doc));
           }
         }

@@ -401,7 +401,7 @@ appointmentsRouter.get('/', (req, res, next) => {
 
   return Appointment
     .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)))
+    .filter(r.row('startDate').during(startDate, endDate))
     .orderBy('startDate')
     .skip(parseInt(skipped))
     .limit(parseInt(limitted))
