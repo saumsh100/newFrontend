@@ -4,10 +4,27 @@ import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
 import TimeSlotColumn from './TimeSlotColumn';
 
-/*
-function dayOfWeekAsString(dayIndex) {
-  return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday",][dayIndex];
-}*/
+function intersectingAppointments(appointments, startDate, endDate) {
+  const sDate = moment(startDate);
+  const eDate = moment(endDate);
+
+  return appointments.filter((app) => {
+    const appStartDate = moment(app.startDate);
+    const appEndDate = moment(app.endDate);
+    if (sDate.isSame(appStartDate) || sDate.isBetween(appStartDate, appEndDate) ||
+      eDate.isSame(appEndDate) || eDate.isBetween(appStartDate, appEndDate)) {
+      return app;
+    };
+  });
+}
+
+const sortApps = (a, b) => {
+  const aMoment = moment(a.startDate);
+  const bMoment = moment(b.startDate);
+  if (aMoment.isBefore(bMoment)) return -1;
+  if (aMoment.isAfter(bMoment)) return 1;
+  return 0;
+};
 
 export default function TimeSlot(props) {
   const {
@@ -24,20 +41,7 @@ export default function TimeSlot(props) {
     selectAppointment,
     columnWidth,
     practIndex,
-    weeklySchedule,
-    currentDate,
   } = props;
-
-
-  /**
-   * displaying based on weeklyschedule
-   *
-   *
-  const day = dayOfWeekAsString(moment(currentDate).weekday());
-  let displayPractApps = true;
-  if (weeklySchedule && weeklySchedule.get(day).isClosed) {
-    displayPractApps = false;
-  }*/
 
   // filter appointments based on selections from the filters panel
   const checkFilters = schedule.toJS();
@@ -58,29 +62,6 @@ export default function TimeSlot(props) {
     });
   });
 
-  const splitAppointments = filteredApps.filter((app) => app.isSplit);
-  // find Split appointments and their adjacent appointments and set isSplit true
-  splitAppointments && splitAppointments.map((sApp) => {
-    filteredApps = filteredApps.map((app) => {
-      const splitAppStartDate = moment(sApp.startDate);
-      const splitAppEndDate = moment(sApp.endDate);
-      const adjacentAppStartDate = moment(app.startDate);
-      const adjacentAppEndDate = moment(app.endDate);
-
-      if (((splitAppStartDate.isSame(adjacentAppStartDate)) ||
-        (splitAppStartDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)) ||
-        (splitAppEndDate.isSame(adjacentAppEndDate)) ||
-        (splitAppEndDate.isBetween(adjacentAppStartDate, adjacentAppEndDate)))
-        && (app.id !== sApp.id)) {
-        return Object.assign({}, app, {
-          isSplit: true,
-          adjacent: true,
-        });
-      }
-      return app;
-    });
-  });
-
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
     boxSizing: 'border-box',
@@ -95,7 +76,13 @@ export default function TimeSlot(props) {
         timeSlotHeight={timeSlotHeight}
         columnWidth={columnWidth}
       />
-      {(filteredApps.length > 0) && filteredApps.map((app, index) => {
+      {filteredApps && filteredApps.map((app, index, array) => {
+
+        const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate)
+        const row = moment(app.startDate).hour();
+        const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row)
+        const rowSort = intersectingApps.sort(sortApps);
+
         return (
           <ShowAppointment
             key={index}
@@ -106,6 +93,8 @@ export default function TimeSlot(props) {
             startHour={startHour}
             endHour={endHour}
             columnWidth={columnWidth}
+            widthIntersect={intersectingApps.length}
+            rowSort={rowSort}
           />
         );
       })}

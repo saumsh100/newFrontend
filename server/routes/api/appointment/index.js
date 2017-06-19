@@ -420,43 +420,32 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
   const {
     practitionerId,
-    chairId,
     patientId,
   } = appointmentData;
 
   const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
   const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
 
-  // const splitApps = []
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)).and(r.row('isCancelled').ne(true)))
+    .getJoin({ service: true })
     .run()
     .then((appointments) => {
-      const intersectingApps = intersectingAppointments(appointments, appointmentData.startDate, appointmentData.endDate);
-      const checkOverlapping = intersectingApps.map((app) => {
-        if ((practitionerId !== app.practitionerId) &&
-          (chairId !== app.chairId) && (patientId !== app.patientId)) {
-          return true;
+      const appWithService = appointments.filter(appService => appService.service);
+
+      const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
+
+      const checkOverlapping = intersectingApps.filter((app) => {
+        if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
+          return app;
         }
-        if ((practitionerId === app.practitionerId) &&
-          (chairId !== app.chairId) && (patientId !== app.patientId)) {
-          appointmentData.isSplit = true;
-          /* if (!app.isSplit) {
-            splitApps.push(app);
-          }*/
-          return true;
+
+        if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
+          return app;
         }
-        return false;
       });
 
-      const noOverLap = checkOverlapping.every(el => el === true);
-      if (checkOverlapping.length === 0 || noOverLap) {
-        /* splitApps && splitApps.map((appSplit) => {
-          const modifiedSplitApp = appSplit;
-          modifiedSplitApp.isSplit = true;
-          appSplit.merge(modifiedSplitApp).save();
-        });*/
-
+      if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
         return Appointment.save(appointmentData)
           .then((appt) => {
             res.status(201).send(normalize('appointment', appt));
@@ -548,7 +537,6 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
   const {
     practitionerId,
-    chairId,
     patientId,
   } = req.body;
 
@@ -565,54 +553,23 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
   Appointment.filter({ accountId })
     .filter(r.row('startDate').during(startDate, endDate))
     .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appointmentData.id)).and(r.row('isCancelled').ne(true)))
+    .getJoin({ service: true })
     .run()
     .then((appointments) => {
-      const intersectingApps = intersectingAppointments(appointments, appointmentData.startDate, appointmentData.endDate);
+      const appWithService = appointments.filter(appService => appService.service);
 
-      if (intersectingApps.length === 0 && appointmentData.isSplit) {
-        appointmentData.isSplit = false;
-      }
+      const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
 
-      const checkOverlapping = intersectingApps.map((app) => {
-        if ((practitionerId !== app.practitionerId) &&
-          (chairId !== app.chairId) && (patientId !== app.patientId)) {
-          if (appointmentData.isSplit) {
-            appointmentData.isSplit = false;
-          }
-          return true;
-        } else if ((practitionerId === app.practitionerId) &&
-          (chairId !== app.chairId) && (patientId !== app.patientId)) {
-          appointmentData.isSplit = true;
-          return true;
+      const checkOverlapping = intersectingApps.filter((app) => {
+        if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
+          return app;
         }
-
-        return false;
+        if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
+          return app;
+        }
       });
 
-      const testIfNoOverlap = checkOverlapping.every(el => el === true);
-
-      if (checkOverlapping.length === 0 || testIfNoOverlap) {
-        Appointment.get(appointmentData.id)
-            .run()
-            .then((appSplit) => {
-              const startDate = r.ISO8601(moment(appSplit.startDate).startOf('day').toISOString());
-              const endDate = r.ISO8601(moment(appSplit.endDate).endOf('day').toISOString());
-              Appointment.filter({ accountId })
-                .filter(r.row('startDate').during(startDate, endDate))
-                .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appSplit.id)).and(r.row('isCancelled').ne(true)))
-                .run()
-                .then((appointments) => {
-                  const splitApps = intersectingAppointments(appointments, appSplit.startDate, appSplit.endDate);
-                  if (splitApps.length !== 0) {
-                    splitApps.map((interApp) => {
-                      const modifiedSplitApp = interApp;
-                      modifiedSplitApp.isSplit = false;
-                      interApp.merge(modifiedSplitApp).save();
-                    });
-                  }
-                });
-            });
-
+      if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
         return req.appointment.merge(req.body).save()
           .then(appointment => res.send(normalize('appointment', appointment)))
           .catch(next);
