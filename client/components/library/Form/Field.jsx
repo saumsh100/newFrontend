@@ -21,6 +21,7 @@ function ReduxField(props) {
   if (type === 'tel') {
     // TODO: we are currently overriding the normalize for tel, they should be able to stack (compose)
     normalize = normalizePhone;
+    validate = validate || [];
     validate = [...validate, phoneNumberValidate];
   }
 
