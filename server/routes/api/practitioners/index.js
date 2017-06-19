@@ -75,7 +75,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
 /**
  * Upload a practitioner's avatar
  */
-practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practitioners:update'), fileUpload(), async (req, res, next) => {
+practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practitioners:update'), async (req, res, next) => {
   const fileKey = `avatars/${req.practitioner.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
 
   try {

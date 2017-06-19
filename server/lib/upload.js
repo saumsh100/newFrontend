@@ -1,4 +1,4 @@
-const s3 = require('../../../config/s3');
+const s3 = require('../config/s3');
 const sharp = require('sharp');
 const async = require('async');
 
@@ -8,7 +8,7 @@ function resizeImage(size, buffer) {
   }
 
   return sharp(buffer)
-      .resize(size, size)
+      .resize(size, size, { withoutEnlargement: false })
       .toBuffer();
 }
 
@@ -24,12 +24,11 @@ module.exports = function upload(fileKey, data, sizes = [400, 200, 100]) {
         Body: resizedImage,
         ACL: 'public-read',
       }, async (err, response) => {
-        console.log(err, response);
         if (err) {
           return reject(err);
         }
 
-        nextImage(response);
+        return nextImage(null, response);
       });
     }, async response => resolve(response));
   });
