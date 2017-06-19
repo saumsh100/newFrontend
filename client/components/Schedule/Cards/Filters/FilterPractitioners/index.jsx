@@ -54,7 +54,7 @@ export default function FilterPractitioners(props) {
         {practitionersSort.map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
           const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
-
+          const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null)
           if (!pr) {
             return null;
           }
@@ -68,6 +68,8 @@ export default function FilterPractitioners(props) {
                 id={`checkbox-${i}`}
                 label={label}
                 imgColor={pr.color}
+                url={url}
+                firstName={pr.firstName}
                 imageSrc="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner"
               />
             </div>
