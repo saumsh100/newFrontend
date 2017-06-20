@@ -89,18 +89,22 @@ function runDashboardFeeds(socket) {
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
-
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-        if (isDeleted(doc)) {
-          socket.emit('remove:WaitSpot', doc.id);
-        } else if (isCreated(doc)) {
-          socket.emit('create:WaitSpot', normalize('waitSpot', doc));
-        } else {
-          socket.emit('update:WaitSpot', normalize('waitSpot', doc));
-        }
+
+        Patient.get(doc.patientId)
+          .then((patient) => {
+            doc.patient = patient;
+            if (isDeleted(doc)) {
+              socket.emit('remove:WaitSpot', doc.id);
+            } else if (isCreated(doc)) {
+              socket.emit('create:WaitSpot', normalize('waitSpot', doc));
+            } else {
+              socket.emit('update:WaitSpot', normalize('waitSpot', doc));
+            }
+          });
       });
-    });
+  });
   /**
    * Listen to changes on the sentRecall table and update dashboards in real time
    */

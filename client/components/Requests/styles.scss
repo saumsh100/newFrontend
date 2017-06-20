@@ -78,12 +78,18 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    &:hover {
+      color: $primary-color;
+    }
   }
 
   &__age{
     @extend .font-medium-grey;
     margin-right: 0px;
     padding-right: 0px;
+    &:hover {
+      color: $primary-color;
+    }
   }
 
   &__phoneNumber{
