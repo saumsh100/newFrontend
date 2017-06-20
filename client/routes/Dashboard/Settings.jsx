@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
+import DocumentTitle from 'react-document-title';
 import Container from '../../containers/SettingsContainer';
 import Clinic from '../../components/Settings/Clinic';
 import Schedule from '../../components/Settings/Schedule';
@@ -35,13 +36,15 @@ const ScheduleContainer = props =>
 
 const Settings = props =>
   <Container {...props}>
-    <Switch>
-      <Redirect exact from={base()} to={base('/clinic')} />
-      <Route path={clinicBase()} component={ClinicContainer} />
-      <Route path={scheduleBase()} component={ScheduleContainer} />
-      <Route path={base('/services')} component={Services} />
-      <Route path={base('/practitioners')} component={Practitioners} />
-    </Switch>
+    <DocumentTitle title="CareCru | Settings">
+      <Switch>
+        <Redirect exact from={base()} to={base('/clinic')} />
+        <Route path={clinicBase()} component={ClinicContainer} />
+        <Route path={scheduleBase()} component={ScheduleContainer} />
+        <Route path={base('/services')} component={Services} />
+        <Route path={base('/practitioners')} component={Practitioners} />
+      </Switch>
+    </DocumentTitle>
   </Container>;
 
 export default Settings;

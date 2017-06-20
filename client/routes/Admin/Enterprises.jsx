@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
+import DocumentTitle from 'react-document-title';
 import Container from '../../containers/EnterprisesContainer';
 import List from '../../components/Admin/Enterprises/List/index';
 import Create from '../../components/Admin/Enterprises/Form/index';
@@ -19,12 +20,14 @@ const Enterprises = props =>
 
 const Admin = () =>
   <div>
-    <Switch>
-      <Redirect exact from="/admin" to={base()} />
+    <DocumentTitle title="CareCru | Super Admin">
+      <Switch>
+        <Redirect exact from="/admin" to={base()} />
 
-      <Route path={base('/:enterpriseId/accounts')} component={Accounts} />
-      <Route path={base()} component={Enterprises} />
-    </Switch>
+        <Route path={base('/:enterpriseId/accounts')} component={Accounts} />
+        <Route path={base()} component={Enterprises} />
+      </Switch>
+    </DocumentTitle>
   </div>;
 
 export default Admin;
