@@ -74,6 +74,7 @@ class PractitionerBasicData extends Component {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
       fullAvatarUrl: practitioner.get('fullAvatarUrl'),
+      type: practitioner.get('type'),
     };
 
     return (
@@ -91,6 +92,15 @@ class PractitionerBasicData extends Component {
           onSubmit={this.updatePractitioner}
           initialValues={initialValues}
         >
+          <Field
+            name="type"
+            label="Type"
+            component="DropdownSelect"
+            options={[
+              { value: 'Dentist' },
+              { value: 'Hygenist' },
+            ]}
+          />
           <Field
             required
             name="firstName"

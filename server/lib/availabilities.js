@@ -41,7 +41,11 @@ function fetchServiceData(options) {
   } = options;
 
   const joinObject = {
-    practitioners: true,
+    practitioners: {
+      _apply: prac => prac.filter(row => {
+        return row('isActive').eq(true);
+      }),
+    },
     requests: {
       _apply: (sequence) => {
         return sequence.filter((request) => {

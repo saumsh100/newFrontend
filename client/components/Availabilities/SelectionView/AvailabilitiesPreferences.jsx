@@ -22,9 +22,13 @@ function AvailabilitiesPreferences(props) {
 
   const serviceOptions = services.get('models').map(s => ({ label: s.get('name'), value: s.get('id') })).toArray();
 
+  const filteredPractitioners = practitioners.get('models').toArray().filter((prac) => {
+    return prac.isActive;
+  });
+
   const practitionerOptions = [
     { label: 'No Preference', value: '' },
-    ...practitioners.get('models').map(p => ({ label: p.getFullName(), value: p.get('id') })).toArray(),
+    ...filteredPractitioners.map(p => ({ label: p.getFullName(), value: p.get('id') })),
   ];
 
   return (
