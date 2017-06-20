@@ -92,7 +92,7 @@ export function createWaitSpot() {
 
     const params = {
       accountId: account.id,
-      patientId: patientUser.id,
+      patientUserId: patientUser.id,
       preferences: waitSpot.preferences,
       unavailableDays: waitSpot.unavailableDays,
     };
