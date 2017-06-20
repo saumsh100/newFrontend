@@ -13,6 +13,7 @@ const Account = createModel('Account', {
   city: type.string(),
   zipCode: type.string(),
   vendastaId: type.string(),
+  timezone: type.string(),
   twilioPhoneNumber: type.string(),
   destinationPhoneNumber: type.string(),
   phoneNumber: type.string(),

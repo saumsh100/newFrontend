@@ -1,10 +1,10 @@
 
 import React, { PropTypes } from 'react';
+import moment from 'moment-timezone';
 import { Form, Field, Button, Grid, Row, Col } from '../../../library';
 import styles from './styles.scss';
 import jwt from 'jwt-decode';
 import { emailValidate } from '../../../library/Form/validate';
-
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
@@ -21,17 +21,23 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     phoneNumber: activeAccount.get('phoneNumber'),
     contactEmail: activeAccount.get('contactEmail'),
     website: activeAccount.get('website'),
+    timezone: activeAccount.get('timezone'),
   };
 
   const token = localStorage.getItem('token');
   const decodedToken = jwt(token);
   let role = null;
-
   users.map((users) => {
     if (decodedToken.userId === users.id) {
       role = users.role
     }
     return null;
+  });
+
+  const options = moment.tz.names().map((value) => {
+    return {
+      value,
+    };
   });
 
   const display = (role === 'SUPERADMIN' ? (<div>
@@ -72,6 +78,15 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
           name="name"
           label="Name"
           validate={[maxLength25]}
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          name="timezone"
+          label="Timezone"
+          component="DropdownSelect"
+          options={options}
+
         />
       </div>
       <div className={styles.paddingField}>

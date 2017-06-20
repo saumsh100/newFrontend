@@ -26,6 +26,7 @@ const AccountSchema = {
   zipCode: null,
   vendastaId: null,
   phoneNumber: null,
+  timezone: null,
   contactEmail: null,
   website: null,
   twilioPhoneNumber: null,
