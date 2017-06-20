@@ -888,7 +888,6 @@ const SEEDS = {
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       twilioPhoneNumber: clinicPhoneNumber,
-      logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: donnaDentalId,
     },
@@ -903,7 +902,6 @@ const SEEDS = {
       zipCode: '90210',
       twilioPhoneNumber: clinicPhoneNumber,
 
-      logo: '/images/liberty_logo.png',
       enterpriseId: sunshineSmilesId,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
