@@ -888,7 +888,6 @@ const SEEDS = {
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       twilioPhoneNumber: clinicPhoneNumber,
-      logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: donnaDentalId,
       canSendReminders: true,
@@ -904,7 +903,7 @@ const SEEDS = {
       city: 'Toronto',
       zipCode: '90210',
       twilioPhoneNumber: clinicPhoneNumber,
-      logo: '/images/liberty_logo.png',
+
       enterpriseId: sunshineSmilesId,
       canSendReminders: true,
       canSendRecalls: true,
@@ -1237,7 +1236,7 @@ const SEEDS = {
     {
       accountId,
       patientId: justinPatientId,
-      patientUserId: patientUserId3,
+      //patientUserId: patientUserId3,
       preferences: {
         weekends: false,
         evenings: false,
@@ -1248,25 +1247,17 @@ const SEEDS = {
         moment().add(2, 'days').toISOString(),
       ],
     },
+    {
+      accountId,
+      patientId: sergeyPatientId,
+    },
   ],
 
   PatientUser,
   Recall,
   Reminder,
 
-  /*SentReminder: [
-    {
-      reminderId,
-      accountId,
-      createdAt: moment({hour: 13, minute: 10})._d,
-      appointmentId: appointmentId1,
-      patientId: justinPatientId,
-      primaryType: 'sms',
-      lengthSeconds: 30,
-    },
-
-    ...SentReminder,
-  ],*/
+  SentReminder: [],
 
   SentRecall: [],
 };

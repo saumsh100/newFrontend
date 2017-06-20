@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const zxcvbn = require('zxcvbn');
 const userRouter = require('express').Router();
 const User = require('../../../models/User');
+const Permission = require('../../../models/Permission');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const StatusError = require('../../../util/StatusError');
@@ -25,6 +26,15 @@ userRouter.get('/me', ({ userId, role, accountId, sessionData }, res) =>
     })
   )
 );
+
+userRouter.get('/:userId',checkPermissions('users:read'), (req, res, next) => {
+  return Permission.get(req.profile.permissionId)
+  .then((permission) => {
+    req.profile.role = permission.role;
+    return res.send(normalize('user', req.profile));
+  }).catch(next);
+
+});
 
 userRouter.get('/',checkPermissions('users:read'), (req, res, next) => {
   const {

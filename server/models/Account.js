@@ -15,6 +15,9 @@ const Account = createModel('Account', {
   vendastaId: type.string(),
   twilioPhoneNumber: type.string(),
   destinationPhoneNumber: type.string(),
+  phoneNumber: type.string(),
+  contactEmail: type.string(),
+  website: type.string(),
   logo: type.string(),
   fullLogoUrl: type.virtual().default(function () {
     return this.logo ? `${globals.s3.urlPrefix}${this.logo}` : null;
@@ -39,6 +42,7 @@ function validatePatient(doc) {
 function validatePhoneNumbers(doc) {
   doc.destinationPhoneNumber = validatePhoneNumber(doc.destinationPhoneNumber);
   doc.twilioPhoneNumber = validatePhoneNumber(doc.twilioPhoneNumber);
+  doc.phoneNumber = validatePhoneNumber(doc.phoneNumber);
 }
 
 module.exports = Account;

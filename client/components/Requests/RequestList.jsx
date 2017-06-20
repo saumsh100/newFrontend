@@ -65,29 +65,22 @@ class RequestList extends Component {
       setHoverRequestId,
     } = this.props;
 
-    const showComponent = sortedRequests.length ? (
-      sortedRequests.map((request) => {
-        //const active = request.get('id') === this.props.setHoverRequestId;
-        return (
-          <RequestListItem
-            key={request.id}
-            request={request}
-            service={services.get(request.get('serviceId'))}
-            patientUser={patientUsers.get(request.get('patientUserId'))}
-            confirmAppointment={this.confirmAppointment}
-            removeRequest={this.removeRequest}
-            setClickedId={setHoverRequestId}
-          />
-        );
-      })
-    ) : (
-      <div className={styles.emptyList}>
-        YOU HAVE NO APPOINTMENT REQUESTS
-      </div>
-    )
     return (
       <List className={styles.requestList}>
-        {showComponent}
+        {sortedRequests.map((request) => {
+          //const active = request.get('id') === this.props.setHoverRequestId;
+          return (
+            <RequestListItem
+              key={request.id}
+              request={request}
+              service={services.get(request.get('serviceId'))}
+              patientUser={patientUsers.get(request.get('patientUserId'))}
+              confirmAppointment={this.confirmAppointment}
+              removeRequest={this.removeRequest}
+              setClickedId={setHoverRequestId}
+            />
+          );
+        })}
       </List>
     );
   }

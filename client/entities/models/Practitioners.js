@@ -6,6 +6,8 @@ const PractitionerSchema = {
   accountId: null,
   services: [],
   firstName: null,
+  type: null,
+  isActive: null,
   lastName: null,
   type: 'DR',
   isCustomSchedule: null,

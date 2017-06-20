@@ -31,7 +31,7 @@ class RemindersList extends Component {
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
-          <CardHeader count={sentReminders.size} title="Reminders" />
+          <CardHeader count={sentReminders.size} title="Sent Reminders" />
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
