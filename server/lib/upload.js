@@ -13,7 +13,27 @@ function resizeImage(size, buffer) {
 }
 
 module.exports = function upload(fileKey, data, sizes = [400, 200, 100]) {
+  const responses = [];
+
   return new Promise((resolve, reject) => {
+    if (!fileKey) {
+      return reject('fileKey must be set');
+    }
+
+    if (!data) {
+      return reject('data must be set');
+    }
+
+    if (!Array.isArray(sizes)) {
+      return reject('sizes must be an array');
+    }
+    
+    const valid = sizes.reduce((prev, curr) => prev && !isNaN(curr), true);
+
+    if (!valid) {
+      return reject('sizes should be numeric');
+    }
+
     async.eachSeries([
       'original',
       ...sizes,
@@ -28,8 +48,15 @@ module.exports = function upload(fileKey, data, sizes = [400, 200, 100]) {
           return reject(err);
         }
 
+        responses.push(response);
         return nextImage(null, response);
       });
-    }, async response => resolve(response));
+    }, async (err) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      return resolve(responses);
+    });
   });
 };

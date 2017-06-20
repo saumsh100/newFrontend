@@ -17,7 +17,7 @@ const db = {
   authKey: environmentVariables.RETHINKDB_AUTHKEY || '',
   host: environmentVariables.RETHINKDB_HOST || 'localhost',
   port: environmentVariables.RETHINKDB_PORT || '28015',
-  db: environmentVariables.RETHINKDB_DB || 'carecru_development',//defaultDBName,
+  db: environmentVariables.RETHINKDB_DB || 'carecru_development', // defaultDBName,
 };
 
 const caCert = environmentVariables.COMPOSE_CA_CERT;
