@@ -114,7 +114,7 @@ class PractitionerBasicData extends Component {
               component="DropdownSelect"
               options={[
                 { value: 'Dentist' },
-                { value: 'Hygenist' },
+                { value: 'Hygienist' },
               ]}
             />
           </div>
