@@ -26,7 +26,6 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     if (decodedToken.userId === users.id) {
       role = users.role
     }
-    console.log(users.toJS())
     return null;
   });
 
