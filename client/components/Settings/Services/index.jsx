@@ -43,6 +43,7 @@ class Services extends Component {
         <ServiceListContainer
           services={services}
           setServiceId={this.props.setServiceId}
+          serviceId={serviceId}
         />
         <ServiceDataContainer
           services={services}
@@ -77,7 +78,7 @@ function mapStateToProps({ entities, accountSettings }) {
   return {
     services: filteredServices,
     practitioners: filteredPractitioners,
-    serviceId
+    serviceId,
   };
 }
 

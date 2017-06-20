@@ -28,6 +28,7 @@ class ServiceDataContainer extends Component {
     const { services, serviceId, practitioners } = this.props;
 
     const selectedService = serviceId ? services.get(serviceId) : services.first();
+
     if (!practitioners) {
       return null;
     }

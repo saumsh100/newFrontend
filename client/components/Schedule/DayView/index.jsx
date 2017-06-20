@@ -36,7 +36,7 @@ class DayView extends Component  {
         chairs={chairs.get('models')}
         services={services.get('models')}
         patients={patients.get('models')}
-        practitioners={practitioners.get('models')}
+        practitioners={practitioners}
         startHour={6}
         endHour={24}
         weeklySchedules={weeklySchedules}

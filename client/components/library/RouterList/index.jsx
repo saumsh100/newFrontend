@@ -8,9 +8,16 @@ import { List, ListItem } from '../List';
 export default function RouterList({ location, routes, className }) {
   const listItems = routes.map(({ to, label, disabled }) => {
     // TODO: check if active
+
+    const selectedItem = location.pathname === to
+
     return (
       <Link to={to} key={to + label} disabled={disabled}>
-        <ListItem disabled={disabled} className={className} >
+        <ListItem
+          disabled={disabled}
+          selectItem={selectedItem}
+          className={className} 
+        >
           {label}
         </ListItem>
       </Link>

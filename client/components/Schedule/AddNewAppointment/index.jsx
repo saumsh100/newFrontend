@@ -124,6 +124,15 @@ class AddNewAppointment extends Component {
       },
     };
 
+    const alertRequestUpdate = {
+      success: {
+        body: `Request Confirmed for ${patientSelected.firstName}'s Appointment`,
+      },
+      error: {
+        body: `Request failed for ${patientSelected.firstName} Failed`,
+      },
+    };
+
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
       return createEntityRequest({
@@ -135,7 +144,7 @@ class AddNewAppointment extends Component {
           return updateEntityRequest({
             key: 'requests',
             model: selectedAppointment.requestModel,
-            alert: alertUpdate,
+            alert: alertRequestUpdate,
           }).then(() => {
             reinitializeState();
             reset(formName);
@@ -226,7 +235,7 @@ class AddNewAppointment extends Component {
     });
   }
 
-  //ToDo: Feature is disabled
+  //ToDo: handling practitioner schedules and timeoffs
   handleDateChange(day) {
     /*const {
       practitioners,
