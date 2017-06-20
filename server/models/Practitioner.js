@@ -66,8 +66,6 @@ Practitioner.define('getAvailableTimeIntervals', function (startDate, endDate) {
   return new Promise((resolve, reject) => {
     self.getWeeklySchedule()
       .then((weeklySchedule) => {
-
-
       });
   });
 });
