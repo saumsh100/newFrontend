@@ -63,7 +63,7 @@ class SideBar extends Component {
     }*/
 
     const displayLogo = (fullLogoUrl ? (<div className={styles.sidebar__header}>
-      <img className={styles.sidebar__header_logo} src={fullLogoUrl.replace('[size]', 400)} alt="logo" />
+      <img className={styles.sidebar__header_logo} src={fullLogoUrl.replace('[size]', 'original')} alt="logo" />
     </div>) : null);
 
     return (

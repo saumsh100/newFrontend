@@ -156,6 +156,9 @@ class Business extends Component {
       };
     }) : []);
 
+    unfilledHours = Math.round(unfilledHours * 100) / 100;
+    filledHours = Math.round(filledHours * 100) / 100;
+
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
     const pickupPercent = Math.floor(100 * callStats.pickup / callStats.total) || null;
