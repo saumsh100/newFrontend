@@ -71,6 +71,16 @@
   &_service {
     padding-bottom: 5px;
   }
+
+  &_hiddentext {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    padding-bottom: 25px;
+    &_toggle {
+      padding-left: 5px;
+    }
+  }
 }
 
 .serviceHeaderContainer {

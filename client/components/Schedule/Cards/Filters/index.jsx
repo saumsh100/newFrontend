@@ -37,6 +37,8 @@ export default function Filters(props) {
     });
   }
 
+  const filterPractitioners = practitioners.map((prac) => prac.get('isActive'))
+
   const entities = {
     chairsFilter: chairs,
     practitionersFilter: practitioners,

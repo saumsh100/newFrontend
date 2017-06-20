@@ -81,7 +81,9 @@ class Dashboard extends React.Component {
       return (isSameDate && !app.isDeleted && !app.isCancelled);
     });
 
-    const filterConfirmedRequests = requests.toArray().filter((req) => !req.get('isCancelled'));
+    const filterConfirmedRequests = requests.toArray().filter((req) => {
+      return !req.get('isCancelled') && !req.get('isConfirmed')
+    });
 
     const data = [
       { count: appointmentFilter.size, title: 'Appointments Today', icon: 'calendar', size: 6, color: 'primaryColor' },

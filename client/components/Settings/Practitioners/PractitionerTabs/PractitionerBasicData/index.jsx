@@ -11,6 +11,8 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
 const maxLength25 = maxLength(25);
 
+
+
 class PractitionerBasicData extends Component {
   constructor(props) {
     super(props);
@@ -70,10 +72,16 @@ class PractitionerBasicData extends Component {
       return null;
     }
 
+    const practitionerTypes = [
+      { value: 'Doctor' },
+      { value: 'Hygienist' },
+    ];
+
     const initialValues = {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
       fullAvatarUrl: practitioner.get('fullAvatarUrl'),
+      isActive: practitioner.get('isActive'),
       type: practitioner.get('type'),
     };
 
@@ -113,6 +121,24 @@ class PractitionerBasicData extends Component {
             label="Last Name"
             validate={[maxLength25]}
           />
+          <div className={styles.practFormContainer_type}>
+            <Field
+              required
+              component="DropdownSelect"
+              options={practitionerTypes}
+              name="type"
+              label="Practitioner Type"
+            />
+          </div>
+          <div className={styles.practFormContainer_practActive}>
+            Active?
+            <div className={styles.practFormContainer_practActive_toggle}>
+              <Field
+                name="isActive"
+                component="Toggle"
+              />
+            </div>
+          </div>
         </Form>
       </div>
     );

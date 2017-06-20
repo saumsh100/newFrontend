@@ -32,7 +32,6 @@ export default function FilterPractitioners(props) {
     }
   }
 
-
   practitionersSort = practitionersSort.map((prac, index) => {
     return Object.assign({}, prac.toJS(), {
       color: colorArray[index],
