@@ -91,18 +91,26 @@
   width: 50%;
   display: inline-block;
   padding-left: 10px;
+  padding-bottom: 10px;
   &__createForm{
     padding: 0px 15px 5px 15px;
     height: 100%;
   }
 
+  &_type {
+    padding-top: 10px;
+    padding-bottom: 25px;
+  }
+
   &_practActive {
     display: flex;
+    padding-top: 5px;
     align-content: center;
     align-items: center;
     &_toggle {
       padding-left: 5px;
     }
+
   }
 }
 

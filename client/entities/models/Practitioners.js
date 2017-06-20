@@ -12,6 +12,7 @@ const PractitionerSchema = {
   fullAvatarUrl: null,
   avatarUrl: null,
   isActive: null,
+  type: null,
 };
 
 export default class Practitioner extends createModel(PractitionerSchema) {
