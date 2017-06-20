@@ -13,7 +13,14 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
-import PatientUser, { patientUserId, patientUserId2, patientUserId3 } from '../fixtures/patientUsers';
+import PatientUser,
+{
+  patientUserId,
+  patientUserId2,
+  patientUserId3,
+  patientUserId4,
+  patientUserId5,
+} from '../fixtures/patientUsers';
 import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
@@ -555,6 +562,30 @@ const SEEDS = {
       isCancelled: false,
       note: 'testing note 2....',
     },
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      patientUserId: patientUserId4,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
+    },
+    {
+      accountId,
+      startDate: moment({hour: 13, minute: 10})._d,
+      endDate: moment({hour: 13, minute: 50})._d,
+      serviceId: serviceId,
+      practitionerId: practitionerId2,
+      patientUserId: patientUserId5,
+      chairId,
+      isConfirmed: false,
+      isCancelled: false,
+      note: 'testing note 2....',
+    },
 
     // Availabilities Test
     {
@@ -747,6 +778,7 @@ const SEEDS = {
       id: alexPatientId,
       accountId,
       avatarUrl: faker.image.avatar(),
+      patientUserId: patientUserId4,
       firstName: 'Alex',
       lastName: 'Bashliy',
       mobilePhoneNumber: alexPhoneNumber,
@@ -849,16 +881,17 @@ const SEEDS = {
       id: accountId,
       weeklyScheduleId,
       name: 'Donna Dental',
-      address: '#202 - 404 Chesapeake Bay',
+      street: '#202 - 404 Chesapeake Bay',
       country: 'US',
       state: 'CA',
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       twilioPhoneNumber: clinicPhoneNumber,
-      logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: donnaDentalId,
+      canSendReminders: true,
+      canSendRecalls: true,
     },
     {
       id: accountId2,
@@ -871,15 +904,9 @@ const SEEDS = {
       zipCode: '90210',
       twilioPhoneNumber: clinicPhoneNumber,
 
-      logo: '/images/liberty_logo.png',
       enterpriseId: sunshineSmilesId,
-      // bookingWidgetPrimaryColor: '#f29b12',
-      // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
-      // twilioPhoneNumber: clinicPhoneNumber,
-      // logo: 'images/availabilies_sidebar_logo_2.png',
-      // address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
-      // clinicName: 'PACIFIC HEART DENTAL',
-      // bookingWidgetPrimaryColor: '#0597d8',
+      canSendReminders: true,
+      canSendRecalls: true,
     },
     {
       id: syncTestAccId,
@@ -1209,7 +1236,7 @@ const SEEDS = {
     {
       accountId,
       patientId: justinPatientId,
-      patientUserId: patientUserId3,
+      //patientUserId: patientUserId3,
       preferences: {
         weekends: false,
         evenings: false,
@@ -1220,25 +1247,17 @@ const SEEDS = {
         moment().add(2, 'days').toISOString(),
       ],
     },
+    {
+      accountId,
+      patientId: sergeyPatientId,
+    },
   ],
 
   PatientUser,
   Recall,
   Reminder,
 
-  SentReminder: [
-    /*{
-      reminderId,
-      accountId,
-      createdAt: moment({hour: 13, minute: 10})._d,
-      appointmentId: appointmentId1,
-      patientId: justinPatientId,
-      primaryType: 'sms',
-      lengthSeconds: 30,
-    },*/
-
-    ...SentReminder,
-  ],
+  SentReminder: [],
 
   SentRecall: [],
 };

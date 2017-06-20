@@ -3,13 +3,64 @@ import axios from 'axios';
 import zxcvbn from 'zxcvbn';
 
 const asyncEmailValidatePatient = (values) => {
-  return axios.post('/patientCheck', { email: values.email })
+  if (!values.email) return;
+  return axios.post('/patientUsers/email', { email: values.email })
     .then((response) => {
       if (response.data.exists) {
         throw { email: 'There is already a user with that email' };
       }
     });
 };
+
+const asyncPhoneNumberValidatePatient = (values) => {
+  if (!values.phoneNumber) return;
+  return axios.post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
+    .then((response) => {
+      if (response.data.exists) {
+        console.log('throwing error');
+        throw { phoneNumber: 'There is already a user with that phone number' };
+      }
+    });
+};
+
+const asyncEmailValidateNewPatient = (values) => {
+  return axios.post('/api/patients/emailCheck', { email: values.email })
+    .then((response) => {
+      if (response.data.exists) {
+        throw { email: 'There is already a user with that email' };
+      }
+    });
+};
+
+const asyncPhoneNumberValidateNewPatient = (values) => {
+  if (!values.phoneNumber) return;
+  return axios.post('/api/patients/phoneNumberCheck', { phoneNumber: values.phoneNumber })
+    .then((response) => {
+      if (response.data.exists) {
+        console.log('throwing error');
+        throw { phoneNumber: 'There is already a user with that phone number' };
+      }
+    });
+};
+
+
+const asyncValidatePatient = composeAsyncValidators([asyncEmailValidatePatient, asyncPhoneNumberValidatePatient]);
+const asyncValidateNewPatient = composeAsyncValidators(([asyncEmailValidateNewPatient, asyncPhoneNumberValidateNewPatient]))
+
+function composeAsyncValidators(validatorFns) {
+  return async (values, dispatch, props, field) => {
+    let errors;
+    for (const validatorFn of validatorFns) {
+      try {
+        await validatorFn(values, dispatch, props, field);
+      } catch (err) {
+        errors = Object.assign({}, errors, err);
+      }
+    }
+
+    if (errors) throw errors;
+  };
+}
 
 const phoneValidate = (value) => {
   if (!/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(value)) {
@@ -32,7 +83,7 @@ const phoneNumberValidate = (value) => {
 };
 
 const phoneValidateNullOkay = (value) => {
-  if (!/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(value) && value !== null && value !== '') {
+  if (!/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value) && value !== null && value !== '') {
     return 'Invalid phone number';
   }
 };
@@ -97,7 +148,13 @@ const passwordStrength = (value) => {
 };
 
 export {
+  composeAsyncValidators,
+  asyncValidatePatient,
+  asyncValidateNewPatient,
   asyncEmailValidatePatient,
+  asyncEmailValidateNewPatient,
+  asyncPhoneNumberValidatePatient,
+  asyncPhoneNumberValidateNewPatient,
   asyncEmailValidateUser,
   maxLength,
   emailValidate,

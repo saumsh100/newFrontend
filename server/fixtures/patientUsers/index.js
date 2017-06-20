@@ -9,10 +9,15 @@ import { passwordHashSaltRounds } from '../../config/globals';
 export const patientUserId = uuid();
 export const patientUserId2 = uuid();
 export const patientUserId3 = uuid();
+export const patientUserId4 = uuid();
+export const patientUserId5 = uuid();
+export const patientuserId6 = uuid();
+
 
 const justinPhoneNumber = '+17808508886';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
+const sergeyPhoneNumber = '+17788654251';
 
 export default [
   {
@@ -38,5 +43,21 @@ export default [
     email: 'justin@carecru.com',
     phoneNumber: justinPhoneNumber,
     password: bcrypt.hashSync('justin', passwordHashSaltRounds),
+  },
+  {
+    id: patientUserId4,
+    email: 'jatinder@carecru.com',
+    password: bcrypt.hashSync('alex', passwordHashSaltRounds),
+    firstName: 'Alex',
+    lastName: 'Bashliy',
+    phoneNumber: alexPhoneNumber,
+  },
+  {
+    id: patientUserId5,
+    email: 'sergey@carecru.com',
+    password: bcrypt.hashSync('sergey', passwordHashSaltRounds),
+    firstName: 'Sergey',
+    lastName: 'James',
+    phoneNumber: sergeyPhoneNumber,
   },
 ];

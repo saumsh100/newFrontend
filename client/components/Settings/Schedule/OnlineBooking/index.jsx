@@ -29,7 +29,6 @@ class OnlineBooking extends Component {
 
   handleSubmit(values) {
     const { activeAccount, updateEntityRequest } = this.props;
-    console.log(hexToRgbA(values.bookingWidgetPrimaryColor, 1))
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
@@ -54,7 +53,9 @@ class OnlineBooking extends Component {
     }
 
     const location = window.location;
-    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${location.hostname}:${location.port}/widgets/${activeAccount.id}/widget.js"></script>`;
+
+    const port = location.port ? `:${location.port}` : '';
+    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${location.hostname}${port}/widgets/${activeAccount.id}/widget.js"></script>`;
 
     return (
       <div className={styles.mainContainer}>

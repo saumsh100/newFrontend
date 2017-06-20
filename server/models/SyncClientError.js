@@ -4,6 +4,7 @@ const createModel = require('./createModel');
 const type = thinky.type;
 
 const SyncClientError = createModel('SyncClientError', {
+  syncId: type.number(),
   accountId: type.string().uuid(4).required(),
   version: type.string(),
   adapter: type.string(),

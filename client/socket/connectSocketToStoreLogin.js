@@ -8,9 +8,12 @@ import {
 } from '../actions/entities';
 
 import {
-  showAlertTimeout,
+  showAlertTimeout
 } from '../thunks/alerts';
 
+import {
+  setSyncingWithPMS,
+} from '../actions/schedule';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
@@ -25,10 +28,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Request Socket
        */
       socket.on('create:Request', (data) => {
-        dispatch(addEntity({ key: 'requests', entity: data }));
+        dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
       });
       socket.on('update:Request', (data) => {
-        dispatch(updateEntity({ key: 'requests', entity: data }));
+        dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
       });
       socket.on('remove:Request', (data) => {
         dispatch(deleteEntity({ key: 'requests', id: data }));
@@ -38,25 +41,52 @@ export default function connectSocketToStoreLogin(store, socket) {
        * WaitSpot Socket
        */
       socket.on('create:WaitSpot', (data) => {
-        dispatch(addEntity({ key: 'waitSpots', entity: data }));
+        dispatch(receiveEntities({ key: 'waitSpots', entities: data.entities }));
       });
       socket.on('update:WaitSpot', (data) => {
-        dispatch(updateEntity({ key: 'waitSpots', entity: data }));
+        dispatch(receiveEntities({ key: 'waitSpots', entities: data.entities }));
       });
       socket.on('remove:WaitSpot', (data) => {
         dispatch(deleteEntity({ key: 'waitSpots', id: data }));
       });
 
       /**
+       * SentReminder Socket
+       */
+      socket.on('create:SentReminder', (data) => {
+        dispatch(receiveEntities({ key: 'sentReminders', entities: data.entities }));
+      });
+      socket.on('update:SentReminder', (data) => {
+        dispatch(receiveEntities({ key: 'sentReminders', entities: data.entities }));
+      });
+      socket.on('remove:SentReminder', (data) => {
+        dispatch(deleteEntity({ key: 'sentReminders', id: data }));
+      });
+
+      /**
+       * SentRecalls Socket
+       */
+      socket.on('create:SentRecall', (data) => {
+        dispatch(receiveEntities({ key: 'sentRecalls', entities: data.entities }));
+      });
+      socket.on('update:SentRecall', (data) => {
+        dispatch(receiveEntities({ key: 'sentRecalls', entities: data.entities }));
+      });
+      socket.on('remove:SentRecall', (data) => {
+        dispatch(deleteEntity({ key: 'sentRecalls', id: data }));
+      });
+
+      /**
        * Appointment Socket
        */
       socket.on('create:Appointment', (data) => {
-        dispatch(addEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('update:Appointment', (data) => {
-        dispatch(updateEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
+        console.log('remove:Appointment event, id=', data);
         dispatch(deleteEntity({ key: 'appointments', id: data }));
       });
 
@@ -64,13 +94,13 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
-        dispatch(addEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
       socket.on('update:Patient', (data) => {
-        dispatch(updateEntity({ key: 'appointments', entity: data }));
+        dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
       socket.on('remove:Patient', (data) => {
-        dispatch(deleteEntity({ key: 'appointments', id: data }));
+        dispatch(deleteEntity({ key: 'patients', id: data }));
       });
 
       socket.on('newMessage', (data) => {
@@ -86,16 +116,27 @@ export default function connectSocketToStoreLogin(store, socket) {
           model,
           operation,
         } = data;
-        const text = `SyncClientError: ${model} ${operation} failed in the PMS`
-        dispatch(showAlertTimeout({ text, type: 'error' }));
+        const alert = {
+          title: 'Sync Error',
+          body: `SyncClientError: ${model} ${operation} failed in the PMS`,
+        };
+        dispatch(showAlertTimeout({ alert, type: 'error' }));
+      });
 
-        console.log('[ TEMP ] normalized logEntry', data);
+      socket.on('syncFinished', () => {
+        const alert = {
+          title: 'Sync update',
+          body: 'Sync finished',
+        };
+        // console.log(alert.body);
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
+        dispatch(setSyncingWithPMS({ isSyncing: false }));
       });
     })
     .on('unauthorized', (msg) => {
       console.log('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
-    })
+    });
 
 }
 

@@ -8,6 +8,8 @@ const UserSchema = {
   lastName: null,
   username: null,
   activeAccountid: null,
+  permissionId: null,
+  role: null,
 };
 
 export default class User extends createModel(UserSchema) {

@@ -52,7 +52,7 @@ class PatientList extends Component {
         limit: HOW_MANY_TO_SKIP,
       },
     }).then((result) => {
-      if (Object.keys(result).length === 0) {
+      if (Object.keys(result).length === 0 || object.keys(result.appointments).length <= 7) {
         this.setState({ moreData: false });
       }
     });
@@ -211,6 +211,9 @@ class PatientList extends Component {
     let currentPatient = this.state.currentPatient;
     let app = appointments.sort((a, b) => moment(a.startDate).diff(b.startDate));
     app = app.filter((appointment) => {
+      if (appointment.isDeleted === true) {
+        return true;
+      }
       if (moment(appointment.startDate).diff(new Date()) > 0) {
         return true;
       }

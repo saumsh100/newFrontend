@@ -137,17 +137,27 @@ accountsRouter.post('/:accountId/newUser/', (req, res, next) => {
 accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => {
   const { permission } = req;
 
-  if (req.account.id !== req.accountId) {
-    return next(StatusError(403, 'req.accountId does not match URL account id'));
-  }
+  return User.get(req.sessionData.userId)
+    .getJoin({permission: true})
+    .then((user) => {
 
-  if (req.role !== 'SUPERADMIN' && req.role !== 'OWNER') {
-    return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
-  }
+      if (user.permission.role !== req.role) {
+        return next(StatusError(403, 'Access Denied!'));
+      }
 
-  permission.merge(req.body).save()
-    .then(p => res.send(normalize('permission', p)))
-    .catch(next);
+      if (req.account.id !== req.accountId) {
+        return next(StatusError(403, 'req.accountId does not match URL account id'));
+      }
+
+      if (req.role !== 'SUPERADMIN' && req.role !== 'OWNER') {
+        return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+      }
+
+      return permission.merge(req.body).save()
+        .then(p => res.send(normalize('permission', p)))
+        .catch(next);
+
+    }).catch(next);
 });
 
 

@@ -41,7 +41,11 @@ function fetchServiceData(options) {
   } = options;
 
   const joinObject = {
-    practitioners: true,
+    practitioners: {
+      _apply: prac => prac.filter(row => {
+        return row('isActive').eq(true);
+      }),
+    },
     requests: {
       _apply: (sequence) => {
         return sequence.filter((request) => {
@@ -245,6 +249,8 @@ function fetchAvailabilities(options) {
         fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
+            console.log('startDate', startDate);
+            console.log('endDate', endDate);
             const practitionerAvailabilities = practitioners.map((p, i) => {
               return generatePractitionerAvailabilities({
                 practitioner: p,

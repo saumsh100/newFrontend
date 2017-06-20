@@ -97,9 +97,9 @@ class ServiceDataItem extends Component {
                 normalize={parseNum}
                 validate={[notNegative, maxDuration]}
               />
-              <div className={styles.servicesPractForm_service}>
-                Is Hidden:
-                <div>
+              <div className={styles.servicesPractForm_hiddentext}>
+                Would you like to set this service to hidden ?
+                <div className={styles.servicesPractForm_hiddentext_toggle}>
                   <Field
                     name="isHidden"
                     component="Toggle"

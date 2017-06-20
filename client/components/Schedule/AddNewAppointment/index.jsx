@@ -211,11 +211,13 @@ class AddNewAppointment extends Component {
     } = this.props;
 
     const selectedPractitioner = practitioners.get(id);
-    const practitionerServiceIds = selectedPractitioner.get('services');
+    const practitionerServiceIds = selectedPractitioner ? selectedPractitioner.get('services') : null;
 
     const servicesAllowed = [];
     practitionerServiceIds.map((serviceId) => {
-      servicesAllowed.push(services.get(serviceId));
+      if (!servicesAllowed.includes(services.get(serviceId))) {
+        servicesAllowed.push(services.get(serviceId));
+      }
     });
 
     change(formName, 'appointment.serviceId', '');
@@ -224,8 +226,7 @@ class AddNewAppointment extends Component {
     });
   }
 
-
-  //ToDo: Feature is disabled for now
+  //ToDo: Feature is disabled
   handleDateChange(day) {
     /*const {
       practitioners,
@@ -254,6 +255,7 @@ class AddNewAppointment extends Component {
   }
 
   render() {
+
     const {
       formName,
       patients,
@@ -318,6 +320,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 };
 
+/*
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
@@ -328,7 +331,7 @@ function mapStateToProps({ entities, auth }) {
   return {
     activeAccount,
   };
-}
+}*/
 
 AddNewAppointment.propTypes = {
   formName: PropTypes.string.required,
@@ -345,6 +348,6 @@ AddNewAppointment.propTypes = {
   reinitializeState: PropTypes.func,
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(AddNewAppointment);
