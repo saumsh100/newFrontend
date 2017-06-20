@@ -3,6 +3,8 @@ import React, { PropTypes } from 'react';
 import { Form, Field, Button, Grid, Row, Col } from '../../../library';
 import styles from './styles.scss';
 import jwt from 'jwt-decode';
+import { emailValidate } from '../../../library/Form/validate';
+
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
@@ -16,6 +18,9 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
     destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
     vendastaId: activeAccount.get('vendastaId'),
+    phoneNumber: activeAccount.get('phoneNumber'),
+    contactEmail: activeAccount.get('contactEmail'),
+    website: activeAccount.get('website'),
   };
 
   const token = localStorage.getItem('token');
@@ -67,6 +72,26 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
           name="name"
           label="Name"
           validate={[maxLength25]}
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          name="phoneNumber"
+          label="Contact Phone Number"
+          type="tel"
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          name="contactEmail"
+          label="Contact Email"
+          validate={[emailValidate]}
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          name="website"
+          label="Website"
         />
       </div>
       {display}
