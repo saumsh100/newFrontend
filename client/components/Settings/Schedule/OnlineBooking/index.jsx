@@ -29,7 +29,6 @@ class OnlineBooking extends Component {
 
   handleSubmit(values) {
     const { activeAccount, updateEntityRequest } = this.props;
-    console.log(hexToRgbA(values.bookingWidgetPrimaryColor, 1))
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {

@@ -74,6 +74,7 @@ class PractitionerBasicData extends Component {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
       fullAvatarUrl: practitioner.get('fullAvatarUrl'),
+      isActive: practitioner.get('isActive'),
     };
 
     return (
@@ -103,6 +104,16 @@ class PractitionerBasicData extends Component {
             label="Last Name"
             validate={[maxLength25]}
           />
+
+          <div className={styles.practFormContainer_practActive}>
+            Active?
+            <div className={styles.practFormContainer_practActive_toggle}>
+              <Field
+                name="isActive"
+                component="Toggle"
+              />
+            </div>
+          </div>
         </Form>
       </div>
     );

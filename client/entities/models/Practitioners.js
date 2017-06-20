@@ -11,6 +11,7 @@ const PractitionerSchema = {
   weeklyScheduleId: null,
   fullAvatarUrl: null,
   avatarUrl: null,
+  isActive: null,
 };
 
 export default class Practitioner extends createModel(PractitionerSchema) {

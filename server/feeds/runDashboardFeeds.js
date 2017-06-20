@@ -33,10 +33,8 @@ function runDashboardFeeds(socket) {
           if (appointment.isSaved() === false) {
             socket.emit('remove:Appointment', appointment.id);
           } else if (appointment.getOldValue() === null) {
-            console.log('>>>>> create:Appointment: ', appointment);
             socket.emit('create:Appointment', normalize('appointment', appointment));
           } else {
-            console.log('>>>>> update:Appointment: ', appointment);
             socket.emit('update:Appointment', normalize('appointment', appointment));
           }
         });
