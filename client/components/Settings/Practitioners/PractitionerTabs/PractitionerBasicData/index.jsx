@@ -72,11 +72,6 @@ class PractitionerBasicData extends Component {
       return null;
     }
 
-    const practitionerTypes = [
-      { value: 'Doctor' },
-      { value: 'Hygienist' },
-    ];
-
     const initialValues = {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
@@ -101,15 +96,6 @@ class PractitionerBasicData extends Component {
           initialValues={initialValues}
         >
           <Field
-            name="type"
-            label="Type"
-            component="DropdownSelect"
-            options={[
-              { value: 'Dentist' },
-              { value: 'Hygenist' },
-            ]}
-          />
-          <Field
             required
             name="firstName"
             label="First Name"
@@ -123,11 +109,13 @@ class PractitionerBasicData extends Component {
           />
           <div className={styles.practFormContainer_type}>
             <Field
-              required
-              component="DropdownSelect"
-              options={practitionerTypes}
               name="type"
               label="Practitioner Type"
+              component="DropdownSelect"
+              options={[
+                { value: 'Dentist' },
+                { value: 'Hygienist' },
+              ]}
             />
           </div>
           <div className={styles.practFormContainer_practActive}>

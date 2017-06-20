@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -50,6 +51,12 @@ const EnterpriseForm = (props) => {
     { title: pageTitle(), key: isCreate ? 'add' : account.id },
   ];
 
+  const options = moment.tz.names().map((value) => {
+    return {
+      value,
+    };
+  });
+
   return (
     (account || isCreate) ? (
       <PageContainer title={pageTitle()} breadcrumbs={breadcrumbs()}>
@@ -62,6 +69,13 @@ const EnterpriseForm = (props) => {
           onSubmit={onSubmit}
         >
           <Field required name="name" label="Name" />
+          <Field
+            name="timezone"
+            label="Timezone"
+            component="DropdownSelect"
+            options={options}
+
+          />
         </Form>
       </PageContainer>
     ) : (
