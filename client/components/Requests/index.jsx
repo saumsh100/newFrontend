@@ -25,18 +25,26 @@ class Requests extends Component {
       return Date.parse(b.startDate) - Date.parse(a.startDate);
     });
 
+    const showComponent = sortedRequests.length ? (
+      <RequestList
+        sortedRequests={sortedRequests}
+        services={services}
+        patientUsers={patientUsers}
+        location={location}
+      />
+    ) : (
+      <div className={styles.emptyList}>
+        YOU HAVE NO APPOINTMENT REQUESTS
+      </div>
+    );
+
     return (
       <Card className={styles.requestCard}>
         <div className={styles.requestHeader}>
           <CardHeader count={sortedRequests.length} title={'Appointment Requests'} />
         </div>
         <div className={styles.requestBody}>
-          <RequestList
-            sortedRequests={sortedRequests}
-            services={services}
-            patientUsers={patientUsers}
-            location={location}
-          />
+          {showComponent}
         </div>
       </Card>
     );
