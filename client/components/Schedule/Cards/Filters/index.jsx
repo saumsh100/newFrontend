@@ -21,7 +21,7 @@ export default function Filters(props) {
     remindersFilter: schedule.toJS().remindersFilter,
   };
 
-  let filteredServices = [];
+  const filteredServices = [];
 
   if (practitionersFilter.length) {
     practitionersFilter.map((pracId) => {
@@ -36,9 +36,6 @@ export default function Filters(props) {
       }
     });
   }
-
-  const filterPractitioners = practitioners.filter((prac) => prac.get('isActive'));
-
 
   const entities = {
     chairsFilter: chairs,

@@ -16,7 +16,7 @@ export default function RouterList({ location, routes, className }) {
         <ListItem
           disabled={disabled}
           selectItem={selectedItem}
-          className={className} 
+          className={className}
         >
           {label}
         </ListItem>

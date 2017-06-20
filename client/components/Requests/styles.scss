@@ -78,9 +78,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    &:hover {
-      color: $primary-color;
-    }
   }
 
   &__age{

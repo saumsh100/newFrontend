@@ -9,7 +9,6 @@
 }
 
 .listItem {
-  position: relative;
   display: flex;
   align-items: center;
   height: 2.5rem;
@@ -23,10 +22,12 @@
   }
 }
 
-.selectedListItemIcon {
-  margin-left: auto;
-  padding-right: 15px;
-  color: $primary-dark;
+.selected {
+  background-color: darken($primary-grey, 5%);
+  &:hover {
+    cursor: auto;
+    background-color: darken($primary-grey, 5%);
+  }
 }
 
 .disabledListItem{

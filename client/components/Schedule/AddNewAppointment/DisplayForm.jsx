@@ -21,6 +21,15 @@ const generateEntityOptions = (entities, label) => {
   return options;
 };
 
+const generatePractitionerOptions = (practitioners) => {
+  const options = [];
+  practitioners.map((pr) => {
+    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
+    options.push({ label, value: pr.id });
+  });
+  return options;
+};
+
 export default function DisplayForm(props) {
   const {
     formName,
@@ -76,7 +85,7 @@ export default function DisplayForm(props) {
   }
 
   const serviceOptions = generateEntityOptions(services, 'name');
-  const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
+  const practitionerOptions = generatePractitionerOptions(practitioners);
   const chairOptions = generateEntityOptions(chairs, 'name');
   const title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Create New Appointment';
 

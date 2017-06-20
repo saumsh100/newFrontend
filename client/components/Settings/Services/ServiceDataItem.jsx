@@ -98,7 +98,7 @@ class ServiceDataItem extends Component {
                 validate={[notNegative, maxDuration]}
               />
               <div className={styles.servicesPractForm_hiddentext}>
-                Would you like to set this service to hidden ?
+                Would you like to set this service to be hidden on the booking widget ?
                 <div className={styles.servicesPractForm_hiddentext_toggle}>
                   <Field
                     name="isHidden"

@@ -269,6 +269,7 @@ class AddNewAppointment extends Component {
       formName,
       patients,
       chairs,
+      practitioners,
       selectedAppointment,
       reinitializeState,
     } = this.props;
@@ -289,7 +290,7 @@ class AddNewAppointment extends Component {
           key={formName}
           formName={formName}
           services={this.state.servicesAllowed}
-          practitioners={this.state.practitionersBySchedule}
+          practitioners={practitioners}
           patients={patients}
           chairs={chairs}
           selectedAppointment={selectedAppointment}

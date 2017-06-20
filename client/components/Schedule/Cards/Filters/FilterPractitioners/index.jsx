@@ -51,12 +51,16 @@ export default function FilterPractitioners(props) {
           onChange={() => handleAllCheck(filterKey)}
         />
         {practitionersSort.map((pr, i) => {
-          const checked = selectedFilterItem.indexOf(pr.id) > -1;
-          const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
-          const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null)
+
           if (!pr) {
             return null;
           }
+
+          const displayName = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
+
+          const checked = selectedFilterItem.indexOf(pr.id) > -1;
+          const label = (<div className={styles.filter_practitioner__name}>{displayName}</div>);
+          const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null);
 
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>
@@ -79,9 +83,11 @@ export default function FilterPractitioners(props) {
   );
 }
 
-
-
-
 FilterPractitioners.PropTypes = {
-
+  filterKey: PropTypes.string,
+  allChecked: PropTypes.bool,
+  practitioners: PropTypes.object.required,
+  selectedFilterItem: PropTypes.array,
+  handleAllCheck: PropTypes.func,
+  handleEntityCheck: PropTypes.func,
 };

@@ -20,16 +20,9 @@ export function ListItem(props) {
     classes = classNames(props.className, styles.listItem);
   }
 
-  let showIconComponent = props.selectItem ? (
-    <div className={styles.selectedListItemIcon}>
-      <Icon icon="chevron-circle-right" size={1}/>
-    </div>
-  ) : null;
+  classes = props.selectItem ? classNames(styles.selected, classes) : classes;
 
   return (
-    <li {...props} className={classes} >
-      {props.children}
-      {showIconComponent}
-    </li>
+    <li {...props} className={classes} />
   );
 }
