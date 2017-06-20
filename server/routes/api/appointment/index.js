@@ -301,7 +301,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         daysOfWeek.map((day) => {
           if (!account.weeklySchedule[day].isClosed) {
             timeOpen += getDiffInMin(account.weeklySchedule[day].startTime, account.weeklySchedule[day].endTime);
-            if (account.weeklySchedule[day].breaks) {
+            if (account.weeklySchedule[day].breaks && account.weeklySchedule[day].breaks[0]) {
               timeOpen -= getDiffInMin(account.weeklySchedule[day].breaks[0].startTime, account.weeklySchedule[day].breaks[0].endTime);
             }
           }
@@ -313,7 +313,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           const index = (i + dayOfWeek) % 7;
           if (!account.weeklySchedule[daysOfWeek[index]].isClosed) {
             timeOpen += getDiffInMin(account.weeklySchedule[daysOfWeek[index]].startTime, account.weeklySchedule[daysOfWeek[index]].endTime);
-            if (account.weeklySchedule[daysOfWeek[index]].breaks) {
+            if (account.weeklySchedule[daysOfWeek[index]].breaks && account.weeklySchedule[daysOfWeek[index]].breaks[0]) {
               timeOpen -= getDiffInMin(account.weeklySchedule[daysOfWeek[index]].breaks[0].startTime, account.weeklySchedule[daysOfWeek[index]].breaks[0].endTime);
             }
           }
