@@ -51,7 +51,7 @@ class RequestList extends Component {
 
 
   removeRequest(request) {
-    const confirmRemove = confirm('Are you sure you want to remove this request?');
+    const confirmRemove = confirm('Are you sure you want to reject this request?');
     if (confirmRemove) {
       this.props.deleteEntityRequest({ key: 'requests', id: request.get('id') });
     }

@@ -29,7 +29,7 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
 
   return SentRecall
     .filter({ accountId })
-   // .filter(r.row('startDate').during(startDate, endDate))
+    .filter(r.row('startDate').during(startDate, endDate))
     .getJoin(joinObject)
     .run()
     .then(sentRecalls => res.send(normalize('sentRecalls', sentRecalls)))

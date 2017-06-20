@@ -3,7 +3,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import styles from './main.scss';
 import {
-  ListItem,
+  ListItem, Avatar
 } from '../../library';
 
 class PatientListItem extends Component {
@@ -17,7 +17,7 @@ class PatientListItem extends Component {
   }
 
   render() {
-    const { user, currentPatient } = this.props;
+    const { user = {}, currentPatient } = this.props;
     const { startDate } = user.appointment;
     let showDate = startDate;
 
@@ -38,7 +38,7 @@ class PatientListItem extends Component {
 
     return (
       <ListItem onClick={this.goToDialogue} className={usersActiveClassName}>
-        <img className={styles.users__photo} src={avatar} alt="photo" />
+        <Avatar className={styles.users__photo} user={user} />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
             <div className={styles.users__name}>

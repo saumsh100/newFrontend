@@ -171,10 +171,9 @@ class ScheduleComponent extends Component {
               </Col>
             </Row>
             <Row className={styles.schedule__sidebar_rowRequest}>
-              <Col xs={12} >
+              <Col xs={12} className={styles.schedule__sidebar_request} >
                 <RequestsContainer
                   key={'scheduleRequests'}
-                  className={styles.schedule__sidebar_request}
                 />
               </Col>
             </Row>

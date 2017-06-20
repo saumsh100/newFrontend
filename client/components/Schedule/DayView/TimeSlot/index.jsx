@@ -79,9 +79,10 @@ export default function TimeSlot(props) {
       {filteredApps && filteredApps.map((app, index, array) => {
 
         const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate)
-        const row = moment(app.startDate).hour();
-        const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row)
-        const rowSort = intersectingApps.sort(sortApps);
+        // check which appointments are in the same row
+        // const row = moment(app.startDate).hour();
+        // const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row)
+        const rowSort = intersectingApps.sort(sortApps); //sort by startdate
 
         return (
           <ShowAppointment

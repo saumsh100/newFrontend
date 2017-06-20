@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import NewPatientForm from './NewPatientForm';
 import { Card, CardHeader, Icon } from '../../library';
+import { change } from 'redux-form';
 import styles from './styles.scss';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
 
@@ -26,8 +27,11 @@ class AddPatientUser extends Component {
       patientUser,
     } = mergingPatientData;
 
+    const phoneNumber = values.phoneNumber;
+    
     values.isSyncedWithPMS = false;
     values.patientUserId = patientUser.id;
+    values.mobilePhoneNumber = phoneNumber;
 
     const appointment = {
       startDate: requestData.startDate,
@@ -73,6 +77,7 @@ class AddPatientUser extends Component {
             mergingPatientData={mergingPatientData}
             formName="Create New Patient"
             onSubmit={this.handleSubmit}
+            handleDatePicker={this.handleDatePicker}
           />
         </div>
       </Card>
@@ -83,6 +88,7 @@ class AddPatientUser extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     createEntityRequest,
+    change,
     //reset,
   }, dispatch);
 };

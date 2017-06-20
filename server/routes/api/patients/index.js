@@ -92,7 +92,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
     };
 
       appointments.map((appointment) => {
-        if (male.test(appointment.patient.gender)) {
+        if (appointment.patient.gender && male.test(appointment.patient.gender)) {
           send.male++;
         } else {
           send.female++;
@@ -275,6 +275,36 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), (req, res,
       res.send(normalize('patients', filteredPatients));
     });*/
 });
+
+patientsRouter.post('/emailCheck', checkPermissions('patients:read'), (req, res, next) => {
+  const { accountId } = req;
+  const email = req.body.email.toLowerCase();
+  Patient
+    .filter({ accountId })
+    .filter({ email })
+    .run()
+    .then((patient) => {
+      res.send({ exists: !!patient[0] });
+    })
+    .catch(next);
+});
+
+patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), (req, res, next) => {
+  const { accountId } = req;
+  const phoneNumber = req.body.phoneNumber;
+
+  const trimmedNumber = phoneNumber.replace(/ +/g, '');
+
+  Patient
+    .filter({ accountId })
+    .filter(r.row('mobilePhoneNumber').eq(trimmedNumber))
+    .run()
+    .then((patient) => {
+      res.send({ exists: !!patient[0] });
+    })
+    .catch(next);
+});
+
 
 /**
  * Create a patient

@@ -35,14 +35,15 @@
   }
 }
 
+.appointmentContainer {
+  &:hover {
+    cursor: pointer;
+  }
+}
 .showAppointment {
   position: absolute;
   box-sizing: border-box;
   overflow: auto;
-
-  &:hover {
-    cursor: pointer;
-  }
 
   &_icon {
     color: $inactive-color;

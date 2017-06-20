@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import { Form, Field, DayPicker } from '../../library';
 import styles from '../styles.scss';
 
-import { maxLength, asyncEmailValidateUser, emailValidate, phoneValidate } from '../../library/Form/validate';
+import { maxLength, asyncValidateNewPatient, emailValidate, phoneValidate } from '../../library/Form/validate';
 
 
-export default function NewPatientForm({ onSubmit, formName, mergingPatientData }) {
+export default function NewPatientForm({ onSubmit, formName, mergingPatientData, }) {
   const options = [
     { value: 'Male' },
     { value: 'Female' },
@@ -24,7 +24,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData 
     firstName,
     lastName,
     email,
-    mobilePhoneNumber: phoneNumber,
+    phoneNumber,
   };
 
   return (
@@ -32,6 +32,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData 
       form={formName}
       onSubmit={onSubmit}
       initialValues={initialValues}
+      asyncValidate={asyncValidateNewPatient}
     >
       <Field
         required
@@ -56,9 +57,9 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData 
       </div>
       <Field
         required
-        name="mobilePhoneNumber"
-        validate={[phoneValidate]}
+        name="phoneNumber"
         label="Phone Number"
+        type="tel"
       />
       <Field
         required
@@ -72,6 +73,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData 
         component="DayPicker"
         name="birthDate"
         label="Birth Date"
+        handleThisInput
       />
     </Form>
   );
@@ -82,4 +84,6 @@ NewPatientForm.propTypes = {
   birthday: PropTypes.instanceOf(Date),
   saveBirthday: PropTypes.func,
   onSubmit: PropTypes.func.isRequired,
+  mergingPatientData: PropTypes.object,
+  handleDatePickeer: PropTypes.func,
 };
