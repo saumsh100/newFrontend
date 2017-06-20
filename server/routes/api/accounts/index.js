@@ -143,7 +143,6 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
 });
 
 accountsRouter.post('/:accountId/newUser/', (req, res, next) => {
-
   if (req.account.id !== req.accountId) {
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }

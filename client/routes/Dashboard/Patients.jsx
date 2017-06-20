@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
+import DocumentTitle from 'react-document-title';
 import Container from '../../containers/PatientsContainer';
 import List from '../../containers/PatientsListContainer';
 import Messages from '../../containers/PatientsMessagesContainer';
@@ -10,12 +11,14 @@ const base = (path = '') => `/patients${path}`;
 
 const Patients = () =>
   <Container>
-    <Switch>
-      <Redirect exact from={base()} to={base('/list')} />
-      <Route path={base('/list')} component={List} />
-      <Route path={base('/messages')} component={Messages} />
-      {/*<Route path={base('/phone')} component={Phone} />*/}
-    </Switch>
+    <DocumentTitle title="CareCru | Patients">
+      <Switch>
+        <Redirect exact from={base()} to={base('/list')} />
+        <Route path={base('/list')} component={List} />
+        <Route path={base('/messages')} component={Messages} />
+        {/*<Route path={base('/phone')} component={Phone} />*/}
+      </Switch>
+    </DocumentTitle>
   </Container>;
 
 export default Patients;

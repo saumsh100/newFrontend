@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import DocumentTitle from 'react-document-title';
 import {
   Grid,
   Row,
@@ -116,72 +117,74 @@ class ScheduleComponent extends Component {
     }
 
     return (
-      <Grid>
-        <Row className={styles.rowMainContainer}>
-          <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
-            <Card>
-              <div className={`${styles.schedule__title} ${styles.title}`}>
-                <CurrentDate currentDate={currentDate}>
-                  <DayPicker
-                    target="icon"
-                    onChange={this.setCurrentDay}
-                    multiple={false}
+      <DocumentTitle title="CareCru | Schedule">
+        <Grid>
+          <Row className={styles.rowMainContainer}>
+            <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
+              <Card>
+                <div className={`${styles.schedule__title} ${styles.title}`}>
+                  <CurrentDate currentDate={currentDate}>
+                    <DayPicker
+                      target="icon"
+                      onChange={this.setCurrentDay}
+                      multiple={false}
+                    />
+                    <HeaderButtons
+                      addNewAppointment={this.addNewAppointment}
+                    />
+                  </CurrentDate>
+                </div>
+                <div className={styles.schedule__container_content}>
+                  <DayView
+                    currentDate={currentDate}
+                    practitioners={filterPractitioners}
+                    patients={patients}
+                    chairs={chairs}
+                    services={services}
+                    appointments={appointments}
+                    schedule={schedule}
+                    selectAppointment={selectAppointment}
+                    weeklySchedules={weeklySchedules}
                   />
-                  <HeaderButtons
-                    addNewAppointment={this.addNewAppointment}
-                  />
-                </CurrentDate>
-              </div>
-              <div className={styles.schedule__container_content}>
-                <DayView
-                  currentDate={currentDate}
-                  practitioners={filterPractitioners}
-                  patients={patients}
-                  chairs={chairs}
-                  services={services}
-                  appointments={appointments}
-                  schedule={schedule}
-                  selectAppointment={selectAppointment}
-                  weeklySchedules={weeklySchedules}
-                />
-                <Modal
-                  active={
-                    addNewAppointment ||
-                    !!selectedAppointment ||
+                  <Modal
+                    active={
+                      addNewAppointment ||
+                      !!selectedAppointment ||
                       !!mergingPatientData.patientUser
-                  }
-                  onEscKeyDown={this.reinitializeState}
-                  onOverlayClick={this.reinitializeState}
-                  custom
-                >
-                  {displayModalComponent}
-                </Modal>
-              </div>
-              {/* Here is the legend */}
-              <Legend />
-            </Card>
-          </Col>
-          <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
-            <Row>
-              <Col xs={12}>
-                <Filters
-                  schedule={schedule}
-                  chairs={chairs.get('models').toArray()}
-                  practitioners={filterPractitioners}
-                  services={services.get('models')}
-                />
-              </Col>
-            </Row>
-            <Row className={styles.schedule__sidebar_rowRequest}>
-              <Col xs={12} className={styles.schedule__sidebar_request} >
-                <RequestsContainer
-                  key={'scheduleRequests'}
-                />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Grid>
+                    }
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={this.reinitializeState}
+                    custom
+                  >
+                    {displayModalComponent}
+                  </Modal>
+                </div>
+                {/* Here is the legend */}
+                <Legend />
+              </Card>
+            </Col>
+            <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
+              <Row>
+                <Col xs={12}>
+                  <Filters
+                    schedule={schedule}
+                    chairs={chairs.get('models').toArray()}
+                    practitioners={filterPractitioners}
+                    services={services.get('models')}
+                  />
+                </Col>
+              </Row>
+              <Row className={styles.schedule__sidebar_rowRequest}>
+                <Col xs={12} className={styles.schedule__sidebar_request} >
+                  <RequestsContainer
+                    key={'scheduleRequests'}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Grid>
+      </DocumentTitle>
     );
   }
 }
