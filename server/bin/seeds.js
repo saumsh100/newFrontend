@@ -891,6 +891,8 @@ const SEEDS = {
       logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: donnaDentalId,
+      canSendReminders: true,
+      canSendRecalls: true,
     },
     {
       id: accountId2,
@@ -905,6 +907,8 @@ const SEEDS = {
 
       logo: '/images/liberty_logo.png',
       enterpriseId: sunshineSmilesId,
+      canSendReminders: true,
+      canSendRecalls: true,
       // bookingWidgetPrimaryColor: '#f29b12',
       // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       // twilioPhoneNumber: clinicPhoneNumber,

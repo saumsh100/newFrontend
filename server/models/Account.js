@@ -19,14 +19,15 @@ const Account = createModel('Account', {
   fullLogoUrl: type.virtual().default(function () {
     return this.logo ? `${globals.s3.urlPrefix}${this.logo}` : null;
   }),
+
   clinicName: type.string(),
   bookingWidgetPrimaryColor: type.string(),
   weeklyScheduleId: type.string().uuid(4),
   enterpriseId: type.string().uuid(4).required(),
 
   // Application "Addons"
-  canSendReminders: type.boolean().default(true),
-  canSendRecalls: type.boolean().default(true),
+  canSendReminders: type.boolean().default(false),
+  canSendRecalls: type.boolean().default(false),
 });
 
 Account.docOn('saving', validatePatient); // <<< doc is in `doc` param
