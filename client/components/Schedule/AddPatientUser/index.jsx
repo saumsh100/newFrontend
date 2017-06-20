@@ -28,7 +28,7 @@ class AddPatientUser extends Component {
     } = mergingPatientData;
 
     const phoneNumber = values.phoneNumber;
-    
+
     values.isSyncedWithPMS = false;
     values.patientUserId = patientUser.id;
     values.mobilePhoneNumber = phoneNumber;

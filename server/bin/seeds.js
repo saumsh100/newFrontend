@@ -1241,7 +1241,7 @@ const SEEDS = {
     {
       accountId,
       patientId: justinPatientId,
-      patientUserId: patientUserId3,
+      //patientUserId: patientUserId3,
       preferences: {
         weekends: false,
         evenings: false,
@@ -1252,25 +1252,17 @@ const SEEDS = {
         moment().add(2, 'days').toISOString(),
       ],
     },
+    {
+      accountId,
+      patientId: sergeyPatientId,
+    },
   ],
 
   PatientUser,
   Recall,
   Reminder,
 
-  /*SentReminder: [
-    {
-      reminderId,
-      accountId,
-      createdAt: moment({hour: 13, minute: 10})._d,
-      appointmentId: appointmentId1,
-      patientId: justinPatientId,
-      primaryType: 'sms',
-      lengthSeconds: 30,
-    },
-
-    ...SentReminder,
-  ],*/
+  SentReminder: [],
 
   SentRecall: [],
 };
