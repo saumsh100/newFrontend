@@ -458,10 +458,8 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   //     return res.sendStatus(400);
   //   })
   //   .catch(next);
-  console.log(appointmentData)
   return Appointment.save(appointmentData)
     .then(appointment => {
-      console.log(appointment)
       res.status(201).send(normalize('appointment', appointment))
     })
     .catch(next);
