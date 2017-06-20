@@ -1,7 +1,7 @@
 
 import authRouter from './auth';
 import authMiddleware from '../../middleware/patientAuth';
-import { Account, PatientUser } from '../../models';
+import { Account, PatientUser, Practitioner } from '../../models';
 import { validatePhoneNumber } from '../../util/validators';
 
 const myRouter = require('express').Router();
@@ -27,31 +27,38 @@ myRouter.param('accountId', loaders('account', 'Account'));
 myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', {
   services: {
-    _apply: service => service.filter(row => {
+    _apply: service => service.filter((row) => {
       return row('isHidden').ne(true);
     }),
   },
+
   practitioners: true,
 }));
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
+    console.log(req.account);
     // Needs to match the structure of the reducers
-    const { entities } = normalize('account', req.account);
-    const initialState = {
-      availabilities: {
+    return Practitioner
+    .filter({accountId: req.account.id})
+    .filter({isActive: true})
+    .then(practitioners => {
+      const { entities } = normalize('account', req.account);
+      const initialState = {
+        availabilities: {
+          account: req.account,
+          services: req.account.services,
+          practitioners,
+          selectedServiceId: (req.account.services[0] ? req.account.services[0].id : null),
+        },
+
+        entities,
+      };
+
+      return res.render('patient', {
         account: req.account,
-        services: req.account.services,
-        practitioners: req.account.practitioners,
-        selectedServiceId: (req.account.services[0] ? req.account.services[0].id : null),
-      },
-
-      entities,
-    };
-
-    return res.render('patient', {
-      account: req.account,
-      initialState: JSON.stringify(initialState),
+        initialState: JSON.stringify(initialState),
+      });
     });
   } catch (err) {
     next(err);

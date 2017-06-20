@@ -43,10 +43,9 @@ class SideBar extends Component {
 
     const {
       name,
-      address,
+      street,
       state,
       city,
-      logo,
       fullLogoUrl,
     } = account.toJS();
 
@@ -77,7 +76,7 @@ class SideBar extends Component {
                 {name}
               </div>
               <div className={styles.sidebar__information_text}>
-                {address}
+                {street}
               </div>
               <div className={styles.sidebar__information_text}>
                 {city}, {state}

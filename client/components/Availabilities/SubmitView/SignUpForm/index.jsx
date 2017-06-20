@@ -27,7 +27,7 @@ export default function SignUpForm({ onSubmit }) {
       <Field
         required
         name="phoneNumber"
-        label="Phone Number (+1)"
+        label="Phone Number"
         type="tel"
       />
       <Field

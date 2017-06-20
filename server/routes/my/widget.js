@@ -82,6 +82,10 @@
     };
 
     window.addEventListener('message', () => ccmodal.close());
+
+    if (window.location.search.indexOf('ccbw') > -1) {
+      ccmodal.open();
+    }
   });
 
 })();

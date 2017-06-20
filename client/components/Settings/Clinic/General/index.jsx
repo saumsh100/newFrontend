@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
 import Address from '../Address';
 import { Map } from 'immutable';
-import { updateEntityRequest } from '../../../../thunks/fetchEntities';
+import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo } from '../../../../thunks/accounts';
 import { Grid, Row, Col, Dropzone, AccountLogo, Button, Header} from '../../../library';
 import styles from './styles.scss';
+import jwt from 'jwt-decode';
 
 class General extends React.Component {
 
@@ -21,6 +22,14 @@ class General extends React.Component {
     this.updateName = this.updateName.bind(this);
     this.uploadLogo = this.uploadLogo.bind(this);
     this.deleteLogo = this.deleteLogo.bind(this);
+  }
+
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+    const url = `/api/users/${decodedToken.userId}`;
+
+    this.props.fetchEntities({ url });
   }
 
   uploadLogo(files) {
@@ -76,6 +85,7 @@ class General extends React.Component {
           </div>
 
           <GeneralForm
+            users={this.props.users}
             onSubmit={this.updateName}
             activeAccount={activeAccount}
           />
@@ -100,7 +110,9 @@ class General extends React.Component {
 
 General.propTypes = {
   activeAccount: PropTypes.object,
+  users: PropTypes.object,
   updateEntityRequest: PropTypes.func,
+  fetchEntities: PropTypes.func,
   uploadLogo: PropTypes.func,
   deleteLogo: PropTypes.func,
 };
@@ -108,6 +120,7 @@ General.propTypes = {
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     updateEntityRequest,
+    fetchEntities,
     uploadLogo,
     deleteLogo,
   }, dispatch);
@@ -115,6 +128,7 @@ function mapDispatchToProps(dispatch){
 
 function mapStateToProps({ entities, auth }) {
   return {
+    users: entities.getIn(['users', 'models']),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }

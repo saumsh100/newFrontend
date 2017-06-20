@@ -29,12 +29,12 @@ class Address extends React.Component {
         body: 'Address Information Update Failed',
       },
     };
+
     updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
   }
 
   render() {
     const { activeAccount } = this.props;
-
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
@@ -44,6 +44,7 @@ class Address extends React.Component {
         />
       );
     }
+
     return (
       <div>
         {showComponent}
@@ -56,7 +57,7 @@ class Address extends React.Component {
 Address.propTypes = {
   activeAccount: PropTypes.object,
   updateEntityRequest: PropTypes.func,
-}
+};
 
 function mapDispatchToActions(dispatch){
   return bindActionCreators({
@@ -64,5 +65,5 @@ function mapDispatchToActions(dispatch){
   },dispatch);
 }
 
-const enhance = connect(null, mapDispatchToActions)
+const enhance = connect(null, mapDispatchToActions);
 export default enhance(Address);
