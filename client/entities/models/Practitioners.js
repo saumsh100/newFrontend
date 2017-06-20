@@ -7,6 +7,7 @@ const PractitionerSchema = {
   services: [],
   firstName: null,
   lastName: null,
+  type: 'DR',
   isCustomSchedule: null,
   weeklyScheduleId: null,
   fullAvatarUrl: null,
@@ -16,6 +17,15 @@ const PractitionerSchema = {
 export default class Practitioner extends createModel(PractitionerSchema) {
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
+  }
+
+  getPrettyName() {
+    const name = this.getFullName();
+    if (this.get('type') === 'Dentist') {
+      return `Dr. ${name}`;
+    }
+
+    return name;
   }
 
   getUrlRoot() {

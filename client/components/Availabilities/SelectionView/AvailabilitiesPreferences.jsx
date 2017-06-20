@@ -4,9 +4,28 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import moment from 'moment';
-import { Grid, Row, Col, DayPicker, DropdownSelect } from '../../library';
+import { Grid, Row, Col, DayPicker, DropdownSelect, PractitionerAvatar } from '../../library';
 import * as Actions from '../../../actions/availabilities';
 import styles from '../styles.scss';
+
+function PractitionerListItem({ option }) {
+  const {
+    value,
+    label,
+    practitioner,
+    ignore,
+  } = option;
+
+  if (ignore) return <div className={styles.practitionerItem}>{label || value}</div>;
+  return (
+    <div className={styles.practitionerItem}>
+      <PractitionerAvatar practitioner={practitioner} />
+      <div className={styles.labelText}>
+        {label}
+      </div>
+    </div>
+  );
+}
 
 function AvailabilitiesPreferences(props) {
   const {
@@ -23,8 +42,12 @@ function AvailabilitiesPreferences(props) {
   const serviceOptions = services.get('models').map(s => ({ label: s.get('name'), value: s.get('id') })).toArray();
 
   const practitionerOptions = [
-    { label: 'No Preference', value: '' },
-    ...practitioners.get('models').map(p => ({ label: p.getFullName(), value: p.get('id') })).toArray(),
+    { label: 'No Preference', value: '', ignore: true },
+    ...practitioners.get('models').map(p => ({
+      label: p.getPrettyName(),
+      value: p.get('id'),
+      practitioner: p.toJS(),
+    })).toArray(),
   ];
 
   return (
@@ -45,6 +68,7 @@ function AvailabilitiesPreferences(props) {
             align="right"
             className={styles.dropdown}
             options={practitionerOptions}
+            template={PractitionerListItem}
             value={selectedPractitionerId}
             onChange={value => setSelectedPractitionerId(value)}
           />

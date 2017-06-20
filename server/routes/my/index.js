@@ -27,15 +27,17 @@ myRouter.param('accountId', loaders('account', 'Account'));
 myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', {
   services: {
-    _apply: service => service.filter(row => {
+    _apply: service => service.filter((row) => {
       return row('isHidden').ne(true);
     }),
   },
+
   practitioners: true,
 }));
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
+    console.log(req.account);
     // Needs to match the structure of the reducers
     const { entities } = normalize('account', req.account);
     const initialState = {
