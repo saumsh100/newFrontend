@@ -31,18 +31,9 @@ export default function FilterPractitioners(props) {
     }
   }
 
-<<<<<<< HEAD
-
   practitionersSort = practitionersSort.map((prac, index) => Object.assign({}, prac.toJS(), {
     color: colorArray[index],
   }));
-=======
-  practitionersSort = practitionersSort.map((prac, index) => {
-    return Object.assign({}, prac.toJS(), {
-      color: colorArray[index],
-    });
-  });
->>>>>>> 21cd7fa3b50244d15d2aee67f9b88b17724c91f1
 
   return (
     <div>
@@ -59,7 +50,7 @@ export default function FilterPractitioners(props) {
         {practitionersSort.map((pr, i) => {
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
           const label = (<div className={styles.filter_practitioner__name}>Dr. {pr.firstName}</div>);
-          const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null)
+          const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null);
           if (!pr) {
             return null;
           }
