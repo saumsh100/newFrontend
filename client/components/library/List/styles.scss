@@ -23,10 +23,10 @@
 }
 
 .selected {
-  background-color: darken($primary-grey, 5%);
+  background-color: #bcbcbc;
   &:hover {
     cursor: auto;
-    background-color: darken($primary-grey, 5%);
+    background-color: #bcbcbc;
   }
 }
 
