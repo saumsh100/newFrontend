@@ -249,6 +249,8 @@ function fetchAvailabilities(options) {
         fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
+            console.log('startDate', startDate);
+            console.log('endDate', endDate);
             const practitionerAvailabilities = practitioners.map((p, i) => {
               return generatePractitionerAvailabilities({
                 practitioner: p,

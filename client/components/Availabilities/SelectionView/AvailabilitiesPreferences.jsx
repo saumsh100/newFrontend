@@ -41,13 +41,13 @@ function AvailabilitiesPreferences(props) {
 
   const serviceOptions = services.get('models').map(s => ({ label: s.get('name'), value: s.get('id') })).toArray();
 
-  const filteredPractitioners = practitioners.get('models').toArray().filter((prac) => {
-    return prac.isActive;
+  const filteredPractitioners = practitioners.get('models').filter((prac) => {
+    return prac.get('isActive');
   });
 
   const practitionerOptions = [
     { label: 'No Preference', value: '', ignore: true },
-    ...practitioners.get('models').map(p => ({
+    ...filteredPractitioners.map(p => ({
       label: p.getPrettyName(),
       value: p.get('id'),
       practitioner: p.toJS(),
