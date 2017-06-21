@@ -57,9 +57,9 @@ class RecallsList extends Component {
 }
 
 RecallsList.propTypes = {
-  patients: PropTypes.object.required,
-  recalls: PropTypes.object.required,
-  sentRecalls: PropTypes.object.required,
+  patients: PropTypes.object.isRequired,
+  recalls: PropTypes.object.isRequired,
+  sentRecalls: PropTypes.object.isRequired,
 };
 
 export default RecallsList;

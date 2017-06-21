@@ -126,5 +126,14 @@ export default function DisplayForm(props) {
 }
 
 DisplayForm.PropTypes = {
-  handleSubmit: PropTypes.func,
+  formName: PropTypes.string.isRequired,
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
+  practitioners: PropTypes.object.isRequired,
+  getSuggestions: PropTypes.func.isRequired,
+  selectedAppointment: PropTypes.object.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleAutoSuggest: PropTypes.func.isRequired,
+  handlePractitionerChange: PropTypes.func.isRequired,
 };

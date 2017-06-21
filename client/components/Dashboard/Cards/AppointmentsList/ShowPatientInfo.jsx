@@ -8,7 +8,6 @@ export default function ShowPatientInfo(props) {
     appointment,
     patient,
     service,
-    chair,
     handleAppointmentClick,
     handlePatientClick,
   } = props;
@@ -56,5 +55,4 @@ ShowPatientInfo.propTypes = {
   appointment: PropTypes.object.isRequired,
   patient: PropTypes.object.isRequired,
   service: PropTypes.object.isRequired,
-  chair: PropTypes.object.isRequired,
 };

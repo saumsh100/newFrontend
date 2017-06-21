@@ -344,13 +344,13 @@ function mapStateToProps({ entities, auth }) {
 }*/
 
 AddNewAppointment.propTypes = {
-  formName: PropTypes.string.required,
-  services: PropTypes.object.required,
-  patients: PropTypes.object.required,
-  chairs: PropTypes.object.required,
-  practitioners: PropTypes.object.required,
+  formName: PropTypes.string.isRequired,
+  services: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  chairs: PropTypes.array,
+  practitioners: PropTypes.object.isRequired,
   weeklySchedule: PropTypes.object,
-  activeAccount: PropTypes.object.required,
+  //activeAccount: PropTypes.object.isRequired,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,

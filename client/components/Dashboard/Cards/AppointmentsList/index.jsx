@@ -93,10 +93,10 @@ class AppointmentsList extends Component {
 }
 
 AppointmentsList.propTypes = {
-  appointments: PropTypes.object.required,
-  patients: PropTypes.object.required,
-  services: PropTypes.object.required,
-  chairs: PropTypes.object.required,
+  appointments: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
 };
 
 export default AppointmentsList;
