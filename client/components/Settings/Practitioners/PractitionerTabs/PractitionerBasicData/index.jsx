@@ -77,15 +77,6 @@ class PractitionerBasicData extends Component {
           initialValues={initialValues}
         >
           <Field
-            name="type"
-            label="Type"
-            component="DropdownSelect"
-            options={[
-              { value: 'Dentist' },
-              { value: 'Hygenist' },
-            ]}
-          />
-          <Field
             required
             name="firstName"
             label="First Name"

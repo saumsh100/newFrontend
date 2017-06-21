@@ -1,11 +1,16 @@
 
-const moment = require('moment');
+import moment from 'moment';
+import 'moment-timezone';
 const isEmpty = require('lodash/isEmpty');
 
 // OS of the computer will add timezone to this function
 const Time = {
   time: (hours, minutes) => {
     return new Date(1970, 1, 0, hours, minutes);
+  },
+
+  timeWithZone: (hours, minutes, timezone) => {
+    return moment.tz(new Date(1970, 1, 0, hours, minutes), timezone)._d;
   },
 
   getISOSortPredicate: (property) => {
