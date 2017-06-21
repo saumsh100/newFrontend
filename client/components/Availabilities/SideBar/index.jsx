@@ -22,6 +22,15 @@ class SideBar extends Component {
       // selectedWaitlist,
     } = this.props;
 
+    const {
+      name,
+      street,
+      state,
+      city,
+      fullLogoUrl,
+      timezone,
+    } = account.toJS();
+
     let selectedAvailabilityComponent = null;
     if (selectedAvailability) {
       const { startDate } = selectedAvailability;
@@ -32,22 +41,14 @@ class SideBar extends Component {
             YOUR APPOINTMENT
           </div>
           <div className={styles.sidebar__information_text}>
-            {moment(startDate).format('dddd, MMMM Do YYYY')}
+            {(timezone ? moment(startDate).tz(timezone).format('dddd, MMMM Do YYYY') : moment(startDate).format('dddd, MMMM Do YYYY'))}
           </div>
           <div className={styles.sidebar__information_text}>
-            {moment(startDate).format('h:mm a')}
+            {(timezone ? moment(startDate).tz(timezone).format('h:mm a') : moment(startDate).format('h:mm a'))}
           </div>
         </div>
       );
     }
-
-    const {
-      name,
-      street,
-      state,
-      city,
-      fullLogoUrl,
-    } = account.toJS();
 
 
     /*let goBackButton = null;
