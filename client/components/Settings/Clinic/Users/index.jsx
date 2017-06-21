@@ -68,7 +68,7 @@ class Users extends Component{
 
     this.props.createEntityRequest({ key: 'user', entityData, url });
 
-    // reseting inputs to empty
+    // resetting inputs to empty
     entityData.firstName = '';
     entityData.lastName = '';
     entityData.username = '';
@@ -216,7 +216,13 @@ class Users extends Component{
     ];
 
     const addUserButton = (this.props.role === 'SUPERADMIN' ? (
-      <Button className={styles.inviteUser} onClick={this.addNewUser} >Add a User</Button>) : null);
+      <Button
+        className={styles.inviteUser}
+        onClick={this.addNewUser}
+        data-test-id="addUserButton"
+      >
+        Add a User
+      </Button>) : null);
 
     return (
       <Grid>
@@ -228,6 +234,7 @@ class Users extends Component{
           active={active}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
+          data-test-id="inviteUserDialog"
         >
           <InviteUserForm
             mainStyle={styles.emailInvite}
@@ -243,6 +250,7 @@ class Users extends Component{
           active={newActive}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
+          data-test-id="newUserDialog"
         >
           <NewUserForm
             mainStyle={styles.emailInvite}
@@ -270,10 +278,19 @@ class Users extends Component{
           <h2 className={styles.mainHeader}>Users in {clinicName}</h2>
           <div>
             {addUserButton}
-            <Button className={styles.inviteUser} onClick={this.addUser} >Invite a User</Button>
+            <Button
+              className={styles.inviteUser}
+              onClick={this.addUser}
+              data-test-id="inviteUserButton"
+            >
+              Invite a User
+            </Button>
           </div>
         </Row>
-        <List className={styles.userList}>
+        <List
+          className={styles.userList}
+          data-test-id="activeUsersList"
+        >
         {users.toArray().map((user, i) => {
           permissions.toArray()[i].get('role');
           return (

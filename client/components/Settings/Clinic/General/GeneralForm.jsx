@@ -23,12 +23,14 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
       onSubmit={onSubmit}
       initialValues={initialValues}
       className={styles.generalRow}
+      data-test-id="generalSettingsForm"
     >
       <div className={styles.paddingField}>
         <Field
           name="name"
           label="Name"
           validate={[maxLength25]}
+          data-test-id="name"
         />
       </div>
       <div className={styles.paddingField}>
@@ -37,6 +39,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
           name="twilioPhoneNumber"
           label="Twilio Phone Number"
           type="tel"
+          data-test-id="twilioPhoneNumber"
         />
       </div>
       <div className={styles.paddingField}>
@@ -45,6 +48,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
           name="destinationPhoneNumber"
           label="Destination Phone Number"
           type="tel"
+          data-test-id="destinationPhoneNumber"
         />
       </div>
       <div className={styles.paddingField}>
@@ -52,6 +56,7 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
           required
           name="vendastaId"
           label="Vendasta Id"
+          data-test-id="vendastaId"
         />
       </div>
     </Form>

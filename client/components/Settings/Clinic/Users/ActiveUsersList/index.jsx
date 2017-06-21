@@ -14,7 +14,10 @@ class ActiveUsersList extends Component {
     }
 
     return (
-      <ListItem className={styles.userListItem}>
+      <ListItem
+        className={styles.userListItem}
+        data-test-id={activeUser.getName()}
+      >
         <div className={styles.main}>
           <Avatar className={styles.image} user={activeUser} />
           <div className={styles.userName}>
