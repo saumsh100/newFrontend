@@ -51,6 +51,7 @@ const EnterpriseForm = (props) => {
     { title: pageTitle(), key: isCreate ? 'add' : account.id },
   ];
 
+  //TODO do we need all timezones and the overlap
   const options = moment.tz.names().map((value) => {
     return {
       value,

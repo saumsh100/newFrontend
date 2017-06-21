@@ -33,7 +33,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     }
     return null;
   });
-
+  //TODO do we need all timezones and the overlap
   const options = moment.tz.names().map((value) => {
     return {
       value,

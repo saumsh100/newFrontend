@@ -159,6 +159,7 @@ class Overview extends Component {
         const data = {};
         data.appointmentBooked = Math.floor(key.toObject().appointmentTime / 60);
         data.appointmentNotFiltred = Math.floor(key.toObject().totalTime / 60) - data.appointmentBooked;
+        data.appointmentNotFiltred = (data.appointmentNotFiltred > 0 ? data.appointmentNotFiltred : data.appointmentsBooked);
         data.percentage = Math.floor(100 * data.appointmentBooked / data.appointmentNotFiltred);
         data.name = (/Dentist/g.test(key.toObject().type) ? `Dr. ${key.toObject().lastName}` : `${key.toObject().firstName} ${key.toObject().lastName}`);
         data.img = '/images/avatar.png';

@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import 'moment-timezone';
 import classNames from 'classnames';
 import {
   Grid,
@@ -59,18 +60,20 @@ class AvailabilitiesDisplay extends Component {
       selectedStartDate,
       selectedAvailability,
       setSelectedAvailability,
+      account,
     } = this.props;
 
     const numDaysForward = 4;
     const dayAvailabilities = [];
     // const startDate = new Date();
-
     let i;
     for (i = 0; i <= numDaysForward; i++) {
       const momentDate = moment(selectedStartDate).add(i, 'days');
       const sortedAvailabilities = getSortedAvailabilities(momentDate, availabilities);
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
+
+    const accountTimezone = account.timezone;
 
     const headerClasses = classNames(styles.appointment__table_elements);
     const header = (
@@ -80,10 +83,10 @@ class AvailabilitiesDisplay extends Component {
             <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_header`}>
               <div className={styles.appointment__list_header}>
                 <div className={styles.list__header_day}>
-                  {a.momentDate.format('ddd')}
+                  {(accountTimezone ? a.momentDate.tz(accountTimezone).format('ddd') : a.momentDate.format('ddd'))}
                 </div>
                 <div className={styles.list__header_number}>
-                  {a.momentDate.format('DD/MM/YYYY')}
+                  {(accountTimezone ? a.momentDate.tz(accountTimezone).format('DD/MM/YYYY') : a.momentDate.format('DD/MM/YYYY'))}
                 </div>
               </div>
             </ul>
@@ -119,7 +122,7 @@ class AvailabilitiesDisplay extends Component {
                           onClick={() => setSelectedAvailability(availability)}
                           className={classes}
                         >
-                          {moment(availability.startDate).format('h:mm a')}
+                          {(accountTimezone ? moment(availability.startDate).tz(accountTimezone).format('h:mm a') : moment(availability.startDate).format('h:mm a'))}
                         </li>
                       );
                     })}
@@ -184,14 +187,17 @@ AvailabilitiesDisplay.propTypes = {
   selectedPractitionerId: PropTypes.string,
   selectedServiceId: PropTypes.string.isRequired,
   selectedAvailability: PropTypes.object,
+  account: PropTypes.object,
   setSelectedStartDate: PropTypes.func.isRequired,
   setSelectedAvailability: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ availabilities }) {
+  const account = availabilities.get('account').toJS();
   return {
     isFetching: availabilities.get('isFetching'),
     availabilities: availabilities.get('availabilities'),
+    account,
     selectedStartDate: availabilities.get('selectedStartDate'),
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
     selectedServiceId: availabilities.get('selectedServiceId'),
