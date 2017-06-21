@@ -54,7 +54,14 @@ export default handleActions({
   [ADD_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const filterEntities = state.toJS()[key];
-    filterEntities.push(action.payload.id);
+
+    if (key === 'practitionersFilter' && filterEntities.length === 4) {
+      filterEntities.shift();
+      filterEntities.push(action.payload.id);
+    } else {
+      filterEntities.push(action.payload.id);
+    }
+
     const mergeObj = {};
     mergeObj[key] = filterEntities;
     return state.merge(mergeObj);
@@ -75,9 +82,13 @@ export default handleActions({
 
     entities.map((entity) => {
       const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
-      if (!checkFilter) {
+
+      if (key === 'practitionersFilter' && filterEntities.length < 4 && !checkFilter) {
+        filterEntities.push(entity.get('id'));
+      } else if (!checkFilter && key !== 'practitionersFilter') {
         filterEntities.push(entity.get('id'));
       }
+
     });
 
     const mergeObj = {};

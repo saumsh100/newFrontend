@@ -124,6 +124,15 @@ class AddNewAppointment extends Component {
       },
     };
 
+    const alertRequestUpdate = {
+      success: {
+        body: `Request Confirmed for ${patientSelected.firstName}'s Appointment`,
+      },
+      error: {
+        body: `Request failed for ${patientSelected.firstName} Failed`,
+      },
+    };
+
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
       return createEntityRequest({
@@ -135,7 +144,7 @@ class AddNewAppointment extends Component {
           return updateEntityRequest({
             key: 'requests',
             model: selectedAppointment.requestModel,
-            alert: alertUpdate,
+            alert: alertRequestUpdate,
           }).then(() => {
             reinitializeState();
             reset(formName);
@@ -226,7 +235,7 @@ class AddNewAppointment extends Component {
     });
   }
 
-  //ToDo: Feature is disabled
+  //ToDo: handling practitioner schedules and timeoffs
   handleDateChange(day) {
     /*const {
       practitioners,
@@ -260,6 +269,7 @@ class AddNewAppointment extends Component {
       formName,
       patients,
       chairs,
+      practitioners,
       selectedAppointment,
       reinitializeState,
     } = this.props;
@@ -280,7 +290,7 @@ class AddNewAppointment extends Component {
           key={formName}
           formName={formName}
           services={this.state.servicesAllowed}
-          practitioners={this.state.practitionersBySchedule}
+          practitioners={practitioners}
           patients={patients}
           chairs={chairs}
           selectedAppointment={selectedAppointment}
@@ -334,13 +344,13 @@ function mapStateToProps({ entities, auth }) {
 }*/
 
 AddNewAppointment.propTypes = {
-  formName: PropTypes.string.required,
-  services: PropTypes.object.required,
-  patients: PropTypes.object.required,
-  chairs: PropTypes.object.required,
-  practitioners: PropTypes.object.required,
+  formName: PropTypes.string.isRequired,
+  services: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  chairs: PropTypes.array,
+  practitioners: PropTypes.object.isRequired,
   weeklySchedule: PropTypes.object,
-  activeAccount: PropTypes.object.required,
+  //activeAccount: PropTypes.object.isRequired,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,

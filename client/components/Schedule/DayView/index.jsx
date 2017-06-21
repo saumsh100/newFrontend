@@ -36,7 +36,7 @@ class DayView extends Component  {
         chairs={chairs.get('models')}
         services={services.get('models')}
         patients={patients.get('models')}
-        practitioners={practitioners.get('models')}
+        practitioners={practitioners}
         startHour={6}
         endHour={24}
         weeklySchedules={weeklySchedules}
@@ -47,13 +47,13 @@ class DayView extends Component  {
 }
 
 DayView.propTypes = {
-  appointments: PropTypes.object,
-  patients: PropTypes.object,
-  services: PropTypes.object,
-  chairs: PropTypes.object,
-  practitioners: PropTypes.object,
-  currentDate: PropTypes.object,
-  schedule: PropTypes.object,
+  appointments: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
+  practitioners: PropTypes.object.isRequired,
+  currentDate: PropTypes.object.isRequired,
+  schedule: PropTypes.object.isRequired,
   selectAppointment: PropTypes.func.isRequired,
 };
 

@@ -45,7 +45,7 @@ class ServiceListContainer extends Component {
   }
 
   render() {
-    const { services } = this.props;
+    const { services, serviceId } = this.props;
 
     if (!services) {
       return null;
@@ -77,6 +77,7 @@ class ServiceListContainer extends Component {
               id={service.get('id')}
               service={service.get('name')}
               setServiceId={this.props.setServiceId}
+              serviceId={serviceId}
             />
           );
         })}
