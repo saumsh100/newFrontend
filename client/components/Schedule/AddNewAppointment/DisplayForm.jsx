@@ -45,7 +45,7 @@ export default function DisplayForm(props) {
   } = props;
 
   let initialValues = null;
-
+  let time = null;
   if (selectedAppointment) {
     const {
       startDate,
@@ -63,10 +63,10 @@ export default function DisplayForm(props) {
     const patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-
+    time = setTime(startDate)
     initialValues = {
       appointment: {
-        time: setTime(startDate),
+        time,
         date: moment(startDate).format('L'),
         serviceId,
         practitionerId: practitionerId || '',
@@ -107,6 +107,7 @@ export default function DisplayForm(props) {
                 chairOptions={chairOptions}
                 handlePractitionerChange={handlePractitionerChange}
                 selectedAppointment={selectedAppointment}
+                time={time}
               />
             </FormSection>
           </Col>

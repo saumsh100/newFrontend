@@ -5,7 +5,6 @@ import { Checkbox, CheckboxImage } from '../../../../library';
 import { SortByFirstName } from '../../../../library/util/SortEntities';
 
 export default function FilterPractitioners(props) {
-
   const {
     filterKey,
     allChecked,
@@ -24,7 +23,7 @@ export default function FilterPractitioners(props) {
 
   let practitionersSort = practitioners.toArray().sort(SortByFirstName);
 
-  const reset = Math.ceil(( practitionersSort.length - colorLen) / colorLen);
+  const reset = Math.ceil((practitionersSort.length - colorLen) / colorLen);
 
   for(let j = 0 ; j <= reset; j++) {
     for(let i = 0; i < colorLen;  i++) {
@@ -57,8 +56,8 @@ export default function FilterPractitioners(props) {
           }
 
           const displayName = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
-
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
+
           const label = (<div className={styles.filter_practitioner__name}>{displayName}</div>);
           const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null);
 

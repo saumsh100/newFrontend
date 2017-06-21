@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import { omit } from 'lodash';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import styles from './styles.scss';
@@ -22,7 +23,8 @@ export function ListItem(props) {
 
   classes = props.selectItem ? classNames(styles.selected, classes) : classes;
 
+  const newProps = omit(props, ['selectItem']);
   return (
-    <li {...props} className={classes} />
+    <li {...newProps} className={classes} />
   );
 }
