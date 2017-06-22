@@ -139,10 +139,10 @@ export default function ShowAppointment(props) {
 }
 
 ShowAppointment.propTypes = {
-  appointment: PropTypes.object,
+  appointment: PropTypes.object.isRequired,
   bgColor: PropTypes.string,
   practIndex: PropTypes.number,
-  patient: PropTypes.object.required,
+  patient: PropTypes.object.isRequired,
   selectAppointment: PropTypes.func.isRequired,
   startHour: PropTypes.number,
   endHour: PropTypes.number,

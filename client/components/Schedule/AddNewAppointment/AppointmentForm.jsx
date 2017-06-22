@@ -1,14 +1,23 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { Grid, Row, Col, Field, } from '../../library';
 import styles from './styles.scss';
 
 
-const generateTimeOptions = () => {
+const generateTimeOptions = (timeInput) => {
   const timeOptions = [];
   const totalHours = 24;
   const increment = 15;
   const increments = 60 / increment;
+
+  if (timeInput) {
+    const minutes = moment(timeInput).minute();
+    const remainder = minutes % increment;
+    if (remainder) {
+      timeOptions.push({ value: timeInput, label: moment(timeInput).format('LT') });
+    }
+  }
 
   let i;
   for (i = 6; i < totalHours; i++) {
@@ -41,10 +50,6 @@ const marks = {
   180: '180',
 };
 
-const statusOptions = [
-  { label: 'Confirmed', value: true },
-];
-
 export default function AppointmentForm(props) {
   const {
     serviceOptions,
@@ -52,6 +57,7 @@ export default function AppointmentForm(props) {
     chairOptions,
     handlePractitionerChange,
     selectedAppointment,
+    time,
   } = props;
 
   return (
@@ -70,7 +76,7 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={timeOptions}
+            options={generateTimeOptions(time)}
             component="DropdownSelect"
             name="time"
             label="Time"

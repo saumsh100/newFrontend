@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { List, Card, CardHeader, } from '../../../library';
 import ReminderData from './ReminderData';
 import styles from './styles.scss';
@@ -54,5 +54,11 @@ class RemindersList extends Component {
     );
   }
 }
+
+RemindersList.propTypes = {
+  appointments: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  sentReminders: PropTypes.object.isRequired,
+};
 
 export default RemindersList;

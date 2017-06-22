@@ -20,7 +20,14 @@
     cursor: pointer;
     background-color: $primary-grey;
   }
+}
 
+.selected {
+  background-color: darken($primary-grey, 2%);
+  &:hover {
+    cursor: auto;
+    background-color: darken($primary-grey, 2%);
+  }
 }
 
 .disabledListItem{

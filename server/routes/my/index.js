@@ -37,7 +37,6 @@ myRouter.param('accountIdJoin', loaders('account', 'Account', {
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
-    console.log(req.account);
     // Needs to match the structure of the reducers
     return Practitioner
     .filter({accountId: req.account.id})

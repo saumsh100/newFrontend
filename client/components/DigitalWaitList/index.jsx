@@ -248,7 +248,7 @@ DigitalWaitList.propTypes = {
   reset: PropTypes.func.isRequired,
   setSelectedPatientId: PropTypes.func.isRequired,
   setSelectedWaitSpot: PropTypes.func.isRequired,
-  selectedWaitSpot: PropTypes.object.isRequired,
+  selectedWaitSpot: PropTypes.object,
   push: PropTypes.func.isRequired,
 };
 

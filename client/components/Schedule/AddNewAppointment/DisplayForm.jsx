@@ -21,6 +21,15 @@ const generateEntityOptions = (entities, label) => {
   return options;
 };
 
+const generatePractitionerOptions = (practitioners) => {
+  const options = [];
+  practitioners.map((pr) => {
+    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
+    options.push({ label, value: pr.id });
+  });
+  return options;
+};
+
 export default function DisplayForm(props) {
   const {
     formName,
@@ -36,7 +45,7 @@ export default function DisplayForm(props) {
   } = props;
 
   let initialValues = null;
-
+  let time = null;
   if (selectedAppointment) {
     const {
       startDate,
@@ -54,10 +63,10 @@ export default function DisplayForm(props) {
     const patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-
+    time = setTime(startDate)
     initialValues = {
       appointment: {
-        time: setTime(startDate),
+        time,
         date: moment(startDate).format('L'),
         serviceId,
         practitionerId: practitionerId || '',
@@ -76,7 +85,7 @@ export default function DisplayForm(props) {
   }
 
   const serviceOptions = generateEntityOptions(services, 'name');
-  const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
+  const practitionerOptions = generatePractitionerOptions(practitioners);
   const chairOptions = generateEntityOptions(chairs, 'name');
   const title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Create New Appointment';
 
@@ -98,6 +107,7 @@ export default function DisplayForm(props) {
                 chairOptions={chairOptions}
                 handlePractitionerChange={handlePractitionerChange}
                 selectedAppointment={selectedAppointment}
+                time={time}
               />
             </FormSection>
           </Col>
@@ -117,5 +127,14 @@ export default function DisplayForm(props) {
 }
 
 DisplayForm.PropTypes = {
-  handleSubmit: PropTypes.func,
+  formName: PropTypes.string.isRequired,
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
+  practitioners: PropTypes.object.isRequired,
+  getSuggestions: PropTypes.func.isRequired,
+  selectedAppointment: PropTypes.object.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleAutoSuggest: PropTypes.func.isRequired,
+  handlePractitionerChange: PropTypes.func.isRequired,
 };

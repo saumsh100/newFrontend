@@ -20,7 +20,7 @@ export default function Input(props) {
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
 
-  const inputProps = omit(props, ['error', 'borderColor', 'theme']);
+  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles']);
 
   const valuePresent = value !== null && value !== undefined && value !== '' &&
     !(typeof value === 'number' && isNaN(value));

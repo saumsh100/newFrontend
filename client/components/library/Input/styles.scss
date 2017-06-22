@@ -74,6 +74,11 @@ $empty-grey: darken(lightgrey, 5%);
   }
   &_primaryGreyInput{
     border-bottom: 1px solid $primary-grey;
+    color: $primary-grey;
+
+    &:focus ~ .label {
+      color: $primary-white;
+    }
   }
 
   &_primaryWhiteBorder{

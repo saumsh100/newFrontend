@@ -13,9 +13,16 @@ class PractitionerItem extends Component {
   }
 
   render() {
-    const { fullName } = this.props;
+    const { fullName, id, practitionerId } = this.props;
+
+    const selectedPractitioner = practitionerId === id;
+
     return(
-      <ListItem onClick={this.showItem} className={styles.practListItem}>
+      <ListItem
+        onClick={this.showItem}
+        className={styles.practListItem}
+        selectItem={selectedPractitioner}
+      >
         {fullName}
       </ListItem>
     );
