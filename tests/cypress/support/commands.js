@@ -7,7 +7,12 @@ Cypress.addParentCommand('submitDialogForm', (dataTestId) => {
 Cypress.addParentCommand('submitForm', (dataTestId) => {
   cy
     .get(`[data-test-id=${dataTestId}]`)
-    .find('button')
+    .submit();
+});
+
+Cypress.addParentCommand('getAndClick', (dataTestId) => {
+  cy
+    .get(`[data-test-id=${dataTestId}]`)
     .click();
 });
 

@@ -6,14 +6,14 @@
 describe('Account Settings', () => {
 
   before(() => {
-    cy.exec('npm run seeds');
+    cy.exec('NODE_ENV="test" npm run seeds');
   });
 
   beforeEach(() => {
     cy.login();
   });
 
-  context('Clinic Settings', () => {
+  context.skip('Clinic Settings', () => {
     context('General Settings', () => {
       beforeEach(() => {
         cy.visit('http://localhost:5100/settings/clinic/general');
@@ -56,8 +56,7 @@ describe('Account Settings', () => {
 
       it('add another user to my practice', () => {
         cy
-          .get('[data-test-id=addUserButton]')
-          .click()
+          .getAndClick('addUserButton')
           .fillTextInput('newUserDialog', 'firstName', 'John')
           .fillTextInput('newUserDialog', 'lastName', 'Smith')
           .fillEmailInput('newUserDialog', 'email', 'johnsmith@carecru.com')
@@ -73,8 +72,7 @@ describe('Account Settings', () => {
 
       it('invite another user to my practice', () => {
         cy
-          .get('[data-test-id=inviteUserButton]')
-          .click()
+          .getAndClick('inviteUserButton')
           .fillEmailInput('inviteUserDialog', 'email', 'gavin+invitetest@carecru.com')
           .submitDialogForm('inviteUserDialog')
           .reload()
@@ -82,11 +80,10 @@ describe('Account Settings', () => {
           .should('exist');
       });
     });
-
   });
 
-  context('Schedule Settings', () => {
-    context('Office Hours', () => {
+  context.skip('Schedule Settings', () => {
+    context.skip('Office Hours', () => {
       beforeEach(() => {
         cy.visit('http://localhost:5100/settings/schedule/hours');
       });
@@ -95,9 +92,61 @@ describe('Account Settings', () => {
 
       it('click a button to toggle on/off a day of the week', () => {
         cy
-          .get('')
+          .getAndClick('mondayToggle')
+          .getAndClick('mondayStartTime')
+          .get('[data-test-id="1970-01-31T08:00:00.000Z"]')
+          .should('exist');
+      });
+
+      it('save a change to my schedule', () => {
+        cy
+          .getAndClick('mondayToggle')
+          .getAndClick('mondayStartTime')
+          .submitForm('officeHoursForm')
+          .reload()
+          .get('[data-test-id="mondayToggle"]')
+          .find('input')
+          .should('have.value', 'on');
+      });
+
+      it('add a break and save it', () => {
+        cy
+          .getAndClick('mondayAddBreakButton')
+          .submitForm('breaksForm')
+          .reload()
+          .get('[data-test-id="mondayBreakStartTime"]')
+          .should('exist');
+      });
+
+      it('delete a saved break', () => {
+        cy
+          .getAndClick('mondayBreakTrash')
+          .submitForm('breaksForm')
+          .reload()
+          .get('[data-test-id="mondayBreakStartTime"]')
+          .should('not.exist');
       });
 
     });
+
+    context('Online Booking', () => {
+      beforeEach(() => {
+        cy.visit('http://localhost:5100/settings/schedule/onlinebooking');
+      });
+
+      it('select a new widget color', () => {
+        cy
+          .getAndClick('colorInput')
+          .get('.chrome-picker')
+          .find('[value="#F29B12"]')
+          .clear()
+          .type('#123AF2')
+          .submitForm('selectAccountColorForm')
+          .reload()
+          .get('[data-test-id="colorInput"]')
+          .should('have.value', '#123af2');
+      });
+    });
+
   });
 });
