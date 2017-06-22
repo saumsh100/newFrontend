@@ -26,6 +26,7 @@ import { setSelectedWaitSpot } from '../../actions/schedule';
 import withEntitiesRequest from '../../hocs/withEntities';
 import DigitalWaitListItem from './DigitalWaitListItem';
 import AddWaitSpotForm from './AddWaitSpotForm';
+import { SortByFirstName } from '../library/util/SortEntities';
 import styles from './styles.scss';
 
 class DigitalWaitList extends Component {
@@ -45,10 +46,12 @@ class DigitalWaitList extends Component {
 
   getSuggestions(value) {
     return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
-      .then(searchData => searchData.patients)
+      .then((searchData) => {
+        return searchData.patients;})
       .then((searchedPatients) => {
-        return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-            (key) => { return searchedPatients[key]; }) : [];
+        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
+          (key) => searchedPatients[key]) : [];
+        return patientList.sort(SortByFirstName);
       });
   }
 

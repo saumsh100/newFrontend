@@ -15,6 +15,7 @@ import {
 } from '../../../thunks/fetchEntities';
 import { Button, IconButton } from '../../library';
 import styles from './styles.scss';
+import { SortByFirstName } from '../../library/util/SortEntities';
 
 const mergeTime = (date, time) => {
   date.setHours(time.getHours());
@@ -194,8 +195,9 @@ class AddNewAppointment extends Component {
       .then((searchData) => {
         return searchData.patients;
       }).then((searchedPatients) => {
-        return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
+        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
           (key) => searchedPatients[key]) : [];
+        return patientList.sort(SortByFirstName);
       });
   }
 
@@ -264,7 +266,6 @@ class AddNewAppointment extends Component {
   }
 
   render() {
-
     const {
       formName,
       patients,
@@ -328,7 +329,7 @@ function mapDispatchToProps(dispatch) {
     reset,
     change,
   }, dispatch);
-};
+}
 
 /*
 function mapStateToProps({ entities, auth }) {
@@ -356,6 +357,8 @@ AddNewAppointment.propTypes = {
   reset: PropTypes.func,
   change: PropTypes.func,
   reinitializeState: PropTypes.func,
+  fetchEntities: PropTypes.func,
+  updateEntityRequest: PropTypes.func,
 };
 
 const enhance = connect(null, mapDispatchToProps);

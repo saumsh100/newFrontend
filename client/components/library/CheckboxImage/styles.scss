@@ -3,6 +3,7 @@
 .checkBoxImage {
   margin: 0 5px;
   padding: 10px;
+
   input[type=checkbox] {
     display: none;
 
@@ -37,7 +38,6 @@
   &__photo {
     max-width: 45px;
     margin-bottom: 5px;
-    border-radius: 50%;
   }
 
   &__spec {
@@ -49,16 +49,24 @@
 .primaryColor {
   border: 3px solid;
   border-color: $primary-color;
+  transition-timing-function: ease-in;
+  transition: .10s
 }
 .primaryYellow {
   border: 3px solid;
   border-color: $primary-yellow;
+  transition-timing-function: ease-in;
+  transition: .10s
 }
 .primaryGreen {
   border: 3px solid;
   border-color: $primary-green;
+  transition-timing-function: ease-in;
+  transition: .10s
 }
 .primaryBlueGreen {
   border: 3px solid;
   border-color: $primary-blue-green;
+  transition-timing-function: ease-in;
+  transition: .10s
 }

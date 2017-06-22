@@ -24,7 +24,7 @@ const generateEntityOptions = (entities, label) => {
 const generatePractitionerOptions = (practitioners) => {
   const options = [];
   practitioners.map((pr) => {
-    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
+    const label = `${pr.firstName} ${pr.lastName}`;
     options.push({ label, value: pr.id });
   });
   return options;
@@ -63,7 +63,9 @@ export default function DisplayForm(props) {
     const patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-    time = setTime(startDate)
+
+    time = setTime(startDate);
+
     initialValues = {
       appointment: {
         time,
