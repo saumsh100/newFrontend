@@ -13,14 +13,7 @@ const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
 import Reminder from '../fixtures/reminders';
-import PatientUser,
-{
-  patientUserId,
-  patientUserId2,
-  patientUserId3,
-  patientUserId4,
-  patientUserId5,
-} from '../fixtures/patientUsers';
+import PatientUser, { patientUserId, patientUserId2, patientUserId3 } from '../fixtures/patientUsers';
 import Recall from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
@@ -269,8 +262,8 @@ const generateDefaultServices = (_accountId) => {
   });
 
   let second = createService({
-      name: 'Toothache',
-      duration: 30,
+    name: 'Toothache',
+    duration: 30,
   });
 
   if (_accountId === accountId) {
@@ -324,6 +317,7 @@ const generatePracServJoin = (services, _practitionerId) => {
     return {
       Service_id: service.id,
       Practitioner_id: _practitionerId,
+      id: `${_practitionerId}_${service.id}`,
     };
   });
 };
@@ -515,17 +509,17 @@ const SEEDS = {
 
   Request: [
     /*{
-      accountId,
-      startDate: moment({ hour: 11, minute: 10 })._d,
-      endDate: moment({ hour: 12, minute: 50 })._d,
-      patientUserId,
-      serviceId,
-      practitionerId,
-      chairId,
-      isConfirmed: false,
-      isCancelled: false,
-      note: 'Some note from patient here....',
-    },*/
+     accountId,
+     startDate: moment({ hour: 11, minute: 10 })._d,
+     endDate: moment({ hour: 12, minute: 50 })._d,
+     patientUserId,
+     serviceId,
+     practitionerId,
+     chairId,
+     isConfirmed: false,
+     isCancelled: false,
+     note: 'Some note from patient here....',
+     },*/
     {
       accountId,
       startDate: moment({hour: 13, minute: 10})._d,
@@ -557,30 +551,6 @@ const SEEDS = {
       serviceId: serviceId,
       practitionerId: practitionerId2,
       patientUserId: patientUserId3,
-      chairId,
-      isConfirmed: false,
-      isCancelled: false,
-      note: 'testing note 2....',
-    },
-    {
-      accountId,
-      startDate: moment({hour: 13, minute: 10})._d,
-      endDate: moment({hour: 13, minute: 50})._d,
-      serviceId: serviceId,
-      practitionerId: practitionerId2,
-      patientUserId: patientUserId4,
-      chairId,
-      isConfirmed: false,
-      isCancelled: false,
-      note: 'testing note 2....',
-    },
-    {
-      accountId,
-      startDate: moment({hour: 13, minute: 10})._d,
-      endDate: moment({hour: 13, minute: 50})._d,
-      serviceId: serviceId,
-      practitionerId: practitionerId2,
-      patientUserId: patientUserId5,
       chairId,
       isConfirmed: false,
       isCancelled: false,
@@ -640,53 +610,53 @@ const SEEDS = {
       permissionId: grantPermissionId,
     },
     /*{
-      firstName: 'Sergey',
-      lastName: 'Skovorodnikov',
-      username: 'sergey@carecru.com',
-      password: bcrypt.hashSync('sergey', saltRounds),
-      id: sergeyUserId,
-      activeAccountId: accountId,
-      enterpriseId: sunshineSmilesId,
-      // accounts: [accountId],
-    },
-    // account 2 user
-    {
-      firstName: 'Jatinder',
-      lastName: 'Dhillion',
-      username: 'jd@carecru.com',
-      password: bcrypt.hashSync('jd', saltRounds),
-      id: jdUserId,
-      activeAccountId: accountId2,
-      enterpriseId: sunshineSmilesId,
-      // accounts: [accountId],
-    },
-    {
-      firstName: 'Alex',
-      lastName: ' ',
-      username: 'alex@carecru.com',
-      password: bcrypt.hashSync('alex', saltRounds),
-      id: alexUserId,
-      activeAccountId: accountId,
-      enterpriseId: sunshineSmilesId,
-    },
-    {
-      firstName: 'SyncClient',
-      lastName: ' ',
-      username: 'syncclient@carecru.com',
-      password: bcrypt.hashSync('sync', saltRounds),
-      id: syncUserId,
-      activeAccountId: syncTestAccId,
-      enterpriseId: sunshineSmilesId,
-    },
-    {
-      firstName: 'Valerij',
-      lastName: 'Stukanov',
-      username: 'vst@carecru.com',
-      password: bcrypt.hashSync('vst', saltRounds),
-      id: vstUserId,
-      activeAccountId: accountId,
-      enterpriseId: sunshineSmilesId,
-    },*/
+     firstName: 'Sergey',
+     lastName: 'Skovorodnikov',
+     username: 'sergey@carecru.com',
+     password: bcrypt.hashSync('sergey', saltRounds),
+     id: sergeyUserId,
+     activeAccountId: accountId,
+     enterpriseId: sunshineSmilesId,
+     // accounts: [accountId],
+     },
+     // account 2 user
+     {
+     firstName: 'Jatinder',
+     lastName: 'Dhillion',
+     username: 'jd@carecru.com',
+     password: bcrypt.hashSync('jd', saltRounds),
+     id: jdUserId,
+     activeAccountId: accountId2,
+     enterpriseId: sunshineSmilesId,
+     // accounts: [accountId],
+     },
+     {
+     firstName: 'Alex',
+     lastName: ' ',
+     username: 'alex@carecru.com',
+     password: bcrypt.hashSync('alex', saltRounds),
+     id: alexUserId,
+     activeAccountId: accountId,
+     enterpriseId: sunshineSmilesId,
+     },
+     {
+     firstName: 'SyncClient',
+     lastName: ' ',
+     username: 'syncclient@carecru.com',
+     password: bcrypt.hashSync('sync', saltRounds),
+     id: syncUserId,
+     activeAccountId: syncTestAccId,
+     enterpriseId: sunshineSmilesId,
+     },
+     {
+     firstName: 'Valerij',
+     lastName: 'Stukanov',
+     username: 'vst@carecru.com',
+     password: bcrypt.hashSync('vst', saltRounds),
+     id: vstUserId,
+     activeAccountId: accountId,
+     enterpriseId: sunshineSmilesId,
+     },*/
   ],
 
   Family: [
@@ -778,7 +748,6 @@ const SEEDS = {
       id: alexPatientId,
       accountId,
       avatarUrl: faker.image.avatar(),
-      patientUserId: patientUserId4,
       firstName: 'Alex',
       lastName: 'Bashliy',
       mobilePhoneNumber: alexPhoneNumber,
@@ -881,17 +850,16 @@ const SEEDS = {
       id: accountId,
       weeklyScheduleId,
       name: 'Donna Dental',
-      street: '#202 - 404 Chesapeake Bay',
+      address: '#202 - 404 Chesapeake Bay',
       country: 'US',
       state: 'CA',
       city: 'Los Angeles',
       zipCode: '92509',
       vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
       twilioPhoneNumber: clinicPhoneNumber,
+      logo: '/images/liberty_logo.png',
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: donnaDentalId,
-      canSendReminders: true,
-      canSendRecalls: true,
     },
     {
       id: accountId2,
@@ -904,9 +872,15 @@ const SEEDS = {
       zipCode: '90210',
       twilioPhoneNumber: clinicPhoneNumber,
 
+      logo: '/images/liberty_logo.png',
       enterpriseId: sunshineSmilesId,
-      canSendReminders: true,
-      canSendRecalls: true,
+      // bookingWidgetPrimaryColor: '#f29b12',
+      // vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
+      // twilioPhoneNumber: clinicPhoneNumber,
+      // logo: 'images/availabilies_sidebar_logo_2.png',
+      // address: '194-105 East 3rd 7 ave Vancouver, BC Canda V1B 2C3',
+      // clinicName: 'PACIFIC HEART DENTAL',
+      // bookingWidgetPrimaryColor: '#0597d8',
     },
     {
       id: syncTestAccId,
@@ -957,40 +931,40 @@ const SEEDS = {
       permissions: {},
     },
     /*{
-      userId: alexUserId,
-      role: 'VIEWER',
-      permissions: {},
-    },
-    {
-      userId: sergeyUserId,
-      role: 'ADMIN',
-      permissions: {},
-    },
-    {
-      userId: jdUserId,
-      role: 'OWNER',
-      permissions: {},
-    },
-    {
-      userId: syncUserId,
-      role: 'OWNER',
-      permissions: {},
-    },
-    {
-      userId: vstUserId,
-      role: 'SUPERADMIN',
-      permissions: {},
-    },
-    {
-      userId: vstUserId,
-      role: 'SUPERADMIN',
-      permissions: {},
-    },
-    {
-      userId: vstUserId,
-      role: 'SUPERADMIN',
-      permissions: {},
-    },*/
+     userId: alexUserId,
+     role: 'VIEWER',
+     permissions: {},
+     },
+     {
+     userId: sergeyUserId,
+     role: 'ADMIN',
+     permissions: {},
+     },
+     {
+     userId: jdUserId,
+     role: 'OWNER',
+     permissions: {},
+     },
+     {
+     userId: syncUserId,
+     role: 'OWNER',
+     permissions: {},
+     },
+     {
+     userId: vstUserId,
+     role: 'SUPERADMIN',
+     permissions: {},
+     },
+     {
+     userId: vstUserId,
+     role: 'SUPERADMIN',
+     permissions: {},
+     },
+     {
+     userId: vstUserId,
+     role: 'SUPERADMIN',
+     permissions: {},
+     },*/
   ],
 
   // Keep to wipe table on seed
@@ -1093,30 +1067,35 @@ const SEEDS = {
     {
       Practitioner_id: practitionerId,
       Service_id: serviceId,
+      id: `${practitionerId}_${serviceId}`,
     },
     // Perry's services
     {
       Practitioner_id: practitionerId2,
       Service_id: serviceId2,
+      id: `${practitionerId2}_${serviceId2}`,
     },
 
     // Availabilities Test
     {
       Practitioner_id: practitionerId3,
       Service_id: cleanupServiceId,
+      id: `${practitionerId3}_${cleanupServiceId}`,
     },
     {
       Practitioner_id: practitionerId4,
       Service_id: cleanupServiceId,
+      id: `${practitionerId4}_${cleanupServiceId}`,
     },
+    /*
+     ...generatePracServJoin(donnaServices, practitionerId),
+     ...generatePracServJoin(donnaServices, practitionerId2),
 
-    ...generatePracServJoin(donnaServices, practitionerId),
-    ...generatePracServJoin(donnaServices, practitionerId2),
-
-    ...generatePracServJoin(sunshineServices, practitionerId3),
-    ...generatePracServJoin(sunshineServices, practitionerId4),
-    ...generatePracServJoin(sunshineServices, practitionerId5),
-    ...generatePracServJoin(sunshineServices, practitionerId6),
+     ...generatePracServJoin(sunshineServices, practitionerId3),
+     ...generatePracServJoin(sunshineServices, practitionerId4),
+     ...generatePracServJoin(sunshineServices, practitionerId5),
+     ...generatePracServJoin(sunshineServices, practitionerId6),
+     */
   ],
 
   Service: [
@@ -1236,7 +1215,7 @@ const SEEDS = {
     {
       accountId,
       patientId: justinPatientId,
-      //patientUserId: patientUserId3,
+      patientUserId: patientUserId3,
       preferences: {
         weekends: false,
         evenings: false,
@@ -1247,17 +1226,25 @@ const SEEDS = {
         moment().add(2, 'days').toISOString(),
       ],
     },
-    {
-      accountId,
-      patientId: sergeyPatientId,
-    },
   ],
 
   PatientUser,
   Recall,
   Reminder,
 
-  SentReminder: [],
+  SentReminder: [
+    /*{
+     reminderId,
+     accountId,
+     createdAt: moment({hour: 13, minute: 10})._d,
+     appointmentId: appointmentId1,
+     patientId: justinPatientId,
+     primaryType: 'sms',
+     lengthSeconds: 30,
+     },*/
+
+    ...SentReminder,
+  ],
 
   SentRecall: [],
 };
