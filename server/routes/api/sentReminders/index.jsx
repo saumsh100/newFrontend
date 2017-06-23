@@ -28,10 +28,12 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
 
   return SentReminder
     .filter({ accountId, isSent: true })
-    .filter(r.row('startDate').during(startDate, endDate))
+    //.filter(r.row('startDate').during(startDate, endDate))
     .getJoin(joinObject)
     .run()
-    .then(sentReminders => res.send(normalize('sentReminders', sentReminders)))
+    .then(sentReminders => { 
+      return res.send(normalize('sentReminders', sentReminders))
+    })
     .catch(next);
 });
 

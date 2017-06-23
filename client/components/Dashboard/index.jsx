@@ -50,7 +50,7 @@ class Dashboard extends React.Component {
       this.props.fetchEntities({ key: 'users' }),
       this.props.fetchEntities({ key: 'appointments', join: ['patient', 'chair'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
-      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'], params: query }),
+      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
       this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'], params: query }),
     ]).then(() => {
       this.setState({ loaded: true });
@@ -97,7 +97,7 @@ class Dashboard extends React.Component {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
     const user = users.get(decodedToken.userId);
-    const userShow = user ? user.get('firstName') : ''
+    const userShow = user ? user.get('firstName') : '';
 
     return (
       <DocumentTitle title="CareCru | Dashboard">
@@ -196,6 +196,22 @@ function mapStateToProps({ entities }) {
     users: entities.getIn(['users', 'models']),
   };
 }
+
+Dashboard.propTypes = {
+  appointments: PropTypes.object.isRequired,
+  reminders: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  practitioners: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
+  push: PropTypes.func,
+  sentReminders: PropTypes.object,
+  recalls: PropTypes.object,
+  sentRecalls: PropTypes.object,
+  setSelectedPatientId: PropTypes.func,
+  selectAppointment: PropTypes.func,
+  users: PropTypes.object.isRequired,
+};
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({

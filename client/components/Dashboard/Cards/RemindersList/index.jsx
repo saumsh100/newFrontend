@@ -27,6 +27,10 @@ class RemindersList extends Component {
       reminders,
       sentReminders,
     } = this.props;
+    
+    if (!patients || !reminders || !sentReminders || !appointments ) {
+      return null;
+    }
 
     return (
       <Card className={styles.reminders}>
@@ -35,7 +39,12 @@ class RemindersList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {sentReminders.toArray().map((sentReminder,index) => {
+            {sentReminders.toArray().map((sentReminder, index) => {
+              
+              if (!sentReminder) {
+                return null;
+              }
+
               return (
                 <ReminderData
                   key={index}
@@ -59,6 +68,7 @@ RemindersList.propTypes = {
   appointments: PropTypes.object.isRequired,
   patients: PropTypes.object.isRequired,
   sentReminders: PropTypes.object.isRequired,
+  reminders: PropTypes.object.isRequired,
 };
 
 export default RemindersList;

@@ -18,8 +18,10 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
   const start = r.ISO8601(date);
   const end = start.add(reminder.lengthSeconds);
   const appointments = await Appointment
-    .filter({ accountId: reminder.accountId })
-    .filter(r.row('startDate').during(start, end))
+    .filter({
+      accountId: reminder.accountId,
+    })
+    .filter(r.row('startDate').during(start, end).and(r.row('isDeleted').eq(false)))
     .getJoin({ patient: true, sentReminders: true })
     .run();
 

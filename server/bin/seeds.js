@@ -12,7 +12,7 @@ const { time } = require('../util/time');
 const config = require('../config/globals');
 const saltRounds = config.passwordHashSaltRounds;
 
-import Reminder from '../fixtures/reminders';
+import Reminder, { reminderId1 } from '../fixtures/reminders';
 import PatientUser,
 {
   patientUserId,
@@ -67,6 +67,7 @@ const markPatientId = uuid();
 const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallPatientId = '4fcab035-b72c-4f7a-ad73-09465cbf5654';
 const sergeyPatientId = uuid();
+const jdPatientId = uuid();
 
 const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
 
@@ -78,6 +79,7 @@ const practitionerId5 = '5f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
 
 const chairId = '7f439ff8-c55d-4423-9316-a41240c4d329';
+const chairId2 = uuid(); 
 
 const serviceId = uuid();
 const serviceId2 = uuid();
@@ -86,6 +88,7 @@ const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
+const jdAppointmentId = uuid();
 
 const alexChatId = uuid();
 const markChatId = uuid();
@@ -103,8 +106,9 @@ const justinPhoneNumber = '+17808508886';
 const sergeyPhoneNumber = '+17782422626';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
+const jdPhoneNumber = '+16048076210';
 
-const clinicPhoneNumber = '+17786558613';
+const clinicPhoneNumber = '+17786558613'; 
 const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallId = uuid();
 
@@ -442,19 +446,6 @@ const SEEDS = {
     },
     {
       accountId,
-      startDate: new Date(2017, 1, 4, 16, 0, 0, 0),
-      endDate: new Date(2016, 1, 4, 17, 0, 0, 0),
-      patientId: sergeyPatientId,
-      serviceId,
-      practitionerId,
-      chairId,
-      isPatientConfirmed: true,
-      isSyncedWithPMS: true,
-      isCancelled: false,
-      note: 'JD Appointment',
-    },
-    {
-      accountId,
       startDate: new Date(2016, 2, 29, 18, 30, 0, 0),
       endDate: new Date(2016, 2, 29, 20, 30, 0, 0),
       patientId: sergeyPatientId,
@@ -510,7 +501,7 @@ const SEEDS = {
     ...appointmentFixtures,
 
     // For the patientsManagementTab
-    ...randomAppointments,
+    //...randomAppointments,
   ],
 
   Request: [
@@ -738,6 +729,28 @@ const SEEDS = {
       isSyncedWithPMS: false,
     },
     {
+      id: jdPatientId,
+      accountId: accountId2,
+      avatarUrl: faker.image.avatar(),
+      firstName: 'Jatinder',
+      lastName: 'Dhillon',
+      email: 'jatinder@carecru.com',
+      mobilePhoneNumber: jdPhoneNumber,
+      birthDate: moment({year: 1983, month: 2, day: 6})._d,
+      gender: 'male',
+      status: 'Active',
+      language: 'English',
+      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
+      insurance: {
+        insurance: 'Lay Health Insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      },
+      isSyncedWithPMS: false,
+    },
+    {
       id: sergeyPatientId,
       accountId,
       avatarUrl: faker.image.avatar(),
@@ -903,7 +916,6 @@ const SEEDS = {
       city: 'Toronto',
       zipCode: '90210',
       twilioPhoneNumber: clinicPhoneNumber,
-
       enterpriseId: sunshineSmilesId,
       canSendReminders: true,
       canSendRecalls: true,
