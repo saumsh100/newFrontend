@@ -1063,18 +1063,6 @@ const SEEDS = {
   ],
 
   Practitioner_Service: [
-    // Chelsea's services
-    {
-      Practitioner_id: practitionerId,
-      Service_id: serviceId,
-      id: `${practitionerId}_${serviceId}`,
-    },
-    // Perry's services
-    {
-      Practitioner_id: practitionerId2,
-      Service_id: serviceId2,
-      id: `${practitionerId2}_${serviceId2}`,
-    },
 
     // Availabilities Test
     {
@@ -1087,7 +1075,7 @@ const SEEDS = {
       Service_id: cleanupServiceId,
       id: `${practitionerId4}_${cleanupServiceId}`,
     },
-    /*
+
      ...generatePracServJoin(donnaServices, practitionerId),
      ...generatePracServJoin(donnaServices, practitionerId2),
 
@@ -1095,7 +1083,7 @@ const SEEDS = {
      ...generatePracServJoin(sunshineServices, practitionerId4),
      ...generatePracServJoin(sunshineServices, practitionerId5),
      ...generatePracServJoin(sunshineServices, practitionerId6),
-     */
+
   ],
 
   Service: [
