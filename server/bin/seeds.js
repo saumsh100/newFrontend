@@ -83,6 +83,9 @@ const serviceId = uuid();
 const serviceId2 = uuid();
 const serviceId3 = uuid();
 const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
+const fillServiceId = 'e18bd613-c76b-4a9a-a1df-850c867b2cab';
+const funServiceId = 'ac286d7e-cb62-4ea1-8425-fc7e22195692';
+const crazyServiceId = '49ddcf57-9202-41b9-bc65-bb3359bebd83';
 
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
@@ -503,6 +506,46 @@ const SEEDS = {
       startDate: new Date(2017, 3, 3, 10, 0),
       endDate: new Date(2017, 3, 3, 11, 0),
       serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 13, 0),
+      endDate: new Date(2017, 3, 3, 13, 21),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 14, 30),
+      endDate: new Date(2017, 3, 3, 15, 21),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 10, 13, 0),
+      endDate: new Date(2017, 3, 10, 13, 40),
+      serviceId: funServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 10, 14, 30),
+      endDate: new Date(2017, 3, 10, 15, 10),
+      serviceId: funServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 17, 13, 0),
+      endDate: new Date(2017, 3, 17, 14, 10),
+      serviceId: crazyServiceId,
       patientId: justinPatientId,
     },
 
@@ -1109,6 +1152,19 @@ const SEEDS = {
       Practitioner_id: practitionerId4,
       Service_id: cleanupServiceId,
     },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: fillServiceId,
+    },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: funServiceId,
+    },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: crazyServiceId,
+    },
+
 
     ...generatePracServJoin(donnaServices, practitionerId),
     ...generatePracServJoin(donnaServices, practitionerId2),
@@ -1125,6 +1181,30 @@ const SEEDS = {
       accountId: accountId2,
       name: 'Cleanup',
       duration: 60,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: fillServiceId,
+      accountId: accountId2,
+      name: 'Fill',
+      duration: 21,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: funServiceId,
+      accountId: accountId2,
+      name: 'Fun',
+      duration: 40,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: crazyServiceId,
+      accountId: accountId2,
+      name: 'Crazy',
+      duration: 70,
       bufferTime: 0,
       unitCost: 40,
     },
