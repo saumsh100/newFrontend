@@ -317,6 +317,7 @@ const generatePracServJoin = (services, _practitionerId) => {
     return {
       Service_id: service.id,
       Practitioner_id: _practitionerId,
+      id: `${_practitionerId}_${service.id}`,
     };
   });
 };
@@ -1066,23 +1067,27 @@ const SEEDS = {
     {
       Practitioner_id: practitionerId,
       Service_id: serviceId,
+      id: `${practitionerId}_${serviceId}`,
     },
     // Perry's services
     {
       Practitioner_id: practitionerId2,
       Service_id: serviceId2,
+      id: `${practitionerId2}_${serviceId2}`,
     },
 
     // Availabilities Test
     {
       Practitioner_id: practitionerId3,
       Service_id: cleanupServiceId,
+      id: `${practitionerId3}_${cleanupServiceId}`,
     },
     {
       Practitioner_id: practitionerId4,
       Service_id: cleanupServiceId,
+      id: `${practitionerId4}_${cleanupServiceId}`,
     },
-
+    /*
     ...generatePracServJoin(donnaServices, practitionerId),
     ...generatePracServJoin(donnaServices, practitionerId2),
 
@@ -1090,6 +1095,7 @@ const SEEDS = {
     ...generatePracServJoin(sunshineServices, practitionerId4),
     ...generatePracServJoin(sunshineServices, practitionerId5),
     ...generatePracServJoin(sunshineServices, practitionerId6),
+    */
   ],
 
   Service: [

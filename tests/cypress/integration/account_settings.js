@@ -13,7 +13,7 @@ describe('Account Settings', () => {
     cy.login();
   });
 
-  context.skip('Clinic Settings', () => {
+  context('Clinic Settings', () => {
     context('General Settings', () => {
       beforeEach(() => {
         cy.visit('http://localhost:5100/settings/clinic/general');
@@ -82,8 +82,8 @@ describe('Account Settings', () => {
     });
   });
 
-  context.skip('Schedule Settings', () => {
-    context.skip('Office Hours', () => {
+  context('Schedule Settings', () => {
+    context('Office Hours', () => {
       beforeEach(() => {
         cy.visit('http://localhost:5100/settings/schedule/hours');
       });
@@ -147,6 +147,29 @@ describe('Account Settings', () => {
           .should('have.value', '#123af2');
       });
     });
+  });
 
+  context('Services Settings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:5100/settings/services');
+    });
+
+    it('modify the name of an existing service', () => {
+      cy
+        .fillTextInput('serviceDataForm', 'name', 'Child Dental Test Update')
+        .submitForm('serviceDataForm')
+        .reload()
+        .get('[data-test-id="name"')
+        .should('have.value', 'Child Dental Test Update');
+    });
+
+    it('disable a practioner', () => {
+      cy
+        .getAndClick('Chelsea Manfield')
+        .submitForm('servicePractitionersForm')
+        .reload()
+        .get('[data-test-id="Chelsea Manfield"]')
+        .find()
+    });
   });
 });
