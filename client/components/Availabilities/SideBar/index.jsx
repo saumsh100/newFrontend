@@ -41,10 +41,10 @@ class SideBar extends Component {
             YOUR APPOINTMENT
           </div>
           <div className={styles.sidebar__information_text}>
-            {(timezone ? moment(startDate).tz(timezone).format('dddd, MMMM Do YYYY') : moment(startDate).format('dddd, MMMM Do YYYY'))}
+            {moment(startDate).format('dddd, MMMM Do YYYY')}
           </div>
           <div className={styles.sidebar__information_text}>
-            {(timezone ? moment(startDate).tz(timezone).format('h:mm a') : moment(startDate).format('h:mm a'))}
+            {moment(startDate).format('h:mm a')}
           </div>
         </div>
       );
