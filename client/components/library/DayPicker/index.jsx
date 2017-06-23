@@ -38,7 +38,6 @@ class DayPicker extends Component {
     } = this.props;
 
     if (disabled) {
-      console.log('zzz')
       return ;
     }
     if (!multiple) {
@@ -64,7 +63,7 @@ class DayPicker extends Component {
   handleInputChange(e) {
     const { value } = e.target;
     const momentDay = moment(value, 'L', true);
-    if (momentDay.isValid()) {
+    if (momentDay.isValid() && this.props.handleThisInput) {
       this.props.onChange(value);
     } else {
       this.props.onChange(value);
@@ -111,6 +110,7 @@ class DayPicker extends Component {
             <RDayPicker
               onDayClick={this.handleDayClick}
               selectedDays={convertValueToDate(value)}
+              handleInputChange={this.handleInputChange}
               {...this.props}
             />
           </div>
@@ -125,7 +125,6 @@ class DayPicker extends Component {
 DayPicker.propTypes = {
   target: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string,
   iconClassName: PropTypes.string,
   multiple: PropTypes.bool.isRequired,
 };

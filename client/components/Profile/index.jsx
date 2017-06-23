@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import DocumentTitle from 'react-document-title';
 import { Card } from '../library';
 import ChangePasswordForm from './ChangePasswordForm';
 import TestForm from '../demo/TestForm';
@@ -11,13 +12,15 @@ import styles from './styles.scss'
 
 function Profile(props) {
   return (
-    <Card className={styles.cardContainer}>
-      <div className={styles.passwordFormContainer}>
-        <ChangePasswordForm onSubmit={props.changePassword} />
-      </div>
-      {/*<TestForm patient={{ firstName: 'Justin', middleName: 'Daniel', lastName: 'Sharp' }} />*/}
-      {/*<TooltipsTest />*/}
-    </Card>
+    <DocumentTitle title="CareCru | Profile">
+      <Card className={styles.cardContainer}>
+        <div className={styles.passwordFormContainer}>
+          <ChangePasswordForm onSubmit={props.changePassword} />
+        </div>
+        {/*<TestForm patient={{ firstName: 'Justin', middleName: 'Daniel', lastName: 'Sharp' }} />*/}
+        {/*<TooltipsTest />*/}
+      </Card>
+    </DocumentTitle>
   );
 }
 

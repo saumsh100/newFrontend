@@ -33,7 +33,7 @@ class RecallsList extends Component {
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
-          <CardHeader count={sentRecalls.size} title="Recalls" />
+          <CardHeader count={sentRecalls.size} title="Sent Recalls" />
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
@@ -57,9 +57,9 @@ class RecallsList extends Component {
 }
 
 RecallsList.propTypes = {
-  patients: PropTypes.object.required,
-  recalls: PropTypes.object.required,
-  sentRecalls: PropTypes.object.required,
+  patients: PropTypes.object.isRequired,
+  recalls: PropTypes.object.isRequired,
+  sentRecalls: PropTypes.object.isRequired,
 };
 
 export default RecallsList;

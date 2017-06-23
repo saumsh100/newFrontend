@@ -52,7 +52,7 @@ class PatientList extends Component {
         limit: HOW_MANY_TO_SKIP,
       },
     }).then((result) => {
-      if (Object.keys(result).length === 0) {
+      if (Object.keys(result).length === 0 || Object.keys(result.appointments).length <= 7) {
         this.setState({ moreData: false });
       }
     });

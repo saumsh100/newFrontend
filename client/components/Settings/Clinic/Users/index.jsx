@@ -103,8 +103,27 @@ class Users extends Component{
     };
 
     const url = `/api/accounts/${accountId}/permissions/${this.state.editPermissionId}`
+    let userOwner = false;
+    let numOfOwners = 0;
+    this.props.users.toArray().map((user, i) => {
+      const permission = this.props.permissions.get(user.permissionId);
+      if (!permission) {
+        return null;
+      }
+      if (this.state.editPermissionId === permission.toJS().id && permission.toJS().role === 'OWNER') {
+        userOwner = true;
+      }
+      if (permission.toJS().role === 'OWNER') {
+        numOfOwners++;
+      }
+      return null;
+    });
 
-    this.props.updateEntityRequest({ key: 'accounts', values, url });
+    if (numOfOwners === 1 && userOwner === true) {
+      alert('There must be one Owner!')
+    } else {
+      this.props.updateEntityRequest({ key: 'accounts', values, url });
+    }
   }
 
   reinitializeState() {
@@ -292,16 +311,19 @@ class Users extends Component{
           data-test-id="activeUsersList"
         >
         {users.toArray().map((user, i) => {
-          permissions.toArray()[i].get('role');
+          const permission = permissions.get(user.permissionId);
+          if (!permission) {
+            return null;
+          }
           return (
             <ActiveUsersList
               key={user.id}
               activeUser={user}
-              role={permissions.toArray()[i].get('role')}
+              role={permission.get('role')}
               currentUserId={this.state.userId}
               userId={user.get('id')}
               currentUserRole={this.state.role}
-              edit={this.editUser.bind(null, user.get('id'), permissions.toArray()[i].get('id'), permissions.toArray()[i].get('role'), i)}
+              edit={this.editUser.bind(null, user.get('id'), permission.get('id'), permission.get('role'), i)}
             />
           );
         })}

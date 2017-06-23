@@ -21,7 +21,7 @@ export default function Filters(props) {
     remindersFilter: schedule.toJS().remindersFilter,
   };
 
-  let filteredServices = [];
+  const filteredServices = [];
 
   if (practitionersFilter.length) {
     practitionersFilter.map((pracId) => {

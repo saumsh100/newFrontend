@@ -1,7 +1,8 @@
 
 import authRouter from './auth';
 import authMiddleware from '../../middleware/patientAuth';
-import { Account, PatientUser } from '../../models';
+import { Account, PatientUser, Practitioner } from '../../models';
+import { validatePhoneNumber } from '../../util/validators';
 
 const myRouter = require('express').Router();
 const fs = require('fs');
@@ -26,31 +27,37 @@ myRouter.param('accountId', loaders('account', 'Account'));
 myRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
 myRouter.param('accountIdJoin', loaders('account', 'Account', {
   services: {
-    _apply: service => service.filter(row => {
+    _apply: service => service.filter((row) => {
       return row('isHidden').ne(true);
     }),
   },
+
   practitioners: true,
 }));
 
 myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
   try {
     // Needs to match the structure of the reducers
-    const { entities } = normalize('account', req.account);
-    const initialState = {
-      availabilities: {
+    return Practitioner
+    .filter({accountId: req.account.id})
+    .filter({isActive: true})
+    .then(practitioners => {
+      const { entities } = normalize('account', req.account);
+      const initialState = {
+        availabilities: {
+          account: req.account,
+          services: req.account.services,
+          practitioners,
+          selectedServiceId: (req.account.services[0] ? req.account.services[0].id : null),
+        },
+
+        entities,
+      };
+
+      return res.render('patient', {
         account: req.account,
-        services: req.account.services,
-        practitioners: req.account.practitioners,
-        selectedServiceId: (req.account.services[0] ? req.account.services[0].id : null),
-      },
-
-      entities,
-    };
-
-    return res.render('patient', {
-      account: req.account,
-      initialState: JSON.stringify(initialState),
+        initialState: JSON.stringify(initialState),
+      });
     });
   } catch (err) {
     next(err);
@@ -91,13 +98,31 @@ myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
   }
 });
 
-myRouter.post('/patientCheck', (req, res, next) => {
-  const email = req.body.email.toLowerCase();
-  const phoneNumber = req.body.phoneNumber;
-  return PatientUser.filter({ email, phoneNumber }).run()
+myRouter.post('/patientUsers/email', (req, res, next) => {
+  let {
+    email,
+  } = req.body;
+
+  email = email && email.toLowerCase();
+  return PatientUser.filter({ email }).run()
     .then(p => res.send({ exists: !!p[0] }))
     .catch(next);
 });
+
+myRouter.post('/patientUsers/phoneNumber', (req, res, next) => {
+  let {
+    phoneNumber,
+  } = req.body;
+
+  phoneNumber = validatePhoneNumber(phoneNumber);
+  return PatientUser.filter({ phoneNumber }).run()
+    .then(p => {
+      console.log('exists', !!p[0]);
+      res.send({ exists: !!p[0] })
+    })
+    .catch(next);
+});
+
 
 myRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   try {

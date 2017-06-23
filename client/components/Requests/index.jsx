@@ -19,12 +19,12 @@ class Requests extends Component {
 
     const filteredRequests = requests.toArray().filter((req) => {
       return !req.get('isCancelled') && !req.get('isConfirmed');
-    })
+    });
 
     const sortedRequests = filteredRequests.sort((a, b) => {
       return Date.parse(b.startDate) - Date.parse(a.startDate);
     });
-
+    
     return (
       <Card className={styles.requestCard}>
         <div className={styles.requestHeader}>

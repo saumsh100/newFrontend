@@ -9,6 +9,8 @@ export default function AccountLogo({ account, className, size, onClick = () => 
     replaceSize = 400;
   } else if (size === 'lg') {
     replaceSize = 200;
+  } else if (size === 'original') {
+    replaceSize = 'original';
   }
   let avatarUrl = null;
 

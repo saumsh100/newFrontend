@@ -8,10 +8,11 @@ export default function ShowPatientInfo(props) {
     appointment,
     patient,
     service,
-    chair,
     handleAppointmentClick,
     handlePatientClick,
   } = props;
+
+
   const name = service ? service.name : ''
   const startHourMinute = moment(appointment.startDate).format('h:mm');
   const endHourMinute = moment(appointment.endDate).format('h:mm a');
@@ -54,5 +55,4 @@ ShowPatientInfo.propTypes = {
   appointment: PropTypes.object.isRequired,
   patient: PropTypes.object.isRequired,
   service: PropTypes.object.isRequired,
-  chair: PropTypes.object.isRequired,
 };

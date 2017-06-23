@@ -1,11 +1,16 @@
 
 // TODO: will changes be on the same db connection as API then?
 // TODO: If so, we should consider abstracting that so we dont slow up other services
-const Appointment = require('../models/Appointment');
-const Request = require('../models/Request');
-const Patient = require('../models/Patient');
-const WaitSpot = require('../models/WaitSpot');
-const SyncClientError = require('../models/SyncClientError');
+const {
+  PatientUser,
+  SyncClientError,
+  SentRecall,
+  SentReminder,
+  WaitSpot,
+  Patient,
+  Request,
+  Appointment,
+} = require('../models');
 const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
@@ -28,10 +33,8 @@ function runDashboardFeeds(socket) {
           if (appointment.isSaved() === false) {
             socket.emit('remove:Appointment', appointment.id);
           } else if (appointment.getOldValue() === null) {
-            console.log('>>>>> create:Appointment: ', appointment);
             socket.emit('create:Appointment', normalize('appointment', appointment));
           } else {
-            console.log('>>>>> update:Appointment: ', appointment);
             socket.emit('update:Appointment', normalize('appointment', appointment));
           }
         });
@@ -46,17 +49,12 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-
-        console.log('DASH FEED.PATIENT');
-
         if (doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             socket.emit('remove:Patient', doc.id);
           } else if (isCreated(doc)) {
-            console.log('sync.feed.create', doc);
             socket.emit('create:Patient', normalize('patient', doc));
           } else {
-            console.log('sync.feed.update', doc);
             socket.emit('update:Patient', normalize('patient', doc));
           }
         }
@@ -71,7 +69,6 @@ function runDashboardFeeds(socket) {
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
-
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
         if (isDeleted(doc)) {
@@ -92,15 +89,68 @@ function runDashboardFeeds(socket) {
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
-
-      feed.each((error, doc) => {
+      feed.each(async (error, doc) => {
         if (error) throw new Error('Feed error');
+        let patientUser;
+        if (doc.patientUserId) {
+          patientUser = await PatientUser.get(doc.patientUserId);
+        }
+
+        let patient;
+        if (doc.patientId) {
+          patient = await Patient.get(doc.patientId);
+        }
+
+        doc.patient = patient;
+        doc.patientUser = patientUser;
+
         if (isDeleted(doc)) {
           socket.emit('remove:WaitSpot', doc.id);
         } else if (isCreated(doc)) {
           socket.emit('create:WaitSpot', normalize('waitSpot', doc));
         } else {
           socket.emit('update:WaitSpot', normalize('waitSpot', doc));
+        }
+      });
+    });
+  /**
+   * Listen to changes on the sentRecall table and update dashboards in real time
+   */
+  SentReminder
+    .filter({ accountId: activeAccountId })
+    .changes({ squash: true })
+    .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
+      feed.each((error, doc) => {
+        if (error) throw new Error('Feed error');
+        if (isDeleted(doc)) {
+          socket.emit('remove:SentReminder', doc.id);
+        } else if (isCreated(doc)) {
+          socket.emit('create:SentReminder', normalize('sentReminder', doc));
+        } else {
+          socket.emit('update:SentReminder', normalize('sentReminder', doc));
+        }
+      });
+    });
+
+  /**
+   * Listen to changes on the sentRecall table and update dashboards in real time
+   */
+  SentRecall
+    .filter({ accountId: activeAccountId })
+    .changes({ squash: true })
+    .then((feed) => {
+      setupFeedShutdown(socket, feed);
+
+      feed.each((error, doc) => {
+        if (error) throw new Error('Feed error');
+        if (isDeleted(doc)) {
+          socket.emit('remove:SentRecall', doc.id);
+        } else if (isCreated(doc)) {
+          socket.emit('create:SentRecall', normalize('sentRecall', doc));
+        } else {
+          socket.emit('update:SentRecall', normalize('sentRecall', doc));
         }
       });
     });

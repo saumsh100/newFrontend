@@ -28,7 +28,7 @@
 }
 
 .emptyList{
-  padding-top: 35%;
+  //padding-top: 35%;
   background-color: lighten($primary-lightgrey, 2%);
   text-align: center;
   color: lighten($primary-darkgrey, 5%);
@@ -84,6 +84,9 @@
     @extend .font-medium-grey;
     margin-right: 0px;
     padding-right: 0px;
+    &:hover {
+      color: $primary-color;
+    }
   }
 
   &__phoneNumber{

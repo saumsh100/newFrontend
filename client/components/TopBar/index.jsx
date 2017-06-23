@@ -204,7 +204,6 @@ TopBar.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
-  runOnDemandSync: PropTypes.func.isRequired,
   switchActiveAccount: PropTypes.func.isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,

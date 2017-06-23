@@ -34,7 +34,7 @@ class ScheduleContainer extends React.Component {
     Promise.all([
       this.props.fetchEntities({
         key: 'appointments',
-        join: ['patient'],
+        join: ['patient', 'service'],
         params: query,
       }),
       this.props.fetchEntities({

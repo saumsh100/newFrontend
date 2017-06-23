@@ -4,7 +4,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styles from '../styles.scss';
-import { ListItem } from '../../../library';
+import { ListItem, Avatar } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 
 
@@ -95,12 +95,12 @@ class ChatListContainer extends Component {
         sameElse: 'YYYY DD MM',
       })}</div>;
 
-      const avatar = (chat.user.avatarUrl ? chat.user.avatarUrl : '/images/avatar.png');
+      const avatar = (chat.user ? chat.user : {});
 
       const message = (messageRecent.body.length > 111 ? `${messageRecent.body.slice(0, 111)} ...` : messageRecent.body);
 
       return (<ListItem className={userActiveClassName} onClick={this.setPatient.bind(null, chat.user.id, chat.id)} key={chat.user.id}>
-        <img className={styles.users__photo}  src={avatar} alt="photo" />
+        <Avatar className={styles.users__photo} user={avatar} size="lg" />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
             {userDisplay}

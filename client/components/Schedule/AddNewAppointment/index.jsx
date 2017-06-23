@@ -124,6 +124,15 @@ class AddNewAppointment extends Component {
       },
     };
 
+    const alertRequestUpdate = {
+      success: {
+        body: `Request Confirmed for ${patientSelected.firstName}'s Appointment`,
+      },
+      error: {
+        body: `Request failed for ${patientSelected.firstName} Failed`,
+      },
+    };
+
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
       return createEntityRequest({
@@ -135,7 +144,7 @@ class AddNewAppointment extends Component {
           return updateEntityRequest({
             key: 'requests',
             model: selectedAppointment.requestModel,
-            alert: alertUpdate,
+            alert: alertRequestUpdate,
           }).then(() => {
             reinitializeState();
             reset(formName);
@@ -211,11 +220,13 @@ class AddNewAppointment extends Component {
     } = this.props;
 
     const selectedPractitioner = practitioners.get(id);
-    const practitionerServiceIds = selectedPractitioner.get('services');
+    const practitionerServiceIds = selectedPractitioner ? selectedPractitioner.get('services') : null;
 
     const servicesAllowed = [];
     practitionerServiceIds.map((serviceId) => {
-      servicesAllowed.push(services.get(serviceId));
+      if (!servicesAllowed.includes(services.get(serviceId))) {
+        servicesAllowed.push(services.get(serviceId));
+      }
     });
 
     change(formName, 'appointment.serviceId', '');
@@ -224,8 +235,7 @@ class AddNewAppointment extends Component {
     });
   }
 
-
-  //ToDo: Feature is disabled for now
+  //ToDo: handling practitioner schedules and timeoffs
   handleDateChange(day) {
     /*const {
       practitioners,
@@ -254,10 +264,12 @@ class AddNewAppointment extends Component {
   }
 
   render() {
+
     const {
       formName,
       patients,
       chairs,
+      practitioners,
       selectedAppointment,
       reinitializeState,
     } = this.props;
@@ -278,7 +290,7 @@ class AddNewAppointment extends Component {
           key={formName}
           formName={formName}
           services={this.state.servicesAllowed}
-          practitioners={this.state.practitionersBySchedule}
+          practitioners={practitioners}
           patients={patients}
           chairs={chairs}
           selectedAppointment={selectedAppointment}
@@ -318,6 +330,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 };
 
+/*
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
@@ -328,16 +341,16 @@ function mapStateToProps({ entities, auth }) {
   return {
     activeAccount,
   };
-}
+}*/
 
 AddNewAppointment.propTypes = {
-  formName: PropTypes.string.required,
-  services: PropTypes.object.required,
-  patients: PropTypes.object.required,
-  chairs: PropTypes.object.required,
-  practitioners: PropTypes.object.required,
+  formName: PropTypes.string.isRequired,
+  services: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  chairs: PropTypes.array,
+  practitioners: PropTypes.object.isRequired,
   weeklySchedule: PropTypes.object,
-  activeAccount: PropTypes.object.required,
+  //activeAccount: PropTypes.object.isRequired,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,
@@ -345,6 +358,6 @@ AddNewAppointment.propTypes = {
   reinitializeState: PropTypes.func,
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(AddNewAppointment);

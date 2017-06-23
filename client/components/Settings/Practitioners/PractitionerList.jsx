@@ -121,6 +121,7 @@ class PractitionerList extends Component {
                 <PractitionerItem
                   key={practitioner.get('id')}
                   id={practitioner.get('id')}
+                  practitionerId={practitionerId}
                   fullName={practitioner.getFullName()}
                   setPractitionerId={this.props.setPractitionerId}
                 />

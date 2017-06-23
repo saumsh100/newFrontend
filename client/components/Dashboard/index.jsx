@@ -5,8 +5,9 @@ import { bindActionCreators } from 'redux';
 import Loader from 'react-loader';
 import moment from 'moment';
 import jwt from 'jwt-decode';
-import RequestsContainer from '../../containers/RequestContainer';
 import { push } from 'react-router-redux';
+import DocumentTitle from 'react-document-title';
+import RequestsContainer from '../../containers/RequestContainer';
 import { fetchEntities } from '../../thunks/fetchEntities';
 import { selectAppointment } from '../../actions/schedule';
 import {
@@ -49,12 +50,13 @@ class Dashboard extends React.Component {
       this.props.fetchEntities({ key: 'users' }),
       this.props.fetchEntities({ key: 'appointments', join: ['patient', 'chair'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
-      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'] }),
-      this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'] }),
+      this.props.fetchEntities({ key: 'sentReminders', join: ['reminder', 'appointment', 'patient'], params: query }),
+      this.props.fetchEntities({ key: 'sentRecalls', join: ['recall', 'patient'], params: query }),
     ]).then(() => {
       this.setState({ loaded: true });
     }).catch(e => console.log(e));
   }
+
   renderCards() {
     const {
       appointments,
@@ -81,7 +83,9 @@ class Dashboard extends React.Component {
       return (isSameDate && !app.isDeleted && !app.isCancelled);
     });
 
-    const filterConfirmedRequests = requests.toArray().filter((req) => !req.get('isCancelled'));
+    const filterConfirmedRequests = requests.toArray().filter((req) => {
+      return !req.get('isCancelled') && !req.get('isConfirmed')
+    });
 
     const data = [
       { count: appointmentFilter.size, title: 'Appointments Today', icon: 'calendar', size: 6, color: 'primaryColor' },
@@ -89,77 +93,80 @@ class Dashboard extends React.Component {
       { count: sentReminders.size, title: 'Reminders Sent', icon: 'clock-o', size: 6, color: 'primaryGreen' },
       { count: sentRecalls.size, title: 'Recalls Sent', icon: 'bullhorn', size: 6, color: 'primaryYellow' },
     ];
+
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
     const user = users.get(decodedToken.userId);
     const userShow = user ? user.get('firstName') : ''
 
     return (
-      <Grid className={styles.dashboard}>
-        <Row className={styles.dashboard__header}>
-          <Col xs={12} >
-            <Card className={styles.dashboard__header_title}>
-              Welcome Back, <b>{userShow}</b>
-            </Card>
-          </Col>
-        </Row>
-        <Row className={styles.dashboard__body}>
-          <Col xs={12}>
-            <DashboardStats data={data} />
-          </Col>
-          <Col className={styles.padding} xs={12} md={12} lg={8}>
-            <Card className={styles.dashboard__body_comments} >
-              <CardHeader className={styles.cardHeader} title="Appointments" count={appointmentFilter.size} />
-              <AppointmentsList
-                appointments={appointmentFilter}
-                chairs={chairs}
-                patients={patients}
-                services={services}
-                practitioners={practitioners}
-                selectAppointment={selectAppointment}
-                setSelectedPatientId={setSelectedPatientId}
-                push={push}
-              />
-            </Card>
-          </Col>
-          <Col className={styles.padding} xs={12} md={12} lg={4}>
-            <div className={styles.dashboard__body_request}>
-              <RequestsContainer
-                key="dashBoardRequests"
-              />
-            </div>
-          </Col>
-          <Col xs={12}>
-            <Row center="xs" className={styles.dashboard__patientList}>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
-                <RecallsList
+      <DocumentTitle title="CareCru | Dashboard">
+        <Grid className={styles.dashboard}>
+          <Row className={styles.dashboard__header}>
+            <Col xs={12} >
+              <Card className={styles.dashboard__header_title}>
+                Welcome Back, <b>{userShow}</b>
+              </Card>
+            </Col>
+          </Row>
+          <Row className={styles.dashboard__body}>
+            <Col xs={12}>
+              <DashboardStats data={data} />
+            </Col>
+            <Col className={styles.padding} xs={12} md={12} lg={8}>
+              <Card className={styles.dashboard__body_comments} >
+                <CardHeader className={styles.cardHeader} title="Appointments" count={appointmentFilter.size} />
+                <AppointmentsList
+                  appointments={appointmentFilter}
+                  chairs={chairs}
                   patients={patients}
-                  recalls={recalls}
-                  sentRecalls={sentRecalls}
+                  services={services}
+                  practitioners={practitioners}
+                  selectAppointment={selectAppointment}
                   setSelectedPatientId={setSelectedPatientId}
                   push={push}
                 />
-              </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
-                <RemindersList
-                  patients={patients}
-                  appointments={appointments}
-                  reminders={reminders}
-                  sentReminders={sentReminders}
-                  setSelectedPatientId={setSelectedPatientId}
-                  push={push}
+              </Card>
+            </Col>
+            <Col className={styles.padding} xs={12} md={12} lg={4}>
+              <div className={styles.dashboard__body_request}>
+                <RequestsContainer
+                  key="dashBoardRequests"
                 />
-              </Col>
-              <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
-                <DigitalWaitList
-                  setSelectedPatientId={setSelectedPatientId}
-                  push={push}
-                />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Grid>
+              </div>
+            </Col>
+            <Col xs={12}>
+              <Row center="xs" className={styles.dashboard__patientList}>
+                <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
+                  <RecallsList
+                    patients={patients}
+                    recalls={recalls}
+                    sentRecalls={sentRecalls}
+                    setSelectedPatientId={setSelectedPatientId}
+                    push={push}
+                  />
+                </Col>
+                <Col className={styles.dashboard__patientList_item} xs={12} md={6} lg={4}>
+                  <RemindersList
+                    patients={patients}
+                    appointments={appointments}
+                    reminders={reminders}
+                    sentReminders={sentReminders}
+                    setSelectedPatientId={setSelectedPatientId}
+                    push={push}
+                  />
+                </Col>
+                <Col className={styles.dashboard__patientList_item} xs={12} md={12} lg={4}>
+                  <DigitalWaitList
+                    setSelectedPatientId={setSelectedPatientId}
+                    push={push}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Grid>
+      </DocumentTitle>
     );
   }
 
