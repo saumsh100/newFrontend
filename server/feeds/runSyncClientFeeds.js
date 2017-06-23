@@ -17,8 +17,6 @@ function runSyncClientFeeds(socket) {
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
 
-        console.log('SYNC feed doc', JSON.stringify(doc));
-
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             console.log(`SYNC RM: NOT emitting. Removing appointments; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
