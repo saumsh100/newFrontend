@@ -56,7 +56,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
         name="destinationPhoneNumber"
         label="Destination Phone Number"
         type="tel"
-        data-test-id="tel"
+        data-test-id="destinationPhoneNumber"
       />
     </div>
     <div className={styles.paddingField}>

@@ -13,7 +13,7 @@ class ServicesPractList extends Component {
     return (
       <div
         className={styles.servicesPractForm_service}
-        data-test-id={practitioner.getFullName()}
+        data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
       >
         {practitioner.getFullName()}
         <Field

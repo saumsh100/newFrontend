@@ -27,6 +27,7 @@ describe('Account Settings', () => {
           .fillTextInput('generalSettingsForm', 'twilioPhoneNumber', '9876543212')
           .fillTextInput('generalSettingsForm', 'destinationPhoneNumber', '1234567898')
           .fillTextInput('generalSettingsForm', 'vendastaId', '99988')
+          .fillEmailInput('generalSettingsForm', 'contactEmail', 'test@test.com')
           .submitForm('generalSettingsForm')
           .reload()
           .get('[data-test-id=name]')
@@ -163,13 +164,16 @@ describe('Account Settings', () => {
         .should('have.value', 'Child Dental Test Update');
     });
 
-    it('disable a practioner', () => {
+    it('disable a practitioner', () => {
       cy
-        .getAndClick('Chelsea Manfield')
+        .get('[data-test-id=ChelseaMansfield]')
+        .find('input')
+        .click({ force: true })
         .submitForm('servicePractitionersForm')
         .reload()
-        .get('[data-test-id="Chelsea Manfield"]')
-        .find()
+        .get('[data-test-id=ChelseaMansfield]')
+        .find('.react-toggle--checked')
+        .should('not.exist');
     });
   });
 });
