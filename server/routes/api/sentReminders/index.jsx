@@ -31,8 +31,15 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
     //.filter(r.row('startDate').during(startDate, endDate))
     .getJoin(joinObject)
     .run()
-    .then(sentReminders => { 
-      return res.send(normalize('sentReminders', sentReminders))
+    .then((sentReminders) => {
+      const filterSentReminders = sentReminders.filter((sentReminder) => {
+        const appointment = sentReminder.appointment;
+        if (!appointment.isDeleted) {
+          return sentReminder;
+        }
+      });
+
+      return res.send(normalize('sentReminders', filterSentReminders))
     })
     .catch(next);
 });

@@ -27,7 +27,7 @@ class RemindersList extends Component {
       reminders,
       sentReminders,
     } = this.props;
-    
+
     if (!patients || !reminders || !sentReminders || !appointments ) {
       return null;
     }
@@ -40,7 +40,7 @@ class RemindersList extends Component {
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
             {sentReminders.toArray().map((sentReminder, index) => {
-              
+
               if (!sentReminder) {
                 return null;
               }
