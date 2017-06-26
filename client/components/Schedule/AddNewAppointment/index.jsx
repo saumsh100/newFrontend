@@ -41,6 +41,9 @@ class AddNewAppointment extends Component {
     this.deleteAppointment = this.deleteAppointment.bind(this);
     this.handlePractitionerChange = this.handlePractitionerChange.bind(this);
     this.handleSliderChange = this.handleSliderChange.bind(this);
+    this.handleDurationChange = this.handleDurationChange.bind(this);
+    this.handleUnitChange = this.handleUnitChange.bind(this);
+    this.handleBufferChange = this.handleBufferChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -163,12 +166,57 @@ class AddNewAppointment extends Component {
       formName,
     } = this.props;
 
-
     const duration = value[0];
     const buffer = value[1];
 
     change(formName, 'appointment.duration', duration);
     change(formName, 'appointment.buffer', buffer - duration);
+    change(formName, 'appointment.unit', (duration / 15).toFixed(2));
+  }
+
+  handleDurationChange(value) {
+    const {
+      change,
+      formName,
+      appFormValues,
+    } = this.props;
+
+    change(formName, 'appointment.unit', (value / 15).toFixed(2));
+
+    if (value > 15 && value <= 180 && appFormValues) {
+      change(formName, 'appointment.slider', [value, value]);
+      change(formName, 'appointment.buffer', 0);
+    }
+  }
+
+  handleUnitChange(value) {
+    const {
+      change,
+      formName,
+    } = this.props;
+
+    const duration = value * 15;
+
+    if (duration <= 180 && duration >= 15) {
+      change(formName, 'appointment.duration', duration);
+      change(formName, 'appointment.slider', [duration, duration]);
+      change(formName, 'appointment.buffer', 0);
+    }
+  }
+
+  handleBufferChange(value) {
+    const {
+      change,
+      formName,
+      appFormValues,
+    } = this.props;
+
+    const duration = (appFormValues && appFormValues.appointment.slider) ? appFormValues.appointment.slider[0] : 60;
+
+    const bufferValue = duration + value;
+    if (bufferValue > duration && bufferValue <= 180) {
+      change(formName, 'appointment.slider', [duration, bufferValue]);
+    }
   }
 
   deleteAppointment() {
@@ -271,6 +319,9 @@ class AddNewAppointment extends Component {
           handleAutoSuggest={this.handleAutoSuggest}
           handlePractitionerChange={this.handlePractitionerChange}
           handleSliderChange={this.handleSliderChange}
+          handleDurationChange={this.handleDurationChange}
+          handleUnitChange={this.handleUnitChange}
+          handleBufferChange={this.handleBufferChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton

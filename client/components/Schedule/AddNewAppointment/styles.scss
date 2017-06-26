@@ -12,7 +12,6 @@
 .title {
   padding-top: 15px;
   padding-left: 15px;
-  padding-bottom: 15px;
   font-size: $extra-medium-size;
   font-weight: $jumbo-weight;
   color: $primary-color;
@@ -50,9 +49,9 @@
     }
 
     &_right {
-      padding-top: 65px;
+      padding-top: 49px;
       background-color: #ff755e;
-      height: 536px;
+      height: 551px;
       width: 301px;
       border-bottom-right-radius: .3rem;
       border-top-right-radius: .3rem;
@@ -83,6 +82,13 @@
 
     &_nearFields {
       width: 100%;
+    }
+
+    &_unit {
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      padding-right: 10px;
     }
 
     &_select {

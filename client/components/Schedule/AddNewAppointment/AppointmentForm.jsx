@@ -61,6 +61,9 @@ export default function AppointmentForm(props) {
     selectedAppointment,
     time,
     handleSliderChange,
+    handleDurationChange,
+    handleUnitChange,
+    handleBufferChange,
   } = props;
 
   return (
@@ -89,7 +92,7 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+        <Col xs={12} md={12} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
             <Col xs={12} >
               <Field
@@ -104,7 +107,7 @@ export default function AppointmentForm(props) {
             </Col>
           </Row>
         </Col>
-        <Col md={2} />
+        {/*<Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
             <Col xs={12} >
@@ -118,7 +121,7 @@ export default function AppointmentForm(props) {
               />
             </Col>
           </Row>
-        </Col>
+        </Col>*/}
       </Row>
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={12} className={styles.addNewAppt_col}>
@@ -171,10 +174,21 @@ export default function AppointmentForm(props) {
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
             type="number"
+            onChange={(e, value) => handleDurationChange(value)}
             required
           />
         </Col>
-        <Col md={2} />
+        <Col xs={12} md={2} className={styles.addNewAppt_col_unit}>
+          <Field
+            name="unit"
+            label="Unit"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            type="number"
+            onChange={(e, value)=>{handleUnitChange(value)}}
+          />
+        </Col>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
             name="buffer"
@@ -183,6 +197,7 @@ export default function AppointmentForm(props) {
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
             type="number"
+            onChange={(e, value) => handleBufferChange(value)}
           />
         </Col>
       </Row>
@@ -196,7 +211,6 @@ export default function AppointmentForm(props) {
             min={15}
             max={180}
             marks={marks}
-            labels={['Duration', 'Buffer']}
             onChange={(e, value)=> handleSliderChange(value)}
           />
         </Col>

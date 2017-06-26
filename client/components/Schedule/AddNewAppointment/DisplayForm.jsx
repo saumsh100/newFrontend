@@ -42,7 +42,10 @@ export default function DisplayForm(props) {
     handleSubmit,
     handleAutoSuggest,
     handlePractitionerChange,
-    handleSliderChange
+    handleSliderChange,
+    handleDurationChange,
+    handleUnitChange,
+    handleBufferChange,
   } = props;
 
   let initialValues = null;
@@ -114,6 +117,9 @@ export default function DisplayForm(props) {
                 selectedAppointment={selectedAppointment}
                 time={time}
                 handleSliderChange={handleSliderChange}
+                handleDurationChange={handleDurationChange}
+                handleUnitChange={handleUnitChange}
+                handleBufferChange={handleBufferChange}
               />
             </FormSection>
           </Col>

@@ -24,10 +24,11 @@ export default function RFRangeSlider(props) {
 
   return (
     <RangeSlider
+      value={initialState}
       {...newProps}
       {...newInput}
       error={finalError}
-      onChange={(value)=>{input.onChange(value)}}
+      onChange={(value)=>{ input.onChange(value) }}
       setRangeState={initialState}
     />
   );
