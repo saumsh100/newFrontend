@@ -52,7 +52,7 @@ export default function FilterPractitioners(props) {
             return null;
           }
 
-          const displayName = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
+          const displayName = `${pr.firstName} ${pr.lastName}`;
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
 
           const label = (<div className={styles.filter_practitioner__name}>{displayName}</div>);

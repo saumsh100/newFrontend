@@ -180,13 +180,14 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
       patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
         .or(patient('email').match(search[0])));
-  }).limit(20)
+  }).limit(50)
     .getJoin({ appointments: {
       _apply: (appointment) => {
         return appointment.filter((request) => {
           return generateDuringFilter(request, startDate, endDate);
         });
     } }, chat: {textMessages: { user: true }} })
+    .orderBy('firstName')
     .run()
     .then((patients) => {
       const normPatients = normalize('patients', patients);

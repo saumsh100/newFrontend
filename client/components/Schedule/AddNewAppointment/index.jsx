@@ -13,8 +13,11 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { Button, IconButton } from '../../library';
+import { Button, IconButton, Avatar } from '../../library';
 import styles from './styles.scss';
+import { SortByFirstName } from '../../library/util/SortEntities';
+
+
 
 const mergeTime = (date, time) => {
   date.setHours(time.getHours());
@@ -32,7 +35,6 @@ class AddNewAppointment extends Component {
     super(props);
     this.state = {
       servicesAllowed: this.props.services,
-      practitionersBySchedule: this.props.practitioners,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,7 +42,10 @@ class AddNewAppointment extends Component {
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
     this.handlePractitionerChange = this.handlePractitionerChange.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleSliderChange = this.handleSliderChange.bind(this);
+    this.handleDurationChange = this.handleDurationChange.bind(this);
+    this.handleUnitChange = this.handleUnitChange.bind(this);
+    this.handleBufferChange = this.handleBufferChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -53,7 +58,6 @@ class AddNewAppointment extends Component {
       formName,
     } = this.props;
 
-
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
     const {
@@ -64,6 +68,8 @@ class AddNewAppointment extends Component {
       chairId,
       isPatientConfirmed,
       isCancelled,
+      buffer,
+      duration,
     } = appointmentValues;
 
     const {
@@ -71,23 +77,8 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
-    // setting initial duration and buffer if slider isn't used.
-    let duration = appointmentValues.duration;
-    if (!duration) {
-      duration = [60, 60];
-    }
 
-    // check if the buffer equals the duration if it doesn't set the buffer time
-    let bufferTime = 0;
-    if (duration[1] !== duration[0]) {
-      bufferTime = duration[1] - duration[0];
-    }
-
-    let totalDurationMin = duration[0];
-
-    if (bufferTime > 0) {
-      totalDurationMin = duration[0] + bufferTime;
-    }
+    let totalDurationMin = duration + buffer;
 
     const startDate = mergeTime(new Date(date), new Date(time));
     const endDate = moment(startDate).add(totalDurationMin, 'minutes');
@@ -103,7 +94,7 @@ class AddNewAppointment extends Component {
       isPatientConfirmed,
       isCancelled,
       isSyncedWithPMS: false,
-      customBufferTime: bufferTime,
+      customBufferTime: buffer,
     };
 
     const alertCreate = {
@@ -171,43 +162,65 @@ class AddNewAppointment extends Component {
     }
   }
 
-  deleteAppointment() {
-    const {
-      selectedAppointment,
-      reinitializeState,
-      updateEntityRequest,
-    } = this.props;
-
-    const deleteApp = confirm('Are you sure you want to delete this appointment?');
-
-    if (deleteApp) {
-      const appModel = selectedAppointment.appModel;
-      const deletedModel = appModel.set('isDeleted', true);
-      updateEntityRequest({ key: 'appointments', model: deletedModel });
-    }
-
-    reinitializeState();
-  }
-
-  getSuggestions(value) {
-    return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
-      .then((searchData) => {
-        return searchData.patients;
-      }).then((searchedPatients) => {
-        return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          (key) => searchedPatients[key]) : [];
-      });
-  }
-
-  handleAutoSuggest(newValue) {
+  handleSliderChange(value) {
     const {
       change,
       formName,
+      unit,
     } = this.props;
 
-    if (typeof newValue === 'object') {
-      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
-      change(formName, 'patient.email', newValue.email);
+    const duration = value[0];
+    const buffer = value[1];
+
+    change(formName, 'appointment.duration', duration);
+    change(formName, 'appointment.buffer', buffer - duration);
+    change(formName, 'appointment.unit', (duration / unit).toFixed(2));
+  }
+
+  handleDurationChange(value) {
+    const {
+      change,
+      formName,
+      appFormValues,
+      unit,
+    } = this.props;
+
+    change(formName, 'appointment.unit', (value / unit).toFixed(2));
+
+    if (value >= unit && value <= 180 && appFormValues) {
+      change(formName, 'appointment.slider', [value, value]);
+      change(formName, 'appointment.buffer', 0);
+    }
+  }
+
+  handleUnitChange(value) {
+    const {
+      change,
+      formName,
+      unit,
+    } = this.props;
+
+    const duration = value * unit;
+
+    if (duration <= 180 && duration >= unit) {
+      change(formName, 'appointment.duration', duration);
+      change(formName, 'appointment.slider', [duration, duration]);
+      change(formName, 'appointment.buffer', 0);
+    }
+  }
+
+  handleBufferChange(value) {
+    const {
+      change,
+      formName,
+      appFormValues,
+    } = this.props;
+
+    const duration = (appFormValues && appFormValues.appointment.slider) ? appFormValues.appointment.slider[0] : 60;
+
+    const bufferValue = duration + value;
+    if (bufferValue > duration && bufferValue <= 180) {
+      change(formName, 'appointment.slider', [duration, bufferValue]);
     }
   }
 
@@ -235,36 +248,59 @@ class AddNewAppointment extends Component {
     });
   }
 
-  //ToDo: handling practitioner schedules and timeoffs
-  handleDateChange(day) {
-    /*const {
-      practitioners,
+  handleAutoSuggest(newValue) {
+    const {
       change,
       formName,
-      weeklySchedules,
-      activeAccount,
     } = this.props;
 
-    const clinicSchedule = activeAccount ? weeklySchedules.get(activeAccount.get('weeklyScheduleId')) : null;
-    const dayOfWeek = dayOfWeekAsString(moment(day).weekday());
+    if (typeof newValue === 'object') {
+      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
+      change(formName, 'patient.email', newValue.email);
+    }
+  }
 
-    const filterBySchedulePract = practitioners.toArray().filter((pr) => {
-      const weeklySchedule = weeklySchedules.get(pr.get('weeklyScheduleId'));
-      if (weeklySchedule && !weeklySchedule.get(dayOfWeek).isClosed) {
-        return pr;
-      } else if (!weeklySchedule & clinicSchedule && !clinicSchedule.get(dayOfweek).isClosed) {
-        return pr
-      }
-    });
+  getSuggestions(value) {
+    return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
+      .then((searchData) => {
+        return searchData.patients;
+      }).then((searchedPatients) => {
+        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
+          (key) => searchedPatients[key]) : [];
 
-    change(formName, 'appointment.practitionerId', '');
-    this.setState({
-      practitionersBySchedule: filterBySchedulePract,
-    });*/
+        patientList.map((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="lg" />
+              <span className={styles.suggestionContainer_fullName}>
+                {`${patient.firstName} ${patient.lastName}`}
+              </span>
+            </div>
+          );
+        })
+        return patientList;
+      });
+  }
+
+  deleteAppointment() {
+    const {
+      selectedAppointment,
+      reinitializeState,
+      updateEntityRequest,
+    } = this.props;
+
+    const deleteApp = confirm('Are you sure you want to delete this appointment?');
+
+    if (deleteApp) {
+      const appModel = selectedAppointment.appModel;
+      const deletedModel = appModel.set('isDeleted', true);
+      updateEntityRequest({ key: 'appointments', model: deletedModel });
+    }
+
+    reinitializeState();
   }
 
   render() {
-
     const {
       formName,
       patients,
@@ -272,6 +308,7 @@ class AddNewAppointment extends Component {
       practitioners,
       selectedAppointment,
       reinitializeState,
+      unit,
     } = this.props;
 
     const remoteButtonProps = {
@@ -294,10 +331,15 @@ class AddNewAppointment extends Component {
           patients={patients}
           chairs={chairs}
           selectedAppointment={selectedAppointment}
+          unit={unit}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
           handlePractitionerChange={this.handlePractitionerChange}
+          handleSliderChange={this.handleSliderChange}
+          handleDurationChange={this.handleDurationChange}
+          handleUnitChange={this.handleUnitChange}
+          handleBufferChange={this.handleBufferChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton
@@ -328,20 +370,24 @@ function mapDispatchToProps(dispatch) {
     reset,
     change,
   }, dispatch);
-};
+}
 
-/*
-function mapStateToProps({ entities, auth }) {
+
+function mapStateToProps({ entities, form, auth }, { formName }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
-  if (!activeAccount) {
-    return {};
+  if (!form[formName] || !activeAccount.get('unit')) {
+    return {
+      values: {},
+      unit: 15,
+    };
   }
 
   return {
-    activeAccount,
+    appFormValues: form[formName].values,
+    unit: activeAccount.get('unit'),
   };
-}*/
+}
 
 AddNewAppointment.propTypes = {
   formName: PropTypes.string.isRequired,
@@ -350,14 +396,16 @@ AddNewAppointment.propTypes = {
   chairs: PropTypes.array,
   practitioners: PropTypes.object.isRequired,
   weeklySchedule: PropTypes.object,
-  //activeAccount: PropTypes.object.isRequired,
+  unit: PropTypes.number,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,
   change: PropTypes.func,
   reinitializeState: PropTypes.func,
+  fetchEntities: PropTypes.func,
+  updateEntityRequest: PropTypes.func,
 };
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(AddNewAppointment);
