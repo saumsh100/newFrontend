@@ -2,8 +2,6 @@ import { UserAuth } from '../../../lib/auth';
 import { AuthSession } from '../../../models';
 
 const accountsRouter = require('express').Router();
-const sharp = require('sharp');
-const async = require('async');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
@@ -13,8 +11,7 @@ const StatusError = require('../../../util/StatusError');
 const { Account, Permission } = require('../../../models');
 const uuid = require('uuid').v4;
 const { sendInvite } = require('../../../lib/inviteMail');
-const fileUpload = require('express-fileupload');
-const s3 = require('../../../config/s3');
+const upload = require('../../../lib/upload');
 
 accountsRouter.param('accountId', loaders('account', 'Account', { enterprise: true }));
 accountsRouter.param('inviteId', loaders('invite', 'Invite'));
@@ -33,52 +30,21 @@ accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, e
 /**
  * Upload a accounts's logo
  */
-accountsRouter.post('/:accountId/logo', checkPermissions('accounts:update'), fileUpload(), async (req, res, next) => {
+accountsRouter.post('/:accountId/logo', checkPermissions('accounts:update'), async (req, res, next) => {
   const fileKey = `logos/${req.account.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
+  try {
+    await upload(fileKey, req.files.file.data);
 
-  function resizeImage(size, buffer) {
-    if (size === 'original') {
-      return Promise.resolve(buffer);
-    }
+    req.account.logo = fileKey;
+    const savedAccount = await req.account.save();
 
-    return sharp(buffer)
-      .resize(size, size)
-      .toBuffer();
+    return res.send(normalize('account', savedAccount));
+  } catch (error) {
+    return next(error);
   }
-
-  async.eachSeries([
-    'original',
-    400,
-    200,
-    100,
-  ], async (size, nextImage) => {
-    const file = req.files.file.data;
-    const resizedImage = await resizeImage(size, file);
-    s3.upload({
-      Key: fileKey.replace('[size]', size),
-      Body: resizedImage,
-      ACL: 'public-read',
-    }, async (err, response) => {
-      console.log(err, response);
-      if (err) {
-        return next(err);
-      }
-
-      nextImage();
-    });
-  }, async () => {
-    try {
-      req.account.logo = fileKey;
-
-      const savedAccount = await req.account.save();
-      res.send(normalize('account', savedAccount));
-    } catch (error) {
-      next(error);
-    }
-  });
 });
 
-accountsRouter.delete('/:accountId/logo', checkPermissions('accounts:update'), fileUpload(), async (req, res, next) => {
+accountsRouter.delete('/:accountId/logo', checkPermissions('accounts:update'), async (req, res, next) => {
   try {
     req.account.logo = null;
     const savedAccount = await req.account.save();
@@ -119,7 +85,7 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     joinObject,
   } = req;
 
-  /*// Some default code to ensure we don't pull the entire conversation for each chat
+  /* // Some default code to ensure we don't pull the entire conversation for each chat
   if (joinObject.weeklySchedule) {
     joinObject.weeklySchedule = {
       _apply: (sequence) => {
@@ -195,11 +161,9 @@ accountsRouter.put('/:accountId/permissions/:permissionId', (req, res, next) => 
 });
 
 
-accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
-  return req.account.merge(req.body).save()
-    .then(account => {res.send(normalize('account', account))})
-    .catch(next);
-});
+accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => req.account.merge(req.body).save()
+    .then((account) => { res.send(normalize('account', account)); })
+    .catch(next));
 
 accountsRouter.get('/:accountId/invites', (req, res, next) => {
   console.log(req.account.id);
@@ -243,7 +207,6 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
         });
     })
     .catch(next);
-
 });
 
 
@@ -264,8 +227,7 @@ accountsRouter.delete('/:accountId/invites/:inviteId', (req, res, next) => {
 });
 
 
-accountsRouter.get('/:accountId/users', (req, res, next) => {
-  return User.filter({ enterpriseId: req.account.enterprise.id })
+accountsRouter.get('/:accountId/users', (req, res, next) => User.filter({ enterpriseId: req.account.enterprise.id })
       .filter({ activeAccountId: req.account.id }).getJoin({ permission: true }).run()
       .then((permissions) => {
         const users = permissions.filter((user) => {
@@ -280,8 +242,7 @@ accountsRouter.get('/:accountId/users', (req, res, next) => {
         };
         res.send(obj);
       })
-      .catch(next);
-});
+      .catch(next));
 
 module.exports = accountsRouter;
 

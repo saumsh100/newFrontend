@@ -23,7 +23,7 @@ describe('RemindersList Calculation Library', () => {
       expect(typeof func).toBe('function');
     });
 
-    /*it('should work..', (done) => {
+    /* it('should work..', (done) => {
       computerRemindersAndSend().then(() => done());
     });*/
   });
