@@ -13,8 +13,12 @@ const Practitioner = require('../../server/models/Practitioner');
 // TODO: make seeds more modular so we can see here
 const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
 const serviceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
+const fillServiceId = 'e18bd613-c76b-4a9a-a1df-850c867b2cab';
+const funServiceId = 'ac286d7e-cb62-4ea1-8425-fc7e22195692';
 const practitionerId = '4f439ff8-c55d-4423-9316-a41240c4d329';
 const weeklyScheduleId = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
+const crazyServiceId = '49ddcf57-9202-41b9-bc65-bb3359bebd83';
+
 
 describe('Availabilities Library', () => {
   describe('#fetchServiceData', () => {
@@ -189,6 +193,120 @@ describe('Availabilities Library', () => {
             const endTime = Date.now();
             //console.log('Time elapsed:', endTime - startTime);
             done();
+          });
+      });
+
+      it('should return 5 availabilities 30 timeInterval (seedData just appointments)', () => {
+        const startDate = (new Date(2017, 3, 3, 13, 0)).toISOString();
+        const endDate = (new Date(2017, 3, 3, 17, 0)).toISOString();
+
+        const startTime = Date.now();
+
+        const options = {
+          accountId,
+          practitionerId,
+          serviceId: fillServiceId,
+          startDate,
+          endDate,
+        };
+
+        return fetchAvailabilities(options)
+          .then((availabilities) => {
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(5);
+            expect(availabilities[0]).toEqual({
+              startDate: (new Date(2017, 3, 3, 13, 30)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 13, 51)).toISOString(),
+            });
+            expect(availabilities[1]).toEqual({
+              startDate: (new Date(2017, 3, 3, 14, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 14, 21)).toISOString(),
+            });
+            expect(availabilities[2]).toEqual({
+              startDate: (new Date(2017, 3, 3, 15, 30)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 15, 51)).toISOString(),
+            });
+            expect(availabilities[3]).toEqual({
+              startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 16, 21)).toISOString(),
+            });
+            expect(availabilities[4]).toEqual({
+              startDate: (new Date(2017, 3, 3, 16, 30)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 16, 51)).toISOString(),
+            });
+
+            const endTime = Date.now();
+            //console.log('Time elapsed:', endTime - startTime);
+          });
+      });
+
+      it('should return 1 availabilities with 60 timeInterval (seedData just appointments)', () => {
+        const startDate = (new Date(2017, 3, 3, 13, 0)).toISOString();
+        const endDate = (new Date(2017, 3, 3, 17, 0)).toISOString();
+
+        const options = {
+          accountId,
+          practitionerId,
+          serviceId: fillServiceId,
+          timeInterval: 60,
+          startDate,
+          endDate,
+        };
+
+        return fetchAvailabilities(options)
+          .then((availabilities) => {
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(1);
+            expect(availabilities[0]).toEqual({
+              startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 3, 16, 21)).toISOString(),
+            });
+          });
+      });
+
+      it('should return 1 availabilities with service of 40 mins (seedData just appointments)', () => {
+        const startDate = (new Date(2017, 3, 10, 13, 0)).toISOString();
+        const endDate = (new Date(2017, 3, 10, 17, 0)).toISOString();
+
+        const options = {
+          accountId,
+          practitionerId,
+          serviceId: funServiceId,
+          startDate,
+          endDate,
+        };
+
+        return fetchAvailabilities(options)
+          .then((availabilities) => {
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(1);
+            expect(availabilities[0]).toEqual({
+              startDate: (new Date(2017, 3, 10, 16, 0)).toISOString(),
+              endDate: (new Date(2017, 3, 10, 16, 40)).toISOString(),
+            });
+          });
+      });
+
+      it('should return 1 availabilities with service of 70 mins (seedData just appointments)', () => {
+        const startDate = (new Date(2017, 3, 17, 13, 0)).toISOString();
+        const endDate = (new Date(2017, 3, 17, 17, 0)).toISOString();
+
+        const options = {
+          accountId,
+          practitionerId,
+          serviceId: crazyServiceId,
+          startDate,
+          endDate,
+        };
+
+        return fetchAvailabilities(options)
+          .then((availabilities) => {
+            expect(Array.isArray(availabilities)).toBe(true);
+            expect(availabilities.length).toBe(1);
+            expect(availabilities[0]).toEqual({
+              startDate: (new Date(2017, 3, 17, 14, 30)).toISOString(),
+              endDate: (new Date(2017, 3, 17, 15, 40)).toISOString(),
+            });
           });
       });
 

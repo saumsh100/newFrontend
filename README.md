@@ -10,19 +10,18 @@ React, Redux, Sass
 
 ## Install
 
-Install RethinkDB (https://www.rethinkdb.com/docs/install/).
-Use node and npm versions in package.json file, install them if not already installed.
-
-`git clone git@github.com:carecru/carecru.git`
-
-`cd carecru`
-
-`npm install`
+1. Install RethinkDB (https://www.rethinkdb.com/docs/install/).
+2. Use node and npm versions in package.json file, install them if not already installed. To do so, use
+Node Version Manager (https://github.com/creationix/nvm).
+3. Install Redis (https://redis.io/)
+4. Clone the Repository: `git clone git@github.com:carecru/carecru.git`
+5. Navigate into root directory: `cd carecru`
+6. Install node modules: `npm install`
 
 ### Installation on Windows 10 (work in progress)
 Run all commands PowerShell as admin:
 
-clone the repo: 
+clone the repo:
 - git clone <repo url>
 
 install node-gyp globally
@@ -39,13 +38,10 @@ If there are problems with build and you are changing order of installation, bui
 
 ## Database Setup
 
-`rethinkdb`
-
-Seed database with development data. In a separate tab at the top of carecru repo
-
-`node ./server/bin/seeds.js`
-
-Can be re-run whenever a fresh DB is needed.
+1. Start up RethinkDB in a separate tab: `rethinkdb`
+2. Seed the database with development data: `npm run seeds`
+> **Note:**
+> `npm run seeds` can be re-run whenever a fresh DB is needed
 
 ## Environment Variables
 
@@ -56,36 +52,31 @@ Contact the repo admin to acquire the `.env` file.
 
 ## Run
 
-`rethinkdb` (if not already running)
-
-In a separate tab at the top of carecru repo
-
-`npm start`
-
-http://localhost:5000
-
-Subdomain Applications
-
-add the following to `/etc/hosts`
-
+1. If not already running, start up RethinkDB: `rethinkdb`
+2. In a separate tab: `npm start`
+3. Navigate to `localhost:5000` to see application running
+4. Add the following subdomains to your `/etc/hosts` file:
 ```
 127.0.0.1           carecru.dev
 127.0.0.1        my.carecru.dev
 127.0.0.1       api.carecru.dev
 ```
+> **Note:**
+> For purposes of testing and effective development, please continue this README to run the build-tools, and use localhost:5100 instead of localhost:5000.
+
 
 ## Build Tools
 ### Front-end
 
-You have to run next command (in a separate tab) to see changes on a fly.
+Run the following command in a separate tab, to see changes on the fly:
 
 `npm run client:dev:server`
 
-So now application hosted on `http://localhost:5100`. All not static requests are transparently proxied to `http://localhost:5000`.
+Now, the application is hosted at `http://localhost:5100`. All non-static requests are transparently proxied to `http://localhost:5000`.
 
-#### Possible pitfalls
-- If you get a message like `Error occured while trying to proxy` you need to check application is running. It could be not initialized yet, so just reload page in a moment.
-- If there are no changes even after page reload - be sure that you get application from a right endpoint `http://localhost:5100` not a `http://localhost:5000`.
+> **Troubleshooting**
+> If you get a message like `Error occurred while trying to proxy` you need to check that the application is running. It may not yet be initialized, so just reload the page in a moment.
+> If there are no changes even after page reload - be sure that you are accessing the application from `http://localhost:5100`, and not `http://localhost:5000`.
 
 ### Back-end
 
@@ -93,15 +84,15 @@ Be sure that you start application with `npm start` command. In a new terminal d
 
 `npm run server:watch`
 
-Server will be restarted automatically.
+The Server will be restarted automatically.
 
 ### Running on custom `host:port`
 By default `npm start` will run the Node server on `localhost:5000`. Webpack then starts a proxy server that will run on `localhost:5100`, which is the address that we ultimately connect to.  However, it is possible to run both Webpack server and Node server on a different localhost:port. Changing Node's server host and port is not really needed, but if you run a VM or want to expose the Carecru application on your local network, you can use environment variables to set the host and port for Webpack. `npm` spins up Webpack in a new shell, so it does not care for `.env` file that the Node server sources. Hence, you can't put these vars in there. It has a global environment and environment vars that were part of the start command. Long story short, to set the host and port for Webpack, put the following into your `$HOME/.profile` file (or another bash file that is sourced when a login shell is created).
 
 ```
 export SERVER_HOST="localhost"
-export SERVER_PORT=5000 
-export WP_PROXY_PORT=8080 
+export SERVER_PORT=5000
+export WP_PROXY_PORT=8080
 export WP_PROXY_HOST="carecru.dev"
 ```
 
@@ -111,6 +102,22 @@ If no environment variables are provided, then Node server defaults to `localhos
 
 #### Optional
 If you use tmux you can run `sh scripts/run-server.sh`. This will spin up 3 panes with the Node server and two Webpack processes in those panes.
+
+## Running Tests
+Before running Cypress E2E tests, please restart the server with the following command:
+`NODE_ENV="test" npm run start dev`
+> **Note:**
+> You can use this command instead of `npm start` when developing.
+> Each time you run the Cypress test suite, the test database is re-seeded. Cypress runs this command: `NODE_ENV="test" npm run seeds`
+
+Run the following command to execute all tests:
+`npm run test`
+
+To execute E2E tests only:
+`npm run test:cypress`
+
+To run server jest tests only:
+`npm run test:jest`
 
 ## View on Heroku
 
