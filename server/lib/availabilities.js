@@ -46,6 +46,7 @@ function fetchServiceData(options) {
         return row('isActive').eq(true);
       }),
     },
+
     requests: {
       _apply: (sequence) => {
         return sequence.filter((request) => {
@@ -192,15 +193,17 @@ function generatePractitionerAvailabilities(options) {
   // console.log('requests', requests);
   // console.log('weeklySchedule.monday', weeklySchedule.monday);
 
+  // TODO: getTimeSlots should really be: (appts, rqsts, resos).orderBy(startDate), then get openings
+  // TODO: from there, split up based on account interval and weeklySchedule
+
   /*
    - getTimeSlots for this practitioner from startDate to endDate
    - split timeSlots up into service.duration intervals
-   - loop over potential timeSlots and see if there are any conflicts with
-   - requests [if no practitionerId ?], needs to know about practitioner.length
-   - reservations [if no practitionerId ?], needs to know about practitioner.length
-   - appointments
+   - loop over potential timeSlots and see if there are any conflicts with:
+   -    requests [if no practitionerId ?], needs to know about practitioner.length
+   -    reservations [if no practitionerId ?], needs to know about practitioner.length
+   -    appointments
    */
-
   const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
   const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
 
@@ -249,8 +252,6 @@ function fetchAvailabilities(options) {
         fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
-            console.log('startDate', startDate);
-            console.log('endDate', endDate);
             const practitionerAvailabilities = practitioners.map((p, i) => {
               return generatePractitionerAvailabilities({
                 practitioner: p,
