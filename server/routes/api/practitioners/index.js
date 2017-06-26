@@ -7,6 +7,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
 const WeeklySchedule = require('../../../models/WeeklySchedule');
+const Account = require('../../../models/Account');
 const Service = require('../../../models/Service');
 const normalize = require('../normalize');
 const _ = require('lodash');
@@ -36,22 +37,30 @@ practitionersRouter.get('/', (req, res, next) => {
  * Create a practitioner
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, res, next) => {
-  const weeklyScheduleData = Object.assign({}, { accountId: req.accountId });
+  return Account.get(req.accountId).getJoin({ weeklySchedule: true }).run()
+   .then((account) => {
+     delete account.weeklySchedule.weeklyScheduleId;
+     delete account.weeklySchedule.createdAt;
+     delete account.weeklySchedule.id;
 
-  return WeeklySchedule.save(weeklyScheduleData)
-    .then((weeklySchedule) => {
-      const practitionerData = Object.assign({},
-        { accountId: req.accountId,
-          weeklyScheduleId: weeklySchedule.id,
-        },
-        req.body);
-      Practitioner.save(practitionerData)
-        .then((practitioner) => {
-          practitioner.weeklySchedule = weeklySchedule;
-          res.status(201).send(normalize('practitioner', practitioner));
-        })
-        .catch(next);
-    }).catch(next);
+     //giving new prac the offices schedule
+
+     WeeklySchedule.save(account.weeklySchedule)
+         .then((weeklySchedule) => {
+           const practitionerData = Object.assign({},
+             { accountId: req.accountId,
+               weeklyScheduleId: weeklySchedule.id,
+             },
+             req.body);
+           Practitioner.save(practitionerData)
+             .then((practitioner) => {
+               practitioner.weeklySchedule = weeklySchedule;
+               res.status(201).send(normalize('practitioner', practitioner));
+             })
+             .catch(next);
+         });
+   })
+   .catch(next);
 });
 
 /**
