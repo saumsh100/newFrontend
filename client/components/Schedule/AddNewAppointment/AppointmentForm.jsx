@@ -2,8 +2,10 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { Grid, Row, Col, Field, } from '../../library';
+import { parseNum, notNegative} from '../../library/Form/validate'
 import styles from './styles.scss';
 
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 const generateTimeOptions = (timeInput) => {
   const timeOptions = [];
@@ -159,14 +161,37 @@ export default function AppointmentForm(props) {
           </div>
         </Col>
       </Row>
-      <Row className={styles.addNewAppt_row}>
+      <Row className={styles.addNewAppt_row_durBuff}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Field
+            name="dur"
+            label="Duration"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            required
+          />
+        </Col>
+        <Col md={2} />
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Field
+            name="buffer"
+            label="Buffer"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            required
+          />
+        </Col>
+      </Row>
+      <Row className={styles.addNewAppt_row_slider}>
         <Col xs={12} className={styles.addNewAppt_col_nearFields}>
           <Field
             component="RangeSlider"
             name="duration"
             label="Duration"
             unit="m"
-            defaultValues={[60, 60]}
+            defaultValues={[60,60]}
             min={15}
             max={180}
             marks={marks}

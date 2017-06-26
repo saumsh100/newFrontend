@@ -54,7 +54,6 @@ class AddNewAppointment extends Component {
       formName,
     } = this.props;
 
-
     const appointmentValues = values.appointment;
     const patientValues = values.patient;
     const {
@@ -331,18 +330,18 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-/*
-function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
-  if (!activeAccount) {
-    return {};
+function mapStateToProps({ entities, form }, {formName } ) {
+  if (!form[formName]) {
+    return {
+      values: {}
+    };
   }
 
   return {
-    activeAccount,
+    appFormValues: form[formName].values
   };
-}*/
+}
 
 AddNewAppointment.propTypes = {
   formName: PropTypes.string.isRequired,
@@ -361,6 +360,6 @@ AddNewAppointment.propTypes = {
   updateEntityRequest: PropTypes.func,
 };
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(AddNewAppointment);

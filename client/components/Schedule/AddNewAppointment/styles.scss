@@ -66,6 +66,15 @@
 
   &_row {
     height: 95px;
+
+    &_durBuff {
+      height: 55px;
+      width: 50%;
+    }
+
+    &_slider {
+      height: 85px;
+    }
   }
 
   &_col {

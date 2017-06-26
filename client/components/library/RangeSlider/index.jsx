@@ -26,6 +26,7 @@ class RangeSlider extends Component {
     }
   }
 
+
   onRangeChange(value) {
     const duration = this.state.value[0];
     const buffer = this.state.value[1];
@@ -68,7 +69,7 @@ class RangeSlider extends Component {
 
     return (
       <div>
-        <div className={styles.label}>
+        {/*<div className={styles.label}>
           <div>{label}</div>
           <div className={styles.label_valueUnit}>
             <div className={styles.label_valueUnit_duration}>{this.state.value[0]}{unit}</div>
@@ -77,7 +78,7 @@ class RangeSlider extends Component {
               {this.state.value[1] - this.state.value[0]}{unit}
             </div>
           </div>
-        </div>
+        </div>*/}
         <Range
           value={[this.state.value[0], this.state.value[1]]}
           pushable
