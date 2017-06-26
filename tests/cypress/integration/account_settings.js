@@ -160,7 +160,8 @@ describe('Account Settings', () => {
         .fillTextInput('serviceDataForm', 'name', 'Child Dental Test Update')
         .submitForm('serviceDataForm')
         .reload()
-        .get('[data-test-id="name"')
+        .get('[data-test-id="serviceDataForm"]')
+        .find('[data-test-id="name"]')
         .should('have.value', 'Child Dental Test Update');
     });
 
