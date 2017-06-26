@@ -6,7 +6,7 @@ import normalize from '../normalize';
 import { Enterprise, Account, User, Service, WeeklySchedule, Reminder } from '../../../models';
 import loaders from '../../util/loaders';
 import { UserAuth } from '../../../lib/auth';
-const { timeWithZone } = require('../../../util/time');
+const { time } = require('../../../util/time');
 
 const router = Router();
 
@@ -150,75 +150,75 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
       const defaultSchdedule = {
         accountId: account.id,
         monday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
+          startTime: time(8, 0, timezone),
+          endTime: time(17, 0, timezone),
           breaks: [
             {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
+              startTime: time(12, 0, timezone),
+              endTime: time(13, 0, timezone),
             },
           ],
         },
         tuesday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
+          startTime: time(8, 0, timezone),
+          endTime: time(17, 0, timezone),
           breaks: [
             {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
+              startTime: time(12, 0, timezone),
+              endTime: time(13, 0, timezone),
             },
           ],
         },
         wednesday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
+          startTime: time(8, 0, timezone),
+          endTime: time(17, 0, timezone),
           breaks: [
             {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
+              startTime: time(12, 0, timezone),
+              endTime: time(13, 0, timezone),
             },
           ],
 
         },
         thursday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
+          startTime: time(8, 0, timezone),
+          endTime: time(17, 0, timezone),
           breaks: [
             {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
+              startTime: time(12, 0, timezone),
+              endTime: time(13, 0, timezone),
             },
           ],
         },
         friday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
+          startTime: time(8, 0, timezone),
+          endTime: time(17, 0, timezone),
           breaks: [
             {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
+              startTime: time(12, 0, timezone),
+              endTime: time(13, 0, timezone),
             },
           ],
 
         },
         saturday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
+          startTime: time(8, 0, timezone),
+          endTime: time(17, 0, timezone),
           breaks: [
             {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
+              startTime: time(12, 0, timezone),
+              endTime: time(13, 0, timezone),
             },
           ],
 
         },
         sunday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
+          startTime: time(8, 0, timezone),
+          endTime: time(17, 0, timezone),
           breaks: [
             {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
+              startTime: time(12, 0, timezone),
+              endTime: time(13, 0, timezone),
             },
           ],
 

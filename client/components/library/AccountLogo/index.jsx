@@ -1,7 +1,7 @@
 
 import Avatar from '../Avatar';
 import React, { PropTypes } from 'react';
-import styles from './styles.scss'
+import styles from './styles.scss';
 
 export default function AccountLogo({ account, className, size, onClick = () => {} }) {
   let replaceSize = 100;
@@ -16,6 +16,10 @@ export default function AccountLogo({ account, className, size, onClick = () => 
 
   if (account.fullLogoUrl) {
     avatarUrl = account.fullLogoUrl.replace('[size]', replaceSize);
+  }
+
+  if (!avatarUrl) {
+    return null;
   }
 
   return (

@@ -21,6 +21,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     phoneNumber: activeAccount.get('phoneNumber'),
     contactEmail: activeAccount.get('contactEmail'),
     website: activeAccount.get('website'),
+    timeInterval: activeAccount.get('timeInterval'),
     timezone: activeAccount.get('timezone'),
   };
 
@@ -39,6 +40,21 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
       value,
     };
   });
+
+  const optionsInterval = [
+    {
+      value: 15,
+    },
+    {
+      value: 30,
+    },
+    {
+      value: 45,
+    },
+    {
+      value: 60,
+    },
+  ];
 
   const display = (role === 'SUPERADMIN' ? (<div>
     <div className={styles.paddingField}>
@@ -101,6 +117,15 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
           name="contactEmail"
           label="Contact Email"
           validate={[emailValidate]}
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          name="timeInterval"
+          label="Interval for Booking Widget"
+          component="DropdownSelect"
+          options={optionsInterval}
+
         />
       </div>
       <div className={styles.paddingField}>

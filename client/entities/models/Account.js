@@ -23,6 +23,7 @@ const AccountSchema = {
   country: null,
   state: null,
   city: null,
+  timeInterval: null,
   zipCode: null,
   vendastaId: null,
   phoneNumber: null,

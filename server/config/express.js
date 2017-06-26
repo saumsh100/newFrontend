@@ -14,6 +14,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 
 // Initialize Express App!
 const app = express();
@@ -59,12 +60,14 @@ app.use(bodyParser.json({ limit: '10mb' }));
 // Parses Buffer data into body
 app.use(bodyParser.raw({ limit: '10mb' }));
 
+// Files
+app.use(fileUpload());
 
 // Below breaks!
 // app.use(multer());
 
 // Heroku will proxy HTTPS to this HTTP application
-/*if (globals.env === 'production') {
+/* if (globals.env === 'production') {
  // Assume and ensure HTTPS connections
  app.set('trust proxy', 1);
  app.use((req, res, next) => {

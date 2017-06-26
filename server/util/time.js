@@ -68,12 +68,14 @@ const Time = {
   createPossibleTimeSlots: (timeSlots, intervalLength, minimumLength) => {
     const len = timeSlots.length;
 
+    const realInterval = Math.ceil(intervalLength / minimumLength);
+
     let i;
     let possibleTimeSlots = [];
     for (i = 0; i < len; i++) {
       possibleTimeSlots = [
         ...possibleTimeSlots,
-        ...Time.breakdownTimeSlot(timeSlots[i], intervalLength, minimumLength),
+        ...Time.breakdownTimeSlot(timeSlots[i], minimumLength * realInterval, minimumLength),
       ];
     }
 
