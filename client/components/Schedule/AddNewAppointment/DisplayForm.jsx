@@ -42,6 +42,7 @@ export default function DisplayForm(props) {
     handleSubmit,
     handleAutoSuggest,
     handlePractitionerChange,
+    handleSliderChange
   } = props;
 
   let initialValues = null;
@@ -73,9 +74,11 @@ export default function DisplayForm(props) {
         serviceId,
         practitionerId: practitionerId || '',
         chairId: chairId || '',
-        duration: [durationTime, bufferTime],
+        slider: [durationTime, bufferTime],
         isPatientConfirmed,
         isCancelled,
+        duration: durationTime,
+        buffer: customBufferTime,
       },
       patient: {
         patientSelected: patient.toJS(),
@@ -110,6 +113,7 @@ export default function DisplayForm(props) {
                 handlePractitionerChange={handlePractitionerChange}
                 selectedAppointment={selectedAppointment}
                 time={time}
+                handleSliderChange={handleSliderChange}
               />
             </FormSection>
           </Col>

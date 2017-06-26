@@ -3,7 +3,13 @@ import { Map } from 'immutable';
 import {  Form, Field, IconButton, Header, } from '../../library';
 import styles from './styles.scss';
 
+const parseNum = value => value && parseInt(value);
 
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength45 = maxLength(45);
+const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 
 class ServiceDataItem extends Component {
@@ -92,7 +98,7 @@ class ServiceDataItem extends Component {
                 validate={[notNegative, maxDuration]}
               />
               <div className={styles.servicesPractForm_hiddentext}>
-                Would you like to hide this service on the booking widget ?
+                Would you like to set this service to be hidden on the booking widget ?
                 <div className={styles.servicesPractForm_hiddentext_toggle}>
                   <Field
                     name="isHidden"

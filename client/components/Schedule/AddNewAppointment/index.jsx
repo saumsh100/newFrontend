@@ -33,7 +33,6 @@ class AddNewAppointment extends Component {
     super(props);
     this.state = {
       servicesAllowed: this.props.services,
-      practitionersBySchedule: this.props.practitioners,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,7 +40,7 @@ class AddNewAppointment extends Component {
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
     this.handlePractitionerChange = this.handlePractitionerChange.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleSliderChange = this.handleSliderChange.bind(this);
   }
 
   handleSubmit(values) {
@@ -64,6 +63,8 @@ class AddNewAppointment extends Component {
       chairId,
       isPatientConfirmed,
       isCancelled,
+      buffer,
+      duration,
     } = appointmentValues;
 
     const {
@@ -71,23 +72,8 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
-    // setting initial duration and buffer if slider isn't used.
-    let duration = appointmentValues.duration;
-    if (!duration) {
-      duration = [60, 60];
-    }
 
-    // check if the buffer equals the duration if it doesn't set the buffer time
-    let bufferTime = 0;
-    if (duration[1] !== duration[0]) {
-      bufferTime = duration[1] - duration[0];
-    }
-
-    let totalDurationMin = duration[0];
-
-    if (bufferTime > 0) {
-      totalDurationMin = duration[0] + bufferTime;
-    }
+    let totalDurationMin = duration + buffer;
 
     const startDate = mergeTime(new Date(date), new Date(time));
     const endDate = moment(startDate).add(totalDurationMin, 'minutes');
@@ -103,7 +89,7 @@ class AddNewAppointment extends Component {
       isPatientConfirmed,
       isCancelled,
       isSyncedWithPMS: false,
-      customBufferTime: bufferTime,
+      customBufferTime: buffer,
     };
 
     const alertCreate = {
@@ -171,6 +157,20 @@ class AddNewAppointment extends Component {
     }
   }
 
+  handleSliderChange(value) {
+    const {
+      change,
+      formName,
+    } = this.props;
+
+
+    const duration = value[0];
+    const buffer = value[1];
+
+    change(formName, 'appointment.duration', duration);
+    change(formName, 'appointment.buffer', buffer - duration);
+  }
+
   deleteAppointment() {
     const {
       selectedAppointment,
@@ -236,34 +236,6 @@ class AddNewAppointment extends Component {
     });
   }
 
-  //ToDo: handling practitioner schedules and timeoffs
-  handleDateChange(day) {
-    /*const {
-      practitioners,
-      change,
-      formName,
-      weeklySchedules,
-      activeAccount,
-    } = this.props;
-
-    const clinicSchedule = activeAccount ? weeklySchedules.get(activeAccount.get('weeklyScheduleId')) : null;
-    const dayOfWeek = dayOfWeekAsString(moment(day).weekday());
-
-    const filterBySchedulePract = practitioners.toArray().filter((pr) => {
-      const weeklySchedule = weeklySchedules.get(pr.get('weeklyScheduleId'));
-      if (weeklySchedule && !weeklySchedule.get(dayOfWeek).isClosed) {
-        return pr;
-      } else if (!weeklySchedule & clinicSchedule && !clinicSchedule.get(dayOfweek).isClosed) {
-        return pr
-      }
-    });
-
-    change(formName, 'appointment.practitionerId', '');
-    this.setState({
-      practitionersBySchedule: filterBySchedulePract,
-    });*/
-  }
-
   render() {
     const {
       formName,
@@ -298,6 +270,7 @@ class AddNewAppointment extends Component {
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
           handlePractitionerChange={this.handlePractitionerChange}
+          handleSliderChange={this.handleSliderChange}
         />
         <div className={styles.remoteSubmit}>
           <RemoteSubmitButton

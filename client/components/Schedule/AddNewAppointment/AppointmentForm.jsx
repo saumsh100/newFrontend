@@ -60,6 +60,7 @@ export default function AppointmentForm(props) {
     handlePractitionerChange,
     selectedAppointment,
     time,
+    handleSliderChange,
   } = props;
 
   return (
@@ -164,11 +165,12 @@ export default function AppointmentForm(props) {
       <Row className={styles.addNewAppt_row_durBuff}>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            name="dur"
+            name="duration"
             label="Duration"
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
+            type="number"
             required
           />
         </Col>
@@ -180,7 +182,7 @@ export default function AppointmentForm(props) {
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
-            required
+            type="number"
           />
         </Col>
       </Row>
@@ -188,13 +190,14 @@ export default function AppointmentForm(props) {
         <Col xs={12} className={styles.addNewAppt_col_nearFields}>
           <Field
             component="RangeSlider"
-            name="duration"
-            label="Duration"
+            name="slider"
             unit="m"
-            defaultValues={[60,60]}
+            defaultValues={[60,61]}
             min={15}
             max={180}
             marks={marks}
+            labels={['Duration', 'Buffer']}
+            onChange={(e, value)=> handleSliderChange(value)}
           />
         </Col>
       </Row>
