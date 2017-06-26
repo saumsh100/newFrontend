@@ -65,7 +65,6 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
           .filter(r.row('startDate').during(r.time(1970, 1, 1, 'Z'), endDate))
           .orderBy(r.row('startDate'))
           .then((lastAppointment) => {
-            console.log(lastAppointment)
             return res.send({
               allApps: req.patient.appointments.length,
               monthsApp: appointments.length,
