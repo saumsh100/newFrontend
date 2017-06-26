@@ -27,7 +27,7 @@ describe('Account Settings', () => {
           .fillTextInput('generalSettingsForm', 'twilioPhoneNumber', '9876543212')
           .fillTextInput('generalSettingsForm', 'destinationPhoneNumber', '1234567898')
           .fillTextInput('generalSettingsForm', 'vendastaId', '99988')
-          .fillEmailInput('generalSettingsForm', 'contactEmail', 'test@test.com')
+          .fillInput('generalSettingsForm', 'contactEmail', 'test@test.com')
           .submitForm('generalSettingsForm')
           .reload()
           .get('[data-test-id=name]')
@@ -60,7 +60,7 @@ describe('Account Settings', () => {
           .getAndClick('addUserButton')
           .fillTextInput('newUserDialog', 'firstName', 'John')
           .fillTextInput('newUserDialog', 'lastName', 'Smith')
-          .fillEmailInput('newUserDialog', 'email', 'johnsmith@carecru.com')
+          .fillInput('newUserDialog', 'email', 'johnsmith@carecru.com')
           .selectOption('newUserDialog', 'role', 'ADMIN')
           .fillTextInput('newUserDialog', 'password', 'testaccntpass')
           .fillTextInput('newUserDialog', 'confirmPassword', 'testaccntpass')
@@ -74,7 +74,7 @@ describe('Account Settings', () => {
       it('invite another user to my practice', () => {
         cy
           .getAndClick('inviteUserButton')
-          .fillEmailInput('inviteUserDialog', 'email', 'gavin+invitetest@carecru.com')
+          .fillInput('inviteUserDialog', 'email', 'gavin+invitetest@carecru.com')
           .submitDialogForm('inviteUserDialog')
           .reload()
           .get('[data-test-id="gavin+invitetest@carecru.com"]')
@@ -164,7 +164,7 @@ describe('Account Settings', () => {
         .should('have.value', 'Child Dental Test Update');
     });
 
-    it('disable a practitioner', () => {
+    it('update the enable/disable state of practitioner', () => {
       cy
         .get('[data-test-id=ChelseaMansfield]')
         .find('input')
@@ -173,6 +173,77 @@ describe('Account Settings', () => {
         .reload()
         .get('[data-test-id=ChelseaMansfield]')
         .find('.react-toggle--checked')
+        .should('not.exist');
+    });
+
+    it('create a new service', () => {
+      cy
+        .getAndClick('addServiceButton')
+        .fillTextInput('createServiceForm', 'name', 'TestService')
+        .fillInput('createServiceForm', 'duration', '3')
+        .fillInput('createServiceForm', 'bufferTime', '3')
+        .submitForm('createServiceForm')
+        .reload()
+        .get('[data-test-id="TestService"]')
+        .should('exist');
+    });
+  });
+
+  context('Practitioner Settings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:5100/settings/practitioners');
+    });
+
+    it('update the name of a practitioner', () => {
+      cy
+        .fillTextInput('practitionerBasicDataForm', 'firstName', 'Kelsey')
+        .submitForm('practitionerBasicDataForm')
+        .reload()
+        .get('[data-test-id="practitionerBasicDataForm"]')
+        .find('[data-test-id="firstName"]')
+        .should('have.value', 'Kelsey');
+    });
+
+    it('update enable/disable state of a service', () => {
+      cy
+        .fillTextInput('practitionerBasicDataForm', 'firstName', 'Kelsey')
+        .submitForm('practitionerBasicDataForm')
+        .reload()
+        .get('[data-test-id="practitionerBasicDataForm"]')
+        .find('[data-test-id="firstName"]')
+        .should('have.value', 'Kelsey');
+    });
+
+    it('add time off for a practitioner', () => {
+      cy
+        .getAndClick('practitionerTimeOffTab')
+        .getAndClick('addTimeOffButton')
+        .getAndClick('moreOptionsButton')
+        .fillTextInput('addTimeOffForm', 'noteInput', 'This is a test note.')
+        .submitDialogForm('addTimeOffDialog')
+        .reload()
+        .getAndClick('practitionerTimeOffTab')
+        .get('[data-test-id="timeOffList"]')
+        .should('exist');
+    });
+
+    it('add a new practitioner', () => {
+      cy
+        .getAndClick('addPractitionerButton')
+        .fillTextInput('createPractitionerForm', 'firstName', 'Testly')
+        .fillTextInput('createPractitionerForm', 'lastName', 'Testerson')
+        .submitForm('createPractitionerForm')
+        .reload()
+        .get('[data-test-id="TestlyTesterson"]')
+        .should('exist');
+    });
+
+    it('delete a practitioner', () => {
+      cy
+        .getAndClick('KelseyMansfield')
+        .getAndClick('deletePractitioner')
+        .reload()
+        .get('[data-test-id="KelseyMansfield"]')
         .should('not.exist');
     });
   });

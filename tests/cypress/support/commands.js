@@ -34,7 +34,7 @@ Cypress.addParentCommand('fillTextInput', (formDataTestId ,dataTestId, text) => 
     .type(text);
 });
 
-Cypress.addParentCommand('fillEmailInput', (formDataTestId ,dataTestId, email) => {
+Cypress.addParentCommand('fillInput', (formDataTestId ,dataTestId, email) => {
   cy
     .get(`[data-test-id=${formDataTestId}]`)
     .find(`[data-test-id=${dataTestId}]`)

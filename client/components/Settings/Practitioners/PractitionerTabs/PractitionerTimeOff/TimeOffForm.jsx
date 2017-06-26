@@ -104,7 +104,7 @@ function TimeOffForm(props) {
       className={styles.inlineBlock}
     />) : null;
 
-  const showNoteComponent = showOption ? <Field name="note" label="Note" /> : null;
+  const showNoteComponent = showOption ? <Field name="note" label="Note" data-test-id="noteInput" /> : null;
   const optionsIcon = showOption ? 'minus' : 'plus';
 
   const columnSizeDate = values.allDay ? 12 : 8;
@@ -117,6 +117,7 @@ function TimeOffForm(props) {
       validate={checkDates}
       initialValues={initialValues}
       ignoreSaveButton
+      data-test-id="addTimeOffForm"
     >
       <Grid>
         <Row>
@@ -152,7 +153,7 @@ function TimeOffForm(props) {
             />
           </Col>
           <Col xs={6}>
-            <div onClick={() => setOption(!showOption)} className={styles.moreOptions}>
+            <div onClick={() => setOption(!showOption)} className={styles.moreOptions} data-test-id="moreOptionsButton">
               More Options
               <Icon
                 icon={optionsIcon}
