@@ -54,15 +54,24 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
 
   return Appointment
       .filter({
-        accountId: req.accountId,
         patientId: req.patient.id,
       })
       .filter(r.row('startDate').during(startDate, endDate))
       .then((appointments) => {
-        res.send({
-          allApps: req.patient.appointments.length,
-          monthsApp: appointments.length,
-        });
+        Appointment
+          .filter({
+            patientId: req.patient.id,
+          })
+          .filter(r.row('startDate').during(r.time(1970, 1, 1, 'Z'), endDate))
+          .orderBy(r.row('startDate'))
+          .then((lastAppointment) => {
+            console.log(lastAppointment)
+            return res.send({
+              allApps: req.patient.appointments.length,
+              monthsApp: appointments.length,
+              lastAppointment: lastAppointment[0] ? lastAppointment[0].startDate : null,
+            });
+          });
       })
       .catch(next);
 });
