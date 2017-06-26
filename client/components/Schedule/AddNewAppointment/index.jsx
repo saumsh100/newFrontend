@@ -179,11 +179,12 @@ class AddNewAppointment extends Component {
       change,
       formName,
       appFormValues,
+      unit,
     } = this.props;
 
-    change(formName, 'appointment.unit', (value / 15).toFixed(2));
+    change(formName, 'appointment.unit', (value / unit).toFixed(2));
 
-    if (value > 15 && value <= 180 && appFormValues) {
+    if (value >= unit && value <= 180 && appFormValues) {
       change(formName, 'appointment.slider', [value, value]);
       change(formName, 'appointment.buffer', 0);
     }
@@ -193,11 +194,12 @@ class AddNewAppointment extends Component {
     const {
       change,
       formName,
+      unit,
     } = this.props;
 
-    const duration = value * 15;
+    const duration = value * unit;
 
-    if (duration <= 180 && duration >= 15) {
+    if (duration <= 180 && duration >= unit) {
       change(formName, 'appointment.duration', duration);
       change(formName, 'appointment.slider', [duration, duration]);
       change(formName, 'appointment.buffer', 0);
@@ -292,6 +294,7 @@ class AddNewAppointment extends Component {
       practitioners,
       selectedAppointment,
       reinitializeState,
+      unit,
     } = this.props;
 
     const remoteButtonProps = {
@@ -314,6 +317,7 @@ class AddNewAppointment extends Component {
           patients={patients}
           chairs={chairs}
           selectedAppointment={selectedAppointment}
+          unit={unit}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}
           handleAutoSuggest={this.handleAutoSuggest}
@@ -355,16 +359,21 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-function mapStateToProps({ entities, form }, {formName } ) {
-  if (!form[formName]) {
+function mapStateToProps({ entities, form, auth }, {formName} ) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+
+  if (!form[formName] || !activeAccount) {
     return {
-      values: {}
+      values: {},
+      activeAccount: {},
     };
   }
 
   return {
-    appFormValues: form[formName].values
+    appFormValues: form[formName].values,
+    unit: activeAccount.get('unit'),
   };
+
 }
 
 AddNewAppointment.propTypes = {

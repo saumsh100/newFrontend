@@ -60,6 +60,7 @@ export default function AppointmentForm(props) {
     handlePractitionerChange,
     selectedAppointment,
     time,
+    unit,
     handleSliderChange,
     handleDurationChange,
     handleUnitChange,
@@ -208,7 +209,7 @@ export default function AppointmentForm(props) {
             name="slider"
             unit="m"
             defaultValues={[60,61]}
-            min={15}
+            min={unit}
             max={180}
             marks={marks}
             onChange={(e, value)=> handleSliderChange(value)}

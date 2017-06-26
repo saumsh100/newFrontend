@@ -32,6 +32,7 @@ const Account = createModel('Account', {
   // Application "Addons"
   canSendReminders: type.boolean().default(false),
   canSendRecalls: type.boolean().default(false),
+  unit: type.number().default(15),
 });
 
 Account.docOn('saving', validatePatient); // <<< doc is in `doc` param

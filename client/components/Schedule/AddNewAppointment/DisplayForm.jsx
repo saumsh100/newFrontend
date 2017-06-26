@@ -39,6 +39,7 @@ export default function DisplayForm(props) {
     practitioners,
     getSuggestions,
     selectedAppointment,
+    unit,
     handleSubmit,
     handleAutoSuggest,
     handlePractitionerChange,
@@ -82,6 +83,7 @@ export default function DisplayForm(props) {
         isCancelled,
         duration: durationTime,
         buffer: customBufferTime,
+        unit: (durationTime / unit).toFixed(2),
       },
       patient: {
         patientSelected: patient.toJS(),
@@ -116,6 +118,7 @@ export default function DisplayForm(props) {
                 handlePractitionerChange={handlePractitionerChange}
                 selectedAppointment={selectedAppointment}
                 time={time}
+                unit={unit}
                 handleSliderChange={handleSliderChange}
                 handleDurationChange={handleDurationChange}
                 handleUnitChange={handleUnitChange}
