@@ -131,4 +131,11 @@
 }
 
 
+.suggestionContainer {
+  display: flex;
+  align-items: center;
 
+  &_fullName {
+    padding-left: 15px;
+  }
+}

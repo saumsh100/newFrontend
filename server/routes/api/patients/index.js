@@ -178,6 +178,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
           return generateDuringFilter(request, startDate, endDate);
         });
     } }, chat: {textMessages: { user: true }} })
+    .orderBy('firstName')
     .run()
     .then((patients) => {
       const normPatients = normalize('patients', patients);

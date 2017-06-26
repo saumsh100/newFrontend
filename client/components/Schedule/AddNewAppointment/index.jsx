@@ -13,9 +13,11 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { Button, IconButton } from '../../library';
+import { Button, IconButton, Avatar } from '../../library';
 import styles from './styles.scss';
 import { SortByFirstName } from '../../library/util/SortEntities';
+
+
 
 const mergeTime = (date, time) => {
   date.setHours(time.getHours());
@@ -246,7 +248,18 @@ class AddNewAppointment extends Component {
       }).then((searchedPatients) => {
         const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
           (key) => searchedPatients[key]) : [];
-        return patientList.sort(SortByFirstName);
+
+        patientList.map((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="lg" />
+              <span className={styles.suggestionContainer_fullName}>
+                {`${patient.firstName} ${patient.lastName}`}
+              </span>
+            </div>
+          );
+        })
+        return patientList;
       });
   }
 
@@ -359,13 +372,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-function mapStateToProps({ entities, form, auth }, {formName} ) {
+function mapStateToProps({ entities, form, auth }, { formName }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
-  if (!form[formName] || !activeAccount) {
+  if (!form[formName] || !activeAccount.get('unit')) {
     return {
       values: {},
-      activeAccount: {},
+      unit: 15,
     };
   }
 
@@ -373,7 +386,6 @@ function mapStateToProps({ entities, form, auth }, {formName} ) {
     appFormValues: form[formName].values,
     unit: activeAccount.get('unit'),
   };
-
 }
 
 AddNewAppointment.propTypes = {
@@ -383,7 +395,7 @@ AddNewAppointment.propTypes = {
   chairs: PropTypes.array,
   practitioners: PropTypes.object.isRequired,
   weeklySchedule: PropTypes.object,
-  //activeAccount: PropTypes.object.isRequired,
+  unit: PropTypes.number,
   selectedAppointment: PropTypes.object,
   deleteEntityRequest: PropTypes.func,
   reset: PropTypes.func,

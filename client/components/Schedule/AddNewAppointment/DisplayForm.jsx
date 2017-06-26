@@ -49,6 +49,7 @@ export default function DisplayForm(props) {
     handleBufferChange,
   } = props;
 
+
   let initialValues = null;
   let time = null;
   if (selectedAppointment) {
@@ -70,6 +71,7 @@ export default function DisplayForm(props) {
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
 
     time = setTime(startDate);
+    const unitValue = unit ? Number((durationTime / unit).toFixed(2)) : 0;
 
     initialValues = {
       appointment: {
@@ -83,7 +85,7 @@ export default function DisplayForm(props) {
         isCancelled,
         duration: durationTime,
         buffer: customBufferTime,
-        unit: (durationTime / unit).toFixed(2),
+        unit: unitValue,
       },
       patient: {
         patientSelected: patient.toJS(),
