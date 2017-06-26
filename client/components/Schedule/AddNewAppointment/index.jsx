@@ -166,6 +166,7 @@ class AddNewAppointment extends Component {
     const {
       change,
       formName,
+      unit,
     } = this.props;
 
     const duration = value[0];
@@ -173,7 +174,7 @@ class AddNewAppointment extends Component {
 
     change(formName, 'appointment.duration', duration);
     change(formName, 'appointment.buffer', buffer - duration);
-    change(formName, 'appointment.unit', (duration / 15).toFixed(2));
+    change(formName, 'appointment.unit', (duration / unit).toFixed(2));
   }
 
   handleDurationChange(value) {
@@ -223,22 +224,40 @@ class AddNewAppointment extends Component {
     }
   }
 
-  deleteAppointment() {
+  handlePractitionerChange(id) {
     const {
-      selectedAppointment,
-      reinitializeState,
-      updateEntityRequest,
+      services,
+      practitioners,
+      change,
+      formName,
     } = this.props;
 
-    const deleteApp = confirm('Are you sure you want to delete this appointment?');
+    const selectedPractitioner = practitioners.get(id);
+    const practitionerServiceIds = selectedPractitioner ? selectedPractitioner.get('services') : null;
 
-    if (deleteApp) {
-      const appModel = selectedAppointment.appModel;
-      const deletedModel = appModel.set('isDeleted', true);
-      updateEntityRequest({ key: 'appointments', model: deletedModel });
+    const servicesAllowed = [];
+    practitionerServiceIds.map((serviceId) => {
+      if (!servicesAllowed.includes(services.get(serviceId))) {
+        servicesAllowed.push(services.get(serviceId));
+      }
+    });
+
+    change(formName, 'appointment.serviceId', '');
+    this.setState({
+      servicesAllowed,
+    });
+  }
+
+  handleAutoSuggest(newValue) {
+    const {
+      change,
+      formName,
+    } = this.props;
+
+    if (typeof newValue === 'object') {
+      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
+      change(formName, 'patient.email', newValue.email);
     }
-
-    reinitializeState();
   }
 
   getSuggestions(value) {
@@ -263,40 +282,22 @@ class AddNewAppointment extends Component {
       });
   }
 
-  handleAutoSuggest(newValue) {
+  deleteAppointment() {
     const {
-      change,
-      formName,
+      selectedAppointment,
+      reinitializeState,
+      updateEntityRequest,
     } = this.props;
 
-    if (typeof newValue === 'object') {
-      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
-      change(formName, 'patient.email', newValue.email);
+    const deleteApp = confirm('Are you sure you want to delete this appointment?');
+
+    if (deleteApp) {
+      const appModel = selectedAppointment.appModel;
+      const deletedModel = appModel.set('isDeleted', true);
+      updateEntityRequest({ key: 'appointments', model: deletedModel });
     }
-  }
 
-  handlePractitionerChange(id) {
-    const {
-      services,
-      practitioners,
-      change,
-      formName,
-    } = this.props;
-
-    const selectedPractitioner = practitioners.get(id);
-    const practitionerServiceIds = selectedPractitioner ? selectedPractitioner.get('services') : null;
-
-    const servicesAllowed = [];
-    practitionerServiceIds.map((serviceId) => {
-      if (!servicesAllowed.includes(services.get(serviceId))) {
-        servicesAllowed.push(services.get(serviceId));
-      }
-    });
-
-    change(formName, 'appointment.serviceId', '');
-    this.setState({
-      servicesAllowed,
-    });
+    reinitializeState();
   }
 
   render() {

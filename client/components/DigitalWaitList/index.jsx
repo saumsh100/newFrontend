@@ -14,6 +14,7 @@ import {
   Icon,
   Button,
   IconButton,
+  Avatar,
   RemoteSubmitButton,
 } from '../library';
 import {
@@ -51,7 +52,17 @@ class DigitalWaitList extends Component {
       .then((searchedPatients) => {
         const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
           (key) => searchedPatients[key]) : [];
-        return patientList.sort(SortByFirstName);
+        patientList.map((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="lg" />
+              <span className={styles.suggestionContainer_fullName}>
+                {`${patient.firstName} ${patient.lastName}`}
+              </span>
+            </div>
+          );
+        })
+        return patientList;
       });
   }
 
@@ -80,7 +91,6 @@ class DigitalWaitList extends Component {
         patientUserId: selectedWaitSpot.patientUserId,
       }, values);
     }
-
 
     const alertCreate = {
       success: {
