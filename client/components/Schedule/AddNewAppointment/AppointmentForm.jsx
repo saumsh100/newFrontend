@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Grid, Row, Col, Field, } from '../../library';
 import styles from './styles.scss';
 
@@ -23,7 +23,7 @@ const generateTimeOptions = (timeInput) => {
   for (i = 6; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
       const value = time.toISOString();
       const label = time.format('LT');
       timeOptions.push({ value, label });
