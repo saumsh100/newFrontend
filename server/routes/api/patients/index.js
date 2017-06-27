@@ -54,15 +54,23 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
 
   return Appointment
       .filter({
-        accountId: req.accountId,
         patientId: req.patient.id,
       })
       .filter(r.row('startDate').during(startDate, endDate))
       .then((appointments) => {
-        res.send({
-          allApps: req.patient.appointments.length,
-          monthsApp: appointments.length,
-        });
+        Appointment
+          .filter({
+            patientId: req.patient.id,
+          })
+          .filter(r.row('startDate').during(r.time(1970, 1, 1, 'Z'), endDate))
+          .orderBy(r.row('startDate'))
+          .then((lastAppointment) => {
+            return res.send({
+              allApps: req.patient.appointments.length,
+              monthsApp: appointments.length,
+              lastAppointment: lastAppointment[0] ? lastAppointment[0].startDate : null,
+            });
+          });
       })
       .catch(next);
 });
@@ -163,6 +171,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 
   // making search case insensitive as
   const searchReg = (search[1] ? `(?i)(${search[0]}|${search[1]})` : `(?i)${search[0]}`);
+  const phoneSearch = `${search[0].replace(/\D/g, '')}`;
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
@@ -170,14 +179,19 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
     return patient('accountId').eq(req.accountId).and(
       patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
+        .or(patient('mobilePhoneNumber').match(phoneSearch))
+        .or(patient('homePhoneNumber').match(phoneSearch))
+        .or(patient('workPhoneNumber').match(phoneSearch))
+        .or(patient('otherPhoneNumber').match(phoneSearch))
         .or(patient('email').match(search[0])));
-  }).limit(20)
+  }).limit(50)
     .getJoin({ appointments: {
       _apply: (appointment) => {
         return appointment.filter((request) => {
           return generateDuringFilter(request, startDate, endDate);
         });
     } }, chat: {textMessages: { user: true }} })
+    .orderBy('firstName')
     .run()
     .then((patients) => {
       const normPatients = normalize('patients', patients);

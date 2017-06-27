@@ -195,7 +195,6 @@ for (let i = 0; i < 100; i++) {
     birthDate: faker.date.past(),
     gender: 'male',
     langauge: 'English',
-    lastAppointmentDate: faker.date.past(),
     insurance: {
       insurance: 'Lay Health Insurance',
       memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -723,7 +722,6 @@ const SEEDS = {
       patientUserId: patientUserId3,
       gender: 'male',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       status: 'Active',
       insurance: {
         insurance: 'GMC Health Insurance',
@@ -746,7 +744,6 @@ const SEEDS = {
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       status: 'Active',
       isSyncedWithPMS: false,
     },
@@ -762,7 +759,6 @@ const SEEDS = {
       gender: 'male',
       status: 'Active',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       insurance: {
         insurance: 'Lay Health Insurance',
         memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -780,7 +776,6 @@ const SEEDS = {
       lastName: 'Joseph',
       mobilePhoneNumber: markPhoneNumber,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       gender: 'male',
       status: 'Active',
       language: 'English',
@@ -797,7 +792,6 @@ const SEEDS = {
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'female',
       status: 'Active',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
@@ -814,7 +808,6 @@ const SEEDS = {
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
@@ -1301,7 +1294,7 @@ const SEEDS = {
   Reminder,
 
   SentReminder: [
-    /*{
+    /* {
      reminderId,
      accountId,
      createdAt: moment({hour: 13, minute: 10})._d,
@@ -1309,8 +1302,7 @@ const SEEDS = {
      patientId: justinPatientId,
      primaryType: 'sms',
      lengthSeconds: 30,
-     },*/
-
+     }, */
     ...SentReminder,
   ],
 

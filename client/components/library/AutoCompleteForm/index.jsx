@@ -9,7 +9,7 @@ import omit from 'lodash/omit';
 // input value for every given suggestion.
 //const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = suggestion => {
-  const display = suggestion.display || suggestion.firstName || suggestion.name;
+  const display = suggestion.display || `${suggestion.firstName} ${suggestion.lastName}` || suggestion.name;
   return (<div>
     {display}
   </div>);
