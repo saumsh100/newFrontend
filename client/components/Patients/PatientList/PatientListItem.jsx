@@ -42,7 +42,7 @@ class PatientListItem extends Component {
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
             <div className={styles.users__name}>
-              {user.firstName}&nbsp;{user.lastName},&nbsp;{age}
+              {user.firstName}&nbsp;{user.lastName},&nbsp;{age || 'N/A'}
             </div>
 
           </div>
