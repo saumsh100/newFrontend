@@ -15,7 +15,7 @@ const generateTimeOptions = (timeInput) => {
     const minutes = moment(timeInput).minute();
     const remainder = minutes % increment;
     if (remainder) {
-      timeOptions.push({ value: timeInput, label: moment(timeInput).format('LT') });
+      timeOptions.push({ value: timeInput, label: moment(timeInput).format('L') });
     }
   }
 
@@ -25,7 +25,7 @@ const generateTimeOptions = (timeInput) => {
     for (j = 0; j < increments; j++) {
       const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
       const value = time.toISOString();
-      const label = time.format('LT');
+      const label = time.format('L');
       timeOptions.push({ value, label });
     }
   }
