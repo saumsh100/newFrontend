@@ -2,6 +2,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
+import 'moment-timezone';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
@@ -16,7 +17,7 @@ import {
 } from '../../../library';
 import styles from './styles.scss';
 
-const generateTimeOptions = () => {
+const generateTimeOptions = (timezone) => {
   const timeOptions = [];
   const totalHours = 24;
   const increment = 5;
@@ -26,9 +27,9 @@ const generateTimeOptions = () => {
   for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
+      const time = (timezone ? moment.tz(new Date(Date.UTC(1970, 1, 0, i, j * increment)), timezone) : moment(new Date(1970, 1, 0, i, j * increment)));
       const value = time.toISOString();
-      const label = time.format('LT');
+      const label = time.utc().format('LT');
       timeOptions.push({ value, label });
     }
   }
@@ -36,11 +37,46 @@ const generateTimeOptions = () => {
   return timeOptions;
 };
 
-const timeOptions = generateTimeOptions();
+const timeOptions = generateTimeOptions;
 
-function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
+function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAccount }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
-  if (!weeklySchedule) return null;
+  if (!weeklySchedule) {
+    return null;
+  };
+
+  function submit(value) {
+    const valueCopy = {};
+    Object.keys(value).forEach((key) => {
+      valueCopy[key] = {};
+      valueCopy[key].isClosed = value[key].isClosed;
+      const now = moment(value[key].startTime);
+      const another = now.clone();
+      another.tz(timezone);
+
+      another.utcOffset(moment(value[key].startTime).tz(timezone).format('Z'));
+
+      now.add(-1 * another.utcOffset(), 'minutes');
+
+      const nowEnd = moment(value[key].endTime);
+      const anotherEnd = nowEnd.clone();
+
+      anotherEnd.utcOffset(moment(value[key].endTime).tz(timezone).format('Z'));
+
+      nowEnd.add(-1 * anotherEnd.utcOffset(), 'minutes');
+
+      valueCopy[key].endTime = nowEnd._d;
+
+      valueCopy[key].startTime = now._d;
+    });
+
+    onSubmit(valueCopy)
+  }
+
+  const timezone = activeAccount.toJS().timezone;
+
+  const options = timeOptions(timezone);
+
 
   const parsedWeeklySchedule = pick(weeklySchedule, [
     'monday',
@@ -54,10 +90,12 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
 
   // Need to do this so editing breaks does not screw up initialValues here
   const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => {
+    const startDate = (timezone ? moment(startTime).tz(timezone).format('YYYY-MM-DDTHH:mm:ss.SSS') : startTime);
+    const endDate = (timezone ? moment(endTime).tz(timezone).add(moment.tz.guess()).format('YYYY-MM-DDTHH:mm:ss.SSS') : endTime);
     return {
       isClosed,
-      startTime,
-      endTime,
+      startTime: startDate + 'Z',
+      endTime: endDate + 'Z',
     };
   });
 
@@ -90,7 +128,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
                   <Col xs={4} className={styles.flexCentered}>
                     <Field
                       component="DropdownSelect"
-                      options={timeOptions}
+                      options={options}
                       name="startTime"
                       className={styles.inlineBlock}
                       disabled={isDisabled}
@@ -106,7 +144,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
                     <Field
                       className={styles.inlineBlock}
                       component="DropdownSelect"
-                      options={timeOptions}
+                      options={options}
                       name="endTime"
                       disabled={isDisabled}
                       label="End Time"
@@ -125,7 +163,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
   return (
     <Form
       form={formName}
-      onSubmit={onSubmit}
+      onSubmit={submit}
       initialValues={initialValues}
     >
       <DayHoursForm day="monday" />
@@ -139,16 +177,20 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
   );
 }
 
-function mapStateToProps({ form }, { formName }) {
+function mapStateToProps({ form, entities, auth }, { formName }) {
 
   // form data is populated when component renders
-  if (!form[formName]) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+
+  if (!form[formName] ) {
     return {
       values: {},
+      activeAccount,
     };
   }
 
   return {
+    activeAccount,
     values: form[formName].values,
   };
 }
