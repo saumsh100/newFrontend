@@ -129,6 +129,7 @@ class ScheduleComponent extends Component {
                       selectedDays={new Date(currentDate)}
                       onDayClick={this.setCurrentDay}
                       multiple={false}
+                      data-test-id="dayPicker"
                     />
                     <HeaderButtons
                       addNewAppointment={this.addNewAppointment}

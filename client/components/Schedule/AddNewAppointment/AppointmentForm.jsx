@@ -78,6 +78,7 @@ export default function AppointmentForm(props) {
             borderColor="primaryColor"
             multiple={false}
             required
+            data-test-id="date"
           />
         </Col>
         <Col md={2} />
@@ -89,6 +90,7 @@ export default function AppointmentForm(props) {
             label="Time"
             borderColor="primaryColor"
             required
+            data-test-id="time"
           />
         </Col>
       </Row>
@@ -104,25 +106,26 @@ export default function AppointmentForm(props) {
                 borderColor="primaryColor"
                 onChange={(e, newValue) => handlePractitionerChange(newValue)}
                 required
+                data-test-id="practitionerId"
               />
             </Col>
           </Row>
         </Col>
         {/*<Col md={2} />
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
-          <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={12} >
-              <Field
-                options={[]}
-                component="DropdownSelect"
-                name="split"
-                label="Split"
-                borderColor="primaryColor"
-                disabled
-              />
-            </Col>
-          </Row>
-        </Col>*/}
+         <Col xs={12} md={5} className={styles.addNewAppt_col}>
+         <Row className={styles.addNewAppt_col_nearFields}>
+         <Col xs={12} >
+         <Field
+         options={[]}
+         component="DropdownSelect"
+         name="split"
+         label="Split"
+         borderColor="primaryColor"
+         disabled
+         />
+         </Col>
+         </Row>
+         </Col>*/}
       </Row>
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={12} className={styles.addNewAppt_col}>
@@ -133,6 +136,7 @@ export default function AppointmentForm(props) {
             label="Service"
             borderColor="primaryColor"
             required
+            data-test-id="serviceId"
           />
         </Col>
       </Row>
@@ -145,6 +149,7 @@ export default function AppointmentForm(props) {
             label="Chair"
             borderColor="primaryColor"
             required
+            data-test-id="chairId"
           />
         </Col>
         <Col md={2} />
@@ -155,6 +160,7 @@ export default function AppointmentForm(props) {
               name="isPatientConfirmed"
               label="Patient Confirmed"
               className={styles.addNewAppt_col_confirmCancel_label}
+              data-test-id="isPatientConfirmed"
             />
             <Field
               component="Checkbox"
@@ -162,6 +168,7 @@ export default function AppointmentForm(props) {
               label="Patient Cancelled"
               className={styles.addNewAppt_col_confirmCancel_label}
               hidden={selectedAppointment && !selectedAppointment.request ? false : true}
+              data-test-id="isCancelled"
             />
           </div>
         </Col>
@@ -177,6 +184,7 @@ export default function AppointmentForm(props) {
             type="number"
             onChange={(e, value) => handleDurationChange(value)}
             required
+            data-test-id="duration"
           />
         </Col>
         <Col xs={12} md={2} className={styles.addNewAppt_col_unit}>
@@ -188,6 +196,7 @@ export default function AppointmentForm(props) {
             validate={[notNegative, maxDuration]}
             type="number"
             onChange={(e, value)=>{handleUnitChange(value)}}
+            data-test-id="unit"
           />
         </Col>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
@@ -199,6 +208,7 @@ export default function AppointmentForm(props) {
             validate={[notNegative, maxDuration]}
             type="number"
             onChange={(e, value) => handleBufferChange(value)}
+            data-test-id="buffer"
           />
         </Col>
       </Row>
@@ -213,6 +223,7 @@ export default function AppointmentForm(props) {
             max={180}
             marks={marks}
             onChange={(e, value)=> handleSliderChange(value)}
+            data-test-id="slider"
           />
         </Col>
       </Row>

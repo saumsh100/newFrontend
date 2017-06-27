@@ -114,6 +114,7 @@ export default function ShowAppointment(props) {
         key={appointment.id}
         className={styles.showAppointment}
         style={appStyle}
+        data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
           {(isPatientConfirmed && <Icon icon="check-circle-o" />)}

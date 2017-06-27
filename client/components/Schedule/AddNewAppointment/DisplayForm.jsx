@@ -107,6 +107,7 @@ export default function DisplayForm(props) {
       onSubmit={handleSubmit}
       ignoreSaveButton
       initialValues={initialValues}
+      data-test-id="createAppointmentForm"
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>

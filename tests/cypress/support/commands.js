@@ -20,10 +20,10 @@ Cypress.addParentCommand('selectOption', (formDataTestId, dataTestId, optionValu
   cy
     .get(`[data-test-id=${formDataTestId}]`)
     .find(`[data-test-id=${dataTestId}]`)
-    .click()
+    .click({ force: true })
     .next()
     .get(`[data-test-id=${optionValue}]`)
-    .click();
+    .click({ force: true });
 });
 
 Cypress.addParentCommand('fillTextInput', (formDataTestId ,dataTestId, text) => {
