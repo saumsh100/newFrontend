@@ -1125,13 +1125,13 @@ const SEEDS = {
     },
 
 
-     ...generatePracServJoin(donnaServices, practitionerId),
-     ...generatePracServJoin(donnaServices, practitionerId2),
+    ...generatePracServJoin(donnaServices, practitionerId),
+    ...generatePracServJoin(donnaServices, practitionerId2),
 
-     ...generatePracServJoin(sunshineServices, practitionerId3),
-     ...generatePracServJoin(sunshineServices, practitionerId4),
-     ...generatePracServJoin(sunshineServices, practitionerId5),
-     ...generatePracServJoin(sunshineServices, practitionerId6),
+    ...generatePracServJoin(sunshineServices, practitionerId3),
+    ...generatePracServJoin(sunshineServices, practitionerId4),
+    ...generatePracServJoin(sunshineServices, practitionerId5),
+    ...generatePracServJoin(sunshineServices, practitionerId6),
 
   ],
 

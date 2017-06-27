@@ -24,6 +24,7 @@ export default function CreateServiceForm(props) {
       <Form
         form="modalServiceForm"
         onSubmit={onSubmit}
+        data-test-id="createServiceForm"
       >
         <Row className={styles.servicesFormRow__createRow}>
           <Col xs={12}>
@@ -32,6 +33,7 @@ export default function CreateServiceForm(props) {
               name="name"
               label="Name"
               validate={[maxLength25]}
+              data-test-id="name"
             />
           </Col>
         </Row>
@@ -44,6 +46,7 @@ export default function CreateServiceForm(props) {
               type="number"
               validate={[notNegative, maxDuration]}
               normalize={parseNum}
+              data-test-id="duration"
             />
           </Col>
         </Row>
@@ -56,6 +59,7 @@ export default function CreateServiceForm(props) {
               type="number"
               validate={[notNegative, maxDuration]}
               normalize={parseNum}
+              data-test-id="bufferTime"
             />
           </Col>
         </Row>

@@ -75,12 +75,14 @@ class ServiceDataItem extends Component {
               form={`${service.get('id')}Form`}
               onSubmit={this.updateService}
               initialValues={initialValues}
+              data-test-id="serviceDataForm"
             >
               <Field
                 required
                 name="name"
                 label="Name"
                 validate={[maxLength45]}
+                data-test-id="name"
               />
               <Field
                 required

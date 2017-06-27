@@ -13,11 +13,13 @@ export default function PreferencesForm({ handleSubmit, activeAccount, }) {
       onSubmit={handleSubmit}
       className={styles.preferencesForm}
       initialValues={initialValues}
+      data-test-id="selectAccountColorForm"
     >
       <Field
         component="ColorPicker"
         label="Primary Widget Color"
         name="bookingWidgetPrimaryColor"
+        data-test-id="colorInput"
       />
     </Form>
   );

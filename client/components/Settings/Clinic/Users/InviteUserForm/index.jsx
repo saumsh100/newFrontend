@@ -19,6 +19,7 @@ class InviteUserForm extends Component {
           type="email"
           name="email"
           label="Email"
+          data-test-id="email"
         />
       </Form>
     );
