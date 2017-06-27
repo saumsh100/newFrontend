@@ -2,7 +2,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
-import 'moment-timezone';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
@@ -17,7 +16,7 @@ import {
 } from '../../../library';
 import styles from './styles.scss';
 
-const generateTimeOptions = (timezone) => {
+const generateTimeOptions = () => {
   const timeOptions = [];
   const totalHours = 24;
   const increment = 5;
@@ -27,9 +26,9 @@ const generateTimeOptions = (timezone) => {
   for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = (timezone ? moment.tz(new Date(Date.UTC(1970, 1, 0, i, j * increment)), timezone) : moment(new Date(1970, 1, 0, i, j * increment)));
+      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
       const value = time.toISOString();
-      const label = time.utc().format('LT');
+      const label = time.format('LT');
       timeOptions.push({ value, label });
     }
   }
@@ -37,18 +36,11 @@ const generateTimeOptions = (timezone) => {
   return timeOptions;
 };
 
-const timeOptions = generateTimeOptions;
+const timeOptions = generateTimeOptions();
 
-function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAccount }) {
+function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
-  if (!weeklySchedule) {
-    return null;
-  };
-
-  const timezone = activeAccount.toJS().timezone;
-
-  const options = timeOptions(timezone);
-
+  if (!weeklySchedule) return null;
 
   const parsedWeeklySchedule = pick(weeklySchedule, [
     'monday',
@@ -62,12 +54,10 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAcc
 
   // Need to do this so editing breaks does not screw up initialValues here
   const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => {
-    const startDate = (timezone ? moment(startTime).tz(timezone).format('YYYY-MM-DDTHH:mm:ss.SSS') : startTime);
-    const endDate = (timezone ? moment(endTime).tz(timezone).add(moment.tz.guess()).format('YYYY-MM-DDTHH:mm:ss.SSS') : endTime);
     return {
       isClosed,
-      startTime: startDate + 'Z',
-      endTime: endDate + 'Z',
+      startTime,
+      endTime,
     };
   });
 
@@ -100,7 +90,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAcc
                   <Col xs={4} className={styles.flexCentered}>
                     <Field
                       component="DropdownSelect"
-                      options={options}
+                      options={timeOptions}
                       name="startTime"
                       className={styles.inlineBlock}
                       disabled={isDisabled}
@@ -116,7 +106,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAcc
                     <Field
                       className={styles.inlineBlock}
                       component="DropdownSelect"
-                      options={options}
+                      options={timeOptions}
                       name="endTime"
                       disabled={isDisabled}
                       label="End Time"
@@ -149,20 +139,16 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAcc
   );
 }
 
-function mapStateToProps({ form, entities, auth }, { formName }) {
+function mapStateToProps({ form }, { formName }) {
 
   // form data is populated when component renders
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-
-  if (!form[formName] ) {
+  if (!form[formName]) {
     return {
       values: {},
-      activeAccount,
     };
   }
 
   return {
-    activeAccount,
     values: form[formName].values,
   };
 }

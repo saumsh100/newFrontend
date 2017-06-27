@@ -18,7 +18,7 @@ import {
 } from '../../../library';
 import styles from './styles.scss';
 
-const generateTimeOptions = (timezone) => {
+const generateTimeOptions = () => {
   const timeOptions = [];
   const totalHours = 24;
   const increment = 5;
@@ -28,9 +28,9 @@ const generateTimeOptions = (timezone) => {
   for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = (timezone ? moment.tz(new Date(Date.UTC(1970, 1, 0, i, j * increment)), timezone) : moment(new Date(1970, 1, 0, i, j * increment)));
+      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
       const value = time.toISOString();
-      const label = time.utc().format('LT');
+      const label = time.format('LT');
       timeOptions.push({ value, label });
     }
   }
@@ -41,11 +41,11 @@ const generateTimeOptions = (timezone) => {
 const defaultStartTime = moment(new Date(1970, 1, 0, 12, 0)).toISOString();
 const defaultEndTime = moment(new Date(1970, 1, 0, 13, 0)).toISOString();
 
-const timeOptions = generateTimeOptions;
+const timeOptions = generateTimeOptions();
 
-console.log('found?', timeOptions().find(to => to.value === defaultStartTime));
+console.log('found?', timeOptions.find(to => to.value === defaultStartTime));
 
-function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, activeAccount }) {
+function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 
@@ -59,20 +59,8 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, activeAccoun
     'sunday',
   ]);
 
-  const timezone = activeAccount.toJS().timezone;
-
-  const options = timeOptions(timezone);
-
   const initialValues = mapValues(parsedWeeklySchedule, (day) => {
-    const breakDay = day.breaks || [];
-    const breaks = breakDay.map((value) => {
-      const startDate = (timezone ? moment(value.startTime).tz(timezone).format('YYYY-MM-DDTHH:mm:ss.SSS') : []);
-      const endDate = (timezone ? moment(value.endTime).tz(timezone).add(moment.tz.guess()).format('YYYY-MM-DDTHH:mm:ss.SSS') : []);
-      return {
-        startTime: startDate + 'Z',
-        endTime: endDate + 'Z',
-      };
-    });
+    const breaks = day.breaks || [];
     return { breaks };
   });
 
@@ -110,7 +98,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, activeAccoun
                       <Col xs={4} className={styles.flexCentered}>
                         <Field
                           component="DropdownSelect"
-                          options={options}
+                          options={timeOptions}
                           name={`${field}.startTime`}
                           className={styles.inlineBlock}
                           label="Start Time"
@@ -125,7 +113,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, activeAccoun
                         <Field
                           className={styles.inlineBlock}
                           component="DropdownSelect"
-                          options={options}
+                          options={timeOptions}
                           name={`${field}.endTime`}
                           label="End Time"
                         />
@@ -180,10 +168,8 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, activeAccoun
 
 }
 
-function mapStateToProps({ form, entities, auth }, {formName}) {
+function mapStateToProps({ form }, {formName}) {
   // form data is populated when component renders
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-
   if (!form[formName]) {
     return {
       values: {},
@@ -191,7 +177,6 @@ function mapStateToProps({ form, entities, auth }, {formName}) {
   }
 
   return {
-    activeAccount,
     values: form[formName].values,
   };
 }
