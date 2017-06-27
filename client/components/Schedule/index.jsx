@@ -126,7 +126,8 @@ class ScheduleComponent extends Component {
                   <CurrentDate currentDate={currentDate}>
                     <DayPicker
                       target="icon"
-                      onChange={this.setCurrentDay}
+                      selectedDays={new Date(currentDate)}
+                      onDayClick={this.setCurrentDay}
                       multiple={false}
                     />
                     <HeaderButtons

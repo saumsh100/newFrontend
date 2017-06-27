@@ -147,6 +147,10 @@ const passwordStrength = (value) => {
   }
 };
 
+const parseNum = value => value && parseInt(value);
+
+const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
+
 export {
   composeAsyncValidators,
   asyncValidatePatient,
@@ -166,5 +170,7 @@ export {
   numDigitsValidate,
   phoneValidate,
   postalCodeValidate,
-  phoneValidateNullOkay
+  phoneValidateNullOkay,
+  parseNum,
+  notNegative,
 };

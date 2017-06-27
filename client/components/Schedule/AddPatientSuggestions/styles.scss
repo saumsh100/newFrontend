@@ -3,7 +3,7 @@
 .suggestionsContainer {
   position: relative;
   width: 500px;
-  height: 400px;
+  height: auto;
   max-height: 450px;
   overflow: auto;
   background: $primary-white;
@@ -82,6 +82,7 @@
 
 .createPatientButtonContainer {
   padding-top: 35px;
+  padding-bottom: 15px;
   display: flex;
   justify-content: center;
 }

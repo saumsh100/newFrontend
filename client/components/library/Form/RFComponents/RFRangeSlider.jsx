@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import omit from 'lodash/omit';
 import RangeSlider from '../../RangeSlider';
+import Input from '../../Input';
 
 export default function RFRangeSlider(props) {
   const {
@@ -23,10 +24,11 @@ export default function RFRangeSlider(props) {
 
   return (
     <RangeSlider
+      value={initialState}
       {...newProps}
       {...newInput}
       error={finalError}
-      onChange={(value)=>{input.onChange(value)}}
+      onChange={(value)=>{ input.onChange(value) }}
       setRangeState={initialState}
     />
   );
