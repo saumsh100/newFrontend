@@ -2,8 +2,10 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { Grid, Row, Col, Field, } from '../../library';
+import { parseNum, notNegative} from '../../library/Form/validate'
 import styles from './styles.scss';
 
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 const generateTimeOptions = (timeInput) => {
   const timeOptions = [];
@@ -58,6 +60,11 @@ export default function AppointmentForm(props) {
     handlePractitionerChange,
     selectedAppointment,
     time,
+    unit,
+    handleSliderChange,
+    handleDurationChange,
+    handleUnitChange,
+    handleBufferChange,
   } = props;
 
   return (
@@ -88,7 +95,7 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+        <Col xs={12} md={12} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
             <Col xs={12} >
               <Field
@@ -104,21 +111,21 @@ export default function AppointmentForm(props) {
             </Col>
           </Row>
         </Col>
-        <Col md={2} />
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
-          <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={12} >
-              <Field
-                options={[]}
-                component="DropdownSelect"
-                name="split"
-                label="Split"
-                borderColor="primaryColor"
-                disabled
-              />
-            </Col>
-          </Row>
-        </Col>
+        {/*<Col md={2} />
+         <Col xs={12} md={5} className={styles.addNewAppt_col}>
+         <Row className={styles.addNewAppt_col_nearFields}>
+         <Col xs={12} >
+         <Field
+         options={[]}
+         component="DropdownSelect"
+         name="split"
+         label="Split"
+         borderColor="primaryColor"
+         disabled
+         />
+         </Col>
+         </Row>
+         </Col>*/}
       </Row>
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={12} className={styles.addNewAppt_col}>
@@ -166,18 +173,57 @@ export default function AppointmentForm(props) {
           </div>
         </Col>
       </Row>
-      <Row className={styles.addNewAppt_row}>
+      <Row className={styles.addNewAppt_row_durBuff}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Field
+            name="duration"
+            label="Duration"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            type="number"
+            onChange={(e, value) => handleDurationChange(value)}
+            required
+            data-test-id="duration"
+          />
+        </Col>
+        <Col xs={12} md={2} className={styles.addNewAppt_col_unit}>
+          <Field
+            name="unit"
+            label="Unit"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            type="number"
+            onChange={(e, value)=>{handleUnitChange(value)}}
+            data-test-id="unit"
+          />
+        </Col>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Field
+            name="buffer"
+            label="Buffer"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            type="number"
+            onChange={(e, value) => handleBufferChange(value)}
+            data-test-id="buffer"
+          />
+        </Col>
+      </Row>
+      <Row className={styles.addNewAppt_row_slider}>
         <Col xs={12} className={styles.addNewAppt_col_nearFields}>
           <Field
             component="RangeSlider"
-            name="duration"
-            label="Duration"
+            name="slider"
             unit="m"
-            defaultValues={[60, 60]}
-            min={15}
+            defaultValues={[60,61]}
+            min={unit}
             max={180}
             marks={marks}
-            data-test-id="duration"
+            onChange={(e, value)=> handleSliderChange(value)}
+            data-test-id="slider"
           />
         </Col>
       </Row>

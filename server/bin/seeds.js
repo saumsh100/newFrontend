@@ -172,6 +172,7 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 };
 
 const randomAppointments = [];
+const e2eAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
 const randomChats = [];
@@ -195,7 +196,6 @@ for (let i = 0; i < 100; i++) {
     birthDate: faker.date.past(),
     gender: 'male',
     langauge: 'English',
-    lastAppointmentDate: faker.date.past(),
     insurance: {
       insurance: 'Lay Health Insurance',
       memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -251,9 +251,33 @@ for (let i = 0; i < 100; i++) {
     chairId,
     note: 'First',
   });
-
-  e2eAppointments
 }
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().add(1, 'hours')._d,
+  endDate: moment().add(2, 'hours')._d,
+  patientId: alexPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Today for E2E test',
+});
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().date(1)._d,
+  endDate: moment().date(1).add(1, 'hours')._d,
+  patientId: justinPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Tomorrow for E2E test',
+});
 
 const generateDefaultServices = (_accountId) => {
   const createService = serviceData => Object.assign({}, {
@@ -550,6 +574,9 @@ const SEEDS = {
 
     // For the patientsManagementTab
     ...randomAppointments,
+
+    // For E2E tests of Schedule
+    ...e2eAppointments,
   ],
 
   Request: [
@@ -725,7 +752,6 @@ const SEEDS = {
       patientUserId: patientUserId3,
       gender: 'male',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       status: 'Active',
       insurance: {
         insurance: 'GMC Health Insurance',
@@ -748,7 +774,6 @@ const SEEDS = {
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       status: 'Active',
       isSyncedWithPMS: false,
     },
@@ -764,7 +789,6 @@ const SEEDS = {
       gender: 'male',
       status: 'Active',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       insurance: {
         insurance: 'Lay Health Insurance',
         memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -782,7 +806,6 @@ const SEEDS = {
       lastName: 'Joseph',
       mobilePhoneNumber: markPhoneNumber,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       gender: 'male',
       status: 'Active',
       language: 'English',
@@ -799,7 +822,6 @@ const SEEDS = {
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'female',
       status: 'Active',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
@@ -816,7 +838,6 @@ const SEEDS = {
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
@@ -1303,7 +1324,7 @@ const SEEDS = {
   Reminder,
 
   SentReminder: [
-    /*{
+    /* {
      reminderId,
      accountId,
      createdAt: moment({hour: 13, minute: 10})._d,
@@ -1311,8 +1332,7 @@ const SEEDS = {
      patientId: justinPatientId,
      primaryType: 'sms',
      lengthSeconds: 30,
-     },*/
-
+     }, */
     ...SentReminder,
   ],
 

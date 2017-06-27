@@ -7,7 +7,7 @@ import { buildAppointmentEvent } from '../ics';
 
 export const createConfirmationText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('dddd, MMMM do'); // Saturday, July 9th
+  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
   return `Thanks ${patient.firstName}! You appointment with ${account.name} ` +
     `on ${startDate} at ${startTime} is confirmed. `;
@@ -16,7 +16,7 @@ export const createConfirmationText = ({ patient, account, appointment }) => {
 const BASE_URL = `https://${host}/twilio/voice/sentReminders`;
 const createReminderText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('dddd, MMMM do'); // Saturday, July 9th
+  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
   return `${patient.firstName}, your next appointment with ${account.name} ` +
     `is on ${startDate} at ${startTime}. Reply 'C' to ` +
@@ -25,7 +25,7 @@ const createReminderText = ({ patient, account, appointment }) => {
 
 const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) => {
   const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('dddd, MMMM Do'); // Saturday, July 9th
+  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
   return `${BASE_URL}/${sentReminder.id}/?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;
 };

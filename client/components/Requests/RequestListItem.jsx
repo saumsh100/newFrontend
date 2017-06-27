@@ -71,11 +71,13 @@ class RequestListItem extends Component {
               icon={'times-circle-o'}
               className={styles.clickHandlers__remove}
               onClick={this.onClickRemove}
+              data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Reject`}
             />
             <Icon
               icon={'check-circle'}
               className={styles.clickHandlers__confirm}
               onClick={this.onClickConfirm}
+              data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Accept`}
             />
           </div>
         </div>
@@ -83,7 +85,10 @@ class RequestListItem extends Component {
     }
 
     return (
-      <ListItem className={styles.requestListItem}>
+      <ListItem
+        className={styles.requestListItem}
+        data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}AppointmentRequest`}
+      >
         <Popover
           className={styles.requestPopover}
           isOpen={isHovered}

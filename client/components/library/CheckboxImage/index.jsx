@@ -11,7 +11,6 @@ export default function CheckboxImage(props) {
     checked,
     onChange,
     imgColor,
-    imageSrc,
     url,
     firstName,
   } = props;

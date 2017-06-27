@@ -14,7 +14,12 @@
 .formContainer {
   padding: 15px;
   &_spacing {
-    padding: 10px;
+    padding: 0px;
+  }
+
+  &_dropDown {
+    padding-top: 15px;
+    padding-bottom: 20px;
   }
 }
 

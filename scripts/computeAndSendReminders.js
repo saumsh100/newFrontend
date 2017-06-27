@@ -7,9 +7,15 @@ const sampleData = {
     endDate: new Date(2017, 6, 1, 10, 0),
   },
 
-  patient: {
+  /*patient: {
     firstName: 'Justin',
     email: 'justin.d.sharp@gmail.com',
+  },*/
+
+  patient: {
+    firstName: 'Jatinder',
+    email: 'dhillon.jatinder@gmail.com',
+    mobilePhoneNumber: '16048076210',
   },
 
   account: {

@@ -96,7 +96,10 @@ class UpcomingPatientList extends Component {
       });
 
       const results = inputLength === 0 ? [] : searched.filter((person) => {
-        return inputValue[1].test(person.fullName) || inputValue[0].test(person.fullName) || inputValue[0].test(person.email);
+        const phoneTest = inputValue[0].test(person.mobilePhoneNumber) || inputValue[0].test(person.homePhoneNumber)
+        || inputValue[0].test(person.workPhoneNumber) || inputValue[0].test(person.otherPhoneNumber);
+
+        return inputValue[1].test(person.fullName) || inputValue[0].test(person.fullName) || inputValue[0].test(person.email) || phoneTest;
       });
 
       this.setState({

@@ -17,7 +17,7 @@ export default function FilterPractitioners(props) {
   if (!practitioners) {
     return null;
   }
-  const colors = ['primaryColor', 'primaryYellow', 'primaryGreen', 'primaryBlueGreen' ];
+  const colors = ['primaryColor', 'primaryYellow', 'primaryGreen', 'primaryBlueGreen'];
   const colorLen = colors.length;
   const colorArray = [];
 
@@ -25,17 +25,15 @@ export default function FilterPractitioners(props) {
 
   const reset = Math.ceil((practitionersSort.length - colorLen) / colorLen);
 
-  for(let j = 0 ; j <= reset; j++) {
-    for(let i = 0; i < colorLen;  i++) {
-      colorArray.push(colors[i])
+  for (let j = 0; j <= reset; j++) {
+    for (let i = 0; i < colorLen; i++) {
+      colorArray.push(colors[i]);
     }
   }
 
-  practitionersSort = practitionersSort.map((prac, index) => {
-    return Object.assign({}, prac.toJS(), {
-      color: colorArray[index],
-    });
-  });
+  practitionersSort = practitionersSort.map((prac, index) => Object.assign({}, prac.toJS(), {
+    color: colorArray[index],
+  }));
 
   return (
     <div>
@@ -50,12 +48,11 @@ export default function FilterPractitioners(props) {
           onChange={() => handleAllCheck(filterKey)}
         />
         {practitionersSort.map((pr, i) => {
-
           if (!pr) {
             return null;
           }
 
-          const displayName = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
+          const displayName = `${pr.firstName} ${pr.lastName}`;
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
 
           const label = (<div className={styles.filter_practitioner__name}>{displayName}</div>);
