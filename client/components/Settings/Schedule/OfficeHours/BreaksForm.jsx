@@ -28,7 +28,7 @@ const generateTimeOptions = () => {
   for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
       const value = time.toISOString();
       const label = time.format('LT');
       timeOptions.push({ value, label });
