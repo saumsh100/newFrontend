@@ -71,6 +71,7 @@ export default function AppointmentForm(props) {
             borderColor="primaryColor"
             multiple={false}
             required
+            data-test-id="date"
           />
         </Col>
         <Col md={2} />
@@ -82,6 +83,7 @@ export default function AppointmentForm(props) {
             label="Time"
             borderColor="primaryColor"
             required
+            data-test-id="time"
           />
         </Col>
       </Row>
@@ -97,6 +99,7 @@ export default function AppointmentForm(props) {
                 borderColor="primaryColor"
                 onChange={(e, newValue) => handlePractitionerChange(newValue)}
                 required
+                data-test-id="practitionerId"
               />
             </Col>
           </Row>
@@ -126,6 +129,7 @@ export default function AppointmentForm(props) {
             label="Service"
             borderColor="primaryColor"
             required
+            data-test-id="serviceId"
           />
         </Col>
       </Row>
@@ -138,6 +142,7 @@ export default function AppointmentForm(props) {
             label="Chair"
             borderColor="primaryColor"
             required
+            data-test-id="chairId"
           />
         </Col>
         <Col md={2} />
@@ -148,6 +153,7 @@ export default function AppointmentForm(props) {
               name="isPatientConfirmed"
               label="Patient Confirmed"
               className={styles.addNewAppt_col_confirmCancel_label}
+              data-test-id="isPatientConfirmed"
             />
             <Field
               component="Checkbox"
@@ -155,6 +161,7 @@ export default function AppointmentForm(props) {
               label="Patient Cancelled"
               className={styles.addNewAppt_col_confirmCancel_label}
               hidden={selectedAppointment && !selectedAppointment.request ? false : true}
+              data-test-id="isCancelled"
             />
           </div>
         </Col>
@@ -170,6 +177,7 @@ export default function AppointmentForm(props) {
             min={15}
             max={180}
             marks={marks}
+            data-test-id="duration"
           />
         </Col>
       </Row>

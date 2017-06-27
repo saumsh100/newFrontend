@@ -251,6 +251,8 @@ for (let i = 0; i < 100; i++) {
     chairId,
     note: 'First',
   });
+
+  e2eAppointments
 }
 
 const generateDefaultServices = (_accountId) => {
