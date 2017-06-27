@@ -14,6 +14,16 @@ import {
 import TimeOffDisplay from './TimeOffDisplay';
 import styles from './styles.scss';
 
+Date.prototype.stdTimezoneOffset = function () {
+  const jan = new Date(this.getFullYear(), 0, 1);
+  const jul = new Date(this.getFullYear(), 6, 1);
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+};
+
+Date.prototype.dst = function () {
+  return this.getTimezoneOffset() < this.stdTimezoneOffset();
+};
+
 const generateTimeOptions = () => {
   const timeOptions = [];
   const totalHours = 24;
@@ -24,9 +34,10 @@ const generateTimeOptions = () => {
   for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
+      const today = new Date();
       const value = time.toISOString();
-      const label = time.format('LT');
+      const label = (today.dst() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
       timeOptions.push({ value, label });
     }
   }

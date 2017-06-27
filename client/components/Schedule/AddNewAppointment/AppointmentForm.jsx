@@ -4,6 +4,15 @@ import moment from 'moment-timezone';
 import { Grid, Row, Col, Field, } from '../../library';
 import styles from './styles.scss';
 
+Date.prototype.stdTimezoneOffset = function () {
+  const jan = new Date(this.getFullYear(), 0, 1);
+  const jul = new Date(this.getFullYear(), 6, 1);
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+};
+
+Date.prototype.dst = function () {
+  return this.getTimezoneOffset() < this.stdTimezoneOffset();
+};
 
 const generateTimeOptions = (timeInput) => {
   const timeOptions = [];
@@ -15,7 +24,7 @@ const generateTimeOptions = (timeInput) => {
     const minutes = moment(timeInput).minute();
     const remainder = minutes % increment;
     if (remainder) {
-      timeOptions.push({ value: timeInput, label: moment(timeInput).format('L') });
+      timeOptions.push({ value: timeInput, label: moment(timeInput).format('LT') });
     }
   }
 
@@ -24,8 +33,9 @@ const generateTimeOptions = (timeInput) => {
     let j;
     for (j = 0; j < increments; j++) {
       const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
+      const today = new Date();
       const value = time.toISOString();
-      const label = time.format('L');
+      const label = (today.dst() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
       timeOptions.push({ value, label });
     }
   }
