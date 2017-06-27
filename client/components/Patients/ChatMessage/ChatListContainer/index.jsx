@@ -83,7 +83,7 @@ class ChatListContainer extends Component {
       const age = (user ? moment().diff(user.birthDate, 'years') : null);
 
       const userDisplay = (user ? (<div className={styles.users__name}>
-        <span>{`${chat.user.firstName} ${chat.user.lastName}`}</span><span>, {`${age}`}</span>
+        <span>{`${chat.user.firstName} ${chat.user.lastName}`}</span><span>, {`${age || 'N/A'}`}</span>
       </div>) : <div className={styles.users__name}> {userPhone} </div>);
 
       const time = <div className={styles.timeChat}>{moment(messageRecent.createdAt).calendar(null, {

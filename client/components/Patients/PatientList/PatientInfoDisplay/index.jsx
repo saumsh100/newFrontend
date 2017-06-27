@@ -53,7 +53,7 @@ class PatientInfoDisplay extends Component {
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
                 <p className={styles.name}>
                   <span>{currentPatient.firstName} {currentPatient.lastName}</span>
-                  <span>, {age}</span>
+                  <span>, {age || 'N/A'}</span>
                 </p>
               </div>
               <div className={`${styles.patient_profile__info} ${styles.personal__table_info}`}>
