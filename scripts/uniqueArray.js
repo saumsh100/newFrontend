@@ -6,16 +6,22 @@ import { v4 as uuid } from 'uuid';
 import faker from 'faker';
 import axios from 'axios';
 import size from 'lodash/size';
-import Patient from '../server/models/Patient';
+import isArray from 'lodash/isArray';
+import uniqBy from 'lodash/uniqBy';
 import uniqWith from 'lodash/uniqWith';
+import Patient from '../server/models/Patient';
 import bindAxiosInterceptors from '../client/util/bindAxiosInterceptors';
 
 const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmODBhNjZmNy0wYTBmLTQwY2MtOGFiZC02MTEzMmNkMTA0ZWQiLCJzZXNzaW9uSWQiOiJkY2MwOTI2YS0wMjJkLTQ1NTMtOThiMS0yZWJmYzJhN2Q5ZGQiLCJhY2NvdW50SWQiOiIxYWVhYjAzNS1iNzJjLTRmN2EtYWQ3My0wOTQ2NWNiZjU2NTQiLCJpYXQiOjE0OTgwMDAyNTcsImV4cCI6MTUwMDU5MjI1N30.m5VUlTYzhSK7cnRYwtapko2--239-aE6Kh0BCkWZT4k';
 bindAxiosInterceptors(() => TOKEN);
 
 let start = Date.now();
+const uniqueConfig = {
+  email: ['accountId'],
+  mobilePhoneNumber: ['accountId'],
+};
 
-function generatePatientSeeds(num = 1000) {
+function generatePatientSeeds(num = 10000) {
   const accountId = uuid();
   const patientSeeds = [];
   let i;
@@ -80,16 +86,38 @@ async function main() {
     console.log(`Single Completed in ${Date.now() - start}ms`);*/
 
     start = Date.now();
-    try {
-      const res = await axios.post('http://localhost:5100/api/patients/batch', { patients: batchSeeds });
-      console.log('num patients created =', size(res.data.entities.patients));
-      console.log('num errors created =', 'ZERO');
-      console.log(`Batch Completed in ${Date.now() - start}ms`);
-    } catch (err) {
-      console.log('num patients created =', size(err.data.entities.patients));
-      console.log('num errors created =', err.data.errors.length);
-      console.log(`Batch Completed in ${Date.now() - start}ms`);
-    }
+    console.log('Patient Seeds Length', patientSeeds.length);
+    const uniqueSeeds = uniqWith(patientSeeds, (a, b) => {
+      if (a.id && b.id && a.id === b.id) {
+        //const error = UniqueFieldError(Model, 'id');
+        //error.doc = a;
+        //errors.push(error);
+        return true;
+      }
+
+      for (const field in uniqueConfig) {
+        const fieldConfig = uniqueConfig[field];
+        if (isArray(fieldConfig)) {
+          // Now check
+          let same = a[field] === b[field];
+          for (const depField of fieldConfig) {
+            same = same && a[depField] === b[depField];
+          }
+
+          if (same) {
+            return true;
+          }
+        } else {
+          // Perhaps we need to check objects also?
+          if (a[field] === b[field]) {
+            return true;
+          }
+        }
+      }
+    });
+
+    console.log('Unique Seeds Length', uniqueSeeds.length);
+    console.log(`${Date.now() - start}ms`);
 
     process.exit();
   } catch (err) {

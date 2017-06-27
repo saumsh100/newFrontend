@@ -4,15 +4,11 @@ import map from 'lodash/map';
 import mapValues from 'lodash/mapValues';
 import isArray from 'lodash/isArray';
 import thinky from '../../config/thinky';
+import { UniqueFieldError } from './errors';
 
 const { r, type } = thinky;
 const TABLE_NAME_DELIMETER = '_';
 const PRIMARY_KEY_DELIMETER = '_';
-const UniqueFieldError = (Model, fieldName) =>
-  new Error(
-    'Unique Field Validation Error in ' +
-    `${Model.tableName} model with [${fieldName}] field`
-  );
 
 /**
  * createTableName does...

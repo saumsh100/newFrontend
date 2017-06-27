@@ -4,14 +4,15 @@
 
 import { v4 as uuid } from 'uuid';
 import faker from 'faker';
+import uniqWith from 'lodash/uniqWith';
 import Patient from '../server/models/Patient';
 
-const accountId = uuid();
+const accountId = '315f01e4-03c7-4fb4-add0-09b00921e686';
 const patientSeeds = [];
 let start = Date.now();
 
 let i;
-for (i = 0; i < 10; i++) {
+for (i = 0; i < 5; i++) {
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
   const phoneNumber = faker.phone.phoneNumberFormat(0);
@@ -34,9 +35,9 @@ const sameLast = patientSeeds[0].lastName;
 console.log('sameEmail', sameEmail);
 console.log('sameFirst', sameFirst);
 console.log('sameLast', sameLast);
-patientSeeds[9].email = sameEmail;
-patientSeeds[9].firstName = sameFirst;
-patientSeeds[9].lastName = sameLast;
+patientSeeds[4].email = 'Jess.Cummerata@google.ca';
+patientSeeds[4].firstName = sameFirst;
+patientSeeds[4].lastName = sameLast;
 //patientSeeds[99].id = patientSeeds[0].id;
 //patientSeeds[98].id = patientSeeds[0].id;
 //patientSeeds[97].id = patientSeeds[0].id;
@@ -49,7 +50,22 @@ async function main() {
   try {
     const errors = [];
     const docs = [];
-    for (const patientSeed of patientSeeds) {
+
+    // make patient seeds with conflicts picked out
+    let newPatientSeeds = patientSeeds.map(p => {
+      let patient = new Patient(p);
+      Patient.sanitize(patient);
+      return patient;
+    });
+
+    newPatientSeeds = uniqWith(newPatientSeeds, (a, b) => {
+      // TODO: needs to throw the correct error
+      const same = a.id === b.id || a.email === b.email || a.mobilePhoneNumber === b.mobilePhoneNumber;
+      if (same) errors.push(a);
+      return same;
+    });
+
+    for (const patientSeed of newPatientSeeds) {
       try {
         let patient = new Patient(patientSeed);
         patient = Patient.sanitize(patient);

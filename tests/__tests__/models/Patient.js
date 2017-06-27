@@ -147,7 +147,60 @@ describe('models/Patient', () => {
   });
 
   describe('Batch Saving', () => {
-    test('should be able to save 2 patients', async () => {
+    describe('#preUniqueValidator', () => {
+      test('it should throw 1 error and return 1 patient model', () => {
+        const id = uuid();
+        const data = [
+          makeData(),
+          makeData({ id }),
+        ];
+
+        const { docs, errors } = Patient.preValidateArray(data);
+
+        expect(errors.length).toBe(1);
+        expect(docs.length).toBe(1);
+
+        const [doc] = docs;
+        const [error] = errors;
+
+        // Ensure it is a Patient model...
+        expect(doc.isSaved()).toBe(false);
+
+        // Defaults got added
+        expect(typeof doc.preferences).toBe('object');
+
+        // Error should have correct message and correct doc
+        expect(error.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        expect(error.doc).toMatchObject(makeData({ id }));
+
+      });
+
+      test('it should throw 2 errors and return 1 patient model', () => {
+        const id1 = uuid();
+        const id2 = uuid();
+        const data = [
+          makeData(),
+          makeData({ id: id1 }),
+          makeData({ id: id2 }),
+        ];
+
+        const { docs, errors } = Patient.preValidateArray(data);
+
+        expect(errors.length).toBe(2);
+        expect(docs.length).toBe(1);
+
+        const [doc] = docs;
+        const [error1, error2] = errors;
+
+        expect(doc.isSaved()).toBe(false);
+        expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        expect(error1.doc).toMatchObject(makeData({ id: id1 }));
+        expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        expect(error2.doc).toMatchObject(makeData({ id: id2 }));
+      });
+    });
+
+    test('should be able to save 2 unique patients', async () => {
       const email = 'justin@be.ca';
       const mobilePhoneNumber = '111 222 3333';
       const patients = await Patient.batchSave([
@@ -195,6 +248,27 @@ describe('models/Patient', () => {
         expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
         expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
         expect(patient.isSaved()).toBe(true);
+      }
+    });
+
+    test.only('save 1 first, then try batch saving, both should fail', async () => {
+      try {
+        await Patient.save(makeData());
+
+        await Patient.batchSave([
+          makeData(),
+          makeData(),
+        ]);
+
+        throw new Error('Did not pass');
+      } catch ({ errors, docs }) {
+
+        expect(errors.length).toBe(2);
+        expect(docs.length).toBe(0);
+
+        const [error1, error2] = errors;
+        expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
       }
     });
   });
