@@ -23,8 +23,10 @@ const generateTimeOptions = (timeInput) => {
   if (timeInput) {
     const minutes = moment(timeInput).minute();
     const remainder = minutes % increment;
+    const today = new Date();
+    const label = (today.dst() ? moment(timeInput).subtract(1, 'hours').format('LT') :  moment(timeInput).format('LT'));
     if (remainder) {
-      timeOptions.push({ value: timeInput, label: moment(timeInput).format('LT') });
+      timeOptions.push({ value: timeInput, label });
     }
   }
 
