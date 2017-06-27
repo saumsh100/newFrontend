@@ -45,34 +45,6 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAcc
     return null;
   };
 
-  function submit(value) {
-    const valueCopy = {};
-    Object.keys(value).forEach((key) => {
-      valueCopy[key] = {};
-      valueCopy[key].isClosed = value[key].isClosed;
-      const now = moment(value[key].startTime);
-      const another = now.clone();
-      another.tz(timezone);
-
-      another.utcOffset(moment(value[key].startTime).tz(timezone).format('Z'));
-
-      now.add(-1 * another.utcOffset(), 'minutes');
-
-      const nowEnd = moment(value[key].endTime);
-      const anotherEnd = nowEnd.clone();
-
-      anotherEnd.utcOffset(moment(value[key].endTime).tz(timezone).format('Z'));
-
-      nowEnd.add(-1 * anotherEnd.utcOffset(), 'minutes');
-
-      valueCopy[key].endTime = nowEnd._d;
-
-      valueCopy[key].startTime = now._d;
-    });
-
-    onSubmit(valueCopy)
-  }
-
   const timezone = activeAccount.toJS().timezone;
 
   const options = timeOptions(timezone);
@@ -163,7 +135,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, activeAcc
   return (
     <Form
       form={formName}
-      onSubmit={submit}
+      onSubmit={onSubmit}
       initialValues={initialValues}
     >
       <DayHoursForm day="monday" />

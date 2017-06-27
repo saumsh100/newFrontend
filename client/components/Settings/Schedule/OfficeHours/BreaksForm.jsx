@@ -59,37 +59,6 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, activeAccoun
     'sunday',
   ]);
 
-  function submit(value) {
-    const valueCopy = {};
-    Object.keys(value).forEach((key) => {
-      const breakDay = value[key].breaks || [];
-      valueCopy[key] = {};
-      valueCopy[key].breaks = breakDay.map((breaks) => {
-        const now = moment(breaks.startTime);
-        const another = now.clone();
-        another.tz(timezone);
-
-        another.utcOffset(moment(breaks.startTime).tz(timezone).format('Z'));
-
-        now.add(-1 * another.utcOffset(), 'minutes');
-
-        const nowEnd = moment(breaks.endTime);
-        const anotherEnd = nowEnd.clone();
-
-        anotherEnd.utcOffset(moment(breaks.endTime).tz(timezone).format('Z'));
-
-        nowEnd.add(-1 * anotherEnd.utcOffset(), 'minutes');
-
-        return {
-          endTime: nowEnd._d,
-          startTime: now._d,
-        };
-      });
-    });
-
-    onSubmit(valueCopy)
-  }
-
   const timezone = activeAccount.toJS().timezone;
 
   const options = timeOptions(timezone);
@@ -196,7 +165,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, activeAccoun
   return (
     <Form
       form={breaksName}
-      onSubmit={submit}
+      onSubmit={onSubmit}
       initialValues={initialValues}
     >
       <DayBreaksForm day="monday" />
