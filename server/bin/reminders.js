@@ -5,7 +5,7 @@ import { computeRemindersAndSend } from '../lib/reminders';
 
 global.io = createSocketServer();
 
-// We could use Heroku Scheduler for this but I have ever tested it - JS
+// We could use Heroku Scheduler for this but I have never tested it - JS
 jobQueue.process('reminders', async (job, done) => {
   const { data: { date } } = job;
   try {

@@ -150,7 +150,7 @@ class PractitionerTimeOff extends Component {
 
     let showAddOrListComponent = (
       <div style={{ paddingLeft: '15px' }}>
-        <Button onClick={this.addTimeOff} >Add Time Off</Button>
+        <Button onClick={this.addTimeOff} data-test-id="addTimeOffButton" >Add Time Off</Button>
       </div>
     );
 
@@ -187,6 +187,7 @@ class PractitionerTimeOff extends Component {
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
           custom
+          data-test-id="addTimeOffDialog"
         >
           <TimeOffForm
             key={formName}

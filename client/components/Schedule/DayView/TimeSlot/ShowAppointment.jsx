@@ -51,10 +51,10 @@ export default function ShowAppointment(props) {
   }
 
   let appPosition = 0;
-  rowSort.map((app, index) =>{
-     if (appointment.id === app.id) {
-       appPosition = index;
-     }
+  rowSort.map((app, index) => {
+    if (appointment.id === app.id) {
+      appPosition = index;
+    }
   });
 
   const patient = patientData.toJS();
@@ -77,8 +77,9 @@ export default function ShowAppointment(props) {
   const width = `${columnWidth * ((100 / rowSort.length) / 100)}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
+
   // main app style
-  let appStyle = {
+  const appStyle = {
     top,
     left,
     height,
@@ -92,7 +93,7 @@ export default function ShowAppointment(props) {
   const heightCalcBuffer = ((customBufferTime / 60) / totalHours) * 100;
   const topBuffer = `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`;
 
-  let bufferStyle = {
+  const bufferStyle = {
     top: topBuffer,
     left,
     width,
@@ -103,6 +104,7 @@ export default function ShowAppointment(props) {
 
   return (
     <div
+      key={appointment.id}
       onClick={() => {
         selectAppointment(appointment);
       }}
@@ -112,6 +114,7 @@ export default function ShowAppointment(props) {
         key={appointment.id}
         className={styles.showAppointment}
         style={appStyle}
+        data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
           {(isPatientConfirmed && <Icon icon="check-circle-o" />)}
@@ -124,11 +127,13 @@ export default function ShowAppointment(props) {
           </div>
         </div>
         <div className={styles.showAppointment_duration}>
-          <span>{moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}</span>
+          <span className={styles.showAppointment_duration_text}>
+            {moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}
+          </span>
         </div>
         <div className={styles.showAppointment_serviceChair}>
-          <span className={styles.paddingText}>{serviceData},</span>
-          <span>{chairData}</span>
+          <span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>
+          <span className={styles.showAppointment_serviceChair_chair}>{chairData}</span>
         </div>
       </div>
       <div className={styles.showAppointment} style={bufferStyle}>

@@ -22,6 +22,7 @@ class ServiceListItem extends Component {
         onClick={this.showItem}
         className={styles.servicesListItem}
         selectItem={selectItem}
+        data-test-id={service}
       >
         <div className={styles.servicesListItem_text}>
          {service}

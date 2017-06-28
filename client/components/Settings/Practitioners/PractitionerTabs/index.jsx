@@ -60,18 +60,18 @@ class PractitionerTabs extends Component {
         <div className={styles.pracHeaderContainer}>
           <Header title={practitioner.getFullName()} />
           <div className={styles.trashButton}>
-            <IconButton icon="trash" onClick={this.deletePractitioner} />
+            <IconButton icon="trash" onClick={this.deletePractitioner} data-test-id="deletePractitioner" />
           </div>
         </div>
         <Tabs index={this.state.index} onChange={this.handleTabChange} >
-          <Tab label="Basic">
+          <Tab label="Basic" data-test-id="practitionerBasicDataTab">
             <PractitionerBasicData
               key={practitioner.get('id')}
               practitioner={practitioner}
               updatePractitioner={this.updatePractitioner}
             />
           </Tab>
-          <Tab label="Practitioner Schedule">
+          <Tab label="Practitioner Schedule" data-test-id="practitionerOfficeHoursTab">
             <PractitionerOfficeHours
               key={practitioner.get('id')}
               weeklySchedule={weeklySchedule}
@@ -79,7 +79,7 @@ class PractitionerTabs extends Component {
               updateEntityRequest={this.props.updateEntityRequest}
             />
           </Tab>
-          <Tab label="Services" >
+          <Tab label="Services" data-test-id="practitionerServicesTab">
             <PractitionerServices
               key={practitioner.get('id')}
               serviceIds={serviceIds}
@@ -87,7 +87,7 @@ class PractitionerTabs extends Component {
               updatePractitioner={this.updatePractitioner}
             />
           </Tab>
-          <Tab label="Time Off">
+          <Tab label="Time Off" data-test-id="practitionerTimeOffTab">
             <PractitionerTimeOff
               key={practitioner.get('id')}
               practitioner={practitioner}x

@@ -33,6 +33,7 @@ function intersectingAppointments(appointments, startDate, endDate) {
   });
 }
 
+
 function getDiffInMin(startDate, endDate) {
   return moment(endDate).diff(moment(startDate), 'minutes');
 }

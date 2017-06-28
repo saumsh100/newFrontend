@@ -35,6 +35,7 @@ const AccountSchema = {
   destinationPhoneNumber: null,
   enterpriseId: null,
   weeklyScheduleId: null, //new OfficeHoursRecord(),
+  unit: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

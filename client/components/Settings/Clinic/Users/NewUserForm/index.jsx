@@ -19,12 +19,14 @@ class NewUserForm extends Component {
           validate={[maxLength(25)]}
           name="firstName"
           label="First Name"
+          data-test-id="firstName"
         />
         <Field
           required
           validate={[maxLength(25)]}
           name="lastName"
           label="Last Name"
+          data-test-id="lastName"
         />
         <Field
           required
@@ -32,6 +34,7 @@ class NewUserForm extends Component {
           type="email"
           name="email"
           label="Email"
+          data-test-id="email"
         />
         <Field
           required
@@ -43,6 +46,7 @@ class NewUserForm extends Component {
             { value: 'OWNER' },
             { value: 'MANAGER' },
           ]}
+          data-test-id="role"
         />
         <Field
           required
@@ -50,6 +54,7 @@ class NewUserForm extends Component {
           name="password"
           validate={[passwordsValidate, passwordStrength]}
           label="Password"
+          data-test-id="password"
         />
         <Field
           required
@@ -57,6 +62,7 @@ class NewUserForm extends Component {
           name="confirmPassword"
           validate={[passwordsValidate, passwordStrength]}
           label="Password Confirmation"
+          data-test-id="confirmPassword"
         />
       </Form>
     );
