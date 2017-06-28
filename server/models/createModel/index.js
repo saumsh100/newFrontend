@@ -1,12 +1,9 @@
 
-import { v4 as uuid } from 'uuid';
 import omit from 'lodash/omit';
 import uniqWith from 'lodash/uniqWith';
-import uniqBy from 'lodash/uniqBy';
 import isArray from 'lodash/isArray';
 import cloneDeep from 'lodash/cloneDeep';
 import {
-  createAuxilliaryTables,
   generateUniqueValidator,
 } from './auxilliary';
 import { UniqueFieldError } from './errors';
@@ -58,6 +55,7 @@ function createModel(tableName, schema, config = {}) {
 
   if (uniqueConfig) {
     Model.uniqueValidate = generateUniqueValidator(uniqueConfig, Model);
+    // Model.uniquePredicate = generateUniqWithPredicate(uniqueConfig);
     Model.pre('save', Model.uniqueValidate);
   }
 
@@ -73,7 +71,6 @@ function createModel(tableName, schema, config = {}) {
   Model.defineStatic('preValidateArray', async function (docsArray) {
     const errors = [];
 
-    const start = Date.now();
     // turn into models
     let docs = docsArray.map((p) => {
       //p.id = p.id || uuid();
@@ -83,8 +80,6 @@ function createModel(tableName, schema, config = {}) {
       patient.emit('saving', patient);
       return patient;
     });
-
-    console.log(`Taken ${Date.now() - start}ms so far...`);
 
     // now validate and catch any validation errors
     docs = docs.filter((d) => {
@@ -97,49 +92,67 @@ function createModel(tableName, schema, config = {}) {
       }
     });
 
-    console.log(`Taken ${Date.now() - start}ms so far...`);
+    const onError = (field, doc) => {
+      const error = UniqueFieldError(Model, field);
+      error.doc = doc;
+      errors.push(error);
+    };
 
-    // Now check check uniqueness against each other
-    docs = uniqBy(docs, (a, b) => {
+    // TODO: create a getUniqueModels function for the Model
+    const basePredicate = (a, b) => {
       if (a.id && b.id && a.id === b.id) {
-        const error = UniqueFieldError(Model, 'id');
-        error.doc = a;
-        errors.push(error);
+        onError('id', a);
         return true;
       }
+    };
 
-      for (const field in uniqueConfig) {
-        const fieldConfig = uniqueConfig[field];
-        if (!fieldConfig) continue;
-        if (isArray(fieldConfig)) {
-          // Now check
-          let same = a[field] === b[field];
-          for (const depField of fieldConfig) {
-            same = same && a[depField] === b[depField];
-          }
+    // Dynamically create predicate to make it performant
+    let predicate = basePredicate;
+    if (uniqueConfig) {
+      if (Model.performantPredicate) {
+        predicate = (a, b) => {
+          return basePredicate(a, b) ||
+            Model.performantPredicate(a, b, onError);
+        };
+      } else {
+        const defaultPredicate = (a, b) => {
+          for (const field in uniqueConfig) {
+            const fieldConfig = uniqueConfig[field];
+            if (!fieldConfig) continue;
+            if (isArray(fieldConfig)) {
+              // Now check
+              let same = a[field] === b[field];
+              for (const depField of fieldConfig) {
+                same = same && a[depField] === b[depField];
+              }
 
-          if (same) {
-            const error = UniqueFieldError(Model, field);
-            error.doc = a;
-            errors.push(error);
-            return true;
+              if (same) {
+                onError(field, a);
+                return true;
+              }
+            } else {
+              // Perhaps we need to check objects also?
+              if (a[field] === b[field]) {
+                onError(field, a);
+                return true;
+              }
+            }
           }
-        } else {
-          // Perhaps we need to check objects also?
-          if (a[field] === b[field]) {
-            const error = UniqueFieldError(Model, field);
-            error.doc = a;
-            errors.push(error);
-            return true;
-          }
-        }
+        };
+
+        predicate = (a, b) => {
+          return basePredicate(a, b) ||
+            defaultPredicate(a, b);
+        };
       }
-    });
+    }
 
-    console.log(`Taken ${Date.now() - start}ms so far...`);
-    console.log('About to unique validate');
+
+    // Now check check uniqueness against each other
+    docs = uniqWith(docs, predicate);
 
     if (Model.uniqueValidate) {
+      // Now that they are sanitized, validated, and unique against eachother
       const finalDocs = [];
       for (const d of docs) {
         try {
@@ -173,7 +186,6 @@ function createModel(tableName, schema, config = {}) {
       throw { errors, docs };
     }
 
-    console.log('About to batch insert');
     try {
       // Bulk Insert... at this point it is assumed to pass!
       const result = await this.batchInsert(docs);

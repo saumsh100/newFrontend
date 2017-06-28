@@ -148,14 +148,14 @@ describe('models/Patient', () => {
 
   describe('Batch Saving', () => {
     describe('#preUniqueValidator', () => {
-      test('it should throw 1 error and return 1 patient model', () => {
+      test('it should throw 1 error and return 1 patient model', async () => {
         const id = uuid();
         const data = [
           makeData(),
           makeData({ id }),
         ];
 
-        const { docs, errors } = Patient.preValidateArray(data);
+        const { docs, errors } = await Patient.preValidateArray(data);
 
         expect(errors.length).toBe(1);
         expect(docs.length).toBe(1);
@@ -175,7 +175,7 @@ describe('models/Patient', () => {
 
       });
 
-      test('it should throw 2 errors and return 1 patient model', () => {
+      test('it should throw 2 errors and return 1 patient model', async () => {
         const id1 = uuid();
         const id2 = uuid();
         const data = [
@@ -184,7 +184,7 @@ describe('models/Patient', () => {
           makeData({ id: id2 }),
         ];
 
-        const { docs, errors } = Patient.preValidateArray(data);
+        const { docs, errors } = await Patient.preValidateArray(data);
 
         expect(errors.length).toBe(2);
         expect(docs.length).toBe(1);
@@ -251,7 +251,7 @@ describe('models/Patient', () => {
       }
     });
 
-    test.only('save 1 first, then try batch saving, both should fail', async () => {
+    test('save 1 first, then try batch saving, both should fail', async () => {
       try {
         await Patient.save(makeData());
 

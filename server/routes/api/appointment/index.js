@@ -80,6 +80,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       .getJoin({
         patient: true,
         practitioner: true,
+        practitioner: true,
         service: true,
       })
       .run()

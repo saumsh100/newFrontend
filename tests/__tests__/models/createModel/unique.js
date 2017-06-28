@@ -1,84 +1,44 @@
 
-import _ from 'lodash';
-import thinky from '../../../../server/config/thinky';
+import { v4 as uuid } from 'uuid';
+import faker from 'faker';
+import uniqWith from 'lodash/uniqWith';
 import {
-  createTableName,
-  createPrimaryKey,
-  createAuxilliaryTable,
-  createAuxilliaryTables,
-} from '../../../../server/models/createModel/auxilliary';
+  generateUniqueWithPredicate,
+} from '../../../../server/models/createModel/unique';
 
-const { r } = thinky;
+const accountId = uuid();
+const makeSeeds = () => ([
+  { accountId, name: 'a', email: 'a@me.ca' },
+  { accountId, name: 'b', email: 'b@me.ca' },
+]);
 
-test.skip('createModel/auxilliary Helpers', () => {
-  beforeEach((done) => {
-    // Remove any tables with Thing after creating them, but tables are creating async, so
-    // this is just to make sure...
-    /*r.db('carecru_development')
-      .tableList()
-      .run()
-      .then((list) => {
-        const tables = list.filter(str => str.indexOf('Thing') > -1);
-        console.log(tables);
-        return Promise.all(tables.map((tableName) => {
-          console.log('Removing', tableName);
-          return r.db('carecru_development').tableDrop(tableName);
-        })).then(() => done());
-       });*/
-    done();
-  });
+const uniqConfig = {
+  name: ['accountId'],
+  email: ['accountId'],
+};
 
-  describe('#createTableName', () => {
-    it('should be a function', () => {
-      expect(typeof createTableName).toBe('function');
+describe('createModel/unique Helpers', () => {
+  describe('#generateUniqueWithPredicate', () => {
+    test('should return the array', () => {
+      const seeds = uniqWith(makeSeeds(), generateUniqueWithPredicate(uniqConfig));
+      expect(seeds.length).toBe(2);
+    });
+
+    test('should return only 1 for same name & same accountId', () => {
+      const seeds = makeSeeds();
+      seeds[1].name = seeds[0].name;
+
+      const s = uniqWith(seeds, generateUniqueWithPredicate(uniqConfig));
+      expect(s.length).toBe(1);
+    });
+
+    test('should return 2 for same name but different accountId', () => {
+      const seeds = makeSeeds();
+      seeds[1].name = seeds[0].name;
+      seeds[1].accountId = 'cat';
+
+      const s = uniqWith(seeds, generateUniqueWithPredicate(uniqConfig));
+      expect(s.length).toBe(2);
     });
   });
-
-  describe('#createPrimaryKey', () => {
-    it('should be a function', () => {
-      expect(typeof createPrimaryKey).toBe('function');
-    });
-  });
-
-  describe('#createAuxilliaryTable', () => {
-    it('should be a function', () => {
-      expect(typeof createAuxilliaryTable).toBe('function');
-    });
-
-    it('should create the appropriate aux Model (table)', () => {
-      const auxTable = createAuxilliaryTable(
-        'Thing1',
-        'name',
-        {
-          value: 'id',
-        }
-      );
-
-      expect(2).toBe(2);
-    });
-  });
-
-  describe('#createAuxilliaryTables', () => {
-    it('should be a function', () => {
-      expect(typeof createAuxilliaryTables).toBe('function');
-    });
-
-    it('should create the appropriate Models (tables)', () => {
-      const modelName = 'Thing2';
-      const auxConfig = {
-        name: {
-          value: 'id',
-        },
-
-        job: {
-          value: 'id',
-          dependencies: ['businessId'],
-        },
-      };
-
-      const auxTables = createAuxilliaryTables(modelName, auxConfig);
-      expect(_.size(auxTables)).toBe(2);
-    });
-  });
-
 });

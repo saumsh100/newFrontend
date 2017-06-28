@@ -313,22 +313,23 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
     );
   });
 
-  console.log(req.headers['content-length']);
-  console.log('Batch Saving');
-
   return Patient.batchSave(cleanedPatients)
     .then(p => res.send(normalize('patients', p)))
     .catch(({ errors, docs }) => {
-
-      //console.log('docs.length', docs.length);
-      //console.log('errors.length', errors.length);
-      errors.forEach((err) => {
-        delete err.doc.createdAt;
+      errors = errors.map(({ doc, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete doc.createdAt;
+        return {
+          doc,
+          message,
+        };
       });
 
       const entities = normalize('patients', docs);
       const responseData = Object.assign({}, entities, { errors });
-      //console.log(responseData.entities.patients);
       return res.status(400).send(responseData);
     })
     .catch(next);

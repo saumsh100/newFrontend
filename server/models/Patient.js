@@ -65,6 +65,18 @@ const Patient = createModel('Patient', {
   sanitize: validatePatient,
 });
 
+Patient.defineStatic('performantPredicate', function (a, b, onError) {
+  if (a.accountId === b.accountId && a.email === b.email) {
+    onError('email', a);
+    return true;
+  }
+
+  if (a.accountId === b.accountId && a.mobilePhoneNumber === b.mobilePhoneNumber) {
+    onError('mobilePhoneNumber', a);
+    return true;
+  }
+});
+
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
   return this.filter({ mobilePhoneNumber: phoneNumber }).nth(0).run();
