@@ -32,7 +32,6 @@ const generateTimeOptions = (timeInput, unitIncrement) => {
       timeOptions.push({ value: timeInput, label });
     }
   }
-  const today = new Date();
   let i;
   for (i = 0; i < totalHours; i++) {
     let j;
@@ -40,7 +39,6 @@ const generateTimeOptions = (timeInput, unitIncrement) => {
       const time = moment(new Date(1970, 1, 0, i, j * increment));
       const today = new Date();
       const value = time.toISOString();
-      console.log(timeInput, value)
       const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
       timeOptions.push({ value, label });
     }
