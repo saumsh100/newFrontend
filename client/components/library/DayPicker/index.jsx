@@ -94,6 +94,7 @@ class DayPicker extends Component {
           type="button"
           className={iconClassName}
           onClick={this.togglePopOver}
+          data-test-id={this.props['data-test-id']}
         />
       );
     }
@@ -125,7 +126,6 @@ class DayPicker extends Component {
 DayPicker.propTypes = {
   target: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string,
   iconClassName: PropTypes.string,
   multiple: PropTypes.bool.isRequired,
 };

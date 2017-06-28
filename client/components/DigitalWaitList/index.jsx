@@ -14,6 +14,7 @@ import {
   Icon,
   Button,
   IconButton,
+  Avatar,
   RemoteSubmitButton,
 } from '../library';
 import {
@@ -26,6 +27,7 @@ import { setSelectedWaitSpot } from '../../actions/schedule';
 import withEntitiesRequest from '../../hocs/withEntities';
 import DigitalWaitListItem from './DigitalWaitListItem';
 import AddWaitSpotForm from './AddWaitSpotForm';
+import { SortByFirstName } from '../library/util/SortEntities';
 import styles from './styles.scss';
 
 class DigitalWaitList extends Component {
@@ -45,10 +47,22 @@ class DigitalWaitList extends Component {
 
   getSuggestions(value) {
     return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
-      .then(searchData => searchData.patients)
+      .then((searchData) => {
+        return searchData.patients;})
       .then((searchedPatients) => {
-        return Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-            (key) => { return searchedPatients[key]; }) : [];
+        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
+          (key) => searchedPatients[key]) : [];
+        patientList.map((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="lg" />
+              <span className={styles.suggestionContainer_fullName}>
+                {`${patient.firstName} ${patient.lastName}`}
+              </span>
+            </div>
+          );
+        })
+        return patientList;
       });
   }
 
@@ -77,7 +91,6 @@ class DigitalWaitList extends Component {
         patientUserId: selectedWaitSpot.patientUserId,
       }, values);
     }
-
 
     const alertCreate = {
       success: {
@@ -248,7 +261,7 @@ DigitalWaitList.propTypes = {
   reset: PropTypes.func.isRequired,
   setSelectedPatientId: PropTypes.func.isRequired,
   setSelectedWaitSpot: PropTypes.func.isRequired,
-  selectedWaitSpot: PropTypes.object.isRequired,
+  selectedWaitSpot: PropTypes.object,
   push: PropTypes.func.isRequired,
 };
 

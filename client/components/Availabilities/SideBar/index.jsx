@@ -22,6 +22,15 @@ class SideBar extends Component {
       // selectedWaitlist,
     } = this.props;
 
+    const {
+      name,
+      street,
+      state,
+      city,
+      fullLogoUrl,
+      timezone,
+    } = account.toJS();
+
     let selectedAvailabilityComponent = null;
     if (selectedAvailability) {
       const { startDate } = selectedAvailability;
@@ -41,14 +50,6 @@ class SideBar extends Component {
       );
     }
 
-    const {
-      name,
-      street,
-      state,
-      city,
-      fullLogoUrl,
-    } = account.toJS();
-
 
     /*let goBackButton = null;
     if (registrationStep === 2) {
@@ -63,7 +64,7 @@ class SideBar extends Component {
     }*/
 
     const displayLogo = (fullLogoUrl ? (<div className={styles.sidebar__header}>
-      <img className={styles.sidebar__header_logo} src={fullLogoUrl.replace('[size]', 400)} alt="logo" />
+      <img className={styles.sidebar__header_logo} src={fullLogoUrl.replace('[size]', 'original')} alt="logo" />
     </div>) : null);
 
     return (

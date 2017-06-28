@@ -23,9 +23,11 @@ const AccountSchema = {
   country: null,
   state: null,
   city: null,
+  timeInterval: null,
   zipCode: null,
   vendastaId: null,
   phoneNumber: null,
+  timezone: null,
   contactEmail: null,
   website: null,
   twilioPhoneNumber: null,
@@ -33,6 +35,7 @@ const AccountSchema = {
   destinationPhoneNumber: null,
   enterpriseId: null,
   weeklyScheduleId: null, //new OfficeHoursRecord(),
+  unit: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

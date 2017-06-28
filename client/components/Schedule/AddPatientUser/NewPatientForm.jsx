@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Form, Field, DayPicker } from '../../library';
-import styles from '../styles.scss';
+import styles from './styles.scss';
 
 import { maxLength, asyncValidateNewPatient, emailValidate, phoneValidate } from '../../library/Form/validate';
 
@@ -40,13 +40,15 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
         validate={[maxLength(15)]}
         label="First Name"
       />
-      <Field
-        required
-        name="lastName"
-        validate={[maxLength(15)]}
-        label="Last Name"
-      />
       <div className={styles.formContainer_spacing}>
+        <Field
+          required
+          name="lastName"
+          validate={[maxLength(15)]}
+          label="Last Name"
+        />
+      </div>
+      <div className={styles.formContainer_dropDown}>
         <Field
           required
           name="gender"

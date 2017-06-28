@@ -65,6 +65,7 @@ class ServicesPractForm extends Component {
           enableReinitialize
           keepDirtyOnReinitialize
           destroyOnUnmount={false}
+          data-test-id="servicePractitionersForm"
         >
           {practitioners.toArray().map((practitioner, index) => {
             return (

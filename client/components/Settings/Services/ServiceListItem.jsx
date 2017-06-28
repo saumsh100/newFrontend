@@ -13,10 +13,20 @@ class ServiceListItem extends Component {
   }
 
   render() {
-    const { service } = this.props;
+    const { service, serviceId, id } = this.props;
+
+    const selectItem = serviceId === id;
+
     return(
-      <ListItem onClick={this.showItem}  className={styles.servicesListItem}>
-        {service}
+      <ListItem
+        onClick={this.showItem}
+        className={styles.servicesListItem}
+        selectItem={selectItem}
+        data-test-id={service}
+      >
+        <div className={styles.servicesListItem_text}>
+         {service}
+        </div>
       </ListItem>
     );
   }

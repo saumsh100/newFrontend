@@ -1,14 +1,25 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { Grid, Row, Col, Field, } from '../../library';
+import { parseNum, notNegative} from '../../library/Form/validate'
 import styles from './styles.scss';
 
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
-const generateTimeOptions = () => {
+const generateTimeOptions = (timeInput) => {
   const timeOptions = [];
   const totalHours = 24;
   const increment = 15;
   const increments = 60 / increment;
+
+  if (timeInput) {
+    const minutes = moment(timeInput).minute();
+    const remainder = minutes % increment;
+    if (remainder) {
+      timeOptions.push({ value: timeInput, label: moment(timeInput).format('LT') });
+    }
+  }
 
   let i;
   for (i = 6; i < totalHours; i++) {
@@ -41,10 +52,6 @@ const marks = {
   180: '180',
 };
 
-const statusOptions = [
-  { label: 'Confirmed', value: true },
-];
-
 export default function AppointmentForm(props) {
   const {
     serviceOptions,
@@ -52,6 +59,12 @@ export default function AppointmentForm(props) {
     chairOptions,
     handlePractitionerChange,
     selectedAppointment,
+    time,
+    unit,
+    handleSliderChange,
+    handleDurationChange,
+    handleUnitChange,
+    handleBufferChange,
   } = props;
 
   return (
@@ -65,22 +78,24 @@ export default function AppointmentForm(props) {
             borderColor="primaryColor"
             multiple={false}
             required
+            data-test-id="date"
           />
         </Col>
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={timeOptions}
+            options={generateTimeOptions(time)}
             component="DropdownSelect"
             name="time"
             label="Time"
             borderColor="primaryColor"
             required
+            data-test-id="time"
           />
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+        <Col xs={12} md={12} className={styles.addNewAppt_col}>
           <Row className={styles.addNewAppt_col_nearFields}>
             <Col xs={12} >
               <Field
@@ -91,25 +106,26 @@ export default function AppointmentForm(props) {
                 borderColor="primaryColor"
                 onChange={(e, newValue) => handlePractitionerChange(newValue)}
                 required
+                data-test-id="practitionerId"
               />
             </Col>
           </Row>
         </Col>
-        <Col md={2} />
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
-          <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={12} >
-              <Field
-                options={[]}
-                component="DropdownSelect"
-                name="split"
-                label="Split"
-                borderColor="primaryColor"
-                disabled
-              />
-            </Col>
-          </Row>
-        </Col>
+        {/*<Col md={2} />
+         <Col xs={12} md={5} className={styles.addNewAppt_col}>
+         <Row className={styles.addNewAppt_col_nearFields}>
+         <Col xs={12} >
+         <Field
+         options={[]}
+         component="DropdownSelect"
+         name="split"
+         label="Split"
+         borderColor="primaryColor"
+         disabled
+         />
+         </Col>
+         </Row>
+         </Col>*/}
       </Row>
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={12} className={styles.addNewAppt_col}>
@@ -120,6 +136,7 @@ export default function AppointmentForm(props) {
             label="Service"
             borderColor="primaryColor"
             required
+            data-test-id="serviceId"
           />
         </Col>
       </Row>
@@ -132,6 +149,7 @@ export default function AppointmentForm(props) {
             label="Chair"
             borderColor="primaryColor"
             required
+            data-test-id="chairId"
           />
         </Col>
         <Col md={2} />
@@ -142,6 +160,7 @@ export default function AppointmentForm(props) {
               name="isPatientConfirmed"
               label="Patient Confirmed"
               className={styles.addNewAppt_col_confirmCancel_label}
+              data-test-id="isPatientConfirmed"
             />
             <Field
               component="Checkbox"
@@ -149,21 +168,62 @@ export default function AppointmentForm(props) {
               label="Patient Cancelled"
               className={styles.addNewAppt_col_confirmCancel_label}
               hidden={selectedAppointment && !selectedAppointment.request ? false : true}
+              data-test-id="isCancelled"
             />
           </div>
         </Col>
       </Row>
-      <Row className={styles.addNewAppt_row}>
+      <Row className={styles.addNewAppt_row_durBuff}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Field
+            name="duration"
+            label="Duration"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            type="number"
+            onChange={(e, value) => handleDurationChange(value)}
+            required
+            data-test-id="duration"
+          />
+        </Col>
+        <Col xs={12} md={2} className={styles.addNewAppt_col_unit}>
+          <Field
+            name="unit"
+            label="Unit"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            type="number"
+            onChange={(e, value)=>{handleUnitChange(value)}}
+            data-test-id="unit"
+          />
+        </Col>
+        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+          <Field
+            name="buffer"
+            label="Buffer"
+            borderColor="primaryColor"
+            normalize={parseNum}
+            validate={[notNegative, maxDuration]}
+            type="number"
+            onChange={(e, value) => handleBufferChange(value)}
+            data-test-id="buffer"
+          />
+        </Col>
+      </Row>
+      <Row className={styles.addNewAppt_row_slider}>
         <Col xs={12} className={styles.addNewAppt_col_nearFields}>
           <Field
             component="RangeSlider"
-            name="duration"
-            label="Duration"
+            name="slider"
             unit="m"
-            defaultValues={[60, 60]}
-            min={15}
+            defaultValues={[60,61]}
+            min={unit}
             max={180}
             marks={marks}
+            onChange={(e, value)=> handleSliderChange(value)}
+            data-test-id="slider"
           />
         </Col>
       </Row>

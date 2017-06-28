@@ -1,4 +1,6 @@
 
+import Appointment from './Appointment';
+import moment from 'moment';
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const AddressSchema = require('./schemas/Address');
@@ -39,7 +41,6 @@ const Patient = createModel('Patient', {
   prefContactPhone: type.string(),
   patientUserId: type.string(),
 
-  lastAppointmentDate: type.date(),
   notes: type.string(),
   gender: type.string(),
   prefName: type.string(),
@@ -63,6 +64,18 @@ const Patient = createModel('Patient', {
   },
 
   sanitize: validatePatient,
+});
+
+Patient.defineStatic('performantPredicate', function (a, b, onError) {
+  if (a.accountId === b.accountId && a.email === b.email) {
+    onError('email', a);
+    return true;
+  }
+
+  if (a.accountId === b.accountId && a.mobilePhoneNumber === b.mobilePhoneNumber) {
+    onError('mobilePhoneNumber', a);
+    return true;
+  }
 });
 
 // TODO: change to findOne as a general Model function

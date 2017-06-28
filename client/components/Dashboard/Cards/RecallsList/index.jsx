@@ -37,7 +37,12 @@ class RecallsList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {sentRecalls.toArray().map((sentRecall,index) => {
+            {sentRecalls.toArray().map((sentRecall, index) => {
+              
+              if (!sentRecall) {
+                return null;
+              }
+              
               return (
                 <RecallData
                   key={index}
@@ -57,9 +62,9 @@ class RecallsList extends Component {
 }
 
 RecallsList.propTypes = {
-  patients: PropTypes.object.required,
-  recalls: PropTypes.object.required,
-  sentRecalls: PropTypes.object.required,
+  patients: PropTypes.object.isRequired,
+  recalls: PropTypes.object.isRequired,
+  sentRecalls: PropTypes.object.isRequired,
 };
 
 export default RecallsList;

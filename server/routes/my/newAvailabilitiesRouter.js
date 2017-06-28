@@ -11,6 +11,7 @@ availabilitiesRouter.param('accountId', loaders('account', 'Account'));
 availabilitiesRouter.get('/accounts/:accountId/availabilities', (req, res, next) => {
   const data = Object.assign({}, req.query, {
     accountId: req.account.id,
+    timeInterval: req.account.timeInterval,
   });
 
   return fetchAvailabilities(data)

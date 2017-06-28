@@ -88,6 +88,7 @@ async function main() {
     } catch (err) {
       console.log('num patients created =', size(err.data.entities.patients));
       console.log('num errors created =', err.data.errors.length);
+      console.log(err.data.errors);
       console.log(`Batch Completed in ${Date.now() - start}ms`);
     }
 

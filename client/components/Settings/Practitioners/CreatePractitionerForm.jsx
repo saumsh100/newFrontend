@@ -13,12 +13,14 @@ export default function CreatePractitionerForm(props) {
     <Form
       form="modalPractitionerForm"
       onSubmit={onSubmit}
+      data-test-id="createPractitionerForm"
     >
       <div className={styles.practFormRow__createRow}>
         <Field
           required
           name="firstName"
           label="First Name"
+          data-test-id="firstName"
         />
       </div>
       <div className={styles.practFormRow__createRow}>
@@ -26,6 +28,7 @@ export default function CreatePractitionerForm(props) {
           required
           name="lastName"
           label="Last Name"
+          data-test-id="lastName"
         />
       </div>
     </Form>

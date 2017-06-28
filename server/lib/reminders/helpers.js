@@ -18,8 +18,10 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
   const start = r.ISO8601(date);
   const end = start.add(reminder.lengthSeconds);
   const appointments = await Appointment
-    .filter({ accountId: reminder.accountId })
-    .filter(r.row('startDate').during(start, end))
+    .filter({
+      accountId: reminder.accountId,
+    })
+    .filter(r.row('startDate').during(start, end).and(r.row('isDeleted').eq(false)))
     .getJoin({ patient: true, sentReminders: true })
     .run();
 
@@ -65,6 +67,6 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
   return sentReminders.filter(({ appointment }) => {
     // - if appointment is upcoming or is cancelled
     const isAfter = moment(appointment.startDate).isAfter(date);
-    return !appointment.isCancelled && isAfter;
+    return !appointment.isCancelled && isAfter && !appointment.isDeleted;
   });
 }

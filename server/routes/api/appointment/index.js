@@ -33,6 +33,7 @@ function intersectingAppointments(appointments, startDate, endDate) {
   });
 }
 
+
 function getDiffInMin(startDate, endDate) {
   return moment(endDate).diff(moment(startDate), 'minutes');
 }
@@ -79,6 +80,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       .filter(r.row('startDate').during(startDate, endDate))
       .getJoin({
         patient: true,
+        practitioner: true,
         practitioner: true,
         service: true,
       })
@@ -458,9 +460,10 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
   //     return res.sendStatus(400);
   //   })
   //   .catch(next);
-
   return Appointment.save(appointmentData)
-    .then(appointment => res.status(201).send(normalize('appointment', appointment)))
+    .then(appointment => {
+      res.status(201).send(normalize('appointment', appointment))
+    })
     .catch(next);
 });
 

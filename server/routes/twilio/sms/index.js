@@ -97,6 +97,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     // Confirm first available reminder
     const sentReminder = validSmsReminders[0];
     const { appointment } = sentReminder;
+    console.log(appointment);
     await sentReminder.merge({ isConfirmed: true }).save();
     await appointment.merge({ isConfirmed: true }).save();
 

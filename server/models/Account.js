@@ -13,6 +13,8 @@ const Account = createModel('Account', {
   city: type.string(),
   zipCode: type.string(),
   vendastaId: type.string(),
+  timeInterval: type.number(),
+  timezone: type.string(),
   twilioPhoneNumber: type.string(),
   destinationPhoneNumber: type.string(),
   phoneNumber: type.string(),
@@ -31,6 +33,7 @@ const Account = createModel('Account', {
   // Application "Addons"
   canSendReminders: type.boolean().default(false),
   canSendRecalls: type.boolean().default(false),
+  unit: type.number().default(15),
 });
 
 Account.docOn('saving', validatePatient); // <<< doc is in `doc` param

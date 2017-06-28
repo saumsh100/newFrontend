@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { List, Card, CardHeader, } from '../../../library';
 import ReminderData from './ReminderData';
 import styles from './styles.scss';
@@ -28,6 +28,10 @@ class RemindersList extends Component {
       sentReminders,
     } = this.props;
 
+    if (!patients || !reminders || !sentReminders || !appointments ) {
+      return null;
+    }
+
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
@@ -35,7 +39,12 @@ class RemindersList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {sentReminders.toArray().map((sentReminder,index) => {
+            {sentReminders.toArray().map((sentReminder, index) => {
+
+              if (!sentReminder) {
+                return null;
+              }
+
               return (
                 <ReminderData
                   key={index}
@@ -54,5 +63,12 @@ class RemindersList extends Component {
     );
   }
 }
+
+RemindersList.propTypes = {
+  appointments: PropTypes.object.isRequired,
+  patients: PropTypes.object.isRequired,
+  sentReminders: PropTypes.object.isRequired,
+  reminders: PropTypes.object.isRequired,
+};
 
 export default RemindersList;

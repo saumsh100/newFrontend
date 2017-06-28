@@ -21,7 +21,20 @@ const uniqueConfig = {
   mobilePhoneNumber: ['accountId'],
 };
 
-function generatePatientSeeds(num = 10000) {
+const createUniqWith = (config) => {
+  const isSame = (c, d) => {
+    let same = c.id && d.id && (c.id === d.id);
+    return same ||
+      (c.email === d.email) ||
+      (d.mobilePhoneNumber === d.mobilePhoneNumber);
+  };
+
+  return (a, b) => {
+    return !isSame(a, b);
+  };
+};
+
+function generatePatientSeeds(num = 100) {
   const accountId = uuid();
   const patientSeeds = [];
   let i;
@@ -117,6 +130,13 @@ async function main() {
     });
 
     console.log('Unique Seeds Length', uniqueSeeds.length);
+    console.log(`${Date.now() - start}ms`);
+
+    start = Date.now();
+    console.log('Batch Seeds Length', batchSeeds.length);
+    const withSeeds = uniqWith(patientSeeds, createUniqWith(uniqueConfig));
+
+    console.log('With Seeds Length', withSeeds.length);
     console.log(`${Date.now() - start}ms`);
 
     process.exit();

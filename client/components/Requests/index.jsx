@@ -19,32 +19,24 @@ class Requests extends Component {
 
     const filteredRequests = requests.toArray().filter((req) => {
       return !req.get('isCancelled') && !req.get('isConfirmed');
-    })
+    });
 
     const sortedRequests = filteredRequests.sort((a, b) => {
       return Date.parse(b.startDate) - Date.parse(a.startDate);
     });
-
-    const showComponent = sortedRequests.length ? (
-      <RequestList
-        sortedRequests={sortedRequests}
-        services={services}
-        patientUsers={patientUsers}
-        location={location}
-      />
-    ) : (
-      <div className={styles.emptyList}>
-        YOU HAVE NO APPOINTMENT REQUESTS
-      </div>
-    );
-
+    
     return (
       <Card className={styles.requestCard}>
         <div className={styles.requestHeader}>
           <CardHeader count={sortedRequests.length} title={'Appointment Requests'} />
         </div>
         <div className={styles.requestBody}>
-          {showComponent}
+          <RequestList
+            sortedRequests={sortedRequests}
+            services={services}
+            patientUsers={patientUsers}
+            location={location}
+          />
         </div>
       </Card>
     );

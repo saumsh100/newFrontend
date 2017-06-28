@@ -28,7 +28,7 @@
 }
 
 .emptyList{
-  padding-top: 35%;
+  //padding-top: 35%;
   background-color: lighten($primary-lightgrey, 2%);
   text-align: center;
   color: lighten($primary-darkgrey, 5%);
@@ -78,9 +78,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    &:hover {
-      color: $primary-color;
-    }
   }
 
   &__age{
