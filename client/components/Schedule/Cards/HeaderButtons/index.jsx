@@ -52,7 +52,7 @@ class HeaderButtons extends Component {
         </div>
         <div>
           <div className={styles.headerButtons__quickAdd} onClick={addNewAppointment}>
-            <span className={styles.headerButtons__quickAdd_text}> Quick Add </span>
+            <span className={styles.headerButtons__quickAdd_text} data-test-id="quickAddAppointment"> Quick Add </span>
             <Icon
               icon="plus"
               size={1.5}

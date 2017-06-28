@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 const isEmpty = require('lodash/isEmpty');
 const isUndefined = require('lodash/isUndefined');
 const unionBy = require('lodash/unionBy');
@@ -176,6 +177,7 @@ function generatePractitionerAvailabilities(options) {
     practitioner,
     weeklySchedule,
     service,
+    timeInterval,
     startDate,
     endDate,
   } = options;
@@ -204,6 +206,7 @@ function generatePractitionerAvailabilities(options) {
    -    reservations [if no practitionerId ?], needs to know about practitioner.length
    -    appointments
    */
+
   const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
   const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
 
@@ -214,7 +217,7 @@ function generatePractitionerAvailabilities(options) {
   // Incorporate timeOff into this!
   const timeSlots = createIntervalsFromWeeklySchedule(weeklySchedule, startDate, endDate);
   const validTimeSlots = timeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
-  const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, 30, startDate, endDate);
+  const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, timeInterval || 30);
   const finalSlots = possibleTimeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
 
   const availabilities = finalSlots.filter((timeSlot) => {
@@ -233,7 +236,14 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefReservations;
   });
 
-  return availabilities;
+  let x = availabilities.map((aval) => {
+    return {
+      startDate: aval.startDate,
+      endDate: moment(aval.startDate).add(service.duration, 'minutes').toISOString(),
+    };
+  });
+
+  return x;
 }
 
 /**
@@ -244,6 +254,7 @@ function fetchAvailabilities(options) {
   const {
     startDate,
     endDate,
+    timeInterval,
   } = options;
 
   return new Promise((resolve, reject) => {
@@ -258,6 +269,7 @@ function fetchAvailabilities(options) {
                 weeklySchedule: weeklySchedules[i],
                 service,
                 startDate,
+                timeInterval,
                 endDate,
               });
             });

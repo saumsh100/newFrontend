@@ -17,7 +17,7 @@ export default function PatientForm(props) {
   return (
     <Grid className={styles.addNewAppt_mainContainer_right}>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12}>
+        <Col xs={12} data-test-id="patientSelected">
           <Field
             component="AutoComplete"
             name="patientSelected"
@@ -37,6 +37,7 @@ export default function PatientForm(props) {
             label="Phone #"
             theme="primaryGrey"
             disabled
+            data-test-id="mobilePhoneNumber"
           />
         </Col>
       </Row>
@@ -47,6 +48,7 @@ export default function PatientForm(props) {
             label="Email"
             theme="primaryGrey"
             disabled
+            data-test-id="email"
           />
         </Col>
       </Row>
@@ -58,6 +60,7 @@ export default function PatientForm(props) {
             name="note"
             rows={6}
             className={styles.addNewAppt_comment}
+            data-test-id="note"
           />
         </Col>
       </Row>

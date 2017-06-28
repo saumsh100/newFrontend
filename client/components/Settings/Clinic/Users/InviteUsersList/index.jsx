@@ -10,7 +10,10 @@ class InviteUsersList extends Component {
     const localDate = new Date(date);
 
     return (
-      <ListItem className={userListStyle}>
+      <ListItem
+        className={userListStyle}
+        data-test-id={email}
+      >
         <div className={mainStyle}>
           <p className={nameStyle}>{email}</p>
           <p className={emailStyle}>

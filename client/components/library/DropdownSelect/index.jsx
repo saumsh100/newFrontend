@@ -55,7 +55,7 @@ export default class DropdownSelect extends Component {
     const OptionTemplate = template || DefaultOption;
 
     return (
-      <List className={styles.dropDownList}>
+      <List className={styles.dropDownList} >
         {options.map((option, i) => {
           const isSelected = value === option.value;
           let className = styles.optionListItem;
@@ -67,6 +67,7 @@ export default class DropdownSelect extends Component {
               key={`dropDownSelect_${i}`}
               className={className}
               onClick={() => onChange(option.value)}
+              data-test-id={option.value}
             >
               <div className={styles.optionDiv} >
                 <OptionTemplate option={option} />
@@ -117,6 +118,7 @@ export default class DropdownSelect extends Component {
       <div
         className={disabled ? styles.toggleDivDisabled : toggleClassName}
         onClick={disabled ? false : this.toggle}
+        data-test-id={this.props['data-test-id']}
       >
         <label className={labelClassName}>
           {label}

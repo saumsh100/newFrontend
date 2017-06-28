@@ -30,15 +30,15 @@ function DigitalWaitListItem(props) {
   if (notAllTrue(preferences)) {
     availComponent = map(preferences, (val, key) => {
       if (!val) return null;
-      return <div className={styles.data}>{key}</div>;
+      return <div key={key} className={styles.data}>{key}</div>;
     });
   }
 
   // Set Except to None by default and then list if not empty
   let exceptComponent = <span className={styles.data}>None</span>;
   if (unavailableDays && unavailableDays.length) {
-    exceptComponent = unavailableDays.map((val) => {
-      return <div className={styles.data}>{moment(val).format('MM/DD')}</div>;
+    exceptComponent = unavailableDays.map((val, unavailableIndex) => {
+      return <div key={unavailableIndex} className={styles.data}>{moment(val).format('MM/DD')}</div>;
     });
   }
 
@@ -122,7 +122,8 @@ function DigitalWaitListItem(props) {
 }
 
 DigitalWaitListItem.propTypes = {
-  patient: PropTypes.object.isRequired,
+  patientUser: PropTypes.object.isRequired,
+  patient: PropTypes.object,
   waitSpot: PropTypes.object.isRequired,
 };
 

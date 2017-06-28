@@ -1,4 +1,6 @@
 
+import Appointment from './Appointment';
+import moment from 'moment';
 const thinky = require('../config/thinky');
 const createModel = require('./createModel');
 const AddressSchema = require('./schemas/Address');
@@ -39,7 +41,6 @@ const Patient = createModel('Patient', {
   prefContactPhone: type.string(),
   patientUserId: type.string(),
 
-  lastAppointmentDate: type.date(),
   notes: type.string(),
   gender: type.string(),
   prefName: type.string(),

@@ -40,15 +40,20 @@ class AddPatientSuggestions extends Component {
     const patientModel = patients.get(appointment.patientId);
     const patientUserId = mergingPatientData.patientUser.id;
     const modifiedPatient = patientModel.set('patientUserId', patientUserId);
-    updateEntityRequest({
-      key: 'patients',
-      model: modifiedPatient,
-      url: `/api/patients/${modifiedPatient.get('id')}`,
-    })
-      .then(() => {
-        reinitializeState();
-        selectAppointment(appointment);
-      });
+
+    const confirmSuggestion = confirm("Are you sure you want to connect these patients?")
+
+    if (confirmSuggestion) {
+      updateEntityRequest({
+        key: 'patients',
+        model: modifiedPatient,
+        url: `/api/patients/${modifiedPatient.get('id')}`,
+      })
+        .then(() => {
+          reinitializeState();
+          selectAppointment(appointment);
+        });
+    }
   }
 
   render() {

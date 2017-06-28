@@ -82,11 +82,13 @@ class ScheduleComponent extends Component {
 
     const mergingPatientData = schedule.toJS().mergingPatientData;
 
+    const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
+
     let displayModalComponent = (
       <AddNewAppointment
         formName={formName}
         chairs={chairs.get('models').toArray()}
-        practitioners={practitioners.get('models')}
+        practitioners={filterPractitioners}
         services={services.get('models')}
         patients={patients.get('models')}
         selectedAppointment={selectedAppointment}
@@ -124,8 +126,10 @@ class ScheduleComponent extends Component {
                   <CurrentDate currentDate={currentDate}>
                     <DayPicker
                       target="icon"
-                      onChange={this.setCurrentDay}
+                      selectedDays={new Date(currentDate)}
+                      onDayClick={this.setCurrentDay}
                       multiple={false}
+                      data-test-id="dayPicker"
                     />
                     <HeaderButtons
                       addNewAppointment={this.addNewAppointment}
@@ -135,7 +139,7 @@ class ScheduleComponent extends Component {
                 <div className={styles.schedule__container_content}>
                   <DayView
                     currentDate={currentDate}
-                    practitioners={practitioners}
+                    practitioners={filterPractitioners}
                     patients={patients}
                     chairs={chairs}
                     services={services}
@@ -167,7 +171,7 @@ class ScheduleComponent extends Component {
                   <Filters
                     schedule={schedule}
                     chairs={chairs.get('models').toArray()}
-                    practitioners={practitioners.get('models')}
+                    practitioners={filterPractitioners}
                     services={services.get('models')}
                   />
                 </Col>

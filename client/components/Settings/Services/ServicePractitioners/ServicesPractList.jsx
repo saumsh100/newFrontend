@@ -11,7 +11,10 @@ class ServicesPractList extends Component {
     const { practitioner } = this.props;
 
     return (
-      <div className={styles.servicesPractForm_service}>
+      <div
+        className={styles.servicesPractForm_service}
+        data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
+      >
         {practitioner.getFullName()}
         <Field
           component="Toggle"

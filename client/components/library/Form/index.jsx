@@ -49,6 +49,7 @@ function Form(props) {
         className={className}
         onSubmit={handleSubmit}
         onChange={e => e.stopPropagation()}
+        data-test-id={props['data-test-id']}
       >
         {children}
         {showSubmitButton}

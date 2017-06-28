@@ -21,6 +21,15 @@ const generateEntityOptions = (entities, label) => {
   return options;
 };
 
+const generatePractitionerOptions = (practitioners) => {
+  const options = [];
+  practitioners.map((pr) => {
+    const label = `${pr.firstName} ${pr.lastName}`;
+    options.push({ label, value: pr.id });
+  });
+  return options;
+};
+
 export default function DisplayForm(props) {
   const {
     formName,
@@ -30,13 +39,19 @@ export default function DisplayForm(props) {
     practitioners,
     getSuggestions,
     selectedAppointment,
+    unit,
     handleSubmit,
     handleAutoSuggest,
     handlePractitionerChange,
+    handleSliderChange,
+    handleDurationChange,
+    handleUnitChange,
+    handleBufferChange,
   } = props;
 
-  let initialValues = null;
 
+  let initialValues = null;
+  let time = null;
   if (selectedAppointment) {
     const {
       startDate,
@@ -55,16 +70,22 @@ export default function DisplayForm(props) {
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
 
+    time = setTime(startDate);
+    const unitValue = unit ? Number((durationTime / unit).toFixed(2)) : 0;
+
     initialValues = {
       appointment: {
-        time: setTime(startDate),
+        time,
         date: moment(startDate).format('L'),
         serviceId,
         practitionerId: practitionerId || '',
         chairId: chairId || '',
-        duration: [durationTime, bufferTime],
+        slider: [durationTime, bufferTime],
         isPatientConfirmed,
         isCancelled,
+        duration: durationTime,
+        buffer: customBufferTime,
+        unit: unitValue,
       },
       patient: {
         patientSelected: patient.toJS(),
@@ -76,7 +97,7 @@ export default function DisplayForm(props) {
   }
 
   const serviceOptions = generateEntityOptions(services, 'name');
-  const practitionerOptions = generateEntityOptions(practitioners, 'firstName');
+  const practitionerOptions = generatePractitionerOptions(practitioners);
   const chairOptions = generateEntityOptions(chairs, 'name');
   const title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Create New Appointment';
 
@@ -86,6 +107,7 @@ export default function DisplayForm(props) {
       onSubmit={handleSubmit}
       ignoreSaveButton
       initialValues={initialValues}
+      data-test-id="createAppointmentForm"
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>
@@ -98,6 +120,12 @@ export default function DisplayForm(props) {
                 chairOptions={chairOptions}
                 handlePractitionerChange={handlePractitionerChange}
                 selectedAppointment={selectedAppointment}
+                time={time}
+                unit={unit}
+                handleSliderChange={handleSliderChange}
+                handleDurationChange={handleDurationChange}
+                handleUnitChange={handleUnitChange}
+                handleBufferChange={handleBufferChange}
               />
             </FormSection>
           </Col>
@@ -117,5 +145,14 @@ export default function DisplayForm(props) {
 }
 
 DisplayForm.PropTypes = {
-  handleSubmit: PropTypes.func,
+  formName: PropTypes.string.isRequired,
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
+  practitioners: PropTypes.object.isRequired,
+  getSuggestions: PropTypes.func.isRequired,
+  selectedAppointment: PropTypes.object.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleAutoSuggest: PropTypes.func.isRequired,
+  handlePractitionerChange: PropTypes.func.isRequired,
 };

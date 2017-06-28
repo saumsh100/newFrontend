@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import 'moment-timezone';
 import classNames from 'classnames';
 import {
   Grid,
@@ -59,18 +60,20 @@ class AvailabilitiesDisplay extends Component {
       selectedStartDate,
       selectedAvailability,
       setSelectedAvailability,
+      account,
     } = this.props;
 
     const numDaysForward = 4;
     const dayAvailabilities = [];
     // const startDate = new Date();
-
     let i;
     for (i = 0; i <= numDaysForward; i++) {
       const momentDate = moment(selectedStartDate).add(i, 'days');
       const sortedAvailabilities = getSortedAvailabilities(momentDate, availabilities);
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
+
+    const accountTimezone = account.timezone;
 
     const headerClasses = classNames(styles.appointment__table_elements);
     const header = (
@@ -184,14 +187,17 @@ AvailabilitiesDisplay.propTypes = {
   selectedPractitionerId: PropTypes.string,
   selectedServiceId: PropTypes.string.isRequired,
   selectedAvailability: PropTypes.object,
+  account: PropTypes.object,
   setSelectedStartDate: PropTypes.func.isRequired,
   setSelectedAvailability: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ availabilities }) {
+  const account = availabilities.get('account').toJS();
   return {
     isFetching: availabilities.get('isFetching'),
     availabilities: availabilities.get('availabilities'),
+    account,
     selectedStartDate: availabilities.get('selectedStartDate'),
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
     selectedServiceId: availabilities.get('selectedServiceId'),

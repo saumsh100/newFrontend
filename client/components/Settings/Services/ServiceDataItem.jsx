@@ -75,12 +75,14 @@ class ServiceDataItem extends Component {
               form={`${service.get('id')}Form`}
               onSubmit={this.updateService}
               initialValues={initialValues}
+              data-test-id="serviceDataForm"
             >
               <Field
                 required
                 name="name"
                 label="Name"
                 validate={[maxLength45]}
+                data-test-id="name"
               />
               <Field
                 required
@@ -98,7 +100,7 @@ class ServiceDataItem extends Component {
                 validate={[notNegative, maxDuration]}
               />
               <div className={styles.servicesPractForm_hiddentext}>
-                Would you like to set this service to hidden ?
+                Would you like to set this service to be hidden on the booking widget ?
                 <div className={styles.servicesPractForm_hiddentext_toggle}>
                   <Field
                     name="isHidden"
