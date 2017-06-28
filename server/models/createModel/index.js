@@ -2,7 +2,6 @@
 import { v4 as uuid } from 'uuid';
 import omit from 'lodash/omit';
 import uniqWith from 'lodash/uniqWith';
-import uniqBy from 'lodash/uniqBy';
 import isArray from 'lodash/isArray';
 import cloneDeep from 'lodash/cloneDeep';
 import {
@@ -89,7 +88,7 @@ function createModel(tableName, schema, config = {}) {
     // now validate and catch any validation errors
     docs = docs.filter((d) => {
       try {
-        d.validate();
+        d.validate(); // TODO what does this validation do? There is no function in model
         return true;
       } catch (error) {
         error.doc = d;
@@ -100,16 +99,17 @@ function createModel(tableName, schema, config = {}) {
     console.log(`Taken ${Date.now() - start}ms so far...`);
 
     // Now check check uniqueness against each other
-    docs = uniqBy(docs, (a, b) => {
+    docs = uniqWith(docs, (a, b) => {
       if (a.id && b.id && a.id === b.id) {
         const error = UniqueFieldError(Model, 'id');
         error.doc = a;
         errors.push(error);
-        return true;
+        return true; // TODO why return true here?
       }
 
       for (const field in uniqueConfig) {
         const fieldConfig = uniqueConfig[field];
+        console.log('createModel.preValidateArray() checking field: ', field, 'fieldConfig=', fieldConfig);
         if (!fieldConfig) continue;
         if (isArray(fieldConfig)) {
           // Now check
@@ -168,6 +168,7 @@ function createModel(tableName, schema, config = {}) {
    */
   Model.defineStatic('batchSave', async function (dataArray) {
     // TODO: remove attrs on error docs that will break during send
+    console.log('batchSave: saving', dataArray);
     const { docs, errors } = await Model.preValidateArray(dataArray);
     if (!docs.length) {
       throw { errors, docs };
