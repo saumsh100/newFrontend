@@ -19,9 +19,6 @@ import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 // Binds the token setting in header
 bindAxiosInterceptors();
 
-console.log('logrocket', process.env.LOGROCKET_APP_ID);
-console.log('intercom', process.env.INTERCOM_APP_ID);
-
 if (process.env.NODE_ENV === 'production') {
   LogRocket.init(process.env.LOGROCKET_APP_ID);
   window.Intercom('boot', {
