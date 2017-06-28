@@ -28,39 +28,17 @@ const sortApps = (a, b) => {
 
 export default function TimeSlot(props) {
   const {
-    practitioner,
     timeSlots,
     timeSlotHeight,
     startHour,
     endHour,
-    schedule,
-    patients,
-    appointments,
-    services,
-    chairs,
+    filteredApps,
     selectAppointment,
     columnWidth,
     practIndex,
   } = props;
 
   // filter appointments based on selections from the filters panel
-  const checkFilters = schedule.toJS();
-
-  let filteredApps = appointments.filter((app) => {
-    const service = services.get(app.get('serviceId'));
-    const chair = chairs.get(app.get('chairId'));
-    const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
-    const chairsFilter = chair && checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
-
-    return ((app.practitionerId === practitioner.id) && chairsFilter && servicesFilter );
-  }).map((app) => {
-    return Object.assign({}, app.toJS(), {
-      appModel: app,
-      serviceData: services.get(app.get('serviceId')).get('name'),
-      chairData: chairs.get(app.get('chairId')).get('name'),
-      patientData: patients.get(app.get('patientId')),
-    });
-  });
 
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
@@ -89,7 +67,6 @@ export default function TimeSlot(props) {
             key={index}
             practIndex={practIndex}
             appointment={app}
-            bgColor={practitioner.color}
             selectAppointment={selectAppointment}
             startHour={startHour}
             endHour={endHour}

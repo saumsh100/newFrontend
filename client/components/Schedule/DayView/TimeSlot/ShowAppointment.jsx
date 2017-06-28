@@ -26,7 +26,6 @@ function hexToRgbA(hex, opacity) {
 export default function ShowAppointment(props) {
   const {
     appointment,
-    bgColor,
     practIndex,
     selectAppointment,
     startHour,
@@ -43,6 +42,7 @@ export default function ShowAppointment(props) {
     serviceData,
     chairData,
     patientData,
+    practitionerData,
     isPatientConfirmed,
   } = appointment;
 
@@ -57,6 +57,7 @@ export default function ShowAppointment(props) {
     }
   });
 
+  const bgColor = practitionerData.color;
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
 

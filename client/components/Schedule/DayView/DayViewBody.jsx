@@ -2,6 +2,8 @@
 import React, { Component, PropTypes } from 'react';
 import TimeColumn from './TimeColumn/TimeColumn';
 import TimeSlot from './TimeSlot/index';
+import PractitionersSlot from './PractitionersSlot';
+import ChairsSlot from './ChairsSlot';
 import styles from './styles.scss';
 import { SortByFirstName } from '../../library/util/SortEntities';
 
@@ -16,8 +18,6 @@ export default function   DayViewBody(props){
     services,
     chairs,
     selectAppointment,
-    weeklySchedules,
-    currentDate,
   } = props;
 
   const timeSlots = [];
@@ -54,37 +54,33 @@ export default function   DayViewBody(props){
     return checkedPractitioners.indexOf(pr.id) > -1;
   });
 
+  // Display chairs that have been selected on the filters
+  const checkedChairs = schedule.toJS().chairsFilter;
+  let chairsArray = chairs.toArray().filter((chair) => {
+    return checkedChairs.indexOf(chair.id) > -1;
+  });
+
   return (
     <div className={styles.dayView_body}>
       <TimeColumn
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
       />
-      <div className={styles.dayView_body_timeSlot}>
-        {practitionersArray.length ? practitionersArray.map((pract, i, arr) => {
-          const columnWidth = 100 / arr.length;
-          return (
-            <TimeSlot
-              key={i}
-              timeSlots={timeSlots}
-              timeSlotHeight={timeSlotHeight}
-              practitioner={pract}
-              practIndex={i}
-              columnWidth={columnWidth}
-              startHour={startHour}
-              endHour={endHour}
-              schedule={schedule}
-              patients={patients}
-              appointments={appointments}
-              services={services}
-              chairs={chairs}
-              selectAppointment={selectAppointment}
-              weeklySchedule={weeklySchedules.get(pract.weeklyScheduleId)}
-              currentDate={currentDate}
-            />
-          );
-        }) : null}
-      </div>
+      <ChairsSlot
+        timeSlots={timeSlots}
+        timeSlotHeight={timeSlotHeight}
+        practitionersArray={practitionersArray}
+        chairsArray={chairsArray}
+        startHour={startHour}
+        endHour={endHour}
+        schedule={schedule}
+        patients={patients}
+        appointments={appointments}
+        services={services}
+        chairs={chairs}
+        practitioners={practitioners}
+        selectAppointment={selectAppointment}
+      />
     </div>
   );
 }
