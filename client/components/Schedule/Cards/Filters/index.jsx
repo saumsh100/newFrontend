@@ -57,10 +57,10 @@ export default function Filters(props) {
 
   return (
     <FiltersAll
-     selectedFilters={selectedFilters}
-     entities={entities}
-     allFiltersCheck={allFiltersCheck}
-     className={styles.filter_options}
+      selectedFilters={selectedFilters}
+      entities={entities}
+      allFiltersCheck={allFiltersCheck}
+      className={styles.filter_options}
     />
   );
 }

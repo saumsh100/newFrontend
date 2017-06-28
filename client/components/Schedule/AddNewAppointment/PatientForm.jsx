@@ -21,7 +21,7 @@ export default function PatientForm(props) {
           <Field
             component="AutoComplete"
             name="patientSelected"
-            label="Enter Patient Name"
+            label="Patient Search"
             getSuggestions={getSuggestions}
             onChange={(e, newValue) => handleAutoSuggest(newValue)}
             validate={[validatePatient]}
