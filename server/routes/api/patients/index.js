@@ -115,24 +115,6 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 });
 
 /**
- * Batch creation
- */
-patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
-  const { patients } = req.body;
-  const cleanedPatients = patients.map((patient) => {
-    return Object.assign(
-      {},
-      _.omit(patient, ['id', 'dateCreated']),
-      { accountId: req.accountId }
-    );
-  });
-
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
-    .catch(next);
-});
-
-/**
  * Batch updating
  */
 patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
@@ -345,8 +327,25 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
     );
   });
 
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
+  return Patient.batchSave(cleanedPatients)
+    .then(p => res.send(normalize('patients', p)))
+    .catch(({ errors, docs }) => {
+      errors = errors.map(({ doc, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete doc.createdAt;
+        return {
+          doc,
+          message,
+        };
+      });
+
+      const entities = normalize('patients', docs);
+      const responseData = Object.assign({}, entities, { errors });
+      return res.status(400).send(responseData);
+    })
     .catch(next);
 });
 
