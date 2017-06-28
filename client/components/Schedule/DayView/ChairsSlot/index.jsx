@@ -37,7 +37,7 @@ export default function ChairsSlot(props) {
           return Object.assign({}, app.toJS(), {
             appModel: app,
             serviceData: services.get(app.get('serviceId')).get('name'),
-            chairsData: chair,
+            chairData: chair.name,
             practitionerData,
             patientData: patients.get(app.get('patientId')),
           });

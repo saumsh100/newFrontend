@@ -18,7 +18,7 @@ function intersectingAppointments(appointments, startDate, endDate) {
   });
 }
 
-const sortApps = (a, b) => {
+const sortAppsByStartDate = (a, b) => {
   const aMoment = moment(a.startDate);
   const bMoment = moment(b.startDate);
   if (aMoment.isBefore(bMoment)) return -1;
@@ -38,8 +38,6 @@ export default function TimeSlot(props) {
     practIndex,
   } = props;
 
-  // filter appointments based on selections from the filters panel
-
   const timeSlotContentStyle = {
     width: `${columnWidth}%`,
     boxSizing: 'border-box',
@@ -55,12 +53,11 @@ export default function TimeSlot(props) {
         columnWidth={columnWidth}
       />
       {filteredApps && filteredApps.map((app, index, array) => {
-
-        const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate)
+        const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate);
         // check which appointments are in the same row
-        // const row = moment(app.startDate).hour();
-        // const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row)
-        const rowSort = intersectingApps.sort(sortApps); //sort by startdate
+        const row = moment(app.startDate).hour();
+        const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row);
+        const rowSort = rowFilter.sort(sortAppsByStartDate);
 
         return (
           <ShowAppointment
@@ -71,7 +68,7 @@ export default function TimeSlot(props) {
             startHour={startHour}
             endHour={endHour}
             columnWidth={columnWidth}
-            widthIntersect={intersectingApps.length}
+            widthIntersect={rowFilter.length}
             rowSort={rowSort}
           />
         );

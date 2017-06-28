@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import TimeSlot from '../TimeSlot';
 import styles from '../styles.scss';
@@ -31,7 +32,7 @@ export default function PractitionersSlot(props) {
           const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
           const chairsFilter = chair && checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
 
-          return ((app.practitionerId === pract.id) && chairsFilter && servicesFilter );
+          return ((app.practitionerId === pract.id) && chairsFilter && servicesFilter);
         }).map((app) => {
           return Object.assign({}, app.toJS(), {
             appModel: app,
