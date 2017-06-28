@@ -19,7 +19,15 @@ import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 // Binds the token setting in header
 bindAxiosInterceptors();
 
-LogRocket.init(process.env.LOGROCKET_APP_ID);
+console.log('logrocket', process.env.LOGROCKET_APP_ID);
+console.log('intercom', process.env.INTERCOM_APP_ID);
+
+if (process.env.NODE_ENV === 'production') {
+  LogRocket.init(process.env.LOGROCKET_APP_ID);
+  window.Intercom('boot', {
+    app_id: process.env.INTERCOM_APP_ID,
+  });
+}
 
 const browserHistory = createBrowserHistory();
 const store = configure({ browserHistory });
@@ -28,11 +36,24 @@ const store = configure({ browserHistory });
 load()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
-    const user = auth.get('user').toJS();
-    LogRocket.identify(user.id, {
-      name: `${user.firstName} ${user.lastName}`,
-      email: user.username,
-    });
+    if (process.env.NODE_ENV === 'production') {
+      const user = auth.get('user').toJS();
+      const userId = user.id;
+      const fullName = `${user.firstName} ${user.lastName}`;
+      const email = user.username;
+      LogRocket.identify(userId, {
+        name: fullName,
+        email: email,
+      });
+
+      window.Intercom('update', {
+        user_id: userId,
+        name: fullName,
+        email,
+        created_at: user.createdAt,
+        logrocketURL: `https://app.logrocket.com/${process.env.LOGROCKET_APP_ID}/sessions?u=${userId}`,
+      });
+    }
 
     connectSocketToStoreLogin(store, socket);
   }

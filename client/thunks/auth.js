@@ -60,10 +60,23 @@ export function login(redirectedFrom = '/') {
       .post('/auth', loginDetails)
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(({ user }) => {
-        LogRocket.identify(user.id, {
-          name: `${user.firstName} ${user.lastName}`,
-          email: user.username,
-        });
+        const userId = user.id;
+        const fullName = `${user.firstName} ${user.lastName}`;
+        const email = user.username;
+        if (process.env.NODE_ENV === 'production') {
+          LogRocket.identify(userId, {
+            name: fullName,
+            email: email,
+          });
+
+          window.Intercom('update', {
+            user_id: userId,
+            name: fullName,
+            email,
+            created_at: user.createdAt,
+            logrocketURL: `https://app.logrocket.com/${process.env.LOGROCKET_APP_ID}/sessions?u=${userId}`,
+          });
+        }
 
         connectSocketToStoreLogin({ dispatch, getState }, socket);
 
