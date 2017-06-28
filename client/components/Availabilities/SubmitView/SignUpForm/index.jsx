@@ -5,7 +5,6 @@ import { asyncValidatePatient, passwordsMatch, passwordStrength } from '../../..
 import styles from './styles.scss';
 
 export default function SignUpForm({ onSubmit, initialValues }) {
-  console.log(initialValues)
   return (
     <Form
       form="userSignUpForm"
