@@ -17,10 +17,10 @@ Date.prototype.dst = function () {
 
 const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
-const generateTimeOptions = (timeInput) => {
+const generateTimeOptions = (timeInput, unitIncrement) => {
   const timeOptions = [];
   const totalHours = 24;
-  const increment = 15;
+  const increment = unitIncrement;
   const increments = 60 / increment;
 
   if (timeInput) {
@@ -97,7 +97,7 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={generateTimeOptions(time)}
+            options={generateTimeOptions(time, unit)}
             component="DropdownSelect"
             name="time"
             label="Time"

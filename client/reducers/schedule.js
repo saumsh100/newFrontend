@@ -12,10 +12,12 @@ import {
   SELECT_WAITSPOT,
   SET_SYNCING,
   SET_MERGING,
+  SET_SCHEDULE_VIEW,
 } from '../constants';
 
 const initialState = fromJS({
   scheduleDate: new Date(),
+  scheduleView: 'chair',
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
@@ -39,6 +41,10 @@ export default handleActions({
     return state.merge({
       scheduleDate: action.payload.scheduleDate,
     });
+  },
+
+  [SET_SCHEDULE_VIEW](state, action) {
+    return state.set('scheduleView', action.payload.view);
   },
 
   [SELECT_APPOINTMENT](state, action) {
