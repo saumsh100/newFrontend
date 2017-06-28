@@ -4,12 +4,13 @@ import { VButton, Form, Field } from '../../../library';
 import { asyncValidatePatient, passwordsMatch, passwordStrength } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
-export default function SignUpForm({ onSubmit }) {
+export default function SignUpForm({ onSubmit, initialValues }) {
   return (
     <Form
       form="userSignUpForm"
       onSubmit={onSubmit}
       validate={passwordsMatch}
+      initialValues={initialValues}
       asyncValidate={asyncValidatePatient}
       asyncBlurFields={['email', 'phoneNumber']}
       ignoreSaveButton
@@ -40,7 +41,7 @@ export default function SignUpForm({ onSubmit }) {
         required
         label="Password"
         name="password"
-        popover="Password must be uncommon words and no sequences. Tips: Use uncommon words or creating spelllllings"
+        popover="Password must be uncommon words and no sequences. Tips: Use uncommon words or creative spelllllings"
         type="password"
         validate={[passwordStrength]}
       />
@@ -62,4 +63,5 @@ export default function SignUpForm({ onSubmit }) {
 
 SignUpForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
 };
