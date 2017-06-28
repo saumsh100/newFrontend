@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import { VButton, Icon } from '../library';
+import moment from 'moment-timezone';
 import SelectionView from './SelectionView';
 import SubmitView from './SubmitView';
 import SideBar from './SideBar';
@@ -22,7 +23,13 @@ class Availabilities extends Component {
       registrationStep,
       setRegistrationStep,
       selectedAvailability,
+      account,
     } = this.props;
+
+    if (account.toJS().timezone) {
+      moment.tz.setDefault(account.toJS().timezone);
+    }
+
 
     let widgetBodyClasses = styles.widgetBody;
     let currentView = <SelectionView />;

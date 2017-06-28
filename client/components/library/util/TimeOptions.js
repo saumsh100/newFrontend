@@ -25,6 +25,7 @@ export const timeOptions = generateTimeOptions();
 export const setTime = (time) => {
   const tempTime = new Date(time);
   const mergeTime = new Date(1970, 1, 0);
+  mergeTime.setDate(mergeTime.getDate());
   mergeTime.setHours(tempTime.getHours());
   mergeTime.setMinutes(tempTime.getMinutes());
   return mergeTime.toISOString();

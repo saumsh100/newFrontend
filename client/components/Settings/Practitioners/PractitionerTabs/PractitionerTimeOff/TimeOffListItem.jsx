@@ -11,6 +11,16 @@ const setTime = (time) => {
   return mergeTime.toISOString();
 };
 
+Date.prototype.stdTimezoneOffset = function () {
+  const jan = new Date(this.getFullYear(), 0, 1);
+  const jul = new Date(this.getFullYear(), 6, 1);
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+};
+
+Date.prototype.dst = function () {
+  return this.getTimezoneOffset() < this.stdTimezoneOffset();
+};
+
 class TimeOffListItem extends Component {
   constructor(props) {
     super(props);
@@ -36,10 +46,11 @@ class TimeOffListItem extends Component {
     const startTime = setTime(startDate);
     const endTime = setTime(endDate);
 
-    const startDateFM = moment(startDate).format('MMM Do YYYY');
-    const endDateFM = moment(endDate).format('MMM Do YYYY');
-    const startTimeFM = moment(startTime).format('LT');
-    const endTimeFM = moment(endTime).format('LT');
+    const today = new Date();
+    const startDateFM = (today.dst() ? moment(startDate).subtract(1, 'hours').format('MMM Do YYYY') : moment(startDate).format('MMM Do YYYY'));
+    const endDateFM = (today.dst() ? moment(endDate).subtract(1, 'hours').format('MMM Do YYYY') : moment(endDate).format('MMM Do YYYY'));
+    const startTimeFM = (today.dst() ? moment(startDate).subtract(1, 'hours').format('LT') : moment(startDate).format('LT'));
+    const endTimeFM = (today.dst() ? moment(endDate).subtract(1, 'hours').format('LT') : moment(endDate).format('LT'));
 
     const showData = allDay ? `${startDateFM} To: ${endDateFM}` :
       `${startDateFM} ${startTimeFM} To: ${endDateFM} ${endTimeFM}`;
