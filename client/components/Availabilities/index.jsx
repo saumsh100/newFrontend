@@ -24,6 +24,7 @@ class Availabilities extends Component {
       setRegistrationStep,
       selectedAvailability,
       account,
+      initialValues,
     } = this.props;
 
     if (account.toJS().timezone) {
@@ -51,7 +52,7 @@ class Availabilities extends Component {
 
     if (registrationStep === 2) {
       widgetBodyClasses = classNames(widgetBodyClasses, styles.widgetBodyNoFooter);
-      currentView = <SubmitView />;
+      currentView = <SubmitView initialValues={initialValues}/>;
       footer = null;
     }
 
@@ -78,12 +79,14 @@ Availabilities.propTypes = {
   registrationStep: PropTypes.number.isRequired,
   setRegistrationStep: PropTypes.func.isRequired,
   account: PropTypes.object,
+  initialValues: PropTypes.object,
 };
 
 function mapStateToProps({ availabilities }) {
   return {
     selectedAvailability: availabilities.get('selectedAvailability'),
     registrationStep: availabilities.get('registrationStep'),
+    initialValues: availabilities.get('initialForm'),
     account: availabilities.get('account'),
   };
 }

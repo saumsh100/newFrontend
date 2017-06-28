@@ -102,6 +102,7 @@ class SubmitView extends Component {
       closeBookingModal,
       bookingWidgetPrimaryColor,
       setIsLogin,
+      initialValues,
     } = this.props;
 
     // If patient is authenticated, display <BookView />
@@ -119,7 +120,7 @@ class SubmitView extends Component {
 
     let formComponent = (
       <div>
-        <SignUpForm onSubmit={this.signUpAndConfirm} />
+        <SignUpForm onSubmit={this.signUpAndConfirm} initialValues={initialValues}/>
         <div className={styles.alreadyHaveWrapper}>
           Already have an account? {loginHereAnchor}
         </div>
@@ -303,6 +304,7 @@ SubmitView.propTypes = {
     id: PropTypes.string,
     firstName: PropTypes.string,
   }),
+  initialValues: PropTypes.object,
 
   hasWaitList: PropTypes.bool.isRequired,
 };
