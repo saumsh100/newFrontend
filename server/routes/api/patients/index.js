@@ -86,8 +86,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
   const endDate = r.now();
 
   return Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
     .getJoin({
       patient: true,
     })
