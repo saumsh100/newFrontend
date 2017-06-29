@@ -472,12 +472,29 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
   const { appointments } = req.body;
   const cleanedAppointments = appointments.map((appointment) => Object.assign(
       {},
-      _.omit(appointment, ['id', 'dateCreated']),
+      _.omit(appointment, ['id']),
       { accountId: req.accountId }
     ));
 
-  return Appointment.save(cleanedAppointments)
-    .then(_appointments => res.send(normalize('appointments', _appointments)))
+  return Appointment.batchSave(cleanedAppointments)
+    .then(a => res.send(normalize('appointments', a)))
+    .catch(({ errors, docs }) => {
+      errors = errors.map(({ appointment, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete appointment.createdAt;
+        return {
+          appointment,
+          message,
+        };
+      });
+
+      const entities = normalize('appointments', docs);
+      const responseData = Object.assign({}, entities, { errors });
+      return res.status(400).send(responseData);
+    })
     .catch(next);
 });
 
