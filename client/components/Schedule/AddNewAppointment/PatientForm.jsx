@@ -44,7 +44,7 @@ export default function PatientForm(props) {
           <Field
             component="TextArea"
             name="note"
-            rows={6}
+            rows={9}
             className={styles.addNewAppt_comment}
             data-test-id="note"
           />

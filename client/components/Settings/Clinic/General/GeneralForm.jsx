@@ -10,7 +10,7 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength25 = maxLength(50);
 
-const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
+const maxUnitSize = value => value && value > 60 ? 'Must be less than or equal to 180' : undefined;
 
 export default function GeneralForm({ onSubmit, activeAccount, users }) {
 
@@ -90,7 +90,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
         required
         name="unit"
         label="Schedule Unit"
-        validate={[notNegative, maxDuration]}
+        validate={[notNegative, maxUnitSize]}
       />
     </div>
   </div>) : null);
