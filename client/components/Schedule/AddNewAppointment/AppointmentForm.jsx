@@ -1,33 +1,56 @@
 
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Grid, Row, Col, Field, } from '../../library';
 import { parseNum, notNegative} from '../../library/Form/validate'
 import styles from './styles.scss';
 
+Date.prototype.stdTimezoneOffset = function () {
+  const jan = new Date(this.getFullYear(), 0, 1);
+  const jul = new Date(this.getFullYear(), 6, 1);
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+};
+
+Date.prototype.dst = function () {
+  return this.getTimezoneOffset() < this.stdTimezoneOffset();
+};
+
 const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
-const generateTimeOptions = (timeInput) => {
+const generateTimeOptions = (timeInput, unitIncrement) => {
   const timeOptions = [];
   const totalHours = 24;
-  const increment = 15;
+  const increment = unitIncrement;
   const increments = 60 / increment;
 
   if (timeInput) {
     const minutes = moment(timeInput).minute();
     const remainder = minutes % increment;
+    const today = new Date();
+    const label = (today.dst() && !moment(new Date()).isDST() ? moment(timeInput).subtract(1, 'hours').format('LT') : moment(timeInput).format('LT'));
     if (remainder) {
-      timeOptions.push({ value: timeInput, label: moment(timeInput).format('LT') });
+      timeOptions.push({ value: timeInput, label });
     }
   }
-
   let i;
   for (i = 6; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
       const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const today = new Date();
       const value = time.toISOString();
-      const label = time.format('LT');
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      timeOptions.push({ value, label });
+    }
+  }
+
+  for (i = 0; i < 6; i++) {
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const today = new Date();
+      const value = time.toISOString();
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
       timeOptions.push({ value, label });
     }
   }
@@ -84,7 +107,7 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={generateTimeOptions(time)}
+            options={generateTimeOptions(time, unit)}
             component="DropdownSelect"
             name="time"
             label="Time"

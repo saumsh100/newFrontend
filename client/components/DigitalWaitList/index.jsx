@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
+import moment from 'moment-timezone';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
@@ -57,7 +58,7 @@ class DigitalWaitList extends Component {
             <div className={styles.suggestionContainer}>
               <Avatar user={patient} size="lg" />
               <span className={styles.suggestionContainer_fullName}>
-                {`${patient.firstName} ${patient.lastName}`}
+                {`${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}`}
               </span>
             </div>
           );
@@ -230,7 +231,7 @@ class DigitalWaitList extends Component {
               } else if (waitSpot.patientId) {
                 patientData = patients.getIn(['models', waitSpot.get('patientId')]);
               }
-
+              
               return (
                 <DigitalWaitListItem
                   key={waitSpot.id}

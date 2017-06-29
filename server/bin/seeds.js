@@ -192,7 +192,7 @@ for (let i = 0; i < 100; i++) {
     firstName,
     lastName,
     email: `${firstName}.${lastName}@google.ca`,
-    mobilePhoneNumber: phoneNumber,
+    // mobilePhoneNumber: phoneNumber,
     birthDate: faker.date.past(),
     gender: 'male',
     langauge: 'English',
@@ -1332,7 +1332,7 @@ const SEEDS = {
      patientId: justinPatientId,
      primaryType: 'sms',
      lengthSeconds: 30,
-     }, */
+     },*/
     ...SentReminder,
   ],
 

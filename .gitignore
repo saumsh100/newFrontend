@@ -46,4 +46,4 @@ server/bin/build/
 staging.env
 package-lock.json
 .ackrc
-.history
+.history/

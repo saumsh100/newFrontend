@@ -16,6 +16,7 @@ const Service = createModel('Service', {
   customCosts: type.object().allowNull(),
   pmsId: type.string(),
   isHidden: type.boolean().default(false),
+  isDefault: type.boolean(),
 
   //allowedPractitioners: [ type.string().uuid(4) ],
 

@@ -3,6 +3,8 @@ import React, { PropTypes } from 'react';
 import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import jwt from 'jwt-decode';
+import moment from 'moment-timezone'
 import { push } from 'react-router-redux'
 import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
@@ -19,7 +21,12 @@ function DashboardApp(props) {
     children,
     isCollapsed,
     setIsCollapsed,
+    activeAccount = {},
   } = props;
+
+  if (activeAccount.timezone) {
+    moment.tz.setDefault(activeAccount.timezone);
+  }
 
   let overlay = null;
   if (!isCollapsed) {
@@ -61,14 +68,16 @@ function DashboardApp(props) {
 
 DashboardApp.propTypes = {
   children: PropTypes.node,
+  activeAccount: PropTypes.object,
   location: PropTypes.object,
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ toolbar }) {
+function mapStateToProps({ toolbar, entities, auth }) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
 
