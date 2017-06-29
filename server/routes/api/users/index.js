@@ -12,22 +12,24 @@ const { omit } = require('lodash');
 
 userRouter.param('userId', loaders('profile', 'User'));
 
-userRouter.get('/me', ({ userId, role, accountId, sessionData }, res) =>
-  User.get(userId).getJoin({ enterprise: true }).then(user =>
-    res.json({
+userRouter.get('/me', ({ userId, accountId, sessionData }, res) =>
+  User.get(userId).getJoin({ enterprise: true, permission: true }).then(user => {
+    const role = user.permission.role;
+    return res.json({
       ...(omit(sessionData, ['permissions'])),
       enterprise: user.enterprise,
+      role,
       user: {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
       },
-    })
-  )
+    });
+  })
 );
 
-userRouter.get('/:userId',checkPermissions('users:read'), (req, res, next) => {
+userRouter.get('/:userId', checkPermissions('users:read'), (req, res, next) => {
   return Permission.get(req.profile.permissionId)
   .then((permission) => {
     req.profile.role = permission.role;
@@ -36,7 +38,7 @@ userRouter.get('/:userId',checkPermissions('users:read'), (req, res, next) => {
 
 });
 
-userRouter.get('/',checkPermissions('users:read'), (req, res, next) => {
+userRouter.get('/', checkPermissions('users:read'), (req, res, next) => {
   const {
     accountId,
     joinObject,
