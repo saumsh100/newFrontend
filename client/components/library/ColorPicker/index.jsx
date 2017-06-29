@@ -51,6 +51,7 @@ class ColorPicker extends Component {
             value={this.props.color}
             onChange={this.props.onChange}
             onClick={this.handleClick}
+            data-test-id={this.props['data-test-id']}
           />
         </Popover>
       </div>

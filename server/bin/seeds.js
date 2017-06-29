@@ -172,6 +172,7 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 };
 
 const randomAppointments = [];
+const e2eAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
 const randomChats = [];
@@ -191,7 +192,7 @@ for (let i = 0; i < 100; i++) {
     firstName,
     lastName,
     email: `${firstName}.${lastName}@google.ca`,
-    mobilePhoneNumber: phoneNumber,
+    // mobilePhoneNumber: phoneNumber,
     birthDate: faker.date.past(),
     gender: 'male',
     langauge: 'English',
@@ -251,6 +252,32 @@ for (let i = 0; i < 100; i++) {
     note: 'First',
   });
 }
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().add(1, 'hours')._d,
+  endDate: moment().add(2, 'hours')._d,
+  patientId: alexPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Today for E2E test',
+});
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().date(1)._d,
+  endDate: moment().date(1).add(1, 'hours')._d,
+  patientId: justinPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Tomorrow for E2E test',
+});
 
 const generateDefaultServices = (_accountId) => {
   const createService = serviceData => Object.assign({}, {
@@ -547,6 +574,9 @@ const SEEDS = {
 
     // For the patientsManagementTab
     ...randomAppointments,
+
+    // For E2E tests of Schedule
+    ...e2eAppointments,
   ],
 
   Request: [
@@ -1125,13 +1155,13 @@ const SEEDS = {
     },
 
 
-     ...generatePracServJoin(donnaServices, practitionerId),
-     ...generatePracServJoin(donnaServices, practitionerId2),
+    ...generatePracServJoin(donnaServices, practitionerId),
+    ...generatePracServJoin(donnaServices, practitionerId2),
 
-     ...generatePracServJoin(sunshineServices, practitionerId3),
-     ...generatePracServJoin(sunshineServices, practitionerId4),
-     ...generatePracServJoin(sunshineServices, practitionerId5),
-     ...generatePracServJoin(sunshineServices, practitionerId6),
+    ...generatePracServJoin(sunshineServices, practitionerId3),
+    ...generatePracServJoin(sunshineServices, practitionerId4),
+    ...generatePracServJoin(sunshineServices, practitionerId5),
+    ...generatePracServJoin(sunshineServices, practitionerId6),
 
   ],
 
@@ -1302,7 +1332,7 @@ const SEEDS = {
      patientId: justinPatientId,
      primaryType: 'sms',
      lengthSeconds: 30,
-     }, */
+     },*/
     ...SentReminder,
   ],
 

@@ -219,7 +219,7 @@ class AddNewAppointment extends Component {
     const duration = (appFormValues && appFormValues.appointment.slider) ? appFormValues.appointment.slider[0] : 60;
 
     const bufferValue = duration + value;
-    if (bufferValue > duration && bufferValue <= 180) {
+    if (bufferValue >= duration && bufferValue <= 180) {
       change(formName, 'appointment.slider', [duration, bufferValue]);
     }
   }
@@ -273,7 +273,7 @@ class AddNewAppointment extends Component {
             <div className={styles.suggestionContainer}>
               <Avatar user={patient} size="lg" />
               <span className={styles.suggestionContainer_fullName}>
-                {`${patient.firstName} ${patient.lastName}`}
+                {`${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}`}
               </span>
             </div>
           );

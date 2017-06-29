@@ -7,10 +7,22 @@ const AddressSchema = require('./schemas/Address');
 const PreferencesSchema = require('./schemas/Preferences');
 const { validatePhoneNumber } = require('../util/validators');
 
-const UniqueFieldError = new Error('Unique Field Validation Error');
-
 const type = thinky.type;
 const r = thinky.r;
+
+function validatePatient(doc) {
+  return validatePhoneNumbers(doc);
+}
+
+function validatePhoneNumbers(doc) {
+  doc.homePhoneNumber = validatePhoneNumber(doc.homePhoneNumber);
+  doc.mobilePhoneNumber = validatePhoneNumber(doc.mobilePhoneNumber);
+  doc.workPhoneNumber = validatePhoneNumber(doc.workPhoneNumber);
+  doc.otherPhoneNumber = validatePhoneNumber(doc.otherPhoneNumber);
+
+  // Only need for batchSaving...
+  return doc;
+}
 
 const Patient = createModel('Patient', {
   accountId: type.string().required(),
@@ -45,6 +57,25 @@ const Patient = createModel('Patient', {
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
   status: type.string().enum(['Active', 'InActive']).default('Active'),
+}, {
+  unique: {
+    email: ['accountId'],
+    mobilePhoneNumber: ['accountId'],
+  },
+
+  sanitize: validatePatient,
+});
+
+Patient.defineStatic('performantPredicate', function (a, b, onError) {
+  if (a.accountId === b.accountId && a.email === b.email) {
+    onError('email', a);
+    return true;
+  }
+
+  if (a.accountId === b.accountId && a.mobilePhoneNumber === b.mobilePhoneNumber) {
+    onError('mobilePhoneNumber', a);
+    return true;
+  }
 });
 
 // TODO: change to findOne as a general Model function
@@ -59,65 +90,5 @@ Patient.define('getPreferredPhoneNumber', () => {
   const prefPhone = this.prefContactPhone;
   return this[prefPhone];
 });
-
-/**
- * Fires on document create and update
- */
-Patient.docOn('saving', validatePatient); // <<< doc is in `doc` param
-// Patient.pre('save', validatePatient); // <<< doc is in the scope
-
-Patient.pre('save', async function (next) {
-  // Grab all patients in the account
-  // let sequence;
-  if (!this.email && !this.mobilePhoneNumber) {
-    return next();
-  }
-
-  let filterSequence = {};
-  const emailFilter = r.row('email').eq(this.email);
-  const phoneFilter = r.row('mobilePhoneNumber').eq(this.mobilePhoneNumber);
-
-  if (this.email) {
-    filterSequence = emailFilter;
-  }
-
-  if (this.mobilePhoneNumber) {
-    filterSequence = phoneFilter;
-  }
-
-  if (this.email && this.mobilePhoneNumber) {
-    filterSequence = emailFilter.or(phoneFilter);
-  }
-
-  const patients = await Patient.filter({ accountId: this.accountId }).filter(filterSequence).run();
-  if (!patients.length) {
-    return next();
-  }
-
-  if (patients.length > 1) {
-    return next(UniqueFieldError);
-  }
-
-  // By now we can guarantee that there is one patient in the array
-  const [patient] = patients;
-
-  // If it is saving for first time, this.id will be undefined (if not seeded, seeds sometimes add id)
-  if (patient.id !== this.id) {
-    return next(UniqueFieldError);
-  }
-
-  return next();
-});
-
-function validatePatient(doc) {
-  validatePhoneNumbers(doc);
-}
-
-function validatePhoneNumbers(doc) {
-  doc.homePhoneNumber = validatePhoneNumber(doc.homePhoneNumber);
-  doc.mobilePhoneNumber = validatePhoneNumber(doc.mobilePhoneNumber);
-  doc.workPhoneNumber = validatePhoneNumber(doc.workPhoneNumber);
-  doc.otherPhoneNumber = validatePhoneNumber(doc.otherPhoneNumber);
-}
 
 module.exports = Patient;

@@ -69,12 +69,18 @@ class AddressForm extends React.Component {
 
     return (
       <div className={styles.addressRow}>
-        <Form form="addressSettingsForm" onSubmit={onSubmit} initialValues={this.state} >
+        <Form
+          form="addressSettingsForm"
+          onSubmit={onSubmit}
+          initialValues={this.state}
+          data-test-id="addressSettingsForm"
+        >
           <Field
             required
             name="street"
             label="Street Address"
             validate={[maxLength25]}
+            data-test-id="street"
           />
           <div className={styles.addressCol}>
           <div className={styles.addressColPlain}>
@@ -83,6 +89,7 @@ class AddressForm extends React.Component {
               name="city"
               label="City"
               validate={[maxLength25]}
+              data-test-id="city"
             />
           </div>
             <div className={styles.addressColSelect}>
@@ -92,18 +99,20 @@ class AddressForm extends React.Component {
                 label="State"
                 component="DropdownSelect"
                 options={stateProv}
+                data-test-id="state"
               />
             </div>
           </div>
           <div className={styles.addressCol}>
-          <div className={styles.addressColPlain}>
-            <Field
-              required
-              name="zipCode"
-              label={zipPostal}
-              validate={[this.zipPostalVal]}
-            />
-          </div>
+            <div className={styles.addressColPlain}>
+              <Field
+                required
+                name="zipCode"
+                label={zipPostal}
+                validate={[this.zipPostalVal]}
+                data-test-id="zipCode"
+              />
+            </div>
             <div className={styles.addressColSelect}>
               <Field
                 name="country"
@@ -111,6 +120,7 @@ class AddressForm extends React.Component {
                 component="DropdownSelect"
                 options={countrySelector}
                 onChange={this.changeCountry}
+                data-test-id="country"
               />
             </div>
           </div>

@@ -14,6 +14,7 @@ class Requests extends Component {
       requests,
       services,
       patientUsers,
+      practitioners,
       location,
     } = this.props;
 
@@ -36,6 +37,7 @@ class Requests extends Component {
             services={services}
             patientUsers={patientUsers}
             location={location}
+            practitioners={practitioners}
           />
         </div>
       </Card>

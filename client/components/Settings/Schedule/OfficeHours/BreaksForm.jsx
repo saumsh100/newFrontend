@@ -68,7 +68,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
     return ({ fields, meta: { touched, error } }) => {
       return (
         <Grid className={styles.dayGrid}>
-          <Row className={styles.breakRow}>
+          <Row className={styles.breakRow} >
             <Col
               xs={3}
               className={styles.breaksDay}
@@ -83,6 +83,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
                 type="button"
                 icon="plus"
                 onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
+                data-test-id={`${day}AddBreakButton`}
               >
                 Add Break
               </Button>
@@ -102,6 +103,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
                           name={`${field}.startTime`}
                           className={styles.inlineBlock}
                           label="Start Time"
+                          data-test-id={`${day}BreakStartTime`}
                         />
                       </Col>
                       <Col xs={1} className={styles.flexCentered}>
@@ -124,6 +126,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
                           icon="trash"
                           className={styles.trashButton}
                           onClick={() => fields.remove(index)}
+                          data-test-id={`${day}BreakTrash`}
                         />
                       </Col>
                     </Row>
@@ -155,6 +158,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
       form={breaksName}
       onSubmit={onSubmit}
       initialValues={initialValues}
+      data-test-id="breaksForm"
     >
       <DayBreaksForm day="monday" />
       <DayBreaksForm day="tuesday" />

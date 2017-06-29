@@ -26,7 +26,6 @@ function hexToRgbA(hex, opacity) {
 export default function ShowAppointment(props) {
   const {
     appointment,
-    bgColor,
     practIndex,
     selectAppointment,
     startHour,
@@ -43,6 +42,7 @@ export default function ShowAppointment(props) {
     serviceData,
     chairData,
     patientData,
+    practitionerData,
     isPatientConfirmed,
   } = appointment;
 
@@ -57,6 +57,7 @@ export default function ShowAppointment(props) {
     }
   });
 
+  const bgColor = practitionerData.color;
   const patient = patientData.toJS();
   const age = moment().diff(patient.birthDate, 'years');
 
@@ -114,6 +115,7 @@ export default function ShowAppointment(props) {
         key={appointment.id}
         className={styles.showAppointment}
         style={appStyle}
+        data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
           {(isPatientConfirmed && <Icon icon="check-circle-o" />)}

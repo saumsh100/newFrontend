@@ -24,7 +24,7 @@ const generateEntityOptions = (entities, label) => {
 const generatePractitionerOptions = (practitioners) => {
   const options = [];
   practitioners.map((pr) => {
-    const label = `${pr.firstName} ${pr.lastName}`;
+    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName}`;
     options.push({ label, value: pr.id });
   });
   return options;
@@ -49,9 +49,9 @@ export default function DisplayForm(props) {
     handleBufferChange,
   } = props;
 
-
   let initialValues = null;
   let time = null;
+
   if (selectedAppointment) {
     const {
       startDate,
@@ -107,6 +107,7 @@ export default function DisplayForm(props) {
       onSubmit={handleSubmit}
       ignoreSaveButton
       initialValues={initialValues}
+      data-test-id="createAppointmentForm"
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>

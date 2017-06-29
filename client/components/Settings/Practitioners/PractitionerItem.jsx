@@ -22,6 +22,7 @@ class PractitionerItem extends Component {
         onClick={this.showItem}
         className={styles.practListItem}
         selectItem={selectedPractitioner}
+        data-test-id={this.props['data-test-id']}
       >
         {fullName}
       </ListItem>

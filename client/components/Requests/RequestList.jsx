@@ -41,6 +41,7 @@ class RequestList extends Component {
       customBufferTime: 0,
       request: true,
       requestModel: modifiedRequest,
+      practitionerId: request.get('practitionerId'),
     };
 
     checkPatientUser(patientUser, appointment);
@@ -62,6 +63,7 @@ class RequestList extends Component {
       sortedRequests,
       services,
       patientUsers,
+      practitioners,
       setHoverRequestId,
     } = this.props;
 
@@ -69,11 +71,15 @@ class RequestList extends Component {
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
           //const active = request.get('id') === this.props.setHoverRequestId;
+          const practitionerId = request.get('practitionerId');
+          const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
+
           return (
             <RequestListItem
               key={request.id}
               request={request}
               service={services.get(request.get('serviceId'))}
+              practitioner={practitioner}
               patientUser={patientUsers.get(request.get('patientUserId'))}
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
@@ -87,6 +93,8 @@ class RequestList extends Component {
 }
 
 RequestList.propTypes = {
+  services: PropTypes.object.isRequired,
+  patientUsers: PropTypes.object.isRequired,
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,

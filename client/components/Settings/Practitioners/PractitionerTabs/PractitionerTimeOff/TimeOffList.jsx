@@ -29,7 +29,7 @@ class TimeOffList extends Component {
     } = this.props;
 
     return (
-      <List className={styles.timeOffList} >
+      <List className={styles.timeOffList} data-test-id="timeOffList" >
         <div className={styles.timeOffList_addTimeOffText}>Add Time Off{children}</div>
         {timeOffs.toArray().map((timeOff) => {
           return (
