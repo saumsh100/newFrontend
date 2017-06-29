@@ -33,7 +33,18 @@ const generateTimeOptions = (timeInput, unitIncrement) => {
     }
   }
   let i;
-  for (i = 0; i < totalHours; i++) {
+  for (i = 6; i < totalHours; i++) {
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const today = new Date();
+      const value = time.toISOString();
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      timeOptions.push({ value, label });
+    }
+  }
+
+  for (i = 0; i < 6; i++) {
     let j;
     for (j = 0; j < increments; j++) {
       const time = moment(new Date(1970, 1, 0, i, j * increment));
