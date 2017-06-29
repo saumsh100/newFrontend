@@ -4,12 +4,13 @@ import moment from 'moment-timezone';
 import { Form, Field, Button, Grid, Row, Col } from '../../../library';
 import styles from './styles.scss';
 import jwt from 'jwt-decode';
-import { emailValidate } from '../../../library/Form/validate';
+import { emailValidate, parseNum, notNegative } from '../../../library/Form/validate';
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength25 = maxLength(50);
 
+const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 export default function GeneralForm({ onSubmit, activeAccount, users }) {
 
@@ -23,6 +24,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     website: activeAccount.get('website'),
     timeInterval: activeAccount.get('timeInterval'),
     timezone: activeAccount.get('timezone'),
+    unit: activeAccount.get('unit')
   };
 
   const token = localStorage.getItem('token');
@@ -81,6 +83,14 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
         name="vendastaId"
         label="Vendasta Id"
         data-test-id="vendastaId"
+      />
+    </div>
+    <div className={styles.paddingField}>
+      <Field
+        required
+        name="unit"
+        label="Schedule Unit"
+        validate={[notNegative, maxDuration]}
       />
     </div>
   </div>) : null);

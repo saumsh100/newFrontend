@@ -37,6 +37,7 @@ export default function DisplayForm(props) {
     services,
     chairs,
     practitioners,
+    patientSearched,
     getSuggestions,
     selectedAppointment,
     unit,
@@ -133,6 +134,7 @@ export default function DisplayForm(props) {
             <FormSection name="patient">
               <PatientForm
                 getSuggestions={getSuggestions}
+                patientSearched={patientSearched}
                 handleSubmit={handleSubmit}
                 handleAutoSuggest={handleAutoSuggest}
               />

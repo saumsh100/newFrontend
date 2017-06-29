@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import DisplaySearchedPatient from './DisplaySearchedPatient';
 import { Grid, Row, Col, Field } from '../../library';
 import styles from './styles.scss';
 
@@ -8,15 +9,22 @@ function validatePatient(value) {
 }
 
 export default function PatientForm(props) {
-
   const {
     getSuggestions,
     handleAutoSuggest,
+    patientSearched,
   } = props;
 
   return (
     <Grid className={styles.addNewAppt_mainContainer_right}>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
+        <Col xs={12}>
+          <DisplaySearchedPatient
+            patientSearched={patientSearched}
+          />
+        </Col>
+      </Row>
+      <Row className={styles.addNewAppt_mainContainer_right_rowSuggest}>
         <Col xs={12} data-test-id="patientSelected">
           <Field
             component="AutoComplete"
@@ -27,28 +35,6 @@ export default function PatientForm(props) {
             validate={[validatePatient]}
             theme="primaryGrey"
             required
-          />
-        </Col>
-      </Row>
-      <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12}>
-          <Field
-            name="mobilePhoneNumber"
-            label="Phone #"
-            theme="primaryGrey"
-            disabled
-            data-test-id="mobilePhoneNumber"
-          />
-        </Col>
-      </Row>
-      <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12} >
-          <Field
-            name="email"
-            label="Email"
-            theme="primaryGrey"
-            disabled
-            data-test-id="email"
           />
         </Col>
       </Row>
