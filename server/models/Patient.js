@@ -27,7 +27,7 @@ function validatePhoneNumbers(doc) {
 const Patient = createModel('Patient', {
   accountId: type.string().required(),
   avatarUrl: type.string(),
-  email: type.string(),
+  email: type.string().email(),
   pmsId: type.string(),
   firstName: type.string().required(),
   lastName: type.string().required(),

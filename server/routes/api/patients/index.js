@@ -322,7 +322,7 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
   const cleanedPatients = patients.map((patient) => {
     return Object.assign(
       {},
-      _.omit(patient, ['id', 'dateCreated']),
+      _.omit(patient, ['id']),
       { accountId: req.accountId }
     );
   });
