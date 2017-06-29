@@ -81,7 +81,6 @@ appointmentsRouter.get('/business', (req, res, next) => {
       .getJoin({
         patient: true,
         practitioner: true,
-        practitioner: true,
         service: true,
       })
       .run()
@@ -128,19 +127,16 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
   const startDate = r.now().add(365 * 24 * 60 * 60 * -1);
   const endDate = r.now();
 
-  const time1 = moment(new Date())
   return Appointment
     .getAll(accountId, {index: 'accountId'})
     .filter(r.row('startDate').during(startDate, endDate))
     .run()
     .then((result) => {
-      console.log(moment.duration(moment(time1).diff(moment(new Date()))).milliseconds(), 'statsdate')
       const days = new Array(6).fill(0);
       // calculate the frequency of the day of the week
       for (let i = 0; i < result.length; i++) {
         days[moment(result[i].startDate).get('day') - 1]++;
       }
-      console.log(moment.duration(moment(time1).diff(moment(new Date()))).milliseconds(), 'statsdate')
       res.send({ days });
     })
     .catch(next);
@@ -167,18 +163,16 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     const startDate = r.ISO8601(start);
     const endDate = r.ISO8601(end);
     Promises.push(Appointment
-      .filter({ accountId })
+      .getAll(accountId, {index: 'accountId'})
       .filter(r.row('startDate').during(startDate, endDate))
       .getJoin({
         patient: true,
       })
       .run());
   }
-  const time1 = moment(new Date())
 
   Promise.all(Promises)
     .then((values) => {
-      console.log(moment.duration(moment(time1).diff(moment(new Date()))).milliseconds(), 'statslastyear')
       data = values.map((value) => {
         value.map((appointment) => {
           const patientAge = moment().diff(moment(appointment.patient.birthDate), 'years');
@@ -203,7 +197,6 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
         });
         return value.length;
       });
-      console.log(moment.duration(moment(time1).diff(moment(new Date()))).milliseconds(), 'statslastyear')
       res.send({ data: data.reverse(), months: months.reverse(), age });
     })
     .catch(next);
@@ -237,10 +230,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
   startDate = startDate ? r.ISO8601(startDate) : r.now();
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
-  const time1 = moment(new Date())
-
   const a = Appointment
-    .filter({ accountId })
+    .getAll(accountId, {index: 'accountId'})
     .filter(r.row('startDate').during(startDate, endDate))
     .getJoin({
       patient: true,
@@ -268,7 +259,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
   return Promise.all([a, b, c, d, e])
     .then((values) => {
-      console.log(moment.duration(moment(time1).diff(moment(new Date()))).milliseconds(), 'stats')
       const sendStats = {};
       sendStats.practitioner = {};
       sendStats.services = {};
@@ -380,7 +370,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;
-      console.log(moment.duration(moment(time1).diff(moment(new Date()))).milliseconds(), 'stats')
       res.send(sendStats);
     })
     .catch(next);
