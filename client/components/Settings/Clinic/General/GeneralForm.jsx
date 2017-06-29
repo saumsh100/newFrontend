@@ -8,7 +8,7 @@ import { emailValidate } from '../../../library/Form/validate';
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
-const maxLength25 = maxLength(25);
+const maxLength25 = maxLength(50);
 
 
 export default function GeneralForm({ onSubmit, activeAccount, users }) {
