@@ -17,7 +17,7 @@ class AppointmentFilled extends Component {
               {appointmentNotFilled}
             </div>
             <div className={styles.appointmentFilled__header_title}>
-              Productivity Hours Not Filled
+              Production Hours Not Filled
             </div>
             <div className={styles.appointmentFilled__header_date}>
               {moment(startDate).format('MM/DD/YYYY')} - {moment(endDate).format('MM/DD/YYYY')}

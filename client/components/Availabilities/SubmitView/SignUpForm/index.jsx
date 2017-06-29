@@ -41,7 +41,7 @@ export default function SignUpForm({ onSubmit, initialValues }) {
         required
         label="Password"
         name="password"
-        popover="Password must be uncommon words and no sequences. Tips: Use uncommon words or creative spelllllings"
+        // popover="Password must be uncommon words and no sequences. Tips: Use uncommon words or creative spelllllings"
         type="password"
         validate={[passwordStrength]}
       />

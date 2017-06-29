@@ -27,20 +27,19 @@ const generateTimeOptions = (timeInput, unitIncrement) => {
     const minutes = moment(timeInput).minute();
     const remainder = minutes % increment;
     const today = new Date();
-    const label = (today.dst() ? moment(timeInput).subtract(1, 'hours').format('LT') : moment(timeInput).format('LT'));
+    const label = (today.dst() && !moment(new Date()).isDST() ? moment(timeInput).subtract(1, 'hours').format('LT') : moment(timeInput).format('LT'));
     if (remainder) {
       timeOptions.push({ value: timeInput, label });
     }
   }
-
   let i;
-  for (i = 6; i < totalHours; i++) {
+  for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
       const today = new Date();
       const value = time.toISOString();
-      const label = (today.dst() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
       timeOptions.push({ value, label });
     }
   }
