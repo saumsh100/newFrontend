@@ -34,4 +34,6 @@ const Appointment = createModel('Appointment', {
   isParent: type.boolean(),
 });
 
+Appointment.ensureIndex('practitionerIdRange', doc => [doc('practitionerId'), doc('startDate')]);
+
 module.exports = Appointment;

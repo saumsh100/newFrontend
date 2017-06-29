@@ -7,7 +7,6 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const checkIsArray = require('../../../middleware/checkIsArray');
 const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
-const Chat = require('../../../models/Chat');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
 const globals = require('../../../config/globals');
@@ -18,13 +17,13 @@ patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointmen
 function ageRange(age, array) {
   if (age < 18) {
     array[0]++;
-  } else if(age >= 18 && age < 25) {
+  } else if (age >= 18 && age < 25) {
     array[1]++;
-  } else if(age >= 25 && age < 35) {
+  } else if (age >= 25 && age < 35) {
     array[2]++;
-  } else if(age >= 35 && age < 45) {
+  } else if (age >= 35 && age < 45) {
     array[3]++;
-  } else if(age >= 45 && age < 55) {
+  } else if (age >= 45 && age < 55) {
     array[4]++;
   } else {
     array[5]++;
@@ -42,11 +41,9 @@ function ageRangePercent(array) {
   return newArray;
 }
 
-const generateDuringFilter = (m, startDate, endDate) => {
-  return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
+const generateDuringFilter = (m, startDate, endDate) => m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
   m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
 );
-};
 
 patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (req, res, next) => {
   const startDate = r.now().add(365 * 24 * 60 * 60 * -1);
@@ -89,7 +86,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
         male: 0,
         female: 0,
         ageData: new Array(6).fill(0),
-    };
+      };
 
       appointments.map((appointment) => {
         if (appointment.patient.gender && male.test(appointment.patient.gender)) {
@@ -111,13 +108,11 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
  */
 patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
   const { patients } = req.body;
-  const cleanedPatients = patients.map((patient) => {
-    return Object.assign(
+  const cleanedPatients = patients.map(patient => Object.assign(
       {},
       _.omit(patient, ['id', 'dateCreated']),
       { accountId: req.accountId }
-    );
-  });
+    ));
 
   return Patient.save(cleanedPatients)
     .then(_patients => res.send(normalize('patients', _patients)))
@@ -129,10 +124,8 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
  */
 patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
   const { patients } = req.body;
-  const patientUpdates = patients.map((patient) => {
-    return Patient.get(patient.id).run()
-      .then(_patient => _patient.merge(patient).save());
-  });
+  const patientUpdates = patients.map(patient => Patient.get(patient.id).run()
+      .then(_patient => _patient.merge(patient).save()));
 
   return Promise.all(patientUpdates)
     .then(_patients => res.send(normalize('patients', _patients)))
@@ -166,18 +159,13 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
-  Patient.filter((patient) => {
-    return patient('accountId').eq(req.accountId).and(
+  Patient.filter(patient => patient('accountId').eq(req.accountId).and(
       patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
-        .or(patient('email').match(search[0])));
-  }).limit(20)
+        .or(patient('email').match(search[0])))).limit(20)
     .getJoin({ appointments: {
-      _apply: (appointment) => {
-        return appointment.filter((request) => {
-          return generateDuringFilter(request, startDate, endDate);
-        });
-    } }, chat: {textMessages: { user: true }} })
+      _apply: appointment => appointment.filter(request => generateDuringFilter(request, startDate, endDate)) },
+      chat: { textMessages: { user: true } } })
     .run()
     .then((patients) => {
       const normPatients = normalize('patients', patients);
@@ -211,16 +199,15 @@ patientsRouter.get('/', checkPermissions('patients:read'), (req, res, next) => {
     .then(p => res.send({ length: p.length }));
   } else if (patientUserId) {
     return Patient
-      .filter({ accountId})
+      .filter({ accountId })
       .filter(r.row('patientUserId').eq(patientUserId)).run()
-      .then(patient => res.send(normalize('patients', patient)))
-  } else {
-    return Patient.filter({ accountId }).run()
+      .then(patient => res.send(normalize('patients', patient)));
+  }
+  return Patient.filter({ accountId }).run()
       .then((patients) => {
-        res.send(normalize('patients', patients))
+        res.send(normalize('patients', patients));
       })
       .catch(next);
-  }
 });
 
 /**
@@ -323,13 +310,11 @@ patientsRouter.post('/', (req, res, next) => {
  */
 patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
   const { patients } = req.body;
-  const cleanedPatients = patients.map((patient) => {
-    return Object.assign(
+  const cleanedPatients = patients.map(patient => Object.assign(
       {},
       _.omit(patient, ['id', 'dateCreated']),
       { accountId: req.accountId }
-    );
-  });
+    ));
 
   return Patient.save(cleanedPatients)
     .then(_patients => res.send(normalize('patients', _patients)))
@@ -339,28 +324,23 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
 /**
  * Get a patient
  */
-patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
-  return Promise.resolve(req.patient)
+patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, next) => Promise.resolve(req.patient)
     .then(patient => res.send(normalize('patient', patient)))
-    .catch(next);
-});
+    .catch(next));
 
 /**
  * Update a patient
  */
-patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
-  return req.patient.merge(req.body).save()
+patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => req.patient.merge(req.body).save()
     .then(patient => res.send(normalize('patient', patient)))
-    .catch(next);
-});
+    .catch(next));
 
 /**
  * Delete a patient
  */
-patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => {
-   return req.patient.deleteAll()
+patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => req.patient.deleteAll()
     .then(() => res.send(204))
-    .catch(next);
-});
+    .catch(next));
+
 
 module.exports = patientsRouter;

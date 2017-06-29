@@ -24,6 +24,8 @@ const Practitioner = createModel('Practitioner', {
 
 });
 
+Practitioner.ensureIndex('accountAndType', doc => [doc('accountId'), doc('type')]);
+
 /**
  * getWeeklySchedule will fetch the appropriate weeklySchedule
  * based if it is custom or if it should inherit the clinic's office hours

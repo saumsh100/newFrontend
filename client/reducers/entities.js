@@ -16,6 +16,7 @@ import {
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
 import Enterprise from '../entities/models/Enterprise';
+import EnterpriseDashboard from '../entities/models/EnterpriseDashboard';
 import enterprises from '../entities/collections/enterprises';
 import Patient from '../entities/models/Patient';
 import patients from '../entities/collections/patients';
@@ -52,7 +53,7 @@ import WeeklySchedule from '../entities/models/WeeklySchedule';
 import User from '../entities/models/User';
 import users from '../entities/collections/users';
 import Reminder from '../entities/models/Reminder';
-import reminders from '../entities/collections/reminders'
+import reminders from '../entities/collections/reminders';
 import SentReminder from '../entities/models/SentReminder';
 import sentReminders from '../entities/collections/sentReminders';
 import Recall from '../entities/models/Recall';
@@ -60,38 +61,36 @@ import recalls from '../entities/collections/recalls';
 import SentRecall from '../entities/models/SentRecall';
 import sentRecalls from '../entities/collections/sentRecalls';
 
-export const createInitialEntitiesState = (initialEntitiesState = {}) => {
-  return receiveEntities(Map({
+export const createInitialEntitiesState = (initialEntitiesState = {}) => receiveEntities(Map({
     // KEYs must map to the response object
     // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
-    accounts: new accounts(),
-    enterprises: new enterprises(),
-    textMessages: new textMessages(),
-    appointments: new appointments(),
-    requests: new requests(),
-    services: new services(),
-    permissions: new permissions(),
-    invites: new invites(),
-    practitioners: new practitioners(),
-    availabilities: new availabilities(),
-    dialogs: new dialogs(),
-    patients: new patients(),
-    chairs: new chairs(),
-    chats: new chat(),
-    waitSpots: new waitSpots(),
-    weeklySchedules: new weeklySchedules(),
-    users: new users(),
-    timeOffs: new timeOffs(),
-    reminders: new reminders(),
-    sentReminders: new sentReminders(),
-    recalls: new recalls(),
-    sentRecalls: new sentRecalls(),
-    patientUsers: new patientUsers(),
+  accounts: new accounts(),
+  enterprises: new enterprises(),
+  textMessages: new textMessages(),
+  appointments: new appointments(),
+  requests: new requests(),
+  services: new services(),
+  permissions: new permissions(),
+  invites: new invites(),
+  practitioners: new practitioners(),
+  availabilities: new availabilities(),
+  dialogs: new dialogs(),
+  patients: new patients(),
+  chairs: new chairs(),
+  chats: new chat(),
+  waitSpots: new waitSpots(),
+  weeklySchedules: new weeklySchedules(),
+  users: new users(),
+  timeOffs: new timeOffs(),
+  reminders: new reminders(),
+  sentReminders: new sentReminders(),
+  recalls: new recalls(),
+  sentRecalls: new sentRecalls(),
+  patientUsers: new patientUsers(),
 
     // reviews: Reviews(), MODEL
     // listings: Listings(),
-  }), initialEntitiesState);
-};
+}), initialEntitiesState);
 
 const Models = {
   accounts: Account,
@@ -117,6 +116,7 @@ const Models = {
   recalls: Recall,
   sentRecalls: SentRecall,
   patientUsers: PatientUser,
+  enterpriseDashboard: EnterpriseDashboard,
 };
 
 export default handleActions({
@@ -133,26 +133,25 @@ export default handleActions({
     const model = newState.getIn([key, 'models', id]);
     if (model) {
       return newState.deleteIn([key, 'models', id]);
-    } else {
-      return state;
     }
+    return state;
   },
 
   [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity['entities'][key])[0];
-    const addEntity = entity['entities'][key][id];
+    const id = Object.keys(entity.entities[key])[0];
+    const addEntity = entity.entities[key][id];
     const newModel = new Models[key](addEntity);
     return state.setIn([key, 'models', id], newModel);
   },
 
   [UPDATE_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity['entities'][key])[0];
-    const updatedEntity = entity['entities'][key][id];
+    const id = Object.keys(entity.entities[key])[0];
+    const updatedEntity = entity.entities[key][id];
     const updatedModel = new Models[key](updatedEntity);
     return state.updateIn([key, 'models', id], () => updatedModel);
   },
 
-  [ADD_SOCKET_ENTITY](state, { payload: {key, entity } }){
+  [ADD_SOCKET_ENTITY](state, { payload: { key, entity } }) {
     const id = entity.id;
     const newModel = new Models[key](entity);
     return state.setIn([key, 'models', id], newModel);
@@ -175,14 +174,14 @@ export default handleActions({
   [READ_MESSAGES_IN_CURRENT_DIALOG](state, action) {
     const { messageId, dialogId, messageIndex = 0 } = action.payload;
     const dialogs = state.toJS().dialogs;
-    const currentDialog = dialogs.models[dialogId]
+    const currentDialog = dialogs.models[dialogId];
     const dialog = fromJS(currentDialog);
     const dialogMessages = currentDialog.messages
-      .map(m => m)
+      .map(m => m);
     const unreadCount = currentDialog.unreadCount;
-    dialogMessages[messageIndex].read = true
+    dialogMessages[messageIndex].read = true;
     const updatedMessagesDialog = dialog.updateIn(['messages'], () => dialogMessages);
-    const updatedDialog = updatedMessagesDialog.updateIn(['unreadCount'], () => unreadCount-1).toJS();
+    const updatedDialog = updatedMessagesDialog.updateIn(['unreadCount'], () => unreadCount - 1).toJS();
     return state.updateIn(['dialogs', 'models', dialogId], () => updatedDialog);
   },
 
@@ -195,17 +194,17 @@ export default handleActions({
         const { id, firstName, lastName, gender, language, birthday, middleName, status } = action.payload;
         const name = `${firstName} ${lastName}`;
         objectToMergeWith = fromJS({ name, gender, language, birthday, id, middleName, status });
-      break;
+        break;
 
       case 'insurance':
         const { insurance, memberId, contract, carrier, sin } = action.payload;
-        objectToMergeWith = fromJS({ insurance: { insurance, memberId, contract, carrier, sin, id }});
-      break;
+        objectToMergeWith = fromJS({ insurance: { insurance, memberId, contract, carrier, sin, id } });
+        break;
 
     }
-    const updatedPatient = fromJS(currentPatient).mergeDeep(objectToMergeWith)
+    const updatedPatient = fromJS(currentPatient).mergeDeep(objectToMergeWith);
     return state.updateIn(['patientList', 'models', id], () => updatedPatient.toJS());
-  }
+  },
 
 }, createInitialEntitiesState());
 
@@ -222,19 +221,23 @@ export default handleActions({
 function receiveEntities(state, entities) {
   // TODO: update all appropriate entitites in state
   let newState = state;
+  console.log('entities', entities);
   each(entities, (collectionMap, key) => {
+    console.log('collectionMap', collectionMap);
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
       if (!model || key === 'weeklySchedules' || key === 'patients' || key === 'chats' || key === 'textMessages') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
+        console.log('model', newModel, 'md', modelData, 'ns', newState, 'key', key, 'id', id);
         newState = newState.setIn([key, 'models', id], newModel);
+        console.log(newState);
       } else {
         newState = newState.mergeIn([key, 'models', id], modelData);
       }
     });
   });
-
+  console.log('newstate', newState);
   return newState;
 }

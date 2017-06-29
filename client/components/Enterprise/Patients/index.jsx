@@ -1,53 +1,54 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Loading from 'react-loader';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Page from '../Page';
 import Table from '../Table';
 import withAuthProps from '../../../hocs/withAuthProps';
-import { getCollection } from '../../Utils';
+import { getModel } from '../../Utils';
 import { fetchEntities } from '../../../thunks/fetchEntities';
-import { switchActiveEnterprise } from '../../../thunks/auth';
 
-const fetchEnterprises = () => fetchEntities({ key: 'enterprises' });
+const fetchEnterpriseDashboard = () => fetchEntities({ key: 'enterpriseDashboard', url: '/api/enterprises/dashboard/patients' });
 
 class PatientsPage extends Component {
   componentWillMount() {
-    this.props.fetchEnterprises();
-  }
-
-  selectEnterprise(enterpriseId) {
-    this.props.switchActiveEnterprise(enterpriseId, this.props.location.pathname);
+    this.props.fetchEnterpriseDashboard();
   }
 
   render() {
-    const { enterprises, enterpriseId } = this.props;
-
     return (
-      <Page>
-        <Table />
-      </Page>
+      !this.props.enterpriseDashboardPatients ?
+        <Loading /> : <Page>
+          <Table
+            clinics={this.props.enterpriseDashboardPatients.clinics}
+            totals={this.props.enterpriseDashboardPatients.totals}
+          />
+        </Page>
     );
   }
 }
 
 PatientsPage.propTypes = {
-  fetchEnterprises: PropTypes.func.isRequired,
-  switchActiveEnterprise: PropTypes.func.isRequired,
+  fetchEnterpriseDashboard: PropTypes.func.isRequired,
   enterprises: PropTypes.arrayOf(PropTypes.object),
+  enterpriseDashboardPatients: PropTypes.shape({
+    isFetching: PropTypes.bool,
+    clinics: PropTypes.shape({}),
+    totals: PropTypes.shape({}),
+  }),
   enterpriseId: PropTypes.string,
   location: PropTypes.shape({
     pathname: PropTypes.string,
-  })
+  }),
 };
 
 const stateToProps = (state, { isSuperAdmin }) => (isSuperAdmin ? {
-  enterprises: getCollection(state, 'enterprises'),
+  enterpriseDashboardPatients: getModel(state, 'enterpriseDashboard', 'patients'),
 } : {});
 
 const actionsToProps = dispatch => bindActionCreators({
-  fetchEnterprises,
-  switchActiveEnterprise,
+  fetchEnterpriseDashboard,
 }, dispatch);
 
 export default withAuthProps(connect(stateToProps, actionsToProps)(PatientsPage));

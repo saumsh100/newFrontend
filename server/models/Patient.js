@@ -46,6 +46,8 @@ const Patient = createModel('Patient', {
   status: type.string().enum(['Active', 'InActive']).default('Active'),
 });
 
+Patient.ensureIndex('accountStatusPatients', doc => [doc('status'), doc('accountId'), doc('createdAt')]);
+
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
   return this.filter({ mobilePhoneNumber: phoneNumber }).nth(0).run();

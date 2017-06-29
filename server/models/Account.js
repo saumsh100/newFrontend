@@ -36,6 +36,8 @@ const Account = createModel('Account', {
 
 Account.docOn('saving', validatePatient); // <<< doc is in `doc` param
 
+Account.ensureIndex('enterpriseId');
+
 function validatePatient(doc) {
   validatePhoneNumbers(doc);
 }

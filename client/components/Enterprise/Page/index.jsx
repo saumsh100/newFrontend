@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, VButton } from '../../library';
+import { Row, Col } from '../../library';
 import styles from './enterprise-page.scss';
 
 const EnterprisePage = ({ children }) => (
@@ -20,13 +20,17 @@ const EnterprisePage = ({ children }) => (
       <Row middle="md" className={styles['filter-container']}>
         <Col md={6}>
           <h1 className={styles['page-title']}>Patients</h1>
-          <VButton title="Add Segment" compact className={styles['btn-add-segment']} color="darkgrey" />
+          { /* <VButton
+                  title="Add Segment"
+                  compact className={styles['btn-add-segment']}
+                  color="darkgrey"
+          />*/ }
         </Col>
-        <Col md={6} className={styles['filter-buttons']} >
-          { /* TODO: Implement ButtonDropDown element */ }
+        { /* TODO: Implement ButtonDropDown element */ }
+        { /* <Col md={6} className={styles['filter-buttons']} >
           <VButton title="Save" color="red" compact />
           <VButton title="Clear" compact />
-        </Col>
+        </Col> */}
       </Row>
 
       <div>
