@@ -35,5 +35,8 @@ const Appointment = createModel('Appointment', {
 });
 
 Appointment.ensureIndex('accountId');
+Appointment.ensureIndex('accountStart', function (row) {
+  return [row('accountId'), row('startDate')];
+});
 
 module.exports = Appointment;
