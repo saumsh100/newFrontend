@@ -29,7 +29,7 @@ myRouter.param('accountIdJoin', loaders('account', 'Account', {
   services: {
     _apply: service => service.filter((row) => {
       return row('isHidden').ne(true);
-    }),
+    }).orderBy('name'),
   },
 
   practitioners: true,
