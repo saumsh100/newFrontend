@@ -40,14 +40,12 @@ class SideBar extends Component {
           <div className={styles.sidebar__information_title}>
             YOUR APPOINTMENT
           </div>
+          <br />
           <div className={styles.sidebar__information_text}>
-            {moment(startDate).format('MMM').toUpperCase()}
+            {moment(startDate).format('dddd, MMMM Do YYYY')}
           </div>
           <div className={styles.sidebar__information_text}>
-            {moment(startDate).format('D')}
-          </div>
-          <div className={styles.sidebar__information_text}>
-            {moment(startDate).format('dddd, h:mm a')}
+            {moment(startDate).format('h:mm a')}
           </div>
         </div>
       );
