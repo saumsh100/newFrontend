@@ -9,6 +9,8 @@ const entries = appEntries(name => [
   `./client/entries/${name}.js`,
 ]);
 
+console.log('INTERCOM_APP_ID', process.env.INTERCOM_APP_ID);
+
 const developmentConfig = merge(baseConfig, {
   entry: entries('app', 'patient'),
 
