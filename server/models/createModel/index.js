@@ -175,6 +175,7 @@ function createModel(tableName, schema, config = {}) {
       docs = finalDocs;
     }
 
+    console.log(`input docs size ${docsArray.size}; final docs size ${docs.length}`);
     return { errors, docs };
   });
 
@@ -184,11 +185,12 @@ function createModel(tableName, schema, config = {}) {
    */
   Model.defineStatic('batchSave', async function (dataArray) {
     // TODO: remove attrs on error docs that will break during send
-    console.log('batchSave: saving', dataArray);
     const { docs, errors } = await Model.preValidateArray(dataArray);
     if (!docs.length) {
       throw { errors, docs };
     }
+
+    console.log(`batchSave: saving ${dataArray.length} valid patients`);
 
     try {
       // Bulk Insert... at this point it is assumed to pass!

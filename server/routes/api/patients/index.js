@@ -330,6 +330,7 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
   return Patient.batchSave(cleanedPatients)
     .then(p => res.send(normalize('patients', p)))
     .catch(({ errors, docs }) => {
+    // TODO make sure that we are catching the 400 error
       errors = errors.map(({ patient, message }) => {
         // Created At can sometimes be a ReQL query and cannot
         // be stringified by express on res.send, this is a

@@ -32,7 +32,7 @@ tsd.json
 tmux*
 xterm*
 screen-256color.ti
-server/public/assets/
+server/public/assets/s
 .env
 rethinkdb_data/
 *.swp

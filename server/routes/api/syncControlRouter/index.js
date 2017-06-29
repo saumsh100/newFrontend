@@ -22,4 +22,9 @@ syncControlRouter.post('/finishSync', (req, res, next) => {
   res.sendStatus(200);
 });
 
+syncControlRouter.post('/progress', (req, res, next) => {
+  const io = req.app.get('socketio');
+  console.log(`Sync progress: accountId=${req.accountId}; progress=`, req.body);
+});
+
 module.exports = syncControlRouter;
