@@ -146,7 +146,6 @@ class ScheduleComponent extends Component {
                     appointments={appointments}
                     schedule={schedule}
                     selectAppointment={selectAppointment}
-                    weeklySchedules={weeklySchedules}
                   />
                   <Modal
                     active={

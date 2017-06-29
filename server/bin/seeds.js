@@ -1332,7 +1332,7 @@ const SEEDS = {
      patientId: justinPatientId,
      primaryType: 'sms',
      lengthSeconds: 30,
-     }, */
+     },*/
     ...SentReminder,
   ],
 

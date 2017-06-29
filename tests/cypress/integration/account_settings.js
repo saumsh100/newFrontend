@@ -6,7 +6,7 @@
 describe('Account Settings', () => {
 
   before(() => {
-    cy.exec('NODE_ENV="test" npm run seeds');
+    cy.exec('env NODE_ENV="test" npm run seeds');
   });
 
   beforeEach(() => {
