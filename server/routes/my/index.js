@@ -43,12 +43,18 @@ myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
     .filter({isActive: true})
     .then(practitioners => {
       const { entities } = normalize('account', req.account);
+      let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
+      for (let i = 0; i < req.account.services.length; i++) {
+        if (req.account.services[i].isDefault) {
+          selectedServiceId = req.account.services[i].id;
+        }
+      }
       const initialState = {
         availabilities: {
           account: req.account,
           services: req.account.services,
           practitioners,
-          selectedServiceId: (req.account.services[0] ? req.account.services[0].id : null),
+          selectedServiceId,
         },
 
         entities,

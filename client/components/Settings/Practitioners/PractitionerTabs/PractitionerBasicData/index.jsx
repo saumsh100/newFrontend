@@ -75,18 +75,21 @@ class PractitionerBasicData extends Component {
           form={`${practitioner.get('id')}Form`}
           onSubmit={this.updatePractitioner}
           initialValues={initialValues}
+          data-test-id="practitionerBasicDataForm"
         >
           <Field
             required
             name="firstName"
             label="First Name"
             validate={[maxLength25]}
+            data-test-id="firstName"
           />
           <Field
             required
             name="lastName"
             label="Last Name"
             validate={[maxLength25]}
+            data-test-id="lastName"
           />
           <div className={styles.practFormContainer_type}>
             <Field

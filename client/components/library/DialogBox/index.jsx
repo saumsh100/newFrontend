@@ -26,6 +26,11 @@ class DialogBox extends Component {
       showFooterComponent = (
         <div className={styles.dialogBody__footer}>
           {actions.map((action, index) => {
+            if (this.props['data-test-id']) {
+              action.props = action.props || [];
+              action.props['data-test-id'] = this.props['data-test-id'] + action.label;
+            }
+
             return (
               <action.component
                 key={`action_${index}`}
@@ -43,7 +48,10 @@ class DialogBox extends Component {
 
     return (
       <Modal {...this.props}>
-        <div className={styles.dialogBody}>
+        <div
+          className={styles.dialogBody}
+          data-test-id={this.props['data-test-id']}
+        >
           <div className={styles.dialogBody__header}>
             <CardHeader title={title} />
             <div

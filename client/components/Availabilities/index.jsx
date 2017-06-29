@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import { VButton, Icon } from '../library';
+import moment from 'moment-timezone';
 import SelectionView from './SelectionView';
 import SubmitView from './SubmitView';
 import SideBar from './SideBar';
@@ -22,7 +23,14 @@ class Availabilities extends Component {
       registrationStep,
       setRegistrationStep,
       selectedAvailability,
+      account,
+      initialValues,
     } = this.props;
+
+    if (account.toJS().timezone) {
+      moment.tz.setDefault(account.toJS().timezone);
+    }
+
 
     let widgetBodyClasses = styles.widgetBody;
     let currentView = <SelectionView />;
@@ -44,7 +52,7 @@ class Availabilities extends Component {
 
     if (registrationStep === 2) {
       widgetBodyClasses = classNames(widgetBodyClasses, styles.widgetBodyNoFooter);
-      currentView = <SubmitView />;
+      currentView = <SubmitView initialValues={initialValues}/>;
       footer = null;
     }
 
@@ -71,12 +79,14 @@ Availabilities.propTypes = {
   registrationStep: PropTypes.number.isRequired,
   setRegistrationStep: PropTypes.func.isRequired,
   account: PropTypes.object,
+  initialValues: PropTypes.object,
 };
 
 function mapStateToProps({ availabilities }) {
   return {
     selectedAvailability: availabilities.get('selectedAvailability'),
     registrationStep: availabilities.get('registrationStep'),
+    initialValues: availabilities.get('initialForm'),
     account: availabilities.get('account'),
   };
 }

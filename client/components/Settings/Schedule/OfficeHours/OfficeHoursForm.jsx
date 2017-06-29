@@ -68,7 +68,8 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
     return (
       <FormSection name={day}>
         <Grid className={styles.dayGrid}>
-          <Row className={styles.dayRow}>
+          <Row
+            className={styles.dayRow} data-test-id={day} >
             <Col
               xs={3}
               className={classNames(isDisabled ? styles.disabledDay : styles.day, styles.flexCentered)}
@@ -78,6 +79,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
             <Col
               xs={2}
               className={styles.flexCentered}
+              data-test-id={`${day}Toggle`}
             >
               <Field component="Toggle" name="isClosed" flipped />
             </Col>
@@ -87,7 +89,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
             >
               <Grid>
                 <Row>
-                  <Col xs={4} className={styles.flexCentered}>
+                  <Col xs={4} className={styles.flexCentered} data-test-id={`${day}StartTime`} >
                     <Field
                       component="DropdownSelect"
                       options={timeOptions}
@@ -127,6 +129,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
       form={formName}
       onSubmit={onSubmit}
       initialValues={initialValues}
+      data-test-id="officeHoursForm"
     >
       <DayHoursForm day="monday" />
       <DayHoursForm day="tuesday" />

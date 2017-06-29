@@ -83,10 +83,10 @@ class AvailabilitiesDisplay extends Component {
             <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_header`}>
               <div className={styles.appointment__list_header}>
                 <div className={styles.list__header_day}>
-                  {(accountTimezone ? a.momentDate.tz(accountTimezone).format('ddd') : a.momentDate.format('ddd'))}
+                  {a.momentDate.format('ddd')}
                 </div>
                 <div className={styles.list__header_number}>
-                  {(accountTimezone ? a.momentDate.tz(accountTimezone).format('DD/MM/YYYY') : a.momentDate.format('DD/MM/YYYY'))}
+                  {a.momentDate.format('DD/MM/YYYY')}
                 </div>
               </div>
             </ul>
@@ -122,7 +122,7 @@ class AvailabilitiesDisplay extends Component {
                           onClick={() => setSelectedAvailability(availability)}
                           className={classes}
                         >
-                          {(accountTimezone ? moment(availability.startDate).tz(accountTimezone).format('h:mm a') : moment(availability.startDate).format('h:mm a'))}
+                          {moment(availability.startDate).format('h:mm a')}
                         </li>
                       );
                     })}

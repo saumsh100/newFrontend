@@ -36,19 +36,25 @@
 }
 
 .appointmentContainer {
-  &:hover {
-    cursor: pointer;
-  }
+
 }
 .showAppointment {
   position: absolute;
   box-sizing: border-box;
-  overflow: auto;
+  overflow-y: auto;
 
   &_icon {
     color: $inactive-color;
     opacity: 0.5;
     float: right;
+  }
+
+  &:hover {
+    cursor: pointer;
+    z-index: 5 !important;
+    //animation-name: example;
+    //animation-duration: 4s;
+    //transition: all 0.10s ease-in;
   }
 
   &_nameAge {
@@ -72,6 +78,12 @@
     color: $primary-dark;
     font-weight: $large-weight;
     font-size: $small-size;
+
+    &_text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &_serviceChair {
@@ -80,7 +92,26 @@
     color: $primary-dark;
     font-family: $medium-font;
     font-size: $extra-small-size;
+
+    &_service{
+      padding-right: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    &_chair{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
+}
+
+@keyframes example {
+  0%   {background-color: $primary-color; }
+  25%  {background-color: $primary-color;}
+  50%  {background-color: $primary-color;}
+  100% {background-color: $primary-color-hover;}
 }
 
 .paddingText {

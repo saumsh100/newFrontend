@@ -10,7 +10,11 @@ const Time = {
   },
 
   timeWithZone: (hours, minutes, timezone) => {
-    return moment.tz(new Date(1970, 1, 0, hours, minutes), timezone)._d;
+    const now = moment(new Date(Date.UTC(1970, 1, 0, hours, minutes)));
+    const another = now.clone();
+    another.tz(timezone);
+    now.add(-1 * another.utcOffset(), 'minutes');
+    return now._d;
   },
 
   getISOSortPredicate: (property) => {
@@ -68,12 +72,14 @@ const Time = {
   createPossibleTimeSlots: (timeSlots, intervalLength, minimumLength) => {
     const len = timeSlots.length;
 
+    const realInterval = Math.ceil(intervalLength / minimumLength);
+
     let i;
     let possibleTimeSlots = [];
     for (i = 0; i < len; i++) {
       possibleTimeSlots = [
         ...possibleTimeSlots,
-        ...Time.breakdownTimeSlot(timeSlots[i], intervalLength, minimumLength),
+        ...Time.breakdownTimeSlot(timeSlots[i], minimumLength * realInterval, minimumLength),
       ];
     }
 

@@ -48,6 +48,22 @@ servicesRouter.get('/:serviceId', (req, res, next) => {
 
 servicesRouter.put('/:serviceId', checkPermissions('services:update'), (req, res, next) => {
 
+  if (req.service.isDefault !== req.body.isDefault && req.body.isDefault === true) {
+    return Service.filter({ accountId: req.service.accountId })
+    .getJoin({ practitioners: true }).run()
+    .then((services) => {
+      const promises = [];
+      for (let i = 0; i < services.length; i++) {
+        const merge = (services[i].id === req.service.id ? req.body : { isDefault: false });
+        promises.push(services[i].merge(merge).saveAll({ practitioners: true }));
+      }
+      return Promise.all(promises)
+      .then((allServices) => {
+        res.send(normalize('services', allServices));
+      });
+    });
+  }
+
   return Service.get(req.service.id).getJoin({ practitioners: true }).run()
     .then((service) => {
       service.merge(req.body).saveAll({ practitioners: true })

@@ -19,17 +19,17 @@ class UserInfo extends Component {
       setSelectedPatientId,
     } = this.props;
 
-    console.log(id)
-
     setSelectedPatientId(id);
     this.props.push('/patients/list');
   }
 
   render() {
 
+    const age = moment().diff(this.props.currentPatient.birthDate, 'years') || 'N/A';
+
     const info = (this.props.currentPatient.anonPhone ? <div className={styles.fullName2}>{this.props.currentPatient.anonPhone}</div>
       : (<div onClick={this.handlePatientClick.bind(null, this.props.currentPatient.id)} className={styles.fullName}> {`${this.props.currentPatient.firstName}
-      ${this.props.currentPatient.lastName}, ${moment().diff(this.props.currentPatient.birthDate, 'years')}`} </div>));
+      ${this.props.currentPatient.lastName}, ${age}`} </div>));
 
     const clickable = (this.props.currentPatient.anonPhone ? this.handlePatientClick.bind(null, this.props.currentPatient.id) : () => null);
 

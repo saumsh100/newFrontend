@@ -23,7 +23,7 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "npm run test:cypress && npm run test:jest",
     "test:cypress": "cypress run",
-    "test:jest": "jest",
+    "test:jest": "export $(cat .env | xargs) && jest --verbose",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
     "clean:assets": "rimraf statics/assets",
@@ -221,6 +221,7 @@
     "nodemon": "^1.10.2",
     "pretty-bytes": "^4.0.2",
     "react-addons-perf": "^15.2.1",
-    "sinon": "^1.15.3"
+    "sinon": "^1.15.3",
+    "supertest": "^2.0.1"
   }
 }

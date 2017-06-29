@@ -104,6 +104,7 @@ class PractitionerList extends Component {
               icon="plus"
               onClick={this.setActive}
               className={styles.addPractitionerButton}
+              data-test-id="addPractitionerButton"
             />
             <DialogBox
               active={this.state.active}
@@ -124,6 +125,7 @@ class PractitionerList extends Component {
                   practitionerId={practitionerId}
                   fullName={practitioner.getFullName()}
                   setPractitionerId={this.props.setPractitionerId}
+                  data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
                 />
               );
             })}

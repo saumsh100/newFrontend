@@ -59,6 +59,7 @@ class ServiceDataItem extends Component {
         duration: service.get('duration'),
         bufferTime: service.get('bufferTime'),
         isHidden: service.get('isHidden'),
+        isDefault: service.get('isDefault') || false,
       };
 
       showComponent = (
@@ -75,12 +76,14 @@ class ServiceDataItem extends Component {
               form={`${service.get('id')}Form`}
               onSubmit={this.updateService}
               initialValues={initialValues}
+              data-test-id="serviceDataForm"
             >
               <Field
                 required
                 name="name"
                 label="Name"
                 validate={[maxLength45]}
+                data-test-id="name"
               />
               <Field
                 required
@@ -102,6 +105,15 @@ class ServiceDataItem extends Component {
                 <div className={styles.servicesPractForm_hiddentext_toggle}>
                   <Field
                     name="isHidden"
+                    component="Toggle"
+                  />
+                </div>
+              </div>
+              <div className={styles.servicesPractForm_hiddentext}>
+                Would you like to set this service to be the default on the booking widget ?
+                <div className={styles.servicesPractForm_hiddentext_toggle}>
+                  <Field
+                    name="isDefault"
                     component="Toggle"
                   />
                 </div>

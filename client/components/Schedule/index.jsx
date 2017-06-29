@@ -126,8 +126,10 @@ class ScheduleComponent extends Component {
                   <CurrentDate currentDate={currentDate}>
                     <DayPicker
                       target="icon"
-                      onChange={this.setCurrentDay}
+                      selectedDays={new Date(currentDate)}
+                      onDayClick={this.setCurrentDay}
                       multiple={false}
+                      data-test-id="dayPicker"
                     />
                     <HeaderButtons
                       addNewAppointment={this.addNewAppointment}
@@ -144,7 +146,6 @@ class ScheduleComponent extends Component {
                     appointments={appointments}
                     schedule={schedule}
                     selectAppointment={selectAppointment}
-                    weeklySchedules={weeklySchedules}
                   />
                   <Modal
                     active={

@@ -24,7 +24,7 @@ const generateEntityOptions = (entities, label) => {
 const generatePractitionerOptions = (practitioners) => {
   const options = [];
   practitioners.map((pr) => {
-    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName} RDH`;
+    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName}`;
     options.push({ label, value: pr.id });
   });
   return options;
@@ -39,13 +39,19 @@ export default function DisplayForm(props) {
     practitioners,
     getSuggestions,
     selectedAppointment,
+    unit,
     handleSubmit,
     handleAutoSuggest,
     handlePractitionerChange,
+    handleSliderChange,
+    handleDurationChange,
+    handleUnitChange,
+    handleBufferChange,
   } = props;
 
   let initialValues = null;
   let time = null;
+
   if (selectedAppointment) {
     const {
       startDate,
@@ -63,7 +69,10 @@ export default function DisplayForm(props) {
     const patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-    time = setTime(startDate)
+
+    time = setTime(startDate);
+    const unitValue = unit ? Number((durationTime / unit).toFixed(2)) : 0;
+
     initialValues = {
       appointment: {
         time,
@@ -71,9 +80,12 @@ export default function DisplayForm(props) {
         serviceId,
         practitionerId: practitionerId || '',
         chairId: chairId || '',
-        duration: [durationTime, bufferTime],
+        slider: [durationTime, bufferTime],
         isPatientConfirmed,
         isCancelled,
+        duration: durationTime,
+        buffer: customBufferTime,
+        unit: unitValue,
       },
       patient: {
         patientSelected: patient.toJS(),
@@ -95,6 +107,7 @@ export default function DisplayForm(props) {
       onSubmit={handleSubmit}
       ignoreSaveButton
       initialValues={initialValues}
+      data-test-id="createAppointmentForm"
     >
       <Grid className={styles.addNewAppt}>
         <Row className={styles.addNewAppt_mainContainer}>
@@ -108,6 +121,11 @@ export default function DisplayForm(props) {
                 handlePractitionerChange={handlePractitionerChange}
                 selectedAppointment={selectedAppointment}
                 time={time}
+                unit={unit}
+                handleSliderChange={handleSliderChange}
+                handleDurationChange={handleDurationChange}
+                handleUnitChange={handleUnitChange}
+                handleBufferChange={handleBufferChange}
               />
             </FormSection>
           </Col>

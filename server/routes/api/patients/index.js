@@ -51,15 +51,23 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
 
   return Appointment
       .filter({
-        accountId: req.accountId,
         patientId: req.patient.id,
       })
       .filter(r.row('startDate').during(startDate, endDate))
       .then((appointments) => {
-        res.send({
-          allApps: req.patient.appointments.length,
-          monthsApp: appointments.length,
-        });
+        Appointment
+          .filter({
+            patientId: req.patient.id,
+          })
+          .filter(r.row('startDate').during(r.time(1970, 1, 1, 'Z'), endDate))
+          .orderBy(r.row('startDate'))
+          .then((lastAppointment) => {
+            return res.send({
+              allApps: req.patient.appointments.length,
+              monthsApp: appointments.length,
+              lastAppointment: lastAppointment[0] ? lastAppointment[0].startDate : null,
+            });
+          });
       })
       .catch(next);
 });
@@ -104,6 +112,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 });
 
 /**
+<<<<<<< HEAD
  * Batch creation
  */
 patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
@@ -120,6 +129,8 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
 });
 
 /**
+=======
+>>>>>>> 84a98c19c36334536ac95efded5e35add6d13a34
  * Batch updating
  */
 patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
@@ -156,16 +167,26 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 
   // making search case insensitive as
   const searchReg = (search[1] ? `(?i)(${search[0]}|${search[1]})` : `(?i)${search[0]}`);
+  const phoneSearch = `${search[0].replace(/\D/g, '')}`;
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
   Patient.filter(patient => patient('accountId').eq(req.accountId).and(
       patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
-        .or(patient('email').match(search[0])))).limit(20)
+        .or(patient('mobilePhoneNumber').match(phoneSearch))
+        .or(patient('homePhoneNumber').match(phoneSearch))
+        .or(patient('workPhoneNumber').match(phoneSearch))
+        .or(patient('otherPhoneNumber').match(phoneSearch))
+        .or(patient('email').match(search[0])));
+  }).limit(50)
     .getJoin({ appointments: {
-      _apply: appointment => appointment.filter(request => generateDuringFilter(request, startDate, endDate)) },
-      chat: { textMessages: { user: true } } })
+      _apply: (appointment) => {
+        return appointment.filter((request) => {
+          return generateDuringFilter(request, startDate, endDate);
+        });
+    } }, chat: {textMessages: { user: true }} })
+    .orderBy('firstName')
     .run()
     .then((patients) => {
       const normPatients = normalize('patients', patients);
@@ -316,8 +337,25 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
       { accountId: req.accountId }
     ));
 
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
+  return Patient.batchSave(cleanedPatients)
+    .then(p => res.send(normalize('patients', p)))
+    .catch(({ errors, docs }) => {
+      errors = errors.map(({ doc, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete doc.createdAt;
+        return {
+          doc,
+          message,
+        };
+      });
+
+      const entities = normalize('patients', docs);
+      const responseData = Object.assign({}, entities, { errors });
+      return res.status(400).send(responseData);
+    })
     .catch(next);
 });
 

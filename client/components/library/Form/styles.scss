@@ -9,7 +9,15 @@
 }
 
 .submitButton {
-  margin-left: 50%;
+  margin: 0 auto;
 }
 
-
+.toggle {
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 200px;
+  padding: 0.4rem 0.8rem;
+  background: hsl(0, 0%, 27%);
+  color: white;
+  border-radius: 0.3rem;
+}

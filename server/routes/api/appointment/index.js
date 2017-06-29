@@ -33,6 +33,7 @@ function intersectingAppointments(appointments, startDate, endDate) {
   });
 }
 
+
 function getDiffInMin(startDate, endDate) {
   return moment(endDate).diff(moment(startDate), 'minutes');
 }
@@ -75,8 +76,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
   }
 
   Appointment
-      .filter({ accountId })
-      .filter(r.row('startDate').during(startDate, endDate))
+      .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
       .getJoin({
         patient: true,
         practitioner: true,
@@ -127,8 +127,7 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
   const endDate = r.now();
 
   return Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
     .run()
     .then((result) => {
       const days = new Array(6).fill(0);
@@ -162,8 +161,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     const startDate = r.ISO8601(start);
     const endDate = r.ISO8601(end);
     Promises.push(Appointment
-      .filter({ accountId })
-      .filter(r.row('startDate').during(startDate, endDate))
+      .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
       .getJoin({
         patient: true,
       })
@@ -229,10 +227,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
   startDate = startDate ? r.ISO8601(startDate) : r.now();
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
-
   const a = Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
     .getJoin({
       patient: true,
       practitioner: true,

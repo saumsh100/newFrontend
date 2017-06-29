@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import pick from 'lodash/pick';
 import isArray from 'lodash/isArray';
 import RDayPicker, { DateUtils } from 'react-day-picker';
@@ -12,10 +12,10 @@ import styles from './styles.scss';
 
 const convertValueToDate = (value) => {
   if (isArray(value)) {
-    return value.map(v => new Date(v));
+    return value.map(v => moment(new Date(v)))._d;
   }
 
-  return new Date(value);
+  return moment(new Date(value))._d;
 };
 
 class DayPicker extends Component {
@@ -45,7 +45,7 @@ class DayPicker extends Component {
       this.setState({ isOpen: false });
     } else {
       const selectedIndex = value.findIndex(v =>
-        DateUtils.isSameDay(new Date(v), day)
+        DateUtils.isSameDay(moment(new Date(v))._d, day)
       );
 
       if (selectedIndex > -1) {
@@ -94,6 +94,7 @@ class DayPicker extends Component {
           type="button"
           className={iconClassName}
           onClick={this.togglePopOver}
+          data-test-id={this.props['data-test-id']}
         />
       );
     }

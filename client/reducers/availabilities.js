@@ -34,6 +34,7 @@ export const createInitialWidgetState = state => fromJS(Object.assign({
   isFetching: true,
   isConfirming: false,
   isLogin: false,
+  initialForm: {},
   isTimerExpired: false,
   isSuccessfulBooking: false,
   hasWaitList: false,
@@ -106,7 +107,10 @@ export default handleActions({
   },
 
   [SET_IS_TIMER_EXPIRED](state, action) {
-    return state.set('isTimerExpired', action.payload);
+    const form = (window.store.getState().form.userSignUpForm ? window.store.getState().form.userSignUpForm : {});
+    const newState = form.values ? state.set('initialForm', form.values) : state;
+
+    return newState.set('isTimerExpired', action.payload);
   },
 
   [SET_HAS_WAITLIST](state, action) {
@@ -152,7 +156,10 @@ export default handleActions({
   },
 
   [SET_REGISTRATION_STEP](state, action) {
-    return state.set('registrationStep', action.payload);
+    const form = (window.store.getState().form.userSignUpForm ? window.store.getState().form.userSignUpForm : {});
+    const newState = form.values ? state.set('initialForm', form.values) : state;
+
+    return newState.set('registrationStep', action.payload);
   },
 
   [SET_CLINIC_INFO](state, action) {

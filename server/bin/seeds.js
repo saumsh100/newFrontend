@@ -76,6 +76,9 @@ const serviceId = uuid();
 const serviceId2 = uuid();
 const serviceId3 = uuid();
 const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
+const fillServiceId = 'e18bd613-c76b-4a9a-a1df-850c867b2cab';
+const funServiceId = 'ac286d7e-cb62-4ea1-8425-fc7e22195692';
+const crazyServiceId = '49ddcf57-9202-41b9-bc65-bb3359bebd83';
 
 const appointmentId1 = uuid();
 const appointmentId2 = uuid();
@@ -169,6 +172,7 @@ const largeUnreadTextMessageSeeds = (chatId, patientPhone, clinicPhone) => {
 };
 
 const randomAppointments = [];
+const e2eAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
 const randomChats = [];
@@ -188,11 +192,10 @@ for (let i = 0; i < 100; i++) {
     firstName,
     lastName,
     email: `${firstName}.${lastName}@google.ca`,
-    mobilePhoneNumber: phoneNumber,
+    // mobilePhoneNumber: phoneNumber,
     birthDate: faker.date.past(),
     gender: 'male',
     langauge: 'English',
-    lastAppointmentDate: faker.date.past(),
     insurance: {
       insurance: 'Lay Health Insurance',
       memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -249,6 +252,32 @@ for (let i = 0; i < 100; i++) {
     note: 'First',
   });
 }
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().add(1, 'hours')._d,
+  endDate: moment().add(2, 'hours')._d,
+  patientId: alexPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Today for E2E test',
+});
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().date(1)._d,
+  endDate: moment().date(1).add(1, 'hours')._d,
+  patientId: justinPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Tomorrow for E2E test',
+});
 
 const generateDefaultServices = (_accountId) => {
   const createService = serviceData => Object.assign({}, {
@@ -499,12 +528,55 @@ const SEEDS = {
       serviceId: cleanupServiceId,
       patientId: justinPatientId,
     },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 13, 0),
+      endDate: new Date(2017, 3, 3, 13, 21),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 14, 30),
+      endDate: new Date(2017, 3, 3, 15, 21),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 10, 13, 0),
+      endDate: new Date(2017, 3, 10, 13, 40),
+      serviceId: funServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 10, 14, 30),
+      endDate: new Date(2017, 3, 10, 15, 10),
+      serviceId: funServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 17, 13, 0),
+      endDate: new Date(2017, 3, 17, 14, 10),
+      serviceId: crazyServiceId,
+      patientId: justinPatientId,
+    },
 
     // For the Reminders Tests
     ...appointmentFixtures,
 
     // For the patientsManagementTab
     ...randomAppointments,
+
+    // For E2E tests of Schedule
+    ...e2eAppointments,
   ],
 
   Request: [
@@ -680,7 +752,6 @@ const SEEDS = {
       patientUserId: patientUserId3,
       gender: 'male',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       status: 'Active',
       insurance: {
         insurance: 'GMC Health Insurance',
@@ -703,7 +774,6 @@ const SEEDS = {
       birthDate: moment({year: 1993, month: 6, day: 15})._d,
       gender: 'male',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       status: 'Active',
       isSyncedWithPMS: false,
     },
@@ -719,7 +789,6 @@ const SEEDS = {
       gender: 'male',
       status: 'Active',
       language: 'English',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       insurance: {
         insurance: 'Lay Health Insurance',
         memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
@@ -737,7 +806,6 @@ const SEEDS = {
       lastName: 'Joseph',
       mobilePhoneNumber: markPhoneNumber,
       birthDate: moment({year: 1996, month: 4, day: 25})._d,
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       gender: 'male',
       status: 'Active',
       language: 'English',
@@ -754,7 +822,6 @@ const SEEDS = {
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'female',
       status: 'Active',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
@@ -771,7 +838,6 @@ const SEEDS = {
       birthDate: moment({year: 1997, month: 3, day: 4})._d,
       gender: 'male',
       status: 'Active',
-      lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
@@ -1075,14 +1141,27 @@ const SEEDS = {
       Service_id: cleanupServiceId,
       id: `${practitionerId4}_${cleanupServiceId}`,
     },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: fillServiceId,
+    },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: funServiceId,
+    },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: crazyServiceId,
+    },
 
-     ...generatePracServJoin(donnaServices, practitionerId),
-     ...generatePracServJoin(donnaServices, practitionerId2),
 
-     ...generatePracServJoin(sunshineServices, practitionerId3),
-     ...generatePracServJoin(sunshineServices, practitionerId4),
-     ...generatePracServJoin(sunshineServices, practitionerId5),
-     ...generatePracServJoin(sunshineServices, practitionerId6),
+    ...generatePracServJoin(donnaServices, practitionerId),
+    ...generatePracServJoin(donnaServices, practitionerId2),
+
+    ...generatePracServJoin(sunshineServices, practitionerId3),
+    ...generatePracServJoin(sunshineServices, practitionerId4),
+    ...generatePracServJoin(sunshineServices, practitionerId5),
+    ...generatePracServJoin(sunshineServices, practitionerId6),
 
   ],
 
@@ -1092,6 +1171,30 @@ const SEEDS = {
       accountId: accountId2,
       name: 'Cleanup',
       duration: 60,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: fillServiceId,
+      accountId: accountId2,
+      name: 'Fill',
+      duration: 21,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: funServiceId,
+      accountId: accountId2,
+      name: 'Fun',
+      duration: 40,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: crazyServiceId,
+      accountId: accountId2,
+      name: 'Crazy',
+      duration: 70,
       bufferTime: 0,
       unitCost: 40,
     },
@@ -1221,7 +1324,7 @@ const SEEDS = {
   Reminder,
 
   SentReminder: [
-    /*{
+    /* {
      reminderId,
      accountId,
      createdAt: moment({hour: 13, minute: 10})._d,
@@ -1230,7 +1333,6 @@ const SEEDS = {
      primaryType: 'sms',
      lengthSeconds: 30,
      },*/
-
     ...SentReminder,
   ],
 

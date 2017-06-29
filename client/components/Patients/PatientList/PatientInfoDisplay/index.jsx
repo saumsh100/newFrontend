@@ -22,7 +22,7 @@ class PatientInfoDisplay extends Component {
     if (moment(currentPatient.birthDate)._d.toString() !== "Invalid Date") {
       showDate = moment(currentPatient.birthDate).format('MMMM Do YYYY')
     }
-    const lastApp = (currentPatient.lastAppointmentDate ? moment(currentPatient.lastAppointmentDate).format('MMMM Do YYYY') : 'N/A')
+    const lastApp = (this.props.patientIdStats.lastAppointment ? moment(this.props.patientIdStats.lastAppointment).format('MMMM Do YYYY') : 'N/A')
 
     let display = false;
 
@@ -53,7 +53,7 @@ class PatientInfoDisplay extends Component {
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
                 <p className={styles.name}>
                   <span>{currentPatient.firstName} {currentPatient.lastName}</span>
-                  <span>, {age}</span>
+                  <span>, {age || 'N/A'}</span>
                 </p>
               </div>
               <div className={`${styles.patient_profile__info} ${styles.personal__table_info}`}>
