@@ -67,12 +67,14 @@ const Patient = createModel('Patient', {
 });
 
 Patient.defineStatic('performantPredicate', function (a, b, onError) {
-  if (a.accountId === b.accountId && a.email === b.email) {
+  if (a.email && b.email
+      && a.accountId === b.accountId && a.email === b.email) {
     onError('email', a);
     return true;
   }
 
-  if (a.accountId === b.accountId && a.mobilePhoneNumber === b.mobilePhoneNumber) {
+  if (a.mobilePhoneNumber && b.mobilePhoneNumber
+      && a.accountId === b.accountId && a.mobilePhoneNumber === b.mobilePhoneNumber) {
     onError('mobilePhoneNumber', a);
     return true;
   }

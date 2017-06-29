@@ -330,14 +330,14 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
   return Patient.batchSave(cleanedPatients)
     .then(p => res.send(normalize('patients', p)))
     .catch(({ errors, docs }) => {
-      errors = errors.map(({ doc, message }) => {
+      errors = errors.map(({ patient, message }) => {
         // Created At can sometimes be a ReQL query and cannot
         // be stringified by express on res.send, this is a
         // quick fix for now. Also, message has to be plucked off
         // because it is removed on send as well
-        delete doc.createdAt;
+        delete patient.createdAt;
         return {
-          doc,
+          patient,
           message,
         };
       });

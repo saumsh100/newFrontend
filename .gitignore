@@ -45,3 +45,5 @@ statics/assets/
 server/bin/build/
 staging.env
 package-lock.json
+.ackrc
+.history
