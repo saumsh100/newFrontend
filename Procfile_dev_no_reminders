@@ -1,1 +1,1 @@
-web: nodemon server/bin/build/server.bundle.js
+web: ./node_modules/.bin/nodemon server/bin/build/server.bundle.js
