@@ -34,4 +34,6 @@ const Appointment = createModel('Appointment', {
   isParent: type.boolean(),
 });
 
+Appointment.ensureIndex('accountId');
+
 module.exports = Appointment;
