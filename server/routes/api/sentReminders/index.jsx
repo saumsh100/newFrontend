@@ -34,7 +34,7 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
     .then((sentReminders) => {
       const filterSentReminders = sentReminders.filter((sentReminder) => {
         const appointment = sentReminder.appointment;
-        if (!appointment.isDeleted) {
+        if (!appointment.isDeleted && !appointment.isCancelled) {
           return sentReminder;
         }
       });
@@ -43,5 +43,11 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
     })
     .catch(next);
 });
+
+
+sentRemindersRouter.get('/:sentReminderId/confirm', (req, res, next) => {
+   console.log('in here!!!!!!');
+});
+
 
 module.exports = sentRemindersRouter;
