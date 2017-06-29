@@ -58,7 +58,6 @@ export function fetchEntitiesRequest({ id, key, join, params = {}, url }) {
       .then((response) => {
         const { data } = response;
         dispatch(receiveRequest({ id, data }));
-        console.log(data);
         dispatch(receiveEntities({ key, entities: data.entities }));
         return data.entities;
       })

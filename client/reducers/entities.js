@@ -221,23 +221,18 @@ export default handleActions({
 function receiveEntities(state, entities) {
   // TODO: update all appropriate entitites in state
   let newState = state;
-  console.log('entities', entities);
   each(entities, (collectionMap, key) => {
-    console.log('collectionMap', collectionMap);
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
       if (!model || key === 'weeklySchedules' || key === 'patients' || key === 'chats' || key === 'textMessages') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
-        console.log('model', newModel, 'md', modelData, 'ns', newState, 'key', key, 'id', id);
         newState = newState.setIn([key, 'models', id], newModel);
-        console.log(newState);
       } else {
         newState = newState.mergeIn([key, 'models', id], modelData);
       }
     });
   });
-  console.log('newstate', newState);
   return newState;
 }
