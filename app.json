@@ -50,7 +50,7 @@
     },
     "INTERCOM_APP_ID": {
       "required": true
-    },
+    }
   },
   "formation": {
     "web": {
