@@ -46,10 +46,10 @@
       "required": true
     },
     "LOGROCKET_APP_ID": {
-      "required": true,
+      "required": true
     },
     "INTERCOM_APP_ID": {
-      "required": true,
+      "required": true
     },
   },
   "formation": {
