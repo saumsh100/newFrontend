@@ -12,3 +12,28 @@
   justify-content: space-between;
   max-width: 200px;
 }
+
+.listItem {
+  min-height: 80px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.edit {
+  margin-right: 30px;
+}
+
+.main {
+  margin-left: 30px;
+}
+
+.list {
+  font-family: "Gotham-Book";
+  font-size: 1.0em;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}

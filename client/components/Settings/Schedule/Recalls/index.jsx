@@ -46,7 +46,7 @@ class Recalls extends Component {
       <Grid>
         <Header title={'Recalls'} className={styles.headerTitle} />
         <div className={styles.toggle}>
-        Sent Recalls:&nbsp;
+        Recalls ON/OFF:&nbsp;
           <Toggle
             name="canSendRecalls"
             onChange={this.canSendRecalls}
