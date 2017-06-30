@@ -36,6 +36,8 @@ export default function TimeSlot(props) {
     selectAppointment,
     columnWidth,
     practIndex,
+    scheduleView,
+    columnHeaderName,
   } = props;
 
   const timeSlotContentStyle = {
@@ -51,6 +53,8 @@ export default function TimeSlot(props) {
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
         columnWidth={columnWidth}
+        scheduleView={scheduleView}
+        columnHeaderName={columnHeaderName}
       />
       {filteredApps && filteredApps.map((app, index, array) => {
         const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate);

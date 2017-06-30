@@ -117,3 +117,29 @@
 .paddingText {
   padding-right: 5px;
 }
+
+
+.columnHeader {
+  position: fixed;
+  display: flex;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  color: $primary-darkgrey;
+  font-weight: $medium-weight;
+  font-size: $small-size;
+  background: $primary-grey;
+  justify-content: center;
+  opacity: 0.5;
+  z-index: 5;
+
+  &_icon {
+    display: flex;
+    text-align: center;
+  }
+
+  &_text {
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;
+  }
+}

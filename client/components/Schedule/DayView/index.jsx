@@ -4,10 +4,6 @@ import moment from 'moment';
 import DayViewBody from './DayViewBody';
 
 class DayView extends Component  {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       currentDate,
@@ -25,8 +21,6 @@ class DayView extends Component  {
       const isSameDate = startDate.isSame(currentDate, 'day');
       return (!app.isDeleted && isSameDate && !app.isCancelled);
     });
-
-    // practitioners are filtered by is active.
 
     return (
       <DayViewBody
