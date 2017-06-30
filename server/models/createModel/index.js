@@ -233,7 +233,10 @@ function createModel(tableName, schema, config = {}) {
 
   // Ultimately what we would use if we could easily separate validate, sanitize, preSave steps
   Model.defineStatic('batchInsert', (docs) => {
+    // Was the only function that this would work in
     docs = docs.map((originalDoc) => {
+      // isBatch allows us to ignore these on changeFeeds...
+      originalDoc.isBatch = true;
       return originalDoc._makeSavableCopy();
     });
 
