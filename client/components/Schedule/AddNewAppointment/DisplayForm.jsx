@@ -54,7 +54,7 @@ export default function DisplayForm(props) {
     appointment: {
       duration: 60,
       buffer: 0,
-    }
+    },
   };
   let time = null;
   let patient = null;
