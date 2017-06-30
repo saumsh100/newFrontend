@@ -132,6 +132,16 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(showAlertTimeout({ alert, type: 'success' }));
         dispatch(setSyncingWithPMS({ isSyncing: false }));
       });
+
+      socket.on('syncProgress', (data) => {
+        const percentDone = Math.floor((data.saved / data.total) * 100);
+        const alert = {
+          title: 'Sync progress',
+          body: `${data.collection} ${percentDone}%`,
+        };
+        console.log(alert.body);
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
+      });
     })
     .on('unauthorized', (msg) => {
       console.log('unauthorized: ', JSON.stringify(msg.data));

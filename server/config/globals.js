@@ -60,6 +60,10 @@ const logrocket = {
   appId: environmentVariables.LOGROCKET_APP_ID,
 };
 
+const intercom = {
+  appId: environmentVariables.INTERCOM_APP_ID,
+};
+
 const aws = {
   accessKeyId: environmentVariables.AWS_ACCESS_KEY_ID,
   secretAccessKey: environmentVariables.AWS_SECRET_ACCESS_KEY,
@@ -95,6 +99,7 @@ module.exports = {
   namespaces,
   loader,
   logrocket,
+  intercom,
   aws,
   s3,
 };

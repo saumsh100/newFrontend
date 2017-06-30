@@ -54,6 +54,7 @@ export default function PractitionersSlot(props) {
             endHour={endHour}
             filteredApps={filteredApps}
             selectAppointment={selectAppointment}
+            columnHeaderName={pract.prettyName}
           />
         );
       }) : null}

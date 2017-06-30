@@ -36,25 +36,24 @@
 }
 
 .appointmentContainer {
-
-}
-.showAppointment {
-  position: absolute;
-  box-sizing: border-box;
-  overflow-y: auto;
-
-  &_icon {
-    color: $inactive-color;
-    opacity: 0.5;
-    float: right;
-  }
-
   &:hover {
     cursor: pointer;
     z-index: 5 !important;
     //animation-name: example;
     //animation-duration: 4s;
     //transition: all 0.10s ease-in;
+  }
+}
+.showAppointment {
+  position: absolute;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition: background-color 0.5s ease;
+
+  &_icon {
+    color: $inactive-color;
+    opacity: 0.5;
+    float: right;
   }
 
   &_nameAge {
@@ -116,4 +115,30 @@
 
 .paddingText {
   padding-right: 5px;
+}
+
+
+.columnHeader {
+  position: fixed;
+  display: flex;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  color: $primary-darkgrey;
+  font-weight: $medium-weight;
+  font-size: $small-size;
+  background: $primary-grey;
+  justify-content: center;
+  opacity: 0.5;
+  z-index: 5;
+
+  &_icon {
+    display: flex;
+    text-align: center;
+  }
+
+  &_text {
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;
+  }
 }

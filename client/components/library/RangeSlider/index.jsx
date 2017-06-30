@@ -58,14 +58,15 @@ class RangeSlider extends Component {
   render() {
     const {
       label,
-      unit,
+
       max,
+      min,
       labels,
     } = this.props;
 
     const maximumTrackStyle = {
       backgroundColor: '#ff715a',
-      width: `${((this.props.value[0]- 15)/(max - 15)) * 100}%`,
+      width: `${((this.props.value[0] - min)/(max - min)) * 100}%`,
     };
 
     const newProps = omit(this.props, ['onChange']);

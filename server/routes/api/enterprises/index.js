@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { pick } from 'lodash';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Enterprise, Account, User, Service, WeeklySchedule, Reminder } from '../../../models';
+import { Enterprise, Account, User, Service, WeeklySchedule, Reminder, Recall } from '../../../models';
 import loaders from '../../util/loaders';
 import { UserAuth } from '../../../lib/auth';
 const { timeWithZone } = require('../../../util/time');
@@ -106,6 +106,15 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
           lengthSeconds: 2 * 60 * 60,
         },
       ];
+
+      const defaultRecalls =  [
+        {
+          // 6 month recall
+          accountId: account.id,
+          primaryType: 'email',
+          lengthSeconds: 6 * 30 * 24 * 60 * 60,
+        },
+      ]
 
       const defaultServices = [
         {
@@ -229,6 +238,7 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
         Reminder.save(defaultReminders),
         WeeklySchedule.save(defaultSchdedule),
         Service.save(defaultServices),
+        Recall.save(defaultRecalls),
       ]).then((values) => {
         account.merge({ weeklyScheduleId: values[1].id }).save()
         .then(() => res.send(201, normalize('account', account)));

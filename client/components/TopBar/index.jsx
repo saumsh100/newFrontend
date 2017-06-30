@@ -17,12 +17,6 @@ import {
 import withAuthProps from '../../hocs/withAuthProps';
 import styles from './styles.scss';
 
-const ROLES_MAP = {
-  SUPERADMIN: 'Super Admin',
-  OWNER: 'Clinic Owner',
-  MANAGER: 'Office Manager',
-};
-
 const UserMenu = (props) => {
   const {
     user,
@@ -44,7 +38,7 @@ const UserMenu = (props) => {
           Hello, {user.get('firstName')}
         </div>
         <div className={styles.userRole}>
-          {ROLES_MAP[role]}
+          {role}
         </div>
         <div className={styles.businessName}>
           {businessName}

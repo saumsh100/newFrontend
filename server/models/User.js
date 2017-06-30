@@ -15,8 +15,8 @@ const User = createModel('User', {
   enterpriseId: type.string().uuid(4).required(),
   permissionId: type.string().uuid(4).required(),
 }, {
-  aux: {
-    username: {},
+  unique: {
+    username: true,
   },
 });
 

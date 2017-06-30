@@ -20,7 +20,6 @@
       @extend .font-jumbo;
     }
     &__title {
-      width: 80px;
         @extend .font-header-title-white;
         @media screen and (max-width: 1660px) {
             max-width: 120px;

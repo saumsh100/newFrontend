@@ -63,7 +63,6 @@ export default handleActions({
     // We can't re-fetch practitioners and services cause they are pulled from server, so don't purge those...
     // We also don't wanna re-set user-selected state because why make them re-select?
     return state.merge({
-      selectedAvailability: null,
       isFetching: true,
       isLogin: false,
       isConfirming: false,
@@ -71,18 +70,6 @@ export default handleActions({
       isSuccessfulBooking: false,
       registrationStep: 1,
       reservationId: null,
-      hasWaitList: false,
-      waitSpot: {
-        preferences: {
-          mornings: true,
-          afternoons: true,
-          evenings: true,
-          weekdays: true,
-          weekends: true,
-        },
-
-        unavailableDays: [],
-      },
     });
   },
 

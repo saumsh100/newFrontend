@@ -86,8 +86,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
   const endDate = r.now();
 
   return Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
     .getJoin({
       patient: true,
     })
@@ -111,24 +110,6 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
       send.ageData = ageRangePercent(send.ageData);
       res.send(send);
     })
-    .catch(next);
-});
-
-/**
- * Batch creation
- */
-patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
-  const { patients } = req.body;
-  const cleanedPatients = patients.map((patient) => {
-    return Object.assign(
-      {},
-      _.omit(patient, ['id', 'dateCreated']),
-      { accountId: req.accountId }
-    );
-  });
-
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
     .catch(next);
 });
 
@@ -340,13 +321,32 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
   const cleanedPatients = patients.map((patient) => {
     return Object.assign(
       {},
-      _.omit(patient, ['id', 'dateCreated']),
-      { accountId: req.accountId }
+      _.omit(patient, ['id']),
+      { accountId: req.accountId },
+      { isBatch: true }
     );
   });
 
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
+  return Patient.batchSave(cleanedPatients)
+    .then(p => res.send(normalize('patients', p)))
+    .catch(({ errors, docs }) => {
+    // TODO make sure that we are catching the 400 error
+      errors = errors.map(({ patient, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete patient.createdAt;
+        return {
+          patient,
+          message,
+        };
+      });
+
+      const entities = normalize('patients', docs);
+      const responseData = Object.assign({}, entities, { errors });
+      return res.status(400).send(responseData);
+    })
     .catch(next);
 });
 

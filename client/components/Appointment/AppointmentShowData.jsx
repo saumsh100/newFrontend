@@ -9,7 +9,7 @@ function joinNumber(str){
   return [newStr.slice(0, 3), insertStr, newStr.slice(3,6), insertStr, newStr.slice(6)].join('');
 }
 
-export default function AppointmentShowData({ time, nameAge, phoneNumber, service, email, note }) {
+export default function AppointmentShowData({ time, nameAge, phoneNumber, service, email, note, practitioner }) {
   return (
     <div className={styles.appointmentShowData}>
       <div className={styles.appointmentShowData__nameAge}>{nameAge}</div>
@@ -24,7 +24,8 @@ export default function AppointmentShowData({ time, nameAge, phoneNumber, servic
         {email}
       </div>
       <div className={styles.appointmentShowData__insurance}>
-        <Icon icon={'medkit'} className={styles.appointmentShowData__icons} />
+        <Icon icon={'user-md'} className={styles.appointmentShowData__icons} />
+        <span>{practitioner ? practitioner.getPrettyName() : ''}</span>
       </div>
       <div className={styles.appointmentShowData__note}>
         <span className={styles.noteText}><b>Note: </b></span>

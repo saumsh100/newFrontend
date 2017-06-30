@@ -76,8 +76,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
   }
 
   Appointment
-      .filter({ accountId })
-      .filter(r.row('startDate').during(startDate, endDate))
+      .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
       .getJoin({
         patient: true,
         practitioner: true,
@@ -128,8 +127,7 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
   const endDate = r.now();
 
   return Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
     .run()
     .then((result) => {
       const days = new Array(6).fill(0);
@@ -163,8 +161,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     const startDate = r.ISO8601(start);
     const endDate = r.ISO8601(end);
     Promises.push(Appointment
-      .filter({ accountId })
-      .filter(r.row('startDate').during(startDate, endDate))
+      .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
       .getJoin({
         patient: true,
       })
@@ -230,10 +227,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
   startDate = startDate ? r.ISO8601(startDate) : r.now();
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
-
   const a = Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
     .getJoin({
       patient: true,
       practitioner: true,
@@ -473,12 +468,29 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
   const { appointments } = req.body;
   const cleanedAppointments = appointments.map((appointment) => Object.assign(
       {},
-      _.omit(appointment, ['id', 'dateCreated']),
+      _.omit(appointment, ['id']),
       { accountId: req.accountId }
     ));
 
-  return Appointment.save(cleanedAppointments)
-    .then(_appointments => res.send(normalize('appointments', _appointments)))
+  return Appointment.batchSave(cleanedAppointments)
+    .then(a => res.send(normalize('appointments', a)))
+    .catch(({ errors, docs }) => {
+      errors = errors.map(({ appointment, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete appointment.createdAt;
+        return {
+          appointment,
+          message,
+        };
+      });
+
+      const entities = normalize('appointments', docs);
+      const responseData = Object.assign({}, entities, { errors });
+      return res.status(400).send(responseData);
+    })
     .catch(next);
 });
 
