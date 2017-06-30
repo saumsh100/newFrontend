@@ -150,7 +150,6 @@ function createModel(tableName, schema, config = {}) {
       }
     }
 
-
     // Now check check uniqueness against each other
     docs = uniqWith(docs, predicate);
 
@@ -234,6 +233,10 @@ function createModel(tableName, schema, config = {}) {
 
   // Ultimately what we would use if we could easily separate validate, sanitize, preSave steps
   Model.defineStatic('batchInsert', (docs) => {
+    docs = docs.map((originalDoc) => {
+      return originalDoc._makeSavableCopy();
+    });
+
     return r.db(db)
       .table(tableName)
       .insert(docs, {
