@@ -79,7 +79,7 @@ export function setAllFilters(entityKeys) {
       }
       dispatch(addAllScheduleFilter({
         key: `${key}Filter`,
-        entities: filterModel
+        entities: filterModel,
       }));
     });
   };
