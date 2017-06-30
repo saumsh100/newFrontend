@@ -36,7 +36,13 @@
 }
 
 .appointmentContainer {
-
+  &:hover {
+    cursor: pointer;
+    z-index: 5 !important;
+    //animation-name: example;
+    //animation-duration: 4s;
+    //transition: all 0.10s ease-in;
+  }
 }
 .showAppointment {
   position: absolute;
@@ -49,13 +55,7 @@
     float: right;
   }
 
-  &:hover {
-    cursor: pointer;
-    z-index: 5 !important;
-    //animation-name: example;
-    //animation-duration: 4s;
-    //transition: all 0.10s ease-in;
-  }
+
 
   &_nameAge {
     display: flex;
