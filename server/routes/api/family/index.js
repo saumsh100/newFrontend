@@ -1,8 +1,10 @@
+const _ = require('lodash');
 const familyRouter = require('express').Router();
 const Family = require('../../../models/Family');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
+const checkIsArray = require('../../../middleware/checkIsArray');
 
 familyRouter.param('familyId', loaders('family', 'Family'));
 
