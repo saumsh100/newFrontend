@@ -49,6 +49,7 @@ class DayViewBody extends Component {
     let practitionersArray = sortedPractitioners.map((prac, index) => {
       return Object.assign({}, prac.toJS(), {
         color: colors[index],
+        prettyName: prac.getPrettyName(),
       });
     });
 

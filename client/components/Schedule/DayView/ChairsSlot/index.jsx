@@ -54,6 +54,8 @@ export default function ChairsSlot(props) {
             endHour={endHour}
             filteredApps={filteredApps}
             selectAppointment={selectAppointment}
+            scheduleView={schedule.toJS().scheduleView}
+            columnHeaderName={chair.name}
           />
         );
       }) : null}

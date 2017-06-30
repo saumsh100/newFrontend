@@ -35,6 +35,7 @@ class AddNewAppointment extends Component {
     super(props);
     this.state = {
       servicesAllowed: this.props.services,
+      patientSearched: null,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -249,14 +250,10 @@ class AddNewAppointment extends Component {
   }
 
   handleAutoSuggest(newValue) {
-    const {
-      change,
-      formName,
-    } = this.props;
-
     if (typeof newValue === 'object') {
-      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
-      change(formName, 'patient.email', newValue.email);
+      this.props.setPatientSearched(newValue);
+    } else if (newValue === '') {
+      this.props.setPatientSearched('');
     }
   }
 
@@ -277,7 +274,7 @@ class AddNewAppointment extends Component {
               </span>
             </div>
           );
-        })
+        });
         return patientList;
       });
   }
@@ -320,7 +317,10 @@ class AddNewAppointment extends Component {
       <div className={styles.formContainer}>
         <IconButton
           icon="times"
-          onClick={reinitializeState}
+          onClick={()=>{
+            this.props.reset(formName)
+            return reinitializeState()
+          }}
           className={styles.trashIcon}
         />
         <DisplayForm
@@ -331,6 +331,7 @@ class AddNewAppointment extends Component {
           patients={patients}
           chairs={chairs}
           selectedAppointment={selectedAppointment}
+          patientSearched={this.props.patientSearched}
           unit={unit}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}

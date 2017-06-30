@@ -10,12 +10,12 @@ import Patient from '../server/models/Patient';
 import uniqWith from 'lodash/uniqWith';
 import bindAxiosInterceptors from '../client/util/bindAxiosInterceptors';
 
-const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmODBhNjZmNy0wYTBmLTQwY2MtOGFiZC02MTEzMmNkMTA0ZWQiLCJzZXNzaW9uSWQiOiJkY2MwOTI2YS0wMjJkLTQ1NTMtOThiMS0yZWJmYzJhN2Q5ZGQiLCJhY2NvdW50SWQiOiIxYWVhYjAzNS1iNzJjLTRmN2EtYWQ3My0wOTQ2NWNiZjU2NTQiLCJpYXQiOjE0OTgwMDAyNTcsImV4cCI6MTUwMDU5MjI1N30.m5VUlTYzhSK7cnRYwtapko2--239-aE6Kh0BCkWZT4k';
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMDBhYjljOC1jMTJhLTQ5MGItYjEyZS00ODY2NzBlNTkxYWQiLCJzZXNzaW9uSWQiOiI1OWIzMDU4OS1hOTRiLTQ2YmMtOWM1NC02Y2YzOWMzNmQxNzYiLCJhY3RpdmVBY2NvdW50SWQiOiJiZWVmYjAzNS1iNzJjLTRmN2EtYWQ3My0wOTQ2NWNiZjU2NTQiLCJpYXQiOjE0OTg1OTMzMTgsImV4cCI6MTUwMTE4NTMxOH0.L1xc2_QIpWq0AwYYtACKVa3rerGLHxj501aO-ral_J0';
 bindAxiosInterceptors(() => TOKEN);
 
 let start = Date.now();
 
-function generatePatientSeeds(num = 1000) {
+function generatePatientSeeds(num = 5) {
   const accountId = uuid();
   const patientSeeds = [];
   let i;
@@ -81,7 +81,7 @@ async function main() {
 
     start = Date.now();
     try {
-      const res = await axios.post('http://localhost:5100/api/patients/batch', { patients: batchSeeds });
+      const res = await axios.post('http://carecru.dev:8080/api/patients/batch', { patients: batchSeeds });
       console.log('num patients created =', size(res.data.entities.patients));
       console.log('num errors created =', 'ZERO');
       console.log(`Batch Completed in ${Date.now() - start}ms`);

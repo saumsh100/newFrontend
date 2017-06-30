@@ -83,8 +83,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
   const endDate = r.now();
 
   return Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
     .getJoin({
       patient: true,
     })
@@ -112,25 +111,6 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 });
 
 /**
-<<<<<<< HEAD
- * Batch creation
- */
-patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
-  const { patients } = req.body;
-  const cleanedPatients = patients.map(patient => Object.assign(
-      {},
-      _.omit(patient, ['id', 'dateCreated']),
-      { accountId: req.accountId }
-    ));
-
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
-    .catch(next);
-});
-
-/**
-=======
->>>>>>> 84a98c19c36334536ac95efded5e35add6d13a34
  * Batch updating
  */
 patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
@@ -333,21 +313,24 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
   const { patients } = req.body;
   const cleanedPatients = patients.map(patient => Object.assign(
       {},
-      _.omit(patient, ['id', 'dateCreated']),
-      { accountId: req.accountId }
-    ));
+      _.omit(patient, ['id']),
+      { accountId: req.accountId },
+      { isBatch: true }
+    );
+  });
 
   return Patient.batchSave(cleanedPatients)
     .then(p => res.send(normalize('patients', p)))
     .catch(({ errors, docs }) => {
-      errors = errors.map(({ doc, message }) => {
+    // TODO make sure that we are catching the 400 error
+      errors = errors.map(({ patient, message }) => {
         // Created At can sometimes be a ReQL query and cannot
         // be stringified by express on res.send, this is a
         // quick fix for now. Also, message has to be plucked off
         // because it is removed on send as well
-        delete doc.createdAt;
+        delete patient.createdAt;
         return {
-          doc,
+          patient,
           message,
         };
       });

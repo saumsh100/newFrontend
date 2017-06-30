@@ -75,6 +75,14 @@ const marks = {
   180: '180',
 };
 
+const marks2 = (unit) => {
+  let mark = {}
+  for(let i = unit; i <= 180; i+=unit) {
+    mark[i] = `${i}`;
+  }
+  return mark;
+};
+
 export default function AppointmentForm(props) {
   const {
     serviceOptions,
@@ -197,10 +205,10 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row_durBuff}>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+        <Col xs={12} md={4} className={styles.addNewAppt_col}>
           <Field
             name="duration"
-            label="Duration"
+            label="Duration (min)"
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
@@ -210,10 +218,10 @@ export default function AppointmentForm(props) {
             data-test-id="duration"
           />
         </Col>
-        <Col xs={12} md={2} className={styles.addNewAppt_col_unit}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col_unit}>
           <Field
             name="unit"
-            label="Unit"
+            label={`Duration (unit of ${unit})`}
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
@@ -222,10 +230,10 @@ export default function AppointmentForm(props) {
             data-test-id="unit"
           />
         </Col>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+        <Col xs={12} md={3} className={styles.addNewAppt_col}>
           <Field
             name="buffer"
-            label="Buffer"
+            label="Buffer (min)"
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
@@ -244,7 +252,7 @@ export default function AppointmentForm(props) {
             defaultValues={[60,61]}
             min={unit}
             max={180}
-            marks={marks}
+            marks={marks2(unit)}
             onChange={(e, value)=> handleSliderChange(value)}
             data-test-id="slider"
           />

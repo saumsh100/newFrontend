@@ -37,6 +37,7 @@ export default function DisplayForm(props) {
     services,
     chairs,
     practitioners,
+    patientSearched,
     getSuggestions,
     selectedAppointment,
     unit,
@@ -49,9 +50,14 @@ export default function DisplayForm(props) {
     handleBufferChange,
   } = props;
 
-  let initialValues = null;
+  let initialValues = {
+    appointment: {
+      duration: 60,
+      buffer: 0,
+    },
+  };
   let time = null;
-
+  let patient = null;
   if (selectedAppointment) {
     const {
       startDate,
@@ -66,7 +72,7 @@ export default function DisplayForm(props) {
       isCancelled,
     } = selectedAppointment;
 
-    const patient = patients.get(patientId);
+    patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
 
@@ -94,6 +100,12 @@ export default function DisplayForm(props) {
         note,
       },
     };
+  }
+
+  let patientDisplay = patientSearched || patient;
+
+  if (patientSearched === '') {
+    patientDisplay = patientSearched;
   }
 
   const serviceOptions = generateEntityOptions(services, 'name');
@@ -133,6 +145,7 @@ export default function DisplayForm(props) {
             <FormSection name="patient">
               <PatientForm
                 getSuggestions={getSuggestions}
+                patientSearched={patientDisplay}
                 handleSubmit={handleSubmit}
                 handleAutoSuggest={handleAutoSuggest}
               />

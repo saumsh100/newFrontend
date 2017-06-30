@@ -32,6 +32,7 @@ const Appointment = createModel('Appointment', {
   isSplit: type.boolean(),
   splitAppointments: [type.string().uuid(4)],
   isParent: type.boolean(),
+  isBatch: type.boolean(),
 });
 
 Appointment.ensureIndex('practitionerIdRange', doc => [doc('practitionerId'), doc('startDate')]);

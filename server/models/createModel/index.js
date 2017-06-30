@@ -84,17 +84,17 @@ function createModel(tableName, schema, config = {}) {
     // now validate and catch any validation errors
     docs = docs.filter((d) => {
       try {
-        d.validate();
+        d.validate(); // validate against schema
         return true;
       } catch (error) {
-        error.doc = d;
+        error[tableName.toLowerCase()] = d;
         errors.push(error);
       }
     });
 
     const onError = (field, doc) => {
       const error = UniqueFieldError(Model, field);
-      error.doc = doc;
+      error[tableName.toLowerCase()] = doc;
       errors.push(error);
     };
 
@@ -115,13 +115,16 @@ function createModel(tableName, schema, config = {}) {
             Model.performantPredicate(a, b, onError);
         };
       } else {
+        // do uniqueness validation
         const defaultPredicate = (a, b) => {
           for (const field in uniqueConfig) {
             const fieldConfig = uniqueConfig[field];
+            // if there is not uniqueness config - skip this field, move on to another uniqueness field
             if (!fieldConfig) continue;
             if (isArray(fieldConfig)) {
               // Now check
               let same = a[field] === b[field];
+              // check uniqueness between the two models i am trying to save
               for (const depField of fieldConfig) {
                 same = same && a[depField] === b[depField];
               }
@@ -147,12 +150,11 @@ function createModel(tableName, schema, config = {}) {
       }
     }
 
-
     // Now check check uniqueness against each other
     docs = uniqWith(docs, predicate);
 
     if (Model.uniqueValidate) {
-      // Now that they are sanitized, validated, and unique against eachother
+      // Now that they are sanitized, validated, and unique against each other
       const finalDocs = [];
       for (const d of docs) {
         try {
@@ -164,7 +166,7 @@ function createModel(tableName, schema, config = {}) {
             finalDocs.push(d);
           });
         } catch (err) {
-          err.doc = d;
+          err[tableName.toLowerCase()] = d;
           errors.push(err);
         }
       }
@@ -172,12 +174,13 @@ function createModel(tableName, schema, config = {}) {
       docs = finalDocs;
     }
 
+    console.log(`input docs size ${docsArray.size}; final docs size ${docs.length}`);
     return { errors, docs };
   });
 
   /**
    *
-   *
+   * THIS IS USED TO SAVE, NOT THE OTHER ONE
    */
   Model.defineStatic('batchSave', async function (dataArray) {
     // TODO: remove attrs on error docs that will break during send
@@ -185,6 +188,8 @@ function createModel(tableName, schema, config = {}) {
     if (!docs.length) {
       throw { errors, docs };
     }
+
+    console.log(`batchSave: saving ${dataArray.length} valid patients`);
 
     try {
       // Bulk Insert... at this point it is assumed to pass!
@@ -228,6 +233,13 @@ function createModel(tableName, schema, config = {}) {
 
   // Ultimately what we would use if we could easily separate validate, sanitize, preSave steps
   Model.defineStatic('batchInsert', (docs) => {
+    // Was the only function that this would work in
+    docs = docs.map((originalDoc) => {
+      // isBatch allows us to ignore these on changeFeeds...
+      originalDoc.isBatch = true;
+      return originalDoc._makeSavableCopy();
+    });
+
     return r.db(db)
       .table(tableName)
       .insert(docs, {
