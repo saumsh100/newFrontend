@@ -323,7 +323,8 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
     return Object.assign(
       {},
       _.omit(patient, ['id']),
-      { accountId: req.accountId }
+      { accountId: req.accountId },
+      { isBatch: true }
     );
   });
 

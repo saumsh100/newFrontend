@@ -473,7 +473,8 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
   const cleanedAppointments = appointments.map((appointment) => Object.assign(
       {},
       _.omit(appointment, ['id']),
-      { accountId: req.accountId }
+      { accountId: req.accountId },
+      { isBatch: true }
     ));
 
   return Appointment.batchSave(cleanedAppointments)

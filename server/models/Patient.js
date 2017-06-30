@@ -57,6 +57,7 @@ const Patient = createModel('Patient', {
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
   status: type.string().enum(['Active', 'InActive']).default('Active'),
+  isBatch: type.boolean(),
 }, {
   unique: {
     email: ['accountId'],
