@@ -10,6 +10,8 @@ import ClinicUsers from '../../components/Settings/Clinic/Users';
 import ScheduleOfficeHours from '../../components/Settings/Schedule/OfficeHours';
 import Services from '../../components/Settings/Services';
 import Practitioners from '../../components/Settings/Practitioners';
+import Reminders from '../../components/Settings/Schedule/Reminders';
+import Recalls from '../../components/Settings/Schedule/Recalls';
 import ScheduleOnlineBooking from '../../components/Settings/Schedule/OnlineBooking';
 
 const base = (path = '') => `/settings${path}`;
@@ -31,6 +33,8 @@ const ScheduleContainer = props =>
       <Redirect exact from={scheduleBase()} to={scheduleBase('/hours')} />
       <Route path={scheduleBase('/hours')} component={ScheduleOfficeHours} />
       <Route path={scheduleBase('/onlinebooking')} component={ScheduleOnlineBooking} />
+      <Route path={scheduleBase('/reminderslist')} component={Reminders} />
+      <Route path={scheduleBase('/recalls')} component={Recalls} />
     </Switch>
   </Schedule>;
 
