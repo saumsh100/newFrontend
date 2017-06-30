@@ -89,7 +89,6 @@ function ShowAppointment(props) {
     width,
     backgroundColor,
     border: `1.5px solid ${bgColor}`,
-    transition: 'background-color 0.5s ease',
     //zIndex: appPosition,
   };
 

@@ -48,14 +48,13 @@
   position: absolute;
   box-sizing: border-box;
   overflow-y: auto;
+  transition: background-color 0.5s ease;
 
   &_icon {
     color: $inactive-color;
     opacity: 0.5;
     float: right;
   }
-
-
 
   &_nameAge {
     display: flex;
