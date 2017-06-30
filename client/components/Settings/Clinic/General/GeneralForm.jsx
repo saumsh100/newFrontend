@@ -13,7 +13,6 @@ const maxLength25 = maxLength(50);
 const maxUnitSize = value => value && value > 60 ? 'Must be less than or equal to 180' : undefined;
 
 export default function GeneralForm({ onSubmit, activeAccount, users }) {
-
   const initialValues = {
     name: activeAccount.get('name'),
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
@@ -90,6 +89,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
         required
         name="unit"
         label="Schedule Unit"
+        type="number"
         validate={[notNegative, maxUnitSize]}
       />
     </div>
