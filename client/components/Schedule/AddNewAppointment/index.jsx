@@ -274,7 +274,7 @@ class AddNewAppointment extends Component {
               </span>
             </div>
           );
-        })
+        });
         return patientList;
       });
   }

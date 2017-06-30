@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from '../styles.scss';
 import { Icon } from '../../../library';
+import withHoverable from '../../../../hocs/withHoverable'
 
 const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -23,7 +24,7 @@ function hexToRgbA(hex, opacity) {
   throw new Error('Bad Hex');
 }
 
-export default function ShowAppointment(props) {
+function ShowAppointment(props) {
   const {
     appointment,
     practIndex,
@@ -33,6 +34,7 @@ export default function ShowAppointment(props) {
     columnWidth,
     widthIntersect,
     rowSort,
+    isHovered,
   } = props;
 
   const {
@@ -78,16 +80,16 @@ export default function ShowAppointment(props) {
   const width = `${columnWidth * ((100 / rowSort.length) / 100)}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
-
+  const backgroundColor = isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
   // main app style
   const appStyle = {
     top,
     left,
     height,
     width,
-    backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
+    backgroundColor,
     border: `1.5px solid ${bgColor}`,
-    zIndex: appPosition,
+    //zIndex: appPosition,
   };
 
   // calculating the buffer position and height styling
@@ -100,7 +102,7 @@ export default function ShowAppointment(props) {
     width,
     height: `${heightCalcBuffer}%`,
     backgroundColor: '#b4b4b5',
-    zIndex: appPosition,
+    //zIndex: appPosition,
   };
 
   return (
@@ -154,3 +156,5 @@ ShowAppointment.propTypes = {
   endHour: PropTypes.number,
   columnWidth: PropTypes.number,
 };
+
+export default withHoverable(ShowAppointment);
