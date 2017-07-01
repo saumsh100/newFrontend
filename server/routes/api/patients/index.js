@@ -156,15 +156,16 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
-  Patient.filter((patient) => {
-    return patient('accountId').eq(req.accountId).and(
-      patient('firstName').match(searchReg)
+  Patient
+  .getAll(req.accountId, { index: 'accountId' })
+  .filter((patient) => {
+    return patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
         .or(patient('mobilePhoneNumber').match(phoneSearch))
         .or(patient('homePhoneNumber').match(phoneSearch))
         .or(patient('workPhoneNumber').match(phoneSearch))
         .or(patient('otherPhoneNumber').match(phoneSearch))
-        .or(patient('email').match(search[0])));
+        .or(patient('email').match(search[0]));
   }).limit(50)
     .getJoin({ appointments: {
       _apply: (appointment) => {

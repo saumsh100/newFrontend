@@ -81,6 +81,8 @@ Patient.defineStatic('performantPredicate', function (a, b, onError) {
   }
 });
 
+Patient.ensureIndex('accountId');
+
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
   return this.filter({ mobilePhoneNumber: phoneNumber }).nth(0).run();
