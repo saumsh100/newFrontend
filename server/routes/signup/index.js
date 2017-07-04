@@ -24,7 +24,6 @@ signupRouter.post('/:token', ({ body, params: { token } }, res, next) => {
       return Permission.save({
         role: 'MANAGER',
       }).then((permission) => {
-        console.log('this')
         return UserAuth.signup({
           ...newUser,
           enterpriseId,
