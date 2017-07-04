@@ -28,20 +28,27 @@ class Reminders extends Component {
     this.openModal = this.openModal.bind(this);
   }
 
-  componentDidMount() {
-    if (!this.props.activeAccount) {
-      return null;
-    }
+  componentWillMount() {
 
     this.props.fetchEntities({
       url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
     });
 
-    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : false;
+    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : null;
 
     this.setState({
       canSendReminders,
     });
+  }
+
+  componentWillReceiveProps() {
+    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : null;
+
+    if (this.state.canSendReminders === null) {
+      this.setState({
+        canSendReminders,
+      });
+    }
   }
 
   reinitializeState() {

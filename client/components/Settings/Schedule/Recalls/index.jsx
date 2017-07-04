@@ -29,19 +29,25 @@ class Recalls extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.activeAccount) {
-      return null;
-    }
-
     this.props.fetchEntities({
       url: `/api/accounts/${this.props.activeAccount.id}/recalls`,
     });
 
-    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : false;
+    const canSendRecalls = this.props.activeAccount ? this.props.activeAccount.toJS().canSendRecalls : false;
 
     this.setState({
-      canSendReminders,
+      canSendRecalls,
     });
+  }
+
+  componentWillReceiveProps() {
+    const canSendRecalls = this.props.activeAccount ? this.props.activeAccount.toJS().canSendRecalls : null;
+
+    if (this.state.canSendRecalls === null) {
+      this.setState({
+        canSendRecalls,
+      });
+    }
   }
 
   reinitializeState() {
