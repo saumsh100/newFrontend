@@ -32,7 +32,7 @@ const Appointment = createModel('Appointment', {
   isSplit: type.boolean(),
   splitAppointments: [type.string().uuid(4)],
   isParent: type.boolean(),
-  isBatch: type.boolean(),
+  isBatch: type.boolean().default(false),
 });
 
 Appointment.ensureIndex('accountId');
