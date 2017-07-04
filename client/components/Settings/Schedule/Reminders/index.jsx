@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import jwt from 'jwt-decode';
 import { updateEntityRequest, fetchEntities, createEntityRequest } from '../../../../thunks/fetchEntities';
 import { Toggle, Grid, Header, Button, RemoteSubmitButton, DialogBox } from '../../../library';
 import RemindersList from './RemindersList';
@@ -28,9 +29,12 @@ class Reminders extends Component {
     this.openModal = this.openModal.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+
     this.props.fetchEntities({
-      url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
+      url: `/api/accounts/${decodedToken.accountId}/reminders`,
     });
 
     this.setState({
@@ -217,7 +221,7 @@ Reminders.propTypes = {
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]) || {};
   return {
     activeAccount,
     reminders: entities.getIn(['reminders', 'models']),

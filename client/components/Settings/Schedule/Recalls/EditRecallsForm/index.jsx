@@ -1,8 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Form, Field } from '../../../../library';
-import { emailValidate } from '../../../../library/Form/validate';
 
-class EditRemindersForm extends Component {
+class EditRecallsForm extends Component {
 
   render() {
     const { sendEdit, formName, initialValues = {} } = this.props;
@@ -48,11 +47,11 @@ class EditRemindersForm extends Component {
   }
 }
 
-EditRemindersForm.propTypes = {
+EditRecallsForm.propTypes = {
   formName: PropTypes.string,
   sendEdit: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
 };
 
 
-export default EditRemindersForm;
+export default EditRecallsForm;

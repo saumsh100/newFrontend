@@ -41,7 +41,7 @@ const PATHS = {
     },
     {
       to: '/settings/schedule/reminderslist',
-      label: 'RemindersList',
+      label: 'Reminders',
     },
     {
       to: '/settings/schedule/recalls',
