@@ -904,8 +904,8 @@ const SEEDS = {
       twilioPhoneNumber: clinicPhoneNumber,
       bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: donnaDentalId,
-      canSendReminders: true,
-      canSendRecalls: true,
+      // canSendReminders: true,
+      // canSendRecalls: true,
     },
     {
       id: accountId2,

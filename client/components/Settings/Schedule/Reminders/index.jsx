@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { updateEntityRequest, fetchEntities, createEntityRequest } from '../../../../thunks/fetchEntities';
+import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import { Toggle, Grid, Header, Button, RemoteSubmitButton, DialogBox } from '../../../library';
 import RemindersList from './RemindersList';
 import EditRemindersForm from './EditRemindersForm';
@@ -24,24 +24,36 @@ class Reminders extends Component {
     this.reinitializeState = this.reinitializeState.bind(this);
     this.edit = this.edit.bind(this);
     this.sendEdit = this.sendEdit.bind(this);
+    this.deleteReminders = this.deleteReminders.bind(this);
     this.newReminder = this.newReminder.bind(this);
     this.openModal = this.openModal.bind(this);
   }
 
-  componentDidMount() {
-    if (!this.props.activeAccount) {
-      return null;
+  componentWillMount() {
+    if (this.props.activeAccount && this.props.activeAccount.id) {
+      this.props.fetchEntities({
+        url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
+      });
     }
 
-    this.props.fetchEntities({
-      url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
-    });
-
-    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : false;
+    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : null;
 
     this.setState({
       canSendReminders,
     });
+  }
+
+  componentWillReceiveProps() {
+    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : null;
+
+    if (this.state.canSendReminders === null) {
+      this.setState({
+        canSendReminders,
+      });
+      this.props.fetchEntities({
+        url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
+      });
+    }
   }
 
   reinitializeState() {
@@ -51,6 +63,25 @@ class Reminders extends Component {
     };
 
     this.setState(newState);
+  }
+
+  deleteReminders(id) {
+    const alert = {
+      success: {
+        body: 'Reminder Delete',
+      },
+      error: {
+        title: 'Clinic Reminders Error',
+        body: 'Failed to Delete.',
+      },
+    };
+
+    this.props.deleteEntityRequest({
+      url: `/api/accounts/${this.props.activeAccount.id}/reminders/${id}/`,
+      key: 'reminders',
+      id,
+      alert,
+    });
   }
 
   openModal() {
@@ -151,9 +182,11 @@ class Reminders extends Component {
 
     const reminders = this.props.reminders.toArray().map((reminder) => {
       return (<RemindersList
+        key={reminder.id}
         length={reminder.lengthSeconds}
         primaryType={reminder.primaryType}
         edit={this.edit.bind(null, reminder.id)}
+        deleteFunc={this.deleteReminders.bind(null, reminder.id)}
       />);
     });
 
@@ -220,6 +253,7 @@ Reminders.propTypes = {
   activeAccount: PropTypes.object,
   reminders: PropTypes.object,
   updateEntityRequest: PropTypes.func,
+  deleteEntityRequest: PropTypes.func,
   fetchEntities: PropTypes.func,
   createEntityRequest: PropTypes.func,
   reset: PropTypes.func,
@@ -237,6 +271,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     createEntityRequest,
+    deleteEntityRequest,
     updateEntityRequest,
     reset,
   }, dispatch);
