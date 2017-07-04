@@ -7,7 +7,7 @@ class EditRecallsForm extends Component {
     const { sendEdit, formName, initialValues = {} } = this.props;
     const intValues = {
       primaryType: initialValues.primaryType,
-      lengthHours: initialValues.lengthSeconds / 60 / 60,
+      lengthMonths: Math.round(initialValues.lengthSeconds / 60 / 60 / 24 / 30),
     };
 
     const options = [
@@ -32,8 +32,8 @@ class EditRecallsForm extends Component {
         <Field
           required
           type="number"
-          name="lengthHours"
-          label="Length Hours"
+          name="lengthMonths"
+          label="Length Months"
         />
         <Field
           required

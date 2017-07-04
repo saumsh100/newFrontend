@@ -17,7 +17,7 @@ class RecallsList extends Component {
         <div className={styles.main}>
           <div className={styles.userName}>
             <p className={styles.list}>Type: {primaryType.toUpperCase()}</p>
-            <p className={styles.list}>Every {length / 60 / 60 } hours</p>
+            <p className={styles.list}>Every {length / 60 / 60 / 24 / 30 } months</p>
           </div>
         </div>
         {button}
