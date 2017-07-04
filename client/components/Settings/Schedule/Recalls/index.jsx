@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { updateEntityRequest, fetchEntities, createEntityRequest } from '../../../../thunks/fetchEntities';
+import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import { Toggle, Grid, Header, Button, RemoteSubmitButton, DialogBox } from '../../../library';
 import RecallsList from './RecallsList';
 import EditRecallsForm from './EditRecallsForm';
@@ -25,23 +25,36 @@ class Recalls extends Component {
     this.edit = this.edit.bind(this);
     this.sendEdit = this.sendEdit.bind(this);
     this.newRecall = this.newRecall.bind(this);
+    this.deleteRecall = this.deleteRecall.bind(this);
     this.openModal = this.openModal.bind(this);
   }
 
   componentWillMount() {
-    if (!this.props.activeAccount) {
-      return null;
+    if (this.props.activeAccount && this.props.activeAccount.id) {
+      this.props.fetchEntities({
+        url: `/api/accounts/${this.props.activeAccount.id}/recalls`,
+      });
     }
 
-    this.props.fetchEntities({
-      url: `/api/accounts/${this.props.activeAccount.id}/recalls`,
-    });
-
-    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : false;
+    const canSendRecalls = this.props.activeAccount ? this.props.activeAccount.toJS().canSendRecalls : null;
 
     this.setState({
-      canSendReminders,
+      canSendRecalls,
     });
+  }
+
+  componentWillReceiveProps() {
+    const canSendRecalls = this.props.activeAccount ? this.props.activeAccount.toJS().canSendRecalls : null;
+
+    if (this.state.canSendRecalls === null) {
+      this.setState({
+        canSendRecalls,
+      });
+
+      this.props.fetchEntities({
+        url: `/api/accounts/${this.props.activeAccount.id}/recalls`,
+      });
+    }
   }
 
   reinitializeState() {
@@ -51,6 +64,25 @@ class Recalls extends Component {
     };
 
     this.setState(newState);
+  }
+
+  deleteRecall(id) {
+    const alert = {
+      success: {
+        body: 'Recall Delete',
+      },
+      error: {
+        title: 'Clinic Recall Error',
+        body: 'Failed to Delete.',
+      },
+    };
+
+    this.props.deleteEntityRequest({
+      url: `/api/accounts/${this.props.activeAccount.id}/recalls/${id}/`,
+      key: 'recalls',
+      id,
+      alert,
+    });
   }
 
   openModal() {
@@ -151,9 +183,11 @@ class Recalls extends Component {
 
     const recalls = this.props.recalls.toArray().map((recall) => {
       return (<RecallsList
+        key={recall.id}
         length={recall.lengthSeconds}
         primaryType={recall.primaryType}
         edit={this.edit.bind(null, recall.id)}
+        deleteFunc={this.deleteRecall.bind(null, recall.id)}
       />);
     });
 
@@ -220,6 +254,7 @@ Recalls.propTypes = {
   activeAccount: PropTypes.object,
   recalls: PropTypes.object,
   updateEntityRequest: PropTypes.func,
+  deleteEntityRequest: PropTypes.func,
   fetchEntities: PropTypes.func,
   createEntityRequest: PropTypes.func,
   reset: PropTypes.func,
@@ -237,6 +272,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     createEntityRequest,
+    deleteEntityRequest,
     updateEntityRequest,
     reset,
   }, dispatch);
