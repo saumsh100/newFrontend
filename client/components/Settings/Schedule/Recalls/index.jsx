@@ -28,7 +28,7 @@ class Recalls extends Component {
     this.openModal = this.openModal.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (!this.props.activeAccount) {
       return null;
     }
