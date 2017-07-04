@@ -6,12 +6,19 @@ import styles from './styles.scss';
 
 export default function RecallData(props) {
   const {
-    patient,
-    recall,
+    patientJS,
+    recallJS,
     sentRecall,
     index,
     handleRecallClick,
   } = props;
+
+  if (!recallJS || !patientJS) {
+    return null;
+  }
+
+  const recall = recallJS.toJS();
+  const patient = patientJS.toJS();
 
   const displayStatus = sentRecall.isConfirmed ? 'Recall Confirmed' : 'Recall Sent';
 
