@@ -59,7 +59,7 @@ const alexPatientId2 = uuid();
 const markPatientId = uuid();
 const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
 const recallPatientId = '4fcab035-b72c-4f7a-ad73-09465cbf5654';
-const sergeyPatientId = uuid();
+const sergeyPatientId = '0b59a171-889e-4631-b392-cc422f711db1';
 
 const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
 
@@ -96,7 +96,7 @@ const hour8 = new Date(1970, 1, 1, 8, 0);
 const hour5 = new Date(1970, 1, 1, 17, 0);
 
 const justinPhoneNumber = '+17808508886';
-const sergeyPhoneNumber = '+17782422626';
+const sergeyPhoneNumber = '+16042657486';
 const alexPhoneNumber = '+19782521845';
 const markPhoneNumber = '+17788654451';
 
@@ -176,6 +176,10 @@ const e2eAppointments = [];
 const randomPatients = [];
 let randomMessages = [];
 const randomChats = [];
+const e2eChats = [];
+const e2eChatId = '5dddfd4e-4b67-4786-8e03-25ce829b4105';
+const e2eChatLastDate = faker.date.past();
+const e2eChatMessages = genericTextMessageSeeds(e2eChatId, '17786558613', clinicPhoneNumber, e2eChatLastDate);
 const randomCalls = [];
 
 for (let i = 0; i < 100; i++) {
@@ -277,6 +281,15 @@ e2eAppointments.push({
   isCancelled: false,
   chairId,
   note: 'Appointment Tomorrow for E2E test',
+});
+
+e2eChats.push({
+  id: e2eChatId,
+  accountId,
+  patientId: sergeyPatientId,
+  patientPhoneNumber: sergeyPhoneNumber,
+  lastTextMessageDate: e2eChatLastDate,
+  lastTextMessageId: e2eChatMessages[e2eChatMessages.length - 1].id,
 });
 
 const generateDefaultServices = (_accountId) => {
@@ -1229,6 +1242,7 @@ const SEEDS = {
     // },
 
     ...randomChats,
+    ...e2eChats,
   ],
 
   TextMessage: [
@@ -1247,6 +1261,7 @@ const SEEDS = {
     // ...genericTextMessageSeeds(sergeyChatId, sergeyPhoneNumber, clinicPhoneNumber),
     //...largeUnreadTextMessageSeeds(justinChatId, justinPhoneNumber, clinicPhoneNumber),
     ...randomMessages,
+    ...e2eChatMessages,
   ],
 
   Chair: [

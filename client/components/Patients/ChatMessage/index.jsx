@@ -178,6 +178,7 @@ class ChatMessage extends Component {
                       value={this.state.value}
                       getSuggestions={this.getSuggestions}
                       inputProps={inputProps}
+                      data-test-id="patientSearch"
                       focusInputOnSuggestionClick={false}
                       getSuggestionValue={suggestion => suggestion.name}
                       classStyles={styles.chatSearch}

@@ -10,7 +10,7 @@ import omit from 'lodash/omit';
 //const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = suggestion => {
   const display = suggestion.display || `${suggestion.firstName} ${suggestion.lastName}` || suggestion.name;
-  return (<div>
+  return (<div data-test-id={`${suggestion.name}Suggestion`} >
     {display}
   </div>);
 };
@@ -56,7 +56,7 @@ class AutoCompleteForm extends Component {
 
     props.value = this.props.value;
 
-    return <Input {...props} />;
+    return <Input {...props} data-test-id={this.props['data-test-id']} />;
   };
 
   render() {
