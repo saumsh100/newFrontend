@@ -46,6 +46,7 @@ function ShowAppointment(props) {
     patientData,
     practitionerData,
     isPatientConfirmed,
+    isReminderSent,
   } = appointment;
 
   if (!patientData) {
@@ -120,7 +121,8 @@ function ShowAppointment(props) {
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
-          {(isPatientConfirmed && <Icon icon="check-circle-o" />)}
+          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon icon="check-circle-o" />)}</div>
+          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon icon="clock-o" />)} </div>
         </div>
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} >

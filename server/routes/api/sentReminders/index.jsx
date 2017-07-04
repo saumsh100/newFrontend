@@ -44,10 +44,4 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
     .catch(next);
 });
 
-
-sentRemindersRouter.get('/:sentReminderId/confirm', (req, res, next) => {
-   console.log('in here!!!!!!');
-});
-
-
 module.exports = sentRemindersRouter;

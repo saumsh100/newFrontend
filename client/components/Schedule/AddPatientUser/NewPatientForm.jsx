@@ -33,7 +33,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
       onSubmit={onSubmit}
       initialValues={initialValues}
       asyncValidate={asyncValidateNewPatient}
-      isValid
+      allowSave
     >
       <Field
         required

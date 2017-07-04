@@ -61,7 +61,6 @@ export function isDueForRecall({ recall, patient, date }) {
 
   // Check if latest appointment is within the recall window
   const { startDate } = appointments[appointments.length - 1];
-  console.log(startDate);
   const isDue = moment(date).diff(startDate) > recall.lengthSeconds;
 
   const recallAlreadySentOrLongerAway = sentRecalls.some((s) => {

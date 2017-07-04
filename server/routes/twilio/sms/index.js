@@ -99,7 +99,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     const { appointment } = sentReminder;
 
     await sentReminder.merge({ isConfirmed: true }).save();
-    await appointment.merge({ isConfirmed: true }).save();
+    await appointment.merge({ isPatientConfirmed: true }).save();
 
     // Mark this as read cause we are auto-responding to it
     await textMessage.merge({ read: true }).save();

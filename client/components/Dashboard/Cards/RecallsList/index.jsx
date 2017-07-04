@@ -30,8 +30,6 @@ class RecallsList extends Component {
       return null;
     }
 
-    console.log(sentRecalls);
-
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
