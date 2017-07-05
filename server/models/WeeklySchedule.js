@@ -13,6 +13,18 @@ const WeeklySchedule = createModel('WeeklySchedule', {
   friday: DailyScheduleShema,
   saturday: DailyScheduleShema,
   sunday: DailyScheduleShema,
+  startDate: type.date(),
+  weeklySchedules: [{
+    monday: DailyScheduleShema,
+    tuesday: DailyScheduleShema,
+    wednesday: DailyScheduleShema,
+    thursday: DailyScheduleShema,
+    friday: DailyScheduleShema,
+    saturday: DailyScheduleShema,
+    sunday: DailyScheduleShema,
+  }],
+  isAdvanced: type.boolean(),
 });
 
 module.exports = WeeklySchedule;
+

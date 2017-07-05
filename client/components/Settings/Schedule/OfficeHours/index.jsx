@@ -1,17 +1,56 @@
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import OfficeHoursForm from './OfficeHoursForm';
 import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
-import { Header } from '../../../library';
+import { Header, Button, DialogBox, RemoteSubmitButton, Form, Field, } from '../../../library';
 import styles from './styles.scss';
 
-function OfficeHours(props) {
-  const { weeklySchedule } = props;
-  const handleSubmit = (values) => {
-    const newWeeklySchedule = weeklySchedule.merge(values);
+class OfficeHours extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      active: false,
+    };
+
+    this.reinitializeState = this.reinitializeState.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.createPattern = this.createPattern.bind(this);
+    this.sendEdit = this.sendEdit.bind(this);
+  }
+
+  reinitializeState() {
+    this.setState({
+      active: false,
+    });
+  }
+
+  // 'monday',
+  // 'tuesday',
+  // 'wednesday',
+  // 'thursday',
+  // 'friday',
+  // 'saturday',
+  // 'sunday',
+
+  sendEdit(i, values) {
+    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+
+    Object.keys(values).forEach((key) => {
+      if (values[key].breaks) {
+        weeklySchedule.weeklySchedules[i][key].breaks = values[key].breaks;
+      } else {
+        const breaks = weeklySchedule.weeklySchedules[i][key].breaks;
+        weeklySchedule.weeklySchedules[i][key] = values[key];
+        weeklySchedule.weeklySchedules[i][key].breaks = breaks;
+      }
+    });
+
+    const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
       success: {
@@ -22,26 +61,127 @@ function OfficeHours(props) {
       },
     };
 
-    props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
-  };
+    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+  }
 
-  return (
-    <div>
-      <Header title="Weekly Schedule" className={styles.header} />
-      <OfficeHoursForm
-        weeklySchedule={weeklySchedule}
-        onSubmit={handleSubmit}
-        formName="officeHours"
-      />
-      <Header title="Breaks" className={styles.header} />
-      <BreaksForm
-        weeklySchedule={weeklySchedule}
-        onSubmit={handleSubmit}
-        formName="officeHours"
-        breaksName="clinicBreaks"
-      />
-    </div>
-  );
+  createPattern(values) {
+    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+    const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
+
+    delete weeklyScheduleNew.weeklySchedules;
+    delete weeklyScheduleNew.startDate;
+    delete weeklyScheduleNew.id;
+
+    weeklySchedule.weeklySchedules.push(weeklyScheduleNew);
+    weeklySchedule.startDate = values.startDate;
+    weeklySchedule.isAdvanced = true;
+
+    const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
+
+    const alert = {
+      success: {
+        body: 'Clinic Office Hours Updated',
+      },
+      error: {
+        body: 'Clinic Office Hours Update Failed',
+      },
+    };
+
+    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+  }
+
+  openModal() {
+    this.setState({
+      active: true,
+    });
+  }
+
+  render() {
+    const { weeklySchedule } = this.props;
+    const handleSubmit = (values) => {
+      const newWeeklySchedule = weeklySchedule.merge(values);
+
+      const alert = {
+        success: {
+          body: 'Clinic Office Hours Updated',
+        },
+        error: {
+          body: 'Clinic Office Hours Update Failed',
+        },
+      };
+      this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    };
+
+    let schedules = null;
+    if (weeklySchedule) {
+      schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => {
+        return (<div>
+          <Header title={`Weekly Schedule ${i}`} className={styles.header} />
+          <OfficeHoursForm
+            weeklySchedule={schedule}
+            onSubmit={this.sendEdit.bind(null, i)}
+            formName={`officeHours${i}`}
+          />
+          <Header title="Breaks" className={styles.header} />
+          <BreaksForm
+            weeklySchedule={schedule}
+            onSubmit={this.sendEdit.bind(null, i)}
+            formName={`officeHours${i}`}
+            breaksName={`clinicBreaks${i}`}
+          />
+        </div>);
+      });
+    }
+
+    const actions = [
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Save', onClick: this.createPattern, component: RemoteSubmitButton, props: { form: 'advanceCreate' }},
+    ];
+
+    return (
+      <div>
+        <DialogBox
+          actions={actions}
+          title="Create a New Pattern"
+          type="small"
+          active={this.state.active}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
+          data-test-id="inviteUserDialog"
+        >
+          <Form
+            // className={formStyle}
+            form="advanceCreate"
+            onSubmit={this.createPattern}
+            initialValues={weeklySchedule}
+            ignoreSaveButton
+          >
+            <Field
+              required
+              component="DayPicker"
+              name="startDate"
+              label="Start Date"
+            />
+          </Form>
+        </DialogBox>
+        <Header title="Weekly Schedule" className={styles.header} />
+        <Button onClick={this.openModal}>HIT ME</Button>
+        <OfficeHoursForm
+          weeklySchedule={weeklySchedule}
+          onSubmit={handleSubmit}
+          formName="officeHours"
+        />
+        <Header title="Breaks" className={styles.header} />
+        <BreaksForm
+          weeklySchedule={weeklySchedule}
+          onSubmit={handleSubmit}
+          formName="officeHours"
+          breaksName="clinicBreaks"
+        />
+        {schedules}
+      </div>
+    );
+  }
 }
 
 OfficeHours.propTypes = {
