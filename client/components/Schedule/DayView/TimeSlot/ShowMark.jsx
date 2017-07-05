@@ -8,6 +8,19 @@ const getDuration = (startDate, endDate, customBufferTime) => {
   return duration.asMinutes() - customBufferTime;
 };
 
+function hexToRgbA(hex, opacity) {
+  let c;
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('');
+    if (c.length === 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    }
+    c = `0x${c.join('')}`;
+    return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c &255].join(',')}, ${opacity})`;
+  }
+  throw new Error('Bad Hex');
+}
+
 export default function ShowMark(props) {
   const {
     appointment,
@@ -56,9 +69,8 @@ export default function ShowMark(props) {
     left,
     height,
     width,
-    backgroundColor: '#b4b4b5',
+    backgroundColor: hexToRgbA('#b4b4b5', 0.6),
     border: '1.5px solid #b4b4b5',
-    opacity: '0.6',
     //zIndex: appPosition,
   };
 
@@ -72,9 +84,9 @@ export default function ShowMark(props) {
         className={styles.showAppointment}
         style={appStyle}
       >
-         <div className={styles.showAppointment_mark}>
-           Note: <span className={styles.showAppointment_mark_note}> {note || ''} </span>
-         </div>
+        <div className={styles.showAppointment_mark}>
+          <span className={styles.showAppointment_mark_note}> {note || ''} </span>
+        </div>
       </div>
     </div>
   );

@@ -114,6 +114,7 @@
     font-size: $extra-small-size;
 
     &_note {
+      padding: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
