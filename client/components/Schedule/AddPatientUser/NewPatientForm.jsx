@@ -4,6 +4,9 @@ import styles from './styles.scss';
 
 import { maxLength, asyncValidateNewPatient, emailValidate, phoneValidate } from '../../library/Form/validate';
 
+function test() {
+  console.log('zzzzz')
+}
 
 export default function NewPatientForm({ onSubmit, formName, mergingPatientData, }) {
   const options = [
@@ -33,6 +36,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
       onSubmit={onSubmit}
       initialValues={initialValues}
       asyncValidate={asyncValidateNewPatient}
+      validate={test}
       allowSave
     >
       <Field

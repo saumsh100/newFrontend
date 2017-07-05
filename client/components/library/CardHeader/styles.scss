@@ -19,9 +19,9 @@
 .displayFlex {
   display: flex;
   align-items: center;
-  @media screen and (min-width: 1000px) {
-    min-width: 100px;
-  }
+  //@media screen and (min-width: 1000px) {
+  //  min-width: 100px;
+  //}
 }
 
 .cardCount {
