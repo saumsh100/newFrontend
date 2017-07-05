@@ -18,6 +18,7 @@ const AppointmentsSchema = {
   isSyncedWithPMS: null,
   isSplit: null,
   isReminderSent: null,
+  mark: null,
 };
 
 export default class Appointments extends createModel(AppointmentsSchema) {

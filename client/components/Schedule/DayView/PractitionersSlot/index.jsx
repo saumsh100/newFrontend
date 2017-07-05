@@ -27,6 +27,10 @@ export default function PractitionersSlot(props) {
         const checkFilters = schedule.toJS();
 
         const filteredApps = appointments.filter((app) => {
+          if (app.get('mark')) {
+            return app;
+          }
+
           const service = services.get(app.get('serviceId'));
           const chair = chairs.get(app.get('chairId'));
           const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
@@ -34,6 +38,10 @@ export default function PractitionersSlot(props) {
 
           return ((app.practitionerId === pract.id) && chairsFilter && servicesFilter);
         }).map((app) => {
+          if (app.get('mark')) {
+            return app;
+          }
+
           return Object.assign({}, app.toJS(), {
             appModel: app,
             serviceData: services.get(app.get('serviceId')).get('name'),

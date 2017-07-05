@@ -108,6 +108,17 @@
       text-overflow: ellipsis;
     }
   }
+
+  &_mark {
+    font-family: $medium-font;
+    font-size: $extra-small-size;
+
+    &_note {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 @keyframes example {

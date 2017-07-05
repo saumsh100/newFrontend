@@ -26,12 +26,20 @@ export default function ChairsSlot(props) {
         const checkFilters = schedule.toJS();
 
         const filteredApps = appointments.filter((app) => {
+          if (app.get('mark')) {
+            return app;
+          }
+
           const service = services.get(app.get('serviceId'));
           const practitioner = practitioners.get(app.get('practitionerId'));
           const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
           const practitionersFilter = practitioner && checkFilters.practitionersFilter.indexOf(practitioner.get('id')) > -1;
           return ((app.chairId === chair.id) && practitionersFilter && servicesFilter );
         }).map((app) => {
+          if (app.get('mark')) {
+            return app;
+          }
+
           const practitionerData = practitionersArray.find(prac=> prac.id === app.get('practitionerId'));
 
           return Object.assign({}, app.toJS(), {

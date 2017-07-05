@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
+import ShowMark from './ShowMark';
 import TimeSlotColumn from './TimeSlotColumn';
 
 function intersectingAppointments(appointments, startDate, endDate) {
@@ -63,7 +64,18 @@ export default function TimeSlot(props) {
         const rowFilter = intersectingApps.filter(interApp => moment(interApp.startDate).hour() === row);
         const rowSort = rowFilter.sort(sortAppsByStartDate);
 
-        return (
+        const displayComponent = app.mark ? (
+          <ShowMark
+            key={index}
+            practIndex={practIndex}
+            appointment={app}
+            startHour={startHour}
+            endHour={endHour}
+            columnWidth={columnWidth}
+            widthIntersect={rowFilter.length}
+            rowSort={rowSort}
+          />
+        ) : (
           <ShowAppointment
             key={index}
             practIndex={practIndex}
@@ -76,6 +88,7 @@ export default function TimeSlot(props) {
             rowSort={rowSort}
           />
         );
+        return displayComponent;
       })}
     </div>
   );
