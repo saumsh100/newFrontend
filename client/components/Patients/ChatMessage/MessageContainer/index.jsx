@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import jwt from 'jwt-decode';
 import moment from 'moment';
-import { Avatar, Form, Field } from '../../../library';
+import { Avatar, Form, Field, Button } from '../../../library';
 import * as Actions from '../../../../actions/entities';
 import { createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
 import styles from '../styles.scss';
@@ -13,7 +13,24 @@ class MessageContainer extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      buttonClass: styles.sendButtonOff,
+    };
+
     this.sendMessage = this.sendMessage.bind(this);
+    this.button = this.button.bind(this);
+  }
+
+  button(e) {
+    if (e.target.value && e.target.value.length !== 0) {
+      this.setState({
+        buttonClass: styles.sendButton,
+      });
+    } else {
+      this.setState({
+        buttonClass: styles.sendButtonOff,
+      });
+    }
   }
 
   sendMessage(mobilePhoneNumber, message) {
@@ -32,7 +49,6 @@ class MessageContainer extends Component {
     if (!entityData.chatId) {
       this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/' })
         .then((chat) => {
-          console.log(chat)
           entityData.chatId = Object.keys(chat.chats)[0];
           const patientId = chat.chats.patientId;
           this.props.setSelectedPatient(patientId);
@@ -152,11 +168,22 @@ class MessageContainer extends Component {
             ignoreSaveButton
             onSubmit={this.sendMessage.bind(null, userPhone)}
           >
-            <Field
-              type="text"
-              name="message"
-              label="Type a message"
-            />
+            <div className={styles.send}>
+              <div className={styles.sendInput}>
+                <Field
+                  onChange={this.button}
+                  type="text"
+                  name="message"
+                  label="Type a message"
+                />
+              </div>
+              <button className={styles.button} type="submit">
+                <svg className={this.state.buttonClass} fill="#000000" height="40" viewBox="0 0 24 24" width="40" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                  <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
+              </button>
+            </div>
           </Form>
         </div>
       </div>
