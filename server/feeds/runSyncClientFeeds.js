@@ -10,7 +10,7 @@ function runSyncClientFeeds(socket) {
 
   // ASSUMPTION: Assuming these are the changes coming from the Dashboard
   Appointment
-    .filter({ accountId: activeAccountId })
+    .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
@@ -33,7 +33,7 @@ function runSyncClientFeeds(socket) {
     });
 
   Patient
-    .filter({ accountId: activeAccountId })
+    .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
