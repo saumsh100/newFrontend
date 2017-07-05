@@ -26,7 +26,7 @@ export default function ChairsSlot(props) {
         const checkFilters = schedule.toJS();
 
         const filteredApps = appointments.filter((app) => {
-          if (app.get('mark')) {
+          if (app.get('mark') && (app.chairId === chair.id)) {
             return app;
           }
 
@@ -34,6 +34,7 @@ export default function ChairsSlot(props) {
           const practitioner = practitioners.get(app.get('practitionerId'));
           const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
           const practitionersFilter = practitioner && checkFilters.practitionersFilter.indexOf(practitioner.get('id')) > -1;
+
           return ((app.chairId === chair.id) && practitionersFilter && servicesFilter );
         }).map((app) => {
           if (app.get('mark')) {
@@ -50,6 +51,8 @@ export default function ChairsSlot(props) {
             patientData: patients.get(app.get('patientId')),
           });
         });
+
+        console.log(filteredApps)
 
         return (
           <TimeSlot

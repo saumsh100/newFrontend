@@ -27,7 +27,7 @@ export default function PractitionersSlot(props) {
         const checkFilters = schedule.toJS();
 
         const filteredApps = appointments.filter((app) => {
-          if (app.get('mark')) {
+          if (app.get('mark') && (app.practitionerId === pract.id)) {
             return app;
           }
 

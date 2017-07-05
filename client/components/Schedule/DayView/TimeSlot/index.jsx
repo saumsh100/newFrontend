@@ -88,6 +88,7 @@ export default function TimeSlot(props) {
             rowSort={rowSort}
           />
         );
+
         return displayComponent;
       })}
     </div>
