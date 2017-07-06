@@ -34,7 +34,7 @@ class OfficeHours extends Component {
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
     weeklySchedule.weeklySchedules.splice(i, 1);
 
-    if (weeklySchedule.weeklySchedules[0]) {
+    if (!weeklySchedule.weeklySchedules[0]) {
       weeklySchedule.isAdvanced = false;
     }
 
