@@ -38,17 +38,17 @@ class RecallsList extends Component {
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
             {sentRecalls.toArray().map((sentRecall, index) => {
-              
+
               if (!sentRecall) {
                 return null;
               }
-              
+
               return (
                 <RecallData
                   key={index}
                   index={index}
-                  recall={recalls.get(sentRecall.get('recallId')).toJS()}
-                  patient={patients.get(sentRecall.get('patientId')).toJS()}
+                  recallJS={recalls.get(sentRecall.get('recallId'))}
+                  patientJS={patients.get(sentRecall.get('patientId'))}
                   sentRecall={sentRecall}
                   handleRecallClick={this.handleRecallClick}
                 />

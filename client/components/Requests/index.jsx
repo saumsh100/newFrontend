@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import RequestList from './RequestList';
-import { Card, CardHeader } from '../library';
+import { Card, CardHeader, IconButton } from '../library';
 import styles from './styles.scss';
 
 class Requests extends Component {
@@ -25,11 +25,13 @@ class Requests extends Component {
     const sortedRequests = filteredRequests.sort((a, b) => {
       return Date.parse(b.startDate) - Date.parse(a.startDate);
     });
-    
+
     return (
       <Card className={styles.requestCard}>
         <div className={styles.requestHeader}>
-          <CardHeader count={sortedRequests.length} title={'Appointment Requests'} />
+          <CardHeader count={sortedRequests.length} title={'Appointment Requests'} >
+            {/*<IconButton icon="undo" />*/}
+          </CardHeader>
         </div>
         <div className={styles.requestBody}>
           <RequestList

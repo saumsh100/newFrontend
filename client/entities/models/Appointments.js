@@ -17,6 +17,8 @@ const AppointmentsSchema = {
   isCancelled: null,
   isSyncedWithPMS: null,
   isSplit: null,
+  isReminderSent: null,
+  mark: null,
 };
 
 export default class Appointments extends createModel(AppointmentsSchema) {
