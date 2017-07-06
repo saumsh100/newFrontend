@@ -4,13 +4,23 @@
 
 (function() {
 
+  window.CareCru = window.CareCru || {
+    // Insert default settings here
+    showBookingButton: true,
+  };
+
+  window.CareCru.bookingWidgets = window.CareCru.bookingWidgets || {};
+  window.CareCru.BookingWidget = window.CareCru.BookingWidget || {};
+
   // The purpose of doing this is to ensure this script can run without replacement
   const __REPLACE_THIS_COLOR__ = null;
   const __REPLACE_THIS_STYLE_TEXT__ = null;
   const __REPLACE_THIS_IFRAME_SRC__ = null;
+  const __ACCOUNT_ID__ = null;
   const BOOKING_WIDGET_PRIMARY_COLOR = __REPLACE_THIS_COLOR__;
   const STYLE_TEXT = __REPLACE_THIS_STYLE_TEXT__;
   const IFRAME_SRC = __REPLACE_THIS_IFRAME_SRC__;
+  const ACCOUNT_ID = __ACCOUNT_ID__;
 
   function CareCruBookingModal({ modalBody }) {
     const overlay = document.createElement('div');
@@ -72,8 +82,13 @@
     style.textContent += STYLE_TEXT;
 
     const body = document.getElementsByTagName('body')[0];
-    body.appendChild(style);
-    body.appendChild(bookingButton);
+    const head = document.getElementsByTagName('head')[0];
+
+    // Insert at top of head so that any consecutive style can override
+    head.insertBefore(style, head.firstChild);
+
+    // Show booking button by appending into end of body
+    window.CareCru.showBookingButton && body.appendChild(bookingButton);
 
     const ccmodal = new CareCruBookingModal({ modalBody: iframe });
 
@@ -86,6 +101,42 @@
     if (window.location.search.indexOf('ccbw') > -1) {
       ccmodal.open();
     }
+
+    console.log('ACCOUNT_ID', ACCOUNT_ID);
+    window.CareCru.bookingWidgets[ACCOUNT_ID] = ccmodal;
+    console.log('added account', ACCOUNT_ID);
+
+    if (Object.keys(window.CareCru.bookingWidgets).length > 1) {
+      // A widget has already been created, open must now accept a target
+      window.CareCru.BookingWidget.open = function(accountId) {
+        if (!accountId) {
+          throw new Error('Missing parameter accountId, you have multiple widgets installed on this page.');
+        }
+
+        window.CareCru.bookingWidgets[accountId].open();
+      };
+
+      // A widget has already been created, open must now accept a target
+      window.CareCru.BookingWidget.close = function(accountId) {
+        if (!accountId) {
+          throw new Error('Missing parameter accountId, you have multiple widgets installed on this page.');
+        }
+
+        window.CareCru.bookingWidgets[accountId].close();
+      };
+    } else {
+      // A widget has already been created, open must now accept a target
+      window.CareCru.BookingWidget.open = function() {
+        ccmodal.open();
+      };
+
+      // A widget has already been created, open must now accept a target
+      window.CareCru.BookingWidget.close = function() {
+        ccmodal.close();
+      };
+    }
+
+    console.log('Done Widget Loading 123123');
   });
 
 })();
