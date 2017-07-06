@@ -10,7 +10,7 @@ const Patient = require('../../../models/Patient');
 const Chat = require('../../../models/Chat');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
-const globals = require('../../../config/globals');
+const { env, namespaces } = require('../../../config/globals');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
 patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
@@ -114,26 +114,11 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 });
 
 /**
- * Batch updating
- */
-patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
-  const { patients } = req.body;
-  const patientUpdates = patients.map((patient) => {
-    return Patient.get(patient.id).run()
-      .then(_patient => _patient.merge(patient).save());
-  });
-
-  return Promise.all(patientUpdates)
-    .then(_patients => res.send(normalize('patients', _patients)))
-    .catch(next);
-});
-
-/**
  * TESTING ONLY
  * Used to search an patient by any property.
  * E.g. api/patients/test?pmsId=1003&note=unit test patient
  */
-if (globals.env !== 'production') {
+if (env !== 'production') {
   patientsRouter.get('/test', checkPermissions('patients:read'), (req, res, next) => {
     const property = req.query;
     return Patient
@@ -308,9 +293,18 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), (req
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
-
   return Patient.save(patientData)
-    .then(patient => res.status(201).send(normalize('patient', patient)))
+    .then((patient) => {
+      const normalized = normalize('patient', patient);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('create:Patient', normalized);
+    })
     .catch(next);
 });
 
@@ -319,12 +313,12 @@ patientsRouter.post('/', (req, res, next) => {
  */
 patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
   const { patients } = req.body;
+  console.log('req.accountId', req.accountId);
   const cleanedPatients = patients.map((patient) => {
     return Object.assign(
       {},
       _.omit(patient, ['id']),
       { accountId: req.accountId },
-      { isBatch: true }
     );
   });
 
@@ -365,7 +359,17 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
   return req.patient.merge(req.body).save()
-    .then(patient => res.send(normalize('patient', patient)))
+    .then((patient) => {
+      const normalized = normalize('patient', patient);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('update:Patient', normalized);
+    })
     .catch(next);
 });
 
@@ -373,8 +377,14 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Delete a patient
  */
 patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => {
-   return req.patient.deleteAll()
+  const { patient } = req;
+  return patient.deleteAll()
     .then(() => res.send(204))
+    .then(() => {
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('remove:Patient', patient);
+    })
     .catch(next);
 });
 

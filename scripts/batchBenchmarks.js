@@ -10,7 +10,7 @@ import Patient from '../server/models/Patient';
 import uniqWith from 'lodash/uniqWith';
 import bindAxiosInterceptors from '../client/util/bindAxiosInterceptors';
 
-const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMDBhYjljOC1jMTJhLTQ5MGItYjEyZS00ODY2NzBlNTkxYWQiLCJzZXNzaW9uSWQiOiI1OWIzMDU4OS1hOTRiLTQ2YmMtOWM1NC02Y2YzOWMzNmQxNzYiLCJhY3RpdmVBY2NvdW50SWQiOiJiZWVmYjAzNS1iNzJjLTRmN2EtYWQ3My0wOTQ2NWNiZjU2NTQiLCJpYXQiOjE0OTg1OTMzMTgsImV4cCI6MTUwMTE4NTMxOH0.L1xc2_QIpWq0AwYYtACKVa3rerGLHxj501aO-ral_J0';
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkYWUxMzI5Mi03MDk0LTRiMWQtYWExNC1mNDM1MzNjZmI1NjIiLCJzZXNzaW9uSWQiOiI1MmM4MTdlYi1iNmZkLTRmNzctYTU3OC00OWEzNDBjMWVlOGIiLCJhY3RpdmVBY2NvdW50SWQiOiIyYWVhYjAzNS1iNzJjLTRmN2EtYWQ3My0wOTQ2NWNiZjU2NTQiLCJpYXQiOjE0OTkzNjUzMzksImV4cCI6MTUwMTk1NzMzOX0.6_IN2SJDN56EINNoMzmM-iBGEzdzRwBZwmOSna0Jji0';
 bindAxiosInterceptors(() => TOKEN);
 
 let start = Date.now();
@@ -32,6 +32,7 @@ function generatePatientSeeds(num = 5) {
       mobilePhoneNumber: phoneNumber,
       birthDate: faker.date.past(),
       gender: 'male',
+      // isSyncedWithPMS: true,
     });
   }
 
@@ -63,7 +64,7 @@ console.log(`Generated Patient Seeds in ${Date.now() - start}ms`);
 
 async function main() {
   try {
-    /*const errors = [];
+    const errors = [];
     const docs = [];
     start = Date.now();
     for (const patientSeed of patientSeeds) {
@@ -77,11 +78,11 @@ async function main() {
 
     console.log('num patients created =', docs.length);
     console.log('num errors created =', errors.length);
-    console.log(`Single Completed in ${Date.now() - start}ms`);*/
+    console.log(`Single Completed in ${Date.now() - start}ms`);
 
-    start = Date.now();
+    /*start = Date.now();
     try {
-      const res = await axios.post('http://carecru.dev:8080/api/patients/batch', { patients: batchSeeds });
+      const res = await axios.post('http://localhost:5100/api/patients/batch', { patients: batchSeeds });
       console.log('num patients created =', size(res.data.entities.patients));
       console.log('num errors created =', 'ZERO');
       console.log(`Batch Completed in ${Date.now() - start}ms`);
@@ -90,7 +91,7 @@ async function main() {
       console.log('num errors created =', err.data.errors.length);
       console.log(err.data.errors);
       console.log(`Batch Completed in ${Date.now() - start}ms`);
-    }
+    }*/
 
     process.exit();
   } catch (err) {

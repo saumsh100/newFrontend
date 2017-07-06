@@ -9,7 +9,7 @@ function runSyncClientFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
 
   // ASSUMPTION: Assuming these are the changes coming from the Dashboard
-  Appointment
+  /*Appointment
     .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
@@ -56,7 +56,7 @@ function runSyncClientFeeds(socket) {
           }
         }
       });
-    });
+    });*/
 }
 
 function isDeleted(doc) {

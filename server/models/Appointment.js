@@ -35,7 +35,6 @@ const Appointment = createModel('Appointment', {
   mark: type.virtual().default(function () {
     return !this.patientId;
   }),
-  isBatch: type.boolean().default(false),
 });
 
 Appointment.ensureIndex('accountId');
