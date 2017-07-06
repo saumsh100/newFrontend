@@ -132,7 +132,6 @@ const Time = {
         endTime,
         closedEnd: true,
       };
-
       return [interval];
     }
 
@@ -235,9 +234,24 @@ const Time = {
     const startDayOfWeek = momentStart.format('dddd').toLowerCase();
     const endDayOfWeek = momentEnd.format('dddd').toLowerCase();
 
+    // Check if there's a pattern and which weekly schedule to use
+    let weeklyScheduleStart = weeklySchedule;
+    let weeklyScheduleEnd = weeklySchedule;
+
+    if (weeklySchedule.isAdvanced) {
+      const week = momentStart.diff(weeklySchedule.startDate, 'week') % (weeklySchedule.weeklySchedules.length + 1);
+      if (week > 0) {
+        weeklyScheduleStart = weeklySchedule.weeklySchedules[week - 1];
+      }
+      const weekEnd = momentStart.diff(weeklySchedule.startDate, 'week') % (weeklySchedule.weeklySchedules.length + 1);
+      if (week > 0) {
+        weeklyScheduleEnd = weeklySchedule.weeklySchedules[weekEnd - 1];
+      }
+    }
+
     // Pluck the dailySchedules based on day
-    const startDailySchedule = weeklySchedule[startDayOfWeek];
-    const endDailySchedule = weeklySchedule[endDayOfWeek]
+    const startDailySchedule = weeklyScheduleStart[startDayOfWeek];
+    const endDailySchedule = weeklyScheduleEnd[endDayOfWeek];
 
     const dailySchedules = [startDailySchedule];
     if (startDay === endDay) {
@@ -260,11 +274,21 @@ const Time = {
         dailySchedules.push(endDailySchedule);
         break;
       }
-
       // Add 1 more day to the start time
       momentStart.add(1, 'days');
+
+      let weeklyScheduleAdvance = weeklySchedule;
+
+      // Check if there's a pattern and which weekly schedule to use
+      if (weeklySchedule.isAdvanced) {
+        const week = momentStart.diff(weeklySchedule.startDate, 'week') % (weeklySchedule.weeklySchedules.length + 1);
+        if (week > 0) {
+          weeklyScheduleAdvance = weeklySchedule.weeklySchedules[week - 1];
+        }
+      }
+
       const nextDayOfWeek = momentStart.format('dddd').toLowerCase();
-      dailySchedules.push(weeklySchedule[nextDayOfWeek]);
+      dailySchedules.push(weeklyScheduleAdvance[nextDayOfWeek]);
     }
 
     return dailySchedules;

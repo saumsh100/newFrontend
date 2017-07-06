@@ -155,6 +155,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
   };
   return (
     <Form
+      enableReinitialize
       form={breaksName}
       onSubmit={onSubmit}
       initialValues={initialValues}

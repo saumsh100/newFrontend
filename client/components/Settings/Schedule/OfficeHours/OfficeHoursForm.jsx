@@ -126,6 +126,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName }) {
 
   return (
     <Form
+      enableReinitialize
       form={formName}
       onSubmit={onSubmit}
       initialValues={initialValues}

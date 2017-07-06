@@ -27,8 +27,8 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
   endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
   return SentReminder
-    .filter({ accountId, isSent: true })
-    //.filter(r.row('startDate').during(startDate, endDate))
+    .filter({ accountId, isSent: false })
+    .filter(r.row('startDate').during(startDate, endDate))
     .getJoin(joinObject)
     .run()
     .then((sentReminders) => {

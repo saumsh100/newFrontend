@@ -21,6 +21,7 @@ class OfficeHours extends Component {
     this.openModal = this.openModal.bind(this);
     this.createPattern = this.createPattern.bind(this);
     this.sendEdit = this.sendEdit.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   reinitializeState() {
@@ -29,13 +30,27 @@ class OfficeHours extends Component {
     });
   }
 
-  // 'monday',
-  // 'tuesday',
-  // 'wednesday',
-  // 'thursday',
-  // 'friday',
-  // 'saturday',
-  // 'sunday',
+  delete(i) {
+    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+    weeklySchedule.weeklySchedules.splice(i, 1);
+
+    if (weeklySchedule.weeklySchedules[0]) {
+      weeklySchedule.isAdvanced = false;
+    }
+
+    const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
+
+    const alert = {
+      success: {
+        body: 'Clinic Pattern Deleted',
+      },
+      error: {
+        body: 'Clinic Pattern Deleted Failed',
+      },
+    };
+
+    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+  }
 
   sendEdit(i, values) {
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
@@ -87,7 +102,12 @@ class OfficeHours extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+    .then(() => {
+      this.setState({
+        active: false,
+      });
+    });
   }
 
   openModal() {
@@ -116,7 +136,10 @@ class OfficeHours extends Component {
     if (weeklySchedule) {
       schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => {
         return (<div>
-          <Header title={`Weekly Schedule ${i}`} className={styles.header} />
+          <div className={styles.flexHeader}>
+            <Header title={`Pattern ${i + 1}`} className={styles.header} />
+            <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
+          </div>
           <OfficeHoursForm
             weeklySchedule={schedule}
             onSubmit={this.sendEdit.bind(null, i)}
@@ -164,8 +187,10 @@ class OfficeHours extends Component {
             />
           </Form>
         </DialogBox>
-        <Header title="Weekly Schedule" className={styles.header} />
-        <Button onClick={this.openModal}>HIT ME</Button>
+        <div className={styles.flexHeader}>
+          <Header title="Weekly Schedule" className={styles.header} />
+          <Button className={styles.button} onClick={this.openModal}>Create New Pattern</Button>
+        </div>
         <OfficeHoursForm
           weeklySchedule={weeklySchedule}
           onSubmit={handleSubmit}

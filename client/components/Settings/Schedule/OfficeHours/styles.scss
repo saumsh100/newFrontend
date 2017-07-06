@@ -45,6 +45,16 @@
   color: lighten($primary-darkgrey, 25%);
 }
 
+.flexHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  margin: 15px;
+  margin-right: 40px;
+}
+
 .dayGrid {
   padding: 5px;
   -webkit-box-sizing: border-box;
