@@ -62,7 +62,6 @@ class HeaderButtons extends Component {
       syncStyle = classNames(styles.disabledStyle, syncStyle);
     }
 
-    console.log(localStorage.getItem('scheduleView'))
     return (
       <div className={styles.headerButtons}>
         <div

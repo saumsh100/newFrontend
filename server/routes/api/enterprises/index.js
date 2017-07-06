@@ -39,7 +39,7 @@ router.post('/switch', checkPermissions('enterprises:read'), (req, res, next) =>
           .then(({ id: newSessionId }) => UserAuth.signToken({
             userId: sessionData.userId,
             sessionId: newSessionId,
-            accountId,
+            activeAccountId: accountId,
           }));
       });
     })

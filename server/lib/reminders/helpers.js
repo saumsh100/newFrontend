@@ -40,12 +40,15 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
  * @returns {boolean}
  */
 export function shouldSendReminder({ appointment, reminder }) {
-  const { sentReminders } = appointment;
+  const { sentReminders, patient } = appointment;
+
+  const preferences = patient.preferences;
+
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
     return (s.reminderId === reminder.id) || (reminder.lengthSeconds > s.lengthSeconds);
   });
 
-  return !reminderAlreadySentOrLongerAway;
+  return !reminderAlreadySentOrLongerAway && preferences.reminders;
 }
 
 /**

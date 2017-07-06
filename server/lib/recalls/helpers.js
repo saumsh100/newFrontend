@@ -29,7 +29,12 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
     appointments: {
       _apply(sequence) {
         // TODO: This will order oldest appointment first, needs to be flipped!
-        return sequence.orderBy('startDate');
+        return sequence
+          .filter({
+            isDeleted: false,
+            isCancelled: false,
+          })
+          .orderBy('startDate');
       },
     },
   };
