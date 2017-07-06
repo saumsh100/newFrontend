@@ -80,7 +80,7 @@ class Dashboard extends React.Component {
     const appointmentFilter = appointments.filter((app) => {
       const sDate = moment(app.startDate);
       const isSameDate = today.isSame(sDate, 'day');
-      return (isSameDate && !app.isDeleted && !app.isCancelled);
+      return (isSameDate && !app.isDeleted && !app.isCancelled && !app.mark);
     });
 
     const filterConfirmedRequests = requests.toArray().filter((req) => {

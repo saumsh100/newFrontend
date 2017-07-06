@@ -87,6 +87,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 
   return Appointment
     .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+    .filter(r.row.hasFields('patientId'))
     .getJoin({
       patient: true,
     })
