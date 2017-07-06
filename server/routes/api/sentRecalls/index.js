@@ -24,12 +24,12 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
   } = query;
 
   // Todo: setup date variable
-  startDate = startDate ? r.ISO8601(startDate) : r.now();
-  endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
+  startDate = startDate ? r.ISO8601(startDate) : r.now().add(365 * 24 * 60 * 60 * -1);
+  endDate = endDate ? r.ISO8601(endDate) : r.now();
 
   return SentRecall
     .filter({ accountId })
-    //.filter(r.row('startDate').during(startDate, endDate))
+    .filter(r.row('createdAt').during(startDate, endDate))
     .getJoin(joinObject)
     .run()
     .then(sentRecalls => res.send(normalize('sentRecalls', sentRecalls)))

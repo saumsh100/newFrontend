@@ -23,12 +23,12 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
   } = query;
 
   // Todo: setup date variable
-  startDate = startDate ? r.ISO8601(startDate) : r.now();
-  endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
+  startDate = startDate ? r.ISO8601(startDate) : r.now().add(365 * 24 * 60 * 60 * -1);
+  endDate = endDate ? r.ISO8601(endDate) : r.now();
 
   return SentReminder
     .filter({ accountId, isSent: true })
-    //.filter(r.row('startDate').during(startDate, endDate))
+    .filter(r.row('createdAt').during(startDate, endDate))
     .getJoin(joinObject)
     .run()
     .then((sentReminders) => {
