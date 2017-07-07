@@ -526,8 +526,8 @@ appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'),
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
+  const accountId = req.accountId;
   return req.appointment.merge(req.body).save()
-    .then(appointment => res.send(normalize('appointment', appointment)))
     .then((appointment) => {
       const normalized = normalize('appointment', appointment);
       res.status(201).send(normalized);
@@ -552,15 +552,17 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
  */
 appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:delete'), (req, res, next) => {
   const { appointment } = req;
+  const accountId = req.accountId;
   // TODO: why not use deleteAll ?
   return appointment.delete()
     .then(() => res.send(204))
     .then(() => {
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      return io.of(ns).in(accountId).emit('remove:Appointment', appointment);
+      const normalized = normalize('appointment', appointment);
+      return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })
-    .catch(next)
+    .catch(next);
 });
 
 module.exports = appointmentsRouter;

@@ -358,6 +358,7 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+  const accountId = req.accountId;
   return req.patient.merge(req.body).save()
     .then((patient) => {
       const normalized = normalize('patient', patient);
@@ -378,12 +379,14 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
  */
 patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => {
   const { patient } = req;
+  const accountId = req.accountId;
   return patient.deleteAll()
     .then(() => res.send(204))
     .then(() => {
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      return io.of(ns).in(accountId).emit('remove:Patient', patient);
+      const normalized = normalize('patient', patient);
+      return io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
     .catch(next);
 });
