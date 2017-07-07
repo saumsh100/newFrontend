@@ -58,25 +58,8 @@ const generateTimeOptions = (timeInput, unitIncrement) => {
   return timeOptions;
 };
 
-export const timeOptions = generateTimeOptions();
-
-const marks = {
-  15: '15',
-  30: '30',
-  45: '45',
-  60: '60',
-  75: '75',
-  90: '90',
-  105: '105',
-  120: '120',
-  135: '135',
-  150: '150',
-  165: '165',
-  180: '180',
-};
-
 const marks2 = (unit) => {
-  let mark = {}
+  const mark = {};
   for(let i = unit; i <= 180; i+=unit) {
     mark[i] = `${i}`;
   }

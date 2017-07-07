@@ -76,6 +76,7 @@ export default function DisplayForm(props) {
     patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
+    const slider = durationTime > 180 ? [180, 180] : [durationTime, bufferTime];
 
     time = setTime(startDate);
     const unitValue = unit ? Number((durationTime / unit).toFixed(2)) : 0;
@@ -87,7 +88,7 @@ export default function DisplayForm(props) {
         serviceId,
         practitionerId: practitionerId || '',
         chairId: chairId || '',
-        slider: [durationTime, bufferTime],
+        slider,
         isPatientConfirmed,
         isCancelled,
         duration: durationTime,
