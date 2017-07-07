@@ -179,29 +179,32 @@ class PractitionerOfficeHours extends Component{
   render() {
     const { weeklySchedule, practitioner } = this.props;
 
-    const schedules = weeklySchedule.weeklySchedules.map((schedule, i) => {
-      return (<div className={styles.toggleContainer_hours}>
-        <div className={styles.orSpacer} />
-        <div className={styles.flexHeader}>
-          <Header title={`Pattern ${i + 1}`} className={styles.header} />
-          <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
-        </div>
-        <OfficeHoursForm
-          weeklySchedule={weeklySchedule.weeklySchedules[i]}
-          onSubmit={this.sendEdit}
-          formName={`officeHours${i}`}
-          dataId={i}
-        />
-        <Header title="Breaks" className={styles.subHeader} />
-        <BreaksForm
-          weeklySchedule={weeklySchedule.weeklySchedules[i]}
-          onSubmit={this.sendEdit}
-          formName={`officeHours${i}`}
-          breaksName={`clinicBreaks${i}`}
-          dataId={i}
-        />
-      </div>);
-    });
+    let schedules = null;
+    if (weeklySchedule) {
+      schedules = weeklySchedule.weeklySchedules.map((schedule, i) => {
+        return (<div className={styles.toggleContainer_hours}>
+          <div className={styles.orSpacer} />
+          <div className={styles.flexHeader}>
+            <Header title={`Pattern ${i + 1}`} className={styles.header} />
+            <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
+          </div>
+          <OfficeHoursForm
+            weeklySchedule={weeklySchedule.weeklySchedules[i]}
+            onSubmit={this.sendEdit}
+            formName={`officeHours${i}`}
+            dataId={i}
+          />
+          <Header title="Breaks" className={styles.subHeader} />
+          <BreaksForm
+            weeklySchedule={weeklySchedule.weeklySchedules[i]}
+            onSubmit={this.sendEdit}
+            formName={`officeHours${i}`}
+            breaksName={`clinicBreaks${i}`}
+            dataId={i}
+          />
+        </div>);
+      });
+    }
 
 
     let showComponent = null;
