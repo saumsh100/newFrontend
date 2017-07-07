@@ -73,6 +73,12 @@ class PractitionerOfficeHours extends Component{
   }
 
   delete(i) {
+    const deleteSche = confirm('Delete Schedule?');
+
+    if (!deleteSche) {
+      return null;
+    }
+
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
     weeklySchedule.weeklySchedules.splice(i, 1);
 
@@ -91,10 +97,11 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
   }
 
-  sendEdit(i, values) {
+  sendEdit(values, j, k) {
+    const i = k.dataId;
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
 
     Object.keys(values).forEach((key) => {
@@ -163,29 +170,30 @@ class PractitionerOfficeHours extends Component{
   render() {
     const { weeklySchedule, practitioner } = this.props;
 
-    let schedules = null;
-    if (weeklySchedule) {
-      schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => {
-        return (<div>
-          <div className={styles.flexHeader}>
-            <Header title={`Pattern ${i + 1}`} className={styles.header} />
-            <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
-          </div>
-          <OfficeHoursForm
-            weeklySchedule={schedule}
-            onSubmit={this.sendEdit.bind(null, i)}
-            formName={`officeHours${i}`}
-          />
-          <Header title="Breaks" className={styles.header} />
-          <BreaksForm
-            weeklySchedule={schedule}
-            onSubmit={this.sendEdit.bind(null, i)}
-            formName={`officeHours${i}`}
-            breaksName={`clinicBreaks${i}`}
-          />
-        </div>);
-      });
-    }
+    const schedules = weeklySchedule.weeklySchedules.map((schedule, i) => {
+      return (<div className={styles.toggleContainer_hours}>
+        <div className={styles.orSpacer} />
+        <div className={styles.flexHeader}>
+          <Header title={`Pattern ${i + 1}`} className={styles.header} />
+          <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
+        </div>
+        <OfficeHoursForm
+          weeklySchedule={weeklySchedule.weeklySchedules[i]}
+          onSubmit={this.sendEdit}
+          formName={`officeHours${i}`}
+          dataId={i}
+        />
+        <Header title="Breaks" className={styles.subHeader} />
+        <BreaksForm
+          weeklySchedule={weeklySchedule.weeklySchedules[i]}
+          onSubmit={this.sendEdit}
+          formName={`officeHours${i}`}
+          breaksName={`clinicBreaks${i}`}
+          dataId={i}
+        />
+      </div>);
+    });
+
 
     let showComponent = null;
 
@@ -202,7 +210,7 @@ class PractitionerOfficeHours extends Component{
             onSubmit={this.handleFormUpdate}
             formName={`${weeklySchedule.get('id')}officeHours`}
           />
-          <Header title="Breaks"/>
+          <Header title="Breaks" className={styles.subHeader} />
           <BreaksForm
             key={`${practitioner.get('id')}_Breaks`}
             weeklySchedule={weeklySchedule}
@@ -210,7 +218,6 @@ class PractitionerOfficeHours extends Component{
             formName={`${weeklySchedule.get('id')}officeHours`}
             breaksName={`${weeklySchedule.get('id')}clinicBreaks`}
           />
-          {schedules}
         </div>
       );
     } else {
@@ -265,6 +272,7 @@ class PractitionerOfficeHours extends Component{
           </div>
         </div>
         {showComponent}
+        {schedules}
       </div>
     );
   }

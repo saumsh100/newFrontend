@@ -31,6 +31,12 @@ class OfficeHours extends Component {
   }
 
   delete(i) {
+    const deleteSche = confirm('Delete Schedule?');
+
+    if (!deleteSche) {
+      return null;
+    }
+
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
     weeklySchedule.weeklySchedules.splice(i, 1);
 
@@ -49,7 +55,7 @@ class OfficeHours extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
   }
 
   sendEdit(i, values) {
@@ -136,6 +142,7 @@ class OfficeHours extends Component {
     if (weeklySchedule) {
       schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => {
         return (<div>
+          <div className={styles.orSpacer} />
           <div className={styles.flexHeader}>
             <Header title={`Pattern ${i + 1}`} className={styles.header} />
             <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
@@ -145,7 +152,7 @@ class OfficeHours extends Component {
             onSubmit={this.sendEdit.bind(null, i)}
             formName={`officeHours${i}`}
           />
-          <Header title="Breaks" className={styles.header} />
+          <Header title="Breaks" className={styles.subHeader} />
           <BreaksForm
             weeklySchedule={schedule}
             onSubmit={this.sendEdit.bind(null, i)}
@@ -196,7 +203,7 @@ class OfficeHours extends Component {
           onSubmit={handleSubmit}
           formName="officeHours"
         />
-        <Header title="Breaks" className={styles.header} />
+        <Header title="Breaks" className={styles.subHeader} />
         <BreaksForm
           weeklySchedule={weeklySchedule}
           onSubmit={handleSubmit}

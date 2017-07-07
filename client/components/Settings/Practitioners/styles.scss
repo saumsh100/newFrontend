@@ -40,6 +40,19 @@
   text-transform: capitalize;
 }
 
+.subHeader {
+  padding-left: 15px;
+  div {
+    font-size: 26px;
+  }
+}
+.orSpacer {
+  border-top: outset #b4b4b5;
+  margin: 30px auto 0 auto;
+  width: 90%;
+  position: relative;
+  border-width: thin;
+}
 
 .flexHeader {
   display: flex;
