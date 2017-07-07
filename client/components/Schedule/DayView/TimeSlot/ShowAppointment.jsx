@@ -83,6 +83,7 @@ function ShowAppointment(props) {
   const height = `${(heightCalc / totalHours) * 100}%`;
 
   const backgroundColor = isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
+  const zIndex = isHovered ? 5 : appPosition;
   // main app style
   const appStyle = {
     top,
@@ -91,7 +92,7 @@ function ShowAppointment(props) {
     width,
     backgroundColor,
     border: `1.5px solid ${bgColor}`,
-    //zIndex: appPosition,
+    zIndex,
   };
 
   // calculating the buffer position and height styling
@@ -104,7 +105,7 @@ function ShowAppointment(props) {
     width,
     height: `${heightCalcBuffer}%`,
     backgroundColor: '#b4b4b5',
-    //zIndex: appPosition,
+    zIndex,
   };
 
   return (
