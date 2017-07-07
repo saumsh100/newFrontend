@@ -15,8 +15,9 @@ const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
-  // ASSUMPTION: These are the changes coming from the SYNC client...
-  Appointment
+  console.log('socket activeAccountId', activeAccountId);
+
+  /*Appointment
     .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
@@ -57,7 +58,7 @@ function runDashboardFeeds(socket) {
           }
         }
       });
-    });
+    });*/
 
   /**
    * Listen to changes on the Requests table and update dashboards in real time

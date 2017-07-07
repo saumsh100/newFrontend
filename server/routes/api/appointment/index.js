@@ -416,52 +416,25 @@ appointmentsRouter.get('/', (req, res, next) => {
 
 appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) => {
   const accountId = req.accountId;
-
   const appointmentData = Object.assign({}, req.body, {
     accountId,
   });
 
-  // const {
-  //   practitionerId,
-  //   patientId,
-  // } = appointmentData;
-  //
-  // const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
-  // const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
-  //
-  // Appointment.filter({ accountId })
-  //   .filter(r.row('startDate').during(startDate, endDate).and(r.row('isDeleted').ne(true)).and(r.row('isCancelled').ne(true)))
-  //   .getJoin({ service: true })
-  //   .run()
-  //   .then((appointments) => {
-  //     const appWithService = appointments.filter(appService => appService.service);
-  //
-  //     const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
-  //
-  //     const checkOverlapping = intersectingApps.filter((app) => {
-  //       if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
-  //         return app;
-  //       }
-  //
-  //       if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
-  //         return app;
-  //       }
-  //     });
-  //
-  //     if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
-  //       return Appointment.save(appointmentData)
-  //         .then((appt) => {
-  //           res.status(201).send(normalize('appointment', appt));
-  //         })
-  //         .catch(next);
-  //     }
-  //     console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
-  //     return res.sendStatus(400);
-  //   })
-  //   .catch(next);
   return Appointment.save(appointmentData)
-    .then(appointment => {
-      res.status(201).send(normalize('appointment', appointment))
+    .then((appointment) => {
+      const normalized = normalize('appointment', appointment);
+      res.status(201).send(normalized);
+      return { appointment, normalized };
+    })
+    .then(async ({ appointment, normalized }) => {
+      // Dispatch to the appropriate socket room
+      if (appointment.isSyncedWithPMS && appointment.patientId) {
+        appointment.patient = await Patient.get(appointment.patientId);
+      }
+
+      const io = req.app.get('socketio');
+      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('create:Appointment', normalized);
     })
     .catch(next);
 });
@@ -558,78 +531,43 @@ appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'),
  * Update a single appointment
  */
 appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'), (req, res, next) => {
-  // const accountId = req.accountId;
-
-  // const {
-  //   practitionerId,
-  //   patientId,
-  // } = req.body;
-  //
-  // const appointmentData = req.body;
-  // const startDate = r.ISO8601(moment(appointmentData.startDate).startOf('day').toISOString());
-  // const endDate = r.ISO8601(moment(appointmentData.endDate).endOf('day').toISOString());
-  //
-  // if (appointmentData.isDeleted) {
-  //   return req.appointment.merge(req.body).save()
-  //     .then(appointment => res.send(normalize('appointment', appointment)))
-  //     .catch(next);
-  // }
-  //
-  // Appointment.filter({ accountId })
-  //   .filter(r.row('startDate').during(startDate, endDate))
-  //   .filter(r.row('isDeleted').ne(true).and(r.row('id').ne(appointmentData.id)).and(r.row('isCancelled').ne(true)))
-  //   .getJoin({ service: true })
-  //   .run()
-  //   .then((appointments) => {
-  //     const appWithService = appointments.filter(appService => appService.service);
-  //
-  //     const intersectingApps = intersectingAppointments(appWithService, appointmentData.startDate, appointmentData.endDate);
-  //
-  //     const checkOverlapping = intersectingApps.filter((app) => {
-  //       if ((practitionerId !== app.practitionerId) && (patientId !== app.patientId)) {
-  //         return app;
-  //       }
-  //       if ((practitionerId === app.practitionerId) && (patientId !== app.patientId)) {
-  //         return app;
-  //       }
-  //     });
-  //
-  //     if (intersectingApps.length === 0 || checkOverlapping.length > 0) {
-  //       return req.appointment.merge(req.body).save()
-  //         .then(appointment => res.send(normalize('appointment', appointment)))
-  //         .catch(next);
-  //     }
-  //
-  //     console.log(`This appointment from account: ${accountId}, overlapped with another appointment`);
-  //     return res.sendStatus(400);
-  //   })
-  //   .catch(next);
-
+  const accountId = req.accountId;
   return req.appointment.merge(req.body).save()
-    .then(appointment => res.send(normalize('appointment', appointment)))
+    .then((appointment) => {
+      const normalized = normalize('appointment', appointment);
+      res.status(201).send(normalized);
+      return { appointment, normalized };
+    })
+    .then(async ({ appointment, normalized }) => {
+      // Dispatch to the appropriate socket room
+      if (appointment.isSyncedWithPMS && appointment.patientId) {
+        // Dashboard app needs patient data
+        appointment.patient = await Patient.get(appointment.patientId);
+      }
+
+      const io = req.app.get('socketio');
+      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('update:Appointment', normalized);
+    })
     .catch(next);
 });
 
 /**
  * Remove a single appointment
  */
-appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:delete'), (req, res, next) => req.appointment.delete()
+appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:delete'), (req, res, next) => {
+  const { appointment } = req;
+  const accountId = req.accountId;
+  // TODO: why not use deleteAll ?
+  return appointment.delete()
     .then(() => res.send(204))
-    .catch(next));
-
-// TODO: this is not used
-/* appointmentsRouter.get('/:patientId', (req, res, next) => {
-  const {
-    accountId,
-    joinObject,
-    params: { patientId },
-  } = req;
-
-  // TODO: create a loader for patientId and ensure that the user can view this patient
-  Appointment.filter({ accountId, patientId }).getJoin(joinObject).run()
-    .then(appointments => res.send(normalize('appointment', appointments[0])))
+    .then(() => {
+      const io = req.app.get('socketio');
+      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const normalized = normalize('appointment', appointment);
+      return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
+    })
     .catch(next);
-});*/
-
+});
 
 module.exports = appointmentsRouter;
