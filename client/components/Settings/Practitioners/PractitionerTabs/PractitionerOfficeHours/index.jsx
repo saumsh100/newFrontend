@@ -39,7 +39,12 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    this.props.updateEntityRequest({ key: 'practitioners', model: modifiedPractitioner, alert });
+    this.props.updateEntityRequest({
+      key: 'practitioners',
+      model: modifiedPractitioner,
+      url: `/api/practitioners/${practitioner.get('id')}/customSchedule`,
+      alert,
+    });
 
     const newValue = (value === 'off') ? 'on' : 'off';
     this.setState({ value: newValue });
@@ -58,7 +63,11 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    this.props.updateEntityRequest({
+      key: 'weeklySchedule',
+      model: newWeeklySchedule,
+      alert,
+    });
   }
 
   render() {

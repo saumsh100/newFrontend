@@ -25,7 +25,6 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, appointment) => {
         if (error) throw new Error('Feed error');
-
         Patient.get(appointment.patientId)
         .then((patient) => {
           appointment.patient = patient;
