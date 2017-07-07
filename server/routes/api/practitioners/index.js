@@ -81,6 +81,34 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
        }).catch(next);
    }));
 
+
+/**
+ * Update a practitioners custom weekly schedule
+ */
+practitionersRouter.put('/:practitionerId/customSchedule', checkPermissions('practitioners:update'), (req, res, next) => {
+  return Account.get(req.accountId).getJoin({ weeklySchedule: true }).run()
+    .then((account) => {
+      delete account.weeklySchedule.weeklyScheduleId;
+      delete account.weeklySchedule.createdAt;
+      delete account.weeklySchedule.id;
+
+      WeeklySchedule.save(account.weeklySchedule)
+        .then((weeklySchedule) => {
+          const practitionerData = req.body;
+          practitionerData.weeklyScheduleId = weeklySchedule.id;
+          Practitioner.get(req.practitioner.id).run()
+            .then((practitioner) => {
+              practitioner.merge(practitionerData).save().then((prac)=>{
+                prac.weeklySchedule = weeklySchedule;
+                res.status(201).send(normalize('practitioner', prac));
+              });
+            })
+            .catch(next);
+        });
+    })
+    .catch(next);
+});
+
 /**
  * Upload a practitioner's avatar
  */
@@ -89,7 +117,7 @@ practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practition
 
   try {
     await upload(fileKey, req.files.file.data);
-      
+
     req.practitioner.avatarUrl = fileKey;
 
     const savedPractitioner = await req.practitioner.save();
