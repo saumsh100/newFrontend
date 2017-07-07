@@ -236,14 +236,12 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefReservations;
   });
 
-  let x = availabilities.map((aval) => {
+  return availabilities.map((aval) => {
     return {
       startDate: aval.startDate,
       endDate: moment(aval.startDate).add(service.duration, 'minutes').toISOString(),
     };
   });
-
-  return x;
 }
 
 /**
