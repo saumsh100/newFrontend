@@ -83,7 +83,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
 
 
 /**
- * Update a practitioner weekly schedule
+ * Update a practitioners custom weekly schedule
  */
 practitionersRouter.put('/:practitionerId/customSchedule', checkPermissions('practitioners:update'), (req, res, next) => {
   return Account.get(req.accountId).getJoin({ weeklySchedule: true }).run()
@@ -94,7 +94,7 @@ practitionersRouter.put('/:practitionerId/customSchedule', checkPermissions('pra
 
       WeeklySchedule.save(account.weeklySchedule)
         .then((weeklySchedule) => {
-          const practitionerData = req.body
+          const practitionerData = req.body;
           practitionerData.weeklyScheduleId = weeklySchedule.id;
           Practitioner.get(req.practitioner.id).run()
             .then((practitioner) => {
