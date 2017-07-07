@@ -62,7 +62,8 @@ function ShowAppointment(props) {
 
   const bgColor = practitionerData.color;
   const patient = patientData.toJS();
-  const age = moment().diff(patient.birthDate, 'years');
+  const age = moment().diff(patient.birthDate, 'years') || '';
+  const lastName = age ? `${patient.lastName},` : patient.lastName;
 
   // Calculating the top position and height of the appointment.
   const durationTime = getDuration(startDate, endDate, customBufferTime);
@@ -127,8 +128,8 @@ function ShowAppointment(props) {
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} >
             <span className={styles.paddingText}>{patient.firstName}</span>
-            <span className={styles.paddingText}>{patient.lastName},</span>
-            <span>{age}</span>
+            <span className={styles.paddingText}>{lastName}</span>
+            <span>{age || ''}</span>
           </div>
         </div>
         <div className={styles.showAppointment_duration}>

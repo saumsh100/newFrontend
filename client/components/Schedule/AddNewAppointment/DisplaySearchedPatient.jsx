@@ -10,12 +10,13 @@ export default function DisplaySearchedPatient(props) {
 
   let displayPatientComponent = null;
   if (patientSearched) {
+    const bday = moment().diff(patientSearched.birthDate, 'years') || '';
+    const lastName = bday ? `${patientSearched.lastName},` : patientSearched.lastName
     displayPatientComponent = (
       <div className={styles.patientSearch}>
         <Avatar className={styles.patientSearch_avatar} user={patientSearched || {}} />
         <div className={styles.patientSearch_name}>
-          {`${patientSearched.firstName} ${patientSearched.lastName},
-          ${moment().diff(patientSearched.birthDate, 'years')}`}
+          {`${patientSearched.firstName} ${lastName} ${bday || ''}`}
         </div>
         <div className={styles.patientSearch_email}>
           {`${patientSearched.email || ''}`}
