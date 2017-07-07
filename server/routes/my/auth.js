@@ -1,15 +1,18 @@
 
 import { Router } from 'express';
+import crypto from 'crypto';
 import { PatientAuth } from '../../lib/auth';
 import authMiddleware from '../../middleware/patientAuth';
 import twilio, { phoneNumber } from '../../config/twilio';
 import loaders from '../util/loaders';
 import StatusError from '../../util/StatusError';
-import { PatientUser, PinCode } from '../../models';
+import { PatientUser, PinCode, Token } from '../../models';
+import { sendPatientSignup } from '../../lib/mail';
 
 const authRouter = Router();
 
 authRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
+authRouter.param('tokenId', loaders('token', 'Token'));
 
 const signTokenAndSend = res => ({ session, model }) => {
   const tokenData = {
@@ -18,11 +21,16 @@ const signTokenAndSend = res => ({ session, model }) => {
   };
 
   return PatientAuth.signToken(tokenData)
-    .then(token => res.json({ token }));
+    .then(token => res.json({ token }))
+    .then(() => model);
 };
 
 const createConfirmationText = (pinCode) => {
   return `${pinCode} is your CareCru verification code.`;
+};
+
+const generateEmailConfirmationURL = (tokenId, protocol, host) => {
+  return `${protocol}://${host}/auth/signup/${tokenId}/email`;
 };
 
 async function sendConfirmationMessage(patientUser) {
@@ -34,7 +42,8 @@ async function sendConfirmationMessage(patientUser) {
   });
 }
 
-authRouter.post('/signup', ({ body: patient }, res, next) => {
+authRouter.post('/signup', (req, res, next) => {
+  const { body: patient } = req;
   if (patient.password !== patient.confirmPassword) {
     next({ status: 400, message: 'Passwords doesn\'t match.' });
   }
@@ -47,6 +56,31 @@ authRouter.post('/signup', ({ body: patient }, res, next) => {
       return { session, model };
     })
     .then(signTokenAndSend(res))
+    .then(async (patientUser) => {
+      const { email, firstName, id } = patientUser;
+
+      // Create token
+      const tokenId = crypto.randomBytes(12).toString('hex');
+      const token = await Token.save({ id: tokenId, patientUserId: id });
+
+      // Generate the URL to confirm email
+      const confirmationURL = generateEmailConfirmationURL(token.id, req.protocol, req.get('host'));
+
+      // Send Mandrill email async
+      sendPatientSignup({
+        toEmail: email,
+        mergeVars: [
+          {
+            name: 'PATIENT_FIRSTNAME',
+            content: firstName,
+          },
+          {
+            name: 'EMAIL_CONFIRMATION_URL',
+            content: confirmationURL,
+          },
+        ],
+      });
+    })
     .catch(next);
 });
 
@@ -82,6 +116,19 @@ authRouter.post('/:patientUserId/resend', (req, res, next) => {
       sendConfirmationMessage(patientUser);
     })
     .catch(next);
+});
+
+authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
+  try {
+    const { token } = req;
+    const { patientUserId } = token;
+    const patientUser = await PatientUser.get(patientUserId);
+    await patientUser.merge({ isEmailConfirmed: true }).save();
+    await token.delete();
+    return res.render('patient-email-confirmed');
+  } catch (err) {
+    next(err);
+  }
 });
 
 authRouter.post('/', ({ body: { email, password } }, res, next) =>

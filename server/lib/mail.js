@@ -13,6 +13,12 @@ module.exports = {
     config.templateName = 'Patient Recall';
     return sendTemplate(config);
   },
+
+  sendPatientSignup: (config) => {
+    config.subject = 'Confirm your email';
+    config.templateName = 'Patient Signup Confirmation';
+    return sendTemplate(config);
+  },
 };
 
 /**
@@ -28,7 +34,7 @@ function sendTemplate(config) {
     toEmail,
     templateName,
     mergeVars,
-    fromName,
+    fromName = 'CareCru',
     attachments,
   } = config;
 
