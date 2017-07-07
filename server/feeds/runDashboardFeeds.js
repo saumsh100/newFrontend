@@ -15,7 +15,6 @@ const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
-
   // ASSUMPTION: These are the changes coming from the SYNC client...
   Appointment
     .filter({ accountId: activeAccountId, isBatch: false })
@@ -26,7 +25,6 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, appointment) => {
         if (error) throw new Error('Feed error');
-
         Patient.get(appointment.patientId)
         .then((patient) => {
           appointment.patient = patient;

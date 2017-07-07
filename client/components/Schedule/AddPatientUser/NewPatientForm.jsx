@@ -1,9 +1,13 @@
+
 import React, { PropTypes } from 'react';
 import { Form, Field, DayPicker } from '../../library';
 import styles from './styles.scss';
 
 import { maxLength, asyncValidateNewPatient, emailValidate, phoneValidate } from '../../library/Form/validate';
 
+function test() {
+
+}
 
 export default function NewPatientForm({ onSubmit, formName, mergingPatientData, }) {
   const options = [
@@ -33,6 +37,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
       onSubmit={onSubmit}
       initialValues={initialValues}
       asyncValidate={asyncValidateNewPatient}
+      allowSave
     >
       <Field
         required
@@ -50,7 +55,6 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
       </div>
       <div className={styles.formContainer_dropDown}>
         <Field
-          required
           name="gender"
           label="Gender"
           component="DropdownSelect"
@@ -58,20 +62,17 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
         />
       </div>
       <Field
-        required
         name="phoneNumber"
         label="Phone Number"
         type="tel"
       />
       <Field
-        required
         type="email"
         name="email"
         validate={[emailValidate]}
         label="Email"
       />
       <Field
-        required
         component="DayPicker"
         name="birthDate"
         label="Birth Date"

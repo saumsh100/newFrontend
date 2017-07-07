@@ -6,9 +6,10 @@ import styles from '../styles.scss';
 class RemindersList extends Component {
 
   render() {
-    const { primaryType, length, edit } = this.props;
+    const { primaryType, length, edit, deleteFunc } = this.props;
 
     const button = <Button className={styles.edit} onClick={edit}>Edit</Button>;
+    const buttonDel = <Button className={styles.edit} onClick={deleteFunc}>Delete</Button>;
 
     return (
       <ListItem
@@ -20,7 +21,10 @@ class RemindersList extends Component {
             <p className={styles.list}>Every {length / 60 / 60 } hours</p>
           </div>
         </div>
-        {button}
+        <div>
+          {buttonDel}
+          {button}
+        </div>
       </ListItem>
     );
   }
@@ -30,6 +34,7 @@ RemindersList.propTypes = {
   primaryType: PropTypes.string,
   length: PropTypes.number,
   edit: PropTypes.func,
+  deleteFunc: PropTypes.func,
 };
 
 export default RemindersList;

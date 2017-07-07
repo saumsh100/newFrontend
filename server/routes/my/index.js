@@ -93,7 +93,8 @@ myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
         const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${req.account.id}/embed`;
         const withColor = replaceIndex(widgetJS, /__REPLACE_THIS_COLOR__/g, 1, toString(color));
         const withSrc = replaceIndex(withColor, /__REPLACE_THIS_IFRAME_SRC__/g, 1, toString(iframeSrc));
-        const replacedWidgetJS = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
+        const withStyleText = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
+        const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(req.account.id));
 
         // TODO: need to be able to minify and compress code UglifyJS
         res.send(replacedWidgetJS);

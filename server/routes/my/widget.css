@@ -82,10 +82,10 @@
   right: 0px;
   width: 150px;
   height: 130px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
   cursor: pointer;
-  font-size: 1.4em;
+  font-size: 1.4rem;
   display: flex;
   align-items: center;
   background-color: var(--bookingWidgetPrimaryColor);

@@ -43,7 +43,6 @@ userRouter.get('/', checkPermissions('users:read'), (req, res, next) => {
     accountId,
     joinObject,
   } = req;
-  console.log(accountId);
   return User.filter({ activeAccountId: accountId }).getJoin(joinObject).run()
     .then(users => res.send(normalize('users', users)))
     .catch(next);

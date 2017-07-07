@@ -77,6 +77,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
 
   Appointment
       .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+      .filter(r.row.hasFields('patientId'))
       .getJoin({
         patient: true,
         practitioner: true,
@@ -99,6 +100,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
         });
         Appointment
             .filter({ accountId })
+            .filter(r.row.hasFields('patientId'))
             .filter(filter)
             .run()
             .then((appointments) => {
@@ -128,6 +130,7 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
 
   return Appointment
     .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+    .filter(r.row.hasFields('patientId'))
     .run()
     .then((result) => {
       const days = new Array(6).fill(0);
@@ -162,6 +165,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     const endDate = r.ISO8601(end);
     Promises.push(Appointment
       .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+      .filter(r.row.hasFields('patientId'))
       .getJoin({
         patient: true,
       })
@@ -229,6 +233,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
   const a = Appointment
     .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+    .filter(r.row.hasFields('patientId'))
     .getJoin({
       patient: true,
       practitioner: true,

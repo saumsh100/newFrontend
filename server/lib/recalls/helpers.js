@@ -29,7 +29,12 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
     appointments: {
       _apply(sequence) {
         // TODO: This will order oldest appointment first, needs to be flipped!
-        return sequence.orderBy('startDate');
+        return sequence
+          .filter({
+            isDeleted: false,
+            isCancelled: false,
+          })
+          .orderBy('startDate');
       },
     },
   };
@@ -56,7 +61,7 @@ export function isDueForRecall({ recall, patient, date }) {
 
   // Check if latest appointment is within the recall window
   const { startDate } = appointments[appointments.length - 1];
-  const isDue = moment(date).diff(startDate) > recall.lengthSeconds;
+  const isDue = moment(date).diff(startDate) / 1000 > recall.lengthSeconds;
 
   const recallAlreadySentOrLongerAway = sentRecalls.some((s) => {
     return (s.recallId === recall.id) || (recall.lengthSeconds > s.lengthSeconds);
