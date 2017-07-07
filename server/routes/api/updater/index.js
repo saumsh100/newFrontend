@@ -47,6 +47,7 @@ updaterRouter.get('/available', checkPermissions('syncClientVersion:read'), (req
         res.send({
           available: true,
           path: release.path,
+          bucket: release.bucket,
           filename,
           key: release.key,
           secret: release.secret,
