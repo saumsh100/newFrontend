@@ -71,7 +71,7 @@ export default function ShowMark(props) {
     width,
     backgroundColor: hexToRgbA('#b4b4b5', 0.6),
     border: '1.5px solid #b4b4b5',
-    //zIndex: appPosition,
+    zIndex: appPosition,
   };
 
   return (
