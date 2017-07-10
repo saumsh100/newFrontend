@@ -40,21 +40,5 @@ describe('Patient Management', () => {
         .contains('Response to message #1 of E2E test')
         .should('exist');
     });
-
-    it.only('receive a message in a new chat', () => {
-      cy
-        .server()
-        .route({
-          method: 'POST',
-          url: '/api/chats/textMessages',
-          response: 'fixture:responses/chat/receiveNewChat.json',
-        })
-        .get('[data-test-id="patientSearch"]')
-        .type('Sergey')
-        .getAndClick('"Sergey SkovorodnikovSuggestion"')
-        .fillTextInput('chatMessageForm', 'message', 'Sent message #1 of E2E test')
-        .submitForm('chatMessageForm');
-    });
-
   });
 });
