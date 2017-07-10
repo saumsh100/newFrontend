@@ -19,6 +19,12 @@ module.exports = {
     config.templateName = 'Patient Signup Confirmation';
     return sendTemplate(config);
   },
+
+  sendAppointmentRequested: (config) => {
+    config.subject = 'Congratulations! Your appointment was requested.';
+    config.templateName = 'Appointment Requested';
+    return sendTemplate(config);
+  },
 };
 
 /**

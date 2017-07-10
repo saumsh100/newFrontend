@@ -1,11 +1,15 @@
 
 const requestsRouter = require('express').Router();
+const moment = require('moment');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
-const Request = require('../../../models/Request');
-const Service = require('../../../models/Service');
-const moment = require('moment');
+const { Account, PatientUser, Request, Service } = require('../../../models');
+const {
+  sendAppointmentRequested,
+  sendAppointmentRequestConfirmed,
+  sendAppointmentRequestRejected,
+} = require('../../../lib/mail');
 
 requestsRouter.param('requestId', loaders('request', 'Request'));
 
@@ -13,8 +17,31 @@ requestsRouter.param('requestId', loaders('request', 'Request'));
  * Create a request
  */
 requestsRouter.post('/', (req, res, next) => {
+  // TODO: patientUserId should be pulled from auth
+  const { patientUserId, accountId } = req.body;
   return Request.save(req.body)
     .then(request => res.status(201).send(normalize('request', request)))
+    .then(async () => {
+      const patientUser = await PatientUser.get(patientUserId);
+      const account = await Account.get(accountId);
+      const { email, firstName } = patientUser;
+      const { name } = account;
+      // Send Email
+      sendAppointmentRequested({
+        toEmail: email,
+        fromName: name,
+        mergeVars: [
+          {
+            name: 'PATIENT_FIRSTNAME',
+            content: firstName,
+          },
+          {
+            name: 'ACCOUNT_NAME',
+            content: name,
+          },
+        ],
+      });
+    })
     .catch(next);
 });
 
@@ -54,5 +81,42 @@ requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, 
     })
     .catch(next);
 });
+
+/**
+ * Send Rejected Request Email
+ */
+requestsRouter.post('/:requestId/reject', (req, res, next) => {
+  // TODO: patientUserId should be pulled from auth
+  const { accountId, request } = req;
+  return request.merge({ isCancelled: true }).save()
+    .then(r => res.status(201).send(normalize('request', r)))
+    .then(async () => {
+      const patientUser = await PatientUser.get(patientUserId);
+      const account = await Account.get(accountId);
+      const { email, firstName } = patientUser;
+      const { name } = account;
+      // Send Email
+      sendAppointmentRequestRejected({
+        toEmail: email,
+        fromName: name,
+        mergeVars: [
+          {
+            name: 'PATIENT_FIRSTNAME',
+            content: firstName,
+          },
+          {
+            name: 'ACCOUNT_NAME',
+            content: name,
+          },
+        ],
+      });
+    })
+    .catch(next);
+});
+
+
+/**
+ * Send Confirmed Request Email
+ */
 
 module.exports = requestsRouter;
