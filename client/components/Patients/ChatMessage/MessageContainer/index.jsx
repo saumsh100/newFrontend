@@ -145,7 +145,7 @@ class MessageContainer extends Component {
           }
         }
 
-        return (<div key={text} className={styles.textTime}>
+        return (<div key={text} className={styles.textTime} data-test-id="chatMessage">
           {time}
           {third}{second}{first}
         </div>);
@@ -167,6 +167,7 @@ class MessageContainer extends Component {
             form="chatMessageForm"
             ignoreSaveButton
             onSubmit={this.sendMessage.bind(null, userPhone)}
+            data-test-id="chatMessageForm"
           >
             <div className={styles.send}>
               <div className={styles.sendInput}>
@@ -175,6 +176,7 @@ class MessageContainer extends Component {
                   type="text"
                   name="message"
                   label="Type a message"
+                  data-test-id="message"
                 />
               </div>
               <button className={styles.button} type="submit">

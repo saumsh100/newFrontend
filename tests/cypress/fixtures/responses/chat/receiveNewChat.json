@@ -1,0 +1,31 @@
+{
+  "entities": {
+    "textMessages": {
+      "6c2d4554-d739-45aa-b62b-e955df649a05": {
+        "body": "Hey! This E2E test message should appear in a new chat window!",
+        "chatId": "76844c66-446d-4a01-b2ae-6efcd1f4c21b",
+        "createdAt": "2016-12-25T21:34:25.679Z",
+        "from": "+17786558613",
+        "id": "6c2d4554-d739-45aa-b62b-e955df649a05",
+        "read": true,
+        "to": "17786558613"
+      }
+    },
+    "chats": {
+      "76844c66-446d-4a01-b2ae-6efcd1f4c21b": {
+        "accountId": "2aeab035-b72c-4f7a-ad73-09465cbf5654",
+        "createdAt": "2017-06-30T18:53:22.638Z",
+        "id": "76844c66-446d-4a01-b2ae-6efcd1f4c21b",
+        "lastTextMessageDate": "2017-06-30T18:55:25.679Z",
+        "lastTextMessageId": "6c2d4554-d739-45aa-b62b-e955df649a05",
+        "patient": "0b59a171-889e-4631-b392-cc422f711db1",
+        "patientId": "0b59a171-889e-4631-b392-cc422f711db1",
+        "patientPhoneNumber": "+16042657486",
+        "textMessages": [
+          "6c2d4554-d739-45aa-b62b-e955df649a05"
+        ]
+      }
+    }
+  },
+  "result": "76844c66-446d-4a01-b2ae-6efcd1f4c21b"
+}

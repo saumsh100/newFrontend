@@ -4,5 +4,8 @@
   "screenshotsFolder": "tests/cypress/screenshots",
   "videosFolder": "tests/cypress/videos",
   "supportFile": "tests/cypress/support",
-  "videoRecording": false
+  "videoRecording": false,
+  "env": {
+    "siteURL": "http://localhost:5100"
+  }
 }
