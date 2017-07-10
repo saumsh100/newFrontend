@@ -30,16 +30,15 @@ signupRouter.post('/:token', ({ body, params: { token } }, res, next) => {
           permissionId: permission.id,
           activeAccountId: accountId,
         })
-          .then(({ model: user, authSession }) => {
+          .then(({ model: user, session }) => {
             return {
             user,
-            inviteId: id,
-            sessionIdId: authSession.id,
+            sessionIdId: session.id,
           }});
       });
     })
-    .then(({ user: { id, activeAccountId }, inviteId, sessionId }) => {
-       return Invite.get(inviteId).then(invite => invite.delete())
+    .then(({ user: { id, activeAccountId }, sessionId }) => {
+       return Invite.filter({ token }).then(invite => invite[0].delete())
         .then(() => UserAuth.signToken({ userId: id, sessionId }))
       }
     )

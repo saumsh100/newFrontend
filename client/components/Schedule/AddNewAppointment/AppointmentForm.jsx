@@ -17,30 +17,40 @@ Date.prototype.dst = function () {
 
 const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
-const generateTimeOptions = (timeInput) => {
+const generateTimeOptions = (timeInput, unitIncrement) => {
   const timeOptions = [];
   const totalHours = 24;
-  const increment = 15;
+  const increment = unitIncrement;
   const increments = 60 / increment;
 
   if (timeInput) {
     const minutes = moment(timeInput).minute();
     const remainder = minutes % increment;
     const today = new Date();
-    const label = (today.dst() ? moment(timeInput).subtract(1, 'hours').format('LT') : moment(timeInput).format('LT'));
+    const label = (today.dst() && !moment(new Date()).isDST() ? moment(timeInput).subtract(1, 'hours').format('LT') : moment(timeInput).format('LT'));
     if (remainder) {
       timeOptions.push({ value: timeInput, label });
     }
   }
-
   let i;
   for (i = 6; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(Date.UTC(1970, 1, 0, i, j * increment)));
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
       const today = new Date();
       const value = time.toISOString();
-      const label = (today.dst() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      timeOptions.push({ value, label });
+    }
+  }
+
+  for (i = 0; i < 6; i++) {
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const today = new Date();
+      const value = time.toISOString();
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
       timeOptions.push({ value, label });
     }
   }
@@ -48,21 +58,12 @@ const generateTimeOptions = (timeInput) => {
   return timeOptions;
 };
 
-export const timeOptions = generateTimeOptions();
-
-const marks = {
-  15: '15',
-  30: '30',
-  45: '45',
-  60: '60',
-  75: '75',
-  90: '90',
-  105: '105',
-  120: '120',
-  135: '135',
-  150: '150',
-  165: '165',
-  180: '180',
+const marks2 = (unit) => {
+  const mark = {};
+  for(let i = unit; i <= 180; i+=unit) {
+    mark[i] = `${i}`;
+  }
+  return mark;
 };
 
 export default function AppointmentForm(props) {
@@ -97,7 +98,7 @@ export default function AppointmentForm(props) {
         <Col md={2} />
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
-            options={generateTimeOptions(time)}
+            options={generateTimeOptions(time, unit)}
             component="DropdownSelect"
             name="time"
             label="Time"
@@ -187,10 +188,10 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_row_durBuff}>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+        <Col xs={12} md={4} className={styles.addNewAppt_col}>
           <Field
             name="duration"
-            label="Duration"
+            label="Duration (min)"
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
@@ -200,10 +201,10 @@ export default function AppointmentForm(props) {
             data-test-id="duration"
           />
         </Col>
-        <Col xs={12} md={2} className={styles.addNewAppt_col_unit}>
+        <Col xs={12} md={5} className={styles.addNewAppt_col_unit}>
           <Field
             name="unit"
-            label="Unit"
+            label={`Duration (unit of ${unit})`}
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
@@ -212,10 +213,10 @@ export default function AppointmentForm(props) {
             data-test-id="unit"
           />
         </Col>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+        <Col xs={12} md={3} className={styles.addNewAppt_col}>
           <Field
             name="buffer"
-            label="Buffer"
+            label="Buffer (min)"
             borderColor="primaryColor"
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
@@ -234,7 +235,7 @@ export default function AppointmentForm(props) {
             defaultValues={[60,61]}
             min={unit}
             max={180}
-            marks={marks}
+            marks={marks2(unit)}
             onChange={(e, value)=> handleSliderChange(value)}
             data-test-id="slider"
           />

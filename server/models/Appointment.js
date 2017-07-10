@@ -10,9 +10,9 @@ const Appointment = createModel('Appointment', {
   note: type.string(),
 
   // Relations
-  patientId: type.string().uuid(4).required(),
+  patientId: type.string().uuid(4),
   accountId: type.string().uuid(4).required(),
-  serviceId: type.string().uuid(4).required(),
+  serviceId: type.string().uuid(4),
   practitionerId: type.string().uuid(4).required(),
   chairId: type.string().uuid(4),
 
@@ -32,6 +32,14 @@ const Appointment = createModel('Appointment', {
   isSplit: type.boolean(),
   splitAppointments: [type.string().uuid(4)],
   isParent: type.boolean(),
+  mark: type.virtual().default(function () {
+    return !this.patientId;
+  }),
+});
+
+Appointment.ensureIndex('accountId');
+Appointment.ensureIndex('accountStart', function (row) {
+  return [row('accountId'), row('startDate')];
 });
 
 module.exports = Appointment;

@@ -33,11 +33,11 @@ class RequestListItem extends Component {
   render() {
     const {
       request,
-      //patient,
       service,
       isHovered,
       active,
-      patientUser
+      patientUser,
+      practitioner,
     } = this.props;
 
     if (!request || !patientUser) {
@@ -100,6 +100,7 @@ class RequestListItem extends Component {
               phoneNumber={data.mobilePhoneNumber}
               email={data.email}
               note={data.note}
+              practitioner={practitioner}
             />
           )]}
           preferPlace="left"

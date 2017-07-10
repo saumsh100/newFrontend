@@ -40,9 +40,12 @@ const PATHS = {
       label: 'Online Booking',
     },
     {
-      to: '',
-      label: 'RemindersList',
-      disabled: true,
+      to: '/settings/schedule/reminderslist',
+      label: 'Reminders',
+    },
+    {
+      to: '/settings/schedule/recalls',
+      label: 'Recalls',
     },
     {
       to: '',

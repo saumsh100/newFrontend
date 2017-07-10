@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import DisplaySearchedPatient from './DisplaySearchedPatient';
 import { Grid, Row, Col, Field } from '../../library';
 import styles from './styles.scss';
 
@@ -8,20 +9,27 @@ function validatePatient(value) {
 }
 
 export default function PatientForm(props) {
-
   const {
     getSuggestions,
     handleAutoSuggest,
+    patientSearched,
   } = props;
 
   return (
     <Grid className={styles.addNewAppt_mainContainer_right}>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
+        <Col xs={12}>
+          <DisplaySearchedPatient
+            patientSearched={patientSearched}
+          />
+        </Col>
+      </Row>
+      <Row className={styles.addNewAppt_mainContainer_right_rowSuggest}>
         <Col xs={12} data-test-id="patientSelected">
           <Field
             component="AutoComplete"
             name="patientSelected"
-            label="Enter Patient Name"
+            label="Patient Search"
             getSuggestions={getSuggestions}
             onChange={(e, newValue) => handleAutoSuggest(newValue)}
             validate={[validatePatient]}
@@ -31,34 +39,12 @@ export default function PatientForm(props) {
         </Col>
       </Row>
       <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12}>
-          <Field
-            name="mobilePhoneNumber"
-            label="Phone #"
-            theme="primaryGrey"
-            disabled
-            data-test-id="mobilePhoneNumber"
-          />
-        </Col>
-      </Row>
-      <Row className={styles.addNewAppt_mainContainer_right_row}>
-        <Col xs={12} >
-          <Field
-            name="email"
-            label="Email"
-            theme="primaryGrey"
-            disabled
-            data-test-id="email"
-          />
-        </Col>
-      </Row>
-      <Row className={styles.addNewAppt_mainContainer_right_row}>
         <Col xs={12} className={styles.addNewAppt_col_textArea} >
           <div className={styles.addNewAppt_comment_label}>Comment</div>
           <Field
             component="TextArea"
             name="note"
-            rows={6}
+            rows={9}
             className={styles.addNewAppt_comment}
             data-test-id="note"
           />

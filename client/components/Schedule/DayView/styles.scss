@@ -36,25 +36,28 @@
 }
 
 .appointmentContainer {
-
-}
-.showAppointment {
-  position: absolute;
-  box-sizing: border-box;
-  overflow-y: auto;
-
-  &_icon {
-    color: $inactive-color;
-    opacity: 0.5;
-    float: right;
-  }
-
   &:hover {
     cursor: pointer;
     z-index: 5 !important;
     //animation-name: example;
     //animation-duration: 4s;
     //transition: all 0.10s ease-in;
+  }
+}
+.showAppointment {
+  position: absolute;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition: background-color 0.5s ease;
+
+  &_icon {
+    display: flex;
+    color: $inactive-color;
+    opacity: 1;
+    float: right;
+    &_item {
+      padding-right: 2px;
+    }
   }
 
   &_nameAge {
@@ -105,6 +108,18 @@
       text-overflow: ellipsis;
     }
   }
+
+  &_mark {
+    font-family: $medium-font;
+    font-size: $extra-small-size;
+
+    &_note {
+      padding: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 @keyframes example {
@@ -116,4 +131,30 @@
 
 .paddingText {
   padding-right: 5px;
+}
+
+
+.columnHeader {
+  position: fixed;
+  display: flex;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  color: $primary-darkgrey;
+  font-weight: $medium-weight;
+  font-size: $small-size;
+  background: $primary-grey;
+  justify-content: center;
+  opacity: 0.5;
+  z-index: 10;
+
+  &_icon {
+    display: flex;
+    text-align: center;
+  }
+
+  &_text {
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;
+  }
 }

@@ -47,6 +47,7 @@ function fetchServiceData(options) {
         return row('isActive').eq(true);
       }),
     },
+
     requests: {
       _apply: (sequence) => {
         return sequence.filter((request) => {
@@ -190,16 +191,22 @@ function generatePractitionerAvailabilities(options) {
     requests,
     reservations,
   } = service;
+
   // console.log('requests', requests);
   // console.log('weeklySchedule.monday', weeklySchedule.monday);
+
+  // TODO: getTimeSlots should really be: (appts, rqsts, resos).orderBy(startDate), then get openings
+  // TODO: from there, split up based on account interval and weeklySchedule
+
   /*
    - getTimeSlots for this practitioner from startDate to endDate
    - split timeSlots up into service.duration intervals
-   - loop over potential timeSlots and see if there are any conflicts with
-   - requests [if no practitionerId ?], needs to know about practitioner.length
-   - reservations [if no practitionerId ?], needs to know about practitioner.length
-   - appointments
+   - loop over potential timeSlots and see if there are any conflicts with:
+   -    requests [if no practitionerId ?], needs to know about practitioner.length
+   -    reservations [if no practitionerId ?], needs to know about practitioner.length
+   -    appointments
    */
+
   const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
   const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
 
@@ -228,12 +235,14 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefRequests &&
            !conflictsWithNoPrefReservations;
   });
+
   let x = availabilities.map((aval) => {
     return {
       startDate: aval.startDate,
       endDate: moment(aval.startDate).add(service.duration, 'minutes').toISOString(),
     };
   });
+
   return x;
 }
 

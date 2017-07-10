@@ -7,16 +7,42 @@ import { Icon } from '../../../library';
 import styles from '../../styles.scss';
 import { runOnDemandSync } from '../../../../thunks/runOnDemandSync';
 
-import { setSyncingWithPMS } from '../../../../actions/schedule';
+import { setSyncingWithPMS, setScheduleView } from '../../../../actions/schedule';
 
-// export default function HeaderButtons(props) {
 class HeaderButtons extends Component {
+  constructor(props) {
+    super(props);
+    this.setView = this.setView.bind(this);
+  }
+
+  componentDidMount() {
+    const localStorageView = JSON.parse(localStorage.getItem('scheduleView'));
+    if (localStorageView && (localStorageView.view !== this.props.scheduleView)) {
+      const view = localStorageView.view;
+      this.props.setScheduleView({ view });
+    }
+  }
+
+  setView() {
+    if (this.props.scheduleView === 'chair') {
+      const viewObj = { view: 'practitioner' };
+      localStorage.setItem('scheduleView', JSON.stringify(viewObj));
+      this.props.setScheduleView({ view: 'practitioner' });
+    } else {
+      const viewObj = { view: 'chair' };
+      localStorage.setItem('scheduleView', JSON.stringify(viewObj));
+      this.props.setScheduleView({ view: 'chair' });
+    }
+  }
+
   render() {
     const {
       addNewAppointment,
       runOnDemandSync,
       setSyncingWithPMS,
       syncingWithPMS,
+      scheduleView,
+      setScheduleView,
     } = this.props;
 
     function onDemandSync() {
@@ -30,7 +56,6 @@ class HeaderButtons extends Component {
       }
     }
 
-
     let syncStyle = styles.headerButtons__quickAdd;
 
     if (syncingWithPMS) {
@@ -39,6 +64,17 @@ class HeaderButtons extends Component {
 
     return (
       <div className={styles.headerButtons}>
+        <div
+          className={styles.headerButtons__quickAdd}
+          onClick={this.setView}
+        >
+          <span className={styles.headerButtons__quickAdd_text}>{scheduleView} View</span>
+          <Icon
+            icon="exchange"
+            size={1.5}
+            className={styles.headerButtons__quickAdd_icon}
+          />
+        </div>
         <div
           className={syncStyle}
           onClick={onDemandSync}
@@ -59,14 +95,6 @@ class HeaderButtons extends Component {
               className={styles.headerButtons__quickAdd_icon}
             />
           </div>
-          {/* <IconButton icon="plus" onClick={(e)=>{
-           e.stopPropagation()
-           props.showAlert({ text: 'Created An Appointment', type: 'success' });
-           }}/>
-           <IconButton icon="plus" onClick={(e)=>{
-           e.stopPropagation()
-           props.showAlert({ text: 'Failed to Update', type: 'error' });
-           }}/>*/}
         </div>
       </div>
     );
@@ -81,15 +109,17 @@ HeaderButtons.PropTypes = {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     runOnDemandSync,
+    setScheduleView,
     setSyncingWithPMS,
   }, dispatch);
 }
 
 function mapStateToProps({ schedule }) {
-
   const syncingWithPMS = schedule.toJS().syncingWithPMS;
+  const scheduleView = schedule.toJS().scheduleView;
   return {
     syncingWithPMS,
+    scheduleView,
   };
 }
 

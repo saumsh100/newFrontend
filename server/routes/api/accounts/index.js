@@ -6,6 +6,8 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
 const Invite = require('../../../models/Invite');
+const Reminder = require('../../../models/Reminder');
+const Recall = require('../../../models/Recall');
 const User = require('../../../models/User');
 const StatusError = require('../../../util/StatusError');
 const { Account, Permission } = require('../../../models');
@@ -16,6 +18,8 @@ const upload = require('../../../lib/upload');
 accountsRouter.param('accountId', loaders('account', 'Account', { enterprise: true }));
 accountsRouter.param('inviteId', loaders('invite', 'Invite'));
 accountsRouter.param('permissionId', loaders('permission', 'Permission'));
+accountsRouter.param('reminderId', loaders('reminder', 'Reminder'));
+accountsRouter.param('recallId', loaders('recall', 'Recall'));
 
 // List of all available accounts to switch
 accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, enterpriseRole, enterpriseId, sessionData }, res, next) =>
@@ -73,6 +77,101 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
       sessionId: newSession.id,
     }))
     .then(signedToken => res.json({ token: signedToken }))
+    .catch(next);
+});
+
+// Get Recalls settings
+
+accountsRouter.get('/:accountId/recalls', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.account.id !== req.accountId) {
+    next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  return Recall.filter({accountId: req.accountId})
+  .run()
+  .then((recalls) => {
+    res.send(normalize('recalls', recalls));
+  })
+  .catch(next);
+});
+
+accountsRouter.post('/:accountId/recalls', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.account.id !== req.accountId) {
+    next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+  const saverecall = Object.assign({ accountId: req.accountId }, req.body);
+
+  return Recall.save(saverecall).then((recall) => {
+    res.send(normalize('recall', recall));
+  }).catch(next);
+});
+
+accountsRouter.put('/:accountId/recalls/:recallId', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.accountId !== req.account.id) {
+    return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+  }
+
+  return req.recall.merge(req.body).save()
+  .then(recall => {
+    res.send(normalize('recall', recall));
+  })
+  .catch(next);
+});
+
+accountsRouter.delete('/:accountId/recalls/:recallId', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.accountId !== req.account.id) {
+    return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+  }
+  return req.recall.delete()
+    .then(() => res.sendStatus(204))
+    .catch(next);
+});
+
+// Get Reminder settings
+
+accountsRouter.get('/:accountId/reminders', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.account.id !== req.accountId) {
+    next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  return Reminder.filter({accountId: req.accountId})
+  .run()
+  .then((reminders) => {
+    res.send(normalize('reminders', reminders));
+  })
+  .catch(next);
+
+});
+
+accountsRouter.post('/:accountId/reminders', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.account.id !== req.accountId) {
+    next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  const saveReminder = Object.assign({ accountId: req.accountId }, req.body);
+  return Reminder.save(saveReminder).then((reminder) => {
+    res.send(normalize('reminder', reminder));
+  }).catch(next);
+});
+
+accountsRouter.put('/:accountId/reminders/:reminderId', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.accountId !== req.account.id) {
+    return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+  }
+
+  return req.reminder.merge(req.body).save()
+  .then(reminder => {
+    res.send(normalize('reminder', reminder));
+  })
+  .catch(next);
+});
+
+accountsRouter.delete('/:accountId/reminders/:reminderId', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.accountId !== req.account.id) {
+    return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+  }
+  return req.reminder.delete()
+    .then(() => res.sendStatus(204))
     .catch(next);
 });
 

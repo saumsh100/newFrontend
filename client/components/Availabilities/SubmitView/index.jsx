@@ -141,6 +141,16 @@ class SubmitView extends Component {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
+          <span>You are currently logged in as <strong>{patientUser.getFullName()}</strong>.
+            <br /><br />
+            If this is not you, and you would like to logout
+            and signin/signup as another user,
+            click <a href="#logout" onClick={(e) => {
+              e.preventDefault();
+              this.logout();
+            }}>here</a>.
+            <br /><br />
+          </span>
             We have sent a confirmation code via SMS to {patientUser.get('phoneNumber')}.
             Please type in the code below and submit to complete your booking.
             If you did not receive your SMS and want it sent again, click {resendAnchor}.

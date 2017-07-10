@@ -26,10 +26,12 @@ class ScheduleComponent extends Component {
     super(props);
     this.state = {
       addNewAppointment: false,
+      patientSearched: null,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
+    this.setPatientSearched = this.setPatientSearched.bind(this)
   }
 
   setCurrentDay(day) {
@@ -45,12 +47,19 @@ class ScheduleComponent extends Component {
     this.props.selectAppointment(null);
     this.setState({
       addNewAppointment: false,
+      patientSearched: null,
     });
   }
 
   addNewAppointment() {
     this.setState({
       addNewAppointment: true,
+    });
+  }
+
+  setPatientSearched(patientSearched) {
+    this.setState({
+      patientSearched,
     });
   }
 
@@ -94,6 +103,8 @@ class ScheduleComponent extends Component {
         selectedAppointment={selectedAppointment}
         reinitializeState={this.reinitializeState}
         weeklySchedules={weeklySchedules}
+        setPatientSearched={this.setPatientSearched}
+        patientSearched={this.state.patientSearched}
       />
     );
 
@@ -146,7 +157,6 @@ class ScheduleComponent extends Component {
                     appointments={appointments}
                     schedule={schedule}
                     selectAppointment={selectAppointment}
-                    weeklySchedules={weeklySchedules}
                   />
                   <Modal
                     active={

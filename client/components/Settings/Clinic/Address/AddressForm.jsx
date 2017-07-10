@@ -8,8 +8,9 @@ import { connect } from 'react-redux';
 import styles from './styles.scss';
 
 const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
+  value && value.length > max ? `Must be ${max} characters or less, and no blank spaces` : undefined
 const maxLength25 = maxLength(25);
+const maxPostalLength = maxLength(6);
 
 class AddressForm extends React.Component {
 
@@ -109,8 +110,9 @@ class AddressForm extends React.Component {
                 required
                 name="zipCode"
                 label={zipPostal}
-                validate={[this.zipPostalVal]}
+                validate={[maxPostalLength, this.zipPostalVal]}
                 data-test-id="zipCode"
+                maxLength="6"
               />
             </div>
             <div className={styles.addressColSelect}>

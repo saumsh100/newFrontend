@@ -10,7 +10,7 @@ const Patient = require('../../../models/Patient');
 const Chat = require('../../../models/Chat');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
-const globals = require('../../../config/globals');
+const { env, namespaces } = require('../../../config/globals');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
 patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
@@ -63,7 +63,7 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
             patientId: req.patient.id,
           })
           .filter(r.row('startDate').during(r.time(1970, 1, 1, 'Z'), endDate))
-          .orderBy(r.row('startDate'))
+          .orderBy(r.desc('startDate'))
           .then((lastAppointment) => {
             return res.send({
               allApps: req.patient.appointments.length,
@@ -86,8 +86,8 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
   const endDate = r.now();
 
   return Appointment
-    .filter({ accountId })
-    .filter(r.row('startDate').during(startDate, endDate))
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+    .filter(r.row.hasFields('patientId'))
     .getJoin({
       patient: true,
     })
@@ -115,44 +115,11 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 });
 
 /**
- * Batch creation
- */
-patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
-  const { patients } = req.body;
-  const cleanedPatients = patients.map((patient) => {
-    return Object.assign(
-      {},
-      _.omit(patient, ['id', 'dateCreated']),
-      { accountId: req.accountId }
-    );
-  });
-
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
-    .catch(next);
-});
-
-/**
- * Batch updating
- */
-patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
-  const { patients } = req.body;
-  const patientUpdates = patients.map((patient) => {
-    return Patient.get(patient.id).run()
-      .then(_patient => _patient.merge(patient).save());
-  });
-
-  return Promise.all(patientUpdates)
-    .then(_patients => res.send(normalize('patients', _patients)))
-    .catch(next);
-});
-
-/**
  * TESTING ONLY
  * Used to search an patient by any property.
  * E.g. api/patients/test?pmsId=1003&note=unit test patient
  */
-if (globals.env !== 'production') {
+if (env !== 'production') {
   patientsRouter.get('/test', checkPermissions('patients:read'), (req, res, next) => {
     const property = req.query;
     return Patient
@@ -175,15 +142,16 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
 
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
-  Patient.filter((patient) => {
-    return patient('accountId').eq(req.accountId).and(
-      patient('firstName').match(searchReg)
+  Patient
+  .getAll(req.accountId, { index: 'accountId' })
+  .filter((patient) => {
+    return patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
         .or(patient('mobilePhoneNumber').match(phoneSearch))
         .or(patient('homePhoneNumber').match(phoneSearch))
         .or(patient('workPhoneNumber').match(phoneSearch))
         .or(patient('otherPhoneNumber').match(phoneSearch))
-        .or(patient('email').match(search[0])));
+        .or(patient('email').match(search[0]));
   }).limit(50)
     .getJoin({ appointments: {
       _apply: (appointment) => {
@@ -326,9 +294,18 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), (req
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
-
   return Patient.save(patientData)
-    .then(patient => res.status(201).send(normalize('patient', patient)))
+    .then((patient) => {
+      const normalized = normalize('patient', patient);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('create:Patient', normalized);
+    })
     .catch(next);
 });
 
@@ -337,16 +314,35 @@ patientsRouter.post('/', (req, res, next) => {
  */
 patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
   const { patients } = req.body;
+  console.log('req.accountId', req.accountId);
   const cleanedPatients = patients.map((patient) => {
     return Object.assign(
       {},
-      _.omit(patient, ['id', 'dateCreated']),
-      { accountId: req.accountId }
+      _.omit(patient, ['id']),
+      { accountId: req.accountId },
     );
   });
 
-  return Patient.save(cleanedPatients)
-    .then(_patients => res.send(normalize('patients', _patients)))
+  return Patient.batchSave(cleanedPatients)
+    .then(p => res.send(normalize('patients', p)))
+    .catch(({ errors, docs }) => {
+    // TODO make sure that we are catching the 400 error
+      errors = errors.map(({ patient, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete patient.createdAt;
+        return {
+          patient,
+          message,
+        };
+      });
+
+      const entities = normalize('patients', docs);
+      const responseData = Object.assign({}, entities, { errors });
+      return res.status(400).send(responseData);
+    })
     .catch(next);
 });
 
@@ -363,8 +359,19 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Update a patient
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+  const accountId = req.accountId;
   return req.patient.merge(req.body).save()
-    .then(patient => res.send(normalize('patient', patient)))
+    .then((patient) => {
+      const normalized = normalize('patient', patient);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('update:Patient', normalized);
+    })
     .catch(next);
 });
 
@@ -372,8 +379,16 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
  * Delete a patient
  */
 patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => {
-   return req.patient.deleteAll()
+  const { patient } = req;
+  const accountId = req.accountId;
+  return patient.deleteAll()
     .then(() => res.send(204))
+    .then(() => {
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const normalized = normalize('patient', patient);
+      return io.of(ns).in(accountId).emit('remove:Patient', normalized);
+    })
     .catch(next);
 });
 

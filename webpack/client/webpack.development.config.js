@@ -1,3 +1,4 @@
+
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
@@ -21,18 +22,19 @@ const entries = appEntries(name => [
 ]);
 
 const {
+  INTERCOM_APP_ID,
   LOGROCKET_APP_ID,
   FACEBOOK_APP_ID,
 } = env;
 
 const developmentConfig = merge(baseConfig, {
   entry: entries('app', 'patient'),
-
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
         LOGROCKET_APP_ID: `"${LOGROCKET_APP_ID || '7mbzb4/carecru-development'}"`,
+        INTERCOM_APP_ID: `"${INTERCOM_APP_ID || 'enpxykhl'}"`,
         FACEBOOK_APP_ID: `"${FACEBOOK_APP_ID}"`,
         API_SERVER_PORT: `"${serverPort}"`,
       },

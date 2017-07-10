@@ -1,4 +1,4 @@
-  {
+{
   "name": "carecru",
   "scripts": {
   },
@@ -43,6 +43,12 @@
       "required": true
     },
     "S3_BUCKET": {
+      "required": true
+    },
+    "LOGROCKET_APP_ID": {
+      "required": true
+    },
+    "INTERCOM_APP_ID": {
       "required": true
     }
   },

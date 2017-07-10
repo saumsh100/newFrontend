@@ -2,11 +2,13 @@
 import { v4 as uuid } from 'uuid';
 import map from 'lodash/map';
 import mapValues from 'lodash/mapValues';
+import isArray from 'lodash/isArray';
 import thinky from '../../config/thinky';
+import { UniqueFieldError } from './errors';
 
 const { r, type } = thinky;
 const TABLE_NAME_DELIMETER = '_';
-const PRIMARY_KEY_DELIMETER = '.';
+const PRIMARY_KEY_DELIMETER = '_';
 
 /**
  * createTableName does...
@@ -30,6 +32,24 @@ export function createPrimaryKey(dependencies, fieldName) {
   return dependencies.length ?
     `${fieldName}${PRIMARY_KEY_DELIMETER}${dependencies.join(PRIMARY_KEY_DELIMETER)}` :
     fieldName;
+}
+
+/**
+ * createPrimaryKey does...
+ *
+ * @param dependencies
+ * @param fieldName
+ * @returns {string}
+ */
+export function createPredicate(dependencies, fieldName) {
+  return (doc) => {
+    const pred = [doc(fieldName)];
+    dependencies.forEach((depFieldName) => {
+      pred.push(doc(depFieldName));
+    });
+
+    return pred;
+  };
 }
 
 /**
@@ -194,7 +214,7 @@ export function generateAuxValidators(auxTables, doc) {
   });
 }
 
-export function generateUniqueValidator(auxTables) {
+export function _generateUniqueValidator(auxTables) {
   // Generate validators to ensure uniqueness on fields
 
   /**
@@ -218,6 +238,76 @@ export function generateUniqueValidator(auxTables) {
         next(err);
         // TODO: how do we handle this, do we throw the error or call next(err) or what?
       });
+  };
+}
+
+/**
+ *
+ * @param config
+ * @param Model
+ * @returns {Function} predicate for pre('save', <pred>)
+ */
+export function generateUniqueValidator(config, Model) {
+  const uniqueIndices = {};
+  const valueGetters = {};
+  for (const field in config) {
+    const fieldConfig = config[field];
+    if (!fieldConfig) {
+      console.error(`Falsey property passed into unique config at fieldName=[${field}]`);
+      continue;
+    }
+
+    let index = field;
+    let predicate;
+    let getValue = doc => doc[field];
+
+    // Ensure the indices are created
+    if (isArray(fieldConfig)) {
+      index = createPrimaryKey(fieldConfig, field);
+      predicate = createPredicate(fieldConfig, field);
+      getValue = (doc) => {
+        const value = doc[field];
+        if (!value) return;
+        if (!value) return;
+        const values = [value];
+        for (const depFieldName of fieldConfig) {
+          const depValue = doc[depFieldName];
+          if (!depValue) return;
+          values.push(depValue);
+        }
+
+        return values;
+      };
+    }
+
+    Model.ensureIndex(index, predicate);
+    uniqueIndices[field] = index;
+    valueGetters[field] = getValue;
+  }
+
+  return async function (next) {
+    const self = this;
+    for (const field in config) {
+      const index = uniqueIndices[field];
+      const valueGetter = valueGetters[field];
+      if (!index && !valueGetter) {
+        continue;
+      }
+
+      const value = valueGetter(self);
+      if (!value) {
+        continue;
+      }
+
+      // Now that we have the secondary index and the value let's see what we get!
+      const models = await Model.getAll(value, { index });
+      const [model] = models;
+      if (model && model.id !== self.id) {
+        return next(UniqueFieldError(Model, field));
+      }
+    }
+
+    return next();
   };
 }
 

@@ -32,7 +32,6 @@ import User from './User';
 import WaitSpot from './WaitSpot';
 import WeeklySchedule from './WeeklySchedule';
 
-
 export {
   Account,
   Account_Patient,

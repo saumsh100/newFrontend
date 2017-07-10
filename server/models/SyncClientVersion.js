@@ -13,6 +13,7 @@ const SyncClientVersion = createModel('SyncClientVersion', {
   secret: type.string(),
   filename: type.string(),
   path: type.string(),
+  bucket: type.string(),
 });
 
 module.exports = SyncClientVersion;
