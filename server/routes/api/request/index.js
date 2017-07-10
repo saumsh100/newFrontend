@@ -12,6 +12,7 @@ const {
 } = require('../../../lib/mail');
 
 requestsRouter.param('requestId', loaders('request', 'Request'));
+requestsRouter.param('appointmentId', loaders('appointment', 'Appointment'));
 
 /**
  * Create a request
@@ -71,6 +72,7 @@ requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res
     .catch(next);
 });
 
+
 /**
  * Delete a request
  */
@@ -85,16 +87,16 @@ requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, 
 /**
  * Send Rejected Request Email
  */
-requestsRouter.post('/:requestId/reject', (req, res, next) => {
+requestsRouter.put('/:requestId/reject', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { accountId, request } = req;
   return request.merge({ isCancelled: true }).save()
     .then(r => res.status(201).send(normalize('request', r)))
     .then(async () => {
-      const patientUser = await PatientUser.get(patientUserId);
+      const patientUser = await PatientUser.get(req.request.patientUserId);
       const account = await Account.get(accountId);
       const { email, firstName } = patientUser;
-      const { name } = account;
+      const { name, phoneNumber, contactEmail, website } = account;
       // Send Email
       sendAppointmentRequestRejected({
         toEmail: email,
@@ -106,7 +108,19 @@ requestsRouter.post('/:requestId/reject', (req, res, next) => {
           },
           {
             name: 'ACCOUNT_NAME',
-            content: name,
+            content: name || '',
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: phoneNumber || '',
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: contactEmail || '',
+          },
+          {
+            name: 'ACCOUNT_WEBSITE',
+            content: website || '',
           },
         ],
       });
@@ -118,5 +132,54 @@ requestsRouter.post('/:requestId/reject', (req, res, next) => {
 /**
  * Send Confirmed Request Email
  */
+requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('requests:update'), (req, res, next) =>{
+  return req.request.merge({ isConfirmed: true }).save()
+  .then(async () => {
+    const patientUser = await PatientUser.get(req.request.patientUserId);
+    const account = await Account.get(req.appointment.accountId);
+    const { email, firstName } = patientUser;
+    const { name, phoneNumber, contactEmail, website } = account;
+    const { startDate } = req.appointment;
+    // Send Email
+    return sendAppointmentRequestConfirmed({
+      toEmail: email,
+      fromName: name,
+      mergeVars: [
+        {
+          name: 'PATIENT_FIRSTNAME',
+          content: firstName,
+        },
+        {
+          name: 'ACCOUNT_NAME',
+          content: name || '',
+        },
+        {
+          name: 'ACCOUNT_PHONENUMBER',
+          content: phoneNumber || '',
+        },
+        {
+          name: 'ACCOUNT_CONTACTEMAIL',
+          content: contactEmail || '',
+        },
+        {
+          name: 'ACCOUNT_WEBSITE',
+          content: website || '',
+        },
+        {
+          name: 'APPOINTMENT_DATE',
+          content: moment(startDate).format('MMMM Do YYYY'),
+        },
+        {
+          name: 'APPOINTMENT_TIME',
+          content: moment(startDate).format('h:mm:ss a'),
+        },
+      ],
+    });
+  })
+  .then(() => {
+    res.send(200);
+  })
+   .catch(next);
+});
 
 module.exports = requestsRouter;

@@ -127,19 +127,26 @@ class AddNewAppointment extends Component {
 
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
+      const requestId = selectedAppointment.requestId;
       return createEntityRequest({
         key: 'appointments',
         entityData: newAppointment,
         alert: alertCreate,
-      }).then(() => {
+      }).then((data) => {
         if (selectedAppointment && selectedAppointment.request) {
           return updateEntityRequest({
             key: 'requests',
             model: selectedAppointment.requestModel,
             alert: alertRequestUpdate,
           }).then(() => {
-            reinitializeState();
-            reset(formName);
+            this.props.updateEntityRequest({
+              url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
+              values: {},
+            })
+            .then(() => {
+              reinitializeState();
+              reset(formName);
+            });
           });
         } else {
           reinitializeState();
