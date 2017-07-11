@@ -63,6 +63,16 @@ const Time = {
     return startTimeDuring || startTimeEqual || endTimeDuring || endTimeEqual;
   },
 
+  isDuringEachotherTimeOff: (a, b) => {
+    const startTimeDuring = moment(b.startDate).isBetween(a.startDate, a.endDate);
+    const dayStartEqual = moment(a.startDate).isSame(b.startDate);
+    const startTimeEqual = moment(a.startDate).isSame(b.startDate, 'day') && a.allDay;
+    const endTimeDuring = moment(b.endDate).isBetween(a.startDate, a.endDate);
+    const dayEndEqual = moment(a.endDate).isSame(b.endDate, 'day') && a.allDay;
+    const endTimeEqual = moment(a.endDate).isSame(b.endDate);
+    return startTimeDuring || startTimeEqual || endTimeDuring || endTimeEqual || dayStartEqual || dayEndEqual;
+  },
+
   /**
    *
    * @param timeSlots
