@@ -65,12 +65,14 @@ describe('Patient Management', () => {
         .submitForm('editPatient')
         .getAndClick('contactTab')
         .fillTextInput('contactPatient', 'city', 'Bangkok')
+        .submitForm('contactPatient')
         .reload()
         .get('[data-test-id="patientListSearch"]')
         .type('justin')
         .getAndClick('"Justin SharpeSuggestion"')
-        .get('[data-test-id=lastName]')
-        .should('have.value', 'Sharpe');
+        .getAndClick('contactTab')
+        .get('[data-test-id=city]')
+        .should('have.value', 'Bangkok');
     });
   });
 });
