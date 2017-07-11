@@ -41,4 +41,36 @@ describe('Patient Management', () => {
         .should('exist');
     });
   });
+
+  context('Patients', () => {
+    beforeEach(() => {
+      cy.visit(`${Cypress.env('siteURL')}/patients/list`);
+    });
+
+    it('select a patient and see its data on the page', () => {
+      cy
+        .get('[data-test-id="patientListSearch"]')
+        .type('justin')
+        .getAndClick('"Justin SharpSuggestion"')
+        .get('[data-test-id=editFirstName]')
+        .should('have.value', 'Justin');
+    });
+
+    it('edit a selected patients basic info', () => {
+      cy
+        .get('[data-test-id="patientListSearch"]')
+        .type('justin')
+        .getAndClick('"Justin SharpSuggestion"')
+        .fillTextInput('editPatient', 'lastName', 'Sharpe')
+        .submitForm('editPatient')
+        .getAndClick('contactTab')
+        .fillTextInput('contactPatient', 'city', 'Bangkok')
+        .reload()
+        .get('[data-test-id="patientListSearch"]')
+        .type('justin')
+        .getAndClick('"Justin SharpeSuggestion"')
+        .get('[data-test-id=lastName]')
+        .should('have.value', 'Sharpe');
+    });
+  });
 });
