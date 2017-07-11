@@ -54,7 +54,10 @@ class RequestList extends Component {
   removeRequest(request) {
     const confirmRemove = confirm('Are you sure you want to reject this request?');
     if (confirmRemove) {
-      this.props.rejectRequest(request.get('id'));
+      this.props.updateEntityRequest({
+        url: `/api/requests/${request.id}/reject`,
+        values: {},
+      });
       // this.props.setUndoRequest({ undoRequest: request });
     }
   }
