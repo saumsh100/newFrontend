@@ -42,7 +42,7 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
       <Field
         required
         name="mobilePhoneNumber"
-        validate={[phoneValidate]}
+        type="tel"
         label="Phone Number"
       />
       <Field

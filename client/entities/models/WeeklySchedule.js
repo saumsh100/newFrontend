@@ -10,6 +10,9 @@ const WeeklyScheduleSchema = {
   friday: null,
   saturday: null,
   sunday: null,
+  startDate: null,
+  weeklySchedules: [],
+  isAdvanced: null,
 };
 
 export default class WeeklySchedule extends createModel(WeeklyScheduleSchema) {

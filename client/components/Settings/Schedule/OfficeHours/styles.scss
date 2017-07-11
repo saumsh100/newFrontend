@@ -4,6 +4,14 @@
 .header {
   padding-left: 15px;
 }
+
+.subHeader {
+  padding-left: 15px;
+  div {
+    font-size: 26px;
+  }
+}
+
 .day {
   text-transform: capitalize;
 }
@@ -43,6 +51,24 @@
 .toDivDisabled {
   @extend .toDiv;
   color: lighten($primary-darkgrey, 25%);
+}
+
+.flexHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  margin: 15px;
+  margin-right: 40px;
+}
+
+.orSpacer {
+  border-top: outset #b4b4b5;
+  margin: 30px auto 0 auto;
+  width: 90%;
+  position: relative;
+  border-width: thin;
 }
 
 .dayGrid {
