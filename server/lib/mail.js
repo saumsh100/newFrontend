@@ -13,6 +13,28 @@ module.exports = {
     config.templateName = 'Patient Recall';
     return sendTemplate(config);
   },
+
+  sendPatientSignup: (config) => {
+    config.subject = 'Confirm your email';
+    config.templateName = 'Patient Signup Confirmation';
+    return sendTemplate(config);
+  },
+
+  sendAppointmentRequested: (config) => {
+    config.subject = 'Congratulations! Your appointment was requested.';
+    config.templateName = 'Appointment Requested';
+    return sendTemplate(config);
+  },
+  sendAppointmentRequestRejected: (config) => {
+    config.subject = 'Sorry, Your appointment was Rejected.';
+    config.templateName = 'Appointment Rejected';
+    return sendTemplate(config);
+  },
+  sendAppointmentRequestConfirmed: (config) => {
+    config.subject = 'Congratulations! Your appointment was Confirmed.';
+    config.templateName = 'Appointment Confirmed';
+    return sendTemplate(config);
+  },
 };
 
 /**
@@ -28,7 +50,7 @@ function sendTemplate(config) {
     toEmail,
     templateName,
     mergeVars,
-    fromName,
+    fromName = 'CareCru',
     attachments,
   } = config;
 

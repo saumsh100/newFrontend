@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { UserAuth } from '../../../lib/auth';
 import { AuthSession } from '../../../models';
 
@@ -294,7 +295,10 @@ accountsRouter.post('/:accountId/invites', (req, res, next) => {
             {
               name: 'NAME',
               content: `${user[0].firstName} ${user[0].lastName}`,
-
+            },
+            {
+              name: 'CURRENT_YEAR',
+              content: moment().format('YYYY'),
             },
           ];
           sendInvite({
