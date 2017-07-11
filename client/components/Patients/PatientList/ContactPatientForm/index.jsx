@@ -43,6 +43,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
       onSubmit={submit}
       className={styles.form}
       initialValues={initialValues}
+      data-test-id={formName}
     >
       <div className={styles.names2}>
         <div className={styles.mailIcon}>
@@ -119,6 +120,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
             name="city"
             validate={[maxLength(15)]}
             label="City"
+            data-test-id="city"
           />
         </div>
         <Field

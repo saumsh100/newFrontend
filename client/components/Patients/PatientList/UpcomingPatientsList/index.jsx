@@ -157,6 +157,7 @@ class UpcomingPatientList extends Component {
                 getSuggestions={this.getSuggestions}
                 inputProps={inputProps}
                 focusInputOnSuggestionClick={false}
+                data-test-id="patientListSearch"
                 getSuggestionValue={suggestion => suggestion.name}
               />
             </div>

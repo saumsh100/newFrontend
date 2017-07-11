@@ -175,6 +175,7 @@ class MainContainer extends Component {
                           <Tab
                             label="Contact"
                             className={styles.tabs}
+                            data-test-id="contactTab"
                           >
                             <div className={styles.tabdivs}>
                               <ContactPatientForm
