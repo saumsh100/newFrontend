@@ -52,7 +52,7 @@ describe('Patient Management', () => {
         .get('[data-test-id="patientListSearch"]')
         .type('justin')
         .getAndClick('"Justin SharpSuggestion"')
-        .get('[data-test-id=editFirstName]')
+        .get('[data-test-id=firstName]')
         .should('have.value', 'Justin');
     });
 
