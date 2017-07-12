@@ -1438,9 +1438,25 @@ const SEEDS = {
   Recall,
   Reminder,
 
-  SentReminder: [],
+  SentReminder: [{
+    accountId,
+    reminderId: reminderId1,
+    appointmentId: appointmentId2,
+    patientId: alexPatientId,
+    isSent: true,
+    isConfirmed: false,
+    lengthSeconds: 60,
+    primaryType: 'sms',
+  }],
 
-  SentRecall: [],
+  SentRecall: [{
+    recallId: recallIdtest,
+    accountId,
+    patientId: justinPatientId,
+    isSent: true,
+    lengthSeconds: 6 * 30 * 24 * 60 * 60,
+    primaryType: 'email',
+  }],
 };
 
 seedDatabase(SEEDS)

@@ -212,6 +212,7 @@ class DigitalWaitList extends Component {
           <CardHeader
             count={waitSpots.get('models').size}
             title="Digital Waitlist"
+            data-test-id="waitListCount"
           >
             <Button
               flat
@@ -231,7 +232,7 @@ class DigitalWaitList extends Component {
               } else if (waitSpot.patientId) {
                 patientData = patients.getIn(['models', waitSpot.get('patientId')]);
               }
-              
+
               return (
                 <DigitalWaitListItem
                   key={waitSpot.id}

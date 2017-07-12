@@ -31,6 +31,7 @@ export default function ReminderData(props) {
     <ListItem
       key={`patientsItem${index}`}
       className={styles.patients__item}
+      data-test-id={`${index}_sentReminder`}
     >
       <Avatar className={styles.patients__item_img} size="lg" user={patient} />
       <div className={styles.patients__item_wrapper}>
