@@ -115,7 +115,12 @@ class Dashboard extends React.Component {
             </Col>
             <Col className={styles.padding} xs={12} md={12} lg={8}>
               <Card className={styles.dashboard__body_comments} >
-                <CardHeader className={styles.cardHeader} title="Appointments" count={appointmentFilter.size} />
+                <CardHeader
+                  className={styles.cardHeader}
+                  title="Appointments"
+                  count={appointmentFilter.size}
+                  data-test-id="appointmentCount"
+                />
                 <AppointmentsList
                   appointments={appointmentFilter}
                   chairs={chairs}
