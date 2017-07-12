@@ -19,7 +19,7 @@ export default function
   let countComponent = null;
   if (count || count === 0) {
     countComponent = (
-      <div className={styles.cardCount}>
+      <div className={styles.cardCount} data-test-id="cardCount">
         {count}
       </div>
     );

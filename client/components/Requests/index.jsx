@@ -29,7 +29,10 @@ class Requests extends Component {
     return (
       <Card className={styles.requestCard}>
         <div className={styles.requestHeader}>
-          <CardHeader count={sortedRequests.length} title={'Appointment Requests'} >
+          <CardHeader
+            count={sortedRequests.length}
+            title={'Appointment Requests'}
+          >
             {/*<IconButton icon="undo" />*/}
           </CardHeader>
         </div>
