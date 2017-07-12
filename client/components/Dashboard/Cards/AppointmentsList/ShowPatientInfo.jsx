@@ -11,6 +11,7 @@ export default function ShowPatientInfo(props) {
     service,
     handleAppointmentClick,
     handlePatientClick,
+    index,
   } = props;
 
 
@@ -23,7 +24,7 @@ export default function ShowPatientInfo(props) {
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
   return (
-    <div className={styles.patientContainer}>
+    <div className={styles.patientContainer} data-test-id={`${patient.firstName}${index}`}>
       <Avatar className={styles.patientContainer_img} user={patient} />
       <div className={styles.patientContainer_text}>
         <div className={styles.patientContainer_name} >

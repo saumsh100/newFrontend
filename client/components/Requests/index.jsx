@@ -30,6 +30,7 @@ class Requests extends Component {
       <Card className={styles.requestCard}>
         <div className={styles.requestHeader}>
           <CardHeader
+            data-test-id="requestCount"
             count={sortedRequests.length}
             title={'Appointment Requests'}
           >

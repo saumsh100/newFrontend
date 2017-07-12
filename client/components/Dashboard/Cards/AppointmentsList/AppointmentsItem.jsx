@@ -12,6 +12,7 @@ export default function AppointmentsItem(props) {
     service,
     patient,
     practitioner,
+    index,
     chair,
     handleAppointmentClick,
     handlePatientClick,
@@ -29,6 +30,7 @@ export default function AppointmentsItem(props) {
     >
       <ShowPatientInfo
         patient={patient}
+        index={index}
         appointment={appointment}
         service={service}
         chair={chair}
