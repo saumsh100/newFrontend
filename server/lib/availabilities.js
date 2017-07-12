@@ -146,7 +146,8 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
       timeOffs: {
         _apply: (sequence) => {
           return sequence.filter((timeOff) => {
-            return generateDuringFilter(timeOff, startDate, endDate);
+            // subtract and add for start date and enddate as if all day is true it can miss it.
+            return generateDuringFilter(timeOff, moment(startDate).subtract(1, 'days').toISOString(), moment(endDate).add(1, 'days').toISOString());
           });
         },
       },
@@ -236,6 +237,7 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefRequests &&
            !conflictsWithNoPrefReservations;
   });
+
 
   const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
     for (let i = 0; timeOffs && i < timeOffs.length; i++) {
