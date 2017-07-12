@@ -4,7 +4,7 @@ describe('Dashboard', () => {
     cy.exec('env NODE_ENV="test" npm run seeds')
       .login();
   });
-  
+
   it('compare top card appointment request count with request list item count', () => {
     cy
       .get('[data-test-id="requestCount"]')
@@ -45,7 +45,7 @@ describe('Dashboard', () => {
       .should('exist');
   });
 
-  it('see a total count and listing of digital waitlists', () => {
+  it('see a total count and listing of digital wait lists', () => {
     cy
       .get('[data-test-id="waitListCount"]')
       .contains('3')
