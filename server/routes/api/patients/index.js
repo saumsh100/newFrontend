@@ -360,8 +360,21 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
  */
 patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
   const accountId = req.accountId;
+
+  const phoneNumber = req.patient.mobilePhoneNumber;
+
   return req.patient.merge(req.body).save()
     .then((patient) => {
+      if (phoneNumber !== patient.mobilePhoneNumber) {
+        Chat.filter({ accountId: req.accountId })
+        .filter({ patientPhoneNumber: phoneNumber })
+        .then((chat) => {
+          if (!chat[0]) {
+            return;
+          }
+          chat[0].merge({ patientPhoneNumber: patient.mobilePhoneNumber }).save();
+        });
+      }
       const normalized = normalize('patient', patient);
       res.status(201).send(normalized);
       return { patient, normalized };

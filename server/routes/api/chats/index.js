@@ -97,6 +97,10 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     userId,
   } = req.body;
 
+  if (!patient.mobilePhoneNumber) {
+    return res.sendStatus(400);
+  }
+
   const mergeData = {
     lastTextMessageDate: new Date(),
   };
