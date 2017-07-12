@@ -85,6 +85,9 @@ const chairId2 = uuid();
 const serviceId = uuid();
 const serviceId2 = uuid();
 const serviceId3 = uuid();
+const fillServiceId = 'e18bd613-c76b-4a9a-a1df-850c867b2cab';
+const funServiceId = 'ac286d7e-cb62-4ea1-8425-fc7e22195692';
+const crazyServiceId = '49ddcf57-9202-41b9-bc65-bb3359bebd83';
 const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 
 const appointmentId1 = uuid();
@@ -99,6 +102,7 @@ const sergeyChatId = uuid();
 const weeklyScheduleId = uuid();
 const weeklyScheduleId2 = uuid();
 const weeklyScheduleId3 = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
+const weeklyScheduleId4 = '39b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 
 const hour8 = new Date(1970, 1, 1, 8, 0);
 const hour5 = new Date(1970, 1, 1, 17, 0);
@@ -265,33 +269,34 @@ for (let i = 0; i < 100; i++) {
     chairId,
     note: 'First',
   });
-
-  e2eAppointments.push({
-    accountId,
-    startDate: moment().add(1, 'hours')._d,
-    endDate: moment().add(2, 'hours')._d,
-    patientId: alexPatientId,
-    serviceId: serviceId,
-    practitionerId,
-    isPatientConfirmed: true,
-    isCancelled: false,
-    chairId,
-    note: 'Appointment Today for E2E test',
-  });
-
-  e2eAppointments.push({
-    accountId,
-    startDate: moment().date(1)._d,
-    endDate: moment().date(1).add(1, 'hours')._d,
-    patientId: justinPatientId,
-    serviceId: serviceId,
-    practitionerId,
-    isPatientConfirmed: true,
-    isCancelled: false,
-    chairId,
-    note: 'Appointment Tomorrow for E2E test',
-  });
 }
+
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().add(1, 'hours')._d,
+  endDate: moment().add(2, 'hours')._d,
+  patientId: alexPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Today for E2E test',
+});
+
+e2eAppointments.push({
+  accountId,
+  startDate: moment().date(1)._d,
+  endDate: moment().date(1).add(1, 'hours')._d,
+  patientId: justinPatientId,
+  serviceId: serviceId,
+  practitionerId,
+  isPatientConfirmed: true,
+  isCancelled: false,
+  chairId,
+  note: 'Appointment Tomorrow for E2E test',
+});
 
 e2eChats.push({
   id: e2eChatId,
@@ -513,7 +518,7 @@ const SEEDS = {
       note: 'Justin Appointment',
     },
 
-    // Availabilities Test
+     // Availabilities Test
     {
       accountId: accountId2,
       practitionerId: practitionerId4,
@@ -536,6 +541,46 @@ const SEEDS = {
       startDate: new Date(2017, 3, 3, 10, 0),
       endDate: new Date(2017, 3, 3, 11, 0),
       serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 13, 0),
+      endDate: new Date(2017, 3, 3, 13, 21),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 3, 14, 30),
+      endDate: new Date(2017, 3, 3, 15, 21),
+      serviceId: cleanupServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 10, 13, 0),
+      endDate: new Date(2017, 3, 10, 13, 40),
+      serviceId: funServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 10, 14, 30),
+      endDate: new Date(2017, 3, 10, 15, 10),
+      serviceId: funServiceId,
+      patientId: justinPatientId,
+    },
+    {
+      accountId: accountId2,
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 3, 17, 13, 0),
+      endDate: new Date(2017, 3, 17, 14, 10),
+      serviceId: crazyServiceId,
       patientId: justinPatientId,
     },
 
@@ -907,6 +952,66 @@ const SEEDS = {
         isClosed: true,
       },
     },
+    {
+      id: weeklyScheduleId4,
+      accountId: accountId2,
+      monday: {
+        startTime: time(8, 0),
+        endTime: time(17, 0),
+        breaks: [
+          {
+            startTime: time(12, 0),
+            endTime: time(13, 0),
+          },
+        ],
+      },
+
+      wednesday: {
+        isClosed: true,
+      },
+
+      friday: {
+        isClosed: true,
+      },
+
+      saturday: {
+        isClosed: true,
+      },
+
+      sunday: {
+        isClosed: true,
+      },
+      startDate: new Date(2017, 4, 5, 9, 0),
+      weeklySchedules: [{
+        sunday: {
+          startTime: time(8, 0),
+          endTime: time(17, 0),
+          breaks: [
+            {
+              startTime: time(12, 0),
+              endTime: time(13, 0),
+            },
+          ],
+        },
+
+        wednesday: {
+          isClosed: true,
+        },
+
+        friday: {
+          isClosed: true,
+        },
+
+        saturday: {
+          isClosed: true,
+        },
+
+        monday: {
+          isClosed: true,
+        },
+      }],
+      isAdvanced: true,
+    },
   ],
 
   Account: [
@@ -1059,6 +1164,23 @@ const SEEDS = {
       startDate: new Date(2017, 2, 28, 0, 0), // tuesday (1 day)
       endDate: new Date(2017, 2, 28, 23, 59), // tuesday
     },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 1, 27, 0, 0),
+      endDate: new Date(2017, 1, 27, 0, 0),
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 7, 8, 0),
+      endDate: new Date(2017, 2, 7, 12, 0),
+      allDay: false,
+    },
+    {
+      practitionerId: practitionerId4,
+      startDate: new Date(2017, 2, 7, 16, 0),
+      endDate: new Date(2017, 2, 7, 17, 0),
+      allDay: false,
+    },
   ],
 
   Practitioner: [
@@ -1098,7 +1220,7 @@ const SEEDS = {
       accountId: accountId2,
       firstName: 'Chelsea',
       lastName: 'Handler',
-      weeklyScheduleId: weeklyScheduleId3,
+      weeklyScheduleId: weeklyScheduleId4,
       isCustomSchedule: true,
       // services: [],
     },
@@ -1130,6 +1252,18 @@ const SEEDS = {
       Practitioner_id: practitionerId4,
       Service_id: cleanupServiceId,
     },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: fillServiceId,
+    },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: funServiceId,
+    },
+    {
+      Practitioner_id: practitionerId4,
+      Service_id: crazyServiceId,
+    },
 
     ...generatePracServJoin(donnaServices, practitionerId),
     ...generatePracServJoin(donnaServices, practitionerId2),
@@ -1146,6 +1280,30 @@ const SEEDS = {
       accountId: accountId2,
       name: 'Cleanup',
       duration: 60,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: fillServiceId,
+      accountId: accountId2,
+      name: 'Fill',
+      duration: 21,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: funServiceId,
+      accountId: accountId2,
+      name: 'Fun',
+      duration: 40,
+      bufferTime: 0,
+      unitCost: 40,
+    },
+    {
+      id: crazyServiceId,
+      accountId: accountId2,
+      name: 'Crazy',
+      duration: 70,
       bufferTime: 0,
       unitCost: 40,
     },
