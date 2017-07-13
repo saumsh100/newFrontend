@@ -3,7 +3,7 @@ import moment from 'moment';
 describe('Intelligence', () => {
 
   const today = moment();
-  const nextDay = moment(today).add(2, 'd').hour(0).minute(0).second(0).millisecond(0);
+  const endDate = moment(today).add(2, 'd').hour(0).minute(0).second(0).millisecond(0);
 
   beforeEach(() => {
     cy.login();
@@ -14,13 +14,13 @@ describe('Intelligence', () => {
       cy.visit(`${Cypress.env('siteURL')}/intelligence/overview`);
     })
 
-    it('load overview page and set the date-range and confirm calculated data', () => {
+    it('load overview page, set the date-range, confirm calculated data', () => {
       cy
         .getAndClick('overViewDatePicker')
         .getAndClick('"startDate"')
         .get('.DayPicker-Day--today')
         .click()
-        .fillTextInput('dates', 'endDate', `${nextDay.toISOString()}`)
+        .fillTextInput('dates', 'endDate', `${endDate.toISOString()}`)
         .submitForm('dates')
         .get('[data-test-id="4_appointmentsConfirmed"]')
         .should('exist')
@@ -46,7 +46,7 @@ describe('Intelligence', () => {
         .getAndClick('"startDate"')
         .get('.DayPicker-Day--today')
         .click()
-        .fillTextInput('dates', 'endDate', `${nextDay.toISOString()}`)
+        .fillTextInput('dates', 'endDate', `${endDate.toISOString()}`)
         .submitForm('dates')
         .get('[data-test-id="1_activePatients"]')
         .should('exist')
