@@ -52,7 +52,7 @@ describe('Patient Management', () => {
         .get('[data-test-id="patientListSearch"]')
         .type('justin')
         .getAndClick('"Justin SharpSuggestion"')
-        .get('[data-test-id=firstName]')
+        .get('[data-test-id=personalFirstName]')
         .should('have.value', 'Justin');
     });
 
@@ -73,6 +73,24 @@ describe('Patient Management', () => {
         .getAndClick('contactTab')
         .get('[data-test-id=city]')
         .should('have.value', 'Bangkok');
+    });
+
+    it('adding a new patient', () => {
+      cy
+        .getAndClick('addNewPatient')
+        .fillTextInput('newUser', 'firstName', 'Cypress')
+        .fillTextInput('newUser', 'lastName', 'Hill')
+        .selectOption('newUser', 'gender', '"Male"')
+        .fillTextInput('newUser', 'mobilePhoneNumber', '+12345679999')
+        .get('[data-test-id="email"]')
+        .click({ force: true })
+        .type('cypresshill@gmail.com')
+        .getAndClick('birthDate')
+        .get('.DayPicker-Day--today')
+        .click()
+        .submitForm('newUser')
+        .get('[data-test-id=personalFirstName]')
+        .should('have.value', 'Cypress');
     });
   });
 });

@@ -57,7 +57,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
           name="firstName"
           validate={[maxLength(15)]}
           label="First Name"
-          data-test-id="firstName"
+          data-test-id="personalFirstName"
         />
         <div className={styles.middleField}>
           <Field
