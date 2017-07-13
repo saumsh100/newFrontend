@@ -86,7 +86,7 @@ class AvailabilitiesDisplay extends Component {
                   {a.momentDate.format('ddd')}
                 </div>
                 <div className={styles.list__header_number}>
-                  {a.momentDate.format('DD/MM/YYYY')}
+                  {a.momentDate.format('MM/DD/YYYY')}
                 </div>
               </div>
             </ul>
