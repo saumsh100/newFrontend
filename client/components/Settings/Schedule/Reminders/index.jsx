@@ -232,7 +232,13 @@ class Reminders extends Component {
         </DialogBox>
         <div className={styles.header}>
           <Header title={'Reminders'} className={styles.headerTitle} />
-          <Button className={styles.edit} onClick={this.openModal}>Create New</Button>
+          <Button
+            className={styles.edit}
+            onClick={this.openModal}
+            data-test-id="createNewReminder"
+          >
+            Create New
+          </Button>
         </div>
         <div className={styles.toggle}>
         Reminders ON/OFF:&nbsp;
@@ -240,6 +246,7 @@ class Reminders extends Component {
             name="canSendReminders"
             onChange={this.canSendReminders}
             checked={this.state.canSendReminders}
+            data-test-id="toggleSendReminders"
           />
         </div>
         <Header title={'Reminders List'} className={styles.headerTitle} />

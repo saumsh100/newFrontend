@@ -29,12 +29,14 @@ class EditRemindersForm extends Component {
         onSubmit={sendEdit}
         ignoreSaveButton
         initialValues={intValues}
+        data-test-id={formName}
       >
         <Field
           required
           type="number"
           name="lengthHours"
           label="Length Hours"
+          data-test-id="lengthHours"
         />
         <Field
           required
@@ -42,6 +44,7 @@ class EditRemindersForm extends Component {
           options={options}
           name="primaryType"
           label="Primary Type"
+          data-test-id="primaryType"
         />
       </Form>
     );
