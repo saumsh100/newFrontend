@@ -39,7 +39,7 @@ class PatientInfoDisplay extends Component {
 
     return (
       <div className={styles.patients_content__header}>
-        <div onClick={this.props.onClick} className={styles.patients_content__addUser}>
+        <div onClick={this.props.onClick} className={styles.patients_content__addUser} data-test-id="addNewPatient">
           Add New Patient
           <span>
             <i className="fa fa-plus" />
