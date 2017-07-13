@@ -82,6 +82,7 @@ class DayPicker extends Component {
         {...this.props}
         onChange={this.handleInputChange}
         onFocus={this.togglePopOver}
+        data-test-id={this.props['data-test-id']}
       />
     );
 
