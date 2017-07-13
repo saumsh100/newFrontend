@@ -11,10 +11,10 @@ describe('Intelligence', () => {
 
   context('Overview', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/intelligence/overview');
+      cy.visit(`${Cypress.env('siteURL')}/intelligence/overview`);
     })
 
-    it('load overview page and set the date-range and show confirmed appointments', () => {
+    it('load overview page and set the date-range and confirm calculated data', () => {
       cy
         .getAndClick('overViewDatePicker')
         .getAndClick('"startDate"')
@@ -37,10 +37,10 @@ describe('Intelligence', () => {
 
   context('Business', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/intelligence/business');
+      cy.visit(`${Cypress.env('siteURL')}/intelligence/business`);
     })
 
-    it('load business page', () => {
+    it('load business page, set date range, and confirm calculated data ', () => {
       cy
         .getAndClick('businessDatePicker')
         .getAndClick('"startDate"')
