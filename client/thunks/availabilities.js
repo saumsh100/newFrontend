@@ -169,7 +169,7 @@ export function fetchAvailabilities() {
     const startDate = availabilities.get('selectedStartDate');
 
     // TODO: it should be calculating till end of endDate
-    const endDate = moment(startDate).add(4, 'days').toISOString();
+    const endDate = moment(startDate).add(5, 'days').toISOString();
     const params = {
       serviceId: availabilities.get('selectedServiceId'),
       practitionerId: availabilities.get('selectedPractitionerId'),

@@ -136,15 +136,19 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
   const searchString = req.query.patients || '';
   const search = searchString.split(' ');
 
-  // making search case insensitive as
-  const searchReg = (search[1] ? `(?i)(${search[0]}|${search[1]})` : `(?i)${search[0]}`);
-  const phoneSearch = `${search[0].replace(/\D/g, '')}`;
 
+  // making search case insensitive as
+  const searchReg = `(?i)${search[0]}`;
+  const phoneSearch = `${search[0].replace(/\D/g, '')}`;
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
   Patient
   .getAll(req.accountId, { index: 'accountId' })
   .filter((patient) => {
+    if (search[1]) {
+      return patient('firstName').match(searchReg).and(patient('lastName').match(`(?i)${search[1]}`))
+          .or(patient('firstName').match(`(?i)${search[1]}`).and(patient('lastName').match(searchReg)));
+    }
     return patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
         .or(patient('mobilePhoneNumber').match(phoneSearch))
@@ -162,14 +166,52 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
     .orderBy('firstName')
     .run()
     .then((patients) => {
-      const normPatients = normalize('patients', patients);
+      const beginningCheck1 = new RegExp(`^${search[0]}`, 'i');
+      const beginningCheck2 = search[1] ? new RegExp(`${search[0]}`, 'i') : null;
+
+      const anyCheck1 = new RegExp(search[0], 'i');
+      const anyCheck2 = search[1] ? new RegExp(search[0], 'i') : null;
+
+      const word1Length = search[0].length;
+      const word2Length = search[1] ? search[1].length : null;
+
+      const patientsSort = patients.sort((a, b) => {
+        let aValue = 0;
+        let bValue = 0;
+
+        aValue += (beginningCheck1.test(a.firstName) ? word1Length + 1 : 0);
+        aValue += (anyCheck1.test(a.firstName) ? word1Length + 1 : 0);
+        aValue += (beginningCheck1.test(a.lastName) ? word1Length : 0);
+        aValue += (anyCheck1.test(a.lastName) ? word1Length : 0);
+
+        bValue += (beginningCheck1.test(b.firstName) ? word1Length + 1 : 0);
+        bValue += (anyCheck1.test(b.firstName) ? word1Length + 1 : 0);
+        bValue += (beginningCheck1.test(b.lastName) ? word1Length : 0);
+        bValue += (anyCheck1.test(b.lastName) ? word1Length : 0);
+
+        if (search[1]) {
+          aValue += (beginningCheck2.test(a.firstName) ? word2Length : 0);
+          aValue += (anyCheck2.test(a.firstName) ? word2Length : 0);
+          aValue += (beginningCheck2.test(a.lastName) ? word2Length : 0);
+          aValue += (anyCheck2.test(a.lastName) ? word2Length : 0);
+
+          bValue += (beginningCheck2.test(b.firstName) ? word2Length : 0);
+          bValue += (anyCheck2.test(b.firstName) ? word2Length : 0);
+          bValue += (beginningCheck2.test(b.lastName) ? word2Length : 0);
+          bValue += (anyCheck2.test(b.lastName) ? word2Length : 0);
+        }
+
+        return bValue - aValue;
+      });
+
+      const normPatients = normalize('patients', patientsSort);
 
       normPatients.entities.chats = {};
       normPatients.entities.textMessages = {};
 
-      for (let i = 0; i < patients.length; i++) {
-        if (patients[i].chat) {
-          const chatNorm = normalize('chat', patients[i].chat);
+      for (let i = 0; i < patientsSort.length; i++) {
+        if (patientsSort[i].chat) {
+          const chatNorm = normalize('chat', patientsSort[i].chat);
           normPatients.entities.chats = Object.assign(normPatients.entities.chats, chatNorm.entities.chats);
           normPatients.entities.textMessages = Object.assign(normPatients.entities.textMessages, chatNorm.entities.textMessages);
         }
