@@ -91,6 +91,6 @@ describe('Patient Management', () => {
         .submitForm('newUser')
         .get('[data-test-id=personalFirstName]')
         .should('have.value', 'Cypress');
-    })
+    });
   });
 });
