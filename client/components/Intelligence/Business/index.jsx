@@ -315,6 +315,7 @@ class Business extends Component {
                   data={patientsData1}
                   borderColor={colorMap.darkblue}
                   fontColor={colorMap.darkblue}
+                  data-test-id={`${activePatients}_activePatients`}
                 />
               </Col>
               <Col xs={12} className={styles.business__body_select}>
@@ -333,6 +334,7 @@ class Business extends Component {
                   data={patientsData2}
                   borderColor={colorMap.darkblue}
                   fontColor={colorMap.darkblue}
+                  data-test-id={`${filledHours - unfilledHours}_unfilledHours`}
                 />
               </Col>
             </Row>

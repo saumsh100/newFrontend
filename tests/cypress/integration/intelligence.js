@@ -3,12 +3,7 @@ import moment from 'moment';
 describe('Intelligence', () => {
 
   const today = moment();
-  const nextDay = moment(today).add(2, 'd').hour(12).minute(0).second(0).millisecond(0);
-
-
-  before(() => {
-    cy.exec('env NODE_ENV="test" npm run seeds');
-  });
+  const nextDay = moment(today).add(2, 'd').hour(0).minute(0).second(0).millisecond(0);
 
   beforeEach(() => {
     cy.login();
@@ -41,10 +36,10 @@ describe('Intelligence', () => {
   });
 
   context('Business', () => {
-    beforeEach(()=> {
-      cy.visit('http://localhost:5100/intelligence/business')
-
+    beforeEach(() => {
+      cy.visit('http://localhost:5100/intelligence/business');
     })
+
     it('load business page', () => {
       cy
         .getAndClick('businessDatePicker')
@@ -53,6 +48,10 @@ describe('Intelligence', () => {
         .click()
         .fillTextInput('dates', 'endDate', `${nextDay.toISOString()}`)
         .submitForm('dates')
+        .get('[data-test-id="1_activePatients"]')
+        .should('exist')
+        .get('[data-test-id="17_unfilledHours"]')
+        .should('exist');
     });
   });
 });
