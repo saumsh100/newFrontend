@@ -146,8 +146,8 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
       timeOffs: {
         _apply: (sequence) => {
           return sequence.filter((timeOff) => {
-            // subtract and add for start date and enddate as if all day is true it can miss it.
-            return generateDuringFilter(timeOff, moment(startDate).subtract(1, 'days').toISOString(), moment(endDate).add(1, 'days').toISOString());
+            // subtract and add for start date and enddate as you can miss if longer than week.
+            return generateDuringFilter(timeOff, moment(startDate).subtract(365, 'days').toISOString(), moment(endDate).add(365, 'days').toISOString());
           });
         },
       },
