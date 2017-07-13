@@ -18,7 +18,7 @@ export default function Patients(props) {
         return (
           <Col key={index} className={styles.patients__wrapper} xs={12} sm={Math.floor(12 / array)}>
             <Card className={styles.patients__item} >
-              <div className={styles.patients__item_count}>{d.count}</div>
+              <div className={styles.patients__item_count} data-test-id={props['data-test-id']}>{d.count}</div>
               <div className={styles.patients__item_subtitle}>{d.title}</div>
               {/*<div className={styles.patients__item_date}>{d.date}</div>*/}
               <Icon className={styles.patients__item_icon} icon="question-circle" size={1.5} />

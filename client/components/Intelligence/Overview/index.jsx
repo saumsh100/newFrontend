@@ -258,25 +258,34 @@ class Overview extends Component {
           <Col className={styles.intelligence__header} xs={12}>
             <Card className={styles.intelligence__header_title}>
               <b>Overview</b>
-              <div className={styles.floatRight}>
-                <DropdownMenu labelComponent={UserMenu} closeOnInsideClick={false}>
+              <div
+                className={styles.floatRight}
+                data-test-id="overViewDatePicker"
+              >
+                <DropdownMenu
+                  labelComponent={UserMenu}
+                  closeOnInsideClick={false}
+                >
                   <Form
                     className={styles.formDrop}
                     form="dates"
                     onSubmit={this.submit}
                     initialValues={initialValues}
+                    data-test-id="dates"
                   >
                     <Field
                       required
                       component="DayPicker"
                       name="startDate"
                       label="Start Date"
+                      data-test-id="startDate"
                     />
                     <Field
                       required
                       component="DayPicker"
                       name="endDate"
                       label="End Date"
+                      data-test-id="endDate"
                     />
                   </Form>
                 </DropdownMenu>
@@ -315,7 +324,7 @@ class Overview extends Component {
         <Loader loaded={this.state.loader} color="#FF715C">
           <Row className={styles.intelligence__body}>
             <Col xs={12}>
-              <DashboardStats data={data} />
+              <DashboardStats data={data} data-test-id={`${notConfirmedAppointments}_appointmentsConfirmed`}/>
             </Col>
             <Col xs={12} sm={6}>
               <AppointmentFilled
