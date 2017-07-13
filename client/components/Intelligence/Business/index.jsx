@@ -255,25 +255,31 @@ class Business extends Component {
           <Col className={styles.business__header} xs={12}>
             <Card className={stylesOverview.intelligence__header_title}>
               <b>Business</b>
-              <div className={stylesOverview.floatRight}>
-                <DropdownMenu labelComponent={UserMenu} closeOnInsideClick={false}>
+              <div className={stylesOverview.floatRight} data-test-id="businessDatePicker" >
+                <DropdownMenu
+                  labelComponent={UserMenu}
+                  closeOnInsideClick={false}
+                >
                   <Form
                     className={stylesOverview.formDrop}
                     form="dates"
                     onSubmit={this.submit}
                     initialValues={initialValues}
+                    data-test-id="dates"
                   >
                     <Field
                       required
                       component="DayPicker"
                       name="startDate"
                       label="Start Date"
+                      data-test-id="startDate"
                     />
                     <Field
                       required
                       component="DayPicker"
                       name="endDate"
                       label="End Date"
+                      data-test-id="endDate"
                     />
                     {/* <div className={styles.checkbox}>
                         Compare

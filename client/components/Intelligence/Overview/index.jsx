@@ -309,7 +309,7 @@ class Overview extends Component {
           >
             <Field
               required
-                component="DayPicker"
+              component="DayPicker"
               name="startDate"
               label="Start Date"
             />
