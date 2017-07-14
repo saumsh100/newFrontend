@@ -27,11 +27,10 @@ export class DropdownMenu extends Component {
   close(e) {
     const className = e.target.className;
 
-    if (className !== 'DayPicker-NavButton DayPicker-NavButton--prev'
-      && className !== 'DayPicker-NavButton DayPicker-NavButton--next'
-        && className !== 'DayPicker-Day DayPicker-Day--selected DayPicker-Day--today'
-      && className !== 'DayPicker-Day DayPicker-Day--selected') {
-      this.setState({isOpen: false});
+    const regTest = /daypicker/i;
+
+    if (!regTest.test(className)) {
+      this.setState({ isOpen: false });
     }
   }
 
