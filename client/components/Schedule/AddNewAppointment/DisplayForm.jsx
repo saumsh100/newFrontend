@@ -5,6 +5,7 @@ import { Grid, Row, Col, Form, FormSection } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import PatientForm from './PatientForm';
 import { setTime } from '../../library/util/TimeOptions';
+import { SortByName } from '../../library/util/SortEntities';
 import styles from './styles.scss';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
@@ -15,7 +16,7 @@ const getDuration = (startDate, endDate, customBufferTime) => {
 
 const generateEntityOptions = (entities, label) => {
   const options = [];
-  entities.map((entity) => {
+  entities.sort(SortByName).map((entity) => {
     options.push({ label: entity[label], value: entity.id });
   });
   return options;
