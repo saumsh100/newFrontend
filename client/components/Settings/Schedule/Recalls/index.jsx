@@ -233,7 +233,13 @@ class Recalls extends Component {
         </DialogBox>
         <div className={styles.header}>
           <Header title={'Recalls'} className={styles.headerTitle} />
-          <Button className={styles.edit} onClick={this.openModal}>Create New</Button>
+          <Button
+            className={styles.edit}
+            onClick={this.openModal}
+            data-test-id="createNewRecall"
+          >
+            Create New
+          </Button>
         </div>
         <div className={styles.toggle}>
         Recalls ON/OFF:&nbsp;
@@ -241,6 +247,7 @@ class Recalls extends Component {
             name="canSendRecalls"
             onChange={this.canSendRecalls}
             checked={this.state.canSendRecalls}
+            data-test-id="toggleSendRecalls"
           />
         </div>
         <Header title={'Recalls List'} className={styles.headerTitle} />

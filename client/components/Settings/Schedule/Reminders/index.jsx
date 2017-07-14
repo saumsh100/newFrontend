@@ -232,9 +232,18 @@ class Reminders extends Component {
         </DialogBox>
         <div className={styles.header}>
           <Header title={'Reminders'} className={styles.headerTitle} />
-          <Button className={styles.edit} onClick={this.openModal}>Create New</Button>
+          <Button
+            className={styles.edit}
+            onClick={this.openModal}
+            data-test-id="createNewReminder"
+          >
+            Create New
+          </Button>
         </div>
-        <div className={styles.toggle}>
+        <div
+          className={styles.toggle}
+          data-test-id="toggleSendReminders"
+        >
         Reminders ON/OFF:&nbsp;
           <Toggle
             name="canSendReminders"

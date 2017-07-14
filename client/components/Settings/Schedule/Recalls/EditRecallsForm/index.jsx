@@ -28,12 +28,14 @@ class EditRecallsForm extends Component {
         onSubmit={sendEdit}
         ignoreSaveButton
         initialValues={intValues}
+        data-test-id={formName}
       >
         <Field
           required
           type="number"
           name="lengthMonths"
           label="Length Months"
+          data-test-id="lengthMonths"
         />
         <Field
           required
@@ -41,6 +43,7 @@ class EditRecallsForm extends Component {
           options={options}
           name="primaryType"
           label="Primary Type"
+          data-test-id="primaryType"
         />
       </Form>
     );
