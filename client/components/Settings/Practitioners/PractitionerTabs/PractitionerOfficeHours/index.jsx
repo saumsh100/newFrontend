@@ -18,6 +18,7 @@ class PractitionerOfficeHours extends Component{
     this.reinitializeState = this.reinitializeState.bind(this);
     this.openModal = this.openModal.bind(this);
     this.createPattern = this.createPattern.bind(this);
+    this.changeStartDate = this.changeStartDate.bind(this);
     this.sendEdit = this.sendEdit.bind(this);
     this.delete = this.delete.bind(this);
   }
@@ -41,9 +42,42 @@ class PractitionerOfficeHours extends Component{
     });
   }
 
+  changeStartDate(values) {
+    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+    weeklySchedule.startDate = values.startDate;
+    const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
+
+    const alert = {
+      success: {
+        body: 'Clinic Office Hours Updated',
+      },
+      error: {
+        body: 'Clinic Office Hours Update Failed',
+      },
+    };
+
+    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+    .then(() => {
+      this.setState({
+        active: false,
+      });
+    });
+  }
+
   createPattern(values) {
+    const createPattern = confirm('Are you sure you want to create a pattern?');
+
+    if (!createPattern) {
+      return null;
+    }
+
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
     const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
+
+    if (!weeklyScheduleNew.startDate) {
+      alert('Please put in a start date before creating a pattern!');
+      return null;
+    }
 
     delete weeklyScheduleNew.weeklySchedules;
     delete weeklyScheduleNew.startDate;
@@ -64,7 +98,7 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
     .then(() => {
       this.setState({
         active: false,
@@ -214,7 +248,10 @@ class PractitionerOfficeHours extends Component{
         <div className={styles.toggleContainer_hours}>
           <div className={styles.flexHeader}>
             <Header title="Weekly Schedule"/>
-            <Button className={styles.button} onClick={this.openModal}>Create New Pattern</Button>
+            <div>
+              <Button className={styles.button} onClick={this.createPattern}>Create New Pattern</Button>
+              <Button className={styles.button} onClick={this.openModal}>Change Start Date</Button>
+            </div>
           </div>
           <OfficeHoursForm
             key={`${practitioner.get('id')}_Hours`}
@@ -244,7 +281,7 @@ class PractitionerOfficeHours extends Component{
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.createPattern, component: RemoteSubmitButton, props: { form: 'advanceCreatePrac' }},
+      { label: 'Save', onClick: this.changeStartDate, component: RemoteSubmitButton, props: { form: 'advanceCreatePrac' }},
     ];
 
     return (
@@ -261,7 +298,7 @@ class PractitionerOfficeHours extends Component{
           <Form
             // className={formStyle}
             form="advanceCreatePrac"
-            onSubmit={this.createPattern}
+            onSubmit={this.changeStartDate}
             initialValues={weeklySchedule}
             ignoreSaveButton
           >
