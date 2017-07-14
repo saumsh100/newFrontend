@@ -4,7 +4,6 @@ import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import jwt from 'jwt-decode';
-import moment from 'moment-timezone'
 import { push } from 'react-router-redux'
 import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
@@ -23,10 +22,6 @@ function DashboardApp(props) {
     setIsCollapsed,
     activeAccount = {},
   } = props;
-
-  if (activeAccount.timezone) {
-    moment.tz.setDefault(activeAccount.timezone);
-  }
 
   let overlay = null;
   if (!isCollapsed) {
