@@ -188,7 +188,6 @@ describe('Account Settings', () => {
           .submitForm('newRecall');
       });
     })
-
   });
 
   context('Services Settings', () => {

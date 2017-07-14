@@ -5,6 +5,7 @@ describe('Intelligence', () => {
   const today = moment();
   const endDate = moment(today).add(2, 'd').hour(0).minute(0).second(0).millisecond(0);
 
+  
   beforeEach(() => {
     cy.login();
   });
@@ -26,12 +27,8 @@ describe('Intelligence', () => {
         .should('exist')
         .get('[data-test-id="Perry Cox hours booked"]')
         .contains('0h')
-        .get('[data-test-id="Perry Cox hours not filled')
-        .contains('9h')
         .get('[data-test-id="Dr. Mansfield hours booked')
-        .contains('1h')
-        .get('[data-test-id="Dr. Mansfield hours not filled')
-        .contains('8h');
+        .contains('1h');
     });
   });
 
@@ -49,8 +46,6 @@ describe('Intelligence', () => {
         .fillTextInput('dates', 'endDate', `${endDate.toISOString()}`)
         .submitForm('dates')
         .get('[data-test-id="1_activePatients"]')
-        .should('exist')
-        .get('[data-test-id="17_unfilledHours"]')
         .should('exist');
     });
   });
