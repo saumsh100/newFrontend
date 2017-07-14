@@ -240,13 +240,15 @@ class Reminders extends Component {
             Create New
           </Button>
         </div>
-        <div className={styles.toggle}>
+        <div
+          className={styles.toggle}
+          data-test-id="toggleSendReminders"
+        >
         Reminders ON/OFF:&nbsp;
           <Toggle
             name="canSendReminders"
             onChange={this.canSendReminders}
             checked={this.state.canSendReminders}
-            data-test-id="toggleSendReminders"
           />
         </div>
         <Header title={'Reminders List'} className={styles.headerTitle} />
