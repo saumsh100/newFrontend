@@ -368,6 +368,18 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         }
       });
 
+      const newObject = {};
+
+      const sorted = Object.keys(sendStats.patients).sort((keyA, keyB) => {
+        return sendStats.patients[keyB].numAppointments - sendStats.patients[keyA].numAppointments;
+      });
+
+      newObject[sorted[0]] = sendStats.patients[sorted[0]];
+      newObject[sorted[1]] = sendStats.patients[sorted[1]];
+      newObject[sorted[2]] = sendStats.patients[sorted[2]];
+      newObject[sorted[3]] = sendStats.patients[sorted[3]];
+
+      sendStats.patients = newObject;
 
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;
