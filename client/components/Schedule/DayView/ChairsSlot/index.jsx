@@ -52,8 +52,6 @@ export default function ChairsSlot(props) {
           });
         });
 
-        console.log(filteredApps)
-
         return (
           <TimeSlot
             key={i}
