@@ -20,6 +20,7 @@ class OfficeHours extends Component {
     this.reinitializeState = this.reinitializeState.bind(this);
     this.openModal = this.openModal.bind(this);
     this.createPattern = this.createPattern.bind(this);
+    this.changeStartDate = this.changeStartDate.bind(this);
     this.sendEdit = this.sendEdit.bind(this);
     this.delete = this.delete.bind(this);
   }
@@ -85,16 +86,49 @@ class OfficeHours extends Component {
     this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
   }
 
-  createPattern(values) {
+  changeStartDate(values) {
+    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
+    weeklySchedule.startDate = values.startDate;
+    const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
+
+    const alert = {
+      success: {
+        body: 'Clinic Office Hours Updated',
+      },
+      error: {
+        body: 'Clinic Office Hours Update Failed',
+      },
+    };
+
+    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+    .then(() => {
+      this.setState({
+        active: false,
+      });
+    });
+  }
+
+  createPattern() {
+    const createPattern = confirm('Are you sure you want to create a pattern?');
+
+    if (!createPattern) {
+      return null;
+    }
+
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
     const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
+
+    if (!weeklyScheduleNew.startDate) {
+      alert('Please put in a start date before creating a pattern!');
+      return null;
+    }
 
     delete weeklyScheduleNew.weeklySchedules;
     delete weeklyScheduleNew.startDate;
     delete weeklyScheduleNew.id;
 
     weeklySchedule.weeklySchedules.push(weeklyScheduleNew);
-    weeklySchedule.startDate = values.startDate;
+    // weeklySchedule.startDate = values.startDate;
     weeklySchedule.isAdvanced = true;
 
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
@@ -108,7 +142,7 @@ class OfficeHours extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
     .then(() => {
       this.setState({
         active: false,
@@ -165,14 +199,14 @@ class OfficeHours extends Component {
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.createPattern, component: RemoteSubmitButton, props: { form: 'advanceCreate' }},
+      { label: 'Save', onClick: this.changeStartDate, component: RemoteSubmitButton, props: { form: 'advanceCreate' }},
     ];
 
     return (
       <div>
         <DialogBox
           actions={actions}
-          title="Create a New Pattern"
+          title="Update StartDate"
           type="small"
           active={this.state.active}
           onEscKeyDown={this.reinitializeState}
@@ -182,7 +216,7 @@ class OfficeHours extends Component {
           <Form
             // className={formStyle}
             form="advanceCreate"
-            onSubmit={this.createPattern}
+            onSubmit={this.changeStartDate}
             initialValues={weeklySchedule}
             ignoreSaveButton
           >
@@ -196,7 +230,10 @@ class OfficeHours extends Component {
         </DialogBox>
         <div className={styles.flexHeader}>
           <Header title="Weekly Schedule" className={styles.header} />
-          <Button className={styles.button} onClick={this.openModal}>Create New Pattern</Button>
+          <div>
+            <Button className={styles.button} onClick={this.createPattern}>Create New Pattern</Button>
+            <Button className={styles.button} onClick={this.openModal}>Change Start Date</Button>
+          </div>
         </div>
         <OfficeHoursForm
           weeklySchedule={weeklySchedule}
