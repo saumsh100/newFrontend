@@ -8,6 +8,7 @@ import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
 import PractitionerTimeOff from './PractitionerTimeOff';
+import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
 import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 
 class PractitionerTabs extends Component {
@@ -46,7 +47,7 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule, timeOffs } = this.props;
+    const { practitioner, weeklySchedule, timeOffs, recurringTimeOffs } = this.props;
 
     if (!practitioner && !weeklySchedule) {
       return null;
@@ -92,6 +93,13 @@ class PractitionerTabs extends Component {
               key={practitioner.get('id')}
               practitioner={practitioner}
               timeOffs={timeOffs}
+            />
+          </Tab>
+          <Tab label="Recurring Time Off">
+            <PractitionerRecurringTimeOff
+              key={practitioner.get('id')}
+              practitioner={practitioner}
+              recurringTimeOffs={recurringTimeOffs}
             />
           </Tab>
         </Tabs>

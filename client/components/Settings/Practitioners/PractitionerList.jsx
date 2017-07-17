@@ -80,6 +80,7 @@ class PractitionerList extends Component {
       weeklySchedules,
       services,
       timeOffs,
+      recurringTimeOffs,
     } = this.props;
 
     const selectedPractitioner = (practitionerId ?
@@ -92,6 +93,12 @@ class PractitionerList extends Component {
     if (timeOffs) {
       filteredTimeOffs = timeOffs.filter((timeOff) => {
         return timeOff.practitionerId === selectedPractitioner.get('id');
+      });
+    }
+    let filteredRecurringTimeOffs = null;
+    if (recurringTimeOffs) {
+      filteredRecurringTimeOffs = recurringTimeOffs.filter((recurringTimeOff) => {
+        return recurringTimeOff.practitionerId === selectedPractitioner.get('id');
       });
     }
 
@@ -138,6 +145,7 @@ class PractitionerList extends Component {
             setPractitionerId={this.props.setPractitionerId}
             services={services}
             timeOffs={filteredTimeOffs}
+            recurringTimeOffs={filteredRecurringTimeOffs}
           />
         </div>
       </div>

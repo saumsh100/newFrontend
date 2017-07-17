@@ -16,6 +16,7 @@ import Permission from './Permission';
 import PinCode from './PinCode';
 import Practitioner from './Practitioner';
 import Practitioner_Service from './Practitioner_Service';
+import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
 import PractitionerTimeOff from './PractitionerTimeOff';
 import Recall from './Recall';
 import Reminder from './Reminder';
@@ -50,6 +51,7 @@ export {
   PinCode,
   Practitioner,
   Practitioner_Service,
+  PractitionerRecurringTimeOff,
   PractitionerTimeOff,
   Request,
   Reminder,
@@ -164,6 +166,7 @@ Practitioner.hasMany(Reservation, 'reservations', 'id', 'practitionerId');
 Practitioner.hasMany(Request, 'requests', 'id', 'practitionerId');
 Practitioner.hasOne(WeeklySchedule, 'weeklySchedule', 'weeklyScheduleId', 'id');
 Practitioner.hasMany(PractitionerTimeOff, 'timeOffs', 'id', 'practitionerId');
+Practitioner.hasMany(PractitionerRecurringTimeOff, 'recurringTimeOffs', 'id', 'practitionerId');
 Practitioner.hasAndBelongsToMany(Service, 'services', 'id', 'id');
 
 /**
