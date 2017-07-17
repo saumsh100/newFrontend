@@ -45,7 +45,7 @@ function fetchServiceData(options) {
   const joinObject = {
     practitioners: {
       _apply: prac => prac.filter(row => {
-        return row('isActive').eq(true);
+        return row('isActive').eq(true).and(row('isHidden').eq(false));
       }),
     },
 
