@@ -61,13 +61,11 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
           })
           .filter(r.row('startDate').during(r.time(1970, 1, 1, 'Z'), endDate))
           .orderBy(r.row('startDate'))
-          .then((lastAppointment) => {
-            return res.send({
-              allApps: req.patient.appointments.length,
-              monthsApp: appointments.length,
-              lastAppointment: lastAppointment[0] ? lastAppointment[0].startDate : null,
-            });
-          });
+          .then(lastAppointment => res.send({
+            allApps: req.patient.appointments.length,
+            monthsApp: appointments.length,
+            lastAppointment: lastAppointment[0] ? lastAppointment[0].startDate : null,
+          }));
       })
       .catch(next);
 });
@@ -158,14 +156,11 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
         .or(patient('homePhoneNumber').match(phoneSearch))
         .or(patient('workPhoneNumber').match(phoneSearch))
         .or(patient('otherPhoneNumber').match(phoneSearch))
-        .or(patient('email').match(search[0])));
-  }).limit(50)
+        .or(patient('email').match(search[0])))
+  ).limit(50)
     .getJoin({ appointments: {
-      _apply: (appointment) => {
-        return appointment.filter((request) => {
-          return generateDuringFilter(request, startDate, endDate);
-        });
-    } }, chat: {textMessages: { user: true }} })
+      _apply: appointment => appointment.filter(request => generateDuringFilter(request, startDate, endDate)) },
+      chat: { textMessages: { user: true } } })
     .orderBy('firstName')
     .run()
     .then((patients) => {
@@ -316,8 +311,8 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
       _.omit(patient, ['id']),
       { accountId: req.accountId },
       { isBatch: true }
-    );
-  });
+    )
+  );
 
   return Patient.batchSave(cleanedPatients)
     .then(p => res.send(normalize('patients', p)))
