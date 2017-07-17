@@ -167,7 +167,6 @@ class DigitalWaitList extends Component {
       selectedWaitSpot,
     } = this.props;
 
-
     let formName = 'addWaitSpot';
     let title = "Add Patient to Waitlist"
     if (selectedWaitSpot) {
@@ -232,7 +231,7 @@ class DigitalWaitList extends Component {
               } else if (waitSpot.patientId) {
                 patientData = patients.getIn(['models', waitSpot.get('patientId')]);
               }
-
+              
               return (
                 <DigitalWaitListItem
                   key={waitSpot.id}
