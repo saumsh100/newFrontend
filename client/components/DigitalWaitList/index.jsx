@@ -217,7 +217,7 @@ class DigitalWaitList extends Component {
               flat
               onClick={this.toggleWaitSpotForm}
             >
-              Add to Waitlist <Icon style={{ marginLeft: '5px' }} icon="plus-circle" />
+              Add to Waitlist <Icon style={{ marginLeft: '5px' }} size={1.5} icon="plus-circle" />
             </Button>
           </CardHeader>
         </div>
@@ -231,7 +231,7 @@ class DigitalWaitList extends Component {
               } else if (waitSpot.patientId) {
                 patientData = patients.getIn(['models', waitSpot.get('patientId')]);
               }
-              
+
               return (
                 <DigitalWaitListItem
                   key={waitSpot.id}

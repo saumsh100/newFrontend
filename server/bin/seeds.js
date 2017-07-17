@@ -1428,12 +1428,12 @@ const SEEDS = {
         moment().toISOString(),
         moment().add(2, 'days').toISOString(),
       ],
-      endDate: recentStartTime,
+      endDate: recentStartTime.add(oneHour),
     },
     {
       accountId,
       patientId: sergeyPatientId,
-      endDate: recentStartTime,
+      endDate: recentStartTime.add(oneHour),
     },
   ],
 
