@@ -127,7 +127,8 @@ class AddNewAppointment extends Component {
 
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
-      const requestId = selectedAppointment ? selectedAppointment.requestId : null;
+      const requestId = selectedAppointment ? selectedAppointment.requestModel.get('id') : null;
+      console.log(requestId);
       return createEntityRequest({
         key: 'appointments',
         entityData: newAppointment,
