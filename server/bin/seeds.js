@@ -26,6 +26,7 @@ import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
 import userFixtures from '../fixtures/users';
 import permissionFixtures from '../fixtures/permissions';
+import accountFixtures from '../fixtures/accounts';
 
 import enterpriseFixtures, {
   sunshineSmilesId,
@@ -1030,6 +1031,7 @@ const SEEDS = {
       //bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: dsoId,
     },
+    ...accountFixtures,
   ],
 
   Permission: [
