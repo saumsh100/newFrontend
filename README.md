@@ -143,6 +143,8 @@ This will run it in the background as daemon process so you won't need to keep a
 
 ### Sequelize/Postgres
 
+Run `npm install` to install sequelize and other libraries for postgres
+
 First we need to install postgres. Follow up this link and setup database (MacOS: https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx)
 Add to your .env file
 ```
