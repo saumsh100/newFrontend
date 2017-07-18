@@ -8,6 +8,7 @@ const WaitSpotSchema = {
   accountId: null,
   preferences: null,
   unavailableDays: null,
+  endDate: null,
 };
 
 export default class WaitSpot extends createModel(WaitSpotSchema) {
