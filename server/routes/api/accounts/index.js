@@ -22,15 +22,20 @@ accountsRouter.param('permissionId', loaders('permission', 'Permission'));
 accountsRouter.param('reminderId', loaders('reminder', 'Reminder'));
 accountsRouter.param('recallId', loaders('recall', 'Recall'));
 
-// List of all available accounts to switch
-accountsRouter.get('/', checkPermissions('accounts:read'), ({ accountId, role, enterpriseRole, enterpriseId, sessionData }, res, next) =>
-  (((role === 'SUPERADMIN') || (enterpriseRole === 'OWNER')) ?
+/**
+ * GET /
+ * - list of accounts in an enterprise
+ * - must be a SUPERADMIN or OWNER to list all
+ * - if not, it just lists the one
+ */
+accountsRouter.get('/', checkPermissions('accounts:read'), (req, res, next) => {
+  const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
+  return (((role === 'SUPERADMIN') || (enterpriseRole === 'OWNER')) ?
     Account.filter({ enterpriseId }).run() :
     Account.filter({ id: accountId }).run())
-
-    .then(accounts => res.send(normalize('accounts', accounts)))
-    .catch(next)
-);
+      .then(accounts => res.send(normalize('accounts', accounts)))
+      .catch(next)
+});
 
 /**
  * Upload a accounts's logo
