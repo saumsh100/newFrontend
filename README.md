@@ -17,7 +17,7 @@ Node Version Manager (https://github.com/creationix/nvm).
 4. Clone the Repository: `git clone git@github.com:carecru/carecru.git`
 5. Navigate into root directory: `cd carecru`
 6. Install node modules: `npm install`
-7. Install postgresql and setup database (MacOS: https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx)
+7. Install postgres and setup sequelize (Info at the bottom)
 
 ### Installation on Windows 10 (work in progress)
 Run all commands PowerShell as admin:
@@ -140,3 +140,39 @@ echo alias rundb='rethinkdb --daemon -d <CARECRU_CODE_DIR>' >> ~/.profile
 ```
 
 This will run it in the background as daemon process so you won't need to keep a terminal window for it. To kill it use your systems task manager or run `pkill rethinkdb` and then check that it's killed `ps -ef | grep rethinkdb`. However, you should not need to do this often.
+
+### Sequelize/Postgres
+
+First we need to install postgres. Follow up this link and setup database (MacOS: https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx)
+Add to your .env file
+```
+POSTGRESQL_HOST="localhost"
+POSTGRESQL_PORT=5432
+POSTGRESQL_USER="user-name-you-have-created"
+POSTGRESQL_PASSWORD="leave-empty-if-no-password"
+POSTGRESQL_DATABASE="database-name-you-created"
+```
+
+Now, my advice is to install sequelize-cli (https://github.com/sequelize/cli) as a global lib
+```
+npm install -g sequelize-cli
+```
+
+To get info about commands type
+```
+sequelize help
+```
+
+You can find file `.sequelizerc` inside of root folder. It is used to set default variables for sequelize like model path or seeders path
+
+To see example model go to `server/_models/segment/segment.js`. Same structure can be used for all models.
+
+Inside folde `server/seeders/` are seeder files. You can use this to seed database.
+
+NOTE: I haven't added migrations
+
+##### Rebuild/Seed database
+To rebuild and seed database just type
+```
+npm run rebuild
+```

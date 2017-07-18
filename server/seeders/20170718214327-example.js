@@ -1,10 +1,16 @@
 const SegmentModel = require('../_models').Segment;
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) { // eslint-disable-line
     let res = null;
     try {
       res = await SegmentModel.create({
         name: 'Test name',
+        someInteger: 1,
+        someJson: {
+          test1: 1,
+          test2: 2,
+        },
       });
     } catch (error) {
       throw error;
@@ -13,7 +19,7 @@ module.exports = {
     return res;
   },
 
-  down(queryInterface, Sequelize) {
+  down(queryInterface, Sequelize) { // eslint-disable-line
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.

@@ -12,6 +12,17 @@ module.exports = (sequelize, DataTypes) => {
         len: [8, 255],
       },
     },
+    someInteger: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: {
+        isInt: true,
+      },
+    },
+    someJson: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
   });
 
   Segment.associate = ((models) => {
