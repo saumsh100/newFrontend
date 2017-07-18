@@ -24,6 +24,7 @@
     "test": "npm run test:cypress && npm run test:jest",
     "test:cypress": "cypress run",
     "test:jest": "export $(cat .env | xargs) && jest --verbose",
+    "test:api": "newman run -e tests/newman/Carecru-development.postman_environment.json tests/newman/endpoints.json",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
     "clean:assets": "rimraf statics/assets",
