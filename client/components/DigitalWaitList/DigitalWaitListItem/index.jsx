@@ -107,10 +107,11 @@ function DigitalWaitListItem(props) {
       <Avatar size="lg" user={patientUser.toJS()} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
+          <div className={styles.patients__item_endDate}>
+            <b>{moment(waitSpot.get('endDate')).format('MMMM Do YYYY, h:mm a')}</b>
+          </div>
           <div className={styles.patients__item_name}>
-            <b>
-              <span className={styles.name}>{name}</span>,
-            </b>
+            <span className={styles.name}>{name}</span>
           </div>
           <div className={styles.patients__item_phone}>
             {patientUser.get('phoneNumber')}
