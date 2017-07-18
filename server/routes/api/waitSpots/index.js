@@ -29,10 +29,15 @@ waitSpotsRouter.post('/', (req, res, next) => {
  * Get all waitSpots under a clinic
  */
 waitSpotsRouter.get('/', (req, res, next) => {
-  const { accountId, joinObject } = req;
+  const { accountId, joinObject, query } = req;
 
-  const startTime = r.now();
-  const endTime = r.now().add(365 * 24 * 60 * 60);
+  let {
+    startTime,
+    endTime,
+  } = query;
+
+  startTime = startTime ? r.ISO8601(startTime) : r.now();
+  endTime = endTime ? r.ISO8601(endTime) : r.now().add(365 * 24 * 60 * 60);
 
   return WaitSpot
     .filter({ accountId })
