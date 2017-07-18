@@ -23,6 +23,7 @@ const WaitSpot = createModel('WaitSpot', {
   accountId: type.string().uuid(4).required(),
   preferences: PreferencesSchema,
   unavailableDays: [type.date()],
+  endDate: type.date(),
 });
 
 module.exports = WaitSpot;

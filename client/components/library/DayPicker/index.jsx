@@ -12,10 +12,10 @@ import styles from './styles.scss';
 
 const convertValueToDate = (value) => {
   if (isArray(value)) {
-    return value.map(v => moment(new Date(v)))._d;
+    return value.map(v => new Date(v));
   }
 
-  return moment(new Date(value))._d;
+  return new Date(value);
 };
 
 class DayPicker extends Component {

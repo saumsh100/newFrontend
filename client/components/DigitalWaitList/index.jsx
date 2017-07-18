@@ -167,7 +167,6 @@ class DigitalWaitList extends Component {
       selectedWaitSpot,
     } = this.props;
 
-
     let formName = 'addWaitSpot';
     let title = "Add Patient to Waitlist"
     if (selectedWaitSpot) {
@@ -218,7 +217,7 @@ class DigitalWaitList extends Component {
               flat
               onClick={this.toggleWaitSpotForm}
             >
-              Add to Waitlist <Icon style={{ marginLeft: '5px' }} icon="plus-circle" />
+              Add to Waitlist <Icon style={{ marginLeft: '5px' }} size={1.5} icon="plus-circle" />
             </Button>
           </CardHeader>
         </div>
