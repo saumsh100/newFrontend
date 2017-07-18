@@ -24,6 +24,8 @@ import PatientUser,
 import Recall, { recallIdtest } from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
+import userFixtures from '../fixtures/users';
+import permissionFixtures from '../fixtures/permissions';
 
 import enterpriseFixtures, {
   sunshineSmilesId,
@@ -695,54 +697,7 @@ const SEEDS = {
       enterpriseId: dsoId,
       permissionId: grantPermissionId,
     },
-    /*{
-     firstName: 'Sergey',
-     lastName: 'Skovorodnikov',
-     username: 'sergey@carecru.com',
-     password: bcrypt.hashSync('sergey', saltRounds),
-     id: sergeyUserId,
-     activeAccountId: accountId,
-     enterpriseId: sunshineSmilesId,
-     // accounts: [accountId],
-     },
-     // account 2 user
-     {
-     firstName: 'Jatinder',
-     lastName: 'Dhillion',
-     username: 'jd@carecru.com',
-     password: bcrypt.hashSync('jd', saltRounds),
-     id: jdUserId,
-     activeAccountId: accountId2,
-     enterpriseId: sunshineSmilesId,
-     // accounts: [accountId],
-     },
-     {
-     firstName: 'Alex',
-     lastName: ' ',
-     username: 'alex@carecru.com',
-     password: bcrypt.hashSync('alex', saltRounds),
-     id: alexUserId,
-     activeAccountId: accountId,
-     enterpriseId: sunshineSmilesId,
-     },
-     {
-     firstName: 'SyncClient',
-     lastName: ' ',
-     username: 'syncclient@carecru.com',
-     password: bcrypt.hashSync('sync', saltRounds),
-     id: syncUserId,
-     activeAccountId: syncTestAccId,
-     enterpriseId: sunshineSmilesId,
-     },
-     {
-     firstName: 'Valerij',
-     lastName: 'Stukanov',
-     username: 'vst@carecru.com',
-     password: bcrypt.hashSync('vst', saltRounds),
-     id: vstUserId,
-     activeAccountId: accountId,
-     enterpriseId: sunshineSmilesId,
-     },*/
+    ...userFixtures,
   ],
 
   Family: [
@@ -1093,6 +1048,7 @@ const SEEDS = {
       role: 'OWNER',
       permissions: {},
     },
+    ...permissionFixtures,
     /*{
      userId: alexUserId,
      role: 'VIEWER',
