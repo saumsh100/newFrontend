@@ -152,6 +152,15 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
         },
       },
 
+      recurringTimeOffs: {
+        _apply: (sequence) => {
+          return sequence.filter((timeOff) => {
+            // subtract and add for start date and enddate as you can miss if longer than week.
+            return generateDuringFilter(timeOff, moment(startDate).subtract(365 * 2, 'days').toISOString(), moment(endDate).add(365 * 2, 'days').toISOString());
+          });
+        },
+      },
+
       appointments: {
         _apply: (sequence) => {
           return sequence.filter((appt) => {
@@ -187,6 +196,7 @@ function generatePractitionerAvailabilities(options) {
   const {
     appointments,
     timeOffs,
+    recurringTimeOffs,
   } = practitioner;
 
   const {
@@ -238,10 +248,79 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefReservations;
   });
 
+  const fullTimeOffs = timeOffs.slice();
+
+  for (let i = 0; i < recurringTimeOffs.length; i++) {
+    let startDay;
+    let endDay;
+
+    if (recurringTimeOffs[i].allDay) {
+      startDay = recurringTimeOffs[i].startDate;
+      endDay = recurringTimeOffs[i].startDate;
+    } else {
+      startDay = new Date(recurringTimeOffs[i].startDate);
+      const startTime = new Date(recurringTimeOffs[i].startTime);
+      startDay.setHours(startTime.getHours());
+      startDay.setMinutes(startTime.getMinutes());
+
+      endDay = new Date(recurringTimeOffs[i].startDate);
+      const endTime = new Date(recurringTimeOffs[i].endTime);
+      endDay.setHours(endTime.getHours());
+      endDay.setMinutes(endTime.getMinutes());
+    }
+
+    const start = moment(startDay);
+    const end = moment(endDay);
+
+    const dayOfWeek = moment().day(recurringTimeOffs[i].dayOfWeek).isoWeekday();
+
+    const tmpStart = start.clone().day(dayOfWeek);
+    const tmpEnd = end.clone().day(dayOfWeek);
+
+    let count = 1;
+
+    if (tmpStart.isAfter(start, 'd') || tmpStart.isSame(start, 'd')) {
+      fullTimeOffs.push({
+        startDate: tmpStart.toISOString(),
+        endDate: tmpEnd.toISOString(),
+        practitionerId: recurringTimeOffs[i].practitionerId,
+        allDay: recurringTimeOffs[i].allDay,
+      });
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+    } else {
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+
+      fullTimeOffs.push({
+        startDate: tmpStart.toISOString(),
+        endDate: tmpEnd.toISOString(),
+        practitionerId: recurringTimeOffs[i].practitionerId,
+        allDay: recurringTimeOffs[i].allDay,
+      });
+
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+    }
+
+    while (tmpStart.isBefore(moment(recurringTimeOffs[i].endDate)) && tmpStart.isBefore(endDate)) {
+      if (count % recurringTimeOffs[i].interval === 0 && count >= recurringTimeOffs[i].interval) {
+        fullTimeOffs.push({
+          startDate: tmpStart.toISOString(),
+          endDate: tmpEnd.toISOString(),
+          practitionerId: recurringTimeOffs[i].practitionerId,
+          allDay: recurringTimeOffs[i].allDay,
+        });
+      }
+      count++;
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+    }
+  }
 
   const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
-    for (let i = 0; timeOffs && i < timeOffs.length; i++) {
-      if (isDuringEachotherTimeOff(timeOffs[i], slot)) {
+    for (let i = 0; fullTimeOffs && i < fullTimeOffs.length; i++) {
+      if (isDuringEachotherTimeOff(fullTimeOffs[i], slot)) {
         return false;
       }
     }

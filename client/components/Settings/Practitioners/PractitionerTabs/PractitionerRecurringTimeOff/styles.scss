@@ -16,6 +16,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  &_readOnly{
+    margin-left: 10px;
+    color: $primary-darkgrey;
+  }
+
   &_allDay{
     margin-left: auto;
     color: $primary-darkgrey;

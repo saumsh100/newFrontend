@@ -131,9 +131,9 @@ class PractitionerRecurringTimeOff extends Component {
       selectedTimeOff,
     } = this.state;
 
-    let formName = `practitioner${practitioner.get('id')}_timeOff`;
+    let formName = `practitioner${practitioner.get('id')}_recurringTimeOff`;
     if (selectedTimeOff) {
-      formName = `timeOff${selectedTimeOff.get('id')}_timeOff`;
+      formName = `timeOff${selectedTimeOff.get('id')}_recurringTimeOff`;
     }
 
     let showAddOrListComponent = (

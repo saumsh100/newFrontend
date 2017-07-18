@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { withState } from 'recompose';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import {
   Form,
@@ -17,14 +17,18 @@ import styles from './styles.scss';
 const generateTimeOptions = () => {
   const timeOptions = [];
   const totalHours = 24;
+  const increment = 60;
+  const increments = 60 / increment;
 
   let i;
   for (i = 0; i < totalHours; i++) {
-    const labelValue = i % 12;
-    const value = ((i + 1) * 60).toString();
-    const label = i / 12 >= 1 ?  `${labelValue + 1}:00 PM` : `${labelValue + 1}:00 AM`;
-
-    timeOptions.push({ value, label });
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const value = time.toISOString();
+      const label = time.format('LT');
+      timeOptions.push({ value, label });
+    }
   }
 
   return timeOptions;
@@ -81,8 +85,8 @@ function RecurringTimeOffForm(props) {
   const initialValues = {
     startDate: moment(startDate).format('L'),
     endDate: moment(endDate).format('L'),
-    startTime: startTime ? startTime.toString() : null,
-    endTime: endTime ? endTime.toString() : null,
+    startTime,
+    endTime,
     allDay,
     dayOfWeek,
     interval: interval ? interval.toString() : null,

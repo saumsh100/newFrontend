@@ -10,6 +10,7 @@ const normalize = require('../normalize');
 const _ = require('lodash');
 const uuid = require('uuid');
 const upload = require('../../../lib/upload');
+import moment from 'moment-timezone'
 
 practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
@@ -23,6 +24,9 @@ practitionersRouter.get('/', (req, res, next) => {
     joinObject,
   } = req;
   // const { accountId } = req;
+  let test = moment('2014-04-08T17:00:00.000Z')
+  console.log(moment.tz('04/08/2014 13:00:00', 'MM/DD/YYYY HH:mm:ss', 'America/Toronto').toISOString())
+  console.log(test.clone().day(1).toISOString())
 
   return Practitioner.filter({ accountId }).getJoin(joinObject).run()
     .then(practitioners => res.send(normalize('practitioners', practitioners)))

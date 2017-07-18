@@ -33,14 +33,15 @@ class RecurringTimeOffListItem extends Component {
       endTime,
       note,
       interval,
+      fromPMS,
       dayOfWeek,
       allDay,
     } = timeOff;
 
     const startDateFM = moment(startDate).format('MMM Do YYYY');
     const endDateFM = moment(endDate).format('MMM Do YYYY');
-    const startTimeFM = startTime / 60 >= 12 ? `${startTime / 60 - 12}:00 PM` : `${startTime / 60}:00 AM`;
-    const endTimeFM = endTime / 60 >= 12 ? `${endTime / 60 - 12}:00 PM` : `${endTime / 60}:00 AM`;
+    const startTimeFM = moment(startTime).format('hh:mm A');
+    const endTimeFM = moment(endTime).format('hh:mm A');
 
     let showData = allDay ? `${startDateFM} To: ${endDateFM}` :
       `${startDateFM} ${startTimeFM} To: ${endDateFM} ${endTimeFM}`;
@@ -49,8 +50,14 @@ class RecurringTimeOffListItem extends Component {
 
     const showNote = note ? `${note}` : 'No Description';
 
+    const button = fromPMS ? <div className={styles.timeOffList_readOnly}>Read Only</div> : (<IconButton
+      icon="trash"
+      className={styles.timeOffList_delete}
+      onClick={this.deleteTimeOff}
+    />);
+
     return (
-      <ListItem onClick={onClick} className={styles.timeOffList_item}>
+      <ListItem onClick={fromPMS ? () => {} : onClick} className={styles.timeOffList_item}>
         <div className={styles.timeOffList_date}>
           {showData}
           <div className={styles.timeOffList_note}>
@@ -60,11 +67,7 @@ class RecurringTimeOffListItem extends Component {
         <div className={styles.timeOffList_allDay}>
           {allDay ? 'All Day' : null}
         </div>
-        <IconButton
-          icon="trash"
-          className={styles.timeOffList_delete}
-          onClick={this.deleteTimeOff}
-        />
+        {button}
       </ListItem>
     );
   }
