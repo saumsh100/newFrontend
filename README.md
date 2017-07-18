@@ -169,6 +169,8 @@ To see example model go to `server/_models/segment/segment.js`. Same structure c
 
 Inside folde `server/seeders/` are seeder files. You can use this to seed database.
 
+To see example usage in route, go to `server/api/routes/segment/index.js`
+
 NOTE: I haven't added migrations
 
 ##### Rebuild/Seed database
