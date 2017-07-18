@@ -17,6 +17,7 @@ Node Version Manager (https://github.com/creationix/nvm).
 4. Clone the Repository: `git clone git@github.com:carecru/carecru.git`
 5. Navigate into root directory: `cd carecru`
 6. Install node modules: `npm install`
+7. Install postgresql and setup database (MacOS: https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx)
 
 ### Installation on Windows 10 (work in progress)
 Run all commands PowerShell as admin:

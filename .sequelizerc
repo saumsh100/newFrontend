@@ -1,0 +1,8 @@
+const path = require('path')
+const postgres = require('./server/config/globals').postgres;
+
+module.exports = {
+	'url': `postgres://${postgres.username}:${postgres.password}@${postgres.host}:${postgres.port}/${postgres.database}`,
+	'models-path': 'server/_models',
+	'seeders-path': 'server/seeders',
+}
