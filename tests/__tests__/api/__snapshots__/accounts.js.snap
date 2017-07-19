@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/accounts GET / - with manager role so only return one 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "fullLogoUrl": null,
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "name": "Test Account",
+        "unit": 15,
+      },
+    },
+  },
+  "result": Array [
+    "62954241-3652-4792-bae5-5bfed53d37b7",
+  ],
+}
+`;
+
+exports[`/api/accounts GET / - with owner role so return all 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "fullLogoUrl": null,
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "name": "Test Account",
+        "unit": 15,
+      },
+    },
+  },
+  "result": Array [
+    "62954241-3652-4792-bae5-5bfed53d37b7",
+  ],
+}
+`;
