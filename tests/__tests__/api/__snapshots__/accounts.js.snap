@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/api/accounts GET / - with manager role so only return one 1`] = `
+exports[`/api/accounts GET / with manager role so only return one 1`] = `
 Object {
   "entities": Object {
     "accounts": Object {
@@ -22,7 +22,7 @@ Object {
 }
 `;
 
-exports[`/api/accounts GET / - with owner role so return all 1`] = `
+exports[`/api/accounts GET / with owner role so return all 1`] = `
 Object {
   "entities": Object {
     "accounts": Object {
