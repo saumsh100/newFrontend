@@ -58,8 +58,12 @@ Cypress.addParentCommand('login', (username, secret) => {
       url: `${Cypress.env('siteURL')}/auth`,
       body: { username: email, password }
     }).then((resp) => {
-      return window.localStorage.setItem('token', resp.body.token)
-    })
+      cy.visit(`${Cypress.env('siteURL')}`, {
+        onBeforeLoad: function(win) {
+          win.localStorage.setItem('token', resp.body.token)
+        },
+      });
+    });
 
   /*
   cy
