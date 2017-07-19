@@ -44,7 +44,7 @@ class RecurringTimeOffListItem extends Component {
     const endTimeFM = moment(endTime).format('hh:mm A');
 
     let showData = allDay ? `${startDateFM} To: ${endDateFM}` :
-      `${startDateFM} ${startTimeFM} To: ${endDateFM} ${endTimeFM}`;
+      `${startDateFM} To: ${endDateFM} - ${startTimeFM} To: ${endTimeFM}`;
 
     showData += ` - Every: ${dayOfWeek} - Interval: ${interval}`;
 

@@ -36,6 +36,11 @@
   }
 }
 
+.minHeight {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
 .allDay {
   display: flex;
   align-items: center;
@@ -56,6 +61,10 @@
 .inlineBlock {
   padding-left: 10px;
   padding-bottom: 1px;
+}
+
+.modal {
+  width: 400px;
 }
 
 .displayTimeOff {

@@ -125,38 +125,34 @@ function RecurringTimeOffForm(props) {
       ignoreSaveButton
     >
       <Grid>
-        <Row>
-          <Col xs={12} md={columnSizeDate}>
-            <Field
-              name="interval"
-              label="Interval"
-              component="DropdownSelect"
-              options={[
-                { value: '1' },
-                { value: '2' },
-                { value: '3' },
-                { value: '4' },
-              ]}
-            />
-          </Col>
+        <Row className={styles.minHeight}>
+          <Field
+            name="interval"
+            label="Interval"
+            component="DropdownSelect"
+            options={[
+              { value: '1' },
+              { value: '2' },
+              { value: '3' },
+              { value: '4' },
+            ]}
+          />
         </Row>
-        <Row>
-          <Col xs={12} md={columnSizeDate}>
-            <Field
-              name="dayOfWeek"
-              label="Day of Week"
-              component="DropdownSelect"
-              options={[
-                { value: 'Sunday' },
-                { value: 'Monday' },
-                { value: 'Tuesday' },
-                { value: 'Wednesday' },
-                { value: 'Thursday' },
-                { value: 'Friday' },
-                { value: 'Saturday' },
-              ]}
-            />
-          </Col>
+        <Row className={styles.minHeight}>
+          <Field
+            name="dayOfWeek"
+            label="Day of Week"
+            component="DropdownSelect"
+            options={[
+              { value: 'Sunday' },
+              { value: 'Monday' },
+              { value: 'Tuesday' },
+              { value: 'Wednesday' },
+              { value: 'Thursday' },
+              { value: 'Friday' },
+              { value: 'Saturday' },
+            ]}
+          />
         </Row>
         <Row>
           <Col xs={12} md={columnSizeDate}>

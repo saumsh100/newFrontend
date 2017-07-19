@@ -14,6 +14,7 @@ import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import RecurringTimeOffListItem from './RecurringTimeOffListItem';
 import RecurringTimeOffList from './RecurringTimeOffList';
 import RecurringTimeOffForm from './RecurringTimeOffForm';
+import styles from './styles.scss';
 
 class PractitionerRecurringTimeOff extends Component {
   constructor(props) {
@@ -184,6 +185,7 @@ class PractitionerRecurringTimeOff extends Component {
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
+          className={styles.modal}
           custom
         >
           <RecurringTimeOffForm
