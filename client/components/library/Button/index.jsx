@@ -26,7 +26,7 @@ export default function Button(props) {
 
   const newProps = omit(props, ['flat', 'submit']);
   return (
-    <button {...newProps} className={classes}>
+    <button data-test-id={props['data-test-id']} {...newProps} className={classes}>
       <div className={styles.displayFlex}>
         {iconComponent}
         {props.children}
