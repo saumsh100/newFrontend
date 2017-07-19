@@ -35,6 +35,7 @@ class AddNewAppointment extends Component {
     super(props);
     this.state = {
       servicesAllowed: this.props.services,
+      patientSearched: null,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -126,19 +127,27 @@ class AddNewAppointment extends Component {
 
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
+      const requestId = selectedAppointment ? selectedAppointment.requestModel.get('id') : null;
+      console.log(requestId);
       return createEntityRequest({
         key: 'appointments',
         entityData: newAppointment,
         alert: alertCreate,
-      }).then(() => {
+      }).then((data) => {
         if (selectedAppointment && selectedAppointment.request) {
           return updateEntityRequest({
             key: 'requests',
             model: selectedAppointment.requestModel,
             alert: alertRequestUpdate,
           }).then(() => {
-            reinitializeState();
-            reset(formName);
+            this.props.updateEntityRequest({
+              url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
+              values: {},
+            })
+            .then(() => {
+              reinitializeState();
+              reset(formName);
+            });
           });
         } else {
           reinitializeState();
@@ -219,7 +228,7 @@ class AddNewAppointment extends Component {
     const duration = (appFormValues && appFormValues.appointment.slider) ? appFormValues.appointment.slider[0] : 60;
 
     const bufferValue = duration + value;
-    if (bufferValue > duration && bufferValue <= 180) {
+    if (bufferValue >= duration && bufferValue <= 180) {
       change(formName, 'appointment.slider', [duration, bufferValue]);
     }
   }
@@ -249,14 +258,10 @@ class AddNewAppointment extends Component {
   }
 
   handleAutoSuggest(newValue) {
-    const {
-      change,
-      formName,
-    } = this.props;
-
     if (typeof newValue === 'object') {
-      change(formName, 'patient.mobilePhoneNumber', newValue.mobilePhoneNumber);
-      change(formName, 'patient.email', newValue.email);
+      this.props.setPatientSearched(newValue);
+    } else if (newValue === '') {
+      this.props.setPatientSearched('');
     }
   }
 
@@ -273,11 +278,11 @@ class AddNewAppointment extends Component {
             <div className={styles.suggestionContainer}>
               <Avatar user={patient} size="lg" />
               <span className={styles.suggestionContainer_fullName}>
-                {`${patient.firstName} ${patient.lastName}`}
+                {`${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}`}
               </span>
             </div>
           );
-        })
+        });
         return patientList;
       });
   }
@@ -320,7 +325,10 @@ class AddNewAppointment extends Component {
       <div className={styles.formContainer}>
         <IconButton
           icon="times"
-          onClick={reinitializeState}
+          onClick={()=>{
+            this.props.reset(formName)
+            return reinitializeState()
+          }}
           className={styles.trashIcon}
         />
         <DisplayForm
@@ -331,6 +339,7 @@ class AddNewAppointment extends Component {
           patients={patients}
           chairs={chairs}
           selectedAppointment={selectedAppointment}
+          patientSearched={this.props.patientSearched}
           unit={unit}
           getSuggestions={this.getSuggestions}
           handleSubmit={this.handleSubmit}

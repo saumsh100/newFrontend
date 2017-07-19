@@ -26,6 +26,10 @@ class PatientsMessagesContainer extends Component {
     this.setCurrentPatient = this.setCurrentPatient.bind(this);
   }
 
+  componentWillMount() {
+    this.props.setSelectedPatient(null);
+  }
+
   componentDidMount() {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);

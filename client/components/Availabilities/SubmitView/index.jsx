@@ -102,6 +102,7 @@ class SubmitView extends Component {
       closeBookingModal,
       bookingWidgetPrimaryColor,
       setIsLogin,
+      initialValues,
     } = this.props;
 
     // If patient is authenticated, display <BookView />
@@ -119,7 +120,7 @@ class SubmitView extends Component {
 
     let formComponent = (
       <div>
-        <SignUpForm onSubmit={this.signUpAndConfirm} />
+        <SignUpForm onSubmit={this.signUpAndConfirm} initialValues={initialValues}/>
         <div className={styles.alreadyHaveWrapper}>
           Already have an account? {loginHereAnchor}
         </div>
@@ -140,6 +141,16 @@ class SubmitView extends Component {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
+          <span>You are currently logged in as <strong>{patientUser.getFullName()}</strong>.
+            <br /><br />
+            If this is not you, and you would like to logout
+            and signin/signup as another user,
+            click <a href="#logout" onClick={(e) => {
+              e.preventDefault();
+              this.logout();
+            }}>here</a>.
+            <br /><br />
+          </span>
             We have sent a confirmation code via SMS to {patientUser.get('phoneNumber')}.
             Please type in the code below and submit to complete your booking.
             If you did not receive your SMS and want it sent again, click {resendAnchor}.
@@ -176,7 +187,13 @@ class SubmitView extends Component {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
-            Congratulations! You have successfully requested your appointment.
+            <span>
+              Congratulations! You have successfully <strong>requested</strong> your appointment.
+            </span>
+            <br/><br/>
+            <span>
+              <strong>Wait</strong> for the clinic to confirm your appointment details.
+            </span>
           </div>
           <VButton
             icon="sign-out"
@@ -303,6 +320,7 @@ SubmitView.propTypes = {
     id: PropTypes.string,
     firstName: PropTypes.string,
   }),
+  initialValues: PropTypes.object,
 
   hasWaitList: PropTypes.bool.isRequired,
 };

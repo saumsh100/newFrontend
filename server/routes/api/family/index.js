@@ -1,8 +1,10 @@
+const _ = require('lodash');
 const familyRouter = require('express').Router();
 const Family = require('../../../models/Family');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const loaders = require('../../util/loaders');
+const checkIsArray = require('../../../middleware/checkIsArray');
 
 familyRouter.param('familyId', loaders('family', 'Family'));
 
@@ -39,6 +41,40 @@ familyRouter.get('/', checkPermissions('family:read'), (req, res, next) => {
     .then(allFamilyInfo => res.send(normalize('families', allFamilyInfo)))
     .catch(next);
 });
+
+/**
+ * Batch create family
+ */
+familyRouter.post('/batch', checkPermissions('family:create'), checkIsArray('families'), (req, res, next) => {
+  const { families } = req.body;
+  const cleanedFamilies = families.map((family) => Object.assign(
+    {},
+    _.omit(family, ['id']),
+    { accountId: req.accountId }
+  ));
+
+  return Family.batchSave(cleanedFamilies)
+    .then(a => res.send(normalize('families', a)))
+    .catch(({ errors, docs }) => {
+      errors = errors.map(({ family, message }) => {
+        // Created At can sometimes be a ReQL query and cannot
+        // be stringified by express on res.send, this is a
+        // quick fix for now. Also, message has to be plucked off
+        // because it is removed on send as well
+        delete family.createdAt;
+        return {
+          family,
+          message,
+        };
+      });
+
+      const entities = normalize('families', docs);
+      const responseData = Object.assign({}, entities, { errors });
+      return res.status(400).send(responseData);
+    })
+    .catch(next);
+});
+
 
 /**
  * Create an family entry

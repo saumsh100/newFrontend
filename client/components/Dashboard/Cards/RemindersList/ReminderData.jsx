@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import moment from 'moment';
-import { ListItem,  Icon } from '../../../library';
+import { ListItem, Icon, Avatar } from '../../../library';
 import styles from './styles.scss';
 
 export default function ReminderData(props) {
@@ -18,8 +18,11 @@ export default function ReminderData(props) {
   const displayStatus = sentReminder.isConfirmed ? 'Reminder Confirmed' : 'Reminder Sent';
 
   let icon = reminder.primaryType.toLowerCase();
+
   if (icon === 'sms') {
     icon = 'comment';
+  } else if (icon === 'email') {
+    icon = 'envelope';
   }
 
   const age = moment().diff(patient.birthDate, 'years');
@@ -28,8 +31,9 @@ export default function ReminderData(props) {
     <ListItem
       key={`patientsItem${index}`}
       className={styles.patients__item}
+      data-test-id={`${index}_sentReminder`}
     >
-      <img className={styles.patients__item_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
+      <Avatar className={styles.patients__item_img} size="lg" user={patient} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_name}>

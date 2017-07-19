@@ -8,7 +8,7 @@ import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
-import { setHoverRequestId } from '../../actions/requests';
+import { setHoverRequestId, setUndoRequest } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
 import { checkPatientUser } from '../../thunks/schedule';
 
@@ -41,6 +41,7 @@ class RequestList extends Component {
       customBufferTime: 0,
       request: true,
       requestModel: modifiedRequest,
+      practitionerId: request.get('practitionerId'),
     };
 
     checkPatientUser(patientUser, appointment);
@@ -53,7 +54,11 @@ class RequestList extends Component {
   removeRequest(request) {
     const confirmRemove = confirm('Are you sure you want to reject this request?');
     if (confirmRemove) {
-      this.props.deleteEntityRequest({ key: 'requests', id: request.get('id') });
+      this.props.updateEntityRequest({
+        url: `/api/requests/${request.id}/reject`,
+        values: {},
+      });
+      // this.props.setUndoRequest({ undoRequest: request });
     }
   }
 
@@ -62,6 +67,7 @@ class RequestList extends Component {
       sortedRequests,
       services,
       patientUsers,
+      practitioners,
       setHoverRequestId,
     } = this.props;
 
@@ -69,11 +75,15 @@ class RequestList extends Component {
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
           //const active = request.get('id') === this.props.setHoverRequestId;
+          const practitionerId = request.get('practitionerId');
+          const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
+
           return (
             <RequestListItem
               key={request.id}
               request={request}
               service={services.get(request.get('serviceId'))}
+              practitioner={practitioner}
               patientUser={patientUsers.get(request.get('patientUserId'))}
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
@@ -87,10 +97,13 @@ class RequestList extends Component {
 }
 
 RequestList.propTypes = {
+  services: PropTypes.object.isRequired,
+  patientUsers: PropTypes.object.isRequired,
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
   setHoverRequestId: PropTypes.func,
+  setUndoRequest: PropTypes.func,
   push: PropTypes.func,
 };
 
@@ -103,6 +116,7 @@ function mapActionsToProps(dispatch) {
     selectAppointment,
     checkPatientUser,
     push,
+    setUndoRequest,
   }, dispatch);
 }
 

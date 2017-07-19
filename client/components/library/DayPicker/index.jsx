@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import pick from 'lodash/pick';
 import isArray from 'lodash/isArray';
 import RDayPicker, { DateUtils } from 'react-day-picker';
@@ -30,12 +30,14 @@ class DayPicker extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleDayClick(day, { selected , disabled }) {
+  handleDayClick(day, { selected, disabled }) {
     const {
       multiple,
       value,
       onChange,
     } = this.props;
+
+    day = moment(day).subtract(12, 'hours')._d;
 
     if (disabled) {
       return ;
@@ -45,7 +47,7 @@ class DayPicker extends Component {
       this.setState({ isOpen: false });
     } else {
       const selectedIndex = value.findIndex(v =>
-        DateUtils.isSameDay(new Date(v), day)
+        DateUtils.isSameDay(moment(new Date(v))._d, day)
       );
 
       if (selectedIndex > -1) {
@@ -82,6 +84,7 @@ class DayPicker extends Component {
         {...this.props}
         onChange={this.handleInputChange}
         onFocus={this.togglePopOver}
+        data-test-id={this.props['data-test-id']}
       />
     );
 

@@ -86,21 +86,23 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
-        console.log('remove:Appointment event, id=', data);
-        dispatch(deleteEntity({ key: 'appointments', id: data }));
+        console.log('remove:Appointment event, id=', data.id);
+        dispatch(deleteEntity({ key: 'appointments', id: data.id }));
       });
 
       /**
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
+        console.log('Created Patient', data.entities);
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
+
       socket.on('update:Patient', (data) => {
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
       socket.on('remove:Patient', (data) => {
-        dispatch(deleteEntity({ key: 'patients', id: data }));
+        dispatch(deleteEntity({ key: 'patients', id: data.id }));
       });
 
       socket.on('newMessage', (data) => {
@@ -131,6 +133,16 @@ export default function connectSocketToStoreLogin(store, socket) {
         // console.log(alert.body);
         dispatch(showAlertTimeout({ alert, type: 'success' }));
         dispatch(setSyncingWithPMS({ isSyncing: false }));
+      });
+
+      socket.on('syncProgress', (data) => {
+        const percentDone = Math.floor((data.saved / data.total) * 100);
+        const alert = {
+          title: 'Sync progress',
+          body: `${data.collection} ${percentDone}%`,
+        };
+        console.log(alert.body);
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
     })
     .on('unauthorized', (msg) => {

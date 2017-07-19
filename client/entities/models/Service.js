@@ -13,6 +13,7 @@ const ServiceSchema = {
   practitioners: [],
   allowedPractitioners: null,
   isHidden: null,
+  isDefault: null,
 };
 
 export default class Service extends createModel(ServiceSchema) {

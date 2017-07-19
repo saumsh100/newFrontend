@@ -12,10 +12,12 @@ import {
   SELECT_WAITSPOT,
   SET_SYNCING,
   SET_MERGING,
+  SET_SCHEDULE_VIEW,
 } from '../constants';
 
 const initialState = fromJS({
   scheduleDate: new Date(),
+  scheduleView: 'chair',
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
@@ -41,6 +43,10 @@ export default handleActions({
     });
   },
 
+  [SET_SCHEDULE_VIEW](state, action) {
+    return state.set('scheduleView', action.payload.view);
+  },
+
   [SELECT_APPOINTMENT](state, action) {
     const appointment = action.payload;
     return state.set('selectedAppointment', appointment);
@@ -54,14 +60,7 @@ export default handleActions({
   [ADD_SCHEDULE_FILTER](state, action) {
     const key = action.payload.key;
     const filterEntities = state.toJS()[key];
-
-    if (key === 'practitionersFilter' && filterEntities.length === 4) {
-      filterEntities.shift();
-      filterEntities.push(action.payload.id);
-    } else {
-      filterEntities.push(action.payload.id);
-    }
-
+    filterEntities.push(action.payload.id);
     const mergeObj = {};
     mergeObj[key] = filterEntities;
     return state.merge(mergeObj);
@@ -82,13 +81,9 @@ export default handleActions({
 
     entities.map((entity) => {
       const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
-
-      if (key === 'practitionersFilter' && filterEntities.length < 4 && !checkFilter) {
-        filterEntities.push(entity.get('id'));
-      } else if (!checkFilter && key !== 'practitionersFilter') {
+      if (!checkFilter) {
         filterEntities.push(entity.get('id'));
       }
-
     });
 
     const mergeObj = {};

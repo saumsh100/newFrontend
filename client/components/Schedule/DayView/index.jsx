@@ -4,10 +4,6 @@ import moment from 'moment';
 import DayViewBody from './DayViewBody';
 
 class DayView extends Component  {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       currentDate,
@@ -18,7 +14,6 @@ class DayView extends Component  {
       chairs,
       schedule,
       selectAppointment,
-      weeklySchedules,
     } = this.props;
 
     const filteredAppointments = appointments.get('models').toArray().filter((app) => {
@@ -29,7 +24,6 @@ class DayView extends Component  {
 
     return (
       <DayViewBody
-        currentDate={currentDate}
         schedule={schedule}
         selectAppointment={selectAppointment}
         appointments={filteredAppointments}
@@ -39,7 +33,6 @@ class DayView extends Component  {
         practitioners={practitioners}
         startHour={6}
         endHour={24}
-        weeklySchedules={weeklySchedules}
       />
     );
   }

@@ -57,6 +57,7 @@ export async function sendRemindersForAccount(account, date) {
 
       console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentReminder.merge({ isSent: true }).save();
+      await appointment.merge({ isReminderSent: true }).save();
 
       if (primaryType === 'sms') {
         const textMessageData = sanitizeTwilioSmsData(data);

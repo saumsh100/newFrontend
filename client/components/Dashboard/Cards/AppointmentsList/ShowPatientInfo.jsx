@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import styles from './styles.scss';
+import Avatar from '../../../library/Avatar';
 
 export default function ShowPatientInfo(props) {
   const {
@@ -10,6 +11,7 @@ export default function ShowPatientInfo(props) {
     service,
     handleAppointmentClick,
     handlePatientClick,
+    index,
   } = props;
 
 
@@ -22,8 +24,8 @@ export default function ShowPatientInfo(props) {
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
   return (
-    <div className={styles.patientContainer}>
-      <img className={styles.patientContainer_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
+    <div className={styles.patientContainer} data-test-id={`${index}_appointment`}>
+      <Avatar className={styles.patientContainer_img} user={patient} />
       <div className={styles.patientContainer_text}>
         <div className={styles.patientContainer_name} >
           <a

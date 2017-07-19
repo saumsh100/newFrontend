@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
+import moment from 'moment-timezone';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
@@ -57,7 +58,7 @@ class DigitalWaitList extends Component {
             <div className={styles.suggestionContainer}>
               <Avatar user={patient} size="lg" />
               <span className={styles.suggestionContainer_fullName}>
-                {`${patient.firstName} ${patient.lastName}`}
+                {`${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}`}
               </span>
             </div>
           );
@@ -166,7 +167,6 @@ class DigitalWaitList extends Component {
       selectedWaitSpot,
     } = this.props;
 
-
     let formName = 'addWaitSpot';
     let title = "Add Patient to Waitlist"
     if (selectedWaitSpot) {
@@ -211,12 +211,13 @@ class DigitalWaitList extends Component {
           <CardHeader
             count={waitSpots.get('models').size}
             title="Digital Waitlist"
+            data-test-id="waitListCount"
           >
             <Button
               flat
               onClick={this.toggleWaitSpotForm}
             >
-              Add to Waitlist <Icon style={{ marginLeft: '5px' }} icon="plus-circle" />
+              Add to Waitlist <Icon style={{ marginLeft: '5px' }} size={1.5} icon="plus-circle" />
             </Button>
           </CardHeader>
         </div>
@@ -289,6 +290,10 @@ const enhance = compose(
     id: 'waitSpots',
     key: 'waitSpots',
     join: ['patientUser', 'patient'],
+    params: {
+      startTime: moment().toISOString(),
+      endTime: moment().add(360, 'days').toISOString(),
+    },
   }),
 
   connect(mapStateToProps, mapDispatchToProps),

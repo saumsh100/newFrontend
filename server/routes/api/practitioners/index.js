@@ -4,6 +4,7 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
 const WeeklySchedule = require('../../../models/WeeklySchedule');
+const Account = require('../../../models/Account');
 const Service = require('../../../models/Service');
 const normalize = require('../normalize');
 const _ = require('lodash');
@@ -32,22 +33,30 @@ practitionersRouter.get('/', (req, res, next) => {
  * Create a practitioner
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, res, next) => {
-  const weeklyScheduleData = Object.assign({}, { accountId: req.accountId });
+  return Account.get(req.accountId).getJoin({ weeklySchedule: true }).run()
+   .then((account) => {
+     delete account.weeklySchedule.weeklyScheduleId;
+     delete account.weeklySchedule.createdAt;
+     delete account.weeklySchedule.id;
 
-  return WeeklySchedule.save(weeklyScheduleData)
-    .then((weeklySchedule) => {
-      const practitionerData = Object.assign({},
-        { accountId: req.accountId,
-          weeklyScheduleId: weeklySchedule.id,
-        },
-        req.body);
-      Practitioner.save(practitionerData)
-        .then((practitioner) => {
-          practitioner.weeklySchedule = weeklySchedule;
-          res.status(201).send(normalize('practitioner', practitioner));
-        })
-        .catch(next);
-    }).catch(next);
+     //giving new prac the offices schedule
+
+     WeeklySchedule.save(account.weeklySchedule)
+         .then((weeklySchedule) => {
+           const practitionerData = Object.assign({},
+             { accountId: req.accountId,
+               weeklyScheduleId: weeklySchedule.id,
+             },
+             req.body);
+           Practitioner.save(practitionerData)
+             .then((practitioner) => {
+               practitioner.weeklySchedule = weeklySchedule;
+               res.status(201).send(normalize('practitioner', practitioner));
+             })
+             .catch(next);
+         });
+   })
+   .catch(next);
 });
 
 /**
@@ -72,6 +81,34 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
        }).catch(next);
    }));
 
+
+/**
+ * Update a practitioners custom weekly schedule
+ */
+practitionersRouter.put('/:practitionerId/customSchedule', checkPermissions('practitioners:update'), (req, res, next) => {
+  return Account.get(req.accountId).getJoin({ weeklySchedule: true }).run()
+    .then((account) => {
+      delete account.weeklySchedule.weeklyScheduleId;
+      delete account.weeklySchedule.createdAt;
+      delete account.weeklySchedule.id;
+
+      WeeklySchedule.save(account.weeklySchedule)
+        .then((weeklySchedule) => {
+          const practitionerData = req.body;
+          practitionerData.weeklyScheduleId = weeklySchedule.id;
+          Practitioner.get(req.practitioner.id).run()
+            .then((practitioner) => {
+              practitioner.merge(practitionerData).save().then((prac)=>{
+                prac.weeklySchedule = weeklySchedule;
+                res.status(201).send(normalize('practitioner', prac));
+              });
+            })
+            .catch(next);
+        });
+    })
+    .catch(next);
+});
+
 /**
  * Upload a practitioner's avatar
  */
@@ -80,7 +117,7 @@ practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practition
 
   try {
     await upload(fileKey, req.files.file.data);
-      
+
     req.practitioner.avatarUrl = fileKey;
 
     const savedPractitioner = await req.practitioner.save();

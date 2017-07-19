@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from '../styles.scss';
 import { Icon } from '../../../library';
+import withHoverable from '../../../../hocs/withHoverable'
 
 const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -23,10 +24,9 @@ function hexToRgbA(hex, opacity) {
   throw new Error('Bad Hex');
 }
 
-export default function ShowAppointment(props) {
+function ShowAppointment(props) {
   const {
     appointment,
-    bgColor,
     practIndex,
     selectAppointment,
     startHour,
@@ -34,6 +34,7 @@ export default function ShowAppointment(props) {
     columnWidth,
     widthIntersect,
     rowSort,
+    isHovered,
   } = props;
 
   const {
@@ -43,7 +44,9 @@ export default function ShowAppointment(props) {
     serviceData,
     chairData,
     patientData,
+    practitionerData,
     isPatientConfirmed,
+    isReminderSent,
   } = appointment;
 
   if (!patientData) {
@@ -57,8 +60,10 @@ export default function ShowAppointment(props) {
     }
   });
 
+  const bgColor = practitionerData.color;
   const patient = patientData.toJS();
-  const age = moment().diff(patient.birthDate, 'years');
+  const age = moment().diff(patient.birthDate, 'years') || '';
+  const lastName = age ? `${patient.lastName},` : patient.lastName;
 
   // Calculating the top position and height of the appointment.
   const durationTime = getDuration(startDate, endDate, customBufferTime);
@@ -77,16 +82,17 @@ export default function ShowAppointment(props) {
   const width = `${columnWidth * ((100 / rowSort.length) / 100)}%`;
   const height = `${(heightCalc / totalHours) * 100}%`;
 
-
+  const backgroundColor = isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
+  const zIndex = isHovered ? 5 : appPosition;
   // main app style
   const appStyle = {
     top,
     left,
     height,
     width,
-    backgroundColor: `${hexToRgbA(bgColor, 0.6)}`,
+    backgroundColor,
     border: `1.5px solid ${bgColor}`,
-    zIndex: appPosition,
+    zIndex,
   };
 
   // calculating the buffer position and height styling
@@ -99,7 +105,7 @@ export default function ShowAppointment(props) {
     width,
     height: `${heightCalcBuffer}%`,
     backgroundColor: '#b4b4b5',
-    zIndex: appPosition,
+    zIndex,
   };
 
   return (
@@ -117,13 +123,14 @@ export default function ShowAppointment(props) {
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
-          {(isPatientConfirmed && <Icon icon="check-circle-o" />)}
+          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon icon="check-circle-o" />)}</div>
+          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon icon="clock-o" />)} </div>
         </div>
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} >
             <span className={styles.paddingText}>{patient.firstName}</span>
-            <span className={styles.paddingText}>{patient.lastName},</span>
-            <span>{age}</span>
+            <span className={styles.paddingText}>{lastName}</span>
+            <span>{age || ''}</span>
           </div>
         </div>
         <div className={styles.showAppointment_duration}>
@@ -153,3 +160,5 @@ ShowAppointment.propTypes = {
   endHour: PropTypes.number,
   columnWidth: PropTypes.number,
 };
+
+export default withHoverable(ShowAppointment);

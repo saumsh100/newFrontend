@@ -15,10 +15,10 @@ const normalize = require('../routes/api/normalize');
 
 function runDashboardFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
+  console.log('socket activeAccountId', activeAccountId);
 
-  // ASSUMPTION: These are the changes coming from the SYNC client...
-  Appointment
-    .filter({ accountId: activeAccountId })
+  /*Appointment
+    .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
       // TODO should be shutting all feeds associated with this socket, not just one. In one place
@@ -26,7 +26,6 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, appointment) => {
         if (error) throw new Error('Feed error');
-
         Patient.get(appointment.patientId)
         .then((patient) => {
           appointment.patient = patient;
@@ -42,7 +41,7 @@ function runDashboardFeeds(socket) {
     });
 
   Patient
-    .filter({ accountId: activeAccountId })
+    .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
@@ -59,7 +58,7 @@ function runDashboardFeeds(socket) {
           }
         }
       });
-    });
+    });*/
 
   /**
    * Listen to changes on the Requests table and update dashboards in real time

@@ -9,7 +9,8 @@ import {
   SELECT_APPOINTMENT,
   SELECT_WAITSPOT,
   SET_SYNCING,
-  SET_MERGING
+  SET_MERGING,
+  SET_SCHEDULE_VIEW,
 } from '../constants';
 
 export const setMergingPatient = createAction(SET_MERGING);
@@ -21,4 +22,5 @@ export const removeScheduleFilter = createAction(REMOVE_SCHEDULE_FILTER);
 export const addAllScheduleFilter = createAction(ADD_ALL_SCHEDULE_FILTER);
 export const clearScheduleFilter = createAction(CLEAR_SCHEDULE_FILTER);
 export const setSyncingWithPMS = createAction(SET_SYNCING);
+export const setScheduleView = createAction(SET_SCHEDULE_VIEW);
 

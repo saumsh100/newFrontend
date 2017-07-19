@@ -3,10 +3,10 @@ import { Router } from 'express';
 import { pick } from 'lodash';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Enterprise, Account, User, Service, WeeklySchedule, Reminder } from '../../../models';
+import { Enterprise, Account, User, Service, WeeklySchedule, Reminder, Recall } from '../../../models';
 import loaders from '../../util/loaders';
 import { UserAuth } from '../../../lib/auth';
-const { time } = require('../../../util/time');
+const { timeWithZone } = require('../../../util/time');
 
 const router = Router();
 
@@ -39,7 +39,7 @@ router.post('/switch', checkPermissions('enterprises:read'), (req, res, next) =>
           .then(({ id: newSessionId }) => UserAuth.signToken({
             userId: sessionData.userId,
             sessionId: newSessionId,
-            accountId,
+            activeAccountId: accountId,
           }));
       });
     })
@@ -107,6 +107,15 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
         },
       ];
 
+      const defaultRecalls =  [
+        {
+          // 6 month recall
+          accountId: account.id,
+          primaryType: 'email',
+          lengthSeconds: 6 * 30 * 24 * 60 * 60,
+        },
+      ]
+
       const defaultServices = [
         {
           accountId: account.id,
@@ -150,75 +159,75 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
       const defaultSchdedule = {
         accountId: account.id,
         monday: {
-          startTime: time(8, 0, timezone),
-          endTime: time(17, 0, timezone),
+          startTime: timeWithZone(8, 0, timezone),
+          endTime: timeWithZone(17, 0, timezone),
           breaks: [
             {
-              startTime: time(12, 0, timezone),
-              endTime: time(13, 0, timezone),
+              startTime: timeWithZone(12, 0, timezone),
+              endTime: timeWithZone(13, 0, timezone),
             },
           ],
         },
         tuesday: {
-          startTime: time(8, 0, timezone),
-          endTime: time(17, 0, timezone),
+          startTime: timeWithZone(8, 0, timezone),
+          endTime: timeWithZone(17, 0, timezone),
           breaks: [
             {
-              startTime: time(12, 0, timezone),
-              endTime: time(13, 0, timezone),
+              startTime: timeWithZone(12, 0, timezone),
+              endTime: timeWithZone(13, 0, timezone),
             },
           ],
         },
         wednesday: {
-          startTime: time(8, 0, timezone),
-          endTime: time(17, 0, timezone),
+          startTime: timeWithZone(8, 0, timezone),
+          endTime: timeWithZone(17, 0, timezone),
           breaks: [
             {
-              startTime: time(12, 0, timezone),
-              endTime: time(13, 0, timezone),
+              startTime: timeWithZone(12, 0, timezone),
+              endTime: timeWithZone(13, 0, timezone),
             },
           ],
 
         },
         thursday: {
-          startTime: time(8, 0, timezone),
-          endTime: time(17, 0, timezone),
+          startTime: timeWithZone(8, 0, timezone),
+          endTime: timeWithZone(17, 0, timezone),
           breaks: [
             {
-              startTime: time(12, 0, timezone),
-              endTime: time(13, 0, timezone),
+              startTime: timeWithZone(12, 0, timezone),
+              endTime: timeWithZone(13, 0, timezone),
             },
           ],
         },
         friday: {
-          startTime: time(8, 0, timezone),
-          endTime: time(17, 0, timezone),
+          startTime: timeWithZone(8, 0, timezone),
+          endTime: timeWithZone(17, 0, timezone),
           breaks: [
             {
-              startTime: time(12, 0, timezone),
-              endTime: time(13, 0, timezone),
+              startTime: timeWithZone(12, 0, timezone),
+              endTime: timeWithZone(13, 0, timezone),
             },
           ],
 
         },
         saturday: {
-          startTime: time(8, 0, timezone),
-          endTime: time(17, 0, timezone),
+          startTime: timeWithZone(8, 0, timezone),
+          endTime: timeWithZone(17, 0, timezone),
           breaks: [
             {
-              startTime: time(12, 0, timezone),
-              endTime: time(13, 0, timezone),
+              startTime: timeWithZone(12, 0, timezone),
+              endTime: timeWithZone(13, 0, timezone),
             },
           ],
 
         },
         sunday: {
-          startTime: time(8, 0, timezone),
-          endTime: time(17, 0, timezone),
+          startTime: timeWithZone(8, 0, timezone),
+          endTime: timeWithZone(17, 0, timezone),
           breaks: [
             {
-              startTime: time(12, 0, timezone),
-              endTime: time(13, 0, timezone),
+              startTime: timeWithZone(12, 0, timezone),
+              endTime: timeWithZone(13, 0, timezone),
             },
           ],
 
@@ -229,6 +238,7 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
         Reminder.save(defaultReminders),
         WeeklySchedule.save(defaultSchdedule),
         Service.save(defaultServices),
+        Recall.save(defaultRecalls),
       ]).then((values) => {
         account.merge({ weeklyScheduleId: values[1].id }).save()
         .then(() => res.send(201, normalize('account', account)));

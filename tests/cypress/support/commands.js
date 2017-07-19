@@ -54,7 +54,7 @@ Cypress.addParentCommand('login', (username, secret) => {
   })
 
   cy
-    .visit('http://localhost:5100/login', { log: false })
+    .visit(`${Cypress.env('siteURL')}/login`, { log: false })
     .get('input[name=email]', { log: false })
     .type(email, { log: false })
     .get('input[name=password]', { log: false })

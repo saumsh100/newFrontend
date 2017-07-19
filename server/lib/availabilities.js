@@ -8,6 +8,7 @@ const { Service, Practitioner } = require('../models');
 const StatusError = require('../util/StatusError');
 const {
   isDuringEachother,
+  isDuringEachotherTimeOff,
   createPossibleTimeSlots,
   createIntervalsFromWeeklySchedule,
   getISOSortPredicate,
@@ -44,9 +45,10 @@ function fetchServiceData(options) {
   const joinObject = {
     practitioners: {
       _apply: prac => prac.filter(row => {
-        return row('isActive').eq(true);
+        return row('isActive').eq(true).and(row.hasFields('isHidden').not().or(row('isHidden').eq(false)));
       }),
     },
+
     requests: {
       _apply: (sequence) => {
         return sequence.filter((request) => {
@@ -144,7 +146,8 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
       timeOffs: {
         _apply: (sequence) => {
           return sequence.filter((timeOff) => {
-            return generateDuringFilter(timeOff, startDate, endDate);
+            // subtract and add for start date and enddate as you can miss if longer than week.
+            return generateDuringFilter(timeOff, moment(startDate).subtract(365, 'days').toISOString(), moment(endDate).add(365, 'days').toISOString());
           });
         },
       },
@@ -183,23 +186,29 @@ function generatePractitionerAvailabilities(options) {
 
   const {
     appointments,
-    timeOff,
+    timeOffs,
   } = practitioner;
 
   const {
     requests,
     reservations,
   } = service;
+
   // console.log('requests', requests);
   // console.log('weeklySchedule.monday', weeklySchedule.monday);
+
+  // TODO: getTimeSlots should really be: (appts, rqsts, resos).orderBy(startDate), then get openings
+  // TODO: from there, split up based on account interval and weeklySchedule
+
   /*
    - getTimeSlots for this practitioner from startDate to endDate
    - split timeSlots up into service.duration intervals
-   - loop over potential timeSlots and see if there are any conflicts with
-   - requests [if no practitionerId ?], needs to know about practitioner.length
-   - reservations [if no practitionerId ?], needs to know about practitioner.length
-   - appointments
+   - loop over potential timeSlots and see if there are any conflicts with:
+   -    requests [if no practitionerId ?], needs to know about practitioner.length
+   -    reservations [if no practitionerId ?], needs to know about practitioner.length
+   -    appointments
    */
+
   const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
   const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
 
@@ -213,7 +222,7 @@ function generatePractitionerAvailabilities(options) {
   const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, timeInterval || 30);
   const finalSlots = possibleTimeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
 
-  const availabilities = finalSlots.filter((timeSlot) => {
+  const validTimeSlotsNoWithTimeOff = finalSlots.filter((timeSlot) => {
     // see if the timeSlot conflicts with any appointments, requests or resos
     const conflictsWithAppointment = appointments.some(a => isDuringEachother(timeSlot, a));
     const conflictsWithPractitionerRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
@@ -228,13 +237,23 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefRequests &&
            !conflictsWithNoPrefReservations;
   });
-  let x = availabilities.map((aval) => {
+
+
+  const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
+    for (let i = 0; timeOffs && i < timeOffs.length; i++) {
+      if (isDuringEachotherTimeOff(timeOffs[i], slot)) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  return availabilities.map((aval) => {
     return {
       startDate: aval.startDate,
       endDate: moment(aval.startDate).add(service.duration, 'minutes').toISOString(),
     };
   });
-  return x;
 }
 
 /**

@@ -8,57 +8,24 @@ const r = thinky.r;
 const { passwordHashSaltRounds } = require('../config/globals');
 const validators = require('../util/validators');
 
-const UniqueFieldError = new Error('Unique Field Validation Error');
-
 const PatientUser = createModel('PatientUser', {
   avatarUrl: type.string(),
   firstName: type.string().required(),
   lastName: type.string().required(),
   email: type.string().email().required(),
+  isEmailConfirmed: type.boolean().default(false),
   phoneNumber: type.string().required(),
-  password: type.string().required(),
   isPhoneNumberConfirmed: type.boolean().default(false),
-});
+  password: type.string().required(),
+}, {
+  unique: {
+    email: true,
+    phoneNumber: true,
+  },
 
-PatientUser.docOn('saving', (doc) => {
-  doc.phoneNumber = validators.validatePhoneNumber(doc.phoneNumber);
-});
-
-PatientUser.pre('save', async function (next) {
-  let filterSequence = {};
-  const emailFilter = r.row('email').eq(this.email);
-  const phoneFilter = r.row('phoneNumber').eq(this.phoneNumber);
-
-  if (this.email) {
-    filterSequence = emailFilter;
-  }
-
-  if (this.phoneNumber) {
-    filterSequence = phoneFilter;
-  }
-
-  if (this.email && this.phoneNumber) {
-    filterSequence = emailFilter.or(phoneFilter);
-  }
-
-  const patients = await PatientUser.filter(filterSequence).run();
-  if (!patients.length) {
-    return next();
-  }
-
-  if (patients.length > 1) {
-    return next(UniqueFieldError);
-  }
-
-  // By now we can guarantee that there is one patient in the array
-  const [patient] = patients;
-
-  // If it is saving for first time, this.id will be undefined (if not seeded, seeds sometimes add id)
-  if (patient.id !== this.id) {
-    return next(UniqueFieldError);
-  }
-
-  return next();
+  sanitize: (doc) => {
+    doc.phoneNumber = validators.validatePhoneNumber(doc.phoneNumber);
+  },
 });
 
 PatientUser.define('isValidPasswordAsync', function (password) {

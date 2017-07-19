@@ -66,12 +66,6 @@ class UpcomingPatientList extends Component {
     return this.props.submitSearch({
       patients: value,
     }).then(() => {
-      value = value.split(' ');
-      const inputValue = [];
-      inputValue[0] = new RegExp(value[0], 'i');
-      inputValue[1] = new RegExp(value[1], 'i');
-      const inputLength = inputValue.length;
-
       const searched = this.props.searchedPatients.map((userId) => {
         const avatar = (this.props.patients.get(userId) ? this.props.patients.get(userId).toJS() : {});
         const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
@@ -95,12 +89,7 @@ class UpcomingPatientList extends Component {
         };
       });
 
-      const results = inputLength === 0 ? [] : searched.filter((person) => {
-        const phoneTest = inputValue[0].test(person.mobilePhoneNumber) || inputValue[0].test(person.homePhoneNumber)
-        || inputValue[0].test(person.workPhoneNumber) || inputValue[0].test(person.otherPhoneNumber);
-
-        return inputValue[1].test(person.fullName) || inputValue[0].test(person.fullName) || inputValue[0].test(person.email) || phoneTest;
-      });
+      const results = searched;
 
       this.setState({
         results,
@@ -157,6 +146,7 @@ class UpcomingPatientList extends Component {
                 getSuggestions={this.getSuggestions}
                 inputProps={inputProps}
                 focusInputOnSuggestionClick={false}
+                data-test-id="patientListSearch"
                 getSuggestionValue={suggestion => suggestion.name}
               />
             </div>

@@ -10,7 +10,7 @@ const passwordHashSaltRounds = 10;
 const environmentVariables = process.env;
 const env = environmentVariables.NODE_ENV || 'development';
 const port = environmentVariables.PORT || '5000';
-const host = environmentVariables.HOST || 'carecru.dev';
+const host = environmentVariables.HOST || 'carecru.dev:5100';
 const protocol = env === 'production' ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
@@ -60,6 +60,10 @@ const logrocket = {
   appId: environmentVariables.LOGROCKET_APP_ID,
 };
 
+const intercom = {
+  appId: environmentVariables.INTERCOM_APP_ID,
+};
+
 const aws = {
   accessKeyId: environmentVariables.AWS_ACCESS_KEY_ID,
   secretAccessKey: environmentVariables.AWS_SECRET_ACCESS_KEY,
@@ -95,6 +99,7 @@ module.exports = {
   namespaces,
   loader,
   logrocket,
+  intercom,
   aws,
   s3,
 };

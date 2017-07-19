@@ -81,6 +81,7 @@ class AppointmentsList extends Component {
               chair={chair}
               patient={patient}
               service={service}
+              index={index}
               //practitioner={practitioner}
               handleAppointmentClick={this.handleAppointmentClick}
               handlePatientClick={this.handlePatientClick}

@@ -75,12 +75,6 @@ class ChatMessage extends Component {
     return this.submitSearch({
       patients: value,
     }).then(() => {
-      value = value.split(' ');
-      const inputValue = [];
-      inputValue[0] = new RegExp(value[0], 'i');
-      inputValue[1] = new RegExp(value[1], 'i');
-      const inputLength = inputValue.length;
-
       const patientSearch = this.props.searchedPatients || [] ;
 
       const searched = patientSearch.map((userId) => {
@@ -106,9 +100,8 @@ class ChatMessage extends Component {
         };
       });
 
-      const results = inputLength === 0 ? [] : searched.filter((person) => {
-        return inputValue[1].test(person.fullName) || inputValue[0].test(person.fullName) || inputValue[0].test(person.email);
-      });
+
+      const results = searched;
 
       this.setState({
         results,
@@ -178,6 +171,7 @@ class ChatMessage extends Component {
                       value={this.state.value}
                       getSuggestions={this.getSuggestions}
                       inputProps={inputProps}
+                      data-test-id="patientSearch"
                       focusInputOnSuggestionClick={false}
                       getSuggestionValue={suggestion => suggestion.name}
                       classStyles={styles.chatSearch}

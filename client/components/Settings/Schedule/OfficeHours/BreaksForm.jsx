@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import pick from 'lodash/pick';
@@ -45,7 +45,7 @@ const timeOptions = generateTimeOptions();
 
 console.log('found?', timeOptions.find(to => to.value === defaultStartTime));
 
-function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
+function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 
@@ -155,10 +155,12 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
   };
   return (
     <Form
+      enableReinitialize
       form={breaksName}
       onSubmit={onSubmit}
       initialValues={initialValues}
       data-test-id="breaksForm"
+      dataId={dataId}
     >
       <DayBreaksForm day="monday" />
       <DayBreaksForm day="tuesday" />
@@ -171,6 +173,12 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName }) {
   );
 
 }
+
+BreaksForm.propTypes = {
+  values: PropTypes.object,
+  weeklySchedule: PropTypes.object,
+  onSubmit: PropTypes.func,
+};
 
 function mapStateToProps({ form }, {formName}) {
   // form data is populated when component renders

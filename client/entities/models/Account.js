@@ -36,6 +36,8 @@ const AccountSchema = {
   enterpriseId: null,
   weeklyScheduleId: null, //new OfficeHoursRecord(),
   unit: null,
+  canSendReminders: null,
+  canSendRecalls: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

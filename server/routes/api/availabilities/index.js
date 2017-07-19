@@ -75,7 +75,6 @@ availabilitiesRouter.get('/', (req, res, next) => {
   // const OFFICE_START_TIME = moment({ hours: 9, minutes: 0 });
   // const OFFICE_END_TIME = moment({ hours: 17, minutes: 0 });
   const { serviceId, practitionerId, startDate, endDate, retrieveFirstTime } = req.query;
-
   const appointmentJoin = {
     appointments: {
       _apply: function (sequence) {
@@ -102,7 +101,7 @@ availabilitiesRouter.get('/', (req, res, next) => {
           const startDateTopass = moment(startDate).clone().startOf('day')
           let firstAvailableDate = startDate;
           let endAvailableDateToShow = endDate;
-          // retrieve dayoffs form the db 
+          // retrieve dayoffs form the db
           const { weeklySchedule } = account;
           const closedDays = Object.keys(weeklySchedule)
           .filter(k => (typeof weeklySchedule[k] == "object" && weeklySchedule[k].isClosed === true))
@@ -128,18 +127,18 @@ availabilitiesRouter.get('/', (req, res, next) => {
           const results = _.fromPairs(
             Array.from(requiredRange.by('day'))
               .map(currentDay => {
-                //retrieve OFFICE_START_TIME OFFICE_END_TIME 
+                //retrieve OFFICE_START_TIME OFFICE_END_TIME
                 const dayName =  currentDay._d.toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
                 const daySchedule = weeklySchedule[dayName];
                 const { startTime, endTime } = daySchedule;
-          
+
                 const sTime = { hours: startTime.h, minutes: startTime.m };
                 const eTime = { hours: endTime.h, minutes: endTime.m };
                 const OFFICE_START_TIME = currentDay.clone().set(sTime).toDate();
                 const OFFICE_END_TIME = currentDay.clone().set(eTime).toDate();
                 const dayRange = moment.range(OFFICE_START_TIME, OFFICE_END_TIME)
-                
-                //create time ranges for appointments reservations and requests 
+
+                //create time ranges for appointments reservations and requests
                 const appointmentRanges = appointments
                   .filter(a => moment(a.startTime).startOf('day').isSame(currentDay))
                   .map(appointment => moment.range(appointment.startTime, appointment.endTime));
@@ -151,7 +150,7 @@ availabilitiesRouter.get('/', (req, res, next) => {
                   .map(request => moment.range(request.startTime, request.endTime));
 
                 const allRanges = reservationRanges.concat(appointmentRanges).concat(requestRanges);
-                
+
                 // express a function that check is given time overlaps with given range
                 const hasAppointment = slotRange => _.some(allRanges, appointmentRange => {
                   return appointmentRange.overlaps(slotRange);
@@ -164,7 +163,7 @@ availabilitiesRouter.get('/', (req, res, next) => {
                     startsAt: slot.toDate(),
                     isBusy: hasAppointment(moment.range(slot, slot.clone().add(29, 'minutes')))
                     || closedDays.indexOf(slot.toDate().toLocaleString('en-us', { weekday: 'long' }).toLowerCase()) > -1,
-                    
+
                   }));
 
                 return [
