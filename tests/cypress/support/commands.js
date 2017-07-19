@@ -51,8 +51,17 @@ Cypress.addParentCommand('login', (username, secret) => {
     consoleProps() {
       return { email, password };
     },
-  })
+  });
 
+  return cy.request({
+      method: "POST",
+      url: `${Cypress.env('siteURL')}/auth`,
+      body: { username: email, password }
+    }).then((resp) => {
+      return window.localStorage.setItem('token', resp.body.token)
+    })
+
+  /*
   cy
     .visit(`${Cypress.env('siteURL')}/login`, { log: false })
     .get('input[name=email]', { log: false })
@@ -64,5 +73,5 @@ Cypress.addParentCommand('login', (username, secret) => {
     .get('button[role=SUPERADMIN]', { log: false })
     .then(() => {
       log.snapshot().end();
-    });
+    });*/
 });
