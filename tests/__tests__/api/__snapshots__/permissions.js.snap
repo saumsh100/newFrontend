@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/accounts/:accountId/permissions PUT /api/accounts/:accountId/permissions/:permissionId should update the permission object 1`] = `
+Object {
+  "entities": Object {
+    "permissions": Object {
+      "84d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "canAccessAllAccounts": true,
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "id": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "role": "ADMIN",
+      },
+    },
+  },
+  "result": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;
