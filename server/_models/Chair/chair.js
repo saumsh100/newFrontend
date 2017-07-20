@@ -8,13 +8,8 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
     },
 
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: sequelize.literal('NOW()'),
-    },
-
     accountId: {
-      type: DataTypes.UUIDV4,
+      type: DataTypes.UUID,
     },
 
     description: {
