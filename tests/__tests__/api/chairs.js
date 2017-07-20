@@ -5,13 +5,12 @@ import {
   Account,
   Chair,
 } from '../../../server/models';
-import seedTestUsers from '../../util/seedTestUsers';
+import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { getModelsArray }  from '../../util/selectors';
 
 const rootUrl = '/api/chairs';
-const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const chairId1 = '23d4e661-1155-4494-8fdb-c4ec0ddf804d';
