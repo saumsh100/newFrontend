@@ -68,7 +68,7 @@ class Modal extends Component {
     return (
       <div className={modalContainerClassName}>
         <div
-          onClick={()=>{this.handleOverlayClick}}
+          onClick={() => { this.handleOverlayClick; }}
           className={backDropClassName}
         />
         <Card className={modalBodyClassName}>
