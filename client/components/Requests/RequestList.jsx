@@ -8,7 +8,7 @@ import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
-import { setHoverRequestId } from '../../actions/requests';
+import { setHoverRequestId, setUndoRequest } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
 import { checkPatientUser } from '../../thunks/schedule';
 
@@ -54,7 +54,11 @@ class RequestList extends Component {
   removeRequest(request) {
     const confirmRemove = confirm('Are you sure you want to reject this request?');
     if (confirmRemove) {
-      this.props.deleteEntityRequest({ key: 'requests', id: request.get('id') });
+      this.props.updateEntityRequest({
+        url: `/api/requests/${request.id}/reject`,
+        values: {},
+      });
+      // this.props.setUndoRequest({ undoRequest: request });
     }
   }
 
@@ -99,6 +103,7 @@ RequestList.propTypes = {
   createEntityRequest: PropTypes.func,
   updateEntityRequest: PropTypes.func,
   setHoverRequestId: PropTypes.func,
+  setUndoRequest: PropTypes.func,
   push: PropTypes.func,
 };
 
@@ -111,6 +116,7 @@ function mapActionsToProps(dispatch) {
     selectAppointment,
     checkPatientUser,
     push,
+    setUndoRequest,
   }, dispatch);
 }
 

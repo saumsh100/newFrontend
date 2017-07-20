@@ -37,7 +37,10 @@ class PatientListItem extends Component {
     const avatar = (user.avatarUrl ? user.avatarUrl : '/images/avatar.png');
 
     return (
-      <ListItem onClick={this.goToDialogue} className={usersActiveClassName}>
+      <ListItem
+        onClick={this.goToDialogue}
+        className={usersActiveClassName}
+      >
         <Avatar className={styles.users__photo} user={user} />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>

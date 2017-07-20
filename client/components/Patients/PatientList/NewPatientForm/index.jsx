@@ -17,18 +17,21 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
       form={formName}
       onSubmit={onSubmit}
       ignoreSaveButton
+      data-test-id="newUser"
     >
       <Field
         required
         name="firstName"
         validate={[maxLength(15)]}
         label="First Name"
+        data-test-id="firstName"
       />
       <Field
         required
         name="lastName"
         validate={[maxLength(15)]}
         label="Last Name"
+        data-test-id="lastName"
       />
       <div className={styles.spacing}>
       <Field
@@ -37,13 +40,15 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
         label="Gender"
         component="DropdownSelect"
         options={options}
+        data-test-id="gender"
       />
       </div>
       <Field
         required
         name="mobilePhoneNumber"
-        validate={[phoneValidate]}
+        type="tel"
         label="Phone Number"
+        data-test-id="mobilePhoneNumber"
       />
       <Field
         required
@@ -51,12 +56,14 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
         name="email"
         validate={[emailValidate]}
         label="Email"
+        data-test-id="email"
       />
       <Field
         required
         component="DayPicker"
         name="birthDate"
         label="Birth Date"
+        data-test-id="birthDate"
       />
     </Form>
   );

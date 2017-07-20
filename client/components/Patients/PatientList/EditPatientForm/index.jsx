@@ -45,6 +45,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
       onSubmit={onSubmit}
       className={styles.form}
       initialValues={initialValues}
+      data-test-id={formName}
     >
       <div className={styles.names}>
         <div className={styles.userIcon}>
@@ -56,6 +57,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
           name="firstName"
           validate={[maxLength(15)]}
           label="First Name"
+          data-test-id="personalFirstName"
         />
         <div className={styles.middleField}>
           <Field
@@ -71,6 +73,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
           name="lastName"
           validate={[maxLength(15)]}
           label="Last Name"
+          data-test-id="lastName"
         />
       </div>
 

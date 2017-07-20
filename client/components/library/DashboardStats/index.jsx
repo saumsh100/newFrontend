@@ -20,6 +20,7 @@ export default function DashboardStats(props) {
             className={styles[d.color]}
             count={d.count} title={d.title}
             icon={d.icon}
+            data-test-id={props['data-test-id']}
           />
         </Col>
       ))}

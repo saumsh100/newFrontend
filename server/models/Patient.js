@@ -57,7 +57,6 @@ const Patient = createModel('Patient', {
   // TODO: this needs to be modified to support priorities and a standard structure
   appointmentPreference: type.string().enum(['email', 'sms', 'both']).default('both'),
   status: type.string().enum(['Active', 'InActive']).default('Active'),
-  isBatch: type.boolean(),
 }, {
   unique: {
     email: ['accountId'],
@@ -81,7 +80,11 @@ Patient.defineStatic('performantPredicate', function (a, b, onError) {
   }
 });
 
+<<<<<<< HEAD
 Patient.ensureIndex('accountStatusPatients', doc => [doc('status'), doc('accountId'), doc('createdAt')]);
+=======
+Patient.ensureIndex('accountId');
+>>>>>>> b1a33b1793158c6a48493e7d41f1a61c5deb479a
 
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {

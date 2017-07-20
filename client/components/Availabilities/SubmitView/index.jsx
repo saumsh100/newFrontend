@@ -187,7 +187,13 @@ class SubmitView extends Component {
       formComponent = (
         <div>
           <div className={styles.messageWrapper}>
-            Congratulations! You have successfully requested your appointment.
+            <span>
+              Congratulations! You have successfully <strong>requested</strong> your appointment.
+            </span>
+            <br/><br/>
+            <span>
+              <strong>Wait</strong> for the clinic to confirm your appointment details.
+            </span>
           </div>
           <VButton
             icon="sign-out"

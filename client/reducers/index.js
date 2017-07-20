@@ -17,7 +17,7 @@ import apiRequests from './apiRequests';
 
 import availabilities from './availabilities';
 
-export default combineReducers({
+const appReducer = combineReducers({
   alerts,
   accountSettings,
   routing,
@@ -34,3 +34,13 @@ export default combineReducers({
   availabilities,
   apiRequests,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'LOGOUT') {
+    state = undefined;
+  }
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;

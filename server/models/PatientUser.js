@@ -13,9 +13,10 @@ const PatientUser = createModel('PatientUser', {
   firstName: type.string().required(),
   lastName: type.string().required(),
   email: type.string().email().required(),
+  isEmailConfirmed: type.boolean().default(false),
   phoneNumber: type.string().required(),
-  password: type.string().required(),
   isPhoneNumberConfirmed: type.boolean().default(false),
+  password: type.string().required(),
 }, {
   unique: {
     email: true,

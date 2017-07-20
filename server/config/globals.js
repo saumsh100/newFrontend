@@ -1,4 +1,3 @@
-
 const path = require('path');
 const fs = require('fs');
 
@@ -10,7 +9,7 @@ const passwordHashSaltRounds = 10;
 const environmentVariables = process.env;
 const env = environmentVariables.NODE_ENV || 'development';
 const port = environmentVariables.PORT || '5000';
-const host = environmentVariables.HOST || 'carecru.dev';
+const host = environmentVariables.HOST || 'carecru.dev:5100';
 const protocol = env === 'production' ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
@@ -75,6 +74,15 @@ const s3 = {
 
 s3.urlPrefix = environmentVariables.S3_URL_PREFIX || `https://${s3.bucket}.s3.amazonaws.com/`;
 
+// Postgres config
+const postgres = {
+  host: environmentVariables.POSTGRESQL_HOST || 'localhost',
+  port: environmentVariables.POSTGRESQL_PORT || 5432,
+  username: environmentVariables.POSTGRESQL_USER || 'admin',
+  password: environmentVariables.POSTGRESQL_USER || '',
+  database: environmentVariables.POSTGRESQL_DATABASE || 'carecru',
+};
+
 const staticPath = path.normalize(path.join(root, '../statics'));
 
 module.exports = {
@@ -102,4 +110,5 @@ module.exports = {
   intercom,
   aws,
   s3,
+  postgres,
 };

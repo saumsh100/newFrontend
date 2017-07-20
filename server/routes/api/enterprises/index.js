@@ -38,8 +38,10 @@ router.post('/switch', checkPermissions('enterprises:read'), (req, res, next) =>
           .then(({ id: newSessionId }) => UserAuth.signToken({
             userId: sessionData.userId,
             sessionId: newSessionId,
-            accountId,
-          }))))
+            activeAccountId: accountId,
+          }))
+      )
+    )
     .then(token => res.json({ token }))
     .catch(next);
 });
@@ -187,14 +189,14 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
         },
       ];
 
-      const defaultRecalls =  [
+      const defaultRecalls = [
         {
           // 6 month recall
           accountId: account.id,
           primaryType: 'email',
           lengthSeconds: 6 * 30 * 24 * 60 * 60,
         },
-      ]
+      ];
 
       const defaultServices = [
         {

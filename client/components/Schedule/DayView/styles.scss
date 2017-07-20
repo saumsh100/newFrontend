@@ -51,9 +51,13 @@
   transition: background-color 0.5s ease;
 
   &_icon {
+    display: flex;
     color: $inactive-color;
-    opacity: 0.5;
+    opacity: 1;
     float: right;
+    &_item {
+      padding-right: 2px;
+    }
   }
 
   &_nameAge {
@@ -104,6 +108,18 @@
       text-overflow: ellipsis;
     }
   }
+
+  &_mark {
+    font-family: $medium-font;
+    font-size: $extra-small-size;
+
+    &_note {
+      padding: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 @keyframes example {
@@ -129,7 +145,7 @@
   background: $primary-grey;
   justify-content: center;
   opacity: 0.5;
-  z-index: 5;
+  z-index: 10;
 
   &_icon {
     display: flex;

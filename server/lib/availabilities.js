@@ -8,6 +8,7 @@ const { Service, Practitioner } = require('../models');
 const StatusError = require('../util/StatusError');
 const {
   isDuringEachother,
+  isDuringEachotherTimeOff,
   createPossibleTimeSlots,
   createIntervalsFromWeeklySchedule,
   getISOSortPredicate,
@@ -145,7 +146,8 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
       timeOffs: {
         _apply: (sequence) => {
           return sequence.filter((timeOff) => {
-            return generateDuringFilter(timeOff, startDate, endDate);
+            // subtract and add for start date and enddate as you can miss if longer than week.
+            return generateDuringFilter(timeOff, moment(startDate).subtract(365, 'days').toISOString(), moment(endDate).add(365, 'days').toISOString());
           });
         },
       },
@@ -184,7 +186,7 @@ function generatePractitionerAvailabilities(options) {
 
   const {
     appointments,
-    timeOff,
+    timeOffs,
   } = practitioner;
 
   const {
@@ -220,7 +222,7 @@ function generatePractitionerAvailabilities(options) {
   const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, timeInterval || 30);
   const finalSlots = possibleTimeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
 
-  const availabilities = finalSlots.filter((timeSlot) => {
+  const validTimeSlotsNoWithTimeOff = finalSlots.filter((timeSlot) => {
     // see if the timeSlot conflicts with any appointments, requests or resos
     const conflictsWithAppointment = appointments.some(a => isDuringEachother(timeSlot, a));
     const conflictsWithPractitionerRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
@@ -236,14 +238,22 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefReservations;
   });
 
-  let x = availabilities.map((aval) => {
+
+  const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
+    for (let i = 0; timeOffs && i < timeOffs.length; i++) {
+      if (isDuringEachotherTimeOff(timeOffs[i], slot)) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  return availabilities.map((aval) => {
     return {
       startDate: aval.startDate,
       endDate: moment(aval.startDate).add(service.duration, 'minutes').toISOString(),
     };
   });
-
-  return x;
 }
 
 /**

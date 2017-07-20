@@ -30,12 +30,14 @@ class DayPicker extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleDayClick(day, { selected , disabled }) {
+  handleDayClick(day, { selected, disabled }) {
     const {
       multiple,
       value,
       onChange,
     } = this.props;
+
+    day = moment(day).subtract(12, 'hours')._d;
 
     if (disabled) {
       return ;
@@ -82,6 +84,7 @@ class DayPicker extends Component {
         {...this.props}
         onChange={this.handleInputChange}
         onFocus={this.togglePopOver}
+        data-test-id={this.props['data-test-id']}
       />
     );
 

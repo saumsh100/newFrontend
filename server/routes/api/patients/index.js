@@ -9,7 +9,7 @@ const normalize = require('../normalize');
 const Patient = require('../../../models/Patient');
 const Appointment = require('../../../models/Appointment');
 const loaders = require('../../util/loaders');
-const globals = require('../../../config/globals');
+const { env, namespaces } = require('../../../config/globals');
 
 patientsRouter.param('patientId', loaders('patient', 'Patient'));
 patientsRouter.param('joinPatientId', loaders('patient', 'Patient', { appointments: true }));
@@ -60,7 +60,7 @@ patientsRouter.get('/:joinPatientId/stats', checkPermissions('patients:read'), (
             patientId: req.patient.id,
           })
           .filter(r.row('startDate').during(r.time(1970, 1, 1, 'Z'), endDate))
-          .orderBy(r.row('startDate'))
+          .orderBy(r.desc('startDate'))
           .then(lastAppointment => res.send({
             allApps: req.patient.appointments.length,
             monthsApp: appointments.length,
@@ -82,6 +82,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 
   return Appointment
     .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+    .filter(r.row.hasFields('patientId'))
     .getJoin({
       patient: true,
     })
@@ -109,6 +110,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 });
 
 /**
+<<<<<<< HEAD
  * Batch updating
  */
 patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
@@ -122,11 +124,13 @@ patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('
 });
 
 /**
+=======
+>>>>>>> b1a33b1793158c6a48493e7d41f1a61c5deb479a
  * TESTING ONLY
  * Used to search an patient by any property.
  * E.g. api/patients/test?pmsId=1003&note=unit test patient
  */
-if (globals.env !== 'production') {
+if (env !== 'production') {
   patientsRouter.get('/test', checkPermissions('patients:read'), (req, res, next) => {
     const property = req.query;
     return Patient
@@ -143,35 +147,79 @@ patientsRouter.get('/search', checkPermissions('patients:read'), (req, res, next
   const searchString = req.query.patients || '';
   const search = searchString.split(' ');
 
-  // making search case insensitive as
-  const searchReg = (search[1] ? `(?i)(${search[0]}|${search[1]})` : `(?i)${search[0]}`);
-  const phoneSearch = `${search[0].replace(/\D/g, '')}`;
 
+  // making search case insensitive as
+  const searchReg = `(?i)${search[0]}`;
+  const phoneSearch = `${search[0].replace(/\D/g, '')}`;
   const startDate = r.now();
   const endDate = r.now().add(365 * 24 * 60 * 60);
-  Patient.filter(patient => patient('accountId').eq(req.accountId).and(
-      patient('firstName').match(searchReg)
+  Patient
+  .getAll(req.accountId, { index: 'accountId' })
+  .filter((patient) => {
+    if (search[1]) {
+      return patient('firstName').match(searchReg).and(patient('lastName').match(`(?i)${search[1]}`))
+          .or(patient('firstName').match(`(?i)${search[1]}`).and(patient('lastName').match(searchReg)));
+    }
+    return patient('firstName').match(searchReg)
         .or(patient('lastName').match(searchReg))
         .or(patient('mobilePhoneNumber').match(phoneSearch))
         .or(patient('homePhoneNumber').match(phoneSearch))
         .or(patient('workPhoneNumber').match(phoneSearch))
         .or(patient('otherPhoneNumber').match(phoneSearch))
-        .or(patient('email').match(search[0])))
-  ).limit(50)
+        .or(patient('email').match(search[0]));
+  }).limit(50)
     .getJoin({ appointments: {
       _apply: appointment => appointment.filter(request => generateDuringFilter(request, startDate, endDate)) },
       chat: { textMessages: { user: true } } })
     .orderBy('firstName')
     .run()
     .then((patients) => {
-      const normPatients = normalize('patients', patients);
+      const beginningCheck1 = new RegExp(`^${search[0]}`, 'i');
+      const beginningCheck2 = search[1] ? new RegExp(`${search[0]}`, 'i') : null;
+
+      const anyCheck1 = new RegExp(search[0], 'i');
+      const anyCheck2 = search[1] ? new RegExp(search[0], 'i') : null;
+
+      const word1Length = search[0].length;
+      const word2Length = search[1] ? search[1].length : null;
+
+      const patientsSort = patients.sort((a, b) => {
+        let aValue = 0;
+        let bValue = 0;
+
+        aValue += (beginningCheck1.test(a.firstName) ? word1Length + 1 : 0);
+        aValue += (anyCheck1.test(a.firstName) ? word1Length + 1 : 0);
+        aValue += (beginningCheck1.test(a.lastName) ? word1Length : 0);
+        aValue += (anyCheck1.test(a.lastName) ? word1Length : 0);
+
+        bValue += (beginningCheck1.test(b.firstName) ? word1Length + 1 : 0);
+        bValue += (anyCheck1.test(b.firstName) ? word1Length + 1 : 0);
+        bValue += (beginningCheck1.test(b.lastName) ? word1Length : 0);
+        bValue += (anyCheck1.test(b.lastName) ? word1Length : 0);
+
+        if (search[1]) {
+          aValue += (beginningCheck2.test(a.firstName) ? word2Length : 0);
+          aValue += (anyCheck2.test(a.firstName) ? word2Length : 0);
+          aValue += (beginningCheck2.test(a.lastName) ? word2Length : 0);
+          aValue += (anyCheck2.test(a.lastName) ? word2Length : 0);
+
+          bValue += (beginningCheck2.test(b.firstName) ? word2Length : 0);
+          bValue += (anyCheck2.test(b.firstName) ? word2Length : 0);
+          bValue += (beginningCheck2.test(b.lastName) ? word2Length : 0);
+          bValue += (anyCheck2.test(b.lastName) ? word2Length : 0);
+        }
+
+        return bValue - aValue;
+      });
+
+      const normPatients = normalize('patients', patientsSort);
 
       normPatients.entities.chats = {};
       normPatients.entities.textMessages = {};
 
-      for (let i = 0; i < patients.length; i++) {
-        if (patients[i].chat) {
-          const chatNorm = normalize('chat', patients[i].chat);
+      for (let i = 0; i < patientsSort.length; i++) {
+        if (patientsSort[i].chat) {
+          const chatNorm = normalize('chat', patientsSort[i].chat);
           normPatients.entities.chats = Object.assign(normPatients.entities.chats, chatNorm.entities.chats);
           normPatients.entities.textMessages = Object.assign(normPatients.entities.textMessages, chatNorm.entities.textMessages);
         }
@@ -295,9 +343,18 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), (req
 patientsRouter.post('/', (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
-
   return Patient.save(patientData)
-    .then(patient => res.status(201).send(normalize('patient', patient)))
+    .then((patient) => {
+      const normalized = normalize('patient', patient);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('create:Patient', normalized);
+    })
     .catch(next);
 });
 
@@ -306,13 +363,12 @@ patientsRouter.post('/', (req, res, next) => {
  */
 patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), (req, res, next) => {
   const { patients } = req.body;
+  console.log('req.accountId', req.accountId);
   const cleanedPatients = patients.map(patient => Object.assign(
       {},
       _.omit(patient, ['id']),
       { accountId: req.accountId },
-      { isBatch: true }
-    )
-  );
+    ));
 
   return Patient.batchSave(cleanedPatients)
     .then(p => res.send(normalize('patients', p)))
@@ -347,16 +403,51 @@ patientsRouter.get('/:patientId', checkPermissions('patients:read'), (req, res, 
 /**
  * Update a patient
  */
-patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => req.patient.merge(req.body).save()
-    .then(patient => res.send(normalize('patient', patient)))
-    .catch(next));
+patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+  const accountId = req.accountId;
+
+  const phoneNumber = req.patient.mobilePhoneNumber;
+
+  return req.patient.merge(req.body).save()
+    .then((patient) => {
+      if (phoneNumber !== patient.mobilePhoneNumber) {
+        Chat.filter({ accountId: req.accountId })
+        .filter({ patientPhoneNumber: phoneNumber })
+        .then((chat) => {
+          if (!chat[0]) {
+            return;
+          }
+          chat[0].merge({ patientPhoneNumber: patient.mobilePhoneNumber }).save();
+        });
+      }
+      const normalized = normalize('patient', patient);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      return io.of(ns).in(accountId).emit('update:Patient', normalized);
+    })
+    .catch(next);
+});
 
 /**
  * Delete a patient
  */
-patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => req.patient.deleteAll()
+patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (req, res, next) => {
+  const { patient } = req;
+  const accountId = req.accountId;
+  return patient.deleteAll()
     .then(() => res.send(204))
-    .catch(next));
-
+    .then(() => {
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const normalized = normalize('patient', patient);
+      return io.of(ns).in(accountId).emit('remove:Patient', normalized);
+    })
+    .catch(next);
+});
 
 module.exports = patientsRouter;

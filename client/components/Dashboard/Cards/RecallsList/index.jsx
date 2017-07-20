@@ -33,22 +33,26 @@ class RecallsList extends Component {
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
-          <CardHeader count={sentRecalls.size} title="Sent Recalls" />
+          <CardHeader
+            count={sentRecalls.size}
+            title="Sent Recalls"
+            data-test-id="sentRecallsCount"
+          />
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
             {sentRecalls.toArray().map((sentRecall, index) => {
-              
+
               if (!sentRecall) {
                 return null;
               }
-              
+
               return (
                 <RecallData
                   key={index}
                   index={index}
-                  recall={recalls.get(sentRecall.get('recallId')).toJS()}
-                  patient={patients.get(sentRecall.get('patientId')).toJS()}
+                  recallJS={recalls.get(sentRecall.get('recallId'))}
+                  patientJS={patients.get(sentRecall.get('patientId'))}
                   sentRecall={sentRecall}
                   handleRecallClick={this.handleRecallClick}
                 />

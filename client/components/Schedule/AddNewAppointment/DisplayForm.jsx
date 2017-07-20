@@ -5,6 +5,7 @@ import { Grid, Row, Col, Form, FormSection } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import PatientForm from './PatientForm';
 import { setTime } from '../../library/util/TimeOptions';
+import { SortByName } from '../../library/util/SortEntities';
 import styles from './styles.scss';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
@@ -15,7 +16,7 @@ const getDuration = (startDate, endDate, customBufferTime) => {
 
 const generateEntityOptions = (entities, label) => {
   const options = [];
-  entities.map((entity) => {
+  entities.sort(SortByName).map((entity) => {
     options.push({ label: entity[label], value: entity.id });
   });
   return options;
@@ -58,6 +59,7 @@ export default function DisplayForm(props) {
   };
   let time = null;
   let patient = null;
+
   if (selectedAppointment) {
     const {
       startDate,
@@ -75,6 +77,7 @@ export default function DisplayForm(props) {
     patient = patients.get(patientId);
     const durationTime = getDuration(startDate, endDate, customBufferTime);
     const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
+    const slider = durationTime > 180 ? [180, 180] : [durationTime, bufferTime];
 
     time = setTime(startDate);
     const unitValue = unit ? Number((durationTime / unit).toFixed(2)) : 0;
@@ -86,7 +89,7 @@ export default function DisplayForm(props) {
         serviceId,
         practitionerId: practitionerId || '',
         chairId: chairId || '',
-        slider: [durationTime, bufferTime],
+        slider,
         isPatientConfirmed,
         isCancelled,
         duration: durationTime,

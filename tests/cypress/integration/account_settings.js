@@ -148,6 +148,46 @@ describe('Account Settings', () => {
           .should('have.value', '#123af2');
       });
     });
+
+    context('Reminders Settings', () => {
+      beforeEach(() => {
+        cy.visit('http://localhost:5100/settings/schedule/reminderslist');
+      });
+
+      it('toggling the state of reminders', () => {
+        cy
+          .get('[data-test-id="toggleSendReminders"]')
+          .click({ force: true });
+      });
+
+      it('create new reminder', () => {
+        cy
+          .getAndClick('createNewReminder')
+          .fillInput('newReminder', 'lengthHours', '30')
+          .selectOption('newReminder', 'primaryType', 'sms')
+          .submitForm('newReminder');
+      });
+    })
+
+    context('Recalls Settings', () => {
+      beforeEach(() => {
+        cy.visit('http://localhost:5100/settings/schedule/recalls');
+      });
+
+      it('toggling the state of recalls', () => {
+        cy
+          .get('[data-test-id="toggleSendRecalls"]')
+          .click({ force: true });
+      });
+
+      it('create new recall', () => {
+        cy
+          .getAndClick('createNewRecall')
+          .fillInput('newRecall', 'lengthMonths', '3')
+          .selectOption('newRecall', 'primaryType', 'email')
+          .submitForm('newRecall');
+      });
+    })
   });
 
   context('Services Settings', () => {

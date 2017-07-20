@@ -46,6 +46,7 @@ function ShowAppointment(props) {
     patientData,
     practitionerData,
     isPatientConfirmed,
+    isReminderSent,
   } = appointment;
 
   if (!patientData) {
@@ -61,7 +62,8 @@ function ShowAppointment(props) {
 
   const bgColor = practitionerData.color;
   const patient = patientData.toJS();
-  const age = moment().diff(patient.birthDate, 'years');
+  const age = moment().diff(patient.birthDate, 'years') || '';
+  const lastName = age ? `${patient.lastName},` : patient.lastName;
 
   // Calculating the top position and height of the appointment.
   const durationTime = getDuration(startDate, endDate, customBufferTime);
@@ -81,6 +83,7 @@ function ShowAppointment(props) {
   const height = `${(heightCalc / totalHours) * 100}%`;
 
   const backgroundColor = isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
+  const zIndex = isHovered ? 5 : appPosition;
   // main app style
   const appStyle = {
     top,
@@ -89,7 +92,7 @@ function ShowAppointment(props) {
     width,
     backgroundColor,
     border: `1.5px solid ${bgColor}`,
-    //zIndex: appPosition,
+    zIndex,
   };
 
   // calculating the buffer position and height styling
@@ -102,7 +105,7 @@ function ShowAppointment(props) {
     width,
     height: `${heightCalcBuffer}%`,
     backgroundColor: '#b4b4b5',
-    //zIndex: appPosition,
+    zIndex,
   };
 
   return (
@@ -120,13 +123,14 @@ function ShowAppointment(props) {
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
-          {(isPatientConfirmed && <Icon icon="check-circle-o" />)}
+          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon icon="check-circle-o" />)}</div>
+          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon icon="clock-o" />)} </div>
         </div>
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} >
             <span className={styles.paddingText}>{patient.firstName}</span>
-            <span className={styles.paddingText}>{patient.lastName},</span>
-            <span>{age}</span>
+            <span className={styles.paddingText}>{lastName}</span>
+            <span>{age || ''}</span>
           </div>
         </div>
         <div className={styles.showAppointment_duration}>

@@ -86,21 +86,23 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
-        console.log('remove:Appointment event, id=', data);
-        dispatch(deleteEntity({ key: 'appointments', id: data }));
+        console.log('remove:Appointment event, id=', data.id);
+        dispatch(deleteEntity({ key: 'appointments', id: data.id }));
       });
 
       /**
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
+        console.log('Created Patient', data.entities);
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
+
       socket.on('update:Patient', (data) => {
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
       socket.on('remove:Patient', (data) => {
-        dispatch(deleteEntity({ key: 'patients', id: data }));
+        dispatch(deleteEntity({ key: 'patients', id: data.id }));
       });
 
       socket.on('newMessage', (data) => {

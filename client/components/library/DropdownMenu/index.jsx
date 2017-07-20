@@ -24,13 +24,13 @@ export class DropdownMenu extends Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-  close(test) {
-    const className = test.target.className;
+  close(e) {
+    const className = e.target.className;
 
-    if (className !== 'DayPicker-NavButton DayPicker-NavButton--prev'
-      && className !== 'DayPicker-NavButton DayPicker-NavButton--next'
-      && className !== 'DayPicker-Day DayPicker-Day--selected') {
-      this.setState({isOpen: false});
+    const regTest = /daypicker/i;
+
+    if (!regTest.test(className)) {
+      this.setState({ isOpen: false });
     }
   }
 
@@ -51,7 +51,7 @@ export class DropdownMenu extends Component {
       align: 'right',
     };
 
-    return <RDropdownMenu {...menuOptions} />;
+    return <RDropdownMenu {...menuOptions} data-test-id={this.props['data-test-id']}/>;
   }
 }
 

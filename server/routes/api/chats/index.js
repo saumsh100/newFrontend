@@ -97,6 +97,10 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     userId,
   } = req.body;
 
+  if (!patient.mobilePhoneNumber) {
+    return res.sendStatus(400);
+  }
+
   const mergeData = {
     lastTextMessageDate: new Date(),
   };
@@ -106,7 +110,8 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     textMessages: {
       _apply: (sequence) => {
         return sequence
-          .orderBy('createdAt');
+          .orderBy('createdAt')
+          .limit(TEXT_MESSAGE_LIMIT);
       },
       user: true,
     },
@@ -153,7 +158,6 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
                   .then((chat) => {
                     chat.merge(mergeData).save().then((chats) => {
                       const send = normalize('chat', chats);
-                      console.log(chats)
                       io.of(namespaces.dash)
                         .in(account.id)
                         .emit('newMessage', send);

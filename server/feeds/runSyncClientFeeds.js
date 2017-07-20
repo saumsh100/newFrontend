@@ -7,16 +7,14 @@ const normalize = require('../routes/api/normalize');
 
 function runSyncClientFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
-
   // ASSUMPTION: Assuming these are the changes coming from the Dashboard
-  Appointment
-    .filter({ accountId: activeAccountId })
+  /*Appointment
+    .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-
         if (!doc.isSyncedWithPMS) {
           if (isDeleted(doc)) {
             console.log(`SYNC RM: NOT emitting. Removing appointments; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
@@ -33,7 +31,7 @@ function runSyncClientFeeds(socket) {
     });
 
   Patient
-    .filter({ accountId: activeAccountId })
+    .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
       setupFeedShutdown(socket, feed);
@@ -56,7 +54,7 @@ function runSyncClientFeeds(socket) {
           }
         }
       });
-    });
+    });*/
 }
 
 function isDeleted(doc) {
