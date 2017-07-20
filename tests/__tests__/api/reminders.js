@@ -1,40 +1,18 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import {
-  Account,
-  Reminder,
-} from '../../../server/models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
+import { Account } from '../../../server/models';
+import { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
+import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
 import generateToken from '../../util/generateToken';
 import { getModelsArray } from '../../util/selectors';
 
 const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
-const reminderId1 = 'd5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
-const reminderId2 = 'e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
+
 const newReminderId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 
-async function seedReminders() {
-  await wipeModel(Reminder);
-
-  // seed reminders
-  await Reminder.save([
-    {
-      id: reminderId1,
-      accountId,
-      primaryType: 'sms',
-      createdAt: '2017-07-19T00:14:30.932Z',
-    },
-    {
-      id: reminderId2,
-      accountId,
-      primaryType: 'sms',
-      createdAt: '2017-07-19T00:14:30.932Z',
-    },
-  ]);
-}
 
 describe('/api/accounts/:account/reminders', () => {
   // Seed with some standard user data
@@ -59,7 +37,7 @@ describe('/api/accounts/:account/reminders', () => {
 
   describe('Reminders', () => {
     beforeAll(async () => {
-      await seedReminders();
+      await seedTestReminders();
     });
 
     describe('GET /:accountId/reminders', () => {
@@ -140,7 +118,7 @@ describe('/api/accounts/:account/reminders', () => {
     describe('DELETE /:accountId/reminders/:reminderId', () => {
       afterEach(async () => {
         // have to restore recalls cause these routes could delete
-        await seedReminders();
+        await seedTestReminders();
       });
 
       test('should delete a reminder for the account', () => {

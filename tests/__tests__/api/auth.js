@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jwt-decode';
 import request from 'supertest';
 import { passwordHashSaltRounds } from '../../../server/config/globals';
+import generateToken from '../../util/generateToken';
 import app from '../../../server/bin/app';
 import { Account, Enterprise, Permission, User } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
@@ -73,14 +74,15 @@ describe('/auth', () => {
       });
   });
 
-  /*
-  test('DELETE /auth/session/:sessionId', async () => {
-    const token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
-    const sessionId = jwt(token);
-    return request(app).delete(`/auth/session/${sessionId}`)
-      .send()
-      .expect(200);
-  });
-  */
 
+  test('DELETE /auth/session/:sessionId', async () => {
+    const token = await generateToken({ username: 'test@carecru.com', password: '!@CityOfBudaTest#$' });
+    const session = jwt(token);
+
+    return request(app)
+      .delete(`/auth/session/${session.sessionId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+  });
 });
