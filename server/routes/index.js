@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import subdomain from 'express-subdomain';
 import apiRouter from './api';
+import sequelizeApiRouter from './_api';
 import authRouter from './auth';
 import myRouter from './my';
 import callrailRouter from './callrail';
@@ -34,6 +35,9 @@ rootRouter.get('/atoms', (req, res, next) => {
 
 // Bind REST API
 rootRouter.use('/api', apiRouter);
+
+// New REST API with sequelize
+rootRouter.use('/_api', sequelizeApiRouter);
 
 // Webhooks!
 rootRouter.use('/twilio', twilioRouter);

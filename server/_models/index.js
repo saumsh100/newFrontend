@@ -1,3 +1,4 @@
+
 const path = require('path');
 const Sequelize = require('sequelize');
 const glob = require('glob');

@@ -5,12 +5,12 @@ import {
   Account,
   Chair,
 } from '../../../server/models';
-import seedTestUsers from '../../util/seedTestUsers';
+import { seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { getModelsArray }  from '../../util/selectors';
 
-const rootUrl = '/api/chairs';
+const rootUrl = '/_api/chairs';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
@@ -71,6 +71,16 @@ describe('/api/accounts/:accountId/invites', () => {
           const chairs = getModelsArray('chairs', body);
           expect(chairs.length).toBe(2);
           expect(body).toMatchSnapshot();
+        });
+    });
+
+    test.only('test test', async () => {
+      console.log('requesting');
+      return request(app)
+        .get(rootUrl)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.test).toBe('123');
         });
     });
   });
