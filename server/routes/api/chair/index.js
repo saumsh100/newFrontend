@@ -8,7 +8,9 @@ const Chair = require('../../../models/Chair');
 chairsRouter.param('chairId', loaders('chair', 'Chair'));
 
 /**
- * Create a chair
+ * POST /
+ *
+ * - Create a chair
  */
 chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
   // Attach chair to the clinic of posting user
@@ -19,12 +21,14 @@ chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
   });
 
   return Chair.save(chairData)
-    .then(chair => res.send(201, normalize('chair', chair)))
+    .then(chair => res.status(201).send(normalize('chair', chair)))
     .catch(next);
 });
 
 /**
- * Get all chairs under a clinic
+ * GET /
+ *
+ * - Get all chairs in an account
  */
 chairsRouter.get('/', checkPermissions('chairs:read'), (req, res, next) => {
   const { accountId } = req;
@@ -59,7 +63,7 @@ chairsRouter.put('/:chairId', checkPermissions('chairs:update'), (req, res, next
 chairsRouter.delete('/:chairId', checkPermissions('chairs:delete'), (req, res, next) => {
   // We actually delete chairs as we don't care about history
   return req.chair.delete()
-    .then(() => res.send(204))
+    .then(() => res.status(204).send())
     .catch(next);
 });
 
