@@ -6,7 +6,6 @@ import { passwordHashSaltRounds } from '../../../server/config/globals';
 import app from '../../../server/bin/app';
 import { Account, Enterprise, Permission, User } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
-import generateToken from './util/generateToken';
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';

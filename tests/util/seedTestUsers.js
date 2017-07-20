@@ -100,7 +100,7 @@ async function seedTestUsers() {
     ownerUser,
     superAdminUser,
   ]);
-};
+}
 
 module.exports = {
   enterpriseId,

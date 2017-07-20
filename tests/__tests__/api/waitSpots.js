@@ -1,7 +1,7 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import generateToken from './util/generateToken';
+import generateToken from '../../util/generateToken';
 import { WaitSpot } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
