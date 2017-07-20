@@ -66,7 +66,7 @@ const Patient = createModel('Patient', {
   sanitize: validatePatient,
 });
 
-Patient.defineStatic('performantPredicate', function (a, b, onError) {
+Patient.defineStatic('performantPredicate', (a, b, onError) => {
   if (a.email && b.email
       && a.accountId === b.accountId && a.email === b.email) {
     onError('email', a);
@@ -80,11 +80,8 @@ Patient.defineStatic('performantPredicate', function (a, b, onError) {
   }
 });
 
-<<<<<<< HEAD
 Patient.ensureIndex('accountStatusPatients', doc => [doc('status'), doc('accountId'), doc('createdAt')]);
-=======
 Patient.ensureIndex('accountId');
->>>>>>> b1a33b1793158c6a48493e7d41f1a61c5deb479a
 
 // TODO: change to findOne as a general Model function
 Patient.defineStatic('findByPhoneNumber', function (phoneNumber) {
