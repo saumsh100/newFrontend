@@ -4,8 +4,6 @@ import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Account, Enterprise, Permission, User } from '../../server/models';
 import wipeModel from './wipeModel';
 
-// TODO: these could be exported from fixtures, or use functions from those files
-
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
 const managerPermissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
@@ -82,7 +80,7 @@ const superAdminUser = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
-export default async function seedTestUsers() {
+async function seedTestUsers() {
   // TODO: will be a simple DB wipe with Postgres
   await wipeModel(Account);
   await wipeModel(Enterprise);
@@ -102,4 +100,16 @@ export default async function seedTestUsers() {
     ownerUser,
     superAdminUser,
   ]);
+};
+
+module.exports = {
+  enterpriseId,
+  accountId,
+  managerPermissionId,
+  ownerPermissionId,
+  superAdminPermissionId,
+  managerUserId,
+  ownerUserId,
+  superAdminUserId,
+  seedTestUsers,
 };

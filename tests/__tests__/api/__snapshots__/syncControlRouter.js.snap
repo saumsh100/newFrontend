@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/syncClientControl POST / /runSync - trigger the sync 1`] = `Object {}`;

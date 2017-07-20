@@ -47,6 +47,7 @@ textMessagesRouter.get('/conversations', (req, res, next) => {
 });
 
 textMessagesRouter.get('/dialogs', (req, res, next) => {
+  console.log(req.token);
   Account.filter({ id: req.token.activeAccountId }).getJoin({
     patients: true, appointments: false, textMessages: true,
   }).run()
