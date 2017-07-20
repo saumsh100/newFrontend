@@ -5,19 +5,16 @@ import {
   Account,
   Invite,
 } from '../../../server/models';
-import seedTestUsers from '../../util/seedTestUsers';
+import { accountId, enterpriseId, ownerUserId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { getModelsArray }  from '../../util/selectors';
 
 const rootUrl = '/api/accounts';
-const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
-const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const inviteId1 = '23d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const inviteId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const newInviteId = '11d4e661-1155-4494-8fdb-c4ec0ddf804d';
-const ownerUserId = '5668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const token1 = '6778f250-e8c9-46e3-bfff-0249f1eec6b8';
 const token2 = '8998f250-e8c9-46e3-bfff-0249f1eec6b8';
 

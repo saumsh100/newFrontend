@@ -1,12 +1,12 @@
 
 import bcrypt from 'bcrypt';
+import jwt from 'jwt-decode';
 import request from 'supertest';
 import { passwordHashSaltRounds } from '../../../server/config/globals';
 import app from '../../../server/bin/app';
 import { Account, Enterprise, Permission, User } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
 
-const r = request(app);
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
 const permissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
@@ -55,8 +55,8 @@ describe('/auth', () => {
     await User.save(user);
   });
 
-  test('POST /auth - Success', async () => {
-    return r.post('/auth')
+  test('POST /auth - Success', () => {
+    return request(app).post('/auth')
       .send({ username: 'test@carecru.com', password: '!@CityOfBudaTest#$' })
       .expect(200)
       .then(({ body }) => {
@@ -64,13 +64,23 @@ describe('/auth', () => {
       });
   });
 
-  test('POST /auth - Invalid Credentials', async () => {
-    return r.post('/auth')
+  test('POST /auth - Invalid Credentials', () => {
+    return request(app).post('/auth')
       .send({ username: 'test@carecru.com', password: '!@CityOfBudaTest#$' })
       .expect(200)
       .then(({ body }) => {
         expect(typeof body.token).toBe('string');
       });
   });
+
+  /*
+  test('DELETE /auth/session/:sessionId', async () => {
+    const token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+    const sessionId = jwt(token);
+    return request(app).delete(`/auth/session/${sessionId}`)
+      .send()
+      .expect(200);
+  });
+  */
 
 });

@@ -4,14 +4,12 @@ import app from '../../../server/bin/app';
 import {
   Account,
 } from '../../../server/models';
-import seedTestUsers from '../../util/seedTestUsers';
+import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import { wipeAllModels } from '../../util/wipeModel';
 
 const rootUrl = '/api/accounts';
-const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
-const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const permissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
 
 async function seedData() {
