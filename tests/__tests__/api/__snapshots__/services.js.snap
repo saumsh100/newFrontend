@@ -58,6 +58,42 @@ Object {
 }
 `;
 
+exports[`/api/services PUT / /:serviceId - join practitioners 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "87821f00-ce49-4112-b378-2a3fa9188d16": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-21T22:19:32.904Z",
+        "firstName": "Test",
+        "fullAvatarUrl": null,
+        "id": "87821f00-ce49-4112-b378-2a3fa9188d16",
+        "isActive": true,
+        "isCustomSchedule": false,
+        "isHidden": false,
+        "lastName": "Practitioner",
+      },
+    },
+    "services": Object {
+      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "duration": 4,
+        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isHidden": false,
+        "name": "Test Service",
+        "practitioners": Array [
+          "87821f00-ce49-4112-b378-2a3fa9188d16",
+        ],
+      },
+    },
+  },
+  "result": Array [
+    "c5beec65-73a0-4b58-ba48-65986931d054",
+  ],
+}
+`;
+
 exports[`/api/services PUT / /:serviceId - update service 1`] = `
 Object {
   "entities": Object {
@@ -69,7 +105,9 @@ Object {
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
         "isHidden": false,
         "name": "Updated Test Service",
-        "practitioners": Array [],
+        "practitioners": Array [
+          "87821f00-ce49-4112-b378-2a3fa9188d16",
+        ],
       },
     },
   },

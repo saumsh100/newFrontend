@@ -13,7 +13,8 @@ const waitSpot = {
   patientId,
   patientUserId,
   accountId,
-  createdAt: '2017-07-19T00:14:30.932Z',
+  endDate: '2017-07-23T00:14:30.932Z',
+  createdAt: '2017-07-23T00:14:30.932Z',
 };
 
 async function seedTestWaitSpot() {
@@ -28,7 +29,29 @@ describe('/api/waitSpots', () => {
   beforeAll(async () => {
     await seedTestUsers();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
-    await wipeModel(WaitSpot);
+  });
+
+  afterAll(async () => {
+    await wipeAllModels();
+  });
+
+  describe('GET /', () => {
+    beforeEach(async () => {
+      await seedTestWaitSpot();
+    });
+
+    test('retrieve a waitSpot', () => {
+      return request(app)
+        .get('/api/waitSpots')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          accountId,
+        })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toMatchSnapshot();
+        });
+    });
   });
 
   describe('POST /', () => {
@@ -42,27 +65,9 @@ describe('/api/waitSpots', () => {
           accountId,
           patientId,
           patientUserId,
-          createdAt: '2017-07-19T00:14:30.932Z',
+          createdAt: '2017-07-29T00:14:30.932Z',
         })
         .expect(201)
-        .then(({ body }) => {
-          expect(body).toMatchSnapshot();
-        });
-    });
-  });
-
-  describe('GET /', () => {
-    beforeEach(async () => {
-      await seedTestWaitSpot();
-    });
-    test('retrieve a waitSpot', () => {
-      return request(app)
-        .get('/api/waitSpots')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
-        .expect(200)
         .then(({ body }) => {
           expect(body).toMatchSnapshot();
         });
@@ -82,7 +87,20 @@ describe('/api/waitSpots', () => {
           accountId,
           patientId,
           patientUserId,
-          createdAt: '2017-07-19T00:15:30.932Z',
+          createdAt: '2017-07-29T00:15:30.932Z',
+        })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('retrieve a waitSpot with a patient or patientUser', ()=> {
+      return request(app)
+        .get('/api/waitSpots?join=patient,patientUser')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          accountId,
         })
         .expect(200)
         .then(({ body }) => {
