@@ -20,6 +20,15 @@
   padding-top: 15px;
 }
 
+.chairFlex {
+  height: 130px;
+  margin-left: 25px;
+  &_chairs {
+    float: right;
+    margin-right: 80%;
+  }
+}
+
 .modalContainer {
   display: flex;
   align-items: center;

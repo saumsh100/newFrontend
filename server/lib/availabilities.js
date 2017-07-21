@@ -4,7 +4,7 @@ const isEmpty = require('lodash/isEmpty');
 const isUndefined = require('lodash/isUndefined');
 const unionBy = require('lodash/unionBy');
 const { r } = require('../config/thinky');
-const { Service, Practitioner } = require('../models');
+const { Service, Practitioner, Appointment } = require('../models');
 const StatusError = require('../util/StatusError');
 const {
   isDuringEachother,
@@ -22,6 +22,21 @@ const generateDuringFilter = (m, startDate, endDate) => {
     m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
   );
 };
+
+const generateDuringFilterBetween = (row, startDate, endDate) => {
+  const startDay = r.ISO8601(startDate);
+  const endDay = r.ISO8601(endDate);
+  const startDateSubtract = r.ISO8601(moment(startDate).subtract(1, 'days').toISOString());
+  const startDateAdd = r.ISO8601(moment(startDate).add(1, 'days').toISOString());
+  const endDateSubtract = r.ISO8601(moment(endDate).subtract(1, 'days').toISOString());
+  const endDateAdd = r.ISO8601(moment(endDate).add(1, 'days').toISOString());
+
+  return row('startDate').during(startDateSubtract, startDay)
+  .and(row('endDate').during(startDay, startDateAdd))
+  .or(row('startDate').during(endDateSubtract, endDay)
+  .and(row('endDate').during(endDay, endDateAdd)));
+};
+
 
 /**
  * fetchServiceData will grab all data from the service that is necessary
@@ -127,7 +142,9 @@ function fetchPractitionerData(options) {
     return fetchPractitionersSchedules(practitioners)
       .then((weeklySchedules) => {
         // now get practitioner.timeOff and practitioners.appointments and resolve promise
-        const promises = practitioners.map(p => fetchPractitionerTOAndAppts(p, startDate, endDate));
+        const promises = practitioners.map((p, i) => {
+          return fetchPractitionerTOAndAppts(p, startDate, endDate);
+        });
         return Promise.all(promises).then(practs => resolve({ weeklySchedules, practitioners: practs }));
       })
       .catch(err => reject(err));
@@ -177,77 +194,8 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
   });
 }
 
-/**
- * generatePractitionerAvailabilities is a function that will compute availabilities for
- * a practitioner. By now, we can assume all data is fetched properly and we are just computing
- *
- * @param options
- */
-function generatePractitionerAvailabilities(options) {
-  const {
-    practitioner,
-    weeklySchedule,
-    service,
-    timeInterval,
-    startDate,
-    endDate,
-  } = options;
-
-  const {
-    appointments,
-    timeOffs,
-    recurringTimeOffs,
-  } = practitioner;
-
-  const {
-    requests,
-    reservations,
-  } = service;
-
-  // console.log('requests', requests);
-  // console.log('weeklySchedule.monday', weeklySchedule.monday);
-
-  // TODO: getTimeSlots should really be: (appts, rqsts, resos).orderBy(startDate), then get openings
-  // TODO: from there, split up based on account interval and weeklySchedule
-
-  /*
-   - getTimeSlots for this practitioner from startDate to endDate
-   - split timeSlots up into service.duration intervals
-   - loop over potential timeSlots and see if there are any conflicts with:
-   -    requests [if no practitionerId ?], needs to know about practitioner.length
-   -    reservations [if no practitionerId ?], needs to know about practitioner.length
-   -    appointments
-   */
-
-  const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
-  const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
-
-  // TODO: need to be able to manage these
-  const noPrefRequests = requests.filter(d => isUndefined(d.practitionerId));
-  const noPrefReservations = requests.filter(d => isUndefined(d.practitionerId));
-
-  // Incorporate timeOff into this!
-  const timeSlots = createIntervalsFromWeeklySchedule(weeklySchedule, startDate, endDate);
-  const validTimeSlots = timeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
-  const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, timeInterval || 30);
-  const finalSlots = possibleTimeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
-
-  const validTimeSlotsNoWithTimeOff = finalSlots.filter((timeSlot) => {
-    // see if the timeSlot conflicts with any appointments, requests or resos
-    const conflictsWithAppointment = appointments.some(a => isDuringEachother(timeSlot, a));
-    const conflictsWithPractitionerRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
-    const conflictsWithPractitionerReservations = practitionerReservations.some(pr => isDuringEachother(timeSlot, pr));
-
-    // TODO: this needs to be changed to accomodate "filling up" allowable request queue
-    const conflictsWithNoPrefRequests = noPrefRequests.some(pr => isDuringEachother(timeSlot, pr));
-    const conflictsWithNoPrefReservations = noPrefReservations.some(pr => isDuringEachother(timeSlot, pr));
-    return !conflictsWithAppointment &&
-           !conflictsWithPractitionerRequests &&
-           !conflictsWithPractitionerReservations &&
-           !conflictsWithNoPrefRequests &&
-           !conflictsWithNoPrefReservations;
-  });
-
+// function
+function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate) {
   const fullTimeOffs = timeOffs.slice();
 
   for (let i = 0; i < recurringTimeOffs.length; i++) {
@@ -317,6 +265,83 @@ function generatePractitionerAvailabilities(options) {
       tmpEnd.add(7, 'days');
     }
   }
+  return fullTimeOffs;
+}
+
+/**
+ * generatePractitionerAvailabilities is a function that will compute availabilities for
+ * a practitioner. By now, we can assume all data is fetched properly and we are just computing
+ *
+ * @param options
+ */
+function generatePractitionerAvailabilities(options) {
+  const {
+    practitioner,
+    weeklySchedule,
+    service,
+    timeInterval,
+    startDate,
+    endDate,
+  } = options;
+
+  const {
+    appointments,
+    timeOffs,
+    recurringTimeOffs,
+  } = practitioner;
+
+  const {
+    requests,
+    reservations,
+  } = service;
+
+  // console.log(practitioner.firstName, weeklySchedule)
+
+  // console.log('requests', requests);
+  // console.log('weeklySchedule.monday', weeklySchedule.monday);
+
+  // TODO: getTimeSlots should really be: (appts, rqsts, resos).orderBy(startDate), then get openings
+  // TODO: from there, split up based on account interval and weeklySchedule
+
+  /*
+   - getTimeSlots for this practitioner from startDate to endDate
+   - split timeSlots up into service.duration intervals
+   - loop over potential timeSlots and see if there are any conflicts with:
+   -    requests [if no practitionerId ?], needs to know about practitioner.length
+   -    reservations [if no practitionerId ?], needs to know about practitioner.length
+   -    appointments
+   */
+
+  const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
+  const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
+
+  // TODO: need to be able to manage these
+  const noPrefRequests = requests.filter(d => isUndefined(d.practitionerId));
+  const noPrefReservations = requests.filter(d => isUndefined(d.practitionerId));
+
+  // Incorporate timeOff into this!
+  const timeSlots = createIntervalsFromWeeklySchedule(weeklySchedule, startDate, endDate);
+  const validTimeSlots = timeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
+  const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, timeInterval || 30);
+  const finalSlots = possibleTimeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
+
+  const validTimeSlotsNoWithTimeOff = finalSlots.filter((timeSlot) => {
+    // see if the timeSlot conflicts with any appointments, requests or resos
+    const conflictsWithAppointment = appointments.some(a => isDuringEachother(timeSlot, a));
+    const conflictsWithPractitionerRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
+    const conflictsWithPractitionerReservations = practitionerReservations.some(pr => isDuringEachother(timeSlot, pr));
+
+    // TODO: this needs to be changed to accomodate "filling up" allowable request queue
+    const conflictsWithNoPrefRequests = noPrefRequests.some(pr => isDuringEachother(timeSlot, pr));
+    const conflictsWithNoPrefReservations = noPrefReservations.some(pr => isDuringEachother(timeSlot, pr));
+    return !conflictsWithAppointment &&
+           !conflictsWithPractitionerRequests &&
+           !conflictsWithPractitionerReservations &&
+           !conflictsWithNoPrefRequests &&
+           !conflictsWithNoPrefReservations;
+  });
+
+  const fullTimeOffs = recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate);
 
   const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
     for (let i = 0; fullTimeOffs && i < fullTimeOffs.length; i++) {
@@ -333,6 +358,45 @@ function generatePractitionerAvailabilities(options) {
       endDate: moment(aval.startDate).add(service.duration, 'minutes').toISOString(),
     };
   });
+}
+
+// fetches appointment in the time frame for a given chair(s) and filters if they aren't any availiable
+
+async function filterByChairs(weeklySchedule, avails, pracWeeklySchedule) {
+  const newAvails = [];
+  for (let j = 0; j < avails.length; j++) {
+    const dayOfWeek = moment(avails[j].startDate).format('dddd').toLowerCase();
+    const chairIds = weeklySchedule[dayOfWeek].chairIds;
+
+    // prac has no custom so has all chairs
+    if (pracWeeklySchedule !== weeklySchedule.id) {
+      newAvails.push(avails[j]);
+      continue;
+    }
+
+    const promises = [];
+    for (let i = 0; i < chairIds.length; i++) {
+      promises.push(
+        Appointment
+        .filter(r.row('chairId').eq(chairIds[i]))
+        .filter((row) => {
+          return generateDuringFilterBetween(row, avails[j].startDate, avails[j].endDate);
+        })
+      );
+    }
+    const results = await Promise.all(promises);
+
+    let push = false;
+    for (let i = 0; i < results.length; i++) {
+      if (!results[i][0]) {
+        push = true;
+      }
+    }
+    if (push) {
+      newAvails.push(avails[j]);
+    }
+  }
+  return newAvails;
 }
 
 /**
@@ -353,7 +417,7 @@ function fetchAvailabilities(options) {
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
             const practitionerAvailabilities = practitioners.map((p, i) => {
-              return generatePractitionerAvailabilities({
+              const avails = generatePractitionerAvailabilities({
                 practitioner: p,
                 weeklySchedule: weeklySchedules[i],
                 service,
@@ -361,11 +425,15 @@ function fetchAvailabilities(options) {
                 timeInterval,
                 endDate,
               });
+              return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId)
             });
 
-            const squashed = unionBy(...practitionerAvailabilities, 'startDate');
-            const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
-            return resolve(squashedAndSorted);
+            return Promise.all(practitionerAvailabilities)
+            .then((pracAvails) => {
+              const squashed = unionBy(...pracAvails, 'startDate');
+              const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
+              return resolve(squashedAndSorted);
+            });
           });
       })
       .catch(err => reject(err));

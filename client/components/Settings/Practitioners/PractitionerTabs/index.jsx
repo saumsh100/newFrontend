@@ -78,6 +78,7 @@ class PractitionerTabs extends Component {
               weeklySchedule={weeklySchedule}
               practitioner={practitioner}
               updateEntityRequest={this.props.updateEntityRequest}
+              chairs={this.props.chairs}
             />
           </Tab>
           <Tab label="Services" data-test-id="practitionerServicesTab">
@@ -108,6 +109,12 @@ class PractitionerTabs extends Component {
   }
 }
 
+function mapStateToProps({ entities }) {
+  return {
+    chairs: entities.getIn(['chairs', 'models'])
+  };
+}
+
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     updateEntityRequest,
@@ -115,7 +122,7 @@ function mapActionsToProps(dispatch) {
   }, dispatch);
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 
 export default enhance(PractitionerTabs);
