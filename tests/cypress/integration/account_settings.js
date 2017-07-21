@@ -128,6 +128,19 @@ describe('Account Settings', () => {
           .should('not.exist');
       });
 
+      it('add a schedule pattern', () => {
+        cy
+          .getAndClick('changeStartDate')
+          .getAndClick('startDateDayPicker')
+          .get('.DayPicker-Day--today')
+          .click()
+          .submitForm('advanceCreate')
+          .get('[data-test-id="createPatternSchedule"]')
+          .click({ force: true })
+          .get('[data-test-id="patternHeader0"]')
+          .should('exist');
+      });
+
     });
 
     context('Online Booking', () => {
