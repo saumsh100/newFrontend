@@ -89,7 +89,10 @@ class PractitionerBasicData extends Component {
         >
           <div className={styles.practFormContainer_practActive}>
             Active?
-            <div className={styles.practFormContainer_practActive_toggle}>
+            <div
+              className={styles.practFormContainer_practActive_toggle}
+              data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}Active`}
+            >
               <Field
                 name="isActive"
                 component="Toggle"

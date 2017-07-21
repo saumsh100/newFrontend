@@ -292,5 +292,16 @@ describe('Account Settings', () => {
         .get('[data-test-id="KelseyMansfield"]')
         .should('not.exist');
     });
+
+    it('set practitioner to inactive', () => {
+      cy
+        .getAndClick('PerryCoxActive')
+        .submitForm('practitionerBasicDataForm')
+        .visit('http://localhost:5100/schedule')
+        .getAndClick('quickAddAppointment')
+        .getAndClick('practitionerId')
+        .contains('Perry Cox')
+        .should('not.exist');
+    });
   });
 });
