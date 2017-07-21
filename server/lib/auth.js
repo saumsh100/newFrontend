@@ -96,7 +96,7 @@ export const Auth = (Model, uniqueKey) => ({
       })
       .then((prevSession) => {
         delete prevSession.id;
-        return AuthSession.save({ ...prevSession, ...updates, modelId: session.userId });
+        return AuthSession.save({ ...prevSession, ...updates, modelId: session.userId || session.modelId });
       });
   },
 });
