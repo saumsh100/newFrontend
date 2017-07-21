@@ -1,29 +1,46 @@
 
 import { Router } from 'express';
+import mapValues from 'lodash/mapValues';
+import isNull from 'lodash/isNull';
+import each from 'lodash/each';
 import checkPermissions from '../../../middleware/checkPermissions';
-import loaders from '../../util/loaders';
+import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
 import { Chair } from '../../../_models';
 
 const chairsRouter = Router();
 
-chairsRouter.param('chairId', loaders('chair', 'Chair'));
+chairsRouter.param('chairId', sequelizeLoader('chair', 'Chair'));
+
+function cleanupModels(modelsArray) {
+  return modelsArray.map(({ dataValues }) => {
+    delete dataValues.updatedAt;
+    delete dataValues.deletedAt;
+
+    const cleanData = {};
+    each(dataValues, (a, key) => {
+      if (!isNull(a)) {
+        cleanData[key] = a;
+      }
+    });
+
+    return cleanData;
+  });
+}
 
 /**
  * POST /
  *
  * - Create a chair
  */
-chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
+chairsRouter.post('/', /*checkPermissions('chairs:create'),*/ (req, res, next) => {
   // Attach chair to the clinic of posting user
   const chairData = Object.assign({}, req.body, {
-    accountId: req.accountId,
-    name: req.body.name,
-    pmsId: req.body.pmsId,
+    accountId: req.accountId || req.body.accountId,
   });
 
-  return Chair.save(chairData)
-    .then(chair => res.status(201).send(normalize('chair', chair)))
+  return Chair.create(chairData)
+    .then(chair => res.status(201).send(normalize('chair', chair.dataValues)))
     .catch(next);
 });
 
@@ -33,31 +50,26 @@ chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
  * - Get all chairs in an account
  */
 chairsRouter.get('/', /*checkPermissions('chairs:read'),*/ async (req, res, next) => {
-  /*const { accountId } = req;
-
-  // There is no joinData for chair, no need to put...
-  return Chair.filter({ accountId }).run()
-    .then(chairs => res.send(normalize('chairs', chairs)))
-    .catch(next);*/
+  const { accountId } = req;
   try {
-    // Find all segments existing on system. Temporary for showing functionality
-    const chairs = await Chair.findAll();
-    console.log(chairs);
-    // res.send(segments);
-    res.send({ test: '123' });
+    const chairs = await Chair.findAll({
+      raw: true,
+      // TODO: add this back when we have auth back
+      // where: { accountId },
+    });
+
+    res.send(normalize('chairs', chairs));
   } catch (error) {
-    console.log(error);
     next(error);
   }
-
 });
 
 /**
  * Get a chair
  */
-chairsRouter.get('/:chairId', checkPermissions('chairs:read'), (req, res, next) => {
+chairsRouter.get('/:chairId', /*checkPermissions('chairs:read'),*/ (req, res, next) => {
   return Promise.resolve(req.chair)
-    .then(chair => res.send(normalize('chair', chair)))
+    .then(chair => res.send(normalize('chair', chair.dataValues)))
     .catch(next);
 });
 
