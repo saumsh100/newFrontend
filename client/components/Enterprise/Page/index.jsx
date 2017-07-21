@@ -13,6 +13,13 @@ class EnterprisePage extends React.Component {
     };
 
     this.addSegment = this.addSegment.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this);
+  }
+
+  reinitializeState() {
+    this.setState({
+      addSegment: false,
+    });
   }
 
   addSegment() {
@@ -28,7 +35,10 @@ class EnterprisePage extends React.Component {
     } = this.state;
 
     const displayModalComponent = (
-      <AddSegment />
+      <AddSegment
+        formName="AddSegment"
+        reinitializeState={this.reinitializeState}
+      />
     );
 
     return (<div>

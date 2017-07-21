@@ -17,7 +17,7 @@ class TabContent extends Component {
     
     return (
       // Order is important, classNames={classes} needs to override props.className
-      <div>
+      <div className={className}>
         {children}
       </div>
     );

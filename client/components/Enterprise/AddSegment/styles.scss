@@ -1,5 +1,41 @@
 @import '../../../ui.scss';
 
+.nav {
+  border-right: 1px solid $clr-dark-grey;
+  width: calc(20% - 1px);
+  display: inline-block;
+}
+
+.tab {
+  display: block;
+  text-align: right;
+}
+
+.activeTab {
+    border-bottom: none;
+    font-weight: bold;
+    color: $primary-color;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      content: " ";
+      width: 0px;
+      height: 0px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid $clr-dark-grey;
+      right: -5px;
+      top: 12px;
+    }
+  }
+
+.tabContent {
+  float: right;
+  width: 80%;
+  padding: 15px;
+  box-sizing: border-box;
+}
 
 .formContainer {
   position: relative;
@@ -11,6 +47,7 @@
 
 .title {
   padding-top: 15px;
+  padding-bottom: 15px;
   padding-left: 15px;
   font-size: $extra-medium-size;
   font-weight: $jumbo-weight;
@@ -36,7 +73,7 @@
   color: $primary-grey;
 }
 
-.addNewAppt {
+.addNewSegment {
   border-radius: .5rem;
   width: 900px;
   height: 545px;

@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { change, reset } from 'redux-form';
+import { Button, IconButton, Avatar } from '../../library';
+import DisplayForm from './DisplayForm';
 import {
   fetchEntities,
   createEntityRequest,
@@ -13,9 +15,39 @@ import styles from './styles.scss';
 
 
 class AddSegment extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  
+  handleSubmit() {
+    
+  }
+
   render() {
+    const {
+      formName,
+      reinitializeState,
+    } = this.props;
+  
     return (
-      <div className={styles.formContainer} />
+      <div className={styles.formContainer}>
+        <IconButton
+          icon="times"
+          onClick={() => {
+            this.props.reset(formName);
+            return reinitializeState();
+          }}
+          className={styles.trashIcon}
+        />
+        <DisplayForm
+          key={formName}
+          formName={formName}
+          selectedSegment={null}
+          handleSubmit={this.handleSubmit}
+        />
+      </div>
     );
   }
 }
@@ -32,25 +64,16 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-function mapStateToProps({ entities, form, auth }, { formName }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-
-  if (!form[formName] || !activeAccount.get('unit')) {
-    return {
-      values: {},
-      unit: 15,
-    };
-  }
-
-  return {
-    appFormValues: form[formName].values,
-    unit: activeAccount.get('unit'),
-  };
+function mapStateToProps() {
+  return {};
 }
 
 AddSegment.propTypes = {
+  formName: PropTypes.string.isRequired,
   fetchEntities: PropTypes.func,
   updateEntityRequest: PropTypes.func,
+  reset: PropTypes.func,
+  reinitializeState: PropTypes.func,
 };
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
