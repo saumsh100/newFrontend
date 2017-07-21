@@ -77,3 +77,37 @@ Object {
   "result": "11d4e661-1155-4494-8fdb-c4ec0ddf804d",
 }
 `;
+
+exports[`/api/chairs PUT /api/chairs/:chairId should update a chair 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "Modified Chair Name",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;
+
+exports[`/api/chairs PUT /api/chairs/:chairId should update a chair even with extra attrs 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "Modified Chair Name",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;

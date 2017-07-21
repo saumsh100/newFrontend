@@ -119,9 +119,9 @@ describe('/api/chairs', () => {
     test('should create an chair', async () => {
       return request(app)
         .post(rootUrl)
+        // .set('Authorization', `Bearer ${token}`)
         .send({
           id: newChairId,
-          createdAt: '2017-07-20T00:14:30.932Z',
           accountId,
           name: 'New Chair',
         })
@@ -137,11 +137,11 @@ describe('/api/chairs', () => {
         });
     });
 
-    test.skip('should fail if required info is not there', async () => {
+    test('should fail if required info is not there', async () => {
       return request(app)
         .post(rootUrl)
+        // .set('Authorization', `Bearer ${token}`)
         .send({
-          createdAt: '2017-07-20T00:14:30.932Z',
           accountId,
           // Don't send name,
           // name: 'New Chair',
@@ -156,12 +156,29 @@ describe('/api/chairs', () => {
       await seedChairs();
     });
 
-    test.skip('should update a chair', async () => {
+    test('should update a chair', async () => {
       const name = 'Modified Chair Name';
       return request(app)
         .put(`${rootUrl}/${chairId1}`)
         .send({ name })
-        .set('Authorization', `Bearer ${token}`)
+        // .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitProperties(body);
+          const chairs = getModelsArray('chairs', body);
+          const [chair] = chairs;
+          expect(chairs.length).toBe(1);
+          expect(chair.name).toBe(name);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('should update a chair even with extra attrs', async () => {
+      const name = 'Modified Chair Name';
+      return request(app)
+        .put(`${rootUrl}/${chairId1}`)
+        .send({ name, foo: 'bar' })
+        // .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitProperties(body);
@@ -179,7 +196,7 @@ describe('/api/chairs', () => {
       await seedChairs();
     });
 
-    test.skip('should delete an chair', () => {
+    test('should delete an chair', () => {
       return request(app)
         .delete(`${rootUrl}/${chairId1}`)
         .set('Authorization', `Bearer ${token}`)

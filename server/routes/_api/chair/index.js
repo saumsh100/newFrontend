@@ -1,8 +1,5 @@
 
 import { Router } from 'express';
-import mapValues from 'lodash/mapValues';
-import isNull from 'lodash/isNull';
-import each from 'lodash/each';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
@@ -11,22 +8,6 @@ import { Chair } from '../../../_models';
 const chairsRouter = Router();
 
 chairsRouter.param('chairId', sequelizeLoader('chair', 'Chair'));
-
-function cleanupModels(modelsArray) {
-  return modelsArray.map(({ dataValues }) => {
-    delete dataValues.updatedAt;
-    delete dataValues.deletedAt;
-
-    const cleanData = {};
-    each(dataValues, (a, key) => {
-      if (!isNull(a)) {
-        cleanData[key] = a;
-      }
-    });
-
-    return cleanData;
-  });
-}
 
 /**
  * POST /
@@ -76,18 +57,19 @@ chairsRouter.get('/:chairId', /*checkPermissions('chairs:read'),*/ (req, res, ne
 /**
  * Update a chair
  */
-chairsRouter.put('/:chairId', checkPermissions('chairs:update'), (req, res, next) => {
-  return req.chair.merge(req.body).save()
-    .then(chair => res.send(normalize('chair', chair)))
+chairsRouter.put('/:chairId', /*checkPermissions('chairs:update'),*/ (req, res, next) => {
+  return req.chair.update(req.body)
+    .then(chair => res.send(normalize('chair', chair.dataValues)))
     .catch(next);
 });
 
 /**
  * Delete a chair
  */
-chairsRouter.delete('/:chairId', checkPermissions('chairs:delete'), (req, res, next) => {
+chairsRouter.delete('/:chairId', /*checkPermissions('chairs:delete'),*/ (req, res, next) => {
+  // TODO: probably need to make sure we purge all other areas where chairId is used
   // We actually delete chairs as we don't care about history
-  return req.chair.delete()
+  return req.chair.destroy()
     .then(() => res.status(204).send())
     .catch(next);
 });

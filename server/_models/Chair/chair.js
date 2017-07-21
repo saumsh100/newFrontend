@@ -10,6 +10,7 @@ export default function (sequelize, DataTypes) {
 
     accountId: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
 
     description: {
