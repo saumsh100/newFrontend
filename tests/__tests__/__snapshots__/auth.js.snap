@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`auth lib #load should load the correct model 1`] = `
+Object {
+  "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+  "firstName": "Harvey",
+  "id": "6668f250-e8c9-46e3-bfff-0249f1eec6b8",
+  "lastName": "Dentest",
+  "permissionId": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
+  "username": "manager@test.com",
+}
+`;

@@ -9,7 +9,7 @@ import { Chair } from '../../../server/_models';
 import { seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { getModelsArray, omitProperties }  from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
 const rootUrl = '/_api/chairs';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
@@ -71,7 +71,7 @@ describe('/api/chairs', () => {
         // .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitProperties(body);
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           expect(chairs.length).toBe(2);
           expect(body).toMatchSnapshot();
@@ -86,7 +86,7 @@ describe('/api/chairs', () => {
         // .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitProperties(body);
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           const [chair] = chairs;
           expect(chairs.length).toBe(1);
@@ -101,7 +101,7 @@ describe('/api/chairs', () => {
         // .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitProperties(body);
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           const [chair] = chairs;
           expect(chairs.length).toBe(1);
@@ -128,7 +128,7 @@ describe('/api/chairs', () => {
         // .set('Authorization', `Bearer ${token}`)
         .expect(201)
         .then(({ body }) => {
-          body = omitProperties(body);
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           const [chair] = chairs;
           expect(chairs.length).toBe(1);
@@ -164,7 +164,7 @@ describe('/api/chairs', () => {
         // .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitProperties(body);
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           const [chair] = chairs;
           expect(chairs.length).toBe(1);
@@ -181,7 +181,7 @@ describe('/api/chairs', () => {
         // .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitProperties(body);
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           const [chair] = chairs;
           expect(chairs.length).toBe(1);
