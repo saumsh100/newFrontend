@@ -1,7 +1,9 @@
-import { Router as segmentRouter } from 'express';
+import { Router } from 'express';
 import { Segment as SegmentModel } from '../../../_models/';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
+
+const segmentRouter = Router();
 
 // Get single segment info
 segmentRouter.get('/:type/:segmentId', checkPermissions('segments:read'), async (req, res, next) => {
@@ -92,4 +94,4 @@ segmentRouter.delete('/:type/:segmentId', checkPermissions('segments:delete'), a
   }
 });
 
-module.exports = segmentRouter;
+export default segmentRouter;

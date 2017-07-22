@@ -23,7 +23,7 @@ const sequelize = new Sequelize(
 
 // Import and store all models.
 const models = [];
-models.push(sequelize.import('./Segment/segment'));
+models.push((require('./Segment/segment')(sequelize, Sequelize)));
 
 models.forEach((model) => {
   db[model.name] = model;
