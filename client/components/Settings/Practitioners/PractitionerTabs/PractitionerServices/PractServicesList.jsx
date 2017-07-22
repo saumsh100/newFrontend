@@ -9,10 +9,12 @@ class PractServicesList extends Component {
     const { service, fieldValue, } = this.props;
 
     let showComponent = null;
-    
+
     if (service) {
       showComponent = (
-        <div>
+        <div
+          data-test-id={`${service.get('name')}Toggle`}
+        >
           {service.get('name')}
           <Field
             component="Toggle"

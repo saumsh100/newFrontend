@@ -62,7 +62,6 @@ class AvailabilitiesDisplay extends Component {
       setSelectedAvailability,
       account,
     } = this.props;
-
     const numDaysForward = 4;
     const dayAvailabilities = [];
     // const startDate = new Date();
@@ -95,6 +94,15 @@ class AvailabilitiesDisplay extends Component {
       </div>
     );
 
+    let display = false;
+
+    for (let i = 0; i < dayAvailabilities.length; i++) {
+      if (dayAvailabilities[i].sortedAvailabilities.length) {
+        display = true;
+        break;
+      }
+    }
+
     // console.log(dayAvailabilities);
     let availabilitiesDisplay = (
       <div className={styles.displayContainer}>
@@ -103,7 +111,7 @@ class AvailabilitiesDisplay extends Component {
     );
 
     if (!isFetching) {
-      if (availabilities.length) {
+      if (display) {
         availabilitiesDisplay = (
           <div className={styles.displayAvailabilitiesContainer}>
             <div className={styles.appointment__table_elements}>

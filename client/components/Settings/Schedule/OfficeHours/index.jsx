@@ -177,7 +177,7 @@ class OfficeHours extends Component {
       schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => {
         return (<div>
           <div className={styles.orSpacer} />
-          <div className={styles.flexHeader}>
+          <div className={styles.flexHeader} data-test-id={`patternHeader${i}`}>
             <Header title={`Pattern ${i + 1}`} className={styles.header} />
             <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
           </div>
@@ -219,20 +219,34 @@ class OfficeHours extends Component {
             onSubmit={this.changeStartDate}
             initialValues={weeklySchedule}
             ignoreSaveButton
+            data-test-id="advanceCreate"
           >
             <Field
               required
               component="DayPicker"
               name="startDate"
               label="Start Date"
+              data-test-id="startDateDayPicker"
             />
           </Form>
         </DialogBox>
         <div className={styles.flexHeader}>
           <Header title="Weekly Schedule" className={styles.header} />
           <div>
-            <Button className={styles.button} onClick={this.createPattern}>Create New Pattern</Button>
-            <Button className={styles.button} onClick={this.openModal}>Change Start Date</Button>
+            <Button
+              className={styles.button}
+              onClick={this.createPattern}
+              data-test-id="createPatternSchedule"
+            >
+              Create New Pattern
+            </Button>
+            <Button
+              className={styles.button}
+              onClick={this.openModal}
+              data-test-id="changeStartDate"
+            >
+              Change Start Date
+            </Button>
           </div>
         </div>
         <OfficeHoursForm
