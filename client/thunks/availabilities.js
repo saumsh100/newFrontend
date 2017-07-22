@@ -84,6 +84,7 @@ export function createWaitSpot() {
     const {
       account,
       waitSpot,
+      selectedAvailability: { startDate },
     } = state.availabilities.toJS();
 
     const {
@@ -95,6 +96,7 @@ export function createWaitSpot() {
       patientUserId: patientUser.id,
       preferences: waitSpot.preferences,
       unavailableDays: waitSpot.unavailableDays,
+      endDate: startDate,
     };
 
     return axios.post('/waitSpots', params)

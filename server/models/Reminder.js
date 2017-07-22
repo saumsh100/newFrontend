@@ -9,7 +9,7 @@ const SMS = 'sms';
 const Reminder = createModel('Reminder', {
   accountId: type.string().uuid(4).required(),
   primaryType: type.string().enum(SMS, PHONE, EMAIL).required(),
-  lengthSeconds: type.number().required(),
+  lengthSeconds: type.number(),
 });
 
 module.exports = Reminder;

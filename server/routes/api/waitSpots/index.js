@@ -1,9 +1,12 @@
 
 const waitSpotsRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
+const { r } = require('../../../config/thinky');
 const loaders = require('../../util/loaders');
 const normalize = require('../normalize');
 const WaitSpot = require('../../../models/WaitSpot');
+const moment = require('moment');
+
 
 waitSpotsRouter.param('waitSpotId', loaders('waitSpot', 'WaitSpot'));
 
@@ -12,7 +15,7 @@ waitSpotsRouter.param('waitSpotId', loaders('waitSpot', 'WaitSpot'));
  */
 waitSpotsRouter.post('/', (req, res, next) => {
   // Attach chair to the clinic of posting user
-  // TODO: the short circuit is here to suppor widget, NEEDS to be removed!
+  // TODO: the short circuit is here to support widget, NEEDS to be removed!
   const waitSpotData = Object.assign({}, req.body, {
     accountId: req.body.accountId || req.accountId,
   });
@@ -28,8 +31,14 @@ waitSpotsRouter.post('/', (req, res, next) => {
 waitSpotsRouter.get('/', (req, res, next) => {
   const { accountId, joinObject } = req;
 
-  // There is no joinData for waitSpot, no need to put...
-  return WaitSpot.filter({ accountId }).getJoin(joinObject).run()
+  const startTime = r.now();
+  const endTime = r.now().add(365 * 24 * 60 * 60);
+
+  return WaitSpot
+    .filter({ accountId })
+    .filter(r.row('endDate').during(startTime, endTime))
+    .getJoin(joinObject)
+    .run()
     .then(waitSpots => res.send(normalize('waitSpots', waitSpots)))
     .catch(next);
 });

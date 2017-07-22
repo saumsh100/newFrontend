@@ -17,13 +17,13 @@ const compare = (password, hash) => new Promise((fulfill, reject) => {
   });
 });
 
-export const Auth = (Model, primaryKey) => ({
+export const Auth = (Model, uniqueKey) => ({
   /**
    * @param {string} key
    */
   load(key) {
     // TODO: change to the uniqueFetch helper
-    return Model.filter({ [primaryKey]: key }).run()
+    return Model.filter({ [uniqueKey]: key }).run()
       .then(([model]) => model);
   },
 
@@ -51,10 +51,10 @@ export const Auth = (Model, primaryKey) => ({
    * @param {object} model
    */
   signup(model) {
-    model[primaryKey] = model[primaryKey].toLowerCase();
+    model[uniqueKey] = model[uniqueKey].toLowerCase();
     model.password = bcrypt.hashSync(model.password, globals.passwordHashSaltRounds);
 
-    return this.load(model[primaryKey])
+    return this.load(model[uniqueKey])
       .then(existedModel => (!existedModel) || error(400, 'Email Already in Use'))
       .then(() => Model.save(model))
       .then(model =>
@@ -97,7 +97,7 @@ export const Auth = (Model, primaryKey) => ({
       })
       .then((prevSession) => {
         delete prevSession.id;
-        return AuthSession.save({ ...prevSession, ...updates, modelId: session.userId });
+        return AuthSession.save({ ...prevSession, ...updates, modelId: session.userId || session.modelId });
       });
   },
 });

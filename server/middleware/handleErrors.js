@@ -1,10 +1,14 @@
 
 const chalk = require('chalk');
-const globals = require('../config/globals');
+const { env } = require('../config/globals');
 
 function logError(err, req, res, next) {
   console.log(chalk.red('[ERROR]', (err.status) ? `[${err.status}]` : '', ':', err.message));
-  if (globals.env === 'development') console.error(err);
+  console.log(env);
+  if (env === 'development' || env === 'test') {
+    console.error(err);
+  }
+
   next(err);
 }
 
