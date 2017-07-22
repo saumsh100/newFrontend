@@ -5,7 +5,7 @@ import {
   Account,
   Chair,
 } from '../../../server/models';
-import { seedTestUsers } from '../../util/seedTestUsers';
+import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { getModelsArray }  from '../../util/selectors';
