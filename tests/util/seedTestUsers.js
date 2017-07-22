@@ -2,7 +2,8 @@
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Account, Enterprise, Permission, User } from '../../server/models';
-import wipeModel from './wipeModel';
+import { Account as _Account, Enterprise as _Enterprise, Permission as _Permission, User as _User } from '../../server/_models';
+import wipeModel, { wipeModelSequelize } from './wipeModel';
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
@@ -11,7 +12,7 @@ const ownerPermissionId = '74d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const superAdminPermissionId = '64d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const managerUserId = '6668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const ownerUserId = '5668f250-e8c9-46e3-bfff-0249f1eec6b8';
-const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
+    const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
 
 const enterprise = {
   id: enterpriseId,
@@ -102,6 +103,28 @@ async function seedTestUsers() {
   ]);
 }
 
+async function seedTestUsersSequelize() {
+  // TODO: will be a simple DB wipe with Postgres
+  await wipeModelSequelize(_Account);
+  await wipeModelSequelize(_Enterprise);
+  await wipeModelSequelize(_Permission);
+  await wipeModelSequelize(_User);
+
+  await _Account.create(account);
+  await _Enterprise.create(enterprise);
+  await _Permission.bulkCreate([
+    managerPermission,
+    ownerPermission,
+    superAdminPermission,
+  ]);
+
+  await _User.bulkCreate([
+    managerUser,
+    ownerUser,
+    superAdminUser,
+  ]);
+}
+
 module.exports = {
   enterpriseId,
   accountId,
@@ -112,4 +135,5 @@ module.exports = {
   ownerUserId,
   superAdminUserId,
   seedTestUsers,
+  seedTestUsersSequelize,
 };

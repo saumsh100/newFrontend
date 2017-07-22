@@ -1,5 +1,6 @@
 
-const models = require('../../_models');
+const models = require('../../models');
+const _models = require('../../_models');
 const StatusError = require('../../util/StatusError');
 
 module.exports = (reqProp, modelName, joinData = {}) => {
@@ -20,7 +21,7 @@ module.exports = (reqProp, modelName, joinData = {}) => {
 
 module.exports.sequelizeLoader = (reqProp, modelName) => {
   return (req, res, next, param) => {
-    models[modelName].findById(param)
+    _models[modelName].findById(param)
       .then((model) => {
         if (!model) next(StatusError(404, `${modelName} with id=${param} not found`));
 
