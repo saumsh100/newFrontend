@@ -7,7 +7,7 @@ import {
 } from '../../../server/models';
 import { Chair } from '../../../server/_models';
 import { seedTestUsers } from '../../util/seedTestUsers';
-import generateToken from '../../util/generateToken';
+import { generateTokenSequelize } from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
@@ -57,7 +57,7 @@ describe('/api/chairs', () => {
   beforeAll(async () => {
     await seedData();
     await seedChairs();
-    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+    token = await generateTokenSequelize({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
@@ -68,7 +68,7 @@ describe('/api/chairs', () => {
     test('should fetch 2 chairs', async () => {
       return request(app)
         .get(rootUrl)
-        // .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -83,7 +83,7 @@ describe('/api/chairs', () => {
     test('should fetch the correct chair1', async () => {
       return request(app)
         .get(`${rootUrl}/${chairId1}`)
-        // .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -98,7 +98,7 @@ describe('/api/chairs', () => {
     test('should fetch the correct chair2', async () => {
       return request(app)
         .get(`${rootUrl}/${chairId2}`)
-        // .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -119,13 +119,12 @@ describe('/api/chairs', () => {
     test('should create an chair', async () => {
       return request(app)
         .post(rootUrl)
-        // .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .send({
           id: newChairId,
           accountId,
           name: 'New Chair',
         })
-        // .set('Authorization', `Bearer ${token}`)
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -140,7 +139,7 @@ describe('/api/chairs', () => {
     test('should fail if required info is not there', async () => {
       return request(app)
         .post(rootUrl)
-        // .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
           // Don't send name,
@@ -161,7 +160,7 @@ describe('/api/chairs', () => {
       return request(app)
         .put(`${rootUrl}/${chairId1}`)
         .send({ name })
-        // .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -178,7 +177,7 @@ describe('/api/chairs', () => {
       return request(app)
         .put(`${rootUrl}/${chairId1}`)
         .send({ name, foo: 'bar' })
-        // .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);

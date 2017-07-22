@@ -23,7 +23,7 @@ const loadPermissions = (user) => {
 };
 
 const loadPermissionsSequelize = (user) => {
-  return Permission.findById(user.permissionId)
+  return _Permission.findById(user.permissionId)
     .then((permission) => {
       if (!permission) throw new Error('No permission object in DB');
       return permission;
@@ -35,5 +35,5 @@ const loadPermissionsSequelize = (user) => {
 
 export default loadPermissions;
 export {
-  loadPermissions,
+  loadPermissionsSequelize,
 };
