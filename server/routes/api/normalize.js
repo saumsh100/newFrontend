@@ -57,7 +57,7 @@ const permissionSchema = () => {
 
 const patientUserSchema = () => {
   return new schema.Entity('patientUsers')
-}
+};
 
 const requestSchema = () => {
   return new schema.Entity('requests', {
@@ -102,6 +102,10 @@ const serviceSchema = () => {
   return new schema.Entity('services', {
     practitioners: [_practitionerSchema],
   });
+};
+
+const segmentSchema = () => {
+  return new schema.Entity('segments');
 };
 
 const reservationSchema = () => {
@@ -158,6 +162,7 @@ const SCHEMAS = {
   family: familySchema(),
   request: requestSchema(),
   service: serviceSchema(),
+  segment: segmentSchema(),
   textMessage: textMessageSchema(),
   user: userSchema(),
   patientUser: patientUserSchema(),
@@ -184,6 +189,7 @@ const SCHEMAS = {
   families: [familySchema()],
   requests: [requestSchema()],
   services: [serviceSchema()],
+  segments: [segmentSchema()],
   textMessages: [textMessageSchema()],
   users: [userSchema()],
   syncClientErrors: [syncClientErrorSchema()],

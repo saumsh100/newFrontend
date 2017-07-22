@@ -25,6 +25,7 @@ import authMiddleware from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
 import sentRemindersRouter from './sentReminders';
 import sentRecallsRouter from './sentRecalls';
+import segmentRouter from './segment';
 
 const apiRouter = Router();
 
@@ -52,5 +53,6 @@ apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/sentReminders', sentRemindersRouter);
 apiRouter.use('/sentRecalls', sentRecallsRouter);
+apiRouter.use('/segment', segmentRouter);
 
 export default apiRouter;

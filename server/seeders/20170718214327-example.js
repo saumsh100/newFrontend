@@ -5,11 +5,14 @@ module.exports = {
     let res = null;
     try {
       res = await SegmentModel.create({
-        name: 'Test name',
-        someInteger: 1,
-        someJson: {
-          test1: 1,
-          test2: 2,
+        name: 'Test segment module',
+        description: 'This is just a dummy data',
+        accountId: '1aeab035-b72c-4f7a-ad73-09465cbf5654',
+        module: 'patients',
+        where: {
+          age: {
+            $gt: [10, 15],
+          },
         },
       });
     } catch (error) {
