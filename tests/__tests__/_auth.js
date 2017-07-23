@@ -5,7 +5,7 @@ import { UserAuth } from '../../server/lib/_auth';
 import { Account } from '../../server/models';
 import { seedTestUsers, seedTestUsersSequelize } from '../util/seedTestUsers';
 import { wipeAllModels } from '../util/wipeModel';
-import { omitProperties }  from '../util/selectors';
+import { omitProperties } from '../util/selectors';
 
 const managerEmail = 'manager@test.com';
 const managerPassword = '!@CityOfBudaTest#$';

@@ -183,5 +183,5 @@ npm run rebuild
 ```
 
 ##### Adding new model
-You will find inside of `server/_models/index.js` file a line `models.push((require('./Segment/segment')(sequelize, Sequelize)));`
+You will find inside of `server/_models/index.js` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
 This line represent importing of a single model into the code. Just repeat that for all models.

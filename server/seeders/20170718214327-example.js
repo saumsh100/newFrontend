@@ -7,7 +7,8 @@ module.exports = {
       res = await SegmentModel.create({
         name: 'Test segment module',
         description: 'This is just a dummy data',
-        accountId: '1aeab035-b72c-4f7a-ad73-09465cbf5654',
+        referenceId: '1aeab035-b72c-4f7a-ad73-09465cbf5654',
+        reference: SegmentModel.REFERENCE.ENTERPRISE,
         module: 'patients',
         where: {
           age: {

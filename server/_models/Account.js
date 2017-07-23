@@ -1,4 +1,3 @@
-
 export default function (sequelize, DataTypes) {
   const Account = sequelize.define('Account', {
     id: {

@@ -23,14 +23,13 @@ const sequelize = new Sequelize(
 
 // Import and store all models.
 const models = [];
-models.push((require('./Account')(sequelize, Sequelize)));
-models.push((require('./AuthSession')(sequelize, Sequelize)));
-models.push((require('./Chair')(sequelize, Sequelize)));
-models.push((require('./Enterprise')(sequelize, Sequelize)));
-models.push((require('./Permission')(sequelize, Sequelize)));
-models.push((require('./Segment')(sequelize, Sequelize)));
-models.push((require('./User')(sequelize, Sequelize)));
-
+models.push((require('./Account').default(sequelize, Sequelize)));
+models.push((require('./AuthSession').default(sequelize, Sequelize)));
+models.push((require('./Chair').default(sequelize, Sequelize)));
+models.push((require('./Enterprise').default(sequelize, Sequelize)));
+models.push((require('./Permission').default(sequelize, Sequelize)));
+models.push((require('./Segment').default(sequelize, Sequelize)));
+models.push((require('./User').default(sequelize, Sequelize)));
 
 models.forEach((model) => {
   db[model.name] = model;

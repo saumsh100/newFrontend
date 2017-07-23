@@ -9,34 +9,30 @@ const segmentRouter = Router();
 segmentRouter.param('segmentId', sequelizeLoader('segment', 'Segment'));
 
 // Get single segment info
-segmentRouter.get('/:type/:segmentId', checkPermissions('segments:read'), async (req, res, next) => {
-  const { type, segmentId } = req.params;
+segmentRouter.get('/:segmentId', checkPermissions('segments:read'), async (req, res, next) => {
   try {
-    // return single segment info
-    const segment = await SegmentModel.findOne({
-      where: {
-        accountId: req.accountId,
-        id: segmentId,
-        type,
-      },
-    });
-    return res.send(normalize('segment', segment));
+    const segment = req.segment;
+    // Check if our enterprise or account is segment owner
+    segment.isOwner(req);
+
+    return res.send(normalize('segment', segment.get({
+      plain: true,
+    })));
   } catch (error) {
     return next(error);
   }
 });
 
-// Get all segments for specific type (E.g. patients)
-segmentRouter.get('/:type', checkPermissions('segments:read'), async (req, res, next) => {
-  const { type } = req.params;
+segmentRouter.get('/', checkPermissions('segments:read'), async (req, res, next) => {
   try {
-    // return single segment info
+    // Should add for account, now only returns for enterprise
     const segments = await SegmentModel.findAll({
+      raw: true,
       where: {
-        accountId: req.accountId,
-        type,
+        referenceId: req.enterpriseId,
       },
     });
+
     return res.send(normalize('segments', segments));
   } catch (error) {
     return next(error);
@@ -44,54 +40,57 @@ segmentRouter.get('/:type', checkPermissions('segments:read'), async (req, res, 
 });
 
 // Create segment.
-segmentRouter.post('/:type', checkPermissions('segments:create'), async (req, res, next) => {
-  const { type } = req.params;
+segmentRouter.post('/', checkPermissions('segments:create'), async (req, res, next) => {
   const data = req.body;
   try {
-    data.type = type;
-    data.accountId = req.accountId;
+    data.reference = data.reference || SegmentModel.REFERENCE.ENTERPRISE;
+    data.referenceId = (data.reference === SegmentModel.REFERENCE.ENTERPRISE)
+      ? req.enterpriseId : req.accountId;
+
     const segment = await SegmentModel.create(data);
-    return res.send(normalize('segment', segment));
+
+    return res.status(201).send(normalize('segment', segment.get({
+      plain: true,
+    })));
   } catch (error) {
     return next(error);
   }
 });
 
 // Update segment.
-segmentRouter.put('/:type/:segmentId', checkPermissions('segments:update'), async (req, res, next) => {
-  const { segmentId } = req.params;
+segmentRouter.put('/:segmentId', checkPermissions('segments:update'), async (req, res, next) => {
   const data = req.body;
 
-  // Note: type isn't used, but in future there might be some usage
   try {
-    if (data.type) {
-      // user cannot change his segment type
-      delete data.type;
+    // Check if logged in user is owner of requested object
+    req.segment.isOwner(req);
+
+    // cannot change entepriseId and reference
+    if (data.reference) {
+      delete data.reference;
     }
-    const segment = await SegmentModel.update(data, {
-      where: {
-        id: segmentId,
-        accountId: req.accountId,
-      },
-    });
-    return res.send(normalize('segment', segment));
+
+    if (data.referenceId) {
+      delete data.referenceId;
+    }
+
+    const segment = await req.segment.update(data);
+    return res.send(normalize('segment', segment.get({
+      plain: true,
+    })));
   } catch (error) {
     return next(error);
   }
 });
 
 // Delete segment
-segmentRouter.delete('/:type/:segmentId', checkPermissions('segments:delete'), async (req, res, next) => {
-  const { segmentId } = req.params;
-  // Note: type isn't used, but in future there might be some usage
+segmentRouter.delete('/:segmentId', checkPermissions('segments:delete'), async (req, res, next) => {
   try {
-    const segment = await SegmentModel.destroy({
-      where: {
-        id: segmentId,
-        accountId: req.accountId,
-      },
-    });
-    return res.send(normalize('segment', segment));
+    // Check if logged in user is owner of requested object
+    req.segment.isOwner(req);
+
+    await req.segment.destroy();
+    return res.status(204).send();
   } catch (error) {
     return next(error);
   }

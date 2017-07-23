@@ -1,7 +1,9 @@
-module.exports = (sequelize, DataTypes) => {
-  // @TODO Add additional modules for which segment will be available on the enterprise dashboard
-  const MODULES = {
-    PATIENTS: 'patients',
+const StatusError = require('../util/StatusError');
+
+export default function (sequelize, DataTypes) {
+  const REFERENCE = {
+    ENTERPRISE: 'enterprise',
+    ACCOUNT: 'account',
   };
 
   const Segment = sequelize.define('Segment', {
@@ -10,36 +12,55 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+
     name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [8, 255],
+        len: [4, 255],
       },
     },
+
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    accountId: {
+
+    referenceId: {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
         isUUID: 4,
       },
     },
-    module: {
+
+    reference: {
       type: DataTypes.ENUM,
-      values: Object.keys(MODULES).map(key => MODULES[key]),
+      values: Object.keys(REFERENCE).map(key => REFERENCE[key]),
+      allowNull: false,
     },
+
     where: {
       type: DataTypes.JSONB,
       allowNull: false,
     },
   });
 
+  // Instance functions
+  Segment.prototype.isOwner = function isOwner(req) {
+    const isAccountAndOwner = this.reference === REFERENCE.ACCOUNT &&
+      this.referenceId !== req.accountId;
+
+    const isEnterpriseAndOwner = this.reference === REFERENCE.ENTERPRISE &&
+      this.referenceId !== req.enterpriseId;
+
+    if ((isAccountAndOwner) || (isEnterpriseAndOwner)) {
+      throw new StatusError(403, 'You are not owner of this segment');
+    }
+  };
+
   // Allowing constant to be available for usage outside of model
-  Segment.MODULES = MODULES;
+  Segment.REFERENCE = REFERENCE;
 
   return Segment;
 };
