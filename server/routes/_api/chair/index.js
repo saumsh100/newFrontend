@@ -14,7 +14,7 @@ chairsRouter.param('chairId', sequelizeLoader('chair', 'Chair'));
  *
  * - Create a chair
  */
-chairsRouter.post('/', /*checkPermissions('chairs:create'),*/ (req, res, next) => {
+chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
   // Attach chair to the clinic of posting user
   const chairData = Object.assign({}, req.body, {
     accountId: req.accountId || req.body.accountId,
@@ -30,7 +30,7 @@ chairsRouter.post('/', /*checkPermissions('chairs:create'),*/ (req, res, next) =
  *
  * - Get all chairs in an account
  */
-chairsRouter.get('/', /*checkPermissions('chairs:read'),*/ async (req, res, next) => {
+chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) => {
   const { accountId } = req;
   try {
     const chairs = await Chair.findAll({
@@ -48,7 +48,7 @@ chairsRouter.get('/', /*checkPermissions('chairs:read'),*/ async (req, res, next
 /**
  * Get a chair
  */
-chairsRouter.get('/:chairId', /*checkPermissions('chairs:read'),*/ (req, res, next) => {
+chairsRouter.get('/:chairId', checkPermissions('chairs:read'), (req, res, next) => {
   return Promise.resolve(req.chair)
     .then(chair => res.send(normalize('chair', chair.dataValues)))
     .catch(next);
@@ -57,7 +57,7 @@ chairsRouter.get('/:chairId', /*checkPermissions('chairs:read'),*/ (req, res, ne
 /**
  * Update a chair
  */
-chairsRouter.put('/:chairId', /*checkPermissions('chairs:update'),*/ (req, res, next) => {
+chairsRouter.put('/:chairId', checkPermissions('chairs:update'), (req, res, next) => {
   return req.chair.update(req.body)
     .then(chair => res.send(normalize('chair', chair.dataValues)))
     .catch(next);
@@ -66,7 +66,7 @@ chairsRouter.put('/:chairId', /*checkPermissions('chairs:update'),*/ (req, res, 
 /**
  * Delete a chair
  */
-chairsRouter.delete('/:chairId', /*checkPermissions('chairs:delete'),*/ (req, res, next) => {
+chairsRouter.delete('/:chairId', checkPermissions('chairs:delete'), (req, res, next) => {
   // TODO: probably need to make sure we purge all other areas where chairId is used
   // We actually delete chairs as we don't care about history
   return req.chair.destroy()
