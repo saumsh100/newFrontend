@@ -2,35 +2,31 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Appointment, SentReminder } from '../../../server/models';
+import { SentRecall } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { patientId, seedTestPatients } from '../../util/seedTestPatients';
-import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
-import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
+import { recallId1, seedTestRecalls } from '../../util/seedTestRecalls';
 
-const sentReminderId = 'e757afb0-14ef-4763-b162-c573169131c1';
-const sentReminder = {
-  id: sentReminderId,
-  reminderId: reminderId1,
+const sentRecallId = '689b7e40-0bff-40ea-bdeb-ff08d055075f';
+const sentRecall = {
+  id: sentRecallId,
+  recallId: recallId1,
   accountId,
   patientId,
-  appointmentId,
-  isSent: true,
   lengthSeconds: 540,
-  primaryType: 'email',
+  primaryType: 'sms',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
-async function seedTestSentReminder() {
-  await seedTestAppointments();
+async function seedTestSentRecall() {
+  await seedTestRecalls();
   await seedTestPatients();
-  await seedTestReminders();
-  await wipeModel(SentReminder);
-  await SentReminder.save(sentReminder);
+  await wipeModel(SentRecall);
+  SentRecall.save(sentRecall);
 }
 
-describe('/api/sentReminders', () => {
+describe('/api/sentRecalls', () => {
   // Seed with some standard user data
   let token = null;
   beforeAll(async () => {
@@ -44,25 +40,20 @@ describe('/api/sentReminders', () => {
 
   describe('GET /', () => {
     beforeEach(async () => {
-      await seedTestSentReminder();
+      await seedTestSentRecall();
     });
 
-    test('retrieve sent reminder', () => {
+    test('retrieve sent recall', () => {
       return request(app)
-        .get('/api/sentReminders?join=appointment')
+        .get('/api/sentRecalls')
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
-          joinObject: {
-            appointment: true,
-          },
         })
         .expect(200)
         .then(({ body }) => {
           expect(body).toMatchSnapshot();
         });
     });
-
-
   });
 });

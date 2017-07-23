@@ -7,7 +7,7 @@ import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { serviceId, service, seedTestService } from '../../util/seedTestServices';
 
-describe('/api/services', () => {
+describe('/api/patients', () => {
   // Seed with some standard user data
   let token = null;
   beforeAll(async () => {
@@ -24,7 +24,7 @@ describe('/api/services', () => {
       await seedTestService();
     });
 
-    test('retrieve services', () => {
+    test('/:joinPatientId/stats - retrieve patient stats', () => {
       return request(app)
         .get('/api/services')
         .set('Authorization', `Bearer ${token}`)

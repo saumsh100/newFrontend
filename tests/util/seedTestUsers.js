@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Account, Enterprise, Permission, User } from '../../server/models';
+import { weeklyScheduleId } from './seedTestWeeklySchedules';
 import wipeModel from './wipeModel';
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
@@ -23,6 +24,7 @@ const account = {
   id: accountId,
   enterpriseId,
   name: 'Test Account',
+  weeklyScheduleId,
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
