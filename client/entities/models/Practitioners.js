@@ -6,16 +6,15 @@ const PractitionerSchema = {
   accountId: null,
   services: [],
   firstName: null,
-  type: null,
-  isActive: null,
   lastName: null,
-  type: 'DR',
+  //type: 'DR',
   isCustomSchedule: null,
   weeklyScheduleId: null,
   fullAvatarUrl: null,
   avatarUrl: null,
   isActive: null,
   type: null,
+  isHidden: null,
 };
 
 export default class Practitioner extends createModel(PractitionerSchema) {

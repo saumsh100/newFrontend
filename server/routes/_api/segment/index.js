@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import { Segment as SegmentModel } from '../../../_models/';
+import { Segment as SegmentModel } from '../../../_models/index';
+import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
-import normalize from '../normalize';
+import normalize from '../../api/normalize';
 
 const segmentRouter = Router();
+
+segmentRouter.param('segmentId', sequelizeLoader('segment', 'Segment'));
 
 // Get single segment info
 segmentRouter.get('/:type/:segmentId', checkPermissions('segments:read'), async (req, res, next) => {

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/User Data Validation should be able to save a User without id provided 1`] = `
+Object {
+  "activeAccountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "avatarUrl": null,
+  "enterpriseId": "ef3c578f-c228-4a25-8388-90ee9a0c9eb4",
+  "firstName": "Harvey",
+  "lastName": "Dentest",
+  "password": "test",
+  "permissionId": "1962893f-a1fc-4230-a034-7ad50199cc98",
+  "username": "user@test.com",
+}
+`;

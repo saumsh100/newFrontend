@@ -2,7 +2,9 @@
 import { Router } from 'express';
 import subdomain from 'express-subdomain';
 import apiRouter from './api';
+import sequelizeApiRouter from './_api';
 import authRouter from './auth';
+import sequelizeAuthRouter from './_auth';
 import myRouter from './my';
 import callrailRouter from './callrail';
 import twilioRouter from './twilio';
@@ -25,6 +27,7 @@ rootRouter.use(subdomain('my', myRouter));
 
 // Bind auth route to generate tokens
 rootRouter.use('/auth', authRouter);
+rootRouter.use('/_auth', sequelizeAuthRouter);
 
 rootRouter.use('/signup', signupRouter);
 
@@ -34,6 +37,9 @@ rootRouter.get('/atoms', (req, res, next) => {
 
 // Bind REST API
 rootRouter.use('/api', apiRouter);
+
+// New REST API with sequelize
+rootRouter.use('/_api', sequelizeApiRouter);
 
 // Webhooks!
 rootRouter.use('/twilio', twilioRouter);

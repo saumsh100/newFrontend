@@ -1,7 +1,7 @@
 const SegmentModel = require('../_models').Segment;
 
 module.exports = {
-  async up(queryInterface, Sequelize) { // eslint-disable-line
+  up: async function(queryInterface, Sequelize) { // eslint-disable-line
     let res = null;
     try {
       res = await SegmentModel.create({

@@ -13,6 +13,7 @@ const Practitioner = createModel('Practitioner', {
   pmsId: type.string(),
   type: type.string(),
   isActive: type.boolean().default(true),
+  isHidden: type.boolean().default(false),
   avatarUrl: type.string(),
   fullAvatarUrl: type.virtual().default(function () {
     return this.avatarUrl ? `${globals.s3.urlPrefix}${this.avatarUrl}` : null;

@@ -1,4 +1,3 @@
-
 const bcrypt = require('bcrypt');
 const uuid = require('uuid').v4;
 const moment = require('moment');
@@ -24,6 +23,9 @@ import PatientUser,
 import Recall, { recallIdtest } from '../fixtures/recalls';
 import appointmentFixtures from '../fixtures/appointments';
 import SentReminder from '../fixtures/sentReminders';
+import userFixtures from '../fixtures/users';
+import permissionFixtures from '../fixtures/permissions';
+import accountFixtures from '../fixtures/accounts';
 
 import enterpriseFixtures, {
   sunshineSmilesId,
@@ -695,54 +697,7 @@ const SEEDS = {
       enterpriseId: dsoId,
       permissionId: grantPermissionId,
     },
-    /*{
-     firstName: 'Sergey',
-     lastName: 'Skovorodnikov',
-     username: 'sergey@carecru.com',
-     password: bcrypt.hashSync('sergey', saltRounds),
-     id: sergeyUserId,
-     activeAccountId: accountId,
-     enterpriseId: sunshineSmilesId,
-     // accounts: [accountId],
-     },
-     // account 2 user
-     {
-     firstName: 'Jatinder',
-     lastName: 'Dhillion',
-     username: 'jd@carecru.com',
-     password: bcrypt.hashSync('jd', saltRounds),
-     id: jdUserId,
-     activeAccountId: accountId2,
-     enterpriseId: sunshineSmilesId,
-     // accounts: [accountId],
-     },
-     {
-     firstName: 'Alex',
-     lastName: ' ',
-     username: 'alex@carecru.com',
-     password: bcrypt.hashSync('alex', saltRounds),
-     id: alexUserId,
-     activeAccountId: accountId,
-     enterpriseId: sunshineSmilesId,
-     },
-     {
-     firstName: 'SyncClient',
-     lastName: ' ',
-     username: 'syncclient@carecru.com',
-     password: bcrypt.hashSync('sync', saltRounds),
-     id: syncUserId,
-     activeAccountId: syncTestAccId,
-     enterpriseId: sunshineSmilesId,
-     },
-     {
-     firstName: 'Valerij',
-     lastName: 'Stukanov',
-     username: 'vst@carecru.com',
-     password: bcrypt.hashSync('vst', saltRounds),
-     id: vstUserId,
-     activeAccountId: accountId,
-     enterpriseId: sunshineSmilesId,
-     },*/
+    ...userFixtures,
   ],
 
   Family: [
@@ -1075,6 +1030,7 @@ const SEEDS = {
       //bookingWidgetPrimaryColor: '#f29b12',
       enterpriseId: dsoId,
     },
+    ...accountFixtures,
   ],
 
   Permission: [
@@ -1093,6 +1049,7 @@ const SEEDS = {
       role: 'OWNER',
       permissions: {},
     },
+    ...permissionFixtures,
     /*{
      userId: alexUserId,
      role: 'VIEWER',
@@ -1413,6 +1370,7 @@ const SEEDS = {
     {
       accountId,
       patientUserId,
+      endDate: recentStartTime,
     },
     {
       accountId,
@@ -1427,10 +1385,12 @@ const SEEDS = {
         moment().toISOString(),
         moment().add(2, 'days').toISOString(),
       ],
+      endDate: recentStartTime.add(oneHour),
     },
     {
       accountId,
       patientId: sergeyPatientId,
+      endDate: recentStartTime.add(oneHour),
     },
   ],
 

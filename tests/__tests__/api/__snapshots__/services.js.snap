@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/services DELETE / /:serviceId - delete service 1`] = `Object {}`;
+
+exports[`/api/services GET / /:serviceId - retrieve a service 1`] = `
+Object {
+  "entities": Object {
+    "services": Object {
+      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "duration": 4,
+        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isHidden": false,
+        "name": "Test Service",
+      },
+    },
+  },
+  "result": "c5beec65-73a0-4b58-ba48-65986931d054",
+}
+`;
+
+exports[`/api/services GET / retrieve services 1`] = `
+Object {
+  "entities": Object {
+    "services": Object {
+      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "duration": 4,
+        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isHidden": false,
+        "name": "Test Service",
+      },
+    },
+  },
+  "result": Array [
+    "c5beec65-73a0-4b58-ba48-65986931d054",
+  ],
+}
+`;
+
+exports[`/api/services POST / create service 1`] = `
+Object {
+  "entities": Object {
+    "services": Object {
+      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "duration": 4,
+        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isHidden": false,
+        "name": "Test Service",
+      },
+    },
+  },
+  "result": "c5beec65-73a0-4b58-ba48-65986931d054",
+}
+`;
+
+exports[`/api/services PUT / /:serviceId - update service 1`] = `
+Object {
+  "entities": Object {
+    "services": Object {
+      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "duration": 4,
+        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isHidden": false,
+        "name": "Updated Test Service",
+        "practitioners": Array [],
+      },
+    },
+  },
+  "result": "c5beec65-73a0-4b58-ba48-65986931d054",
+}
+`;

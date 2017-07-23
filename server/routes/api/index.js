@@ -13,6 +13,10 @@ import textMessagesRouter from './textMessages';
 import chairsRouter from './chair';
 import chatsRouter from './chats';
 import servicesRouter from './services';
+import invitesRouter from './invites';
+import recallsRouter from './recalls';
+import remindersRouter from './reminders';
+import permissionsRouter from './permissions';
 import availabilitiesRouter from './availabilities';
 import syncErrorRouter from './syncClientError';
 import syncControlRouter from './syncControlRouter';
@@ -25,12 +29,15 @@ import authMiddleware from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
 import sentRemindersRouter from './sentReminders';
 import sentRecallsRouter from './sentRecalls';
-import segmentRouter from './segment';
 
 const apiRouter = Router();
 
 apiRouter.all('*', authMiddleware, createJoinObject);
 apiRouter.use('/accounts', accountsRouter);
+apiRouter.use('/accounts', invitesRouter);
+apiRouter.use('/accounts', recallsRouter);
+apiRouter.use('/accounts', remindersRouter);
+apiRouter.use('/accounts', permissionsRouter);
 apiRouter.use('/appointments', appointmentRouter);
 apiRouter.use('/calls', callsRouter);
 apiRouter.use('/requests', requestRouter);
@@ -53,6 +60,5 @@ apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/sentReminders', sentRemindersRouter);
 apiRouter.use('/sentRecalls', sentRecallsRouter);
-apiRouter.use('/segment', segmentRouter);
 
 export default apiRouter;

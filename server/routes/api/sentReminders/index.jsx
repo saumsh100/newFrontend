@@ -25,7 +25,6 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), (req, res, 
   // Todo: setup date variable
   startDate = startDate ? r.ISO8601(startDate) : r.now().add(365 * 24 * 60 * 60 * -1);
   endDate = endDate ? r.ISO8601(endDate) : r.now();
-
   return SentReminder
     .filter({ accountId, isSent: true })
     .filter(r.row('createdAt').during(startDate, endDate))

@@ -75,7 +75,7 @@
     }
 
     &_left {
-      max-width: 150px;
+      max-width: 200px;
       overflow: hidden;
       @media screen and (max-width: 450px) {
         margin-top: 10px;
@@ -83,11 +83,27 @@
 
       div {
         text-align: left;
+        white-space: nowrap;
         text-overflow: ellipsis;
         @media screen and (max-width: 450px) {
           text-align: center;
         }
       }
+    }
+
+    &_email {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+     // font-size: $small-size;
+    }
+
+    &_phone {
+      //font-size: $small-size;
+    }
+
+    &_endDate {
+      color: $primary-dark;
     }
 
     &_right {
@@ -157,9 +173,8 @@
     }
 
     &_name {
-      color: $primary-dark;
-      margin-bottom: 7px;
-      
+      text-transform: capitalize;
+      color: $primary-darkgrey;
     }
 
     &_icon {
