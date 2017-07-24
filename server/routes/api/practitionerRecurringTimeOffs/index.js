@@ -64,12 +64,21 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
       EndTime,
       interval = 1,
       DayOfWeek,
+      DayOfMonth,
+      MonthOfYear,
       Id,
     } = schedule.RecurrencePattern;
 
+    if (!DayOfWeek && (!DayOfMonth && !MonthOfYear)) {
+      continue;
+    }
+
+    const newDayOfWeek = DayOfWeek || moment(`${moment().get('year')} ${DayOfMonth} ${MonthOfYear}`, 'YYYY-MM-DD').format('dddd');
+
     if (isWorking) {
       if (practitionerId && DayOfWeek && moment(endDate).isAfter(moment('99900620', 'YYYYMMDD').toISOString())) {
-        const dayOfWeek = DayOfWeek.toLowerCase().replace(/\s/g, '').split(',');
+        const dayOfWeek = newDayOfWeek.toLowerCase().replace(/\s/g, '').split(',');
+
         if (!chairs[practitionerId]) {
           chairs[practitionerId] = [];
         }
@@ -84,7 +93,7 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
         }
       }
     } else {
-      const dayOfWeek = DayOfWeek.replace(/\s/g, '').split(',');
+      const dayOfWeek = newDayOfWeek.replace(/\s/g, '').split(',');
 
       for (let i = 0; i < dayOfWeek.length; i++) {
         recurringTimeoffs.push({

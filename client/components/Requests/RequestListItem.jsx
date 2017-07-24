@@ -63,26 +63,26 @@ class RequestListItem extends Component {
 
     let showHoverComponents = (<div className={styles.clickHandlers__newreqText}>New</div>);
 
-    if (isHovered) {
-     showHoverComponents = (
-        <div>
-          <div className={styles.clickHandlers}>
-            <IconButton
-              icon={'times-circle-o'}
-              className={styles.clickHandlers__remove}
-              onClick={this.onClickRemove}
-              data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Reject`}
-            />
-            <Icon
-              icon={'check-circle'}
-              className={styles.clickHandlers__confirm}
-              onClick={this.onClickConfirm}
-              data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Accept`}
-            />
-          </div>
+    //if (isHovered) {
+   showHoverComponents = (
+      <div>
+        <div className={styles.clickHandlers}>
+          <IconButton
+            icon={'times-circle-o'}
+            className={styles.clickHandlers__remove}
+            onClick={this.onClickRemove}
+            data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Reject`}
+          />
+          <Icon
+            icon={'check-circle'}
+            className={styles.clickHandlers__confirm}
+            onClick={this.onClickConfirm}
+            data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Accept`}
+          />
         </div>
-      );
-    }
+      </div>
+    );
+  //}
 
     return (
       <ListItem

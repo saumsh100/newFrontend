@@ -46,7 +46,7 @@ function fetchServiceData(options) {
   const joinObject = {
     practitioners: {
       _apply: prac => prac.filter(row => {
-        return row('isActive').eq(true);
+        return row('isActive').eq(true).and(row.hasFields('isHidden').not().or(row('isHidden').eq(false)));
       }),
     },
 
@@ -180,7 +180,7 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
   });
 }
 
-// function
+// Converts a model of recurring time offs to just regular time offs so it can be send to that process
 function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate) {
   const fullTimeOffs = timeOffs.slice();
 
@@ -213,6 +213,8 @@ function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate) {
 
     let count = 1;
 
+    // test for first day of the week (seeing if it comes before or after when we changed the day of the week)
+
     if (tmpStart.isAfter(start, 'd') || tmpStart.isSame(start, 'd')) {
       fullTimeOffs.push({
         startDate: tmpStart.toISOString(),
@@ -236,6 +238,8 @@ function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate) {
       tmpStart.add(7, 'days');
       tmpEnd.add(7, 'days');
     }
+
+    // loop through and create regular time offs until the end date of the requested avaliabilities
 
     while (tmpStart.isBefore(moment(recurringTimeOffs[i].endDate)) && tmpStart.isBefore(endDate)) {
       if (count % recurringTimeOffs[i].interval === 0 && count >= recurringTimeOffs[i].interval) {
@@ -354,6 +358,8 @@ async function filterByChairs(weeklySchedule, avails, pracWeeklySchedule, appoin
     const dayOfWeek = moment(avails[j].startDate).format('dddd').toLowerCase();
     const chairIds = weeklySchedule[dayOfWeek].chairIds;
     // prac has no custom so has all chairs
+
+
     if (pracWeeklySchedule !== weeklySchedule.id) {
       newAvails.push(avails[j]);
       continue;

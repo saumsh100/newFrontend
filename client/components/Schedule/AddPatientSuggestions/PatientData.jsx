@@ -25,7 +25,8 @@ export default function PatientData(props) {
   };
 
   return (
-    <ListItem className={styles.suggestionsListItem}>
+    <ListItem
+      className={styles.suggestionsListItem}>
       <img className={styles.patientContainer_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
       <div className={styles.patientContainer} >
         <div className={styles.patientContainer_fullName}>
@@ -43,6 +44,7 @@ export default function PatientData(props) {
           handleUpdatePatient(appointment);
         }}
         className={styles.connectButton}
+        data-test-id={`${patient.firstName}${patient.lastName}`}
       >
         Connect
       </Button>

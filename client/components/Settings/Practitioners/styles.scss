@@ -137,9 +137,20 @@
   &_practActive {
     display: flex;
     padding-top: 5px;
+    padding-bottom: 10px;
     align-content: center;
     align-items: center;
     &_toggle {
+      padding-left: 5px;
+    }
+  }
+
+  &_practHidden {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+    &_hiddenToggle {
       padding-left: 5px;
     }
   }

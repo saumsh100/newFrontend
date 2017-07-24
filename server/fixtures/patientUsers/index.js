@@ -22,11 +22,11 @@ const sergeyPhoneNumber = '+17788654251';
 export default [
   {
     id: patientUserId,
-    email: 'justin@carecru.com',
+    email: 'justinefranco@carecru.com',
     password: bcrypt.hashSync('justin', passwordHashSaltRounds),
     firstName: 'Justine',
     lastName: 'Franco',
-    phoneNumber: alexPhoneNumber,
+    phoneNumber: '+16048883332',
   },
   {
     id: patientUserId2,
