@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/practitioners DELETE / /:practitionerId - delete a practitioner 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/practitioners GET / /:practitionerId - get a practitioner 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "firstName": "Colonel",
+        "fullAvatarUrl": null,
+        "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "isActive": true,
+        "isCustomSchedule": false,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
+  },
+  "result": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+}
+`;
+
+exports[`/api/practitioners GET / get all practitioners 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "firstName": "Colonel",
+        "fullAvatarUrl": null,
+        "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "isActive": true,
+        "isCustomSchedule": false,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
+  },
+  "result": Array [
+    "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+  ],
+}
+`;
+
+exports[`/api/practitioners PUT / /:practitionerId - update practitioner 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "firstName": "Updated",
+        "fullAvatarUrl": null,
+        "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "isActive": true,
+        "isCustomSchedule": false,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "services": Array [],
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
+  },
+  "result": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+}
+`;

@@ -1,29 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/api/services DELETE / /:serviceId - delete service 1`] = `
+exports[`/api/patients DELETE / /:serviceId - delete service 1`] = `
 Object {
   "entities": Object {},
 }
 `;
 
-exports[`/api/services GET / /:serviceId - retrieve a service 1`] = `
-Object {
-  "entities": Object {
-    "services": Object {
-      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
-        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "duration": 4,
-        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
-        "isHidden": false,
-        "name": "Test Service",
-      },
-    },
-  },
-  "result": "c5beec65-73a0-4b58-ba48-65986931d054",
-}
-`;
-
-exports[`/api/services GET / retrieve services 1`] = `
+exports[`/api/patients GET / /:joinPatientId/stats - retrieve patient stats 1`] = `
 Object {
   "entities": Object {
     "services": Object {
@@ -42,7 +25,7 @@ Object {
 }
 `;
 
-exports[`/api/services POST / create service 1`] = `
+exports[`/api/patients GET / /:serviceId - retrieve a service 1`] = `
 Object {
   "entities": Object {
     "services": Object {
@@ -59,7 +42,24 @@ Object {
 }
 `;
 
-exports[`/api/services PUT / /:serviceId - update service 1`] = `
+exports[`/api/patients POST / create service 1`] = `
+Object {
+  "entities": Object {
+    "services": Object {
+      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "duration": 4,
+        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isHidden": false,
+        "name": "Test Service",
+      },
+    },
+  },
+  "result": "c5beec65-73a0-4b58-ba48-65986931d054",
+}
+`;
+
+exports[`/api/patients PUT / /:serviceId - update service 1`] = `
 Object {
   "entities": Object {
     "services": Object {

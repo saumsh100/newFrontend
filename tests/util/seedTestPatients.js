@@ -46,7 +46,7 @@ async function seedTestPatients() {
 
   await PatientUser.save(patientUser);
   await Patient.save(patient);
-};
+}
 
 module.exports = {
   patientId,

@@ -7,7 +7,6 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "canSendRecalls": false,
         "canSendReminders": false,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterprise": Object {
           "createdAt": "2017-07-19T00:14:30.932Z",
           "id": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
@@ -20,6 +19,7 @@ Object {
         "logo": null,
         "name": "Test Account",
         "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
       },
     },
   },
@@ -34,12 +34,12 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "canSendRecalls": false,
         "canSendReminders": false,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "fullLogoUrl": null,
         "id": "62954241-3652-4792-bae5-5bfed53d37b7",
         "name": "Test Account",
         "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
       },
     },
   },
@@ -56,12 +56,12 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "canSendRecalls": false,
         "canSendReminders": false,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "fullLogoUrl": null,
         "id": "62954241-3652-4792-bae5-5bfed53d37b7",
         "name": "Test Account",
         "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
       },
     },
   },
@@ -78,13 +78,13 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "canSendRecalls": false,
         "canSendReminders": false,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "fullLogoUrl": null,
         "id": "62954241-3652-4792-bae5-5bfed53d37b7",
         "logo": null,
         "name": "Test Account",
         "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
       },
     },
   },
@@ -99,7 +99,6 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "canSendRecalls": false,
         "canSendReminders": false,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterprise": Object {
           "createdAt": "2017-07-19T00:14:30.932Z",
           "id": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
@@ -111,18 +110,17 @@ Object {
         "id": "62954241-3652-4792-bae5-5bfed53d37b7",
         "name": "Test Account",
         "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
       },
     },
     "permissions": Object {
       "74d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
         "canAccessAllAccounts": true,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "role": "OWNER",
       },
       "84d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
         "canAccessAllAccounts": true,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "role": "MANAGER",
       },
@@ -130,7 +128,6 @@ Object {
     "users": Object {
       "5668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
         "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "firstName": "Harvey",
         "id": "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
@@ -141,7 +138,6 @@ Object {
       },
       "6668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
         "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "firstName": "Harvey",
         "id": "6668f250-e8c9-46e3-bfff-0249f1eec6b8",
@@ -162,7 +158,6 @@ Object {
 exports[`/api/accounts POST /:accountId/newUser should create and return the user 1`] = `
 Object {
   "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-  "createdAt": "2017-07-20T00:14:30.932Z",
   "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
   "firstName": "New",
   "id": "72954241-3652-4792-bae5-5bfed53d37b7",
@@ -178,7 +173,6 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "canSendRecalls": false,
         "canSendReminders": false,
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterprise": Object {
           "createdAt": "2017-07-19T00:14:30.932Z",
           "id": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
@@ -190,6 +184,7 @@ Object {
         "id": "62954241-3652-4792-bae5-5bfed53d37b7",
         "name": "Test That Thang",
         "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
       },
     },
   },

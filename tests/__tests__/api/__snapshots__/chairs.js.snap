@@ -6,13 +6,11 @@ Object {
     "chairs": Object {
       "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-20T00:14:30.932Z",
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "name": "C1",
       },
       "46d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-20T00:14:30.932Z",
         "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "name": "C2",
       },
@@ -31,7 +29,6 @@ Object {
     "chairs": Object {
       "11d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-20T00:14:30.932Z",
         "id": "11d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "name": "New Chair",
       },
@@ -47,7 +44,6 @@ Object {
     "chairs": Object {
       "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-20T00:14:30.932Z",
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "name": "Modified Chair Name",
       },

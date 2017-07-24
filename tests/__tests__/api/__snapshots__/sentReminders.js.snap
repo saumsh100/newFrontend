@@ -6,7 +6,6 @@ Object {
     "appointments": Object {
       "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "endDate": "2017-07-19T00:16:30.932Z",
         "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
         "isCancelled": false,
@@ -24,7 +23,6 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointment": "6b215a42-5c33-4f94-8313-d89893ae2f36",
         "appointmentId": "6b215a42-5c33-4f94-8313-d89893ae2f36",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "e757afb0-14ef-4763-b162-c573169131c1",
         "isConfirmed": false,
         "isSent": true,

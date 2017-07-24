@@ -8,7 +8,7 @@ import {
 import { accountId, enterpriseId, ownerUserId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { getModelsArray }  from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -74,6 +74,7 @@ describe('/api/accounts/:accountId/invites', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -100,6 +101,7 @@ describe('/api/accounts/:accountId/invites', () => {
         .set('Authorization', `Bearer ${ownerToken}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const [invite] = getModelsArray('invites', body);
           delete invite.token;
           expect(invite).toMatchSnapshot();

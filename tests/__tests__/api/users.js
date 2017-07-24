@@ -8,6 +8,7 @@ import {
   managerUserId,
   seedTestUsers,
 } from '../../util/seedTestUsers';
+import { omitPropertiesFromBody }  from '../../util/selectors';
 
 describe('/api/users', () => {
   // Seed with some standard user data
@@ -24,6 +25,7 @@ describe('/api/users', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

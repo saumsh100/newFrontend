@@ -2,13 +2,15 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Service } from '../../../server/models';
+import { Practitioner } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-import { serviceId, service, seedTestService } from '../../util/seedTestServices';
+import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
+import { weeklySchedule, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-describe('/api/services', () => {
+
+describe('/api/practitioners', () => {
   // Seed with some standard user data
   let token = null;
   beforeAll(async () => {
@@ -22,12 +24,12 @@ describe('/api/services', () => {
 
   describe('GET /', () => {
     beforeEach(async () => {
-      await seedTestService();
+      await seedTestPractitioners();
     });
 
-    test('retrieve services', () => {
+    test('get all practitioners', () => {
       return request(app)
-        .get('/api/services')
+        .get('/api/practitioners')
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -39,9 +41,9 @@ describe('/api/services', () => {
         });
     });
 
-    test('/:serviceId - retrieve a service', () => {
+    test('/:practitionerId - get a practitioner', () => {
       return request(app)
-        .get(`/api/services/${serviceId}`)
+        .get(`/api/practitioners/${practitionerId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -53,33 +55,42 @@ describe('/api/services', () => {
 
   describe('POST /', () => {
     beforeEach(async () => {
-      await wipeModel(Service);
+      await wipeModel(Practitioner);
     });
 
-    test('create service', () => {
+    // TODO: Get help on this
+    /*
+    test.only('create practitioner', () => {
       return request(app)
-        .post('/api/services')
+        .post('/api/practitioners?join=weeklySchedule')
         .set('Authorization', `Bearer ${token}`)
-        .send(service)
+        .send(Object.assign(
+          { accountId },
+          practitioner,
+          {
+            joinObject: weeklySchedule,
+          },
+        ))
         .expect(201)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
+          console.log(JSON.stringify(body));
         });
     });
+    */
   });
 
   describe('PUT /', () => {
     beforeEach(async () => {
-      await seedTestService();
+      await seedTestPractitioners();
     });
 
-    test('/:serviceId - update service', () => {
+    test('/:practitionerId - update practitioner', () => {
       return request(app)
-        .put(`/api/services/${serviceId}`)
+        .put(`/api/practitioners/${practitionerId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          name: 'Updated Test Service',
+          firstName: 'Updated',
         })
         .expect(200)
         .then(({ body }) => {
@@ -87,16 +98,34 @@ describe('/api/services', () => {
           expect(body).toMatchSnapshot();
         });
     });
+
+    // TODO: Daily schemas have generated timestamps
+    /*
+    test.only('/:practitionerId/customSchedule - update weekly schedule', () => {
+      const updatedWeeklySchedule = weeklySchedule;
+      updatedWeeklySchedule.createdAt = '2017-07-19T00:18:30.932Z';
+      return request(app)
+        .put(`/api/practitioners/${practitionerId}/customSchedule`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(Object.assign({ accountId }, weeklySchedule))
+        .expect(201)
+        .then(({ body }) => {
+          expect(body).toMatchSnapshot();
+          console.log(JSON.stringify(body));
+        });
+    });
+    */
+
   });
 
   describe('DELETE /', () => {
     beforeEach(async () => {
-      await seedTestService();
+      await seedTestPractitioners();
     });
 
-    test('/:serviceId - delete service', () => {
+    test('/:practitionerId - delete a practitioner', () => {
       return request(app)
-        .delete(`/api/services/${serviceId}`)
+        .delete(`/api/practitioners/${practitionerId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
@@ -106,3 +135,4 @@ describe('/api/services', () => {
     });
   });
 });
+
