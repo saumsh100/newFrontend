@@ -48,6 +48,138 @@ Object {
 }
 `;
 
+exports[`/api/practitioners GET / get all practitioners with weeklySchedule 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "firstName": "Colonel",
+        "fullAvatarUrl": null,
+        "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "isActive": true,
+        "isCustomSchedule": false,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "weeklySchedule": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
+    "weeklySchedules": Object {
+      "8ce3ba61-60cd-40c6-bc85-c018cabd4a40": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "friday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "id": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+        "monday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "saturday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "sunday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "thursday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "tuesday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "wednesday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+      },
+    },
+  },
+  "result": Array [
+    "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+  ],
+}
+`;
+
+exports[`/api/practitioners POST / create practitioner 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
+        "firstName": "Colonel",
+        "fullAvatarUrl": null,
+        "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "isActive": true,
+        "isCustomSchedule": false,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "weeklySchedule": "1f56957e-8766-4c75-992c-3a95069a9589",
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
+    "weeklySchedules": Object {
+      "1f56957e-8766-4c75-992c-3a95069a9589": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-24T20:12:50.306Z",
+        "friday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "id": "1f56957e-8766-4c75-992c-3a95069a9589",
+        "monday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "saturday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "sunday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "thursday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "tuesday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "wednesday": Object {
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+      },
+    },
+  },
+  "result": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+}
+`;
+
 exports[`/api/practitioners PUT / /:practitionerId - update practitioner 1`] = `
 Object {
   "entities": Object {
