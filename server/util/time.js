@@ -70,6 +70,7 @@ const Time = {
     const endTimeDuring = moment(b.endDate).isBetween(a.startDate, a.endDate);
     const dayEndEqual = moment(a.endDate).isSame(b.endDate, 'day') && a.allDay;
     const endTimeEqual = moment(a.endDate).isSame(b.endDate);
+
     return startTimeDuring || startTimeEqual || endTimeDuring || endTimeEqual || dayStartEqual || dayEndEqual;
   },
 

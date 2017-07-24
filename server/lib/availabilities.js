@@ -4,7 +4,7 @@ const isEmpty = require('lodash/isEmpty');
 const isUndefined = require('lodash/isUndefined');
 const unionBy = require('lodash/unionBy');
 const { r } = require('../config/thinky');
-const { Service, Practitioner } = require('../models');
+const { Service, Practitioner, Appointment } = require('../models');
 const StatusError = require('../util/StatusError');
 const {
   isDuringEachother,
@@ -22,6 +22,7 @@ const generateDuringFilter = (m, startDate, endDate) => {
     m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
   );
 };
+
 
 /**
  * fetchServiceData will grab all data from the service that is necessary
@@ -127,7 +128,9 @@ function fetchPractitionerData(options) {
     return fetchPractitionersSchedules(practitioners)
       .then((weeklySchedules) => {
         // now get practitioner.timeOff and practitioners.appointments and resolve promise
-        const promises = practitioners.map(p => fetchPractitionerTOAndAppts(p, startDate, endDate));
+        const promises = practitioners.map((p, i) => {
+          return fetchPractitionerTOAndAppts(p, startDate, endDate);
+        });
         return Promise.all(promises).then(practs => resolve({ weeklySchedules, practitioners: practs }));
       })
       .catch(err => reject(err));
@@ -152,10 +155,23 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
         },
       },
 
+      recurringTimeOffs: {
+        _apply: (sequence) => {
+          return sequence.filter((timeOff) => {
+            // subtract and add for start date and enddate as you can miss if longer than week.
+            return generateDuringFilter(timeOff, moment(startDate).subtract(365 * 2, 'days').toISOString(), moment(endDate).add(365 * 2, 'days').toISOString());
+          });
+        },
+      },
+
       appointments: {
         _apply: (sequence) => {
           return sequence.filter((appt) => {
-            return generateDuringFilter(appt, startDate, endDate);
+            return generateDuringFilter(appt, startDate, endDate)
+              .and(appt
+                .hasFields('isBookable')
+                .not()
+                .or(appt('isBookable').eq(false)));
           });
         },
       },
@@ -166,6 +182,84 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
       .then(p => resolve(p))
       .catch(err => reject(err));
   });
+}
+
+// Converts a model of recurring time offs to just regular time offs so it can be send to that process
+function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate) {
+  const fullTimeOffs = timeOffs.slice();
+
+  for (let i = 0; i < recurringTimeOffs.length; i++) {
+    let startDay;
+    let endDay;
+
+    if (recurringTimeOffs[i].allDay) {
+      startDay = recurringTimeOffs[i].startDate;
+      endDay = recurringTimeOffs[i].startDate;
+    } else {
+      startDay = new Date(recurringTimeOffs[i].startDate);
+      const startTime = new Date(recurringTimeOffs[i].startTime);
+      startDay.setHours(startTime.getHours());
+      startDay.setMinutes(startTime.getMinutes());
+
+      endDay = new Date(recurringTimeOffs[i].startDate);
+      const endTime = new Date(recurringTimeOffs[i].endTime);
+      endDay.setHours(endTime.getHours());
+      endDay.setMinutes(endTime.getMinutes());
+    }
+
+    const start = moment(startDay);
+    const end = moment(endDay);
+
+    const dayOfWeek = moment().day(recurringTimeOffs[i].dayOfWeek).isoWeekday();
+
+    const tmpStart = start.clone().day(dayOfWeek);
+    const tmpEnd = end.clone().day(dayOfWeek);
+
+    let count = 1;
+
+    // test for first day of the week (seeing if it comes before or after when we changed the day of the week)
+
+    if (tmpStart.isAfter(start, 'd') || tmpStart.isSame(start, 'd')) {
+      fullTimeOffs.push({
+        startDate: tmpStart.toISOString(),
+        endDate: tmpEnd.toISOString(),
+        practitionerId: recurringTimeOffs[i].practitionerId,
+        allDay: recurringTimeOffs[i].allDay,
+      });
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+    } else {
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+
+      fullTimeOffs.push({
+        startDate: tmpStart.toISOString(),
+        endDate: tmpEnd.toISOString(),
+        practitionerId: recurringTimeOffs[i].practitionerId,
+        allDay: recurringTimeOffs[i].allDay,
+      });
+
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+    }
+
+    // loop through and create regular time offs until the end date of the requested avaliabilities
+
+    while (tmpStart.isBefore(moment(recurringTimeOffs[i].endDate)) && tmpStart.isBefore(endDate)) {
+      if (count % recurringTimeOffs[i].interval === 0 && count >= recurringTimeOffs[i].interval) {
+        fullTimeOffs.push({
+          startDate: tmpStart.toISOString(),
+          endDate: tmpEnd.toISOString(),
+          practitionerId: recurringTimeOffs[i].practitionerId,
+          allDay: recurringTimeOffs[i].allDay,
+        });
+      }
+      count++;
+      tmpStart.add(7, 'days');
+      tmpEnd.add(7, 'days');
+    }
+  }
+  return fullTimeOffs;
 }
 
 /**
@@ -187,12 +281,15 @@ function generatePractitionerAvailabilities(options) {
   const {
     appointments,
     timeOffs,
+    recurringTimeOffs,
   } = practitioner;
 
   const {
     requests,
     reservations,
   } = service;
+
+  // console.log(practitioner.firstName, weeklySchedule)
 
   // console.log('requests', requests);
   // console.log('weeklySchedule.monday', weeklySchedule.monday);
@@ -238,10 +335,11 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefReservations;
   });
 
+  const fullTimeOffs = recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate);
 
   const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
-    for (let i = 0; timeOffs && i < timeOffs.length; i++) {
-      if (isDuringEachotherTimeOff(timeOffs[i], slot)) {
+    for (let i = 0; fullTimeOffs && i < fullTimeOffs.length; i++) {
+      if (isDuringEachotherTimeOff(fullTimeOffs[i], slot)) {
         return false;
       }
     }
@@ -254,6 +352,36 @@ function generatePractitionerAvailabilities(options) {
       endDate: moment(aval.startDate).add(service.duration, 'minutes').toISOString(),
     };
   });
+}
+
+// fetches appointment in the time frame for a given chair(s) and filters if they aren't any availiable
+
+async function filterByChairs(weeklySchedule, avails, pracWeeklySchedule, appointments) {
+  const newAvails = [];
+  for (let j = 0; j < avails.length; j++) {
+    const dayOfWeek = moment(avails[j].startDate).format('dddd').toLowerCase();
+    const chairIds = weeklySchedule[dayOfWeek].chairIds;
+    // prac has no custom so has all chairs
+
+
+    if (pracWeeklySchedule !== weeklySchedule.id) {
+      newAvails.push(avails[j]);
+      continue;
+    }
+
+    const isAvailiable = chairIds.some((chairId) => {
+      const test = appointments.some(a => {
+        return a.chairId === chairId && isDuringEachother(avails[j], a);
+      });
+
+      return !test;
+    });
+
+    if (isAvailiable) {
+      newAvails.push(avails[j]);
+    }
+  }
+  return newAvails;
 }
 
 /**
@@ -273,20 +401,31 @@ function fetchAvailabilities(options) {
         fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
-            const practitionerAvailabilities = practitioners.map((p, i) => {
-              return generatePractitionerAvailabilities({
-                practitioner: p,
-                weeklySchedule: weeklySchedules[i],
-                service,
-                startDate,
-                timeInterval,
-                endDate,
+            return Appointment
+            .filter((row) => {
+              return generateDuringFilter(row, startDate, endDate);
+            }).run()
+            .then((appointments) => {
+              const practitionerAvailabilities = practitioners.map((p, i) => {
+                const avails = generatePractitionerAvailabilities({
+                  practitioner: p,
+                  weeklySchedule: weeklySchedules[i],
+                  service,
+                  startDate,
+                  timeInterval,
+                  endDate,
+                });
+                return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
               });
-            });
 
-            const squashed = unionBy(...practitionerAvailabilities, 'startDate');
-            const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
-            return resolve(squashedAndSorted);
+              return Promise.all(practitionerAvailabilities)
+              .then((pracAvails) => {
+                const squashed = unionBy(...pracAvails, 'startDate');
+                const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
+                return resolve(squashedAndSorted);
+              });
+
+            });
           });
       })
       .catch(err => reject(err));
