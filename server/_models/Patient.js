@@ -1,4 +1,8 @@
 
+import uniqWith from 'lodash/uniqWith';
+import customDataTypes from '../util/customDataTypes';
+import { UniqueFieldError } from '../models/createModel/errors';
+
 const ACTIVE = 'Active';
 const INACTIVE = 'Inactive';
 
@@ -47,27 +51,14 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    phoneNumber: {
-      type: DataTypes.STRING,
-    },
-
-    homePhoneNumber: {
-      type: DataTypes.STRING,
-    },
-
-    mobilePhoneNumber: {
-      type: DataTypes.STRING,
-    },
-
-    workPhoneNumber: {
-      type: DataTypes.STRING,
-    },
-
-    otherPhoneNumber: {
-      type: DataTypes.STRING,
-    },
+    phoneNumber: customDataTypes.phoneNumber('phoneNumber', DataTypes),
+    homePhoneNumber: customDataTypes.phoneNumber('homePhoneNumber', DataTypes),
+    mobilePhoneNumber: customDataTypes.phoneNumber('mobilePhoneNumber', DataTypes),
+    workPhoneNumber: customDataTypes.phoneNumber('workPhoneNumber', DataTypes),
+    otherPhoneNumber: customDataTypes.phoneNumber('otherPhoneNumber', DataTypes),
 
     prefPhoneNumber: {
+      // TODO: this should be an enum
       type: DataTypes.STRING,
     },
 
@@ -149,7 +140,77 @@ export default function (sequelize, DataTypes) {
 
       defaultValue: ACTIVE,
     },
+  }, {
+    // Model Config
+    indexes: [
+      {
+        unique: true,
+        fields: ['accountId', 'email']
+      },
+      {
+        unique: true,
+        fields: ['accountId', 'mobilePhoneNumber']
+      },
+    ],
   });
+
+  Patient.associate = (({ Account }) => {
+    Patient.belongsTo(Account, {
+      foreignKey: 'accountId',
+      as: 'account',
+    });
+  });
+
+  Patient.preValidateArray = function (dataArray) {
+    const errors = [];
+
+    const onError = (field, doc) => {
+      const error = UniqueFieldError({ tableName: 'Patient' }, field);
+      error['patient'] = doc;
+      errors.push(error);
+    };
+
+    const docs = uniqWith(dataArray, (a, b) => {
+      if (a.id && b.id && a.id === b.id) {
+        onError('id', a);
+        return true;
+      }
+
+      if (a.accountId && b.accountId && a.accountId === b.accountId) {
+        if (a.mobilePhoneNumber && b.mobilePhoneNumber && a.mobilePhoneNumber === b.mobilePhoneNumber) {
+          onError('mobilePhoneNumber', a);
+          return true;
+        }
+
+        if (a.email && b.email && a.email === b.email) {
+          onError('email', a);
+          return true;
+        }
+      }
+    });
+
+    return { errors, docs };
+  };
+
+  Patient.batchSave = async function (dataArray) {
+    const { docs, errors } = Patient.preValidateArray(dataArray);
+
+    console.log('docs');
+    console.log(docs);
+    console.log('errors');
+    console.log(errors);
+
+    const response = await Patient.bulkCreate(docs, { validate: true });
+
+    console.log('response');
+    console.log(response);
+
+    if (errors.length) {
+      throw { docs: response, errors };
+    }
+
+    return response;
+  };
 
   return Patient;
 }
