@@ -81,6 +81,8 @@ const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
 
 const chairId = '7f439ff8-c55d-4423-9316-a41240c4d329';
 const chairId2 = uuid();
+const chairId3 = '2f439ff8-c55d-4423-9316-a41240c4d329';
+
 
 const serviceId = uuid();
 const serviceId2 = uuid();
@@ -964,22 +966,27 @@ const SEEDS = {
             endTime: time(13, 0),
           },
         ],
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
       wednesday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
       friday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
       saturday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
       sunday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
       startDate: new Date(2017, 4, 5, 9, 0),
       weeklySchedules: [{
@@ -1376,6 +1383,12 @@ const SEEDS = {
     {
       accountId: accountId2,
       name: 'Chair 2',
+      description: '',
+    },
+    {
+      id: chairId3,
+      accountId: accountId2,
+      name: 'Chair 1',
       description: '',
     },
   ],

@@ -374,25 +374,21 @@ async function filterByChairs(weeklySchedule, avails, pracWeeklySchedule) {
       continue;
     }
 
-    const promises = [];
-    for (let i = 0; i < chairIds.length; i++) {
-      promises.push(
-        Appointment
-        .filter(r.row('chairId').eq(chairIds[i]))
+    const results = await Appointment
         .filter((row) => {
           return generateDuringFilterBetween(row, avails[j].startDate, avails[j].endDate);
-        })
-      );
-    }
-    const results = await Promise.all(promises);
+        }).run();
 
-    let push = false;
-    for (let i = 0; i < results.length; i++) {
-      if (!results[i][0]) {
-        push = true;
+    const isAvailiable = (results[0] ? chairIds.some((chairId) => {
+      for (let i = 0; i < results.length; i++) {
+        if (results[i].chairId === chairId) {
+          return false;
+        }
+        return true;
       }
-    }
-    if (push) {
+    }) : true);
+
+    if (isAvailiable) {
       newAvails.push(avails[j]);
     }
   }
@@ -425,7 +421,7 @@ function fetchAvailabilities(options) {
                 timeInterval,
                 endDate,
               });
-              return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId)
+              return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId);
             });
 
             return Promise.all(practitionerAvailabilities)

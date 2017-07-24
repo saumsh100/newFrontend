@@ -69,32 +69,38 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
 
     if (isWorking) {
       if (practitionerId && DayOfWeek && moment(endDate).isAfter(moment('99900620', 'YYYYMMDD').toISOString())) {
+        const dayOfWeek = DayOfWeek.toLowerCase().replace(/\s/g, '').split(',');
         if (!chairs[practitionerId]) {
           chairs[practitionerId] = [];
         }
 
-        chairs[practitionerId].push({
-          Id,
-          practitionerId,
-          chairIds,
-          dayOfWeek: DayOfWeek.toLowerCase(),
-        });
+        for (let i = 0; i < dayOfWeek.length; i++) {
+          chairs[practitionerId].push({
+            Id,
+            practitionerId,
+            chairIds,
+            dayOfWeek: dayOfWeek[i],
+          });
+        }
       }
     } else {
-      recurringTimeoffs.push({
-        practitionerId,
-        PatternStartDate,
-        StartTime,
-        PatternEndDate,
-        EndTime,
-        interval,
-        DayOfWeek,
-        endDate,
-        notes,
-      });
+      const dayOfWeek = DayOfWeek.replace(/\s/g, '').split(',');
+
+      for (let i = 0; i < dayOfWeek.length; i++) {
+        recurringTimeoffs.push({
+          practitionerId,
+          PatternStartDate,
+          StartTime,
+          PatternEndDate,
+          EndTime,
+          interval,
+          DayOfWeek: dayOfWeek[i],
+          endDate,
+          notes,
+        });
+      }
     }
   }
-  // return res.send(200);
 
   return Account.get(req.accountId).run()
   .then((account) => {
