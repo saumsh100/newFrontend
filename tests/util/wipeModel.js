@@ -1,5 +1,5 @@
 
-import * as Models from '../../server/models';
+// import * as Models from '../../server/models';
 
 async function wipeModel(Model) {
   const models = await Model.run();
@@ -11,7 +11,6 @@ async function wipeModel(Model) {
 async function wipeModelSequelize(Model) {
   await Model.destroy({
     where: {},
-    truncate: true,
     force: true,
   });
 }
