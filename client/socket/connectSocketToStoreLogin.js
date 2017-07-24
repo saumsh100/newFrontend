@@ -31,9 +31,11 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
       });
       socket.on('update:Request', (data) => {
+        console.log('updated request')
         dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
       });
       socket.on('remove:Request', (data) => {
+        console.log('removed request')
         dispatch(deleteEntity({ key: 'requests', id: data }));
       });
 
