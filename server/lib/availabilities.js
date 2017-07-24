@@ -167,7 +167,11 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
       appointments: {
         _apply: (sequence) => {
           return sequence.filter((appt) => {
-            return generateDuringFilter(appt, startDate, endDate);
+            return generateDuringFilter(appt, startDate, endDate)
+              .and(appt
+                .hasFields('isBookable')
+                .not()
+                .or(appt('isBookable').eq(false)));
           });
         },
       },
