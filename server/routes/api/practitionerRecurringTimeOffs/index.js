@@ -69,7 +69,7 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
       Id,
     } = schedule.RecurrencePattern;
 
-    if (!DayOfWeek && (!DayOfMonth && !MonthOfYear)) {
+    if (!DayOfWeek && (!DayOfMonth || !MonthOfYear)) {
       continue;
     }
 
