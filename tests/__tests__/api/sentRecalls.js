@@ -46,7 +46,7 @@ describe('/api/sentRecalls', () => {
 
     test('retrieve sent recall', () => {
       return request(app)
-        .get('/api/sentRecalls')
+        .get('/api/sentRecalls?join=recall,patient')
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,

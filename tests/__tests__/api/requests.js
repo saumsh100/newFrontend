@@ -59,6 +59,20 @@ describe('/api/requests', () => {
           expect(body).toMatchSnapshot();
         });
     });
+
+    test('get all requests with patientUsers and services', () => {
+      return request(app)
+        .get('/api/requests?join=patientUser,service')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          accountId,
+        })
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['password']);
+          expect(body).toMatchSnapshot();
+        });
+    });
   });
 
   describe('POST /', () => {

@@ -1,9 +1,10 @@
 
-import { Service } from '../../server/models';
+import { Service, Practitioner } from '../../server/models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
 
 const serviceId = 'c5beec65-73a0-4b58-ba48-65986931d054';
+
 const service = {
   id: serviceId,
   name: 'Test Service',
@@ -14,7 +15,6 @@ const service = {
 
 async function seedTestService() {
   await wipeModel(Service);
-
   await Service.save(service);
 }
 
