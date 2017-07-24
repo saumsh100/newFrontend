@@ -4,9 +4,8 @@ import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import { SyncClientVersion } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
-import {
-  seedTestUsers,
-} from '../../util/seedTestUsers';
+import { seedTestUsers } from '../../util/seedTestUsers';
+import { omitPropertiesFromBody }  from '../../util/selectors';
 
 const syncClientVersionId = '126d3cb0-4468-4503-9254-77fb1e8df539';
 const syncClientVersion = {
@@ -42,6 +41,7 @@ describe('/api/updater', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -52,6 +52,7 @@ describe('/api/updater', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -62,6 +63,7 @@ describe('/api/updater', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(400)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -72,6 +74,7 @@ describe('/api/updater', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -88,6 +91,7 @@ describe('/api/updater', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -98,6 +102,7 @@ describe('/api/updater', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

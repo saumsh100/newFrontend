@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/api/patients DELETE / /:serviceId - delete service 1`] = `Object {}`;
+exports[`/api/patients DELETE / /:serviceId - delete service 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
 
 exports[`/api/patients GET / /:joinPatientId/stats - retrieve patient stats 1`] = `
 Object {
@@ -8,7 +12,6 @@ Object {
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
         "isHidden": false,
@@ -28,7 +31,6 @@ Object {
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
         "isHidden": false,
@@ -46,7 +48,6 @@ Object {
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
         "isHidden": false,
@@ -64,7 +65,6 @@ Object {
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
         "isHidden": false,

@@ -7,6 +7,7 @@ import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { practitionerId, practitioner, seedTestPractitioners } from '../../util/seedTestPractitioners';
 import { weeklySchedule, weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
+import { omitPropertiesFromBody } from '../../util/selectors';
 
 
 describe('/api/practitioners', () => {
@@ -35,6 +36,7 @@ describe('/api/practitioners', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -58,6 +60,7 @@ describe('/api/practitioners', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -102,6 +105,7 @@ describe('/api/practitioners', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -136,6 +140,7 @@ describe('/api/practitioners', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

@@ -41,7 +41,6 @@ Object {
     "sentRecalls": Object {
       "689b7e40-0bff-40ea-bdeb-ff08d055075f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "689b7e40-0bff-40ea-bdeb-ff08d055075f",
         "isSent": false,
         "lengthSeconds": 540,

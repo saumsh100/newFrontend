@@ -6,6 +6,7 @@ import { WaitSpot } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { patientId, patientUserId, seedTestPatients } from '../../util/seedTestPatients';
+import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
 const waitSpotId = 'cc43f0d7-9fb0-4946-b889-f284ea48e4d0';
 const waitSpot = {
@@ -69,6 +70,7 @@ describe('/api/waitSpots', () => {
         })
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -91,6 +93,7 @@ describe('/api/waitSpots', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -104,6 +107,7 @@ describe('/api/waitSpots', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -120,6 +124,7 @@ describe('/api/waitSpots', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

@@ -6,13 +6,11 @@ Object {
     "reminders": Object {
       "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "primaryType": "sms",
       },
       "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "primaryType": "sms",
       },
@@ -31,7 +29,6 @@ Object {
     "reminders": Object {
       "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "primaryType": "sms",
       },
@@ -47,7 +44,6 @@ Object {
     "reminders": Object {
       "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "id": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "primaryType": "phone",
       },

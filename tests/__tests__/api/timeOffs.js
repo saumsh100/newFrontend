@@ -6,6 +6,7 @@ import { PractitionerTimeOff } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
+import { omitPropertiesFromBody } from '../../util/selectors';
 
 const practitionerTimeOffId = '46344262-9039-47fa-a4e6-d762dcc57308';
 const practitionerTimeOff = {
@@ -48,6 +49,7 @@ describe('/api/timeOffs', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -65,6 +67,7 @@ describe('/api/timeOffs', () => {
         .send(practitionerTimeOff)
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -84,6 +87,7 @@ describe('/api/timeOffs', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -100,6 +104,7 @@ describe('/api/timeOffs', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

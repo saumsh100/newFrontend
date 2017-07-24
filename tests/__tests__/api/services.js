@@ -7,7 +7,11 @@ import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 
 import { serviceId, service, seedTestService } from '../../util/seedTestServices';
+
 import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
+
+import { omitPropertiesFromBody } from '../../util/selectors';
+
 
 describe('/api/services', () => {
   // Seed with some standard user data
@@ -36,6 +40,7 @@ describe('/api/services', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -46,6 +51,7 @@ describe('/api/services', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -63,6 +69,7 @@ describe('/api/services', () => {
         .send(service)
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -102,6 +109,7 @@ describe('/api/services', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -118,6 +126,7 @@ describe('/api/services', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

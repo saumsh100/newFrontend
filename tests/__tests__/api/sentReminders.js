@@ -8,6 +8,7 @@ import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { patientId, seedTestPatients } from '../../util/seedTestPatients';
 import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
 import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
+import { omitPropertiesFromBody } from '../../util/selectors';
 
 const sentReminderId = 'e757afb0-14ef-4763-b162-c573169131c1';
 const sentReminder = {
@@ -59,6 +60,7 @@ describe('/api/sentReminders', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

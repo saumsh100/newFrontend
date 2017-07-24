@@ -5,10 +5,8 @@ import generateToken from '../../util/generateToken';
 import { WeeklySchedule } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
 import { weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
-import {
-  accountId,
-  seedTestUsers,
-} from '../../util/seedTestUsers';
+import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
 
 
@@ -36,6 +34,7 @@ describe('/api/weeklySchedules', () => {
         })
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -78,6 +77,7 @@ describe('/api/weeklySchedules', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

@@ -10,6 +10,7 @@ Object {
     "plan": "GROWTH",
   },
   "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+  "entities": Object {},
   "role": "MANAGER",
   "user": Object {
     "firstName": "Harvey",
