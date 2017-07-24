@@ -23,20 +23,6 @@ const generateDuringFilter = (m, startDate, endDate) => {
   );
 };
 
-const generateDuringFilterBetween = (row, startDate, endDate) => {
-  const startDay = r.ISO8601(startDate);
-  const endDay = r.ISO8601(endDate);
-  const startDateSubtract = r.ISO8601(moment(startDate).subtract(1, 'days').toISOString());
-  const startDateAdd = r.ISO8601(moment(startDate).add(1, 'days').toISOString());
-  const endDateSubtract = r.ISO8601(moment(endDate).subtract(1, 'days').toISOString());
-  const endDateAdd = r.ISO8601(moment(endDate).add(1, 'days').toISOString());
-
-  return row('startDate').during(startDateSubtract, startDay)
-  .and(row('endDate').during(startDay, startDateAdd))
-  .or(row('startDate').during(endDateSubtract, endDay)
-  .and(row('endDate').during(endDay, endDateAdd)));
-};
-
 
 /**
  * fetchServiceData will grab all data from the service that is necessary
@@ -362,31 +348,24 @@ function generatePractitionerAvailabilities(options) {
 
 // fetches appointment in the time frame for a given chair(s) and filters if they aren't any availiable
 
-async function filterByChairs(weeklySchedule, avails, pracWeeklySchedule) {
+async function filterByChairs(weeklySchedule, avails, pracWeeklySchedule, appointments) {
   const newAvails = [];
   for (let j = 0; j < avails.length; j++) {
     const dayOfWeek = moment(avails[j].startDate).format('dddd').toLowerCase();
     const chairIds = weeklySchedule[dayOfWeek].chairIds;
-
     // prac has no custom so has all chairs
     if (pracWeeklySchedule !== weeklySchedule.id) {
       newAvails.push(avails[j]);
       continue;
     }
 
-    const results = await Appointment
-        .filter((row) => {
-          return generateDuringFilterBetween(row, avails[j].startDate, avails[j].endDate);
-        }).run();
+    const isAvailiable = chairIds.some((chairId) => {
+      const test = appointments.some(a => {
+        return a.chairId === chairId && isDuringEachother(avails[j], a);
+      });
 
-    const isAvailiable = (results[0] ? chairIds.some((chairId) => {
-      for (let i = 0; i < results.length; i++) {
-        if (results[i].chairId === chairId) {
-          return false;
-        }
-        return true;
-      }
-    }) : true);
+      return !test;
+    });
 
     if (isAvailiable) {
       newAvails.push(avails[j]);
@@ -412,23 +391,30 @@ function fetchAvailabilities(options) {
         fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
-            const practitionerAvailabilities = practitioners.map((p, i) => {
-              const avails = generatePractitionerAvailabilities({
-                practitioner: p,
-                weeklySchedule: weeklySchedules[i],
-                service,
-                startDate,
-                timeInterval,
-                endDate,
+            return Appointment
+            .filter((row) => {
+              return generateDuringFilter(row, startDate, endDate);
+            }).run()
+            .then((appointments) => {
+              const practitionerAvailabilities = practitioners.map((p, i) => {
+                const avails = generatePractitionerAvailabilities({
+                  practitioner: p,
+                  weeklySchedule: weeklySchedules[i],
+                  service,
+                  startDate,
+                  timeInterval,
+                  endDate,
+                });
+                return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
               });
-              return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId);
-            });
 
-            return Promise.all(practitionerAvailabilities)
-            .then((pracAvails) => {
-              const squashed = unionBy(...pracAvails, 'startDate');
-              const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
-              return resolve(squashedAndSorted);
+              return Promise.all(practitionerAvailabilities)
+              .then((pracAvails) => {
+                const squashed = unionBy(...pracAvails, 'startDate');
+                const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
+                return resolve(squashedAndSorted);
+              });
+
             });
           });
       })
