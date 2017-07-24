@@ -290,6 +290,10 @@ const enhance = compose(
     id: 'waitSpots',
     key: 'waitSpots',
     join: ['patientUser', 'patient'],
+    params: {
+      startTime: moment().toISOString(),
+      endTime: moment().add(360, 'days').toISOString(),
+    },
   }),
 
   connect(mapStateToProps, mapDispatchToProps),

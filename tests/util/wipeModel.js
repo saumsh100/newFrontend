@@ -7,6 +7,14 @@ async function wipeModel(Model) {
   }
 }
 
+async function wipeModelSequelize(Model) {
+  await Model.destroy({
+    where: {},
+    truncate: true,
+    force: true,
+  });
+}
+
 async function wipeAllModels() {
   for (const modelName in Models) {
     await wipeModel(Models[modelName]);
@@ -16,4 +24,5 @@ async function wipeAllModels() {
 export default wipeModel;
 export {
   wipeAllModels,
+  wipeModelSequelize,
 };

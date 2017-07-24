@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/chairs GET /api/chairs should fetch 2 chairs 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "C1",
+        "pmsId": null,
+      },
+      "46d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "C2",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": Array [
+    "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+    "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+  ],
+}
+`;
+
+exports[`/api/chairs GET /api/chairs/:chairId should fetch the correct chair1 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "C1",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;
+
+exports[`/api/chairs GET /api/chairs/:chairId should fetch the correct chair2 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "46d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "C2",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;
+
+exports[`/api/chairs POST /api/chairs should create an chair 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "11d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "11d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "New Chair",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": "11d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;
+
+exports[`/api/chairs PUT /api/chairs/:chairId should update a chair 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "Modified Chair Name",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;
+
+exports[`/api/chairs PUT /api/chairs/:chairId should update a chair even with extra attrs 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "name": "Modified Chair Name",
+        "pmsId": null,
+      },
+    },
+  },
+  "result": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/Account Data Validation should be able to save a Account without id provided 1`] = `
+Object {
+  "bookingWidgetPrimaryColor": null,
+  "canSendRecalls": false,
+  "canSendReminders": false,
+  "city": null,
+  "clinicName": null,
+  "contactEmail": null,
+  "country": null,
+  "destinationPhoneNumber": null,
+  "enterpriseId": "ef3c578f-c228-4a25-8388-90ee9a0c9eb4",
+  "logo": null,
+  "name": "Test Account",
+  "phoneNumber": null,
+  "state": null,
+  "street": null,
+  "timeInterval": null,
+  "twilioPhoneNumber": null,
+  "unit": 15,
+  "vendastaId": null,
+  "website": null,
+  "weeklyScheduleId": null,
+  "zipCode": null,
+}
+`;
