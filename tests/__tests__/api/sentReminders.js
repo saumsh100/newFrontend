@@ -49,7 +49,7 @@ describe('/api/sentReminders', () => {
 
     test('retrieve sent reminder', () => {
       return request(app)
-        .get('/api/sentReminders?join=appointment')
+        .get('/api/sentReminders?join=appointment,reminder,patient')
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,

@@ -51,19 +51,6 @@ describe('/api/timeOffs', () => {
           expect(body).toMatchSnapshot();
         });
     });
-
-    test('join: get all time offs with practitioners', () => {
-      return request(app)
-        .get('/api/timeOffs?join=practitioners')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
-        .expect(200)
-        .then(({ body }) => {
-          expect(body).toMatchSnapshot();
-        });
-    });
   });
 
   describe('POST /', () => {
