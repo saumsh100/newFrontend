@@ -69,6 +69,7 @@ describe('/api/requests', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['password']);
           expect(body).toMatchSnapshot();
         });
     });

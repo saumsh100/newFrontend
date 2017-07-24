@@ -48,7 +48,6 @@ Object {
     "practitioners": Object {
       "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "firstName": "Colonel",
         "fullAvatarUrl": null,
         "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
@@ -62,7 +61,6 @@ Object {
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
         "isHidden": false,
@@ -102,6 +100,7 @@ Object {
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "createdAt": "2017-07-19T00:14:30.932Z",
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
         "isHidden": false,

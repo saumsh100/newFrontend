@@ -53,6 +53,20 @@ describe('/api/waitSpots', () => {
           expect(body).toMatchSnapshot();
         });
     });
+
+    test('retrieve waitSpots with a patient or patientUser', ()=> {
+      return request(app)
+        .get('/api/waitSpots?join=patient,patientUser')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          accountId,
+        })
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['password']);
+          expect(body).toMatchSnapshot();
+        });
+    });
   });
 
   describe('POST /', () => {
@@ -90,20 +104,6 @@ describe('/api/waitSpots', () => {
           patientId,
           patientUserId,
           createdAt: '2017-07-29T00:15:30.932Z',
-        })
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        });
-    });
-
-    test('retrieve a waitSpot with a patient or patientUser', ()=> {
-      return request(app)
-        .get('/api/waitSpots?join=patient,patientUser')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {

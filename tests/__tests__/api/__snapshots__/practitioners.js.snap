@@ -123,7 +123,6 @@ Object {
     "practitioners": Object {
       "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "firstName": "Colonel",
         "fullAvatarUrl": null,
         "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
@@ -131,54 +130,9 @@ Object {
         "isCustomSchedule": false,
         "isHidden": false,
         "lastName": "Sanders",
-        "weeklySchedule": "a8dc6a54-bd04-4c34-9bb2-0d72078c044d",
-        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
-      },
-    },
-    "weeklySchedules": Object {
-      "a8dc6a54-bd04-4c34-9bb2-0d72078c044d": Object {
-        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-24T20:31:07.471Z",
-        "friday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "id": "a8dc6a54-bd04-4c34-9bb2-0d72078c044d",
-        "monday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "saturday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "sunday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "thursday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "tuesday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "wednesday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
       },
     },
   },
-  "result": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
 }
 `;
 
