@@ -10,6 +10,7 @@ Object {
 exports[`/api/textMessages GET / /twilio - retrieve twilio messages 1`] = `
 Object {
   "end": 49,
+  "entities": Object {},
   "firstPageUri": "/2010-04-01/Accounts/ACe874663202cfbbaec4be1ba33869f421/Messages.json?PageSize=50&Page=0",
   "first_page_uri": "/2010-04-01/Accounts/ACe874663202cfbbaec4be1ba33869f421/Messages.json?PageSize=50&Page=0",
   "messages": Array [

@@ -8,6 +8,7 @@ import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { serviceId, seedTestService } from '../../util/seedTestServices';
 import { patientUserId, seedTestPatients } from '../../util/seedTestPatients';
 import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
+import { omitPropertiesFromBody } from '../../util/selectors';
 
 const requestId = '272d86fc-f743-4cd6-b0c8-7906959bcc9f';
 const requestSeed = {
@@ -54,6 +55,7 @@ describe('/api/requests', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -71,6 +73,7 @@ describe('/api/requests', () => {
         .send(requestSeed)
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -90,6 +93,7 @@ describe('/api/requests', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -103,6 +107,7 @@ describe('/api/requests', () => {
         })
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -114,6 +119,7 @@ describe('/api/requests', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -130,6 +136,7 @@ describe('/api/requests', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

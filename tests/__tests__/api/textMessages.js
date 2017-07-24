@@ -6,6 +6,7 @@ import { Chat, TextMessage } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
 import { accountId, managerUserId, seedTestUsers } from '../../util/seedTestUsers';
 import { patientId, seedTestPatients } from '../../util/seedTestPatients';
+import { omitPropertiesFromBody } from '../../util/selectors';
 
 const chatId = 'bca11507-4fca-4134-8ffe-e925b76e294e';
 const textMessageId = 'ef6e0183-6173-494f-9937-1327edfa3b4e';
@@ -55,6 +56,7 @@ describe('/api/textMessages', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -66,6 +68,7 @@ describe('/api/textMessages', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -76,6 +79,7 @@ describe('/api/textMessages', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

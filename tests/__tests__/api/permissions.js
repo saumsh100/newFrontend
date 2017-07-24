@@ -7,6 +7,7 @@ import {
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import { wipeAllModels } from '../../util/wipeModel';
+import { omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -45,6 +46,7 @@ describe('/api/accounts/:accountId/permissions', () => {
         .set('Authorization', `Bearer ${superAdminToken}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

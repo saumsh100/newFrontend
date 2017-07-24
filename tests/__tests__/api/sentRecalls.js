@@ -7,6 +7,7 @@ import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { patientId, seedTestPatients } from '../../util/seedTestPatients';
 import { recallId1, seedTestRecalls } from '../../util/seedTestRecalls';
+import { omitPropertiesFromBody } from '../../util/selectors';
 
 const sentRecallId = '689b7e40-0bff-40ea-bdeb-ff08d055075f';
 const sentRecall = {
@@ -52,6 +53,7 @@ describe('/api/sentRecalls', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

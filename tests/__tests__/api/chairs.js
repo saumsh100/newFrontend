@@ -8,7 +8,7 @@ import {
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { getModelsArray }  from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/api/chairs';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -67,6 +67,7 @@ describe('/api/accounts/:accountId/invites', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           expect(chairs.length).toBe(2);
           expect(body).toMatchSnapshot();
@@ -91,6 +92,7 @@ describe('/api/accounts/:accountId/invites', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           expect(chairs.length).toBe(1);
           expect(body).toMatchSnapshot();
@@ -124,6 +126,7 @@ describe('/api/accounts/:accountId/invites', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
           const [chair] = chairs;
           expect(chairs.length).toBe(1);

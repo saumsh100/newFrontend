@@ -6,7 +6,7 @@ import { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { recallId1, seedTestRecalls } from '../../util/seedTestRecalls';
 import generateToken from '../../util/generateToken';
-import { getModelsArray } from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -46,6 +46,7 @@ describe('/api/accounts/:account/recalls', () => {
           .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .then(({ body }) => {
+            body = omitPropertiesFromBody(body);
             const recalls = getModelsArray('recalls', body);
             expect(recalls.length).toBe(2);
             expect(body).toMatchSnapshot();
@@ -72,6 +73,7 @@ describe('/api/accounts/:account/recalls', () => {
           })
           .expect(200)
           .then(({ body }) => {
+            body = omitPropertiesFromBody(body);
             const recalls = getModelsArray('recalls', body);
             expect(recalls.length).toBe(1);
             expect(body).toMatchSnapshot();
@@ -98,6 +100,7 @@ describe('/api/accounts/:account/recalls', () => {
           })
           .expect(200)
           .then(({ body }) => {
+            body = omitPropertiesFromBody(body);
             const recalls = getModelsArray('recalls', body);
             const [recall] = recalls;
             expect(recalls.length).toBe(1);

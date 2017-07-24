@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/api/requests DELETE / /:requestId - delete a request 1`] = `Object {}`;
+exports[`/api/requests DELETE / /:requestId - delete a request 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
 
 exports[`/api/requests GET / get all requests 1`] = `
 Object {
@@ -8,7 +12,6 @@ Object {
     "requests": Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "isCancelled": false,
@@ -31,7 +34,6 @@ Object {
     "requests": Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "isCancelled": false,
@@ -52,7 +54,6 @@ Object {
     "requests": Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "isCancelled": true,
@@ -73,7 +74,6 @@ Object {
     "requests": Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "endDate": "2017-07-19T00:18:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "isCancelled": false,
@@ -88,4 +88,8 @@ Object {
 }
 `;
 
-exports[`/api/requests PUT / /:requestId/confirm/:appointmentId - send confirmed request email 1`] = `Object {}`;
+exports[`/api/requests PUT / /:requestId/confirm/:appointmentId - send confirmed request email 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
