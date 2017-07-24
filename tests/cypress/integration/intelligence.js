@@ -1,22 +1,18 @@
+
 import moment from 'moment';
 
+const today = moment();
+const endDate = moment(today).add(2, 'd').hour(0).minute(0).second(0).millisecond(0);
+
 describe('Intelligence', () => {
-
-  const today = moment();
-  const endDate = moment(today).add(2, 'd').hour(0).minute(0).second(0).millisecond(0);
-
-  
   beforeEach(() => {
     cy.login();
   });
 
   context('Overview', () => {
-    beforeEach(() => {
-      cy.visit(`${Cypress.env('siteURL')}/intelligence/overview`);
-    })
-
     it('load overview page, set the date-range, confirm calculated data', () => {
       cy
+        .visit(`${Cypress.env('siteURL')}/intelligence/overview`)
         .getAndClick('overViewDatePicker')
         .getAndClick('"startDate"')
         .get('.DayPicker-Day--today')
@@ -33,12 +29,9 @@ describe('Intelligence', () => {
   });
 
   context('Business', () => {
-    beforeEach(() => {
-      cy.visit(`${Cypress.env('siteURL')}/intelligence/business`);
-    })
-
     it('load business page, set date range, and confirm calculated data ', () => {
       cy
+        .visit(`${Cypress.env('siteURL')}/intelligence/business`)
         .getAndClick('businessDatePicker')
         .getAndClick('"startDate"')
         .get('.DayPicker-Day--today')

@@ -82,7 +82,7 @@ class AddPatientSuggestions extends Component {
           some possible matches to this patient. Please select one or create a new patient.
         </div>
         <List className={styles.suggestionsList}>
-          {suggestions.map((patient) => {
+          {suggestions.map((patient, index) => {
             return (
               <PatientData
                 key={patient.id}

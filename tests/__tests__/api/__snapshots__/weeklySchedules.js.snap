@@ -1,57 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/api/weeklySchedules GET / retrieve weekly schedules 1`] = `
-Object {
-  "entities": Object {
-    "weeklySchedules": Object {
-      "2bd862e8-67ce-4328-8b2a-7df838ddbeea": Object {
-        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
-        "friday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "id": "2bd862e8-67ce-4328-8b2a-7df838ddbeea",
-        "monday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "saturday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "sunday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "thursday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "tuesday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-        "wednesday": Object {
-          "endTime": "1970-02-01T01:00:00.000Z",
-          "isClosed": false,
-          "startTime": "1970-01-31T16:00:00.000Z",
-        },
-      },
-    },
-  },
-  "result": Array [
-    "2bd862e8-67ce-4328-8b2a-7df838ddbeea",
-  ],
-}
-`;
-
 exports[`/api/weeklySchedules POST / create a weekly schedule 1`] = `
 Object {
   "entities": Object {

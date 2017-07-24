@@ -13,8 +13,8 @@ const waitSpot = {
   patientId,
   patientUserId,
   accountId,
-  endDate: '2017-07-23T00:14:30.932Z',
-  createdAt: '2017-07-23T00:14:30.932Z',
+  endDate: '2017-09-27T00:14:30.932Z',
+  createdAt: '2017-09-27T00:14:30.932Z',
 };
 
 async function seedTestWaitSpot() {
