@@ -10,7 +10,7 @@ const {
   sendAppointmentRequestConfirmed,
   sendAppointmentRequestRejected,
 } = require('../../../lib/mail');
-const { env, namespaces } = require('../../../config/globals');
+const { namespaces } = require('../../../config/globals');
 
 
 requestsRouter.param('requestId', loaders('request', 'Request'));

@@ -78,11 +78,9 @@ function runDashboardFeeds(socket) {
         }
       });
     });
-  */
 
-  /**
-   * Listen to changes on the Waitspot table and update dashboards in real time
-   */
+
+
   WaitSpot
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
@@ -112,6 +110,7 @@ function runDashboardFeeds(socket) {
         }
       });
     });
+
   /**
    * Listen to changes on the sentRecall table and update dashboards in real time
    */
