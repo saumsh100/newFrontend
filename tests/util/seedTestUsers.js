@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Account, Enterprise, Permission, User } from '../../server/models';
+import { weeklyScheduleId } from './seedTestWeeklySchedules';
 import { Account as _Account, Enterprise as _Enterprise, Permission as _Permission, User as _User } from '../../server/_models';
 import wipeModel, { wipeModelSequelize } from './wipeModel';
 
@@ -24,6 +25,7 @@ const account = {
   id: accountId,
   enterpriseId,
   name: 'Test Account',
+  weeklyScheduleId,
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 

@@ -2,18 +2,28 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Service } from '../../../server/models';
+import { PractitionerTimeOff } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-
-import { serviceId, service, seedTestService } from '../../util/seedTestServices';
-
 import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
-
 import { omitPropertiesFromBody } from '../../util/selectors';
 
+const practitionerTimeOffId = '46344262-9039-47fa-a4e6-d762dcc57308';
+const practitionerTimeOff = {
+  id: practitionerTimeOffId,
+  practitionerId,
+  startDate: '2017-07-19T00:16:30.932Z',
+  endDate: '2017-07-19T00:17:30.932Z',
+  createdAt: '2017-07-19T00:14:30.932Z',
+};
 
-describe('/api/services', () => {
+async function seedTestPractitionerTimeOffs() {
+  await seedTestPractitioners();
+  await wipeModel(PractitionerTimeOff);
+  PractitionerTimeOff.save(practitionerTimeOff);
+}
+
+describe('/api/timeOffs', () => {
   // Seed with some standard user data
   let token = null;
   beforeAll(async () => {
@@ -27,28 +37,16 @@ describe('/api/services', () => {
 
   describe('GET /', () => {
     beforeEach(async () => {
-      await seedTestService();
-      await seedTestPractitioners();
+      await seedTestPractitionerTimeOffs();
     });
 
-    test('retrieve services', () => {
+    test('get all practitioner time offs', () => {
       return request(app)
-        .get('/api/services')
+        .get('/api/timeOffs')
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
         })
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        });
-    });
-
-    test('/:serviceId - retrieve a service', () => {
-      return request(app)
-        .get(`/api/services/${serviceId}`)
-        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -59,14 +57,14 @@ describe('/api/services', () => {
 
   describe('POST /', () => {
     beforeEach(async () => {
-      await wipeModel(Service);
+      await wipeModel(PractitionerTimeOff);
     });
 
-    test('create service', () => {
+    test('create time off', () => {
       return request(app)
-        .post('/api/services')
+        .post('/api/timeOffs')
         .set('Authorization', `Bearer ${token}`)
-        .send(service)
+        .send(practitionerTimeOff)
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -77,35 +75,15 @@ describe('/api/services', () => {
 
   describe('PUT /', () => {
     beforeEach(async () => {
-      await seedTestService();
+      await seedTestPractitionerTimeOffs();
     });
 
-    test('/:serviceId - update service', () => {
+    test('/:timeOffId - update a time off', () => {
       return request(app)
-        .put(`/api/services/${serviceId}`)
+        .put(`/api/timeOffs/${practitionerTimeOffId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          name: 'Updated Test Service',
-          practitioners: [practitionerId],
-        })
-        .expect(200)
-        .then(({ body }) => {
-          expect(body).toMatchSnapshot();
-        });
-    });
-  });
-
-  describe('JOIN /', () => {
-    beforeEach(async () => {
-      await seedTestService();
-    });
-
-    test('join practitioners', () => {
-      return request(app)
-        .get('/api/services?join=practitioners')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
+          endDate: '2017-07-19T00:18:30.932Z',
         })
         .expect(200)
         .then(({ body }) => {
@@ -117,12 +95,12 @@ describe('/api/services', () => {
 
   describe('DELETE /', () => {
     beforeEach(async () => {
-      await seedTestService();
+      await seedTestPractitionerTimeOffs();
     });
 
-    test('/:serviceId - delete service', () => {
+    test('/:timeOffId - delete a time off', () => {
       return request(app)
-        .delete(`/api/services/${serviceId}`)
+        .delete(`/api/timeOffs/${practitionerTimeOffId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
@@ -132,3 +110,4 @@ describe('/api/services', () => {
     });
   });
 });
+

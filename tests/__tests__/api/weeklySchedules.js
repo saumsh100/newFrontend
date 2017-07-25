@@ -4,24 +4,11 @@ import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import { WeeklySchedule } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
-import {
-  accountId,
-  seedTestUsers,
-} from '../../util/seedTestUsers';
+import { weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
+import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
-const weeklyScheduleId = '8ce3ba61-60cd-40c6-bc85-c018cabd4a40';
-const weeklySchedule = {
-  id: weeklyScheduleId,
-  accountId,
-  name: 'Test Schedule Seed',
-  pmsId: 1,
-  createdAt: '2017-07-19T00:14:30.932Z',
-};
 
-async function seedTestWeeklySchedule() {
-  await wipeModel(WeeklySchedule);
-  await WeeklySchedule.save(weeklySchedule);
-}
 
 describe('/api/weeklySchedules', () => {
   // Seed with some standard user data
@@ -47,6 +34,7 @@ describe('/api/weeklySchedules', () => {
         })
         .expect(201)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -76,7 +64,7 @@ describe('/api/weeklySchedules', () => {
 
   describe('PUT /:weeklyScheduleId', () => {
     beforeEach(async () => {
-      await seedTestWeeklySchedule();
+      await seedTestWeeklySchedules();
     });
 
     test('update a weekly schedule', () => {
@@ -89,6 +77,7 @@ describe('/api/weeklySchedules', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

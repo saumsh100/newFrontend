@@ -1,40 +1,17 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import {
-  Account,
-  Recall,
-} from '../../../server/models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
+import { Account } from '../../../server/models';
+import { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
+import { recallId1, seedTestRecalls } from '../../util/seedTestRecalls';
 import generateToken from '../../util/generateToken';
-import { getModelsArray } from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
-const recallId1 = 'd5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
-const recallId2 = 'e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
+
 const newRecallId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
-
-async function seedRecalls() {
-  await wipeModel(Recall);
-
-  // seed recalls
-  await Recall.save([
-    {
-      id: recallId1,
-      accountId,
-      primaryType: 'sms',
-      createdAt: '2017-07-19T00:14:30.932Z',
-    },
-    {
-      id: recallId2,
-      accountId,
-      primaryType: 'sms',
-      createdAt: '2017-07-19T00:14:30.932Z',
-    },
-  ]);
-}
 
 describe('/api/accounts/:account/recalls', () => {
   // Seed with some standard user data
@@ -59,7 +36,7 @@ describe('/api/accounts/:account/recalls', () => {
 
   describe('Recalls', () => {
     beforeAll(async () => {
-      await seedRecalls();
+      await seedTestRecalls();
     });
 
     describe('GET /:accountId/recalls', () => {
@@ -69,6 +46,7 @@ describe('/api/accounts/:account/recalls', () => {
           .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .then(({ body }) => {
+            body = omitPropertiesFromBody(body);
             const recalls = getModelsArray('recalls', body);
             expect(recalls.length).toBe(2);
             expect(body).toMatchSnapshot();
@@ -95,6 +73,7 @@ describe('/api/accounts/:account/recalls', () => {
           })
           .expect(200)
           .then(({ body }) => {
+            body = omitPropertiesFromBody(body);
             const recalls = getModelsArray('recalls', body);
             expect(recalls.length).toBe(1);
             expect(body).toMatchSnapshot();
@@ -121,6 +100,7 @@ describe('/api/accounts/:account/recalls', () => {
           })
           .expect(200)
           .then(({ body }) => {
+            body = omitPropertiesFromBody(body);
             const recalls = getModelsArray('recalls', body);
             const [recall] = recalls;
             expect(recalls.length).toBe(1);
@@ -140,7 +120,7 @@ describe('/api/accounts/:account/recalls', () => {
     describe('DELETE /:accountId/recalls/:recallId', () => {
       afterEach(async () => {
         // have to restore recalls cause these routes could delete
-        await seedRecalls();
+        await seedTestRecalls();
       });
 
       test('should delete a recall for the account', () => {

@@ -88,6 +88,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
 practitionersRouter.put('/:practitionerId/customSchedule', checkPermissions('practitioners:update'), (req, res, next) => {
   return Account.get(req.accountId).getJoin({ weeklySchedule: true }).run()
     .then((account) => {
+      console.log(JSON.stringify(account.weeklySchedule));
       delete account.weeklySchedule.weeklyScheduleId;
       delete account.weeklySchedule.createdAt;
       delete account.weeklySchedule.id;

@@ -6,7 +6,7 @@ import {
 } from '../../../server/models';
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
-import { getModelsArray } from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 import { wipeAllModels } from '../../util/wipeModel';
 
 const rootUrl = '/api/accounts';
@@ -45,6 +45,7 @@ describe('/api/accounts', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -57,6 +58,7 @@ describe('/api/accounts', () => {
         .set('Authorization', `Bearer ${ownerToken}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -73,6 +75,7 @@ describe('/api/accounts', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const accounts = getModelsArray('accounts', body);
           const [account] = accounts;
           expect(accounts.length).toBe(1);
@@ -105,6 +108,7 @@ describe('/api/accounts', () => {
         .set('Authorization', `Bearer ${superAdminToken}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const { token } = body;
           expect(typeof token).toBe('string');
         });
@@ -118,6 +122,7 @@ describe('/api/accounts', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -144,6 +149,7 @@ describe('/api/accounts', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const [user] = getModelsArray('users', body);
           delete user.password;
           delete user.permission;
@@ -178,6 +184,7 @@ describe('/api/accounts', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const accounts = getModelsArray('accounts', body);
           const [account] = accounts;
           expect(account.name).toBe(name);
@@ -193,6 +200,7 @@ describe('/api/accounts', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           const users = getModelsArray('users', body).map((u) => {
             delete u.password;
             return u;

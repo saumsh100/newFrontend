@@ -1,6 +1,5 @@
 
 import Account from './Account';
-import Account_Patient from './Account_Patient';
 import Appointment from './Appointment';
 import AuthSession from './AuthSession';
 import Call from './Call';
@@ -34,7 +33,6 @@ import WeeklySchedule from './WeeklySchedule';
 
 export {
   Account,
-  Account_Patient,
   Appointment,
   AuthSession,
   Chair,

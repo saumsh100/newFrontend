@@ -6,12 +6,10 @@ Object {
     "users": Object {
       "5668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
         "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "firstName": "Harvey",
         "id": "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
         "lastName": "Dentest",
-        "password": "$2a$10$zjvFA7/afSsBZ1uGnqtKbOJ1qAC0NAGrDahOVLczRwYmuDeTftuKq",
         "permissionId": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "role": "OWNER",
         "username": "owner@test.com",
@@ -28,12 +26,10 @@ Object {
     "users": Object {
       "5668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
         "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "firstName": "Harvey",
         "id": "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
         "lastName": "Dentest",
-        "password": "$2a$10$igppEHwlwbWottGdz9v/9OkG2soIFRC8BXfBjQFI7L6anzaRznb4W",
         "permissionId": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "role": "OWNER",
         "username": "owner@test.com",
@@ -54,6 +50,7 @@ Object {
     "plan": "GROWTH",
   },
   "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+  "entities": Object {},
   "role": "MANAGER",
   "user": Object {
     "firstName": "Harvey",
@@ -71,12 +68,10 @@ Object {
     "users": Object {
       "6668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
         "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "firstName": "Harvey",
         "id": "6668f250-e8c9-46e3-bfff-0249f1eec6b8",
         "lastName": "Dentest",
-        "password": "$2a$10$V6Tn/H.PWk0d42opmRwIw.YxLX6tbZg2.iGM62Fx0847DhObqTR0u",
         "permissionId": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "username": "manager@test.com",
       },

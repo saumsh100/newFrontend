@@ -27,5 +27,12 @@ export default function (sequelize, DataTypes) {
     },
   });
 
+  Chair.associate = (({ Account }) => {
+    Chair.belongsTo(Account, {
+      foreignKey: 'accountId',
+      as: 'account',
+    });
+  });
+
   return Chair;
 }

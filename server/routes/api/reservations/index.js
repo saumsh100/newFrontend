@@ -24,14 +24,14 @@ reservationsRouter.post('/', (req, res, next) => {
 			serviceId,
 			startTime: startsAt,
 			endTime,
-			accountId,  	
+			accountId,
 	  }).then(reservation => res.send(normalize('reservation', reservation)))
 	    .catch(next);
   })
 });
 
 reservationsRouter.delete('/:reservationId', (req, res, next) => {
-	const { reservationId } = req.params;	
+	const { reservationId } = req.params;
 	Reservation.get(reservationId).then(r => {
 		r.delete();
 	});
