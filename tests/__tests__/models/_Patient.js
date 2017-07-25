@@ -101,7 +101,7 @@ describe('models/Patient', () => {
     test.skip('should be able to save 2 unique patients', async () => {
       const email = 'justin@be.ca';
       const mobilePhoneNumber = '111 222 3333';
-      const patients = await Patient.bulkCreate([
+      const patients = await Patient.batchSave([
         makeData(),
         makeData({ email, mobilePhoneNumber })
       ]);

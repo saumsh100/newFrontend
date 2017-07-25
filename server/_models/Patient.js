@@ -146,10 +146,12 @@ export default function (sequelize, DataTypes) {
     // Model Config
     indexes: [
       {
+        name: 'accountId_email',
         unique: true,
         fields: ['accountId', 'email']
       },
       {
+        name: 'accountId_mobilePhoneNumber',
         unique: true,
         fields: ['accountId', 'mobilePhoneNumber']
       },
@@ -181,11 +183,12 @@ export default function (sequelize, DataTypes) {
       $or['Patient_accountId_mobilePhoneNumber'] = [accountId, mobilePhoneNumber];
     }
 
+    // TODO: when this is working we can finish!
     const p = await Patient.findOne({
       where: {
         $or: {
-          'Patient_accountId_email': [accountId, email],
-          'Patient_accountId_mobilePhoneNumber': [accountId, mobilePhoneNumber],
+          'accountId_email': [accountId, email],
+          'accountId_mobilePhoneNumber': [accountId, mobilePhoneNumber],
         },
       },
     });
@@ -261,7 +264,7 @@ export default function (sequelize, DataTypes) {
    * @returns {Promise.<Array.<Model>>}
    */
   Patient.batchSave = async function (dataArray) {
-    const { docs, errors } = Patient.preValidateArray(dataArray);
+    const { docs, errors } = await Patient.preValidateArray(dataArray);
 
     console.log('docs');
     console.log(docs);
