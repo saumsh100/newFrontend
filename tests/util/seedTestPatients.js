@@ -12,11 +12,12 @@ const patient = {
   id: patientId,
   accountId,
   avatarUrl: '',
-  email: 'testPatient@test.com',
+  email: 'testpatient@test.com',
   pmsId: 0,
   firstName: 'Ronald',
   lastName: 'Mcdonald',
   pmsId: null,
+  mobilePhoneNumber: '7789999999',
   /*
   middleName: '',
 
@@ -35,7 +36,7 @@ const patientUser = {
   id: patientUserId,
   firstName: 'Jack',
   lastName: 'Daniels',
-  email: 'testPatientUser@test.com',
+  email: 'testpatientuser@test.com',
   phoneNumber: '6049999999',
   password: bcrypt.hashSync('!@CityOfBudaTest#$', passwordHashSaltRounds),
 };
@@ -49,6 +50,7 @@ async function seedTestPatients() {
 }
 
 module.exports = {
+  patient,
   patientId,
   patientUserId,
   seedTestPatients,
