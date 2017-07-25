@@ -185,7 +185,7 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
 }
 
 // Converts a model of recurring time offs to just regular time offs so it can be send to that process
-function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate) {
+function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate, startDate) {
   const fullTimeOffs = timeOffs.slice();
 
   for (let i = 0; i < recurringTimeOffs.length; i++) {
@@ -246,7 +246,7 @@ function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate) {
     // loop through and create regular time offs until the end date of the requested avaliabilities
 
     while (tmpStart.isBefore(moment(recurringTimeOffs[i].endDate)) && tmpStart.isBefore(endDate)) {
-      if (count % recurringTimeOffs[i].interval === 0 && count >= recurringTimeOffs[i].interval) {
+      if ((count % recurringTimeOffs[i].interval === 0) && (count >= recurringTimeOffs[i].interval) && moment(startDate).isBefore(tmpStart)) {
         fullTimeOffs.push({
           startDate: tmpStart.toISOString(),
           endDate: tmpEnd.toISOString(),
@@ -335,7 +335,7 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithNoPrefReservations;
   });
 
-  const fullTimeOffs = recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate);
+  const fullTimeOffs = recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate, startDate);
 
   const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
     for (let i = 0; fullTimeOffs && i < fullTimeOffs.length; i++) {
