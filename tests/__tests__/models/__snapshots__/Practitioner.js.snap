@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/Practitioner Data Validation should be able to save a Practitioner without id provided 1`] = `
+Object {
+  "accountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "avatarUrl": null,
+  "firstName": "Test",
+  "isActive": true,
+  "isCustomSchedule": false,
+  "isHidden": false,
+  "lastName": "Practitioner",
+  "pmsId": null,
+  "type": null,
+  "weeklyScheduleId": null,
+}
+`;
