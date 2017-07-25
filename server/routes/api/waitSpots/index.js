@@ -5,7 +5,9 @@ const { r } = require('../../../config/thinky');
 const loaders = require('../../util/loaders');
 const normalize = require('../normalize');
 const WaitSpot = require('../../../models/WaitSpot');
+const Patient = require('../../../models/Patient');
 const moment = require('moment');
+const { namespaces } = require('../../../config/globals');
 
 
 waitSpotsRouter.param('waitSpotId', loaders('waitSpot', 'WaitSpot'));
@@ -16,14 +18,30 @@ waitSpotsRouter.param('waitSpotId', loaders('waitSpot', 'WaitSpot'));
 waitSpotsRouter.post('/', (req, res, next) => {
   // Attach chair to the clinic of posting user
   // TODO: the short circuit is here to suppor widget, NEEDS to be removed!
+
+  const accountId = req.body.accountId || req.accountId;
   const waitSpotData = Object.assign({}, req.body, {
-    accountId: req.body.accountId || req.accountId,
+    accountId,
   });
 
   return WaitSpot.save(waitSpotData)
-    .then(waitSpot => res.send(201, normalize('waitSpot', waitSpot)))
+    .then((waitSpot) => {
+      const normalized = normalize('waitSpot', waitSpot);
+      res.send(201, normalized);
+      return { waitSpot, normalized };
+    })
+    .then(async ({ waitSpot, normalized }) => {
+
+      if (waitSpot.patientId) {
+        waitSpot.patient = await Patient.get(waitSpot.patientId);
+      }
+
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('create:WaitSpot', normalize('waitSpot', waitSpot));
+    })
     .catch(next);
-});0
+});
 
 /**
  * Get all waitSpots under a clinic
@@ -61,8 +79,19 @@ waitSpotsRouter.get('/:waitSpotId', checkPermissions('waitSpots:read'), (req, re
  * Update a waitSpot
  */
 waitSpotsRouter.put('/:waitSpotId', checkPermissions('waitSpots:update'), (req, res, next) => {
+  const accountId = req.body.accountId || req.accountId;
+
   return req.waitSpot.merge(req.body).save()
-    .then(waitSpot => res.send(normalize('waitSpot', waitSpot)))
+    .then((waitSpot) => {
+      const normalized = normalize('waitSpot', waitSpot);
+      res.send(201, normalized);
+      return { normalized };
+    })
+    .then(({ normalized }) => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('update:WaitSpot', normalized);
+    })
     .catch(next);
 });
 
@@ -71,8 +100,16 @@ waitSpotsRouter.put('/:waitSpotId', checkPermissions('waitSpots:update'), (req, 
  */
 waitSpotsRouter.delete('/:waitSpotId', checkPermissions('waitSpots:delete'), (req, res, next) => {
   // We actually delete waitSpots as we don't care about history
+
+  const { waitSpot, accountId } = req;
+
   return req.waitSpot.delete()
     .then(() => res.send(204))
+    .then(() => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('remove:WaitSpot', waitSpot.id);
+    })
     .catch(next);
 });
 

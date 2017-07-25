@@ -17,7 +17,7 @@ function runDashboardFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
   console.log('socket activeAccountId', activeAccountId);
 
-  /*Appointment
+  /* Appointment
     .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
@@ -58,11 +58,10 @@ function runDashboardFeeds(socket) {
           }
         }
       });
-    });*/
+    }); */
 
-  /**
-   * Listen to changes on the Requests table and update dashboards in real time
-   */
+
+  /*
   Request
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
@@ -80,9 +79,8 @@ function runDashboardFeeds(socket) {
       });
     });
 
-  /**
-   * Listen to changes on the Waitspot table and update dashboards in real time
-   */
+
+
   WaitSpot
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
@@ -112,9 +110,9 @@ function runDashboardFeeds(socket) {
         }
       });
     });
-  /**
-   * Listen to changes on the sentRecall table and update dashboards in real time
-   */
+
+
+
   SentReminder
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
@@ -133,9 +131,6 @@ function runDashboardFeeds(socket) {
       });
     });
 
-  /**
-   * Listen to changes on the sentRecall table and update dashboards in real time
-   */
   SentRecall
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
@@ -154,10 +149,6 @@ function runDashboardFeeds(socket) {
       });
     });
 
-  /**
-   * Listen to changes on the SyncClientError table to update dashboards in real time.
-   * Artificially set up the document from the feed for the normalizer.
-   */
   SyncClientError
     .filter({ accountId: activeAccountId })
     .changes()
@@ -170,6 +161,8 @@ function runDashboardFeeds(socket) {
         socket.emit('syncClientError', normalize('syncClientError', logEntry));
       });
     });
+
+    */
 }
 
 function isDeleted(doc) {

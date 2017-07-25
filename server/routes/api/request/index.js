@@ -10,6 +10,8 @@ const {
   sendAppointmentRequestConfirmed,
   sendAppointmentRequestRejected,
 } = require('../../../lib/mail');
+const { namespaces } = require('../../../config/globals');
+
 
 requestsRouter.param('requestId', loaders('request', 'Request'));
 requestsRouter.param('appointmentId', loaders('appointment', 'Appointment'));
@@ -21,7 +23,16 @@ requestsRouter.post('/', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { patientUserId, accountId } = req.body;
   return Request.save(req.body)
-    .then(request => res.status(201).send(normalize('request', request)))
+    .then((request) => {
+      const normalized = normalize('request', request);
+      res.status(201).send(normalized);
+      return { normalized };
+    })
+    .then(({ normalized }) => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('create:Request', normalized);
+    })
     .then(async () => {
       const patientUser = await PatientUser.get(patientUserId);
       const account = await Account.get(accountId);
@@ -67,8 +78,19 @@ requestsRouter.get('/', (req, res, next) => {
  * Update a request
  */
 requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) =>{
+  const { accountId } = req;
+
   return req.request.merge(req.body).save()
-    .then(request => res.send(normalize('request', request)))
+    .then((request) => {
+      const normalized = normalize('request', request);
+      res.status(201).send(normalized);
+      return { normalized };
+    })
+    .then(({ normalized }) => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('update:Request', normalized);
+    })
     .catch(next);
 });
 
@@ -77,9 +99,15 @@ requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res
  * Delete a request
  */
 requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, res, next) =>{
+  const { request, accountId } = req;
+
   return req.request.delete()
-    .then(() =>{
-        res.send(204);
+    .then(() => res.send(204))
+    .then(() => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      const normalized = normalize('request', request);
+      return io.of(ns).in(accountId).emit('remove:Request', normalized);
     })
     .catch(next);
 });
@@ -91,7 +119,16 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { accountId, request } = req;
   return request.merge({ isCancelled: true }).save()
-    .then(r => res.status(201).send(normalize('request', r)))
+    .then((request) => {
+      const normalized = normalize('request', request);
+      res.status(201).send(normalized);
+      return { normalized };
+    })
+    .then(({ normalized }) => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('update:Request', normalized);
+    })
     .then(async () => {
       const patientUser = await PatientUser.get(req.request.patientUserId);
       const account = await Account.get(accountId);
