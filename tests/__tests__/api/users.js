@@ -25,19 +25,18 @@ describe('/api/users', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['password']);
           expect(body).toMatchSnapshot();
         });
     });
 
-    /*
-    // TODO: Password diff each time, fix this
     test('/:userId - retrieve user from id', () => {
       return request(app)
         .get(`/api/users/${ownerUserId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['password']);
           expect(body).toMatchSnapshot();
         });
     });
@@ -52,16 +51,14 @@ describe('/api/users', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['password']);
           expect(body).toMatchSnapshot();
-          console.log(JSON.stringify(body));
         });
     });
-    */
   });
 
-  /*
+
   describe('PUT /:userId', () => {
-    // TODO: Password diff each time, fix this
     test('update a user', async () => {
       return request(app)
         .put(`/api/users/${managerUserId}`)
@@ -73,10 +70,9 @@ describe('/api/users', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['password']);
           expect(body).toMatchSnapshot();
         });
     });
   });
-  */
-
 });

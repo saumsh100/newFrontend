@@ -2,11 +2,12 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Practitioner } from '../../../server/models';
+import omit from 'lodash/omit';
+import { Practitioner, WeeklySchedule } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
-import { weeklySchedule, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
+import { practitionerId, practitioner, seedTestPractitioners } from '../../util/seedTestPractitioners';
+import { weeklySchedule, weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 
@@ -24,6 +25,7 @@ describe('/api/practitioners', () => {
 
   describe('GET /', () => {
     beforeEach(async () => {
+      await seedTestWeeklySchedules();
       await seedTestPractitioners();
     });
 
@@ -37,6 +39,19 @@ describe('/api/practitioners', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('get all practitioners with weeklySchedule', () => {
+      return request(app)
+        .get('/api/practitioners?join=weeklySchedule')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          accountId,
+        })
+        .expect(200)
+        .then(({ body }) => {
           expect(body).toMatchSnapshot();
         });
     });
@@ -58,26 +73,23 @@ describe('/api/practitioners', () => {
       await wipeModel(Practitioner);
     });
 
-    // TODO: Get help on this
-    /*
-    test.only('create practitioner', () => {
+    test('create practitioner', () => {
       return request(app)
-        .post('/api/practitioners?join=weeklySchedule')
+        .post('/api/practitioners')
         .set('Authorization', `Bearer ${token}`)
-        .send(Object.assign(
-          { accountId },
-          practitioner,
-          {
-            joinObject: weeklySchedule,
-          },
-        ))
+        .send(practitioner)
         .expect(201)
         .then(({ body }) => {
-          expect(body).toMatchSnapshot();
-          console.log(JSON.stringify(body));
+          body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'weeklySchedule']);
+          const practitioners = body.entities.practitioners;
+          const newBody = omit(practitioners, ['weeklySchedules'])
+          expect({
+            entities: {
+              practitioners: newBody,
+            },
+          }).toMatchSnapshot();
         });
     });
-    */
   });
 
   describe('PUT /', () => {

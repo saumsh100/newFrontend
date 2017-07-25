@@ -1,3 +1,7 @@
+
+// TODO: this is not used, we should refactor auth to be more standard and
+// TODO: handle OAuth at that point...
+
 const axios = require('axios');
 const querystring = require('querystring');
 const { isObject } = require('lodash');

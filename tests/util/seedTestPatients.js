@@ -11,13 +11,14 @@ const patientUserId = 'b8665c97-1e98-41ac-bf13-090b742de400';
 const patient = {
   id: patientId,
   accountId,
-  avatarUrl: '',
   email: 'testpatient@test.com',
-  pmsId: 0,
   firstName: 'Ronald',
   lastName: 'Mcdonald',
   pmsId: null,
   mobilePhoneNumber: '7789999999',
+  // avatarUrl: '',
+ // pmsId: 0,
+  //pmsId: null,
   /*
   middleName: '',
 
@@ -37,7 +38,7 @@ const patientUser = {
   firstName: 'Jack',
   lastName: 'Daniels',
   email: 'testpatientuser@test.com',
-  phoneNumber: '6049999999',
+  phoneNumber: '+16049999999',
   password: bcrypt.hashSync('!@CityOfBudaTest#$', passwordHashSaltRounds),
 };
 

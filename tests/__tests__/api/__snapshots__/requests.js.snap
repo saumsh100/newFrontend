@@ -28,6 +28,50 @@ Object {
 }
 `;
 
+exports[`/api/requests GET / get all requests with patientUsers and services 1`] = `
+Object {
+  "entities": Object {
+    "patientUsers": Object {
+      "b8665c97-1e98-41ac-bf13-090b742de400": Object {
+        "email": "testPatientUser@test.com",
+        "firstName": "Jack",
+        "id": "b8665c97-1e98-41ac-bf13-090b742de400",
+        "isEmailConfirmed": false,
+        "isPhoneNumberConfirmed": false,
+        "lastName": "Daniels",
+        "phoneNumber": "+16049999999",
+      },
+    },
+    "requests": Object {
+      "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-19T00:17:30.932Z",
+        "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
+        "isCancelled": false,
+        "isConfirmed": false,
+        "patientUser": "b8665c97-1e98-41ac-bf13-090b742de400",
+        "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
+        "service": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "startDate": "2017-07-19T00:16:30.932Z",
+      },
+    },
+    "services": Object {
+      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "duration": 4,
+        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isHidden": false,
+        "name": "Test Service",
+      },
+    },
+  },
+  "result": Array [
+    "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
+  ],
+}
+`;
+
 exports[`/api/requests POST / create request 1`] = `
 Object {
   "entities": Object {

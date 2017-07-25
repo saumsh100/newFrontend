@@ -5,8 +5,13 @@ import generateToken from '../../util/generateToken';
 import { Service } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+
 import { serviceId, service, seedTestService } from '../../util/seedTestServices';
+
+import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
+
 import { omitPropertiesFromBody } from '../../util/selectors';
+
 
 describe('/api/services', () => {
   // Seed with some standard user data
@@ -23,6 +28,7 @@ describe('/api/services', () => {
   describe('GET /', () => {
     beforeEach(async () => {
       await seedTestService();
+      await seedTestPractitioners();
     });
 
     test('retrieve services', () => {
@@ -80,6 +86,26 @@ describe('/api/services', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           name: 'Updated Test Service',
+          practitioners: [practitionerId],
+        })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('JOIN /', () => {
+    beforeEach(async () => {
+      await seedTestService();
+    });
+
+    test('join practitioners', () => {
+      return request(app)
+        .get('/api/services?join=practitioners')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          accountId,
         })
         .expect(200)
         .then(({ body }) => {
