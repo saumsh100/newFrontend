@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/WeeklySchedule Data Validation should be able to save a WeeklySchedule without id provided 1`] = `
+Object {
+  "accountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "friday": Object {
+    "breaks": Array [],
+    "endTime": "17:00:00",
+    "isClosed": false,
+    "startTime": "08:00:00",
+  },
+  "isAdvanced": false,
+  "monday": Object {
+    "breaks": Array [],
+    "endTime": "17:00:00",
+    "isClosed": false,
+    "startTime": "08:00:00",
+  },
+  "saturday": Object {
+    "breaks": Array [],
+    "endTime": "17:00:00",
+    "isClosed": false,
+    "startTime": "08:00:00",
+  },
+  "startDate": null,
+  "sunday": Object {
+    "breaks": Array [],
+    "endTime": "17:00:00",
+    "isClosed": false,
+    "startTime": "08:00:00",
+  },
+  "thursday": Object {
+    "breaks": Array [],
+    "endTime": "17:00:00",
+    "isClosed": false,
+    "startTime": "08:00:00",
+  },
+  "tuesday": Object {
+    "breaks": Array [],
+    "endTime": "17:00:00",
+    "isClosed": false,
+    "startTime": "08:00:00",
+  },
+  "wednesday": Object {
+    "breaks": Array [],
+    "endTime": "17:00:00",
+    "isClosed": false,
+    "startTime": "08:00:00",
+  },
+}
+`;
