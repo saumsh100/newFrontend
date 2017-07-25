@@ -17,7 +17,7 @@ function runDashboardFeeds(socket) {
   const { activeAccountId } = socket.decoded_token;
   console.log('socket activeAccountId', activeAccountId);
 
-  /*Appointment
+  /* Appointment
     .filter({ accountId: activeAccountId, isBatch: false })
     .changes({ squash: true })
     .then((feed) => {
@@ -58,7 +58,7 @@ function runDashboardFeeds(socket) {
           }
         }
       });
-    });*/
+    }); */
 
 
   /*
@@ -148,11 +148,7 @@ function runDashboardFeeds(socket) {
         }
       });
     });
-  */
-  /**
-   * Listen to changes on the SyncClientError table to update dashboards in real time.
-   * Artificially set up the document from the feed for the normalizer.
-   */
+
   SyncClientError
     .filter({ accountId: activeAccountId })
     .changes()
@@ -165,6 +161,8 @@ function runDashboardFeeds(socket) {
         socket.emit('syncClientError', normalize('syncClientError', logEntry));
       });
     });
+
+    */
 }
 
 function isDeleted(doc) {
