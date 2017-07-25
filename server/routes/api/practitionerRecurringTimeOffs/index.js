@@ -77,7 +77,7 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
     const newDayOfWeek = DayOfWeek || moment(`${moment().get('year')} ${DayOfMonth} ${MonthOfYear}`, 'YYYY-MM-DD').format('dddd');
 
     if (isWorking) {
-      if (practitionerId && DayOfWeek && (RecurrenceEndMode || moment(endDate).isAfter(moment('99900620', 'YYYYMMDD').toISOString())) {
+      if (practitionerId && DayOfWeek && (RecurrenceEndMode || moment(endDate).isAfter(moment('99900620', 'YYYYMMDD').toISOString()))) {
         const dayOfWeek = newDayOfWeek.toLowerCase().replace(/\s/g, '').split(',');
 
         if (!chairs[practitionerId]) {
