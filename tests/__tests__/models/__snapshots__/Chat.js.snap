@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/Chat Data Validation should be able to save a Chat without id provided 1`] = `
+Object {
+  "accountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "lastTextMessageDate": null,
+  "lastTextMessageId": null,
+  "patientId": null,
+  "patientPhoneNumber": "+17807807800",
+}
+`;
