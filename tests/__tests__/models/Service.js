@@ -35,8 +35,6 @@ async function wipePractitionerTable() {
   });
 }
 
-
-
 const accountId = 'e13151a6-091e-43db-8856-7e547c171754';
 const makeData = (data = {}) => (Object.assign({
   name: 'Test Service',
