@@ -111,9 +111,8 @@ function runDashboardFeeds(socket) {
       });
     });
 
-  /**
-   * Listen to changes on the sentRecall table and update dashboards in real time
-   */
+
+
   SentReminder
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
@@ -132,9 +131,6 @@ function runDashboardFeeds(socket) {
       });
     });
 
-  /**
-   * Listen to changes on the sentRecall table and update dashboards in real time
-   */
   SentRecall
     .filter({ accountId: activeAccountId })
     .changes({ squash: true })
@@ -152,7 +148,7 @@ function runDashboardFeeds(socket) {
         }
       });
     });
-
+  */
   /**
    * Listen to changes on the SyncClientError table to update dashboards in real time.
    * Artificially set up the document from the feed for the normalizer.
