@@ -3,7 +3,6 @@ import { Account, Patient } from '../../../server/_models';
 import { wipeModelSequelize } from '../../util/wipeModel';
 import { omitProperties } from '../../util/selectors';
 
-
 // TODO: should probably make makeData, a reusable function
 
 const accountId = 'ee3c578f-c228-4a25-8388-90ee9a0c9eb4';

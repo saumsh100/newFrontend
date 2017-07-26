@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/Service Data Validation should be able to save a Service without id provided 1`] = `
+Object {
+  "accountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "bufferTime": null,
+  "duration": 30,
+  "isDefault": true,
+  "isHidden": false,
+  "name": "Test Service",
+  "pmsId": null,
+  "unitCost": null,
+}
+`;

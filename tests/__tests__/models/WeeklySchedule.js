@@ -1,10 +1,10 @@
 
-import { Account, Chair } from '../../../server/_models';
+import { Account, WeeklySchedule } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
 import { wipeModelSequelize }  from '../../util/wipeModel';
 
-async function wipeChairTable() {
-  await Chair.destroy({
+async function wipeWeeklyScheduleTable() {
+  await WeeklySchedule.destroy({
     where: {},
     truncate: true,
     force: true,
@@ -20,7 +20,6 @@ async function wipeAccountTable() {
 
 const accountId = 'e13151a6-091e-43db-8856-7e547c171754';
 const makeData = (data = {}) => (Object.assign({
-  name: 'Test Chair',
   accountId,
 }, data));
 
@@ -34,37 +33,37 @@ const makeAccountData = (data = {}) => (Object.assign({
 const fakeAccountId = 'f23151a6-091e-43db-8856-7e547c171754';
 const fail = 'Your code should be failing but it is passing';
 
-describe('models/Chair', () => {
+describe('models/WeeklySchedule', () => {
   beforeEach(async () => {
-    await wipeChairTable();
+    await wipeWeeklyScheduleTable();
     await wipeAccountTable();
   });
 
   afterAll(async () => {
-    await wipeChairTable();
+    await wipeWeeklyScheduleTable();
     await wipeAccountTable();
   });
 
   describe('Data Validation', () => {
-    test('should be able to save a Chair without id provided', async () => {
+    test('should be able to save a WeeklySchedule without id provided', async () => {
       const data = makeData();
       await Account.create(makeAccountData());
-      const chair = await Chair.create(data);
-      expect(omitProperties(chair.dataValues, ['id'])).toMatchSnapshot();
+      const weeklySchedule = await WeeklySchedule.create(data);
+      expect(omitProperties(weeklySchedule.get({ plain: true }), ['id'])).toMatchSnapshot();
     });
 
-    test('should have null values for description', async () => {
+    test('should have null values for startDate', async () => {
       const data = makeData();
       await Account.create(makeAccountData());
-      const chair = await Chair.create(data);
-      expect(chair.description).toBe(null);
+      const weeklySchedule = await WeeklySchedule.create(data);
+      expect(weeklySchedule.startDate).toBe(null);
     });
 
-    test('should throw error for no name provided', async () => {
-      const data = makeData({ name: undefined });
+    test('should throw error for no accountId provided', async () => {
+      const data = makeData({ accountId: undefined });
       await Account.create(makeAccountData());
       try {
-        await Chair.create(data);
+        await WeeklySchedule.create(data);
         throw new Error(fail);
       } catch (err) {
         expect(err.name).toEqual('SequelizeValidationError');
@@ -74,7 +73,7 @@ describe('models/Chair', () => {
     test('should fail if accountId does not reference an existing account', async () => {
       const data = makeData({ accountId: fakeAccountId });
       try {
-        await Chair.create(data);
+        await WeeklySchedule.create(data);
         throw new Error(fail);
       } catch (err) {
         expect(err.name).toEqual('SequelizeForeignKeyConstraintError');
@@ -89,9 +88,9 @@ describe('models/Chair', () => {
 
     test('should be able to fetch account relationship', async () =>  {
       await Account.create(makeAccountData());
-      const { id } = await Chair.create(makeData());
+      const { id } = await WeeklySchedule.create(makeData());
 
-      const chair = await Chair.findOne({
+      const weeklySchedule = await WeeklySchedule.findOne({
         where: { id },
         include: [
           {
@@ -101,7 +100,7 @@ describe('models/Chair', () => {
         ],
       });
 
-      expect(chair.accountId).toBe(chair.account.id);
+      expect(weeklySchedule.accountId).toBe(weeklySchedule.account.id);
     });
   });
 });
