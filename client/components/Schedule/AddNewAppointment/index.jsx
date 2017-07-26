@@ -297,9 +297,13 @@ class AddNewAppointment extends Component {
     const deleteApp = confirm('Are you sure you want to delete this appointment?');
 
     if (deleteApp) {
+      const delModel = Map({
+        isDeleted: true,
+        isSyncedWithPMS: false,
+      });
       const appModel = selectedAppointment.appModel;
-      const deletedModel = appModel.set('isDeleted', true);
-      updateEntityRequest({ key: 'appointments', model: deletedModel });
+      const deletedModel = appModel.merge(delModel);
+      updateEntityRequest({ key: 'appointments', model: deletedModel })
     }
 
     reinitializeState();
