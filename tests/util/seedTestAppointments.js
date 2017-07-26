@@ -27,6 +27,7 @@ async function seedTestAppointments() {
 }
 
 module.exports = {
+  appointment,
   appointmentId,
   seedTestAppointments,
 };

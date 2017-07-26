@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/enterprises DELETE / /:enterpriseId/accounts/:accountId - delete enterprise account 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/enterprises GET / / - get enterprises 1`] = `
+Object {
+  "entities": Object {
+    "enterprises": Object {
+      "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+        "id": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "name": "Test Enterprise",
+        "plan": "GROWTH",
+      },
+    },
+  },
+  "result": Array [
+    "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+  ],
+}
+`;
+
+exports[`/api/enterprises GET / /:enterpriseId - retrieve enterprise 1`] = `
+Object {
+  "entities": Object {
+    "enterprises": Object {
+      "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+        "id": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "name": "Test Enterprise",
+        "plan": "GROWTH",
+      },
+    },
+  },
+  "result": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+}
+`;
+
+exports[`/api/enterprises GET / /:enterpriseId/accounts - retrieve enterprise accounts 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "fullLogoUrl": null,
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "name": "Test Account",
+        "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
+  },
+  "result": Array [
+    "62954241-3652-4792-bae5-5bfed53d37b7",
+  ],
+}
+`;
+
+exports[`/api/enterprises PUT / /:enterpriseId/accounts/:accountId - update account 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "fullLogoUrl": null,
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "name": "Updated",
+        "unit": 15,
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
+  },
+  "result": "62954241-3652-4792-bae5-5bfed53d37b7",
+}
+`;

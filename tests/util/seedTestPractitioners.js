@@ -14,6 +14,7 @@ const practitioner = {
   lastName: 'Sanders',
   weeklyScheduleId,
   createdAt: '2017-07-19T00:14:30.932Z',
+  type: 'Hygienist',
 };
 
 async function seedTestPractitioners() {

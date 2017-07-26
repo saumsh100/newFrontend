@@ -126,6 +126,7 @@ async function seedTestUsersSequelize() {
 }
 
 module.exports = {
+  enterprise,
   enterpriseId,
   accountId,
   managerPermissionId,

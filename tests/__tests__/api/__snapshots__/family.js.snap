@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/families DELETE / /:familyId - delete family 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/families GET / / - get all family info for account 1`] = `
+Object {
+  "entities": Object {
+    "families": Object {
+      "08cb4f5a-3d19-4f70-a543-ab961e78200c": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+      },
+    },
+  },
+  "result": Array [
+    "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+  ],
+}
+`;
+
+exports[`/api/families GET / /:familyId - retrieve family 1`] = `
+Object {
+  "entities": Object {
+    "families": Object {
+      "08cb4f5a-3d19-4f70-a543-ab961e78200c": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+      },
+    },
+  },
+  "result": Array [
+    "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+  ],
+}
+`;
+
+exports[`/api/families POST / / - create a family 1`] = `
+Object {
+  "entities": Object {
+    "families": Object {
+      "08cb4f5a-3d19-4f70-a543-ab961e78200c": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+      },
+    },
+  },
+  "result": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+}
+`;
+
+exports[`/api/families PUT / /:familyId - update family 1`] = `
+Object {
+  "entities": Object {
+    "families": Object {
+      "08cb4f5a-3d19-4f70-a543-ab961e78200c": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+        "pmsId": "test",
+      },
+    },
+  },
+  "result": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+}
+`;
