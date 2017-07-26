@@ -403,7 +403,11 @@ function fetchAvailabilities(options) {
             // TODO: handle for noPreference on practitioners!
             return Appointment
             .filter((row) => {
-              return generateDuringFilter(row, startDate, endDate);
+              return generateDuringFilter(row, startDate, endDate)
+              .and(row
+                .hasFields('isBookable')
+                .not()
+                .or(row('isBookable').eq(false)));
             }).run()
             .then((appointments) => {
               const practitionerAvailabilities = practitioners.map((p, i) => {
