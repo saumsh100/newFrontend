@@ -2,7 +2,7 @@
 
 exports[`models/Appointment Data Validation should be able to save a Appointment without id provided 1`] = `
 Object {
-  "accountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
   "chairId": null,
   "customBufferTime": null,
   "endDate": 2017-02-01T16:30:00.000Z,

@@ -55,6 +55,23 @@ export default function (sequelize, DataTypes) {
     },
   });
 
+  User.associate = ({ Account, Enterprise, Permission }) => {
+    User.belongsTo(Account, {
+      foreignKey: 'activeAccountId',
+      as: 'activeAccount',
+    });
+
+    User.belongsTo(Enterprise, {
+      foreignKey: 'enterpriseId',
+      as: 'enterprise',
+    });
+
+    User.belongsTo(Permission, {
+      foreignKey: 'permissionId',
+      as: 'permission',
+    });
+  };
+
   /**
    * isValidPasswordAsync is used to ensure the password is correct
    *

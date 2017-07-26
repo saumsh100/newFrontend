@@ -146,24 +146,22 @@ export default function (sequelize, DataTypes) {
     // Model Config
     indexes: [
       {
-        name: 'accountId_email',
         unique: true,
         fields: ['accountId', 'email']
       },
       {
-        name: 'accountId_mobilePhoneNumber',
         unique: true,
         fields: ['accountId', 'mobilePhoneNumber']
       },
     ],
   });
 
-  Patient.associate = (({ Account }) => {
+  Patient.associate = ({ Account }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
     });
-  });
+  };
 
   /**
    *
@@ -172,24 +170,28 @@ export default function (sequelize, DataTypes) {
    */
   Patient.uniqueValidate = async function (model) {
     const { accountId, email, mobilePhoneNumber } = model;
+    if (!accountId) {
+      throw new Error('model.accountId must exist on the model');
+    }
+
+    const noEmail = isUndefined(email) || isNull(email);
+    const noMobilePhoneNumber = isUndefined(mobilePhoneNumber) || isNull(mobilePhoneNumber);
+    if (noEmail && noMobilePhoneNumber) return;
+
     // Grab all models that match
-
     const $or = {};
-    if (isUndefined(email) || isNull(email)) {
-      $or['Patient_accountId_email'] = [accountId, email];
+    if (noEmail) {
+      $or.email = email;
     }
 
-    if (isUndefined(mobilePhoneNumber) || isNull(mobilePhoneNumber)) {
-      $or['Patient_accountId_mobilePhoneNumber'] = [accountId, mobilePhoneNumber];
+    if (noMobilePhoneNumber) {
+      $or.mobilePhoneNumber = mobilePhoneNumber;
     }
 
-    // TODO: when this is working we can finish!
     const p = await Patient.findOne({
       where: {
-        $or: {
-          'accountId_email': [accountId, email],
-          'accountId_mobilePhoneNumber': [accountId, mobilePhoneNumber],
-        },
+        accountId,
+        $or,
       },
     });
 

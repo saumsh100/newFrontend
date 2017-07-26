@@ -1,29 +1,9 @@
 
 import { Account, Appointment, Chair, Practitioner } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
+import { wipeModelSequelize } from '../../util/wipeModel';
+import { seedTestAccountsSequelize, accountId } from '../../util/seedTestAccounts';
 
-async function wipeAppointmentTable() {
-  await Appointment.destroy({
-    where: {},
-    force: true,
-  });
-}
-
-async function wipePractitionerTable() {
-  await Practitioner.destroy({
-    where: {},
-    force: true,
-  });
-}
-
-async function wipeAccountTable() {
-  await Account.destroy({
-    where: {},
-    force: true,
-  });
-}
-
-const accountId = 'e13151a6-091e-43db-8856-7e547c171754';
 const practitionerId = '88a2d812-3a4c-454c-9286-628556563bdc';
 const makeData = (data = {}) => (Object.assign({
   name: 'Test Appointment',
@@ -31,13 +11,6 @@ const makeData = (data = {}) => (Object.assign({
   practitionerId,
   startDate: (new Date(2017, 1, 1, 8, 30)).toISOString(),
   endDate: (new Date(2017, 1, 1, 9, 30)).toISOString(),
-}, data));
-
-const enterpriseId = 'ef3c578f-c228-4a25-8388-90ee9a0c9eb4';
-const makeAccountData = (data = {}) => (Object.assign({
-  id: accountId,
-  name: 'Test Account',
-  enterpriseId,
 }, data));
 
 const makePractitionerData = (data = {}) => Object.assign({
@@ -52,21 +25,20 @@ const fail = 'Your code should be failing but it is passing';
 
 describe('models/Appointment', () => {
   beforeEach(async () => {
-    await wipeAppointmentTable();
-    await wipePractitionerTable();
-    await wipeAccountTable();
+    await wipeModelSequelize(Appointment);
+    await wipeModelSequelize(Practitioner);
+    await seedTestAccountsSequelize();
   });
 
   afterAll(async () => {
-    await wipeAppointmentTable();
-    await wipePractitionerTable();
-    await wipeAccountTable();
+    await wipeModelSequelize(Appointment);
+    await wipeModelSequelize(Practitioner);
+    await seedTestAccountsSequelize();
   });
 
   describe('Data Validation', () => {
     test('should be able to save a Appointment without id provided', async () => {
       const data = makeData();
-      await Account.create(makeAccountData());
       await Practitioner.create(makePractitionerData());
       const appointment = await Appointment.create(data);
       expect(omitProperties(appointment.dataValues, ['id'])).toMatchSnapshot();
@@ -74,7 +46,6 @@ describe('models/Appointment', () => {
 
     test('should have default values', async () => {
       const data = makeData();
-      await Account.create(makeAccountData());
       await Practitioner.create(makePractitionerData());
       const appointment = await Appointment.create(data);
       expect(appointment.isDeleted).toBe(false);
@@ -83,7 +54,6 @@ describe('models/Appointment', () => {
 
     test('should throw error for no startDate provided', async () => {
       const data = makeData({ startDate: undefined });
-      await Account.create(makeAccountData());
       await Practitioner.create(makePractitionerData());
       try {
         await Appointment.create(data);
@@ -106,11 +76,10 @@ describe('models/Appointment', () => {
 
   describe('Relations', () => {
     beforeEach(async () => {
-      await wipeAccountTable();
+      await seedTestAccountsSequelize();
     });
 
     test('should be able to fetch account relationship', async () =>  {
-      await Account.create(makeAccountData());
       await Practitioner.create(makePractitionerData());
       const { id } = await Appointment.create(makeData());
 
@@ -128,7 +97,6 @@ describe('models/Appointment', () => {
     });
 
     test('should not fail if you are trying to join a chair if chairId is null', async () =>  {
-      await Account.create(makeAccountData());
       await Practitioner.create(makePractitionerData());
       const { id } = await Appointment.create(makeData());
 

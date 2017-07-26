@@ -88,7 +88,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Appointment.associate = (({ Account, Chair, Patient, Practitioner, Service }) => {
+  Appointment.associate = ({ Account, Chair, Patient, Practitioner, Service }) => {
     Appointment.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -113,7 +113,7 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'serviceId',
       as: 'service',
     });
-  });
+  };
 
   return Appointment;
 }

@@ -1,4 +1,6 @@
 
+import customDataTypes from '../util/customDataTypes';
+
 export default function (sequelize, DataTypes) {
   const Account = sequelize.define('Account', {
     id: {
@@ -65,20 +67,15 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
     },
 
-    twilioPhoneNumber: {
-      type: DataTypes.STRING,
-    },
-
-    destinationPhoneNumber: {
-      type: DataTypes.STRING,
-    },
-
-    phoneNumber: {
-      type: DataTypes.STRING,
-    },
+    twilioPhoneNumber: customDataTypes.phoneNumber('twilioPhoneNumber', DataTypes),
+    destinationPhoneNumber: customDataTypes.phoneNumber('destinationPhoneNumber', DataTypes),
+    phoneNumber: customDataTypes.phoneNumber('phoneNumber', DataTypes),
 
     contactEmail: {
       type: DataTypes.STRING,
+      validate: {
+        isEmail: true,
+      },
     },
 
     website: {
@@ -97,6 +94,43 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
   });
+
+  Account.associate = ({ Appointment, Chat, Enterprise, Patient, Practitioner, Service, WeeklySchedule }) => {
+    Account.belongsTo(Enterprise, {
+      foreignKey: 'enterpriseId',
+      as: 'enterprise',
+    });
+
+    Account.belongsTo(WeeklySchedule, {
+      foreignKey: 'weeklyScheduleId',
+      as: 'weeklySchedule',
+    });
+
+    Account.hasMany(Appointment, {
+      foreignKey: 'accountId',
+      as: 'appointments',
+    });
+
+    Account.hasMany(Chat, {
+      foreignKey: 'accountId',
+      as: 'chats',
+    });
+
+    Account.hasMany(Patient, {
+      foreignKey: 'accountId',
+      as: 'patients',
+    });
+
+    Account.hasMany(Practitioner, {
+      foreignKey: 'accountId',
+      as: 'practitioners',
+    });
+
+    Account.hasMany(Service, {
+      foreignKey: 'accountId',
+      as: 'services',
+    });
+  };
 
   return Account;
 }

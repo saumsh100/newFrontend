@@ -2,7 +2,6 @@
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Account, Enterprise, Permission, User } from '../../server/models';
-import { weeklyScheduleId } from './seedTestWeeklySchedules';
 import { Account as _Account, Enterprise as _Enterprise, Permission as _Permission, User as _User } from '../../server/_models';
 import wipeModel, { wipeModelSequelize } from './wipeModel';
 
@@ -25,7 +24,6 @@ const account = {
   id: accountId,
   enterpriseId,
   name: 'Test Account',
-  weeklyScheduleId,
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
@@ -107,13 +105,13 @@ async function seedTestUsers() {
 
 async function seedTestUsersSequelize() {
   // TODO: will be a simple DB wipe with Postgres
+  await wipeModelSequelize(_User);
+  await wipeModelSequelize(_Permission);
   await wipeModelSequelize(_Account);
   await wipeModelSequelize(_Enterprise);
-  await wipeModelSequelize(_Permission);
-  await wipeModelSequelize(_User);
 
-  await _Account.create(account);
   await _Enterprise.create(enterprise);
+  await _Account.create(account);
   await _Permission.bulkCreate([
     managerPermission,
     ownerPermission,
