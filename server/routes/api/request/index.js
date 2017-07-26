@@ -26,12 +26,16 @@ requestsRouter.post('/', (req, res, next) => {
     .then((request) => {
       const normalized = normalize('request', request);
       res.status(201).send(normalized);
-      return { normalized };
+      return { request, normalized };
     })
-    .then(({ normalized }) => {
+    .then(async ({ request }) => {
+      if (request.patientUserId) {
+        request.patientUser = await PatientUser.get(request.patientUserId);
+      }
+
       const io = req.app.get('socketio');
       const ns = namespaces.dash;
-      return io.of(ns).in(accountId).emit('create:Request', normalized);
+      return io.of(ns).in(accountId).emit('create:Request', normalize('request', request));
     })
     .then(async () => {
       const patientUser = await PatientUser.get(patientUserId);
