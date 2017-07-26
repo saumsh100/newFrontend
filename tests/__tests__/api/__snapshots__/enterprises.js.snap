@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/api/enterprises DELETE / /:enterpriseId/accounts/:accountId - delete family 1`] = `
+exports[`/api/enterprises DELETE / /:enterpriseId/accounts/:accountId - delete enterprise account 1`] = `
 Object {
   "entities": Object {},
 }
@@ -57,21 +57,6 @@ Object {
   "result": Array [
     "62954241-3652-4792-bae5-5bfed53d37b7",
   ],
-}
-`;
-
-exports[`/api/enterprises POST / / - create an enterprise 1`] = `
-Object {
-  "entities": Object {
-    "enterprises": Object {
-      "e70553e7-8cd6-44ec-9a02-bc822cc0d5cb": Object {
-        "id": "e70553e7-8cd6-44ec-9a02-bc822cc0d5cb",
-        "name": "Test Enterprise",
-        "plan": "GROWTH",
-      },
-    },
-  },
-  "result": "e70553e7-8cd6-44ec-9a02-bc822cc0d5cb",
 }
 `;
 
