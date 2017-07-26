@@ -75,7 +75,6 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
     ...pick(req.body, 'name', 'timezone'),
     enterpriseId: req.enterprise.id,
   };
-
   const timezone = req.body.timezone;
 
   Account.save(accountData)
@@ -114,7 +113,7 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
           primaryType: 'email',
           lengthSeconds: 6 * 30 * 24 * 60 * 60,
         },
-      ]
+      ];
 
       const defaultServices = [
         {

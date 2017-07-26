@@ -104,7 +104,6 @@ describe('/api/families', () => {
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          console.log(JSON.stringify(body));
           expect(body).toMatchSnapshot();
         });
     });

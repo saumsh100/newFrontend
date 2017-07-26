@@ -1,0 +1,226 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/appointments DELETE / /:appointmentId - delete appointment 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/appointments GET / / - retrieve appointments 1`] = `
+Object {
+  "entities": Object {
+    "appointments": Object {
+      "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-21T00:16:30.932Z",
+        "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "isCancelled": false,
+        "isDeleted": false,
+        "isPatientConfirmed": false,
+        "isReminderSent": true,
+        "isSyncedWithPMS": false,
+        "mark": false,
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "startDate": "2017-07-21T00:14:30.932Z",
+      },
+    },
+  },
+  "result": Array [
+    "6b215a42-5c33-4f94-8313-d89893ae2f36",
+  ],
+}
+`;
+
+exports[`/api/appointments GET / /:appointmentId - retrieve an appointment 1`] = `
+Object {
+  "entities": Object {
+    "appointments": Object {
+      "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-21T00:16:30.932Z",
+        "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "isCancelled": false,
+        "isDeleted": false,
+        "isPatientConfirmed": false,
+        "isReminderSent": true,
+        "isSyncedWithPMS": false,
+        "mark": false,
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "startDate": "2017-07-21T00:14:30.932Z",
+      },
+    },
+  },
+  "result": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+}
+`;
+
+exports[`/api/appointments GET / /business - [no description] 1`] = `
+Object {
+  "brokenAppts": 0,
+  "entities": Object {},
+  "hygieneAppts": 1,
+}
+`;
+
+exports[`/api/appointments GET / /stats - appointment stats for intelligence overview 1`] = `
+Object {
+  "confirmedAppointments": 0,
+  "entities": Object {},
+  "newPatients": 1,
+  "notConfirmedAppointments": 1,
+  "patients": Object {
+    "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+      "age": 0,
+      "firstName": "Ronald",
+      "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+      "lastName": "Mcdonald",
+      "numAppointments": 0,
+    },
+  },
+  "practitioner": Object {
+    "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+      "appointmentTime": 0,
+      "firstName": "Colonel",
+      "fullAvatarUrl": null,
+      "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+      "lastName": "Sanders",
+      "newPatients": 1,
+      "totalTime": 394200,
+      "type": "Hygienist",
+    },
+  },
+  "services": Object {},
+}
+`;
+
+exports[`/api/appointments GET / /statsdate - data for most popular day of the week 1`] = `
+Object {
+  "days": Array [
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+  ],
+  "entities": Object {},
+}
+`;
+
+exports[`/api/appointments GET / /statslastyear - data for past year 1`] = `
+Object {
+  "age": Array [
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ],
+  "data": Array [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+  ],
+  "entities": Object {},
+  "months": Array [
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+  ],
+}
+`;
+
+exports[`/api/appointments POST / / - create an appointment 1`] = `
+Object {
+  "entities": Object {
+    "appointments": Object {
+      "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-21T00:16:30.932Z",
+        "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "isCancelled": false,
+        "isDeleted": false,
+        "isPatientConfirmed": false,
+        "isReminderSent": true,
+        "isSyncedWithPMS": false,
+        "mark": false,
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "startDate": "2017-07-21T00:14:30.932Z",
+      },
+    },
+  },
+  "result": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+}
+`;
+
+exports[`/api/appointments PUT / /:appointmentId - update appointment 1`] = `
+Object {
+  "entities": Object {
+    "appointments": Object {
+      "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-21T00:16:30.932Z",
+        "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "isCancelled": false,
+        "isDeleted": false,
+        "isPatientConfirmed": false,
+        "isReminderSent": false,
+        "isSyncedWithPMS": true,
+        "mark": false,
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "startDate": "2017-07-21T00:14:30.932Z",
+      },
+    },
+  },
+  "result": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+}
+`;
+
+exports[`/api/appointments PUT / /batch - update 1 appointment 1`] = `
+Object {
+  "entities": Object {
+    "appointments": Object {
+      "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-21T00:16:30.932Z",
+        "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "isCancelled": false,
+        "isDeleted": false,
+        "isPatientConfirmed": false,
+        "isReminderSent": false,
+        "isSyncedWithPMS": false,
+        "mark": false,
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "startDate": "2017-07-21T00:14:30.932Z",
+      },
+    },
+  },
+  "result": Array [
+    "6b215a42-5c33-4f94-8313-d89893ae2f36",
+  ],
+}
+`;
