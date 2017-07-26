@@ -8,6 +8,7 @@ import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
 import PractitionerTimeOff from './PractitionerTimeOff';
+import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
 import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 
 class PractitionerTabs extends Component {
@@ -46,7 +47,7 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const { practitioner, weeklySchedule, timeOffs } = this.props;
+    const { practitioner, weeklySchedule, timeOffs, recurringTimeOffs } = this.props;
 
     if (!practitioner && !weeklySchedule) {
       return null;
@@ -77,6 +78,7 @@ class PractitionerTabs extends Component {
               weeklySchedule={weeklySchedule}
               practitioner={practitioner}
               updateEntityRequest={this.props.updateEntityRequest}
+              chairs={this.props.chairs}
             />
           </Tab>
           <Tab label="Services" data-test-id="practitionerServicesTab">
@@ -94,10 +96,23 @@ class PractitionerTabs extends Component {
               timeOffs={timeOffs}
             />
           </Tab>
+          <Tab label="Recurring Time Off">
+            <PractitionerRecurringTimeOff
+              key={practitioner.get('id')}
+              practitioner={practitioner}
+              recurringTimeOffs={recurringTimeOffs}
+            />
+          </Tab>
         </Tabs>
       </div>
     );
   }
+}
+
+function mapStateToProps({ entities }) {
+  return {
+    chairs: entities.getIn(['chairs', 'models'])
+  };
 }
 
 function mapActionsToProps(dispatch) {
@@ -107,7 +122,7 @@ function mapActionsToProps(dispatch) {
   }, dispatch);
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 
 export default enhance(PractitionerTabs);
