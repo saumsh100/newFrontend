@@ -303,7 +303,7 @@ class AddNewAppointment extends Component {
       });
       const appModel = selectedAppointment.appModel;
       const deletedModel = appModel.merge(delModel);
-      updateEntityRequest({ key: 'appointments', model: deletedModel })
+      updateEntityRequest({ key: 'appointments', model: deletedModel });
     }
 
     reinitializeState();
