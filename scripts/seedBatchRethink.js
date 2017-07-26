@@ -2,12 +2,11 @@
  * Created by sharp on 2017-06-20.
  */
 
+import { v4 as uuid } from 'uuid';
 import faker from 'faker';
-import uniqWith from 'lodash/uniqWith';
-import { wipeModelSequelize } from '../tests/util/wipeModel';
-import { wipeTestAccounts, seedTestAccountsSequelize, accountId } from '../tests/util/seedTestAccounts';
-import { Patient } from '../server/_models';
+import { Patient } from '../server/models';
 
+const accountId = uuid();
 const patientSeeds = [];
 let start = Date.now();
 
@@ -43,8 +42,6 @@ console.log(`Generated Patient Seeds in ${Date.now() - start}ms`);
 
 async function main() {
   try {
-    await wipeModelSequelize(Patient);
-    await seedTestAccountsSequelize();
     start = Date.now();
     const response = await Patient.batchSave(patientSeeds);
     console.log(response);
