@@ -557,12 +557,8 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
         appointment.patient = await Patient.get(appointment.patientId);
       }
 
-      console.log('appointment', appointment);
-      console.log('app norm', JSON.stringify(normalized));
-
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      console.log('ns=', ns);
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
