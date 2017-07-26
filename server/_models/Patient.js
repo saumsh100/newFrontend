@@ -11,7 +11,6 @@ const INACTIVE = 'Inactive';
 export default function (sequelize, DataTypes) {
   const Patient = sequelize.define('Patient', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -180,11 +179,11 @@ export default function (sequelize, DataTypes) {
 
     // Grab all models that match
     const $or = {};
-    if (noEmail) {
+    if (!noEmail) {
       $or.email = email;
     }
 
-    if (noMobilePhoneNumber) {
+    if (!noMobilePhoneNumber) {
       $or.mobilePhoneNumber = mobilePhoneNumber;
     }
 
@@ -196,7 +195,7 @@ export default function (sequelize, DataTypes) {
     });
 
     if (p) {
-      throw new Error('Patient with those unique attributes already exists');
+      throw UniqueFieldError({ tableName: 'Patient' }, 'email or mobilePhoneNumber');
     }
   };
 
@@ -267,17 +266,8 @@ export default function (sequelize, DataTypes) {
    */
   Patient.batchSave = async function (dataArray) {
     const { docs, errors } = await Patient.preValidateArray(dataArray);
-
-    console.log('docs');
-    console.log(docs);
-    console.log('errors');
-    console.log(errors);
-
-    const response = await Patient.bulkCreate(docs);
-
-    console.log('response');
-    console.log(response);
-
+    const savableCopies = docs.map(d => d.get({ plain: true }));
+    const response = await Patient.bulkCreate(savableCopies);
     if (errors.length) {
       throw { docs: response, errors };
     }
