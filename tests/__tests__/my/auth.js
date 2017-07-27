@@ -185,7 +185,6 @@ describe('/auth', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          console.log(JSON.stringify(body));
           expect(body).toMatchSnapshot();
         });
     });
