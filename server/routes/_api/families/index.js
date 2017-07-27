@@ -1,6 +1,5 @@
 
 import { Router } from 'express';
-import omit from 'lodash/omit';
 import checkIsArray from '../../../middleware/checkIsArray';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';

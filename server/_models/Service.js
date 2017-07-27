@@ -47,10 +47,15 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Service.associate = (({ Account, Practitioner }) => {
+  Service.associate = (({ Account, Practitioner, Request }) => {
     Service.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    Service.hasMany(Request, {
+      foreignKey: 'serviceId',
+      as: 'requests',
     });
 
     Service.belongsToMany(Practitioner, {
