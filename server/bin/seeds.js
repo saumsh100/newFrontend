@@ -593,7 +593,7 @@ const SEEDS = {
     ...appointmentFixtures,
 
     // For the patientsManagementTab
-    //...randomAppointments,
+    ...randomAppointments,
 
     ...e2eAppointments,
   ],
