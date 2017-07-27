@@ -2,7 +2,6 @@
 export default function (sequelize, DataTypes) {
   const Invite = sequelize.define('Invite', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
