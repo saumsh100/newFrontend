@@ -9,15 +9,9 @@ export default function (sequelize, DataTypes) {
 
   const WeeklySchedule = sequelize.define('WeeklySchedule', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-    },
-
-    accountId: {
-      type: DataTypes.UUID,
-      allowNull: false,
     },
 
     startDate: {
@@ -70,13 +64,11 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
       defaultValue: defaultDailySchedule,
     },
-  });
 
-  WeeklySchedule.associate = (({ Account }) => {
-    WeeklySchedule.belongsTo(Account, {
-      foreignKey: 'accountId',
-      as: 'account',
-    });
+    // TODO: remove this once we are swapped to be parentId architecture
+    weeklySchedules: {
+      type: DataTypes.ARRAY(DataTypes.JSONB),
+    },
   });
 
   return WeeklySchedule;

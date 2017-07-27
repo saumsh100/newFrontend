@@ -2,9 +2,9 @@
 
 exports[`models/User Data Validation should be able to save a User without id provided 1`] = `
 Object {
-  "activeAccountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
   "avatarUrl": null,
-  "enterpriseId": "ef3c578f-c228-4a25-8388-90ee9a0c9eb4",
+  "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
   "firstName": "Harvey",
   "lastName": "Dentest",
   "password": "test",

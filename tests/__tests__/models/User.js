@@ -1,18 +1,15 @@
 
-import { User } from '../../../server/_models';
+import { User, Permission } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
+import { wipeModelSequelize }  from '../../util/wipeModel';
+import { wipeTestAccounts, seedTestAccountsSequelize, accountId, enterpriseId } from '../../util/seedTestAccounts';
 
-async function wipeUserTable() {
-  await User.destroy({
-    where: {},
-    truncate: true,
-    force: true,
-  });
-}
-
-const activeAccountId = 'e13151a6-091e-43db-8856-7e547c171754';
-const enterpriseId = 'ef3c578f-c228-4a25-8388-90ee9a0c9eb4';
+const activeAccountId = accountId;
 const permissionId = '1962893f-a1fc-4230-a034-7ad50199cc98';
+const makePermissionData = (data = {}) => (Object.assign({
+  id: permissionId,
+  role: 'MANAGER',
+}));
 
 const makeData = (data = {}) => (Object.assign({
   firstName: 'Harvey',
@@ -29,16 +26,21 @@ const fail = 'Your code should be failing but it is passing';
 
 describe('models/User', () => {
   beforeEach(async () => {
-    await wipeUserTable();
+    await wipeModelSequelize(User);
+    await wipeModelSequelize(Permission);
+    await seedTestAccountsSequelize();
   });
 
   afterAll(async () => {
-    await wipeUserTable();
+    await wipeModelSequelize(User);
+    await wipeModelSequelize(Permission);
+    await wipeTestAccounts();
   });
 
   describe('Data Validation', () => {
     test('should be able to save a User without id provided', async () => {
       const data = makeData();
+      await Permission.create(makePermissionData());
       const user = await User.create(data);
       expect(omitProperties(user.dataValues, ['id'])).toMatchSnapshot();
     });
@@ -55,6 +57,7 @@ describe('models/User', () => {
 
     test('should NOT throw Unique Field error', async () => {
       // Save one, then try saving another with same data
+      await Permission.create(makePermissionData());
       await User.create(makeData());
       const data = makeData({ username: 'other@guy.ca' });
       await User.create(data);
@@ -62,8 +65,9 @@ describe('models/User', () => {
 
     test('should throw Unique Field error for diff accountId', async () => {
       const data = makeData();
+      await Permission.create(makePermissionData());
+      await User.create(data);
       try {
-        await User.create(data);
         await User.create(data);
         throw new Error(fail);
       } catch (err) {

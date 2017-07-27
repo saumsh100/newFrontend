@@ -1,14 +1,7 @@
 
 import { AuthSession } from '../../../server/_models';
+import { wipeModelSequelize } from '../../util/wipeModel';
 import { omitProperties }  from '../../util/selectors';
-
-async function wipeAuthSessionTable() {
-  await AuthSession.destroy({
-    where: {},
-    truncate: true,
-    force: true,
-  });
-}
 
 const modelId = 'ef3c578f-c228-4a25-8388-90ee9a0c9eb4';
 const makeData = (data = {}) => (Object.assign({
@@ -19,11 +12,11 @@ const fail = 'Your code should be failing but it is passing';
 
 describe('models/AuthSession', () => {
   beforeEach(async () => {
-    await wipeAuthSessionTable();
+    await wipeModelSequelize(AuthSession);
   });
 
   afterAll(async () => {
-    await wipeAuthSessionTable();
+    await wipeModelSequelize(AuthSession);
   });
 
   describe('Data Validation', () => {
