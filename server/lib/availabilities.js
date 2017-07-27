@@ -400,12 +400,11 @@ function fetchAvailabilities(options) {
   return new Promise((resolve, reject) => {
     fetchServiceData(options)
       .then((service) => {
-        const start = Date.now();
         fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
-            console.log(`Look up time ${Date.now()- start}ms`);
             // TODO: handle for noPreference on practitioners!
             return Appointment
+              .filter({ accountId: options.accountId })
               .filter((row) => {
                 return generateDuringFilter(row, startDate, endDate)
                 .and(row
