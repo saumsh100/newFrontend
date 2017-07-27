@@ -75,8 +75,15 @@ function mapStateToProps({ entities }) {
     return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
   });
 
-  const timeOffs = entities.getIn(['timeOffs', 'models']);
-  const recurringTimeOffs = entities.getIn(['practitionerRecurringTimeOffs', 'models']);
+  const allTimeOffs = entities.getIn(['practitionerRecurringTimeOffs', 'models']);
+
+  const timeOffs = allTimeOffs.filter((timeOff) => {
+    return !timeOff.toJS().interval;
+  });
+
+  const recurringTimeOffs = allTimeOffs.filter((timeOff) => {
+    return timeOff.toJS().interval;
+  });
 
   return {
     practitioners,

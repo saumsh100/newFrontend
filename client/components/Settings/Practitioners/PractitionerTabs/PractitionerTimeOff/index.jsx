@@ -74,7 +74,7 @@ class PractitionerTimeOff extends Component {
         },
       };
 
-      createEntityRequest({ key: 'timeOffs', entityData: trimValues, alert });
+      createEntityRequest({ key: 'practitionerRecurringTimeOffs', entityData: trimValues, alert });
     } else if (selectedTimeOff) {
       // We assume selected practitioner is
       const alert = {
@@ -88,7 +88,7 @@ class PractitionerTimeOff extends Component {
 
       const valuesMap = Map(trimValues);
       const modifiedAccount = selectedTimeOff.merge(valuesMap);
-      updateEntityRequest({ key: 'timeOffs', model: modifiedAccount, alert });
+      updateEntityRequest({ key: 'practitionerRecurringTimeOffs', model: modifiedAccount, alert });
     } else {
       throw new Error('Form was submitted without added or selected time off');
     }
@@ -97,7 +97,7 @@ class PractitionerTimeOff extends Component {
   }
 
   deleteTimeOff(timeOff) {
-    this.props.deleteEntityRequest({ key: 'timeOffs', id: timeOff.get('id') });
+    this.props.deleteEntityRequest({ key: 'practitionerRecurringTimeOffs', id: timeOff.get('id') });
   }
 
   reinitializeState() {

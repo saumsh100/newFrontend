@@ -7,10 +7,10 @@ const PractitionerRecurringTimeOff = createModel('PractitionerRecurringTimeOff',
   endDate: type.date().required(),
   startTime: type.string(),
   endTime: type.string(),
-  interval: type.number().required(),
+  interval: type.number(),
   allDay: type.boolean().default(true),
   fromPMS: type.boolean().default(false),
-  dayOfWeek: type.string().enum('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday').required(),
+  dayOfWeek: type.string().enum('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
   note: type.string(),
 });
 

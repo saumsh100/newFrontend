@@ -1110,7 +1110,7 @@ const SEEDS = {
     // },
   ],
 
-  PractitionerTimeOff: [
+  PractitionerRecurringTimeOff: [
     // For tests!
     {
       practitionerId: practitionerId4,
