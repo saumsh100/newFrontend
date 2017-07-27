@@ -31,7 +31,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Chat.associate = (({ Account }) => {
+  Chat.associate = ({ Account }) => {
     Chat.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -43,7 +43,7 @@ export default function (sequelize, DataTypes) {
     });
 
     // TODO: add hasMany textMessages and hasOne lastTextMessage when done
-  });
+  };
 
   return Chat;
 }
