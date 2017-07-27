@@ -34,5 +34,37 @@ export default function (sequelize, DataTypes) {
     });
   });
 
+  Family.preValidateArray = async function (dataArray) {
+    const errors = [];
+
+    // Build instances of the models
+    let docs = dataArray.map(p => Family.build(p));
+
+    // Now Do ORM Validation
+    const validatedDocs = [];
+    for (const d of docs) {
+      try {
+        await d.validate(); // validate against schema
+        validatedDocs.push(d);
+      } catch (err) {
+        err.patient = d;
+        errors.push(err);
+      }
+    }
+
+    return { errors, docs: validatedDocs };
+  };
+
+  Family.batchSave = async function (dataArray) {
+    const { docs, errors } = await Family.preValidateArray(dataArray);
+    const savableCopies = docs.map(d => d.get({ plain: true }));
+    const response = await Family.bulkCreate(savableCopies);
+    if (errors.length) {
+      throw { docs: response, errors };
+    }
+
+    return response;
+  };
+
   return Family;
 }

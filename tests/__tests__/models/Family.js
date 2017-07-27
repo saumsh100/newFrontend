@@ -108,4 +108,28 @@ describe('models/Family', () => {
       expect(f.patients.length).toBe(2);
     });
   });
+
+  describe('#batchSave', () => {
+    test('should be able to save 2 families', async () => {
+      const appts = await Family.batchSave([
+        makeData(),
+        makeData(),
+      ]);
+
+      expect(appts.length).toBe(2);
+    });
+
+    test('should fail validation for 1 and save the other', async () => {
+      try {
+        await Family.batchSave([
+          makeData(),
+          makeData({ accountId: null }),
+        ]);
+      } catch ({ docs, errors }) {
+        expect(docs.length).toBe(1);
+        expect(errors.length).toBe(1);
+        expect(errors[0].name).toBe('SequelizeValidationError');
+      }
+    });
+  });
 });

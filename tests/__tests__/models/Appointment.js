@@ -113,4 +113,32 @@ describe('models/Appointment', () => {
       expect(a.chair).toBe(null);
     });
   });
+
+  describe('#batchSave', () => {
+    test('should be able to save 2 appointments', async () => {
+      await Practitioner.create(makePractitionerData());
+      const appts = await Appointment.batchSave([
+        makeData(),
+        makeData(),
+      ]);
+
+      expect(appts.length).toBe(2);
+    });
+
+    test('should fail validation for 1 and save the other', async () => {
+      await Practitioner.create(makePractitionerData());
+      try {
+        await Appointment.batchSave([
+          makeData(),
+          makeData({ practitionerId: null }),
+          makeData({ startDate: null }),
+        ]);
+      } catch ({ docs, errors }) {
+        expect(docs.length).toBe(1);
+        expect(errors.length).toBe(2);
+        expect(errors[0].name).toBe('SequelizeValidationError');
+        expect(errors[1].name).toBe('SequelizeValidationError');
+      }
+    });
+  });
 });
