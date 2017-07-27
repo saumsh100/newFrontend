@@ -12,7 +12,7 @@ const ownerPermissionId = '74d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const superAdminPermissionId = '64d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const managerUserId = '6668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const ownerUserId = '5668f250-e8c9-46e3-bfff-0249f1eec6b8';
-    const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
+const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
 
 const enterprise = {
   id: enterpriseId,
@@ -104,7 +104,6 @@ async function seedTestUsers() {
 }
 
 async function seedTestUsersSequelize() {
-  // TODO: will be a simple DB wipe with Postgres
   await wipeModelSequelize(_User);
   await wipeModelSequelize(_Permission);
   await wipeModelSequelize(_Account);
@@ -125,6 +124,13 @@ async function seedTestUsersSequelize() {
   ]);
 }
 
+async function wipeTestUsers() {
+  await wipeModelSequelize(_User);
+  await wipeModelSequelize(_Permission);
+  await wipeModelSequelize(_Account);
+  await wipeModelSequelize(_Enterprise);
+}
+
 module.exports = {
   enterprise,
   enterpriseId,
@@ -137,4 +143,5 @@ module.exports = {
   superAdminUserId,
   seedTestUsers,
   seedTestUsersSequelize,
+  wipeTestUsers,
 };

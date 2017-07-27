@@ -47,7 +47,7 @@ export default function (sequelize, DataTypes) {
         await d.validate(); // validate against schema
         validatedDocs.push(d);
       } catch (err) {
-        err.patient = d;
+        err.family = d;
         errors.push(err);
       }
     }
