@@ -924,6 +924,9 @@ const SEEDS = {
         ],
         chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
+      tuesday: {
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
+      },
 
       wednesday: {
         isClosed: true,
