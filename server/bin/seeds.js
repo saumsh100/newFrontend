@@ -593,7 +593,7 @@ const SEEDS = {
     ...appointmentFixtures,
 
     // For the patientsManagementTab
-    //...randomAppointments,
+    ...randomAppointments,
 
     ...e2eAppointments,
   ],
@@ -922,6 +922,9 @@ const SEEDS = {
             endTime: time(13, 0),
           },
         ],
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
+      },
+      tuesday: {
         chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 

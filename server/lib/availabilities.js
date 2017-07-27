@@ -164,6 +164,7 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
         },
       },
 
+      // TODO: can we comment this out?
       appointments: {
         _apply: (sequence) => {
           return sequence.filter((appt) => {
@@ -259,6 +260,7 @@ function recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate, startDate
       tmpEnd.add(7, 'days');
     }
   }
+
   return fullTimeOffs;
 }
 
@@ -319,12 +321,22 @@ function generatePractitionerAvailabilities(options) {
   const possibleTimeSlots = createPossibleTimeSlots(validTimeSlots, service.duration, timeInterval || 30);
   const finalSlots = possibleTimeSlots.filter(slot => isDuringEachother(slot, { startDate, endDate }));
 
-  const validTimeSlotsNoWithTimeOff = finalSlots.filter((timeSlot) => {
+  const fullTimeOffs = recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate, startDate);
+
+  const availabilities = finalSlots.filter((timeSlot) => {
     // see if the timeSlot conflicts with any appointments, requests or resos
     const conflictsWithAppointment = appointments.some(a => isDuringEachother(timeSlot, a));
     const conflictsWithPractitionerRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
     const conflictsWithPractitionerReservations = practitionerReservations.some(pr => isDuringEachother(timeSlot, pr));
 
+    let conflictsWithTimeSlot = true;
+
+    for (let i = 0; fullTimeOffs && i < fullTimeOffs.length; i++) {
+      if (isDuringEachotherTimeOff(fullTimeOffs[i], timeSlot)) {
+        conflictsWithTimeSlot = false;
+        break;
+      }
+    }
     // TODO: this needs to be changed to accomodate "filling up" allowable request queue
     const conflictsWithNoPrefRequests = noPrefRequests.some(pr => isDuringEachother(timeSlot, pr));
     const conflictsWithNoPrefReservations = noPrefReservations.some(pr => isDuringEachother(timeSlot, pr));
@@ -332,18 +344,8 @@ function generatePractitionerAvailabilities(options) {
            !conflictsWithPractitionerRequests &&
            !conflictsWithPractitionerReservations &&
            !conflictsWithNoPrefRequests &&
-           !conflictsWithNoPrefReservations;
-  });
-
-  const fullTimeOffs = recurringTimeOffsFilter(recurringTimeOffs, timeOffs, endDate, startDate);
-
-  const availabilities = validTimeSlotsNoWithTimeOff.filter((slot) => {
-    for (let i = 0; fullTimeOffs && i < fullTimeOffs.length; i++) {
-      if (isDuringEachotherTimeOff(fullTimeOffs[i], slot)) {
-        return false;
-      }
-    }
-    return true;
+           !conflictsWithNoPrefReservations &&
+            conflictsWithTimeSlot;
   });
 
   return availabilities.map((aval) => {
@@ -356,18 +358,18 @@ function generatePractitionerAvailabilities(options) {
 
 // fetches appointment in the time frame for a given chair(s) and filters if they aren't any availiable
 
-async function filterByChairs(weeklySchedule, avails, pracWeeklySchedule, appointments) {
+function filterByChairs(weeklySchedule, avails, pracWeeklySchedule, appointments) {
   const newAvails = [];
+
+  if (pracWeeklySchedule !== weeklySchedule.id) {
+    return avails;
+  }
+
   for (let j = 0; j < avails.length; j++) {
     const dayOfWeek = moment(avails[j].startDate).format('dddd').toLowerCase();
     const chairIds = weeklySchedule[dayOfWeek].chairIds;
     // prac has no custom so has all chairs
 
-
-    if (pracWeeklySchedule !== weeklySchedule.id) {
-      newAvails.push(avails[j]);
-      continue;
-    }
 
     const isAvailiable = chairIds.some((chairId) => {
       const test = appointments.some(a => {
@@ -402,34 +404,38 @@ function fetchAvailabilities(options) {
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
             return Appointment
-            .filter((row) => {
-              return generateDuringFilter(row, startDate, endDate)
-              .and(row
-                .hasFields('isBookable')
-                .not()
-                .or(row('isBookable').eq(false)));
-            }).run()
-            .then((appointments) => {
-              const practitionerAvailabilities = practitioners.map((p, i) => {
-                const avails = generatePractitionerAvailabilities({
-                  practitioner: p,
-                  weeklySchedule: weeklySchedules[i],
-                  service,
-                  startDate,
-                  timeInterval,
-                  endDate,
+              .filter((row) => {
+                return generateDuringFilter(row, startDate, endDate)
+                .and(row
+                  .hasFields('isBookable')
+                  .not()
+                  .or(row('isBookable').eq(false)));
+              })
+              .run()
+              .then((appointments) => {
+                // Organize appts by chair
+                const appointmentsChairMap = {};
+                appointments.forEach((a) => {
+                  appointmentsChairMap[a.chairId] = appointmentsChairMap[a.chairId] || [];
+                  appointmentsChairMap[a.chairId].push(a);
                 });
-                return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
-              });
+                const practitionerAvailabilities = practitioners.map((p, i) => {
+                  const avails = generatePractitionerAvailabilities({
+                    practitioner: p,
+                    weeklySchedule: weeklySchedules[i],
+                    service,
+                    startDate,
+                    timeInterval,
+                    endDate,
+                  });
 
-              return Promise.all(practitionerAvailabilities)
-              .then((pracAvails) => {
-                const squashed = unionBy(...pracAvails, 'startDate');
+                  return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments, appointmentsChairMap);
+                });
+
+                const squashed = unionBy(...practitionerAvailabilities, 'startDate');
                 const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
                 return resolve(squashedAndSorted);
               });
-
-            });
           });
       })
       .catch(err => reject(err));
