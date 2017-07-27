@@ -414,12 +414,6 @@ function fetchAvailabilities(options) {
               })
               .run()
               .then((appointments) => {
-                // Organize appts by chair
-                const appointmentsChairMap = {};
-                appointments.forEach((a) => {
-                  appointmentsChairMap[a.chairId] = appointmentsChairMap[a.chairId] || [];
-                  appointmentsChairMap[a.chairId].push(a);
-                });
                 const practitionerAvailabilities = practitioners.map((p, i) => {
                   const avails = generatePractitionerAvailabilities({
                     practitioner: p,
@@ -430,7 +424,7 @@ function fetchAvailabilities(options) {
                     endDate,
                   });
 
-                  return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments, appointmentsChairMap);
+                  return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
                 });
 
                 const squashed = unionBy(...practitionerAvailabilities, 'startDate');
