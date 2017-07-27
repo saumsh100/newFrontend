@@ -9,7 +9,6 @@ export default function (sequelize, DataTypes) {
 
   const WeeklySchedule = sequelize.define('WeeklySchedule', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,

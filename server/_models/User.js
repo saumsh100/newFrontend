@@ -5,7 +5,6 @@ import { passwordHashSaltRounds } from '../config/globals';
 export default function (sequelize, DataTypes) {
   const User = sequelize.define('User', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,

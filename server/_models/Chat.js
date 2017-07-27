@@ -4,7 +4,6 @@ import customDataTypes from '../util/customDataTypes';
 export default function (sequelize, DataTypes) {
   const Chat = sequelize.define('Chat', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,

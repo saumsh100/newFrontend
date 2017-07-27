@@ -8,7 +8,6 @@ const PRIMARY_TYPES = {
 export default function (sequelize, DataTypes) {
   const Reminder = sequelize.define('Reminder', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
