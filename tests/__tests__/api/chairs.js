@@ -1,6 +1,6 @@
 
 import request from 'supertest';
-import app from '../../../server/bin/app';
+import app from '../../../server/routes/api/chair';
 import {
   Account,
   Chair,
