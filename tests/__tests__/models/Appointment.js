@@ -6,7 +6,6 @@ import { seedTestAccountsSequelize, accountId } from '../../util/seedTestAccount
 
 const practitionerId = '88a2d812-3a4c-454c-9286-628556563bdc';
 const makeData = (data = {}) => (Object.assign({
-  name: 'Test Appointment',
   accountId,
   practitionerId,
   startDate: (new Date(2017, 1, 1, 8, 30)).toISOString(),
