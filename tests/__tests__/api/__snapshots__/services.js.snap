@@ -52,7 +52,7 @@ Object {
         "fullAvatarUrl": null,
         "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "isActive": true,
-        "isCustomSchedule": false,
+        "isCustomSchedule": true,
         "isHidden": false,
         "lastName": "Sanders",
         "type": "Hygienist",
