@@ -27,6 +27,7 @@ models.push((require('./Account').default(sequelize, Sequelize)));
 models.push((require('./AuthSession').default(sequelize, Sequelize)));
 models.push((require('./Chair').default(sequelize, Sequelize)));
 models.push((require('./Enterprise').default(sequelize, Sequelize)));
+models.push((require('./Patient').default(sequelize, Sequelize)));
 models.push((require('./Permission').default(sequelize, Sequelize)));
 models.push((require('./Segment').default(sequelize, Sequelize)));
 models.push((require('./User').default(sequelize, Sequelize)));

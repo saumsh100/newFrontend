@@ -145,11 +145,11 @@ export default function (sequelize, DataTypes) {
     indexes: [
       {
         unique: true,
-        fields: ['accountId', 'email']
+        fields: ['accountId', 'email'],
       },
       {
         unique: true,
-        fields: ['accountId', 'mobilePhoneNumber']
+        fields: ['accountId', 'mobilePhoneNumber'],
       },
     ],
   });

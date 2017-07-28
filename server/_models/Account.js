@@ -1,3 +1,4 @@
+
 export default function (sequelize, DataTypes) {
   const Account = sequelize.define('Account', {
     id: {
@@ -95,6 +96,11 @@ export default function (sequelize, DataTypes) {
     bookingWidgetPrimaryColor: {
       type: DataTypes.STRING,
     },
+  });
+
+  Account.associate = (({ Enterprise, Patient }) => {
+    Account.belongsTo(Enterprise);
+    Account.hasMany(Patient);
   });
 
   return Account;
