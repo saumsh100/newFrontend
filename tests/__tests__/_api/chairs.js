@@ -1,42 +1,28 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import {
-  Account,
-  // Chair,
-} from '../../../server/models';
-import { Chair } from '../../../server/_models';
-import { seedTestUsers } from '../../util/seedTestUsers';
+import { Account, Chair } from '../../../server/_models';
+import { wipeTestUsers, seedTestUsersSequelize, enterpriseId, accountId } from '../../util/seedTestUsers';
 import { generateTokenSequelize } from '../../util/generateToken';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
+import { wipeModelSequelize } from '../../util/wipeModel';
 import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
 const rootUrl = '/_api/chairs';
-const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
-const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
-const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
+// const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const chairId1 = '23d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const chairId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const newChairId = '11d4e661-1155-4494-8fdb-c4ec0ddf804d';
 
-async function seedData() {
-  await seedTestUsers();
+
 
   // Seed an extra account for fetching multiple and testing switching
-  await Account.save({
+  /*await Account.create({
     id: accountId2,
     enterpriseId,
     name: 'Test Account 2',
-  });
-}
+  });*/
 
 async function seedChairs() {
-  await Chair.destroy({
-    where: {},
-    truncate: true,
-    force: true,
-  });
-
   await Chair.bulkCreate([
     {
       id: chairId1,
@@ -54,14 +40,16 @@ async function seedChairs() {
 describe('/api/chairs', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
-    await seedData();
+  beforeEach(async () => {
+    await wipeModelSequelize(Chair);
+    await seedTestUsersSequelize();
     await seedChairs();
     token = await generateTokenSequelize({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModelSequelize(Chair);
+    await wipeTestUsers();
   });
 
   describe('GET /api/chairs', () => {
@@ -191,10 +179,6 @@ describe('/api/chairs', () => {
   });
 
   describe('DELETE /:chairId', () => {
-    afterEach(async () => {
-      await seedChairs();
-    });
-
     test('should delete an chair', () => {
       return request(app)
         .delete(`${rootUrl}/${chairId1}`)

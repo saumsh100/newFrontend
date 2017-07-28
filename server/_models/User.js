@@ -5,7 +5,6 @@ import { passwordHashSaltRounds } from '../config/globals';
 export default function (sequelize, DataTypes) {
   const User = sequelize.define('User', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -54,6 +53,23 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
   });
+
+  User.associate = ({ Account, Enterprise, Permission }) => {
+    User.belongsTo(Account, {
+      foreignKey: 'activeAccountId',
+      as: 'activeAccount',
+    });
+
+    User.belongsTo(Enterprise, {
+      foreignKey: 'enterpriseId',
+      as: 'enterprise',
+    });
+
+    User.belongsTo(Permission, {
+      foreignKey: 'permissionId',
+      as: 'permission',
+    });
+  };
 
   /**
    * isValidPasswordAsync is used to ensure the password is correct

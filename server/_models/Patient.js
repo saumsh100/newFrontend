@@ -1,15 +1,18 @@
 
 import uniqWith from 'lodash/uniqWith';
+import isUndefined from 'lodash/isUndefined';
+import isNull from 'lodash/isNull';
 import customDataTypes from '../util/customDataTypes';
 import { UniqueFieldError } from '../models/createModel/errors';
 
-const ACTIVE = 'Active';
-const INACTIVE = 'Inactive';
+const STATUS = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+};
 
 export default function (sequelize, DataTypes) {
   const Patient = sequelize.define('Patient', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -62,9 +65,9 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    notes: {
+    /*notes: {
       type: DataTypes.STRING,
-    },
+    },*/
 
     gender: {
       // TODO: needs to be an enum
@@ -133,12 +136,9 @@ export default function (sequelize, DataTypes) {
     },
 
     status: {
-      type: DataTypes.ENUM(
-        ACTIVE,
-        INACTIVE
-      ),
-
-      defaultValue: ACTIVE,
+      type: DataTypes.ENUM,
+      values: Object.keys(STATUS).map(key => STATUS[key]),
+      defaultValue: STATUS.ACTIVE,
     },
   }, {
     // Model Config
@@ -154,28 +154,81 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = (({ Account }) => {
+  Patient.associate = ({ Account }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
     });
-  });
+  };
 
-  Patient.preValidateArray = function (dataArray) {
+  /**
+   *
+   * @param model
+   * @returns {Promise.<void>}
+   */
+  Patient.uniqueValidate = async function (model) {
+    const { accountId, email, mobilePhoneNumber } = model;
+    if (!accountId) {
+      throw new Error('model.accountId must exist on the model');
+    }
+
+    const noEmail = isUndefined(email) || isNull(email);
+    const noMobilePhoneNumber = isUndefined(mobilePhoneNumber) || isNull(mobilePhoneNumber);
+    if (noEmail && noMobilePhoneNumber) return;
+
+    // Grab all models that match
+    const $or = {};
+    if (!noEmail) {
+      $or.email = email;
+    }
+
+    if (!noMobilePhoneNumber) {
+      $or.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    const p = await Patient.findOne({
+      where: {
+        accountId,
+        $or,
+      },
+    });
+
+    if (p) {
+      throw UniqueFieldError({ tableName: 'Patient' }, 'email or mobilePhoneNumber');
+    }
+  };
+
+  /**
+   *
+   * @param dataArray
+   * @returns {Promise.<{errors: Array, docs}>}
+   */
+  Patient.preValidateArray = async function (dataArray) {
     const errors = [];
 
     const onError = (field, doc) => {
       const error = UniqueFieldError({ tableName: 'Patient' }, field);
-      error['patient'] = doc;
+      error.patient = doc.dataValues;
       errors.push(error);
     };
 
-    const docs = uniqWith(dataArray, (a, b) => {
-      if (a.id && b.id && a.id === b.id) {
-        onError('id', a);
-        return true;
-      }
+    // Build instances of the models
+    let docs = dataArray.map(p => Patient.build(p));
 
+    // Now Do ORM Validation
+    const validatedDocs = [];
+    for (const d of docs) {
+      try {
+        await d.validate(); // validate against schema
+        validatedDocs.push(d);
+      } catch (err) {
+        err.patient = d.dataValues;
+        errors.push(err);
+      }
+    }
+
+    // Now check uniqueness against each other
+    docs = uniqWith(validatedDocs, (a, b) => {
       if (a.accountId && b.accountId && a.accountId === b.accountId) {
         if (a.mobilePhoneNumber && b.mobilePhoneNumber && a.mobilePhoneNumber === b.mobilePhoneNumber) {
           onError('mobilePhoneNumber', a);
@@ -189,28 +242,39 @@ export default function (sequelize, DataTypes) {
       }
     });
 
+    // Now that they are sanitized, validated, and unique against each other
+    const finalDocs = [];
+    for (const d of docs) {
+      try {
+        await Patient.uniqueValidate(d);
+        finalDocs.push(d);
+      } catch (err) {
+        err.patient = d.dataValues;
+        errors.push(err);
+      }
+    }
+
+    docs = finalDocs;
     return { errors, docs };
   };
 
+  /**
+   *
+   * @param dataArray
+   * @returns {Promise.<Array.<Model>>}
+   */
   Patient.batchSave = async function (dataArray) {
-    const { docs, errors } = Patient.preValidateArray(dataArray);
-
-    console.log('docs');
-    console.log(docs);
-    console.log('errors');
-    console.log(errors);
-
-    const response = await Patient.bulkCreate(docs, { validate: true });
-
-    console.log('response');
-    console.log(response);
-
+    const { docs, errors } = await Patient.preValidateArray(dataArray);
+    const savableCopies = docs.map(d => d.get({ plain: true }));
+    const response = await Patient.bulkCreate(savableCopies);
     if (errors.length) {
       throw { docs: response, errors };
     }
 
     return response;
   };
+
+  Patient.STATUS = STATUS;
 
   return Patient;
 }

@@ -33,7 +33,7 @@ Object {
   "entities": Object {
     "patientUsers": Object {
       "b8665c97-1e98-41ac-bf13-090b742de400": Object {
-        "email": "testPatientUser@test.com",
+        "email": "testpatientuser@test.com",
         "firstName": "Jack",
         "id": "b8665c97-1e98-41ac-bf13-090b742de400",
         "isEmailConfirmed": false,

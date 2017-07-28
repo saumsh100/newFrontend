@@ -1,16 +1,8 @@
 
-import { Account } from '../../../server/_models';
+import { Account, Enterprise } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
+import { wipeTestAccounts, seedTestAccountsSequelize, enterpriseId } from '../../util/seedTestAccounts';
 
-async function wipeAccountTable() {
-  await Account.destroy({
-    where: {},
-    truncate: true,
-    force: true,
-  });
-}
-
-const enterpriseId = 'ef3c578f-c228-4a25-8388-90ee9a0c9eb4';
 const makeData = (data = {}) => (Object.assign({
   name: 'Test Account',
   enterpriseId,
@@ -20,11 +12,11 @@ const fail = 'Your code should be failing but it is passing';
 
 describe('models/Account', () => {
   beforeEach(async () => {
-    await wipeAccountTable();
+    await seedTestAccountsSequelize();
   });
 
   afterAll(async () => {
-    await wipeAccountTable();
+    await wipeTestAccounts();
   });
 
   describe('Data Validation', () => {
@@ -53,9 +45,17 @@ describe('models/Account', () => {
   });
 
   describe('Data Sanitization', () => {
-    test.skip('should be able to sanitize phone numbers', async () => {
+    test('should be able to sanitize phone numbers', async () => {
       const data = makeData({ twilioPhoneNumber: '111 222 3333' });
-      const account = await Account.save(data);
+      const account = await Account.create(data);
+      expect(account.twilioPhoneNumber).toEqual('+11112223333');
+    });
+  });
+
+  describe('Relations', () => {
+    test('should be able to sanitize phone numbers', async () => {
+      const data = makeData({ twilioPhoneNumber: '111 222 3333' });
+      const account = await Account.create(data);
       expect(account.twilioPhoneNumber).toEqual('+11112223333');
     });
   });

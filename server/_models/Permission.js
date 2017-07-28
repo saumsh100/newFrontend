@@ -8,7 +8,6 @@ const ROLES = {
 export default function (sequelize, DataTypes) {
   const Permission = sequelize.define('Permission', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,

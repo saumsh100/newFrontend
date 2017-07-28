@@ -1,34 +1,18 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import {
-  Account,
-  // Chair,
-} from '../../../server/models';
 import { Segment } from '../../../server/_models';
-import { seedTestUsers } from '../../util/seedTestUsers';
+import { seedTestUsersSequelize } from '../../util/seedTestUsers';
 import { generateTokenSequelize } from '../../util/generateToken';
-import wipeModel, { wipeModelSequelize } from '../../util/wipeModel';
-import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
+import { wipeModelSequelize } from '../../util/wipeModel';
+import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/segments';
-const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
-const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
-const chairId1 = '23d4e661-1155-4494-8fdb-c4ec0ddf804d';
-const chairId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
-const newChairId = '11d4e661-1155-4494-8fdb-c4ec0ddf804d';
 
 async function seedData() {
   await wipeModelSequelize(Segment);
-  await seedTestUsers();
-
-  // Seed an extra account for fetching multiple and testing switching
-  await Account.save({
-    id: accountId2,
-    enterpriseId,
-    name: 'Test Account 2',
-  });
+  await seedTestUsersSequelize();
 }
 
 /**
@@ -52,8 +36,6 @@ describe('/api/segments', () => {
   beforeAll(async () => {
     await seedData();
     token = await generateTokenSequelize({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
-
-    // token2 = await generateTokenSequelize({ username: 'manager2@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {

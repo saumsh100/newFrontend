@@ -3,13 +3,20 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import omit from 'lodash/omit';
-import { Practitioner, WeeklySchedule } from '../../../server/models';
+import { Practitioner, Account, WeeklySchedule } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { practitionerId, practitioner, seedTestPractitioners } from '../../util/seedTestPractitioners';
-import { weeklySchedule, weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
+import { weeklyScheduleId, weeklySchedule, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
+const accountWithSchedule = {
+  id: accountId,
+  enterpriseId,
+  name: 'Test Account',
+  weeklyScheduleId,
+  createdAt: '2017-07-19T00:14:30.932Z',
+};
 
 describe('/api/practitioners', () => {
   // Seed with some standard user data
@@ -70,7 +77,12 @@ describe('/api/practitioners', () => {
 
   describe('POST /', () => {
     beforeEach(async () => {
+      await seedTestUsers();
       await wipeModel(Practitioner);
+      await wipeModel(WeeklySchedule);
+      await WeeklySchedule.save(weeklySchedule);
+      await wipeModel(Account);
+      await Account.save(accountWithSchedule);
     });
 
     test('create practitioner', () => {

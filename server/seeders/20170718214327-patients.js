@@ -3,37 +3,35 @@ const uuid = require('uuid').v4;
 
 const enterpriseId = uuid();
 const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
-const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
 
 module.exports = {
   up: async function (queryInterface, Sequelize) { // eslint-disable-line
-    queryInterface.bulkInsert('Enterprise', [{
+    await queryInterface.bulkInsert('Enterprises', [{
       id: enterpriseId,
       name: 'Zero Enterprise',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }]);
 
-    queryInterface.bulkInsert('Enterprise', [
+    await queryInterface.bulkInsert('Accounts', [
       {
         id: accountId,
         name: 'Zero Account - Zero Enterprise',
         enterpriseId,
-      },
-      {
-        id: accountId2,
-        name: 'First Account - Zero Enterprise',
-        enterpriseId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
 
-
+    const patients = [];
 
     for (let i = 0; i < 100; i += 1) {
-      const lastDate = faker.date.past();
       const firstName = faker.name.firstName();
       const lastName = faker.name.lastName();
       const phoneNumber = faker.phone.phoneNumberFormat(0);
-      const patientObject = {
-        accountId: account.id,
+      patients.push({
+        id: uuid(),
+        accountId,
         firstName,
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
@@ -41,18 +39,19 @@ module.exports = {
         birthDate: faker.date.past(),
         gender: 'male',
         language: 'English',
-        lastAppointmentDate: faker.date.past(),
-        insurance: {
+        insurance: JSON.stringify({
           insurance: 'Lay Health Insurance',
           memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
           contract: '4234rerwefsdfsd',
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
-        },
-      };
-
-      await PatientModel.create(patientObject);
+        }),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
     }
+
+    await queryInterface.bulkInsert('Patients', patients);
   },
 
   down(queryInterface, Sequelize) { // eslint-disable-line

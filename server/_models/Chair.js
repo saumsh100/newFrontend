@@ -2,7 +2,6 @@
 export default function (sequelize, DataTypes) {
   const Chair = sequelize.define('Chair', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -27,12 +26,12 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Chair.associate = (({ Account }) => {
+  Chair.associate = ({ Account }) => {
     Chair.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
     });
-  });
+  };
 
   return Chair;
 }

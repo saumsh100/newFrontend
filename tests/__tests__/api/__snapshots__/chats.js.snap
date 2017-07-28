@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/chats DELETE / /:chatId - delete chat 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/chats GET / / - get chats 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {
+      "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+        "lastTextMessageDate": "2017-07-22T00:14:30.932Z",
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "patientPhoneNumber": "+16045555555",
+      },
+    },
+  },
+  "result": Array [
+    "3180a744-f6b0-4a09-8046-4e713bf5b565",
+  ],
+}
+`;
+
+exports[`/api/chats GET / /:chatId - retrieve chat 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {
+      "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+        "lastTextMessageDate": "2017-07-22T00:14:30.932Z",
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "patientPhoneNumber": "+16045555555",
+      },
+    },
+  },
+  "result": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+}
+`;
+
+exports[`/api/chats GET / /:chatId/textMessages - retrieve text messages for a chat 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {
+      "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+        "lastTextMessageDate": "2017-07-22T00:14:30.932Z",
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "patientPhoneNumber": "+16045555555",
+        "textMessages": Array [
+          "059987cb-3051-4656-98d0-72cda34d32a6",
+        ],
+      },
+    },
+    "textMessages": Object {
+      "059987cb-3051-4656-98d0-72cda34d32a6": Object {
+        "body": "This is a test text message",
+        "chatId": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+        "from": "+16043333333",
+        "id": "059987cb-3051-4656-98d0-72cda34d32a6",
+        "read": false,
+        "to": "+16045555555",
+      },
+    },
+  },
+  "result": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+}
+`;
+
+exports[`/api/chats GET / /patient/:patientId - return chat with patient 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {
+      "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+        "lastTextMessageDate": "2017-07-22T00:14:30.932Z",
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "patientPhoneNumber": "+16045555555",
+        "textMessages": Array [
+          "059987cb-3051-4656-98d0-72cda34d32a6",
+        ],
+      },
+    },
+    "textMessages": Object {
+      "059987cb-3051-4656-98d0-72cda34d32a6": Object {
+        "body": "This is a test text message",
+        "chatId": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+        "from": "+16043333333",
+        "id": "059987cb-3051-4656-98d0-72cda34d32a6",
+        "read": false,
+        "to": "+16045555555",
+      },
+    },
+  },
+  "result": Array [
+    "3180a744-f6b0-4a09-8046-4e713bf5b565",
+  ],
+}
+`;
+
+exports[`/api/chats PUT / /:_chatId/textMessages/read - set all of chats unread text messages to read 1`] = `
+Object {
+  "entities": Object {
+    "textMessages": Object {
+      "059987cb-3051-4656-98d0-72cda34d32a6": Object {
+        "body": "This is a test text message",
+        "chatId": "3180a744-f6b0-4a09-8046-4e713bf5b565",
+        "from": "+16043333333",
+        "id": "059987cb-3051-4656-98d0-72cda34d32a6",
+        "read": true,
+        "to": "+16045555555",
+      },
+    },
+  },
+  "result": Array [
+    "059987cb-3051-4656-98d0-72cda34d32a6",
+  ],
+}
+`;

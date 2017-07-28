@@ -1,12 +1,11 @@
 
 import { Account, Patient } from '../../../server/_models';
 import { wipeModelSequelize } from '../../util/wipeModel';
+import { wipeTestAccounts, seedTestAccountsSequelize, accountId, enterpriseId } from '../../util/seedTestAccounts';
 import { omitProperties } from '../../util/selectors';
-
 
 // TODO: should probably make makeData, a reusable function
 
-const accountId = 'ee3c578f-c228-4a25-8388-90ee9a0c9eb4';
 const otherAccountId = '00d9d6e9-6941-4dec-8e65-c7bc05977e98';
 const makeData = (data = {}) => (Object.assign({
   accountId,
@@ -16,9 +15,6 @@ const makeData = (data = {}) => (Object.assign({
   mobilePhoneNumber: '+18887774444',
 }, data));
 
-// TODO: this will have to change when we add relations to Account & Enterprise
-
-const enterpriseId = 'ef3c578f-c228-4a25-8388-90ee9a0c9eb4';
 const makeAccountData = (data = {}) => (Object.assign({
   id: accountId,
   name: 'Test Account',
@@ -30,18 +26,14 @@ const uniqueErrorMessage = 'Unique Field Validation Error';
 
 describe('models/Patient', () => {
   // IMPORTANT! Patient needs to be removed first...
-  beforeAll(async () => {
-    await wipeModelSequelize(Patient);
-    await wipeModelSequelize(Account);
-  });
-
   beforeEach(async () => {
-    await Account.create(makeAccountData());
+    await wipeModelSequelize(Patient);
+    await seedTestAccountsSequelize();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await wipeModelSequelize(Patient);
-    await wipeModelSequelize(Account);
+    await wipeTestAccounts();
   });
 
   describe('Data Validation', () => {
@@ -77,7 +69,7 @@ describe('models/Patient', () => {
     });
 
     test('should NOT throw Unique Field error for same email but in different accounts', async () => {
-      await Account.create(makeAccountData({ id: otherAccountId, name: 'Other Test' }));
+      await Account.create(makeAccountData({ id: otherAccountId, name: 'Other Test', enterpriseId }));
       const p1 = await Patient.create(makeData());
       const p2 = await Patient.create(makeData({ accountId: otherAccountId }));
 
@@ -99,58 +91,76 @@ describe('models/Patient', () => {
   });
 
   describe('Batch Saving', () => {
-    test.skip('should be able to save 2 unique patients', async () => {
-      const email = 'justin@be.ca';
-      const mobilePhoneNumber = '111 222 3333';
-      const patients = await Patient.bulkCreate([
-        makeData(),
-        makeData({ email, mobilePhoneNumber })
-      ]);
+    describe('#uniqueValidate', () => {
+      test('should fail', async () => {
+        await Patient.create(makeData());
+        try {
+          await Patient.uniqueValidate(makeData());
+          throw new Error(fail);
+        } catch (error) {
+          expect(error.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        }
+      });
 
-      expect(patients.length).toBe(2);
+      test('should not fail', async () => {
+        const email = 'justin@be.ca';
+        // has to be in the post validation format
+        const mobilePhoneNumber = '+11112223333';
+        await Patient.create(makeData());
+        await Patient.uniqueValidate(makeData({ email, mobilePhoneNumber }));
+      });
     });
 
-    test.skip('should save one and throw errors for other 2', async () => {
-      try {
-        await Patient.batchSave([
-          makeData(),
-          makeData(),
-          makeData(),
-        ]);
-
-        throw new Error(fail);
-      } catch ({ docs, errors }) {
-        expect(errors.length).toBe(2);
-        expect(docs.length).toBe(1);
-
-        const [error1, error2] = errors;
-        expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-      }
-    });
-
-    test.skip('save 1 first, then try batch saving, one should fail, one should pass', async () => {
-      await Patient.create(makeData());
-      try {
+    describe('#batchSave', () => {
+      test('should be able to save 2 unique patients', async () => {
         const email = 'justin@be.ca';
         const mobilePhoneNumber = '111 222 3333';
-        const p = await Patient.build(makeData());
-        const validation = await p.validate({ hooks: true });
-        console.log('Passed validation', validation);
+        const patients = await Patient.batchSave([
+          makeData(),
+          makeData({ email, mobilePhoneNumber })
+        ]);
 
-        throw new Error(fail);
-      } catch (error) {
+        expect(patients.length).toBe(2);
+      });
 
-        console.error(error);
+      test('should save one and throw errors for other 2', async () => {
+        try {
+          await Patient.batchSave([
+            makeData(),
+            makeData(),
+            makeData(),
+          ]);
 
-        /*const { errors, docs } = error;
-        expect(errors.length).toBe(2);
-        expect(docs.length).toBe(0);
+          throw new Error(fail);
+        } catch ({ docs, errors }) {
+          expect(errors.length).toBe(2);
+          expect(docs.length).toBe(1);
 
-        const [error1, error2] = errors;
-        expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));*/
-      }
+          const [error1, error2] = errors;
+          expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+          expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        }
+      });
+
+      test('save 1 first, then try batch saving, both should fail', async () => {
+        await Patient.create(makeData());
+        try {
+          await Patient.batchSave([
+            makeData(),
+            makeData(),
+          ]);
+
+          throw new Error(fail);
+        } catch (error) {
+          const { errors, docs } = error;
+          expect(errors.length).toBe(2);
+          expect(docs.length).toBe(0);
+
+          const [error1, error2] = errors;
+          expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+          expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        }
+      });
     });
   });
 });
