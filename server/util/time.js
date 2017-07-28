@@ -56,20 +56,31 @@ const Time = {
   },
 
   isDuringEachother: (a, b) => {
-    const startTimeDuring = moment(a.startDate).isBetween(b.startDate, b.endDate);
-    const startTimeEqual = moment(a.startDate).isSame(b.startDate);
-    const endTimeDuring = moment(a.endDate).isBetween(b.startDate, b.endDate);
-    const endTimeEqual = moment(a.endDate).isSame(b.endDate);
+    const aDateStart = new Date(a.startDate);
+    const bDateStart = new Date(b.startDate);
+    const aDateEnd = new Date(a.endDate);
+    const bDateEnd = new Date(b.endDate);
+    const startTimeDuring = aDateStart > bDateStart && aDateStart < bDateEnd;
+    const startTimeEqual = aDateStart.getTime() === bDateStart.getTime();
+
+    const endTimeDuring = aDateEnd > bDateStart && aDateEnd < bDateEnd;
+    const endTimeEqual = aDateEnd.getTime() === bDateEnd.getTime();
+
     return startTimeDuring || startTimeEqual || endTimeDuring || endTimeEqual;
   },
 
   isDuringEachotherTimeOff: (a, b) => {
-    const startTimeDuring = moment(b.startDate).isBetween(a.startDate, a.endDate);
-    const dayStartEqual = moment(a.startDate).isSame(b.startDate);
-    const startTimeEqual = moment(a.startDate).isSame(b.startDate, 'day') && a.allDay;
-    const endTimeDuring = moment(b.endDate).isBetween(a.startDate, a.endDate);
-    const dayEndEqual = moment(a.endDate).isSame(b.endDate, 'day') && a.allDay;
-    const endTimeEqual = moment(a.endDate).isSame(b.endDate);
+    const aDateStart = new Date(a.startDate);
+    const bDateStart = new Date(b.startDate);
+    const aDateEnd = new Date(a.endDate);
+    const bDateEnd = new Date(b.endDate);
+
+    const startTimeDuring = bDateStart > aDateStart && bDateStart < aDateEnd;
+    const dayStartEqual = aDateStart.getTime() === bDateStart.getTime();
+    const startTimeEqual = aDateStart.toDateString() === bDateStart.toDateString() && a.allDay;
+    const endTimeDuring = bDateEnd > aDateStart && bDateEnd < aDateEnd;
+    const dayEndEqual = aDateEnd.toDateString() === bDateEnd.toDateString() && a.allDay;
+    const endTimeEqual = aDateEnd.getTime() === bDateEnd.getTime();
 
     return startTimeDuring || startTimeEqual || endTimeDuring || endTimeEqual || dayStartEqual || dayEndEqual;
   },

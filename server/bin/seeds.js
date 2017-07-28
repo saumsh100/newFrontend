@@ -592,7 +592,7 @@ const SEEDS = {
     ...appointmentFixtures,
 
     // For the patientsManagementTab
-    //...randomAppointments,
+    ...randomAppointments,
 
     ...e2eAppointments,
   ],
@@ -923,6 +923,9 @@ const SEEDS = {
         ],
         chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
+      tuesday: {
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
+      },
 
       wednesday: {
         isClosed: true,
@@ -1106,7 +1109,7 @@ const SEEDS = {
     // },
   ],
 
-  PractitionerTimeOff: [
+  PractitionerRecurringTimeOff: [
     // For tests!
     {
       practitionerId: practitionerId4,
