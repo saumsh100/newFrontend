@@ -1,6 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import 'moment-timezone';
@@ -27,6 +28,11 @@ class AvailabilitiesDisplay extends Component {
 
     this.setDateBack = this.setDateBack.bind(this);
     this.setDateForward = this.setDateForward.bind(this);
+    this.debouceFetchAvailabilities = debounce(this.debouceFetchAvailabilities, 500);
+
+    this.state = {
+      fetching: false,
+    };
   }
 
   componentWillMount() {
@@ -39,7 +45,8 @@ class AvailabilitiesDisplay extends Component {
                                       (nextProps.selectedStartDate !== this.props.selectedStartDate);
 
     if (shouldFetchAvailabilities) {
-      this.props.fetchAvailabilities();
+      this.setState({ fetching: true });
+      this.debouceFetchAvailabilities();
     }
   }
 
@@ -51,6 +58,11 @@ class AvailabilitiesDisplay extends Component {
   setDateForward() {
     const newStartDate = moment(this.props.selectedStartDate).add(4, 'days').toISOString();
     this.props.setSelectedStartDate(newStartDate);
+  }
+
+  debouceFetchAvailabilities() {
+    this.props.fetchAvailabilities()
+    .then(() => this.setState({ fetching: false }));
   }
 
   render() {
@@ -110,7 +122,7 @@ class AvailabilitiesDisplay extends Component {
       </div>
     );
 
-    if (!isFetching) {
+    if (!isFetching && !this.state.fetching) {
       if (display) {
         availabilitiesDisplay = (
           <div className={styles.displayAvailabilitiesContainer}>
