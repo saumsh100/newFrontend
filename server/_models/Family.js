@@ -17,7 +17,7 @@ export default function (sequelize, DataTypes) {
     },
 
     headId: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
     },
   });
 

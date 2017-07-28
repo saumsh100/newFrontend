@@ -48,9 +48,9 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    note: {
+    /*note: {
       type: DataTypes.STRING,
-    },
+    },*/
 
     isReminderSent: {
       type: DataTypes.BOOLEAN,

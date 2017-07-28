@@ -63,9 +63,9 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    notes: {
+    /*notes: {
       type: DataTypes.STRING,
-    },
+    },*/
 
     gender: {
       // TODO: needs to be an enum
@@ -209,7 +209,7 @@ export default function (sequelize, DataTypes) {
 
     const onError = (field, doc) => {
       const error = UniqueFieldError({ tableName: 'Patient' }, field);
-      error['patient'] = doc;
+      error.patient = doc.dataValues;
       errors.push(error);
     };
 
@@ -223,7 +223,7 @@ export default function (sequelize, DataTypes) {
         await d.validate(); // validate against schema
         validatedDocs.push(d);
       } catch (err) {
-        err.patient = d;
+        err.patient = d.dataValues;
         errors.push(err);
       }
     }
@@ -250,7 +250,7 @@ export default function (sequelize, DataTypes) {
         await Patient.uniqueValidate(d);
         finalDocs.push(d);
       } catch (err) {
-        err.patient = d;
+        err.patient = d.dataValues;
         errors.push(err);
       }
     }
