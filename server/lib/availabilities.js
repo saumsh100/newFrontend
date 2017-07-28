@@ -180,7 +180,16 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
 
     // Using getJoin as a lazy way to having appointments and timeOff ON practitioner model
     return Practitioner.get(practitioner.id).getJoin(joinObject)
-      .then(p => resolve(p))
+      .then(p => {
+        p.timeOffs = p.recurringTimeOffs.filter((timeOff) => {
+          return !timeOff.interval;
+        });
+
+        p.recurringTimeOffs = p.recurringTimeOffs.filter((timeOff) => {
+          return timeOff.interval;
+        });
+        return resolve(p);
+      })
       .catch(err => reject(err));
   });
 }
