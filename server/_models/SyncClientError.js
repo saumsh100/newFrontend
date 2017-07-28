@@ -15,7 +15,7 @@ export default function (sequelize, DataTypes) {
     },
 
     syncId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
     },
 
@@ -52,19 +52,19 @@ export default function (sequelize, DataTypes) {
     },
 
     payload: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT('long'),
     },
 
     customErrorMsg: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT('long'),
     },
 
     errorMessage: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT('long'),
     },
 
     stackTrace: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT('long'),
     },
   });
 
