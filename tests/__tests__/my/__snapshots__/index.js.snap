@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/patientUsers GET / /patientUsers/:patientUserId - retrieve patient user 1`] = `
+Object {
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "email": "testpatientuser@test.com",
+  "entities": Object {},
+  "firstName": "Jack",
+  "id": "b8665c97-1e98-41ac-bf13-090b742de400",
+  "isEmailConfirmed": false,
+  "isPhoneNumberConfirmed": false,
+  "lastName": "Daniels",
+  "phoneNumber": "+16049999999",
+}
+`;
+
+exports[`/patientUsers GET / /patientUsers/:patientUserId - retrieve patientUser 1`] = `
+Object {
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "email": "testpatientuser@test.com",
+  "entities": Object {},
+  "firstName": "Jack",
+  "id": "b8665c97-1e98-41ac-bf13-090b742de400",
+  "isEmailConfirmed": false,
+  "isPhoneNumberConfirmed": false,
+  "lastName": "Daniels",
+  "phoneNumber": "+16049999999",
+}
+`;
+
+exports[`/patientUsers POST / /patientUsers/email - check if patientuser with given email exists - does not exist 1`] = `
+Object {
+  "entities": Object {},
+  "exists": false,
+}
+`;
+
+exports[`/patientUsers POST / /patientUsers/email - check if patientuser with given email exists - exists 1`] = `
+Object {
+  "entities": Object {},
+  "exists": true,
+}
+`;
+
+exports[`/patientUsers POST / /patientUsers/phoneNumber - check if patientuser with given phoneNumber exists - does not exist 1`] = `
+Object {
+  "entities": Object {},
+  "exists": false,
+}
+`;
+
+exports[`/patientUsers POST / /patientUsers/phoneNumber - check if patientuser with given phoneNumber exists - exists 1`] = `
+Object {
+  "entities": Object {},
+  "exists": true,
+}
+`;
+
+exports[`/widgets GET / /:accountId/embed - [no description] 1`] = `
+Object {
+  "entities": Object {},
+}
+`;

@@ -16,6 +16,7 @@ const patient = {
   lastName: 'Mcdonald',
   pmsId: null,
   mobilePhoneNumber: '7789999999',
+  createdAt: '2017-07-19T00:14:30.932Z',
   // avatarUrl: '',
  // pmsId: 0,
   //pmsId: null,
@@ -40,6 +41,7 @@ const patientUser = {
   email: 'testpatientuser@test.com',
   phoneNumber: '+16049999999',
   password: bcrypt.hashSync('!@CityOfBudaTest#$', passwordHashSaltRounds),
+  createdAt: '2017-07-19T00:14:30.932Z',
 };
 
 async function seedTestPatients() {
@@ -52,6 +54,7 @@ async function seedTestPatients() {
 
 module.exports = {
   patient,
+  patientUser,
   patientId,
   patientUserId,
   seedTestPatients,
