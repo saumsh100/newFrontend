@@ -2,7 +2,6 @@
 export default function (sequelize, DataTypes) {
   const Practitioner = sequelize.define('Practitioner', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -55,10 +54,15 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Practitioner.associate = (({ Account, Service }) => {
+  Practitioner.associate = (({ Account, Service, Request }) => {
     Practitioner.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    Practitioner.hasMany(Request, {
+      foreignKey: 'practitionerId',
+      as: 'requests',
     });
 
     Practitioner.belongsToMany(Service, {

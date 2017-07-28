@@ -1,14 +1,7 @@
 
 import { Enterprise } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
-
-async function wipeEnterpriseTable() {
-  await Enterprise.destroy({
-    where: {},
-    truncate: true,
-    force: true,
-  });
-}
+import { wipeModelSequelize }  from '../../util/wipeModel';
 
 const makeData = (data = {}) => (Object.assign({
   name: 'Test Enterprise',
@@ -18,11 +11,11 @@ const fail = 'Your code should be failing but it is passing';
 
 describe('models/Enterprise', () => {
   beforeEach(async () => {
-    await wipeEnterpriseTable();
+    await wipeModelSequelize(Enterprise);
   });
 
   afterAll(async () => {
-    await wipeEnterpriseTable();
+    await wipeModelSequelize(Enterprise);
   });
 
   describe('Data Validation', () => {

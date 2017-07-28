@@ -6,7 +6,6 @@ import customDataTypes from '../util/customDataTypes';
 export default function (sequelize, DataTypes) {
   const PatientUser = sequelize.define('PatientUser', {
     id: {
-      // TODO: why not use type UUIDV4
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,

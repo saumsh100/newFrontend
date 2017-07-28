@@ -23,6 +23,7 @@ const WeeklySchedule = createModel('WeeklySchedule', {
     saturday: DailyScheduleShema,
     sunday: DailyScheduleShema,
   }],
+
   isAdvanced: type.boolean(),
 });
 

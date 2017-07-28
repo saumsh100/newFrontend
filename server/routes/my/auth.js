@@ -105,7 +105,8 @@ authRouter.post('/:patientUserId/resend', (req, res, next) => {
   if (params.patientUserId !== patientUser.id) {
     return next(StatusError(403, 'Requesting user does not have permission to resend another patients sms.'));
   }
-
+  console.log(patientUser);
+  console.log(params);
   return PinCode.filter({ modelId: patientUser.id })
     .then((pinCodes) => {
       for (const pc of pinCodes) {

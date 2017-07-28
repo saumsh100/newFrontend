@@ -129,7 +129,7 @@ OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');
  * Patient Relations
  */
 
-Patient.belongsTo(Family, 'family', 'familyId', 'id');
+Patient.belongsTo(Family, 'family', 'familyIxd', 'id');
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
 Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
 Patient.hasOne(Chat, 'chat', 'id', 'patientId');

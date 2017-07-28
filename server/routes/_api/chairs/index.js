@@ -36,7 +36,7 @@ chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) =>
     const chairs = await Chair.findAll({
       raw: true,
       // TODO: add this back when we have auth back
-      // where: { accountId },
+      where: { accountId },
     });
 
     res.send(normalize('chairs', chairs));

@@ -2,7 +2,6 @@
 
 exports[`models/WeeklySchedule Data Validation should be able to save a WeeklySchedule without id provided 1`] = `
 Object {
-  "accountId": "e13151a6-091e-43db-8856-7e547c171754",
   "friday": Object {
     "breaks": Array [],
     "endTime": "17:00:00",
@@ -47,5 +46,6 @@ Object {
     "isClosed": false,
     "startTime": "08:00:00",
   },
+  "weeklySchedules": null,
 }
 `;

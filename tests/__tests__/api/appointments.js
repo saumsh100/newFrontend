@@ -2,11 +2,12 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Appointment } from '../../../server/models';
+import { Appointment, Account } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { patientId } from '../../util/seedTestPatients';
 import { appointment, appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
+import { weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
 import { practitionerId } from '../../util/seedTestPractitioners';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
@@ -15,6 +16,14 @@ const batchAppointmentId2 = '6ee224d6-8e66-4cb8-9d41-8964a3d9b909';
 const batchAppointmentId3 = 'f3905556-45f7-406d-ba5a-dabe02288665';
 const batchAppointmentId4 = 'bd7a83d3-c1f2-40c5-8cb9-7e3b4362194a';
 const invalidBatchAppointmentId = '61073a69-085c-4646-9dc0-2ad85a0b94fb';
+
+const accountWithSchedule = {
+  id: accountId,
+  enterpriseId,
+  name: 'Test Account',
+  weeklyScheduleId,
+  createdAt: '2017-07-19T00:14:30.932Z',
+};
 
 const batchAppointment = {
   id: batchAppointmentId,
@@ -94,6 +103,10 @@ describe('/api/appointments', () => {
   // TODO: This can use some more test cases... (Gavin: Not familiar with what's going on in these endpoints)
   describe('GET /', () => {
     beforeEach(async () => {
+      await seedTestUsers();
+      await seedTestWeeklySchedules();
+      await wipeModel(Account);
+      await Account.save(accountWithSchedule);
       await seedTestAppointments();
     });
 

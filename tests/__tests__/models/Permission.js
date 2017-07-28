@@ -1,14 +1,7 @@
 
 import { Permission } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
-
-async function wipePermissionTable() {
-  await Permission.destroy({
-    where: {},
-    truncate: true,
-    force: true,
-  });
-}
+import { wipeModelSequelize }  from '../../util/wipeModel';
 
 const makeData = (data = {}) => (Object.assign({
   role: 'MANAGER',
@@ -18,11 +11,11 @@ const fail = 'Your code should be failing but it is passing';
 
 describe('models/Permission', () => {
   beforeEach(async () => {
-    await wipePermissionTable();
+    await wipeModelSequelize(Permission);
   });
 
   afterAll(async () => {
-    await wipePermissionTable();
+    await wipeModelSequelize(Permission);
   });
 
   describe('Data Validation', () => {

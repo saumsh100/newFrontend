@@ -2,7 +2,7 @@
 
 exports[`models/Service Data Validation should be able to save a Service without id provided 1`] = `
 Object {
-  "accountId": "e13151a6-091e-43db-8856-7e547c171754",
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
   "bufferTime": null,
   "duration": 30,
   "isDefault": true,
