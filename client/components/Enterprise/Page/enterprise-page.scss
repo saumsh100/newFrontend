@@ -1,6 +1,9 @@
 @import "../../../ui.scss";
 
 $page-padding: 20px;
+.modal {
+  overflow: hidden;
+}
 
 .header {
   font-size: $font-size;

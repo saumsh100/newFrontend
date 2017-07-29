@@ -32,6 +32,7 @@ export const Auth = (Model, uniqueKey) => ({
    * @param {string} password
    */
   login(key, password) {
+    console.log(key, password);
     return this.load(key)
       .then(model => (model || error(401, 'Invalid Credentials')))
       .then(model =>

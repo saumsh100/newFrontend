@@ -7,15 +7,16 @@ class Tab extends Component {
   constructor(props) {
     super(props);
 
-    //this.parseChildren = this.parseChildren.bind(this);
-    //this.renderHeaders = this.renderHeaders.bind(this);
-    //this.renderContent = this.renderContent.bind(this);
+    // this.parseChildren = this.parseChildren.bind(this);
+    // this.renderHeaders = this.renderHeaders.bind(this);
+    // this.renderContent = this.renderContent.bind(this);
   }
 
   render() {
     const {
       children,
       className,
+      activeClassName,
       index,
       label,
       active,
@@ -25,7 +26,7 @@ class Tab extends Component {
 
     let classes = classNames(className, styles.tab);
     if (active) {
-      classes = classNames(classes, styles.activeTab);
+      classes = classNames(classes, activeClassName, styles.activeTab);
     }
 
     if (disabled) {

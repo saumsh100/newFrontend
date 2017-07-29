@@ -44,28 +44,24 @@ class Tabs extends Component {
   }
 
   renderHeaders(headers) {
-    return headers.map((item, idx) => {
-      return React.cloneElement(item, {
-        key: idx,
-        index: idx,
-        active: this.props.index === idx,
-        onClick: (event, index) => {
-          item.props.onClick && item.props.onClick(event);
-          if (item.props.disabled) return;
-          this.handleTabClick(index);
-        },
-      });
-    });
+    return headers.map((item, idx) => React.cloneElement(item, {
+      key: idx,
+      index: idx,
+      active: this.props.index === idx,
+      onClick: (event, index) => {
+        item.props.onClick && item.props.onClick(event);
+        if (item.props.disabled) return;
+        this.handleTabClick(index);
+      },
+    }));
   }
 
   renderContents(contents) {
-    const contentElements = contents.map((item, idx) => {
-      return React.cloneElement(item, {
-        key: idx,
-        active: this.props.index === idx,
-        tabIndex: idx,
-      });
-    });
+    const contentElements = contents.map((item, idx) => React.cloneElement(item, {
+      key: idx,
+      active: this.props.index === idx,
+      tabIndex: idx,
+    }));
 
     return contentElements.filter((item, idx) => (idx === this.props.index));
   }
@@ -74,12 +70,14 @@ class Tabs extends Component {
     const {
       children,
       className,
+      contentClass,
       navClass,
     } = this.props;
 
-    const newProps = omit(this.props,['index', 'navClass']);
+    const newProps = omit(this.props, ['index', 'navClass']);
 
     const classes = classNames(className, styles.tabs);
+    const contentClasses = classNames(contentClass, styles.content);
     const { headers, contents } = this.parseChildren(children);
 
     return (
@@ -88,7 +86,7 @@ class Tabs extends Component {
         <nav className={navClass}>
           {this.renderHeaders(headers)}
         </nav>
-        <div className={styles.content}>
+        <div className={contentClasses}>
           {this.renderContents(contents)}
         </div>
       </div>

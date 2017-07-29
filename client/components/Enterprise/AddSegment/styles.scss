@@ -1,0 +1,259 @@
+@import '../../../ui.scss';
+
+.gaugeContainer {
+  position: relative;
+}
+
+.gauge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.info {
+  position: absolute;
+  // color: $clr-bg-dark-grey;
+  width: 100%;
+  margin-top: 40px;
+  font-size: 10px;
+
+  h2 {
+    font-size: 24px;
+    color: $primary-color;
+    margin: 5px;
+  }
+}
+
+.nav {
+  border-right: 1px solid $clr-bg-dark-grey;
+  width: 25%;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 600px;
+}
+
+.tab {
+  display: block;
+  text-align: right;
+}
+
+.activeTab {
+    border-bottom: none;
+    font-weight: bold;
+    position: relative;
+    background: $clr-bg-dark-grey;
+    padding: 18px 30px;
+
+    &:before {
+      position: absolute;
+      content: " ";
+      width: 0px;
+      height: 0px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid $clr-bg-dark-grey;
+      right: -6px;
+    }
+  }
+
+.tabContent {
+  float: right;
+  width: 75%;
+  padding: 12px 40px;
+  box-sizing: border-box;
+}
+
+.rightPane {
+  background: $primary-grey;
+  height: 100%;
+  padding-top: 49px;
+  height: 551px;
+  text-align: center;
+}
+
+.formContainer {
+  position: relative;
+  // border: .5px solid #ff715a;
+  background: $primary-white;
+  border-radius: .5rem;
+  width: 1000px;
+  height: 460px;
+}
+
+.title {
+  padding: 40px 0 30px 45px;
+  font-size: $extra-medium-size;
+  font-weight: $jumbo-weight;
+  // color: $primary-color;
+}
+
+.remoteSubmit {
+  display: flex;
+  padding-right: 100px;
+  &_button {
+    margin-left: auto;
+  }
+  &_buttonDelete {
+    padding-left: 10px;
+  }
+}
+
+.trashIcon {
+  position: absolute;
+  left: 845px;
+  top: 5px;
+  font-size: 1.4em;
+  color: $primary-grey;
+}
+
+.addNewSegment {
+  border-radius: .5rem;
+  width: 1000px;
+  height: 545px;
+
+  &_mainContainer {
+    min-width: 200px;
+    &_left {
+      width: 450px;
+      padding-left: 60px;
+    }
+
+    &_right {
+      padding-top: 49px;
+      background-color: #ff755e;
+      height: 551px;
+      width: 301px;
+      border-bottom-right-radius: .3rem;
+      border-top-right-radius: .3rem;
+      &_row {
+        height: auto;
+        padding-left: 20px;
+        width: 250px;
+      }
+      &_rowSuggest {
+        padding-left: 20px;
+        width: 250px;
+      }
+    }
+  }
+
+  &_row {
+    height: 95px;
+
+    &_durBuff {
+      height: 85px;
+      width: 100%;
+    }
+
+    &_slider {
+      height: 85px;
+    }
+  }
+
+  &_col {
+    display: flex;
+    align-items: center;
+
+    &_nearFields {
+      width: 100%;
+    }
+
+    &_unit {
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    &_select {
+      display: flex;
+      align-items: center;
+      height: 80px;
+    }
+
+    &_textArea {
+      padding-top: 20px;
+    }
+
+    &_confirmCancel {
+      display: inline-block;
+      align-items: center;
+      &_label {
+        color: $empty-grey;
+        font-weight: normal;
+        font-size: 16px;
+        padding-bottom: 5px;
+      }
+    }
+  }
+
+  &_comment {
+    width: 235px;
+    max-width: 235px;
+    max-height: 145px;
+    background-color: $primary-color;
+    border-color: $primary-grey;
+    color: $primary-grey;
+    &_label {
+      color: $primary-grey;
+      font-weight: normal;
+      pointer-events: none;
+      font-size: 16px;
+      padding-bottom: 5px;
+    }
+  }
+}
+
+.suggestionContainer {
+  display: flex;
+  align-items: center;
+
+  &_fullName {
+    padding-left: 15px;
+  }
+}
+
+.patientSearch {
+  display: inline-block;
+  border: 0px solid $primary-white;
+  width: 100%;
+  height: 145px;
+  align-items: center;
+  padding-bottom: 15px;
+
+  &_avatar {
+    display: flex;
+    margin: 0 auto;
+    width: 90px;
+    height: 90px;
+  }
+
+  &_searchIcon {
+    display: flex;
+    padding-bottom: 15px;
+    color: $primary-white;
+    text-align: center;
+    justify-content: center;
+  }
+  &_name {
+    padding-top: 15px;
+    color: $primary-white;
+    text-align: center;
+  }
+
+  &_email {
+    color: $primary-white;
+    text-align: center;
+  }
+
+  &_phone {
+    color: $primary-white;
+    text-align: center;
+  }
+
+  &_speel {
+    color: $primary-white;
+    text-align: center;
+  }
+}

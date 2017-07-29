@@ -1,0 +1,18 @@
+@import '../../../ui.scss';
+
+.full {
+  fill: transparent;
+  stroke: $primary-color;
+  stroke-width: 10;
+}
+
+.empty {
+  fill: transparent;
+  stroke: fade-out($primary-color, .5);
+  stroke-width: 5;
+  stroke-dashoffset: 0;
+}
+
+.gauge {
+  transform: rotate(180deg);
+}
