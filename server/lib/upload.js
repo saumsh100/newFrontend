@@ -1,3 +1,4 @@
+
 const s3 = require('../config/s3');
 const sharp = require('sharp');
 const async = require('async');
@@ -27,7 +28,7 @@ module.exports = function upload(fileKey, data, sizes = [400, 200, 100]) {
     if (!Array.isArray(sizes)) {
       return reject('sizes must be an array');
     }
-    
+
     const valid = sizes.reduce((prev, curr) => prev && !isNaN(curr), true);
 
     if (!valid) {
@@ -55,7 +56,7 @@ module.exports = function upload(fileKey, data, sizes = [400, 200, 100]) {
       if (err) {
         return reject(err);
       }
-      
+
       return resolve(responses);
     });
   });
