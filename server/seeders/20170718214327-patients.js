@@ -1,8 +1,8 @@
 const faker = require('faker');
 const uuid = require('uuid').v4;
 
-const enterpriseId = uuid();
-const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
+const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
+const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
 
 module.exports = {
   up: async function (queryInterface, Sequelize) { // eslint-disable-line

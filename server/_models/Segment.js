@@ -44,6 +44,11 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.JSONB,
       allowNull: false,
     },
+
+    rawWhere: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+    },
   });
 
   // Instance functions
@@ -55,7 +60,7 @@ export default function (sequelize, DataTypes) {
       this.referenceId !== req.enterpriseId;
 
     if ((isAccountAndOwner) || (isEnterpriseAndOwner)) {
-      throw new StatusError(403, 'You are not owner of this segment');
+      throw new StatusError(StatusError.FORBIDDEN, 'You are not owner of this segment');
     }
   };
 
