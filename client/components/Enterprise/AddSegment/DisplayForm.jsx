@@ -1,6 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
-import { Grid, Row, Col, Form, FormSection, Tabs, Tab } from '../../library';
+import { Grid, Row, Col, Form, FormSection, Tabs, Tab, Pill, SelectPill } from '../../library';
+import Gauge from './Gauge';
 import styles from './styles.scss';
 
 class DisplayForm extends Component {
@@ -35,12 +36,15 @@ class DisplayForm extends Component {
       >
         <Grid className={styles.addNewSegment}>
           <Row className={styles.addNewSegment_mainContainer}>
-            <Col xs={10} sm={10} md={10}>
+            <Col xs={9} sm={9} md={9}>
               <div className={styles.title}>{title}</div>
               <FormSection name="filters">
                 <Tabs navClass={styles.nav} index={this.state.index} contentClass={styles.tabContent} onChange={this.onTabChange}>
                   <Tab label="Demographics" className={styles.tab} activeClassName={styles.activeTab}>
-                    <span>Demographics</span>
+                    <SelectPill>
+                      <Pill title="0 - 9" pillId="0-9" />
+                      <Pill title="10 - 17" pillId="10-17" />
+                    </SelectPill>
                   </Tab>
                   <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
                     <span>Behavior</span>
@@ -51,8 +55,14 @@ class DisplayForm extends Component {
                 </Tabs>
               </FormSection>
             </Col>
-            <Col xs={2} sm={2} md={2}>
-              <FormSection name="patient" />
+            <Col xs={3} sm={3} md={3}>
+              <div className={styles.rightPane}>
+                <Gauge
+                  percentage={33}
+                >
+                  of patients
+                </Gauge>
+              </div>
             </Col>
           </Row>
         </Grid>

@@ -79,6 +79,7 @@ class EnterprisePage extends React.Component {
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
           custom
+          className={styles.modal}
         >
           {displayModalComponent}
         </Modal>
