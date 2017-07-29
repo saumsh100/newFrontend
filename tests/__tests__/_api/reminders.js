@@ -1,27 +1,44 @@
-
 import request from 'supertest';
+
 import app from '../../../server/bin/app';
-import { Account } from '../../../server/models';
-import { wipeAllModels } from '../../util/wipeModel';
-import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
-import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
-import generateToken from '../../util/generateToken';
+import { Account, Reminder } from '../../../server/_models';
+import wipeModel from '../../_util/wipeModel';
+import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
+import { reminderId1, seedTestReminders } from '../../_util/seedTestReminders';
+import generateToken from '../../_util/generateToken';
 import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/api/accounts';
+const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 
 const newReminderId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 
-
 describe('/api/accounts/:account/reminders', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
+    await wipeTestUsers();
     await seedTestUsers();
+    await Account.create({
+      id: accountId2,
+      enterpriseId,
+      name: 'Test Account 2',
+      createdAt: '2017-07-20T00:14:30.932Z',
+    });
+    await wipeModel(Reminder);
+    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+  });
+  /*
+  beforeAll(async () => {
+    console.log('wiping all models');
+    await wipeTestUsers();
+    console.log('wiped all models');
 
+    console.log('seeding test users');
+    await seedTestUsers();
+    console.log('seeded test users');
     // Seed an extra account for fetching multiple and testing switching
-    await Account.save({
+    await Account.create({
       id: accountId2,
       enterpriseId,
       name: 'Test Account 2',
@@ -30,26 +47,26 @@ describe('/api/accounts/:account/reminders', () => {
 
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
-
+  */
   afterAll(async () => {
-    await wipeAllModels();
+    // await wipeAllModels();
   });
 
   describe('Reminders', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
       await seedTestReminders();
     });
 
     describe('GET /:accountId/reminders', () => {
-      test('should fetch all reminders for the account', () => {
+      test.only('should fetch all reminders for the account', () => {
         return request(app)
           .get(`${rootUrl}/${accountId}/reminders`)
           .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .then(({ body }) => {
             body = omitPropertiesFromBody(body);
-            const reminders = getModelsArray('reminders', body);
             console.log(JSON.stringify(body));
+            const reminders = getModelsArray('reminders', body);
             expect(reminders.length).toBe(2);
             expect(body).toMatchSnapshot();
           });
