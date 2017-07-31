@@ -38,6 +38,11 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    isBookable: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
