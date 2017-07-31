@@ -33,6 +33,8 @@ import permissions from '../entities/collections/permissions';
 import Permission from '../entities/models/Permission';
 import TimeOff from '../entities/models/PractitionerTimeOff';
 import timeOffs from '../entities/collections/practitionerTimeOffs';
+import PractitionerRecurringTimeOff from '../entities/models/PractitionerRecurringTimeOff';
+import PractitionerRecurringTimeOffs from '../entities/collections/PractitionerRecurringTimeOffs';
 import Requests from '../entities/models/Request';
 import requests from '../entities/collections/requests';
 import Dialogs from '../entities/models/Dialogs';
@@ -82,6 +84,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => {
     weeklySchedules: new weeklySchedules(),
     users: new users(),
     timeOffs: new timeOffs(),
+    practitionerRecurringTimeOffs: new PractitionerRecurringTimeOffs(),
     reminders: new reminders(),
     sentReminders: new sentReminders(),
     recalls: new recalls(),
@@ -103,6 +106,7 @@ const Models = {
   permissions: Permission,
   invites: Invites,
   practitioners: Practitioners,
+  practitionerRecurringTimeOffs: PractitionerRecurringTimeOff,
   timeOffs: TimeOff,
   dialogs: Dialogs,
   patients: Patient,

@@ -9,7 +9,6 @@ export default function ReminderData(props) {
   const {
     patient,
     reminder,
-    appointment,
     sentReminder,
     index,
     handleReminderClick,

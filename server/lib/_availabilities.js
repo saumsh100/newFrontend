@@ -4,7 +4,7 @@ const isEmpty = require('lodash/isEmpty');
 const isUndefined = require('lodash/isUndefined');
 const unionBy = require('lodash/unionBy');
 const { r } = require('../config/thinky');
-const { Service, Practitioner, Appointment } = require('../models');
+const { Service, Practitioner, Appointment, Request, WeeklySchedule, Account, PractitionerRecurringTimeOff } = require('../_models');
 const StatusError = require('../util/StatusError');
 const {
   isDuringEachother,
@@ -14,13 +14,23 @@ const {
   getISOSortPredicate,
 } = require('../util/time');
 
-// TODO: Currently returns if EQUAL but that
-const generateDuringFilter = (m, startDate, endDate) => {
-  startDate = r.ISO8601(startDate);
-  endDate = r.ISO8601(endDate);
-  return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
-    m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
-  );
+const generateDuringFilterSequelize = (startDate, endDate) => {
+  return {
+    $or: [
+      {
+        startDate: {
+          gt: new Date(startDate).toISOString(),
+          lt: new Date(endDate).toISOString(),
+        },
+      },
+      {
+        endDate: {
+          gt: new Date(startDate).toISOString(),
+          lt: new Date(endDate).toISOString(),
+        },
+      },
+    ],
+  };
 };
 
 
@@ -43,64 +53,42 @@ function fetchServiceData(options) {
     endDate,
   } = options;
 
-  const joinObject = {
-    practitioners: {
-      _apply: prac => prac.filter(row => {
-        return row('isActive').eq(true).and(row.hasFields('isHidden').not().or(row('isHidden').eq(false)));
-      }),
-    },
-
-    requests: {
-      _apply: (sequence) => {
-        return sequence.filter((request) => {
-          return generateDuringFilter(request, startDate, endDate);
-        });
-      },
-    },
-
-    reservations: {
-      _apply: (sequence) => {
-        // Grab all reservations that were created within 3 minutes ago
-        // that are requesting time within the startDate, endDate
-        return sequence.filter((reservation) => {
-          return reservation('dateCreated').add(60 * 3).gt(r.now()).or(
-            generateDuringFilter(reservation, startDate, endDate)
-          );
-        });
-      },
-    },
-  };
-
   // Wrap in a promise so that we can reject if certain conditions are not met (account does not own service)
   return new Promise((resolve, reject) => {
-    return Service.get(serviceId).getJoin(joinObject)
-      .then((service) => {
-        if (service.accountId !== accountId) {
-          return reject(StatusError(403, `This account does not have access to service with id: ${serviceId}`));
-        }
 
-        if (isEmpty(service.practitioners)) {
-          return reject(StatusError(400, `Service with id: ${serviceId} has no practitioners.`));
-        }
+    return Service.findOne({
+      where: { id: serviceId },
+      include: [
+        { model: Practitioner, as: 'practitioners', raw: true },
+        { model: Request, as: 'requests', raw: true },
+      ],
+    }).then((serviceOne) => {
+      const service = serviceOne.get({ plain: true });
 
-        if (!practitionerId) {
-          // default to returning all practitioners that can perform this service
-          return resolve(service);
-        }
+      if (service.accountId !== accountId) {
+        return reject(StatusError(403, `This account does not have access to service with id: ${serviceId}`));
+      }
 
-        // filter by practitionerId
-        const filteredPractitioners = service.practitioners.filter(practitioner => (
-          practitioner.id === practitionerId
-        ));
+      if (isEmpty(service.practitioners)) {
+        return reject(StatusError(400, `Service with id: ${serviceId} has no practitioners.`));
+      }
 
-        if (isEmpty(filteredPractitioners)) {
-          return reject(StatusError(400, `Service has no practitioners with id: ${practitionerId}`));
-        }
-
-        service.practitioners = filteredPractitioners;
+      if (!practitionerId) {
+        // default to returning all practitioners that can perform this service
         return resolve(service);
-      })
-      .catch(err => reject(err));
+      }
+
+      // filter by practitionerId
+      const filteredPractitioners = service.practitioners.filter(practitioner => (
+        practitioner.id === practitionerId
+      ));
+      if (isEmpty(filteredPractitioners)) {
+        return reject(StatusError(400, `Service has no practitioners with id: ${practitionerId}`));
+      }
+      service.practitioners = filteredPractitioners;
+      return resolve(service);
+    })
+    .catch(err => reject(err));
   });
 }
 
@@ -128,6 +116,7 @@ function fetchPractitionerData(options) {
     return fetchPractitionersSchedules(practitioners)
       .then((weeklySchedules) => {
         // now get practitioner.timeOff and practitioners.appointments and resolve promise
+
         const promises = practitioners.map((p, i) => {
           return fetchPractitionerTOAndAppts(p, startDate, endDate);
         });
@@ -139,58 +128,64 @@ function fetchPractitionerData(options) {
 
 function fetchPractitionersSchedules(practitioners) {
   return Promise.all(practitioners.map((practitioner) => {
-    return practitioner.getWeeklySchedule();
+    return WeeklySchedule.findOne({ where: { id: practitioner.weeklyScheduleId }, raw: true })
+    .then((weeklySchedule) => {
+      if (weeklySchedule) {
+        return weeklySchedule;
+      }
+
+      return Account.findOne({
+        where: {
+          id: practitioner.accountId,
+        },
+        raw: true,
+        nest: true,
+        include: [{ model: WeeklySchedule, as: 'weeklySchedule', raw: true }],
+      }).then((account) => {
+        return account.weeklySchedule;
+      });
+    });
   }));
 }
 
 function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
   return new Promise((resolve, reject) => {
-    const joinObject = {
-      timeOffs: {
-        _apply: (sequence) => {
-          return sequence.filter((timeOff) => {
-            // subtract and add for start date and enddate as you can miss if longer than week.
-            return generateDuringFilter(timeOff, moment(startDate).subtract(365, 'days').toISOString(), moment(endDate).add(365, 'days').toISOString());
-          });
-        },
+
+    return Practitioner.findOne({
+      where: {
+        id: practitioner.id,
       },
-
-      recurringTimeOffs: {
-        _apply: (sequence) => {
-          return sequence.filter((timeOff) => {
-            // subtract and add for start date and enddate as you can miss if longer than week.
-            return generateDuringFilter(timeOff, moment(startDate).subtract(365 * 2, 'days').toISOString(), moment(endDate).add(365 * 2, 'days').toISOString());
-          });
+      include: [
+        {
+          model: Appointment,
+          as: 'appointments',
+          where: {
+            isBookable: false,
+            ...generateDuringFilterSequelize(startDate, endDate),
+          },
+          required: false,
         },
-      },
-
-      // TODO: can we comment this out?
-      appointments: {
-        _apply: (sequence) => {
-          return sequence.filter((appt) => {
-            return generateDuringFilter(appt, startDate, endDate)
-              .and(appt
-                .hasFields('isBookable')
-                .not()
-                .or(appt('isBookable').eq(false)));
-          });
+        {
+          model: PractitionerRecurringTimeOff,
+          as: 'recurringTimeOffs',
+          where: generateDuringFilterSequelize(moment(startDate).subtract(365 * 2, 'days').toISOString(), moment(endDate).add(365 * 2, 'days').toISOString()),
+          required: false,
         },
-      },
-    };
+      ],
 
-    // Using getJoin as a lazy way to having appointments and timeOff ON practitioner model
-    return Practitioner.get(practitioner.id).getJoin(joinObject)
-      .then(p => {
-        p.timeOffs = p.recurringTimeOffs.filter((timeOff) => {
-          return !timeOff.interval;
-        });
+    }).then(p => {
+      const prac = p.get({ plain: true });
+      // TODO replace with real timeOffs
+      prac.timeOffs = prac.recurringTimeOffs.filter((timeOff) => {
+        return !timeOff.interval;
+      });
 
-        p.recurringTimeOffs = p.recurringTimeOffs.filter((timeOff) => {
-          return timeOff.interval;
-        });
-        return resolve(p);
-      })
-      .catch(err => reject(err));
+      prac.recurringTimeOffs = prac.recurringTimeOffs.filter((timeOff) => {
+        return timeOff.interval;
+      });
+
+      return resolve(prac);
+    });
   });
 }
 
@@ -297,7 +292,6 @@ function generatePractitionerAvailabilities(options) {
 
   const {
     requests,
-    reservations,
   } = service;
 
   // console.log(practitioner.firstName, weeklySchedule)
@@ -317,8 +311,8 @@ function generatePractitionerAvailabilities(options) {
    -    appointments
    */
 
+
   const practitionerRequests = requests.filter(d => d.practitionerId === practitioner.id);
-  const practitionerReservations = reservations.filter(d => d.practitionerId === practitioner.id);
 
   // TODO: need to be able to manage these
   const noPrefRequests = requests.filter(d => isUndefined(d.practitionerId));
@@ -336,7 +330,6 @@ function generatePractitionerAvailabilities(options) {
     // see if the timeSlot conflicts with any appointments, requests or resos
     const conflictsWithAppointment = appointments.some(a => isDuringEachother(timeSlot, a));
     const conflictsWithPractitionerRequests = practitionerRequests.some(pr => isDuringEachother(timeSlot, pr));
-    const conflictsWithPractitionerReservations = practitionerReservations.some(pr => isDuringEachother(timeSlot, pr));
 
     let conflictsWithTimeSlot = true;
 
@@ -351,7 +344,6 @@ function generatePractitionerAvailabilities(options) {
     const conflictsWithNoPrefReservations = noPrefReservations.some(pr => isDuringEachother(timeSlot, pr));
     return !conflictsWithAppointment &&
            !conflictsWithPractitionerRequests &&
-           !conflictsWithPractitionerReservations &&
            !conflictsWithNoPrefRequests &&
            !conflictsWithNoPrefReservations &&
             conflictsWithTimeSlot;
@@ -370,14 +362,14 @@ function generatePractitionerAvailabilities(options) {
 function filterByChairs(weeklySchedule, avails, pracWeeklySchedule, appointments) {
   const newAvails = [];
 
+  // prac has no custom so has all chairs
   if (pracWeeklySchedule !== weeklySchedule.id) {
     return avails;
   }
 
   for (let j = 0; j < avails.length; j++) {
     const dayOfWeek = moment(avails[j].startDate).format('dddd').toLowerCase();
-    const chairIds = weeklySchedule[dayOfWeek].chairIds;
-    // prac has no custom so has all chairs
+    const chairIds = weeklySchedule[dayOfWeek].chairIds || [];
 
 
     const isAvailiable = chairIds.some((chairId) => {
@@ -412,16 +404,19 @@ function fetchAvailabilities(options) {
         fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
-            return Appointment
-              .filter({ accountId: options.accountId })
-              .filter((row) => {
-                return generateDuringFilter(row, startDate, endDate)
-                .and(row
-                  .hasFields('isBookable')
-                  .not()
-                  .or(row('isBookable').eq(false)));
-              })
-              .run()
+            return Appointment.findAll({
+              where: {
+                $and: [
+                  {
+                    isBookable: false,
+                  },
+                  {
+                    ...generateDuringFilterSequelize(startDate, endDate)
+                  },
+                ],
+              },
+              raw: true,
+            })
               .then((appointments) => {
                 const practitionerAvailabilities = practitioners.map((p, i) => {
                   const avails = generatePractitionerAvailabilities({
@@ -432,7 +427,6 @@ function fetchAvailabilities(options) {
                     timeInterval,
                     endDate,
                   });
-
                   return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
                 });
 
