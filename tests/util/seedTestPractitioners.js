@@ -2,7 +2,8 @@
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Practitioner } from '../../server/models';
-import wipeModel from './wipeModel';
+import { Practitioner as _Practitioner } from '../../server/_models';
+import wipeModel, { wipeModelSequelize } from './wipeModel';
 import { accountId } from './seedTestUsers';
 import { weeklyScheduleId, seedTestWeeklySchedules } from './seedTestWeeklySchedules';
 
@@ -26,8 +27,15 @@ async function seedTestPractitioners() {
   await Practitioner.save(practitioner);
 }
 
+async function seedTestPractitionersSequelize() {
+  await seedTestWeeklySchedules();
+  await wipeModelSequelize(_Practitioner);
+  await _Practitioner.create(practitioner);
+}
+
 module.exports = {
   practitioner,
   practitionerId,
   seedTestPractitioners,
+  seedTestPractitionersSequelize,
 };

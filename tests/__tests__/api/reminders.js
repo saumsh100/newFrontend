@@ -6,7 +6,7 @@ import { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
 import generateToken from '../../util/generateToken';
-import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
+import { getModelsArray, omitProperties, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -48,6 +48,7 @@ describe('/api/accounts/:account/reminders', () => {
           .expect(200)
           .then(({ body }) => {
             body = omitPropertiesFromBody(body);
+            body = omitProperties(body, ['result']);
             const reminders = getModelsArray('reminders', body);
             console.log(JSON.stringify(body));
             expect(reminders.length).toBe(2);
@@ -70,6 +71,7 @@ describe('/api/accounts/:account/reminders', () => {
           .set('Authorization', `Bearer ${token}`)
           .send({
             id: newReminderId,
+            lengthSeconds: null,
             primaryType: 'sms',
             createdAt: '2017-07-19T00:14:30.932Z',
           })
@@ -96,7 +98,8 @@ describe('/api/accounts/:account/reminders', () => {
           .put(`${rootUrl}/${accountId}/reminders/${reminderId1}`)
           .set('Authorization', `Bearer ${token}`)
           .send({
-            id: newReminderId,
+            id: reminderId1,
+            lengthSeconds:null,
             primaryType: 'phone',
             createdAt: '2017-07-19T00:14:30.932Z',
           })

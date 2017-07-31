@@ -1,5 +1,7 @@
 
-import { computeRemindersAndSend } from '../server/lib/reminders';
+import { Account } from '../server/_models';
+import { seedTestAccountsSequelize, accountId } from '../tests/util/seedTestAccounts';
+import { computeRemindersAndSend } from '../server/lib/_reminders';
 
 const sampleData = {
   appointment: {
@@ -25,22 +27,11 @@ const sampleData = {
   },
 };
 
-function delay(t) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, t);
-  });
-}
+// TODO: test this when we can actually create reminder data through dashboard
 
 async function main() {
   try {
     await computeRemindersAndSend({ date: (new Date().toISOString()) });
-    /*const arr = [1, 2, 3];
-    for (const i of arr) {
-      console.log('before', i);
-      await delay(100);
-      console.log('after', i);
-    }*/
-
     process.exit();
   } catch (err) {
     console.error(err);
