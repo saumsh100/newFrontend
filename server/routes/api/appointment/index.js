@@ -438,7 +438,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       res.status(201).send(normalized);
       return { appointment, normalized };
     })
-    .then(async ({ appointment, normalized }) => {
+    .then(async ({ appointment }) => {
       // Dispatch to the appropriate socket room
       if (appointment.isSyncedWithPMS && appointment.patientId) {
         appointment.patient = await Patient.get(appointment.patientId);
@@ -446,7 +446,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      return io.of(ns).in(accountId).emit('create:Appointment', normalized);
+      return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
 });
@@ -559,7 +559,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      return io.of(ns).in(accountId).emit('update:Appointment', normalized);
+      return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
 });

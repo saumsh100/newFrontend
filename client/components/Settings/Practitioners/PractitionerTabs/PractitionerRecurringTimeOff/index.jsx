@@ -11,14 +11,12 @@ import {
 } from '../../../../../thunks/fetchEntities';
 import { IconButton, Modal, Button, DialogBox } from '../../../../library';
 import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
-import TimeOffList from './TimeOffList';
-import TimeOffForm from './TimeOffForm';
+import RecurringTimeOffListItem from './RecurringTimeOffListItem';
+import RecurringTimeOffList from './RecurringTimeOffList';
+import RecurringTimeOffForm from './RecurringTimeOffForm';
+import styles from './styles.scss';
 
-const mergeTime = (date, time, allDay) => {
-  return allDay ? date : new Date(date.setHours(time.getHours()));
-};
-
-class PractitionerTimeOff extends Component {
+class PractitionerRecurringTimeOff extends Component {
   constructor(props) {
     super(props);
 
@@ -48,20 +46,23 @@ class PractitionerTimeOff extends Component {
       startDate,
       endDate,
       startTime,
+      dayOfWeek,
       endTime,
+      interval,
       allDay,
+      note,
     } = values;
-
-    // TODO: is !allDay merge in startTime, endTime into startDate endDate
-    const mergedStartDate = mergeTime(new Date(startDate), new Date(startTime), allDay);
-    const mergedEndDate = mergeTime(new Date(endDate), new Date(endTime), allDay);
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
-      startDate: mergedStartDate,
-      endDate: mergedEndDate,
-      allDay: values.allDay,
-      note: values.note,
+      startDate,
+      endDate,
+      startTime,
+      dayOfWeek,
+      endTime,
+      interval,
+      allDay,
+      note,
     };
 
     if (this.state.isAdding) {
@@ -99,7 +100,6 @@ class PractitionerTimeOff extends Component {
   deleteTimeOff(timeOff) {
     this.props.deleteEntityRequest({ key: 'practitionerRecurringTimeOffs', id: timeOff.get('id') });
   }
-
   reinitializeState() {
     this.setState({
       isAdding: false,
@@ -123,7 +123,7 @@ class PractitionerTimeOff extends Component {
 
   render() {
     const {
-      timeOffs,
+      recurringTimeOffs,
       practitioner,
     } = this.props;
 
@@ -132,8 +132,30 @@ class PractitionerTimeOff extends Component {
       selectedTimeOff,
     } = this.state;
 
-    if (!timeOffs && !practitioner) {
-      return null;
+    let formName = `practitioner${practitioner.get('id')}_recurringTimeOff`;
+    if (selectedTimeOff) {
+      formName = `timeOff${selectedTimeOff.get('id')}_recurringTimeOff`;
+    }
+
+    let showAddOrListComponent = (
+      <div style={{ paddingLeft: '15px' }}>
+        <Button onClick={this.addTimeOff} >Add Time Off</Button>
+      </div>
+    );
+    if (recurringTimeOffs.size > 0) {
+      showAddOrListComponent = (
+        <RecurringTimeOffList
+          recurringTimeOffs={recurringTimeOffs}
+          practitioner={practitioner}
+          onSelectTimeOff={this.selectTimeOff}
+          deleteTimeOff={this.deleteTimeOff}
+        >
+          <IconButton
+            icon="plus"
+            onClick={this.addTimeOff}
+          />
+        </RecurringTimeOffList>
+      );
     }
 
     const formTimeOff = selectedTimeOff || Map({
@@ -143,31 +165,8 @@ class PractitionerTimeOff extends Component {
       note: '',
     });
 
-    let formName = `practitioner${practitioner.get('id')}_timeOff`;
-    if (selectedTimeOff) {
-      formName = `timeOff${selectedTimeOff.get('id')}_timeOff`;
-    }
-
-    let showAddOrListComponent = (
-      <div style={{ paddingLeft: '15px' }}>
-        <Button onClick={this.addTimeOff} data-test-id="addTimeOffButton" >Add Time Off</Button>
-      </div>
-    );
-
-    if (timeOffs.size > 0) {
-      showAddOrListComponent = (
-        <TimeOffList
-          timeOffs={timeOffs}
-          practitioner={practitioner}
-          onSelectTimeOff={this.selectTimeOff}
-          deleteTimeOff={this.deleteTimeOff}
-        >
-          <IconButton
-            icon="plus"
-            onClick={this.addTimeOff}
-          />
-        </TimeOffList>
-      );
+    if (!recurringTimeOffs || !practitioner) {
+      return null;
     }
 
     const actions = [
@@ -186,10 +185,10 @@ class PractitionerTimeOff extends Component {
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
+          className={styles.modal}
           custom
-          data-test-id="addTimeOffDialog"
         >
-          <TimeOffForm
+          <RecurringTimeOffForm
             key={formName}
             formName={formName}
             timeOff={formTimeOff}
@@ -202,8 +201,8 @@ class PractitionerTimeOff extends Component {
 
 }
 
-PractitionerTimeOff.propTypes = {
-  timeOffs: PropTypes.object,
+PractitionerRecurringTimeOff.propTypes = {
+  recurringTimeOffs: PropTypes.object,
   practitioner: PropTypes.object,
   createEntityRequest: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
@@ -220,4 +219,4 @@ function mapActionsToProps(dispatch) {
 
 const enhance = connect(null, mapActionsToProps);
 
-export default enhance(PractitionerTimeOff);
+export default enhance(PractitionerRecurringTimeOff);

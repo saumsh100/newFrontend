@@ -9,7 +9,7 @@ const SyncClientError = createModel('SyncClientError', {
   version: type.string(),
   adapter: type.string(),
 
-  operation: type.string().enum('create', 'update', 'delete', 'sync').required(),
+  operation: type.string().enum('create', 'update', 'remove', 'sync').required(),
   success: type.boolean(),
 
   model: type.string(),

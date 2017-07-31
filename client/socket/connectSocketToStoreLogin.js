@@ -86,7 +86,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
-        console.log('remove:Appointment event, id=', data.id);
+       // console.log('remove:Appointment event, id=', data.id);
         dispatch(deleteEntity({ key: 'appointments', id: data.id }));
       });
 
@@ -94,7 +94,7 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
-        console.log('Created Patient', data.entities);
+        //console.log('Created Patient', data.entities);
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
 

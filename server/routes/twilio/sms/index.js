@@ -35,6 +35,12 @@ function sendSocket(io, chatId) {
     });
 }
 
+function sendSocketReminder(io, sentReminder) {
+  return io.of('/dash')
+        .in(sentReminder.accountId)
+        .emit('update:SentReminder', normalize('sentReminder', sentReminder));
+}
+
 smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
     // We close response fast, does this help?
@@ -100,7 +106,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
 
     await sentReminder.merge({ isConfirmed: true }).save();
     await appointment.merge({ isPatientConfirmed: true }).save();
-
+    await sendSocketReminder(io, sentReminder);
     // Mark this as read cause we are auto-responding to it
     await textMessage.merge({ read: true }).save();
 

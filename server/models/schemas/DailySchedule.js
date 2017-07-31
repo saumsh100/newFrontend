@@ -13,10 +13,14 @@ const generateDailyScheduleSchema = (options = {}) => {
     startTime: type.date().required().default(startTime),
     endTime: type.date().required().default(endTime),
     breaks: type.array().default(breaks),
+    pmsScheduleId: type.string().uuid(4),
+    chairIds: type.array().default([]),
   }).default({
     isClosed: isClosed,
     startTime: startTime,
     endTime: endTime,
+    chairIds: [],
+    pmsScheduleId: null,
   }).removeExtra();
 };
 
