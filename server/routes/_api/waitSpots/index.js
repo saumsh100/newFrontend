@@ -1,10 +1,10 @@
 
 import { Router } from 'express';
+import moment from 'moment';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { WaitSpot } from '../../../_models';
-import moment from 'moment';
 
 const waitSpotsRouter = Router();
 
