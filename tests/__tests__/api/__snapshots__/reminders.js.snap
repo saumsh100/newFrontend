@@ -7,19 +7,17 @@ Object {
       "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "id": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "lengthSeconds": null,
         "primaryType": "sms",
       },
       "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "id": "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "lengthSeconds": null,
         "primaryType": "sms",
       },
     },
   },
-  "result": Array [
-    "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
-    "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
-  ],
 }
 `;
 
@@ -30,6 +28,7 @@ Object {
       "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "id": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "lengthSeconds": null,
         "primaryType": "sms",
       },
     },
@@ -42,13 +41,14 @@ exports[`/api/accounts/:account/reminders Reminders PUT /:accountId/reminders/:r
 Object {
   "entities": Object {
     "reminders": Object {
-      "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+      "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "id": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "id": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "lengthSeconds": null,
         "primaryType": "phone",
       },
     },
   },
-  "result": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+  "result": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
 }
 `;
