@@ -96,7 +96,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     patient,
     userId,
   } = req.body;
-
+  console.log(patient);
   if (!patient.mobilePhoneNumber) {
     return res.sendStatus(400);
   }

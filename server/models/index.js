@@ -1,6 +1,5 @@
 
 import Account from './Account';
-import Account_Patient from './Account_Patient';
 import Appointment from './Appointment';
 import AuthSession from './AuthSession';
 import Call from './Call';
@@ -34,7 +33,6 @@ import WeeklySchedule from './WeeklySchedule';
 
 export {
   Account,
-  Account_Patient,
   Appointment,
   AuthSession,
   Chair,
@@ -129,7 +127,7 @@ OAuth.belongsTo(Patient, 'patient', 'patientId', 'id');
  * Patient Relations
  */
 
-Patient.belongsTo(Family, 'family', 'familyId', 'id');
+Patient.belongsTo(Family, 'family', 'familyIxd', 'id');
 Patient.hasMany(Appointment, 'appointments', 'id', 'patientId');
 Patient.hasMany(OAuth, 'oauthTokens', 'id', 'patientId');
 Patient.hasOne(Chat, 'chat', 'id', 'patientId');

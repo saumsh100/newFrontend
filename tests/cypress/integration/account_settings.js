@@ -128,6 +128,19 @@ describe('Account Settings', () => {
           .should('not.exist');
       });
 
+      it('add a schedule pattern', () => {
+        cy
+          .getAndClick('changeStartDate')
+          .getAndClick('startDateDayPicker')
+          .get('.DayPicker-Day--today')
+          .click()
+          .submitForm('advanceCreate')
+          .get('[data-test-id="createPatternSchedule"]')
+          .click({ force: true })
+          .get('[data-test-id="patternHeader0"]')
+          .should('exist');
+      });
+
     });
 
     context('Online Booking', () => {
@@ -157,7 +170,8 @@ describe('Account Settings', () => {
       it('toggling the state of reminders', () => {
         cy
           .get('[data-test-id="toggleSendReminders"]')
-          .click({ force: true });
+          .click({ force: true })
+          .reload();
       });
 
       it('create new reminder', () => {
@@ -247,12 +261,16 @@ describe('Account Settings', () => {
 
     it('update enable/disable state of a service', () => {
       cy
-        .fillTextInput('practitionerBasicDataForm', 'firstName', 'Kelsey')
-        .submitForm('practitionerBasicDataForm')
-        .reload()
-        .get('[data-test-id="practitionerBasicDataForm"]')
-        .find('[data-test-id="firstName"]')
-        .should('have.value', 'Kelsey');
+        .getAndClick('practitionerServicesTab')
+        .get('[data-test-id=ToothacheToggle]')
+        .find('input')
+        .click({ force: true })
+        .submitForm('practitionerServicesForm')
+        .visit('http://localhost:5100/settings/services')
+        .getAndClick('Toothache')
+        .get('[data-test-id=KelseyMansfield]')
+        .find('.react-toggle--checked')
+        .should('not.exist');
     });
 
     it('add time off for a practitioner', () => {
@@ -285,6 +303,17 @@ describe('Account Settings', () => {
         .getAndClick('deletePractitioner')
         .reload()
         .get('[data-test-id="KelseyMansfield"]')
+        .should('not.exist');
+    });
+
+    it('set practitioner to inactive', () => {
+      cy
+        .getAndClick('PerryCoxActive')
+        .submitForm('practitionerBasicDataForm')
+        .visit('http://localhost:5100/schedule')
+        .getAndClick('quickAddAppointment')
+        .getAndClick('practitionerId')
+        .contains('Perry Cox')
         .should('not.exist');
     });
   });

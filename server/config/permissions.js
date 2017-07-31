@@ -55,6 +55,7 @@ const SUPERADMIN = {
   textMessages: allow('*', 'update'),
 
   services: allowAll,
+  segments: allowAll,
 
   family: allowAll,
 

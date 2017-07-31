@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -8,6 +9,7 @@ import styles from '../../styles.scss';
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
 const maxLength25 = maxLength(25);
+
 class PractitionerBasicData extends Component {
   constructor(props) {
     super(props);
@@ -18,15 +20,18 @@ class PractitionerBasicData extends Component {
       uploading: false,
     };
   }
+
   uploadAvatar(files) {
     this.setState({
       uploading: true,
     });
     this.props.uploadAvatar(this.props.practitioner.id, files[0]);
   }
+
   deleteAvatar() {
     this.props.deleteAvatar(this.props.practitioner.id);
   }
+
   componentWillReceiveProps(props) {
     if (this.props.practitioner.avatarUrl !== props.practitioner.avatarUrl) {
       this.setState({
@@ -34,6 +39,7 @@ class PractitionerBasicData extends Component {
       });
     }
   }
+
   updatePractitioner(values) {
     const { practitioner } = this.props;
     values.firstName = values.firstName.trim();
@@ -50,18 +56,22 @@ class PractitionerBasicData extends Component {
     };
     this.props.updatePractitioner(modifiedPractitioner, alert);
   }
+
   render() {
     const { practitioner } = this.props;
     if (!practitioner) {
       return null;
     }
+
     const initialValues = {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
       fullAvatarUrl: practitioner.get('fullAvatarUrl'),
       isActive: practitioner.get('isActive'),
       type: practitioner.get('type'),
+      isHidden: practitioner.get('isHidden'),
     };
+
     return (
       <div className={styles.practFormContainer}>
         <Header title="Avatar" />
@@ -77,6 +87,18 @@ class PractitionerBasicData extends Component {
           initialValues={initialValues}
           data-test-id="practitionerBasicDataForm"
         >
+          <div className={styles.practFormContainer_practActive}>
+            Active?
+            <div
+              className={styles.practFormContainer_practActive_toggle}
+              data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}Active`}
+            >
+              <Field
+                name="isActive"
+                component="Toggle"
+              />
+            </div>
+          </div>
           <Field
             required
             name="firstName"
@@ -102,11 +124,12 @@ class PractitionerBasicData extends Component {
               ]}
             />
           </div>
-          <div className={styles.practFormContainer_practActive}>
-            Active?
-            <div className={styles.practFormContainer_practActive_toggle}>
+          <div className={styles.practFormContainer_practHidden}>
+            {`Would you like to set this practitioner to be hidden on the booking
+            widget?`}
+            <div className={styles.practFormContainer_practHidden_hiddenToggle}>
               <Field
-                name="isActive"
+                name="isHidden"
                 component="Toggle"
               />
             </div>

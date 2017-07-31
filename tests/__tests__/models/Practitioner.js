@@ -1,103 +1,145 @@
 
-/**
- * MAJOR DISCLAIMER: this assumes the DB is seeded with seeds!
- */
+import {
+  Account,
+  Practitioner,
+  Practitioner_Service,
+  Service,
+} from '../../../server/_models';
+import { omitProperties }  from '../../util/selectors';
+import { wipeModelSequelize }  from '../../util/wipeModel';
+import { wipeTestAccounts, seedTestAccountsSequelize, accountId } from '../../util/seedTestAccounts';
 
-const { Practitioner } = require('../../../server/models');
+const makeData = (data = {}) => Object.assign({
+  firstName: 'Test',
+  lastName: 'Practitioner',
+  accountId,
+}, data);
 
-// TODO: make seeds more modular so we can see here
-const practitionerId = '4f439ff8-c55d-4423-9316-a41240c4d329';
-const weeklyScheduleId = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
-
-describe('Practitioner', () => {
-  describe('#get', () => {
-    it('should be a function', (done) => {
-      expect(typeof Practitioner.get).toBe('function');
-      done();
-    });
-
-    it('should return a practitioner object', (done) => {
-      Practitioner.get(practitionerId)
-        .then((practitioner) => {
-          expect(typeof practitioner).toBe('object');
-          expect(practitioner.id).toBe(practitionerId);
-          done();
-        });
-    });
-  });
-
-  describe('#getWeeklySchedule', () => {
-    let practitioner;
-    beforeEach((done) => {
-      Practitioner.get(practitionerId)
-        .then((p) => {
-          practitioner = p;
-          done();
-        });
-    });
-
-    it('should be a function', (done) => {
-      expect(typeof practitioner.getWeeklySchedule).toBe('function');
-      done();
-    });
-
-    it('should return the proper weeklySchedule', (done) => {
-      practitioner.getWeeklySchedule()
-        .then((ws) => {
-          expect(ws.id).toBe(weeklyScheduleId);
-          done();
-        });
-    });
-  });
-
-  /*describe('#getTimeOff', () => {
-    let practitioner;
-    beforeEach((done) => {
-      Practitioner.get(practitionerId)
-        .then((p) => {
-          practitioner = p;
-          done();
-        });
-    });
-
-    it('should be a function', (done) => {
-      expect(typeof practitioner.getTimeOff).toBe('function');
-      done();
-    });
-
-    it('should get 0 timesOff for practitioner ', (done) => {
-      const startDate = new Date(2018, 1, 19, 8, 0);
-      const endDate = new Date(2018, 1, 25, 0, 0);
-      practitioner.getTimeOff(startDate, endDate)
-        .then((timeOff) => {
-          //expect(Array.isArray(timeOff)).toBe(true);
-          expect(timeOff.length).toBe(0);
-          done();
-        });
-    });
-
-    it('should get 3 timesOff for practitioner ', (done) => {
-      const startDate = new Date(2017, 2, 19, 8, 0);
-      const endDate = new Date(2017, 2, 25, 0, 0);
-      practitioner.getTimeOff(startDate, endDate)
-        .then((timeOff) => {
-          //expect(Array.isArray(timeOff)).toBe(true);
-          expect(timeOff.length).toBe(3);
-          done();
-        });
-    });
-
-    it('should get 4 timesOff for practitioner ', (done) => {
-      const startDate = new Date(2017, 2, 18);
-      const endDate = new Date(2017, 2, 30);
-      practitioner.getTimeOff(startDate, endDate)
-        .then((timeOff) => {
-          //expect(Array.isArray(timeOff)).toBe(true);
-          expect(timeOff.length).toBe(4);
-          done();
-        });
-    });
-  });*/
+const makeServiceData = () => Object.assign({
+  name: 'Test Service',
+  accountId,
+  duration: 4,
 });
 
+const fakeAccountId = 'f23151a6-091e-43db-8856-7e547c171754';
+const fail = 'Your code should be failing but it is passing';
 
+describe('models/Practitioner', () => {
+  beforeEach(async () => {
+    await wipeModelSequelize(Practitioner);
+    await seedTestAccountsSequelize();
+  });
+
+  afterAll(async () => {
+    await wipeModelSequelize(Practitioner_Service);
+    await wipeModelSequelize(Practitioner);
+    await wipeModelSequelize(Service);
+    await wipeTestAccounts();
+  });
+
+  describe('Data Validation', () => {
+    test('should be able to save a Practitioner without id provided', async () => {
+      const data = makeData();
+      const practitioner = await Practitioner.create(data);
+      expect(omitProperties(practitioner.get({ plain: true }), ['id'])).toMatchSnapshot();
+    });
+
+    test('should have null values for pmsId', async () => {
+      const data = makeData();
+      const practitioner = await Practitioner.create(data);
+      expect(practitioner.pmsId).toBe(null);
+    });
+
+    test('should throw error for no accountId provided', async () => {
+      const data = makeData({ accountId: undefined });
+      try {
+        await Practitioner.create(data);
+        throw new Error(fail);
+      } catch (err) {
+        expect(err.name).toEqual('SequelizeValidationError');
+      }
+    });
+
+    test('should fail if accountId does not reference an existing account', async () => {
+      const data = makeData({ accountId: fakeAccountId });
+      try {
+        await Practitioner.create(data);
+        throw new Error(fail);
+      } catch (err) {
+        expect(err.name).toEqual('SequelizeForeignKeyConstraintError');
+      }
+    });
+  });
+
+  describe('Relations', () => {
+    test('should be able to fetch account relationship', async () =>  {
+      const { id } = await Practitioner.create(makeData());
+      const practitioner = await Practitioner.findOne({
+        where: { id },
+        include: [
+          {
+            model: Account,
+            as: 'account',
+          },
+        ],
+      });
+
+      expect(practitioner.accountId).toBe(practitioner.account.id);
+    });
+
+    describe('Pracitioner.services many2many', () => {
+      let s1;
+      let s2;
+      let practitioner;
+      let ps1;
+      let ps2;
+      beforeEach(async () => {
+        await wipeModelSequelize(Practitioner_Service);
+        await wipeModelSequelize(Practitioner);
+        await wipeModelSequelize(Service);
+        [s1, s2] = await Service.bulkCreate([
+          makeServiceData({ name: 'S1' }),
+          makeServiceData({ name: 'S2' }),
+        ]);
+
+        practitioner = await Practitioner.create(makeData());
+
+        // Now add to the join table for this practitioner and their services
+        [ps1, ps2] = await Practitioner_Service.bulkCreate([
+          { serviceId: s1.id, practitionerId: practitioner.id },
+          { serviceId: s2.id, practitionerId: practitioner.id },
+        ]);
+      });
+
+      test('should be able to fetch the many services', async () =>  {
+        const p = await Practitioner.findOne({
+          where: { id: practitioner.id },
+          include: [
+            {
+              model: Service,
+              as: 'services',
+            },
+          ],
+        });
+
+        expect(p.services.length).toBe(2);
+      });
+
+      test('should be able to update the service relationships', async () => {
+        await Practitioner_Service.destroy({ where: { id: ps2.id } });
+        const p = await Practitioner.findOne({
+          where: { id: practitioner.id },
+          include: [
+            {
+              model: Service,
+              as: 'services',
+            },
+          ],
+        });
+
+
+        expect(p.services.length).toBe(1);
+      });
+    });
+  });
+});

@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/updater GET / /available - invalid version number 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/updater GET / /available - new version available 1`] = `
+Object {
+  "available": true,
+  "entities": Object {},
+  "filename": "carecru_setup_v2.0.0-0.exe",
+  "key": "",
+  "secret": "",
+}
+`;
+
+exports[`/api/updater GET / /available - new version not available 1`] = `
+Object {
+  "available": false,
+  "entities": Object {},
+  "url": "",
+}
+`;
+
+exports[`/api/updater GET / /release - retrieve latest release info 1`] = `
+Object {
+  "build": 0,
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "entities": Object {},
+  "id": "126d3cb0-4468-4503-9254-77fb1e8df539",
+  "key": "",
+  "major": 2,
+  "minor": 0,
+  "patch": 0,
+  "secret": "",
+  "url": "",
+}
+`;
+
+exports[`/api/updater PUT / /bump - bump up the version number 1`] = `
+Object {
+  "build": 1,
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "entities": Object {},
+  "id": "126d3cb0-4468-4503-9254-77fb1e8df539",
+  "key": "",
+  "major": 2,
+  "minor": 0,
+  "patch": 1,
+  "secret": "",
+  "url": "",
+}
+`;
+
+exports[`/api/updater PUT / /unbump - bump down the version number 1`] = `
+Object {
+  "build": -1,
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "entities": Object {},
+  "id": "126d3cb0-4468-4503-9254-77fb1e8df539",
+  "key": "",
+  "major": 2,
+  "minor": 0,
+  "patch": -1,
+  "secret": "",
+  "url": "",
+}
+`;

@@ -157,7 +157,6 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
     ...pick(req.body, 'name', 'timezone'),
     enterpriseId: req.enterprise.id,
   };
-
   const timezone = req.body.timezone;
 
   Account.save(accountData)

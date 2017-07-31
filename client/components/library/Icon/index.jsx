@@ -17,7 +17,7 @@ export default function Icon(props) {
 
   const finalStyles = Object.assign({}, { fontSize: size + 'em' }, style);
 
-  return <i className={classes} style={finalStyles} onClick={onClick} />;
+  return <i className={classes} data-test-id={props["data-test-id"]} style={finalStyles} onClick={onClick} />;
 }
 
 Icon.defaultProps = {

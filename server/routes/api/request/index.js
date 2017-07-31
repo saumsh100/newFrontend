@@ -78,7 +78,7 @@ requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res
  */
 requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, res, next) =>{
   return req.request.delete()
-    .then(() =>{
+    .then(() => {
         res.send(204);
     })
     .catch(next);

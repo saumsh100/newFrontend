@@ -49,10 +49,7 @@ describe('Schedule', () => {
       .contains('Regular Consultation')
       .parent()
       .click()
-      .getAndClick('chairId')
-      .contains('Chair 1')
-      .parent()
-      .click({ force: true })
+      .selectOption('createAppointmentForm', 'chairId', '7f439ff8-c55d-4423-9316-a41240c4d329' )
       .get('[data-test-id="patientSelected"]')
       .find('input')
       .click()
@@ -67,4 +64,36 @@ describe('Schedule', () => {
       .find('[data-test-id="timeSlotAlexBashliy"]')
       .should('exist');
   });
+
+  it('update an existing appointment', () => {
+    cy
+      .get('[data-test-id="timeSlotAlexBashliy"]')
+      .click({ multiple: true, force: true })
+      .getAndClick('serviceId')
+      .contains('Child Dental Exam')
+      .parent()
+      .click()
+      .submitForm('createAppointmentForm');
+  });
+
+  it('confirm a request and create a new patient profile', () => {
+    cy
+      .get('[data-test-id="JustineFrancoAccept"]')
+      .click({ force: true })
+      .submitForm('newPatientForm')
+      .reload();
+  });
+
+  it('confirm a request and suggest a patient profile', () => {
+    cy
+      .get('[data-test-id="MarkJosephAccept')
+      .click({ force: true })
+      .getAndClick('MarkJoseph');
+  })
+
+  it('Reject a request', () => {
+    cy
+      .get('[data-test-id="JustinSharpReject"]')
+      .click({ force: true });
+  })
 });

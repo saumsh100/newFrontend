@@ -38,6 +38,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
       initialValues={initialValues}
       asyncValidate={asyncValidateNewPatient}
       allowSave
+      data-test-id="newPatientForm"
     >
       <Field
         required
