@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/accounts/:account/reminders Reminders GET /:accountId/reminders should fetch all reminders for the account 1`] = `
+Object {
+  "entities": Object {
+    "reminders": Object {
+      "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "primaryType": "sms",
+      },
+      "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "primaryType": "sms",
+      },
+    },
+  },
+  "result": Array [
+    "e5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+    "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+  ],
+}
+`;
+
+exports[`/api/accounts/:account/reminders Reminders POST /:accountId/reminders should create a reminders for the account 1`] = `
+Object {
+  "entities": Object {
+    "reminders": Object {
+      "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "primaryType": "sms",
+      },
+    },
+  },
+  "result": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+}
+`;
+
+exports[`/api/accounts/:account/reminders Reminders PUT /:accountId/reminders/:reminderId should update a reminder for the account 1`] = `
+Object {
+  "entities": Object {
+    "reminders": Object {
+      "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "primaryType": "phone",
+      },
+    },
+  },
+  "result": "f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+}
+`;
