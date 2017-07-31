@@ -19,10 +19,28 @@ class AddSegment extends Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAgeChange = this.handleAgeChange.bind(this);
+    this.handleGenderChange = this.handleGenderChange.bind(this);
   }
   
   handleSubmit() {
     
+  }
+
+  handleAgeChange(value) {
+    const {
+      formName,
+    } = this.props;
+
+    this.props.change(formName, 'age', Object.keys(value));
+  }
+
+  handleGenderChange(value) {
+    const {
+      formName,
+    } = this.props;
+
+    this.props.change(formName, 'gender', Object.keys(value)[0]);
   }
 
   render() {
@@ -45,6 +63,8 @@ class AddSegment extends Component {
           key={formName}
           formName={formName}
           selectedSegment={null}
+          handleAgeChange={this.handleAgeChange}
+          handleGenderChange={this.handleGenderChange}
           handleSubmit={this.handleSubmit}
         />
       </div>
@@ -74,6 +94,7 @@ AddSegment.propTypes = {
   updateEntityRequest: PropTypes.func,
   reset: PropTypes.func,
   reinitializeState: PropTypes.func,
+  change: PropTypes.func,
 };
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

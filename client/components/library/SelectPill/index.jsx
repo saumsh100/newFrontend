@@ -18,6 +18,10 @@ class SelectPill extends PureComponent {
           [pillId]: true,
         },
       });
+
+      this.props.onChange({
+        [pillId]: true,
+      });
     } else {
       this.setState({
         selectedPills: {
@@ -25,9 +29,11 @@ class SelectPill extends PureComponent {
           [pillId]: !this.state.selectedPills[pillId],
         },
       });
+      this.props.onChange({
+        ...this.state.selectedPills,
+        [pillId]: !this.state.selectedPills[pillId],
+      });
     }
-
-    this.props.onChange(this.state.selectedPills);
   }
 
   render() {

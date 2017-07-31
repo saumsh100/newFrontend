@@ -35,12 +35,22 @@
   width: 25%;
   box-sizing: border-box;
   display: inline-block;
-  height: 600px;
+  height: 365px;
 }
 
 .tab {
   display: block;
   text-align: right;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
+.formSection {
+  position: relative;
 }
 
 .activeTab {
