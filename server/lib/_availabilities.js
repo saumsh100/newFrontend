@@ -150,38 +150,6 @@ function fetchPractitionersSchedules(practitioners) {
 
 function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
   return new Promise((resolve, reject) => {
-    // const joinObject = {
-    //   timeOffs: {
-    //     _apply: (sequence) => {
-    //       return sequence.filter((timeOff) => {
-    //         // subtract and add for start date and enddate as you can miss if longer than week.
-    //         return generateDuringFilter(timeOff, moment(startDate).subtract(365, 'days').toISOString(), moment(endDate).add(365, 'days').toISOString());
-    //       });
-    //     },
-    //   },
-
-    //   recurringTimeOffs: {
-    //     _apply: (sequence) => {
-    //       return sequence.filter((timeOff) => {
-    //         // subtract and add for start date and enddate as you can miss if longer than week.
-    //         return generateDuringFilter(timeOff, moment(startDate).subtract(365 * 2, 'days').toISOString(), moment(endDate).add(365 * 2, 'days').toISOString());
-    //       });
-    //     },
-    //   },
-
-    //   // TODO: can we comment this out?
-    //   appointments: {
-    //     _apply: (sequence) => {
-    //       return sequence.filter((appt) => {
-    //         return generateDuringFilter(appt, startDate, endDate)
-    //           .and(appt
-    //             .hasFields('isBookable')
-    //             .not()
-    //             .or(appt('isBookable').eq(false)));
-    //       });
-    //     },
-    //   },
-    // };
 
     return Practitioner.findOne({
       where: {
