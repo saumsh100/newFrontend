@@ -6,7 +6,7 @@ import wipeModel from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { reminderId1, seedTestReminders } from '../../_util/seedTestReminders';
 import generateToken from '../../_util/generateToken';
-import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
+import { getModelsArray, omitProperties, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -17,27 +17,9 @@ describe('/api/accounts/:account/reminders', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
-    await wipeTestUsers();
-    await seedTestUsers();
-    await Account.create({
-      id: accountId2,
-      enterpriseId,
-      name: 'Test Account 2',
-      createdAt: '2017-07-20T00:14:30.932Z',
-    });
     await wipeModel(Reminder);
-    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
-  });
-  /*
-  beforeAll(async () => {
-    console.log('wiping all models');
     await wipeTestUsers();
-    console.log('wiped all models');
-
-    console.log('seeding test users');
     await seedTestUsers();
-    console.log('seeded test users');
-    // Seed an extra account for fetching multiple and testing switching
     await Account.create({
       id: accountId2,
       enterpriseId,
@@ -46,10 +28,6 @@ describe('/api/accounts/:account/reminders', () => {
     });
 
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
-  });
-  */
-  afterAll(async () => {
-    // await wipeAllModels();
   });
 
   describe('Reminders', () => {
@@ -58,14 +36,14 @@ describe('/api/accounts/:account/reminders', () => {
     });
 
     describe('GET /:accountId/reminders', () => {
-      test.only('should fetch all reminders for the account', () => {
+      test('should fetch all reminders for the account', () => {
         return request(app)
           .get(`${rootUrl}/${accountId}/reminders`)
           .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .then(({ body }) => {
             body = omitPropertiesFromBody(body);
-            console.log(JSON.stringify(body));
+            body = omitProperties(body, ['result']);
             const reminders = getModelsArray('reminders', body);
             expect(reminders.length).toBe(2);
             expect(body).toMatchSnapshot();
@@ -90,7 +68,7 @@ describe('/api/accounts/:account/reminders', () => {
             primaryType: 'sms',
             createdAt: '2017-07-19T00:14:30.932Z',
           })
-          .expect(200)
+          .expect(201)
           .then(({ body }) => {
             body = omitPropertiesFromBody(body);
             const reminders = getModelsArray('reminders', body);
@@ -113,7 +91,7 @@ describe('/api/accounts/:account/reminders', () => {
           .put(`${rootUrl}/${accountId}/reminders/${reminderId1}`)
           .set('Authorization', `Bearer ${token}`)
           .send({
-            id: newReminderId,
+            id: reminderId1,
             primaryType: 'phone',
             createdAt: '2017-07-19T00:14:30.932Z',
           })
@@ -138,7 +116,6 @@ describe('/api/accounts/:account/reminders', () => {
 
     describe('DELETE /:accountId/reminders/:reminderId', () => {
       afterEach(async () => {
-        // have to restore recalls cause these routes could delete
         await seedTestReminders();
       });
 
