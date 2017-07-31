@@ -4,7 +4,7 @@ import { sequelizeAuthMiddleware } from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
 import chairsRouter from './chairs';
 import familiesRouter from './families';
-import segmentsRouter from './segment';
+import segmentsRouter from './segments';
 
 const apiRouter = Router();
 

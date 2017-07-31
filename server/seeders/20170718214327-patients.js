@@ -52,6 +52,41 @@ module.exports = {
     }
 
     await queryInterface.bulkInsert('Patients', patients);
+
+    const practitioners = [];
+
+    for (let i = 0; i < 10; i += 1) {
+      practitioners.push({
+        id: uuid(),
+        accountId,
+        type: 'Hygienist',
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+
+    await queryInterface.bulkInsert('Practitioners', practitioners);
+
+    const appointments = [];
+    for (let i = 0; i < patients.length; i += 2) {
+      const patient = patients[i];
+      const appointment = {
+        id: uuid(),
+        accountId,
+        practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+        patientId: patient.id,
+        startDate: new Date(),
+        endDate: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      appointments.push(appointment);
+    }
+
+    await queryInterface.bulkInsert('Appointments', appointments);
   },
 
   down(queryInterface, Sequelize) { // eslint-disable-line

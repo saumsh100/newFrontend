@@ -1,3 +1,7 @@
+const TYPE = {
+  DENTIST: 'Dentist',
+  HYGIENIST: 'Hygienist',
+};
 
 export default function (sequelize, DataTypes) {
   const Practitioner = sequelize.define('Practitioner', {
@@ -17,7 +21,9 @@ export default function (sequelize, DataTypes) {
     },
 
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM,
+      values: Object.keys(TYPE).map(key => TYPE[key]),
+      defaultValue: TYPE.HYGIENIST,
     },
 
     isActive: {
@@ -86,5 +92,6 @@ export default function (sequelize, DataTypes) {
         .catch(err => reject(err));
   };*/
 
+  Practitioner.TYPE = TYPE;
   return Practitioner;
 }
