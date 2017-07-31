@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/sentReminders GET / retrieve sent reminder 1`] = `
+Object {
+  "entities": Object {
+    "appointments": Object {
+      "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-21T00:16:30.932Z",
+        "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "isCancelled": false,
+        "isDeleted": false,
+        "isPatientConfirmed": false,
+        "isReminderSent": true,
+        "isSyncedWithPMS": false,
+        "mark": false,
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "startDate": "2017-07-21T00:14:30.932Z",
+      },
+    },
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointmentPreference": "both",
+        "email": "testpatient@test.com",
+        "firstName": "Ronald",
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "lastName": "Mcdonald",
+        "mobilePhoneNumber": "+17789999999",
+        "pmsId": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+      },
+    },
+    "reminders": Object {
+      "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "id": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "primaryType": "sms",
+      },
+    },
+    "sentReminders": Object {
+      "e757afb0-14ef-4763-b162-c573169131c1": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointment": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "appointmentId": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "id": "e757afb0-14ef-4763-b162-c573169131c1",
+        "isConfirmed": false,
+        "isSent": true,
+        "lengthSeconds": 540,
+        "patient": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "primaryType": "email",
+        "reminder": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "reminderId": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+      },
+    },
+  },
+  "result": Array [
+    "e757afb0-14ef-4763-b162-c573169131c1",
+  ],
+}
+`;
