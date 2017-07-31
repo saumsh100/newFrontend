@@ -3,81 +3,124 @@ import { Router } from 'express';
 import { pick } from 'lodash';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Enterprise, Account, User, Service, WeeklySchedule, Reminder, Recall } from '../../../models';
-import loaders from '../../util/loaders';
-import { UserAuth } from '../../../lib/auth';
+import StatusError from '../../../util/StatusError';
+import {
+  Account,
+  Enterprise,
+  Reminder,
+  Recall,
+  Service,
+  User,
+  WeeklySchedule,
+} from '../../../_models';
+import { sequelizeLoader } from '../../util/loaders';
+import { UserAuth } from '../../../lib/_auth';
 const { timeWithZone } = require('../../../util/time');
 
-const router = Router();
+const enterprisesRouter = Router();
 
-router.param('enterpriseId', loaders('enterprise', 'Enterprise'));
-router.param('accountId', loaders('account', 'Account'));
+enterprisesRouter.param('enterpriseId', sequelizeLoader('enterprise', 'Enterprise'));
+enterprisesRouter.param('accountId', sequelizeLoader('account', 'Account'));
 
-router.get('/', checkPermissions('enterprises:read'), (req, res, next) => {
-  Enterprise.run()
+/**
+ * GET /
+ */
+enterprisesRouter.get('/', checkPermissions('enterprises:read'), (req, res, next) => {
+  return Enterprise.all({ raw: true })
     .then(enterprises => res.send(normalize('enterprises', enterprises)))
     .catch(next);
 });
 
-router.post('/', checkPermissions('enterprises:create'), (req, res, next) => {
-  Enterprise.save(pick(req.body, ['name', 'plan']))
-    .then(enterprise => res.send(201, normalize('enterprise', enterprise)))
+/**
+ * GET /:enterpriseId
+ */
+enterprisesRouter.get('/:enterpriseId', checkPermissions('enterprises:read'), (req, res, next) => {
+  try {
+    res.send(normalize('enterprise', req.enterprise.dataValues));
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /:enterpriseId/accounts
+ */
+enterprisesRouter.get('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:read']), async (req, res, next) => {
+  try {
+    const accounts = await Account.findAll({
+      raw: true,
+      where: {
+        enterpriseId: req.enterprise.id,
+      },
+    });
+
+    res.send(normalize('accounts', accounts));
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /
+ */
+enterprisesRouter.post('/', checkPermissions('enterprises:create'), (req, res, next) => {
+  return Enterprise.create(pick(req.body, ['name', 'plan']))
+    .then(enterprise => res.send(201, normalize('enterprise', enterprise.dataValues)))
     .catch(next);
 });
 
-router.post('/switch', checkPermissions('enterprises:read'), (req, res, next) => {
-  const { userId, body: { enterpriseId }, sessionData, sessionId } = req;
-  Account.filter({ enterpriseId }).run()
-    .then(([{ id: accountId }]) => {
-      return User.get(userId).then((user) => {
-        return user.merge({
-          enterpriseId,
-          activeAccountId: accountId,
-        }).save();
-      }).then(() => {
-        return UserAuth.updateSession(sessionId, sessionData, { accountId, enterpriseId })
-          .then(({ id: newSessionId }) => UserAuth.signToken({
-            userId: sessionData.userId,
-            sessionId: newSessionId,
-            activeAccountId: accountId,
-          }));
-      });
-    })
-    .then(token => res.json({ token }))
-    .catch(next);
+/**
+ * POST /switch
+ */
+enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (req, res, next) => {
+  try {
+    const { userId, body: { enterpriseId }, sessionData, sessionId } = req;
+    const accounts = await Account.findAll({
+      where: { enterpriseId },
+    });
+
+    if (!accounts.length) {
+      throw StatusError(400, 'Cannot switch to an enterprise that does not have any accounts');
+    }
+
+    // Make first account the activeAccount
+    const [{ id: accountId }] = accounts;
+
+    // Update user data with new session info
+    const user = await User.findById(userId);
+    await user.update({ activeAccountId: accountId, enterpriseId });
+
+    // Create a new session
+    const newSession = await UserAuth.updateSession(sessionId, sessionData, {
+      accountId,
+      enterpriseId,
+    });
+
+    // Sign token with new session
+    const token = await UserAuth.signToken({
+      userId: sessionData.userId,
+      newSession: newSession.id,
+      activeAccountId: accountId,
+    });
+
+    res.json({ token });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get('/:enterpriseId', checkPermissions('enterprises:read'), (req, res) => {
-  res.send(normalize('enterprise', req.enterprise));
-});
-
-router.put('/:enterpriseId', checkPermissions('enterprises:update'), (req, res, next) => {
-  req.enterprise.merge(pick(req.body, ['name', 'plan'])).save()
-    .then(enterprise => res.send(normalize('enterprise', enterprise)))
-    .catch(next);
-});
-
-router.delete('/:enterpriseId', checkPermissions('enterprises:delete'), (req, res, next) => {
-  req.enterprise.delete()
-    .then(() => res.sendStatus(204))
-    .catch(next);
-});
-
-router.get('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:read']), (req, res, next) => {
-  Account.filter({ enterpriseId: req.enterprise.id }).run()
-    .then(accounts => res.send(normalize('accounts', accounts)))
-    .catch(next);
-});
-
-
-router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), (req, res, next) => {
+/**
+ * POST /:enterpriseId/accounts
+ */
+enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), (req, res, next) => {
   const accountData = {
     ...pick(req.body, 'name', 'timezone', 'id'),
     enterpriseId: req.enterprise.id,
   };
+
   const timezone = req.body.timezone;
 
-  Account.save(accountData)
+  Account.create(accountData)
     .then((account) => {
       const defaultReminders = [
         {
@@ -234,36 +277,48 @@ router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'ac
       };
 
       Promise.all([
-        Reminder.save(defaultReminders),
-        WeeklySchedule.save(defaultSchdedule),
-        Service.save(defaultServices),
-        Recall.save(defaultRecalls),
+        Reminder.bulkCreate(defaultReminders),
+        WeeklySchedule.create(defaultSchdedule),
+        Service.bulkCreate(defaultServices),
+        Recall.bulkCreate(defaultRecalls),
       ]).then((values) => {
-        account.merge({ weeklyScheduleId: values[1].id }).save()
-        .then(() => res.send(201, normalize('account', account)));
+        account.update({ weeklyScheduleId: values[1].id })
+          .then((acct) => res.status(201).send(normalize('account', acct.dataValues)));
       });
     })
     .catch(next);
 });
 
-router.put(
+enterprisesRouter.put('/:enterpriseId', checkPermissions('enterprises:update'), (req, res, next) => {
+  req.enterprise.update(pick(req.body, ['name', 'plan']))
+    .then(enterprise => res.send(normalize('enterprise', enterprise.dataValues)))
+    .catch(next);
+});
+
+enterprisesRouter.put(
   '/:enterpriseId/accounts/:accountId',
   checkPermissions(['enterprises:read', 'accounts:update']),
   (req, res, next) => {
-    req.account.merge(pick(req.body, ['name'])).save()
-      .then(account => res.send(normalize('account', account)))
+    req.account.update(pick(req.body, ['name']))
+      .then(account => res.send(normalize('account', account.dataValues)))
       .catch(next);
   }
 );
 
-router.delete(
+enterprisesRouter.delete('/:enterpriseId', checkPermissions('enterprises:delete'), (req, res, next) => {
+  req.enterprise.destroy()
+    .then(() => res.sendStatus(204))
+    .catch(next);
+});
+
+enterprisesRouter.delete(
   '/:enterpriseId/accounts/:accountId',
   checkPermissions(['enterprises:read', 'accounts:delete']),
   (req, res, next) => {
-    req.account.delete()
+    req.account.destroy()
       .then(() => res.sendStatus(204))
       .catch(next);
   }
 );
 
-export default router;
+export default enterprisesRouter;
