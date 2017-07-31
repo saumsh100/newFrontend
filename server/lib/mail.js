@@ -5,8 +5,6 @@ module.exports = {
   sendConfirmationReminder: (config) => {
     config.subject = 'Appointment Reminder';
     config.templateName = 'Appointment Reminder';
-    // disabling emails for now
-    return Promise.resolve(1);
     return sendTemplate(config);
   },
 
@@ -25,22 +23,16 @@ module.exports = {
   sendAppointmentRequested: (config) => {
     config.subject = 'Congratulations! Your appointment was requested.';
     config.templateName = 'Appointment Requested';
-    // disabling emails for now
-    return Promise.resolve(1);
     return sendTemplate(config);
   },
   sendAppointmentRequestRejected: (config) => {
     config.subject = 'Sorry, Your appointment was Rejected.';
     config.templateName = 'Appointment Rejected';
-    // disabling emails for now
-    return Promise.resolve(1);
     return sendTemplate(config);
   },
   sendAppointmentRequestConfirmed: (config) => {
     config.subject = 'Congratulations! Your appointment was Confirmed.';
     config.templateName = 'Appointment Confirmed';
-    // disabling emails for now
-    return Promise.resolve(1);
     return sendTemplate(config);
   },
 };

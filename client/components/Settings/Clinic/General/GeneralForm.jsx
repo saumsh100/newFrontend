@@ -10,6 +10,13 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength25 = maxLength(50);
 
+const emailValidateNull = (str) => {
+  if (str !== null && !str.length) {
+    return undefined;
+  }
+  return emailValidate(str);
+};
+
 const maxUnitSize = value => value && value > 60 ? 'Must be less than or equal to 180' : undefined;
 
 export default function GeneralForm({ onSubmit, activeAccount, users }) {
@@ -31,7 +38,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
   let role = null;
   users.map((users) => {
     if (decodedToken.userId === users.id) {
-      role = users.role
+      role = users.role;
     }
     return null;
   });
@@ -57,10 +64,11 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     },
   ];
 
+  const emailValid = role === 'SUPERADMIN' ? emailValidateNull : emailValidate;
+
   const display = (role === 'SUPERADMIN' ? (<div>
     <div className={styles.paddingField}>
       <Field
-        required
         name="twilioPhoneNumber"
         label="Twilio Phone Number"
         type="tel"
@@ -69,7 +77,6 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     </div>
     <div className={styles.paddingField}>
       <Field
-        required
         name="destinationPhoneNumber"
         label="Destination Phone Number"
         type="tel"
@@ -78,7 +85,6 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     </div>
     <div className={styles.paddingField}>
       <Field
-        required
         name="vendastaId"
         label="Vendasta Id"
         data-test-id="vendastaId"
@@ -86,7 +92,6 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
     </div>
     <div className={styles.paddingField}>
       <Field
-        required
         name="unit"
         label="Schedule Unit"
         type="number"
@@ -133,7 +138,7 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
         <Field
           name="contactEmail"
           label="Contact Email"
-          validate={[emailValidate]}
+          validate={[emailValid]}
           data-test-id="contactEmail"
         />
       </div>

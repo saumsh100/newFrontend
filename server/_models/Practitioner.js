@@ -54,7 +54,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Practitioner.associate = (({ Account, Service, Request }) => {
+  Practitioner.associate = (({ Account, Service, Request, Appointment, WeeklySchedule, PractitionerRecurringTimeOff }) => {
     Practitioner.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -63,6 +63,21 @@ export default function (sequelize, DataTypes) {
     Practitioner.hasMany(Request, {
       foreignKey: 'practitionerId',
       as: 'requests',
+    });
+
+    Practitioner.belongsTo(WeeklySchedule, {
+      foreignKey: 'weeklyScheduleId',
+      as: 'weeklySchedule',
+    });
+
+    Practitioner.hasMany(Appointment, {
+      foreignKey: 'practitionerId',
+      as: 'appointments',
+    });
+
+    Practitioner.hasMany(PractitionerRecurringTimeOff, {
+      foreignKey: 'practitionerId',
+      as: 'recurringTimeOffs',
     });
 
     Practitioner.belongsToMany(Service, {

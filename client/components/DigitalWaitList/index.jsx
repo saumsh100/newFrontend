@@ -79,7 +79,9 @@ class DigitalWaitList extends Component {
 
     if (!selectedWaitSpot) {
       newValues = Object.assign(
-        { patientId: values.patientData.id },
+        { patientId: values.patientData.id,
+          endDate: moment().add(1, 'days').toISOString(),
+        },
         omit(values, ['patientData'])
       );
     }

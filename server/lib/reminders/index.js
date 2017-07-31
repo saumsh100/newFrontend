@@ -22,6 +22,20 @@ function sendSocket(io, chatId) {
     });
 }
 
+function sendSocketReminder(io, sentReminderId) {
+  const joinObject = {
+    appointment: true,
+    reminder: true,
+    patient: true,
+  };
+
+  return SentReminder.get(sentReminderId).getJoin(joinObject).run()
+    .then((sentReminder) => {
+      io.of('/dash')
+        .in(sentReminder.accountId)
+        .emit('create:SentReminder', normalize('sentReminder', sentReminder));
+    });
+}
 /**
  *
  * @param account
@@ -58,6 +72,7 @@ export async function sendRemindersForAccount(account, date) {
       console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentReminder.merge({ isSent: true }).save();
       await appointment.merge({ isReminderSent: true }).save();
+      await sendSocketReminder(global.io, sentReminder.id);
 
       if (primaryType === 'sms') {
         const textMessageData = sanitizeTwilioSmsData(data);

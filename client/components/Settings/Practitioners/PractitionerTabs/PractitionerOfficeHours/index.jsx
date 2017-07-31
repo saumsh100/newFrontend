@@ -1,8 +1,21 @@
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { change } from 'redux-form';
+import { batchActions } from 'redux-batched-actions';
 import OfficeHoursForm from '../../../Schedule/OfficeHours/OfficeHoursForm';
 import BreaksForm from '../../../Schedule/OfficeHours/BreaksForm';
 import { Toggle, Header, Row, Col, DialogBox, Form, Field, RemoteSubmitButton, Button } from '../../../../library';
 import styles from '../../styles.scss';
+
+const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+function checkValues(obj) {
+  const allTrue = Object.keys(obj).every((key) => {
+    return obj[key];
+  });
+  return allTrue;
+}
 
 class PractitionerOfficeHours extends Component{
 
@@ -11,16 +24,21 @@ class PractitionerOfficeHours extends Component{
     this.state = {
       value: '',
       active: false,
+      activeChair: false,
+      modalChairDay: 'monday',
     };
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleFormUpdate = this.handleFormUpdate.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.openModal = this.openModal.bind(this);
+    this.openModalChair = this.openModalChair.bind(this);
     this.createPattern = this.createPattern.bind(this);
     this.changeStartDate = this.changeStartDate.bind(this);
     this.sendEdit = this.sendEdit.bind(this);
     this.delete = this.delete.bind(this);
+    this.chairSubmit = this.chairSubmit.bind(this);
+    this.setAllChairs = this.setAllChairs.bind(this);
   }
 
   componentWillMount() {
@@ -33,12 +51,59 @@ class PractitionerOfficeHours extends Component{
   reinitializeState() {
     this.setState({
       active: false,
+      activeChair: false,
     });
   }
 
   openModal() {
     this.setState({
       active: true,
+    });
+  }
+
+  openModalChair(modalChairDay) {
+    this.setState({
+      modalChairDay,
+      activeChair: true,
+    });
+  }
+
+  setAllChairs(e) {
+    e.stopPropagation();
+
+    const { chairs, allChairs } = this.props;
+
+
+    const actions = chairs.toArray().map((chair) => {
+        return change('chairs', chair.id, !allChairs);
+    });
+
+    this.props.batchActions(actions);
+  }
+
+  chairSubmit(values, day) {
+    const { weeklySchedule } = this.props;
+    const newWeeklySchedule = weeklySchedule.toJS();
+
+    newWeeklySchedule[day].chairIds = Object.keys(values).filter(key => values[key] && key !== 'day');
+
+    const sendWeeklySchedule = weeklySchedule.merge(newWeeklySchedule);
+
+    const alert = {
+      success: {
+        body: `Practitioner Chairs Updated for ${day}`,
+      },
+      error: {
+        body: 'Practitioner Chairs Update Failed',
+      },
+    };
+
+    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: sendWeeklySchedule, alert })
+    .then(() => {
+      this.setState({
+        active: false,
+        activeChair: false,
+      });
     });
   }
 
@@ -211,9 +276,11 @@ class PractitionerOfficeHours extends Component{
   }
 
   render() {
-    const { weeklySchedule, practitioner } = this.props;
+    const { weeklySchedule, practitioner, chairs, allChairs } = this.props;
 
     let schedules = null;
+    const initialValuesChairs = {};
+    let dialogShow = null;
     if (weeklySchedule) {
       schedules = weeklySchedule.weeklySchedules.map((schedule, i) => {
         return (<div className={styles.toggleContainer_hours}>
@@ -238,8 +305,57 @@ class PractitionerOfficeHours extends Component{
           />
         </div>);
       });
-    }
 
+      const chairFields = chairs.toArray().map((chair) => {
+        initialValuesChairs[chair.id] = weeklySchedule[this.state.modalChairDay].chairIds.includes(chair.id);
+        return (<div>
+          {chair.name}
+          <Field
+            component="Toggle"
+            name={chair.id}
+          />
+        </div>);
+      });
+
+      const actionsChair = [
+        { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+        { label: 'Save', onClick: values => this.chairSubmit(values, this.state.modalChairDay), component: RemoteSubmitButton, props: { form: 'chairs' } },
+      ];
+
+
+      initialValuesChairs.day = this.state.modalChairDay;
+
+      dialogShow = (<DialogBox
+        actions={actionsChair}
+        title={this.state.modalChairDay.toUpperCase()}
+        type="small"
+        active={this.state.activeChair}
+        onEscKeyDown={this.reinitializeState}
+        onOverlayClick={this.reinitializeState}
+      >
+        {weeklySchedule[this.state.modalChairDay].pmsScheduleId ?
+          <div>Note: This day field is currently being synced via PMS.
+          Please use PMS to change this field for this day</div> : null}
+
+        All Chairs
+        <Toggle
+          name="allChairs"
+          onChange={this.setAllChairs}
+          checked={allChairs}
+        />
+        <Form
+          // className={formStyle}
+          form={'chairs'}
+          onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
+          initialValues={initialValuesChairs}
+          enableReinitialize
+          destroyOnUnmount
+          ignoreSaveButton
+        >
+          {chairFields}
+        </Form>
+      </DialogBox>);
+    }
 
     let showComponent = null;
 
@@ -247,7 +363,7 @@ class PractitionerOfficeHours extends Component{
       showComponent = (
         <div className={styles.toggleContainer_hours}>
           <div className={styles.flexHeader}>
-            <Header title="Weekly Schedule"/>
+            <Header title="Weekly Schedule" />
             <div>
               <Button className={styles.button} onClick={this.createPattern}>Create New Pattern</Button>
               <Button className={styles.button} onClick={this.openModal}>Change Start Date</Button>
@@ -258,6 +374,8 @@ class PractitionerOfficeHours extends Component{
             weeklySchedule={weeklySchedule}
             onSubmit={this.handleFormUpdate}
             formName={`${weeklySchedule.get('id')}officeHours`}
+            modal
+            openModal={day => this.openModalChair(day)}
           />
           <Header title="Breaks" className={styles.subHeader} />
           <BreaksForm
@@ -293,7 +411,6 @@ class PractitionerOfficeHours extends Component{
           active={this.state.active}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
-          data-test-id="inviteUserDialog"
         >
           <Form
             // className={formStyle}
@@ -310,6 +427,7 @@ class PractitionerOfficeHours extends Component{
             />
           </Form>
         </DialogBox>
+        {dialogShow}
         <div className={styles.toggleContainer}>
           <div> Set Custom </div>
           <div className={styles.toggleContainer__toggle}>
@@ -331,7 +449,30 @@ PractitionerOfficeHours.propTypes = {
   activeAccount: PropTypes.object,
   weeklySchedule: PropTypes.object,
   practitioner: PropTypes.object,
-  updateEntityRequest: PropTypes.func,
+  allChairs: PropTypes.bool,
+  updateEntityRequest: PropTypes.func.required,
+  batchActions: PropTypes.func.required,
+  chairs: PropTypes.object,
 };
 
-export default PractitionerOfficeHours;
+function mapStateToProps({ form }) {
+  if (!form.chairs) {
+    return {
+      allChairs: null,
+    };
+  }
+
+  return {
+    allChairs: checkValues(form.chairs.values),
+  };
+}
+
+function mapActionsToProps(dispatch) {
+  return bindActionCreators({
+    batchActions,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapActionsToProps);
+
+export default enhance(PractitionerOfficeHours);

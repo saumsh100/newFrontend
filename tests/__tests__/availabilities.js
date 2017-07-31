@@ -131,7 +131,7 @@ describe('Availabilities Library', () => {
             expect(Array.isArray(appointments)).toBe(true);
             expect(appointments.length).toBe(2);
             expect(Array.isArray(timeOffs)).toBe(true);
-            expect(timeOffs.length).toBe(0);
+            expect(timeOffs.length).toBe(7);
             done();
           });
       });

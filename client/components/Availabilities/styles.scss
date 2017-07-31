@@ -456,7 +456,7 @@
     max-height: 600px; // really only used for development to ensure it doesnt fill full body
     height: 100%;
     margin: 0 auto;
-    overflow: hidden;
+    overflow: hidden !important;
     flex-direction: column;
     background: #fafafa;
     @media screen and (max-width: 800px) {
