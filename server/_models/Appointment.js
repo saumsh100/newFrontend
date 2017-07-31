@@ -88,7 +88,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Appointment.associate = ({ Account, Chair, Patient, Practitioner, Service }) => {
+  Appointment.associate = ({ Account, Chair, Patient, Practitioner, SentReminder, Service }) => {
     Appointment.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -107,6 +107,11 @@ export default function (sequelize, DataTypes) {
     Appointment.belongsTo(Practitioner, {
       foreignKey: 'practitionerId',
       as: 'practitioner',
+    });
+
+    Appointment.hasMany(SentReminder, {
+      foreignKey: 'appointmentId',
+      as: 'sentReminders',
     });
 
     Appointment.belongsTo(Service, {
