@@ -122,7 +122,6 @@ export async function computeRemindersAndSend({ date }) {
     order: [[{ model: Reminder, as: 'reminders' }, 'lengthSeconds']],
   });
 
-  console.log(accounts);
   for (const account of accounts) {
     await sendRemindersForAccount(account, date);
   }
