@@ -88,6 +88,13 @@
 }
 
 .title {
+  &__dayOfWeek {
+    font-size: 22px;
+    font-weight: $large-weight;
+    font-family: $medium-font;
+    margin-right: 10px;
+  },
+
     &__month {
       font-size: 18px;
       font-weight: $large-weight;
