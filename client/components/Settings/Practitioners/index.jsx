@@ -16,8 +16,9 @@ const sortPractitionersAlphabetical = (a, b) => {
 class Practitioners extends Component {
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services', 'timeOffs'] });
+    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services', 'timeOffs', 'recurringTimeOffs'] });
     this.props.fetchEntities({ key: 'services' });
+    this.props.fetchEntities({ key: 'chairs' });
   }
 
   render() {
@@ -25,7 +26,8 @@ class Practitioners extends Component {
       practitioners,
       weeklySchedules,
       timeOffs,
-      services
+      services,
+      recurringTimeOffs,
     } = this.props;
 
     let showComponent = null;
@@ -33,6 +35,7 @@ class Practitioners extends Component {
       const filteredPractitioners = practitioners.sort(sortPractitionersAlphabetical);
       showComponent = (
         <PractitionerList
+          recurringTimeOffs={recurringTimeOffs}
           practitioners={filteredPractitioners}
           weeklySchedules={weeklySchedules}
           timeOffs={timeOffs}
@@ -54,6 +57,7 @@ Practitioners.propTypes = {
   weeklySchedules: PropTypes.object,
   fetchEntities: PropTypes.func,
   timeOffs: PropTypes.object,
+  recurringTimeOffs: PropTypes.object,
   services: PropTypes.object,
 };
 
@@ -71,12 +75,21 @@ function mapStateToProps({ entities }) {
     return weeklyScheduleIds.indexOf(schedule.get('id')) > -1;
   });
 
-  const timeOffs = entities.getIn(['timeOffs', 'models']);
+  const allTimeOffs = entities.getIn(['practitionerRecurringTimeOffs', 'models']);
+
+  const timeOffs = allTimeOffs.filter((timeOff) => {
+    return !timeOff.toJS().interval;
+  });
+
+  const recurringTimeOffs = allTimeOffs.filter((timeOff) => {
+    return timeOff.toJS().interval;
+  });
 
   return {
     practitioners,
     weeklySchedules,
     timeOffs,
+    recurringTimeOffs,
     services: entities.getIn(['services', 'models'])
   };
 }

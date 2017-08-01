@@ -50,6 +50,7 @@ describe('/api/waitSpots', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

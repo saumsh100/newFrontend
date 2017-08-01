@@ -7,7 +7,7 @@ import normalize from '../normalize';
 const permissionsRouter = new Router();
 
 
-permissionsRouter.param('accountId', sequelizeLoader('account', 'Account', { enterprise: true }));
+permissionsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 permissionsRouter.param('inviteId', sequelizeLoader('invite', 'Invite'));
 permissionsRouter.param('permissionId', sequelizeLoader('permission', 'Permission'));
 permissionsRouter.param('reminderId', sequelizeLoader('reminder', 'Reminder'));

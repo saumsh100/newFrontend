@@ -1,0 +1,264 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/accounts DELETE /:accountId/logo should return account with logo as null 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "bookingWidgetPrimaryColor": null,
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "city": null,
+        "clinicName": null,
+        "contactEmail": null,
+        "country": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "logo": null,
+        "name": "Test Account",
+        "phoneNumber": null,
+        "state": null,
+        "street": null,
+        "timeInterval": null,
+        "twilioPhoneNumber": null,
+        "unit": 15,
+        "vendastaId": null,
+        "website": null,
+        "weeklyScheduleId": null,
+        "zipCode": null,
+      },
+    },
+  },
+  "result": "62954241-3652-4792-bae5-5bfed53d37b7",
+}
+`;
+
+exports[`/api/accounts GET / with manager role so only return one 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "bookingWidgetPrimaryColor": null,
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "city": null,
+        "clinicName": null,
+        "contactEmail": null,
+        "country": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "logo": null,
+        "name": "Test Account",
+        "phoneNumber": null,
+        "state": null,
+        "street": null,
+        "timeInterval": null,
+        "twilioPhoneNumber": null,
+        "unit": 15,
+        "vendastaId": null,
+        "website": null,
+        "weeklyScheduleId": null,
+        "zipCode": null,
+      },
+    },
+  },
+  "result": Array [
+    "62954241-3652-4792-bae5-5bfed53d37b7",
+  ],
+}
+`;
+
+exports[`/api/accounts GET / with owner role so return all 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "bookingWidgetPrimaryColor": null,
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "city": null,
+        "clinicName": null,
+        "contactEmail": null,
+        "country": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "logo": null,
+        "name": "Test Account",
+        "phoneNumber": null,
+        "state": null,
+        "street": null,
+        "timeInterval": null,
+        "twilioPhoneNumber": null,
+        "unit": 15,
+        "vendastaId": null,
+        "website": null,
+        "weeklyScheduleId": null,
+        "zipCode": null,
+      },
+    },
+  },
+  "result": Array [
+    "62954241-3652-4792-bae5-5bfed53d37b7",
+  ],
+}
+`;
+
+exports[`/api/accounts GET /:accountId get the account data 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "bookingWidgetPrimaryColor": null,
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "city": null,
+        "clinicName": null,
+        "contactEmail": null,
+        "country": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "logo": null,
+        "name": "Test Account",
+        "phoneNumber": null,
+        "state": null,
+        "street": null,
+        "timeInterval": null,
+        "twilioPhoneNumber": null,
+        "unit": 15,
+        "vendastaId": null,
+        "website": null,
+        "weeklyScheduleId": null,
+        "zipCode": null,
+      },
+    },
+  },
+  "result": "62954241-3652-4792-bae5-5bfed53d37b7",
+}
+`;
+
+exports[`/api/accounts GET /:accountId/users should fetch users for the account 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "bookingWidgetPrimaryColor": null,
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "city": null,
+        "clinicName": null,
+        "contactEmail": null,
+        "country": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "logo": null,
+        "name": "Test Account",
+        "phoneNumber": null,
+        "state": null,
+        "street": null,
+        "timeInterval": null,
+        "twilioPhoneNumber": null,
+        "unit": 15,
+        "vendastaId": null,
+        "website": null,
+        "weeklyScheduleId": null,
+        "zipCode": null,
+      },
+    },
+    "permissions": Object {
+      "74d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "allowedAccounts": null,
+        "canAccessAllAccounts": true,
+        "id": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "permissions": null,
+        "role": "OWNER",
+      },
+      "84d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "allowedAccounts": null,
+        "canAccessAllAccounts": true,
+        "id": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "permissions": null,
+        "role": "MANAGER",
+      },
+    },
+    "users": Object {
+      "5668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
+        "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "avatarUrl": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "firstName": "Harvey",
+        "id": "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
+        "lastName": "Dentest",
+        "permission": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "permissionId": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "username": "owner@test.com",
+      },
+      "6668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
+        "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "avatarUrl": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "firstName": "Harvey",
+        "id": "6668f250-e8c9-46e3-bfff-0249f1eec6b8",
+        "lastName": "Dentest",
+        "permission": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "permissionId": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "username": "manager@test.com",
+      },
+    },
+  },
+  "result": Array [
+    "6668f250-e8c9-46e3-bfff-0249f1eec6b8",
+    "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
+  ],
+}
+`;
+
+exports[`/api/accounts POST /:accountId/newUser should create and return the user 1`] = `
+Object {
+  "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "avatarUrl": null,
+  "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+  "firstName": "New",
+  "id": "72954241-3652-4792-bae5-5bfed53d37b7",
+  "lastName": "Guy",
+  "username": "newguy@test.com",
+}
+`;
+
+exports[`/api/accounts PUT /:accoutId should update the account 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "bookingWidgetPrimaryColor": null,
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "city": null,
+        "clinicName": null,
+        "contactEmail": null,
+        "country": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "logo": null,
+        "name": "Test That Thang",
+        "phoneNumber": null,
+        "state": null,
+        "street": null,
+        "timeInterval": null,
+        "twilioPhoneNumber": null,
+        "unit": 15,
+        "vendastaId": null,
+        "website": null,
+        "weeklyScheduleId": null,
+        "zipCode": null,
+      },
+    },
+  },
+  "result": "62954241-3652-4792-bae5-5bfed53d37b7",
+}
+`;

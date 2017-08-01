@@ -17,6 +17,7 @@ function Header(props) {
     isConfirming,
     isSuccessfulBooking,
     isTimerExpired,
+    patientUser,
   } = props;
 
   let goBackButton = <div className={styles.spacer} />;
@@ -49,11 +50,16 @@ function Header(props) {
     }
   }
 
+  const patientUserDisplay = patientUser ? `Hi, ${patientUser.firstName}` : null;
+
   return (
     <div className={styles.appointment__header}>
       {goBackButton}
       <div className={styles.appointment__header_title}>
         {headerText}
+      </div>
+      <div className={styles.appointment__header_name}>
+        {patientUserDisplay}
       </div>
       <IconButton
         icon="times"
@@ -78,9 +84,10 @@ Header.propTypes = {
   isSuccessfulBooking: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ availabilities }) {
+function mapStateToProps({ availabilities, auth }) {
   return {
     registrationStep: availabilities.get('registrationStep'),
+    patientUser: auth.get('patientUser'),
     isConfirming: availabilities.get('isConfirming'),
     isTimerExpired: availabilities.get('isTimerExpired'),
     isSuccessfulBooking: availabilities.get('isSuccessfulBooking'),

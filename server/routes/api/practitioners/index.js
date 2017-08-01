@@ -4,12 +4,14 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const loaders = require('../../util/loaders');
 const Practitioner = require('../../../models/Practitioner');
 const WeeklySchedule = require('../../../models/WeeklySchedule');
+const Chair = require('../../../models/Chair');
 const Account = require('../../../models/Account');
 const Service = require('../../../models/Service');
 const normalize = require('../normalize');
 const _ = require('lodash');
 const uuid = require('uuid');
 const upload = require('../../../lib/upload');
+import moment from 'moment-timezone'
 
 practitionersRouter.param('practitionerId', loaders('practitioner', 'Practitioner'));
 
@@ -93,19 +95,32 @@ practitionersRouter.put('/:practitionerId/customSchedule', checkPermissions('pra
       delete account.weeklySchedule.createdAt;
       delete account.weeklySchedule.id;
 
-      WeeklySchedule.save(account.weeklySchedule)
-        .then((weeklySchedule) => {
-          const practitionerData = req.body;
-          practitionerData.weeklyScheduleId = weeklySchedule.id;
-          Practitioner.get(req.practitioner.id).run()
-            .then((practitioner) => {
-              practitioner.merge(practitionerData).save().then((prac)=>{
-                prac.weeklySchedule = weeklySchedule;
-                res.status(201).send(normalize('practitioner', prac));
-              });
-            })
-            .catch(next);
-        });
+      Chair.filter({ accountId: account.id})
+      .then((chairs) => {
+        const chairIds = chairs.map(chair => chair.id);
+
+        account.weeklySchedule.monday.chairIds = chairIds;
+        account.weeklySchedule.tuesday.chairIds = chairIds;
+        account.weeklySchedule.wednesday.chairIds = chairIds;
+        account.weeklySchedule.thursday.chairIds = chairIds;
+        account.weeklySchedule.friday.chairIds = chairIds;
+        account.weeklySchedule.saturday.chairIds = chairIds;
+        account.weeklySchedule.sunday.chairIds = chairIds;
+
+        WeeklySchedule.save(account.weeklySchedule)
+          .then((weeklySchedule) => {
+            const practitionerData = req.body;
+            practitionerData.weeklyScheduleId = weeklySchedule.id;
+            Practitioner.get(req.practitioner.id).run()
+              .then((practitioner) => {
+                practitioner.merge(practitionerData).save().then((prac)=>{
+                  prac.weeklySchedule = weeklySchedule;
+                  res.status(201).send(normalize('practitioner', prac));
+                });
+              })
+              .catch(next);
+          });
+      });
     })
     .catch(next);
 });

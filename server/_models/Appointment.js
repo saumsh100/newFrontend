@@ -38,6 +38,11 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    isBookable: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -88,7 +93,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Appointment.associate = ({ Account, Chair, Patient, Practitioner, Service }) => {
+  Appointment.associate = ({ Account, Chair, Patient, Practitioner, SentReminder, Service }) => {
     Appointment.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -107,6 +112,11 @@ export default function (sequelize, DataTypes) {
     Appointment.belongsTo(Practitioner, {
       foreignKey: 'practitionerId',
       as: 'practitioner',
+    });
+
+    Appointment.hasMany(SentReminder, {
+      foreignKey: 'appointmentId',
+      as: 'sentReminders',
     });
 
     Appointment.belongsTo(Service, {
