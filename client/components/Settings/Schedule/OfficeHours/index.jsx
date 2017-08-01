@@ -119,7 +119,7 @@ class OfficeHours extends Component {
     const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
 
     if (!weeklyScheduleNew.startDate) {
-      alert('Please put in a start date before creating a pattern!');
+      window.alert('Please put in a start date before creating a pattern!');
       return null;
     }
 

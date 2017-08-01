@@ -11,6 +11,7 @@ import permissionsRouter from './permissions';
 import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
 import updaterRouter from './updater';
+import weeklySchedulesRouter from './weeklySchedules';
 
 const apiRouter = Router();
 
@@ -25,6 +26,6 @@ apiRouter.use('/accounts', permissionsRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/updater', updaterRouter);
-
+apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 
 export default apiRouter;
