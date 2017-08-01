@@ -58,7 +58,6 @@ describe('/api/sentReminders', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['homePhoneNumber', 'insurance', 'otherPhoneNumber', 'prefPhoneNumber', 'workPhoneNumber']);
-
           expect(body).toMatchSnapshot();
         });
     });

@@ -1,9 +1,10 @@
+
+import moment from 'moment';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
-import moment from 'moment';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { SentReminder, Appointment, Patient, Reminder } from '../../../_models';
+import { SentReminder } from '../../../_models';
 
 
 const sentRemindersRouter = Router();
@@ -17,6 +18,7 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
   const {
     accountId,
     joinObject,
+    includeArray,
     query,
   } = req;
 
@@ -26,8 +28,8 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
   } = query;
 
   // Todo: setup date variable
-  startDate = startDate || moment().subtract(1, 'years');
-  endDate = endDate || moment();
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
 
   try {
     const sentReminders = await SentReminder.findAll({
@@ -41,13 +43,7 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
         },
         isSent: true,
       },
-      include: [{
-        model: Reminder, as: 'reminder',
-      },{
-        model: Appointment, as: 'appointment',
-      },{
-        model: Patient, as: 'patient',
-      }],
+      include: includeArray,
     });
 
     const filterSentReminders = sentReminders.filter((sentReminder) => {
@@ -57,7 +53,7 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
       }
     });
 
-    res.send(normalize('sentReminders', filterSentReminders))
+    res.send(normalize('sentReminders', filterSentReminders));
   } catch (error) {
     next(error);
   }
