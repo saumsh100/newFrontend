@@ -110,22 +110,6 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), (req, res, next)
 });
 
 /**
-<<<<<<< HEAD
- * Batch updating
- */
-patientsRouter.put('/batch', checkPermissions('patients:update'), checkIsArray('patients'), (req, res, next) => {
-  const { patients } = req.body;
-  const patientUpdates = patients.map(patient => Patient.get(patient.id).run()
-      .then(_patient => _patient.merge(patient).save()));
-
-  return Promise.all(patientUpdates)
-    .then(_patients => res.send(normalize('patients', _patients)))
-    .catch(next);
-});
-
-/**
-=======
->>>>>>> b1a33b1793158c6a48493e7d41f1a61c5deb479a
  * TESTING ONLY
  * Used to search an patient by any property.
  * E.g. api/patients/test?pmsId=1003&note=unit test patient

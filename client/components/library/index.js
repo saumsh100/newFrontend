@@ -33,6 +33,7 @@ import Link from './Link';
 import LineChart from './LineChart';
 import Modal from './Modal';
 import SelectPill from './SelectPill';
+import InfoSection from './InfoSection';
 import Pill from './Pill';
 import PieChart from './PieChart';
 import RouterButton from './RouterButton';
@@ -105,6 +106,7 @@ export {
   Modal,
   Pill,
   SelectPill,
+  InfoSection,
   PieChart,
   RemoteSubmitButton,
   RouterButton,

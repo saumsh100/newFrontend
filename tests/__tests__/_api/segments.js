@@ -2,18 +2,12 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import { Segment } from '../../../server/_models';
-import { seedTestUsersSequelize } from '../../util/seedTestUsers';
 import { generateTokenSequelize } from '../../util/generateToken';
-import { wipeModelSequelize } from '../../util/wipeModel';
 import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/segments';
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 
-async function seedData() {
-  await wipeModelSequelize(Segment);
-  await seedTestUsersSequelize();
-}
 
 /**
  * Validate single segment item
@@ -34,12 +28,7 @@ describe('/api/segments', () => {
   let token = null;
   let token2 = null;
   beforeAll(async () => {
-    await seedData();
     token = await generateTokenSequelize({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
-  });
-
-  afterAll(async () => {
-    await wipeModelSequelize(Segment);
   });
 
   const segmentItems = [];
@@ -150,6 +139,16 @@ describe('/api/segments', () => {
         body = omitPropertiesFromBody(body);
         const segments = getModelsArray('segments', body);
         expect(segments.length).toBe(1);
+      }));
+  });
+
+  describe('POST /api/segments/preview', () => {
+    test('Preview items', async () => request(app)
+      .post(`${rootUrl}/preview`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
       }));
   });
 

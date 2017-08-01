@@ -5,7 +5,7 @@ import styles from './styles.scss';
 
 class Gauge extends PureComponent {
   render() {
-    return (<div className={styles.gaugeContainer}>
+    return (<div className={styles.gaugeContainer} style={{ height: '130px' }}>
       <div className={styles.gauge}>
         <CircleGauge
           percentage={this.props.percentage}

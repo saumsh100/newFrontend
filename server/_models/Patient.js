@@ -159,6 +159,11 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'accountId',
       as: 'account',
     });
+
+    // Patient.hasMany(Appointment, {
+    //   foreignKey: 'patientId',
+    //   as: 'appointments',
+    // });
   };
 
   /**

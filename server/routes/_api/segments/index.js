@@ -1,23 +1,21 @@
 import { Router } from 'express';
-import {
-  Patient as PatientModel,
-  Segment as SegmentModel,
-  Account as AccountModel,
-  Appointment as AppointmentModel,
-  Practitioner as PractitionerModel,
-  sequelize,
-} from '../../../_models/index';
+import db from '../../../_models/index';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../../api/normalize';
 
 const segmentRouter = Router();
 
+const Segment = db.Segment;
+const Patient = db.Patient;
+const Account = db.Account;
+const Appointment = db.Appointment;
+
 segmentRouter.param('segmentId', sequelizeLoader('segment', 'Segment'));
 
 function convertRawToSequelizeWhere(raw) {
   // @TODO add conversion here
-  return {};
+  return raw || {};
 }
 // Get single segment info
 segmentRouter.get('/:segmentId', checkPermissions('segments:read'), async (req, res, next) => {
@@ -37,7 +35,7 @@ segmentRouter.get('/:segmentId', checkPermissions('segments:read'), async (req, 
 segmentRouter.get('/', checkPermissions('segments:read'), async (req, res, next) => {
   try {
     // Should add for account, now only returns for enterprise
-    const segments = await SegmentModel.findAll({
+    const segments = await Segment.findAll({
       raw: true,
       where: {
         referenceId: req.enterpriseId,
@@ -54,11 +52,13 @@ segmentRouter.get('/', checkPermissions('segments:read'), async (req, res, next)
 segmentRouter.post('/', checkPermissions('segments:create'), async (req, res, next) => {
   const data = req.body;
   try {
-    data.reference = data.reference || SegmentModel.REFERENCE.ENTERPRISE;
-    data.referenceId = (data.reference === SegmentModel.REFERENCE.ENTERPRISE)
+    data.reference = data.reference || Segment.REFERENCE.ENTERPRISE;
+    data.referenceId = (data.reference === Segment.REFERENCE.ENTERPRISE)
       ? req.enterpriseId : req.accountId;
 
-    const segment = await SegmentModel.create(data);
+    data.rawWhere = convertRawToSequelizeWhere(data.where);
+
+    const segment = await Segment.create(data);
 
     return res.status(201).send(normalize('segment', segment.get({
       plain: true,
@@ -111,9 +111,7 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
   const { rawWhere } = req.body;
   try {
     // fetch all enterprise accounts
-    const attributesUsers = ['Patient.id', [sequelize.fn('count', sequelize.col('Patient.id')), 'patientCount']];
-    const attributesAppo = [[sequelize.fn('count', sequelize.col('Appointment.id')), 'appointmentCount']];
-    const accounts = AccountModel.findAll({
+    const accounts = await Account.findAll({
       raw: true,
       where: {
         enterpriseId: req.enterpriseId,
@@ -123,49 +121,49 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
 
     const baseWhere = {
       accountId: accountIds,
-      status: PatientModel.STATUS.ACTIVE,
+      status: Patient.STATUS.ACTIVE,
     };
 
-    const totalActiveUsers = await PatientModel.findOne({
-      attributes: attributesUsers,
-      where: {
-        baseWhere,
-      },
-      group: ['Patient.id'],
+    const totalActiveUsers = await Patient.count({
+      where: baseWhere,
     });
 
     const segmentWhere = convertRawToSequelizeWhere(rawWhere);
 
-    const segmentActiveUsers = await PatientModel.findOne({
-      attributes: attributesUsers,
+    const segmentActiveUsers = await Patient.count({
       where: {
         ...baseWhere, ...segmentWhere,
       },
-      group: ['Patient.id'],
     });
 
-    const totalAppointments = await PatientModel.findOne({
-      attributes: attributesAppo,
-      where: {
-        baseWhere,
-      },
-      group: ['Appointment.id'],
+    const totalAppointments = await Appointment.count({
+      include: [
+        {
+          model: Patient,
+          as: 'patient',
+          where: baseWhere,
+        },
+      ],
     });
 
-    const segmentAppointments = await PatientModel.findOne({
-      attributes: attributesAppo,
-      where: {
-        ...baseWhere, ...segmentWhere,
-      },
-      group: ['Appointment.id'],
+    const segmentAppointments = await Appointment.count({
+      include: [
+        {
+          model: Patient,
+          as: 'patient',
+          where: {
+            ...baseWhere, ...segmentWhere,
+          },
+        },
+      ],
     });
 
 
     const data = {
-      totalActiveUsers: totalActiveUsers.patientCount,
-      segmentActiveUsers: segmentActiveUsers.patientCount,
-      totalAppointments: totalAppointments.appointmentCount,
-      segmentAppointments: segmentAppointments.appointmentCount,
+      totalActiveUsers,
+      segmentActiveUsers,
+      totalAppointments,
+      segmentAppointments,
     };
 
     return res.send(data);
