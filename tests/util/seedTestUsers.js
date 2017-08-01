@@ -29,6 +29,8 @@ const account = {
 
 const managerPermission = {
   id: managerPermissionId,
+  allowedAccounts: null,
+  permissions: null,
   role: 'MANAGER',
   createdAt: '2017-07-19T00:14:30.932Z',
 };

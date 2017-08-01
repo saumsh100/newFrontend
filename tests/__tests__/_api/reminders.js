@@ -35,6 +35,11 @@ describe('/api/accounts/:account/reminders', () => {
       await seedTestReminders();
     });
 
+    afterAll(async () => {
+      await wipeModel(Reminder);
+      await wipeTestUsers();
+    });
+
     describe('GET /:accountId/reminders', () => {
       test('should fetch all reminders for the account', () => {
         return request(app)
