@@ -5,6 +5,7 @@ const globals = require('../config/globals');
 const handleErrors = require('../middleware/handleErrors');
 const app = require('../config/express');
 require('../models');
+// require('../_models');
 
 // require('../config/kue');
 
