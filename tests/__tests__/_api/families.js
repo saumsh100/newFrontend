@@ -62,6 +62,7 @@ describe('/api/families', () => {
   });
 
   afterAll(async () => {
+    await wipeModelSequelize(Family);
     await wipeTestUsers();
   });
 
