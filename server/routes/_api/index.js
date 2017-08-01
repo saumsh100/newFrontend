@@ -9,6 +9,7 @@ import familiesRouter from './families';
 import remindersRouter from './reminders';
 import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
+import weeklySchedulesRouter from './weeklySchedules';
 
 const apiRouter = Router();
 
@@ -20,5 +21,6 @@ apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/families', familiesRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
+apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 
 export default apiRouter;
