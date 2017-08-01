@@ -1,6 +1,8 @@
 
 import React, { PropTypes, Component } from 'react';
-import { Grid, Row, Col, Form, FormSection, Tabs, Tab, Pill, SelectPill, InfoSection, DropdownSelect } from '../../library';
+import { bindActionCreators } from 'redux';
+
+import { Grid, Row, Col, Form, FormSection, Tabs, Tab, Pill, SelectPill, InfoSection, DropdownSelect, Button } from '../../library';
 import Gauge from './Gauge';
 import styles from './styles.scss';
 
@@ -38,7 +40,7 @@ class DisplayForm extends Component {
           <Row className={styles.addNewSegment_mainContainer}>
             <Col xs={9} sm={9} md={9}>
               <div className={styles.title}>{title}</div>
-              <FormSection name="filters">
+              <FormSection name="filters" className={styles.formSection}>
                 <Tabs navClass={styles.nav} index={this.state.index} contentClass={styles.tabContent} onChange={this.onTabChange}>
                   <Tab label="Demographics" className={styles.tab} activeClassName={styles.activeTab}>
                     <Grid>
@@ -47,7 +49,7 @@ class DisplayForm extends Component {
                           Age
                         </Col>
                         <Col xs={10} sm={10} md={10}>
-                          <SelectPill multiselect>
+                          <SelectPill multiselect onChange={this.props.handleAgeChange}>
                             <Pill title="0-9" pillId="0-9" />
                             <Pill title="10-17" pillId="10-17" />
                             <Pill title="18-24" pillId="18-24" />
@@ -64,7 +66,7 @@ class DisplayForm extends Component {
                           Gender
                         </Col>
                         <Col xs={10} sm={10} md={10}>
-                          <SelectPill>
+                          <SelectPill onChange={this.props.handleGenderChange}>
                             <Pill title="Female" pillId="f" />
                             <Pill title="Male" pillId="m" />
                             <Pill title="Unknown" pillId="u" />
@@ -82,19 +84,25 @@ class DisplayForm extends Component {
                               { label: 'Toronto', value: 1 },
                               { label: 'Quebec', value: 2 },
                             ]}
-                            onChange={(value) => { console.log(value) ;}}
+                            onChange={(value) => { console.log(value); }}
                           />
                         </Col>
                       </Row>
                     </Grid>
+                    
                   </Tab>
-                  <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
+                  {/* <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
                     <span>Behavior</span>
                   </Tab>
                   <Tab label="Technology" className={styles.tab} activeClassName={styles.activeTab}>
                     <span>Technology</span>
-                  </Tab>
+                  </Tab>*/}
                 </Tabs>
+                <div className={styles.buttons}>
+                  <Button flat>Apply</Button>
+                  <Button flat>Save</Button>
+                  <Button flat>Cancel</Button>
+                </div>
               </FormSection>
             </Col>
             <Col xs={3} sm={3} md={3}>
@@ -121,6 +129,8 @@ class DisplayForm extends Component {
 
 DisplayForm.propTypes = {
   formName: PropTypes.string.isRequired,
+  handleAgeChange: PropTypes.func,
+  handleGenderChange: PropTypes.func,
   selectedSegment: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };

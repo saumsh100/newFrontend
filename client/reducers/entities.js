@@ -40,6 +40,8 @@ import Dialogs from '../entities/models/Dialogs';
 import dialogs from '../entities/collections/dialogs';
 import Service from '../entities/models/Service';
 import services from '../entities/collections/services';
+import Segment from '../entities/models/Segment';
+import segments from '../entities/collections/segments';
 import Chairs from '../entities/models/Chair';
 import chairs from '../entities/collections/chairs';
 import chat from '../entities/collections/chat';
@@ -84,6 +86,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => receive
   timeOffs: new timeOffs(),
   reminders: new reminders(),
   sentReminders: new sentReminders(),
+  segments: new segments(),
   recalls: new recalls(),
   sentRecalls: new sentRecalls(),
   patientUsers: new patientUsers(),
@@ -115,6 +118,7 @@ const Models = {
   sentReminders: SentReminder,
   recalls: Recall,
   sentRecalls: SentRecall,
+  segments: Segment,
   patientUsers: PatientUser,
   enterpriseDashboard: EnterpriseDashboard,
 };
