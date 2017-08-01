@@ -1,8 +1,7 @@
 
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
-import { Practitioner, Service, Practitioner_Service } from '../../server/models';
-import { Practitioner as _Practitioner } from '../../server/_models';
+import { Practitioner, Service, Practitioner_Service } from '../../server/_models';
 import wipeModel, { wipeModelSequelize } from './wipeModel';
 import { accountId } from './seedTestUsers';
 import { weeklyScheduleId, seedTestWeeklySchedules } from './seedTestWeeklySchedules';
@@ -24,8 +23,8 @@ const practitioner = {
 };
 
 const pracService = {
-  Practitioner_id: practitionerId,
-  Service_id: cleanupServiceId,
+  practitionerId: practitionerId,
+  serviceId: cleanupServiceId,
 };
 
 const service = {
@@ -42,20 +41,13 @@ async function seedTestPractitioners() {
   await wipeModel(Practitioner);
   await wipeModel(Practitioner_Service);
   await wipeModel(Service);
-  await Practitioner.save(practitioner);
-  await Service.save(service);
-  await Practitioner_Service.save(pracService);
-}
-
-async function seedTestPractitionersSequelize() {
-  await seedTestWeeklySchedules();
-  await wipeModelSequelize(_Practitioner);
-  await _Practitioner.create(practitioner);
+  await Practitioner.create(practitioner);
+  await Service.create(service);
+  await Practitioner_Service.create(pracService);
 }
 
 module.exports = {
   practitioner,
   practitionerId,
   seedTestPractitioners,
-  seedTestPractitionersSequelize,
 };

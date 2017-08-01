@@ -1,3 +1,4 @@
+const globals = require('../config/globals');
 
 export default function (sequelize, DataTypes) {
   const Practitioner = sequelize.define('Practitioner', {
@@ -47,6 +48,13 @@ export default function (sequelize, DataTypes) {
     isCustomSchedule: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+
+    fullAvatarUrl: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['avatarUrl']),
+      get() {
+        return this.get('avatarUrl') ? `${globals.s3.urlPrefix}${this.get('avatarUrl')}` : null;
+      },
     },
 
     weeklyScheduleId: {
