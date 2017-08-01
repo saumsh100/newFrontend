@@ -17,6 +17,11 @@ const appointment = {
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
+  chairId: null,
+  customBufferTime: null,
+  isBookable: false,
+  pmsId: null,
+  serviceId: null,
 };
 
 async function seedTestAppointments() {

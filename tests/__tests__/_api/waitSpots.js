@@ -37,6 +37,9 @@ describe('/api/waitSpots', () => {
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
+  afterAll(async () => {
+    await wipeAllModels();
+  });
 
   describe('GET /', () => {
     test('retrieve a waitSpot', () => {

@@ -18,6 +18,21 @@ const patient = {
   pmsId: null,
   mobilePhoneNumber: '7789999999',
   createdAt: '2017-07-19T00:14:30.932Z',
+  address: null,
+  birthDate: null,
+  familyId: null,
+  gender: null,
+  homePhoneNumber: null,
+  insurance: {},
+  language: null,
+  middleName: null,
+  otherPhoneNumber: null,
+  patientUserId: null,
+  phoneNumber: null,
+  prefName: null,
+  prefPhoneNumber: null,
+  type: null,
+  workPhoneNumber: null,
   // avatarUrl: '',
  // pmsId: 0,
   //pmsId: null,
@@ -44,7 +59,6 @@ const patientUser = {
   password: bcrypt.hashSync('!@CityOfBudaTest#$', passwordHashSaltRounds),
   createdAt: '2017-07-19T00:14:30.932Z',
 };
-
 async function seedTestPatients() {
   await wipeModel(PatientUser);
   await wipeModel(Patient);

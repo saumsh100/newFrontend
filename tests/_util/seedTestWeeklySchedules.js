@@ -12,7 +12,7 @@ const weeklySchedule = {
 
 async function seedTestWeeklySchedules() {
   await wipeModel(WeeklySchedule);
-  await WeeklySchedule.save(weeklySchedule);
+  await WeeklySchedule.create(weeklySchedule);
 }
 
 module.exports = {

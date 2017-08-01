@@ -35,6 +35,7 @@ describe('/api/sentReminders', () => {
   // Seed with some standard user data
   let token = null;
   beforeAll(async () => {
+    await wipeAllModels();
     await seedTestUsers();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });

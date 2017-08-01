@@ -2,13 +2,15 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
-import { Appointment, SentReminder } from '../../../server/_models';
+import { SentReminder } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, seedTestUsers } from '../../_util/seedTestUsers';
-import { patientId, seedTestPatients } from '../../_util/seedTestPatients';
+import { patientId } from '../../_util/seedTestPatients';
 import { reminderId1, seedTestReminders } from '../../_util/seedTestReminders';
-import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
+import { appointmentId, seedTestAppointments } from '../../_util/seedTestAppointments';
 import { omitPropertiesFromBody } from '../../util/selectors';
+
+const rootUrl = '/_api/sentReminders';
 
 const sentReminderId = 'e757afb0-14ef-4763-b162-c573169131c1';
 const sentReminder = {
@@ -39,6 +41,7 @@ describe('/api/sentReminders', () => {
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
+
   afterAll(async () => {
     await wipeAllModels();
   });
@@ -46,7 +49,7 @@ describe('/api/sentReminders', () => {
   describe('GET /', () => {
     test('retrieve sent reminder', () => {
       return request(app)
-        .get('/api/sentReminders?join=appointment,reminder,patient')
+        .get(`${rootUrl}?join=appointment,reminder,patient`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {

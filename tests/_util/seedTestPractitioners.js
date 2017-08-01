@@ -28,5 +28,4 @@ module.exports = {
   practitioner,
   practitionerId,
   seedTestPractitioners,
-  seedTestPractitionersSequelize,
 };
