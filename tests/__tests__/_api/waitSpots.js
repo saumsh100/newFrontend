@@ -4,10 +4,9 @@ import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
 import { WaitSpot } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
-import { accountId, seedTestUsers } from '../../_util/seedTestUsers';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { patientId, patientUserId, seedTestPatients } from '../../_util/seedTestPatients';
 import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
-
 
 const rootUrl = '/_api/waitSpots';
 
@@ -37,6 +36,12 @@ describe('/api/waitSpots', () => {
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
+  afterAll(async () => {
+    await wipeModel(WaitSpot);
+    await wipeModel(Patient);
+    await wipeModel(PatientUser);
+    await wipeTestUsers();
+  });
 
   describe('GET /', () => {
     test('retrieve a waitSpot', () => {
