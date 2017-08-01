@@ -10,6 +10,7 @@ import remindersRouter from './reminders';
 import permissionsRouter from './permissions';
 import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
+import updaterRouter from './updater';
 
 const apiRouter = Router();
 
@@ -23,5 +24,7 @@ apiRouter.use('/accounts', remindersRouter);
 apiRouter.use('/accounts', permissionsRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
+apiRouter.use('/updater', updaterRouter);
+
 
 export default apiRouter;
