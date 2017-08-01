@@ -1,14 +1,14 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import generateToken from '../../util/generateToken';
-import { WeeklySchedule } from '../../../server/models';
-import wipeModel from '../../util/wipeModel';
-import { weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
-import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
+import generateToken from '../../_util/generateToken';
+import { WeeklySchedule } from '../../../server/_models';
+import wipeModel from '../../_util/wipeModel';
+import { weeklyScheduleId, seedTestWeeklySchedules } from '../../_util/seedTestWeeklySchedules';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
-const rootUrl = '/api/weeklySchedules';
+const rootUrl = '/_api/weeklySchedules';
 
 describe('/api/weeklySchedules', () => {
   // Seed with some standard user data
@@ -63,9 +63,9 @@ describe('/api/weeklySchedules', () => {
   */
 
   describe('PUT /:weeklyScheduleId', () => {
-    test('update a weekly schedule', () => {
+    test('should update a weekly schedule', () => {
       return request(app)
-        .put(`/api/weeklySchedules/${weeklyScheduleId}`)
+        .put(`${rootUrl}/${weeklyScheduleId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({ isAdvanced: true })
         .expect(200)

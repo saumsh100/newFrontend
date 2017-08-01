@@ -1,6 +1,6 @@
 
 import { WeeklySchedule } from '../../server/_models';
-import wipeModel, { wipeModelSequelize } from './wipeModel';
+import wipeModel from './wipeModel';
 
 const weeklyScheduleId = '8ce3ba61-60cd-40c6-bc85-c018cabd4a40';
 const weeklySchedule = {
