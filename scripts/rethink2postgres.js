@@ -40,17 +40,17 @@ const TMP_ORDER = [
   'WeeklySchedule',
   'Account',
   'Chair',
-  /*'Permission',
+  'Permission',
   'User',
   'AuthSession',
-  'Invite',*/
+  'Invite',
   'PatientUser',
-  'Family',
-  'Patient',
+  //'Family',
+  //'Patient',
   'Service',
   'Practitioner',
   'Practitioner_Service',
-  'Appointment',
+  //'Appointment',
   //'Request',
   //'Reminder',
   //'SentReminder',
@@ -89,6 +89,27 @@ const FILTER = {
   Appointment() {
     return appointment => appointment('startDate').gt(new Date(2016, 1, 1));
   }
+};
+
+const accountsHash = {};
+const enterprisesHash = {};
+
+// Can't do it for all because it would be too expensive
+const postFetch = {
+  Accounts(accounts) {
+    for (const account of accounts) {
+      account.enterpriseName = enterprisesHash[account.enterpriseId].name;
+      accountsHash[account.id] = account;
+    }
+  },
+
+  Enterprise(enterprises) {
+    for (const enterprise of enterprises) {
+      enterprisesHash[enterprise.id] = enterprise;
+    }
+
+    console.log('Enterprise hashMap built');
+  },
 };
 
 /**
@@ -135,6 +156,7 @@ async function main() {
       const SequelizeModel = SequelizeModels[modelName];
       const transformFn = TRANSFORM[modelName];
       const filterFn = FILTER[modelName];
+      const postFetchFn = postFetch[modelName];
       let thinkyModels;
       if (filterFn) {
         console.log(`Invoking FILTER for ${modelName}`);
@@ -149,9 +171,13 @@ async function main() {
         dataArray = dataArray.map(data => transformFn(data));
       }
 
+      if (postFetchFn) {
+        postFetchFn(dataArray);
+      }
+
       let successes = 0;
       let errors = 0;
-      if (SequelizeModel.batchSave) {
+      if (SequelizeModel.batchSave && modelName !== 'Appointment') {
         try {
           const models = await SequelizeModel.batchSave(dataArray);
           successes = models.length;
@@ -161,7 +187,7 @@ async function main() {
             throw error;
           }
 
-          console.error(error);
+          // console.error(error);
           successes = docs.length;
           errors = errs.length;
         }
@@ -172,8 +198,12 @@ async function main() {
             await SequelizeModel.create(data);
             successes++;
           } catch (err) {
-            console.error(err);
+            // console.error(err);
             errors++;
+            if (data.accountId) {
+              const account = accountsHash[data.accountId];
+              console.log(`---- failure in ${account.name} account under ${account.enterpriseName} enterprise`);
+            }
           }
         }
       }
