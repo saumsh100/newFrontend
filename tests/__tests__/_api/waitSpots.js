@@ -1,12 +1,14 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import generateToken from '../../util/generateToken';
-import { WaitSpot } from '../../../server/models';
-import wipeModel from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-import { patientId, patientUserId, seedTestPatients } from '../../util/seedTestPatients';
+import generateToken from '../../_util/generateToken';
+import { WaitSpot } from '../../../server/_models';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
+import { patientId, patientUserId, seedTestPatients } from '../../_util/seedTestPatients';
 import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
+
+const rootUrl = '/_api/waitSpots';
 
 const waitSpotId = 'cc43f0d7-9fb0-4946-b889-f284ea48e4d0';
 const waitSpot = {
@@ -21,40 +23,39 @@ const waitSpot = {
 async function seedTestWaitSpot() {
   await seedTestPatients();
   await wipeModel(WaitSpot);
-  await WaitSpot.save(waitSpot);
+  await WaitSpot.create(waitSpot);
 };
 
 describe('/api/waitSpots', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
+    await wipeModel(WaitSpot);
     await seedTestUsers();
+    await seedTestWaitSpot();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModel(WaitSpot);
+    await wipeModel(Patient);
+    await wipeModel(PatientUser);
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
-    beforeEach(async () => {
-      await seedTestWaitSpot();
-    });
-
     test('retrieve a waitSpot', () => {
       return request(app)
-        .get('/api/waitSpots')
+        .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['unavailableDays']);
           expect(body).toMatchSnapshot();
         });
     });
 
+    /*
     test('retrieve waitSpots with a patient or patientUser', ()=> {
       return request(app)
         .get('/api/waitSpots?join=patient,patientUser')
@@ -67,14 +68,14 @@ describe('/api/waitSpots', () => {
           body = omitPropertiesFromBody(body, ['password']);
           expect(body).toMatchSnapshot();
         });
-    });
+    });*/
   });
 
   describe('POST /', () => {
     test('create a waitSpot', () => {
       const id = '6303daf4-377e-4b70-843b-08671e6183d7';
       return request(app)
-        .post('/api/waitSpots')
+        .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send({
           id,
@@ -85,20 +86,16 @@ describe('/api/waitSpots', () => {
         })
         .expect(201)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['endDate', 'unavailableDays']);
           expect(body).toMatchSnapshot();
         });
     });
   });
 
   describe('PUT /:waitSpotId', () => {
-    beforeEach(async () => {
-      await seedTestWaitSpot();
-    });
-
     test('update a waitSpot', () => {
       return request(app)
-        .put(`/api/waitSpots/${waitSpotId}`)
+        .put(`${rootUrl}/${waitSpotId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -108,20 +105,16 @@ describe('/api/waitSpots', () => {
         })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['unavailableDays']);
           expect(body).toMatchSnapshot();
         });
     });
   });
 
   describe('DELETE /:waitSpotId', () => {
-    beforeEach(async () => {
-      await seedTestWaitSpot();
-    });
-
     test('delete a waitSpot', () => {
       return request(app)
-        .delete(`/api/waitSpots/${waitSpotId}`)
+        .delete(`${rootUrl}/${waitSpotId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
@@ -129,6 +122,6 @@ describe('/api/waitSpots', () => {
           expect(body).toMatchSnapshot();
         });
     });
+
   });
 });
-

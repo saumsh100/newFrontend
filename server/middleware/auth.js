@@ -117,12 +117,13 @@ module.exports.sequelizeAuthMiddleware = function (req, res, next) {
     // Load Session
     _AuthSession.findById(decoded.sessionId)
       .then(checkValidity('Session Token not found.'))
-      .then(({ modelId: userId, permissions, role, enterpriseId, accountId }) => {
+      .then(({ modelId: userId, permissions, role, enterpriseId, accountId, permissionId }) => {
         const mergedPermissions = merge({}, rolePermissions[role], permissions);
         const sessionData = {
           userId,
           permissions: mergedPermissions,
           role,
+          permissionId,
           enterpriseId,
           accountId,
         };

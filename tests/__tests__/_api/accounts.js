@@ -3,13 +3,13 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import {
   Account,
-} from '../../../server/models';
-import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
-import generateToken from '../../util/generateToken';
-import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
-import { wipeAllModels } from '../../util/wipeModel';
+} from '../../../server/_models';
+import { accountId, enterpriseId, seedTestUsers } from '../../_util/seedTestUsers';
+import generateToken from '../../_util/generateToken';
+import { getModelsArray, omitPropertiesFromBody, omitProperties } from '../../util/selectors';
+import { wipeAllModels } from '../../_util/wipeModel';
 
-const rootUrl = '/api/accounts';
+const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const permissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const userId = '72954241-3652-4792-bae5-5bfed53d37b7';
@@ -18,7 +18,7 @@ async function seedData() {
   await seedTestUsers();
 
   // Seed an extra account for fetching multiple and testing switching
-  await Account.save({
+  await Account.create({
     id: accountId2,
     enterpriseId,
     name: 'Test Account 2',
@@ -40,6 +40,7 @@ describe('/api/accounts', () => {
 
   describe('GET /', () => {
     test('with manager role so only return one', async () => {
+      console.log(token);
       return request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)

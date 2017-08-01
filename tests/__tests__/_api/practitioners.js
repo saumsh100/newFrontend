@@ -3,8 +3,8 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
 import omit from 'lodash/omit';
-import { Practitioner, Account, WeeklySchedule } from '../../../server/models';
-import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
+import { Practitioner, Account, WeeklySchedule } from '../../../server/_models';
+import wipeModel, {  wipeAllModels } from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers } from '../../_util/seedTestUsers';
 import { practitionerId, practitioner, seedTestPractitioners } from '../../_util/seedTestPractitioners';
 import { weeklyScheduleId, weeklySchedule, seedTestWeeklySchedules } from '../../_util/seedTestWeeklySchedules';
@@ -27,11 +27,13 @@ describe('/api/practitioners', () => {
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModel(WeeklySchedule);
+    await wipeModel(Practitioner);
+    await wipeModel(Account);
   });
 
   describe('GET /', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
       await seedTestWeeklySchedules();
       await seedTestPractitioners();
     });
@@ -45,12 +47,12 @@ describe('/api/practitioners', () => {
         })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['pmsId', 'avatarUrl']);
           expect(body).toMatchSnapshot();
         });
     });
 
-    test.only('get all practitioners with weeklySchedule', () => {
+    test('get all practitioners with weeklySchedule', () => {
       return request(app)
         .get('/_api/practitioners?join=weeklySchedule')
         .set('Authorization', `Bearer ${token}`)
@@ -79,7 +81,6 @@ describe('/api/practitioners', () => {
           body.entities.weeklySchedules[schKey].wednesday.pmsScheduleId = null;
           body.entities.weeklySchedules[schKey].thursday.chairIds = [];
           body.entities.weeklySchedules[schKey].thursday.pmsScheduleId = null;
-
           expect(body).toMatchSnapshot();
         });
     });
@@ -90,7 +91,7 @@ describe('/api/practitioners', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['pmsId', 'avatarUrl']);
           expect(body).toMatchSnapshot();
         });
     });
@@ -99,11 +100,16 @@ describe('/api/practitioners', () => {
   describe('POST /', () => {
     beforeEach(async () => {
       await seedTestUsers();
-      await wipeModel(Practitioner);
       await wipeModel(WeeklySchedule);
-      await WeeklySchedule.save(weeklySchedule);
-      await wipeModel(Account);
-      await Account.save(accountWithSchedule);
+      await wipeModel(Practitioner);
+
+      await WeeklySchedule.create(weeklySchedule);
+      await Account.update({ weeklyScheduleId }, { where: { id: accountId } });
+    });
+
+    afterEach(async () => {
+      await Account.update({ weeklyScheduleId: null }, { where: { id: accountId } });
+      await wipeModel(Practitioner);
     });
 
     test('create practitioner', () => {
@@ -113,7 +119,7 @@ describe('/api/practitioners', () => {
         .send(practitioner)
         .expect(201)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'weeklySchedule']);
+          body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'weeklySchedule', 'pmsId', 'avatarUrl']);
           const practitioners = body.entities.practitioners;
           const newBody = omit(practitioners, ['weeklySchedules'])
           expect({
@@ -126,8 +132,15 @@ describe('/api/practitioners', () => {
   });
 
   describe('PUT /', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
       await seedTestPractitioners();
+      await Account.update({ weeklyScheduleId }, { where: { id: accountId } });
+
+    });
+
+    afterAll(async () => {
+      await wipeModel(Practitioner);
+      await Account.update({ weeklyScheduleId: null }, { where: { id: accountId } });
     });
 
     test('/:practitionerId - update practitioner', () => {
@@ -136,31 +149,30 @@ describe('/api/practitioners', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           firstName: 'Updated',
+          services: [],
         })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['pmsId', 'avatarUrl']);
           expect(body).toMatchSnapshot();
         });
     });
 
     // TODO: Daily schemas have generated timestamps
-    /*
-    test.only('/:practitionerId/customSchedule - update weekly schedule', () => {
-      const updatedWeeklySchedule = weeklySchedule;
-      updatedWeeklySchedule.createdAt = '2017-07-19T00:18:30.932Z';
-      return request(app)
-        .put(`/api/practitioners/${practitionerId}/customSchedule`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(Object.assign({ accountId }, weeklySchedule))
-        .expect(201)
-        .then(({ body }) => {
-          expect(body).toMatchSnapshot();
-          console.log(JSON.stringify(body));
-        });
-    });
-    */
 
+    // test('/:practitionerId/customSchedule - update weekly schedule', () => {
+    //   const updatedWeeklySchedule = weeklySchedule;
+    //   updatedWeeklySchedule.createdAt = '2017-07-19T00:18:30.932Z';
+    //   return request(app)
+    //     .put(`/_api/practitioners/${practitionerId}/customSchedule`)
+    //     .set('Authorization', `Bearer ${token}`)
+    //     .send(Object.assign({ accountId }, weeklySchedule))
+    //     .expect(201)
+    //     .then(({ body }) => {
+    //       body = omitPropertiesFromBody(body, ['id']);
+    //       expect(body).toMatchSnapshot();
+    //     });
+    // });
   });
 
   describe('DELETE /', () => {

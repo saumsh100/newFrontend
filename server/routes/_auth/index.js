@@ -13,9 +13,11 @@ authRouter.post('/', ({ body: { username, password } }, res, next) =>
       loadPermissionsSequelize(user)
         .then(({ dataValues }) => {
           const permission = dataValues;
+          const permissionId = permission.id;
           delete permission.id;
           return session.update({
             ...permission,
+            permissionId,
             accountId: user.activeAccountId,
             enterpriseId: user.enterpriseId,
           });
