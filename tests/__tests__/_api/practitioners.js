@@ -18,6 +18,9 @@ const accountWithSchedule = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
+const rootUrl = '/_api/practitioners';
+
+
 describe('/api/practitioners', () => {
   // Seed with some standard user data
   let token = null;
@@ -40,7 +43,7 @@ describe('/api/practitioners', () => {
 
     test('get all practitioners', () => {
       return request(app)
-        .get('/_api/practitioners')
+        .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -54,7 +57,7 @@ describe('/api/practitioners', () => {
 
     test('get all practitioners with weeklySchedule', () => {
       return request(app)
-        .get('/_api/practitioners?join=weeklySchedule')
+        .get(`${rootUrl}?join=weeklySchedule`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -87,7 +90,7 @@ describe('/api/practitioners', () => {
 
     test('/:practitionerId - get a practitioner', () => {
       return request(app)
-        .get(`/_api/practitioners/${practitionerId}`)
+        .get(`${rootUrl}/${practitionerId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -114,7 +117,7 @@ describe('/api/practitioners', () => {
 
     test('create practitioner', () => {
       return request(app)
-        .post('/_api/practitioners')
+        .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send(practitioner)
         .expect(201)
@@ -145,7 +148,7 @@ describe('/api/practitioners', () => {
 
     test('/:practitionerId - update practitioner', () => {
       return request(app)
-        .put(`/_api/practitioners/${practitionerId}`)
+        .put(`${rootUrl}/${practitionerId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           firstName: 'Updated',
@@ -182,7 +185,7 @@ describe('/api/practitioners', () => {
 
     test('/:practitionerId - delete a practitioner', () => {
       return request(app)
-        .delete(`/_api/practitioners/${practitionerId}`)
+        .delete(`${rootUrl}/${practitionerId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
