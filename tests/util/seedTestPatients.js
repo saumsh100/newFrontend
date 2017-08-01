@@ -23,7 +23,6 @@ const patient = {
   familyId: null,
   gender: null,
   homePhoneNumber: null,
-  insurance: {},
   language: null,
   middleName: null,
   otherPhoneNumber: null,

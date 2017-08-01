@@ -1,5 +1,5 @@
 
-import { Appointment } from '../../server/models';
+import { Appointment } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
 import { practitionerId, seedTestPractitioners } from './seedTestPractitioners';

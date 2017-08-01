@@ -2,9 +2,9 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
-import { SentReminder } from '../../../server/_models';
+import { SentReminder, Reminder, Appointment, Patient } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
-import { accountId, seedTestUsers } from '../../_util/seedTestUsers';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { patientId } from '../../_util/seedTestPatients';
 import { reminderId1, seedTestReminders } from '../../_util/seedTestReminders';
 import { appointmentId, seedTestAppointments } from '../../_util/seedTestAppointments';
@@ -28,7 +28,6 @@ const sentReminder = {
 async function seedTestSentReminder() {
   await seedTestAppointments();
   await seedTestReminders();
-  await wipeModel(SentReminder);
   await SentReminder.create(sentReminder);
 }
 
@@ -36,6 +35,7 @@ describe('/api/sentReminders', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
+    await wipeModel(SentReminder);
     await seedTestUsers();
     await seedTestSentReminder();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
@@ -43,7 +43,11 @@ describe('/api/sentReminders', () => {
 
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModel(SentReminder);
+    await wipeModel(Reminder);
+    await wipeModel(Appointment);
+    await wipeModel(Patient);
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
@@ -53,7 +57,8 @@ describe('/api/sentReminders', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['homePhoneNumber', 'insurance', 'otherPhoneNumber', 'prefPhoneNumber', 'workPhoneNumber']);
+
           expect(body).toMatchSnapshot();
         });
     });

@@ -7,6 +7,8 @@ import chairsRouter from './chairs';
 import enterprisesRouter from './enterprises';
 import familiesRouter from './families';
 import remindersRouter from './reminders';
+import permissionsRouter from './permissions';
+import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
 import sentRemindersRouter from './sentReminders';
 
@@ -19,6 +21,8 @@ apiRouter.use('/chairs', chairsRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/families', familiesRouter);
 apiRouter.use('/accounts', remindersRouter);
+apiRouter.use('/accounts', permissionsRouter);
+apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/sentReminders', sentRemindersRouter);
 
