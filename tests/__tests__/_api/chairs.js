@@ -53,7 +53,7 @@ describe('/api/chairs', () => {
   });
 
   describe('GET /api/chairs', () => {
-    test.only('should fetch 2 chairs', async () => {
+    test('should fetch 2 chairs', async () => {
       return request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
