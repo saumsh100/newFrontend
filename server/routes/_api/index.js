@@ -13,6 +13,7 @@ import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
 import updaterRouter from './updater';
 import weeklySchedulesRouter from './weeklySchedules';
+import chatRouter from './chats';
 
 const apiRouter = Router();
 
@@ -28,5 +29,6 @@ apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
+apiRouter.use('/chats', chatRouter);
 
 export default apiRouter;
