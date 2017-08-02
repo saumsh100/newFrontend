@@ -12,6 +12,7 @@ import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
 import updaterRouter from './updater';
 import weeklySchedulesRouter from './weeklySchedules';
+import syncErrorRouter from './syncClientError';
 
 const apiRouter = Router();
 
@@ -23,6 +24,7 @@ apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/families', familiesRouter);
 apiRouter.use('/accounts', remindersRouter);
 apiRouter.use('/accounts', permissionsRouter);
+apiRouter.use('/syncClientError', syncErrorRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/updater', updaterRouter);
