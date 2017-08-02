@@ -57,8 +57,10 @@ export default function (sequelize, DataTypes) {
     },
   });
 
+
   PatientUser.associate = (({ Patient }) => {
     // TODO: add waitspots and requests once those models are done
+
     PatientUser.hasMany(Patient, {
       foreignKey: 'patientUserId',
       as: 'patients',

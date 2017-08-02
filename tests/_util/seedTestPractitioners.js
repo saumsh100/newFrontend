@@ -1,4 +1,5 @@
 
+
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Practitioner, Service, Practitioner_Service } from '../../server/_models';
@@ -7,6 +8,7 @@ import { accountId } from './seedTestUsers';
 import { weeklyScheduleId, seedTestWeeklySchedules } from './seedTestWeeklySchedules';
 
 const practitionerId = '497ff59a-4bae-4013-bdce-b6b5be91a1f5';
+
 const cleanupServiceId = '1f439ff8-c55d-4423-9316-a41240c4d329';
 
 const practitioner = {

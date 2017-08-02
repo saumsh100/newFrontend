@@ -2,7 +2,7 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
-import { WaitSpot } from '../../../server/_models';
+import { WaitSpot, Patient, PatientUser } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { patientId, patientUserId, seedTestPatients } from '../../_util/seedTestPatients';

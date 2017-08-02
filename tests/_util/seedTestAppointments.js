@@ -1,5 +1,5 @@
 
-import { Appointment } from '../../server/models';
+import { Appointment } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
 import { practitionerId, seedTestPractitioners } from './seedTestPractitioners';
@@ -17,18 +17,13 @@ const appointment = {
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
-  chairId: null,
-  customBufferTime: null,
-  isBookable: false,
-  pmsId: null,
-  serviceId: null,
 };
 
 async function seedTestAppointments() {
   await seedTestPractitioners();
   await seedTestPatients();
   await wipeModel(Appointment);
-  await Appointment.save(appointment);
+  await Appointment.create(appointment);
 }
 
 module.exports = {

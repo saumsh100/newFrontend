@@ -1,14 +1,16 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import generateToken from '../../util/generateToken';
-import { Request } from '../../../server/models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-import { serviceId, seedTestService } from '../../util/seedTestServices';
-import { patientUserId, seedTestPatients } from '../../util/seedTestPatients';
-import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
+import generateToken from '../../_util/generateToken';
+import { Request, Appointment, PatientUser, Patient, Service } from '../../../server/_models';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
+import { serviceId, seedTestService } from '../../_util/seedTestServices';
+import { patientUserId, seedTestPatients } from '../../_util/seedTestPatients';
+import { appointmentId, seedTestAppointments } from '../../_util/seedTestAppointments';
 import { omitPropertiesFromBody } from '../../util/selectors';
+
+const rootUrl = '/_api/requests';
 
 const requestId = '272d86fc-f743-4cd6-b0c8-7906959bcc9f';
 const requestSeed = {
@@ -19,44 +21,37 @@ const requestSeed = {
   accountId,
   serviceId,
   createdAt: '2017-07-19T00:14:30.932Z',
-  practitionerId: null,
-  appointmentId: null,
-  chairId: null,
-  note: null,
 };
 
 async function seedTestRequest() {
   await seedTestAppointments();
   await seedTestService();
-  await seedTestPatients();
-  await wipeModel(Request);
-  Request.save(requestSeed);
+  await Request.create(requestSeed);
 }
 
 describe('/api/requests', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
+    await wipeModel(Request)
     await seedTestUsers();
+    await seedTestRequest();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModel(Request);
+    await wipeModel(Service);
+    await wipeModel(Appointment);
+    await wipeModel(PatientUser);
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
-    beforeEach(async () => {
-      await seedTestRequest();
-    });
-
     test('get all requests', () => {
       return request(app)
-        .get('/api/requests')
+        .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -66,27 +61,24 @@ describe('/api/requests', () => {
 
     test('get all requests with patientUsers and services', () => {
       return request(app)
-        .get('/api/requests?join=patientUser,service')
+        .get(`${rootUrl}?join=patientUser,service`)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['password', 'patientUserId']);
+          body = omitPropertiesFromBody(body, ['password', 'avatarUrl', 'patientUserId']);
           expect(body).toMatchSnapshot();
         });
     });
   });
 
   describe('POST /', () => {
-    beforeEach(async () => {
-      await wipeModel(Request);
+    beforeEach(async() => {
+      await wipeModel(Request)
     });
 
     test('create request', () => {
       return request(app)
-        .post('/api/requests')
+        .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send(requestSeed)
         .expect(201)
@@ -97,14 +89,11 @@ describe('/api/requests', () => {
     });
   });
 
-  describe('PUT /', () => {
-    beforeEach(async () => {
-      await seedTestRequest();
-    });
 
+  describe('PUT /', () => {
     test('/:requestId - update request', () => {
       return request(app)
-        .put(`/api/requests/${requestId}`)
+        .put(`${rootUrl}/${requestId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           endDate: '2017-07-19T00:18:30.932Z',
@@ -116,9 +105,10 @@ describe('/api/requests', () => {
         });
     });
 
+
     test('/:requestId - reject request', () => {
       return request(app)
-        .put(`/api/requests/${requestId}/reject`)
+        .put(`${rootUrl}/${requestId}/reject`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -131,10 +121,12 @@ describe('/api/requests', () => {
     });
 
     // TODO: Ask someone if this response is supposed to be an empty object
-    // Use Mandrill Key
+
+    //Use mandrill api key
+
     test('/:requestId/confirm/:appointmentId - send confirmed request email', () => {
       return request(app)
-        .put(`/api/requests/${requestId}/confirm/${appointmentId}`)
+        .put(`${rootUrl}/${requestId}/confirm/${appointmentId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -145,13 +137,9 @@ describe('/api/requests', () => {
   });
 
   describe('DELETE /', () => {
-    beforeEach(async () => {
-      await seedTestRequest();
-    });
-
     test('/:requestId - delete a request', () => {
       return request(app)
-        .delete(`/api/requests/${requestId}`)
+        .delete(`${rootUrl}/${requestId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
