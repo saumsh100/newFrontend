@@ -94,8 +94,12 @@ const practitionerSchema = () => {
   return new schema.Entity('practitioners', {
     weeklySchedule: weeklyScheduleSchema(),
     services: [_serviceSchema],
-    timeOffs: [_timeOffSchema],
+    recurringTimeOffs: [practitionerRecurringTimeOffsSchema()],
   });
+};
+
+const practitionerRecurringTimeOffsSchema = () => {
+  return new schema.Entity('practitionerRecurringTimeOffs');
 };
 
 const serviceSchema = () => {
@@ -106,10 +110,6 @@ const serviceSchema = () => {
 
 const reservationSchema = () => {
   return new schema.Entity('reservations');
-};
-
-const timeOffSchema = () => {
-  return new schema.Entity('timeOffs');
 };
 
 const waitSpotSchema = () => {
@@ -144,7 +144,6 @@ const sentRecallSchema = () => {
 
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
-var _timeOffSchema = timeOffSchema();
 
 const SCHEMAS = {
   // Models (singleFetch/findOne)
@@ -163,7 +162,7 @@ const SCHEMAS = {
   patientUser: patientUserSchema(),
   permission: permissionSchema(),
   practitioner: practitionerSchema(),
-  practitionerTimeOff: timeOffSchema(),
+  practitionerRecurringTimeOff: practitionerRecurringTimeOffsSchema(),
   syncClientError: syncClientErrorSchema(),
   reservation: reservationSchema(),
   reminder: reminderSchema(),
@@ -191,7 +190,7 @@ const SCHEMAS = {
   recalls: [recallSchema()],
   permissions: [permissionSchema()],
   practitioners: [practitionerSchema()],
-  practitionerTimeOffs: [timeOffSchema()],
+  practitionerRecurringTimeOffs: [practitionerRecurringTimeOffsSchema()],
   waitSpots: [waitSpotSchema()],
   weeklySchedules: [weeklyScheduleSchema()],
   reservations: [reservationSchema()],

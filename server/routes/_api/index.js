@@ -9,6 +9,7 @@ import familiesRouter from './families';
 import remindersRouter from './reminders';
 import practitionersRouter from './practitioners';
 import permissionsRouter from './permissions';
+import recurringTimeOffRouter from './recurringTimeOffs';
 import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
 import sentRemindersRouter from './sentReminders';
@@ -40,5 +41,7 @@ apiRouter.use('/requests', requestRouter);
 apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/chats', chatRouter);
+apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
+
 
 export default apiRouter;
