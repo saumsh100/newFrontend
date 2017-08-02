@@ -20,6 +20,7 @@ import invitesRouter from './invites';
 import chatRouter from './chats';
 import syncErrorRouter from './syncClientError';
 import recallsRouter from './recalls';
+import appointmentsRouter from './appointment';
 
 const apiRouter = Router();
 
@@ -43,5 +44,6 @@ apiRouter.use('/requests', requestRouter);
 apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/chats', chatRouter);
+apiRouter.use('/appointments', appointmentsRouter);
 
 export default apiRouter;
