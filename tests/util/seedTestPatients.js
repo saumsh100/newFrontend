@@ -58,6 +58,7 @@ const patientUser = {
   password: bcrypt.hashSync('!@CityOfBudaTest#$', passwordHashSaltRounds),
   createdAt: '2017-07-19T00:14:30.932Z',
 };
+
 async function seedTestPatients() {
   await wipeModel(PatientUser);
   await wipeModel(Patient);

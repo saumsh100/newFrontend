@@ -12,6 +12,7 @@ import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
 import sentRemindersRouter from './sentReminders';
 import sentRecallsRouter from './sentRecalls';
+import requestRouter from './request';
 
 const apiRouter = Router();
 
@@ -27,5 +28,6 @@ apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/sentReminders', sentRemindersRouter);
 apiRouter.use('/sentRecalls', sentRecallsRouter);
+apiRouter.use('/requests', requestRouter);
 
 export default apiRouter;

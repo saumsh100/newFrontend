@@ -68,27 +68,27 @@ export default function (sequelize, DataTypes) {
     });
 
     Request.belongsTo(Appointment, {
-      foreignKey: 'accountId',
+      foreignKey: 'appointmentId',
       as: 'appointment',
     });
 
     Request.belongsTo(Chair, {
-      foreignKey: 'accountId',
+      foreignKey: 'chairId',
       as: 'chair',
     });
 
     Request.belongsTo(Service, {
-      foreignKey: 'accountId',
+      foreignKey: 'serviceId',
       as: 'service',
     });
 
     Request.belongsTo(Practitioner, {
-      foreignKey: 'accountId',
+      foreignKey: 'practitionerId',
       as: 'practitioner',
     });
 
     Request.belongsTo(PatientUser, {
-      foreignKey: 'accountId',
+      foreignKey: 'patientUserId',
       as: 'patientUser',
     });
   };
