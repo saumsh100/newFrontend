@@ -16,6 +16,7 @@ import sentRecallsRouter from './sentRecalls';
 import requestRouter from './request';
 import updaterRouter from './updater';
 import weeklySchedulesRouter from './weeklySchedules';
+import chatRouter from './chats';
 import syncErrorRouter from './syncClientError';
 import recallsRouter from './recalls';
 
@@ -38,5 +39,6 @@ apiRouter.use('/sentRecalls', sentRecallsRouter);
 apiRouter.use('/requests', requestRouter);
 apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
+apiRouter.use('/chats', chatRouter);
 
 export default apiRouter;
