@@ -32,6 +32,73 @@ Object {
 }
 `;
 
+exports[`/api/waitSpots GET / retrieve waitSpots with a patient or patientUser 1`] = `
+Object {
+  "entities": Object {
+    "patientUsers": Object {
+      "b8665c97-1e98-41ac-bf13-090b742de400": Object {
+        "email": "testpatientuser@test.com",
+        "firstName": "Jack",
+        "id": "b8665c97-1e98-41ac-bf13-090b742de400",
+        "isEmailConfirmed": false,
+        "isPhoneNumberConfirmed": false,
+        "lastName": "Daniels",
+        "phoneNumber": "+16049999999",
+      },
+    },
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointmentPreference": "both",
+        "email": "testpatient@test.com",
+        "firstName": "Ronald",
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "lastName": "Mcdonald",
+        "mobilePhoneNumber": "+17789999999",
+        "pmsId": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+      },
+    },
+    "waitSpots": Object {
+      "cc43f0d7-9fb0-4946-b889-f284ea48e4d0": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-09-27T00:14:30.932Z",
+        "id": "cc43f0d7-9fb0-4946-b889-f284ea48e4d0",
+        "patient": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "patientUser": "b8665c97-1e98-41ac-bf13-090b742de400",
+        "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
+        "preferences": Object {
+          "afternoons": true,
+          "evenings": true,
+          "mornings": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+      },
+    },
+  },
+  "result": Array [
+    "cc43f0d7-9fb0-4946-b889-f284ea48e4d0",
+  ],
+}
+`;
+
 exports[`/api/waitSpots POST / create a waitSpot 1`] = `
 Object {
   "entities": Object {

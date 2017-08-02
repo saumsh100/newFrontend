@@ -7,7 +7,7 @@ const eight = time(8, 0);
 const five = time(17, 0);
 
 const generateDailyScheduleSchema = (options = {}) => {
-  const { isClosed = false, startTime = eight, endTime = five, breaks } = options;
+  const { isClosed = false, startTime = eight, endTime = five, breaks = [] } = options;
   return type.object().schema({
     isClosed: type.boolean().required().default(isClosed),
     startTime: type.date().required().default(startTime),

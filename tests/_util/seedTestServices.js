@@ -1,5 +1,5 @@
 
-import { Service, Practitioner } from '../../server/models';
+import { Service } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
 
@@ -11,15 +11,11 @@ const service = {
   accountId,
   duration: 4,
   createdAt: '2017-07-19T00:14:30.932Z',
-  bufferTime: null,
-  isDefault: true,
-  pmsId: null,
-  unitCost: null,
 };
 
 async function seedTestService() {
   await wipeModel(Service);
-  await Service.save(service);
+  await Service.create(service);
 }
 
 module.exports = {

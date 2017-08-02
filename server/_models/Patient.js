@@ -97,7 +97,7 @@ export default function (sequelize, DataTypes) {
         weekdays: true,
         weekends: true,
         sms: true,
-        email: true,
+        emailNotifications: true,
         phone: true,
         reminders: true,
         newsletter: true,
@@ -108,6 +108,11 @@ export default function (sequelize, DataTypes) {
     // TODO: what is this for?
     type: {
       type: DataTypes.STRING,
+    },
+
+    appointmentPreference: {
+      type: DataTypes.STRING,
+      defaultValue: 'both',
     },
 
     birthDate: {
@@ -155,7 +160,7 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account }) => {
+  Patient.associate = ({ Account, PatientUser }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',

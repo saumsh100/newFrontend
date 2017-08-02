@@ -114,6 +114,7 @@ export default function (sequelize, DataTypes) {
       as: 'practitioner',
     });
 
+
     Appointment.hasMany(SentReminder, {
       foreignKey: 'appointmentId',
       as: 'sentReminders',
