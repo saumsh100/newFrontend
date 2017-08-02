@@ -31,5 +31,5 @@ async function seedTestRecalls() {
 module.exports = {
   recallId1,
   recallId2,
-  seedTestRecalls
+  seedTestRecalls,
 };

@@ -17,12 +17,14 @@ import requestRouter from './request';
 import updaterRouter from './updater';
 import weeklySchedulesRouter from './weeklySchedules';
 import syncErrorRouter from './syncClientError';
+import recallsRouter from './recalls';
 
 const apiRouter = Router();
 
 apiRouter.all('*', sequelizeAuthMiddleware, createJoinObject);
 apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/accounts', remindersRouter);
+apiRouter.use('/accounts', recallsRouter);
 apiRouter.use('/chairs', chairsRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/families', familiesRouter);
