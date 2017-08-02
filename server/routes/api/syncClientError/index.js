@@ -24,7 +24,6 @@ syncClientErrorRouter.get('/', checkPermissions('syncClientError:read'), (req, r
  */
 syncClientErrorRouter.post('/', checkPermissions('syncClientError:create'), (req, res, next) => {
   const syncErrorData = Object.assign({}, req.body, { accountId: req.accountId });
-
   return SyncClientError.save(syncErrorData)
     .then((logEntry) => {
       res.sendStatus(201);
