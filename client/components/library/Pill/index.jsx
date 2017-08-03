@@ -10,12 +10,12 @@ class Pill extends PureComponent {
     const className = classnames(styles.pill, this.props.selected ? styles.selectedPill : null);
 
     return (
-      <button
+      <span
         className={className}
         onClick={() => this.props.onClick(this.props.pillId)}
       >
         {this.props.title}
-      </button>
+      </span>
     );
   }
 }

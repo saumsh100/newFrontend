@@ -11,6 +11,14 @@ class SelectPill extends PureComponent {
     };
   }
 
+  componentWillReceiveProps(props) {
+    if (props.selected) {
+      this.state = {
+        selectedPills: props.selected,
+      };
+    }
+  }
+
   onPillClick(pillId) {
     if (!this.props.multiselect) {
       this.setState({
@@ -54,11 +62,13 @@ SelectPill.propTypes = {
   children: PropTypes.node.isRequired,
   onChange: PropTypes.func,
   multiselect: PropTypes.bool,
+  selected: PropTypes.shape({}),
 };
 
 SelectPill.defaultProps = {
   onChange: () => {},
   multiselect: false,
+  selected: {},
 };
 
 export default SelectPill;

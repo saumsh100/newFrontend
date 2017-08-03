@@ -11,6 +11,7 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
+import { previewSegment } from '../../../thunks/segments';
 import styles from './styles.scss';
 
 
@@ -22,9 +23,15 @@ class AddSegment extends Component {
     this.handleAgeChange = this.handleAgeChange.bind(this);
     this.handleGenderChange = this.handleGenderChange.bind(this);
   }
+
+  componentWillReceiveProps(props) {
+    if (props.formData) {
+      this.props.previewSegment(props.formData);
+    }
+  }
   
-  handleSubmit() {
-    
+  handleSubmit(values) {
+    debugger;
   }
 
   handleAgeChange(value) {
@@ -33,6 +40,7 @@ class AddSegment extends Component {
     } = this.props;
 
     this.props.change(formName, 'age', Object.keys(value));
+    return false;
   }
 
   handleGenderChange(value) {
@@ -51,14 +59,6 @@ class AddSegment extends Component {
   
     return (
       <div className={styles.formContainer}>
-        <IconButton
-          icon="times"
-          onClick={() => {
-            this.props.reset(formName);
-            return reinitializeState();
-          }}
-          className={styles.trashIcon}
-        />
         <DisplayForm
           key={formName}
           formName={formName}
@@ -66,6 +66,11 @@ class AddSegment extends Component {
           handleAgeChange={this.handleAgeChange}
           handleGenderChange={this.handleGenderChange}
           handleSubmit={this.handleSubmit}
+          formState={this.props.formState}
+          handleCancel={() => {
+            this.props.reset(formName);
+            return reinitializeState();
+          }}
         />
       </div>
     );
@@ -80,12 +85,16 @@ function mapDispatchToProps(dispatch) {
     deleteEntityRequest,
     reset,
     change,
+    previewSegment,
   }, dispatch);
 }
 
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    formState: state.form.AddSegment,
+    formData: state.form.AddSegment ? state.form.AddSegment.values : null,
+  };
 }
 
 AddSegment.propTypes = {
@@ -95,8 +104,20 @@ AddSegment.propTypes = {
   reset: PropTypes.func,
   reinitializeState: PropTypes.func,
   change: PropTypes.func,
+  previewSegment: PropTypes.func,
+  formState: PropTypes.shape({}).isRequired,
+  formData: PropTypes.shape({}).isRequired,
 };
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(AddSegment);
+
+/**
+ * TODO:
+ * - InitialState on gender
+ * - Preview
+ * - Apply
+ * - Name prompt on save
+ * - Save to the database
+ */
