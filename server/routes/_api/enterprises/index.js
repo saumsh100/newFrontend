@@ -91,6 +91,10 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
     await user.update({ activeAccountId: accountId, enterpriseId });
 
     // Create a new session
+    console.log('sessionData', sessionData);
+    console.log('accountId', accountId);
+    console.log('enterpriseId', enterpriseId);
+
     const newSession = await UserAuth.updateSession(sessionId, sessionData, {
       accountId,
       enterpriseId,
@@ -99,7 +103,7 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
     // Sign token with new session
     const token = await UserAuth.signToken({
       userId: sessionData.userId,
-      newSession: newSession.id,
+      sessionId: newSession.id,
       activeAccountId: accountId,
     });
 
