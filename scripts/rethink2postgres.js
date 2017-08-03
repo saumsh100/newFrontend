@@ -75,6 +75,26 @@ const TMP_ORDER = [
   'PinCode',
 ];
 
+const chantaleId = '1457bf9b-dc94-46f0-95f5-fc398fb6f59b';
+const lalaId1 = '1b9606bc-3666-40d0-a6e7-7770d605b815';
+const lalaId2 = '79c256b9-0345-4e9d-aadb-280d292d778b';
+const mediId = '9ba0dbf9-64b2-41e7-a263-e634431c5e71';
+const cbibetId = 'a660eb1c-dbd3-48c8-aa85-1f154229e45e';
+const mxlpsId = 'ada2fcb1-d542-47d5-ad68-1ecc468d0e13';
+const silvaId = 'be4b890e-1b07-4871-9947-1b4b9ad47227';
+const saharId = '3edbace7-5c78-48ee-986b-bb1336060957';
+
+const emailRemoval = {
+  [chantaleId]: true,
+  [lalaId1]: true,
+  [lalaId2]: true,
+  [mediId]: true,
+  [cbibetId]: true,
+  [mxlpsId]: true,
+  [silvaId]: true,
+  [saharId]: true,
+};
+
 const TRANSFORM = {
   Practitioner_Service(data) {
     data.practitionerId = data.Practitioner_id;
@@ -87,10 +107,9 @@ const TRANSFORM = {
   },
 
   Patient(data) {
-    if (data.email === 'chantale.pamplin@gmail.com') {
-      console.log('data');
-      console.log(data);
-      console.log(' ');
+    // First remove emails from the ones needing removal
+    if (emailRemoval[data.id]) {
+      data.email = undefined;
     }
 
     // If email is a string, trim it, if still defined
@@ -117,6 +136,8 @@ const enterprisesHash = {};
 const ignoreLogs = {
   'Practitioner_Service': true,
   'PatientUser': true,
+  'TextMessage': true,
+  'Chat': true,
 };
 
 // Can't do it for all because it would be too expensive
@@ -210,7 +231,7 @@ async function main() {
 
       let successes = 0;
       let errors = 0;
-      if (SequelizeModel.batchSave && modelName !== 'Appointment' && modelName !== 'Patient') {
+      if (SequelizeModel.batchSave && modelName !== 'Appointment') {
         try {
           const models = await SequelizeModel.batchSave(dataArray);
           successes = models.length;

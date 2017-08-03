@@ -220,11 +220,6 @@ export default function (sequelize, DataTypes) {
     const validatedDocs = [];
     for (const d of docs) {
       try {
-        if (d.email === 'chantale.pamplin@gmail.com') {
-          console.log('d');
-          console.log(d);
-        }
-
         await d.validate(); // validate against schema
         validatedDocs.push(d);
       } catch (err) {
@@ -232,10 +227,6 @@ export default function (sequelize, DataTypes) {
         errors.push(err);
       }
     }
-
-    console.log('pre-uniqWith');
-    console.log('patient docs.length', validatedDocs.length);
-    console.log('patient errors.length', errors.length);
 
     // Now check uniqueness against each other
     docs = uniqWith(validatedDocs, (a, b) => {
@@ -246,23 +237,11 @@ export default function (sequelize, DataTypes) {
         }
 
         if (a.email && b.email && (a.email === b.email)) {
-          console.log('a model');
-          console.log(a);
-          console.log('b model');
-          console.log(b);
-          console.log('a.accountId', a.accountId);
-          console.log('b.accountId', b.accountId);
-          console.log('a.email', a.email);
-          console.log('b.email', b.email);
           onError('email', a);
           return true;
         }
       }
     });
-
-    console.log('post-uniqWith');
-    console.log('patient docs.length', docs.length);
-    console.log('patient errors.length', errors.length);
 
     // Now that they are sanitized, validated, and unique against each other
     const finalDocs = [];
