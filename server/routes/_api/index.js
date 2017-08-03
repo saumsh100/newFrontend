@@ -22,6 +22,7 @@ import chatRouter from './chats';
 import syncErrorRouter from './syncClientError';
 import recallsRouter from './recalls';
 import callsRouter from './calls';
+import servicesRouter from './services';
 
 const apiRouter = Router();
 
@@ -47,6 +48,7 @@ apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/chats', chatRouter);
 apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
 apiRouter.use('/calls', callsRouter);
+apiRouter.use('/services', servicesRouter);
 
 
 export default apiRouter;
