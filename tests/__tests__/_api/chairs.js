@@ -13,6 +13,8 @@ const chairId1 = '23d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const chairId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const newChairId = '11d4e661-1155-4494-8fdb-c4ec0ddf804d';
 
+
+
   // Seed an extra account for fetching multiple and testing switching
   /*await Account.create({
     id: accountId2,
