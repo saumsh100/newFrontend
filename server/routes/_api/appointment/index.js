@@ -21,9 +21,7 @@ const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'sat
 const monthsYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 appointmentsRouter.get('/business', (req, res, next) => {
-
   const {
-    joinObject,
     query,
     accountId,
   } = req;
@@ -444,9 +442,7 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
     ));
   return Appointment.batchSave(cleanedAppointments)
     .then((apps) => {
-      const appData = apps.map((app) => {
-        return app.get({ plain: true });
-      });
+      const appData = apps.map(app => app.get({ plain: true }));
       res.send(normalize('appointments', appData));
     })
     .catch(({ errors, docs }) => {
@@ -470,11 +466,9 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
   })
 
   return Promise.all(appointmentUpdates)
-    .then(_appointments => {
-      const appData = _appointments.map((app) => {
-        return app.dataValues;
-      });
-      res.send(normalize('appointments', appData))
+    .then((_appointments) => {
+      const appData = _appointments.map(app => app.get({ plain: true }));
+      res.send(normalize('appointments', appData));
     })
     .catch(next);
 });
