@@ -2,6 +2,7 @@
 import moment from 'moment';
 import { r } from '../../config/thinky';
 import { Appointment, SentReminder } from '../../models';
+import { SentReminder as _SentReminder, Appointment as _Appointment } from '../../_models';
 
 // Made an effort to throw all easily testable functions into here
 
@@ -69,6 +70,32 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
     .orderBy('createdAt')
     .getJoin({ appointment: true })
     .run();
+
+  return sentReminders.filter(({ appointment }) => {
+    // - if appointment is upcoming or is cancelled
+    const isAfter = moment(appointment.startDate).isAfter(date);
+    return !appointment.isCancelled && isAfter && !appointment.isDeleted;
+  });
+}
+
+export async function getValidSmsRemindersSequelize({ accountId, patientId, date }) {
+  // Confirming valid SMS Reminder for patient
+  const sentReminders = await _SentReminder.findAll({
+    raw: true,
+    nest: true,
+    where: {
+      accountId,
+      patientId,
+      isConfirmed: false,
+      primaryType: 'sms',
+    },
+    include: [
+      {
+        model: _Appointment,
+        as: 'appointment',
+      },
+    ],
+  });
 
   return sentReminders.filter(({ appointment }) => {
     // - if appointment is upcoming or is cancelled
