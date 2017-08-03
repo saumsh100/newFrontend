@@ -19,6 +19,10 @@ const requestSeed = {
   accountId,
   serviceId,
   createdAt: '2017-07-19T00:14:30.932Z',
+  practitionerId: null,
+  appointmentId: null,
+  chairId: null,
+  note: null,
 };
 
 async function seedTestRequest() {
@@ -69,7 +73,7 @@ describe('/api/requests', () => {
         })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['password']);
+          body = omitPropertiesFromBody(body, ['password', 'patientUserId']);
           expect(body).toMatchSnapshot();
         });
     });
@@ -127,6 +131,7 @@ describe('/api/requests', () => {
     });
 
     // TODO: Ask someone if this response is supposed to be an empty object
+    // Use Mandrill Key
     test('/:requestId/confirm/:appointmentId - send confirmed request email', () => {
       return request(app)
         .put(`/api/requests/${requestId}/confirm/${appointmentId}`)

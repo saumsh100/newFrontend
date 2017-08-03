@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
-import { Account, Permission, Invite, Reminder, Recall, User } from '../../../_models';
+import { User } from '../../../_models';
 import StatusError from '../../../util/StatusError';
 import normalize from '../normalize';
 
@@ -8,10 +8,7 @@ const permissionsRouter = new Router();
 
 
 permissionsRouter.param('accountId', sequelizeLoader('account', 'Account'));
-permissionsRouter.param('inviteId', sequelizeLoader('invite', 'Invite'));
 permissionsRouter.param('permissionId', sequelizeLoader('permission', 'Permission'));
-permissionsRouter.param('reminderId', sequelizeLoader('reminder', 'Reminder'));
-permissionsRouter.param('recallId', sequelizeLoader('recall', 'Recall'));
 
 /**
  * PUT /:accountId/permissions/:permissionId

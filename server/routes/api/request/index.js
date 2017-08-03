@@ -87,7 +87,7 @@ requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res
   return req.request.merge(req.body).save()
     .then((request) => {
       const normalized = normalize('request', request);
-      res.status(201).send(normalized);
+      res.status(200).send(normalized);
       return { normalized };
     })
     .then(({ normalized }) => {

@@ -5,17 +5,20 @@ import generateToken from '../../util/generateToken';
 import { SyncClientVersion } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
 import { seedTestUsers } from '../../util/seedTestUsers';
-import { omitPropertiesFromBody }  from '../../util/selectors';
+import { omitPropertiesFromBody, omitProperties }  from '../../util/selectors';
 
 const syncClientVersionId = '126d3cb0-4468-4503-9254-77fb1e8df539';
 const syncClientVersion = {
   id: syncClientVersionId,
+  bucket: null,
   major: 2,
   minor: 0,
   patch: 0,
   build: 0,
+  filename: null,
   url: '',
   key: '',
+  path: null,
   secret: '',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
@@ -74,7 +77,7 @@ describe('/api/updater', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitProperties(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -92,6 +95,7 @@ describe('/api/updater', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
+          body = omitProperties(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -103,6 +107,7 @@ describe('/api/updater', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
+          body = omitProperties(body);
           expect(body).toMatchSnapshot();
         });
     });

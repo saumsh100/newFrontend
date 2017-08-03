@@ -1,0 +1,75 @@
+import { Router } from 'express';
+import checkPermissions from '../../../middleware/checkPermissions';
+import normalize from '../normalize';
+import { sequelizeLoader } from '../../util/loaders';
+import { Recall } from '../../../_models';
+import StatusError from '../../../util/StatusError';
+
+const recallsRouter = new Router();
+
+recallsRouter.param('accountId', sequelizeLoader('account', 'Account'));
+recallsRouter.param('recallId', sequelizeLoader('recall', 'Recall'));
+
+/**
+ * GET /:accountId/recalls
+ */
+recallsRouter.get('/:accountId/recalls', checkPermissions('accounts:read'), async (req, res, next) => {
+  // TODO: these should be on a recalls endpoint, not nested on account
+  if (req.account.id !== req.accountId) {
+    next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  try {
+    const recalls = await Recall.findAll({
+      raw: true,
+      where: { accountId: req.accountId },
+    });
+
+    res.send(normalize('recalls', recalls));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /:accountId/recalls
+ */
+recallsRouter.post('/:accountId/recalls', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.account.id !== req.accountId) {
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
+  }
+
+  const saveRecall = Object.assign({ accountId: req.accountId }, req.body);
+  Recall.create(saveRecall)
+    .then((recall) => {
+      res.status(201).send(normalize('recall', recall.dataValues));
+    })
+    .catch(next);
+});
+
+/**
+ * PUT /:accountId/recalls/:recallId
+ */
+recallsRouter.put('/:accountId/recalls/:recallId', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.accountId !== req.account.id) {
+    return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+  }
+
+  return req.recall.update(req.body)
+    .then((recall) => {
+      res.send(normalize('recall', recall.dataValues));
+    })
+    .catch(next);
+});
+
+recallsRouter.delete('/:accountId/recalls/:recallId', checkPermissions('accounts:read'), (req, res, next) => {
+  if (req.accountId !== req.account.id) {
+    return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+  }
+  return req.recall.destroy()
+    .then(() => res.status(204).send())
+    .catch(next);
+});
+
+module.exports = recallsRouter;
+

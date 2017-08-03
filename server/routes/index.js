@@ -5,9 +5,11 @@ import apiRouter from './api';
 import sequelizeApiRouter from './_api';
 import authRouter from './auth';
 import sequelizeAuthRouter from './_auth';
+import callsRouterSequelize from './_callrail';
 import myRouter from './my';
 import callrailRouter from './callrail';
 import twilioRouter from './twilio';
+import twilioRouterSequelize from './_twilio';
 import signupRouter from './signup';
 import {
   Appointment,
@@ -43,7 +45,9 @@ rootRouter.use('/api', sequelizeApiRouter);
 
 // Webhooks!
 rootRouter.use('/twilio', twilioRouter);
+rootRouter.use('/_twilio', twilioRouterSequelize);
 rootRouter.use('/callrail', callrailRouter);
+rootRouter.use('/_callrail', callsRouterSequelize);
 
 // Booking Widget IFRAME Embed
 rootRouter.get('/embed', (req, res, next) => {

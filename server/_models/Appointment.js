@@ -114,6 +114,7 @@ export default function (sequelize, DataTypes) {
       as: 'practitioner',
     });
 
+
     Appointment.hasMany(SentReminder, {
       foreignKey: 'appointmentId',
       as: 'sentReminders',
@@ -150,7 +151,7 @@ export default function (sequelize, DataTypes) {
     const { docs, errors } = await Appointment.preValidateArray(dataArray);
     const savableCopies = docs.map(d => d.get({ plain: true }));
     const response = await Appointment.bulkCreate(savableCopies);
-    if (errors.length) {
+    if (errors.length > 0) {
       throw { docs: response, errors };
     }
 

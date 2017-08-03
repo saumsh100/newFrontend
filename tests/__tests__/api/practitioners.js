@@ -59,6 +59,7 @@ describe('/api/practitioners', () => {
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -115,6 +116,7 @@ describe('/api/practitioners', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           firstName: 'Updated',
+          services: [],
         })
         .expect(200)
         .then(({ body }) => {
@@ -124,21 +126,19 @@ describe('/api/practitioners', () => {
     });
 
     // TODO: Daily schemas have generated timestamps
-    /*
-    test.only('/:practitionerId/customSchedule - update weekly schedule', () => {
-      const updatedWeeklySchedule = weeklySchedule;
-      updatedWeeklySchedule.createdAt = '2017-07-19T00:18:30.932Z';
-      return request(app)
-        .put(`/api/practitioners/${practitionerId}/customSchedule`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(Object.assign({ accountId }, weeklySchedule))
-        .expect(201)
-        .then(({ body }) => {
-          expect(body).toMatchSnapshot();
-          console.log(JSON.stringify(body));
-        });
-    });
-    */
+    // test('/:practitionerId/customSchedule - update weekly schedule', () => {
+    //   const updatedWeeklySchedule = weeklySchedule;
+    //   updatedWeeklySchedule.createdAt = '2017-07-19T00:18:30.932Z';
+    //   return request(app)
+    //     .put(`/api/practitioners/${practitionerId}/customSchedule`)
+    //     .set('Authorization', `Bearer ${token}`)
+    //     .send(Object.assign({ accountId }, weeklySchedule))
+    //     .expect(201)
+    //     .then(({ body }) => {
+    //       body = omitPropertiesFromBody(body, ['id']);
+    //       expect(body).toMatchSnapshot();
+    //     });
+    // });
 
   });
 
