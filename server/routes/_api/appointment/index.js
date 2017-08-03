@@ -13,22 +13,6 @@ const appointmentsRouter = Router();
 
 appointmentsRouter.param('appointmentId', sequelizeLoader('appointment', 'Appointment'));
 
-function intersectingAppointments(appointments, startDate, endDate) {
-  const sDate = moment(startDate);
-  const eDate = moment(endDate);
-
-  return appointments.filter((app) => {
-    const appStartDate = moment(app.startDate);
-    const appEndDate = moment(app.endDate);
-
-    if (sDate.isSame(appStartDate) || sDate.isBetween(appStartDate, appEndDate) ||
-      eDate.isSame(appEndDate) || eDate.isBetween(appStartDate, appEndDate)) {
-      return app;
-    };
-  });
-}
-
-
 function getDiffInMin(startDate, endDate) {
   return moment(endDate).diff(moment(startDate), 'minutes');
 }
@@ -71,44 +55,44 @@ appointmentsRouter.get('/business', (req, res, next) => {
   }
 
   Appointment
-      .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
-      .filter(r.row.hasFields('patientId'))
-      .getJoin({
-        patient: true,
-        practitioner: true,
-        service: true,
-      })
-      .run()
-      .then((appointments) => {
-        let filter = null;
+    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
+    .filter(r.row.hasFields('patientId'))
+    .getJoin({
+      patient: true,
+      practitioner: true,
+      service: true,
+    })
+    .run()
+    .then((appointments) => {
+      let filter = null;
 
-        appointments.map((appointment) => {
-          if (testHygien.test(appointment.practitioner.type)) {
-            send.hygieneAppts++;
-          }
-          if (appointment.isCancelled) {
-            send.brokenAppts++;
-            // add filter to for query to find out if a cancelled appointment has been refilled
-            filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()), appointment.practitionerId);
-          }
-          return null;
+      appointments.map((appointment) => {
+        if (testHygien.test(appointment.practitioner.type)) {
+          send.hygieneAppts++;
+        }
+        if (appointment.isCancelled) {
+          send.brokenAppts++;
+          // add filter to for query to find out if a cancelled appointment has been refilled
+          filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()), appointment.practitionerId);
+        }
+        return null;
+      });
+      Appointment
+        .filter({ accountId })
+        .filter(r.row.hasFields('patientId'))
+        .filter(filter)
+        .run()
+        .then((appointments) => {
+          appointments.map((appointment) => {
+            if (!appointment.isCancelled) {
+              send.brokenAppts--;
+            }
+            return null;
+          });
+          res.send(send);
         });
-        Appointment
-            .filter({ accountId })
-            .filter(r.row.hasFields('patientId'))
-            .filter(filter)
-            .run()
-            .then((appointments) => {
-              appointments.map((appointment) => {
-                if (!appointment.isCancelled) {
-                  send.brokenAppts--;
-                }
-                return null;
-              });
-              res.send(send);
-            });
-      })
-      .catch(next);
+    })
+    .catch(next);
 });
 
 // data for most popular day of the week.
@@ -404,7 +388,7 @@ appointmentsRouter.get('/', (req, res, next) => {
   } = query;
 
   startDate = startDate ? startDate : moment().toISOString();
-  endDate = endDate ? endDate : moment().add(1, 'years');
+  endDate = endDate ? endDate : moment().add(1, 'years').toISOString();
 
   return Appointment.findAll({
     raw: true,
@@ -451,28 +435,22 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 /**
  * Batch create appointment
  */
-appointmentsRouter.post('/batch', checkPermissions('appointments:create'), checkIsArray('appointments'), (req, res, next) => {
+appointmentsRouter.post('/batch', checkPermissions('appointments:create'), checkIsArray('appointments'), async (req, res, next) => {
   const { appointments } = req.body;
   const cleanedAppointments = appointments.map((appointment) => Object.assign(
       {},
       _.omit(appointment, ['id']),
       { accountId: req.accountId }
     ));
-
   return Appointment.batchSave(cleanedAppointments)
-    .then(a => res.send(normalize('appointments', a)))
-    .catch(({ errors, docs }) => {
-      errors = errors.map(({ appointment, message }) => {
-        // Created At can sometimes be a ReQL query and cannot
-        // be stringified by express on res.send, this is a
-        // quick fix for now. Also, message has to be plucked off
-        // because it is removed on send as well
-        delete appointment.createdAt;
-        return {
-          appointment,
-          message,
-        };
+    .then((apps) => {
+      const appData = apps.map((app) => {
+        return app.get({ plain: true });
       });
+      res.send(normalize('appointments', appData));
+    })
+    .catch(({ errors, docs }) => {
+      docs = docs.map(d => d.get({ plain: true }));
 
       const entities = normalize('appointments', docs);
       const responseData = Object.assign({}, entities, { errors });
@@ -486,11 +464,18 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
  */
 appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkIsArray('appointments'), (req, res, next) => {
   const { appointments } = req.body;
-  const appointmentUpdates = appointments.map((appointment) => Appointment.get(appointment.id).run()
-      .then(_appointment => _appointment.merge(appointment).save()));
+  const appointmentUpdates = appointments.map((appointment) => {
+    return Appointment.findById(appointment.id)
+      .then(_appointment => _appointment.update(appointment));
+  })
 
   return Promise.all(appointmentUpdates)
-    .then(_appointments => res.send(normalize('appointments', _appointments)))
+    .then(_appointments => {
+      const appData = _appointments.map((app) => {
+        return app.dataValues;
+      });
+      res.send(normalize('appointments', appData))
+    })
     .catch(next);
 });
 
@@ -501,8 +486,8 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
 appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (req, res, next) => {
   const appointmentIds = req.query.ids.split(',');
 
-  const appointmentsToDelete = appointmentIds.map((id) => Appointment.get(id).run()
-      .then(_appointment => _appointment.delete()));
+  const appointmentsToDelete = appointmentIds.map((id) => Appointment.findById(id)
+      .then(_appointment => _appointment.destroy()));
 
   return Promise.all(appointmentsToDelete)
     .then(() => {

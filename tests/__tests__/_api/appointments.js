@@ -114,7 +114,7 @@ describe('/api/appointments', () => {
     /*
     test('/business - [no description]', () => {
       return request(app)
-        .get('/api/appointments/business?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z')
+        .get(`${rootUrl}/business?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -195,24 +195,26 @@ describe('/api/appointments', () => {
           expect(body).toMatchSnapshot();
         });
     });
-  /*
+
     test('/batch - 4 appointments created successfully', () => {
       return request(app)
-        .post('/api/appointments/batch')
+        .post(`${rootUrl}/batch`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           appointments: [batchAppointment, batchAppointment2, batchAppointment3, batchAppointment4],
         })
         .expect(200)
         .then(({ body }) => {
+
           body = omitPropertiesFromBody(body);
           expect(Object.keys(body.entities.appointments).length).toBe(4);
         });
     });
 
+
     test('/batch - 1 invalid appointment, 3 valid appointments', () => {
       return request(app)
-        .post('/api/appointments/batch')
+        .post(`${rootUrl}/batch`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           appointments: [invalidBatchAppointment, batchAppointment2, batchAppointment3, batchAppointment4],
@@ -220,20 +222,21 @@ describe('/api/appointments', () => {
         .expect(400)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
+          console.log(body)
           expect(Object.keys(body.entities.appointments).length).toBe(3);
         });
 
-    });*/
+    });
   });
 
 
   describe('PUT /', () => {
-    /*
+
     test('/batch - update 1 appointment', () => {
       const updateAppointment = appointment;
       appointment.isReminderSent = false;
       return request(app)
-        .put('/api/appointments/batch')
+        .put(`${rootUrl}/batch`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           appointments:
@@ -245,7 +248,7 @@ describe('/api/appointments', () => {
           expect(Object.keys(body.entities.appointments).length).toBe(1);
           expect(body).toMatchSnapshot();
         });
-    });*/
+    });
 
     test('/:appointmentId - update appointment', () => {
       return request(app)
