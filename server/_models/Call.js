@@ -18,6 +18,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    dateTime: {
+      type: DataTypes.DATE,
+    },
+
     answered: {
       type: DataTypes.BOOLEAN,
     },

@@ -9,6 +9,7 @@ import familiesRouter from './families';
 import remindersRouter from './reminders';
 import practitionersRouter from './practitioners';
 import permissionsRouter from './permissions';
+import recurringTimeOffRouter from './recurringTimeOffs';
 import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
 import sentRemindersRouter from './sentReminders';
@@ -21,6 +22,7 @@ import chatRouter from './chats';
 import syncErrorRouter from './syncClientError';
 import recallsRouter from './recalls';
 import appointmentsRouter from './appointment';
+import callsRouter from './calls';
 
 const apiRouter = Router();
 
@@ -45,5 +47,8 @@ apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/chats', chatRouter);
 apiRouter.use('/appointments', appointmentsRouter);
+apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
+apiRouter.use('/calls', callsRouter);
+
 
 export default apiRouter;

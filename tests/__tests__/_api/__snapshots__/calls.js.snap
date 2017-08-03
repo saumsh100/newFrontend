@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/calls GET / / - get chats 1`] = `
+Object {
+  "booked": 1,
+  "entities": Object {},
+  "pickup": 1,
+  "total": 1,
+  "webBooked": 0,
+  "webPickup": 0,
+  "webTotal": 0,
+}
+`;

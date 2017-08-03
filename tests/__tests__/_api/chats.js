@@ -145,7 +145,7 @@ describe('/api/chats', () => {
     // test.only('/textMessages - create a text message', async () => {
     //   await seedTestChats();
     //   const textPatient = patient;
-    //   textPatient.mobilePhoneNumber = '+17787130050';
+    //   textPatient.mobilePhoneNumber = '+16045555555';
 
     //   return request(app)
     //     .post(`${rootUrl}/textMessages`)
