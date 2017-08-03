@@ -26,13 +26,21 @@ const ORDER = [
   'Service',
   'Practitioner',
   'Practitioner_Service',
+  'PractitionerRecurringTimeOff',
   'Appointment',
   'Request',
   'Recall',
+  'Reminder',
   'SentRecall',
   'SentReminder',
   'SyncClientError',
   'SyncClientVersion',
+  'Token',
+  'WaitSpot',
+  'Chat',
+  'TextMessage',
+  'Call',
+  'PinCode',
 ];
 
 const TMP_ORDER = [
@@ -45,19 +53,26 @@ const TMP_ORDER = [
   'AuthSession',
   'Invite',
   'PatientUser',
-  //'Family',
-  //'Patient',
+  'Family',
+  'Patient',
   'Service',
   'Practitioner',
   'Practitioner_Service',
-  //'Appointment',
-  //'Request',
-  //'Reminder',
-  //'SentReminder',
-  //'Recall',
-  //'SentRecall',
-  //'SyncClientError',
-  //'SyncClientVersion',
+  'PractitionerRecurringTimeOff',
+  'Appointment',
+  'Request',
+  'Recall',
+  'Reminder',
+  'SentRecall',
+  'SentReminder',
+  'SyncClientError',
+  'SyncClientVersion',
+  'Token',
+  'WaitSpot',
+  'Chat',
+  'TextMessage',
+  'Call',
+  'PinCode',
 ];
 
 const TRANSFORM = {
@@ -72,6 +87,12 @@ const TRANSFORM = {
   },
 
   Patient(data) {
+    if (data.email === 'chantale.pamplin@gmail.com') {
+      console.log('data');
+      console.log(data);
+      console.log(' ');
+    }
+
     // If email is a string, trim it, if still defined
     let { email } = data;
     if (email && typeof email === 'string') {
@@ -86,13 +107,17 @@ const TRANSFORM = {
 };
 
 const FILTER = {
-  Appointment() {
+  /*Appointment() {
     return appointment => appointment('startDate').gt(new Date(2016, 1, 1));
-  }
+  }*/
 };
 
 const accountsHash = {};
 const enterprisesHash = {};
+const ignoreLogs = {
+  'Practitioner_Service': true,
+  'PatientUser': true,
+};
 
 // Can't do it for all because it would be too expensive
 const postFetch = {
@@ -101,6 +126,8 @@ const postFetch = {
       account.enterpriseName = enterprisesHash[account.enterpriseId].name;
       accountsHash[account.id] = account;
     }
+
+    console.log('Account hashMap built');
   },
 
   Enterprise(enterprises) {
@@ -123,12 +150,16 @@ async function wipeSequelize() {
   }
 }
 
-/**
- *
- */
-function splitLargeArray(dataArray, largeNum) {
-
+function logResult(result) {
+  ORDER.forEach((modelName, i) => {
+    const { successes, errors } = result[i];
+    console.log(modelName);
+    console.log(`---- ${successes} ${modelName} models saved`);
+    console.log(`---- ${errors} ${modelName} models failed`);
+  });
 }
+
+const result = [];
 
 /**
  * - Loop through ORDER
@@ -165,8 +196,10 @@ async function main() {
         thinkyModels = await ThinkyModel.run();
       }
 
+      const sequelizeModels = await SequelizeModel.findAll();
       console.log(`${thinkyModels.length} ${modelName} models fetched from Rethink`);
-      let dataArray = thinkyModels.map((t) => t._makeSavableCopy());
+      console.log(`${sequelizeModels.length} ${modelName} models fetched from Sequelize`);
+      let dataArray = thinkyModels.map(t => t._makeSavableCopy());
       if (transformFn) {
         dataArray = dataArray.map(data => transformFn(data));
       }
@@ -177,7 +210,7 @@ async function main() {
 
       let successes = 0;
       let errors = 0;
-      if (SequelizeModel.batchSave && modelName !== 'Appointment') {
+      if (SequelizeModel.batchSave && modelName !== 'Appointment' && modelName !== 'Patient') {
         try {
           const models = await SequelizeModel.batchSave(dataArray);
           successes = models.length;
@@ -187,7 +220,7 @@ async function main() {
             throw error;
           }
 
-          // console.error(error);
+          if (!ignoreLogs[modelName]) console.error(errs);
           successes = docs.length;
           errors = errs.length;
         }
@@ -198,22 +231,25 @@ async function main() {
             await SequelizeModel.create(data);
             successes++;
           } catch (err) {
-            // console.error(err);
+            if (!ignoreLogs[modelName]) console.error(err);
             errors++;
             if (data.accountId) {
               const account = accountsHash[data.accountId];
-              console.log(`---- failure in ${account.name} account under ${account.enterpriseName} enterprise`);
+              if (account) console.log(`---- failure in ${account.name} account under ${account.enterpriseName} enterprise`);
             }
           }
         }
       }
 
+      result.push({ successes, errors });
       console.log(`---- ${successes} ${modelName} models saved`);
       console.log(`---- ${errors} ${modelName} models failed`);
     }
 
     console.log(' ');
     winston.profile('migration');
+    console.log(' ');
+    logResult(result);
     console.log(' ');
     console.log('rethink2postgres migration complete.');
     console.log('Happy days ahead...');
