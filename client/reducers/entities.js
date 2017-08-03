@@ -86,7 +86,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => receive
     weeklySchedules: new weeklySchedules(),
     users: new users(),
     timeOffs: new timeOffs(),
-    practitionerRecurringTimeOffs: new PractitionerRecurringTimeOffs(),
+    practitionerRecurringTimeOffs: new practitionerRecurringTimeOffs(),
     reminders: new reminders(),
     sentReminders: new sentReminders(),
     segments: new segments(),
