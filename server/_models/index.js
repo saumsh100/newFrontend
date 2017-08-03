@@ -4,9 +4,6 @@ const { postgres } = require('../config/globals');
 
 const db = {};
 
-console.log('postgres config');
-console.log(postgres);
-
 // initialize sequelize
 const sequelize = new Sequelize(
   postgres.database,

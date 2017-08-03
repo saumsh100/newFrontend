@@ -74,13 +74,6 @@ const s3 = {
 
 s3.urlPrefix = environmentVariables.S3_URL_PREFIX || `https://${s3.bucket}.s3.amazonaws.com/`;
 
-console.log(environmentVariables.POSTGRESQL_HOST);
-console.log(environmentVariables.POSTGRESQL_PORT);
-console.log(environmentVariables.POSTGRESQL_USER);
-console.log(environmentVariables.POSTGRESQL_PASSWORD);
-console.log(environmentVariables.POSTGRESQL_DATABASE);
-console.log(environmentVariables.TEST_TEST);
-
 // Postgres config
 const postgres = {
   host: environmentVariables.POSTGRESQL_HOST || 'localhost',

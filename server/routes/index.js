@@ -28,7 +28,7 @@ rootRouter.param('sentReminderId', loaders('sentReminder', 'SentReminder', { app
 rootRouter.use(subdomain('my', myRouter));
 
 // Bind auth route to generate tokens
-rootRouter.use('/_auth', authRouter);
+rootRouter.use('/_auth', sequelizeAuthRouter);
 rootRouter.use('/auth', sequelizeAuthRouter);
 
 rootRouter.use('/signup', signupRouter);
@@ -38,7 +38,7 @@ rootRouter.get('/atoms', (req, res, next) => {
 });
 
 // Bind REST API
-rootRouter.use('/_api', apiRouter);
+rootRouter.use('/_api', sequelizeApiRouter);
 
 // New REST API with sequelize
 rootRouter.use('/api', sequelizeApiRouter);
