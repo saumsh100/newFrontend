@@ -228,6 +228,7 @@
     "nodemon": "^1.10.2",
     "pretty-bytes": "^4.0.2",
     "react-addons-perf": "^15.2.1",
+    "sequelize-cli": "^2.7.0",
     "sinon": "^1.15.3",
     "supertest": "^2.0.1"
   }

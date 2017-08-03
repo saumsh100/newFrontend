@@ -1,6 +1,5 @@
 
 import React, { PropTypes, Component } from 'react';
-import { bindActionCreators } from 'redux';
 
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 
@@ -31,7 +30,6 @@ class DisplayForm extends Component {
     const title = selectedSegment ? 'Edit Segment' : 'Create New Segment';
 
     return (
-      
       <Grid className={styles.addNewSegment}>
         <Row className={styles.addNewSegment_mainContainer}>
           <Col xs={9} sm={9} md={9} className={styles.formSection}>
@@ -74,7 +72,7 @@ class DisplayForm extends Component {
                       <Col xs={10} sm={10} md={10}>
                         <SelectPill
                           onChange={this.props.handleGenderChange}
-                          selected={this.props.gender}
+                          selected={[this.props.gender]}
                         >
                           <Pill title="Female" pillId="f" />
                           <Pill title="Male" pillId="m" />
@@ -152,10 +150,11 @@ DisplayForm.propTypes = {
   handleAgeChange: PropTypes.func,
   handleGenderChange: PropTypes.func,
   handleCityChange: PropTypes.func,
+  age: PropTypes.arrayOf(PropTypes.string).isRequired,
+  gender: PropTypes.string.isRequired,
   selectedSegment: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
-  formState: PropTypes.shape({}).isRequired,
 };
 
 export default DisplayForm;
