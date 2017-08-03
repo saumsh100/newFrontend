@@ -18,7 +18,6 @@ import styles from './styles.scss';
 import { SortByFirstName } from '../../library/util/SortEntities';
 
 
-
 const mergeTime = (date, time) => {
   date.setHours(time.getHours());
   date.setMinutes(time.getMinutes());
@@ -27,7 +26,7 @@ const mergeTime = (date, time) => {
 
 // Disabled for handleDateChange
 function dayOfWeekAsString(dayIndex) {
-  return ["sunday","monday","tuesday","wednesday","thursday","friday","saturday",][dayIndex];
+  return ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ][dayIndex];
 }
 
 class AddNewAppointment extends Component {
@@ -155,7 +154,7 @@ class AddNewAppointment extends Component {
         }
       });
 
-    } else {
+    } 
       const appModel = selectedAppointment.appModel;
       const appModelSynced = appModel.set('isSyncedWithPMS', false);
       const valuesMap = Map(newAppointment);
@@ -168,7 +167,7 @@ class AddNewAppointment extends Component {
       }).then(() => {
         reinitializeState();
       });
-    }
+    
   }
 
   handleSliderChange(value) {
@@ -266,12 +265,10 @@ class AddNewAppointment extends Component {
   }
 
   getSuggestions(value) {
-    return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
-      .then((searchData) => {
-        return searchData.patients;
-      }).then((searchedPatients) => {
+    return this.props.fetchEntities({ url: '/api/patients/search', params: { patients: value } })
+      .then((searchData) => searchData.patients).then((searchedPatients) => {
         const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          (key) => searchedPatients[key]) : [];
+          key => searchedPatients[key]) : [];
 
         patientList.map((patient) => {
           patient.display = (
@@ -325,9 +322,9 @@ class AddNewAppointment extends Component {
       <div className={styles.formContainer}>
         <IconButton
           icon="times"
-          onClick={()=>{
-            this.props.reset(formName)
-            return reinitializeState()
+          onClick={() => {
+            this.props.reset(formName);
+            return reinitializeState();
           }}
           className={styles.trashIcon}
         />

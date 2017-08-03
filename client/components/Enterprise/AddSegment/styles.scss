@@ -30,6 +30,12 @@
   padding-top: 10px;
 }
 
+.grid {
+	:global .row {
+		margin-bottom: 10px;
+	}
+}
+
 .nav {
   border-right: 1px solid $clr-bg-dark-grey;
   width: 25%;
@@ -51,6 +57,7 @@
 
 .formSection {
   position: relative;
+  height: 470px;
 }
 
 .activeTab {
