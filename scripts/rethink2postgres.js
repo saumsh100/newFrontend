@@ -26,13 +26,21 @@ const ORDER = [
   'Service',
   'Practitioner',
   'Practitioner_Service',
+  'PractitionerRecurringTimeOff',
   'Appointment',
   'Request',
   'Recall',
+  'Reminder',
   'SentRecall',
   'SentReminder',
   'SyncClientError',
   'SyncClientVersion',
+  'Token',
+  'WaitSpot',
+  'Chat',
+  'TextMessage',
+  'Call',
+  'PinCode',
 ];
 
 const TMP_ORDER = [
@@ -40,25 +48,52 @@ const TMP_ORDER = [
   'WeeklySchedule',
   'Account',
   'Chair',
-  /*'Permission',
+  'Permission',
   'User',
   'AuthSession',
-  'Invite',*/
+  'Invite',
   'PatientUser',
   'Family',
   'Patient',
   'Service',
   'Practitioner',
   'Practitioner_Service',
+  'PractitionerRecurringTimeOff',
   'Appointment',
-  //'Request',
-  //'Reminder',
-  //'SentReminder',
-  //'Recall',
-  //'SentRecall',
-  //'SyncClientError',
-  //'SyncClientVersion',
+  'Request',
+  'Recall',
+  'Reminder',
+  'SentRecall',
+  'SentReminder',
+  'SyncClientError',
+  'SyncClientVersion',
+  'Token',
+  'WaitSpot',
+  'Chat',
+  'TextMessage',
+  'Call',
+  'PinCode',
 ];
+
+const chantaleId = '1457bf9b-dc94-46f0-95f5-fc398fb6f59b';
+const lalaId1 = '1b9606bc-3666-40d0-a6e7-7770d605b815';
+const lalaId2 = '79c256b9-0345-4e9d-aadb-280d292d778b';
+const mediId = '9ba0dbf9-64b2-41e7-a263-e634431c5e71';
+const cbibetId = 'a660eb1c-dbd3-48c8-aa85-1f154229e45e';
+const mxlpsId = 'ada2fcb1-d542-47d5-ad68-1ecc468d0e13';
+const silvaId = 'be4b890e-1b07-4871-9947-1b4b9ad47227';
+const saharId = '3edbace7-5c78-48ee-986b-bb1336060957';
+
+const emailRemoval = {
+  [chantaleId]: true,
+  [lalaId1]: true,
+  [lalaId2]: true,
+  [mediId]: true,
+  [cbibetId]: true,
+  [mxlpsId]: true,
+  [silvaId]: true,
+  [saharId]: true,
+};
 
 const TRANSFORM = {
   Practitioner_Service(data) {
@@ -72,6 +107,11 @@ const TRANSFORM = {
   },
 
   Patient(data) {
+    // First remove emails from the ones needing removal
+    if (emailRemoval[data.id]) {
+      data.email = undefined;
+    }
+
     // If email is a string, trim it, if still defined
     let { email } = data;
     if (email && typeof email === 'string') {
@@ -86,9 +126,38 @@ const TRANSFORM = {
 };
 
 const FILTER = {
-  Appointment() {
+  /*Appointment() {
     return appointment => appointment('startDate').gt(new Date(2016, 1, 1));
-  }
+  }*/
+};
+
+const accountsHash = {};
+const enterprisesHash = {};
+const ignoreLogs = {
+  'Practitioner_Service': true,
+  'PatientUser': true,
+  'TextMessage': true,
+  'Chat': true,
+};
+
+// Can't do it for all because it would be too expensive
+const postFetch = {
+  Accounts(accounts) {
+    for (const account of accounts) {
+      account.enterpriseName = enterprisesHash[account.enterpriseId].name;
+      accountsHash[account.id] = account;
+    }
+
+    console.log('Account hashMap built');
+  },
+
+  Enterprise(enterprises) {
+    for (const enterprise of enterprises) {
+      enterprisesHash[enterprise.id] = enterprise;
+    }
+
+    console.log('Enterprise hashMap built');
+  },
 };
 
 /**
@@ -102,12 +171,16 @@ async function wipeSequelize() {
   }
 }
 
-/**
- *
- */
-function splitLargeArray(dataArray, largeNum) {
-
+function logResult(result) {
+  ORDER.forEach((modelName, i) => {
+    const { successes, errors } = result[i];
+    console.log(modelName);
+    console.log(`---- ${successes} ${modelName} models saved`);
+    console.log(`---- ${errors} ${modelName} models failed`);
+  });
 }
+
+const result = [];
 
 /**
  * - Loop through ORDER
@@ -135,6 +208,7 @@ async function main() {
       const SequelizeModel = SequelizeModels[modelName];
       const transformFn = TRANSFORM[modelName];
       const filterFn = FILTER[modelName];
+      const postFetchFn = postFetch[modelName];
       let thinkyModels;
       if (filterFn) {
         console.log(`Invoking FILTER for ${modelName}`);
@@ -143,15 +217,21 @@ async function main() {
         thinkyModels = await ThinkyModel.run();
       }
 
+      const sequelizeModels = await SequelizeModel.findAll();
       console.log(`${thinkyModels.length} ${modelName} models fetched from Rethink`);
-      let dataArray = thinkyModels.map((t) => t._makeSavableCopy());
+      console.log(`${sequelizeModels.length} ${modelName} models fetched from Sequelize`);
+      let dataArray = thinkyModels.map(t => t._makeSavableCopy());
       if (transformFn) {
         dataArray = dataArray.map(data => transformFn(data));
       }
 
+      if (postFetchFn) {
+        postFetchFn(dataArray);
+      }
+
       let successes = 0;
       let errors = 0;
-      if (SequelizeModel.batchSave) {
+      if (SequelizeModel.batchSave && modelName !== 'Appointment') {
         try {
           const models = await SequelizeModel.batchSave(dataArray);
           successes = models.length;
@@ -161,7 +241,7 @@ async function main() {
             throw error;
           }
 
-          console.error(error);
+          if (!ignoreLogs[modelName]) console.error(errs);
           successes = docs.length;
           errors = errs.length;
         }
@@ -172,18 +252,25 @@ async function main() {
             await SequelizeModel.create(data);
             successes++;
           } catch (err) {
-            console.error(err);
+            if (!ignoreLogs[modelName]) console.error(err);
             errors++;
+            if (data.accountId) {
+              const account = accountsHash[data.accountId];
+              if (account) console.log(`---- failure in ${account.name} account under ${account.enterpriseName} enterprise`);
+            }
           }
         }
       }
 
+      result.push({ successes, errors });
       console.log(`---- ${successes} ${modelName} models saved`);
       console.log(`---- ${errors} ${modelName} models failed`);
     }
 
     console.log(' ');
     winston.profile('migration');
+    console.log(' ');
+    logResult(result);
     console.log(' ');
     console.log('rethink2postgres migration complete.');
     console.log('Happy days ahead...');

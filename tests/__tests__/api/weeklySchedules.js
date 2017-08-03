@@ -5,33 +5,33 @@ import generateToken from '../../util/generateToken';
 import { WeeklySchedule } from '../../../server/models';
 import wipeModel from '../../util/wipeModel';
 import { weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
-
+const rootUrl = '/api/weeklySchedules';
 
 describe('/api/weeklySchedules', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
-    await seedTestUsers();
-    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+  beforeEach(async () => {
     await wipeModel(WeeklySchedule);
+    await seedTestUsers();
+    await seedTestWeeklySchedules();
+    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+  });
+
+  afterAll(async () => {
+    await wipeModel(WeeklySchedule);
+    await wipeTestUsers();
   });
 
   describe('POST /', () => {
-    test('create a weekly schedule', () => {
+    test('should create a weekly schedule and have the appropriate defaults', () => {
       const id = '2bd862e8-67ce-4328-8b2a-7df838ddbeea';
       return request(app)
-        .post('/api/weeklySchedules')
+        .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          id,
-          accountId,
-          name: 'Test Schedule',
-          pmsId: 0,
-          createdAt: '2017-07-19T00:14:30.932Z',
-        })
+        .send({ id })
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -63,18 +63,11 @@ describe('/api/weeklySchedules', () => {
   */
 
   describe('PUT /:weeklyScheduleId', () => {
-    beforeEach(async () => {
-      await seedTestWeeklySchedules();
-    });
-
     test('update a weekly schedule', () => {
       return request(app)
         .put(`/api/weeklySchedules/${weeklyScheduleId}`)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-          name: 'Test Schedule Updated',
-        })
+        .send({ isAdvanced: true })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);

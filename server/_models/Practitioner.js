@@ -1,3 +1,6 @@
+
+const globals = require('../config/globals');
+
 const TYPE = {
   DENTIST: 'Dentist',
   HYGIENIST: 'Hygienist',
@@ -55,12 +58,19 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    fullAvatarUrl: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['avatarUrl']),
+      get() {
+        return this.get('avatarUrl') ? `${globals.s3.urlPrefix}${this.get('avatarUrl')}` : null;
+      },
+    },
+
     weeklyScheduleId: {
       type: DataTypes.UUID,
     },
   });
 
-  Practitioner.associate = (({ Account, Service, Request }) => {
+  Practitioner.associate = ({ Account, Service, Request, Appointment, WeeklySchedule, PractitionerRecurringTimeOff }) => {
     Practitioner.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -71,12 +81,27 @@ export default function (sequelize, DataTypes) {
       as: 'requests',
     });
 
+    Practitioner.belongsTo(WeeklySchedule, {
+      foreignKey: 'weeklyScheduleId',
+      as: 'weeklySchedule',
+    });
+
+    Practitioner.hasMany(Appointment, {
+      foreignKey: 'practitionerId',
+      as: 'appointments',
+    });
+
+    Practitioner.hasMany(PractitionerRecurringTimeOff, {
+      foreignKey: 'practitionerId',
+      as: 'recurringTimeOffs',
+    });
+
     Practitioner.belongsToMany(Service, {
       through: 'Practitioner_Service',
       as: 'services',
       foreignKey: 'practitionerId',
     });
-  });
+  };
 
   /*Practitioner.prototype.getWeeklySchedule = function () {
     const self = this;
@@ -93,5 +118,6 @@ export default function (sequelize, DataTypes) {
   };*/
 
   Practitioner.TYPE = TYPE;
+
   return Practitioner;
 }

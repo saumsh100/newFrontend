@@ -66,7 +66,7 @@ const getFirstAvailableDate = (appointments, startDate, serviceDuration, officeS
       break;
     }
   }
-    return  currentDay
+    return currentDay;
 
 }
 

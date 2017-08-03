@@ -1,8 +1,9 @@
 
 import request from 'supertest';
+import jwt from 'jwt-decode';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Enterprise } from '../../../server/models';
+import { Account, Enterprise } from '../../../server/models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterprise, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
@@ -20,7 +21,7 @@ const account2 = {
 describe('/api/enterprises', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
     await seedTestUsers();
     token = await generateToken({ username: 'superadmin@test.com', password: '!@CityOfBudaTest#$' });
   });
@@ -30,10 +31,6 @@ describe('/api/enterprises', () => {
   });
 
   describe('GET /', () => {
-    beforeEach(async () => {
-      await seedTestUsers();
-    });
-
     test('/ - get enterprises', () => {
       return request(app)
         .get('/api/enterprises/')
@@ -70,10 +67,6 @@ describe('/api/enterprises', () => {
   });
 
   describe('POST /', () => {
-    beforeEach(async () => {
-      await wipeModel(Enterprise);
-    });
-
     test('/ - create an enterprise', () => {
       return request(app)
         .post('/api/enterprises')
@@ -86,33 +79,43 @@ describe('/api/enterprises', () => {
         });
     });
 
-    // TODO: Test enteprise switch
-    /*
-    test('/switch - switch enterprise', () => {
+    test('/switch - switch enterprise', async () => {
+      // Seed another enterprise and account
+      const enterprise = await Enterprise.save({ name: 'Testerprise' });
+      const account = await Account.save({
+        enterpriseId: enterprise.id,
+        name: 'Testcount',
+      });
 
+      return request(app)
+        .post('/api/enterprises/switch')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ enterpriseId: enterprise.id })
+        .expect(200)
+        .then(({ body: { token: newToken } }) => {
+          expect(typeof newToken).toBe('string');
+
+          const tokenData = jwt(newToken);
+          expect(tokenData.activeAccountId).toBe(account.id);
+        });
     });
-    */
 
     test('/:enterpriseId/accounts - create account under enterprise', async () => {
-      await seedTestUsers();
       return request(app)
         .post(`/api/enterprises/${enterpriseId}/accounts`)
         .set('Authorization', `Bearer ${token}`)
         .send(account2)
         .expect(201)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['weeklyScheduleId']);
           expect(Object.keys(body.entities.accounts).length).toBe(1);
+          expect(body).toMatchSnapshot();
         });
     });
 
   });
 
   describe('PUT /', () => {
-    beforeEach(async () => {
-      await seedTestUsers();
-    });
-
     test('/:enterpriseId/accounts/:accountId - update account', () => {
       return request(app)
         .put(`/api/enterprises/${enterpriseId}/accounts/${accountId}`)
@@ -129,10 +132,6 @@ describe('/api/enterprises', () => {
   });
 
   describe('DELETE /', () => {
-    beforeEach(async () => {
-      await seedTestUsers();
-    });
-
     test('/:enterpriseId/accounts/:accountId - delete enterprise account', () => {
       return request(app)
         .delete(`/api/enterprises/${enterpriseId}/accounts/${accountId}`)

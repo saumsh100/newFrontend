@@ -29,7 +29,7 @@ async function seedData() {
 describe('/api/accounts', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
     await seedData();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
@@ -86,14 +86,6 @@ describe('/api/accounts', () => {
   });
 
   describe('POST /:accountId/switch', () => {
-    afterAll(async () => {
-      // Switch account back!
-      const superAdminToken = await generateToken({ username: 'superadmin@test.com', password: '!@CityOfBudaTest#$' })
-      return request(app)
-        .post(`${rootUrl}/${accountId}/switch`)
-        .set('Authorization', `Bearer ${superAdminToken}`);
-    });
-
     test('should return 403 for MANAGER role', async () => {
       return request(app)
         .post(`${rootUrl}/${accountId2}/switch`)
@@ -129,10 +121,6 @@ describe('/api/accounts', () => {
   });
 
   describe('POST /:accountId/newUser', () => {
-    afterAll(async () => {
-      await seedData();
-    });
-
     test('should create and return the user', async () => {
       const superAdminToken = await generateToken({ username: 'superadmin@test.com', password: '!@CityOfBudaTest#$' })
       return request(app)
@@ -172,10 +160,6 @@ describe('/api/accounts', () => {
   });
 
   describe('PUT /:accoutId', () => {
-    afterAll(async () => {
-      await seedData();
-    });
-
     test('should update the account', () => {
       const name = 'Test That Thang';
       return request(app)

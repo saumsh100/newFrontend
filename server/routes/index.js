@@ -5,9 +5,11 @@ import apiRouter from './api';
 import sequelizeApiRouter from './_api';
 import authRouter from './auth';
 import sequelizeAuthRouter from './_auth';
+import callsRouterSequelize from './_callrail';
 import myRouter from './my';
 import callrailRouter from './callrail';
 import twilioRouter from './twilio';
+import twilioRouterSequelize from './_twilio';
 import signupRouter from './signup';
 import {
   Appointment,
@@ -26,8 +28,8 @@ rootRouter.param('sentReminderId', loaders('sentReminder', 'SentReminder', { app
 rootRouter.use(subdomain('my', myRouter));
 
 // Bind auth route to generate tokens
-rootRouter.use('/auth', authRouter);
 rootRouter.use('/_auth', sequelizeAuthRouter);
+rootRouter.use('/auth', sequelizeAuthRouter);
 
 rootRouter.use('/signup', signupRouter);
 
@@ -36,14 +38,16 @@ rootRouter.get('/atoms', (req, res, next) => {
 });
 
 // Bind REST API
-rootRouter.use('/api', apiRouter);
+rootRouter.use('/_api', sequelizeApiRouter);
 
 // New REST API with sequelize
-rootRouter.use('/_api', sequelizeApiRouter);
+rootRouter.use('/api', sequelizeApiRouter);
 
 // Webhooks!
 rootRouter.use('/twilio', twilioRouter);
+rootRouter.use('/_twilio', twilioRouterSequelize);
 rootRouter.use('/callrail', callrailRouter);
+rootRouter.use('/_callrail', callsRouterSequelize);
 
 // Booking Widget IFRAME Embed
 rootRouter.get('/embed', (req, res, next) => {

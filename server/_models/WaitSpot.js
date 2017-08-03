@@ -22,6 +22,13 @@ export default function (sequelize, DataTypes) {
 
     preferences: {
       type: DataTypes.JSONB,
+      defaultValue: {
+        mornings: true,
+        afternoons: true,
+        evenings: true,
+        weekdays: true,
+        weekends: true,
+      },
     },
 
     unavailableDays: {

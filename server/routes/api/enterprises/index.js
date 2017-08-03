@@ -154,7 +154,7 @@ router.get('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'acc
 
 router.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), (req, res, next) => {
   const accountData = {
-    ...pick(req.body, 'name', 'timezone'),
+    ...pick(req.body, 'name', 'timezone', 'id'),
     enterpriseId: req.enterprise.id,
   };
   const timezone = req.body.timezone;

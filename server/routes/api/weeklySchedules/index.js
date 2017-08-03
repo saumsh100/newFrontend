@@ -14,8 +14,6 @@ weeklySchedulesRouter.post('/', checkPermissions('weeklySchedules:create'), (req
   // Attach weeklySchedule to the clinic of posting user
   const weeklyScheduleData = Object.assign({}, req.body, {
     accountId: req.accountId,
-    name: req.body.name,
-    pmsId: req.body.pmsId,
   });
 
   return WeeklySchedule.save(weeklyScheduleData)
@@ -48,7 +46,6 @@ weeklySchedulesRouter.get('/', checkPermissions('weeklySchedules:read'), (req, r
  * Update a weeklySchedule
  */
 weeklySchedulesRouter.put('/:weeklyScheduleId', checkPermissions('weeklySchedules:update'), (req, res, next) => {
-
   //TODO: check if weeklyschedule accountid matches req.accountid
   return req.weeklySchedule.merge(req.body).save()
     .then(weeklySchedule => res.send(normalize('weeklySchedule', weeklySchedule)))

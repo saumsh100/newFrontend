@@ -13,6 +13,7 @@ import {
   Form,
   FormSection,
   Field,
+  Icon,
 } from '../../../library';
 import styles from './styles.scss';
 
@@ -38,7 +39,7 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId }) {
+function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, modal, openModal }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 
@@ -114,6 +115,11 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId })
                       label="End Time"
                     />
                   </Col>
+                  {modal ? (<Icon
+                    className={styles.icon}
+                    icon="cog"
+                    onClick={() => openModal(day)}
+                  />) : null }
                   <Col xs={3} />
                 </Row>
               </Grid>

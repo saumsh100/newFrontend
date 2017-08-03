@@ -1,3 +1,4 @@
+
 const Sequelize = require('sequelize');
 // Getting config for postgres
 const { postgres } = require('../config/globals');
@@ -10,7 +11,7 @@ const sequelize = new Sequelize(
   postgres.username,
   postgres.password,
   {
-    logging: console.log, // eslint-disable-line
+    logging: false, // eslint-disable-line
     dialect: 'postgres',
     host: postgres.host,
     port: postgres.port,
@@ -38,6 +39,7 @@ models.push((require('./Permission').default(sequelize, Sequelize)));
 models.push((require('./PinCode').default(sequelize, Sequelize)));
 models.push((require('./Practitioner').default(sequelize, Sequelize)));
 models.push((require('./Practitioner_Service').default(sequelize, Sequelize)));
+models.push((require('./PractitionerRecurringTimeOff').default(sequelize, Sequelize)));
 models.push((require('./Recall').default(sequelize, Sequelize)));
 models.push((require('./Reminder').default(sequelize, Sequelize)));
 models.push((require('./Request').default(sequelize, Sequelize)));
