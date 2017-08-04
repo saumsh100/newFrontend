@@ -281,7 +281,7 @@ class PractitionerOfficeHours extends Component{
     let schedules = null;
     const initialValuesChairs = {};
     let dialogShow = null;
-    if (weeklySchedule) {
+    if (weeklySchedule && weeklySchedule.toJS().weeklySchedules) {
       schedules = weeklySchedule.weeklySchedules.map((schedule, i) => {
         return (<div className={styles.toggleContainer_hours}>
           <div className={styles.orSpacer} />
