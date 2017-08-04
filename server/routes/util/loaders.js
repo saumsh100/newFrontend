@@ -19,9 +19,9 @@ module.exports = (reqProp, modelName, joinData = {}) => {
   };
 };
 
-module.exports.sequelizeLoader = (reqProp, modelName) => {
+module.exports.sequelizeLoader = (reqProp, modelName, include = []) => {
   return (req, res, next, param) => {
-    _models[modelName].findById(param)
+    _models[modelName].findOne({ where: { id: param }, include })
       .then((model) => {
         if (!model) next(StatusError(404, `${modelName} with id=${param} not found`));
 

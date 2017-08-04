@@ -60,7 +60,7 @@ describe('/api/sentReminders', () => {
         })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['mark']);
           expect(body).toMatchSnapshot();
         });
     });

@@ -179,7 +179,7 @@ export function fetchAvailabilities() {
       endDate,
     };
 
-    axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
+    return axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
       .then(({ data }) => {
         dispatch(setAvailabilities(data.availabilities));
 

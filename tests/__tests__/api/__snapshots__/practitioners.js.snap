@@ -58,7 +58,6 @@ Object {
     "practitioners": Object {
       "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "firstName": "Colonel",
         "fullAvatarUrl": null,
         "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
@@ -74,42 +73,62 @@ Object {
     "weeklySchedules": Object {
       "8ce3ba61-60cd-40c6-bc85-c018cabd4a40": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
         "friday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
           "endTime": "1970-02-01T01:00:00.000Z",
           "isClosed": false,
+          "pmsScheduleId": null,
           "startTime": "1970-01-31T16:00:00.000Z",
         },
         "id": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
         "isAdvanced": false,
         "monday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
           "endTime": "1970-02-01T01:00:00.000Z",
           "isClosed": false,
+          "pmsScheduleId": null,
           "startTime": "1970-01-31T16:00:00.000Z",
         },
         "saturday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
           "endTime": "1970-02-01T01:00:00.000Z",
           "isClosed": false,
+          "pmsScheduleId": null,
           "startTime": "1970-01-31T16:00:00.000Z",
         },
         "sunday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
           "endTime": "1970-02-01T01:00:00.000Z",
           "isClosed": false,
+          "pmsScheduleId": null,
           "startTime": "1970-01-31T16:00:00.000Z",
         },
         "thursday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
           "endTime": "1970-02-01T01:00:00.000Z",
           "isClosed": false,
+          "pmsScheduleId": null,
           "startTime": "1970-01-31T16:00:00.000Z",
         },
         "tuesday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
           "endTime": "1970-02-01T01:00:00.000Z",
           "isClosed": false,
+          "pmsScheduleId": null,
           "startTime": "1970-01-31T16:00:00.000Z",
         },
         "wednesday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
           "endTime": "1970-02-01T01:00:00.000Z",
           "isClosed": false,
+          "pmsScheduleId": null,
           "startTime": "1970-01-31T16:00:00.000Z",
         },
       },
@@ -161,5 +180,89 @@ Object {
     },
   },
   "result": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+}
+`;
+
+exports[`/api/practitioners PUT / /:practitionerId/customSchedule - update weekly schedule 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "8ce3ba61-60cd-40c6-bc85-c018cabd4a40": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "firstName": "Colonel",
+        "fullAvatarUrl": null,
+        "isActive": true,
+        "isCustomSchedule": true,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "type": "Hygienist",
+        "weeklySchedule": "1920872f-0fa3-495c-8711-1e3d8a4a605a",
+        "weeklyScheduleId": "1920872f-0fa3-495c-8711-1e3d8a4a605a",
+      },
+    },
+    "weeklySchedules": Object {
+      "1920872f-0fa3-495c-8711-1e3d8a4a605a": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "friday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "pmsScheduleId": null,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "isAdvanced": false,
+        "monday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "pmsScheduleId": null,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "saturday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "pmsScheduleId": null,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "sunday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "pmsScheduleId": null,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "thursday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "pmsScheduleId": null,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "tuesday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "pmsScheduleId": null,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+        "wednesday": Object {
+          "breaks": Array [],
+          "chairIds": Array [],
+          "endTime": "1970-02-01T01:00:00.000Z",
+          "isClosed": false,
+          "pmsScheduleId": null,
+          "startTime": "1970-01-31T16:00:00.000Z",
+        },
+      },
+    },
+  },
+  "result": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
 }
 `;

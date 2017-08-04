@@ -99,7 +99,7 @@ export default function (sequelize, DataTypes) {
         weekdays: true,
         weekends: true,
         sms: true,
-        email: true,
+        emailNotifications: true,
         phone: true,
         reminders: true,
         newsletter: true,
@@ -154,16 +154,11 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account }) => {
+  Patient.associate = ({ Account, PatientUser }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
     });
-
-    // Patient.hasMany(Appointment, {
-    //   foreignKey: 'patientId',
-    //   as: 'appointments',
-    // });
   };
 
   /**
@@ -234,13 +229,13 @@ export default function (sequelize, DataTypes) {
 
     // Now check uniqueness against each other
     docs = uniqWith(validatedDocs, (a, b) => {
-      if (a.accountId && b.accountId && a.accountId === b.accountId) {
-        if (a.mobilePhoneNumber && b.mobilePhoneNumber && a.mobilePhoneNumber === b.mobilePhoneNumber) {
+      if (a.accountId && b.accountId && (a.accountId === b.accountId)) {
+        if (a.mobilePhoneNumber && b.mobilePhoneNumber && (a.mobilePhoneNumber === b.mobilePhoneNumber)) {
           onError('mobilePhoneNumber', a);
           return true;
         }
 
-        if (a.email && b.email && a.email === b.email) {
+        if (a.email && b.email && (a.email === b.email)) {
           onError('email', a);
           return true;
         }

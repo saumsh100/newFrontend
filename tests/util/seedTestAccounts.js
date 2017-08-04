@@ -28,6 +28,11 @@ async function seedTestAccounts() {
   await Enterprise.save(enterprise);
 }
 
+async function _wipeTestAccounts() {
+  await wipeModel(Account);
+  await wipeModel(Enterprise);
+}
+
 async function wipeTestAccounts() {
   await wipeModelSequelize(_Account);
   await wipeModelSequelize(_Enterprise);
@@ -44,5 +49,6 @@ module.exports = {
   accountId,
   seedTestAccounts,
   wipeTestAccounts,
+  _wipeTestAccounts,
   seedTestAccountsSequelize,
 };

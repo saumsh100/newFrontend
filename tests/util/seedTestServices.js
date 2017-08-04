@@ -11,6 +11,10 @@ const service = {
   accountId,
   duration: 4,
   createdAt: '2017-07-19T00:14:30.932Z',
+  bufferTime: null,
+  isDefault: true,
+  pmsId: null,
+  unitCost: null,
 };
 
 async function seedTestService() {

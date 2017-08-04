@@ -1,5 +1,6 @@
 
 import customDataTypes from '../util/customDataTypes';
+import globals from '../config/globals';
 
 export default function (sequelize, DataTypes) {
   const Account = sequelize.define('Account', {
@@ -66,6 +67,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
     },
 
+    timezone: {
+      type: DataTypes.STRING,
+    },
+
     twilioPhoneNumber: customDataTypes.phoneNumber('twilioPhoneNumber', DataTypes),
     destinationPhoneNumber: customDataTypes.phoneNumber('destinationPhoneNumber', DataTypes),
     phoneNumber: customDataTypes.phoneNumber('phoneNumber', DataTypes),
@@ -85,6 +90,13 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
+    fullLogoUrl: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['logo']),
+      get() {
+        return this.get('logo') ? `${globals.s3.urlPrefix}${this.get('logo')}` : null;
+      },
+    },
+
     clinicName: {
       type: DataTypes.STRING,
     },
@@ -92,9 +104,25 @@ export default function (sequelize, DataTypes) {
     bookingWidgetPrimaryColor: {
       type: DataTypes.STRING,
     },
+
+    syncClientAdapter: {
+      type: DataTypes.STRING,
+    },
   });
 
-  Account.associate = ({ Appointment, Chat, Enterprise, Patient, Practitioner, Service, WeeklySchedule }) => {
+  Account.associate = (models) => {
+    const {
+      Appointment,
+      Chat,
+      Enterprise,
+      Patient,
+      Practitioner,
+      Reminder,
+      Recall,
+      Service,
+      WeeklySchedule,
+    } = models;
+
     Account.belongsTo(Enterprise, {
       foreignKey: 'enterpriseId',
       as: 'enterprise',
@@ -123,6 +151,16 @@ export default function (sequelize, DataTypes) {
     Account.hasMany(Practitioner, {
       foreignKey: 'accountId',
       as: 'practitioners',
+    });
+
+    Account.hasMany(Reminder, {
+      foreignKey: 'accountId',
+      as: 'reminders',
+    });
+
+    Account.hasMany(Recall, {
+      foreignKey: 'accountId',
+      as: 'recalls',
     });
 
     Account.hasMany(Service, {

@@ -34,6 +34,8 @@ import permissions from '../entities/collections/permissions';
 import Permission from '../entities/models/Permission';
 import TimeOff from '../entities/models/PractitionerTimeOff';
 import timeOffs from '../entities/collections/practitionerTimeOffs';
+import PractitionerRecurringTimeOff from '../entities/models/PractitionerRecurringTimeOff';
+import practitionerRecurringTimeOffs from '../entities/collections/PractitionerRecurringTimeOffs';
 import Requests from '../entities/models/Request';
 import requests from '../entities/collections/requests';
 import Dialogs from '../entities/models/Dialogs';
@@ -66,30 +68,31 @@ import sentRecalls from '../entities/collections/sentRecalls';
 export const createInitialEntitiesState = (initialEntitiesState = {}) => receiveEntities(Map({
     // KEYs must map to the response object
     // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
-  accounts: new accounts(),
-  enterprises: new enterprises(),
-  textMessages: new textMessages(),
-  appointments: new appointments(),
-  requests: new requests(),
-  services: new services(),
-  permissions: new permissions(),
-  invites: new invites(),
-  practitioners: new practitioners(),
-  availabilities: new availabilities(),
-  dialogs: new dialogs(),
-  patients: new patients(),
-  chairs: new chairs(),
-  chats: new chat(),
-  waitSpots: new waitSpots(),
-  weeklySchedules: new weeklySchedules(),
-  users: new users(),
-  timeOffs: new timeOffs(),
-  reminders: new reminders(),
-  sentReminders: new sentReminders(),
-  segments: new segments(),
-  recalls: new recalls(),
-  sentRecalls: new sentRecalls(),
-  patientUsers: new patientUsers(),
+    accounts: new accounts(),
+    enterprises: new enterprises(),
+    textMessages: new textMessages(),
+    appointments: new appointments(),
+    requests: new requests(),
+    services: new services(),
+    permissions: new permissions(),
+    invites: new invites(),
+    practitioners: new practitioners(),
+    availabilities: new availabilities(),
+    dialogs: new dialogs(),
+    patients: new patients(),
+    chairs: new chairs(),
+    chats: new chat(),
+    waitSpots: new waitSpots(),
+    weeklySchedules: new weeklySchedules(),
+    users: new users(),
+    timeOffs: new timeOffs(),
+    practitionerRecurringTimeOffs: new practitionerRecurringTimeOffs(),
+    reminders: new reminders(),
+    sentReminders: new sentReminders(),
+    segments: new segments(),
+    recalls: new recalls(),
+    sentRecalls: new sentRecalls(),
+    patientUsers: new patientUsers(),
 
     // reviews: Reviews(), MODEL
     // listings: Listings(),
@@ -105,6 +108,7 @@ const Models = {
   permissions: Permission,
   invites: Invites,
   practitioners: Practitioners,
+  practitionerRecurringTimeOffs: PractitionerRecurringTimeOff,
   timeOffs: TimeOff,
   dialogs: Dialogs,
   patients: Patient,
@@ -138,6 +142,7 @@ export default handleActions({
     if (model) {
       return newState.deleteIn([key, 'models', id]);
     }
+
     return state;
   },
 
@@ -238,5 +243,6 @@ function receiveEntities(state, entities) {
       }
     });
   });
+
   return newState;
 }

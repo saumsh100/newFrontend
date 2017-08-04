@@ -35,6 +35,7 @@ const Appointment = createModel('Appointment', {
   mark: type.virtual().default(function () {
     return !this.patientId;
   }),
+  isBookable: type.boolean().default(false),
 });
 
 Appointment.ensureIndex('practitionerIdRange', doc => [doc('practitionerId'), doc('startDate')]);

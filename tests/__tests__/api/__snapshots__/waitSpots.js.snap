@@ -12,7 +12,6 @@ Object {
     "waitSpots": Object {
       "cc43f0d7-9fb0-4946-b889-f284ea48e4d0": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-09-27T00:14:30.932Z",
         "endDate": "2017-09-27T00:14:30.932Z",
         "id": "cc43f0d7-9fb0-4946-b889-f284ea48e4d0",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",

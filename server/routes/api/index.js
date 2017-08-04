@@ -18,17 +18,18 @@ import recallsRouter from './recalls';
 import remindersRouter from './reminders';
 import permissionsRouter from './permissions';
 import availabilitiesRouter from './availabilities';
+import sentRecallsRouter from './sentRecalls';
+import sentRemindersRouter from './sentReminders';
 import syncErrorRouter from './syncClientError';
 import syncControlRouter from './syncControlRouter';
 import timeOffsRouter from './practitionerTimeOffs';
+import recurringTimeOffRouter from './practitionerRecurringTimeOffs';
 import updaterRouter from './updater';
 import waitSpotsRouter from './waitSpots';
 import weeklySchedulesRouter from './weeklySchedules';
 import enterprisesRouter from './enterprises';
 import authMiddleware from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
-import sentRemindersRouter from './sentReminders';
-import sentRecallsRouter from './sentRecalls';
 
 const apiRouter = Router();
 
@@ -54,6 +55,7 @@ apiRouter.use('/availabilities', availabilitiesRouter);
 apiRouter.use('/syncClientError', syncErrorRouter);
 apiRouter.use('/syncClientControl', syncControlRouter);
 apiRouter.use('/timeOffs', timeOffsRouter);
+apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/updater', updaterRouter);

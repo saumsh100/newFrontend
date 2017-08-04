@@ -4,47 +4,125 @@
  */
 
 import moment from 'moment';
-import { Reminder, Account } from '../../server/models';
+import {
+  Appointment,
+  Patient,
+  Practitioner,
+  Reminder,
+  SentReminder,
+} from '../../server/models';
 import {
   getAppointmentsFromReminder,
   shouldSendReminder,
   getValidSmsReminders,
 } from '../../server/lib/reminders/helpers';
+import wipeModel from '../util/wipeModel';
+import { _wipeTestAccounts, seedTestAccounts, accountId } from '../util/seedTestAccounts';
+import { seedTestPatients, patientId } from '../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../util/seedTestPractitioners';
 
 // TODO: make seeds more modular so we can see here
-const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
-const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
+// const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
+// const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
 const oneDayReminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 
-describe('RemindersList Calculation Library', () => {
-  describe('#computeRemindersAndSend', () => {
-    it('should be a function', () => {
-      const func = () => {};
-      expect(typeof func).toBe('function');
-    });
+const makeApptData = (data = {}) => Object.assign({
+  accountId,
+  patientId,
+  practitionerId,
+}, data);
 
-    /* it('should work..', (done) => {
-      computerRemindersAndSend().then(() => done());
-    });*/
+const makeSentReminderData = (data = {}) => Object.assign({
+  // Doesnt even have to match reminder for this test
+  patientId,
+  accountId,
+  lengthSeconds: 86400,
+  primaryType: 'sms',
+}, data);
+
+const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
+const dates = (y, m, d, h) => {
+  return {
+    startDate: date(y, m, d, h),
+    endDate: date(y, m, d, h + 1),
+  };
+};
+
+describe('RemindersList Calculation Library', () => {
+  beforeEach(async () => {
+    await wipeModel(Appointment);
+    await wipeModel(SentReminder);
+    await wipeModel(Reminder);
+    await wipeModel(Patient);
+    await wipeModel(Practitioner);
+    await seedTestAccounts();
+    await seedTestPatients();
+    await seedTestPractitioners();
+  });
+
+  afterAll(async () => {
+    await wipeModel(Appointment);
+    await wipeModel(SentReminder);
+    await wipeModel(Reminder);
+    await wipeModel(Patient);
+    await wipeModel(Practitioner);
+    await _wipeTestAccounts();
   });
 
   describe('Helpers', () => {
     describe('#getAppointmentsFromReminder', () => {
-      it('should be a function', () => {
+      test('should be a function', () => {
         expect(typeof getAppointmentsFromReminder).toBe('function');
       });
 
       let reminder;
-      beforeEach(async (done) => {
-        reminder = await Reminder.get(oneDayReminderId);
-        done();
+      let appointments;
+      beforeEach(async () => {
+        reminder = await Reminder.save({ accountId, primaryType: 'sms', lengthSeconds: 86400 });
+        appointments = await Appointment.save([
+          makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
+          makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
+          makeApptData({ ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
+        ]);
       });
 
-      it('should return 1 appointment that needs a reminder', async () => {
-        const date = (new Date(2017, 5, 1, 7, 0)).toISOString();
-        const appointments = await getAppointmentsFromReminder({ reminder, date });
-        expect(appointments.length).toBe(1);
-        expect(appointments[0].note).toBe('1 day away reminder');
+      test('should return 2 appointments that need a reminder', async () => {
+        const currentDate = date(2017, 7, 5, 7);
+        const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
+        expect(appts.length).toBe(2);
+      });
+
+      test('should return 1 appointment as the other has reminder already sent', async () => {
+        const currentDate = date(2017, 7, 5, 7);
+        await SentReminder.save(makeSentReminderData({
+          reminderId: reminder.id,
+          appointmentId: appointments[0].id,
+        }));
+
+        const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
+        expect(appts.length).toBe(1);
+      });
+
+      test('should return 1 appointment as the other has a different and earlier reminder sent (dont send 21 day reminders if the 1 day reminder has been sent)', async () => {
+        const currentDate = date(2017, 7, 5, 7);
+        const diffReminder = await Reminder.save({
+          accountId,
+          primaryType: 'sms',
+          lengthSeconds: 86401,
+        });
+
+        await SentReminder.save({
+          reminderId: reminder.id,
+          appointmentId: appointments[0].id,
+          patientId,
+          accountId,
+          // Doesnt even have to match reminder for this test
+          lengthSeconds: 86400,
+          primaryType: 'sms',
+        });
+
+        const appts = await getAppointmentsFromReminder({ reminder: diffReminder, date: currentDate });
+        expect(appts.length).toBe(1);
       });
 
       // TODO: add date so that all checks are at a certain timestamp...
@@ -53,11 +131,11 @@ describe('RemindersList Calculation Library', () => {
     });
 
     describe('#shouldSendReminder', () => {
-      it('should be a function', () => {
+      test('should be a function', () => {
         expect(typeof shouldSendReminder).toBe('function');
       });
 
-      it('should return true if no sentReminders', () => {
+      test('should return true if no sentReminders', () => {
         const reminder = {};
         const appointment = {
           sentReminders: [],
@@ -71,7 +149,7 @@ describe('RemindersList Calculation Library', () => {
         expect(shouldSendReminder({ appointment, reminder })).toBe(true);
       });
 
-      it('should return true if reminderId is not in sentReminders', () => {
+      test('should return true if reminderId is not in sentReminders', () => {
         const reminder = { id: 2 };
         const appointment = {
           sentReminders: [
@@ -88,7 +166,7 @@ describe('RemindersList Calculation Library', () => {
         expect(shouldSendReminder({ appointment, reminder })).toBe(true);
       });
 
-      it('should return false if reminderId is not in sentReminders', () => {
+      test('should return false if reminderId is not in sentReminders', () => {
         const reminder = { id: 1 };
         const appointment = {
           sentReminders: [
@@ -108,7 +186,7 @@ describe('RemindersList Calculation Library', () => {
       // We put this test in originally when we would not create SentReminder based on prefs
       // Now we still create it. But the communication will not esnd. Thus resulting in an isSent=false SentReminder
       // Which lets the receptionist know that she has a failed reminder for an appointment.
-      test.skip('should return false if patient.preferences does not want them', () => {
+      test('should return false if patient.preferences does not want them', () => {
         const reminder = {};
         const appointment = {
           sentReminders: [],
@@ -124,11 +202,22 @@ describe('RemindersList Calculation Library', () => {
     });
 
     describe('#getValidSmsReminders', () => {
-      it('Should be a function', () => {
+      test('Should be a function', () => {
         expect(typeof getValidSmsReminders).toBe('function');
       });
 
-      it('should return [] for no validSmsReminders', async () => {
+      let reminder;
+      let appointments;
+      beforeEach(async () => {
+        reminder = await Reminder.save({ accountId, primaryType: 'sms', lengthSeconds: 86400 });
+        appointments = await Appointment.save([
+          makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
+          makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
+          makeApptData({ ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
+        ]);
+      });
+
+      test('should return [] for no validSmsReminders', async () => {
         const r = await getValidSmsReminders({
           patientId: 'cat',
           accountId: 'dog',
@@ -138,21 +227,62 @@ describe('RemindersList Calculation Library', () => {
         expect(r.length).toBe(0);
       });
 
-      it('should ignore non-sms and already confirmed', async () => {
+      test('should ignore non-sms and already confirmed', async () => {
+        // Seed 3 SentReminders for the patient
+        await SentReminder.save([
+          makeSentReminderData({
+            reminderId: reminder.id,
+            appointmentId: appointments[0].id,
+            isConfirmed: true,
+          }),
+
+          makeSentReminderData({
+            reminderId: reminder.id,
+            appointmentId: appointments[1].id,
+          }),
+
+          makeSentReminderData({
+            reminderId: reminder.id,
+            appointmentId: appointments[2].id,
+            primaryType: 'phone',
+          }),
+        ]);
+
         const r = await getValidSmsReminders({
           patientId,
           accountId,
-          date: (new Date(2017, 5, 1)).toISOString(),
+          date: date(2017, 7, 5, 7),
         });
 
-        expect(r.length).toBe(2);
+        expect(r.length).toBe(1);
       });
 
-      it('should respect createdAt order', async () => {
+      test('should respect createdAt order', async () => {
+        // Seed 3 SentReminders for the patient
+        await SentReminder.save([
+          makeSentReminderData({
+            reminderId: reminder.id,
+            appointmentId: appointments[0].id,
+            createdAt: date(2017, 7, 4, 1),
+          }),
+
+          makeSentReminderData({
+            reminderId: reminder.id,
+            appointmentId: appointments[1].id,
+            createdAt: date(2017, 7, 4, 2),
+          }),
+
+          makeSentReminderData({
+            reminderId: reminder.id,
+            appointmentId: appointments[2].id,
+            primaryType: 'phone',
+          }),
+        ]);
+
         const r = await getValidSmsReminders({
           patientId,
           accountId,
-          date: (new Date(2017, 5, 1)).toISOString(),
+          date: date(2017, 7, 5, 7),
         });
 
         expect(moment(r[0].createdAt).isBefore(r[1].createdAt)).toBe(true);

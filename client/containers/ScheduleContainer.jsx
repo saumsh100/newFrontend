@@ -38,7 +38,7 @@ class ScheduleContainer extends React.Component {
         params: query,
       }),
       this.props.fetchEntities({
-        key: 'practitioners', join: ['weeklySchedule', 'services', 'timeOffs'],
+        key: 'practitioners', join: ['weeklySchedule', 'services'],
       }),
       this.props.fetchEntities({
         key: 'chairs',

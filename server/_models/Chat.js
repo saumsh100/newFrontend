@@ -27,19 +27,24 @@ export default function (sequelize, DataTypes) {
     },
 
     lastTextMessageId: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
     },
   });
 
-  Chat.associate = ({ Account }) => {
+  Chat.associate = ({ Account, Patient, TextMessage }) => {
     Chat.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
     });
 
-    Chat.belongsTo(Account, {
+    Chat.belongsTo(Patient, {
       foreignKey: 'patientId',
       as: 'patient',
+    });
+
+    Chat.hasMany(TextMessage, {
+      foreignKey: 'chatId',
+      as: 'textMessages',
     });
 
     // TODO: add hasMany textMessages and hasOne lastTextMessage when done

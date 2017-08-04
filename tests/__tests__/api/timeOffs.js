@@ -35,26 +35,6 @@ describe('/api/timeOffs', () => {
     await wipeAllModels();
   });
 
-  describe('GET /', () => {
-    beforeEach(async () => {
-      await seedTestPractitionerTimeOffs();
-    });
-
-    test('get all practitioner time offs', () => {
-      return request(app)
-        .get('/api/timeOffs')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        });
-    });
-  });
-
   describe('POST /', () => {
     beforeEach(async () => {
       await wipeModel(PractitionerTimeOff);

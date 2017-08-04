@@ -1,8 +1,24 @@
 
 import { Account, Patient, SentRecall } from '../../models';
 import { getPatientsDueForRecall } from './helpers';
+import normalize from '../../routes/api/normalize';
 import sendRecall from './sendRecall';
+import app from '../../bin/app';
+import { namespaces } from '../../config/globals';
 
+function sendSocketRecall(io, sentRecallId) {
+  const joinObject = {
+    recall: true,
+    patient: true,
+  };
+
+  return SentRecall.get(sentRecallId).getJoin(joinObject).run()
+    .then((sentRecall) => {
+      io.of('/dash')
+        .in(sentRecall.patient.accountId)
+        .emit('create:SentRecall', normalize('sentRecall', sentRecall));
+    });
+}
 /**
  *
  * @param account
@@ -34,6 +50,7 @@ export async function sendRecallsForAccount(account, date) {
 
       console.log(`${primaryType} recall sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentRecall.merge({ isSent: true }).save();
+      await sendSocketRecall(global.io, sentRecall.id);
     }
   }
 }

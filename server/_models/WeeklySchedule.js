@@ -1,10 +1,19 @@
 
+const { time } = require('../util/time');
+
+import { timeWithZone } from '../util/time';
+
 export default function (sequelize, DataTypes) {
+  const startTime = time(8, 0);
+  const endTime = time(17, 0);
+
   const defaultDailySchedule = {
     isClosed: false,
-    startTime: '08:00:00',
-    endTime: '17:00:00',
+    startTime,
+    endTime,
     breaks: [],
+    chairIds: [],
+    pmsScheduleId: null,
   };
 
   const WeeklySchedule = sequelize.define('WeeklySchedule', {
