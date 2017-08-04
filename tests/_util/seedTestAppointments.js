@@ -2,8 +2,8 @@
 import { Appointment } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
-import { practitionerId, seedTestPractitioners } from './seedTestPractitioners';
-import { patientId, seedTestPatients } from './seedTestPatients';
+import { practitionerId, seedTestPractitioners, wipeTestPractitioners } from './seedTestPractitioners';
+import { patientId, seedTestPatients, wipeTestPatients } from './seedTestPatients';
 
 const appointmentId = '6b215a42-5c33-4f94-8313-d89893ae2f36';
 const appointment = {
@@ -26,8 +26,15 @@ async function seedTestAppointments() {
   await Appointment.create(appointment);
 }
 
+async function wipeTestAppointments() {
+  await wipeModel(Appointment);
+  await wipeTestPatients();
+  await wipeTestPractitioners;
+}
+
 module.exports = {
   appointment,
   appointmentId,
   seedTestAppointments,
+  wipeTestAppointments,
 };

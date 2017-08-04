@@ -5,7 +5,7 @@ import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Practitioner, Service, Practitioner_Service } from '../../server/_models';
 import wipeModel, { wipeModelSequelize } from './wipeModel';
 import { accountId } from './seedTestUsers';
-import { weeklyScheduleId, seedTestWeeklySchedules } from './seedTestWeeklySchedules';
+import { weeklyScheduleId, seedTestWeeklySchedules, wipeTestWeeklySchedules } from './seedTestWeeklySchedules';
 
 const practitionerId = '497ff59a-4bae-4013-bdce-b6b5be91a1f5';
 
@@ -48,8 +48,16 @@ async function seedTestPractitioners() {
   await Practitioner_Service.create(pracService);
 }
 
+async function wipeTestPractitioners() {
+  await wipeModel(Practitioner_Service);
+  await wipeModel(Service);
+  await wipeModel(Practitioner);
+  await wipeTestWeeklySchedules();
+}
+
 module.exports = {
   practitioner,
   practitionerId,
   seedTestPractitioners,
+  wipeTestPractitioners,
 };

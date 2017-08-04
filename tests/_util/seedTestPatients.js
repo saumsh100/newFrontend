@@ -1,5 +1,6 @@
 
 import bcrypt from 'bcrypt';
+import moment from 'moment';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Patient, PatientUser } from '../../server/_models';
 import wipeModel from './wipeModel';
@@ -18,7 +19,7 @@ const patient = {
   mobilePhoneNumber: '7789999999',
   createdAt: '2017-07-19T00:14:30.932Z',
   address: null,
-  birthDate: null,
+  birthDate: moment('1980-01-01').toISOString(),
   familyId: null,
   gender: null,
   homePhoneNumber: null,
@@ -67,10 +68,16 @@ async function seedTestPatients() {
   await Patient.create(patient);
 }
 
+async function wipeTestPatients() {
+  await wipeModel(PatientUser);
+  await wipeModel(Patient);
+}
+
 module.exports = {
   patient,
   patientUser,
   patientId,
   patientUserId,
   seedTestPatients,
+  wipeTestPatients,
 };
