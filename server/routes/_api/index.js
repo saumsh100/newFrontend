@@ -21,6 +21,7 @@ import invitesRouter from './invites';
 import chatRouter from './chats';
 import syncErrorRouter from './syncClientError';
 import recallsRouter from './recalls';
+import appointmentsRouter from './appointment';
 import callsRouter from './calls';
 import servicesRouter from './services';
 
@@ -46,6 +47,7 @@ apiRouter.use('/requests', requestRouter);
 apiRouter.use('/updater', updaterRouter);
 apiRouter.use('/weeklySchedules', weeklySchedulesRouter);
 apiRouter.use('/chats', chatRouter);
+apiRouter.use('/appointments', appointmentsRouter);
 apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
 apiRouter.use('/calls', callsRouter);
 apiRouter.use('/services', servicesRouter);
