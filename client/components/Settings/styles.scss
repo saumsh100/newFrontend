@@ -4,8 +4,10 @@
 .rowContainer {
   display: flex;
   height: calc(100vh - 65px);
-  background-color: $primary-white;
+  background-color: $background-color;
   box-sizing: border-box;
+  padding-left: 15px;
+  padding-top: 15px;
 }
 
 .subSettingsCol {

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
-import { IconButton, CardHeader, Col } from '../../library';
+import { IconButton, CardHeader, Col, Button } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
@@ -106,13 +106,15 @@ class PractitionerList extends Component {
       <div className={styles.practMainContainer} >
         <div className={styles.practListContainer}>
           <div className={styles.modalContainer}>
-            <CardHeader count={practitioners.size} title="Practitioners" />
-            <IconButton
+            {/*<CardHeader count={practitioners.size} title="Practitioners" />*/}
+            <Button
               icon="plus"
               onClick={this.setActive}
               className={styles.addPractitionerButton}
               data-test-id="addPractitionerButton"
-            />
+            >
+              Add Practitioner
+            </Button>
             <DialogBox
               active={this.state.active}
               onEscKeyDown={this.setActive}
@@ -136,6 +138,9 @@ class PractitionerList extends Component {
                 />
               );
             })}
+        </div>
+        <div className={styles.middleContainer}>
+          &nbsp;
         </div>
         <div className={styles.practDataContainer}>
           <PractitionerTabs

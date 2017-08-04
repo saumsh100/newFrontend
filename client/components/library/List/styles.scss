@@ -23,11 +23,13 @@
 }
 
 .selected {
-  background-color: darken($primary-grey, 2%);
+  //background-color: darken($primary-grey, 2%);
+  background-color: $primary-grey;
   &:hover {
     cursor: auto;
-    background-color: darken($primary-grey, 2%);
+    background-color: $primary-grey;
   }
+  border-left: 3px solid $primary-color;
 }
 
 .disabledListItem{
