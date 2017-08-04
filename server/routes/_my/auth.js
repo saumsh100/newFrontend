@@ -1,18 +1,18 @@
 
 import { Router } from 'express';
 import crypto from 'crypto';
-import { PatientAuth } from '../../lib/auth';
-import authMiddleware from '../../middleware/patientAuth';
+import { PatientAuth } from '../../lib/_auth';
+import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import twilio, { phoneNumber } from '../../config/twilio';
-import loaders from '../util/loaders';
+import { sequelizeLoader } from '../util/loaders';
 import StatusError from '../../util/StatusError';
-import { PatientUser, PinCode, Token } from '../../models';
+import { PatientUser, PinCode, Token } from '../../_models';
 import { sendPatientSignup } from '../../lib/mail';
 
 const authRouter = Router();
 
-authRouter.param('patientUserId', loaders('patientUser', 'PatientUser'));
-authRouter.param('tokenId', loaders('token', 'Token'));
+authRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
+authRouter.param('tokenId', sequelizeLoader('token', 'Token'));
 
 const signTokenAndSend = res => ({ session, model }) => {
   const tokenData = {
@@ -34,7 +34,7 @@ const generateEmailConfirmationURL = (tokenId, protocol, host) => {
 };
 
 async function sendConfirmationMessage(patientUser) {
-  const { pinCode } = await PinCode.generateConfirmation(patientUser.id);
+  const { pinCode } = await PinCode.create({ modelId: patientUser.id });
   return twilio.sendMessage({
     to: patientUser.phoneNumber,
     from: phoneNumber,
@@ -52,7 +52,10 @@ authRouter.post('/signup', (req, res, next) => {
   // TODO: we have to use some form library for validations.
   return PatientAuth.signup(patient)
     .then(async ({ session, model }) => {
-      await sendConfirmationMessage(model);
+      if (phoneNumber) {
+        await sendConfirmationMessage(model);
+      }
+
       return { session, model };
     })
     .then(signTokenAndSend(res))
@@ -61,7 +64,7 @@ authRouter.post('/signup', (req, res, next) => {
 
       // Create token
       const tokenId = crypto.randomBytes(12).toString('hex');
-      const token = await Token.save({ id: tokenId, patientUserId: id });
+      const token = await Token.create({ id: tokenId, patientUserId: id });
 
       // Generate the URL to confirm email
       const confirmationURL = generateEmailConfirmationURL(token.id, req.protocol, req.get('host'));
@@ -86,13 +89,13 @@ authRouter.post('/signup', (req, res, next) => {
 
 authRouter.post('/signup/:patientUserId/confirm', (req, res, next) => {
   const { body: { confirmCode }, patientUser } = req;
-  return PinCode.get(confirmCode)
+  return PinCode.findById(confirmCode)
     .then((pc) => {
       const { pinCode, modelId } = pc;
       if (patientUser.id === modelId && pinCode === confirmCode) {
-        patientUser.merge({ isPhoneNumberConfirmed: true }).save()
+        patientUser.update({ isPhoneNumberConfirmed: true })
           .then(p => res.send(p))
-          .then(() => pc.delete());
+          .then(() => pc.destroy());
       }
     })
     .catch(() => {
@@ -105,16 +108,16 @@ authRouter.post('/:patientUserId/resend', (req, res, next) => {
   if (params.patientUserId !== patientUser.id) {
     return next(StatusError(403, 'Requesting user does not have permission to resend another patients sms.'));
   }
-  console.log(patientUser);
-  console.log(params);
-  return PinCode.filter({ modelId: patientUser.id })
+
+  return PinCode.findAll({ where: { modelId: patientUser.id } })
     .then((pinCodes) => {
       for (const pc of pinCodes) {
         // Should we await these ?
-        pc.delete();
+        pc.destroy();
       }
 
       sendConfirmationMessage(patientUser);
+      res.end();
     })
     .catch(next);
 });
@@ -123,9 +126,9 @@ authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
   try {
     const { token } = req;
     const { patientUserId } = token;
-    const patientUser = await PatientUser.get(patientUserId);
-    await patientUser.merge({ isEmailConfirmed: true }).save();
-    await token.delete();
+    const patientUser = await PatientUser.findById(patientUserId);
+    await patientUser.update({ isEmailConfirmed: true });
+    await token.destroy();
     return res.render('patient-email-confirmed');
   } catch (err) {
     next(err);
@@ -144,9 +147,10 @@ authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) 
     .catch(next)
 );
 
-authRouter.get('/me', authMiddleware, (req, res, next) => {
+authRouter.get('/me', sequelizeAuthMiddleware, (req, res, next) => {
   const { patientUserId, sessionId } = req;
-  return PatientUser.get(patientUserId)
+  return PatientUser.findById(patientUserId)
+    .then(patientUser => patientUser || Promise.reject(`No PatientUser with id=${patientUserId}`))
     .then(patientUser =>
       res.json({
         sessionId,
