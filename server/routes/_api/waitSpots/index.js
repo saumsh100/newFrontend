@@ -29,7 +29,7 @@ waitSpotsRouter.post('/', checkPermissions('waitSpots:create'), (req, res, next)
  * Get all waitSpots under a clinic
  */
 waitSpotsRouter.get('/', checkPermissions('waitSpots:read'), async (req, res, next) => {
-  const { accountId, joinObject, query } = req;
+  const { accountId, includeArray, query } = req;
 
   let {
     startTime,
@@ -49,6 +49,7 @@ waitSpotsRouter.get('/', checkPermissions('waitSpots:read'), async (req, res, ne
           $gte: startTime,
         },
       },
+      include: includeArray,
     });
     res.send(normalize('waitSpots', waitSpots));
   } catch (error) {

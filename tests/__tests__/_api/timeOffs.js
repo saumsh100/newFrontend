@@ -1,11 +1,11 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import generateToken from '../../util/generateToken';
-import { PractitionerTimeOff } from '../../../server/models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
+import generateToken from '../../_util/generateToken';
+import { PractitionerRecurringTimeOff, Practitioner } from '../../../server/_models';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
+import { accountId, seedTestUsers } from '../../_util/seedTestUsers';
+import { practitionerId, seedTestPractitioners } from '../../_util/seedTestPractitioners';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const practitionerTimeOffId = '46344262-9039-47fa-a4e6-d762dcc57308';
@@ -18,12 +18,13 @@ const practitionerTimeOff = {
 };
 
 async function seedTestPractitionerTimeOffs() {
+  await wipeModel(Practitioner);
   await seedTestPractitioners();
-  await wipeModel(PractitionerTimeOff);
-  PractitionerTimeOff.save(practitionerTimeOff);
+  await wipeModel(PractitionerRecurringTimeOff);
+  await PractitionerRecurringTimeOff.create(practitionerTimeOff);
 }
 
-describe('/api/timeOffs', () => {
+describe('/api/recurringTimeOffs', () => {
   // Seed with some standard user data
   let token = null;
   beforeAll(async () => {
@@ -37,12 +38,13 @@ describe('/api/timeOffs', () => {
 
   describe('POST /', () => {
     beforeEach(async () => {
-      await wipeModel(PractitionerTimeOff);
+      await seedTestPractitioners();
+      await wipeModel(PractitionerRecurringTimeOff);
     });
 
     test('create time off', () => {
       return request(app)
-        .post('/api/timeOffs')
+        .post('/_api/recurringTimeOffs')
         .set('Authorization', `Bearer ${token}`)
         .send(practitionerTimeOff)
         .expect(201)
@@ -60,7 +62,7 @@ describe('/api/timeOffs', () => {
 
     test('/:timeOffId - update a time off', () => {
       return request(app)
-        .put(`/api/timeOffs/${practitionerTimeOffId}`)
+        .put(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           endDate: '2017-07-19T00:18:30.932Z',
@@ -75,12 +77,12 @@ describe('/api/timeOffs', () => {
 
   describe('DELETE /', () => {
     beforeEach(async () => {
-      await seedTestPractitionerTimeOffs();
+      await seedTestPractitionerTimeOffs().catch(err => console.log(err, 'asdsadsads'));
     });
 
     test('/:timeOffId - delete a time off', () => {
       return request(app)
-        .delete(`/api/timeOffs/${practitionerTimeOffId}`)
+        .delete(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {

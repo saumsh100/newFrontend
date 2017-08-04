@@ -23,6 +23,7 @@ const account = {
   id: accountId,
   enterpriseId,
   name: 'Test Account',
+  destinationPhoneNumber: '+16041234567',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 

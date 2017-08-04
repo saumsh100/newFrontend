@@ -47,7 +47,6 @@ servicesRouter.get('/:serviceId', (req, res, next) => {
 });
 
 servicesRouter.put('/:serviceId', checkPermissions('services:update'), (req, res, next) => {
-
   if (req.service.isDefault !== req.body.isDefault && req.body.isDefault === true) {
     return Service.filter({ accountId: req.service.accountId })
     .getJoin({ practitioners: true }).run()

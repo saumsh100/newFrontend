@@ -27,7 +27,7 @@ export default function (sequelize, DataTypes) {
     },
 
     lastTextMessageId: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
     },
   });
 
