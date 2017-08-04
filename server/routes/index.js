@@ -11,6 +11,7 @@ import callrailRouter from './callrail';
 import twilioRouter from './twilio';
 import twilioRouterSequelize from './_twilio';
 import signupRouter from './signup';
+import signupRouterSequelize from './_signup';
 import {
   Appointment,
   Invite,
@@ -32,6 +33,7 @@ rootRouter.use('/_auth', sequelizeAuthRouter);
 rootRouter.use('/auth', sequelizeAuthRouter);
 
 rootRouter.use('/signup', signupRouter);
+rootRouter.use('/_signup', signupRouterSequelize);
 
 rootRouter.get('/atoms', (req, res, next) => {
   res.send('ATOMS');

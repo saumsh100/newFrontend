@@ -15,8 +15,13 @@ async function seedTestWeeklySchedules() {
   await WeeklySchedule.create(weeklySchedule);
 }
 
+async function wipeTestWeeklySchedules() {
+  await wipeModel(WeeklySchedule);
+}
+
 module.exports = {
   weeklyScheduleId,
   weeklySchedule,
   seedTestWeeklySchedules,
+  wipeTestWeeklySchedules,
 };

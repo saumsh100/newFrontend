@@ -124,7 +124,7 @@ describe('/api/appointments', () => {
 
     test('/statsdate - data for most popular day of the week', () => {
       return request(app)
-        .get('/_api/appointments/statsdate')
+        .get(`${rootUrl}/statsdate`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -135,7 +135,7 @@ describe('/api/appointments', () => {
 
     test('/statslastyear - data for past year', () => {
       return request(app)
-        .get('/_api/appointments/statslastyear')
+        .get(`${rootUrl}/statslastyear`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -146,7 +146,7 @@ describe('/api/appointments', () => {
 
     test('/stats - appointment stats for intelligence overview', () => {
       return request(app)
-        .get('/_api/appointments/stats?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z')
+        .get(`${rootUrl}/stats?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -204,7 +204,6 @@ describe('/api/appointments', () => {
         })
         .expect(201)
         .then(({ body }) => {
-
           body = omitPropertiesFromBody(body);
           expect(Object.keys(body.entities.appointments).length).toBe(4);
         });
