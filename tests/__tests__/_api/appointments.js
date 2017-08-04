@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
 import { Appointment, Account, WeeklySchedule } from '../../../server/_models';
-import wipeModel from '../../_util/wipeModel';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { patientId } from '../../_util/seedTestPatients';
 import { appointment, appointmentId, seedTestAppointments } from '../../_util/seedTestAppointments';
@@ -94,24 +94,23 @@ describe('/api/appointments', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
-    //await wipeModel(Account);
-    //await Account.create(accountWithSchedule);
     await seedTestUsers();
-    //await seedTestWeeklySchedules();
     await seedTestAppointments();
+    await Account.update({ weeklyScheduleId }, { where: { id: accountId } }).catch(err => console.log(err));
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
+    await wipeModel(Account);
     await wipeModel(WeeklySchedule);
     await wipeModel(Appointment);
     await wipeTestUsers();
-    await wipeModel(Account);
+    await wipeAllModels();
   });
 
   // TODO: This can use some more test cases... (Gavin: Not familiar with what's going on in these endpoints)
   describe('GET /', () => {
-    /*
+
     test('/business - [no description]', () => {
       return request(app)
         .get(`${rootUrl}/business?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
@@ -125,7 +124,7 @@ describe('/api/appointments', () => {
 
     test('/statsdate - data for most popular day of the week', () => {
       return request(app)
-        .get('/api/appointments/statsdate')
+        .get('/_api/appointments/statsdate')
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -136,7 +135,7 @@ describe('/api/appointments', () => {
 
     test('/statslastyear - data for past year', () => {
       return request(app)
-        .get('/api/appointments/statslastyear')
+        .get('/_api/appointments/statslastyear')
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -147,14 +146,14 @@ describe('/api/appointments', () => {
 
     test('/stats - appointment stats for intelligence overview', () => {
       return request(app)
-        .get('/api/appointments/stats?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z')
+        .get('/_api/appointments/stats?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z')
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
-    });*/
+    });
 
     test('/ - retrieve appointments', () => {
       return request(app)
@@ -203,7 +202,7 @@ describe('/api/appointments', () => {
         .send({
           appointments: [batchAppointment, batchAppointment2, batchAppointment3, batchAppointment4],
         })
-        .expect(200)
+        .expect(201)
         .then(({ body }) => {
 
           body = omitPropertiesFromBody(body);
