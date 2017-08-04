@@ -87,17 +87,8 @@ requestsRouter.get('/', (req, res, next) => {
       isCancelled,
     },
     include: includeArray,
-  }).then(requests => {
-    res.send(normalize('requests', requests));
-  })
+  }).then(requests => res.send(normalize('requests', requests)))
     .catch(next);
-
-  /*
-  let filter = isCancelled? { accountId, isCancelled: true } : { accountId, isCancelled: false }
-
-  return Request.filter(filter).getJoin(joinObject).run()
-    .then(requests => res.send(normalize('requests', requests)))
-    .catch(next);*/
 });
 
 /**
@@ -145,8 +136,8 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { accountId, request } = req;
   return request.update({ isCancelled: true })
-    .then((request) => {
-      const normalized = normalize('request', request.dataValues);
+    .then((requestData) => {
+      const normalized = normalize('request', requestData.dataValues);
       res.status(201).send(normalized);
       return { normalized };
     })
@@ -198,7 +189,6 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
 requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('requests:update'), (req, res, next) =>{
   return req.request.update({ isConfirmed: true })
     .then(async (request) => {
-      console.log(request.dataValues);
       const patientUser = await PatientUser.findById(request.dataValues.patientUserId);
       const account = await Account.findById(request.dataValues.accountId);
       const { email, firstName } = patientUser;

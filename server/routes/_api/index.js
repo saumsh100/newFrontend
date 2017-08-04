@@ -23,6 +23,7 @@ import syncErrorRouter from './syncClientError';
 import recallsRouter from './recalls';
 import appointmentsRouter from './appointment';
 import callsRouter from './calls';
+import servicesRouter from './services';
 import segmentsRouter from './segments';
 
 const apiRouter = Router();
@@ -50,6 +51,7 @@ apiRouter.use('/chats', chatRouter);
 apiRouter.use('/appointments', appointmentsRouter);
 apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
 apiRouter.use('/calls', callsRouter);
+apiRouter.use('/services', servicesRouter);
 
 
 export default apiRouter;

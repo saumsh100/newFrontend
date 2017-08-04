@@ -31,13 +31,6 @@ invitesRouter.get('/:accountId/invites', (req, res, next) => {
   }).then((invites) => {
     res.send(normalize('invites', invites));
   }).catch(next);
-
-  /*
-  return Invite.filter({ accountId: req.account.id }).getJoin({}).run()
-    .then((invites) => {
-      res.send(normalize('invites', invites));
-    })
-    .catch(next);*/
 });
 
 /**

@@ -42,7 +42,7 @@ export default function (sequelize, DataTypes) {
 
     isDefault: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
     },
   });
 
