@@ -5,66 +5,56 @@ import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
 import authMiddleware from '../../middleware/patientAuth';
-import { Account, PatientUser, Practitioner } from '../../_models';
+import { PatientUser, Practitioner } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
-import createJoinObject from '../../middleware/createJoinObject';
 import normalize from '../api/normalize';
 
-const myRouter = new Router();
+const sequelizeMyRouter = new Router();
 
-myRouter.use('/', newAvailabilitiesRouter);
-myRouter.use('/requests', authMiddleware, requestRouter);
-myRouter.use('/waitSpots', authMiddleware, waitSpotsRouter);
-myRouter.use('/auth', authRouter);
+sequelizeMyRouter.use('/', newAvailabilitiesRouter);
+sequelizeMyRouter.use('/requests', authMiddleware, requestRouter);
+sequelizeMyRouter.use('/waitSpots', authMiddleware, waitSpotsRouter);
+sequelizeMyRouter.use('/auth', authRouter);
 
-myRouter.param('accountId', sequelizeLoader('account', 'Account'));
-myRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
-myRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
+sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
+sequelizeMyRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
+sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
   { association: 'practitioners', required: false },
 ]));
 
-
-myRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', {
-  services: {
-    _apply: service => service.filter((row) => {
-      return row('isHidden').ne(true);
-    }).orderBy('name'),
-  },
-
-  practitioners: true,
-}));
-
-myRouter.get('/widgets/:accountIdJoin/embed', (req, res, next) => {
+sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
+  let practitioners;
   try {
-    // Needs to match the structure of the reducers
-    return Practitioner
-    .filter({accountId: req.account.id})
-    .filter({isActive: true})
-    .then(practitioners => {
-      const { entities } = normalize('account', req.account);
-      let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
-      for (let i = 0; i < req.account.services.length; i++) {
-        if (req.account.services[i].isDefault) {
-          selectedServiceId = req.account.services[i].id;
-        }
+    practitioners = await Practitioner.findAll({ where: { accountId: req.account.id, isActive: true } });
+    const { entities } = normalize('account', req.account.dataValues);
+    let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
+    for (let i = 0; i < req.account.services.length; i++) {
+      if (req.account.services[i].isDefault) {
+        selectedServiceId = req.account.services[i].id;
       }
-      const initialState = {
-        availabilities: {
-          account: req.account,
-          services: req.account.services,
-          practitioners,
-          selectedServiceId,
-        },
+    }
 
-        entities,
-      };
+    const responseAccount = req.account.get({ plain: true });
+    const responseServices = req.account.services.map((service) => {
+      return service.get({ plain: true });
+    });
 
-      return res.render('patient', {
-        account: req.account,
-        initialState: JSON.stringify(initialState),
-      });
+    const initialState = {
+      availabilities: {
+        account: responseAccount,
+        services: responseServices,
+        practitioners,
+        selectedServiceId,
+      },
+
+      entities,
+    };
+
+    return res.render('patient', {
+      account: responseAccount,
+      initialState: JSON.stringify(initialState),
     });
   } catch (err) {
     next(err);
@@ -84,18 +74,19 @@ const toString = str => `"${str}"`;
 const toTemplateString = str => `\`${str}\``;
 const getPath = filename => `${__dirname}/../../routes/my/${filename}`;
 
-myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
+sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
+  const account = req.account.get({ plain: true });
   try {
     fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
       if (err) throw err;
       fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {
         if (_err) throw _err;
-        const color = req.account.bookingWidgetPrimaryColor || '#FF715A';
-        const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${req.account.id}/embed`;
+        const color = account.bookingWidgetPrimaryColor || '#FF715A';
+        const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${account.id}/embed`;
         const withColor = replaceIndex(widgetJS, /__REPLACE_THIS_COLOR__/g, 1, toString(color));
         const withSrc = replaceIndex(withColor, /__REPLACE_THIS_IFRAME_SRC__/g, 1, toString(iframeSrc));
         const withStyleText = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
-        const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(req.account.id));
+        const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(account.id));
 
         // TODO: need to be able to minify and compress code UglifyJS
         res.send(replacedWidgetJS);
@@ -106,35 +97,45 @@ myRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
   }
 });
 
-myRouter.post('/patientUsers/email', (req, res, next) => {
+sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
   let {
     email,
   } = req.body;
 
   email = email && email.toLowerCase();
-  return PatientUser.filter({ email }).run()
-    .then(p => res.send({ exists: !!p[0] }))
-    .catch(next);
+
+  let patientUsers;
+  try {
+    patientUsers = await PatientUser.findAll({ where: { email } });
+  } catch (error) {
+    next(error);
+  }
+
+  return res.send({ exists: !!patientUsers[0] });
 });
 
-myRouter.post('/patientUsers/phoneNumber', (req, res, next) => {
+sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   let {
     phoneNumber,
   } = req.body;
 
   phoneNumber = validatePhoneNumber(phoneNumber);
-  return PatientUser.filter({ phoneNumber }).run()
-    .then(p => {
-      console.log('exists', !!p[0]);
-      res.send({ exists: !!p[0] })
-    })
-    .catch(next);
+  let patientUsers;
+  try {
+    patientUsers = await PatientUser.findAll({ where: { phoneNumber } });
+  } catch (error) {
+    next(error);
+  }
+
+  return res.send({ exists: !!patientUsers[0] });
 });
 
 
-myRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
+sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
+  const patientUser = req.patientUser.get({ plain: true });
+  delete patientUser.password;
   try {
-    res.json(req.patientUser.makeSafe());
+    res.json(patientUser);
   } catch (err) {
     next(err);
   }
@@ -142,8 +143,8 @@ myRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
 
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares
-myRouter.use('(/*)?', (req, res, next) => {
+sequelizeMyRouter.use('(/*)?', (req, res, next) => {
   return res.status(404).end();
 });
 
-module.exports = myRouter;
+module.exports = sequelizeMyRouter;
