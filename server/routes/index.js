@@ -7,6 +7,7 @@ import authRouter from './auth';
 import sequelizeAuthRouter from './_auth';
 import callsRouterSequelize from './_callrail';
 import myRouter from './my';
+import sequelizeMyRouter from './_my';
 import callrailRouter from './callrail';
 import twilioRouter from './twilio';
 import twilioRouterSequelize from './_twilio';
@@ -27,6 +28,7 @@ rootRouter.param('sentReminderId', loaders('sentReminder', 'SentReminder', { app
 // Bind subdomain capturing
 // Will be removed once microservices are in full effect
 rootRouter.use(subdomain('my', myRouter));
+rootRouter.use(subdomain('my2', sequelizeMyRouter));
 
 // Bind auth route to generate tokens
 rootRouter.use('/_auth', sequelizeAuthRouter);
