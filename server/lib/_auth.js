@@ -2,7 +2,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import globals from '../config/globals';
-import { User, PatientAuth, AuthSession } from '../_models';
+import { User, PatientUser, AuthSession } from '../_models';
 
 export const error = (status, message) =>
   Promise.reject({ status, message });
@@ -110,4 +110,4 @@ export const Auth = (Model, uniqueKey) => ({
 });
 
 export const UserAuth = Auth(User, 'username');
-// export const PatientAuth = Auth(PatientUser, 'email');
+export const PatientAuth = Auth(PatientUser, 'email');
