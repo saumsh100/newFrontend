@@ -21,7 +21,10 @@ export default function Button(props) {
 
   let iconComponent = null;
   if (props.icon) {
-    iconComponent = <Icon icon={props.icon} className={styles.icon}/>;
+    iconComponent =
+      <div className={styles.icon}>
+        <Icon icon={props.icon} size={1} />
+      </div>
   }
 
   const newProps = omit(props, ['flat', 'submit']);

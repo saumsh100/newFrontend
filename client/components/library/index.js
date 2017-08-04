@@ -4,6 +4,7 @@ import Alert from './Alert';
 import AppBar from './AppBar';
 import Avatar from './Avatar';
 import AutoCompleteForm from './AutoCompleteForm';
+import BadgeHeader from './BadgeHeader';
 import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
@@ -63,6 +64,7 @@ export {
   AppBar,
   Avatar,
   AutoCompleteForm,
+  BadgeHeader,
   BarChart,
   BackgroundIcon,
   Button,

@@ -2,7 +2,6 @@
 
 .practOuterContainer {
   width: 100%;
-  background: $primary-white;
 }
 
 .practMainContainer {
@@ -17,6 +16,7 @@
   min-width: 250px;
   overflow-y: auto;
   padding-top: 15px;
+  background: $primary-white;
 }
 
 .chairFlex {
@@ -29,27 +29,37 @@
 }
 
 .modalContainer {
-  display: flex;
+  width: 100%;
+  display: inline-block;
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
   padding-bottom: 5px;
+  background: $primary-white;
 }
 
+.displayFlexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center ;
+}
 .addPractitionerButton {
   background: $clr-dark-blue;
+  font-size: 13px;
 }
 
-.middleContainer {
-  width: 15px;
-  background: $background-color;
+.badgeHeader {
+  padding: 15px 30px 0 30px
 }
+
+
 .practListItem {
   height: 65px;
   padding-left: 15px;
   font-size: $medium-size;
   text-transform: capitalize;
+  background: $primary-white;
 }
 
 .subHeader {
@@ -78,13 +88,14 @@
 
 .practDataContainer {
   box-sizing: border-box;
+  margin-left: 15px;
   height:100%;
   width: 100%;
   display: inline-block;
   overflow-y: auto;
   padding-top: 15px;
   padding-right: 15px;
-
+  background: $primary-white;
 }
 
 
