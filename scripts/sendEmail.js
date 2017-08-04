@@ -1,5 +1,5 @@
 
-const mail = require('./server/lib/mail');
+const mail = require('../server/lib/mail');
 
 const protocol = 'https';
 const host = 'localhost:5000';

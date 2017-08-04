@@ -1,26 +1,49 @@
 
 const Sequelize = require('sequelize');
-// Getting config for postgres
 const { postgres } = require('../config/globals');
 
-const db = {};
+const sequelizeConfig = {
+  logging: false,
+  dialect: 'postgres',
+  host: postgres.host,
+  port: postgres.port,
+  define: {
+    underscored: false,
+    paranoid: true,
+  },
+};
+
+// Don't use NODE_ENV===production
+// It doesn't let us debug production locally easily
+if (postgres.ssl) {
+  sequelizeConfig.dialectOptions = {
+    ssl: true,
+  };
+}
+
+// If true, sequelize will dump all PostgreSQL queries into terminal
+if (postgres.logging) {
+  sequelizeConfig.logging = console.log; // eslint-disable-line
+}
 
 // initialize sequelize
 const sequelize = new Sequelize(
   postgres.database,
   postgres.username,
   postgres.password,
-  {
-    logging: console.log, // eslint-disable-line
-    dialect: 'postgres',
-    host: postgres.host,
-    port: postgres.port,
-    define: {
-      underscored: false,
-      paranoid: true,
-    },
-  }
+  sequelizeConfig,
 );
+
+// Test the connection for logs
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log(`Sequelize connected to database=${postgres.database} at host:port=${postgres.host}:${postgres.port}`);
+  })
+  .catch(err => {
+    console.error('postgres config', postgres);
+    console.error('Unable to connect to the database:', err);
+  });
 
 // Import and store all models.
 const models = [];
@@ -55,6 +78,7 @@ models.push((require('./User').default(sequelize, Sequelize)));
 models.push((require('./WaitSpot').default(sequelize, Sequelize)));
 models.push((require('./WeeklySchedule').default(sequelize, Sequelize)));
 
+const db = {};
 models.forEach((model) => {
   db[model.name] = model;
 });

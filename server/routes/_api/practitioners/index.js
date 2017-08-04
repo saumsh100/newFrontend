@@ -22,7 +22,6 @@ practitionersRouter.get('/', (req, res, next) => {
   // const accountId = req.query.accountId || req.accountId;
   const {
     accountId,
-    joinObject,
     includeArray,
   } = req;
   // const { accountId } = req;
