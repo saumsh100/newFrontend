@@ -5,9 +5,7 @@ const isEmpty = require('lodash/isEmpty');
 
 // OS of the computer will add timezone to this function
 const Time = {
-  time: (hours, minutes) => {
-    return new Date(1970, 1, 0, hours, minutes);
-  },
+  time: (hours, minutes) => new Date(1970, 1, 0, hours, minutes),
 
   timeWithZone: (hours, minutes, timezone) => {
     const now = moment(new Date(Date.UTC(1970, 1, 0, hours, minutes)));
@@ -17,12 +15,10 @@ const Time = {
     return now._d;
   },
 
-  getISOSortPredicate: (property) => {
-    return (a, b) => {
-      const ap = a[property];
-      const bp = b[property];
-      return (ap < bp) ? -1 : ((ap > bp) ? 1 : 0);
-    };
+  getISOSortPredicate: property => (a, b) => {
+    const ap = a[property];
+    const bp = b[property];
+    return (ap < bp) ? -1 : ((ap > bp) ? 1 : 0);
   },
 
   /**
@@ -47,13 +43,12 @@ const Time = {
    * @param timeSlot
    * @returns {*}
    */
-  combineDateAndTimeSlot: (date, timeSlot) => {
+  combineDateAndTimeSlot: (date, timeSlot) =>
     // combine day from date and time from timeSlot into a new timeSlot
-    return Object.assign({}, timeSlot, {
-      startDate: Time.combineDateAndTime(date, timeSlot.startTime),
-      endDate: Time.combineDateAndTime(date, timeSlot.endTime),
-    });
-  },
+     Object.assign({}, timeSlot, {
+       startDate: Time.combineDateAndTime(date, timeSlot.startTime),
+       endDate: Time.combineDateAndTime(date, timeSlot.endTime),
+     }),
 
   isDuringEachother: (a, b) => {
     const aDateStart = new Date(a.startDate);
