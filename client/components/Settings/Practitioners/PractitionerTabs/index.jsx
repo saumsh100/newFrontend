@@ -57,7 +57,7 @@ class PractitionerTabs extends Component {
     serviceIds = practitioner.get('services');
 
     return (
-      <div>
+      <div className={styles.practTabContainer}>
         <div className={styles.pracHeaderContainer}>
           <Header title={practitioner.getFullName()} />
           <div className={styles.trashButton}>

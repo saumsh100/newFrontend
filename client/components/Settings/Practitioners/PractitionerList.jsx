@@ -137,6 +137,7 @@ class PractitionerList extends Component {
                   key={practitioner.get('id')}
                   id={practitioner.get('id')}
                   practitionerId={practitionerId}
+                  practitioner={practitioner}
                   fullName={practitioner.getFullName()}
                   setPractitionerId={this.props.setPractitionerId}
                   data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}

@@ -16,7 +16,13 @@
 
 .headerTitle {
   display: inline-block;
-  font-size: $large-size;
+  font-size: 25px;
   font-weight: $medium-weight;
   color: $primary-dark;
+  font-family: $medium-font;
+}
+
+.lightHeader {
+  font-family: $dashboard-font;
+  font-weight: 400;
 }
