@@ -151,8 +151,16 @@ export default function (sequelize, DataTypes) {
     const { docs, errors } = await Appointment.preValidateArray(dataArray);
     const savableCopies = docs.map(d => d.get({ plain: true }));
     const response = await Appointment.bulkCreate(savableCopies);
-    if (errors.length > 0) {
-      throw { docs: response, errors };
+    if (errors.length) {
+      const errorsResponse = errors.map((error) => {
+        error.model = 'Appointment';
+        error.errorMessage = 'Appointment save error';
+        if (error.errors && error.errors[0]) {
+          error.errorMessage = error.errors[0].message;
+        }
+        return error;
+      });
+      throw { docs: response, errors: errorsResponse };
     }
 
     return response;
