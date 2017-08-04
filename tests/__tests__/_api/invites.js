@@ -145,4 +145,24 @@ describe('/api/accounts/:accountId/invites', () => {
         .expect(403);
     });
   });
+
+  describe('POST /signup/:token', () => {
+
+    test('should create a User', async () => {
+      return request(app)
+        .post(`/_signup/${token2}/`)
+        .send({
+          firstName: 'Why',
+          lastName: '?',
+          username: 'invite@test.com',
+          password: 'thisisatest',
+          confirmPassword: 'thisisatest',
+        })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.token).not.toBeNull();
+        });
+    });
+  });
+
 });

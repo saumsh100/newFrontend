@@ -9,6 +9,7 @@ import familiesRouter from './families';
 import remindersRouter from './reminders';
 import practitionersRouter from './practitioners';
 import permissionsRouter from './permissions';
+import patientsRouter from './patients';
 import recurringTimeOffRouter from './recurringTimeOffs';
 import usersRouter from './users';
 import waitSpotsRouter from './waitSpots';
@@ -23,6 +24,7 @@ import syncErrorRouter from './syncClientError';
 import recallsRouter from './recalls';
 import appointmentsRouter from './appointment';
 import callsRouter from './calls';
+import servicesRouter from './services';
 import segmentsRouter from './segments';
 
 const apiRouter = Router();
@@ -37,6 +39,7 @@ apiRouter.use('/chairs', chairsRouter);
 apiRouter.use('/segments', segmentsRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/families', familiesRouter);
+apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/practitioners', practitionersRouter);
 apiRouter.use('/syncClientError', syncErrorRouter);
 apiRouter.use('/users', usersRouter);
@@ -50,6 +53,7 @@ apiRouter.use('/chats', chatRouter);
 apiRouter.use('/appointments', appointmentsRouter);
 apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
 apiRouter.use('/calls', callsRouter);
+apiRouter.use('/services', servicesRouter);
 
 
 export default apiRouter;

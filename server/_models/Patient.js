@@ -154,10 +154,25 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account, PatientUser }) => {
+  Patient.associate = ({ Account, Appointment, Chat }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    Patient.hasMany(Appointment, {
+      foreignKey: 'patientId',
+      as: 'appointments',
+    });
+    Patient.hasMany(Chat, {
+      foreignKey: 'patientId',
+      as: 'chats',
+    });
+
+    // This exists because some endpoints refer to 'chats' as 'chat' in the response
+    Patient.hasMany(Chat, {
+      foreignKey: 'patientId',
+      as: 'chat',
     });
   };
 
@@ -268,7 +283,15 @@ export default function (sequelize, DataTypes) {
     const savableCopies = docs.map(d => d.get({ plain: true }));
     const response = await Patient.bulkCreate(savableCopies);
     if (errors.length) {
-      throw { docs: response, errors };
+      const errorsResponse = errors.map((error) => {
+        error.model = 'Patient';
+        error.errorMessage = 'Patient save error';
+        if (error.errors && error.errors[0]) {
+          error.errorMessage = error.errors[0].message;
+        }
+        return error;
+      });
+      throw { docs: response, errors: errorsResponse };
     }
 
     return response;

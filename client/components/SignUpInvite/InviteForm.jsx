@@ -27,7 +27,7 @@ export default function Invite({ onSubmit }) {
       <Field
         required
         type="email"
-        name="email"
+        name="username"
         validate={[emailValidate]}
         label="Email"
       />

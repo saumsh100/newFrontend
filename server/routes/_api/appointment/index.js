@@ -5,7 +5,7 @@ import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Appointment, Account, Service, Patient, Practitioner } from '../../../_models';
+import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
 import checkIsArray from '../../../middleware/checkIsArray';
 import globals, { namespaces } from '../../../config/globals';
 
@@ -21,9 +21,7 @@ const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'sat
 const monthsYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 appointmentsRouter.get('/business', (req, res, next) => {
-
   const {
-    joinObject,
     query,
     accountId,
   } = req;
@@ -44,44 +42,83 @@ appointmentsRouter.get('/business', (req, res, next) => {
 
   const testHygien = /hygien/i;
 
-  startDate = startDate ? r.ISO8601(startDate) : r.now();
-  endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
 
-  function addtoFilter(rowTest, startTime, endTime, practitionerId) {
-    if (!rowTest) {
-      return r.row('startDate').during(startTime, endTime).and(r.row('practitionerId').eq(practitionerId));
-    }
-    return rowTest.or(r.row('startDate').during(startTime, endTime).and(r.row('practitionerId').eq(practitionerId)));
-  }
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
 
-  Appointment
-    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
-    .filter(r.row.hasFields('patientId'))
-    .getJoin({
-      patient: true,
-      practitioner: true,
-      service: true,
-    })
-    .run()
+  return Appointment.findAll({
+    where: {
+      accountId,
+      $or: [
+        {
+          startDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+        {
+          endDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+      ],
+      patientId: {
+        $not: null,
+      },
+    },
+    raw: true,
+    nest: true,
+    include: [
+      {
+        model: Practitioner,
+        as: 'practitioner',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+      {
+        model: Service,
+        as: 'service',
+      },
+    ],
+  })
     .then((appointments) => {
-      let filter = null;
-
+      const queryCancelled = {
+        where: {
+          accountId,
+          $or: [],
+          patientId: {
+            $not: null,
+          },
+        },
+        raw: true,
+      };
       appointments.map((appointment) => {
         if (testHygien.test(appointment.practitioner.type)) {
           send.hygieneAppts++;
         }
         if (appointment.isCancelled) {
           send.brokenAppts++;
-          // add filter to for query to find out if a cancelled appointment has been refilled
-          filter = addtoFilter(filter, r.ISO8601(moment(appointment.startDate).toISOString()), r.ISO8601(moment(appointment.endDate).toISOString()), appointment.practitionerId);
+          // add filter to for queryCancelled to find out if a cancelled appointment has been refilled
+          queryCancelled.where.$or.push({
+            startDate: {
+              gte: startDate,
+              lte: endDate,
+            },
+          });
+          queryCancelled.where.$or.push({
+            endDate: {
+              gte: startDate,
+              lte: endDate,
+            },
+          });
         }
         return null;
       });
       Appointment
-        .filter({ accountId })
-        .filter(r.row.hasFields('patientId'))
-        .filter(filter)
-        .run()
+        .findAll(queryCancelled)
         .then((appointments) => {
           appointments.map((appointment) => {
             if (!appointment.isCancelled) {
@@ -103,14 +140,32 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
     query,
     accountId,
   } = req;
+  const startDate = moment().subtract(1, 'years').toISOString();
+  const endDate = moment().toISOString();
 
-  const startDate = r.now().add(365 * 24 * 60 * 60 * -1);
-  const endDate = r.now();
-
-  return Appointment
-    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
-    .filter(r.row.hasFields('patientId'))
-    .run()
+  return Appointment.findAll({
+    where: {
+      accountId,
+      $or: [
+        {
+          startDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+        {
+          endDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+      ],
+      patientId: {
+        $not: null,
+      },
+    },
+    raw: true,
+  })
     .then((result) => {
       const days = new Array(6).fill(0);
       // calculate the frequency of the day of the week
@@ -140,15 +195,36 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     const end = moment(date).subtract(i - 1, 'months').toISOString();
     const start = moment(date).subtract(i, 'months').toISOString();
     months.push(monthsYear[moment(date).subtract(i - 1, 'months').get('months')]);
-    const startDate = r.ISO8601(start);
-    const endDate = r.ISO8601(end);
-    Promises.push(Appointment
-      .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
-      .filter(r.row.hasFields('patientId'))
-      .getJoin({
-        patient: true,
-      })
-      .run());
+    Promises.push(Appointment.findAll({
+      where: {
+        accountId,
+        $or: [
+          {
+            startDate: {
+              gt: start,
+              lt: end,
+            },
+          },
+          {
+            endDate: {
+              gt: start,
+              lt: end,
+            },
+          },
+        ],
+        patientId: {
+          $not: null,
+        },
+      },
+      include: [
+        {
+          model: Patient,
+          as: 'patient',
+        },
+      ],
+      raw: true,
+      nest: true,
+    }));
   }
 
   Promise.all(Promises)
@@ -207,35 +283,83 @@ appointmentsRouter.get('/stats', (req, res, next) => {
   const start = moment(startDate)._d;
   const end = moment(endDate)._d;
 
-  startDate = startDate ? r.ISO8601(startDate) : r.now();
-  endDate = endDate ? r.ISO8601(endDate) : r.now().add(365 * 24 * 60 * 60);
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
 
-  const a = Appointment
-    .between([accountId, startDate], [accountId, endDate], { index: 'accountStart' })
-    .filter(r.row.hasFields('patientId'))
-    .getJoin({
-      patient: true,
-      practitioner: true,
-      service: true,
-    })
-    .run();
+  const a = Appointment.findAll({
+    where: {
+      accountId,
+      $or: [
+        {
+          startDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+        {
+          endDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+      ],
+      patientId: {
+        $not: null,
+      },
+    },
+    raw: true,
+    nest: true,
+    include: [
+      {
+        model: Practitioner,
+        as: 'practitioner',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+      {
+        model: Service,
+        as: 'service',
+      },
+    ],
+  });
 
   const b = Practitioner
-    .filter({ accountId })
-    .run();
+    .findAll({
+      where: {
+        accountId,
+      },
+      raw: true,
+    });
 
-  const c = Account
-    .filter({ id: accountId })
-    .getJoin({ weeklySchedule: true })
-    .run();
+  // TODO: this needs to change for practitioner schedule and recurring schedules
+
+  const c = Account.findOne({
+    where: {
+      id: accountId,
+    },
+    include: [
+      {
+        model: WeeklySchedule,
+        as: 'weeklySchedule',
+      },
+    ],
+    raw: true,
+    nest: true,
+  });
 
   const d = Service
-    .filter({ accountId })
-    .run();
+    .findAll({
+      where: { accountId },
+      raw: true,
+    });
 
   const e = Patient
-    .filter({ accountId })
-    .run();
+    .findAll({
+      where: { accountId },
+      limit: 4,
+    });
 
   return Promise.all([a, b, c, d, e])
     .then((values) => {
@@ -277,28 +401,27 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       });
 
       // Calculate the amount of hours the office is open for a given range
-      values[2].map((account) => {
-        daysOfWeek.map((day) => {
-          if (!account.weeklySchedule[day].isClosed) {
-            timeOpen += getDiffInMin(account.weeklySchedule[day].startTime, account.weeklySchedule[day].endTime);
-            if (account.weeklySchedule[day].breaks && account.weeklySchedule[day].breaks[0]) {
-              timeOpen -= getDiffInMin(account.weeklySchedule[day].breaks[0].startTime, account.weeklySchedule[day].breaks[0].endTime);
-            }
-          }
-        });
-
-        timeOpen *= weeks;
-
-        for (let i = 0; i < remainingDays; i++) {
-          const index = (i + dayOfWeek) % 7;
-          if (!account.weeklySchedule[daysOfWeek[index]].isClosed) {
-            timeOpen += getDiffInMin(account.weeklySchedule[daysOfWeek[index]].startTime, account.weeklySchedule[daysOfWeek[index]].endTime);
-            if (account.weeklySchedule[daysOfWeek[index]].breaks && account.weeklySchedule[daysOfWeek[index]].breaks[0]) {
-              timeOpen -= getDiffInMin(account.weeklySchedule[daysOfWeek[index]].breaks[0].startTime, account.weeklySchedule[daysOfWeek[index]].breaks[0].endTime);
-            }
+      const account = values[2];
+      daysOfWeek.map((day) => {
+        if (!account.weeklySchedule[day].isClosed) {
+          timeOpen += getDiffInMin(account.weeklySchedule[day].startTime, account.weeklySchedule[day].endTime);
+          if (account.weeklySchedule[day].breaks && account.weeklySchedule[day].breaks[0]) {
+            timeOpen -= getDiffInMin(account.weeklySchedule[day].breaks[0].startTime, account.weeklySchedule[day].breaks[0].endTime);
           }
         }
       });
+
+      timeOpen *= weeks;
+
+      for (let i = 0; i < remainingDays; i++) {
+        const index = (i + dayOfWeek) % 7;
+        if (!account.weeklySchedule[daysOfWeek[index]].isClosed) {
+          timeOpen += getDiffInMin(account.weeklySchedule[daysOfWeek[index]].startTime, account.weeklySchedule[daysOfWeek[index]].endTime);
+          if (account.weeklySchedule[daysOfWeek[index]].breaks && account.weeklySchedule[daysOfWeek[index]].breaks[0]) {
+            timeOpen -= getDiffInMin(account.weeklySchedule[daysOfWeek[index]].breaks[0].startTime, account.weeklySchedule[daysOfWeek[index]].breaks[0].endTime);
+          }
+        }
+      }
 
       // practitioner data
       values[1].map((practitioner) => {
@@ -336,8 +459,18 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           notConfirmedAppointments++;
 
           if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
+            if (!sendStats.patients[appointment.patient.id]) {
+              sendStats.patients[appointment.patient.id] = {
+                numAppointments: 0,
+                id: appointment.patient.id,
+                firstName: appointment.patient.firstName,
+                lastName: appointment.patient.lastName,
+                age: moment().diff(moment(appointment.patient.birthDate), 'years'),
+                avatarUrl: appointment.patient.avatarUrl,
+              };
+            }
             sendStats.patients[appointment.patient.id].numAppointments++;
-            if (appointment.service) {
+            if (appointment.service && appointment.service.id) {
               sendStats.services[appointment.service.id].time += timeApp;
             }
             sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
@@ -392,7 +525,7 @@ appointmentsRouter.get('/', (req, res, next) => {
 
   return Appointment.findAll({
     raw: true,
-    nested: true,
+    nest: true,
     where: {
       accountId,
       startDate: {
@@ -444,10 +577,8 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
     ));
   return Appointment.batchSave(cleanedAppointments)
     .then((apps) => {
-      const appData = apps.map((app) => {
-        return app.get({ plain: true });
-      });
-      res.send(normalize('appointments', appData));
+      const appData = apps.map(app => app.get({ plain: true }));
+      res.status(201).send(normalize('appointments', appData));
     })
     .catch(({ errors, docs }) => {
       docs = docs.map(d => d.get({ plain: true }));
@@ -470,11 +601,9 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
   })
 
   return Promise.all(appointmentUpdates)
-    .then(_appointments => {
-      const appData = _appointments.map((app) => {
-        return app.dataValues;
-      });
-      res.send(normalize('appointments', appData))
+    .then((_appointments) => {
+      const appData = _appointments.map(app => app.get({ plain: true }));
+      res.send(normalize('appointments', appData));
     })
     .catch(next);
 });

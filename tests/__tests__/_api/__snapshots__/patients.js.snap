@@ -1,0 +1,462 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/patients DELETE / /:patientId - delete patient 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/patients GET / / - get all patients under a clinic 1`] = `
+Object {
+  "entities": Object {
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "appointmentPreference": "both",
+        "birthDate": "1980-01-01T08:00:00.000Z",
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Ronald",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsId": null,
+        "prefName": null,
+        "prefPhoneNumber": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+  },
+  "result": Array [
+    "10518e11-b9d2-4d74-9887-29eaae7b5938",
+  ],
+}
+`;
+
+exports[`/api/patients GET / /:patientId - retrieve a patient 1`] = `
+Object {
+  "entities": Object {
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "appointmentPreference": "both",
+        "birthDate": "1980-01-01T08:00:00.000Z",
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Ronald",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsId": null,
+        "prefName": null,
+        "prefPhoneNumber": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+  },
+  "result": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+}
+`;
+
+exports[`/api/patients GET / /:patientId/stats - retrieve patient appointments 1`] = `
+Object {
+  "allApps": 1,
+  "entities": Object {},
+  "lastAppointment": "2017-07-21T00:14:30.932Z",
+  "monthsApp": 1,
+}
+`;
+
+exports[`/api/patients GET / /search - search patients - no results 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {},
+    "patients": Object {},
+    "textMessages": Object {},
+  },
+  "result": Array [],
+}
+`;
+
+exports[`/api/patients GET / /search - search patients - phone number found 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {},
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "appointmentPreference": "both",
+        "appointments": Array [],
+        "birthDate": "1980-01-01T08:00:00.000Z",
+        "chat": Array [],
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Ronald",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsId": null,
+        "prefName": null,
+        "prefPhoneNumber": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+    "textMessages": Object {},
+  },
+  "result": Array [
+    "10518e11-b9d2-4d74-9887-29eaae7b5938",
+  ],
+}
+`;
+
+exports[`/api/patients GET / /search - search patients - phone number not found 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {},
+    "patients": Object {},
+    "textMessages": Object {},
+  },
+  "result": Array [],
+}
+`;
+
+exports[`/api/patients GET / /search - search patients - result found 1`] = `
+Object {
+  "entities": Object {
+    "chats": Object {},
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "appointmentPreference": "both",
+        "appointments": Array [],
+        "birthDate": "1980-01-01T08:00:00.000Z",
+        "chat": Array [],
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Ronald",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsId": null,
+        "prefName": null,
+        "prefPhoneNumber": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+    "textMessages": Object {},
+  },
+  "result": Array [
+    "10518e11-b9d2-4d74-9887-29eaae7b5938",
+  ],
+}
+`;
+
+exports[`/api/patients GET / /stats - retrieve patients appointments 1`] = `
+Object {
+  "ageData": Array [
+    0,
+    0,
+    0,
+    100,
+    0,
+    0,
+  ],
+  "entities": Object {},
+  "female": 1,
+  "male": 0,
+}
+`;
+
+exports[`/api/patients GET / /suggestions - no result found 1`] = `
+Object {
+  "entities": Object {},
+  "result": Array [],
+}
+`;
+
+exports[`/api/patients GET / /suggestions - result found 1`] = `
+Object {
+  "entities": Object {
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "appointmentPreference": "both",
+        "birthDate": "1980-01-01T08:00:00.000Z",
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Ronald",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsId": null,
+        "prefName": null,
+        "prefPhoneNumber": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+  },
+  "result": Array [
+    "10518e11-b9d2-4d74-9887-29eaae7b5938",
+  ],
+}
+`;
+
+exports[`/api/patients POST / / - create a patient 1`] = `
+Object {
+  "entities": Object {
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "appointmentPreference": "both",
+        "birthDate": "1980-01-01T08:00:00.000Z",
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Ronald",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsId": null,
+        "prefName": null,
+        "prefPhoneNumber": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+  },
+  "result": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+}
+`;
+
+exports[`/api/patients POST / /emailCheck - result found 1`] = `
+Object {
+  "entities": Object {},
+  "exists": true,
+}
+`;
+
+exports[`/api/patients POST / /emailCheck - result not found 1`] = `
+Object {
+  "entities": Object {},
+  "exists": false,
+}
+`;
+
+exports[`/api/patients POST / /phoneNumberCheck - result found 1`] = `
+Object {
+  "entities": Object {},
+  "exists": true,
+}
+`;
+
+exports[`/api/patients POST / /phoneNumberCheck - result not found 1`] = `
+Object {
+  "entities": Object {},
+  "exists": false,
+}
+`;
+
+exports[`/api/patients PUT / /:patientId - update patient 1`] = `
+Object {
+  "entities": Object {
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "appointmentPreference": "both",
+        "birthDate": "1980-01-01T08:00:00.000Z",
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Wendy",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPMS": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsId": null,
+        "prefName": null,
+        "prefPhoneNumber": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+  },
+  "result": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+}
+`;
