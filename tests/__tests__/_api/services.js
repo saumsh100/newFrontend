@@ -90,12 +90,13 @@ describe('/api/services', () => {
         .put(`${rootUrl}/${serviceId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          isDefault: false,
+          isDefault: true,
           name: 'Updated Test Service',
           practitioners: [practitionerId],
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id', 'Practitioner_Service']);
           expect(body).toMatchSnapshot();
         });
     });

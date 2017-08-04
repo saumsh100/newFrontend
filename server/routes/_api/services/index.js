@@ -41,7 +41,6 @@ servicesRouter.get('/:serviceId', (req, res, next) => {
 
 servicesRouter.put('/:serviceId', checkPermissions('services:update'), async (req, res, next) => {
   // [ { model: Practitioner, as: 'practitioners' } ]
-  console.log('asdsads')
   try {
 
     if (req.body.practitioners && Array.isArray(req.body.practitioners)) {
@@ -74,7 +73,7 @@ servicesRouter.put('/:serviceId', checkPermissions('services:update'), async (re
         }
       }
     }
-    console.log(req.body.isDefault)
+
     if (req.service.isDefault !== req.body.isDefault && req.body.isDefault === true) {
       await Service.update({ isDefault: false }, {
         where: { accountId: req.accountId },
@@ -110,36 +109,6 @@ servicesRouter.put('/:serviceId', checkPermissions('services:update'), async (re
   } catch (error) {
     next(error);
   }
-  // if (req.service.isDefault !== req.body.isDefault && req.body.isDefault === true) {
-  //   await Service.
-  //   return Service.findAll({
-  //     where: { accountId: req.service.accountId },
-  //     include: [{ model: Practitioner, as: 'practitioners' }],
-  //   }).then(services => {
-
-  //   })
-  //   return Service.filter({ accountId: req.service.accountId })
-  //   .getJoin({ practitioners: true }).run()
-  //   .then((services) => {
-  //     const promises = [];
-  //     for (let i = 0; i < services.length; i++) {
-  //       const merge = (services[i].id === req.service.id ? req.body : { isDefault: false });
-  //       promises.push(services[i].merge(merge).saveAll({ practitioners: true }));
-  //     }
-  //     return Promise.all(promises)
-  //     .then((allServices) => {
-  //       res.send(normalize('services', allServices));
-  //     });
-  //   });
-  // }
-
-  // return Service.get(req.service.id).getJoin({ practitioners: true }).run()
-  //   .then((service) => {
-  //     service.merge(req.body).saveAll({ practitioners: true })
-  //       .then((servicePractitioners) => {
-  //         res.send(normalize('service', servicePractitioners));
-  //       }).catch(next);
-  //   });
 });
 
 servicesRouter.delete('/:serviceId', checkPermissions('services:delete'), (req, res, next) => {

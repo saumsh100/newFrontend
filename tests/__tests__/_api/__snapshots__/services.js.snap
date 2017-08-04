@@ -10,20 +10,47 @@ exports[`/api/services GET / /:serviceId - retrieve a service 1`] = `
 Object {
   "entities": Object {
     "services": Object {
-      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
+      "1f439ff8-c55d-4423-9316-a41240c4d329": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "duration": 4,
-        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "bufferTime": 0,
+        "duration": 60,
+        "id": "1f439ff8-c55d-4423-9316-a41240c4d329",
+        "isDefault": false,
         "isHidden": false,
-        "name": "Test Service",
+        "name": "Cleanup",
+        "pmsId": null,
+        "unitCost": 40,
       },
     },
   },
-  "result": "c5beec65-73a0-4b58-ba48-65986931d054",
+  "result": "1f439ff8-c55d-4423-9316-a41240c4d329",
 }
 `;
 
-exports[`/api/services GET / JOIN / join practitioners 1`] = `
+exports[`/api/services GET / retrieve services 1`] = `
+Object {
+  "entities": Object {
+    "services": Object {
+      "1f439ff8-c55d-4423-9316-a41240c4d329": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "bufferTime": 0,
+        "duration": 60,
+        "id": "1f439ff8-c55d-4423-9316-a41240c4d329",
+        "isDefault": false,
+        "isHidden": false,
+        "name": "Cleanup",
+        "pmsId": null,
+        "unitCost": 40,
+      },
+    },
+  },
+  "result": Array [
+    "1f439ff8-c55d-4423-9316-a41240c4d329",
+  ],
+}
+`;
+
+exports[`/api/services JOIN / join practitioners 1`] = `
 Object {
   "entities": Object {
     "services": Object {
@@ -32,67 +59,12 @@ Object {
         "bufferTime": null,
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
-        "isDefault": true,
+        "isDefault": false,
         "isHidden": false,
         "name": "Test Service",
         "pmsId": null,
         "practitioners": Array [],
         "unitCost": null,
-      },
-    },
-  },
-  "result": Array [
-    "c5beec65-73a0-4b58-ba48-65986931d054",
-  ],
-}
-`;
-
-exports[`/api/services GET / retrieve services 1`] = `
-Object {
-  "entities": Object {
-    "services": Object {
-      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
-        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "duration": 4,
-        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
-        "isHidden": false,
-        "name": "Test Service",
-      },
-    },
-  },
-  "result": Array [
-    "c5beec65-73a0-4b58-ba48-65986931d054",
-  ],
-}
-`;
-
-exports[`/api/services JOIN / join practitioners 1`] = `
-Object {
-  "entities": Object {
-    "practitioners": Object {
-      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
-        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "firstName": "Colonel",
-        "fullAvatarUrl": null,
-        "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
-        "isActive": true,
-        "isCustomSchedule": true,
-        "isHidden": false,
-        "lastName": "Sanders",
-        "type": "Hygienist",
-        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
-      },
-    },
-    "services": Object {
-      "c5beec65-73a0-4b58-ba48-65986931d054": Object {
-        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "duration": 4,
-        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
-        "isHidden": false,
-        "name": "Test Service",
-        "practitioners": Array [
-          "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
-        ],
       },
     },
   },
@@ -108,10 +80,14 @@ Object {
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "bufferTime": null,
         "duration": 4,
         "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isDefault": false,
         "isHidden": false,
         "name": "Test Service",
+        "pmsId": null,
+        "unitCost": null,
       },
     },
   },
@@ -122,20 +98,39 @@ Object {
 exports[`/api/services PUT / /:serviceId - update service 1`] = `
 Object {
   "entities": Object {
+    "practitioners": Object {
+      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "avatarUrl": null,
+        "firstName": "Colonel",
+        "fullAvatarUrl": null,
+        "isActive": true,
+        "isCustomSchedule": true,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "pmsId": null,
+        "type": "Hygienist",
+        "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
+      },
+    },
     "services": Object {
       "c5beec65-73a0-4b58-ba48-65986931d054": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
-        "createdAt": "2017-07-19T00:14:30.932Z",
+        "bufferTime": null,
         "duration": 4,
-        "id": "c5beec65-73a0-4b58-ba48-65986931d054",
+        "isDefault": true,
         "isHidden": false,
         "name": "Updated Test Service",
+        "pmsId": null,
         "practitioners": Array [
           "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         ],
+        "unitCost": null,
       },
     },
   },
-  "result": "c5beec65-73a0-4b58-ba48-65986931d054",
+  "result": Array [
+    "c5beec65-73a0-4b58-ba48-65986931d054",
+  ],
 }
 `;
