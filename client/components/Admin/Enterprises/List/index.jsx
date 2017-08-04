@@ -57,15 +57,15 @@ class EnterpriseList extends Component {
           onDelete={deleteRequest}
           onEdit={navigateToEditPage}
         />
-        <br/><br/>
-        <br/><br/>
-        <span>Switch Enterprise  </span>
+        <br /><br />
+        <br /><br />
+        <span>Switch Enterprise</span>
         {enterprises ? (
-            <select onChange={e => this.selectEnterprise(e.target.value)} value={enterpriseId}>
-              { enterprises.map(enterprise =>
-                <option value={enterprise.id}>{enterprise.name}</option>
+          <select onChange={e => this.selectEnterprise(e.target.value)} value={enterpriseId}>
+            { enterprises.map(enterprise =>
+              <option value={enterprise.id}>{enterprise.name}</option>
               ) }
-            </select>
+          </select>
           ) : null}
       </PageContainer>
     );

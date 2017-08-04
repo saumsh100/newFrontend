@@ -205,7 +205,7 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
 
       res.send(obj);
     })
-    .catch(next)
+    .catch(next);
 });
 
 module.exports = accountsRouter;

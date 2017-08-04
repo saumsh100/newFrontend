@@ -39,7 +39,7 @@ class AddSegment extends Component {
       formName,
     } = this.props;
 
-    this.props.change(formName, 'age', Object.keys(value));
+    this.props.change(formName, 'age', value);
     return false;
   }
 
@@ -48,7 +48,7 @@ class AddSegment extends Component {
       formName,
     } = this.props;
 
-    this.props.change(formName, 'gender', Object.keys(value)[0]);
+    this.props.change(formName, 'gender', value[0]);
   }
 
   render() {
@@ -67,6 +67,8 @@ class AddSegment extends Component {
           handleGenderChange={this.handleGenderChange}
           handleSubmit={this.handleSubmit}
           formState={this.props.formState}
+          age={this.props.formData.age}
+          gender={this.props.formData.gender}
           handleCancel={() => {
             this.props.reset(formName);
             return reinitializeState();
@@ -93,7 +95,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   return {
     formState: state.form.AddSegment,
-    formData: state.form.AddSegment ? state.form.AddSegment.values : null,
+    formData: state.form.AddSegment ? state.form.AddSegment.values : {},
   };
 }
 
@@ -115,7 +117,6 @@ export default enhance(AddSegment);
 
 /**
  * TODO:
- * - InitialState on gender
  * - Preview
  * - Apply
  * - Name prompt on save
