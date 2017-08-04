@@ -7,7 +7,7 @@ class SelectPill extends PureComponent {
 
     this.onPillClick = this.onPillClick.bind(this);
     this.state = {
-      selectedPills: {},
+      selectedPills: [],
     };
   }
 
@@ -22,25 +22,21 @@ class SelectPill extends PureComponent {
   onPillClick(pillId) {
     if (!this.props.multiselect) {
       this.setState({
-        selectedPills: {
-          [pillId]: true,
-        },
+        selectedPills: [pillId],
       });
 
-      this.props.onChange({
-        [pillId]: true,
-      });
+      this.props.onChange([pillId]);
     } else {
-      this.setState({
-        selectedPills: {
+      const change = [
+        ...new Set([
           ...this.state.selectedPills,
-          [pillId]: !this.state.selectedPills[pillId],
-        },
+          pillId,
+        ]),
+      ];
+      this.setState({
+        selectedPills: change,
       });
-      this.props.onChange({
-        ...this.state.selectedPills,
-        [pillId]: !this.state.selectedPills[pillId],
-      });
+      this.props.onChange(change);
     }
   }
 
@@ -49,7 +45,7 @@ class SelectPill extends PureComponent {
     const childrenWithProps = React.Children.map(this.props.children,
       child => React.cloneElement(child, {
         onClick: pillId => this.onPillClick(pillId),
-        selected: this.state.selectedPills[child.props.pillId],
+        selected: this.state.selectedPills.includes(child.props.pillId),
       })
     );
     return (
@@ -62,13 +58,13 @@ SelectPill.propTypes = {
   children: PropTypes.node.isRequired,
   onChange: PropTypes.func,
   multiselect: PropTypes.bool,
-  selected: PropTypes.shape({}),
+  selected: PropTypes.arrayOf(PropTypes.string),
 };
 
 SelectPill.defaultProps = {
   onChange: () => {},
   multiselect: false,
-  selected: {},
+  selected: [],
 };
 
 export default SelectPill;
