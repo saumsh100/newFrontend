@@ -18,6 +18,8 @@ import recallsRouter from './recalls';
 import remindersRouter from './reminders';
 import permissionsRouter from './permissions';
 import availabilitiesRouter from './availabilities';
+import sentRecallsRouter from './sentRecalls';
+import sentRemindersRouter from './sentReminders';
 import syncErrorRouter from './syncClientError';
 import syncControlRouter from './syncControlRouter';
 import timeOffsRouter from './practitionerTimeOffs';
@@ -28,8 +30,6 @@ import weeklySchedulesRouter from './weeklySchedules';
 import enterprisesRouter from './enterprises';
 import authMiddleware from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
-import sentRemindersRouter from './sentReminders';
-import sentRecallsRouter from './sentRecalls';
 
 const apiRouter = Router();
 
