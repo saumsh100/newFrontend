@@ -81,6 +81,8 @@ const postgres = {
   username: environmentVariables.POSTGRESQL_USER || 'admin',
   password: environmentVariables.POSTGRESQL_PASSWORD || '',
   database: environmentVariables.POSTGRESQL_DATABASE || 'carecru',
+  ssl: !!environmentVariables.POSTGRESQL_SSL,
+  logging: !!environmentVariables.POSTGRESQL_LOGGING,
 };
 
 const staticPath = path.normalize(path.join(root, '../statics'));
