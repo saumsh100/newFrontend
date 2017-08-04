@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
   postgres.username,
   postgres.password,
   {
-    logging: false, // eslint-disable-line
+    logging: console.log, // eslint-disable-line
     dialect: 'postgres',
     host: postgres.host,
     port: postgres.port,

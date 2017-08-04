@@ -6,6 +6,7 @@ const passwordHashSaltRounds = 10;
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
+const accountId2 = '72954241-3652-4792-bae5-5bfed53d37b7';
 const managerPermissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const ownerPermissionId = '74d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const superAdminPermissionId = '64d4e661-1155-4494-8fdb-c4ec0ddf804d';
@@ -31,6 +32,14 @@ const account = {
   id: accountId,
   enterpriseId,
   name: 'Test Account',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
+const account2 = {
+  id: accountId2,
+  enterpriseId,
+  name: 'Test Account 2',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
@@ -99,7 +108,7 @@ module.exports = {
   up: async function (queryInterface, Sequelize) { // eslint-disable-line
     await queryInterface.bulkInsert('Enterprises', [enterprise]);
 
-    await queryInterface.bulkInsert('Accounts', [account]);
+    await queryInterface.bulkInsert('Accounts', [account, account2]);
 
     await queryInterface.bulkInsert('Permissions', [
       managerPermission,
@@ -177,6 +186,71 @@ module.exports = {
     }
 
     await queryInterface.bulkInsert('Appointments', appointments);
+
+    const patients2 = [];
+
+    for (let i = 0; i < 80; i += 1) {
+      const firstName = faker.name.firstName();
+      const lastName = faker.name.lastName();
+      const phoneNumber = faker.phone.phoneNumberFormat(0);
+      patients2.push({
+        id: uuid(),
+        accountId: accountId2,
+        firstName,
+        lastName,
+        email: `${firstName}.${lastName}@google.ca`,
+        mobilePhoneNumber: phoneNumber,
+        birthDate: faker.date.past(),
+        gender: 'male',
+        language: 'English',
+        insurance: JSON.stringify({
+          insurance: 'Lay Health Insurance',
+          memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+          contract: '4234rerwefsdfsd',
+          carrier: 'sadasadsadsads',
+          sin: 'dsasdasdasdadsasad',
+        }),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+
+    await queryInterface.bulkInsert('Patients', patients2);
+
+    const practitioners2 = [];
+
+    for (let i = 0; i < 10; i += 1) {
+      practitioners2.push({
+        id: uuid(),
+        accountId: accountId2,
+        type: 'Hygienist',
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+
+    await queryInterface.bulkInsert('Practitioners', practitioners2);
+
+    const appointments2 = [];
+    for (let i = 0; i < patients2.length; i += 2) {
+      const patient = patients2[i];
+      const appointment = {
+        id: uuid(),
+        accountId: accountId2,
+        practitionerId: practitioners2[Math.floor(Math.random() * 10) + 0].id,
+        patientId: patient.id,
+        startDate: new Date(),
+        endDate: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      appointments2.push(appointment);
+    }
+
+    await queryInterface.bulkInsert('Appointments', appointments2);
   },
 
   down(queryInterface, Sequelize) { // eslint-disable-line

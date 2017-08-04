@@ -154,10 +154,15 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account, PatientUser }) => {
+  Patient.associate = ({ Account, Appointment }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    Patient.hasMany(Appointment, {
+      foreignKey: 'patientId',
+      as: 'appointments',
     });
   };
 

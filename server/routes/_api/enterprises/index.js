@@ -6,12 +6,17 @@ import normalize from '../normalize';
 import StatusError from '../../../util/StatusError';
 import {
   Account,
+  Appointment,
   Enterprise,
   Reminder,
   Recall,
   Service,
   User,
   WeeklySchedule,
+  Patient,
+  Segment,
+  Practitioner,
+  sequelize,
 } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { UserAuth } from '../../../lib/_auth';
@@ -324,5 +329,148 @@ enterprisesRouter.delete(
       .catch(next);
   }
 );
+
+enterprisesRouter.get('/enterprise/:enterpriseId/accounts/cities', checkPermissions('enterprises:read'), async (req, res, next) => {
+  // @TODO missing details for cities
+});
+
+enterprisesRouter.get('/dashboard/patients', checkPermissions('segments:read'), async (req, res, next) => {
+  const { segmentId, startDate, endDate } = req.query;
+  try {
+    if (!startDate || !endDate) {
+      throw StatusError(StatusError.BAD_REQUEST, 'Missing start and end time');
+    }
+    const attributes = ['accountId', [sequelize.fn('count', sequelize.col('*')), 'patientCount']];
+
+    // fetch all enterprise accounts
+    const accounts = await Account.findAll({
+      raw: true,
+      where: {
+        enterpriseId: req.enterpriseId,
+      },
+    });
+    const accountIds = [];
+    const clinics = {};
+    accounts.forEach((account) => {
+      accountIds.push(account.id);
+      clinics[account.id] = account;
+    });
+
+    const baseWhere = {
+      accountId: accountIds,
+    };
+
+    // Set date where condition
+    const dateWhere = {
+      createdAt: {
+        $between: [startDate, endDate],
+      },
+    };
+
+    const activeWhere = {
+      status: Patient.STATUS.ACTIVE,
+    };
+
+    let segmentWhere = null;
+    if (segmentId) {
+      const segment = await Segment.findById(segmentId);
+
+      // if segment is null throw error
+      if (!segment) {
+        throw new StatusError(StatusError.BAD_REQUEST, `Data for Segment with id: ${segmentId} do not exists`);
+      }
+      // confirm if user has sent segment he has access to use
+      segment.isOwner(req);
+
+      segmentWhere = segment.where || {};
+    }
+    const activePatientsWhere = { ...baseWhere, ...activeWhere, ...segmentWhere };
+    const activePatientsData = await Patient.findAll({
+      raw: true,
+      attributes,
+      where: activePatientsWhere,
+      group: ['Patient.accountId'],
+    });
+
+    // fetch new patients (E.g. created at between start/end date)
+    const newPatientsWhere = { ...baseWhere, ...activeWhere, ...segmentWhere, ...dateWhere };
+    const newPatientsData = await Patient.findAll({
+      raw: true,
+      attributes,
+      where: newPatientsWhere,
+      group: ['Patient.accountId'],
+    });
+
+    console.log(newPatientsWhere);
+
+    const hygienePatients = await Patient.findAll({
+      raw: true,
+      attributes,
+      where: activePatientsWhere,
+      include: [
+        {
+          attributes: [],
+          model: Appointment,
+          as: 'appointments',
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: Practitioner,
+              as: 'practitioner',
+              required: true,
+              where: {
+                type: Practitioner.TYPE.HYGIENIST,
+              },
+            },
+          ],
+        },
+      ],
+      group: ['Patient.accountId'],
+    });
+
+    let totalActivePatients = 0;
+    activePatientsData.forEach((clinic) => {
+      const patients = parseInt(clinic.patientCount, 10);
+      clinics[clinic.accountId].activePatients = patients;
+      totalActivePatients += patients;
+    });
+
+    let totalHygienePatients = 0;
+    hygienePatients.forEach((clinic) => {
+      const patients = parseInt(clinic.patientCount, 10);
+      clinics[clinic.accountId].hygienePatients = patients;
+      totalHygienePatients += patients;
+    });
+
+    let totalNewPatients = 0;
+    newPatientsData.forEach((clinic) => {
+      const patients = parseInt(clinic.patientCount, 10);
+      clinics[clinic.accountId].newPatients = patients;
+      totalNewPatients += patients;
+    });
+
+    const dashboardData = {
+      entities: {
+        enterpriseDashboard: {
+          patients: {
+            id: 'patients',
+            clinics: accounts,
+            totals: {
+              totalActivePatients,
+              totalHygienePatients,
+              totalNewPatients,
+            },
+          },
+        },
+      },
+    };
+
+
+    return res.send(dashboardData);
+  } catch (error) {
+    return next(error);
+  }
+});
 
 export default enterprisesRouter;

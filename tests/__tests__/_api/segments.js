@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import { Segment } from '../../../server/_models';
@@ -108,7 +108,7 @@ describe('/api/segments', () => {
   });
 
   describe('PUT /api/segments/:segmentId', () => {
-    test('Update signle segment', async () => request(app)
+    test('Update single segment', async () => request(app)
       .put(`${rootUrl}/${segmentItems[0].id}`)
       .send({
         name: 'new name',
@@ -149,6 +149,16 @@ describe('/api/segments', () => {
       .expect(200)
       .then(({ body }) => {
         console.log(body);
+      }));
+  });
+
+  describe('GET /api/enterprise/dashboard/patients', () => {
+    test('Preview items', async () => request(app)
+      .get(`/_api/enterprises/dashboard/patients?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body, error }) => {
+        console.log(body, error);
       }));
   });
 
