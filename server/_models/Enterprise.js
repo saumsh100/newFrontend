@@ -1,6 +1,7 @@
-
-const GROWTH = 'GROWTH';
-const ENTERPRISE = 'ENTERPRISE';
+const PLAN = {
+  GROWTH: 'GROWTH',
+  ENTERPRISE: 'ENTERPRISE',
+};
 
 export default function (sequelize, DataTypes) {
   const Enterprise = sequelize.define('Enterprise', {
@@ -17,15 +18,18 @@ export default function (sequelize, DataTypes) {
     },
 
     plan: {
-      type: DataTypes.ENUM(
-        GROWTH,
-        ENTERPRISE
-      ),
-
-      defaultValue: GROWTH,
+      type: DataTypes.ENUM,
+      values: Object.keys(PLAN).map(key => PLAN[key]),
+      defaultValue: PLAN.GROWTH,
       allowNull: false,
     },
   });
+
+  Enterprise.associate = (({ Account }) => {
+    Enterprise.hasMany(Account);
+  });
+
+  Enterprise.PLAN = PLAN;
 
   return Enterprise;
 }

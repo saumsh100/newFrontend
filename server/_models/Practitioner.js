@@ -1,4 +1,10 @@
+
 const globals = require('../config/globals');
+
+const TYPE = {
+  DENTIST: 'Dentist',
+  HYGIENIST: 'Hygienist',
+};
 
 export default function (sequelize, DataTypes) {
   const Practitioner = sequelize.define('Practitioner', {
@@ -18,7 +24,9 @@ export default function (sequelize, DataTypes) {
     },
 
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM,
+      values: Object.keys(TYPE).map(key => TYPE[key]),
+      defaultValue: TYPE.HYGIENIST,
     },
 
     isActive: {
@@ -62,7 +70,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Practitioner.associate = (({ Account, Service, Request, Appointment, WeeklySchedule, PractitionerRecurringTimeOff }) => {
+  Practitioner.associate = ({ Account, Service, Request, Appointment, WeeklySchedule, PractitionerRecurringTimeOff }) => {
     Practitioner.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -93,7 +101,7 @@ export default function (sequelize, DataTypes) {
       as: 'services',
       foreignKey: 'practitionerId',
     });
-  });
+  };
 
   /*Practitioner.prototype.getWeeklySchedule = function () {
     const self = this;
@@ -108,6 +116,8 @@ export default function (sequelize, DataTypes) {
         .then(account => resolve(account.weeklySchedule))
         .catch(err => reject(err));
   };*/
+
+  Practitioner.TYPE = TYPE;
 
   return Practitioner;
 }

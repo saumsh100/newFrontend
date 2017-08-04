@@ -1,0 +1,16 @@
+@import '../../../ui.scss';
+
+.infoSection {
+	text-align: center;
+	padding: 40px 0 0 0;
+
+	h4 {
+		margin: 0 0 5px 0;
+		font-weight: bold;
+	}
+
+	span {
+		font-size: 10px;
+		color: $clr-dark-grey;
+	}
+}

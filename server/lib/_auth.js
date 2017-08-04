@@ -2,7 +2,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import globals from '../config/globals';
-import { User, PatientUser, AuthSession } from '../_models';
+import { User, PatientAuth, AuthSession } from '../_models';
 
 export const error = (status, message) =>
   Promise.reject({ status, message });
@@ -100,10 +100,14 @@ export const Auth = (Model, uniqueKey) => ({
       .then(({ dataValues }) => {
         const prevSession = dataValues;
         delete prevSession.id;
-        return AuthSession.create({ ...prevSession, ...updates, modelId: session.userId || session.modelId });
+        return AuthSession.create({
+          ...prevSession,
+          ...updates,
+          modelId: session.userId || session.modelId,
+        });
       });
   },
 });
 
 export const UserAuth = Auth(User, 'username');
-export const PatientAuth = Auth(PatientUser, 'email');
+// export const PatientAuth = Auth(PatientUser, 'email');

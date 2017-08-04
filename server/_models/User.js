@@ -77,7 +77,7 @@ export default function (sequelize, DataTypes) {
    * @param password
    * @returns {Promise}
    */
-  User.prototype.isValidPasswordAsync = function(password) {
+  User.prototype.isValidPasswordAsync = function (password) {
     return new Promise((resolve, reject) => {
       bcrypt.compare(password, this.password, (err, match) => {
         if (err) reject(err);
@@ -93,7 +93,7 @@ export default function (sequelize, DataTypes) {
    * @param password
    * @returns {Promise}
    */
-  User.prototype.setPasswordAsync = function(password) {
+  User.prototype.setPasswordAsync = function (password) {
     return new Promise((resolve, reject) => {
       bcrypt.hash(password, passwordHashSaltRounds, (err, hashedPassword) => {
         if (err) reject(err);

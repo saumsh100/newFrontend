@@ -129,8 +129,8 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
   // TODO: need to add joinObject mapping to include...
 
   // Loader will handle 404
-  return Account.findOne({ where: { id: req.account.id }, include: includeArray })
-    .then(account => res.send(normalize('account', account.dataValues)))
+  return Account.findOne({ raw: true, where: { id: req.account.id }, include: includeArray })
+    .then(account => res.send(normalize('account', account)))
     .catch(next);
 });
 

@@ -90,10 +90,7 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    destinationNum: customDataTypes.phoneNumber('destinationNum', DataTypes, {
-      allowNull: false,
-    }),
-
+    destinationNum: customDataTypes.phoneNumber('destinationNum', DataTypes),
     trackingNum: customDataTypes.phoneNumber('trackingNum', DataTypes),
 
     callSource: {

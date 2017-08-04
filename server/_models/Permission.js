@@ -1,8 +1,9 @@
-
-const MANAGER = 'MANAGER';
-const ADMIN = 'ADMIN';
-const OWNER = 'OWNER';
-const SUPERADMIN = 'SUPERADMIN';
+const ROLES = {
+  MANAGER: 'MANAGER',
+  ADMIN: 'ADMIN',
+  OWNER: 'OWNER',
+  SUPERADMIN: 'SUPERADMIN',
+};
 
 export default function (sequelize, DataTypes) {
   const Permission = sequelize.define('Permission', {
@@ -13,13 +14,8 @@ export default function (sequelize, DataTypes) {
     },
 
     role: {
-      type: DataTypes.ENUM(
-        MANAGER,
-        ADMIN,
-        OWNER,
-        SUPERADMIN,
-      ),
-
+      type: DataTypes.ENUM,
+      values: Object.keys(ROLES).map(key => ROLES[key]),
       // TODO: maybe a default value?
       allowNull: false,
     },
@@ -38,6 +34,8 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.ARRAY(DataTypes.UUID),
     },
   });
+
+  Permission.ROLES = ROLES;
 
   return Permission;
 }

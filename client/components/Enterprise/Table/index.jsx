@@ -1,140 +1,101 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { VCard } from '../../library';
 import styles from './table.scss';
 
-const EnterpriseTable = () =>
-  <VCard noPadding>
+function EnterpriseTable(props) {
+  return (<VCard noPadding>
     <table className={styles.table}>
       <thead>
         <tr>
           <th className={styles.th} style={{ width: '100%' }}>
             <h2 className={styles['th-title']}>Clinics</h2>
-            <p className={styles['th-total']}>10</p>
+            <p className={styles['th-total']}>{Object.keys(props.clinics).length}</p>
           </th>
           <th className={styles.th}>
             <h2 className={styles['th-title']}>Active Patients</h2>
-            <p className={styles['th-total']}>73657</p>
+            <p className={styles['th-total']}>{props.totals.activePatients}</p>
             <i className={`fa fa-users ${styles['th-icon']}`} aria-hidden="true" />
           </th>
           <th className={styles.th}>
             <h2 className={styles['th-title']}>Patients with Hygiene Apps</h2>
-            <p className={styles['th-total']}>24885</p>
+            <p className={styles['th-total']}>{props.totals.hygienePatients}</p>
             <i className={`fa fa-tablet ${styles['th-icon']}`} aria-hidden="true" />
           </th>
           <th className={styles.th}>
             <h2 className={styles['th-title']}>New Patients</h2>
-            <p className={styles['th-total']}>930</p>
+            <p className={styles['th-total']}>{props.totals.newPatients}</p>
             <i className={`fa fa-users ${styles['th-icon']}`} aria-hidden="true" />
           </th>
         </tr>
       </thead>
 
       <tbody>
-        <tr className={styles.tr}>
-          <td className={styles.td}>
-            <div className={styles['title-container']}>
-              <span className={styles['order-number-title']}>#</span>
-            </div>
-            <div className={styles['col-content']}>
-              <span className={styles['order-number']}>1</span>
-              <strong className={styles['row-title']}>Olympic Village Dental</strong>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['title-container']}>
-              <span className={styles['col-title']}>Total Active Patients</span>
-              <span className={styles['col-title']}>CDI</span>
-            </div>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['title-container']}>
-              <span className={styles['col-title']}>Total Hygiene Apps</span>
-              <span className={styles['col-title']}>CDI</span>
-            </div>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['title-container']}>
-              <span className={styles['col-title']}>Total New Patients</span>
-              <span className={styles['col-title']}>CDI</span>
-            </div>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-        </tr>
-        <tr className={styles.tr}>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span className={styles['order-number']}>2</span>
-              <strong className={styles['row-title']}>Olympic Village Dental</strong>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-        </tr>
-        <tr className={styles.tr}>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span className={styles['order-number']}>3</span>
-              <strong className={styles['row-title']}>Olympic Village Dental</strong>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-          <td className={styles.td}>
-            <div className={styles['col-content']}>
-              <span>img</span>
-              <span className={styles['col-numbers']}>8939</span>
-              <span className={styles['col-numbers']}>97%</span>
-            </div>
-          </td>
-        </tr>
+        {Object.keys(props.clinics).map((id, index) => {
+          const clinic = props.clinics[id];
+          return (
+            <tr className={styles.tr} key={id}>
+              <td className={styles.td}>
+                <div className={styles['title-container']}>
+                  <span className={styles['order-number-title']}>#</span>
+                </div>
+                <div className={styles['col-content']}>
+                  <span className={styles['order-number']}>{index + 1}</span>
+                  <strong className={styles['row-title']}>{clinic.name}</strong>
+                </div>
+              </td>
+              <td className={styles.td}>
+                <div className={styles['title-container']}>
+                  <span className={styles['col-title']}>Total Active Patients</span>
+                  <span className={styles['col-title']}>CDI</span>
+                </div>
+                <div className={styles['col-content']}>
+                  <span>img</span>
+                  <span className={styles['col-numbers']}>{clinic.activePatients}</span>
+                  <span className={styles['col-numbers']}>97%</span>
+                </div>
+              </td>
+              <td className={styles.td}>
+                <div className={styles['title-container']}>
+                  <span className={styles['col-title']}>Total Hygiene Apps</span>
+                  <span className={styles['col-title']}>CDI</span>
+                </div>
+                <div className={styles['col-content']}>
+                  <span>img</span>
+                  <span className={styles['col-numbers']}>{clinic.hygienePatients}</span>
+                  <span className={styles['col-numbers']}>97%</span>
+                </div>
+              </td>
+              <td className={styles.td}>
+                <div className={styles['title-container']}>
+                  <span className={styles['col-title']}>Total New Patients</span>
+                  <span className={styles['col-title']}>CDI</span>
+                </div>
+                <div className={styles['col-content']}>
+                  <span>img</span>
+                  <span className={styles['col-numbers']}>{clinic.newPatients}</span>
+                  <span className={styles['col-numbers']}>97%</span>
+                </div>
+              </td>
+            </tr>);
+        })}
       </tbody>
     </table>
-  </VCard>
-;
+  </VCard>);
+}
+
+EnterpriseTable.propTypes = {
+  clinics: PropTypes.shape({
+    name: PropTypes.string,
+    newPatients: PropTypes.number,
+    activePatients: PropTypes.number,
+    hygienePatients: PropTypes.number,
+  }),
+  totals: PropTypes.shape({
+    newPatients: PropTypes.number,
+    activePatients: PropTypes.number,
+    hygienePatients: PropTypes.number,
+  }),
+};
 
 export default EnterpriseTable;

@@ -1,7 +1,8 @@
-const path = require('path')
+const path = require('path');
 const postgres = require('./server/config/globals').postgres;
 
 module.exports = {
+  'config': path.resolve('server/config/babelHook.js'),
 	'url': `postgres://${postgres.username}:${postgres.password}@${postgres.host}:${postgres.port}/${postgres.database}`,
 	'models-path': 'server/_models',
 	'seeders-path': 'server/seeders',

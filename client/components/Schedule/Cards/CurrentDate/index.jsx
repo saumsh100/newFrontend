@@ -5,12 +5,13 @@ import styles from '../../styles.scss';
 
 const CurrentDate = (props) => {
   const { currentDate } = props;
-  const dayOftheWeek = new Date(currentDate._d).toLocaleString('en-us', {  weekday: 'long' });
+  const dayOfTheWeek = new Date(currentDate._d).toLocaleString('en-us', { weekday: 'long' });
   const dayOftheMonth = currentDate.date();
   const currentMonth = currentDate.format("MMMM");
   const currentYear = currentDate.format("YYYY");
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
+      <div className={styles.title__dayOfWeek}>{dayOfTheWeek}</div>
       <div className={styles.title__month}>{currentMonth}</div>
       <div className={styles.title__number}>&nbsp;{dayOftheMonth}</div>
       <div className={styles.title__day}>, {currentYear}</div>

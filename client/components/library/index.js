@@ -12,6 +12,7 @@ import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
 import CheckboxImage from './CheckboxImage';
+import CircleGauge from './CircleGauge';
 import CodeSnippet from './CodeSnippet';
 import Collapsible from './Collapsible';
 import ColorPicker from './ColorPicker';
@@ -31,6 +32,9 @@ import Label from './Label';
 import Link from './Link';
 import LineChart from './LineChart';
 import Modal from './Modal';
+import SelectPill from './SelectPill';
+import InfoSection from './InfoSection';
+import Pill from './Pill';
 import PieChart from './PieChart';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
@@ -74,6 +78,7 @@ export {
   Checkbox,
   CheckboxImage,
   ChartStats,
+  CircleGauge,
   CodeSnippet,
   Collapsible,
   ColorPicker,
@@ -99,6 +104,9 @@ export {
   Label,
   LineChart,
   Modal,
+  Pill,
+  SelectPill,
+  InfoSection,
   PieChart,
   RemoteSubmitButton,
   RouterButton,

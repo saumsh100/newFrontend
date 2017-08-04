@@ -31,7 +31,7 @@ class ScheduleComponent extends Component {
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
-    this.setPatientSearched = this.setPatientSearched.bind(this)
+    this.setPatientSearched = this.setPatientSearched.bind(this);
   }
 
   setCurrentDay(day) {

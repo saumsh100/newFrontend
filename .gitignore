@@ -47,3 +47,4 @@ staging.env
 package-lock.json
 .ackrc
 .history/
+yarn.lock

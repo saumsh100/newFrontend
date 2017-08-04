@@ -25,6 +25,7 @@ import recallsRouter from './recalls';
 import appointmentsRouter from './appointment';
 import callsRouter from './calls';
 import servicesRouter from './services';
+import segmentsRouter from './segments';
 
 const apiRouter = Router();
 
@@ -32,14 +33,14 @@ apiRouter.all('*', sequelizeAuthMiddleware, createJoinObject);
 apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/accounts', remindersRouter);
 apiRouter.use('/accounts', invitesRouter);
-
 apiRouter.use('/accounts', recallsRouter);
+apiRouter.use('/accounts', permissionsRouter);
 apiRouter.use('/chairs', chairsRouter);
+apiRouter.use('/segments', segmentsRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/families', familiesRouter);
 apiRouter.use('/patients', patientsRouter);
 apiRouter.use('/practitioners', practitionersRouter);
-apiRouter.use('/accounts', permissionsRouter);
 apiRouter.use('/syncClientError', syncErrorRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/waitSpots', waitSpotsRouter);

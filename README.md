@@ -155,10 +155,11 @@ POSTGRESQL_PASSWORD="leave-empty-if-no-password"
 POSTGRESQL_DATABASE="database-name-you-created"
 ```
 
-Now, my advice is to install sequelize-cli (https://github.com/sequelize/cli) as a global lib
+install sequelize-cli (https://github.com/sequelize/cli)
 ```
-npm install -g sequelize-cli
+npm install sequelize-cli
 ```
+You can install it also as a global module, but then change package.json for `rebuild` command
 
 To get info about commands type
 ```
@@ -167,7 +168,7 @@ sequelize help
 
 You can find file `.sequelizerc` inside of root folder. It is used to set default variables for sequelize like model path or seeders path
 
-To see example model go to `server/_models/segment/segment.js`. Same structure can be used for all models.
+To see example model go to `server/_models/Segment/segment.js`. Same structure can be used for all models.
 
 Inside folde `server/seeders/` are seeder files. You can use this to seed database.
 
@@ -180,3 +181,7 @@ To rebuild and seed database just type
 ```
 npm run rebuild
 ```
+
+##### Adding new model
+You will find inside of `server/_models/index.js` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
+This line represent importing of a single model into the code. Just repeat that for all models.

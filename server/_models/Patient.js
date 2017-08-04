@@ -5,8 +5,10 @@ import isNull from 'lodash/isNull';
 import customDataTypes from '../util/customDataTypes';
 import { UniqueFieldError } from '../models/createModel/errors';
 
-const ACTIVE = 'Active';
-const INACTIVE = 'Inactive';
+const STATUS = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+};
 
 export default function (sequelize, DataTypes) {
   const Patient = sequelize.define('Patient', {
@@ -110,11 +112,6 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    appointmentPreference: {
-      type: DataTypes.STRING,
-      defaultValue: 'both',
-    },
-
     birthDate: {
       type: DataTypes.DATE,
     },
@@ -139,23 +136,20 @@ export default function (sequelize, DataTypes) {
     },
 
     status: {
-      type: DataTypes.ENUM(
-        ACTIVE,
-        INACTIVE
-      ),
-
-      defaultValue: ACTIVE,
+      type: DataTypes.ENUM,
+      values: Object.keys(STATUS).map(key => STATUS[key]),
+      defaultValue: STATUS.ACTIVE,
     },
   }, {
     // Model Config
     indexes: [
       {
         unique: true,
-        fields: ['accountId', 'email']
+        fields: ['accountId', 'email'],
       },
       {
         unique: true,
-        fields: ['accountId', 'mobilePhoneNumber']
+        fields: ['accountId', 'mobilePhoneNumber'],
       },
     ],
   });
@@ -170,7 +164,6 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'patientId',
       as: 'appointments',
     });
-
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
       as: 'chats',
@@ -251,13 +244,13 @@ export default function (sequelize, DataTypes) {
 
     // Now check uniqueness against each other
     docs = uniqWith(validatedDocs, (a, b) => {
-      if (a.accountId && b.accountId && a.accountId === b.accountId) {
-        if (a.mobilePhoneNumber && b.mobilePhoneNumber && a.mobilePhoneNumber === b.mobilePhoneNumber) {
+      if (a.accountId && b.accountId && (a.accountId === b.accountId)) {
+        if (a.mobilePhoneNumber && b.mobilePhoneNumber && (a.mobilePhoneNumber === b.mobilePhoneNumber)) {
           onError('mobilePhoneNumber', a);
           return true;
         }
 
-        if (a.email && b.email && a.email === b.email) {
+        if (a.email && b.email && (a.email === b.email)) {
           onError('email', a);
           return true;
         }
@@ -303,6 +296,8 @@ export default function (sequelize, DataTypes) {
 
     return response;
   };
+
+  Patient.STATUS = STATUS;
 
   return Patient;
 }

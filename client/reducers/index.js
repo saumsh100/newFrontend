@@ -14,7 +14,7 @@ import patientList from './patientList';
 import requests from './requests';
 import accountSettings from './accountSettings';
 import apiRequests from './apiRequests';
-
+import segments from './segments';
 import availabilities from './availabilities';
 
 const appReducer = combineReducers({
@@ -33,6 +33,7 @@ const appReducer = combineReducers({
   patientList,
   availabilities,
   apiRequests,
+  segments,
 });
 
 const rootReducer = (state, action) => {

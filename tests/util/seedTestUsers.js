@@ -31,19 +31,19 @@ const managerPermission = {
   id: managerPermissionId,
   allowedAccounts: null,
   permissions: null,
-  role: 'MANAGER',
+  role: _Permission.ROLES.MANAGER,
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
 const ownerPermission = {
   id: ownerPermissionId,
-  role: 'OWNER',
+  role: _Permission.ROLES.OWNER,
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
 const superAdminPermission = {
   id: superAdminPermissionId,
-  role: 'SUPERADMIN',
+  role: _Permission.ROLES.SUPERADMIN,
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 

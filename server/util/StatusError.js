@@ -14,12 +14,15 @@ function StatusError(statusCode = 500, message = defaultMessage) {
   if (!(this instanceof StatusError)) {
     return new StatusError(statusCode, message);
   }
-  
+
   Error.captureStackTrace(this, this.constructor);
   this.name = this.constructor.name;
   this.message = message;
   this.status = statusCode;
 }
+
+StatusError.BAD_REQUEST = 400;
+StatusError.FORBIDDEN = 403;
 
 require('util').inherits(StatusError, Error);
 

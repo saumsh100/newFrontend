@@ -38,6 +38,7 @@ const Appointment = createModel('Appointment', {
   isBookable: type.boolean().default(false),
 });
 
+Appointment.ensureIndex('practitionerIdRange', doc => [doc('practitionerId'), doc('startDate')]);
 Appointment.ensureIndex('accountId');
 Appointment.ensureIndex('accountStart', function (row) {
   return [row('accountId'), row('startDate')];

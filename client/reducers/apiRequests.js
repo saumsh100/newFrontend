@@ -1,7 +1,6 @@
 
 import { Record, Map } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
-import extend from 'lodash/extend';
 
 export const CREATE_REQUEST = '@apiRequests/CREATE_REQUEST';
 export const RECEIVE_REQUEST = '@apiRequests/RECEIVE_REQUEST';
