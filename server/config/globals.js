@@ -42,8 +42,8 @@ const vendasta = {
 };
 
 const twilio = {
-  accountSid: environmentVariables.TWILIO_ACCOUNT_SID,
-  authToken: environmentVariables.TWILIO_AUTH_TOKEN,
+  accountSid: environmentVariables.TWILIO_ACCOUNT_SID || 'ACe874663202cfbbaec4be1ba33869f421',
+  authToken: environmentVariables.TWILIO_AUTH_TOKEN || '﻿ed5dbadfe331c9bf5898f679a8831b23',
   phoneNumber: environmentVariables.TWILIO_NUMBER,
 };
 
