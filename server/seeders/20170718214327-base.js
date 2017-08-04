@@ -2,6 +2,11 @@ const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
 const passwordHashSaltRounds = 10;
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
@@ -32,6 +37,7 @@ const account = {
   id: accountId,
   enterpriseId,
   name: 'Test Account',
+  city: 'Belgrade',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
@@ -39,6 +45,7 @@ const account = {
 const account2 = {
   id: accountId2,
   enterpriseId,
+  city: 'Kostolac',
   name: 'Test Account 2',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
@@ -145,7 +152,7 @@ module.exports = {
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
         }),
-        createdAt: new Date(),
+        createdAt: faker.date.past(),
         updatedAt: new Date(),
       });
     }

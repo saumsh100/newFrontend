@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Router } from 'express';
 import db from '../../../_models/index';
 import { sequelizeLoader } from '../../util/loaders';
@@ -14,8 +15,38 @@ const Appointment = db.Appointment;
 segmentRouter.param('segmentId', sequelizeLoader('segment', 'Segment'));
 
 function convertRawToSequelizeWhere(raw) {
-  // @TODO add conversion here
-  return raw || {};
+  const patientWhere = {};
+  const accountWhere = {};
+
+  if (raw.city) {
+    accountWhere.city = raw.city;
+  }
+
+  if (raw.gender) {
+    patientWhere.gender = raw.gender;
+  }
+
+  if (raw.age) {
+    const ageRanges = [];
+
+
+    raw.age.forEach((ageSet) => {
+      const ages = ageSet.split('-');
+      ageRanges.push({
+        $between: [moment().add(-parseInt(ages[0], 10), 'years').toISOString(), moment().add(-parseInt(ages[1], 10), 'years').toISOString()]
+      });
+    });
+
+    patientWhere.birthDate = {
+      $or: ageRanges,
+    };
+  }
+
+
+  return {
+    account: accountWhere,
+    patient: patientWhere,
+  };
 }
 // Get single segment info
 segmentRouter.get('/:segmentId', checkPermissions('segments:read'), async (req, res, next) => {
@@ -56,7 +87,7 @@ segmentRouter.post('/', checkPermissions('segments:create'), async (req, res, ne
     data.referenceId = (data.reference === Segment.REFERENCE.ENTERPRISE)
       ? req.enterpriseId : req.accountId;
 
-    data.rawWhere = convertRawToSequelizeWhere(data.where);
+    data.where = convertRawToSequelizeWhere(data.rawWhere);
 
     const segment = await Segment.create(data);
 
@@ -110,12 +141,21 @@ segmentRouter.delete('/:segmentId', checkPermissions('segments:delete'), async (
 segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, res, next) => {
   const { rawWhere } = req.body;
   try {
+    const segmentWhere = convertRawToSequelizeWhere(rawWhere);
+
+    const accountWhere = {
+      enterpriseId: req.enterpriseId,
+    };
+
+    // @TODO Add selectors for city
+    if (segmentWhere.account && segmentWhere.account.city) {
+      accountWhere.city = segmentWhere.account.city;
+    }
+
     // fetch all enterprise accounts
     const accounts = await Account.findAll({
       raw: true,
-      where: {
-        enterpriseId: req.enterpriseId,
-      },
+      where: accountWhere,
     });
     const accountIds = accounts.map(account => account.id);
 
@@ -128,12 +168,10 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
       where: baseWhere,
     });
 
-    const segmentWhere = convertRawToSequelizeWhere(rawWhere);
+    const segmentActiveUsersWhere = { ...baseWhere, ...segmentWhere.patient };
 
     const segmentActiveUsers = await Patient.count({
-      where: {
-        ...baseWhere, ...segmentWhere,
-      },
+      where: segmentActiveUsersWhere,
     });
 
     const totalAppointments = await Appointment.count({
@@ -151,9 +189,7 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
         {
           model: Patient,
           as: 'patient',
-          where: {
-            ...baseWhere, ...segmentWhere,
-          },
+          where: segmentActiveUsersWhere,
         },
       ],
     });

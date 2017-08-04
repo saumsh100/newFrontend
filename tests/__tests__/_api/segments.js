@@ -28,7 +28,7 @@ describe('/api/segments', () => {
   let token = null;
   let token2 = null;
   beforeAll(async () => {
-    token = await generateTokenSequelize({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+    token = await generateTokenSequelize({ username: 'superadmin@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   const segmentItems = [];
@@ -38,10 +38,10 @@ describe('/api/segments', () => {
       .send({
         name: 'Test segment module',
         description: 'This is just a dummy data',
-        where: {
-          age: {
-            $gt: [10, 15],
-          },
+        rawWhere: {
+          age: ['0-5','6-15'],
+          gender: 'female',
+          city: 'Belgrade'
         },
       })
       .set('Authorization', `Bearer ${token}`)
@@ -57,10 +57,10 @@ describe('/api/segments', () => {
       .post(rootUrl)
       .send({
         name: 'Test segment module 2',
-        where: {
-          age: {
-            $gt: [1, 2],
-          },
+        rawWhere: {
+          age: ['0-5','6-15'],
+          gender: 'male',
+          city: 'Belgrade'
         },
       })
       .set('Authorization', `Bearer ${token}`)
@@ -145,6 +145,13 @@ describe('/api/segments', () => {
   describe('POST /api/segments/preview', () => {
     test('Preview items', async () => request(app)
       .post(`${rootUrl}/preview`)
+      .send({
+        rawWhere: {
+          age: ['0-5','6-15'],
+          gender: 'male',
+          city: 'Belgrade'
+        }
+      })
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body }) => {
@@ -152,9 +159,19 @@ describe('/api/segments', () => {
       }));
   });
 
+  describe('GET /_api/enterprises/accounts/cities', () => {
+    test('Preview items', async () => request(app)
+      .get(`/_api/enterprises/${enterpriseId}/accounts/cities`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body, error }) => {
+        console.log(body, error);
+      }));
+  });
+
   describe('GET /api/enterprise/dashboard/patients', () => {
     test('Preview items', async () => request(app)
-      .get(`/_api/enterprises/dashboard/patients?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .get(`/_api/enterprises/dashboard/patients?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {
