@@ -27,7 +27,7 @@ rootRouter.param('sentReminderId', loaders('sentReminder', 'SentReminder', { app
 
 // Bind subdomain capturing
 // Will be removed once microservices are in full effect
-rootRouter.use(subdomain('my', myRouter));
+rootRouter.use(subdomain('my', sequelizeMyRouter));
 rootRouter.use(subdomain('my2', sequelizeMyRouter));
 
 // Bind auth route to generate tokens
