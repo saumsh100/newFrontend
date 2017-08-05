@@ -10,8 +10,12 @@
   font-weight: 400;
 }
 
+.noUnderLine {
+  border-bottom: 0px !important;
+}
+
 .activeTab {
-  //border-bottom: $selection-border $primary-color;
+  border-bottom: $selection-border $primary-color;
   color: $primary-color;
 }
 

@@ -67,7 +67,6 @@ class PractitionerBasicData extends Component {
       firstName: practitioner.get('firstName'),
       lastName: practitioner.get('lastName'),
       fullAvatarUrl: practitioner.get('fullAvatarUrl'),
-      isActive: practitioner.get('isActive'),
       type: practitioner.get('type'),
       isHidden: practitioner.get('isHidden'),
     };
@@ -82,18 +81,6 @@ class PractitionerBasicData extends Component {
         >
           <div className={styles.practFormContainer_basicForm}>
             <Header title="Personal Details" contentHeader />
-            <div className={styles.practFormContainer_practActive}>
-              Active?
-              <div
-                className={styles.practFormContainer_practActive_toggle}
-                data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}Active`}
-              >
-                <Field
-                  name="isActive"
-                  component="Toggle"
-                />
-              </div>
-            </div>
             <Field
               required
               name="firstName"

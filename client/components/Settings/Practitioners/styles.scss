@@ -27,7 +27,6 @@
     margin-right: 80%;
   }
 }
-
 .modalContainer {
   width: 100%;
   display: inline-block;
@@ -50,14 +49,14 @@
 }
 
 .badgeHeader {
-  padding: 15px 30px 0 30px
+  padding: 15px 30px 15px 30px
 }
 
 
 .practListItem {
   padding-left: 25px;
-  padding-bottom: 20px;
-  padding-top: 20px;
+  padding-bottom: 30px;
+  padding-top: 30px;
   text-transform: capitalize;
   background: $primary-white;
 
@@ -86,15 +85,14 @@
   }
 }
 
-.sizingThis {
-  height: 2.5rem;
-  width: 2.5rem;
-  min-width: 2.5rem;
-  min-height: 2.5rem;
+.sizingThisAvatar {
+  height: 3rem;
+  width: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
 }
 
 .subHeader {
-  padding-left: 15px;
   div {
     font-size: 26px;
   }
@@ -110,6 +108,7 @@
 .flexHeader {
   display: flex;
   justify-content: space-between;
+  padding-bottom: 20px;
 }
 
 .button {
@@ -139,12 +138,12 @@
   align-items: center;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
-  padding-left: 10px;
-
+  margin-left: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .trashButton {
-  margin-left: auto;
 }
 
 .toggleContainer {
@@ -170,8 +169,8 @@
 .practFormContainer {
   width: 100%;
   display: flex;
-  padding-top: 35px;
-  padding-left: 10px;
+  padding-top: 20px;
+  margin-left: 10px;
   padding-bottom: 10px;
 
   &_basicForm{
@@ -221,6 +220,19 @@
   }
 }
 
+
+.practitionerActive {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 20px;
+  border-right: 1px solid $primary-darkgrey;
+
+  &_text {
+    font-family: $medium-font;
+    padding-right: 10px;
+  }
+}
 .deleteAvatar {
   width: 200px;
   margin-top: 20px;

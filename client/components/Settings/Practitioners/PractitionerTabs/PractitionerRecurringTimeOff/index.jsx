@@ -138,7 +138,7 @@ class PractitionerRecurringTimeOff extends Component {
     }
 
     let showAddOrListComponent = (
-      <div style={{ paddingLeft: '15px' }}>
+      <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
         <Button onClick={this.addTimeOff} >Add Time Off</Button>
       </div>
     );
