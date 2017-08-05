@@ -173,7 +173,7 @@ class OfficeHours extends Component {
     };
 
     let schedules = null;
-    if (weeklySchedule) {
+    if (weeklySchedule && weeklySchedule.toJS().weeklySchedules) {
       schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => {
         return (<div>
           <div className={styles.orSpacer} />

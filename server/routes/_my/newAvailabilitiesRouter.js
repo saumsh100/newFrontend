@@ -1,9 +1,10 @@
+import { Router } from 'express';
+import { fetchAvailabilities } from '../../lib/_availabilities';
+import { sequelizeLoader } from '../util/loaders';
 
-const availabilitiesRouter = require('express').Router();
-const { fetchAvailabilities } = require('../../lib/availabilities');
-const loaders = require('../util/loaders');
+const availabilitiesRouter = new Router();
 
-availabilitiesRouter.param('accountId', loaders('account', 'Account'));
+availabilitiesRouter.param('accountId', sequelizeLoader('account', 'Account'));
 
 /**
  * Availabilities API
@@ -13,7 +14,6 @@ availabilitiesRouter.get('/accounts/:accountId/availabilities', (req, res, next)
     accountId: req.account.id,
     timeInterval: req.account.timeInterval,
   });
-
   return fetchAvailabilities(data)
     .then((availabilities) => {
       res.send({ availabilities });
