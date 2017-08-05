@@ -1,3 +1,4 @@
+
 import { Router } from 'express';
 import fs from 'fs';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
@@ -21,14 +22,12 @@ sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
 sequelizeMyRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
 sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
-  { association: 'practitioners', required: false },
+  { association: 'practitioners', required: false, where: { isActive: true } },
 ]));
 
 sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
-  let practitioners;
   try {
-    practitioners = await Practitioner.findAll({ where: { accountId: req.account.id, isActive: true } });
-    const { entities } = normalize('account', req.account.dataValues);
+    const { entities } = normalize('account', req.account.get({ plain: true }));
     let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
     for (let i = 0; i < req.account.services.length; i++) {
       if (req.account.services[i].isDefault) {
@@ -41,11 +40,15 @@ sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) =>
       return service.get({ plain: true });
     });
 
+    const responsePractitioners = req.account.practitioners.map((practitioner) => {
+      return practitioner.get({ plain: true });
+    });
+
     const initialState = {
       availabilities: {
         account: responseAccount,
         services: responseServices,
-        practitioners,
+        practitioners: responsePractitioners,
         selectedServiceId,
       },
 

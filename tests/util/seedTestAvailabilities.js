@@ -386,7 +386,7 @@ const WeeklySchedules = [
     },
     startDate: new Date(2017, 4, 5, 9, 0),
     weeklySchedules: [{
-      sunday: {
+      monday: {
         startTime: time(8, 0),
         endTime: time(17, 0),
         breaks: [
@@ -395,22 +395,31 @@ const WeeklySchedules = [
             endTime: time(13, 0),
           },
         ],
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
+      },
+
+      tuesday: {
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
       wednesday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
       friday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
       saturday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
 
-      monday: {
+      sunday: {
         isClosed: true,
+        chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
       },
     }],
     isAdvanced: true,
