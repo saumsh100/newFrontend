@@ -23,15 +23,6 @@ describe('GET /', () => {
 
   // TODO: Figure out why I need to exclude the patientUser field to avoid the circular object
   test('/accounts/:accountId/availabilities - get availabilities', async () => {
-    const practitioners = await Practitioner.findAll({
-      where: {id: practitionerId},
-      include: [{
-        model: WeeklySchedule,
-        as: 'weeklySchedule',
-      }],
-      raw: true,
-      nest: true,
-    });
 
     return request(app)
       .get(`/accounts/${accountId}/availabilities?startDate=2018-07-19T00:14:30.932Z&endDate=2018-07-27T00:14:30.932Z&serviceId=${serviceId}&practitionerId=${practitionerId}`)

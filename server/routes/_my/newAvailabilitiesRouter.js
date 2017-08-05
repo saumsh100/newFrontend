@@ -14,7 +14,6 @@ availabilitiesRouter.get('/accounts/:accountId/availabilities', (req, res, next)
     accountId: req.account.id,
     timeInterval: req.account.timeInterval,
   });
-  console.log(data);
   return fetchAvailabilities(data)
     .then((availabilities) => {
       res.send({ availabilities });
