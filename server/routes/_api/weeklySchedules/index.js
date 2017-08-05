@@ -19,7 +19,7 @@ weeklySchedulesRouter.post('/', checkPermissions('weeklySchedules:create'), (req
   });
 
   return WeeklySchedule.create(weeklyScheduleData)
-    .then(weeklySchedule => res.send(201, normalize('weeklySchedule', weeklySchedule.dataValues)))
+    .then(weeklySchedule => res.status(201).send(normalize('weeklySchedule', weeklySchedule.dataValues)))
     .catch(next);
 });
 

@@ -333,7 +333,7 @@ chatsRouter.put('/:chatId', checkPermissions('chats:update'), (req, res, next) =
 chatsRouter.delete('/:chatId', checkPermissions('chats:delete'), (req, res, next) => {
   // We actually delete chats as we don't care about history
   return req.chat.destroy()
-    .then(() => res.send(204))
+    .then(() => res.status(204).send())
     .catch(next);
 });
 

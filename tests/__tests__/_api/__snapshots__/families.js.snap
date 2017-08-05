@@ -44,15 +44,15 @@ exports[`/api/families POST / / - create a family 1`] = `
 Object {
   "entities": Object {
     "families": Object {
-      "08cb4f5a-3d19-4f70-a543-ab961e78200c": Object {
+      "215d8818-0130-411b-bd55-c04587892b66": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "headId": null,
-        "id": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+        "id": "215d8818-0130-411b-bd55-c04587892b66",
         "pmsId": null,
       },
     },
   },
-  "result": "08cb4f5a-3d19-4f70-a543-ab961e78200c",
+  "result": "215d8818-0130-411b-bd55-c04587892b66",
 }
 `;
 

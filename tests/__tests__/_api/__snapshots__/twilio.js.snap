@@ -5,9 +5,3 @@ Object {
   "entities": Object {},
 }
 `;
-
-exports[`/api/sentReminders POST / retrieve sent reminder 1`] = `
-Object {
-  "entities": Object {},
-}
-`;

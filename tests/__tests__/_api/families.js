@@ -1,10 +1,10 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import { generateTokenSequelize } from '../../util/generateToken';
+import generateToken from '../../_util/generateToken';
 import { Family } from '../../../server/_models';
-import { wipeModelSequelize } from '../../util/wipeModel';
-import { accountId, seedTestUsersSequelize, wipeTestUsers } from '../../util/seedTestUsers';
+import wipeModel from '../../_util/wipeModel';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/families';
@@ -54,15 +54,15 @@ describe('/api/families', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
-    await wipeModelSequelize(Family);
-    await seedTestUsersSequelize();
+    await wipeModel(Family);
+    await seedTestUsers();
     await seedTestFamilies();
 
-    token = await generateTokenSequelize({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeModelSequelize(Family);
+    await wipeModel(Family);
     await wipeTestUsers();
   });
 
@@ -92,15 +92,11 @@ describe('/api/families', () => {
   });
 
   describe('POST /', () => {
-    beforeEach(async () => {
-      await wipeModelSequelize(Family);
-    });
-
     test('/ - create a family', () => {
       return request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send(family)
+        .send(batchFamily) // cant use family cause its already created
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);

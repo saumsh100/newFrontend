@@ -194,6 +194,10 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
       const { email, firstName } = patientUser;
       const { name, phoneNumber, contactEmail, website } = account;
       const { startDate } = req.appointment;
+
+      // Early return so its not dependant on email sending
+      res.status(200).send();
+
       // Send Email
       return sendAppointmentRequestConfirmed({
         toEmail: email,
@@ -229,9 +233,6 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
           },
         ],
       });
-    })
-    .then(() => {
-      res.send(200);
     })
     .catch(next);
 });

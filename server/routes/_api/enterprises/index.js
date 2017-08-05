@@ -70,7 +70,7 @@ enterprisesRouter.get('/:enterpriseId/accounts', checkPermissions(['enterprises:
  */
 enterprisesRouter.post('/', checkPermissions('enterprises:create'), (req, res, next) => {
   return Enterprise.create(pick(req.body, ['name', 'plan']))
-    .then(enterprise => res.send(201, normalize('enterprise', enterprise.dataValues)))
+    .then(enterprise => res.status(201).send(normalize('enterprise', enterprise.dataValues)))
     .catch(next);
 });
 
@@ -96,10 +96,6 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
     await user.update({ activeAccountId: accountId, enterpriseId });
 
     // Create a new session
-    console.log('sessionData', sessionData);
-    console.log('accountId', accountId);
-    console.log('enterpriseId', enterpriseId);
-
     const newSession = await UserAuth.updateSession(sessionId, sessionData, {
       accountId,
       enterpriseId,

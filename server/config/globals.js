@@ -80,7 +80,7 @@ const postgres = {
   port: environmentVariables.POSTGRESQL_PORT || 5432,
   username: environmentVariables.POSTGRESQL_USER || 'admin',
   password: environmentVariables.POSTGRESQL_PASSWORD || '',
-  database: environmentVariables.POSTGRESQL_DATABASE || 'carecru',
+  database: environmentVariables.POSTGRESQL_DATABASE || defaultDBName,
   ssl: !!environmentVariables.POSTGRESQL_SSL,
   logging: !!environmentVariables.POSTGRESQL_LOGGING,
 };

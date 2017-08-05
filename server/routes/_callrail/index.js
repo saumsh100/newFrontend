@@ -59,7 +59,8 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
         Call.create(Object.assign({}, data, callData));
       }
     });
-  res.send(201);
+
+  res.status(201).send(201);
   // res.end();
 });
 
@@ -107,7 +108,7 @@ callsRouterSequelize.post('/:accountId/inbound/post-call', (req, res, next) => {
   .catch(next);
 
   // Needs a response
-  res.send(201);
+  res.status(201).send();
   // res.end();
 });
 
