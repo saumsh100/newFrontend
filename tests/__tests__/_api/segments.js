@@ -39,9 +39,9 @@ describe('/api/segments', () => {
         name: 'Test segment module',
         description: 'This is just a dummy data',
         rawWhere: {
-          age: ['0-5','6-15'],
+          age: ['0-5', '6-15'],
           gender: 'female',
-          city: 'Belgrade'
+          city: 'Belgrade',
         },
       })
       .set('Authorization', `Bearer ${token}`)
@@ -60,7 +60,7 @@ describe('/api/segments', () => {
         rawWhere: {
           age: ['0-5','6-15'],
           gender: 'male',
-          city: 'Belgrade'
+          city: 'Belgrade',
         },
       })
       .set('Authorization', `Bearer ${token}`)
@@ -147,14 +147,16 @@ describe('/api/segments', () => {
       .post(`${rootUrl}/preview`)
       .send({
         rawWhere: {
-          age: ['0-5','6-15'],
+          age: ['0-5', '6-15'],
           gender: 'male',
-          city: 'Belgrade'
-        }
+          city: 'Belgrade',
+        },
       })
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body }) => {
+        expect(body.totalActiveUsers).toBe(210);
+        expect(body.totalAppointments).toBe(105);
         console.log(body);
       }));
   });
@@ -165,6 +167,9 @@ describe('/api/segments', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {
+        expect(body.length).toBe(2);
+        expect(body[0].city).toBe('Belgrade');
+        expect(body[1].city).toBe('Kostolac');
         console.log(body, error);
       }));
   });

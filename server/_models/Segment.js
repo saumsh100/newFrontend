@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const StatusError = require('../util/StatusError');
 
 export default function (sequelize, DataTypes) {
@@ -64,8 +66,49 @@ export default function (sequelize, DataTypes) {
     }
   };
 
+  Segment.convertRawToSequelizeWhere = function (raw) {
+    const patientWhere = {};
+    const accountWhere = {};
+
+    if (raw.city) {
+      accountWhere.city = raw.city;
+    }
+
+    if (raw.gender) {
+      patientWhere.gender = raw.gender;
+    }
+
+    if (raw.age) {
+      const ageRanges = [];
+
+
+      raw.age.forEach((ageSet) => {
+        const ages = ageSet.split('-');
+        if (!ages[1]) {
+          const age = ages[0].replace('+', '');
+          ageRanges.push({
+            $lt: [moment().add(-parseInt(age, 10), 'years').toISOString()],
+          });
+        } else {
+          ageRanges.push({
+            $between: [moment().add(-parseInt(ages[1], 10), 'years').toISOString(), moment().add(-parseInt(ages[0], 10), 'years').toISOString()],
+          });
+        }
+      });
+
+      patientWhere.birthDate = {
+        $or: ageRanges,
+      };
+    }
+
+    return {
+      account: accountWhere,
+      patient: patientWhere,
+    };
+  };
+
   // Allowing constant to be available for usage outside of model
   Segment.REFERENCE = REFERENCE;
 
   return Segment;
-};
+}

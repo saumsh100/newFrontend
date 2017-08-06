@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 import { Router } from 'express';
 import { pick } from 'lodash';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -347,15 +347,13 @@ enterprisesRouter.get('/:enterpriseId/accounts/cities', checkPermissions(['enter
 });
 
 enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read', 'accounts:read', 'segments:read']), async (req, res, next) => {
-  const { segmentId, startDate, endDate } = req.query;
+  const { segmentId, startDate = moment().toISOString(), endDate = moment().add(-30, 'days').toISOString(), rawWhere  = false} = req.query;
   try {
-    if (!startDate || !endDate) {
-      throw StatusError(StatusError.BAD_REQUEST, 'Missing start and end time');
-    }
-
     let segmentWhere = {};
     let accountSegmentWhere = {};
-    if (segmentId) {
+    if (rawWhere) {
+      segmentWhere = Segment.convertRawToSequelizeWhere(rawWhere);
+    } else if (segmentId) {
       const segment = await Segment.findById(segmentId);
 
       // if segment is null throw error
@@ -368,7 +366,6 @@ enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read
       segmentWhere = segment.where.patient || {};
       accountSegmentWhere = segment.where.account || {};
     }
-
 
     // repeteable query object data
     const attributes = ['accountId', [sequelize.fn('count', sequelize.col('*')), 'patientCount']];

@@ -1,4 +1,4 @@
-import moment from 'moment';
+
 import { Router } from 'express';
 import db from '../../../_models/index';
 import { sequelizeLoader } from '../../util/loaders';
@@ -14,47 +14,7 @@ const Appointment = db.Appointment;
 
 segmentRouter.param('segmentId', sequelizeLoader('segment', 'Segment'));
 
-function convertRawToSequelizeWhere(raw) {
-  const patientWhere = {};
-  const accountWhere = {};
 
-  if (raw.city) {
-    accountWhere.city = raw.city;
-  }
-
-  if (raw.gender) {
-    patientWhere.gender = raw.gender;
-  }
-
-  if (raw.age) {
-    const ageRanges = [];
-
-
-    raw.age.forEach((ageSet) => {
-      const ages = ageSet.split('-');
-      if (!ages[1]) {
-        const age = ages[0].replace('+', '');
-        ageRanges.push({
-          $lt: [moment().add(-parseInt(age, 10), 'years').toISOString()],
-        });
-      } else {
-        ageRanges.push({
-          $between: [moment().add(-parseInt(ages[1], 10), 'years').toISOString(), moment().add(-parseInt(ages[0], 10), 'years').toISOString()],
-        });
-      }
-    });
-
-    patientWhere.birthDate = {
-      $or: ageRanges,
-    };
-  }
-
-
-  return {
-    account: accountWhere,
-    patient: patientWhere,
-  };
-}
 // Get single segment info
 segmentRouter.get('/:segmentId', checkPermissions('segments:read'), async (req, res, next) => {
   try {
@@ -94,7 +54,7 @@ segmentRouter.post('/', checkPermissions('segments:create'), async (req, res, ne
     data.referenceId = (data.reference === Segment.REFERENCE.ENTERPRISE)
       ? req.enterpriseId : req.accountId;
 
-    data.where = convertRawToSequelizeWhere(data.rawWhere);
+    data.where = Segment.convertRawToSequelizeWhere(data.rawWhere);
 
     const segment = await Segment.create(data);
 
@@ -148,22 +108,32 @@ segmentRouter.delete('/:segmentId', checkPermissions('segments:delete'), async (
 segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, res, next) => {
   const { rawWhere } = req.body;
   try {
-    const segmentWhere = convertRawToSequelizeWhere(rawWhere);
+    const segmentWhere = Segment.convertRawToSequelizeWhere(rawWhere);
     const accountWhere = {
       enterpriseId: req.enterpriseId,
     };
 
     // @TODO Add selectors for city
+
+
+    // fetch all enterprise accounts
+    const accountsTotal = await Account.findAll({
+      raw: true,
+      where: accountWhere,
+    });
+    const accountIds = accountsTotal.map(account => account.id);
+
+    // Expand accounts query where with segment information if exists
     if (segmentWhere.account && segmentWhere.account.city) {
       accountWhere.city = segmentWhere.account.city;
     }
 
-    // fetch all enterprise accounts
-    const accounts = await Account.findAll({
+    const accountsFiltered = await Account.findAll({
       raw: true,
       where: accountWhere,
     });
-    const accountIds = accounts.map(account => account.id);
+    const accountIdsFiltered = accountsFiltered.map(account => account.id);
+
 
     const baseWhere = {
       accountId: accountIds,
@@ -172,12 +142,6 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
 
     const totalActiveUsers = await Patient.count({
       where: baseWhere,
-    });
-
-    const segmentActiveUsersWhere = { ...baseWhere, ...segmentWhere.patient };
-
-    const segmentActiveUsers = await Patient.count({
-      where: segmentActiveUsersWhere,
     });
 
     const totalAppointments = await Appointment.count({
@@ -190,6 +154,14 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
       ],
     });
 
+    // Change baseWhere to apply filtered account data
+    baseWhere.accountId = accountIdsFiltered;
+    const segmentActiveUsersWhere = { ...baseWhere, ...segmentWhere.patient };
+
+    const segmentActiveUsers = await Patient.count({
+      where: segmentActiveUsersWhere,
+    });
+
     const segmentAppointments = await Appointment.count({
       include: [
         {
@@ -199,7 +171,6 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
         },
       ],
     });
-
 
     const data = {
       totalActiveUsers,
