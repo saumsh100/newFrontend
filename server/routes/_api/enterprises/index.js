@@ -347,7 +347,7 @@ enterprisesRouter.get('/:enterpriseId/accounts/cities', checkPermissions(['enter
 });
 
 enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read', 'accounts:read', 'segments:read']), async (req, res, next) => {
-  const { segmentId, startDate = moment().toISOString(), endDate = moment().add(-30, 'days').toISOString(), rawWhere  = false} = req.query;
+  const { segmentId, startDate = moment().toISOString(), endDate = moment().add(-30, 'days').toISOString(), rawWhere = false, by = 'total' } = req.query;
   try {
     let segmentWhere = {};
     let accountSegmentWhere = {};
@@ -423,6 +423,22 @@ enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read
     };
 
     const activePatientsWhere = { ...baseWhere, ...activeWhere, ...segmentWhere };
+
+    const testData = await Patient.findAll({
+      raw: true,
+      attributes: [[sequelize.fn('count', sequelize.col('Patient.id')), 'patientCount']],
+      where: activePatientsWhere,
+      include: [
+        {
+          attributes: ['city'],
+          model: Account,
+          as: 'account',
+        },
+      ],
+      group: ['city'],
+    });
+
+
     const activePatientsData = await Patient.findAll({
       raw: true,
       attributes,
@@ -535,7 +551,227 @@ enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read
         enterpriseDashboard: {
           patients: {
             id: 'patients',
-            clinics: accounts,
+            clinics,
+            totals: {
+              totalActivePatients,
+              totalHygienePatients,
+              totalNewPatients,
+            },
+          },
+        },
+      },
+    };
+
+
+    return res.send(dashboardData);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+enterprisesRouter.get('/dashboard/patients/region', checkPermissions(['enterprises:read', 'accounts:read', 'segments:read']), async (req, res, next) => {
+  const { segmentId, startDate = moment().toISOString(), endDate = moment().add(-30, 'days').toISOString(), rawWhere = false, by = 'total' } = req.query;
+  try {
+    let segmentWhere = {};
+    let accountSegmentWhere = {};
+    if (rawWhere) {
+      segmentWhere = Segment.convertRawToSequelizeWhere(rawWhere);
+    } else if (segmentId) {
+      const segment = await Segment.findById(segmentId);
+
+      // if segment is null throw error
+      if (!segment) {
+        throw new StatusError(StatusError.BAD_REQUEST, `Data for Segment with id: ${segmentId} do not exists`);
+      }
+      // confirm if user has sent segment he has access to use
+      segment.isOwner(req);
+
+      segmentWhere = segment.where.patient || {};
+      accountSegmentWhere = segment.where.account || {};
+    }
+
+    // repeteable query object data
+    const attributes = [[sequelize.fn('count', sequelize.col('Patient.id')), 'patientCount']];
+    const monthAttributes = [[sequelize.fn('date_trunc', 'month', sequelize.col('Patient.createdAt')), 'date'], [sequelize.fn('count', sequelize.col('Patient.id')), 'patientCount']];
+    const monthGroup = ['city', sequelize.fn('date_trunc', 'month', sequelize.col('Patient.createdAt'))];
+
+    let totalActivePatients = 0;
+    let totalHygienePatients = 0;
+    let totalNewPatients = 0;
+
+    accountSegmentWhere.enterpriseId = req.enterpriseId;
+
+    // fetch all enterprise accounts
+    const accounts = await Account.findAll({
+      attributes: ['city'],
+      raw: true,
+      where: accountSegmentWhere,
+      group: ['city'],
+    });
+    const regions = {};
+    accounts.forEach((account) => {
+      regions[account.city] = account;
+      // set base for active patients
+      regions[account.city].activePatients = {
+        total: 0,
+        month: [],
+      };
+
+      // set base for hygiene patients
+      regions[account.city].hygienePatients = {
+        total: 0,
+        month: [],
+      };
+
+      // set base for new patients
+      regions[account.city].newPatients = {
+        total: 0,
+        month: [],
+      };
+    });
+
+    const accountInclude = {
+      attributes: ['city'],
+      model: Account,
+      as: 'account',
+      where: {
+        enterpriseId: req.enterpriseId,
+      },
+    };
+
+    const baseWhere = {};
+
+    // Set date where condition
+    const dateWhere = {
+      createdAt: {
+        $between: [startDate, endDate],
+      },
+    };
+
+    const activeWhere = {
+      status: Patient.STATUS.ACTIVE,
+    };
+
+    const activePatientsWhere = { ...baseWhere, ...activeWhere, ...segmentWhere };
+
+    const activePatientsData = await Patient.findAll({
+      raw: true,
+      attributes,
+      where: activePatientsWhere,
+      include: [accountInclude],
+      group: ['city'],
+    });
+
+    const activePatientsByMonth = await Patient.findAll({
+      raw: true,
+      attributes: monthAttributes,
+      include: [accountInclude],
+      where: activePatientsWhere,
+      group: monthGroup,
+    });
+
+    // fetch new patients (E.g. created at between start/end date)
+    const newPatientsWhere = { ...baseWhere, ...activeWhere, ...segmentWhere, ...dateWhere };
+    const newPatientsData = await Patient.findAll({
+      raw: true,
+      attributes,
+      where: newPatientsWhere,
+      include: [accountInclude],
+      group: ['city'],
+    });
+
+    const newPatientsByMonth = await Patient.findAll({
+      raw: true,
+      attributes: monthAttributes,
+      include: [accountInclude],
+      where: newPatientsWhere,
+      group: monthGroup,
+    });
+
+    const hygieneInclude = [
+      accountInclude,
+      {
+        attributes: [],
+        model: Appointment,
+        as: 'appointments',
+        required: true,
+        include: [
+          {
+            attributes: [],
+            model: Practitioner,
+            as: 'practitioner',
+            required: true,
+            where: {
+              type: Practitioner.TYPE.HYGIENIST,
+            },
+          },
+        ],
+      },
+    ];
+
+    const hygienePatients = await Patient.findAll({
+      raw: true,
+      attributes,
+      where: activePatientsWhere,
+      include: hygieneInclude,
+      group: ['city'],
+    });
+
+    const hygienePatientsByMonth = await Patient.findAll({
+      raw: true,
+      attributes: [[sequelize.fn('date_trunc', 'month', sequelize.col('Patient.createdAt')), 'date'], [sequelize.fn('count', sequelize.col('*')), 'patientCount']],
+      where: activePatientsWhere,
+      include: hygieneInclude,
+      group: monthGroup,
+    });
+
+    // Prepare and map data
+    activePatientsData.forEach((clinic) => {
+      const patients = parseInt(clinic.patientCount, 10);
+      regions[clinic['account.city']].activePatients.total = patients;
+      totalActivePatients += patients;
+    });
+
+    activePatientsByMonth.forEach((month) => {
+      regions[month['account.city']].activePatients.month.push({
+        date: month.date,
+        number: month.patientCount,
+      });
+    });
+
+    hygienePatients.forEach((clinic) => {
+      const patients = parseInt(clinic.patientCount, 10);
+      regions[clinic['account.city']].hygienePatients.total = patients;
+      totalHygienePatients += patients;
+    });
+
+    hygienePatientsByMonth.forEach((month) => {
+      regions[month['account.city']].hygienePatients.month.push({
+        date: month.date,
+        number: month.patientCount,
+      });
+    });
+
+    newPatientsData.forEach((clinic) => {
+      const patients = parseInt(clinic.patientCount, 10);
+      regions[clinic['account.city']].newPatients.total = patients;
+      totalNewPatients += patients;
+    });
+
+    newPatientsByMonth.forEach((month) => {
+      regions[month['account.city']].newPatients.month.push({
+        date: month.date,
+        number: month.patientCount,
+      });
+    });
+
+
+    const dashboardData = {
+      entities: {
+        enterpriseDashboard: {
+          patients: {
+            id: 'patients',
+            regions,
             totals: {
               totalActivePatients,
               totalHygienePatients,

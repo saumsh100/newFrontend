@@ -105,6 +105,7 @@ segmentRouter.delete('/:segmentId', checkPermissions('segments:delete'), async (
   }
 });
 
+// @TODO This should be updated so it can be used/applied to any data set existing in dashboard.
 segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, res, next) => {
   const { rawWhere } = req.body;
   try {

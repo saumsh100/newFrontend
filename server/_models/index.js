@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { postgres } = require('../config/globals');
 
 const sequelizeConfig = {
-  logging: false,
+  logging: console.log,
   dialect: 'postgres',
   host: postgres.host,
   port: postgres.port,
