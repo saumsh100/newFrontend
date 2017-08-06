@@ -32,9 +32,16 @@ function convertRawToSequelizeWhere(raw) {
 
     raw.age.forEach((ageSet) => {
       const ages = ageSet.split('-');
-      ageRanges.push({
-        $between: [moment().add(-parseInt(ages[0], 10), 'years').toISOString(), moment().add(-parseInt(ages[1], 10), 'years').toISOString()]
-      });
+      if (!ages[1]) {
+        const age = ages[0].replace('+', '');
+        ageRanges.push({
+          $lt: [moment().add(-parseInt(age, 10), 'years').toISOString()],
+        });
+      } else {
+        ageRanges.push({
+          $between: [moment().add(-parseInt(ages[1], 10), 'years').toISOString(), moment().add(-parseInt(ages[0], 10), 'years').toISOString()],
+        });
+      }
     });
 
     patientWhere.birthDate = {
@@ -142,7 +149,6 @@ segmentRouter.post('/preview', checkPermissions('segments:delete'), async (req, 
   const { rawWhere } = req.body;
   try {
     const segmentWhere = convertRawToSequelizeWhere(rawWhere);
-
     const accountWhere = {
       enterpriseId: req.enterpriseId,
     };
