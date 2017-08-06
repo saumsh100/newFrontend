@@ -173,16 +173,22 @@ describe('/api/segments', () => {
         console.log(body, error);
       }));
   });
+  const object = JSON.stringify({
+    age: ['0-5', '6-15'],
+    gender: 'male',
+    city: 'Belgrade',
+  });
 
   describe('GET /api/enterprise/dashboard/patients', () => {
     test('Preview items', async () => request(app)
-      .get(`/_api/enterprises/dashboard/patients?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .get(`/_api/enterprises/dashboard/patients?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}&rawWhere=${object}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {
         console.log(body, error);
       }));
   });
+
 
   describe('GET /api/enterprise/dashboard/patients/region', () => {
     test('Preview items', async () => request(app)

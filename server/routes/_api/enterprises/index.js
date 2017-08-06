@@ -351,10 +351,13 @@ enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read
   try {
     let segmentWhere = {};
     let accountSegmentWhere = {};
+    let segment = null;
     if (rawWhere) {
-      segmentWhere = Segment.convertRawToSequelizeWhere(rawWhere);
+      const converted = Segment.convertRawToSequelizeWhere(JSON.parse(rawWhere));
+      segmentWhere = converted.patient;
+      accountSegmentWhere = converted.account;
     } else if (segmentId) {
-      const segment = await Segment.findById(segmentId);
+      segment = await Segment.findById(segmentId);
 
       // if segment is null throw error
       if (!segment) {
@@ -362,6 +365,10 @@ enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read
       }
       // confirm if user has sent segment he has access to use
       segment.isOwner(req);
+
+      segment = segment.get({
+        plain: true,
+      });
 
       segmentWhere = segment.where.patient || {};
       accountSegmentWhere = segment.where.account || {};
@@ -423,21 +430,6 @@ enterprisesRouter.get('/dashboard/patients', checkPermissions(['enterprises:read
     };
 
     const activePatientsWhere = { ...baseWhere, ...activeWhere, ...segmentWhere };
-
-    const testData = await Patient.findAll({
-      raw: true,
-      attributes: [[sequelize.fn('count', sequelize.col('Patient.id')), 'patientCount']],
-      where: activePatientsWhere,
-      include: [
-        {
-          attributes: ['city'],
-          model: Account,
-          as: 'account',
-        },
-      ],
-      group: ['city'],
-    });
-
 
     const activePatientsData = await Patient.findAll({
       raw: true,
@@ -574,10 +566,13 @@ enterprisesRouter.get('/dashboard/patients/region', checkPermissions(['enterpris
   try {
     let segmentWhere = {};
     let accountSegmentWhere = {};
+    let segment = null;
     if (rawWhere) {
-      segmentWhere = Segment.convertRawToSequelizeWhere(rawWhere);
+      const converted = Segment.convertRawToSequelizeWhere(JSON.parse(rawWhere));
+      segmentWhere = converted.patient;
+      accountSegmentWhere = converted.account;
     } else if (segmentId) {
-      const segment = await Segment.findById(segmentId);
+      segment = await Segment.findById(segmentId);
 
       // if segment is null throw error
       if (!segment) {
@@ -585,6 +580,10 @@ enterprisesRouter.get('/dashboard/patients/region', checkPermissions(['enterpris
       }
       // confirm if user has sent segment he has access to use
       segment.isOwner(req);
+
+      segment = segment.get({
+        plain: true,
+      });
 
       segmentWhere = segment.where.patient || {};
       accountSegmentWhere = segment.where.account || {};
@@ -634,9 +633,7 @@ enterprisesRouter.get('/dashboard/patients/region', checkPermissions(['enterpris
       attributes: ['city'],
       model: Account,
       as: 'account',
-      where: {
-        enterpriseId: req.enterpriseId,
-      },
+      where: accountSegmentWhere,
     };
 
     const baseWhere = {};
@@ -728,6 +725,8 @@ enterprisesRouter.get('/dashboard/patients/region', checkPermissions(['enterpris
     // Prepare and map data
     activePatientsData.forEach((clinic) => {
       const patients = parseInt(clinic.patientCount, 10);
+      console.log(clinic);
+      console.log(regions);
       regions[clinic['account.city']].activePatients.total = patients;
       totalActivePatients += patients;
     });
