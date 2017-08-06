@@ -21,11 +21,17 @@ class SelectPill extends PureComponent {
 
   onPillClick(pillId) {
     if (!this.props.multiselect) {
-      this.setState({
-        selectedPills: [pillId],
-      });
-
-      this.props.onChange([pillId]);
+      if (this.state.selectedPills[0] === pillId) {
+        this.setState({
+          selectedPills: [],
+        });
+        this.props.onChange([]);
+      } else {
+        this.setState({
+          selectedPills: [pillId],
+        });
+        this.props.onChange([pillId]);
+      }
     } else {
       const pills = new Set([
         ...this.state.selectedPills,

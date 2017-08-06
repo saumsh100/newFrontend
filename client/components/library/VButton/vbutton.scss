@@ -47,6 +47,9 @@
 .color-darkgrey { color: $clr-dark-grey; background-color: $clr-bg-dark-grey; }
 .color-darkgrey:hover { color: darken($clr-dark-grey, 5%); background-color: darken($clr-bg-dark-grey, 5%); }
 
+.color-white { color: $clr-dark-grey; background-color: $primary-white; }
+.color-white:hover { color: darken($clr-dark-grey, 5%); background-color: darken($primary-white, 5%); }
+
 .positive { composes: color-green; }
 .negative { composes: color-red; }
 

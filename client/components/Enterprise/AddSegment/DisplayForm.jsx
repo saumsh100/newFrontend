@@ -40,14 +40,11 @@ class DisplayForm extends Component {
     const {
     formName,
     handleSubmit,
-    selectedSegment,
     segments,
   } = this.props;
 
-    const title = selectedSegment ? 'Edit Segment' : 'Create New Segment';
-    console.log(this.props.segments.cities.map(city => ({
-      label: city, value: city,
-    })));
+    const title = 'Create New Segment';
+
     return (
       <Grid className={styles.addNewSegment}>
         <Row className={styles.addNewSegment_mainContainer}>
@@ -60,7 +57,12 @@ class DisplayForm extends Component {
               data-test-id="createSegmentForm"
             >
               <div className={styles.title}>{title}</div>
-              <Tabs navClass={styles.nav} index={this.state.index} contentClass={styles.tabContent} onChange={this.onTabChange}>
+              <Tabs
+                navClass={styles.nav}
+                index={this.state.index}
+                contentClass={styles.tabContent}
+                onChange={this.onTabChange}
+              >
                 <Tab label="Demographics" className={styles.tab} activeClassName={styles.activeTab}>
                   <Grid className={styles.grid}>
                     <Row>
@@ -131,7 +133,12 @@ class DisplayForm extends Component {
             </Form>
               
             <div className={styles.buttons}>
-              <Button flat>Apply</Button>
+              <Button
+                flat
+                onClick={this.props.handleApply}
+              >
+                Apply
+              </Button>
               <RemoteSubmitButton
                 flat
                 form={formName}
@@ -150,7 +157,12 @@ class DisplayForm extends Component {
                 <Loader loaded={false} color="#FF715A" /> :
                 <div>
                   <Gauge
-                    percentage={this.calculatePercentage(segments.preview.segmentActiveUsers, segments.preview.totalActiveUsers)}
+                    percentage={
+                      this.calculatePercentage(
+                        segments.preview.segmentActiveUsers,
+                        segments.preview.totalActiveUsers
+                      )
+                    }
                   >
                   of patients
                 </Gauge>
@@ -178,15 +190,17 @@ DisplayForm.propTypes = {
   handleCityChange: PropTypes.func,
   age: PropTypes.arrayOf(PropTypes.string).isRequired,
   gender: PropTypes.string.isRequired,
-  selectedSegment: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
+  handleApply: PropTypes.func.isRequired,
   segments: PropTypes.shape({
     preview: PropTypes.shape({}),
     loading: PropTypes.bool,
     cities: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   enterpriseId: PropTypes.string.isRequired,
+  fetchCities: PropTypes.func,
+  
 };
 
 function mapDispatchToProps(dispatch) {
@@ -201,20 +215,6 @@ function mapStateToProps(state) {
     enterpriseId: state.auth.get('enterprise').get('id'),
   };
 }
-
-DisplayForm.propTypes = {
-  formName: PropTypes.string.isRequired,
-  fetchEntities: PropTypes.func,
-  updateEntityRequest: PropTypes.func,
-  reset: PropTypes.func,
-  reinitializeState: PropTypes.func,
-  change: PropTypes.func,
-  previewSegment: PropTypes.func,
-  formState: PropTypes.shape({}).isRequired,
-  formData: PropTypes.shape({}).isRequired,
-  fetchCities: PropTypes.func,
-  
-};
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 

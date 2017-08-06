@@ -1,4 +1,3 @@
-import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
   PREVIEW_SEGMENT_ATTEMPT,
@@ -7,6 +6,8 @@ import {
   SEGMENTS_FETCH_CITIES_ATTEMPT,
   SEGMENTS_FETCH_CITIES_ERROR,
   SEGMENTS_FETCH_CITIES_SUCCESS,
+  SEGMENT_APPLY,
+  SEGMENT_REMOVE_APPLIED,
 } from '../constants';
 
 const initialState = {
@@ -16,10 +17,12 @@ const initialState = {
   cities: [],
   error: null,
   errorCities: null,
+  applied: false,
+  rawWhere: {},
 };
 
 export default handleActions({
-  [PREVIEW_SEGMENT_ATTEMPT](state, action) {
+  [PREVIEW_SEGMENT_ATTEMPT](state) {
     return {
       ...state,
       loading: true,
@@ -44,7 +47,7 @@ export default handleActions({
     };
   },
 
-  [SEGMENTS_FETCH_CITIES_ATTEMPT](state, action) {
+  [SEGMENTS_FETCH_CITIES_ATTEMPT](state) {
     return {
       ...state,
       loadingCities: true,
@@ -66,6 +69,21 @@ export default handleActions({
       loadingCities: false,
       errorCities: action.payload,
       cities: [],
+    };
+  },
+
+  [SEGMENT_APPLY](state, action) {
+    return {
+      ...state,
+      applied: true,
+      rawWhere: action.payload,
+    };
+  },
+  [SEGMENT_REMOVE_APPLIED](state) {
+    return {
+      ...state,
+      applied: false,
+      rawWhere: {},
     };
   },
 }, initialState);
