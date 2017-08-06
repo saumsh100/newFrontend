@@ -14,17 +14,17 @@ function EnterpriseTable(props) {
           </th>
           <th className={styles.th}>
             <h2 className={styles['th-title']}>Active Patients</h2>
-            <p className={styles['th-total']}>{props.totals.activePatients}</p>
+            <p className={styles['th-total']}>{props.totals.totalActivePatients}</p>
             <i className={`fa fa-users ${styles['th-icon']}`} aria-hidden="true" />
           </th>
           <th className={styles.th}>
             <h2 className={styles['th-title']}>Patients with Hygiene Apps</h2>
-            <p className={styles['th-total']}>{props.totals.hygienePatients}</p>
+            <p className={styles['th-total']}>{props.totals.totalHygienePatients}</p>
             <i className={`fa fa-tablet ${styles['th-icon']}`} aria-hidden="true" />
           </th>
           <th className={styles.th}>
             <h2 className={styles['th-title']}>New Patients</h2>
-            <p className={styles['th-total']}>{props.totals.newPatients}</p>
+            <p className={styles['th-total']}>{props.totals.totalNewPatients}</p>
             <i className={`fa fa-users ${styles['th-icon']}`} aria-hidden="true" />
           </th>
         </tr>
@@ -51,7 +51,7 @@ function EnterpriseTable(props) {
                 </div>
                 <div className={styles['col-content']}>
                   <span>img</span>
-                  <span className={styles['col-numbers']}>{clinic.activePatients}</span>
+                  <span className={styles['col-numbers']}>{clinic.activePatients.total}</span>
                   <span className={styles['col-numbers']}>97%</span>
                 </div>
               </td>
@@ -62,7 +62,7 @@ function EnterpriseTable(props) {
                 </div>
                 <div className={styles['col-content']}>
                   <span>img</span>
-                  <span className={styles['col-numbers']}>{clinic.hygienePatients}</span>
+                  <span className={styles['col-numbers']}>{clinic.hygienePatients.total}</span>
                   <span className={styles['col-numbers']}>97%</span>
                 </div>
               </td>
@@ -73,7 +73,7 @@ function EnterpriseTable(props) {
                 </div>
                 <div className={styles['col-content']}>
                   <span>img</span>
-                  <span className={styles['col-numbers']}>{clinic.newPatients}</span>
+                  <span className={styles['col-numbers']}>{clinic.newPatients.total}</span>
                   <span className={styles['col-numbers']}>97%</span>
                 </div>
               </td>
@@ -92,9 +92,9 @@ EnterpriseTable.propTypes = {
     hygienePatients: PropTypes.number,
   }),
   totals: PropTypes.shape({
-    newPatients: PropTypes.number,
-    activePatients: PropTypes.number,
-    hygienePatients: PropTypes.number,
+    totalNewPatients: PropTypes.number,
+    totalActivePatients: PropTypes.number,
+    totalHygienePatients: PropTypes.number,
   }),
 };
 

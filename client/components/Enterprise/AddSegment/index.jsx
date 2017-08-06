@@ -73,6 +73,7 @@ class AddSegment extends Component {
             this.props.reset(formName);
             return reinitializeState();
           }}
+        
         />
       </div>
     );
@@ -109,6 +110,7 @@ AddSegment.propTypes = {
   previewSegment: PropTypes.func,
   formState: PropTypes.shape({}).isRequired,
   formData: PropTypes.shape({}).isRequired,
+  
 };
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

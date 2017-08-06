@@ -1,6 +1,7 @@
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -31,6 +32,7 @@ const enterprise = {
   name: 'Test Enterprise',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  plan: 'ENTERPRISE',
 };
 
 const account = {
@@ -132,7 +134,7 @@ module.exports = {
     const patients = [];
 
     for (let i = 0; i < 100; i += 1) {
-      const firstName = faker.name.firstName();
+      const firstName = faker.name.firstName('male');
       const lastName = faker.name.lastName();
       const phoneNumber = faker.phone.phoneNumberFormat(0);
       patients.push({
@@ -142,8 +144,34 @@ module.exports = {
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
-        birthDate: faker.date.past(),
+        birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
         gender: 'male',
+        language: 'English',
+        insurance: JSON.stringify({
+          insurance: 'Lay Health Insurance',
+          memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+          contract: '4234rerwefsdfsd',
+          carrier: 'sadasadsadsads',
+          sin: 'dsasdasdasdadsasad',
+        }),
+        createdAt: faker.date.past(),
+        updatedAt: new Date(),
+      });
+    }
+
+    for (let i = 0; i < 30; i += 1) {
+      const firstName = faker.name.firstName('female');
+      const lastName = faker.name.lastName();
+      const phoneNumber = faker.phone.phoneNumberFormat(0);
+      patients.push({
+        id: uuid(),
+        accountId,
+        firstName,
+        lastName,
+        email: `${firstName}.${lastName}@google.ca`,
+        mobilePhoneNumber: phoneNumber,
+        birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+        gender: 'female',
         language: 'English',
         insurance: JSON.stringify({
           insurance: 'Lay Health Insurance',
@@ -268,5 +296,5 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
-  }
+  },
 };

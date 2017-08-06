@@ -27,11 +27,17 @@ class SelectPill extends PureComponent {
 
       this.props.onChange([pillId]);
     } else {
+      const pills = new Set([
+        ...this.state.selectedPills,
+      ]);
+
+      if (pills.has(pillId)) {
+        pills.delete(pillId);
+      } else {
+        pills.add(pillId);
+      }
       const change = [
-        ...new Set([
-          ...this.state.selectedPills,
-          pillId,
-        ]),
+        ...pills,
       ];
       this.setState({
         selectedPills: change,
