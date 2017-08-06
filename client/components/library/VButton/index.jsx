@@ -6,7 +6,7 @@ import styles from './vbutton.scss';
 
 const scheme = [
   ['size', ['sm', 'md', 'lg', 'xlg']],
-  ['color', ['red', 'grey', 'green', 'blue', 'yellow', 'darkgrey']],
+  ['color', ['white', 'red', 'grey', 'green', 'blue', 'yellow', 'darkgrey']],
 
   'rounded',
   'upperCase',
@@ -19,9 +19,8 @@ const scheme = [
 
 const mapper = getClassMapper(scheme, styles);
 
-const VButton = (props) => {
-  return (
-    <props.as
+const VButton = props => (
+  <props.as
       {...mapper.omit(props, 'as', 'icon')}
       className={mapper.map(props, styles.default, props.className)}
     >
@@ -34,7 +33,6 @@ const VButton = (props) => {
       ) : null }
     </props.as>
   );
-};
 
 VButton.defaultProps = {
   as: 'button',

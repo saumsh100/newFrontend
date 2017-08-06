@@ -11,6 +11,9 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
+import {
+  applySegment,
+} from '../../../actions/segments';
 import { previewSegment } from '../../../thunks/segments';
 import styles from './styles.scss';
 
@@ -22,14 +25,20 @@ class AddSegment extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAgeChange = this.handleAgeChange.bind(this);
     this.handleGenderChange = this.handleGenderChange.bind(this);
+    this.handleApply = this.handleApply.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    if (props.formData) {
+    if (JSON.stringify(this.props.formData) !== JSON.stringify(props.formData)) {
       this.props.previewSegment(props.formData);
     }
   }
   
+  handleApply() {
+    this.props.applySegment(this.props.formData);
+    this.props.reinitializeState();
+  }
+
   handleSubmit(values) {
     debugger;
   }
@@ -48,7 +57,7 @@ class AddSegment extends Component {
       formName,
     } = this.props;
 
-    this.props.change(formName, 'gender', value[0]);
+    this.props.change(formName, 'gender', value[0] || null);
   }
 
   render() {
@@ -69,6 +78,7 @@ class AddSegment extends Component {
           formState={this.props.formState}
           age={this.props.formData.age}
           gender={this.props.formData.gender}
+          handleApply={this.handleApply}
           handleCancel={() => {
             this.props.reset(formName);
             return reinitializeState();
@@ -89,6 +99,7 @@ function mapDispatchToProps(dispatch) {
     reset,
     change,
     previewSegment,
+    applySegment,
   }, dispatch);
 }
 
@@ -107,6 +118,7 @@ AddSegment.propTypes = {
   reset: PropTypes.func,
   reinitializeState: PropTypes.func,
   change: PropTypes.func,
+  applySegment: PropTypes.func,
   previewSegment: PropTypes.func,
   formState: PropTypes.shape({}).isRequired,
   formData: PropTypes.shape({}).isRequired,
@@ -119,8 +131,9 @@ export default enhance(AddSegment);
 
 /**
  * TODO:
- * - Preview
- * - Apply
+ * - Clear form on remove applied
+ * - Edit applied
+ * - Restore edit from rawwhere
  * - Name prompt on save
  * - Save to the database
  */
