@@ -6,7 +6,7 @@ import {
 } from '../actions/segments';
 
 export function previewSegment(rawWhere) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     const data = new FormData();
     data.append('rawWhere', JSON.stringify(rawWhere));
     dispatch(previewSegmentAttempt());
@@ -24,7 +24,7 @@ export function previewSegment(rawWhere) {
 }
 
 export function fetchCities(enterpriseId) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(fetchCitiesAttempt());
     return axios
       .get(`/_api/enterprises/${enterpriseId}/accounts/cities`)

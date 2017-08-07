@@ -4,17 +4,9 @@ import classNames from 'classnames';
 import styles from './styles.scss';
 
 class Tab extends Component {
-  constructor(props) {
-    super(props);
-
-    // this.parseChildren = this.parseChildren.bind(this);
-    // this.renderHeaders = this.renderHeaders.bind(this);
-    // this.renderContent = this.renderContent.bind(this);
-  }
 
   render() {
     const {
-      children,
       className,
       activeClassName,
       index,

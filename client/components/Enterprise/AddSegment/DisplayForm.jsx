@@ -43,7 +43,6 @@ class DisplayForm extends Component {
   } = this.props;
 
     const title = 'Create New Segment';
-
     return (
       <Grid className={styles.addNewSegment}>
         <Row className={styles.addNewSegment_mainContainer}>
@@ -168,10 +167,10 @@ class DisplayForm extends Component {
                   >
                   of patients
                 </Gauge>
-                  <InfoSection title={segments.preview.segmentActiveUsers}>
+                  <InfoSection title={segments.preview.segmentActiveUsers || ''}>
                   # of patients
                 </InfoSection>
-                  <InfoSection title={segments.preview.segmentAppointments}>
+                  <InfoSection title={segments.preview.segmentAppointments || ''}>
                     {`${this.calculatePercentage(segments.preview.segmentAppointments, segments.preview.totalAppointments)}% of total appointments`}
                   </InfoSection>
                   <Summary
@@ -216,7 +215,11 @@ DisplayForm.propTypes = {
   segments: PropTypes.shape({
     preview: PropTypes.shape({}),
     loading: PropTypes.bool,
-    cities: PropTypes.arrayOf(PropTypes.string),
+    cities: PropTypes.arrayOf(
+      PropTypes.shape({
+        city: PropTypes.string,
+      })
+    ),
   }).isRequired,
   enterpriseId: PropTypes.string.isRequired,
   fetchCities: PropTypes.func,

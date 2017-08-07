@@ -1,14 +1,15 @@
 
 import React, { PropTypes, Component, Children } from 'react';
-import Tab from './Tab';
 import omit from 'lodash/omit';
-import TabContent from './TabContent';
 import classNames from 'classnames';
+
+import Tab from './Tab';
+import TabContent from './TabContent';
 import styles from './styles.scss';
 
 // Workaround to be able compare class with type
 // https://github.com/gaearon/react-hot-loader/issues/304
-const tabType = (<Tab />).type;
+const tabType = (<Tab label="" />).type;
 
 class Tabs extends Component {
   constructor(props) {
@@ -74,7 +75,7 @@ class Tabs extends Component {
       navClass,
     } = this.props;
 
-    const newProps = omit(this.props, ['index', 'navClass']);
+    const newProps = omit(this.props, ['index', 'navClass', 'contentClass']);
 
     const classes = classNames(className, styles.tabs);
     const contentClasses = classNames(contentClass, styles.content);
@@ -95,7 +96,10 @@ class Tabs extends Component {
 }
 
 Tabs.propTypes = {
-  children: PropTypes.array.isRequired,
+  className: PropTypes.string,
+  contentClass: PropTypes.string,
+  navClass: PropTypes.string,
+  children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

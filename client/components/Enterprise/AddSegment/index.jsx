@@ -117,7 +117,6 @@ class AddSegment extends Component {
           handleAgeChange={this.handleAgeChange}
           handleGenderChange={this.handleGenderChange}
           handleSubmit={this.handleSubmit}
-          formState={this.props.formState}
           age={this.props.formData.age}
           gender={this.props.formData.gender}
           city={this.props.formData.city}
@@ -189,7 +188,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    formState: state.form.AddSegment,
     formData: state.form.AddSegment ? state.form.AddSegment.values : {},
   };
 }
@@ -205,7 +203,6 @@ AddSegment.propTypes = {
   previewSegment: PropTypes.func,
   addSegmentName: PropTypes.func,
   createEntityRequest: PropTypes.func,
-  formState: PropTypes.shape({}).isRequired,
   formData: PropTypes.shape({
     age: PropTypes.arrayOf(PropTypes.string),
     gender: PropTypes.string,

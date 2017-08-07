@@ -15,7 +15,7 @@ export default function InfoSection({ title, className, children }) {
 }
 
 InfoSection.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
 };

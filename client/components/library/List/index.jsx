@@ -1,11 +1,9 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { omit } from 'lodash';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import styles from './styles.scss';
-import Icon from '../Icon';
-import withHoverable from '../../../hocs/withHoverable';
 
 export function List(props) {
   const classes = classNames(props.className, styles.list);
@@ -28,3 +26,8 @@ export function ListItem(props) {
     <li {...newProps} className={classes} />
   );
 }
+
+ListItem.propTypes = {
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+};

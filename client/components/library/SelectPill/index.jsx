@@ -53,7 +53,6 @@ class SelectPill extends PureComponent {
   }
 
   render() {
-    console.log(this.state);
     const childrenWithProps = React.Children.map(this.props.children,
       child => React.cloneElement(child, {
         onClick: pillId => this.onPillClick(pillId),

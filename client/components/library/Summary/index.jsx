@@ -9,10 +9,11 @@ export default function Summary({ title, items, className }) {
   return (
     <div className={style}>
       <div className={styles.title}>{title}</div>
-      {items.map(item => <div className={styles.container}>
-        <strong>{item.label}</strong>
-        <span>{item.value}</span>
-      </div>
+      {items.map(item =>
+        <div key={item.label} className={styles.container}>
+          <strong>{item.label}</strong>
+          <span>{item.value}</span>
+        </div>
       )}
     </div>
   );
