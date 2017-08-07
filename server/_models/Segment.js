@@ -2,6 +2,10 @@ import moment from 'moment';
 
 const StatusError = require('../util/StatusError');
 
+function validateUUID(uuid) {
+  const re = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return re.test(uuid);
+}
 export default function (sequelize, DataTypes) {
   const REFERENCE = {
     ENTERPRISE: 'enterprise',
@@ -105,6 +109,31 @@ export default function (sequelize, DataTypes) {
       account: accountWhere,
       patient: patientWhere,
     };
+  };
+
+  Segment.convertOrFetch = async function (item, req) {
+    if (!validateUUID(item)) {
+      if (typeof item === 'string') {
+        return Segment.convertRawToSequelizeWhere(JSON.parse(item));
+      }
+      return Segment.convertRawToSequelizeWhere(item);
+    }
+
+    // @todo add check if item is uuid
+    const segment = await Segment.findById(item);
+
+    // if segment is null throw error
+    if (!segment) {
+      throw new StatusError(StatusError.BAD_REQUEST, `Data for Segment with id: ${item} do not exists`);
+    }
+    // confirm if user has sent segment he has access to use
+    segment.isOwner(req);
+
+    const rawSegment = segment.get({
+      plain: true,
+    });
+
+    return rawSegment.where;
   };
 
   // Allowing constant to be available for usage outside of model
