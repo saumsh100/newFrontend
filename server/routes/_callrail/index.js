@@ -102,14 +102,14 @@ callsRouterSequelize.post('/:accountId/inbound/post-call', (req, res, next) => {
 
   // Update that message with the new status
   Call.update(data, { where: { id: callData.id } })
-  .then(() => {
-    console.log(`Updated call ${callData.id}!`);
-  })
-  .catch(next);
+    .then(() => {
+      console.log(`Updated call ${callData.id}!`);
+    })
+    .catch(next);
 
+  // TODO: this needs to be wrapped in a try catch
   // Needs a response
   res.status(201).send();
-  // res.end();
 });
 
 /**
@@ -126,7 +126,7 @@ callsRouterSequelize.post('/:accountId/inbound/modified', (req, res, next) => {
 
   // Needs a response
   res.end();*/
-  console.log('modified', req.body);
+  // TODO: this needs to be wrapped in a try catch
   res.end();
 });
 

@@ -4,7 +4,6 @@ import { PractitionerRecurringTimeOff, Account, Practitioner, WeeklySchedule } f
 
 const union = require('lodash/union');
 const recurringTimeOffRouter = require('express').Router();
-const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 

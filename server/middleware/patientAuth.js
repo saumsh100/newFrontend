@@ -2,7 +2,7 @@
 import jwt from 'jsonwebtoken';
 import { tokenSecret } from '../config/globals';
 import StatusError from '../util/StatusError';
-import { AuthSession } from '../models';
+// import { AuthSession } from '../models';
 import { AuthSession as _AuthSession } from '../_models';
 
 function getTokenFromReq(req) {
@@ -22,7 +22,7 @@ function getTokenFromReq(req) {
   return false;
 }
 
-module.exports = function authMiddleware(req, res, next) {
+/*module.exports = function authMiddleware(req, res, next) {
   const token = getTokenFromReq(req);
   if (!token) {
     return next(StatusError(401, 'Unauthorized. No valid token on header.'));
@@ -68,7 +68,7 @@ module.exports = function authMiddleware(req, res, next) {
       .then(next)
       .catch(next);
   });
-};
+};*/
 
 module.exports.sequelizeAuthMiddleware = function sequelizeAuthMiddleware(req, res, next) {
   const token = getTokenFromReq(req);

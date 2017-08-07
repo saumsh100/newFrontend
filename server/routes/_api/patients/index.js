@@ -400,7 +400,12 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
     const savedPatients = await Patient.batchSave(cleanedPatients);
     const savedPatientsResult = savedPatients.map(savedPatient => savedPatient.get({ plain: true }));
     return res.status(201).send(normalize('patients', savedPatientsResult));
-  } catch ({ errors, docs }) {
+  } catch (err) {
+    const { errors, docs } = err;
+    if (!_.isArray(errors) || !_.isArray(docs)) {
+      return next(err);
+    }
+
     const successfulPatients = docs.map(d => d.get({ plain: true }));
     const entities = normalize('patients', successfulPatients);
     const responseData = Object.assign({}, entities, { errors });

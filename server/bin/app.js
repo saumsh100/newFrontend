@@ -22,7 +22,7 @@ app.set('view engine', 'hbs');
 
 // Extra logging for communication with server
 app.use((req, res, next) => {
-  // console.log(chalk.blue(req.method, req.originalUrl));
+  console.log(chalk.blue(req.method, req.originalUrl));
   next();
 });
 

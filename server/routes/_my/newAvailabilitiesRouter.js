@@ -1,3 +1,4 @@
+
 import { Router } from 'express';
 import { fetchAvailabilities } from '../../lib/_availabilities';
 import { sequelizeLoader } from '../util/loaders';
