@@ -4,9 +4,8 @@ import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
-import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 
-import { Grid, Row, Col, Form, Tabs, Tab, Pill, SelectPill, InfoSection, Button, Field } from '../../library';
+import { Grid, Row, Col, Form, Tabs, Tab, Pill, SelectPill, InfoSection, Button, Field, Summary } from '../../library';
 import Gauge from './Gauge';
 import { fetchCities } from '../../../thunks/segments';
 
@@ -53,7 +52,9 @@ class DisplayForm extends Component {
               form={formName}
               onSubmit={handleSubmit}
               ignoreSaveButton
-              initialValues={{}}
+              initialValues={{
+                city: this.props.city || undefined,
+              }}
               data-test-id="createSegmentForm"
             >
               <div className={styles.title}>{title}</div>
@@ -173,6 +174,23 @@ class DisplayForm extends Component {
                   <InfoSection title={segments.preview.segmentAppointments}>
                     {`${this.calculatePercentage(segments.preview.segmentAppointments, segments.preview.totalAppointments)}% of total appointments`}
                   </InfoSection>
+                  <Summary
+                    title="Demographics"
+                    items={[
+                      {
+                        label: 'Age',
+                        value: this.props.age ? this.props.age.join(', ') : 'All',
+                      },
+                      {
+                        label: 'Gender',
+                        value: this.props.gender || 'All',
+                      },
+                      {
+                        label: 'City',
+                        value: this.props.city || 'All',
+                      },
+                    ]}
+                  />
                 </div>
               }
               
@@ -189,8 +207,9 @@ DisplayForm.propTypes = {
   handleAgeChange: PropTypes.func,
   handleGenderChange: PropTypes.func,
   handleCityChange: PropTypes.func,
-  age: PropTypes.arrayOf(PropTypes.string).isRequired,
-  gender: PropTypes.string.isRequired,
+  age: PropTypes.arrayOf(PropTypes.string),
+  gender: PropTypes.string,
+  city: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
   handleApply: PropTypes.func.isRequired,

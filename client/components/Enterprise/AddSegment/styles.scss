@@ -6,6 +6,7 @@
 
 .addSegmentName {
   width: 400px;
+  position: relative;
 }
 
 .addSegmentNameInput {
@@ -137,10 +138,10 @@
 
 .trashIcon {
   position: absolute;
-  left: 845px;
+  right: 5px;
   top: 5px;
   font-size: 1.4em;
-  color: $primary-grey;
+  color: $primary-color;
 }
 
 .addNewSegment {

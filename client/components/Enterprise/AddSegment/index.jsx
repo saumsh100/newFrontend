@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { change, reset } from 'redux-form';
-import { Modal, Input, Row, Col, Grid, Button } from '../../library';
+import { Modal, Input, Row, Col, Grid, Button, IconButton } from '../../library';
 import DisplayForm from './DisplayForm';
 import {
   fetchEntities,
@@ -24,6 +24,7 @@ class AddSegment extends Component {
 
     this.state = {
       addSegmentName: false,
+      name: '',
     };
 
     this.addSegmentName = this.addSegmentName.bind(this);
@@ -31,6 +32,11 @@ class AddSegment extends Component {
     this.handleAgeChange = this.handleAgeChange.bind(this);
     this.handleGenderChange = this.handleGenderChange.bind(this);
     this.handleApply = this.handleApply.bind(this);
+    this.saveSegment = this.saveSegment.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.previewSegment({});
   }
 
   componentWillReceiveProps(props) {
@@ -43,18 +49,24 @@ class AddSegment extends Component {
   handleApply() {
     this.props.applySegment(this.props.formData);
     this.props.reinitializeState();
+    this.props.reset(this.props.formName);
   }
 
   handleSubmit() {
-    // this.props.createEntityRequest({
-    //   key: 'segments',
-    //   entityData: {
-    //     rawWhere: this.props.formData,
-    //     name: 'segment',
-    //   },
-    //   url: '/_api/segments/' });
-
     this.addSegmentName();
+  }
+
+  saveSegment() {
+    this.props.createEntityRequest({
+      key: 'segments',
+      entityData: {
+        rawWhere: this.props.formData,
+        name: this.state.name,
+      },
+      url: '/_api/segments/' });
+    this.props.reinitializeState();
+    this.closeNameinput();
+    this.props.reset(this.props.formName);
   }
 
   addSegmentName() {
@@ -69,6 +81,7 @@ class AddSegment extends Component {
     this.setState({
       ...this.state,
       addSegmentName: false,
+      name: '',
     });
   }
 
@@ -107,6 +120,7 @@ class AddSegment extends Component {
           formState={this.props.formState}
           age={this.props.formData.age}
           gender={this.props.formData.gender}
+          city={this.props.formData.city}
           handleApply={this.handleApply}
           handleCancel={() => {
             this.props.reset(formName);
@@ -122,17 +136,33 @@ class AddSegment extends Component {
           className={styles.modal}
         >
           <div className={styles.addSegmentName}>
+            <IconButton
+              icon="times"
+              onClick={() => {
+                this.closeNameinput();
+              }}
+              className={styles.trashIcon}
+            />
             <div className={styles.title}>Enter segment name</div>
             <Grid>
               <Row className={styles.addSegmentNameRow}>
                 <Col xs={9} sm={9} md={9}>
                   <Input
                     placeholder="Name"
+                    value={this.state.name}
                     classStyles={styles.addSegmentNameInput}
+                    onChange={(event) => {
+                      this.setState({
+                        ...this.state,
+                        name: event.target.value,
+                      });
+                    }}
                   />
                 </Col>
                 <Col xs={2} sm={2} md={2}>
-                  <Button>Save</Button>
+                  <Button
+                    onClick={this.saveSegment}
+                  >Save</Button>
                 </Col>
               </Row>
             </Grid>
@@ -179,6 +209,7 @@ AddSegment.propTypes = {
   formData: PropTypes.shape({
     age: PropTypes.arrayOf(PropTypes.string),
     gender: PropTypes.string,
+    city: PropTypes.string,
   }).isRequired,
   
 };
@@ -189,9 +220,6 @@ export default enhance(AddSegment);
 
 /**
  * TODO:
- * - Clear form on remove applied
  * - Edit applied
  * - Restore edit from rawwhere
- * - Name prompt on save
- * - Save to the database
  */
