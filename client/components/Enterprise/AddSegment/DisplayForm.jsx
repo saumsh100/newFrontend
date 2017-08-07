@@ -139,12 +139,13 @@ class DisplayForm extends Component {
               >
                 Apply
               </Button>
-              <RemoteSubmitButton
+              <Button
                 flat
                 form={formName}
+                onClick={this.props.handleSubmit}
               >
                   Save
-                </RemoteSubmitButton>
+                </Button>
               <Button
                 flat
                 onClick={this.props.handleCancel}

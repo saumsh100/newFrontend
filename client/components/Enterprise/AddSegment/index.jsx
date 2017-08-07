@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { change, reset } from 'redux-form';
-import { Button, IconButton, Avatar } from '../../library';
+import { Modal, Input, Row, Col, Grid, Button } from '../../library';
 import DisplayForm from './DisplayForm';
 import {
   fetchEntities,
@@ -22,6 +22,11 @@ class AddSegment extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      addSegmentName: false,
+    };
+
+    this.addSegmentName = this.addSegmentName.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAgeChange = this.handleAgeChange.bind(this);
     this.handleGenderChange = this.handleGenderChange.bind(this);
@@ -31,6 +36,7 @@ class AddSegment extends Component {
   componentWillReceiveProps(props) {
     if (JSON.stringify(this.props.formData) !== JSON.stringify(props.formData)) {
       this.props.previewSegment(props.formData);
+      this.closeNameinput = this.closeNameinput.bind(this);
     }
   }
   
@@ -39,8 +45,31 @@ class AddSegment extends Component {
     this.props.reinitializeState();
   }
 
-  handleSubmit(values) {
-    debugger;
+  handleSubmit() {
+    // this.props.createEntityRequest({
+    //   key: 'segments',
+    //   entityData: {
+    //     rawWhere: this.props.formData,
+    //     name: 'segment',
+    //   },
+    //   url: '/_api/segments/' });
+
+    this.addSegmentName();
+  }
+
+  addSegmentName() {
+    console.log(this.state);
+    this.setState({
+      ...this.state,
+      addSegmentName: true,
+    });
+  }
+
+  closeNameinput() {
+    this.setState({
+      ...this.state,
+      addSegmentName: false,
+    });
   }
 
   handleAgeChange(value) {
@@ -85,6 +114,30 @@ class AddSegment extends Component {
           }}
         
         />
+        <Modal
+          active={this.state.addSegmentName}
+          onEscKeyDown={this.closeNameinput}
+          onOverlayClick={this.closeNameinput}
+          custom
+          className={styles.modal}
+        >
+          <div className={styles.addSegmentName}>
+            <div className={styles.title}>Enter segment name</div>
+            <Grid>
+              <Row className={styles.addSegmentNameRow}>
+                <Col xs={9} sm={9} md={9}>
+                  <Input
+                    placeholder="Name"
+                    classStyles={styles.addSegmentNameInput}
+                  />
+                </Col>
+                <Col xs={2} sm={2} md={2}>
+                  <Button>Save</Button>
+                </Col>
+              </Row>
+            </Grid>
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -120,8 +173,13 @@ AddSegment.propTypes = {
   change: PropTypes.func,
   applySegment: PropTypes.func,
   previewSegment: PropTypes.func,
+  addSegmentName: PropTypes.func,
+  createEntityRequest: PropTypes.func,
   formState: PropTypes.shape({}).isRequired,
-  formData: PropTypes.shape({}).isRequired,
+  formData: PropTypes.shape({
+    age: PropTypes.arrayOf(PropTypes.string),
+    gender: PropTypes.string,
+  }).isRequired,
   
 };
 

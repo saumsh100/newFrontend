@@ -25,6 +25,7 @@ class EnterprisePage extends React.Component {
 
   reinitializeState() {
     this.setState({
+      ...this.state,
       addSegment: false,
     });
   }
@@ -32,6 +33,7 @@ class EnterprisePage extends React.Component {
   addSegment() {
     console.log(this.state);
     this.setState({
+      ...this.state,
       addSegment: true,
     });
   }
@@ -49,6 +51,7 @@ class EnterprisePage extends React.Component {
       <AddSegment
         formName="AddSegment"
         reinitializeState={this.reinitializeState}
+        addSegmentName={this.addSegmentName}
       />
     );
     return (<div>
@@ -112,6 +115,7 @@ class EnterprisePage extends React.Component {
         >
           {displayModalComponent}
         </Modal>
+        
       </div>
     </div>);
   }
@@ -122,6 +126,7 @@ EnterprisePage.propTypes = {
   children: PropTypes.node.isRequired,
   applied: PropTypes.bool.isRequired,
   rawWhere: PropTypes.shape({}).isRequired,
+  removeApplied: PropTypes.func,
 };
 
 const stateToProps = state => ({
