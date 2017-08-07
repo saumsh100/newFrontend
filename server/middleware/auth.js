@@ -128,8 +128,6 @@ module.exports.sequelizeAuthMiddleware = function (req, res, next) {
           accountId,
         };
 
-        console.log(chalk.blue(req.method, req.originalUrl, `accountId=${sessionData.accountId}`));
-
         Object.assign(req, sessionData);
         req.sessionData = sessionData;
       })
