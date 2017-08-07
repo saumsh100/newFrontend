@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import { change } from 'redux-form';
 import { connect } from 'react-redux';
-import { Row, Col, VButton, Modal } from '../../library';
+import { Row, Col, VButton, Modal, DropdownSelect } from '../../library';
 import withAuthProps from '../../../hocs/withAuthProps';
 import {
   removeApplied,
+  applySegment,
 } from '../../../actions/segments';
 import styles from './enterprise-page.scss';
 import AddSegment from '../AddSegment/';
+import { fetchEntities } from '../../../thunks/fetchEntities';
+
 
 class EnterprisePage extends React.Component {
   constructor(props) {
@@ -16,11 +20,17 @@ class EnterprisePage extends React.Component {
 
     this.state = {
       addSegment: false,
+      edit: false,
     };
 
     this.addSegment = this.addSegment.bind(this);
+    this.editSegment = this.editSegment.bind(this);
     this.removeApplied = this.removeApplied.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchEntities({ key: 'segments', url: '/api/segments/' });
   }
 
   reinitializeState() {
@@ -38,6 +48,17 @@ class EnterprisePage extends React.Component {
     });
   }
 
+  editSegment() {
+    this.setState({
+      ...this.state,
+      addSegment: true,
+      edit: true,
+    });
+    Object.keys(this.props.rawWhere).forEach((key) => {
+      this.props.change('AddSegment', key, this.props.rawWhere[key]);
+    });
+  }
+
   removeApplied() {
     this.props.removeApplied();
   }
@@ -49,6 +70,7 @@ class EnterprisePage extends React.Component {
 
     const displayModalComponent = (
       <AddSegment
+        edit={this.state.edit}
         formName="AddSegment"
         reinitializeState={this.reinitializeState}
         addSegmentName={this.addSegmentName}
@@ -77,6 +99,19 @@ class EnterprisePage extends React.Component {
                 color="darkgrey"
                 onClick={this.addSegment}
               />
+              <DropdownSelect
+                className={styles.dropdown}
+                align="left"
+                options={this.props.segments.toArray().map(segment => ({
+                  label: segment.name, value: segment,
+                }))}
+                name="city"
+                value=""
+                required
+                onChange={(event) => {
+                  console.log(event);
+                }}
+              />
             </Col> :
             <Col md={6}>
               <h1 className={styles['page-title']}>Patients</h1>
@@ -91,11 +126,11 @@ class EnterprisePage extends React.Component {
                 title="Edit Segment"
                 compact className={styles['btn-add-segment']}
                 color="darkgrey"
-                onClick={this.addSegment}
+                onClick={this.editSegment}
               />
             </Col>
           }
-
+            
           { /* TODO: Implement ButtonDropDown element */ }
           { /* <Col md={6} className={styles['filter-buttons']} >
           <VButton title="Save" color="red" compact />
@@ -127,15 +162,24 @@ EnterprisePage.propTypes = {
   applied: PropTypes.bool.isRequired,
   rawWhere: PropTypes.shape({}).isRequired,
   removeApplied: PropTypes.func,
+  change: PropTypes.func,
+  fetchEntities: PropTypes.func,
+  segments: PropTypes.shape({
+    toArray: PropTypes.func,
+  }).isRequired,
 };
 
 const stateToProps = state => ({
   applied: state.segments.applied,
   rawWhere: state.segments.rawWhere,
+  segments: state.entities.get('segments').get('models'),
 });
 
 const actionsToProps = dispatch => bindActionCreators({
   removeApplied,
+  change,
+  applySegment,
+  fetchEntities,
 }, dispatch);
 
 

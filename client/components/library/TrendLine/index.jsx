@@ -46,7 +46,9 @@ export default function TrendLine(props) {
     width,
     height,
   } = props;
-
+  if (values.length < 1) {
+    return null;
+  }
   const classes = classNames(className, styles.wrapper);
   const svgPoints = generateSVGPoints(width, height, values);
   const pathDescription = convertPointsToPathDescription(svgPoints);

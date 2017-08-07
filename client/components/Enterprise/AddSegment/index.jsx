@@ -110,6 +110,7 @@ class AddSegment extends Component {
     return (
       <div className={styles.formContainer}>
         <DisplayForm
+          edit={this.props.edit}
           key={formName}
           formName={formName}
           selectedSegment={null}
@@ -203,6 +204,7 @@ AddSegment.propTypes = {
   previewSegment: PropTypes.func,
   addSegmentName: PropTypes.func,
   createEntityRequest: PropTypes.func,
+  edit: PropTypes.bool,
   formData: PropTypes.shape({
     age: PropTypes.arrayOf(PropTypes.string),
     gender: PropTypes.string,
@@ -217,6 +219,6 @@ export default enhance(AddSegment);
 
 /**
  * TODO:
- * - Edit applied
- * - Restore edit from rawwhere
+ * - Segment dropdown
+ * - Edit segment
  */
