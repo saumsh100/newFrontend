@@ -1,5 +1,6 @@
 
 require('../config/initializeCodeTranspiler');
+const chalk = require('chalk');
 
 const globals = require('../config/globals');
 const handleErrors = require('../middleware/handleErrors');
