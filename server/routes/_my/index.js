@@ -5,17 +5,17 @@ import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
-import authMiddleware from '../../middleware/patientAuth';
+import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import { PatientUser, Practitioner } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
-import normalize from '../api/normalize';
+import normalize from '../_api/normalize';
 
 const sequelizeMyRouter = new Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
-sequelizeMyRouter.use('/requests', authMiddleware, requestRouter);
-sequelizeMyRouter.use('/waitSpots', authMiddleware, waitSpotsRouter);
+sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
+sequelizeMyRouter.use('/waitSpots', sequelizeAuthMiddleware, waitSpotsRouter);
 sequelizeMyRouter.use('/auth', authRouter);
 
 sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
@@ -114,6 +114,7 @@ sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
     next(error);
   }
 
+  // TODO: this needs to be wrapped in try catch
   return res.send({ exists: !!patientUsers[0] });
 });
 
@@ -130,6 +131,7 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
     next(error);
   }
 
+  // TODO: this needs to be wrapped in try catch
   return res.send({ exists: !!patientUsers[0] });
 });
 
@@ -147,6 +149,7 @@ sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares
 sequelizeMyRouter.use('(/*)?', (req, res, next) => {
+  // TODO: this needs to be wrapped in try catch
   return res.status(404).end();
 });
 

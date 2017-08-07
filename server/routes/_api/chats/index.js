@@ -3,12 +3,8 @@ import { Chat, Account, TextMessage, User, Patient } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 
 const chatsRouter = require('express').Router();
-const { r } = require('../../../config/thinky');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
-// const Chat = require('../../../models/Chat');
-// const Account = require('../../../models/Account');
-// const TextMessage = require('../../../models/TextMessage');
 const { namespaces } = require('../../../config/globals');
 const twilio = require('../../../config/globals').twilio;
 const twilioClient = require('../../../config/twilio');
