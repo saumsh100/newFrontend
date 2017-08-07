@@ -245,7 +245,7 @@ module.exports = {
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
         }),
-        createdAt: new Date(),
+        createdAt: faker.date.past(),
         updatedAt: new Date(),
       });
     }

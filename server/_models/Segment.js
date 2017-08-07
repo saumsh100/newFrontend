@@ -91,15 +91,22 @@ export default function (sequelize, DataTypes) {
         if (!ages[1]) {
           const age = ages[0].replace('+', '');
           ageRanges.push({
-            $lt: [moment().add(-parseInt(age, 10), 'years').toISOString()],
+            $lte: [moment().add(-parseInt(age, 10), 'years').toISOString()],
           });
         } else {
           ageRanges.push({
-            $between: [moment().add(-parseInt(ages[1], 10), 'years').toISOString(), moment().add(-parseInt(ages[0], 10), 'years').toISOString()],
+            $lte: moment().add(-parseInt(ages[0], 10), 'years').endOf('year').toISOString(),
+            $gte: moment().add(-parseInt(ages[1], 10), 'years').startOf('year').toISOString(),
           });
+          // ageRanges.push({
+          //   // $between: [moment().add(-parseInt(ages[1], 10), 'years').toISOString(), moment().add(-parseInt(ages[0], 10), 'years').toISOString()],
+          //   //{
+          //   $lte: moment().add(-parseInt(ages[0], 10), 'years').endOf('year').toISOString(),
+          //   $gte: moment().add(-parseInt(ages[1], 10), 'years').startOf('year').toISOString(),
+          //   // }
+          // });
         }
       });
-
       patientWhere.birthDate = {
         $or: ageRanges,
       };
