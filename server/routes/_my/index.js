@@ -1,4 +1,4 @@
-
+/* eslint-disable consistent-return */
 import { Router } from 'express';
 import fs from 'fs';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
@@ -107,15 +107,12 @@ sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
 
   email = email && email.toLowerCase();
 
-  let patientUsers;
   try {
-    patientUsers = await PatientUser.findAll({ where: { email } });
+    const patientUsers = await PatientUser.findAll({ where: { email } });
+    return res.send({ exists: !!patientUsers[0] });
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send({ exists: !!patientUsers[0] });
 });
 
 sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
@@ -124,15 +121,12 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   } = req.body;
 
   phoneNumber = validatePhoneNumber(phoneNumber);
-  let patientUsers;
   try {
-    patientUsers = await PatientUser.findAll({ where: { phoneNumber } });
+    const patientUsers = await PatientUser.findAll({ where: { phoneNumber } });
+    return res.send({ exists: !!patientUsers[0] });
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send({ exists: !!patientUsers[0] });
 });
 
 

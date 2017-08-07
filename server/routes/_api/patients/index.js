@@ -1,4 +1,4 @@
-
+/* eslint-disable consistent-return */
 import _ from 'lodash';
 import moment from 'moment';
 import { Router } from 'express';
@@ -90,12 +90,11 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
     stats.allApps = totalAppointmentCount;
     stats.monthsApp = appointmentsInDateRangeCount;
     stats.lastAppointment = mostRecentAppointmentDate;
+
+    return res.send(stats);
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send(stats);
 });
 
 patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res, next) => {
@@ -140,12 +139,11 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res,
       return 0;
     });
     stats.ageData = ageRangePercent(stats.ageData);
+
+    return res.send(stats);
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send(stats);
 });
 
 
@@ -259,12 +257,11 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       }
     }
     normPatients.entities.patients = normPatients.entities.patients || {};
+
+    return res.send(normPatients);
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send(normPatients);
 });
 
 // TODO: this should have default queries and limits
@@ -295,12 +292,10 @@ patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next
         where: { accountId },
       });
     }
+    return res.send(normalize('patients', patients));
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send(normalize('patients', patients));
 });
 
 /**
@@ -326,12 +321,10 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
         $or: [{ firstName, lastName }, { email }, { phoneNumber }],
       },
     });
+    return res.send(normalize('patients', patients));
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send(normalize('patients', patients));
 });
 
 patientsRouter.post('/emailCheck', checkPermissions('patients:read'), async (req, res, next) => {
@@ -344,11 +337,10 @@ patientsRouter.post('/emailCheck', checkPermissions('patients:read'), async (req
       raw: true,
       where: { accountId, email },
     });
+    return res.send({ exists: !!patient });
   } catch (error) {
     next(error);
   }
-
-  return res.send({ exists: !!patient });
 });
 
 patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), async (req, res, next) => {
@@ -362,12 +354,10 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
       raw: true,
       where: { accountId, mobilePhoneNumber: trimmedNumber },
     });
+    return res.send({ exists: !!patient });
   } catch (error) {
     next(error);
   }
-
-  // TODO: this needs to be wrapped in try catch
-  return res.send({ exists: !!patient });
 });
 
 
