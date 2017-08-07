@@ -16,7 +16,7 @@ const sortPractitionersAlphabetical = (a, b) => {
 class Practitioners extends Component {
 
   componentWillMount() {
-    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services', 'timeOffs', 'recurringTimeOffs'] });
+    this.props.fetchEntities({ key: 'practitioners', join: ['weeklySchedule', 'services', 'recurringTimeOffs'] });
     this.props.fetchEntities({ key: 'services' });
     this.props.fetchEntities({ key: 'chairs' });
   }

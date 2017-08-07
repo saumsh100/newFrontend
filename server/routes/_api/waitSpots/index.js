@@ -21,7 +21,7 @@ waitSpotsRouter.post('/', checkPermissions('waitSpots:create'), (req, res, next)
   });
 
   return WaitSpot.create(waitSpotData)
-    .then(waitSpot => res.send(201, normalize('waitSpot', waitSpot.dataValues)))
+    .then(waitSpot => res.status(201).send(normalize('waitSpot', waitSpot.dataValues)))
     .catch(next);
 });
 

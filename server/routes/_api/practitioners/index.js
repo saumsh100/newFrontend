@@ -25,7 +25,6 @@ practitionersRouter.get('/', (req, res, next) => {
     includeArray,
   } = req;
   // const { accountId } = req;
-
   return Practitioner.findAll({
     where: { accountId },
     include: includeArray,

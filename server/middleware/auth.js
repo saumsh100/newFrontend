@@ -4,7 +4,7 @@ import merge from 'lodash/merge';
 import { tokenSecret } from '../config/globals';
 import rolePermissions from '../config/permissions';
 import StatusError from '../util/StatusError';
-import { AuthSession } from '../models';
+// import { AuthSession } from '../models';
 import { AuthSession as _AuthSession } from '../_models';
 const chalk = require('chalk');
 
@@ -25,7 +25,7 @@ function getTokenFromReq(req) {
   return false;
 }
 
-module.exports = function authMiddleware(req, res, next) {
+/*module.exports = function authMiddleware(req, res, next) {
   const token = getTokenFromReq(req);
   if (!token) {
     return next(StatusError(401, 'Unauthorized. No valid token on header.'));
@@ -84,7 +84,7 @@ module.exports = function authMiddleware(req, res, next) {
       .then(next)
       .catch(next);
   });
-};
+};*/
 
 module.exports.sequelizeAuthMiddleware = function (req, res, next) {
   const token = getTokenFromReq(req);

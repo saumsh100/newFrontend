@@ -1,3 +1,4 @@
+
 import _ from 'lodash';
 import moment from 'moment';
 import { Router } from 'express';
@@ -93,6 +94,7 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
     next(error);
   }
 
+  // TODO: this needs to be wrapped in try catch
   return res.send(stats);
 });
 
@@ -142,6 +144,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res,
     next(error);
   }
 
+  // TODO: this needs to be wrapped in try catch
   return res.send(stats);
 });
 
@@ -163,8 +166,8 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       where: {
         accountId: req.accountId,
         $or: [
-          { firstName: { $iLike: search[0] }, lastName: { $iLike: search[1] } },
-          { firstName: { $iLike: search[1] }, lastName: { $iLike: search[0] } },
+          { firstName: { $iLike: `%${search[0]}%` }, lastName: { $iLike: `%${search[1]}%` } },
+          { firstName: { $iLike: `%${search[1]}%` }, lastName: { $iLike: `%${search[0]}%` } },
         ],
       },
     };
@@ -173,9 +176,9 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       where: {
         accountId: req.accountId,
         $or: [
-          { firstName: { $iLike: search[0] } },
-          { lastName: { $iLike: search[0] } },
-          { email: { $iLike: search[0] } },
+          { firstName: { $iLike: `%${search[0]}%` } },
+          { lastName: { $iLike: `%${search[0]}%` } },
+          { email: { $iLike: `%${search[0]}%` } },
         ],
       },
     };
@@ -259,6 +262,8 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
   } catch (error) {
     next(error);
   }
+
+  // TODO: this needs to be wrapped in try catch
   return res.send(normPatients);
 });
 
@@ -294,6 +299,7 @@ patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next
     next(error);
   }
 
+  // TODO: this needs to be wrapped in try catch
   return res.send(normalize('patients', patients));
 });
 
@@ -324,6 +330,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
     next(error);
   }
 
+  // TODO: this needs to be wrapped in try catch
   return res.send(normalize('patients', patients));
 });
 
@@ -359,6 +366,7 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
     next(error);
   }
 
+  // TODO: this needs to be wrapped in try catch
   return res.send({ exists: !!patient });
 });
 
@@ -402,7 +410,12 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
     const savedPatients = await Patient.batchSave(cleanedPatients);
     const savedPatientsResult = savedPatients.map(savedPatient => savedPatient.get({ plain: true }));
     return res.status(201).send(normalize('patients', savedPatientsResult));
-  } catch ({ errors, docs }) {
+  } catch (err) {
+    const { errors, docs } = err;
+    if (!_.isArray(errors) || !_.isArray(docs)) {
+      return next(err);
+    }
+
     const successfulPatients = docs.map(d => d.get({ plain: true }));
     const entities = normalize('patients', successfulPatients);
     const responseData = Object.assign({}, entities, { errors });

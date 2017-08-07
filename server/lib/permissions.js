@@ -1,26 +1,26 @@
 
 import merge from 'lodash/merge';
 import rolePermissions from '../config/permissions';
-import { Permission } from '../models';
+// import { Permission } from '../models';
 import { Permission as _Permission } from '../_models';
 
-const loadPermissions = (user) => {
+/*const loadPermissions = (user) => {
   return Permission.get(user.permissionId)
     .then((permission) => {
       // TODO: this should be done on the auth middleware
-      /*const { role, permissions } = permission;
-      permission.permissions = merge(
-        {},
-        permissions,
-        rolePermissions[role]
-      );*/
+      //const { role, permissions } = permission;
+      //permission.permissions = merge(
+      //  {},
+      //  permissions,
+      //  rolePermissions[role]
+      //);
 
       return permission;
     })
     .catch(() => {
       return Promise.reject({ name: 'NoUserPermisson', message: 'User does not have a Permission.' });
     });
-};
+};*/
 
 const loadPermissionsSequelize = (user) => {
   return _Permission.findById(user.permissionId)
@@ -33,7 +33,7 @@ const loadPermissionsSequelize = (user) => {
     });
 };
 
-export default loadPermissions;
+// export default loadPermissions;
 export {
   loadPermissionsSequelize,
 };

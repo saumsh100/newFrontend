@@ -149,6 +149,7 @@ const Time = {
         endTime,
         closedEnd: true,
       };
+
       return [interval];
     }
 

@@ -397,6 +397,14 @@ const WeeklySchedules = [
         ],
       },
 
+      tuesday: {
+        isClosed: true,
+      },
+
+      thursday: {
+        isClosed: true,
+      },
+
       wednesday: {
         isClosed: true,
       },
