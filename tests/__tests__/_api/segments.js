@@ -200,5 +200,15 @@ describe('/api/segments', () => {
       }));
   });
 
+  describe('GET /api/enterprise/dashboard/patients/practitioner', () => {
+    test('Preview items', async () => request(app)
+      .get(`/_api/enterprises/dashboard/patients/practitioner?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body, error }) => {
+        console.log(body, error);
+      }));
+  });
+
   // @TODO MISSING PERMISSION CHECK
 });
