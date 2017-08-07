@@ -12,6 +12,8 @@ const {
   createIntervalsFromWeeklySchedule,
   isDuringEachother,
   getISOSortPredicate,
+  getHoursFromInterval,
+  getAvailableHours,
 } = require('../../server/util/time');
 
 // Monday -> Friday 9 to 5 by default
@@ -64,6 +66,54 @@ const createWeeklySchedule = (custom = {}) => {
     },
     custom
   );
+};
+
+// Monday -> Friday 9 to 5 by default
+const createWeeklyScheduleWithBreaks = () => {
+  return createWeeklySchedule({
+    monday: {
+      breaks: [{
+        startTime: time(12, 0),
+        endTime: time(1, 0),
+      }],
+    },
+    tuesday: {
+      breaks: [{
+        startTime: time(12, 0),
+        endTime: time(1, 0),
+      }],
+    },
+    wednesday: {
+      breaks: [{
+        startTime: time(12, 0),
+        endTime: time(1, 0),
+      }],
+    },
+    thursday: {
+      breaks: [{
+        startTime: time(12, 0),
+        endTime: time(1, 0),
+      }],
+    },
+    friday: {
+      breaks: [{
+        startTime: time(12, 0),
+        endTime: time(1, 0),
+      }],
+    },
+    saturday: {
+      breaks: [{
+        startTime: time(12, 0),
+        endTime: time(1, 0),
+      }],
+    },
+    sunday: {
+      breaks: [{
+        startTime: time(12, 0),
+        endTime: time(1, 0),
+      }],
+    },
+  });
 };
 
 describe('util/time', () => {
@@ -562,6 +612,57 @@ describe('util/time', () => {
       };
 
       expect(isDuringEachother(a, b)).toBe(true);
+    });
+  });
+
+  describe('#getHoursFromInterval', () => {
+    test('should return 4 hours', () => {
+      const interval = {
+        startDate: new Date(2017, 1, 1, 8, 0),
+        endDate: new Date(2017, 1, 1, 12, 0),
+      };
+
+      expect(getHoursFromInterval(interval)).toBe(4);
+    });
+
+    test('should return 28 hours', () => {
+      const interval = {
+        startDate: new Date(2017, 1, 1, 8, 30),
+        endDate: new Date(2017, 1, 2, 12, 30),
+      };
+
+      expect(getHoursFromInterval(interval)).toBe(28);
+    });
+
+    test('should return 1.5 hours', () => {
+      const interval = {
+        startDate: new Date(2017, 1, 1, 8, 30),
+        endDate: new Date(2017, 1, 1, 10, 0),
+      };
+
+      expect(getHoursFromInterval(interval)).toBe(1.5);
+    });
+
+    test('should return 1.25 hours', () => {
+      const interval = {
+        startDate: new Date(2017, 1, 1, 8, 45),
+        endDate: new Date(2017, 1, 1, 10, 0),
+      };
+
+      expect(getHoursFromInterval(interval)).toBe(1.25);
+    });
+  });
+
+  describe('#getAvailableHoursFromInterval', () => {
+    test.only('should return 40 hours for M-F 8-12,1-5', () => {
+      const weeklySchedule = createWeeklyScheduleWithBreaks();
+      const startDate = new Date(2017, 7, 7, 6, 0);
+      const endDate = new Date(2017, 7, 11, 22, 0);
+      expect(getAvailableHours(
+        weeklySchedule,
+        startDate,
+        endDate,
+      )).toBe(40);
     });
   });
 });
