@@ -41,7 +41,6 @@ class EnterprisePage extends React.Component {
   }
 
   addSegment() {
-    console.log(this.state);
     this.setState({
       ...this.state,
       addSegment: true,
@@ -108,15 +107,15 @@ class EnterprisePage extends React.Component {
                 name="city"
                 value=""
                 required
-                onChange={(event) => {
-                  console.log(event);
+                onChange={(segment) => {
+                  this.props.applySegment(segment);
                 }}
               />
             </Col> :
             <Col md={6}>
               <h1 className={styles['page-title']}>Patients</h1>
               <VButton
-                title="Segment Applied"
+                title={`Segment Applied ${this.props.segmentName !== '' ? `(${this.props.segmentName})` : ''}`}
                 compact className={styles['btn-add-segment']}
                 color="white"
                 icon="close"
@@ -164,15 +163,18 @@ EnterprisePage.propTypes = {
   removeApplied: PropTypes.func,
   change: PropTypes.func,
   fetchEntities: PropTypes.func,
+  applySegment: PropTypes.func,
   segments: PropTypes.shape({
     toArray: PropTypes.func,
   }).isRequired,
+  segmentName: PropTypes.string,
 };
 
 const stateToProps = state => ({
   applied: state.segments.applied,
   rawWhere: state.segments.rawWhere,
   segments: state.entities.get('segments').get('models'),
+  segmentName: state.segments.name,
 });
 
 const actionsToProps = dispatch => bindActionCreators({

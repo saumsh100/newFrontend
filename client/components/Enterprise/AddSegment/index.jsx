@@ -32,6 +32,7 @@ class AddSegment extends Component {
     this.handleGenderChange = this.handleGenderChange.bind(this);
     this.handleApply = this.handleApply.bind(this);
     this.saveSegment = this.saveSegment.bind(this);
+    this.updateSegment = this.updateSegment.bind(this);
   }
 
   componentDidMount() {
@@ -46,13 +47,18 @@ class AddSegment extends Component {
   }
   
   handleApply() {
-    this.props.applySegment(this.props.formData);
+    this.props.applySegment({
+      rawWhere: this.props.formData,
+    });
     this.props.reinitializeState();
     this.props.reset(this.props.formName);
   }
 
   handleSubmit() {
-    this.addSegmentName();
+    if (this.props.segmentId) {
+      return this.addSegmentName(this.props.segmentName);
+    }
+    return this.addSegmentName('');
   }
 
   saveSegment() {
@@ -65,14 +71,36 @@ class AddSegment extends Component {
       url: '/_api/segments/' });
     this.props.reinitializeState();
     this.closeNameinput();
+    this.props.applySegment({
+      rawWhere: this.props.formData,
+    });
     this.props.reset(this.props.formName);
   }
 
-  addSegmentName() {
-    console.log(this.state);
+  updateSegment() {
+    this.props.updateEntityRequest({
+      key: 'segments',
+      values: {
+        rawWhere: this.props.formData,
+        name: this.state.name,
+      },
+      url: `/_api/segments/${this.props.segmentId || ''}` });
+    this.props.applySegment({
+      rawWhere: this.props.formData,
+      name: this.state.name,
+      id: this.props.segmentId,
+    });
+    this.props.reinitializeState();
+    this.closeNameinput();
+    this.props.reset(this.props.formName);
+  }
+
+
+  addSegmentName(name) {
     this.setState({
       ...this.state,
       addSegmentName: true,
+      name,
     });
   }
 
@@ -161,7 +189,9 @@ class AddSegment extends Component {
                 </Col>
                 <Col xs={2} sm={2} md={2}>
                   <Button
-                    onClick={this.saveSegment}
+                    onClick={() => {
+                      (this.props.segmentId ? this.updateSegment : this.saveSegment)();
+                    }}
                   >Save</Button>
                 </Col>
               </Row>
@@ -190,6 +220,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   return {
     formData: state.form.AddSegment ? state.form.AddSegment.values : {},
+    segmentId: state.segments.id,
+    segmentName: state.segments.name,
   };
 }
 
@@ -205,6 +237,8 @@ AddSegment.propTypes = {
   addSegmentName: PropTypes.func,
   createEntityRequest: PropTypes.func,
   edit: PropTypes.bool,
+  segmentId: PropTypes.string,
+  segmentName: PropTypes.string,
   formData: PropTypes.shape({
     age: PropTypes.arrayOf(PropTypes.string),
     gender: PropTypes.string,
@@ -217,8 +251,3 @@ const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(AddSegment);
 
-/**
- * TODO:
- * - Segment dropdown
- * - Edit segment
- */
