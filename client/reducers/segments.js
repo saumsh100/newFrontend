@@ -8,6 +8,7 @@ import {
   SEGMENTS_FETCH_CITIES_SUCCESS,
   SEGMENT_APPLY,
   SEGMENT_REMOVE_APPLIED,
+  SEGMENT_SET_NAME,
 } from '../constants';
 
 const initialState = {
@@ -19,6 +20,7 @@ const initialState = {
   errorCities: null,
   applied: false,
   rawWhere: {},
+  name: '',
 };
 
 export default handleActions({
@@ -84,6 +86,12 @@ export default handleActions({
       ...state,
       applied: false,
       rawWhere: {},
+    };
+  },
+  [SEGMENT_SET_NAME](state) {
+    return {
+      ...state,
+      name: state.payload,
     };
   },
 }, initialState);
