@@ -21,6 +21,7 @@ const initialState = {
   applied: false,
   rawWhere: {},
   name: '',
+  id: null,
 };
 
 export default handleActions({
@@ -78,7 +79,9 @@ export default handleActions({
     return {
       ...state,
       applied: true,
-      rawWhere: action.payload,
+      rawWhere: action.payload.rawWhere,
+      name: action.payload.name || '',
+      id: action.payload.id || null,
     };
   },
   [SEGMENT_REMOVE_APPLIED](state) {
@@ -86,6 +89,8 @@ export default handleActions({
       ...state,
       applied: false,
       rawWhere: {},
+      name: '',
+      id: null,
     };
   },
   [SEGMENT_SET_NAME](state) {

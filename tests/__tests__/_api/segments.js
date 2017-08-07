@@ -58,7 +58,7 @@ describe('/api/segments', () => {
       .send({
         name: 'Test segment module 2',
         rawWhere: {
-          age: ['0-5','6-15'],
+          age: ['0-9', '10-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
           gender: 'male',
           city: 'Belgrade',
         },
@@ -174,14 +174,13 @@ describe('/api/segments', () => {
       }));
   });
   const object = JSON.stringify({
-    age: ['0-5', '6-15'],
-    gender: 'male',
-    city: 'Belgrade',
+    age: ['0-9', '10-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+    // age: ['0-9'],
   });
 
   describe('GET /api/enterprise/dashboard/patients', () => {
     test('Preview items', async () => request(app)
-      .get(`/_api/enterprises/dashboard/patients?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}&rawWhere=${object}`)
+      .get(`/_api/enterprises/dashboard/patients?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}&rawWhere=${object}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {

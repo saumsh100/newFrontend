@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { VCard } from '../../library';
+import { VCard, TrendLine } from '../../library';
 import styles from './table.scss';
 
 function EnterpriseTable(props) {
@@ -50,7 +50,12 @@ function EnterpriseTable(props) {
                   <span className={styles['col-title']}>CDI</span>
                 </div>
                 <div className={styles['col-content']}>
-                  <span>img</span>
+                  <span className={styles['col-numbers']}>
+                    <TrendLine
+                      width={80}
+                      values={clinic.activePatients.month.map(value => parseInt(value.number, 10))}
+                    />
+                  </span>
                   <span className={styles['col-numbers']}>{clinic.activePatients.total}</span>
                   <span className={styles['col-numbers']}>97%</span>
                 </div>
@@ -61,7 +66,12 @@ function EnterpriseTable(props) {
                   <span className={styles['col-title']}>CDI</span>
                 </div>
                 <div className={styles['col-content']}>
-                  <span>img</span>
+                  <span className={styles['col-numbers']}>
+                    <TrendLine
+                      width={80}
+                      values={clinic.hygienePatients.month.map(value => parseInt(value.number, 10))}
+                    />
+                  </span>
                   <span className={styles['col-numbers']}>{clinic.hygienePatients.total}</span>
                   <span className={styles['col-numbers']}>97%</span>
                 </div>
@@ -72,7 +82,12 @@ function EnterpriseTable(props) {
                   <span className={styles['col-title']}>CDI</span>
                 </div>
                 <div className={styles['col-content']}>
-                  <span>img</span>
+                  <span className={styles['col-numbers']}>
+                    <TrendLine
+                      width={80}
+                      values={clinic.newPatients.month.map(value => parseInt(value.number, 10))}
+                    />
+                  </span>
                   <span className={styles['col-numbers']}>{clinic.newPatients.total}</span>
                   <span className={styles['col-numbers']}>97%</span>
                 </div>

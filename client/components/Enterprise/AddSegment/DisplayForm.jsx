@@ -40,9 +40,10 @@ class DisplayForm extends Component {
     formName,
     handleSubmit,
     segments,
+    edit,
   } = this.props;
 
-    const title = 'Create New Segment';
+    const title = edit ? 'Edit Segment' : 'Create New Segment';
     return (
       <Grid className={styles.addNewSegment}>
         <Row className={styles.addNewSegment_mainContainer}>
@@ -80,7 +81,7 @@ class DisplayForm extends Component {
                           <Pill title="18-24" pillId="18-24" />
                           <Pill title="25-34" pillId="25-34" />
                           <Pill title="35-44" pillId="35-44" />
-                          <Pill title="45-44" pillId="45-44" />
+                          <Pill title="45-54" pillId="45-54" />
                           <Pill title="55-64" pillId="55-64" />
                           <Pill title="65+" pillId="65+" />
                         </SelectPill>
@@ -123,12 +124,12 @@ class DisplayForm extends Component {
                   </Grid>
                     
                 </Tab>
-                {/* <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
-                    <span>Behavior</span>
-                  </Tab>
-                  <Tab label="Technology" className={styles.tab} activeClassName={styles.activeTab}>
-                    <span>Technology</span>
-                  </Tab>*/}
+                <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
+                  <span>Coming soon</span>
+                </Tab>
+                <Tab label="Custom" className={styles.tab} activeClassName={styles.activeTab}>
+                  <span>Coming soon</span>
+                </Tab>
               </Tabs>
             </Form>
               
@@ -212,6 +213,7 @@ DisplayForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
   handleApply: PropTypes.func.isRequired,
+  edit: PropTypes.bool,
   segments: PropTypes.shape({
     preview: PropTypes.shape({}),
     loading: PropTypes.bool,

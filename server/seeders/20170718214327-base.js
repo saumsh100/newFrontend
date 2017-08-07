@@ -222,8 +222,8 @@ module.exports = {
         accountId,
         practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
         patientId: patient.id,
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: moment().add('-30', 'days').add('-5', 'minutes').toISOString(),
+        endDate: moment().add('-30', 'days').add('30', 'minutes').toISOString(),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -256,7 +256,7 @@ module.exports = {
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
         }),
-        createdAt: new Date(),
+        createdAt: faker.date.past(),
         updatedAt: new Date(),
       });
     }
@@ -287,8 +287,8 @@ module.exports = {
         accountId: accountId2,
         practitionerId: practitioners2[Math.floor(Math.random() * 10) + 0].id,
         patientId: patient.id,
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: moment().add('-30', 'days').add('-5', 'minutes').toISOString(),
+        endDate: moment().add('-30', 'days').add('30', 'minutes').toISOString(),
         createdAt: new Date(),
         updatedAt: new Date(),
       };

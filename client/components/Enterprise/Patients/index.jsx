@@ -31,7 +31,7 @@ class PatientsPage extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.applied && JSON.stringify(this.props.rawWhere) !== JSON.stringify(props.rawWhere)) {
+    if (JSON.stringify(this.props.rawWhere) !== JSON.stringify(props.rawWhere)) {
       this.props.fetchEnterpriseDashboard(null, props.rawWhere);
     }
   }

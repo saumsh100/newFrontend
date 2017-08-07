@@ -50,6 +50,7 @@ class Modal extends Component {
       type,
       custom,
       className,
+      showOverlay,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
@@ -67,10 +68,10 @@ class Modal extends Component {
 
     return (
       <div className={modalContainerClassName}>
-        <div
+        {showOverlay ? <div
           onClick={() => { this.handleOverlayClick; }}
           className={backDropClassName}
-        />
+        /> : null}
         <Card className={modalBodyClassName}>
           {children}
         </Card>
@@ -84,6 +85,11 @@ Modal.propTypes = {
   children: PropTypes.object,
   onEscKeyDown: PropTypes.func,
   onOverlayClick: PropTypes.func,
+  showOverlay: PropTypes.bool,
+};
+
+Modal.defaultProps = {
+  showOverlay: true,
 };
 
 export default Modal;

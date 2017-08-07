@@ -297,6 +297,10 @@ export default function (sequelize, DataTypes) {
     return response;
   };
 
+  Patient.allPatients = async function (db, segment) {
+
+  };
+
   Patient.STATUS = STATUS;
 
   return Patient;
