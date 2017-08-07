@@ -17,7 +17,6 @@ import {
 import { previewSegment } from '../../../thunks/segments';
 import styles from './styles.scss';
 
-
 class AddSegment extends Component {
   constructor(props) {
     super(props);
@@ -133,6 +132,7 @@ class AddSegment extends Component {
           onOverlayClick={this.closeNameinput}
           custom
           className={styles.modal}
+          showOverlay={false}
         >
           <div className={styles.addSegmentName}>
             <IconButton

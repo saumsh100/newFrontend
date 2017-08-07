@@ -123,12 +123,12 @@ class DisplayForm extends Component {
                   </Grid>
                     
                 </Tab>
-                {/* <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
-                    <span>Behavior</span>
-                  </Tab>
-                  <Tab label="Technology" className={styles.tab} activeClassName={styles.activeTab}>
-                    <span>Technology</span>
-                  </Tab>*/}
+                <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
+                  <span>Coming soon</span>
+                </Tab>
+                <Tab label="Custom" className={styles.tab} activeClassName={styles.activeTab}>
+                  <span>Coming soon</span>
+                </Tab>
               </Tabs>
             </Form>
               

@@ -4,15 +4,15 @@ import classnames from 'classnames';
 
 import styles from './styles.scss';
 
-function Pill({ selected, pillId }) {
+function Pill({ selected, pillId, title, onClick }) {
   const className = classnames(styles.pill, selected ? styles.selectedPill : null);
 
   return (
     <span
       className={className}
-      onClick={() => this.props.onClick(pillId)}
+      onClick={() => onClick(pillId)}
     >
-      {this.props.title}
+      {title}
     </span>
   );
 }
