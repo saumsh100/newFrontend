@@ -429,7 +429,7 @@ class PractitionerOfficeHours extends Component{
         </DialogBox>
         {dialogShow}
         <div className={styles.toggleContainer}>
-          <div> Set Custom </div>
+          <div className={styles.toggleContainer__text}> Set Custom </div>
           <div className={styles.toggleContainer__toggle}>
             <Toggle
               defaultChecked={practitioner.get('isCustomSchedule')}

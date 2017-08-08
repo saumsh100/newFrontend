@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { IconButton, CardHeader, Col } from '../../library';
+import { Button, BadgeHeader, Col } from '../../library';
 import Modal from '../../library/Modal';
 import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
@@ -54,12 +54,20 @@ class ServiceListContainer extends Component {
     return (
       <Col xs={2} className={styles.servicesListContainer}>
         <div className={styles.modalContainer}>
-          <CardHeader count={services.size} title="Services" />
-          <IconButton
-            icon="plus"
-            onClick={this.setActive}
-            className={styles.addServiceButton}
-            data-test-id="addServiceButton"
+          <div className={styles.displayFlexCenter}>
+            <Button
+              icon="plus"
+              onClick={this.setActive}
+              className={styles.addServiceButton}
+              data-test-id="addPractitionerButton"
+            >
+              Add New Service
+            </Button>
+          </div>
+          <BadgeHeader
+            count={services.size}
+            title="Services"
+            className={styles.badgeHeader}
           />
           <DialogBox
             active={this.state.active}
