@@ -1,275 +1,176 @@
 
-import { v4 as uuid } from 'uuid';
-import { omit } from 'lodash';
-import Patient from '../../../server/models/Patient';
-import thinky from '../../../server/config/thinky';
-import wipeModel from '../../util/wipeModel';
+import { Account, Patient } from '../../../server/_models';
+import { wipeModelSequelize } from '../../util/wipeModel';
+import { wipeTestAccounts, seedTestAccountsSequelize, accountId, enterpriseId } from '../../util/seedTestAccounts';
+import { omitProperties } from '../../util/selectors';
 
-const accountId1 = uuid();
-const accountId2 = uuid();
-const uniqueErrorMessage = 'Unique Field Validation Error';
+// TODO: should probably make makeData, a reusable function
 
+const otherAccountId = '00d9d6e9-6941-4dec-8e65-c7bc05977e98';
 const makeData = (data = {}) => (Object.assign({
+  accountId,
   firstName: 'Justin',
   lastName: 'Sharp',
   email: 'justin@carecru.com',
   mobilePhoneNumber: '+18887774444',
-  accountId: accountId1,
 }, data));
 
+const makeAccountData = (data = {}) => (Object.assign({
+  id: accountId,
+  name: 'Test Account',
+  enterpriseId,
+}, data));
+
+const fail = 'Your code should be failing but it is passing';
+const uniqueErrorMessage = 'Unique Field Validation Error';
+
 describe('models/Patient', () => {
+  // IMPORTANT! Patient needs to be removed first...
   beforeEach(async () => {
-    await wipeModel(Patient);
+    await wipeModelSequelize(Patient);
+    await seedTestAccountsSequelize();
   });
 
-  afterEach(async () => {
-    await wipeModel(Patient);
-  });
-
-  test('should be able to save a Patient without id provided', async () => {
-    const data = makeData();
-    const patient = await Patient.save(data);
-    expect(patient).toMatchObject(data);
-  });
-
-  describe('Data Sanitization', () => {
-    test('should be able to sanitize Patient mobilePhoneNumber', async () => {
-      const data = makeData({ mobilePhoneNumber: '111 222 3333' });
-      const patient = await Patient.save(data);
-
-      data.mobilePhoneNumber = '+11112223333';
-      expect(patient).toMatchObject(data);
-    });
+  afterAll(async () => {
+    await wipeModelSequelize(Patient);
+    await wipeTestAccounts();
   });
 
   describe('Data Validation', () => {
-    test('should NOT throw Unique Field error', async () => {
-      // Save one, then try saving another with same data
-      await Patient.save(makeData());
-      const data = makeData({ mobilePhoneNumber: '+12222222222', email: 'justin@be.ca' });
-      const patient = await Patient.save(data);
-      expect(patient.isSaved()).toBe(true);
+    test('should be able to save a Patient without id provided', async () => {
+      const data = makeData();
+      const patient = await Patient.create(data);
+      expect(omitProperties(patient.get({ plain: true }), ['id'])).toMatchSnapshot();
     });
 
-    test('should NOT throw Unique Field error for diff accountId', async () => {
-      // Save one, then try saving another with same data
-      await Patient.save(makeData());
-      const data = makeData({ accountId: accountId2 });
-      const patient = await Patient.save(data);
-      expect(patient.isSaved()).toBe(true);
+    test('should be able to sanitize Patient mobilePhoneNumber', async () => {
+      const data = makeData({ mobilePhoneNumber: '111 222 3333' });
+      const patient = await Patient.create(data);
+      expect(patient.mobilePhoneNumber).toBe('+11112223333');
     });
 
-    test('should be able to handle undefined values', async () => {
-      const patient = await Patient.save(makeData({ email: undefined }));
-      expect(patient.isSaved()).toBe(true);
+    test('should set Patient mobilePhoneNumber to null if not valid string', async () => {
+      const data = makeData({ mobilePhoneNumber: '11 222 3333' });
+      const patient = await Patient.create(data);
+      expect(patient.mobilePhoneNumber).toBe(null);
     });
 
     test('should throw Unique Field error for 2 docs with same data', async () => {
       // Save one, then try saving another with same data
-      await Patient.save(makeData());
+      await Patient.create(makeData());
 
       // Couldn't get toThrowError working here...
       try {
-        await Patient.save(makeData());
-        throw new Error('Did not pass');
+        await Patient.create(makeData());
+        throw new Error(fail);
       } catch (err) {
-        expect(err.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        expect(err.name).toBe('SequelizeUniqueConstraintError');
       }
     });
 
-    test('should throw Unique Field error for 3 docs with similar data (1 has same number, 1 has same email)', async () => {
-      // Save one, then try saving another with same data
-      const email = 'justin@be.ca';
-      const mobilePhoneNumber = '+18887774444';
-      await Patient.save(makeData());
-      await Patient.save(makeData({ mobilePhoneNumber: '+12222222222', email }));
+    test('should NOT throw Unique Field error for same email but in different accounts', async () => {
+      await Account.create(makeAccountData({ id: otherAccountId, name: 'Other Test', enterpriseId }));
+      const p1 = await Patient.create(makeData());
+      const p2 = await Patient.create(makeData({ accountId: otherAccountId }));
 
-      // Couldn't get toThrowError working here...
-      try {
-        // Same phone number as first, same email as second
-        await Patient.save(makeData({ mobilePhoneNumber, email }));
-        throw new Error('Did not pass');
-      } catch (err) {
-        expect(err.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-      }
-    });
-
-    test('should throw Unique Field error for 4 docs with similar data (1 has same number, 1 has same email)', async () => {
-      // Save one, then try saving another with same data
-      const email = 'justin@be.ca';
-      const mobilePhoneNumber = '+12226665555';
-      await Patient.save(makeData());
-      await Patient.save(makeData({ accountId: accountId2, email }));
-      await Patient.save(makeData({ mobilePhoneNumber, email }));
-
-      // Couldn't get toThrowError working here...
-      try {
-        // Same phone number as first, same email as second
-        await Patient.save(makeData({ email }));
-        throw new Error('Did not pass');
-      } catch (err) {
-        expect(err.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-      }
+      expect(p1.mobilePhoneNumber).toEqual(p2.mobilePhoneNumber);
+      expect(p1.email).toEqual(p2.email);
     });
 
     test('should NOT throw for undefined values', async () => {
       // Save one, then try saving another with same data
-      await Patient.save(makeData({ email: undefined, mobilePhoneNumber: undefined }));
-      const p = await Patient.save(makeData({ email: undefined, mobilePhoneNumber: undefined }));
-      expect(p.isSaved()).toBe(true);
+      await Patient.create(makeData({ email: undefined, mobilePhoneNumber: undefined }));
+      await Patient.create(makeData({ email: undefined, mobilePhoneNumber: undefined }));
     });
 
     test('should NOT throw for null values', async () => {
       // Save one, then try saving another with same data
-      await Patient.save(makeData({ email: null, mobilePhoneNumber: null }));
-      const p = await Patient.save(makeData({ email: null, mobilePhoneNumber: null }));
-      expect(p.isSaved()).toBe(true);
+      await Patient.create(makeData({ email: null, mobilePhoneNumber: null }));
+      await Patient.create(makeData({ email: null, mobilePhoneNumber: null }));
     });
 
-    describe('on(\'update\')', () => {
-      test('should throw an error for updating to a taken unique field', async () => {
-        const email = 'justin@be.ca';
-        const mobilePhoneNumber = '+12226665555';
-        await Patient.save(makeData());
-        const patient = await Patient.save(makeData({ email, mobilePhoneNumber }));
-        try {
-          await patient.merge({
-            email: 'justin@carecru.com',
-            mobilePhoneNumber: '+18887774444',
-          }).save();
-
-          throw new Error('Did not pass');
-        } catch (err) {
-          expect(err.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        }
-      });
+    test('should throw an error for improper email', async () => {
+      const data = makeData({ email: ' cat@dog ' });
+      try {
+        await Patient.create(data);
+        throw new Error(fail);
+      } catch (error) {
+        expect(error.name).toBe('SequelizeValidationError');
+      }
     });
   });
 
   describe('Batch Saving', () => {
-    describe('#preUniqueValidator', () => {
-      test('it should throw 1 error and return 1 patient model', async () => {
-        const id = uuid();
-        const data = [
-          makeData(),
-          makeData({ id }),
-        ];
-
-        const { docs, errors } = await Patient.preValidateArray(data);
-
-        expect(errors.length).toBe(1);
-        expect(docs.length).toBe(1);
-
-        const [doc] = docs;
-        const [error] = errors;
-
-        // Ensure it is a Patient model...
-        expect(doc.isSaved()).toBe(false);
-
-        // Defaults got added
-        expect(typeof doc.preferences).toBe('object');
-
-        // Error should have correct message and correct doc
-        expect(error.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(error.doc).toMatchObject(makeData({ id }));
-
+    describe('#uniqueValidate', () => {
+      test('should fail', async () => {
+        await Patient.create(makeData());
+        try {
+          await Patient.uniqueValidate(makeData());
+          throw new Error(fail);
+        } catch (error) {
+          expect(error.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        }
       });
 
-      test('it should throw 2 errors and return 1 patient model', async () => {
-        const id1 = uuid();
-        const id2 = uuid();
-        const data = [
-          makeData(),
-          makeData({ id: id1 }),
-          makeData({ id: id2 }),
-        ];
-
-        const { docs, errors } = await Patient.preValidateArray(data);
-
-        expect(errors.length).toBe(2);
-        expect(docs.length).toBe(1);
-
-        const [doc] = docs;
-        const [error1, error2] = errors;
-
-        expect(doc.isSaved()).toBe(false);
-        expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(error1.doc).toMatchObject(makeData({ id: id1 }));
-        expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(error2.doc).toMatchObject(makeData({ id: id2 }));
+      test('should not fail', async () => {
+        const email = 'justin@be.ca';
+        // has to be in the post validation format
+        const mobilePhoneNumber = '+11112223333';
+        await Patient.create(makeData());
+        await Patient.uniqueValidate(makeData({ email, mobilePhoneNumber }));
       });
     });
 
-    test('should be able to save 2 unique patients', async () => {
-      const email = 'justin@be.ca';
-      const mobilePhoneNumber = '111 222 3333';
-      const patients = await Patient.batchSave([
-        makeData(),
-        makeData({ email, mobilePhoneNumber })
-      ]);
-
-      expect(patients.length).toBe(2);
-    });
-
-    test('should save one and throw an error for the other', async () => {
-      try {
-        await Patient.batchSave([
+    describe('#batchSave', () => {
+      test('should be able to save 2 unique patients', async () => {
+        const email = 'justin@be.ca';
+        const mobilePhoneNumber = '111 222 3333';
+        const patients = await Patient.batchSave([
           makeData(),
-          makeData()
+          makeData({ email, mobilePhoneNumber })
         ]);
 
-        throw new Error('Did not pass');
-      } catch ({ errors, docs }) {
-        expect(errors.length).toBe(1);
-        expect(docs.length).toBe(1);
+        expect(patients.length).toBe(2);
+      });
 
-        const [error] = errors;
-        const [patient] = docs;
-        expect(error.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(patient.isSaved()).toBe(true);
-      }
-    });
+      test('should save one and throw errors for other 2', async () => {
+        try {
+          await Patient.batchSave([
+            makeData(),
+            makeData(),
+            makeData(),
+          ]);
 
-    test('should save one and throw an error for the other 2', async () => {
-      try {
-        await Patient.batchSave([
-          makeData(),
-          makeData(),
-          makeData(),
-        ]);
+          throw new Error(fail);
+        } catch ({ docs, errors }) {
+          expect(errors.length).toBe(2);
+          expect(docs.length).toBe(1);
 
-        throw new Error('Did not pass');
-      } catch ({ errors, docs }) {
-        expect(errors.length).toBe(2);
-        expect(docs.length).toBe(1);
+          const [error1, error2] = errors;
+          expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+          expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        }
+      });
 
-        const [error1, error2] = errors;
-        const [patient] = docs;
-        expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(patient.isSaved()).toBe(true);
-      }
-    });
+      test('save 1 first, then try batch saving, both should fail', async () => {
+        await Patient.create(makeData());
+        try {
+          await Patient.batchSave([
+            makeData(),
+            makeData(),
+          ]);
 
-    test('save 1 first, then try batch saving, both should fail', async () => {
-      try {
-        await Patient.save(makeData());
+          throw new Error(fail);
+        } catch (error) {
+          const { errors, docs } = error;
+          expect(errors.length).toBe(2);
+          expect(docs.length).toBe(0);
 
-        await Patient.batchSave([
-          makeData(),
-          makeData(),
-        ]);
-
-        throw new Error('Did not pass');
-      } catch ({ errors, docs }) {
-
-        expect(errors.length).toBe(2);
-        expect(docs.length).toBe(0);
-
-        const [error1, error2] = errors;
-        expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-        expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
-      }
+          const [error1, error2] = errors;
+          expect(error1.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+          expect(error2.message).toEqual(expect.stringContaining(uniqueErrorMessage));
+        }
+      });
     });
   });
 });

@@ -1,10 +1,11 @@
 
 require('../config/initializeCodeTranspiler');
+const chalk = require('chalk');
 
 const globals = require('../config/globals');
 const handleErrors = require('../middleware/handleErrors');
 const app = require('../config/express');
-require('../models');
+// require('../models');
 require('../_models');
 
 // require('../config/kue');
@@ -22,7 +23,7 @@ app.set('view engine', 'hbs');
 
 // Extra logging for communication with server
 app.use((req, res, next) => {
-  // console.log(chalk.blue(req.method, req.originalUrl));
+  console.log(chalk.blue(req.method, req.originalUrl));
   next();
 });
 

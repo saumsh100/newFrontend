@@ -5,6 +5,7 @@ Object {
   "entities": Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
         "canSendRecalls": false,
         "canSendReminders": false,
@@ -20,7 +21,9 @@ Object {
         "phoneNumber": null,
         "state": null,
         "street": null,
+        "syncClientAdapter": null,
         "timeInterval": null,
+        "timezone": null,
         "twilioPhoneNumber": null,
         "unit": 15,
         "vendastaId": null,
@@ -39,6 +42,7 @@ Object {
   "entities": Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
         "canSendRecalls": false,
         "canSendReminders": false,
@@ -54,7 +58,9 @@ Object {
         "phoneNumber": null,
         "state": null,
         "street": null,
+        "syncClientAdapter": null,
         "timeInterval": null,
+        "timezone": null,
         "twilioPhoneNumber": null,
         "unit": 15,
         "vendastaId": null,
@@ -75,6 +81,7 @@ Object {
   "entities": Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
         "canSendRecalls": false,
         "canSendReminders": false,
@@ -90,7 +97,9 @@ Object {
         "phoneNumber": null,
         "state": null,
         "street": null,
+        "syncClientAdapter": null,
         "timeInterval": null,
+        "timezone": null,
         "twilioPhoneNumber": null,
         "unit": 15,
         "vendastaId": null,
@@ -111,6 +120,7 @@ Object {
   "entities": Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
         "canSendRecalls": false,
         "canSendReminders": false,
@@ -126,7 +136,9 @@ Object {
         "phoneNumber": null,
         "state": null,
         "street": null,
+        "syncClientAdapter": null,
         "timeInterval": null,
+        "timezone": null,
         "twilioPhoneNumber": null,
         "unit": 15,
         "vendastaId": null,
@@ -145,6 +157,7 @@ Object {
   "entities": Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
         "canSendRecalls": false,
         "canSendReminders": false,
@@ -160,7 +173,9 @@ Object {
         "phoneNumber": null,
         "state": null,
         "street": null,
+        "syncClientAdapter": null,
         "timeInterval": null,
+        "timezone": null,
         "twilioPhoneNumber": null,
         "unit": 15,
         "vendastaId": null,
@@ -234,6 +249,7 @@ Object {
   "entities": Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
         "canSendRecalls": false,
         "canSendReminders": false,
@@ -249,7 +265,9 @@ Object {
         "phoneNumber": null,
         "state": null,
         "street": null,
+        "syncClientAdapter": null,
         "timeInterval": null,
+        "timezone": null,
         "twilioPhoneNumber": null,
         "unit": 15,
         "vendastaId": null,

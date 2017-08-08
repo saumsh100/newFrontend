@@ -1,13 +1,13 @@
 
 import moment from 'moment';
 import 'moment-timezone';
-const isEmpty = require('lodash/isEmpty');
+import isEmpty from 'lodash/isEmpty';
 
 // OS of the computer will add timezone to this function
 const Time = {
   time: (hours, minutes) => new Date(1970, 1, 0, hours, minutes),
 
-  timeWithZone: (hours, minutes, timezone) => {
+  timeWithZone(hours, minutes, timezone) {
     const now = moment(new Date(Date.UTC(1970, 1, 0, hours, minutes)));
     const another = now.clone();
     another.tz(timezone);
@@ -27,7 +27,7 @@ const Time = {
    * @param time
    * @returns {string}
    */
-  combineDateAndTime: (date, time) => {
+  combineDateAndTime(date, time) {
     const mTime = moment(time);
     return moment(date)
       .hours(mTime.hours())
@@ -37,20 +37,25 @@ const Time = {
       .toISOString();
   },
 
+  getHoursFromInterval({ startDate, endDate }) {
+    return moment(endDate).diff(startDate, 'hours', true);
+  },
+
   /**
    *
    * @param date
    * @param timeSlot
    * @returns {*}
    */
-  combineDateAndTimeSlot: (date, timeSlot) =>
+  combineDateAndTimeSlot(date, timeSlot) {
     // combine day from date and time from timeSlot into a new timeSlot
-     Object.assign({}, timeSlot, {
-       startDate: Time.combineDateAndTime(date, timeSlot.startTime),
-       endDate: Time.combineDateAndTime(date, timeSlot.endTime),
-     }),
+    return Object.assign({}, timeSlot, {
+      startDate: Time.combineDateAndTime(date, timeSlot.startTime),
+      endDate: Time.combineDateAndTime(date, timeSlot.endTime),
+    });
+  },
 
-  isDuringEachother: (a, b) => {
+  isDuringEachother(a, b) {
     const aDateStart = new Date(a.startDate);
     const bDateStart = new Date(b.startDate);
     const aDateEnd = new Date(a.endDate);
@@ -64,7 +69,7 @@ const Time = {
     return startTimeDuring || startTimeEqual || endTimeDuring || endTimeEqual;
   },
 
-  isDuringEachotherTimeOff: (a, b) => {
+  isDuringEachotherTimeOff(a, b) {
     const aDateStart = new Date(a.startDate);
     const bDateStart = new Date(b.startDate);
     const aDateEnd = new Date(a.endDate);
@@ -86,7 +91,7 @@ const Time = {
    * @param intervalLength
    * @param minimumLength
    */
-  createPossibleTimeSlots: (timeSlots, intervalLength, minimumLength) => {
+  createPossibleTimeSlots(timeSlots, intervalLength, minimumLength) {
     const len = timeSlots.length;
 
     const realInterval = Math.ceil(intervalLength / minimumLength);
@@ -103,7 +108,7 @@ const Time = {
     return possibleTimeSlots;
   },
 
-  breakdownTimeSlot: (timeSlot, intervalLength, minimumLength) => {
+  breakdownTimeSlot(timeSlot, intervalLength, minimumLength) {
     const {
       startDate,
       endDate,
@@ -132,7 +137,7 @@ const Time = {
    * @param dailySchedule
    * @returns {*}
    */
-  createIntervalsFromDailySchedule: (dailySchedule) => {
+  createIntervalsFromDailySchedule(dailySchedule) {
     const {
       isClosed,
       startTime,
@@ -149,6 +154,7 @@ const Time = {
         endTime,
         closedEnd: true,
       };
+
       return [interval];
     }
 
@@ -208,7 +214,7 @@ const Time = {
    * @param startDate ISOString
    * @param endDate ISOString
    */
-  createIntervalsFromWeeklySchedule: (weeklySchedule, startDate, endDate) => {
+  createIntervalsFromWeeklySchedule(weeklySchedule, startDate, endDate) {
     // Get the array of dailySchedules
     const dailySchedules = Time.getDailySchedules(weeklySchedule, startDate, endDate);
 
@@ -236,7 +242,7 @@ const Time = {
    * @param startDate
    * @param endDate
    */
-  getDailySchedules: (weeklySchedule, startDate, endDate) => {
+  getDailySchedules(weeklySchedule, startDate, endDate) {
     const momentStart = moment(startDate);
     const momentEnd = moment(endDate);
     if (momentStart.isAfter(momentEnd)) {
@@ -309,6 +315,18 @@ const Time = {
     }
 
     return dailySchedules;
+  },
+
+  getAvailableHours(weeklySchedule, startDate, endDate) {
+    const intervals = Time.createIntervalsFromWeeklySchedule(weeklySchedule, startDate, endDate);
+    const filteredIntervals = intervals.filter(i => Time.isDuringEachother(i, { startDate, endDate }));
+    // console.log(intervals.length);
+    // console.log(filteredIntervals.length);
+    return intervals.reduce((availableHours, interval) => {
+      // console.log(interval);
+      // console.log(Time.getHoursFromInterval(interval));
+      return availableHours + Time.getHoursFromInterval(interval);
+    }, 0);
   },
 };
 

@@ -19,6 +19,8 @@ const superAdminPermissionId = '64d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const managerUserId = '6668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const ownerUserId = '5668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
+const weeklyScheduleId = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
+
 
 const ROLES = {
   MANAGER: 'MANAGER',
@@ -38,6 +40,7 @@ const enterprise = {
 const account = {
   id: accountId,
   enterpriseId,
+  weeklyScheduleId,
   name: 'Test Account',
   city: 'Belgrade',
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -113,9 +116,17 @@ const superAdminUser = {
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
 
+const WeeklySchedule = {
+  id: weeklyScheduleId,
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
 module.exports = {
   up: async function (queryInterface, Sequelize) { // eslint-disable-line
     await queryInterface.bulkInsert('Enterprises', [enterprise]);
+
+    await queryInterface.bulkInsert('WeeklySchedules', [WeeklySchedule]);
 
     await queryInterface.bulkInsert('Accounts', [account, account2]);
 

@@ -1,7 +1,6 @@
 
 import { Router } from 'express';
 import twilio from 'twilio';
-
 import {
   Account,
   Chat,
@@ -28,15 +27,16 @@ const createReminderMessage = (config) => {
 
 // Handle all automated Call interaction with twilio numbers
 voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
-
   const sentReminder = await SentReminder.findOne({
     where: {
       id: req.sentReminderId,
     },
+
     include: [{
       model: Appointment,
       as: 'appointment',
     }],
+
     raw: true,
     nest: true,
   });
@@ -48,7 +48,6 @@ voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
     startDate,
     startTime,
   } = req.query;
-
 
   // Use the Twilio Node.js SDK to build an XML response
   const twiml = new twilio.TwimlResponse();

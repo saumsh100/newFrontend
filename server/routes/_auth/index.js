@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import omit from 'lodash/omit';
 import { UserAuth } from '../../lib/_auth';
-import loadPermissions, { loadPermissionsSequelize } from '../../lib/permissions';
+import { loadPermissionsSequelize } from '../../lib/permissions';
 
 const authRouter = Router();
 

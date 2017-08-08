@@ -9,7 +9,7 @@ import {
   Appointment
 } from '../../../_models';
 import { getValidSmsReminders } from '../../../lib/_reminders/helpers';
-import { createConfirmationText } from '../../../lib/reminders/sendReminder';
+import { createConfirmationText } from '../../../lib/_reminders/sendReminder';
 import { sequelizeLoader } from '../../util/loaders';
 import { sanitizeTwilioSmsData } from '../util';
 import twilioClient from '../../../config/twilio';

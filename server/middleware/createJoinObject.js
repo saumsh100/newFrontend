@@ -15,6 +15,7 @@ import  {
   PinCode,
   Practitioner,
   Practitioner_Service,
+  PractitionerRecurringTimeOff,
   Recall,
   Reminder,
   Request,
@@ -45,8 +46,7 @@ const JOIN_MAP = {
   patientUser: { model: PatientUser, as: 'patientUser' },
   permission: { model: Permission, as: 'permission' },
   practitioner: { model: Practitioner, as: 'practitioner' },
-  // TODO: add this when Kirat pushes
-  // practitionerTimeOff: { model: PractitionerTimeOff, as: 'practitionerTimeOff' },
+  recurringTimeOff: { model: PractitionerRecurringTimeOff, as: 'recurringTimeOffs' },
   syncClientError: { model: SyncClientError, as: 'syncClientError' },
   reminder: { model: Reminder, as: 'reminder' },
   recall: { model: Recall, as: 'recall' },
@@ -71,8 +71,7 @@ const JOIN_MAP = {
   patientUsers: { model: PatientUser, as: 'patientUsers' },
   permissions: { model: Permission, as: 'permissions' },
   practitioners: { model: Practitioner, as: 'practitioners' },
-  // TODO: add this when Kirat pushes
-  // practitionerTimeOffs: { model: PractitionerTimeOff, as: 'practitionerTimeOffs' },
+  recurringTimeOffs: { model: PractitionerRecurringTimeOff, as: 'recurringTimeOffs' },
   syncClientErrors: { model: SyncClientError, as: 'syncClientErrors' },
   reminders: { model: Reminder, as: 'reminders' },
   recalls: { model: Recall, as: 'recalls' },
