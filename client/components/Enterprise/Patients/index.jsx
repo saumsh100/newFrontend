@@ -7,10 +7,13 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../Page';
 import Table from '../Table';
+import Graph from '../Graph';
+import { Grid, Row, Col } from '../../library/';
 import withAuthProps from '../../../hocs/withAuthProps';
 import { getModel } from '../../Utils';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 
+import styles from './styles.scss';
 
 const fetchEnterpriseDashboard = (segmentId, rawWhere) => {
   const from = moment().subtract(1, 'month');
@@ -40,6 +43,16 @@ class PatientsPage extends Component {
     return (
       !this.props.enterpriseDashboardPatients ?
         <Loading /> : <Page>
+          <Grid className={styles.container}>
+            <Row>
+              <Col md={9}>
+                <Graph
+                  clinics={this.props.enterpriseDashboardPatients.clinics}
+                  totals={this.props.enterpriseDashboardPatients.totals}
+                />
+              </Col>
+            </Row>
+          </Grid>
           <Table
             clinics={this.props.enterpriseDashboardPatients.clinics}
             totals={this.props.enterpriseDashboardPatients.totals}
