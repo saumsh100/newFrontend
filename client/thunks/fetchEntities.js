@@ -19,6 +19,8 @@ import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequ
 
 export function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {
+    // adding this so pass by reference params won't go for mulitple requests
+    params = Object.assign({}, params);
     const { entities } = getState();
     const entity = entities.get(key);
     // Add onto the query param for join if passed in

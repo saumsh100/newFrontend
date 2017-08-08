@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../library';
-import { maxLength, asyncEmailValidateUser, emailValidate, passwordsValidate } from '../library/Form/validate';
+import { maxLength, asyncEmailValidateUser, emailValidate, passwordsValidate, passwordStrength } from '../library/Form/validate';
 
 
 export default function Invite({ onSubmit }) {
@@ -27,7 +27,7 @@ export default function Invite({ onSubmit }) {
       <Field
         required
         type="email"
-        name="username"
+        name="email"
         validate={[emailValidate]}
         label="Email"
       />
@@ -35,14 +35,14 @@ export default function Invite({ onSubmit }) {
         required
         type="password"
         name="password"
-        validate={[passwordsValidate]}
+        validate={[passwordsValidate, passwordStrength]}
         label="Password"
       />
       <Field
         required
         type="password"
         name="confirmPassword"
-        validate={[passwordsValidate]}
+        validate={[passwordsValidate, passwordStrength]}
         label="Password Confirmation"
       />
       <Button

@@ -116,6 +116,19 @@ const superAdminUser = {
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
 
+const superAdminUser2 = {
+  id: uuid(),
+  enterpriseId,
+  activeAccountId: accountId,
+  permissionId: superAdminPermissionId,
+  username: 'justin@carecru.com',
+  password: bcrypt.hashSync('justin', passwordHashSaltRounds),
+  firstName: 'Justin',
+  lastName: 'Sharp',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
 const WeeklySchedule = {
   id: weeklyScheduleId,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -140,6 +153,7 @@ module.exports = {
       managerUser,
       ownerUser,
       superAdminUser,
+      superAdminUser2,
     ]);
 
     const patients = [];

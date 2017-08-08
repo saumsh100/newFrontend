@@ -1,3 +1,8 @@
+const ROLES = {
+  MANAGER: 'MANAGER',
+  ADMIN: 'ADMIN',
+  OWNER: 'OWNER',
+};
 
 export default function (sequelize, DataTypes) {
   const Invite = sequelize.define('Invite', {
@@ -19,6 +24,18 @@ export default function (sequelize, DataTypes) {
 
     sendingUserId: {
       type: DataTypes.UUID,
+      allowNull: false,
+    },
+
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
+    role: {
+      type: DataTypes.ENUM,
+      values: Object.keys(ROLES).map(key => ROLES[key]),
+      defaultValue: 'MANAGER',
       allowNull: false,
     },
 

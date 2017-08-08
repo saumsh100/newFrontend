@@ -12,7 +12,6 @@ module.exports = function checkPermission(permission) {
   const check = permissions =>
     requests.reduce((res, [resource, action]) =>
       res && (permissions[resource] && permissions[resource][action]), true);
-
   return function middleware(req, res, next) {
     if (check(req.permissions)) {
       return next();

@@ -79,17 +79,17 @@ const OWNER = {
   enterprises: denyAll,
 };
 
-const MANAGER = {
+const ADMIN = {
   ...OWNER,
 };
 
-const USER = {
-  ...MANAGER,
+const MANAGER = {
+  ...ADMIN,
 };
 
 export default {
   SUPERADMIN,
   OWNER,
   MANAGER,
-  USER,
+  ADMIN,
 };

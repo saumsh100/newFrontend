@@ -214,8 +214,8 @@ class Users extends Component{
       })
     }
     const options = [
-          { value: 'ADMIN' },
           { value: 'OWNER' },
+          { value: 'ADMIN' },
           { value: 'MANAGER' },
     ];
 
