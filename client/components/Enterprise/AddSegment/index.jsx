@@ -69,11 +69,12 @@ class AddSegment extends Component {
         name: this.state.name,
       },
       url: '/_api/segments/' });
-    this.props.reinitializeState();
-    this.closeNameinput();
     this.props.applySegment({
       rawWhere: this.props.formData,
+      name: this.state.name,
     });
+    this.props.reinitializeState();
+    this.closeNameinput();
     this.props.reset(this.props.formName);
   }
 

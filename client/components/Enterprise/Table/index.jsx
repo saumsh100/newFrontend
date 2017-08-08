@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { VCard, TrendLine } from '../../library';
-import styles from './table.scss';
+import styles from './styles.scss';
 
 function EnterpriseTable(props) {
   return (<VCard noPadding>
