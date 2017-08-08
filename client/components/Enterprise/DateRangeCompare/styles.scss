@@ -1,0 +1,27 @@
+
+@import '../../../ui.scss';
+
+.buttons {
+  display: flex;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.rightButtons {
+  margin-left: auto;
+}
+
+.applyButton {
+  font-size: 18px;
+  font-family: $medium-font;
+}
+
+.dashCol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputsWrapper {
+  margin-top: -10px;
+}

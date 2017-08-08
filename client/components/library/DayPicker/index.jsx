@@ -79,9 +79,14 @@ class DayPicker extends Component {
       value,
     } = this.props;
 
+    // If value is defined, format to 10/8/2017 style
+    const displayValue = value ? moment(value).format('l') : value;
+
     let dayPickerTargetComponent = (
       <Input
         {...this.props}
+        value={displayValue}
+        classStyles={styles.dateInput}
         onChange={this.handleInputChange}
         onFocus={this.togglePopOver}
         data-test-id={this.props['data-test-id']}

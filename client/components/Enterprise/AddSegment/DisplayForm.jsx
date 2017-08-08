@@ -122,7 +122,7 @@ class DisplayForm extends Component {
                       </Col>
                     </Row>
                   </Grid>
-                    
+
                 </Tab>
                 <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
                   <span>Coming soon</span>
@@ -132,7 +132,7 @@ class DisplayForm extends Component {
                 </Tab>
               </Tabs>
             </Form>
-              
+
             <div className={styles.buttons}>
               <Button
                 flat
@@ -146,11 +146,13 @@ class DisplayForm extends Component {
                 onClick={this.props.handleSubmit}
               >
                   Save
-                </Button>
+              </Button>
               <Button
                 flat
                 onClick={this.props.handleCancel}
-              >Cancel</Button>
+              >
+                Cancel
+              </Button>
             </div>
           </Col>
           <Col xs={3} sm={3} md={3}>
@@ -193,7 +195,7 @@ class DisplayForm extends Component {
                   />
                 </div>
               }
-              
+
             </div>
           </Col>
         </Row>
@@ -225,7 +227,7 @@ DisplayForm.propTypes = {
   }).isRequired,
   enterpriseId: PropTypes.string.isRequired,
   fetchCities: PropTypes.func,
-  
+
 };
 
 function mapDispatchToProps(dispatch) {

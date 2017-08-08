@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { change } from 'redux-form';
 import { connect } from 'react-redux';
-import { Row, Col, VButton, Modal, DropdownSelect } from '../../library';
+import { Row, Col, VButton, Modal, DropdownSelect, DropdownMenu } from '../../library';
 import withAuthProps from '../../../hocs/withAuthProps';
 import {
   removeApplied,
@@ -11,6 +11,7 @@ import {
 } from '../../../actions/segments';
 import styles from './enterprise-page.scss';
 import AddSegment from '../AddSegment/';
+import DateRangeCompare from '../DateRangeCompare';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 
 
@@ -26,6 +27,7 @@ class EnterprisePage extends React.Component {
     this.addSegment = this.addSegment.bind(this);
     this.editSegment = this.editSegment.bind(this);
     this.removeApplied = this.removeApplied.bind(this);
+    this.applyDateRange = this.applyDateRange.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
   }
 
@@ -62,6 +64,10 @@ class EnterprisePage extends React.Component {
     this.props.removeApplied();
   }
 
+  applyDateRange(values) {
+    window.alert(JSON.stringify(values));
+  }
+
   render() {
     const {
       addSegment,
@@ -75,6 +81,17 @@ class EnterprisePage extends React.Component {
         addSegmentName={this.addSegmentName}
       />
     );
+
+    // Does this need to be a function?
+    const DateRangeTarget = (props) => (
+      <VButton
+        {...props}
+        title="Date Range"
+        compact className={styles['btn-add-segment']}
+        color="white"
+      />
+    );
+
     return (<div>
       <Row className={styles.header}>
         <Col md={8}>
@@ -129,12 +146,18 @@ class EnterprisePage extends React.Component {
               />
             </Col>
           }
-            
+
           { /* TODO: Implement ButtonDropDown element */ }
-          { /* <Col md={6} className={styles['filter-buttons']} >
-          <VButton title="Save" color="red" compact />
-          <VButton title="Clear" compact />
-        </Col> */}
+
+          <Col md={6}>
+            <DropdownMenu
+              labelComponent={DateRangeTarget}
+              closeOnInsideClick={false}
+              className={styles.dateRangeMenu}
+            >
+              <DateRangeCompare onSubmit={this.applyDateRange} />
+            </DropdownMenu>
+          </Col>
         </Row>
 
         <div>
@@ -149,7 +172,7 @@ class EnterprisePage extends React.Component {
         >
           {displayModalComponent}
         </Modal>
-        
+
       </div>
     </div>);
   }

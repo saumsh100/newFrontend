@@ -63,7 +63,15 @@ $page-padding: 20px;
     }
   }
 }
+
 .dropdown:hover {
   background-color: darken($clr-bg-dark-grey, 5%);
   color: darken($clr-dark-grey, 5%);
+}
+
+.dateRangeMenu > :global(.dd-menu-items) > :global(.dd-items-right) {
+  width: 350px;
+  background-color: $primary-grey;
+  padding: 20px;
+  border-radius: 10px;
 }
