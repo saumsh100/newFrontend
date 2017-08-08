@@ -5,10 +5,8 @@ import {
   SET_IS_COLLAPSED,
 } from '../constants';
 
-console.log('reducer isCollapsed', window.innerWidth < 700);
-
 export const initialState = Map({
-  isCollapsed: window.innerWidth < 700,
+  isCollapsed: false,
 });
 
 export default handleActions({

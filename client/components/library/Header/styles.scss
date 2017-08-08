@@ -17,12 +17,13 @@
 .headerTitle {
   display: inline-block;
   font-size: 25px;
-  font-weight: $medium-weight;
   color: $primary-dark;
-  font-family: $medium-font;
+  font-family: $dashboard-font;
+  font-weight: $jumbo-weight;
 }
 
 .lightHeader {
+  font-size: 25px;
   font-family: $dashboard-font;
-  font-weight: 400;
+  font-weight: 500;
 }

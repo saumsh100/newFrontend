@@ -2,11 +2,14 @@
 @import '../../../../ui';
 
 .header {
-  padding-left: 15px;
+
 }
 
 .subHeader {
-  padding-left: 15px;
+  margin-bottom: 30px;
+  margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: 1px solid $primary-grey;
   div {
     font-size: 26px;
   }
@@ -56,6 +59,10 @@
 .flexHeader {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 30px;
+  margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: 1px solid $primary-grey;
 }
 
 .button {
@@ -69,6 +76,10 @@
   width: 90%;
   position: relative;
   border-width: thin;
+}
+
+.formContainer {
+  padding-bottom: 30px;
 }
 
 .dayGrid {

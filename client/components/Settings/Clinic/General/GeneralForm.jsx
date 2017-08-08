@@ -105,60 +105,59 @@ export default function GeneralForm({ onSubmit, activeAccount, users }) {
       form="generalSettingsForm"
       onSubmit={onSubmit}
       initialValues={initialValues}
-      className={styles.generalRow}
       data-test-id="generalSettingsForm"
     >
-      <div className={styles.paddingField}>
-        <Field
-          name="name"
-          label="Name"
-          validate={[maxLength25]}
-          data-test-id="name"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="timezone"
-          label="Timezone"
-          component="DropdownSelect"
-          options={options}
-          data-test-id="timezone"
+        <div className={styles.paddingField}>
+          <Field
+            name="name"
+            label="Name"
+            validate={[maxLength25]}
+            data-test-id="name"
+          />
+        </div>
+        <div className={styles.paddingField}>
+          <Field
+            name="timezone"
+            label="Timezone"
+            component="DropdownSelect"
+            options={options}
+            data-test-id="timezone"
 
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="phoneNumber"
-          label="Contact Phone Number"
-          type="tel"
-          data-test-id="phoneNumber"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="contactEmail"
-          label="Contact Email"
-          validate={[emailValid]}
-          data-test-id="contactEmail"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="timeInterval"
-          label="Interval for Booking Widget"
-          component="DropdownSelect"
-          options={optionsInterval}
+          />
+        </div>
+        <div className={styles.paddingField}>
+          <Field
+            name="phoneNumber"
+            label="Contact Phone Number"
+            type="tel"
+            data-test-id="phoneNumber"
+          />
+        </div>
+        <div className={styles.paddingField}>
+          <Field
+            name="contactEmail"
+            label="Contact Email"
+            validate={[emailValid]}
+            data-test-id="contactEmail"
+          />
+        </div>
+        <div className={styles.paddingField}>
+          <Field
+            name="timeInterval"
+            label="Interval for Booking Widget"
+            component="DropdownSelect"
+            options={optionsInterval}
 
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="website"
-          label="Website"
-          data-test-id="website"
-        />
-      </div>
-      {display}
+          />
+        </div>
+        <div className={styles.paddingField}>
+          <Field
+            name="website"
+            label="Website"
+            data-test-id="website"
+          />
+        </div>
+        {display}
     </Form>
   );
 }

@@ -71,24 +71,27 @@ class General extends React.Component {
     let showComponent = null;
     if (activeAccount) {
       showComponent = (
-        <div style={{ display: 'inlineBlock' }}>
+        <div className={styles.outerContainer}>
           <Header
-            title="Basic"
+            title="Clinic Details"
             className={styles.generalHeader}
           />
-          <div className={styles.drop}>
-            <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
-              <AccountLogo account={activeAccount} size="original" />
-              <p>Drop logo here or click to select file.</p>
-            </Dropzone>
-            {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
+          <div className={styles.generalMainContainer}>
+            <div className={styles.formContainer}>
+              <GeneralForm
+                users={this.props.users}
+                onSubmit={this.updateName}
+                activeAccount={activeAccount}
+              />
+            </div>
+            <div className={styles.drop}>
+              <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
+                <AccountLogo account={activeAccount} size="original" />
+                <p>Drop logo here or click to select file.</p>
+              </Dropzone>
+              {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
+            </div>
           </div>
-
-          <GeneralForm
-            users={this.props.users}
-            onSubmit={this.updateName}
-            activeAccount={activeAccount}
-          />
           <Header
             title="Address"
             className={styles.generalHeader}

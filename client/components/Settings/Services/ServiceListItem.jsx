@@ -24,9 +24,6 @@ class ServiceListItem extends Component {
         selectItem={selectItem}
         data-test-id={service}
       >
-        <div className={styles.servicesListItem_icon}>
-          <Icon icon="minus-square-o" size={1} />
-        </div>
         <div className={styles.servicesListItem_text}>
           {service}
         </div>

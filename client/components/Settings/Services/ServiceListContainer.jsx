@@ -1,3 +1,4 @@
+
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -7,7 +8,8 @@ import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
 import styles from './styles.scss';
-import DialogBox from "../../library/DialogBox/index";
+import DialogBox from '../../library/DialogBox/index';
+import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 
 class ServiceListContainer extends Component {
   constructor(props) {
@@ -51,6 +53,12 @@ class ServiceListContainer extends Component {
       return null;
     }
 
+    const formName = 'createServiceForm';
+    const actions = [
+      { label: 'Cancel', onClick: this.setActive, component: Button },
+      { label: 'Save', onClick: this.createService, component: RemoteSubmitButton, props: { form: formName } },
+    ];
+
     return (
       <Col xs={2} className={styles.servicesListContainer}>
         <div className={styles.modalContainer}>
@@ -71,10 +79,12 @@ class ServiceListContainer extends Component {
           />
           <DialogBox
             active={this.state.active}
+            actions={actions}
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
           >
             <CreateServiceForm
+              formName={formName}
               onSubmit={this.createService}
             />
           </DialogBox>

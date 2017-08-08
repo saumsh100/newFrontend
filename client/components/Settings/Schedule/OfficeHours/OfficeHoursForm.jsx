@@ -138,6 +138,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
       initialValues={initialValues}
       data-test-id="officeHoursForm"
       dataId={dataId}
+      className={styles.formContainer}
     >
       <DayHoursForm day="monday" />
       <DayHoursForm day="tuesday" />

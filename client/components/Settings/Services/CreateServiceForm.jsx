@@ -14,7 +14,7 @@ const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : un
 const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
 export default function CreateServiceForm(props) {
-  const { onSubmit } = props;
+  const { onSubmit, formName } = props;
   return (
   <Row className={styles.formContainer__createForm}>
     <Col xs={12}>
@@ -22,9 +22,10 @@ export default function CreateServiceForm(props) {
       <CardHeader title="Create New Service" />
     </Row>
       <Form
-        form="modalServiceForm"
+        form={formName}
         onSubmit={onSubmit}
         data-test-id="createServiceForm"
+        ignoreSaveButton
       >
         <Row className={styles.servicesFormRow__createRow}>
           <Col xs={12}>
@@ -53,14 +54,14 @@ export default function CreateServiceForm(props) {
         <Row className={styles.servicesFormRow__createRow}>
           <Col xs={12}>
               <Field
-              required
-              name="bufferTime"
-              label="Buffer Time"
-              type="number"
-              validate={[notNegative, maxDuration]}
-              normalize={parseNum}
-              data-test-id="bufferTime"
-            />
+                required
+                name="bufferTime"
+                label="Buffer Time"
+                type="number"
+                validate={[notNegative, maxDuration]}
+                normalize={parseNum}
+                data-test-id="bufferTime"
+              />
           </Col>
         </Row>
       </Form>
