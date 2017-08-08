@@ -654,7 +654,7 @@ describe('util/time', () => {
   });
 
   describe('#getAvailableHoursFromInterval', () => {
-    test.only('should return 40 hours for M-F 8-12,1-5', () => {
+    test('should return 40 hours for M-F 8-12,1-5', () => {
       const weeklySchedule = createWeeklyScheduleWithBreaks();
       const startDate = new Date(2017, 7, 7, 6, 0);
       const endDate = new Date(2017, 7, 11, 22, 0);
