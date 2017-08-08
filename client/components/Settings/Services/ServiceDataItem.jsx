@@ -70,13 +70,14 @@ class ServiceDataItem extends Component {
               <IconButton icon="trash" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
             </div>
           </div>
-          <h2 className={styles.header}>Services</h2>
           <div className={styles.servicesFormRow}>
+            <Header title="Service Details" contentHeader />
             <Form
               form={`${service.get('id')}Form`}
               onSubmit={this.updateService}
               initialValues={initialValues}
               data-test-id="serviceDataForm"
+              alignSave="left"
             >
               <Field
                 required
@@ -100,25 +101,24 @@ class ServiceDataItem extends Component {
                 normalize={parseNum}
                 validate={[notNegative, maxDuration]}
               />
-              <div className={styles.servicesPractForm_hiddentext}>
-                Would you like to set this service to be hidden on the booking widget ?
-                <div className={styles.servicesPractForm_hiddentext_toggle}>
+              <div className={styles.servicesFormRow_hiddenText}>
+                <span className={styles.servicesFormRow_hiddenText_text}> Would you like to set this service to be hidden on the booking widget ? </span>
+                <div className={styles.servicesFormRow_hiddenText_toggle}>
                   <Field
                     name="isHidden"
                     component="Toggle"
                   />
                 </div>
               </div>
-              <div className={styles.servicesPractForm_hiddentext}>
-                Would you like to set this service to be the default on the booking widget ?
-                <div className={styles.servicesPractForm_hiddentext_toggle}>
+              <div className={styles.servicesFormRow_hiddenText}>
+                <span className={styles.servicesFormRow_hiddenText_text}>Would you like to set this service to be the default on the booking widget ? </span>
+                <div className={styles.servicesFormRow_hiddenText_toggle}>
                   <Field
                     name="isDefault"
                     component="Toggle"
                   />
                 </div>
               </div>
-
             </Form>
           </div>
         </div>

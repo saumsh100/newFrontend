@@ -78,6 +78,7 @@ class PractitionerBasicData extends Component {
           onSubmit={this.updatePractitioner}
           initialValues={initialValues}
           data-test-id="practitionerBasicDataForm"
+          alignSave="left"
         >
           <div className={styles.practFormContainer_basicForm}>
             <Header title="Personal Details" contentHeader />

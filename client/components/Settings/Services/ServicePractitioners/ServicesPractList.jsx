@@ -15,11 +15,15 @@ class ServicesPractList extends Component {
         className={styles.servicesPractForm_service}
         data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
       >
-        {practitioner.getFullName()}
-        <Field
-          component="Toggle"
-          name={practitioner.get('id')}
-        />
+        <span className={styles.servicesPractForm_service_text}>
+          {practitioner.getFullName()}
+        </span>
+        <div className={styles.servicesPractForm_service_toggle}>
+          <Field
+            component="Toggle"
+            name={practitioner.get('id')}
+          />
+        </div>
       </div>
     );
   }
