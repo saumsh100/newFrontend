@@ -7,7 +7,7 @@
 
 .subHeader {
   margin-bottom: 30px;
-  margin-left: 15px;
+  //margin-left: 15px;
   margin-right: 15px;
   border-bottom: 1px solid $primary-grey;
   div {
@@ -22,7 +22,7 @@
 .breaksDay {
   @extend .day;
   padding-top: 12px;
-  padding-left: 15px;
+  //padding-left: 15px;
 }
 
 .breakRow {
@@ -37,7 +37,7 @@
 .flexCentered {
   display: flex;
   align-items: center;
-  padding-left: 15px;
+  //padding-left: 15px;
 }
 
 .inlineBlock {
@@ -60,7 +60,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
-  margin-left: 15px;
+  //margin-left: 15px;
   margin-right: 15px;
   border-bottom: 1px solid $primary-grey;
 }

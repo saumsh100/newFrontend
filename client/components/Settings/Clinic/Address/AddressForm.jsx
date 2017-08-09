@@ -75,6 +75,7 @@ class AddressForm extends React.Component {
           onSubmit={onSubmit}
           initialValues={this.state}
           data-test-id="addressSettingsForm"
+          alignSave="left"
         >
           <Field
             required

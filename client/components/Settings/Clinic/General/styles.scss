@@ -2,16 +2,14 @@
 
 .outerContainer {
   width: 100%;
-  margin-left: 15px;
 }
 .generalMainContainer {
   display: flex;
   width: 100%;
-
+  box-sizing: border-box;
 }
 .generalHeader {
-  padding: 10px 5px 10px 0px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
 }
@@ -22,6 +20,7 @@
 
 .formContainer {
   width: 40%;
+  margin-bottom: 35px;
 }
 .generalForm{
   width: 100%;
@@ -39,8 +38,14 @@
 }
 
 .drop {
+  padding-top: 10px;
   margin-left: 35px;
   button {
     margin-top: 10px;
   }
+
+}
+
+.paddingSave {
+  padding-bottom: 20px;
 }
