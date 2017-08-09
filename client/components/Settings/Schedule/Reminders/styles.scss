@@ -1,16 +1,21 @@
+@import '../../../../ui';
+
 .headerTitle {
-  margin-left: 30px;
 }
 
 .toggle {
-  margin-left: 32px;
   display: -webkit-box;
   display: flex;
   align-items: center;
   align-content: center;
-  padding-bottom: 25px;
   justify-content: space-between;
   max-width: 200px;
+
+  &_text {
+    font-weight: $large-weight;
+    padding-right: 10px;
+    width: 80px;
+  }
 }
 
 .listItem {
@@ -21,10 +26,15 @@
 
 .edit {
   margin-right: 30px;
+  //background: $clr-dark-blue;
+}
+
+.createButtonContainer {
+  padding-bottom: 20px;
 }
 
 .main {
-  margin-left: 30px;
+  margin-right: 15px;
 }
 
 .list {
@@ -32,8 +42,41 @@
   font-size: 1.0em;
 }
 
+.formContainer {
+  padding-bottom: 15px;
+
+  &_select {
+    padding-top: 10px;
+  }
+}
+
 .header {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #efefef;
+  margin-right: 15px;
+}
+
+
+.fa-envelope {
+  color: $primary-blue;
+  &:hover {
+    color: darken($primary-blue, 5%);
+  }
+}
+
+.fa-phone {
+  color: $primary-yellow;
+  &:hover {
+    color: darken($primary-yellow, 5%);
+  }
+}
+
+.fa-comment {
+  color: $primary-color;
+  &:hover {
+    color: darken($primary-color, 5%);
+  }
 }

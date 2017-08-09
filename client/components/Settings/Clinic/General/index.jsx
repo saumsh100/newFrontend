@@ -101,7 +101,6 @@ class General extends React.Component {
                 activeAccount={activeAccount}
               />
             </div>
-
             <div className={styles.drop}>
               <Header
                 title="Logo"
@@ -114,21 +113,6 @@ class General extends React.Component {
               {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
             </div>
           </div>
-
-          {role === 'SUPERADMIN' &&
-            <Header
-              title="Administrative Information"
-              contentHeader
-            />}
-
-          <div className={styles.formContainer}>
-            {role === 'SUPERADMIN' && <SuperAdminForm
-              role={role}
-              onSubmit={this.updateName}
-              activeAccount={activeAccount}
-            /> }
-          </div>
-
           <Header
             title="Contact Information"
             contentHeader
@@ -140,15 +124,27 @@ class General extends React.Component {
               activeAccount={activeAccount}
             />
           </div>
-
           <Header
             title="Address Information"
-            className={styles.generalHeader}
             contentHeader
           />
-          <Address
-            activeAccount={activeAccount}
-          />
+          <div className={styles.formContainer}>
+            <Address
+              activeAccount={activeAccount}
+            />
+          </div>
+          {role === 'SUPERADMIN' ? <Header
+            title="Administrative Information"
+            contentHeader
+          /> : null }
+
+          <div className={styles.formContainer}>
+            {role === 'SUPERADMIN' ? <SuperAdminForm
+              role={role}
+              onSubmit={this.updateName}
+              activeAccount={activeAccount}
+            /> : null }
+          </div>
         </div>
       );
     }

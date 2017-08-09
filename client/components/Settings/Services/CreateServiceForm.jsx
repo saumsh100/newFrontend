@@ -7,7 +7,7 @@ const parseNum = value => value && parseInt(value);
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
-const maxLength25 = maxLength(25);
+const maxLength25 = maxLength(35);
 
 const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 

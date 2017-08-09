@@ -62,9 +62,12 @@
   height: 65px;
   padding: 10px 0px 10px 30px;
   &_text {
-    font-size: $small-size;
+    font-size: $medium-size;
     font-weight: $large-weight;
     text-transform: capitalize;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
   }
 
   &_icon {

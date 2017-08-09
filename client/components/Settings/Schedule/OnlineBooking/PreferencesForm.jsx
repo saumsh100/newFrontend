@@ -14,13 +14,16 @@ export default function PreferencesForm({ handleSubmit, activeAccount, }) {
       className={styles.preferencesForm}
       initialValues={initialValues}
       data-test-id="selectAccountColorForm"
+      alignSave="left"
     >
-      <Field
-        component="ColorPicker"
-        label="Primary Widget Color"
-        name="bookingWidgetPrimaryColor"
-        data-test-id="colorInput"
-      />
+      <div className={styles.formContainer_pickerField}>
+        <Field
+          component="ColorPicker"
+          label="Primary Widget Color"
+          name="bookingWidgetPrimaryColor"
+          data-test-id="colorInput"
+        />
+      </div>
     </Form>
   );
 }

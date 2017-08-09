@@ -237,8 +237,9 @@ class OfficeHours extends Component {
               className={styles.button}
               onClick={this.createPattern}
               data-test-id="createPatternSchedule"
+              icon="plus"
             >
-              Create New Pattern
+              Add New Pattern
             </Button>
             <Button
               className={styles.button}

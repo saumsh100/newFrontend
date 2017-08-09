@@ -1,16 +1,23 @@
+
+@import '../../../../ui';
+
 .headerTitle {
-  margin-left: 30px;
+
 }
 
 .toggle {
-  margin-left: 32px;
   display: -webkit-box;
   display: flex;
   align-items: center;
   align-content: center;
-  padding-bottom: 25px;
   justify-content: space-between;
   max-width: 200px;
+
+  &_text {
+    font-weight: $large-weight;
+    padding-right: 10px;
+    width: 80px;
+  }
 }
 
 .listItem {
@@ -23,9 +30,22 @@
   margin-right: 30px;
 }
 
-.main {
-  margin-left: 30px;
+.createButtonContainer {
+  padding-bottom: 20px;
 }
+
+.main {
+  margin-right: 15px;
+}
+
+.formContainer {
+  padding-bottom: 15px;
+
+  &_select {
+    padding-top: 10px;
+  }
+}
+
 
 .list {
   font-family: "Gotham-Book";
@@ -36,4 +56,29 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #efefef;
+  margin-right: 15px;
+}
+
+
+.fa-envelope {
+  color: $primary-blue;
+  &:hover {
+    color: darken($primary-blue, 5%);
+  }
+}
+
+.fa-phone {
+  color: $primary-yellow;
+  &:hover {
+    color: darken($primary-yellow, 5%);
+  }
+}
+
+.fa-comment {
+  color: $primary-color;
+  &:hover {
+    color: darken($primary-color, 5%);
+  }
 }

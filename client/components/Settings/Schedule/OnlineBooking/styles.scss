@@ -2,26 +2,31 @@
 
 .mainContainer {
   display: inline-block;
+  width: 100%;
 }
 
 .header {
-  padding-left: 15px;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
 }
 
 .formContainer {
-  padding-left: 15px;
-  width: 100%;
+  padding-top: 20px;
+  &_pickerField {
+    margin-right: 10px;
+  }
+
+  &_intervalField {
+    width: 185px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }
 
 .preferencesForm {
-  display: flex;
-  align-items: center;
 }
 .snippetContainer {
   display: inline-block;
-  padding-left: 15px;
 }
 
 .label {

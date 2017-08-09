@@ -6,7 +6,7 @@ import {
 } from '../constants';
 
 export const initialState = Map({
-  isCollapsed: false,
+  isCollapsed: true,
 });
 
 export default handleActions({

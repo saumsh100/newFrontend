@@ -1,29 +1,33 @@
 .addressForm {
   width: 100%;
+  padding-bottom: 20px;
 }
 .addressRow {
   display: inline-block;
   height: 100%;
-  width: 40%;
+  width: 100%;
 }
 
 .addressCol{
   display: flex;
   align-items: center;
   width: 100%;
-  padding-top: 18px;
   min-height: 50px;
   height: 50px;
   padding-bottom: 30px;
 }
 
 .addressColPlain{
-  width: 40%;
+  width: 100%;
   min-width: 200px;
+  &_padding {
+    padding-bottom: 20px;
+  }
 }
 
 .addressColSelect{
-    width: 40%;
-    min-width: 200px;
-    margin-left: auto;
+  width: 100%;
+  min-width: 200px;
+  padding-bottom: 20px;
+  margin-left: auto;
 }
