@@ -9,6 +9,8 @@ import { IconButton, BadgeHeader, Col, Button } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
+import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+
 import Modal  from '../../library/Modal';
 import styles from './styles.scss';
 import DialogBox from "../../library/DialogBox/index";
@@ -102,6 +104,12 @@ class PractitionerList extends Component {
       });
     }
 
+    const formName = 'addPractitionerForm';
+    const actions = [
+      { label: 'Cancel', onClick: this.setActive, component: Button },
+      { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { form: formName } },
+    ];
+
     return (
       <div className={styles.practMainContainer} >
         <div className={styles.practListContainer}>
@@ -126,8 +134,10 @@ class PractitionerList extends Component {
               onEscKeyDown={this.setActive}
               onOverlayClick={this.setActive}
               title="Add New Practitioner"
+              actions={actions}
             >
               <CreatePractitionerForm
+                formName={formName}
                 onSubmit={this.createPractitioner}
               />
             </DialogBox>

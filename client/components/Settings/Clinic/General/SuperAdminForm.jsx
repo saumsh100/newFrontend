@@ -12,6 +12,8 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
     vendastaId: activeAccount.get('vendastaId'),
     unit: activeAccount.get('unit'),
+    canSendReminders: activeAccount.get('canSendReminders'),
+    canSendRecalls: activeAccount.get('canSendRecalls'),
   };
 
   return (
@@ -22,6 +24,32 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       data-test-id="generalSettingsForm"
       alignSave="left"
     >
+      <div className={styles.paddingField}>
+        <div className={styles.paddingField_flex}>
+          <div className={styles.paddingText} >
+            Can Send Reminders
+          </div>
+          <div className={styles.paddingField_toggle}>
+            <Field
+              component="Toggle"
+              name="canSendReminders"
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.paddingField}>
+        <div className={styles.paddingField_flex}>
+          <div className={styles.paddingText} >
+            Can Send Recalls
+          </div>
+          <div className={styles.paddingField_toggle}>
+            <Field
+              component="Toggle"
+              name="canSendRecalls"
+            />
+          </div>
+        </div>
+      </div>
       <div className={styles.paddingField}>
         <Field
           name="twilioPhoneNumber"
@@ -53,6 +81,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           validate={[notNegative, maxUnitSize]}
         />
       </div>
+
     </Form>
   );
 

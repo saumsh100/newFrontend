@@ -117,7 +117,7 @@ class ServiceDataItem extends Component {
                 >
                   <div className={styles.servicesFormRow_widget_content}>
                     <div className={styles.servicesFormRow_hiddenText}>
-                      <span className={styles.servicesFormRow_hiddenText_text}> Set as hidden ? </span>
+                      <span className={styles.servicesFormRow_hiddenText_text}> Set as hidden </span>
                       <div className={styles.servicesFormRow_hiddenText_toggle}>
                         <Field
                           name="isHidden"
@@ -126,7 +126,7 @@ class ServiceDataItem extends Component {
                       </div>
                     </div>
                     <div className={styles.servicesFormRow_hiddenText}>
-                      <span className={styles.servicesFormRow_hiddenText_text}> Set as default ? </span>
+                      <span className={styles.servicesFormRow_hiddenText_text}> Set as default </span>
                       <div className={styles.servicesFormRow_hiddenText_toggle}>
                         <Field
                           name="isDefault"

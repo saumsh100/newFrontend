@@ -72,10 +72,10 @@ class ServicesPractForm extends Component {
           <div className={styles.servicesPractForm_serviceList}>
             {practitioners.toArray().map((practitioner, index) => {
               return (
-                  <ServicesPractList
-                    key={`${practitioner.get('id')}${index}`}
-                    practitioner={practitioner}
-                  />
+                <ServicesPractList
+                  key={`${practitioner.get('id')}${index}`}
+                  practitioner={practitioner}
+                />
               );
             })}
           </div>
