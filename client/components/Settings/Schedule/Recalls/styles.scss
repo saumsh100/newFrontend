@@ -2,7 +2,6 @@
 @import '../../../../ui';
 
 .headerTitle {
-
 }
 
 .toggle {
@@ -24,6 +23,7 @@
   min-height: 80px;
   display: flex;
   justify-content: space-between;
+  padding-left: 5px;
 }
 
 .edit {
@@ -40,7 +40,6 @@
 
 .formContainer {
   padding-bottom: 15px;
-
   &_select {
     padding-top: 10px;
   }

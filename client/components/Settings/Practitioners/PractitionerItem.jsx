@@ -36,7 +36,7 @@ class PractitionerItem extends Component {
         <div className={styles.practListItem_textContainer}>
           <div className={styles.practListItem_name}>{fullName}</div>
           <div className={styles.practListItem_type}>
-            {practitioner.get('type') || ''}
+            {practitioner.get('type') || 'Dentist'}
           </div>
         </div>
       </ListItem>

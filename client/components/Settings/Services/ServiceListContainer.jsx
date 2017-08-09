@@ -53,6 +53,9 @@ class ServiceListContainer extends Component {
       return null;
     }
 
+    const selectedService = (serviceId ?
+      services.get(serviceId) : services.first());
+
     const formName = 'createServiceForm';
     const actions = [
       { label: 'Cancel', onClick: this.setActive, component: Button },
@@ -96,7 +99,7 @@ class ServiceListContainer extends Component {
               id={service.get('id')}
               service={service.get('name')}
               setServiceId={this.props.setServiceId}
-              serviceId={serviceId}
+              serviceId={selectedService.get('id')}
             />
           );
         })}

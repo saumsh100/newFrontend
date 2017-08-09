@@ -85,6 +85,7 @@ class PractitionerList extends Component {
     const selectedPractitioner = (practitionerId ?
       practitioners.get(practitionerId) : practitioners.first());
 
+
     const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
     const weeklySchedule = weeklyScheduleId ? weeklySchedules.get(weeklyScheduleId) : null;
 
@@ -136,7 +137,7 @@ class PractitionerList extends Component {
                 <PractitionerItem
                   key={practitioner.get('id')}
                   id={practitioner.get('id')}
-                  practitionerId={practitionerId}
+                  practitionerId={selectedPractitioner.get('id')}
                   practitioner={practitioner}
                   fullName={practitioner.getFullName()}
                   setPractitionerId={this.props.setPractitionerId}

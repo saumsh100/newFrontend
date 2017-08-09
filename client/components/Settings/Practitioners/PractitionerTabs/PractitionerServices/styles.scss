@@ -1,8 +1,45 @@
 .formContainer {
   padding-left: 10px;
   padding-top: 15px;
+
+  &_content {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 300px;
+  }
+
+  &_service {
+    display: flex;
+    align-items: center;
+    padding-bottom: 5px;
+
+    &_name {
+      padding-right: 35px;
+      max-width: 250px;
+      width: 300px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &_toggle {
+      margin-left: auto;
+      padding-left: 5px;
+    }
+  }
 }
 
 .allText {
   font-family: 'Gotham-Medium';
+  padding-right: 35px;
+}
+
+.allToggle {
+  margin-left: auto;
+}
+
+.allContainer {
+  display: flex;
+  width: 300px;
+  align-items: center;
 }

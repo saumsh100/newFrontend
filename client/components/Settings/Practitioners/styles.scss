@@ -245,3 +245,32 @@
   width: 200px;
   margin-top: 20px;
 }
+
+
+.chairsContainer {
+  padding: 10px;
+  &_all {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+
+    &_text {
+      width: 120px;
+      font-weight: $large-weight;
+    }
+  }
+
+  &_fields {
+    display: flex;
+    align-items: center;
+    padding-bottom: 5px;
+  }
+
+  &_name {
+    width: 120px;
+  }
+
+  &_toggle {
+    margin-left: auto;
+  }
+}
