@@ -34,6 +34,7 @@ export default {
   // Send Appointment Reminder text via Twilio
   sms({ account, appointment, patient }) {
     // TODO: add phoneNumber logic for patient
+    return Promise.resolve(true);
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
