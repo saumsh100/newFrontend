@@ -1,0 +1,59 @@
+@import '../../ui';
+@import '../../fonts';
+
+.mainContainer {
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+}
+
+.padding {
+  padding-bottom: 20px;
+}
+
+.mediumFont {
+  font-family: $medium-font;
+}
+
+.jumboFont {
+  font-family: $medium-font;
+  font-size: $jumbo-size;
+}
+
+.header {
+  font-size: $header-size;
+  color: $primary-dark;
+  font-weight: $jumbo-weight;
+}
+
+.cardHeaderTitle {
+  font-family: $medium-font;
+  font-size: $title-size;
+  color: $primary-dark;
+}
+
+.cardHeaderCount {
+  font-family: $medium-font;
+  font-size: $count-size;
+  font-weight: 800;
+}
+
+.listHeader {
+  font-family: $medium-font;
+}
+
+.subHeader {
+  color: $primary-darkgrey;
+  font-size: $small-size;
+}
+
+.subHeaderMedium {
+  font-family: $medium-font;
+  color: $primary-darkgrey;
+  font-size: $small-size;
+}
+
+.tab {
+  font-family: $medium-font;
+  color: $primary-darkgrey;
+}
