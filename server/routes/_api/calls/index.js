@@ -20,6 +20,19 @@ const generateDuringFilterSequelize = (startDate, endDate) => {
   };
 };
 
+/**
+ * GET /api/calls
+ *
+ * query parameters:
+ *      ?startDate=:Date
+ *      ?endDate=:Date
+ *      ?noNormalizer=:boolean
+ *      ?limit=:number
+ *      ?skip=:number
+ *
+ * @returns 200 A list of calls sorted in decending order
+ *          401 If not logged in
+ */
 callsRouter.get('/', (req, res, next) => {
   const {
     query,
@@ -35,15 +48,16 @@ callsRouter.get('/', (req, res, next) => {
     limit,
   } = query;
 
-  const limits = limit && skip ? { limit, offset: skip } : {}
+  const limits = limit && skip ? { limit, offset: skip } : {};
 
-  const include = includeArray.map(include => {
-    if (include.as === 'patient') {
+  const include = includeArray.map((included) => {
+    if (included.as === 'patient') {
       return {
         ...include,
         required: false,
       };
     }
+
     return include;
   });
 
@@ -54,32 +68,33 @@ callsRouter.get('/', (req, res, next) => {
       accountId,
       ...range,
     },
+
     ...limits,
     raw: true,
     nest: true,
     include,
-    order: [['startTime', 'DESC']]
-  }).then((calls) => {
+    order: [['startTime', 'DESC']],
+  })
+  .then((calls) => {
     calls = noNormalizer ? calls : normalize('calls', calls);
     return res.send(calls);
   })
   .catch(next);
 });
 
-/**
- * Receive a call from CallRail's webhook API
- */
-callsRouter.post('/', (req, res, next) => {
-  try {
-    console.log(req.body);
-  } catch (err) {
-    next(err);
-  }
-});
-
-/**
- * Update for tag and appointment Booked
- */
+ /**
+  * PUT /api/calls/:callId
+  * body
+  * query parameters:
+  *      ?startDate=:Date
+  *      ?endDate=:Date
+  *      ?noNormalizer=:boolean
+  *      ?limit=:number
+  *      ?skip=:number
+  *
+  * @returns 201 Update for tag and appointment Booked
+  *          401 If not logged in
+  */
 callsRouter.put('/:callId', (req, res, next) => {
   return req.call.update(req.body)
     .then((call) => {
@@ -88,14 +103,24 @@ callsRouter.put('/:callId', (req, res, next) => {
     }).catch(next);
 });
 
-// gives x, y values for a call data for a given startDate and end Date
+/**
+ * GET /api/calls/statsgraph
+ * body
+ * query parameters:
+ *      ?startDate=:Date
+ *      ?endDate=:Date
+ *
+ * @returns 200  gives x, y values for a call data for a given startDate and end Date
+ *          400 If not startDate and/or EndDate
+ *          401 If not logged in
+ */
 callsRouter.get('/statsgraph', (req, res, next) => {
   const {
     query,
     accountId,
   } = req;
 
-  let {
+  const {
     startDate,
     endDate,
   } = query;
@@ -113,6 +138,8 @@ callsRouter.get('/statsgraph', (req, res, next) => {
     },
     raw: true,
   }).then((calls) => {
+    // TODO: handle with one query or extract to a function for testing.
+
     const send = {
       xValues: [],
       yValues: [],
@@ -146,7 +173,16 @@ callsRouter.get('/statsgraph', (req, res, next) => {
   .catch(next);
 });
 
-
+/**
+ * GET /api/calls/stats
+ * body
+ * query parameters:
+ *      ?startDate=:Date
+ *      ?endDate=:Date
+ *
+ * @returns 200  gives call stats during startDate and endDate (or last year)
+ *          401 If not logged in
+ */
 callsRouter.get('/stats', (req, res, next) => {
   const {
     query,
@@ -191,21 +227,23 @@ callsRouter.get('/stats', (req, res, next) => {
       raw: true,
     })
     .then((calls) => {
+      // TODO: handle with one query or extract to a function for testing.
+      const regCheck = /direct/i;
       calls.map((call) => {
-        send.total++;
+        send.total += 1;
         if (call.answered) {
-          send.pickup++;
+          send.pickup += 1;
         }
         if (call.wasApptBooked) {
-          send.booked++;
+          send.booked += 1;
         }
-        if (call.callSource !== 'direct') {
-          send.webTotal++;
+        if (regCheck.test(call.callSource)) {
+          send.webTotal += 1;
           if (call.answered) {
-            send.webPickup++;
+            send.webPickup += 1;
           }
           if (call.wasApptBooked) {
-            send.webBooked++;
+            send.webBooked += 1;
           }
         }
         return null;
@@ -217,3 +255,4 @@ callsRouter.get('/stats', (req, res, next) => {
 });
 
 module.exports = callsRouter;
+

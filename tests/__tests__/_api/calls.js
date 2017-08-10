@@ -18,7 +18,7 @@ const rootUrl = '/_api/calls';
 const call = {
   id: 'asdsads',
   accountId,
-  dateTime: new Date().toISOString(),
+  startTime: '2017-08-10T22:54:00.569Z',
   answered: true,
   callSource: 'direct',
   wasApptBooked: true,
@@ -60,11 +60,67 @@ describe('/api/calls', () => {
       await seedTestCalls();
     });
 
-    test('/ - get chats', () => {
+    test('/ - get chats stats', () => {
       return request(app)
-        .get(`${rootUrl}?limit=15`)
+        .get(`${rootUrl}/stats`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['lastTextMessageId']);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/ - get chats', () => {
+      return request(app)
+        .get(`${rootUrl}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['lastTextMessageId']);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/ - get graph stats 400 as no dates provided', () => {
+      return request(app)
+        .get(`${rootUrl}/statsgraph`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(400);
+    });
+
+    test('/ - get graph stats', () => {
+      return request(app)
+        .get(`${rootUrl}/statsgraph?startDate=2017-07-09T22:54:00.569Z&endDate=2017-08-13T22:54:00.569Z`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['lastTextMessageId']);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/ - get graph stats. Fail due to a bad date', () => {
+      return request(app)
+        .get(`${rootUrl}/statsgraph?startDate=2017-07-9T22:54:00.569Z&endDate=2017-08-13T22:54:00.569Z`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(500);
+    });
+  });
+
+  describe('PUT /', () => {
+    beforeAll(async () => {
+      await seedTestCalls();
+    });
+
+    test('/ - put chats', () => {
+      return request(app)
+        .put(`${rootUrl}/asdsads`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          wasApptBooked: false,
+        })
+        .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['lastTextMessageId']);
           expect(body).toMatchSnapshot();
