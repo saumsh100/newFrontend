@@ -10,7 +10,7 @@ import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
 class CallList extends Component {
   constructor(props) {
     super(props);
-    this.sendEdit=this.sendEdit.bind(this);
+    this.sendEdit = this.sendEdit.bind(this);
   }
 
   sendEdit(id, e) {

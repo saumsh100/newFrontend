@@ -4,8 +4,6 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import Loader from 'react-loader';
 import jwt from 'jwt-decode';
-// import _ from 'lodash';
-// import { Map } from 'immutable';
 import PhoneGraph from './PhoneGraph';
 import PhoneCalls from './PhoneCalls';
 import { fetchEntitiesRequest, fetchEntities, createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
