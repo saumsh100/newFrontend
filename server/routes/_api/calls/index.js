@@ -53,7 +53,7 @@ callsRouter.get('/', (req, res, next) => {
   const include = includeArray.map((included) => {
     if (included.as === 'patient') {
       return {
-        ...include,
+        ...included,
         required: false,
       };
     }
