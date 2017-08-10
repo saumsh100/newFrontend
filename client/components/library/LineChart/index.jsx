@@ -9,6 +9,8 @@ export default function LineChart(props) {
     labels = [],
     displayLegend,
     displayTooltips,
+    height,
+    width,
   } = props;
 
   const legend = {
@@ -55,6 +57,8 @@ export default function LineChart(props) {
     <Line
       data={newData}
       options={options}
+      height={height}
+      width={width}
     />
   );
 }

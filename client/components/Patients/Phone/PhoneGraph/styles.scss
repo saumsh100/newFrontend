@@ -1,0 +1,40 @@
+@import '../../../../ui.scss';
+
+
+.booked {
+  border-top: 5px solid $inactive-color;
+  margin:0 20px 20px 20px;
+  min-width: 250px;
+  overflow: hidden;
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin-left: 15px;
+    justify-content: space-between;
+  }
+  &__body {
+    position: relative;
+    canvas {
+      max-width: 99%;
+    }
+    @media screen and (max-width: 900px){
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+.floatRight {
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.formDrop {
+  padding: 10px;
+  button {
+    margin-left: auto;
+  }
+}

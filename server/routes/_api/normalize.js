@@ -20,6 +20,12 @@ const appointmentSchema = () => {
   });
 };
 
+const callSchema = () => {
+  return new schema.Entity('calls', {
+    patient: patientSchema(),
+  });
+};
+
 const chairSchema = () => {
   return new schema.Entity('chairs');
 };
@@ -149,6 +155,7 @@ const SCHEMAS = {
   // Models (singleFetch/findOne)
   account: accountSchema(),
   appointment: appointmentSchema(),
+  call: callSchema(),
   chair: chairSchema(),
   enterprise: enterpriseSchema(),
   chat: chatSchema(),
@@ -174,6 +181,7 @@ const SCHEMAS = {
   // Collections (list/find)
   accounts: [accountSchema()],
   appointments: [appointmentSchema()],
+  calls: [callSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
   enterprises: [enterpriseSchema()],
