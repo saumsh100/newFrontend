@@ -40,13 +40,13 @@ Object {
 
 exports[`/api/calls GET / / - get chats stats 1`] = `
 Object {
-  "booked": 0,
+  "booked": 1,
   "entities": Object {},
-  "pickup": 0,
-  "total": 0,
-  "webBooked": 0,
-  "webPickup": 0,
-  "webTotal": 0,
+  "pickup": 1,
+  "total": 1,
+  "webBooked": 1,
+  "webPickup": 1,
+  "webTotal": 1,
 }
 `;
 

@@ -62,7 +62,7 @@ describe('/api/calls', () => {
 
     test('/ - get chats stats', () => {
       return request(app)
-        .get(`${rootUrl}/stats`)
+        .get(`${rootUrl}/stats?startDate=2017-07-09T22:54:00.569Z&endDate=2017-08-13T22:54:00.569Z`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {

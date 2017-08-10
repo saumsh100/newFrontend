@@ -219,7 +219,7 @@ callsRouter.get('/stats', (req, res, next) => {
     return Call.findAll({
       where: {
         destinationNum,
-        dateTime: {
+        startTime: {
           gt: new Date(startDate).toISOString(),
           lt: new Date(endDate).toISOString(),
         },
