@@ -371,10 +371,8 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       sendStats.services = {};
       sendStats.patients = {};
       sendStats.newPatients = 0;
-      console.log('test1', moment(start), moment(end))
       const range = moment().range(moment(start), moment(end));
-      console.log('test2')
-
+    
       const numberOfDays = moment(end).diff(moment(start), 'days');
       const dayOfWeek = moment(start).day();
       const weeks = Math.floor(numberOfDays / 7);
