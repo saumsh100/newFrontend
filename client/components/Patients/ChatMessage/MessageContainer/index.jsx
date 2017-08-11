@@ -103,9 +103,7 @@ class MessageContainer extends Component {
           lastWeek: '[Last] dddd h:mm a',
           sameElse: 'YYYY DD MM, h:mm a',
         })}</div>;
-
-        console.log(this.props.activeAccount.toJS().twilioPhoneNumber)
-
+        
         if (message.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
           userPhone = message.to;
         } else {
