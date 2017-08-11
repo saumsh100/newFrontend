@@ -16,7 +16,7 @@ export default function ReminderData(props) {
 
   const displayStatus = sentReminder.isConfirmed ? 'Reminder Confirmed' : 'Reminder Sent';
 
-  let icon = reminder.primaryType.toLowerCase();
+  let icon = reminder ? reminder.toJS().primaryType.toLowerCase() : null;
 
   if (icon === 'sms') {
     icon = 'comment';

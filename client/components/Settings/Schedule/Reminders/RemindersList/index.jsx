@@ -18,7 +18,7 @@ class RemindersList extends Component {
         <div className={styles.main}>
           <div className={styles.userName}>
             <p className={styles.list}>Type: {primaryType.toUpperCase()}</p>
-            <p className={styles.list}>Every {length / 60 / 60 } hours</p>
+            <p className={styles.list}>{length / 60 / 60 } hours before appointment</p>
           </div>
         </div>
         <div>

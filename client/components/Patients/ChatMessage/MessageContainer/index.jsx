@@ -104,6 +104,8 @@ class MessageContainer extends Component {
           sameElse: 'YYYY DD MM, h:mm a',
         })}</div>;
 
+        console.log(this.props.activeAccount.toJS().twilioPhoneNumber)
+
         if (message.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
           userPhone = message.to;
         } else {
@@ -206,9 +208,11 @@ MessageContainer.propTypes = {
   receiveMessage: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, auth }) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+
   return {
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
+    activeAccount,
   };
 }
 

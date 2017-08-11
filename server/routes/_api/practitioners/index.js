@@ -162,10 +162,23 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
         practitionerData.weeklyScheduleId = weeklySchedule.dataValues.id;
         return req.practitioner
         .update(practitionerData)
-        .then((practitioner) => {
-          practitioner = practitioner.get({ plain: true });
-          practitioner = practitioner.weeklySchedule = weeklySchedule.get({ plain: true });
-          return res.status(201).send(normalize('practitioner', practitioner));
+        .then(async (practitioner) => {
+          const prac = await Practitioner.findOne({
+            where: {
+              id: practitioner.dataValues.id,
+            },
+            include: [
+              {
+                model: WeeklySchedule,
+                as: 'weeklySchedule',
+                required: false,
+              },
+            ],
+            raw: true,
+            nest: true,
+          });
+
+          return res.status(201).send(normalize('practitioner', prac));
         });
       });
     });

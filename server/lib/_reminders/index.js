@@ -6,21 +6,22 @@ import { getAppointmentsFromReminder } from './helpers';
 import sendReminder from './sendReminder';
 
 async function sendSocket(io, chatId) {
-  const chat = await Chat.findOne({
+  let chat = await Chat.findOne({
     where: { id: chatId },
     include: [
       {
         model: TextMessage,
         as: 'textMessages',
+        order: ['createdAt', 'DESC'],
       },
       {
         model: Patient,
         as: 'patient',
       },
     ],
-
-    order: [[{ model: TextMessage, as: 'textMessages' }, 'createdAt']],
   });
+
+  chat = chat.get({ plain: true });
 
   await io.of('/dash')
     .in(chat.patient.accountId)
@@ -78,11 +79,11 @@ export async function sendRemindersForAccount(account, date) {
 
         // Now save TM
         const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
-
+        console.log(textMessage.get({ plain: true }))
         // Update Chat to have new textMessage
         await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
 
-        // Now update the clients in real-time
+        // // Now update the clients in real-time
         await sendSocket(global.io, chat.id);
       }
     }

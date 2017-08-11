@@ -247,7 +247,7 @@ module.exports = {
       appointments.push(appointment);
     }
 
-    await queryInterface.bulkInsert('Appointments', appointments);
+    // await queryInterface.bulkInsert('Appointments', appointments);
 
     const patients2 = [];
 

@@ -53,7 +53,7 @@ class RemindersList extends Component {
                 <ReminderData
                   key={index}
                   index={index}
-                  reminder={reminders.get(sentReminder.get('reminderId')).toJS()}
+                  reminder={reminders.get(sentReminder.get('reminderId'))}
                   patient={patients.get(sentReminder.get('patientId')).toJS()}
                   sentReminder={sentReminder}
                   handleReminderClick={this.handleReminderClick}

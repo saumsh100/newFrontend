@@ -17,12 +17,11 @@ export default function RecallData(props) {
     return null;
   }
 
-  const recall = recallJS.toJS();
   const patient = patientJS.toJS();
 
-  const displayStatus = sentRecall.isConfirmed ? 'Recall Confirmed' : 'Recall Sent';
+  let icon = recallJS ? recallJS.toJS().primaryType.toLowerCase() : null;
 
-  let icon = recall.primaryType.toLowerCase();
+  const displayStatus = sentRecall.isConfirmed ? 'Recall Confirmed' : 'Recall Sent';
 
   if (icon === 'sms') {
     icon = 'comment';
