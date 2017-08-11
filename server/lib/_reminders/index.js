@@ -79,7 +79,7 @@ export async function sendRemindersForAccount(account, date) {
 
         // Now save TM
         const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
-        console.log(textMessage.get({ plain: true }))
+
         // Update Chat to have new textMessage
         await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
 
