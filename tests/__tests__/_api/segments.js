@@ -39,9 +39,9 @@ describe('/api/segments', () => {
         name: 'Test segment module',
         description: 'This is just a dummy data',
         rawWhere: {
-          age: ['0-5','6-15'],
+          age: ['0-5', '6-15'],
           gender: 'female',
-          city: 'Belgrade'
+          city: 'Belgrade',
         },
       })
       .set('Authorization', `Bearer ${token}`)
@@ -58,9 +58,9 @@ describe('/api/segments', () => {
       .send({
         name: 'Test segment module 2',
         rawWhere: {
-          age: ['0-5','6-15'],
+          age: ['0-9', '10-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
           gender: 'male',
-          city: 'Belgrade'
+          city: 'Belgrade',
         },
       })
       .set('Authorization', `Bearer ${token}`)
@@ -147,14 +147,16 @@ describe('/api/segments', () => {
       .post(`${rootUrl}/preview`)
       .send({
         rawWhere: {
-          age: ['0-5','6-15'],
+          age: ['0-5', '6-15'],
           gender: 'male',
-          city: 'Belgrade'
-        }
+          city: 'Belgrade',
+        },
       })
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body }) => {
+        expect(body.totalActiveUsers).toBe(210);
+        expect(body.totalAppointments).toBe(105);
         console.log(body);
       }));
   });
@@ -165,13 +167,41 @@ describe('/api/segments', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {
+        expect(body.length).toBe(2);
+        expect(body[0].city).toBe('Belgrade');
+        expect(body[1].city).toBe('Kostolac');
         console.log(body, error);
       }));
+  });
+  const object = JSON.stringify({
+    age: ['0-9', '10-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+    // age: ['0-9'],
   });
 
   describe('GET /api/enterprise/dashboard/patients', () => {
     test('Preview items', async () => request(app)
-      .get(`/_api/enterprises/dashboard/patients?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .get(`/_api/enterprises/dashboard/patients?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}&rawWhere=${object}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body, error }) => {
+        console.log(body, error);
+      }));
+  });
+
+
+  describe('GET /api/enterprise/dashboard/patients/region', () => {
+    test('Preview items', async () => request(app)
+      .get(`/_api/enterprises/dashboard/patients/region?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body, error }) => {
+        console.log(body, error);
+      }));
+  });
+
+  describe('GET /api/enterprise/dashboard/patients/practitioner', () => {
+    test('Preview items', async () => request(app)
+      .get(`/_api/enterprises/dashboard/patients/practitioner?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {

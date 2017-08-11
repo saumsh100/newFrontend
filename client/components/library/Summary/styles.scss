@@ -1,0 +1,36 @@
+@import '../../../ui.scss';
+
+.summary {
+  margin: 20px 0 0 0;
+  padding: 20px 15px 0 15px;
+  border-top: 1px solid $clr-bg-dark-grey;
+  text-align: left;
+  overflow: hidden;
+
+  strong {
+    font-size: 11px;
+    font-weight: bold;
+    float: left;
+  }
+  span {
+    font-size: 11px;
+    float: right;
+    max-width: 50%;
+    text-align: right;
+    &:first-letter {
+      text-transform:capitalize;
+    }
+  }
+
+}
+
+.container {
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+
+.title {
+  font-size: 10px;
+  color: $clr-dark-grey;
+}

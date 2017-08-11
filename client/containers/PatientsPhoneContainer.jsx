@@ -1,6 +1,9 @@
 
 import React, { PropTypes, Component } from 'react';
-import PatientsPhone from '../components/Patients/Phone';
+import { fetchEntities } from '../thunks/fetchEntities';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import Phone from '../components/Patients/Phone/';
 
 class PatientsPhoneContainer extends Component {
   constructor(props) {
@@ -13,11 +16,24 @@ class PatientsPhoneContainer extends Component {
 
   render() {
     return (
-      <PatientsPhone />
+      <Phone />
     );
   }
 }
 
 PatientsPhoneContainer.propTypes = {};
 
-export default PatientsPhoneContainer;
+function mapStateToProps({ entities }) {
+
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntities,
+  }, dispatch);
+}
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(PatientsPhoneContainer);

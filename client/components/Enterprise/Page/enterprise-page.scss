@@ -42,3 +42,36 @@ $page-padding: 20px;
 .filter-container {
   margin: em(16px) 0;
 }
+
+.dropdown {
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  background-color: $clr-bg-dark-grey;
+  color: $clr-dark-grey;
+  vertical-align: middle;
+  margin-left: -5px;
+  border-left: 1px solid darken($clr-bg-dark-grey, 5%);
+
+  & > div:first-child {
+    height: 30px;
+    padding: 0;
+    border: 0;
+    text-align: center;
+    & i {
+      margin-left: 0;
+    }
+  }
+}
+
+.dropdown:hover {
+  background-color: darken($clr-bg-dark-grey, 5%);
+  color: darken($clr-dark-grey, 5%);
+}
+
+.dateRangeMenu > :global(.dd-menu-items) > :global(.dd-items-right) {
+  width: 350px;
+  background-color: $primary-grey;
+  padding: 20px;
+  border-radius: 10px;
+}

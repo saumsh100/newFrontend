@@ -62,6 +62,8 @@ class OfficeHours extends Component {
   sendEdit(i, values) {
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
 
+    weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
+
     Object.keys(values).forEach((key) => {
       if (values[key].breaks) {
         weeklySchedule.weeklySchedules[i][key].breaks = values[key].breaks;
@@ -117,6 +119,8 @@ class OfficeHours extends Component {
 
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
     const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
+
+    weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
     if (!weeklyScheduleNew.startDate) {
       window.alert('Please put in a start date before creating a pattern!');

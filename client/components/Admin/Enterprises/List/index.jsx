@@ -63,7 +63,7 @@ class EnterpriseList extends Component {
         {enterprises ? (
           <select onChange={e => this.selectEnterprise(e.target.value)} value={enterpriseId}>
             { enterprises.map(enterprise =>
-              <option value={enterprise.id}>{enterprise.name}</option>
+              <option key={enterprise.id} value={enterprise.id}>{enterprise.name}</option>
               ) }
           </select>
           ) : null}

@@ -10,6 +10,6 @@ const SegmentSchema = {
   rawWhere: null,
 };
 
-export default class Reminder extends createModel(SegmentSchema) {
+export default class Segment extends createModel(SegmentSchema) {
 
 }

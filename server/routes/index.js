@@ -68,7 +68,7 @@ rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
 
 rootRouter.post('/userCheck', (req, res, next) => {
   const username = req.body.email.toLowerCase().trim();
-  User.findOne({ username })
+  User.findOne({ where: { username } })
     .then((user) => {
       res.send({ exists: !!user });
     })

@@ -4,6 +4,20 @@
   position: relative;
 }
 
+.addSegmentName {
+  width: 400px;
+  position: relative;
+}
+
+.addSegmentNameInput {
+  padding: 0;
+  margin: 0 0 0 20px;
+}
+
+.addSegmentNameRow {
+  padding: 0 0 20px 0;
+}
+
 .gauge {
   position: absolute;
   top: 0;
@@ -92,6 +106,7 @@
   padding-top: 49px;
   height: 551px;
   text-align: center;
+  position: relative;
 }
 
 .formContainer {
@@ -123,10 +138,10 @@
 
 .trashIcon {
   position: absolute;
-  left: 845px;
+  right: 5px;
   top: 5px;
   font-size: 1.4em;
-  color: $primary-grey;
+  color: $primary-color;
 }
 
 .addNewSegment {

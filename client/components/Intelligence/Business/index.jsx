@@ -44,7 +44,7 @@ class Business extends Component {
     Promise.all([
       this.props.fetchEntitiesRequest({
         id: 'callStats',
-        url: '/api/calls/',
+        url: '/api/calls/stats',
         params }),
       this.props.fetchEntitiesRequest({
         id: 'appointmentStats',

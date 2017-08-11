@@ -6,6 +6,7 @@ import {
   FETCH_ENTITIES,
   RECEIVE_ENTITIES,
   DELETE_ENTITY,
+  DELETE_ALL_ENTITY,
   ADD_ENTITY,
   UPDATE_ENTITY,
   SEND_MESSAGE_ON_CLIENT,
@@ -44,6 +45,8 @@ import Service from '../entities/models/Service';
 import services from '../entities/collections/services';
 import Segment from '../entities/models/Segment';
 import segments from '../entities/collections/segments';
+import Calls from '../entities/models/Call';
+import calls from '../entities/collections/calls';
 import Chairs from '../entities/models/Chair';
 import chairs from '../entities/collections/chairs';
 import chat from '../entities/collections/chat';
@@ -80,6 +83,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => receive
   availabilities: new availabilities(),
   dialogs: new dialogs(),
   patients: new patients(),
+  calls: new calls(),
   chairs: new chairs(),
   chats: new chat(),
   waitSpots: new waitSpots(),
@@ -112,6 +116,7 @@ const Models = {
   timeOffs: TimeOff,
   dialogs: Dialogs,
   patients: Patient,
+  calls: Calls,
   chairs: Chairs,
   chats: Chat,
   availabilities: Availability,
@@ -141,6 +146,16 @@ export default handleActions({
     const model = newState.getIn([key, 'models', id]);
     if (model) {
       return newState.deleteIn([key, 'models', id]);
+    }
+
+    return state;
+  },
+
+  [DELETE_ALL_ENTITY](state, { payload }) {
+    const newState = state;
+    const model = newState.getIn([payload, 'models']);
+    if (model) {
+      return newState.deleteIn([payload, 'models']);
     }
 
     return state;

@@ -1,23 +1,20 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import styles from './styles.scss';
 
-class Pill extends PureComponent {
+function Pill({ selected, pillId, title, onClick }) {
+  const className = classnames(styles.pill, selected ? styles.selectedPill : null);
 
-  render() {
-    const className = classnames(styles.pill, this.props.selected ? styles.selectedPill : null);
-
-    return (
-      <span
-        className={className}
-        onClick={() => this.props.onClick(this.props.pillId)}
-      >
-        {this.props.title}
-      </span>
-    );
-  }
+  return (
+    <span
+      className={className}
+      onClick={() => onClick(pillId)}
+    >
+      {title}
+    </span>
+  );
 }
 
 Pill.propTypes = {

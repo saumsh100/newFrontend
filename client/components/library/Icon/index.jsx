@@ -15,9 +15,9 @@ export default function Icon(props) {
   const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
 
-  const finalStyles = Object.assign({}, { fontSize: size + 'em' }, style);
+  const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
 
-  return <i className={classes} data-test-id={props["data-test-id"]} style={finalStyles} onClick={onClick} />;
+  return <i className={classes} data-test-id={props['data-test-id']} style={finalStyles} onClick={onClick} />;
 }
 
 Icon.defaultProps = {
@@ -29,5 +29,6 @@ Icon.propTypes = {
   size: PropTypes.number,
   className: PropTypes.string,
   onClick: PropTypes.func,
-  style: PropTypes.object,
+  style: PropTypes.shape({}),
+  'data-test-id': PropTypes.string,
 };

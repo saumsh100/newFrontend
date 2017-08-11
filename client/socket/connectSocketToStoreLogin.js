@@ -91,6 +91,14 @@ export default function connectSocketToStoreLogin(store, socket) {
       });
 
       /**
+       * Calls Socket
+       */
+      socket.on('receivedCall', (data) => {
+        const message = `Call from ${data.callerNum} (${data.callerName})`;
+        window.alert(message);
+      });
+
+      /**
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {

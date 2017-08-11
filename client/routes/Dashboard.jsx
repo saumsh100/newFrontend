@@ -48,7 +48,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
       />
     </DashboardApp>;
 
-  const signUp = /^\/signup\/.+\/$/i;
+  const signUp = /^\/signup\/.+$/i;
   const urlTest = (signUp.test(history.location.pathname) ? history.location.pathname : '/signup');
 
   return (

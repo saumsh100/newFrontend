@@ -27,6 +27,7 @@ invitesRouter.get('/:accountId/invites', (req, res, next) => {
     raw: true,
     where: {
       accountId,
+      isDeleted: false,
     },
   }).then((invites) => {
     res.send(normalize('invites', invites));
@@ -38,16 +39,27 @@ invitesRouter.get('/:accountId/invites', (req, res, next) => {
  *
  * - create a user invite for the account
  */
-invitesRouter.post('/:accountId/invites', (req, res, next) => {
+invitesRouter.post('/:accountId/invites', async (req, res, next) => {
   // Override accountId, and add token
   const newInvite = req.body;
   newInvite.accountId = req.accountId;
   newInvite.token = uuid();
   newInvite.enterpriseId = req.account.enterprise.id;
 
+  const checkEmail = await Invite.findAll({
+    where: {
+      email: newInvite.email,
+    },
+  });
+
+  if (checkEmail[0]) {
+    return res.sendStatus(400);
+  }
+
   return Invite.create(newInvite)
     .then((inviteData) => {
       const invite = inviteData.dataValues;
+
       const fullUrl = `${req.protocol}://${req.get('host')}/signupinvite/${invite.token}`;
       User.findAll({
         where: {

@@ -18,7 +18,10 @@ class CircleGague extends PureComponent {
         r={(this.props.radius - 15) / 2}
       />
       <circle
-        style={{ strokeDasharray: circumference, strokeDashoffset: circumference - (circumference * (this.props.percentage / 100)) }}
+        style={{
+          strokeDasharray: circumference,
+          strokeDashoffset:
+            circumference - (circumference * ((this.props.percentage || 100) / 100)) }}
         className={className}
         cx={this.props.radius / 2}
         cy={this.props.radius / 2}

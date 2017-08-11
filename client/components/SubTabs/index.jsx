@@ -18,7 +18,6 @@ const ROUTES = {
     {
       to: '/patients/phone',
       label: 'Phone',
-      disabled: true,
     },
   ],
 

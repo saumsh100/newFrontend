@@ -4,6 +4,7 @@ import moment from 'moment';
 import checkPermissions from '../../middleware/checkPermissions';
 import { sequelizeLoader } from '../util/loaders';
 import { Patient, Call } from '../../_models';
+import { namespaces } from '../../config/globals';
 
 const callsRouterSequelize = Router();
 
@@ -58,6 +59,9 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
         console.log(`Received communication from unknown number: ${customer_phone_number}.`);
         Call.create(Object.assign({}, data, callData));
       }
+    }).then(() => {
+      const io = req.app.get('socketio');
+      return io.of(namespaces.dash).in(req.account.id).emit('receivedCall', data);
     });
 
   res.status(201).send(201);

@@ -1,6 +1,7 @@
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -33,6 +34,7 @@ const enterprise = {
   name: 'Test Enterprise',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  plan: 'ENTERPRISE',
 };
 
 const account = {
@@ -114,6 +116,19 @@ const superAdminUser = {
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
 
+const superAdminUser2 = {
+  id: uuid(),
+  enterpriseId,
+  activeAccountId: accountId,
+  permissionId: superAdminPermissionId,
+  username: 'justin@carecru.com',
+  password: bcrypt.hashSync('justin', passwordHashSaltRounds),
+  firstName: 'Justin',
+  lastName: 'Sharp',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
 const WeeklySchedule = {
   id: weeklyScheduleId,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -138,12 +153,13 @@ module.exports = {
       managerUser,
       ownerUser,
       superAdminUser,
+      superAdminUser2,
     ]);
 
     const patients = [];
 
     for (let i = 0; i < 100; i += 1) {
-      const firstName = faker.name.firstName();
+      const firstName = faker.name.firstName('male');
       const lastName = faker.name.lastName();
       const phoneNumber = faker.phone.phoneNumberFormat(0);
       patients.push({
@@ -153,8 +169,34 @@ module.exports = {
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
-        birthDate: faker.date.past(),
+        birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
         gender: 'male',
+        language: 'English',
+        insurance: JSON.stringify({
+          insurance: 'Lay Health Insurance',
+          memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+          contract: '4234rerwefsdfsd',
+          carrier: 'sadasadsadsads',
+          sin: 'dsasdasdasdadsasad',
+        }),
+        createdAt: faker.date.past(),
+        updatedAt: new Date(),
+      });
+    }
+
+    for (let i = 0; i < 30; i += 1) {
+      const firstName = faker.name.firstName('female');
+      const lastName = faker.name.lastName();
+      const phoneNumber = faker.phone.phoneNumberFormat(0);
+      patients.push({
+        id: uuid(),
+        accountId,
+        firstName,
+        lastName,
+        email: `${firstName}.${lastName}@google.ca`,
+        mobilePhoneNumber: phoneNumber,
+        birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+        gender: 'female',
         language: 'English',
         insurance: JSON.stringify({
           insurance: 'Lay Health Insurance',
@@ -194,8 +236,8 @@ module.exports = {
         accountId,
         practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
         patientId: patient.id,
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: moment().add('-30', 'days').add('-5', 'minutes').toISOString(),
+        endDate: moment().add('-30', 'days').add('30', 'minutes').toISOString(),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -228,7 +270,7 @@ module.exports = {
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
         }),
-        createdAt: new Date(),
+        createdAt: faker.date.past(),
         updatedAt: new Date(),
       });
     }
@@ -259,8 +301,8 @@ module.exports = {
         accountId: accountId2,
         practitionerId: practitioners2[Math.floor(Math.random() * 10) + 0].id,
         patientId: patient.id,
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: moment().add('-30', 'days').add('-5', 'minutes').toISOString(),
+        endDate: moment().add('-30', 'days').add('30', 'minutes').toISOString(),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -279,5 +321,5 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
-  }
+  },
 };

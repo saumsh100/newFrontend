@@ -120,7 +120,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
-          <SubNavItem path="/patients/phone" label="Phone Calls" disabled/>
+          <SubNavItem path="/patients/phone" label="Phone Calls" />
         </MultiNavItem>
 
         <SingleNavItem path="/reputation" icon="star" label="Reputation" disabled />

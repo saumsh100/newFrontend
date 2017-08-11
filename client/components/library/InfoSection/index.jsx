@@ -8,14 +8,14 @@ export default function InfoSection({ title, className, children }) {
   const style = classnames(styles.infoSection, className);
   return (
     <div className={style}>
-      <h4>{title}</h4>
+      <h3>{title}</h3>
       <span>{children}</span>
     </div>
   );
 }
 
 InfoSection.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
 };

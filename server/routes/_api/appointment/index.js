@@ -1,5 +1,6 @@
 
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
@@ -8,6 +9,8 @@ import normalize from '../normalize';
 import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
 import checkIsArray from '../../../middleware/checkIsArray';
 import globals, { namespaces } from '../../../config/globals';
+
+const moment = extendMoment(Moment);
 
 const appointmentsRouter = Router();
 
@@ -369,7 +372,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       sendStats.patients = {};
       sendStats.newPatients = 0;
       const range = moment().range(moment(start), moment(end));
-
+    
       const numberOfDays = moment(end).diff(moment(start), 'days');
       const dayOfWeek = moment(start).day();
       const weeks = Math.floor(numberOfDays / 7);

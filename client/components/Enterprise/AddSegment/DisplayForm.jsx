@@ -1,10 +1,14 @@
 
 import React, { PropTypes, Component } from 'react';
+import Loader from 'react-loader';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 
-import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
-
-import { Grid, Row, Col, Form, Tabs, Tab, Pill, SelectPill, InfoSection, Button, Field } from '../../library';
+import { Grid, Row, Col, Form, Tabs, Tab, Pill, SelectPill, InfoSection, Button, Field, Summary } from '../../library';
 import Gauge from './Gauge';
+import { fetchCities } from '../../../thunks/segments';
+
 import styles from './styles.scss';
 
 class DisplayForm extends Component {
@@ -16,19 +20,30 @@ class DisplayForm extends Component {
     this.onTabChange = this.onTabChange.bind(this);
   }
 
+  componentDidMount() {
+    this.props.fetchCities(this.props.enterpriseId);
+  }
+
   onTabChange(index) {
     this.setState({ index });
+  }
+
+  calculatePercentage(num, total) {
+    if (total === 0) {
+      return 100;
+    }
+    return _.round((num / total) * 100, 2);
   }
 
   render() {
     const {
     formName,
     handleSubmit,
-    selectedSegment,
+    segments,
+    edit,
   } = this.props;
 
-    const title = selectedSegment ? 'Edit Segment' : 'Create New Segment';
-
+    const title = edit ? 'Edit Segment' : 'Create New Segment';
     return (
       <Grid className={styles.addNewSegment}>
         <Row className={styles.addNewSegment_mainContainer}>
@@ -37,11 +52,18 @@ class DisplayForm extends Component {
               form={formName}
               onSubmit={handleSubmit}
               ignoreSaveButton
-              initialValues={{}}
+              initialValues={{
+                city: this.props.city || undefined,
+              }}
               data-test-id="createSegmentForm"
             >
               <div className={styles.title}>{title}</div>
-              <Tabs navClass={styles.nav} index={this.state.index} contentClass={styles.tabContent} onChange={this.onTabChange}>
+              <Tabs
+                navClass={styles.nav}
+                index={this.state.index}
+                contentClass={styles.tabContent}
+                onChange={this.onTabChange}
+              >
                 <Tab label="Demographics" className={styles.tab} activeClassName={styles.activeTab}>
                   <Grid className={styles.grid}>
                     <Row>
@@ -59,7 +81,7 @@ class DisplayForm extends Component {
                           <Pill title="18-24" pillId="18-24" />
                           <Pill title="25-34" pillId="25-34" />
                           <Pill title="35-44" pillId="35-44" />
-                          <Pill title="45-44" pillId="45-44" />
+                          <Pill title="45-54" pillId="45-54" />
                           <Pill title="55-64" pillId="55-64" />
                           <Pill title="65+" pillId="65+" />
                         </SelectPill>
@@ -74,9 +96,9 @@ class DisplayForm extends Component {
                           onChange={this.props.handleGenderChange}
                           selected={[this.props.gender]}
                         >
-                          <Pill title="Female" pillId="f" />
-                          <Pill title="Male" pillId="m" />
-                          <Pill title="Unknown" pillId="u" />
+                          <Pill title="Female" pillId="female" />
+                          <Pill title="Male" pillId="male" />
+                          <Pill title="Unknown" pillId="unknown" />
                         </SelectPill>
                       </Col>
                     </Row>
@@ -88,10 +110,11 @@ class DisplayForm extends Component {
                         <Field
                           component="DropdownSelect"
                           align="left"
-                          options={[
-                              { label: 'Toronto', value: 1 },
-                              { label: 'Quebec', value: 2 },
-                          ]}
+                          options={
+                            this.props.segments.cities.map(city => ({
+                              label: city.city, value: city.city,
+                            }))
+                          }
                           name="city"
                           borderColor="primaryColor"
                           required
@@ -99,44 +122,80 @@ class DisplayForm extends Component {
                       </Col>
                     </Row>
                   </Grid>
-                    
+
                 </Tab>
-                {/* <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
-                    <span>Behavior</span>
-                  </Tab>
-                  <Tab label="Technology" className={styles.tab} activeClassName={styles.activeTab}>
-                    <span>Technology</span>
-                  </Tab>*/}
+                <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
+                  <span>Coming soon</span>
+                </Tab>
+                <Tab label="Custom" className={styles.tab} activeClassName={styles.activeTab}>
+                  <span>Coming soon</span>
+                </Tab>
               </Tabs>
             </Form>
-              
+
             <div className={styles.buttons}>
-              <Button flat>Apply</Button>
-              <RemoteSubmitButton
+              <Button
+                flat
+                onClick={this.props.handleApply}
+              >
+                Apply
+              </Button>
+              <Button
                 flat
                 form={formName}
+                onClick={this.props.handleSubmit}
               >
                   Save
-                </RemoteSubmitButton>
+              </Button>
               <Button
                 flat
                 onClick={this.props.handleCancel}
-              >Cancel</Button>
+              >
+                Cancel
+              </Button>
             </div>
           </Col>
           <Col xs={3} sm={3} md={3}>
             <div className={styles.rightPane}>
-              <Gauge
-                percentage={33}
-              >
+              {this.props.segments.loading || !this.props.segments.preview ?
+                <Loader loaded={false} color="#FF715A" /> :
+                <div>
+                  <Gauge
+                    percentage={
+                      this.calculatePercentage(
+                        segments.preview.segmentActiveUsers,
+                        segments.preview.totalActiveUsers
+                      )
+                    }
+                  >
                   of patients
                 </Gauge>
-              <InfoSection title="12,346">
+                  <InfoSection title={segments.preview.segmentActiveUsers || ''}>
                   # of patients
                 </InfoSection>
-              <InfoSection title="121,346">
-                  100% of total appointments
-                </InfoSection>
+                  <InfoSection title={segments.preview.segmentAppointments || ''}>
+                    {`${this.calculatePercentage(segments.preview.segmentAppointments, segments.preview.totalAppointments)}% of total appointments`}
+                  </InfoSection>
+                  <Summary
+                    title="Demographics"
+                    items={[
+                      {
+                        label: 'Age',
+                        value: this.props.age ? this.props.age.join(', ') : 'All',
+                      },
+                      {
+                        label: 'Gender',
+                        value: this.props.gender || 'All',
+                      },
+                      {
+                        label: 'City',
+                        value: this.props.city || 'All',
+                      },
+                    ]}
+                  />
+                </div>
+              }
+
             </div>
           </Col>
         </Row>
@@ -150,11 +209,40 @@ DisplayForm.propTypes = {
   handleAgeChange: PropTypes.func,
   handleGenderChange: PropTypes.func,
   handleCityChange: PropTypes.func,
-  age: PropTypes.arrayOf(PropTypes.string).isRequired,
-  gender: PropTypes.string.isRequired,
-  selectedSegment: PropTypes.object.isRequired,
+  age: PropTypes.arrayOf(PropTypes.string),
+  gender: PropTypes.string,
+  city: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
+  handleApply: PropTypes.func.isRequired,
+  edit: PropTypes.bool,
+  segments: PropTypes.shape({
+    preview: PropTypes.shape({}),
+    loading: PropTypes.bool,
+    cities: PropTypes.arrayOf(
+      PropTypes.shape({
+        city: PropTypes.string,
+      })
+    ),
+  }).isRequired,
+  enterpriseId: PropTypes.string.isRequired,
+  fetchCities: PropTypes.func,
+
 };
 
-export default DisplayForm;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchCities,
+  }, dispatch);
+}
+
+function mapStateToProps(state) {
+  return {
+    segments: state.segments,
+    enterpriseId: state.auth.get('enterprise').get('id'),
+  };
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(DisplayForm);
