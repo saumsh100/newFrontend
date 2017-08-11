@@ -62,7 +62,6 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
     ],
   });
 
-  // const patients = await Patient.filter(filterObject).getJoin(joinObject).run();
   return patients.filter(patient => isDueForRecall({ recall, patient: patient.get({ plain: true }), date }));
 }
 
