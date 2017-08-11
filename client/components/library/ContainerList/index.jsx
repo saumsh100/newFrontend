@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { List, ListItem, Card, CardHeader } from '../../library';
-import classnames from 'classnames'
+import classnames from 'classnames';
 import styles from './styles.scss';
 
 

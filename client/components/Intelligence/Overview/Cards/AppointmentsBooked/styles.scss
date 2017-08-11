@@ -3,17 +3,18 @@
 
 .booked {
   border-top: 5px solid $inactive-color;
-  margin:0 5px 20px;
+  //margin:0 5px 20px;
   min-width: 250px;
   overflow: hidden;
   &__header {
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 30px;
     margin-left: 15px;
   }
   &__body {
     position: relative;
+    padding-top: 20px;
     canvas {
       max-width: 99%;
     }

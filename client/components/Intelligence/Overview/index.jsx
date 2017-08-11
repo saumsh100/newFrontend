@@ -373,7 +373,7 @@ class Overview extends Component {
                 female={female || 0}
               />
             </Col>
-            <Col xs={12}>
+            <Col className={styles.padding} xs={12} sm={6}>
               <AppointmentsBooked
                 borderColor={colorMap.grey}
                 cardTitle="Appointments Booked Last 12 Months"
@@ -387,7 +387,7 @@ class Overview extends Component {
                 ]}
               />
             </Col>
-            <Col className={styles.padding} xs={12}>
+            <Col className={styles.padding} xs={12} sm={6}>
               <WebsiteTrafficSources
                 title="Appointments By Day for the Last 12 Months"
                 labels={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}

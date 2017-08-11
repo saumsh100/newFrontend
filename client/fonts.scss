@@ -1,3 +1,4 @@
+@import './ui';
 
 //font-headers
 .font-header-title {
@@ -42,10 +43,6 @@
   font-weight: $medium-weight;
 }
 
-.colorHeader {
-  color: red;
-}
-
 .font-medium-noFont{
   font-size: $medium-size;
   font-weight: $medium-weight;
@@ -88,38 +85,56 @@
   color: $inactive-color;
 }
 
+.letterSpacing {
+  letter-spacing: 0.5px;
+}
 
 .header {
   font-size: $header-size;
-  color: $primary-dark;
   font-weight: $jumbo-weight;
+  @extend .letterSpacing;
 }
 
 .cardHeaderTitle {
   font-family: $medium-font;
   font-size: $title-size;
   color: $primary-dark;
+  @extend .letterSpacing;
 }
 
 .cardHeaderCount {
   font-family: $medium-font;
   font-size: $count-size;
   font-weight: 800;
+  @extend .letterSpacing;
 }
 
-.listHeader {
+
+.listItemHeader {
   font-family: $medium-font;
+  color: $primary-dark;
+  //font-weight: $large-weight;
+  @extend .letterSpacing;
 }
 
 .subHeader {
+  color: $empty-grey;
+  @extend .letterSpacing;
+}
+.subHeaderSmall {
   color: $primary-darkgrey;
   font-size: $small-size;
+  @extend .letterSpacing;
 }
 
 .subHeaderMedium {
   font-family: $medium-font;
+  color: darken($primary-grey, 15%);
+  @extend .letterSpacing;
+}
+.subHeaderMediumSmall {
+  font-family: $medium-font;
   color: $primary-darkgrey;
-  font-size: $small-size;
 }
 
 .tab {

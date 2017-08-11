@@ -22,6 +22,15 @@
   }
 }
 
+.listItemHeader {
+  composes: listItemHeader from "sass-loader!../../../fonts.scss";
+}
+
+.subHeader {
+  composes: subHeader from "sass-loader!../../../fonts.scss";
+}
+
+
 .reminders {
   border-top: $card-border-size $primary-darkgrey;
   height: 604px;
@@ -96,14 +105,16 @@
       text-overflow: ellipsis;
       overflow: hidden;
      // font-size: $small-size;
+      @extend .subHeader;
     }
 
     &_phone {
       //font-size: $small-size;
+      @extend .subHeader;
     }
 
     &_endDate {
-      color: $primary-dark;
+      @extend .listItemHeader;
     }
 
     &_right {
@@ -115,8 +126,6 @@
         margin-left: 0;
         margin-top: 10px;
       }
-
-
     }
 
     &_clickIcons {
@@ -152,12 +161,14 @@
     }
 
     &_days {
-      color: $primary-dark;
+      //color: $primary-dark;
       padding: 2px 0;
       white-space: pre-line;
       max-width: 140px;
       margin-top: 5px;
       margin-bottom: 5px;
+      @extend .listItemHeader;
+
       @media screen and (max-width: 450px) {
         color: $primary-darkgrey;
       }
@@ -179,7 +190,7 @@
 
     &_icon {
       cursor: pointer;
-      color: $primary-darkgrey;
+      @extend .subHeader;
       display: flex;
       position: absolute;
       right: 10px;

@@ -108,7 +108,7 @@ function DigitalWaitListItem(props) {
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_endDate}>
-            <b>{moment(waitSpot.get('endDate')).format('MMMM Do YYYY, h:mm a')}</b>
+            {moment(waitSpot.get('endDate')).format('MMMM Do YYYY, h:mm a')}
           </div>
           <div className={styles.patients__item_name}>
             <span className={styles.name}>{name}</span>
