@@ -11,12 +11,12 @@ class EditRecallsForm extends Component {
     };
 
     const options = [
-      {
-        value: 'sms',
-      },
-      {
-        value: 'phone',
-      },
+      // {
+      //   value: 'sms',
+      // },
+      // {
+      //   value: 'phone',
+      // },
       {
         value: 'email',
       },

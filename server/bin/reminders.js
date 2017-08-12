@@ -1,7 +1,7 @@
 
 import jobQueue from '../config/jobQueue';
 import createSocketServer from '../sockets/createSocketServer';
-import { computeRemindersAndSend } from '../lib/reminders';
+import { computeRemindersAndSend } from '../lib/_reminders';
 
 global.io = createSocketServer();
 

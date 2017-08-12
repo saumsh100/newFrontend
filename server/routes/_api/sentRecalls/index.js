@@ -30,6 +30,16 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
   startDate = startDate || moment().subtract(1, 'years').toISOString();
   endDate = endDate || moment().toISOString();
 
+  const include = includeArray.map((included) => {
+    if (included.as === 'recall') {
+      return {
+        ...included,
+        required: true,
+      };
+    }
+    return included;
+  });
+
   return SentRecall.findAll({
     raw: true,
     nest: true,
@@ -40,7 +50,7 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
         $gte: startDate,
       },
     },
-    include: includeArray,
+    include,
   }).then(sentRecalls => res.send(normalize('sentRecalls', sentRecalls)))
     .catch(next);
 });
