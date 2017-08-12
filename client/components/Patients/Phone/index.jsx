@@ -53,11 +53,10 @@ class Phone extends Component {
       }),
     ])
       .then((data) => {
-        const moreData = Object.keys(data[1].calls).length > 6;
+        const moreData = Object.keys(data[1].calls || {}).length > 6;
         this.setState({
           loader: true,
           skip: this.state.skip + 7,
-          limit: this.state.limit + 7,
           moreData,
         });
       });
@@ -80,11 +79,10 @@ class Phone extends Component {
       url: '/api/calls/',
       join: ['patient'],
       params,
-    }).then((calls) => {
-      const moreData = Object.keys(calls).length > 6;
+    }).then((data) => {
+      const moreData = Object.keys(data.calls || {}).length > 6;
       this.setState({
         skip: this.state.skip + 7,
-        limit: this.state.limit + 7,
         moreData,
       });
     });
@@ -126,8 +124,8 @@ class Phone extends Component {
         endDate: moment(values.endDate),
         loader: true,
         moreData,
-        skip: 7,
-        limit: 14,
+        skip: 0,
+        limit: 7,
       });
     });
   }

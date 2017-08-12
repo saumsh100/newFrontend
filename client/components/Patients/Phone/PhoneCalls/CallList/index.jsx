@@ -62,6 +62,7 @@ class CallList extends Component {
       <td className={styles.column}>{durationMissed}</td>
       <td className={styles.column}>
         <form
+          className={styles.position}
           key={`form${id}`}
         >
           <div className={styles.switchField}>
