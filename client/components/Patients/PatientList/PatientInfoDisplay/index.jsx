@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import styles from '../main.scss';
+import styles2 from '../../styles.scss';
 import {
   Avatar, IconButton,
 } from '../../../library';
@@ -20,9 +21,9 @@ class PatientInfoDisplay extends Component {
     let showDate = null;
 
     if (moment(currentPatient.birthDate)._d.toString() !== "Invalid Date") {
-      showDate = moment(currentPatient.birthDate).format('MMMM Do YYYY')
+      showDate = moment(currentPatient.birthDate).format('MMMM Do, YYYY')
     }
-    const lastApp = (this.props.patientIdStats.lastAppointment ? moment(this.props.patientIdStats.lastAppointment).format('MMMM Do YYYY') : 'N/A')
+    const lastApp = (this.props.patientIdStats.lastAppointment ? moment(this.props.patientIdStats.lastAppointment).format('MMMM Do, YYYY') : 'N/A')
 
     let display = false;
 
@@ -33,7 +34,7 @@ class PatientInfoDisplay extends Component {
     if (currentPatient.id !== null) {
       display = true;
       if (currentPatient.appointment.startDate) {
-        nextApp = moment(currentPatient.appointment.startDate).format('MMMM Do YYYY');
+        nextApp = moment(currentPatient.appointment.startDate).format('MMMM Do, YYYY');
       }
     }
 
@@ -51,41 +52,41 @@ class PatientInfoDisplay extends Component {
               <IconButton className={styles.deleteInfo} icon="trash-o" onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}} />
               <Avatar className={styles.patient_profile__photo} user={user} />
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
-                <p className={styles.name}>
+                <p className={styles2.displayName}>
                   <span>{currentPatient.firstName} {currentPatient.lastName}</span>
                   <span>, {age || 'N/A'}</span>
                 </p>
               </div>
               <div className={`${styles.patient_profile__info} ${styles.personal__table_info}`}>
-                <div className={styles.info}>
+                <div className={styles2.info}>
                   <span>{showDate}</span>
                 </div>
-                <div className={styles.info}>
+                <div className={styles2.info}>
                   <span>{currentPatient.gender}</span>
                 </div>
               </div>
               <div className={`${styles.patient_profile__language} ${styles.personal__table}`}>
-                <div className={styles.contact}>
+                <div className={styles2.contact}>
                   <span><i className="fa fa-phone" style={{ color: '#ff715a' }} />&emsp; {currentPatient.mobilePhoneNumber}</span>
                   <br />
                   <span><i className="fa fa-flag" style={{ color: '#ff715a' }} />&emsp;{currentPatient.email}</span>
                 </div>
               </div>
               <div className={styles.appointment}>
-                <div className={styles.info2}>
-                  <div>
+                <div>
+                  <div className={styles2.info_footer}>
                     <span>Last Appointment</span>
                   </div>
                   <div>
                     <span className={styles.info}><strong>{lastApp}</strong></span>
                   </div>
                 </div>
-                <div className={styles.info2}>
-                  <div>
+                <div >
+                  <div className={styles2.info_footer}>
                     <span>Next Appointment</span>
                   </div>
                   <div className={styles.end}>
-                    <span className={styles.info}><strong>{nextApp}</strong></span>
+                    <span className={styles2.contact}>{nextApp}</span>
                   </div>
                 </div>
               </div>

@@ -502,21 +502,20 @@
   //justify-content: center;
   min-width: 250px;
   overflow: hidden;
+  max-height: 500px;
+
   &__header {
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 30px;
     margin-left: 15px;
   }
 
   &__mainContent {
-    display: flex;
-    flex-direction: row;
     width: 100%;
-    padding-top: 20px;
     canvas {
-      max-height: 98%;
-      max-width: 98%;
+      max-height: 99%;
+      max-width: 99%;
     }
   }
 

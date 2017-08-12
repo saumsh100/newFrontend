@@ -6,6 +6,8 @@
   //margin:0 5px 20px;
   min-width: 250px;
   overflow: hidden;
+  max-height: 500px;
+
   &__header {
     display: flex;
     align-items: center;
@@ -14,9 +16,9 @@
   }
   &__body {
     position: relative;
-    padding-top: 20px;
     canvas {
       max-width: 99%;
+      max-height: 99%
     }
     @media screen and (max-width: 900px){
       position: relative;

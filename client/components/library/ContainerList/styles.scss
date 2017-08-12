@@ -1,5 +1,9 @@
 @import "../../../ui.scss";
 
+.listItemHeader {
+  composes: listItemHeader from "sass-loader!../../../fonts.scss";
+}
+
 .containerList {
   border-top: 5px solid $inactive-color;
   margin: 0 5px 20px;
@@ -39,11 +43,12 @@
         }
         &_left {
             text-align: left;
-            composes: listItemHeader from "sass-loader!../../../fonts.scss";
+            @extend .listItemHeader;
         }
         &_right {
             margin-left: auto;
             text-align: right;
+            @extend .listItemHeader;
         }
     }
 }

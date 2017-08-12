@@ -134,7 +134,9 @@
 }
 .subHeaderMediumSmall {
   font-family: $medium-font;
+  font-size: $small-size;
   color: $primary-darkgrey;
+  @extend .letterSpacing;
 }
 
 .tab {
