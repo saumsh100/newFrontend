@@ -300,10 +300,11 @@
 }
 
 .fullName {
-  font-family: "Gotham-Book";
-  font-size: 18px;
+  //font-family: "Gotham-Book";
+  //font-size: 18px;
   margin: 10px 0;
-  font-weight: 900;
+  //font-weight: 900;
+  composes: header from 'sass-loader!../../../fonts.scss'
 }
 
 .fullName2 {
@@ -327,8 +328,7 @@
 }
 
 .fonts {
-  font-family: "Gotham-Book";
-  font-size: 12px;
+  composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
   color: #bfbfbf;
   font-weight: bold;
 }

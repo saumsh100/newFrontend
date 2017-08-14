@@ -372,8 +372,8 @@ class PractitionerOfficeHours extends Component{
           <div className={styles.flexHeader}>
             <Header title="Weekly Schedule" />
             <div>
-              <Button className={styles.button} icon="plus" onClick={this.createPattern}>Add New Pattern</Button>
-              <Button className={styles.button} onClick={this.openModal}>Change Start Date</Button>
+              <Button className={styles.button} icon="plus" create onClick={this.createPattern}>Add New Pattern</Button>
+              <Button className={styles.button} create onClick={this.openModal}>Change Start Date</Button>
             </div>
           </div>
           <OfficeHoursForm

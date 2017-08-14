@@ -31,7 +31,7 @@
   }
   &:focus, &:active {
     outline: none;
-    box-shadow: 0 0 0 2px lighten($primary-color, 20%);
+    //box-shadow: 0 0 0 2px lighten($primary-color, 20%);
   }
 }
 
@@ -60,3 +60,13 @@
 .icon {
   padding-right: 5px;
 }
+
+.create {
+  background: $clr-dark-blue;
+
+
+  &:hover {
+    background-color: darken($clr-dark-blue, 20%) !important;
+  }
+}
+

@@ -38,7 +38,7 @@
   background-color: $primary-white;
   border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
-  color: $disabled-color;
+  color: $disabled-color !important;
 
   &:hover {
     cursor: not-allowed;

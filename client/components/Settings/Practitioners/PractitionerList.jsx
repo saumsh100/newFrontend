@@ -120,6 +120,7 @@ class PractitionerList extends Component {
                 onClick={this.setActive}
                 className={styles.addPractitionerButton}
                 data-test-id="addPractitionerButton"
+                create
               >
                 Add New Practitioner
               </Button>

@@ -37,13 +37,7 @@
 }
 
 .addServiceButton {
-  background: $clr-dark-blue;
-  font-size: 13px;
   width: 188px;
-
-  &:hover {
-    background-color: darken($clr-dark-blue, 20%) !important;
-  }
 }
 
 .displayFlex {

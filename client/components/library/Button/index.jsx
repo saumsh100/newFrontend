@@ -10,12 +10,14 @@ const cx = classNames.bind(styles);
 export default function Button(props) {
   const classes = classNames(
     props.className,
+    props.theme,
     cx({
       default: true,
       flat: props.flat,
       notFlat: !props.flat,
       disabled: props.disabled,
       icon: props.icon,
+      create: props.create,
     })
   );
 
@@ -38,9 +40,14 @@ export default function Button(props) {
   );
 }
 
+Button.theme = {
+  secondary: styles.secondary,
+};
+
 Button.propTypes = {
   flat: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
   icon: PropTypes.string,
+  theme: PropTypes.string,
 };

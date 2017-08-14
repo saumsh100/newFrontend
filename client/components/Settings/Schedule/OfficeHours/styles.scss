@@ -17,6 +17,7 @@
 
 .day {
   text-transform: capitalize;
+  composes: listItemHeader from 'sass-loader!../../../../fonts.scss';
 }
 
 .breaksDay {

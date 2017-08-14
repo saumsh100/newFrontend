@@ -666,6 +666,8 @@ ul {
   background: #fafafa;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  background: $primary-grey;
 
   &__addUser {
     position: absolute;
@@ -735,7 +737,7 @@ ul {
   &__wrapper {
     display: flex;
     flex-direction: row;
-    background: #cdcaca;
+    background: $primary-grey;
     width: 100%;
     .left {
       height: 100%;

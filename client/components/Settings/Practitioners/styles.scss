@@ -44,11 +44,7 @@
   justify-content: center ;
 }
 .addPractitionerButton {
-  background: $clr-dark-blue;
-  font-size: 13px;
-  &:hover {
-    background-color: darken($clr-dark-blue, 20%) !important;
-  }
+  //font-size: 13px;
 }
 
 .badgeHeader {
