@@ -259,7 +259,14 @@ class PractitionerOfficeHours extends Component{
 
   handleFormUpdate(values) {
     const { weeklySchedule, practitioner } = this.props;
-    const newWeeklySchedule = weeklySchedule.merge(values);
+    const newWeeklySchedule = Object.assign({}, weeklySchedule.toJS());
+    // console.log(values)
+
+    daysOfWeek.forEach((day) => {
+      Object.keys(values[day]).forEach((pram) => {
+        newWeeklySchedule[day][pram] = values[day][pram];
+      });
+    });
 
     const alert = {
       success: {
@@ -272,7 +279,7 @@ class PractitionerOfficeHours extends Component{
 
     this.props.updateEntityRequest({
       key: 'weeklySchedule',
-      model: newWeeklySchedule,
+      model: weeklySchedule.merge(newWeeklySchedule),
       alert,
     });
   }
@@ -283,8 +290,11 @@ class PractitionerOfficeHours extends Component{
     let schedules = null;
     const initialValuesChairs = {};
     let dialogShow = null;
-    if (weeklySchedule && weeklySchedule.toJS().weeklySchedules) {
-      schedules = weeklySchedule.weeklySchedules.map((schedule, i) => {
+
+    if (weeklySchedule) {
+      const allSchedules = weeklySchedule.toJS().weeklySchedules || [];
+
+      schedules = allSchedules.map((schedule, i) => {
         return (<div className={styles.toggleContainer_hours}>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader}>

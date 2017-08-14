@@ -36,11 +36,17 @@
   font-family: Gotham-Book;
   position: relative;
   border-right: 3px solid #efefef;
+  &:last-child {
+    border: none;
+  }
 }
 
 
 .columnHead {
   border-right: 3px solid #efefef;
+  &:last-child {
+    border: none;
+  }
 }
 
 .phone {
@@ -130,16 +136,16 @@
 
   tbody {
     display:block;
-    height:360px;
+    max-height:360px;
     overflow-y: scroll;
   }
   thead, tbody tr {
-      display:table;
-      width:100%;
-      table-layout:fixed;
+    display:table;
+    width:100%;
+    table-layout:fixed;
   }
   thead {
-    width: calc( 100% - 15.8px )
+    width: calc( 100% - 1em )
   }
 }
 

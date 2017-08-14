@@ -310,23 +310,24 @@ class Users extends Component{
           className={styles.userList}
           data-test-id="activeUsersList"
         >
-        {users.toArray().map((user, i) => {
-          const permission = permissions.get(user.permissionId);
-          if (!permission) {
-            return null;
-          }
-          return (
-            <ActiveUsersList
-              key={user.id}
-              activeUser={user}
-              role={permission.get('role')}
-              currentUserId={this.state.userId}
-              userId={user.get('id')}
-              currentUserRole={this.state.role}
-              edit={this.editUser.bind(null, user.get('id'), permission.get('id'), permission.get('role'), i)}
-            />
-          );
-        })}
+          {users.toArray().map((user, i) => {
+            const permission = permissions.get(user.permissionId);
+            if (!permission) {
+              return null;
+            }
+
+            return (
+              <ActiveUsersList
+                key={user.id}
+                activeUser={user}
+                role={permission.get('role')}
+                currentUserId={this.state.userId}
+                userId={user.get('id')}
+                currentUserRole={this.state.role}
+                edit={this.editUser.bind(null, user.get('id'), permission.get('id'), permission.get('role'), i)}
+              />
+            );
+          })}
         </List>
         <Row>
           <h2 className={styles.header} >Pending Invitations</h2>

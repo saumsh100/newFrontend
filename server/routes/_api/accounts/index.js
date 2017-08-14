@@ -158,9 +158,20 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
         enterpriseId: req.account.enterprise.id,
         permissionId: permission.id,
       }).then(({ model: user }) => {
-        delete user.password;
-        user.permission = permission;
-        res.send(normalize('user', user.dataValues));
+        return User.findOne({
+          where: { id: user.dataValues.id },
+          include: [
+            {
+              model: Permission,
+              as: 'permission',
+            },
+          ],
+          raw: true,
+          nest: true,
+        }).then((userSend) => {
+          delete userSend.password;
+          return res.status(201).send(normalize('user', userSend));
+        });
       });
     })
     .catch(next);

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import OfficeHoursForm from './OfficeHoursForm';
 import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
-import { Header, Button, DialogBox, RemoteSubmitButton, Form, Field, } from '../../../library';
+import { Header, Button, DialogBox, RemoteSubmitButton, Form, Field } from '../../../library';
 import styles from './styles.scss';
 
 class OfficeHours extends Component {
