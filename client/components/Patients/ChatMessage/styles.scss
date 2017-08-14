@@ -90,6 +90,7 @@
   &__header {
     display: flex;
     align-items: center;
+    height: 40px;
   }
 
   &__name {
@@ -117,7 +118,7 @@
   }
 
   &__text {
-    padding-top: 10px;
+    //padding-top: 10px;
     padding-right: 40px;
     padding-bottom: 10px;
     composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';

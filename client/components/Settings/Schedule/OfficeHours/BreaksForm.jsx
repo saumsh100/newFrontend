@@ -164,13 +164,15 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
       dataId={dataId}
       alignSave="left"
     >
-      <DayBreaksForm day="monday" />
-      <DayBreaksForm day="tuesday" />
-      <DayBreaksForm day="wednesday" />
-      <DayBreaksForm day="thursday" />
-      <DayBreaksForm day="friday" />
-      <DayBreaksForm day="saturday" />
-      <DayBreaksForm day="sunday" />
+      <div className={styles.paddingBottom}>
+        <DayBreaksForm day="monday" />
+        <DayBreaksForm day="tuesday" />
+        <DayBreaksForm day="wednesday" />
+        <DayBreaksForm day="thursday" />
+        <DayBreaksForm day="friday" />
+        <DayBreaksForm day="saturday" />
+        <DayBreaksForm day="sunday" />
+      </div>
     </Form>
   );
 
