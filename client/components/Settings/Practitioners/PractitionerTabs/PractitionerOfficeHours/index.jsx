@@ -260,7 +260,6 @@ class PractitionerOfficeHours extends Component{
   handleFormUpdate(values) {
     const { weeklySchedule, practitioner } = this.props;
     const newWeeklySchedule = Object.assign({}, weeklySchedule.toJS());
-    // console.log(values)
 
     daysOfWeek.forEach((day) => {
       Object.keys(values[day]).forEach((pram) => {
