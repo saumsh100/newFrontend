@@ -68,18 +68,15 @@
     width: 100%;
   }
   &_name {
+    composes: listItemHeader from 'sass-loader!../../../fonts.scss';
     padding-top: 5px;
     padding-left: 5px;
-    font-size: $medium-size;
-    font-weight: $large-weight;
   }
 
   &_type {
+    composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
     align-items: flex-end;
     padding-left: 5px;
-    font-size: $extra-small-size;
-    font-weight: $medium-weight;
-    color: $primary-darkgrey;
     padding-top: 10px;
   }
 

@@ -29,8 +29,7 @@
 .subSettingsListItem {
   height: 65px;
   padding-left: 15px;
-  font-size: $medium-size;
-  font-weight: $large-weight;
+  composes: listItemHeader from 'sass-loader!../../fonts.scss';
 }
 
 .settingsFormsCol {

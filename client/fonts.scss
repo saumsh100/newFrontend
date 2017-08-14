@@ -126,6 +126,11 @@
   font-size: $small-size;
   @extend .letterSpacing;
 }
+.subHeaderExtraSmall {
+  color: $primary-darkgrey;
+  font-size: $extra-small-size;
+  @extend .letterSpacing;
+}
 
 .subHeaderMedium {
   font-family: $medium-font;

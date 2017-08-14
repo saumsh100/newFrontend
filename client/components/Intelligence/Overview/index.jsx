@@ -326,7 +326,7 @@ class Overview extends Component {
             <Col xs={12}>
               <DashboardStats data={data} data-test-id={`${notConfirmedAppointments}_appointmentsConfirmed`}/>
             </Col>
-            <Col xs={12} sm={6}>
+            <Col  xs={12} sm={6}>
               <AppointmentFilled
                 appointmentFilled={totalData.appointmentBooked}
                 appointmentNotFilled={totalData.appointmentNotFiltred}
@@ -335,13 +335,13 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <Col xs={12} sm={6}>
+            <Col   xs={12} sm={6}>
               <ContainerList
                 cardTitle="Top Services by Hours"
                 data={serviceData}
               />
             </Col>
-            <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
+            <FlexGrid className={styles.padding} borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
               {realData}
             </FlexGrid>
             <Col
@@ -361,12 +361,12 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <Col className={styles.padding} xs={12} md={6}>
+            <Col className={styles.paddingLine} xs={12} md={6}>
               <AgeRange
                 chartData={ageRange}
               />
             </Col>
-            <Col className={styles.padding} xs={12} md={6}>
+            <Col className={styles.paddingLine} cxs={12} md={6}>
               <MaleVsFemale
                 title="Male vs Female Patients for the Last 12 Months"
                 male={male || 0}

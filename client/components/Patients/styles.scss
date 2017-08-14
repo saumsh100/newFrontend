@@ -16,6 +16,14 @@
     list-style: none;
 }*/
 
+.subHeaderMediumSmall {
+  composes: subHeaderMediumSmall from "sass-loader!../../fonts.scss";
+}
+
+.subHeaderSmall {
+  composes: subHeaderSmall from "sass-loader!../../fonts.scss";
+}
+
 .users {
   &_name {
     composes: listItemHeader from "sass-loader!../../fonts.scss";
@@ -23,11 +31,11 @@
   &_text {
     display: flex;
     padding-top: 15px;
-    composes: subHeaderMediumSmall from "sass-loader!../../fonts.scss";
+    @extend .subHeaderMediumSmall;
   }
   &_date {
     padding-left: 10px;
-    composes: subHeaderSmall from "sass-loader!../../fonts.scss";
+    @extend .subHeaderSmall;
   }
 }
 
@@ -36,10 +44,10 @@
 }
 
 .info {
-  composes: subHeaderMediumSmall from "sass-loader!../../fonts.scss";
+  @extend .subHeaderMediumSmall;
 
   &_footer {
-    composes: subHeaderSmall from "sass-loader!../../fonts.scss";
+    @extend .subHeaderSmall;
   }
 }
 

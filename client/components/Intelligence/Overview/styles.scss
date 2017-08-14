@@ -83,8 +83,16 @@
     }
   }
 }
+
+
 .padding {
   padding: 5px;
+  padding-top: 20px;
+}
+
+.paddingLine {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .cardHeader {
@@ -487,10 +495,11 @@
 
 
 }
-
+/*
 .padding5 {
   padding: 5px;
-}
+}*/
+
 
 
 .websiteTrafikSources {
@@ -502,7 +511,6 @@
   //justify-content: center;
   min-width: 250px;
   overflow: hidden;
-  max-height: 500px;
 
   &__header {
     display: flex;
