@@ -93,7 +93,6 @@ const Time = {
    */
   createPossibleTimeSlots: (timeSlots, intervalLength, minimumLength) => {
     const len = timeSlots.length;
-
     const realInterval = Math.ceil(intervalLength / minimumLength);
 
     let i;
@@ -123,8 +122,8 @@ const Time = {
         endDate: end.toISOString(),
       });
 
-      start.add(intervalLength, 'minutes');
-      end.add(intervalLength, 'minutes');
+      start.add(minimumLength, 'minutes');
+      end.add(minimumLength, 'minutes');
     }
 
     return timeSlots;
