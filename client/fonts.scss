@@ -85,8 +85,19 @@
   color: $inactive-color;
 }
 
+
+//New Camel Case Class Structure
+
 .letterSpacing {
   letter-spacing: 0.5px;
+}
+
+.fontMedium {
+  @extend .font-medium;
+}
+
+.fontJumbo {
+  @extend .font-jumbo;
 }
 
 .header {
