@@ -35,7 +35,7 @@ function Typography(props) {
           codeSnippet={'{font-family: Gotham Medium; font-size: 73px; font-weight: 600; letter-spacing: 0.5px;}'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/intelligence')} >
           <span>- dashboard-stats, intelligence-stats, or business-stats.</span>
         </div>
       </div>
@@ -50,7 +50,7 @@ function Typography(props) {
           codeSnippet={'{font-size: 25px; font-weight: 600; letterSpacing: 0.5px;}'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/')} >
           <span>- the displayed number on dashboard-appointment-requests.</span>
         </div>
       </div>
@@ -65,7 +65,7 @@ function Typography(props) {
           codeSnippet={'{font-family: Gotham Medium; font-size: 16px; letterSpacing: 0.5px;}'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/')} >
           <span>- the displayed title on dashboard-appointment-requests.</span>
         </div>
       </div>
@@ -80,7 +80,7 @@ function Typography(props) {
           codeSnippet={'{font-size: 25px; font-weight: 600; letterSpacing: 0.5px;}'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/settings')} >
           <span>- all settings page headers eg. General.</span>
         </div>
       </div>
@@ -95,7 +95,7 @@ function Typography(props) {
           codeSnippet={'{font-family: Gotham Medium; color: #2e3845; letterSpacing: 0.5px;}'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/settings/practitioners')} >
           <span>- patient name on dashboard-sentReminders-list or practitioner name on settings-practitioners-list .</span>
         </div>
       </div>
@@ -110,7 +110,7 @@ function Typography(props) {
           codeSnippet={'{color: darken(lightgrey, 5%); letterSpacing: 0.5px;}'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/')} >
           <span>- service name on dashboard-appointment-list .</span>
         </div>
       </div>
@@ -125,7 +125,7 @@ function Typography(props) {
           codeSnippet={`{color: $primary-darkgrey; font-size: $small-size; @extend .letterSpacing;}`}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/patients/messages')}>
           <span>- text message on patients-messages-list, below the name .</span>
         </div>
       </div>
@@ -140,7 +140,7 @@ function Typography(props) {
           codeSnippet={`{color: $primary-darkgrey;font-size: $extra-small-size;@extend .letterSpacing;}`}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/patients/list')}>
           <span>- last appointment text on large patient-info display .</span>
         </div>
       </div>
@@ -155,7 +155,7 @@ function Typography(props) {
           codeSnippet={'{color: darken(lightgrey, 5%); font-size: 12px letterSpacing: 0.5px;}'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/patients/list')}>
           <span>- phone number and email on large patient-info display .</span>
         </div>
       </div>
@@ -170,7 +170,7 @@ function Typography(props) {
           codeSnippet={`{font-family: $medium-font;font-size: $small-size;color: $primary-darkgrey;@extend .letterSpacing;}`}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/patients/list')}>
           <span>- next appt text on patients-list, below name.</span>
         </div>
       </div>
@@ -185,7 +185,7 @@ function Typography(props) {
           codeSnippet={'{ font-family: Gotham Medium; color: #959596; }'}
           hideClipBoard
         />
-        <div className={styles.examples} >
+        <div className={styles.examples} onClick={() => push('/settings/practitioners')}>
           <span>- settings sub-pages and setting-practitioners.</span>
         </div>
       </div>

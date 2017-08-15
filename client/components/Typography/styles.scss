@@ -11,18 +11,10 @@
 }
 
 .padding {
-
   padding-bottom: 20px;
-}
-.hover {
-  &:hover {
-    color: $primary-color;
-    cursor: pointer;
-  }
 }
 
 .examples {
-
   margin-bottom: 20px;
   margin-top: 5px;
 
@@ -35,6 +27,10 @@
     padding-bottom: 5px;
     padding-right: 10px;
     background: darken($primary-grey,10%);
+    &:hover {
+      background: darken($primary-grey, 20%);
+      cursor: pointer;
+    }
   }
 }
 .legend {
