@@ -1,0 +1,45 @@
+@import '../../ui';
+@import '../../fonts';
+
+.mainContainer {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100vh - 68px);
+  padding: 30px;
+  overflow: auto;
+}
+
+.padding {
+  padding-bottom: 20px;
+}
+
+.examples {
+  margin-bottom: 20px;
+  margin-top: 5px;
+
+  span {
+    border: 1px solid $primary-darkgrey;
+    border-radius: 10px;
+    width: auto;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    background: darken($primary-grey,10%);
+    &:hover {
+      background: darken($primary-grey, 20%);
+      cursor: pointer;
+    }
+  }
+}
+.legend {
+  position: absolute;
+  padding: 20px;
+  top: 100px;
+  right: 350px;
+  border: 1px solid $primary-dark;
+  height: auto;
+  width: 300px;
+}
+

@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Form, Field } from '../../../../library';
+import styles from '../styles.scss'
 import { emailValidate } from '../../../../library/Form/validate';
 
 class EditRemindersForm extends Component {
@@ -31,21 +32,25 @@ class EditRemindersForm extends Component {
         initialValues={intValues}
         data-test-id={formName}
       >
-        <Field
-          required
-          type="number"
-          name="lengthHours"
-          label="Length Hours"
-          data-test-id="lengthHours"
-        />
-        <Field
-          required
-          component="DropdownSelect"
-          options={options}
-          name="primaryType"
-          label="Primary Type"
-          data-test-id="primaryType"
-        />
+        <div className={styles.formContainer} >
+          <Field
+            required
+            type="number"
+            name="lengthHours"
+            label="Length Hours"
+            data-test-id="lengthHours"
+          />
+          <div className={styles.formContainer_select} >
+            <Field
+              required
+              component="DropdownSelect"
+              options={options}
+              name="primaryType"
+              label="Primary Type"
+              data-test-id="primaryType"
+            />
+          </div>
+        </div>
       </Form>
     );
   }

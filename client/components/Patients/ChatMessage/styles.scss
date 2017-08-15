@@ -90,13 +90,13 @@
   &__header {
     display: flex;
     align-items: center;
+    height: 40px;
   }
 
   &__name {
     color: #2e3845;
     font-size: 14px;
-    font-family: Gotham-Book;
-    font-weight: 900;
+    composes: listItemHeader from 'sass-loader!../../../fonts.scss';
     max-width: 90%;
     display: flex;
 
@@ -118,11 +118,10 @@
   }
 
   &__text {
-    padding-top: 10px;
+    //padding-top: 10px;
     padding-right: 40px;
     padding-bottom: 10px;
-    color: #969696;
-    font-size: 12px;
+    composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
     word-break: break-all;
   }
 
@@ -302,10 +301,11 @@
 }
 
 .fullName {
-  font-family: "Gotham-Book";
-  font-size: 18px;
+  //font-family: "Gotham-Book";
+  //font-size: 18px;
   margin: 10px 0;
-  font-weight: 900;
+  //font-weight: 900;
+  composes: header from 'sass-loader!../../../fonts.scss'
 }
 
 .fullName2 {
@@ -329,8 +329,7 @@
 }
 
 .fonts {
-  font-family: "Gotham-Book";
-  font-size: 12px;
+  composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
   color: #bfbfbf;
   font-weight: bold;
 }

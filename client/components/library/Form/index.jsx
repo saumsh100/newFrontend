@@ -40,9 +40,10 @@ function Form(props) {
     pristine,
     ignoreSaveButton,
     allowSave,
+    alignSave,
   } = props;
 
-  let showSubmitButton = ignoreSaveButton ? null : (<SaveButton pristine={!allowSave && pristine}/>);
+  let showSubmitButton = ignoreSaveButton ? null : (<SaveButton pristine={!allowSave && pristine} alignSave={alignSave} />);
 
 
   return (

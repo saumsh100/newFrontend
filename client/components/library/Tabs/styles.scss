@@ -6,11 +6,17 @@
   padding: 10px;
   cursor: pointer;
   color: $primary-darkgrey;
+  font-family: $medium-font;
+  font-weight: 400;
+}
+
+.noUnderLine {
+  border-bottom: 0px !important;
 }
 
 .activeTab {
   border-bottom: $selection-border $primary-color;
-  color: black;
+  color: $primary-color;
 }
 
 .disabledTab {

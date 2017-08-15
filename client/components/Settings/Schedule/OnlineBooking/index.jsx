@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Header, CodeSnippet } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import PreferencesForm from './PreferencesForm';
+import IntervalForm from './IntervalForm';
 import styles from './styles.scss';
 
 function hexToRgbA(hex, opacity) {
@@ -28,6 +29,7 @@ class OnlineBooking extends Component {
   }
 
   handleSubmit(values) {
+    console.log(values);
     const { activeAccount, updateEntityRequest } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
@@ -64,6 +66,10 @@ class OnlineBooking extends Component {
           className={styles.header}
         />
         <div className={styles.formContainer}>
+          <Header
+            title="Color Options"
+            contentHeader
+          />
           <PreferencesForm
             activeAccount={activeAccount}
             handleSubmit={this.handleSubmit}
@@ -76,6 +82,16 @@ class OnlineBooking extends Component {
           </div>
           <CodeSnippet
             codeSnippet={snippet}
+          />
+        </div>
+        <div className={styles.formContainer}>
+          <Header
+            title="Interval Options"
+            contentHeader
+          />
+          <IntervalForm
+            activeAccount={activeAccount}
+            handleSubmit={this.handleSubmit}
           />
         </div>
       </div>

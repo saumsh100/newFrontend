@@ -62,7 +62,6 @@ Practitioners.propTypes = {
 };
 
 function mapStateToProps({ entities }) {
-
   const practitioners = entities.getIn(['practitioners', 'models']);
 
   const weeklyScheduleIds = practitioners.toArray().map((practitioner) => {

@@ -84,6 +84,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
                 icon="plus"
                 onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
                 data-test-id={`${day}AddBreakButton`}
+                create
               >
                 Add Break
               </Button>
@@ -161,14 +162,17 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
       initialValues={initialValues}
       data-test-id="breaksForm"
       dataId={dataId}
+      alignSave="left"
     >
-      <DayBreaksForm day="monday" />
-      <DayBreaksForm day="tuesday" />
-      <DayBreaksForm day="wednesday" />
-      <DayBreaksForm day="thursday" />
-      <DayBreaksForm day="friday" />
-      <DayBreaksForm day="saturday" />
-      <DayBreaksForm day="sunday" />
+      <div className={styles.paddingBottom}>
+        <DayBreaksForm day="monday" />
+        <DayBreaksForm day="tuesday" />
+        <DayBreaksForm day="wednesday" />
+        <DayBreaksForm day="thursday" />
+        <DayBreaksForm day="friday" />
+        <DayBreaksForm day="saturday" />
+        <DayBreaksForm day="sunday" />
+      </div>
     </Form>
   );
 

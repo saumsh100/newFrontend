@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { ListItem } from '../../library';
+import { ListItem, Icon } from '../../library';
 import styles from './styles.scss';
 
 class ServiceListItem extends Component {
@@ -25,7 +25,7 @@ class ServiceListItem extends Component {
         data-test-id={service}
       >
         <div className={styles.servicesListItem_text}>
-         {service}
+          {service}
         </div>
       </ListItem>
     );

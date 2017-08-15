@@ -21,11 +21,15 @@ class Tab extends Component {
       active,
       onClick,
       disabled,
+      noUnderLine,
     } = this.props;
 
     let classes = classNames(className, styles.tab);
-    if (active) {
+    if (active ) {
       classes = classNames(classes, styles.activeTab);
+      if (noUnderLine) {
+        classes = classNames(classes, styles.noUnderLine);
+      }
     }
 
     if (disabled) {

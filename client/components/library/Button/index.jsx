@@ -10,18 +10,23 @@ const cx = classNames.bind(styles);
 export default function Button(props) {
   const classes = classNames(
     props.className,
+    props.theme,
     cx({
       default: true,
       flat: props.flat,
       notFlat: !props.flat,
       disabled: props.disabled,
       icon: props.icon,
+      create: props.create,
     })
   );
 
   let iconComponent = null;
   if (props.icon) {
-    iconComponent = <Icon icon={props.icon} className={styles.icon}/>;
+    iconComponent =
+      <div className={styles.icon}>
+        <Icon icon={props.icon} size={1} />
+      </div>
   }
 
   const newProps = omit(props, ['flat', 'submit']);
@@ -35,9 +40,14 @@ export default function Button(props) {
   );
 }
 
+Button.theme = {
+  secondary: styles.secondary,
+};
+
 Button.propTypes = {
   flat: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
   icon: PropTypes.string,
+  theme: PropTypes.string,
 };

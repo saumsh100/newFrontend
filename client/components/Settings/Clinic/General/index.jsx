@@ -3,6 +3,8 @@ import React, {PropTypes, Component} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
+import ContactForm from './ContactForm';
+import SuperAdminForm from './SuperAdminForm';
 import Address from '../Address';
 import { Map } from 'immutable';
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
@@ -66,36 +68,83 @@ class General extends React.Component {
   }
 
   render() {
-    const { activeAccount } = this.props;
+    const { activeAccount, users } = this.props;
 
     let showComponent = null;
     if (activeAccount) {
-      showComponent = (
-        <div style={{ display: 'inlineBlock' }}>
-          <Header
-            title="Basic"
-            className={styles.generalHeader}
-          />
-          <div className={styles.drop}>
-            <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
-              <AccountLogo account={activeAccount} size="original" />
-              <p>Drop logo here or click to select file.</p>
-            </Dropzone>
-            {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
-          </div>
 
-          <GeneralForm
-            users={this.props.users}
-            onSubmit={this.updateName}
-            activeAccount={activeAccount}
-          />
+      const token = localStorage.getItem('token');
+      const decodedToken = jwt(token);
+      let role = null;
+      users.map((users) => {
+        if (decodedToken.userId === users.id) {
+          role = users.role;
+        }
+        return null;
+      });
+
+      showComponent = (
+        <div className={styles.outerContainer}>
           <Header
-            title="Address"
+            title="General"
             className={styles.generalHeader}
           />
-          <Address
-            activeAccount={activeAccount}
+          <div className={styles.generalMainContainer}>
+            <div className={styles.formContainer}>
+              <Header
+                title="Clinic Details"
+                contentHeader
+              />
+              <GeneralForm
+                role={role}
+                onSubmit={this.updateName}
+                activeAccount={activeAccount}
+              />
+            </div>
+            <div className={styles.drop}>
+              <Header
+                title="Logo"
+                contentHeader
+              />
+              <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
+                <AccountLogo account={activeAccount} size="original" />
+                  <p>Drop logo here or click to select file.</p>
+              </Dropzone>
+              {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
+            </div>
+          </div>
+          <Header
+            title="Contact Information"
+            contentHeader
           />
+          <div className={styles.formContainer}>
+            <ContactForm
+              role={role}
+              onSubmit={this.updateName}
+              activeAccount={activeAccount}
+            />
+          </div>
+          <Header
+            title="Address Information"
+            contentHeader
+          />
+          <div className={styles.formContainer}>
+            <Address
+              activeAccount={activeAccount}
+            />
+          </div>
+          {role === 'SUPERADMIN' ? <Header
+            title="Administrative Information"
+            contentHeader
+          /> : null }
+
+          <div className={styles.formContainer}>
+            {role === 'SUPERADMIN' ? <SuperAdminForm
+              role={role}
+              onSubmit={this.updateName}
+              activeAccount={activeAccount}
+            /> : null }
+          </div>
         </div>
       );
     }

@@ -41,12 +41,16 @@ class PractServicesForm extends Component {
     if (services) {
       showComponent = (
         <div className={styles.formContainer}>
-          <div className={styles.allText}>All Services</div>
-            <Toggle
-              name="allServices"
-              onChange={this.setAllServices}
-              checked={this.props.allServices}
-            />
+          <div className={styles.allContainer} >
+            <div className={styles.allText}>All Services</div>
+            <div className={styles.allToggle}>
+              <Toggle
+                name="allServices"
+                onChange={this.setAllServices}
+                checked={this.props.allServices}
+              />
+            </div>
+          </div>
           <Form
             form={formName}
             onSubmit={this.props.handleSubmit}
@@ -55,15 +59,18 @@ class PractServicesForm extends Component {
             keepDirtyOnReinitialize
             destroyOnUnmount={false}
             data-test-id="practitionerServicesForm"
+            alignSave="left"
           >
-            {services.toArray().map((service, index) => {
-              return (
-                <PractServicesList
-                  key={`${practitioner.get('id')}${index}`}
-                  service={service}
-                />
-              );
-            })}
+            <div className={styles.formContainer_content}>
+              {services.toArray().map((service, index) => {
+                return (
+                  <PractServicesList
+                    key={`${practitioner.get('id')}${index}`}
+                    service={service}
+                  />
+                );
+              })}
+            </div>
           </Form>
         </div>
       )

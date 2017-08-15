@@ -54,6 +54,7 @@ class Tabs extends Component {
           if (item.props.disabled) return;
           this.handleTabClick(index);
         },
+        noUnderLine: this.props.noUnderLine,
       });
     });
   }
@@ -64,6 +65,7 @@ class Tabs extends Component {
         key: idx,
         active: this.props.index === idx,
         tabIndex: idx,
+        noUnderLine: this.props.noUnderLine,
       });
     });
 
@@ -75,6 +77,7 @@ class Tabs extends Component {
       children,
       className,
       navClass,
+      noUnderLine,
     } = this.props;
 
     const newProps = omit(this.props,['index', 'navClass']);

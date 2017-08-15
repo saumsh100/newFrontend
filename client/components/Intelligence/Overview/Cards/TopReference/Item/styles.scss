@@ -12,7 +12,6 @@
     }
 }
 .patients {
-    border-top: 1px solid $primary-grey;
     padding: 0;
     margin: 0;
     &__item {
@@ -31,11 +30,13 @@
             justify-content: space-between;
             color: $primary-dark;
             align-items: center;
-            font-weight: $large-weight;
+            //font-weight: $large-weight;
 
         }
         &_left {
             text-align: left;
+
+
         }
         &_right {
             margin-left: auto;
@@ -48,8 +49,11 @@
             margin-right: 10px;
         }
         &_number {
-            font-size: 20px;
-            font-weight: 600;
+          composes: listItemHeader from 'sass-loader!../../../../../../fonts.scss'
+        }
+
+        &_name {
+          composes: listItemHeader from 'sass-loader!../../../../../../fonts.scss'
         }
     }
 }

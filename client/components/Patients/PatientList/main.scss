@@ -14,6 +14,7 @@ ul {
   list-style: none;
 }
 
+
 .tabs {
   padding: 8px;
   border-bottom-color: #b4b4b5;
@@ -446,8 +447,6 @@ ul {
   width: 50%;
   margin: 25%;
   text-align: center;
-  // border-right-style: solid;
-  // border-right-color: grey;
   float:left;
   position: relative;
 }
@@ -631,10 +630,7 @@ ul {
     }
 
     &__name {
-      color: #2e3845;
-      font-size: 14px;
-      font-family: Gotham-Book;
-      font-weight: 900;
+      //composes: listItemHeader from "sass-loader!../../../fonts.scss";
       max-width: 90%;
       display: -webkit-box;
       display: -ms-flexbox;
@@ -670,6 +666,8 @@ ul {
   background: #fafafa;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  background: $primary-grey;
 
   &__addUser {
     position: absolute;
@@ -739,7 +737,7 @@ ul {
   &__wrapper {
     display: flex;
     flex-direction: row;
-    background: #cdcaca;
+    background: $primary-grey;
     width: 100%;
     .left {
       height: 100%;
