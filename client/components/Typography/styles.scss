@@ -2,9 +2,11 @@
 @import '../../fonts';
 
 .mainContainer {
+  box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 68px);
   padding: 30px;
+  overflow: auto;
 }
 
 .padding {
@@ -12,48 +14,10 @@
 }
 
 .mediumFont {
-  font-family: $medium-font;
+  @extend .font-medium;
 }
 
 .jumboFont {
-  font-family: $medium-font;
-  font-size: $jumbo-size;
+  @extend .font-jumbo;
 }
 
-.header {
-  font-size: $header-size;
-  color: $primary-dark;
-  font-weight: $jumbo-weight;
-}
-
-.cardHeaderTitle {
-  font-family: $medium-font;
-  font-size: $title-size;
-  color: $primary-dark;
-}
-
-.cardHeaderCount {
-  font-family: $medium-font;
-  font-size: $count-size;
-  font-weight: 800;
-}
-
-.listHeader {
-  font-family: $medium-font;
-}
-
-.subHeader {
-  color: $primary-darkgrey;
-  font-size: $small-size;
-}
-
-.subHeaderMedium {
-  font-family: $medium-font;
-  color: $primary-darkgrey;
-  font-size: $small-size;
-}
-
-.tab {
-  font-family: $medium-font;
-  color: $primary-darkgrey;
-}
