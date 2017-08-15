@@ -2,9 +2,9 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import { Account, Chair } from '../../../server/_models';
-import { wipeTestUsers, seedTestUsersSequelize, enterpriseId, accountId } from '../../util/seedTestUsers';
-import { generateTokenSequelize } from '../../util/generateToken';
-import { wipeModelSequelize } from '../../util/wipeModel';
+import { wipeTestUsers, seedTestUsers, enterpriseId, accountId } from '../../_util/seedTestUsers';
+import generateToken from '../../_util/generateToken';
+import wipeModel from '../../_util/wipeModel';
 import { getModelsArray, omitPropertiesFromBody }  from '../../util/selectors';
 
 const rootUrl = '/_api/chairs';
@@ -41,14 +41,14 @@ describe('/api/chairs', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
-    await wipeModelSequelize(Chair);
-    await seedTestUsersSequelize();
+    await wipeModel(Chair);
+    await seedTestUsers();
     await seedChairs();
-    token = await generateTokenSequelize({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeModelSequelize(Chair);
+    await wipeModel(Chair);
     await wipeTestUsers();
   });
 
@@ -61,6 +61,20 @@ describe('/api/chairs', () => {
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           const chairs = getModelsArray('chairs', body);
+          expect(chairs.length).toBe(2);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('should fetch 2 chairs and be formatted in the jsonapi standard', async () => {
+      return request(app)
+        .get(rootUrl)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/vnd.api+json')
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, [], true);
+          const chairs = body.data;
           expect(chairs.length).toBe(2);
           expect(body).toMatchSnapshot();
         });
@@ -120,6 +134,24 @@ describe('/api/chairs', () => {
           const [chair] = chairs;
           expect(chairs.length).toBe(1);
           expect(chair.name).toBe('New Chair');
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('should create a chair and respond with json api', async () => {
+      return request(app)
+        .post(rootUrl)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/vnd.api+json')
+        .send({
+          id: newChairId,
+          accountId,
+          name: 'New Chair',
+        })
+        .expect(201)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, [], true);
+          expect(body.data.attributes.name).toBe('New Chair');
           expect(body).toMatchSnapshot();
         });
     });

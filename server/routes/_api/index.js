@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { sequelizeAuthMiddleware } from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
+import getResponseConfig from '../../middleware/getResponseConfig';
 import accountsRouter from './accounts';
 import chairsRouter from './chairs';
 import enterprisesRouter from './enterprises';
@@ -30,7 +31,7 @@ import segmentsRouter from './segments';
 
 const apiRouter = Router();
 
-apiRouter.all('*', sequelizeAuthMiddleware, createJoinObject);
+apiRouter.all('*', sequelizeAuthMiddleware, createJoinObject, getResponseConfig);
 apiRouter.use('/accounts', accountsRouter);
 apiRouter.use('/accounts', remindersRouter);
 apiRouter.use('/accounts', invitesRouter);
