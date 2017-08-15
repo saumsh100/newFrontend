@@ -319,12 +319,14 @@ class PractitionerOfficeHours extends Component{
 
       const chairFields = chairs.toArray().map((chair) => {
         initialValuesChairs[chair.id] = weeklySchedule[this.state.modalChairDay].chairIds.includes(chair.id);
-        return (<div>
-          {chair.name}
-          <Field
-            component="Toggle"
-            name={chair.id}
-          />
+        return (<div className={styles.chairsContainer_fields}>
+          <span className={styles.chairsContainer_name}>{chair.name}</span>
+          <div className={styles.chairsContainer_toggle}>
+            <Field
+              component="Toggle"
+              name={chair.id}
+            />
+          </div>
         </div>);
       });
 
@@ -347,24 +349,29 @@ class PractitionerOfficeHours extends Component{
         {weeklySchedule[this.state.modalChairDay].pmsScheduleId ?
           <div>Note: This day field is currently being synced via PMS.
           Please use PMS to change this field for this day</div> : null}
-
-        All Chairs
-        <Toggle
-          name="allChairs"
-          onChange={this.setAllChairs}
-          checked={allChairs}
-        />
-        <Form
-          // className={formStyle}
-          form={'chairs'}
-          onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
-          initialValues={initialValuesChairs}
-          enableReinitialize
-          destroyOnUnmount
-          ignoreSaveButton
-        >
-          {chairFields}
-        </Form>
+        <div className={styles.chairsContainer}>
+          <div className={styles.chairsContainer_all} >
+            <span className={styles.chairsContainer_all_text}>All Chairs</span>
+            <div className={styles.chairsContainer_toggle}>
+              <Toggle
+                name="allChairs"
+                onChange={this.setAllChairs}
+                checked={allChairs}
+              />
+            </div>
+          </div>
+          <Form
+            // className={formStyle}
+            form={'chairs'}
+            onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
+            initialValues={initialValuesChairs}
+            enableReinitialize
+            destroyOnUnmount
+            ignoreSaveButton
+          >
+            {chairFields}
+          </Form>
+        </div>
       </DialogBox>);
     }
 
@@ -376,8 +383,8 @@ class PractitionerOfficeHours extends Component{
           <div className={styles.flexHeader}>
             <Header title="Weekly Schedule" />
             <div>
-              <Button className={styles.button} onClick={this.createPattern}>Create New Pattern</Button>
-              <Button className={styles.button} onClick={this.openModal}>Change Start Date</Button>
+              <Button className={styles.button} icon="plus" create onClick={this.createPattern}>Add New Pattern</Button>
+              <Button className={styles.button} create onClick={this.openModal}>Change Start Date</Button>
             </div>
           </div>
           <OfficeHoursForm
@@ -440,7 +447,7 @@ class PractitionerOfficeHours extends Component{
         </DialogBox>
         {dialogShow}
         <div className={styles.toggleContainer}>
-          <div> Set Custom </div>
+          <div className={styles.toggleContainer__text}> Set Custom </div>
           <div className={styles.toggleContainer__toggle}>
             <Toggle
               defaultChecked={practitioner.get('isCustomSchedule')}

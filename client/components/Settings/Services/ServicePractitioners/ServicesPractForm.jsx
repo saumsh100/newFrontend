@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import { change } from 'redux-form';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
-import _ from 'lodash';
+import { Header } from '../../../library';
+
 
 import ServicesPractList from './ServicesPractList';
 import { Form, Toggle } from '../../../library';
@@ -66,26 +67,29 @@ class ServicesPractForm extends Component {
           keepDirtyOnReinitialize
           destroyOnUnmount={false}
           data-test-id="servicePractitionersForm"
+          alignSave="left"
         >
-          {practitioners.toArray().map((practitioner, index) => {
-            return (
-              <ServicesPractList
-                key={`${practitioner.get('id')}${index}`}
-                practitioner={practitioner}
-              />
-            );
-          })}
+          <div className={styles.servicesPractForm_serviceList}>
+            {practitioners.toArray().map((practitioner, index) => {
+              return (
+                <ServicesPractList
+                  key={`${practitioner.get('id')}${index}`}
+                  practitioner={practitioner}
+                />
+              );
+            })}
+          </div>
         </Form>
       );
     }
 
     return (
       <div>
-        <h2 className={styles.header}>Practitioners</h2>
+        <Header className={styles.header} title="Practitioners Performing This Service" contentHeader />
         <div className={styles.servicesPractForm}>
-          <div className={styles.servicesPractForm_allText}>
-            All Practitioners
-            <div>
+          <div className={styles.servicesPractForm_all}>
+            <span className={styles.servicesPractForm_all_text}> All Practitioners</span>
+            <div className={styles.servicesPractForm_all_toggle}>
               <Toggle
                 name="allPractitioners"
                 onChange={this.setAllPractitioners}

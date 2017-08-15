@@ -241,13 +241,16 @@ class OfficeHours extends Component {
               className={styles.button}
               onClick={this.createPattern}
               data-test-id="createPatternSchedule"
+              icon="plus"
+              create
             >
-              Create New Pattern
+              Add New Pattern
             </Button>
             <Button
               className={styles.button}
               onClick={this.openModal}
               data-test-id="changeStartDate"
+              create
             >
               Change Start Date
             </Button>

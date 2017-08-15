@@ -1,5 +1,6 @@
+
 import React, { PropTypes, Component } from 'react';
-import { ListItem, Button } from '../../../../library';
+import { ListItem, Button, Icon } from '../../../../library';
 import styles from '../styles.scss';
 
 
@@ -7,6 +8,14 @@ class RecallsList extends Component {
 
   render() {
     const { primaryType, length, edit, deleteFunc } = this.props;
+
+    let icon = primaryType.toLowerCase();
+
+    if (icon === 'sms') {
+      icon = 'comment';
+    } else if (icon === 'email') {
+      icon = 'envelope';
+    }
 
     const button = <Button className={styles.edit} onClick={edit}>Edit</Button>;
     const buttonDel = <Button className={styles.edit} onClick={deleteFunc}>Delete</Button>;
@@ -17,7 +26,7 @@ class RecallsList extends Component {
       >
         <div className={styles.main}>
           <div className={styles.userName}>
-            <p className={styles.list}>Type: {primaryType.toUpperCase()}</p>
+            <p className={styles.list}><Icon icon={icon} /> <b>{primaryType.toUpperCase()}</b></p>
             <p className={styles.list}>Every {length / 60 / 60 / 24 / 30 } months</p>
           </div>
         </div>

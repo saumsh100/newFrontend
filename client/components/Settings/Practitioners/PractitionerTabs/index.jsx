@@ -9,6 +9,8 @@ import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
 import PractitionerTimeOff from './PractitionerTimeOff';
 import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
+import PractitionerActive from './PractitionerActive';
+
 import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 
 class PractitionerTabs extends Component {
@@ -57,14 +59,19 @@ class PractitionerTabs extends Component {
     serviceIds = practitioner.get('services');
 
     return (
-      <div>
+      <div className={styles.practTabContainer}>
         <div className={styles.pracHeaderContainer}>
           <Header title={practitioner.getFullName()} />
+          <PractitionerActive
+            key={practitioner.get('id')}
+            practitioner={practitioner}
+            updatePractitioner={this.updatePractitioner}
+          />
           <div className={styles.trashButton}>
             <IconButton icon="trash" onClick={this.deletePractitioner} data-test-id="deletePractitioner" />
           </div>
         </div>
-        <Tabs index={this.state.index} onChange={this.handleTabChange} >
+        <Tabs className={styles.practitionerTabs} index={this.state.index} onChange={this.handleTabChange} noUnderLine >
           <Tab label="Basic" data-test-id="practitionerBasicDataTab">
             <PractitionerBasicData
               key={practitioner.get('id')}

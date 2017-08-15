@@ -1,3 +1,4 @@
+@import './ui';
 
 //font-headers
 .font-header-title {
@@ -8,6 +9,16 @@
 .font-header-title-white{
   font-size: $title-size;
   color: $primary-white;
+}
+
+
+.font-large {
+  font-size: $large-size;
+  font-weight: $large-weight;
+}
+.font-small {
+  font-size: $small-size;
+  font-weight: $small-weight;
 }
 
 //Font-sizes-weights
@@ -24,10 +35,7 @@
   letter-spacing: 2px;
 }
 
-.font-large {
-  font-size: $large-size;
-  font-weight: $large-weight;
-}
+
 
 .font-medium {
   font-family: $medium-font;
@@ -39,10 +47,7 @@
   font-size: $medium-size;
   font-weight: $medium-weight;
 }
-.font-small {
-  font-size: $small-size;
-  font-weight: $small-weight;
-}
+
 
 //Font-sizes-weights-colors
 .font-jumbo-dark {
@@ -78,4 +83,79 @@
 .font-small-grey {
   @extend .font-small;
   color: $inactive-color;
+}
+
+
+//New Camel Case Class Structure
+
+.letterSpacing {
+  letter-spacing: 0.5px;
+}
+
+.fontMedium {
+  @extend .font-medium;
+}
+
+.fontJumbo {
+  @extend .font-jumbo;
+}
+
+.cardHeaderTitle {
+  font-family: $medium-font;
+  font-size: $title-size;
+  color: $primary-dark;
+  @extend .letterSpacing;
+}
+
+.cardHeaderCount {
+  font-family: $medium-font;
+  font-size: $count-size;
+  font-weight: 800;
+  @extend .letterSpacing;
+}
+
+
+.listItemHeader {
+  font-family: $medium-font;
+  color: $primary-dark;
+  //font-weight: $jumbo-weight;
+  @extend .letterSpacing;
+}
+
+.header {
+  font-size: $header-size;
+  font-weight: $jumbo-weight;
+  @extend .letterSpacing;
+}
+
+.subHeader {
+  color: $empty-grey;
+  @extend .letterSpacing;
+}
+.subHeaderSmall {
+  color: $primary-darkgrey;
+  font-size: $small-size;
+  @extend .letterSpacing;
+}
+.subHeaderExtraSmall {
+  color: $primary-darkgrey;
+  font-size: $extra-small-size;
+  @extend .letterSpacing;
+}
+
+.subHeaderMedium {
+  font-family: $medium-font;
+  color: darken($primary-grey, 15%);
+  @extend .letterSpacing;
+}
+.subHeaderMediumSmall {
+  font-family: $medium-font;
+  font-size: $small-size;
+  color: $primary-darkgrey;
+  @extend .letterSpacing;
+}
+
+.tab {
+  font-family: $medium-font;
+  color: $primary-darkgrey;
 }

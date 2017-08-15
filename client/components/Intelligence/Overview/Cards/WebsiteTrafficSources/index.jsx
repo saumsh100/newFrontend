@@ -12,16 +12,16 @@ export default function WebsiteTrafficSources(props) {
   } = props;
 
   return (
-    <Card >
-      <CardHeader className={styles.cardHeader} title={title} />
-      <div className={styles.websiteTrafikSources}>
-        <div className={styles.websiteTrafikSources__mainContent}>
-          <BarChart
-            displayTooltips
-            labels={labels}
-            dataSets={chartData}
-          />
-        </div>
+    <Card className={styles.websiteTrafikSources}>
+      <div className={styles.websiteTrafikSources__header}>
+        <CardHeader title={title} />
+      </div>
+      <div className={styles.websiteTrafikSources__mainContent}>
+        <BarChart
+          displayTooltips
+          labels={labels}
+          dataSets={chartData}
+        />
       </div>
     </Card>
   );

@@ -1,5 +1,7 @@
 
 @import '../../../ui.scss';
+@import '../../../fonts';
+
 .plainHeader {
   box-sizing: border-box;
   display: flex;
@@ -13,10 +15,13 @@
   align-items: center;
 }
 
-
 .headerTitle {
   display: inline-block;
-  font-size: $large-size;
-  font-weight: $medium-weight;
-  color: $primary-dark;
+  @extend .header;
+}
+
+.lightHeader {
+  font-size: 25px;
+  font-family: $dashboard-font;
+  font-weight: 500;
 }

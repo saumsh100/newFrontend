@@ -12,6 +12,7 @@ import loadSchedule from 'bundle-loader?lazy!./Dashboard/Schedule';
 import loadIntelligence from 'bundle-loader?lazy!./Dashboard/Intelligence';
 import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
+import loadTypography from 'bundle-loader?lazy!./Dashboard/Typography';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
 import loadReputatuion from 'bundle-loader?lazy!./Dashboard/Reputation';
 import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
@@ -29,6 +30,8 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
         <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
         <LazyRoute path="/patients" load={loadPatients} name="patients" />
+        <LazyRoute path="/typography" load={loadTypography} name="typography" />
+
         {/*<LazyRoute path="/social" load={loadSocial} name="social" />*/}
         {/*<LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />*/}
         <LazyRoute path="/settings" load={loadSettings} name="settings" />

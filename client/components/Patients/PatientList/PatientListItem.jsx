@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import styles from './main.scss';
+import styles2 from '../styles.scss';
 import {
   ListItem, Avatar
 } from '../../library';
@@ -22,7 +23,7 @@ class PatientListItem extends Component {
     let showDate = startDate;
 
     if (moment(showDate)._d.toString() !== "Invalid Date") {
-      showDate = moment(startDate).format('MMMM Do YYYY, h:mm a');
+      showDate = moment(startDate).format('MMMM Do, YYYY');
     }
 
     const age = moment().diff(user.birthDate, 'years');
@@ -44,16 +45,17 @@ class PatientListItem extends Component {
         <Avatar className={styles.users__photo} user={user} />
         <div className={styles.users__wrapper}>
           <div className={styles.users__header}>
-            <div className={styles.users__name}>
+            <div className={styles2.users_name}>
               {user.firstName}&nbsp;{user.lastName},&nbsp;{age || 'N/A'}
             </div>
 
           </div>
           <div className={styles.users__body}>
-            <div className={styles.users__text}>
-              <strong>Next Appt</strong>
-              <br />
-              {showDate}
+            <div className={styles2.users_text}>
+              Next Appt
+              <div className={styles2.users_date}>
+                {showDate}
+              </div>
             </div>
           </div>
         </div>

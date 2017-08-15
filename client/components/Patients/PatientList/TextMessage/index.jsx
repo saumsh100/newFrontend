@@ -21,7 +21,7 @@ class TextMessage extends Component {
 
     return (
       <div style={style}>
-        <div style={style2}>Events Coming Soon</div>
+        <div style={style2}></div>
       </div>
         );
   }

@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import styles from './styles.scss';
 
 class Tab extends Component {
-
   render() {
     const {
       className,
@@ -14,11 +13,15 @@ class Tab extends Component {
       active,
       onClick,
       disabled,
+      noUnderLine,
     } = this.props;
 
     let classes = classNames(className, styles.tab);
-    if (active) {
+    if (active ) {
       classes = classNames(classes, activeClassName, styles.activeTab);
+      if (noUnderLine) {
+        classes = classNames(classes, styles.noUnderLine);
+      }
     }
 
     if (disabled) {

@@ -181,13 +181,14 @@ class Reminders extends Component {
     }
 
     const reminders = this.props.reminders.toArray().map((reminder) => {
-      return (<RemindersList
-        key={reminder.id}
-        length={reminder.lengthSeconds}
-        primaryType={reminder.primaryType}
-        edit={this.edit.bind(null, reminder.id)}
-        deleteFunc={this.deleteReminders.bind(null, reminder.id)}
-      />);
+      return (
+        <RemindersList
+          key={reminder.id}
+          length={reminder.lengthSeconds}
+          primaryType={reminder.primaryType}
+          edit={this.edit.bind(null, reminder.id)}
+          deleteFunc={this.deleteReminders.bind(null, reminder.id)}
+        />);
     });
 
     const actions = [
@@ -201,7 +202,7 @@ class Reminders extends Component {
     ];
 
     return (
-      <Grid>
+      <div className={styles.main}>
         <DialogBox
           actions={actionsNew}
           title="Reminders"
@@ -232,28 +233,31 @@ class Reminders extends Component {
         </DialogBox>
         <div className={styles.header}>
           <Header title={'Reminders'} className={styles.headerTitle} />
+          <div
+            className={styles.toggle}
+            data-test-id="toggleSendReminders"
+          >
+            <span className={styles.toggle_text}> Reminders ON/OFF:&nbsp; </span>
+            <Toggle
+              name="canSendReminders"
+              onChange={this.canSendReminders}
+              checked={this.state.canSendReminders}
+            />
+          </div>
+        </div>
+        <div className={styles.createButtonContainer}>
           <Button
             className={styles.edit}
             onClick={this.openModal}
             data-test-id="createNewReminder"
+            icon="plus"
           >
-            Create New
+            Add New Reminder
           </Button>
         </div>
-        <div
-          className={styles.toggle}
-          data-test-id="toggleSendReminders"
-        >
-        Reminders ON/OFF:&nbsp;
-          <Toggle
-            name="canSendReminders"
-            onChange={this.canSendReminders}
-            checked={this.state.canSendReminders}
-          />
-        </div>
-        <Header title={'Reminders List'} className={styles.headerTitle} />
+        {this.props.reminders.size > 0 ? <Header title={'Reminders List'} contentHeader /> : null }
         {reminders}
-      </Grid>
+      </div>
     );
   }
 }

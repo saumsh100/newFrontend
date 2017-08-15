@@ -16,6 +16,45 @@
     list-style: none;
 }*/
 
+.subHeaderMediumSmall {
+  composes: subHeaderMediumSmall from "sass-loader!../../fonts.scss";
+}
+
+.subHeaderSmall {
+  composes: subHeaderSmall from "sass-loader!../../fonts.scss";
+}
+
+.users {
+  &_name {
+    composes: listItemHeader from "sass-loader!../../fonts.scss";
+  }
+  &_text {
+    display: flex;
+    padding-top: 15px;
+    @extend .subHeaderMediumSmall;
+  }
+  &_date {
+    padding-left: 10px;
+    @extend .subHeaderSmall;
+  }
+}
+
+.displayName {
+  composes: header from "sass-loader!../../fonts.scss";
+}
+
+.info {
+  @extend .subHeaderMediumSmall;
+
+  &_footer {
+    @extend .subHeaderSmall;
+  }
+}
+
+.contact {
+  composes: subHeaderMedium from "sass-loader!../../fonts.scss";
+}
+
 
 .dialogs {
     max-width: 30%;

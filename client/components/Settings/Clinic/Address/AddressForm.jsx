@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes, } from 'react';
+import moment from 'moment-timezone';
 import { Row, Col, Form, Field, Select, } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
 import { change, }  from 'redux-form';
@@ -22,6 +23,7 @@ class AddressForm extends React.Component {
       city: '',
       zipCode: '',
       state: '',
+      timezone: ''
     }
     this.changeCountry = this.changeCountry.bind(this);
     this.zipPostalVal = this.zipPostalVal.bind(this)
@@ -58,6 +60,7 @@ class AddressForm extends React.Component {
         city: accountInfo.get('city'),
         zipCode: accountInfo.get('zipCode'),
         state: accountInfo.get('state'),
+        timezone: accountInfo.get('timezone'),
       });
     }
   }
@@ -68,6 +71,18 @@ class AddressForm extends React.Component {
     let stateProv = (this.state.country === 'United States' ? usStates : caProvinces);
     let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
 
+    const options = moment.tz.names().map((value) => {
+      const exp = new RegExp(/america/i);
+      if (exp.test(value)) {
+        return {
+          value,
+        };
+      }
+      return {
+        value: null,
+      };
+    }).filter(filterValue => filterValue.value !== null);
+
     return (
       <div className={styles.addressRow}>
         <Form
@@ -75,24 +90,28 @@ class AddressForm extends React.Component {
           onSubmit={onSubmit}
           initialValues={this.state}
           data-test-id="addressSettingsForm"
+          alignSave="left"
         >
-          <Field
-            required
-            name="street"
-            label="Street Address"
-            validate={[maxLength25]}
-            data-test-id="street"
-          />
-          <div className={styles.addressCol}>
-          <div className={styles.addressColPlain}>
-            <Field
-              required
-              name="city"
-              label="City"
-              validate={[maxLength25]}
-              data-test-id="city"
-            />
-          </div>
+          <div className={styles.addressForm}>
+            <div className={styles.addressColPlain_padding}>
+              <Field
+                required
+                name="street"
+                label="Street Address"
+                validate={[maxLength25]}
+                data-test-id="street"
+              />
+            </div>
+            <div className={styles.addressColSelect}>
+              <Field
+                name="country"
+                label="Country"
+                component="DropdownSelect"
+                options={countrySelector}
+                onChange={this.changeCountry}
+                data-test-id="country"
+              />
+            </div>
             <div className={styles.addressColSelect}>
               <Field
                 required
@@ -103,9 +122,16 @@ class AddressForm extends React.Component {
                 data-test-id="state"
               />
             </div>
-          </div>
-          <div className={styles.addressCol}>
             <div className={styles.addressColPlain}>
+              <Field
+                required
+                name="city"
+                label="City"
+                validate={[maxLength25]}
+                data-test-id="city"
+              />
+            </div>
+            <div className={styles.addressColPlain_padding}>
               <Field
                 required
                 name="zipCode"
@@ -117,12 +143,11 @@ class AddressForm extends React.Component {
             </div>
             <div className={styles.addressColSelect}>
               <Field
-                name="country"
-                label="Country"
+                name="timezone"
+                label="Timezone"
                 component="DropdownSelect"
-                options={countrySelector}
-                onChange={this.changeCountry}
-                data-test-id="country"
+                options={options}
+                data-test-id="timezone"
               />
             </div>
           </div>

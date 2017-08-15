@@ -1,9 +1,20 @@
-@import'../../../../ui';
 
+@import '../../../../ui';
+
+.listItemHeader {
+  composes: listItemHeader from "sass-loader!../../../../fonts.scss";
+}
+
+.subHeader {
+  composes: subHeader from "sass-loader!../../../../fonts.scss";
+}
+
+.subHeaderMedium {
+  composes: subHeaderMedium from "sass-loader!../../../../fonts.scss";
+}
 
 .appointmentList {
   height: 556px;
-  border-top: 1px solid #efefef;
   overflow: auto;
   background-color: lighten($primary-lightgrey, 2%);
   @media screen and (max-width: 450px){
@@ -57,8 +68,7 @@
   }
 
   &_name {
-    font-family: $medium-font;
-    font-size: $medium-size;
+    @extend .listItemHeader;
     padding-bottom: 10px;
     @media screen and (max-width: 850px){
       font-size: $medium-size;
@@ -74,16 +84,15 @@
   }
 
   &_appTime {
-    font-family: $medium-font;
+    @extend .listItemHeader;
     text-decoration: none;
-    color: $primary-dark;
     &:hover {
       color: $primary-color;
     }
   }
 
-
   &_service {
+    @extend .subHeader;
     @media screen and (max-width: 850px){
       font-size: $medium-size;
     }
@@ -96,7 +105,8 @@
   padding: 10px;
   //border-right: 2px solid;
   //border-right-color: $inactive-color;
-  color: darken($primary-grey, 15%);
+  @extend .subHeaderMedium;
+
   @media screen and (max-width: 850px){
     word-break: break-all;
   }

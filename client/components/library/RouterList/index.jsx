@@ -6,7 +6,7 @@ import Link from '../Link';
 import { List, ListItem } from '../List';
 
 export default function RouterList({ location, routes, className }) {
-  const listItems = routes.map(({ to, label, disabled }) => {
+  const listItems = routes.map(({ to, label, disabled, icon }) => {
     // TODO: check if active
 
     const selectedItem = location.pathname === to

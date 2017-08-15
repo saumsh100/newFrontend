@@ -70,56 +70,74 @@ class ServiceDataItem extends Component {
               <IconButton icon="trash" className={styles.trashButton__trashIcon} onClick={this.deleteService} />
             </div>
           </div>
-          <h2 className={styles.header}>Services</h2>
-          <div className={styles.servicesFormRow}>
-            <Form
-              form={`${service.get('id')}Form`}
-              onSubmit={this.updateService}
-              initialValues={initialValues}
-              data-test-id="serviceDataForm"
-            >
-              <Field
-                required
-                name="name"
-                label="Name"
-                validate={[maxLength45]}
-                data-test-id="name"
-              />
-              <Field
-                required
-                name="duration"
-                label="Duration"
-                type="number"
-                normalize={parseNum}
-                validate={[notNegative, maxDuration]}
-              />
-              <Field
-                name="bufferTime"
-                label="Buffer Time"
-                type="number"
-                normalize={parseNum}
-                validate={[notNegative, maxDuration]}
-              />
-              <div className={styles.servicesPractForm_hiddentext}>
-                Would you like to set this service to be hidden on the booking widget ?
-                <div className={styles.servicesPractForm_hiddentext_toggle}>
-                  <Field
-                    name="isHidden"
-                    component="Toggle"
-                  />
-                </div>
+          <div>
+            <div className={styles.servicesFormRow}>
+              <Header title="Service Details" contentHeader />
+              <Form
+                form={`${service.get('id')}Form`}
+                onSubmit={this.updateService}
+                initialValues={initialValues}
+                data-test-id="serviceDataForm"
+                alignSave="left"
+              >
+                <Field
+                  required
+                  name="name"
+                  label="Name"
+                  validate={[maxLength45]}
+                  data-test-id="name"
+                />
+                <Field
+                  required
+                  name="duration"
+                  label="Duration"
+                  type="number"
+                  normalize={parseNum}
+                  validate={[notNegative, maxDuration]}
+                />
+                <Field
+                  name="bufferTime"
+                  label="Buffer Time"
+                  type="number"
+                  normalize={parseNum}
+                  validate={[notNegative, maxDuration]}
+                />
+              </Form>
+              <div className={styles.servicesFormRow_widget}>
+                <Header
+                  title="Booking Widget Settings"
+                  className={styles.servicesFormRow_contentHeader}
+                  contentHeader
+                />
+                <Form
+                  form={`${service.get('id')}WidgetForm`}
+                  onSubmit={this.updateService}
+                  initialValues={initialValues}
+                  alignSave="left"
+                >
+                  <div className={styles.servicesFormRow_widget_content}>
+                    <div className={styles.servicesFormRow_hiddenText}>
+                      <span className={styles.servicesFormRow_hiddenText_text}> Set as hidden </span>
+                      <div className={styles.servicesFormRow_hiddenText_toggle}>
+                        <Field
+                          name="isHidden"
+                          component="Toggle"
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.servicesFormRow_hiddenText}>
+                      <span className={styles.servicesFormRow_hiddenText_text}> Set as default </span>
+                      <div className={styles.servicesFormRow_hiddenText_toggle}>
+                        <Field
+                          name="isDefault"
+                          component="Toggle"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Form>
               </div>
-              <div className={styles.servicesPractForm_hiddentext}>
-                Would you like to set this service to be the default on the booking widget ?
-                <div className={styles.servicesPractForm_hiddentext_toggle}>
-                  <Field
-                    name="isDefault"
-                    component="Toggle"
-                  />
-                </div>
-              </div>
-
-            </Form>
+            </div>
           </div>
         </div>
       );

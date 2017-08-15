@@ -1,29 +1,69 @@
 @import '../../../../ui.scss';
+
+.outerContainer {
+  width: 100%;
+}
+.generalMainContainer {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
 .generalHeader {
-  padding: 10px 5px 10px 15px;
+  margin-bottom: 30px;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
 }
 .generalGrid {
   height: 100%;
-  width: 50%;
+  width: 100%;
+}
+
+.formContainer {
+  width: 40%;
+  margin-bottom: 35px;
+
+  &_contact {
+    margin-left: 35px;
+  }
 }
 .generalForm{
+  width: 100%;
 }
+
 .generalRow {
   display: inline-block;
   height: 100%;
-  width: 50%;
+  width: 100%;
   padding-left: 15px;
 }
 
 .paddingField {
   padding-bottom: 15px;
+
+  &_flex {
+    width: 40%;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  &_toggle {
+    margin-left: auto;
+  }
+}
+
+.paddingText {
+  padding-right: 5px;
 }
 
 .drop {
-  margin-left: 15px;
+  margin-left: 35px;
   button {
     margin-top: 10px;
   }
+
+}
+
+.paddingSave {
+  padding-bottom: 20px;
 }

@@ -11,13 +11,12 @@
 }
 .practListContainer {
   display: inline-block;
-  border-right: 1px solid;
-  border-right-color: $primary-dark;
-  width: 200px;
-  max-width: 200px;
-  min-width: 200px;
+  width: 270px;
+  max-width: 270px;
+  min-width: 270px;
   overflow-y: auto;
   padding-top: 15px;
+  background: $primary-white;
 }
 
 .chairFlex {
@@ -28,29 +27,68 @@
     margin-right: 80%;
   }
 }
-
 .modalContainer {
-  display: flex;
+  width: 100%;
+  display: inline-block;
+  justify-content: center;
   align-items: center;
-  padding-left: 5px;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
-  padding-left: 15px;
+  padding-bottom: 5px;
+  background: $primary-white;
 }
 
-.addPractitionerButton {
-  margin-left: auto;
+.displayFlexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center ;
 }
+.addPractitionerButton {
+  //font-size: 13px;
+}
+
+.badgeHeader {
+  padding: 15px 30px 15px 30px
+}
+
 
 .practListItem {
-  height: 65px;
-  padding-left: 15px;
-  font-size: $medium-size;
+  padding-left: 25px;
+  padding-bottom: 30px;
+  padding-top: 30px;
   text-transform: capitalize;
+  background: $primary-white;
+
+  &_textContainer {
+    height: 100%;
+    width: 100%;
+  }
+  &_name {
+    composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+    padding-top: 5px;
+    padding-left: 5px;
+  }
+
+  &_type {
+    composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+    align-items: flex-end;
+    padding-left: 5px;
+    padding-top: 10px;
+  }
+
+  &_avatarContainer {
+    height: 100%;
+  }
+}
+
+.sizingThisAvatar {
+  height: 3rem;
+  width: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
 }
 
 .subHeader {
-  padding-left: 15px;
   div {
     font-size: 26px;
   }
@@ -66,6 +104,7 @@
 .flexHeader {
   display: flex;
   justify-content: space-between;
+  padding-bottom: 20px;
 }
 
 .button {
@@ -75,13 +114,18 @@
 
 .practDataContainer {
   box-sizing: border-box;
+  margin-left: 15px;
   height:100%;
   width: 100%;
   display: inline-block;
   overflow-y: auto;
   padding-top: 15px;
   padding-right: 15px;
+  background: $primary-white;
+}
 
+.practTabContainer {
+  padding-left: 25px;
 }
 
 
@@ -90,12 +134,12 @@
   align-items: center;
   border-bottom: 1px solid;
   border-bottom-color: $primary-lightgrey;
-  padding-left: 10px;
-
+  margin-left: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .trashButton {
-  margin-left: auto;
 }
 
 .toggleContainer {
@@ -106,9 +150,14 @@
   padding-left: 10px;
   &_hours {
     padding-left: 10px;
+    padding-bottom: 15px;
   }
   &__toggle{
     padding-left: 5px;
+  }
+
+  &__text {
+    font-family: $medium-font;
   }
 }
 
@@ -119,11 +168,21 @@
 
 
 .practFormContainer {
-  width: 50%;
-  display: inline-block;
-  padding-left: 10px;
+  width: 100%;
+  display: flex;
+  padding-top: 20px;
   padding-bottom: 10px;
 
+  &_basicForm{
+    display: inline-block;
+    width: 90%;
+    padding-right: 20px;
+  }
+
+  &_avatarContainer {
+    display: inline-block;
+    padding-left: 25px;
+  }
   &__createForm{
     padding: 0px 15px 5px 15px;
     height: 100%;
@@ -149,14 +208,61 @@
     display: flex;
     align-content: center;
     align-items: center;
-    padding-bottom: 15px;
+    padding-bottom: 25px;
+
+    &_text {
+      width: 50%;
+    }
     &_hiddenToggle {
+      margin-left: auto;
       padding-left: 5px;
     }
   }
 }
 
+
+.practitionerActive {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 20px;
+  border-right: 1px solid $primary-darkgrey;
+
+  &_text {
+    font-family: $medium-font;
+    padding-right: 10px;
+  }
+}
 .deleteAvatar {
   width: 200px;
   margin-top: 20px;
+}
+
+
+.chairsContainer {
+  padding: 10px;
+  &_all {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+
+    &_text {
+      width: 120px;
+      font-weight: $large-weight;
+    }
+  }
+
+  &_fields {
+    display: flex;
+    align-items: center;
+    padding-bottom: 5px;
+  }
+
+  &_name {
+    width: 120px;
+  }
+
+  &_toggle {
+    margin-left: auto;
+  }
 }

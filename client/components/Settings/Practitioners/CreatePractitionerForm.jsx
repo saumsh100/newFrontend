@@ -7,13 +7,14 @@ function isNumber(value){
 }
 
 export default function CreatePractitionerForm(props) {
-  const { onSubmit } = props;
+  const { onSubmit, formName } = props;
   return (
   <div className={styles.practFormContainer__createForm}>
     <Form
-      form="modalPractitionerForm"
+      form={formName}
       onSubmit={onSubmit}
       data-test-id="createPractitionerForm"
+      ignoreSaveButton
     >
       <div className={styles.practFormRow__createRow}>
         <Field

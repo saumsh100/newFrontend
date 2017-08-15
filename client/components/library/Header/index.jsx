@@ -1,3 +1,4 @@
+
 import React, {PropTypes} from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
@@ -8,18 +9,26 @@ export default function Header(props) {
     className,
     children,
     title,
+    contentHeader,
   } = props;
 
   const classes = classNames(className, styles.plainHeader);
 
   let titleComponent = null;
+  let titleClassName = styles.headerTitle;
+
+  if (contentHeader) {
+    titleClassName = classNames(titleClassName, styles.lightHeader)
+  }
+
   if (title) {
     titleComponent = (
-      <div className={styles.headerTitle}>
+      <div className={titleClassName}>
         {title}
       </div>
     );
   }
+
 
   return (
     <div {...props} className={classes}>

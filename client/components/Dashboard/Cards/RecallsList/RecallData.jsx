@@ -46,11 +46,9 @@ export default function RecallData(props) {
               onClick={() => handleRecallClick(patient.id)}
               href="#"
             >
-              <b>
-                <span className={styles.patients__item_name_first}>{patient.firstName}</span>
-                <span>{patient.lastName}</span>
-                <span>, {age}</span>
-              </b>
+              <span className={styles.patients__item_name_first}>{patient.firstName}</span>
+              <span>{patient.lastName}</span>
+              <span>, {age}</span>
             </a>
           </div>
           <div className={styles.patients__item_phone}>

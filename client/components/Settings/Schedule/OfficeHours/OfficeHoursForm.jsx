@@ -138,14 +138,18 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
       initialValues={initialValues}
       data-test-id="officeHoursForm"
       dataId={dataId}
+      className={styles.formContainer}
+      alignSave="left"
     >
-      <DayHoursForm day="monday" />
-      <DayHoursForm day="tuesday" />
-      <DayHoursForm day="wednesday" />
-      <DayHoursForm day="thursday" />
-      <DayHoursForm day="friday" />
-      <DayHoursForm day="saturday" />
-      <DayHoursForm day="sunday" />
+      <div className={styles.paddingBottom}>
+        <DayHoursForm day="monday" />
+        <DayHoursForm day="tuesday" />
+        <DayHoursForm day="wednesday" />
+        <DayHoursForm day="thursday" />
+        <DayHoursForm day="friday" />
+        <DayHoursForm day="saturday" />
+        <DayHoursForm day="sunday" />
+      </div>
     </Form>
   );
 }

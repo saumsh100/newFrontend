@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
-import { IconButton, CardHeader, Col } from '../../library';
+import { IconButton, BadgeHeader, Col, Button } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
+import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+
 import Modal  from '../../library/Modal';
 import styles from './styles.scss';
 import DialogBox from "../../library/DialogBox/index";
@@ -34,7 +36,6 @@ class PractitionerList extends Component {
   }
 
   createPractitioner(values) {
-
     const { services } = this.props;
 
     values.firstName = values.firstName.trim();
@@ -86,6 +87,7 @@ class PractitionerList extends Component {
     const selectedPractitioner = (practitionerId ?
       practitioners.get(practitionerId) : practitioners.first());
 
+
     const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
     const weeklySchedule = weeklyScheduleId ? weeklySchedules.get(weeklyScheduleId) : null;
 
@@ -102,24 +104,41 @@ class PractitionerList extends Component {
       });
     }
 
+    const formName = 'addPractitionerForm';
+    const actions = [
+      { label: 'Cancel', onClick: this.setActive, component: Button },
+      { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { form: formName } },
+    ];
+
     return (
       <div className={styles.practMainContainer} >
         <div className={styles.practListContainer}>
           <div className={styles.modalContainer}>
-            <CardHeader count={practitioners.size} title="Practitioners" />
-            <IconButton
-              icon="plus"
-              onClick={this.setActive}
-              className={styles.addPractitionerButton}
-              data-test-id="addPractitionerButton"
+            <div className={styles.displayFlexCenter}>
+              <Button
+                icon="plus"
+                onClick={this.setActive}
+                className={styles.addPractitionerButton}
+                data-test-id="addPractitionerButton"
+                create
+              >
+                Add New Practitioner
+              </Button>
+            </div>
+            <BadgeHeader
+              count={practitioners.size}
+              title="Practitioners"
+              className={styles.badgeHeader}
             />
             <DialogBox
               active={this.state.active}
               onEscKeyDown={this.setActive}
               onOverlayClick={this.setActive}
               title="Add New Practitioner"
+              actions={actions}
             >
               <CreatePractitionerForm
+                formName={formName}
                 onSubmit={this.createPractitioner}
               />
             </DialogBox>
@@ -129,7 +148,8 @@ class PractitionerList extends Component {
                 <PractitionerItem
                   key={practitioner.get('id')}
                   id={practitioner.get('id')}
-                  practitionerId={practitionerId}
+                  practitionerId={selectedPractitioner.get('id')}
+                  practitioner={practitioner}
                   fullName={practitioner.getFullName()}
                   setPractitionerId={this.props.setPractitionerId}
                   data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}

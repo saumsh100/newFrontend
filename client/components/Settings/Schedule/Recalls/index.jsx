@@ -202,7 +202,7 @@ class Recalls extends Component {
     ];
 
     return (
-      <Grid>
+      <div className={styles.main}>
         <DialogBox
           actions={actionsNew}
           title="Recalls"
@@ -233,26 +233,32 @@ class Recalls extends Component {
         </DialogBox>
         <div className={styles.header}>
           <Header title={'Recalls'} className={styles.headerTitle} />
+          <div className={styles.toggle}>
+            <span className={styles.toggle_text}> Recalls ON/OFF:&nbsp; </span>
+            <Toggle
+              name="canSendRecalls"
+              onChange={this.canSendRecalls}
+              checked={this.state.canSendRecalls}
+              data-test-id="toggleSendRecalls"
+            />
+          </div>
+        </div>
+        <div className={styles.createButtonContainer}>
           <Button
             className={styles.edit}
             onClick={this.openModal}
             data-test-id="createNewRecall"
+            icon="plus"
           >
-            Create New
+            Add New Recall
           </Button>
         </div>
-        <div className={styles.toggle}>
-        Recalls ON/OFF:&nbsp;
-          <Toggle
-            name="canSendRecalls"
-            onChange={this.canSendRecalls}
-            checked={this.state.canSendRecalls}
-            data-test-id="toggleSendRecalls"
-          />
-        </div>
-        <Header title={'Recalls List'} className={styles.headerTitle} />
+        {this.props.recalls.size > 0 ? <Header
+          title={'Recalls List'}
+          contentHeader
+        /> : null }
         {recalls}
-      </Grid>
+      </div>
     );
   }
 }

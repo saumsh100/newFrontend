@@ -23,11 +23,12 @@
 }
 
 .selected {
-  background-color: darken($primary-grey, 2%);
+  background-color: $primary-grey !important;
   &:hover {
     cursor: auto;
-    background-color: darken($primary-grey, 2%);
+    background-color: $primary-grey;
   }
+  border-left: 3px solid $primary-color;
 }
 
 .disabledListItem{
@@ -37,7 +38,7 @@
   background-color: $primary-white;
   border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
-  color: $disabled-color;
+  color: $disabled-color !important;
 
   &:hover {
     cursor: not-allowed;

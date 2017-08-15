@@ -1,5 +1,6 @@
+
 import React, { PropTypes, Component } from 'react';
-import { ListItem } from '../../library';
+import { ListItem, Avatar } from '../../library';
 import styles from './styles.scss';
 
 class PractitionerItem extends Component {
@@ -13,7 +14,12 @@ class PractitionerItem extends Component {
   }
 
   render() {
-    const { fullName, id, practitionerId } = this.props;
+    const {
+      fullName,
+      id,
+      practitionerId,
+      practitioner,
+    } = this.props;
 
     const selectedPractitioner = practitionerId === id;
 
@@ -24,7 +30,15 @@ class PractitionerItem extends Component {
         selectItem={selectedPractitioner}
         data-test-id={this.props['data-test-id']}
       >
-        {fullName}
+        <span className={styles.practListItem_avatarContainer}>
+          <Avatar user={practitioner.toJS()} className={styles.sizingThisAvatar} />
+        </span>
+        <div className={styles.practListItem_textContainer}>
+          <div className={styles.practListItem_name}>{fullName}</div>
+          <div className={styles.practListItem_type}>
+            {practitioner.get('type') || 'Dentist'}
+          </div>
+        </div>
       </ListItem>
     );
   }
@@ -34,6 +48,7 @@ class PractitionerItem extends Component {
 PractitionerItem.propTypes = {
   setPractitionerId: PropTypes.func,
   fullName: PropTypes.string,
+  practitioner: PropTypes.object,
 };
 
 export default PractitionerItem;

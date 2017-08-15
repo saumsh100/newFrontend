@@ -9,7 +9,7 @@ import styles from './styles.scss';
 
 // Workaround to be able compare class with type
 // https://github.com/gaearon/react-hot-loader/issues/304
-const tabType = (<Tab label="" />).type;
+const tabType = (<Tab />).type;
 
 class Tabs extends Component {
   constructor(props) {
@@ -45,24 +45,30 @@ class Tabs extends Component {
   }
 
   renderHeaders(headers) {
-    return headers.map((item, idx) => React.cloneElement(item, {
-      key: idx,
-      index: idx,
-      active: this.props.index === idx,
-      onClick: (event, index) => {
-        item.props.onClick && item.props.onClick(event);
-        if (item.props.disabled) return;
-        this.handleTabClick(index);
-      },
-    }));
+    return headers.map((item, idx) => {
+      return React.cloneElement(item, {
+        key: idx,
+        index: idx,
+        active: this.props.index === idx,
+        onClick: (event, index) => {
+          item.props.onClick && item.props.onClick(event);
+          if (item.props.disabled) return;
+          this.handleTabClick(index);
+        },
+        noUnderLine: this.props.noUnderLine,
+      });
+    });
   }
 
   renderContents(contents) {
-    const contentElements = contents.map((item, idx) => React.cloneElement(item, {
-      key: idx,
-      active: this.props.index === idx,
-      tabIndex: idx,
-    }));
+    const contentElements = contents.map((item, idx) => {
+      return React.cloneElement(item, {
+        key: idx,
+        active: this.props.index === idx,
+        tabIndex: idx,
+        noUnderLine: this.props.noUnderLine,
+      });
+    });
 
     return contentElements.filter((item, idx) => (idx === this.props.index));
   }
@@ -73,6 +79,7 @@ class Tabs extends Component {
       className,
       contentClass,
       navClass,
+      noUnderLine,
     } = this.props;
 
     const newProps = omit(this.props, ['index', 'navClass', 'contentClass']);
