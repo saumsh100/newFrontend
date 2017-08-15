@@ -1,4 +1,5 @@
 
+import isArray from 'lodash/isArray';
 import toArray from 'lodash/toArray';
 import mapValues from 'lodash/mapValues';
 import omit from 'lodash/omit';
@@ -18,10 +19,33 @@ export function omitProperties(object, omitProps = []) {
   return omit(object, omitProps);
 }
 
-export function omitPropertiesFromBody(responseBody, omitProps) {
+export function omitPropertiesFromBody(responseBody, omitProps, jsonApi = false) {
+  if (jsonApi) {
+    return omitPropertiesFromBodyJsonApi(responseBody, omitProps);
+  }
+
   responseBody.entities = mapValues(responseBody.entities, (modelsSet) => {
     return mapValues(modelsSet, model => omitProperties(model, omitProps));
   });
 
   return responseBody;
+}
+
+function omitPropertiesFromBodyJsonApi(responseBody, omitProps) {
+  let data = responseBody.data;
+  if (!data) return responseBody;
+  if (isArray(data)) {
+    data = data.map(d => omitPropertiesFromData(d, omitProps));
+  } else {
+    data = omitPropertiesFromData(data, omitProps);
+  }
+
+  responseBody.data = data;
+  return responseBody;
+}
+
+function omitPropertiesFromData(data, omitProps) {
+  // a bit hacky for now but it does the job
+  data.attributes = omitProperties(data.attributes, omitProps);
+  return omitProperties(data, omitProps);
 }

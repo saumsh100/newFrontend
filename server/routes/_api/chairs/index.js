@@ -2,12 +2,15 @@
 import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
+import format from '../../util/format';
 import normalize from '../normalize';
 import { Chair } from '../../../_models';
 
 const chairsRouter = Router();
 
 chairsRouter.param('chairId', sequelizeLoader('chair', 'Chair'));
+
+
 
 /**
  * POST /
@@ -21,7 +24,7 @@ chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
   });
 
   return Chair.create(chairData)
-    .then(chair => res.status(201).send(normalize('chair', chair.dataValues)))
+    .then(chair => res.status(201).send(format(req, res, 'chair', chair.get({ plain: true }))))
     .catch(next);
 });
 
@@ -39,7 +42,7 @@ chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) =>
       where: { accountId },
     });
 
-    res.send(normalize('chairs', chairs));
+    res.send(format(req, res, 'chairs', chairs));
   } catch (error) {
     next(error);
   }

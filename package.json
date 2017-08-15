@@ -100,6 +100,7 @@
     "interval-arithmetic-eval": "^0.4.3",
     "isomorphic-style-loader": "^2.0.0",
     "jsdom": "^7.2.2",
+    "jsonapi-serializer": "^3.5.5",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
     "keycode": "^2.1.6",
