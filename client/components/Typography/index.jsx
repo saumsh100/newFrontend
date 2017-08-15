@@ -47,7 +47,7 @@ function Typography(props) {
           .cardHeaderCount
         </span>
         <CodeSnippet
-          codeSnippet={'{font-size: 25px; font-weight: 600; letterSpacing: 0.5px;}'}
+          codeSnippet={'{font-size: 25px; font-weight: 600; letter-spacing: 0.5px;}'}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/')} >
@@ -62,7 +62,7 @@ function Typography(props) {
           .cardHeaderTitle
         </span>
         <CodeSnippet
-          codeSnippet={'{font-family: Gotham Medium; font-size: 16px; letterSpacing: 0.5px;}'}
+          codeSnippet={'{font-family: Gotham Medium; font-size: 16px; letter-spacing: 0.5px;}'}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/')} >
@@ -77,7 +77,7 @@ function Typography(props) {
           .header
         </span>
         <CodeSnippet
-          codeSnippet={'{font-size: 25px; font-weight: 600; letterSpacing: 0.5px;}'}
+          codeSnippet={'{font-size: 25px; font-weight: 600; letter-spacing: 0.5px;}'}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/settings')} >
@@ -92,7 +92,7 @@ function Typography(props) {
           .listItemHeader
         </span>
         <CodeSnippet
-          codeSnippet={'{font-family: Gotham Medium; color: #2e3845; letterSpacing: 0.5px;}'}
+          codeSnippet={'{font-family: Gotham Medium; color: #2e3845; letter-spacing: 0.5px;}'}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/settings/practitioners')} >
@@ -107,7 +107,7 @@ function Typography(props) {
           .subHeader
         </span>
         <CodeSnippet
-          codeSnippet={'{color: darken(lightgrey, 5%); letterSpacing: 0.5px;}'}
+          codeSnippet={'{color: darken(lightgrey, 5%); letter-spacing: 0.5px;}'}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/')} >
@@ -122,7 +122,7 @@ function Typography(props) {
           .subHeaderSmall
         </span>
         <CodeSnippet
-          codeSnippet={`{color: $primary-darkgrey; font-size: $small-size; @extend .letterSpacing;}`}
+          codeSnippet={`{color: #959596; font-size: 12px; letter-spacing: 0.5px;}`}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/patients/messages')}>
@@ -137,7 +137,7 @@ function Typography(props) {
           .subHeaderExtraSmall
         </span>
         <CodeSnippet
-          codeSnippet={`{color: $primary-darkgrey;font-size: $extra-small-size;@extend .letterSpacing;}`}
+          codeSnippet={`{color: #959596; font-size: 10px; letter-spacing: 0.5px;}`}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/patients/list')}>
@@ -152,7 +152,7 @@ function Typography(props) {
           .subHeaderMedium
         </span>
         <CodeSnippet
-          codeSnippet={'{color: darken(lightgrey, 5%); font-size: 12px letterSpacing: 0.5px;}'}
+          codeSnippet={'{color: darken(lightgrey, 5%); font-size: 12px; letter-spacing: 0.5px;}'}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/patients/list')}>
@@ -167,7 +167,7 @@ function Typography(props) {
           .subHeaderMediumSmall
         </span>
         <CodeSnippet
-          codeSnippet={`{font-family: $medium-font;font-size: $small-size;color: $primary-darkgrey;@extend .letterSpacing;}`}
+          codeSnippet={'{font-family: Gotham Medium; font-size: 12px; color: #959596; letter-spacing: 0.5px;}'}
           hideClipBoard
         />
         <div className={styles.examples} onClick={() => push('/patients/list')}>
