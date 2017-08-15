@@ -100,12 +100,6 @@
   @extend .font-jumbo;
 }
 
-.header {
-  font-size: $header-size;
-  font-weight: $jumbo-weight;
-  @extend .letterSpacing;
-}
-
 .cardHeaderTitle {
   font-family: $medium-font;
   font-size: $title-size;
@@ -125,6 +119,12 @@
   font-family: $medium-font;
   color: $primary-dark;
   //font-weight: $jumbo-weight;
+  @extend .letterSpacing;
+}
+
+.header {
+  font-size: $header-size;
+  font-weight: $jumbo-weight;
   @extend .letterSpacing;
 }
 

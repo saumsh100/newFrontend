@@ -42,21 +42,6 @@ function Typography(props) {
 
       <div className={styles.padding}>
         <span
-          className={styles.header}
-        >
-          .header
-        </span>
-        <CodeSnippet
-          codeSnippet={'{font-size: 25px; font-weight: 600; letterSpacing: 0.5px;}'}
-          hideClipBoard
-        />
-        <div className={styles.examples} >
-          <span>- all settings page headers eg. General.</span>
-        </div>
-      </div>
-
-      <div className={styles.padding}>
-        <span
           className={styles.cardHeaderCount}
         >
           .cardHeaderCount
@@ -82,6 +67,21 @@ function Typography(props) {
         />
         <div className={styles.examples} >
           <span>- the displayed title on dashboard-appointment-requests.</span>
+        </div>
+      </div>
+
+      <div className={styles.padding}>
+        <span
+          className={styles.header}
+        >
+          .header
+        </span>
+        <CodeSnippet
+          codeSnippet={'{font-size: 25px; font-weight: 600; letterSpacing: 0.5px;}'}
+          hideClipBoard
+        />
+        <div className={styles.examples} >
+          <span>- all settings page headers eg. General.</span>
         </div>
       </div>
 
