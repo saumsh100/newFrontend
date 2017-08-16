@@ -93,9 +93,10 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * Calls Socket
        */
-      socket.on('receivedCall', (data) => {
-        const message = `Call from ${data.callerNum} (${data.callerName})`;
-        window.alert(message);
+      socket.on('call.started', (data) => {
+        // const message = `Call from ${data.callerNum} (${data.callerName})`;
+        // window.alert(data);
+        console.log(data);
       });
 
       /**

@@ -31,6 +31,21 @@ const redis = {
   uri: environmentVariables.REDIS_URL || 'redis://localhost:6379',
 };
 
+const rabbit = {
+  host: environmentVariables.RABBIT_HOST || 'localhost',
+  port: environmentVariables.RABBIT_PORT || null,
+  username: environmentVariables.RABBIT_USERNAME || null,
+  password: environmentVariables.RABBIT_PASSWORD || null,
+};
+
+let user = '';
+if (rabbit.username && rabbit.password) {
+  user = `${rabbit.username}:${rabbit.password}@`;
+}
+
+const urlRabbit = rabbit.port ? `amqp://${user}${rabbit.host}:${rabbit.port}?heartbeat=380` :
+`amqp://${user}${rabbit.host}?heartbeat=380`;
+
 const namespaces = {
   dash: '/dash',
   sync: '/sync',
@@ -103,6 +118,7 @@ module.exports = {
   db,
   caCert,
   redis,
+  urlRabbit,
   vendasta,
   twilio,
   mandrill,
