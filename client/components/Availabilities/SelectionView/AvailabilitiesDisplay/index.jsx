@@ -18,7 +18,10 @@ import styles from './styles.scss';
 
 const getSortedAvailabilities = (momentDate, availabilities, accountTimezone) => {
   // TODO: This could be sped up, we can assume availabilities are in order
-  return availabilities.filter(a => moment.tz(a.startDate, accountTimezone).isSame(momentDate, 'd'));
+  return availabilities.filter((a) => {
+    return accountTimezone ? moment.tz(a.startDate, accountTimezone).isSame(momentDate, 'd')
+    : moment(a.startDate).isSame(momentDate, 'd');
+  });
   // return filteredAvailabilities.sort((a, b) => moment(a).diff(b));
 };
 
@@ -81,7 +84,8 @@ class AvailabilitiesDisplay extends Component {
 
     let i;
     for (i = 0; i <= numDaysForward; i++) {
-      const momentDate = moment.tz(selectedStartDate, accountTimezone).add(i, 'days');
+      const momentDate = accountTimezone ? moment.tz(selectedStartDate, accountTimezone).add(i, 'days')
+      : moment(selectedStartDate).add(i, 'days');
       const sortedAvailabilities = getSortedAvailabilities(momentDate, availabilities, accountTimezone);
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
@@ -143,7 +147,8 @@ class AvailabilitiesDisplay extends Component {
                           onClick={() => setSelectedAvailability(availability)}
                           className={classes}
                         >
-                          {moment.tz(availability.startDate, accountTimezone).format('h:mm a')}
+                          {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
+                          : moment(availability.startDate).format('h:mm a')}
                         </li>
                       );
                     })}
