@@ -49,15 +49,15 @@
   CareCruBookingModal.prototype.open = function() {
     this.overlay.className = `${this.overlay.className} active`;
     this.inner.className = `${this.inner.className} active`;
-    //document.body.style.setProperty('overflow', 'hidden');
-    //document.body.style.setProperty('position', 'fixed');
+    document.body.style.setProperty('overflow', 'hidden');
+    document.body.style.setProperty('position', 'fixed');
   };
 
   CareCruBookingModal.prototype.close = function() {
     this.overlay.className = this.overlay.className.replace('active', '');
     this.inner.className = this.inner.className.replace('active', '');
-    //document.body.style.setProperty('overflow', '');
-    //document.body.style.setProperty('position', '');
+    document.body.style.setProperty('overflow', '');
+    document.body.style.setProperty('position', '');
   };
 
   window.document.addEventListener('DOMContentLoaded', function() {
@@ -102,7 +102,9 @@
       ccmodal.open();
     }
 
+    console.log('ACCOUNT_ID', ACCOUNT_ID);
     window.CareCru.bookingWidgets[ACCOUNT_ID] = ccmodal;
+    console.log('added account', ACCOUNT_ID);
 
     if (Object.keys(window.CareCru.bookingWidgets).length > 1) {
       // A widget has already been created, open must now accept a target
@@ -134,7 +136,7 @@
       };
     }
 
-    console.log('Done CareCru Widget Loading.');
+    console.log('Done Widget Loading 123123');
   });
 
 })();
