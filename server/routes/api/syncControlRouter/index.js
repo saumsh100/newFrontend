@@ -1,6 +1,9 @@
+
 const syncControlRouter = require('express').Router();
 // const checkPermissions = require('../../../middleware/checkPermissions');
 const { namespaces } = require('../../../config/globals');
+const normalize = require('../normalize');
+const { Account } = require('../../../models');
 
 syncControlRouter.post('/runSync', (req, res, next) => {
   const io = req.app.get('socketio');
@@ -12,14 +15,23 @@ syncControlRouter.post('/runSync', (req, res, next) => {
     .emit('runSync', '');
 });
 
-syncControlRouter.post('/finishSync', (req, res, next) => {
-  const io = req.app.get('socketio');
-  console.log(`Sync finished. AccountId=${req.accountId}`);
+syncControlRouter.post('/finishSync', async (req, res, next) => {
+  try {
+    const io = req.app.get('socketio');
+    console.log(`Sync finished. AccountId=${req.accountId}`);
 
-  io.of(namespaces.dash)
-    .in(req.accountId)
-    .emit('syncFinished');
-  res.sendStatus(200);
+    // Early return for code safety reasons
+    res.sendStatus(200);
+
+    const account = await Account.get(req.accountId);
+    const newAccount = await account.merge({ lastSyncDate: new Date() }).save();
+
+    io.of(namespaces.dash)
+      .in(req.accountId)
+      .emit('syncFinished', normalize('account', newAccount));
+  } catch (err) {
+    next(err);
+  }
 });
 
 syncControlRouter.post('/progress', (req, res, next) => {

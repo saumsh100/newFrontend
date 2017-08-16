@@ -1,8 +1,9 @@
+
 import React, { Component, PropTypes } from 'react';
 import { Form, Field, } from '../../../library';
+import { notNegative } from '../../../library/Form/validate';
+import LastSyncDisplay from '../../../LastSyncDisplay';
 import styles from './styles.scss';
-import jwt from 'jwt-decode';
-import { notNegative, } from '../../../library/Form/validate';
 
 const maxUnitSize = value => value && value > 60 ? 'Must be less than or equal to 180' : undefined;
 
@@ -16,6 +17,12 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     canSendRecalls: activeAccount.get('canSendRecalls'),
   };
 
+  const lastSyncDate = activeAccount.get('lastSyncDate');
+  let lastSyncComponent = null;
+  if (lastSyncDate) {
+    lastSyncComponent = <LastSyncDisplay date={lastSyncDate} className={styles.lastSyncWrapper} />;
+  }
+
   return (
     <Form
       form="superAdminSettingsForm"
@@ -24,6 +31,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       data-test-id="generalSettingsForm"
       alignSave="left"
     >
+      {lastSyncComponent}
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText} >
