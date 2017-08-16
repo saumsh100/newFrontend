@@ -8,10 +8,10 @@ const createSocketIOServer = require('../sockets/createSocketServer');
 const bindSocketHandlers = require('../sockets');
 
 // Set up pub in routes for pub subs
-const context = rabbitjs.createContext(globals.rabbit);
+// const context = rabbitjs.createContext(globals.rabbit);
 
-const pub = context.socket('PUB', { routing: 'topic' });
-pub.connect('events');
+// const pub = context.socket('PUB', { routing: 'topic' });
+// pub.connect('events');
 
 // Socket.io needs a NodeJS HTTP server
 const server = http.createServer(app);
@@ -26,7 +26,7 @@ global.io = io;
 bindSocketHandlers(io);
 
 app.set('socketio', io);
-app.set('pub', pub);
+// app.set('pub', pub);
 
 // Bind to supplied port
 server.listen(globals.port, () => {

@@ -60,8 +60,8 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
         Call.create(Object.assign({}, data, callData));
       }
     }).then(() => {
-      const pub = req.app.get('pub');
-      pub.publish('call.started', callData.id);
+      // const pub = req.app.get('pub');
+      // pub.publish('call.started', callData.id);
     });
 
   res.status(201).send(201);
