@@ -160,11 +160,13 @@ export function closeBookingModal() {
   };
 }
 
+let requestCount = 0;  // The number of availability requests sent
+
 export function fetchAvailabilities() {
   return (dispatch, getState) => {
     // Set the loading symbol
     dispatch(setIsFetching(true));
-
+    requestCount += 1;
     // Make request with current selected options
     const { availabilities, entities } = getState();
     const account = entities.getIn(['accounts', 'models']).first();
@@ -178,17 +180,21 @@ export function fetchAvailabilities() {
       startDate,
       endDate,
     };
-
     return axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
-      .then(({ data }) => {
+      .then(({ data, status }) => {
         dispatch(setAvailabilities(data.availabilities));
-
+        requestCount -= 1;
         // Remove loading symbol
-        dispatch(setIsFetching(false));
+        if (!requestCount) {
+          dispatch(setIsFetching(false));
+        }
       })
       .catch((err) => {
         dispatch(setAvailabilities([]));
-        dispatch(setIsFetching(false));
+        requestCount -= 1;
+        if (!requestCount) {
+          dispatch(setIsFetching(false));
+        }
         throw err;
       });
   };
