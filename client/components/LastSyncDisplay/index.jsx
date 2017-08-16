@@ -8,6 +8,8 @@ import styles from './styles.scss';
 export default function LastSyncDisplay(props) {
   const { date, className } = props;
 
+  if (!date) return null;
+
   const mDate = moment(date);
   const isOff = mDate.isBefore(moment().subtract(10, 'minutes'));
   const statusClass = isOff ? styles.off : styles.on;
