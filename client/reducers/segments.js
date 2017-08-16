@@ -1,3 +1,4 @@
+
 import { handleActions } from 'redux-actions';
 import {
   PREVIEW_SEGMENT_ATTEMPT,

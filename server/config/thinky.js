@@ -12,7 +12,6 @@ if (globals.env === 'production') {
   });
 }
 
-let thinky;
-// const thinky = createThinky(dbConfig);
+const thinky = createThinky(dbConfig);
 
 module.exports = thinky;
