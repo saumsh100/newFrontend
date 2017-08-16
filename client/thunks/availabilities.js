@@ -181,7 +181,7 @@ export function fetchAvailabilities() {
       endDate,
     };
     return axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
-      .then(({ data, status }) => {
+      .then(({ data }) => {
         dispatch(setAvailabilities(data.availabilities));
         requestCount -= 1;
         // Remove loading symbol
