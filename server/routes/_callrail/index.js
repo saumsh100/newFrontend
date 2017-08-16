@@ -16,7 +16,7 @@ callsRouterSequelize.param('accountId', sequelizeLoader('account', 'Account'));
  * Receive a new call from CallRail's webhook API
  */
 callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
-  const { customer_phone_number } = req.body;
+  const { callernum } = req.body;
   const callData = {
     id: JSON.stringify(req.body.id),
     accountId: req.account.id,
@@ -49,19 +49,19 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
     data.dateTime = moment(req.body.datetime).toISOString();
   }
 
-  Patient.findOne({ where: { mobilePhoneNumber: customer_phone_number }, raw: true })
+  Patient.findOne({ where: { mobilePhoneNumber: callernum }, raw: true })
     .then((patient) => {
       if (patient) {
         console.log(`Received a call from ${patient.firstName} ${patient.lastName}`);
         callData.patientId = patient.id;
         Call.create(Object.assign({}, data, callData));
       } else {
-        console.log(`Received communication from unknown number: ${customer_phone_number}.`);
+        console.log(`Received communication from unknown number: ${callernum}.`);
         Call.create(Object.assign({}, data, callData));
       }
     }).then(() => {
-      const io = req.app.get('socketio');
-      return io.of(namespaces.dash).in(req.account.id).emit('receivedCall', data);
+      const pub = req.app.get('pub');
+      pub.publish('call.started', callData.id);
     });
 
   res.status(201).send(201);
