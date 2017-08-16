@@ -34,7 +34,8 @@ class WaitListPreferences extends Component {
   }
 
   render() {
-    const { waitSpot, updateWaitSpot } = this.props;
+    const { waitSpot, account, updateWaitSpot } = this.props;
+    const accountTimezone = account.timezone;
     const preferences = waitSpot.get('preferences');
     return (
       <Grid className={styles.gridContainer}>
@@ -92,6 +93,7 @@ class WaitListPreferences extends Component {
                   <DayPicker
                     multiple
                     target="icon"
+                    timezone={accountTimezone}
                     disabledDays={date => moment().isAfter(date)}
                     iconClassName={styles.unavailButton}
                     value={waitSpot.get('unavailableDays').toArray()}
@@ -109,11 +111,14 @@ class WaitListPreferences extends Component {
 
 WaitListPreferences.propTypes = {
   waitSpot: PropTypes.object,
+  account: PropTypes.object,
   updateWaitSpot: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ availabilities }) {
+  const account = availabilities.get('account').toJS();
   return {
+    account,
     waitSpot: availabilities.get('waitSpot'),
   };
 }
