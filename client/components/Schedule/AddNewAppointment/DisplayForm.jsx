@@ -31,6 +31,21 @@ const generatePractitionerOptions = (practitioners) => {
   return options;
 };
 
+const validateAppForm = (values) => {
+  const errors = {
+    appointment: {},
+    patient: {},
+  };
+
+  const patientSelected = (values.patient && values.patient.patientSelected) ? values.patient.patientSelected : null;
+
+  if (patientSelected && (typeof values.patient.patientSelected !== 'object')) {
+    errors.patient.patientSelected = 'Searching...';
+  }
+
+  return errors;
+};
+
 export default function DisplayForm(props) {
   const {
     formName,
