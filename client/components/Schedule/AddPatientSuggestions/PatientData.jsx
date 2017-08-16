@@ -22,6 +22,7 @@ export default function PatientData(props) {
     request: true,
     patientId: patient.id,
     requestModel: requestData.requestModel,
+    practitionerId: requestData.practitionerId,
   };
 
   return (
