@@ -18,7 +18,6 @@ class AddPatientSuggestions extends Component {
     const {
       setMergingPatient,
       mergingPatientData,
-      reinitializeState,
     } = this.props;
 
     setMergingPatient({
@@ -60,7 +59,6 @@ class AddPatientSuggestions extends Component {
     const {
       mergingPatientData,
       reinitializeState,
-      selectAppointment
     } = this.props;
 
     const suggestions = mergingPatientData.suggestions;
