@@ -1,3 +1,4 @@
+
 import jwt from 'jwt-decode';
 import {
   addSocketEntity,
@@ -14,6 +15,10 @@ import {
 import {
   setSyncingWithPMS,
 } from '../actions/schedule';
+
+import {
+  getModel,
+} from '../components/Utils';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
@@ -125,14 +130,15 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(showAlertTimeout({ alert, type: 'error' }));
       });
 
-      socket.on('syncFinished', () => {
+      socket.on('syncFinished', (data) => {
         const alert = {
           title: 'Sync update',
           body: 'Sync finished',
         };
-        // console.log(alert.body);
+
         dispatch(showAlertTimeout({ alert, type: 'success' }));
         dispatch(setSyncingWithPMS({ isSyncing: false }));
+        dispatch(updateEntity({ key: 'accounts', entity: data }));
       });
 
       socket.on('syncProgress', (data) => {

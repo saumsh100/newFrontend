@@ -37,6 +37,7 @@ function AvailabilitiesPreferences(props) {
     setSelectedServiceId,
     setSelectedPractitionerId,
     setSelectedStartDate,
+    account,
   } = props;
 
   const serviceOptions = services.get('models').map(s => ({ label: s.get('name'), value: s.get('id') })).toArray();
@@ -53,6 +54,8 @@ function AvailabilitiesPreferences(props) {
       practitioner: p.toJS(),
     })).toArray(),
   ];
+
+  const accountTimezone = account.timezone;
 
   return (
     <Grid>
@@ -83,6 +86,7 @@ function AvailabilitiesPreferences(props) {
           <span className={styles.label}>Date Range</span>
           <DayPicker
             target="icon"
+            timezone={accountTimezone}
             disabledDays={date => moment().isAfter(date)}
             iconClassName={styles.dayPickerIcon}
             value={selectedStartDate}
@@ -105,6 +109,13 @@ AvailabilitiesPreferences.propTypes = {
   setSelectedStartDate: PropTypes.func.isRequired,
 };
 
+function mapStateToProps({ availabilities }) {
+  const account = availabilities.get('account').toJS();
+  return {
+    account,
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setSelectedServiceId: Actions.setSelectedServiceId,
@@ -113,4 +124,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(AvailabilitiesPreferences);
+export default connect(mapStateToProps, mapDispatchToProps)(AvailabilitiesPreferences);
