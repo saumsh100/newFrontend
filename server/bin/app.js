@@ -1,6 +1,5 @@
 
 require('../config/initializeCodeTranspiler');
-const chalk = require('chalk');
 
 const chalk = require('chalk');
 const globals = require('../config/globals');

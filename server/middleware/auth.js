@@ -6,7 +6,6 @@ import rolePermissions from '../config/permissions';
 import StatusError from '../util/StatusError';
 // import { AuthSession } from '../models';
 import { AuthSession as _AuthSession } from '../_models';
-const chalk = require('chalk');
 
 function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
