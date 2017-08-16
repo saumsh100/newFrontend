@@ -44,6 +44,35 @@ If there are problems with build and you are changing order of installation, bui
 > **Note:**
 > `npm run seeds` can be re-run whenever a fresh DB is needed
 
+## RabbitMQ Setup
+
+Install RabbitMQ via brew
+
+```
+brew install rabbitmq
+```
+
+Edit .profile using vim (or editor of your choice)
+
+```
+vim ~/.profile
+```
+
+Add to file
+```
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+```
+
+Start RabbitMQ
+```
+rabbitmq-server
+```
+
+Stop RabbitMQ
+```
+rabbitmqctl stop
+```
+
 ## Environment Variables
 
 To run the application effectively, you need to acquire all of the necessary API keys.
@@ -127,34 +156,6 @@ https://carecru-staging-pr-[PR_NUMBER].herokuapp.com
 
 
 ## Useful notes
-### RabbitMQ
-
-Install RabbitMQ via brew
-
-```
-brew install rabbitmq
-```
-
-Edit .profile using vim (or editor of your choice)
-
-```
-vim ~/.profile
-```
-
-Add to file
-```
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-```
-
-Start RabbitMQ
-```
-rabbitmq-server
-```
-
-Stop RabbitMQ
-```
-rabbitmqctl stop
-```
 
 ### Rethink
 It is also possible to run rethinkdb as a daemon from any directory hidden in the background:
