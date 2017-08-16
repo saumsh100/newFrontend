@@ -1,12 +1,12 @@
 
+import rabbitjs from 'rabbit.js';
 import createSocketServer from '../sockets/createSocketServer';
-import createRabbitSub from '../lib/events';
+import registerEventSubscribers from '../lib/events';
 
-const rabbitjs = require('rabbit.js');
-const { urlRabbit } = require('../config/globals');
+import { rabbit } from '../config/globals';
 
 global.io = createSocketServer();
 
-const context = rabbitjs.createContext(urlRabbit);
+const context = rabbitjs.createContext(rabbit);
 
-createRabbitSub(context, global.io);
+registerEventSubscribers(context, global.io);

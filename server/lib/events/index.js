@@ -1,8 +1,8 @@
-import createCallsSub from './Calls';
+import registerCallsSubscriber from './Calls';
 
-export default function createRabbitSub(context, io) {
+export default function registerEventSubscribers(context, io) {
   context.on('ready', () => {
     // Here we'll add more subs for other routes
-    createCallsSub(context, io);
+    registerCallsSubscriber(context, io);
   });
 }

@@ -1,10 +1,6 @@
 import { namespaces } from '../../../config/globals';
-
-const {
-  Call,
-  Patient,
-} = require('../../../_models');
-const normalize = require('../../../routes/_api/normalize');
+import { Call, Patient } from '../../../_models';
+import normalize from '../../../routes/_api/normalize';
 
 function sendCallerIdSocket(sub, io) {
   sub.on('data', (data) => {
@@ -30,7 +26,7 @@ function sendCallerIdSocket(sub, io) {
 }
 
 
-export default function createCallsSub(context, io) {
+export default function registerCallsSubscriber(context, io) {
   // Need to create a new sub for every route to tell
   // the difference eg. call.created and call.deleted
   const subStarted = context.socket('SUB', { routing: 'topic' });

@@ -1,6 +1,6 @@
+import rabbitjs from 'rabbit.js';
 
 const http = require('http');
-const rabbitjs = require('rabbit.js');
 
 const globals = require('../config/globals');
 const app = require('./app');
@@ -8,7 +8,7 @@ const createSocketIOServer = require('../sockets/createSocketServer');
 const bindSocketHandlers = require('../sockets');
 
 // Set up pub in routes for pub subs
-const context = rabbitjs.createContext(globals.urlRabbit);
+const context = rabbitjs.createContext(globals.rabbit);
 
 const pub = context.socket('PUB', { routing: 'topic' });
 pub.connect('events');
