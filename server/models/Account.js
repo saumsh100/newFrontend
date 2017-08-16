@@ -35,6 +35,7 @@ const Account = createModel('Account', {
   canSendRecalls: type.boolean().default(false),
   unit: type.number().default(15),
   syncClientAdapter: type.string(),
+  lastSyncDate: type.date(),
 });
 
 Account.docOn('saving', validatePatient); // <<< doc is in `doc` param

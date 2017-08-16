@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,6 +8,7 @@ import { getModel, getCollection } from '../../../Utils';
 import { fetchEntities, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import PageContainer from '../../General/PageContainer';
 import EditableList from '../../General/EditableList';
+import LastSyncDisplay from '../../../LastSyncDisplay';
 import { VButton } from '../../../library';
 import styles from './styles.scss';
 
@@ -44,6 +46,13 @@ class AccountsList extends Component {
         to={baseUrl('/create')}
       >Add Account</VButton>;
 
+    const renderAccountDisplay = (account) => (
+      <div className={styles.wrapper}>
+        <strong className={styles.list}>{account.name}</strong>
+        <LastSyncDisplay className={styles.lastSyncDisplay} date={account.lastSyncDate} />
+      </div>
+    );
+
     return (
       <div>{ enterprise ? (
         <PageContainer
@@ -53,7 +62,7 @@ class AccountsList extends Component {
         >
           <EditableList
             items={accounts}
-            render={account => <strong className={styles.list}>{account.name}</strong>}
+            render={renderAccountDisplay}
             onEdit={navigateToEdit}
             onDelete={deleteAccount}
             confirm={({ name }) => `Do you really want to delete ${name} Account?`}

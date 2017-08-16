@@ -2,6 +2,7 @@
 require('../config/initializeCodeTranspiler');
 const chalk = require('chalk');
 
+const chalk = require('chalk');
 const globals = require('../config/globals');
 const handleErrors = require('../middleware/handleErrors');
 const app = require('../config/express');

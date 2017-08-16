@@ -41,7 +41,6 @@ function getTokenFromReq(req) {
 
   return jwt.verify(token, tokenSecret, {}, (err, decoded) => {
     if (err) {
-      console.error(err);
       return next(StatusError(401, 'Unauthorized. Error verifying token.'));
     }
 
@@ -145,4 +144,3 @@ module.exports.sequelizeAuthMiddleware = function (req, res, next) {
       .catch(next);
   });
 };
-

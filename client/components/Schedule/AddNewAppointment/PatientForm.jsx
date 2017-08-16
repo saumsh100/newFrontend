@@ -5,7 +5,7 @@ import { Grid, Row, Col, Field } from '../../library';
 import styles from './styles.scss';
 
 function validatePatient(value) {
-  return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
+  return (value && (typeof value !== 'object')) ? 'Searching...' : undefined;
 }
 
 export default function PatientForm(props) {
