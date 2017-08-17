@@ -22,6 +22,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsId": null,
+        "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
           "afternoon": true,

@@ -130,6 +130,7 @@ Object {
         "country": null,
         "destinationPhoneNumber": "+16041234567",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "fullLogoUrl": null,
         "id": "62954241-3652-4792-bae5-5bfed53d37b7",
         "logo": null,
         "name": "Test Account",

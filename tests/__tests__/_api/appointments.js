@@ -110,7 +110,6 @@ describe('/api/appointments', () => {
 
   // TODO: This can use some more test cases... (Gavin: Not familiar with what's going on in these endpoints)
   describe('GET /', () => {
-
     test('/business - [no description]', () => {
       return request(app)
         .get(`${rootUrl}/business?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)

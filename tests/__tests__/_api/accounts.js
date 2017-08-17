@@ -136,7 +136,7 @@ describe('/api/accounts', () => {
           firstName: 'New',
           lastName: 'Guy',
         })
-        .expect(200)
+        .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           const [user] = getModelsArray('users', body);
