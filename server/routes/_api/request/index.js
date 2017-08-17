@@ -35,7 +35,8 @@ requestsRouter.post('/', (req, res, next) => {
     })
     .then(async ({ request }) => {
       if (request.patientUserId) {
-        request.patientUser = await PatientUser.findById(request.patientUserId);
+        const pUser = await PatientUser.findById(request.patientUserId);
+        request.patientUser = pUser.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
