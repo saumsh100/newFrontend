@@ -129,17 +129,17 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
       }));
     });
 
-    const deleteTimeOffs = Object.keys(recurringTimeoffs).map((allData) => {
+    const deleteTimeOffs = recurringTimeoffs.map((allData) => {
       return PractitionerRecurringTimeOff.destroy({
         where: {
+          fromPMS: true,
           practitionerId: allData.practitionerId,
         },
       });
     });
 
     return Promise.all(deleteTimeOffs)
-    .then(() => {
-
+    .then((a) => {
       const waitForAll = [];
 
       recurringTimeoffs.map((allData) => {
