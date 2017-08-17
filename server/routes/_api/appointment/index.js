@@ -557,9 +557,10 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       return { appointment: appointment.dataValues, normalized };
     })
     .then(async ({ appointment }) => {
-      // Dispatch to the appropriate socket room
       if (appointment.isSyncedWithPMS && appointment.patientId) {
-        appointment.patient = await Patient.findById(appointment.patientId);
+        // Dashboard app needs patient data
+        const patient = await Patient.findById(appointment.patientId);
+        appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
@@ -669,7 +670,8 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       // Dispatch to the appropriate socket room
       if (appointment.isSyncedWithPMS && appointment.patientId) {
         // Dashboard app needs patient data
-        appointment.patient = await Patient.findById(appointment.patientId);
+        const patient = await Patient.findById(appointment.patientId);
+        appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
