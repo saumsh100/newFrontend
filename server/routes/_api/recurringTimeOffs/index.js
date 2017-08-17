@@ -97,7 +97,7 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
     }
   }
 
-  return Account.get(req.accountId).run()
+  return Account.findById(req.accountId)
   .then((account) => {
 
     const allPromises = [];

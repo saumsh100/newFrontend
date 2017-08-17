@@ -460,11 +460,11 @@ patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, 
   const { patient } = req;
   const accountId = req.accountId;
   return patient.destroy()
-    .then(() => res.send(204))
+    .then(() => res.sendStatus(204))
     .then(() => {
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      const normalized = normalize('patient', patient);
+      const normalized = normalize('patient', patient.get({ plain: true }));
       return io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
     .catch(next);
