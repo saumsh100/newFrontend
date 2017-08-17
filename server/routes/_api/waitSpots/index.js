@@ -100,7 +100,6 @@ waitSpotsRouter.put('/:waitSpotId', checkPermissions('waitSpots:update'), (req, 
  */
 waitSpotsRouter.delete('/:waitSpotId', checkPermissions('waitSpots:delete'), (req, res, next) => {
   const { waitSpot, accountId } = req;
-  
   // We actually delete waitSpots as we don't care about history
   return req.waitSpot.destroy()
     .then(() => {
