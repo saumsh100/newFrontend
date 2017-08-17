@@ -15,7 +15,7 @@ function logError(err, req, res, next) {
 function sendError(err, req, res, next) {
   console.log(err.message);
   const errorStatus = err.status || 500;
-  
+
   // Prepare a JsonAPI-compliant error response for clients that request it
   if (req.header('Accept') === 'application/vnd.api+json') {
     // Create a JsonAPI error object. If a collection of errors exists, multiple error

@@ -118,7 +118,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
       })
       .then((practitionerDel) => {
         practitionerDel = practitionerDel.get({ plain: true });
-        return res.send(normalize('practitioner', practitionerDel));
+        return res.send(format(req, res, 'practitioner', practitionerDel));
       });
     });
   }).catch(next)
