@@ -23,10 +23,20 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
   ],
+
+  Practitioner: [
+    'firstName',
+    'lastName',
+    'type',
+    'isActive',
+    'isHidden',
+    'avatarUrl',
+    'isCustomSchedule',
+  ],
 };
 
 /**
- * SERIALIZERS contains all allowable resources for josnapi serialization*
+ * SERIALIZERS contains all allowable resources for jsonapi serialization*
  */
 const SERIALIZERS = {
   chair: new Serializer('chair', makeConfig({
@@ -36,6 +46,11 @@ const SERIALIZERS = {
 
   chairs: new Serializer('chairs', makeConfig({
     attributes: ModelAttributes.Chair,
+  })),
+
+  practitioner: new Serializer('practitioner', makeConfig({
+    attributes: ModelAttributes.Practitioner,
+    pluralizeType: false,
   })),
 };
 
