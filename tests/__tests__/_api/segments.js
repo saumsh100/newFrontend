@@ -5,7 +5,7 @@ import app from '../../../server/bin/app';
 import { Segment } from '../../../server/_models';
 import wipeModel from '../../_util/wipeModel';
 import { seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
-import { generateTokenSequelize } from '../../util/generateToken';
+import generateToken from '../../_util/generateToken';
 import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/segments';
@@ -32,7 +32,7 @@ describe('/api/segments', () => {
   let token2 = null;
   beforeEach(async () => {
     await seedTestUsers();
-    token = await generateTokenSequelize({ username: 'superadmin@test.com', password: '!@CityOfBudaTest#$' });
+    token = await generateToken({ username: 'superadmin@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
