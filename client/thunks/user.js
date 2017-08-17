@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { SubmissionError } from 'redux-form';
+import {
+  showAlertTimeout,
+} from './alerts';
 
 // TODO: remove UX specific logic from here, just return request promise...
 export function changePassword(params) {
@@ -10,10 +13,12 @@ export function changePassword(params) {
       .then(() => {
         // re-route?
         // dispatch(push('/'));
+        dispatch(showAlertTimeout({ alert: { body: 'Password Changed' }, type: 'success' }));
       })
       .catch((err) => {
+        dispatch(showAlertTimeout({ alert: { body: err.data }, type: 'error' }));
         throw new SubmissionError({
-          confirmPassword: err.data,
+          oldPassword: err.data,
         });
       });
   };
