@@ -80,14 +80,15 @@ requestsRouter.get('/', (req, res, next) => {
   isCancelled = !!isCancelled;
 
   return Request.findAll({
-    raw: true,
-    nest: true,
     where: {
       accountId,
       isCancelled,
     },
     include: includeArray,
-  }).then(requests => res.send(normalize('requests', requests)))
+  }).then(requests => {
+    const sendRequests = requests.map(r => r.get({ plain: true }));
+    return res.send(normalize('requests', sendRequests));
+  })
     .catch(next);
 });
 
