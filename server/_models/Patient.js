@@ -60,7 +60,7 @@ export default function (sequelize, DataTypes) {
     workPhoneNumber: customDataTypes.phoneNumber('workPhoneNumber', DataTypes),
     otherPhoneNumber: customDataTypes.phoneNumber('otherPhoneNumber', DataTypes),
 
-    prefPhoneNumber: {
+    prefContactPhone: {
       // TODO: this should be an enum
       type: DataTypes.STRING,
     },
