@@ -25,7 +25,7 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "npm run test:api",
     "test:cypress": "cypress run",
-    "test:jest": "export $(cat .env | xargs) && jest --verbose",
+    "test:jest": "export $(cat .env | xargs) && jest --verbose --forceExit",
     "test:api": "export $(cat .env | xargs) && jest tests/__tests__/_api --verbose --runInBand",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
