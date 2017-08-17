@@ -118,7 +118,6 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
 
       allPromises.push(Practitioner.findOne({ where: { id: practitionerId }, raw: true })
       .then((prac) => {
-        console.log(prac)
         return WeeklySchedule.findOne({ where: { id: prac.weeklyScheduleId }, raw: true })
         .then((weeklySchedule) => {
           Object.keys(newChairIds).map((day) => {
