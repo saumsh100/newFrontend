@@ -26,7 +26,7 @@
     "test": "npm run test:api",
     "test:cypress": "cypress run",
     "test:jest": "export $(cat .env | xargs) && jest --verbose --forceExit",
-    "test:api": "export $(cat .env | xargs) && jest tests/__tests__/_api --verbose --runInBand",
+    "test:api": "export $(cat .env | xargs) && jest tests/__tests__/_api --verbose --runInBand --forceExit",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
     "clean:assets": "rimraf statics/assets",
