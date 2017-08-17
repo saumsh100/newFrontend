@@ -6,7 +6,7 @@
   left: 0;
   width: $side-nav-width;
   position: fixed;
-  height: 100%;
+  height: calc(100vh - 65px);
   background-color: $primary-dark;
   z-index: 20;
   overflow-y: auto;

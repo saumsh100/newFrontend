@@ -59,9 +59,9 @@ accountsRouter.post('/:accountId/logo', checkPermissions('accounts:update'), asy
     await upload(fileKey, req.files.file.data);
 
     req.account.logo = fileKey;
-    const savedAccount = await req.account.save();
+    const savedAccount = await req.account.update({ logo: fileKey });
 
-    return res.send(normalize('account', savedAccount));
+    return res.send(normalize('account', savedAccount.get({ plain: true })));
   } catch (error) {
     return next(error);
   }
