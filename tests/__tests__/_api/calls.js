@@ -3,9 +3,9 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
 import { Call, Patient, Account } from '../../../server/_models';
-import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
-import { accountId, seedTestUsers } from '../../_util/seedTestUsers';
-import { patient, patientId, seedTestPatients } from '../../_util/seedTestPatients';
+import wipeModel from '../../_util/wipeModel';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
+import { patient, patientId, seedTestPatients, wipeTestPatients } from '../../_util/seedTestPatients';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const chatId = '3180a744-f6b0-4a09-8046-4e713bf5b565';
@@ -51,8 +51,9 @@ describe('/api/calls', () => {
   });
 
   afterAll(async () => {
-    await wipeModel(Call)
-    await wipeAllModels();
+    await wipeModel(Call);
+    await wipeTestPatients();
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
