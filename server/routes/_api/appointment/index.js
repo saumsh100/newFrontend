@@ -372,7 +372,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       sendStats.patients = {};
       sendStats.newPatients = 0;
       const range = moment().range(moment(start), moment(end));
-    
+
       const numberOfDays = moment(end).diff(moment(start), 'days');
       const dayOfWeek = moment(start).day();
       const weeks = Math.floor(numberOfDays / 7);
@@ -527,8 +527,6 @@ appointmentsRouter.get('/', (req, res, next) => {
   endDate = endDate ? endDate : moment().add(1, 'years').toISOString();
 
   return Appointment.findAll({
-    raw: true,
-    nest: true,
     where: {
       accountId,
       startDate: {
@@ -539,7 +537,10 @@ appointmentsRouter.get('/', (req, res, next) => {
     limit: parseInt(limitted),
     include: includeArray,
     offset: parseInt(skipped),
-  }).then(appointments => res.send(normalize('appointments', appointments)))
+  }).then((appointments) => {
+    const sendAppointments = appointments.map(a => a.get({ plain: true }));
+    return res.send(normalize('appointments', sendAppointments));
+  })
     .catch(next);
 });
 
