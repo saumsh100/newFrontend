@@ -110,12 +110,14 @@ appointmentsRouter.get('/business', (req, res, next) => {
               gte: startDate,
               lte: endDate,
             },
+            practitionerId: appointment.practitionerId,
           });
           queryCancelled.where.$or.push({
             endDate: {
               gte: startDate,
               lte: endDate,
             },
+            practitionerId: appointment.practitionerId,
           });
         }
         return null;
