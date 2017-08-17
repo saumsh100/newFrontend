@@ -693,7 +693,7 @@ appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:dele
     .then(() => {
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      const normalized = normalize('appointment', appointment);
+      const normalized = normalize('appointment', appointment.get({ plain: true }));
       return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })
     .catch(next);
