@@ -57,8 +57,10 @@ servicesRouter.put('/:serviceId', checkPermissions('services:update'), async (re
       for (let i = 0; i < practitioners.length; i++) {
         if (!req.body.practitioners.includes(practitioners[i])) {
           await Practitioner_Service.destroy({
-            practitionerId: practitioners[i],
-            serviceId: serviceClean.id,
+            where: {
+              practitionerId: practitioners[i],
+              serviceId: serviceClean.id,
+            },
           });
         }
       }
