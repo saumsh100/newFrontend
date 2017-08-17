@@ -58,7 +58,11 @@ export default function (sequelize, DataTypes) {
     });
 
     Service.belongsToMany(Practitioner, {
-      through: 'Practitioner_Service',
+      through: {
+        model: 'Practitioner_Service',
+        unique: false,
+      },
+      constraints: false,
       as: 'practitioners',
       foreignKey: 'serviceId',
     });
