@@ -118,7 +118,6 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
 
       allPromises.push(Practitioner.findOne({ where: { id: practitionerId }, raw: true })
       .then((prac) => {
-        console.log(prac)
         return WeeklySchedule.findOne({ where: { id: prac.weeklyScheduleId }, raw: true })
         .then((weeklySchedule) => {
           Object.keys(newChairIds).map((day) => {
@@ -130,17 +129,17 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
       }));
     });
 
-    const deleteTimeOffs = Object.keys(recurringTimeoffs).map((allData) => {
+    const deleteTimeOffs = recurringTimeoffs.map((allData) => {
       return PractitionerRecurringTimeOff.destroy({
         where: {
+          fromPMS: true,
           practitionerId: allData.practitionerId,
         },
       });
     });
 
     return Promise.all(deleteTimeOffs)
-    .then(() => {
-
+    .then((a) => {
       const waitForAll = [];
 
       recurringTimeoffs.map((allData) => {
