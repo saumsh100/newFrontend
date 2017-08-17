@@ -50,30 +50,12 @@ servicesRouter.put('/:serviceId', checkPermissions('services:update'), async (re
         },
         include: [{ model: Practitioner, as: 'practitioners', required: false }],
       });
-      const serviceClean = service.get({ plain: true });
-      const practitioners = serviceClean.practitioners;
 
-      // delete removed services
-      for (let i = 0; i < practitioners.length; i++) {
-        if (!req.body.practitioners.includes(practitioners[i])) {
-          await Practitioner_Service.destroy({
-            where: {
-              practitionerId: practitioners[i],
-              serviceId: serviceClean.id,
-            },
-          });
-        }
-      }
-
-      // create new services for pract
-      for (let i = 0; i < req.body.practitioners.length; i++) {
-        if (!practitioners.includes(req.body.practitioners[i])) {
-          await Practitioner_Service.create({
-            practitionerId: req.body.practitioners[i],
-            serviceId: serviceClean.id,
-          });
-        }
-      }
+      const pracs = await Practitioner.findAll({
+        where: { id: req.body.practitioners },
+        include: [{ model: Service, as: 'services' }],
+      });
+      await service.setPractitioners(pracs);
     }
 
     if (req.service.isDefault !== req.body.isDefault && req.body.isDefault === true) {
