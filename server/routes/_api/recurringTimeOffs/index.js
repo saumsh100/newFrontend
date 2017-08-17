@@ -97,13 +97,12 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
     }
   }
 
-  return Account.findById(req.accountId)
+  return Account.findOne({ where: { id: req.accountId }, raw: true })
   .then((account) => {
 
     const allPromises = [];
     Object.keys(chairs).map((practitionerId) => {
       const newChairIds = {};
-
       const ids = {};
 
       for (let i = 0; i < chairs[practitionerId].length; i++) {
@@ -119,13 +118,14 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
 
       allPromises.push(Practitioner.findOne({ where: { id: practitionerId }, raw: true })
       .then((prac) => {
-        return WeeklySchedule.findOne({ where: { id: prac.weeklySchedule.id }, raw: true })
+        console.log(prac)
+        return WeeklySchedule.findOne({ where: { id: prac.weeklyScheduleId }, raw: true })
         .then((weeklySchedule) => {
           Object.keys(newChairIds).map((day) => {
             weeklySchedule[day].chairIds = newChairIds[day];
             weeklySchedule[day].pmsScheduleId = ids[day];
           });
-          return WeeklySchedule.update(weeklySchedule, { where: { id: prac.weeklySchedule.id } });
+          return WeeklySchedule.update(weeklySchedule, { where: { id: prac.weeklyScheduleId } });
         });
       }));
     });
