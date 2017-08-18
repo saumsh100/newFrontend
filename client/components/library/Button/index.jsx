@@ -18,6 +18,7 @@ export default function Button(props) {
       disabled: props.disabled,
       icon: props.icon,
       create: props.create,
+      edit: props.edit
     })
   );
 
