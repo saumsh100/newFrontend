@@ -109,8 +109,8 @@ appointmentsRouter.get('/business', (req, res, next) => {
             startDate: {
               gte: startDate,
               lte: endDate,
-              practitionerId: appointment.practitionerId,
             },
+            practitionerId: appointment.practitionerId,
           });
         }
         return null;
