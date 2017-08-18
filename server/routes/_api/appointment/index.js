@@ -107,17 +107,10 @@ appointmentsRouter.get('/business', (req, res, next) => {
           // add filter to for queryCancelled to find out if a cancelled appointment has been refilled
           queryCancelled.where.$or.push({
             startDate: {
-              gt: startDate,
-              lt: endDate,
+              gte: startDate,
+              lte: endDate,
+              practitionerId: appointment.practitionerId,
             },
-            practitionerId: appointment.practitionerId,
-          });
-          queryCancelled.where.$or.push({
-            endDate: {
-              gt: startDate,
-              lt: endDate,
-            },
-            practitionerId: appointment.practitionerId,
           });
         }
         return null;
