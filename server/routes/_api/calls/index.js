@@ -131,14 +131,26 @@ callsRouter.get('/statsgraph', (req, res, next) => {
 
   const range = generateDuringFilterSequelize(startDate, endDate);
 
-  return Call.findAll({
+  const promises = [];
+
+  promises.push(Call.findAll({
     where: {
       accountId,
       ...range,
     },
     raw: true,
-  }).then((calls) => {
+  }));
+
+  promises.push(Account.findOne({
+    where: { id: accountId },
+    raw: true,
+  }));
+
+  return Promise.all(promises)
+  .then((results) => {
     // TODO: handle with one query or extract to a function for testing.
+    const calls = results[0];
+    const account = results[1];
 
     const send = {
       xValues: [],
@@ -146,7 +158,7 @@ callsRouter.get('/statsgraph', (req, res, next) => {
     };
 
     const graphData = {};
-    const startTime = moment(startDate);
+    const startTime = account.timezone ? moment.tz(startDate, account.timezone) : moment(startDate);
     graphData[startTime.format('MMM DD')] = 0;
 
     // define x values
@@ -157,8 +169,9 @@ callsRouter.get('/statsgraph', (req, res, next) => {
 
     // pupulate y values
     calls.forEach((call) => {
-      if (graphData[moment(call.startTime).format('MMM DD')] >= 0) {
-        graphData[moment(call.startTime).format('MMM DD')] += 1;
+      const date = account.timezone ? moment.tz(call.startTime, account.timezone).format('MMM DD') : moment(call.startTime).format('MMM DD');
+      if (graphData[date] >= 0) {
+        graphData[date] += 1;
       }
     });
 
