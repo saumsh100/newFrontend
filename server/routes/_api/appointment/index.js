@@ -87,7 +87,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       },
     ],
   })
-    .then((appointments) => {
+    .then(async (appointments) => {
       const queryCancelled = {
         where: {
           accountId,
@@ -98,41 +98,34 @@ appointmentsRouter.get('/business', (req, res, next) => {
         },
         raw: true,
       };
-      appointments.map((appointment) => {
-        if (testHygien.test(appointment.practitioner.type)) {
+
+      for (let i = 0; i < appointments.length; i++) {
+        if (testHygien.test(appointments[i].practitioner.type)) {
           send.hygieneAppts++;
         }
-        if (appointment.isCancelled) {
+
+        if (appointments[i].isCancelled) {
           send.brokenAppts++;
-          // add filter to for queryCancelled to find out if a cancelled appointment has been refilled
-          queryCancelled.where.$or.push({
-            startDate: {
-              gt: startDate,
-              lt: endDate,
+          const filled = await Appointment.findOne({
+            where: {
+              accountId,
+              startDate: {
+                gte: appointments[i].startDate,
+                lte: appointments[i].endDate,
+              },
+              patientId: {
+                $not: null,
+              },
+              practitionerId: appointments[i].practitionerId,
+              isCancelled: false,
             },
-            practitionerId: appointment.practitionerId,
           });
-          queryCancelled.where.$or.push({
-            endDate: {
-              gt: startDate,
-              lt: endDate,
-            },
-            practitionerId: appointment.practitionerId,
-          });
+          if (filled) {
+            send.brokenAppts--;
+          }
         }
-        return null;
-      });
-      Appointment
-        .findAll(queryCancelled)
-        .then((appointments) => {
-          appointments.map((appointment) => {
-            if (!appointment.isCancelled) {
-              send.brokenAppts--;
-            }
-            return null;
-          });
-          res.send(send);
-        });
+      }
+      return res.send(send);
     })
     .catch(next);
 });
