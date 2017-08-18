@@ -37,14 +37,17 @@ class DayPicker extends Component {
       onChange,
       timezone,
     } = this.props;
+
+
     const dates = moment(day).format('YYYY-MM-DD');
 
-    day = timezone ? moment.tz(dates, timezone).add(12, 'hours')._d : moment(day).subtract(12, 'hours')._d;
+    day = timezone ? moment.tz(dates, timezone).add(12, 'hours').toISOString() : moment(day).subtract(12, 'hours').toISOString();
     if (disabled) {
       return;
     }
 
     if (!multiple) {
+      console.log(day)
       this.props.onChange(day);
       this.setState({ isOpen: false });
     } else {
@@ -68,6 +71,7 @@ class DayPicker extends Component {
   handleInputChange(e) {
 
     const { value } = e.target;
+
     const momentDay = moment(value, 'L', true);
 
     if (momentDay.isValid() && this.props.handleThisInput) {
