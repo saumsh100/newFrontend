@@ -6,10 +6,10 @@ import classNames from 'classnames';
 import styles from './styles.scss';
 
 export default function LastSyncDisplay(props) {
-  const { date, className } = props;
+  const { date, ttl, className } = props;
   if (!date) return null;
   const mDate = moment(date);
-  const isOff = mDate.isBefore(moment().subtract(10, 'minutes'));
+  const isOff = mDate.isBefore(moment().subtract(ttl, 'minutes'));
   const statusClass = isOff ? styles.off : styles.on;
   const classes = classNames(className, statusClass);
   const displayString = `Last synced ${mDate.fromNow(true)} ago`;
@@ -19,6 +19,10 @@ export default function LastSyncDisplay(props) {
     </div>
   );
 }
+
+LastSyncDisplay.defaultProps = {
+  ttl: 30,
+};
 
 LastSyncDisplay.propTypes = {
   date: PropTypes.string,
