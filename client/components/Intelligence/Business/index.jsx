@@ -156,8 +156,8 @@ class Business extends Component {
       };
     }) : []);
 
-    unfilledHours = Math.round(unfilledHours * 100) / 100;
-    filledHours = Math.round(filledHours * 100) / 100;
+    unfilledHours = unfilledHours.toFixed(2);
+    filledHours = filledHours.toFixed(2);
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
@@ -213,7 +213,7 @@ class Business extends Component {
 
     const patientsData2 = [
       {
-        count: filledHours - unfilledHours,
+        count: (filledHours - unfilledHours).toFixed(2),
         title: 'Unfilled Hours',
         date: moment({ year: 2017, month: 2, day: 15 }).fromNow(),
         color: 'primaryColor',

@@ -1,5 +1,5 @@
 
-import Moment from 'moment';
+import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
@@ -87,7 +87,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       },
     ],
   })
-    .then((appointments) => {
+    .then(async (appointments) => {
       const queryCancelled = {
         where: {
           accountId,
@@ -98,41 +98,34 @@ appointmentsRouter.get('/business', (req, res, next) => {
         },
         raw: true,
       };
-      appointments.map((appointment) => {
-        if (testHygien.test(appointment.practitioner.type)) {
+
+      for (let i = 0; i < appointments.length; i++) {
+        if (testHygien.test(appointments[i].practitioner.type)) {
           send.hygieneAppts++;
         }
-        if (appointment.isCancelled) {
+
+        if (appointments[i].isCancelled) {
           send.brokenAppts++;
-          // add filter to for queryCancelled to find out if a cancelled appointment has been refilled
-          queryCancelled.where.$or.push({
-            startDate: {
-              gt: startDate,
-              lt: endDate,
+          const filled = await Appointment.findOne({
+            where: {
+              accountId,
+              startDate: {
+                gte: appointments[i].startDate,
+                lte: appointments[i].endDate,
+              },
+              patientId: {
+                $not: null,
+              },
+              practitionerId: appointments[i].practitionerId,
+              isCancelled: false,
             },
-            practitionerId: appointment.practitionerId,
           });
-          queryCancelled.where.$or.push({
-            endDate: {
-              gt: startDate,
-              lt: endDate,
-            },
-            practitionerId: appointment.practitionerId,
-          });
+          if (filled) {
+            send.brokenAppts--;
+          }
         }
-        return null;
-      });
-      Appointment
-        .findAll(queryCancelled)
-        .then((appointments) => {
-          appointments.map((appointment) => {
-            if (!appointment.isCancelled) {
-              send.brokenAppts--;
-            }
-            return null;
-          });
-          res.send(send);
-        });
+      }
+      return res.send(send);
     })
     .catch(next);
 });
@@ -148,7 +141,9 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
   const startDate = moment().subtract(1, 'years').toISOString();
   const endDate = moment().toISOString();
 
-  return Appointment.findAll({
+  const promises = [];
+
+  promises.push(Appointment.findAll({
     where: {
       accountId,
       $or: [
@@ -170,12 +165,23 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
       },
     },
     raw: true,
-  })
-    .then((result) => {
+  }));
+
+  promises.push(Account.findOne({
+    where: { id: accountId },
+    raw: true,
+  }));
+
+  return Promise.all(promises)
+    .then((results) => {
+      const result = results[0];
+      const account = results[1];
+
       const days = new Array(6).fill(0);
       // calculate the frequency of the day of the week
       for (let i = 0; i < result.length; i++) {
-        days[moment(result[i].startDate).get('day') - 1]++;
+        const day = account.timezone ? moment.tz(result[i].startDate, account.timezone).get('day') : moment(result[i].startDate).get('day');
+        days[day - 1]++;
       }
       res.send({ days });
     })

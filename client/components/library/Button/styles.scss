@@ -64,9 +64,15 @@
 .create {
   background: $clr-dark-blue;
 
-
   &:hover {
     background-color: darken($clr-dark-blue, 20%) !important;
   }
 }
 
+.edit {
+  background: $primary-green;
+
+  &:hover {
+    background-color: darken($primary-green, 10%) !important;
+  }
+}
