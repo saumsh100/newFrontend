@@ -66,7 +66,17 @@ function fetchServiceData(options) {
     return Service.findOne({
       where: { id: serviceId },
       include: [
-        { model: Practitioner, as: 'practitioners', raw: true },
+        {
+          where: {
+            isActive: true,
+            isHidden: {
+              $ne: true,
+            },
+          },
+          model: Practitioner,
+          as: 'practitioners',
+          raw: true,
+        },
         { model: Request, as: 'requests', raw: true },
       ],
     }).then((serviceOne) => {
