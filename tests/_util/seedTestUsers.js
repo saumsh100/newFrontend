@@ -24,6 +24,7 @@ const account = {
   enterpriseId,
   name: 'Test Account',
   destinationPhoneNumber: '+16041234567',
+  timezone: 'America/Vancouver',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
