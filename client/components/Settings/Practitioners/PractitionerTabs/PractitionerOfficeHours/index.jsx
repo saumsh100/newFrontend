@@ -297,7 +297,7 @@ class PractitionerOfficeHours extends Component{
         return (<div className={styles.toggleContainer_hours}>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader}>
-            <Header title={`Pattern ${i + 1}`} className={styles.header} />
+            <Header title={`Week ${i + 2} Pattern`} className={styles.header} />
             <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
           </div>
           <OfficeHoursForm
