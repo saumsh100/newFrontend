@@ -108,6 +108,10 @@ export default function (sequelize, DataTypes) {
     syncClientAdapter: {
       type: DataTypes.STRING,
     },
+
+    lastSyncDate: {
+      type: DataTypes.DATE,
+    },
   });
 
   Account.associate = (models) => {
