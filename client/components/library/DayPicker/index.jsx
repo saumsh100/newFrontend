@@ -47,7 +47,6 @@ class DayPicker extends Component {
     }
 
     if (!multiple) {
-      console.log(day)
       this.props.onChange(day);
       this.setState({ isOpen: false });
     } else {
