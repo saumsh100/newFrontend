@@ -23,8 +23,8 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
   };
 
   const data = {
-    answered: req.body.answered,
-    direction: req.body.answered,
+    answered: req.body.answered === true,
+    direction: req.body.direction,
     duration: req.body.duration,
     priorCalls: req.body.prior_calls,
     recording: req.body.recording,
@@ -51,6 +51,7 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
 
   Patient.findOne({ where: { mobilePhoneNumber: callernum }, raw: true })
     .then((patient) => {
+      console.log(patient, 'adssadsad')
       if (patient) {
         console.log(`Received a call from ${patient.firstName} ${patient.lastName}`);
         callData.patientId = patient.id;
@@ -78,8 +79,8 @@ callsRouterSequelize.post('/:accountId/inbound/post-call', (req, res, next) => {
   };
 
   const data = {
-    answered: req.body.answered,
-    direction: req.body.answered,
+    answered: req.body.answered === true,
+    direction: req.body.direction,
     duration: req.body.duration,
     priorCalls: req.body.prior_calls,
     recording: req.body.recording,
@@ -120,18 +121,48 @@ callsRouterSequelize.post('/:accountId/inbound/post-call', (req, res, next) => {
  * Call has ended from CallRail's webhook API
  */
 callsRouterSequelize.post('/:accountId/inbound/modified', (req, res, next) => {
+  const callData = {
+    id: JSON.stringify(req.body.id),
+    accountId: req.account.id,
+  };
+
+  const data = {
+    answered: req.body.answered === true,
+    direction: req.body.direction,
+    duration: req.body.duration,
+    priorCalls: req.body.prior_calls,
+    recording: req.body.recording,
+    recordingDuration: req.body.recording_duration,
+    startTime: req.body.start_time,
+    totalCalls: req.body.total_calls,
+    voicemail: req.body.voicemail,
+    callerCity: req.body.callercity,
+    callerCountry: req.body.callercountry,
+    callerName: req.body.callername,
+    callerNum: req.body.callernum,
+    callerState: req.body.callerstate,
+    callerZip: req.body.callerzip,
+    campaign: req.body.campaign,
+    destinationNum: req.body.destinationnum,
+    trackingNum: req.body.trackingnum,
+    wasApptBooked: req.body.wasApptBooked,
+    callSource: req.body.callsource,
+  };
+
+  if (req.body.datetime) {
+    data.datetime = moment(req.body.datetime).toISOString();
+  }
+
   // Update that message with the new status
-  /*Call.get(req.body.id).run()
-    .then((call) => {
-      return call.merge(req.body).save()
-        .then(call => console.log(`Updated call ${call.id}!`))
+  Call.update(data, { where: { id: callData.id } })
+    .then(() => {
+      console.log(`Modified call ${callData.id}!`);
     })
     .catch(next);
 
-  // Needs a response
-  res.end();*/
   // TODO: this needs to be wrapped in a try catch
-  res.end();
+  // Needs a response
+  res.status(201).send();
 });
 
 
