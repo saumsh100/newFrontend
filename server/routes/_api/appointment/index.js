@@ -1,5 +1,5 @@
 
-import Moment from 'moment';
+import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
@@ -107,15 +107,17 @@ appointmentsRouter.get('/business', (req, res, next) => {
           // add filter to for queryCancelled to find out if a cancelled appointment has been refilled
           queryCancelled.where.$or.push({
             startDate: {
-              gte: startDate,
-              lte: endDate,
+              gt: startDate,
+              lt: endDate,
             },
+            practitionerId: appointment.practitionerId,
           });
           queryCancelled.where.$or.push({
             endDate: {
-              gte: startDate,
-              lte: endDate,
+              gt: startDate,
+              lt: endDate,
             },
+            practitionerId: appointment.practitionerId,
           });
         }
         return null;
@@ -146,7 +148,9 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
   const startDate = moment().subtract(1, 'years').toISOString();
   const endDate = moment().toISOString();
 
-  return Appointment.findAll({
+  const promises = [];
+
+  promises.push(Appointment.findAll({
     where: {
       accountId,
       $or: [
@@ -168,12 +172,23 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
       },
     },
     raw: true,
-  })
-    .then((result) => {
+  }));
+
+  promises.push(Account.findOne({
+    where: { id: accountId },
+    raw: true,
+  }));
+
+  return Promise.all(promises)
+    .then((results) => {
+      const result = results[0];
+      const account = results[1];
+
       const days = new Array(6).fill(0);
       // calculate the frequency of the day of the week
       for (let i = 0; i < result.length; i++) {
-        days[moment(result[i].startDate).get('day') - 1]++;
+        const day = account.timezone ? moment.tz(result[i].startDate, account.timezone).get('day') : moment(result[i].startDate).get('day');
+        days[day - 1]++;
       }
       res.send({ days });
     })
@@ -372,7 +387,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       sendStats.patients = {};
       sendStats.newPatients = 0;
       const range = moment().range(moment(start), moment(end));
-    
+
       const numberOfDays = moment(end).diff(moment(start), 'days');
       const dayOfWeek = moment(start).day();
       const weeks = Math.floor(numberOfDays / 7);
@@ -527,8 +542,6 @@ appointmentsRouter.get('/', (req, res, next) => {
   endDate = endDate ? endDate : moment().add(1, 'years').toISOString();
 
   return Appointment.findAll({
-    raw: true,
-    nest: true,
     where: {
       accountId,
       startDate: {
@@ -539,7 +552,10 @@ appointmentsRouter.get('/', (req, res, next) => {
     limit: parseInt(limitted),
     include: includeArray,
     offset: parseInt(skipped),
-  }).then(appointments => res.send(normalize('appointments', appointments)))
+  }).then((appointments) => {
+    const sendAppointments = appointments.map(a => a.get({ plain: true }));
+    return res.send(normalize('appointments', sendAppointments));
+  })
     .catch(next);
 });
 
@@ -556,9 +572,10 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       return { appointment: appointment.dataValues, normalized };
     })
     .then(async ({ appointment }) => {
-      // Dispatch to the appropriate socket room
       if (appointment.isSyncedWithPMS && appointment.patientId) {
-        appointment.patient = await Patient.findById(appointment.patientId);
+        // Dashboard app needs patient data
+        const patient = await Patient.findById(appointment.patientId);
+        appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
@@ -668,7 +685,8 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       // Dispatch to the appropriate socket room
       if (appointment.isSyncedWithPMS && appointment.patientId) {
         // Dashboard app needs patient data
-        appointment.patient = await Patient.findById(appointment.patientId);
+        const patient = await Patient.findById(appointment.patientId);
+        appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
@@ -690,7 +708,7 @@ appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:dele
     .then(() => {
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      const normalized = normalize('appointment', appointment);
+      const normalized = normalize('appointment', appointment.get({ plain: true }));
       return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })
     .catch(next);

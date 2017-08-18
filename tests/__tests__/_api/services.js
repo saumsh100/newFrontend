@@ -9,9 +9,7 @@ import { accountId, seedTestUsers } from '../../_util/seedTestUsers';
 const rootUrl = '/_api/services';
 
 import { serviceId, service, seedTestService } from '../../_util/seedTestServices';
-
 import { practitionerId, seedTestPractitioners } from '../../_util/seedTestPractitioners';
-
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 

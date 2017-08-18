@@ -9,6 +9,8 @@ Object {
         "email": "invite@test.com",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isDeleted": false,
+        "role": "MANAGER",
         "sendingUserId": "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
         "token": "6778f250-e8c9-46e3-bfff-0249f1eec6b8",
       },
@@ -17,6 +19,8 @@ Object {
         "email": "invite@test.com",
         "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
         "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isDeleted": false,
+        "role": "MANAGER",
         "sendingUserId": "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
         "token": "8998f250-e8c9-46e3-bfff-0249f1eec6b8",
       },
@@ -35,6 +39,8 @@ Object {
   "email": "invite@test.com",
   "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
   "id": "11d4e661-1155-4494-8fdb-c4ec0ddf804d",
+  "isDeleted": false,
+  "role": "MANAGER",
   "sendingUserId": "5668f250-e8c9-46e3-bfff-0249f1eec6b8",
 }
 `;

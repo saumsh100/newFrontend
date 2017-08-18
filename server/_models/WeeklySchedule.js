@@ -1,11 +1,9 @@
 
-const { time } = require('../util/time');
-
 import { timeWithZone } from '../util/time';
 
 export default function (sequelize, DataTypes) {
-  const startTime = time(8, 0);
-  const endTime = time(17, 0);
+  const startTime = timeWithZone(8, 0, 'America/Los_Angeles');
+  const endTime = timeWithZone(17, 0, 'America/Los_Angeles');
 
   const defaultDailySchedule = {
     isClosed: false,

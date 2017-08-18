@@ -150,7 +150,7 @@ class PractitionerOfficeHours extends Component{
     delete weeklyScheduleNew.id;
 
     weeklySchedule.weeklySchedules.push(weeklyScheduleNew);
-    weeklySchedule.startDate = values.startDate;
+    // weeklySchedule.startDate = values.startDate;
     weeklySchedule.isAdvanced = true;
 
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);

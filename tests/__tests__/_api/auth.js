@@ -1,16 +1,20 @@
 
 import jwt from 'jwt-decode';
 import request from 'supertest';
-import { generateTokenSequelize } from '../../util/generateToken';
 import app from '../../../server/bin/app';
-import { seedTestUsersSequelize } from '../../util/seedTestUsers';
+import generateToken from '../../_util/generateToken';
+import { seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 
 const rootUrl = '/_auth';
 
 describe('/auth', () => {
   // Clear what is necessary
   beforeEach(async () => {
-    await seedTestUsersSequelize();
+    await seedTestUsers();
+  });
+
+  afterAll(async () => {
+    await wipeTestUsers();
   });
 
   test('POST /auth - Success', () => {
@@ -35,7 +39,7 @@ describe('/auth', () => {
 
 
   test('DELETE /auth/session/:sessionId', async () => {
-    const token = await generateTokenSequelize({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+    const token = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
     const session = jwt(token);
 
     return request(app)

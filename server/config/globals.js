@@ -90,12 +90,16 @@ const s3 = {
 
 s3.urlPrefix = environmentVariables.S3_URL_PREFIX || `https://${s3.bucket}.s3.amazonaws.com/`;
 
+// For Codeship, use these envs if defined!
+const pgUser = environmentVariables.PGUSER;
+const pgPassword = environmentVariables.PGPASSWORD;
+
 // Postgres config
 const postgres = {
   host: environmentVariables.POSTGRESQL_HOST || 'localhost',
   port: environmentVariables.POSTGRESQL_PORT || 5432,
-  username: environmentVariables.POSTGRESQL_USER || 'admin',
-  password: environmentVariables.POSTGRESQL_PASSWORD || '',
+  username: pgUser || (environmentVariables.POSTGRESQL_USER || 'admin'),
+  password: pgPassword || (environmentVariables.POSTGRESQL_PASSWORD || ''),
   database: environmentVariables.POSTGRESQL_DATABASE || defaultDBName,
   ssl: !!environmentVariables.POSTGRESQL_SSL,
   logging: !!environmentVariables.POSTGRESQL_LOGGING,

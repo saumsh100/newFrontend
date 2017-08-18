@@ -20,9 +20,11 @@ function DigitalWaitListItem(props) {
     index,
   } = props;
 
+
   if (!patientUser) {
     return null;
   }
+
   const { preferences, unavailableDays } = waitSpot.toJS();
 
   // Set Availability to All by default and then list selected if not...

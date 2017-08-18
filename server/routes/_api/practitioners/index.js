@@ -96,6 +96,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
   .then((practitioner) => {
     practitioner = practitioner.get({ plain: true });
     const services = [];
+    const addServices = [];
 
     practitioner.services.forEach((service) => {
       if (!newServices.includes(service)) {
@@ -103,11 +104,24 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
       }
     });
     const promises = [];
+
+    newServices.forEach((newService) => {
+      if (!practitioner.services.includes(newService)) {
+        addServices.push(newService);
+        promises.push(Practitioner_Service.create({
+          practitionerId: practitioner.id,
+          serviceId: newService,
+        }));
+      }
+    });
+
     promises.push(Practitioner.update(req.body, { where: { id: req.practitioner.id } }));
     promises.push(Practitioner_Service.destroy({
       where: {
         id: services,
       },
+      paranoid: false,
+      force: true,
     }));
     return Promise.all(promises)
     .then(() => {

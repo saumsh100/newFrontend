@@ -3,8 +3,10 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
 import { Appointment, Account, WeeklySchedule } from '../../../server/_models';
-import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
+import wipeModel from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
+import { wipeTestPatients } from '../../_util/seedTestPatients';
+import { wipeTestPractitioners } from '../../_util/seedTestPractitioners';
 import { patientId } from '../../_util/seedTestPatients';
 import { appointment, appointmentId, seedTestAppointments } from '../../_util/seedTestAppointments';
 import { weeklyScheduleId, seedTestWeeklySchedules } from '../../_util/seedTestWeeklySchedules';
@@ -24,6 +26,7 @@ const accountWithSchedule = {
   enterpriseId,
   name: 'Test Account',
   weeklyScheduleId,
+  timezone: 'America/Vancouver',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
@@ -104,13 +107,13 @@ describe('/api/appointments', () => {
     await wipeModel(Account);
     await wipeModel(WeeklySchedule);
     await wipeModel(Appointment);
+    await wipeTestPatients();
+    await wipeTestPractitioners();
     await wipeTestUsers();
-    await wipeAllModels();
   });
 
   // TODO: This can use some more test cases... (Gavin: Not familiar with what's going on in these endpoints)
   describe('GET /', () => {
-
     test('/business - [no description]', () => {
       return request(app)
         .get(`${rootUrl}/business?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)

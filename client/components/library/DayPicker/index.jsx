@@ -10,7 +10,7 @@ import Input from '../Input';
 import IconButton from '../IconButton';
 import styles from './styles.scss';
 
-const convertValueToDate = (value) => {
+const convertValueToDate = (value, timezone) => {
   if (isArray(value)) {
     return value.map(v => new Date(v));
   }
@@ -35,25 +35,28 @@ class DayPicker extends Component {
       multiple,
       value,
       onChange,
+      timezone,
     } = this.props;
+    const dates = moment(day).format('YYYY-MM-DD');
 
-    day = moment(day).subtract(12, 'hours')._d;
-
+    day = timezone ? moment.tz(dates, timezone).add(12, 'hours')._d : moment(day).subtract(12, 'hours')._d;
     if (disabled) {
-      return ;
+      return;
     }
+
     if (!multiple) {
-      this.props.onChange(day.toISOString());
+      this.props.onChange(day);
       this.setState({ isOpen: false });
     } else {
-      const selectedIndex = value.findIndex(v =>
-        DateUtils.isSameDay(moment(new Date(v))._d, day)
-      );
+      const selectedIndex = value.findIndex(v => {
+        const date = moment(new Date(v))._d;
+        return DateUtils.isSameDay(date, day);
+      });
 
       if (selectedIndex > -1) {
         onChange(value.filter((v, i) => i !== selectedIndex));
       } else {
-        onChange([...value, day.toISOString()]);
+        onChange([...value, day]);
       }
     }
   }
@@ -63,8 +66,10 @@ class DayPicker extends Component {
   }
 
   handleInputChange(e) {
+
     const { value } = e.target;
     const momentDay = moment(value, 'L', true);
+
     if (momentDay.isValid() && this.props.handleThisInput) {
       this.props.onChange(value);
     } else {
@@ -77,6 +82,7 @@ class DayPicker extends Component {
       target,
       iconClassName,
       value,
+      timezone,
     } = this.props;
 
     // If value is defined, format to 10/8/2017 style
@@ -118,7 +124,7 @@ class DayPicker extends Component {
             {/*<IconButton className={styles.closeButton} icon="close" onClick={this.togglePopOver} />*/}
             <RDayPicker
               onDayClick={this.handleDayClick}
-              selectedDays={convertValueToDate(value)}
+              selectedDays={convertValueToDate(value, timezone)}
               handleInputChange={this.handleInputChange}
               {...this.props}
             />
@@ -135,6 +141,7 @@ DayPicker.propTypes = {
   target: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   iconClassName: PropTypes.string,
+  timezone: PropTypes.string,
   multiple: PropTypes.bool.isRequired,
 };
 

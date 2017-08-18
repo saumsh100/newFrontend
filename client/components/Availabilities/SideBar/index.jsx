@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import 'moment-timezone';
 import { Button } from '../../library';
 import * as Actions from '../../../actions/availabilities';
 import styles from './styles.scss';
@@ -42,10 +43,12 @@ class SideBar extends Component {
           </div>
           <br />
           <div className={styles.sidebar__information_text}>
-            {moment(startDate).format('dddd, MMMM Do YYYY')}
+            {timezone ? moment.tz(startDate, timezone).format('dddd, MMMM Do YYYY')
+            : moment(startDate).format('dddd, MMMM Do YYYY')}
           </div>
           <div className={styles.sidebar__information_text}>
-            {moment(startDate).format('h:mm a')}
+            {timezone ? moment.tz(startDate, timezone).format('h:mm a')
+            : moment(startDate).format('h:mm a')}
           </div>
         </div>
       );
