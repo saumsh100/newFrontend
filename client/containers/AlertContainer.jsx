@@ -12,18 +12,31 @@ class AlertContainer extends Component {
       hideAlert,
     } = this.props;
 
+    if (!alert) {
+      return null;
+    }
+
+    const alertsStack = alert.toJS().alertsStack;
+
     return (
-      <Alert
-        alert={alert.toJS()}
-        hideAlert={hideAlert}
-      />
+      <div>
+        {alertsStack.map((alertData, index) => {
+          return (
+            <Alert
+              index={index}
+              alert={alertData}
+              hideAlert={hideAlert}
+            />
+          );
+        })}
+      </div>
     );
   }
 }
 
 AlertContainer.propTypes = {
   alert: PropTypes.object.isRequired,
- // hideAlert: PropTypes.func,
+  hideAlert: PropTypes.func,
 };
 
 function mapStateToProps({ alerts }) {

@@ -13,7 +13,9 @@ class Alert extends Component {
     const {
       alert,
       hideAlert,
+      index,
     } = this.props;
+
 
     let alertStyle = styles.alert;
     if (alert.status === 'show') {
@@ -25,8 +27,13 @@ class Alert extends Component {
       iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
     }
 
+    const top = (70 * (index + 1)) + (100 * index);
+    const styleTop = {
+      top: `${top}px`,
+    };
+
     return (
-      <div className={alertStyle}>
+      <div className={alertStyle} style={styleTop}>
         <div className={styles.textContainer}>
           <div className={styles.title}>
             <span>{alert.title}!</span>
