@@ -6,21 +6,6 @@
     "NODE_ENV": {
       "required": true
     },
-    "RETHINKDB_AUTHKEY": {
-      "required": true
-    },
-    "RETHINKDB_DB": {
-      "required": true
-    },
-    "RETHINKDB_HOST": {
-      "required": true
-    },
-    "RETHINKDB_PORT": {
-      "required": true
-    },
-    "COMPOSE_CA_CERT": {
-      "required": true
-    },
     "VENDASTA_API_KEY": {
       "required": true
     },
@@ -49,6 +34,24 @@
       "required": true
     },
     "INTERCOM_APP_ID": {
+      "required": true
+    },
+    "POSTGRESQL_DATABASE": {
+      "required": true
+    },
+    "POSTGRESQL_HOST": {
+      "required": true
+    },
+    "POSTGRESQL_PASSWORD": {
+      "required": true
+    },
+    "POSTGRESQL_PORT": {
+      "required": true
+    },
+    "POSTGRESQL_SSL": {
+      "required": true
+    },
+    "POSTGRESQL_USER": {
       "required": true
     }
   },
