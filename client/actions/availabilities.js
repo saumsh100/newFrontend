@@ -14,6 +14,7 @@ import {
   SET_SELECTED_AVAILABILITY,
   SET_IS_FETCHING,
   SET_AVAILABILITIES,
+  SET_NEXT_AVAILABILITY,
   SET_IS_CONFIRMING,
   SET_IS_LOGIN,
   SET_IS_TIMER_EXPIRED,
@@ -37,6 +38,7 @@ export const removeReservationAction = createAction(REMOVE_RESERVATION);
 export const setSelectedAvailability = createAction(SET_SELECTED_AVAILABILITY);
 export const setIsFetching = createAction(SET_IS_FETCHING);
 export const setAvailabilities = createAction(SET_AVAILABILITIES);
+export const setNextAvailability = createAction(SET_NEXT_AVAILABILITY);
 export const setIsConfirming = createAction(SET_IS_CONFIRMING);
 export const setIsLogin = createAction(SET_IS_LOGIN);
 export const setIsTimerExpired = createAction(SET_IS_TIMER_EXPIRED);

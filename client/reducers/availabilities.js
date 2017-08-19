@@ -23,6 +23,7 @@ import {
   SET_HAS_WAITLIST,
   UPDATE_WAITSPOT,
   SET_IS_LOGIN,
+  SET_NEXT_AVAILABILITY,
 } from '../constants';
 
 export const createInitialWidgetState = state => {
@@ -39,6 +40,7 @@ export const createInitialWidgetState = state => {
     practitioners: [],
     services: [],
     availabilities: [],
+    nextAvailability: null,
     patientUser: null,
     isFetching: true,
     isConfirming: false,
@@ -89,6 +91,10 @@ export default handleActions({
 
   [SET_AVAILABILITIES](state, action) {
     return state.set('availabilities', action.payload);
+  },
+
+  [SET_NEXT_AVAILABILITY](state, action) {
+    return state.set('nextAvailability', action.payload);
   },
 
   [SET_IS_FETCHING](state, action) {

@@ -89,7 +89,6 @@
       font-family: $medium-font;
       color: white;
       text-align: center;
-      text-transform: lowercase;
       list-style: none;
       opacity: 0.9;
       background-color: var(--bookingWidgetPrimaryColor);
@@ -107,6 +106,30 @@
       }
     }
 
+  }
+}
+
+.nextAvailabilityButton {
+  cursor: pointer;
+  box-sizing: border-box;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  list-style: none;
+  opacity: 0.9;
+  background-color: var(--bookingWidgetPrimaryColor);
+  padding: 20px;
+  &:hover {
+    opacity: 1.0;
+  }
+
+  > div {
+    font-family: $medium-font;
+    margin-left: 8px;
   }
 }
 
