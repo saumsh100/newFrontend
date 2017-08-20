@@ -1,8 +1,11 @@
+
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const { appEntries } = require('../utils');
+const packageJSON = require('../../package.json');
 
+const nodeVersion = packageJSON.engines.node;
 const projectRoot = path.resolve(__dirname, '../..');
 
 const externalModules = nodeModulesPath =>
@@ -43,7 +46,7 @@ module.exports = {
             cacheDirectory: true,
             babelrc: false,
             presets: [
-              ['env', { targets: { node: '8.4' } }],
+              ['env', { targets: { node: nodeVersion } }],
               'react',
               'stage-2',
             ],
