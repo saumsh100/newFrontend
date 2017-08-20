@@ -14,15 +14,15 @@ describe('/api/weeklySchedules', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
-    await wipeModel(WeeklySchedule);
     await seedTestUsers();
+    await wipeModel(WeeklySchedule);
     await seedTestWeeklySchedules();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeModel(WeeklySchedule);
     await wipeTestUsers();
+    await wipeModel(WeeklySchedule);
   });
 
   describe('POST /', () => {
