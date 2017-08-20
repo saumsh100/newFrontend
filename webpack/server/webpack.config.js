@@ -43,7 +43,7 @@ module.exports = {
             cacheDirectory: true,
             babelrc: false,
             presets: [
-              ['env', { targets: { node: 6.2 } }],
+              ['env', { targets: { node: '8.4' } }],
               'react',
               'stage-2',
             ],
