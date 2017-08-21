@@ -3,13 +3,10 @@
 .alert {
   display: flex;
   align-items: center;
-  position: fixed;
   max-width: 250px;
   width: 250px;
   height: auto;
   border-radius: 3px;
-  top: 70px;
-  right: -78px;
   z-index: 5002;
   visibility: hidden;
   box-shadow: 10px 10px 15px -10px rgba(0, 0, 0, 0.75);
@@ -20,6 +17,7 @@
   transition-timing-function: ease-in;
   transition: 0.1s;
   transform: translateX(0);
+  margin-bottom: 5px;
 }
 
 

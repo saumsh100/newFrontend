@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Alert } from '../components/library';
 import { hideAlert } from '../actions/alerts';
+import styles from './styles.scss';
 
 class AlertContainer extends Component {
   render() {
@@ -17,8 +18,9 @@ class AlertContainer extends Component {
     }
 
     const alertsStack = alert.toJS().alertsStack;
+
     return (
-      <div>
+      <div className={styles.alertsContainer}>
         {alertsStack.map((alertData, index) => {
           return (
             <Alert

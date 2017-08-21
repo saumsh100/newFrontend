@@ -6,7 +6,6 @@ const uuid = require('uuid').v4;
 
 export const SHOW_ALERT = 'SHOW_ALERT';
 export const HIDE_ALERT = 'HIDE_ALERT';
-export const DELETE_ALERT = 'DELETE_ALERT';
 
 const initialState = fromJS({
   time: 0,
@@ -16,13 +15,14 @@ const initialState = fromJS({
 export default handleActions({
   [SHOW_ALERT](state, { payload: { alert, type } }) {
     let title = alert.title;
+
     if (type === 'success') {
       title = 'Success';
     } else if (type === 'error' && !alert.title) {
       title = 'Error';
     }
-    const alertsStack = state.toJS().alertsStack;
 
+    const alertsStack = state.toJS().alertsStack;
     const time = alert.sticky ? state.toJS().time : state.toJS().time + 3000;
 
     const alertData = {
@@ -33,26 +33,19 @@ export default handleActions({
       status: 'show',
       time,
       sticky: alert.sticky || false,
+      action: alert.action,
     };
 
     alertsStack.push(alertData);
     return state.merge({ time, alertsStack });
   },
 
-  [DELETE_ALERT](state, payload) {
-    const alertsStack = state.toJS().alertsStack;
-    const time = state.toJS().time;
-    const newAlertsStack = alertsStack.filter(alert => alert.id !== payload.payload);
-
-    return state.merge({ time, alertsStack: newAlertsStack });
-  },
-
-  [HIDE_ALERT](state, action) {
+  [HIDE_ALERT](state, { payload: { alert } }) {
     const alertsStack = state.toJS().alertsStack;
 
-    const filteredStack = alertsStack.filter((alert, index) => {
-      if ((index !== action.payload.index || alert.sticky) && (alert.id !== action.payload.id)) {
-        return alert;
+    const filteredStack = alertsStack.filter((alrt) => {
+      if (alrt.id !== alert.id) {
+        return alrt;
       }
     });
 
