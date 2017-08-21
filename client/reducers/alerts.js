@@ -7,11 +7,6 @@ export const HIDE_ALERT = 'HIDE_ALERT';
 
 const initialState = fromJS({
   time: 0,
-  body: null,
-  icon: null,
-  title: null,
-  type: null,
-  status: null,
   alertsStack: [],
 });
 
@@ -38,7 +33,6 @@ export default handleActions({
   },
 
   [HIDE_ALERT](state, action) {
-
     const alertsStack = state.toJS().alertsStack;
     const filteredStack = alertsStack.filter((alert, i) => i !== action.payload.index);
 
@@ -46,11 +40,6 @@ export default handleActions({
 
     const time = state.toJS().time !== 0 ? state.toJS().time - 3000 : 0;
     return state.merge({
-      body: null,
-      title: null,
-      icon: null,
-      type: null,
-      status: 'hide',
       time,
       alertsStack: filteredStack,
     });
