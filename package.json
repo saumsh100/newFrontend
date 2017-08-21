@@ -120,6 +120,7 @@
     "moment-timezone": "^0.5.13",
     "multer": "^1.1.0",
     "node-cron": "^1.1.2",
+    "node-gyp": "^3.6.2",
     "node-sass": "^4.5.2",
     "node-uuid": "~1.4.1",
     "nodemon": "^1.11.0",

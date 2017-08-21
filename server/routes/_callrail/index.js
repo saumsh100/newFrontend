@@ -51,7 +51,6 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
 
   Patient.findOne({ where: { mobilePhoneNumber: callernum }, raw: true })
     .then((patient) => {
-      console.log(patient, 'adssadsad')
       if (patient) {
         console.log(`Received a call from ${patient.firstName} ${patient.lastName}`);
         callData.patientId = patient.id;
@@ -65,7 +64,7 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
       pub.publish('call.started', callData.id);
     });
 
-  res.status(201).send(201);
+  res.sendStatus(201);
   // res.end();
 });
 
@@ -109,12 +108,14 @@ callsRouterSequelize.post('/:accountId/inbound/post-call', (req, res, next) => {
   Call.update(data, { where: { id: callData.id } })
     .then(() => {
       console.log(`Updated call ${callData.id}!`);
+      const pub = req.app.get('pub');
+      pub.publish('call.ended', callData.id);
     })
     .catch(next);
 
   // TODO: this needs to be wrapped in a try catch
   // Needs a response
-  res.status(201).send();
+  res.sendStatus(201);
 });
 
 /**
@@ -162,7 +163,7 @@ callsRouterSequelize.post('/:accountId/inbound/modified', (req, res, next) => {
 
   // TODO: this needs to be wrapped in a try catch
   // Needs a response
-  res.status(201).send();
+  res.sendStatus(201);
 });
 
 

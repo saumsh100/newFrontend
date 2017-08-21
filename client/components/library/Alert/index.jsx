@@ -13,6 +13,7 @@ class Alert extends Component {
     const {
       alert,
       hideAlert,
+      index,
     } = this.props;
 
     let alertStyle = styles.alert;
@@ -25,8 +26,13 @@ class Alert extends Component {
       iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
     }
 
+    const top = (70 * (index + 1)) + (50 * index);
+    const styleTop = {
+      top: `${top}px`,
+    };
+
     return (
-      <div className={alertStyle}>
+      <div className={alertStyle} style={styleTop}>
         <div className={styles.textContainer}>
           <div className={styles.title}>
             <span>{alert.title}!</span>
@@ -39,7 +45,7 @@ class Alert extends Component {
             size={0.8}
             onClick={(e) => {
               e.stopPropagation();
-              hideAlert();
+              hideAlert({ id: alert.id });
             }}
           />
         </div>

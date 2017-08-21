@@ -21,6 +21,7 @@ class ServicePractitioners extends Component {
     const alert = {
       success: {
         body: `Practitioners updated for ${service.get('name')}.`,
+        sticky: true,
       },
       error: {
         body: `Could not update practitioners for ${service.get('name')}.`,

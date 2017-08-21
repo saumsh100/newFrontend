@@ -32,7 +32,6 @@ accountsRouter.param('permissionId', sequelizeLoader('permission', 'Permission')
 accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
     const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
-
     // Fetch all if correct role, just fetch current account if not
     let accounts;
     if (role === 'SUPERADMIN' || enterpriseRole === 'OWNER') {
