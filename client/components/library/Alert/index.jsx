@@ -28,8 +28,8 @@ class Alert extends Component {
     iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
 
     return (
-      <div className={alertStyle} >
-        <div className={styles.textContainer} onClick={this.handleAction}>
+      <div className={alertStyle} onClick={this.handleAction} >
+        <div className={styles.textContainer} >
           <div className={styles.title}>
             <span>{alert.title}!</span>
           </div>
