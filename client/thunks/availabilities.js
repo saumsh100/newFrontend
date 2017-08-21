@@ -4,6 +4,7 @@ import axios from 'axios';
 import {
   setIsFetching,
   setAvailabilities,
+  setNextAvailability,
   sixDaysShiftAction,
   setIsSuccessfulBooking,
   setStartingAppointmentTimeAction,
@@ -180,9 +181,12 @@ export function fetchAvailabilities() {
       startDate,
       endDate,
     };
+
     return axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
       .then(({ data }) => {
+        // data.availabilities = [];
         dispatch(setAvailabilities(data.availabilities));
+        dispatch(setNextAvailability(data.nextAvailability));
         requestCount -= 1;
         // Remove loading symbol
         if (!requestCount) {

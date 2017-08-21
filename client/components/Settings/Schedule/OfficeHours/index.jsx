@@ -182,7 +182,7 @@ class OfficeHours extends Component {
         return (<div>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader} data-test-id={`patternHeader${i}`}>
-            <Header title={`Pattern ${i + 1}`} className={styles.header} />
+            <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
             <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
           </div>
           <OfficeHoursForm
