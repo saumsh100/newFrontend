@@ -195,7 +195,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       include: [
         { association: 'appointments', required: false, where: { startDate: { $between: [startDate, endDate] } } },
         {
-          association: 'chat',
+          association: 'chats',
           required: false,
           include: [{ association: 'textMessages', required: false, include: [{ association: 'user', required: false }] }],
         },
