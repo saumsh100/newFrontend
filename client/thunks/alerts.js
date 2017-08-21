@@ -8,9 +8,9 @@ export function showAlertTimeout(payload) {
     const alertsStack = alerts.toJS().alertsStack;
 
     alertsStack.map((alrt, index) => {
-      if (alrt.sticky === false) {
+      if (alrt && !alrt.sticky) {
         window.setTimeout(() => {
-          dispatch(hideAlert({ index: alrt.index }));
+          dispatch(hideAlert({ index }));
         }, alrt.time);
       }
     });

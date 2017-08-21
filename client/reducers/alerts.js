@@ -2,6 +2,8 @@
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 
+const uuid = require('uuid').v4;
+
 export const SHOW_ALERT = 'SHOW_ALERT';
 export const HIDE_ALERT = 'HIDE_ALERT';
 
@@ -22,9 +24,8 @@ export default handleActions({
 
     const time = alert.sticky ? state.toJS().time : state.toJS().time + 3000;
 
-    const index = alertsStack.length;
     const alertData = {
-      index,
+      id: uuid(),
       title,
       body: alert.body,
       type,
@@ -40,8 +41,8 @@ export default handleActions({
   [HIDE_ALERT](state, action) {
     const alertsStack = state.toJS().alertsStack;
 
-    const filteredStack = alertsStack.filter((alert) => {
-      if (alert.index !== action.payload.index) {
+    const filteredStack = alertsStack.filter((alert, index) => {
+      if ((index !== action.payload.index || alert.sticky) && (alert.id !== action.payload.id)) {
         return alert;
       }
     });

@@ -45,7 +45,7 @@ class Alert extends Component {
             size={0.8}
             onClick={(e) => {
               e.stopPropagation();
-              hideAlert({ index: alert.index });
+              hideAlert({ id: alert.id });
             }}
           />
         </div>
