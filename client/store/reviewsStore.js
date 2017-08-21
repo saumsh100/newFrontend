@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import { enableBatching } from 'redux-batched-actions';
 import thunkMiddleware from 'redux-thunk';
-import rootReducer, { createInitialState } from '../reducers/availabilitiesReducer';
+import rootReducer, { createInitialState } from '../reducers/reviewsReducer';
 
 export default function configure({ initialState, browserHistory }) {
   const create = window.devToolsExtension

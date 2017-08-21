@@ -9,8 +9,8 @@ import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import time from '../../server/util/time';
-import App from './Patient';
-import configure from '../store/availabilitiesStore';
+import App from './Reviews';
+import configure from '../store/reviewsStore';
 import { loadPatient } from '../thunks/patientAuth';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 
@@ -57,6 +57,6 @@ loadPatient()(store.dispatch).then(() => {
   render(App);
 
   if (module.hot) {
-    module.hot.accept('./Patient', () => render(App));
+    module.hot.accept('./Reviews', () => render(App));
   }
 });

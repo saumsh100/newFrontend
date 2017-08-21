@@ -1,3 +1,3 @@
 
 import '../apps/default';
-import '../apps/PatientEntry';
+import '../apps/ReviewsEntry';

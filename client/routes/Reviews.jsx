@@ -2,21 +2,20 @@
 import React, { PropTypes } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
-import PatientApp from '../containers/PatientApp';
-import FourZeroFour from '../components/FourZeroFour';
+import ReviewsWidget from '../components/ReviewsWidget';
 
-const PatientRouter = ({ history }) => {
+const ReviewsRouter = ({ history }) => {
   return (
     <Router history={history}>
       <div>
-        <Route component={PatientApp} />
+        <Route component={ReviewsWidget} />
       </div>
     </Router>
   );
 };
 
-PatientRouter.propTypes = {
+ReviewsRouter.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-export default PatientRouter;
+export default ReviewsRouter;

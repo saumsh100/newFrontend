@@ -1,12 +1,12 @@
 
 import { Provider } from 'react-redux';
 import React from 'react';
-import PatientRoutes from '../routes/Patient';
+import ReviewsRoutes from '../routes/Reviews';
 import '../styles/default.scss';
 
-const PatientApp = ({ browserHistory, store }) =>
+const ReviewsApp = ({ browserHistory, store }) =>
   <Provider store={store}>
-    <PatientRoutes history={browserHistory} />
+    <ReviewsRoutes history={browserHistory} />
   </Provider>;
 
-export default PatientApp;
+export default ReviewsApp;

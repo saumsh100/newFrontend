@@ -1,11 +1,11 @@
 
 import { Router } from 'express';
 // import { Review } from '../../../models';
-import loaders from '../../util/loaders';
+import { sequelizeLoader } from '../../util/loaders';
 
 const reviewsRouter = Router();
 
-reviewsRouter.param('accountId', loaders('account', 'Account'));
+reviewsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 
 /**
  * GET /reviews/:accountId/embed

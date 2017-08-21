@@ -5,13 +5,14 @@ import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
+import reviewsRouter from './reviews';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import { PatientUser, Practitioner } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
 
-const sequelizeMyRouter = new Router();
+const sequelizeMyRouter = Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
@@ -24,6 +25,8 @@ sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
   { association: 'practitioners', required: false, where: { isActive: true } },
 ]));
+
+sequelizeMyRouter.use('/reviews', reviewsRouter);
 
 sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
   try {
