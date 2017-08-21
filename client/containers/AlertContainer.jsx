@@ -7,6 +7,16 @@ import { hideAlert } from '../actions/alerts';
 import styles from './styles.scss';
 
 class AlertContainer extends Component {
+
+  constructor(props) {
+    super(props);
+    this.handleAction = this.handleAction.bind(this);
+  }
+
+  handleAction(alert) {
+    alert.action();
+  }
+
   render() {
     const {
       alert,
@@ -28,6 +38,7 @@ class AlertContainer extends Component {
               index={index}
               alert={alertData}
               hideAlert={hideAlert}
+              handleAction={this.handleAction}
             />
           );
         })}
