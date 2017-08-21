@@ -62,11 +62,21 @@ function fetchServiceData(options) {
 
   // Wrap in a promise so that we can reject if certain conditions are not met (account does not own service)
   return new Promise((resolve, reject) => {
-
     return Service.findOne({
       where: { id: serviceId },
       include: [
-        { model: Practitioner, as: 'practitioners', raw: true },
+        {
+          model: Practitioner,
+          as: 'practitioners',
+          raw: true,
+          required: false,
+          where: {
+            isActive: true,
+            isHidden: {
+              $ne: true,
+            },
+          },
+        },
         { model: Request, as: 'requests', raw: true },
       ],
     }).then((serviceOne) => {

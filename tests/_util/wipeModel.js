@@ -1,4 +1,5 @@
 
+import clone from 'lodash/clone';
 import * as Models from '../../server/_models';
 
 async function wipeModel(Model) {
@@ -8,8 +9,41 @@ async function wipeModel(Model) {
   });
 }
 
+const ORDER = [
+  'Enterprise',
+  'WeeklySchedule',
+  'Account',
+  'Chair',
+  'Permission',
+  'User',
+  'AuthSession',
+  'Invite',
+  'PatientUser',
+  'Family',
+  'Patient',
+  'Service',
+  'Practitioner',
+  'Practitioner_Service',
+  'PractitionerRecurringTimeOff',
+  'Appointment',
+  'Request',
+  'Recall',
+  'Reminder',
+  'SentRecall',
+  'SentReminder',
+  'SyncClientError',
+  'SyncClientVersion',
+  'Token',
+  'WaitSpot',
+  'Chat',
+  'TextMessage',
+  'Call',
+  'PinCode',
+];
+
 async function wipeAllModels() {
-  for (const modelName in Models) {
+  const reversedOrder = clone(ORDER).reverse();
+  for (const modelName of reversedOrder) {
     await wipeModel(Models[modelName]);
   }
 }

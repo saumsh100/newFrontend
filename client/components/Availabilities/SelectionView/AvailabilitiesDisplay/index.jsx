@@ -29,13 +29,14 @@ class AvailabilitiesDisplay extends Component {
   constructor(props) {
     super(props);
 
-    this.setDateBack = this.setDateBack.bind(this);
-    this.setDateForward = this.setDateForward.bind(this);
-    this.debouceFetchAvailabilities = debounce(this.debouceFetchAvailabilities, 500);
-
     this.state = {
       fetching: false,
     };
+
+    this.setDateBack = this.setDateBack.bind(this);
+    this.setDateForward = this.setDateForward.bind(this);
+    this.jumpToNext = this.jumpToNext.bind(this);
+    this.debouceFetchAvailabilities = debounce(this.debouceFetchAvailabilities, 500);
   }
 
   componentWillMount() {
@@ -63,20 +64,27 @@ class AvailabilitiesDisplay extends Component {
     this.props.setSelectedStartDate(newStartDate);
   }
 
+  jumpToNext(startDate) {
+    const newStartDate = moment(startDate).subtract(2, 'hours').toISOString();
+    this.props.setSelectedStartDate(newStartDate);
+  }
+
   debouceFetchAvailabilities() {
     this.props.fetchAvailabilities()
-    .then(() => this.setState({ fetching: false }));
+      .then(() => this.setState({ fetching: false }));
   }
 
   render() {
     const {
       isFetching,
       availabilities,
+      nextAvailability,
       selectedStartDate,
       selectedAvailability,
       setSelectedAvailability,
       account,
     } = this.props;
+
     const numDaysForward = 4;
     const dayAvailabilities = [];
 
@@ -111,8 +119,8 @@ class AvailabilitiesDisplay extends Component {
       </div>
     );
 
+    // TODO: use array.some?
     let display = false;
-
     for (let i = 0; i < dayAvailabilities.length; i++) {
       if (dayAvailabilities[i].sortedAvailabilities.length) {
         display = true;
@@ -156,6 +164,25 @@ class AvailabilitiesDisplay extends Component {
                 );
               })}
             </div>
+          </div>
+        );
+      } else if (nextAvailability) {
+        const { startDate } = nextAvailability;
+        const mDate = accountTimezone ? moment.tz(startDate, accountTimezone) : moment(startDate);
+        const displayDate = mDate.format('ddd, MMM D');
+        const nextLink = (
+          <li
+            onClick={() => this.jumpToNext(startDate)}
+            className={styles.nextAvailabilityButton}
+          >
+            <span>Next Availablility on</span>
+            <div>{' ' + displayDate}</div>
+          </li>
+        );
+
+        availabilitiesDisplay = (
+          <div className={styles.displayContainer}>
+            {nextLink}
           </div>
         );
       } else {
@@ -206,6 +233,7 @@ class AvailabilitiesDisplay extends Component {
 AvailabilitiesDisplay.propTypes = {
   // startsAt: PropTypes.prop,
   availabilities: PropTypes.arrayOf(PropTypes.object),
+  nextAvailability: PropTypes.object,
   onSelect: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   fetchAvailabilities: PropTypes.func.isRequired,
@@ -223,11 +251,12 @@ function mapStateToProps({ availabilities }) {
   return {
     isFetching: availabilities.get('isFetching'),
     availabilities: availabilities.get('availabilities'),
-    account,
+    nextAvailability: availabilities.get('nextAvailability'),
     selectedStartDate: availabilities.get('selectedStartDate'),
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
     selectedServiceId: availabilities.get('selectedServiceId'),
     selectedAvailability: availabilities.get('selectedAvailability'),
+    account,
   };
 }
 

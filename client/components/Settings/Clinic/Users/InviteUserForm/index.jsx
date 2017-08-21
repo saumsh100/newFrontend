@@ -1,6 +1,8 @@
+
 import React, { PropTypes, Component } from 'react';
 import { Form, Field } from '../../../../library';
 import { emailValidate, asyncEmailValidateUser } from '../../../../library/Form/validate';
+import styles from '../styles.scss';
 
 class InviteUserForm extends Component {
 
@@ -27,20 +29,22 @@ class InviteUserForm extends Component {
         asyncValidate={asyncEmailValidateUser}
         ignoreSaveButton
       >
-        <Field
-          required
-          validate={[emailValidate]}
-          type="email"
-          name="email"
-          label="Email"
-          data-test-id="email"
-        />
-        <Field
-          name="role"
-          label="User Role"
-          component="DropdownSelect"
-          options={optionsInterval}
-        />
+        <div className={styles.inviteFormContainer}>
+          <Field
+            required
+            validate={[emailValidate]}
+            type="email"
+            name="email"
+            label="Email"
+            data-test-id="email"
+          />
+          <Field
+            name="role"
+            label="User Role"
+            component="DropdownSelect"
+            options={optionsInterval}
+          />
+        </div>
       </Form>
     );
   }
