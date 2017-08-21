@@ -32,6 +32,7 @@ class ServiceListContainer extends Component {
     const alert = {
       success: {
         body: `${values.name} service created.`,
+        sticky: true,
       },
       error: {
         body: `${values.name} service could not be created.`,

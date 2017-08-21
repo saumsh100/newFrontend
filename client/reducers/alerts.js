@@ -20,23 +20,31 @@ export default handleActions({
     }
     const alertsStack = state.toJS().alertsStack;
 
+    const time = alert.sticky ? state.toJS().time : state.toJS().time + 3000;
+
+    const index = alertsStack.length;
     const alertData = {
+      index,
       title,
       body: alert.body,
       type,
       status: 'show',
-      time: state.toJS().time + 3000,
+      time,
+      sticky: alert.sticky || false,
     };
 
     alertsStack.push(alertData);
-    return state.merge({ ...alertData, alertsStack });
+    return state.merge({ time, alertsStack });
   },
 
   [HIDE_ALERT](state, action) {
     const alertsStack = state.toJS().alertsStack;
-    const filteredStack = alertsStack.filter((alert, i) => i !== action.payload.index);
 
-    console.log("index===>", action.payload.index, "time==>", state.toJS().time);
+    const filteredStack = alertsStack.filter((alert) => {
+      if (alert.index !== action.payload.index) {
+        return alert;
+      }
+    });
 
     const time = state.toJS().time !== 0 ? state.toJS().time - 3000 : 0;
     return state.merge({

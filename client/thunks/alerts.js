@@ -8,9 +8,11 @@ export function showAlertTimeout(payload) {
     const alertsStack = alerts.toJS().alertsStack;
 
     alertsStack.map((alrt, index) => {
-      window.setTimeout(() => {
-        dispatch(hideAlert({ index }));
-      }, alrt.time);
-    })
+      if (alrt.sticky === false) {
+        window.setTimeout(() => {
+          dispatch(hideAlert({ index: alrt.index }));
+        }, alrt.time);
+      }
+    });
   };
 }

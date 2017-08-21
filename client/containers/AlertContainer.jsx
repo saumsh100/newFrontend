@@ -17,12 +17,12 @@ class AlertContainer extends Component {
     }
 
     const alertsStack = alert.toJS().alertsStack;
-
     return (
       <div>
         {alertsStack.map((alertData, index) => {
           return (
             <Alert
+              key={`${index}_alert`}
               index={index}
               alert={alertData}
               hideAlert={hideAlert}
