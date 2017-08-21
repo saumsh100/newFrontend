@@ -229,13 +229,6 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
   const joinObject = {};
 
   // Some default code to ensure we don't pull the entire conversation for each chat
-  joinObject.textMessages = {
-    _apply: (sequence) => {
-      return sequence
-        .orderBy('createdAt')
-        .limit(limitted);
-    },
-  };
 
   return Chat.findOne({
     where: { patientId: req.params.patientId },
