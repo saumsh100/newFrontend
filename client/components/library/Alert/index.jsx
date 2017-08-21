@@ -7,33 +7,29 @@ import styles from './styles.scss';
 class Alert extends Component {
   constructor(props) {
     super(props);
+    this.handleAction = this.handleAction.bind(this);
+  }
+
+  handleAction(e) {
+    e.stopPropagation();
+    this.props.alert.action();
   }
 
   render() {
     const {
       alert,
       hideAlert,
-      index,
     } = this.props;
 
     let alertStyle = styles.alert;
-    if (alert.status === 'show') {
-      alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
-    }
+    alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
 
     let iconStyle = styles.iconContainer;
-    if (alert.status === 'show') {
-      iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
-    }
-
-    const top = (70 * (index + 1)) + (50 * index);
-    const styleTop = {
-      top: `${top}px`,
-    };
+    iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
 
     return (
-      <div className={alertStyle} style={styleTop}>
-        <div className={styles.textContainer}>
+      <div className={alertStyle} >
+        <div className={styles.textContainer} onClick={this.handleAction}>
           <div className={styles.title}>
             <span>{alert.title}!</span>
           </div>
@@ -45,7 +41,7 @@ class Alert extends Component {
             size={0.8}
             onClick={(e) => {
               e.stopPropagation();
-              hideAlert({ id: alert.id });
+              hideAlert({ alert });
             }}
           />
         </div>
