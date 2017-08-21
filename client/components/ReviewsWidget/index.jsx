@@ -2,10 +2,15 @@
 import React, { PropTypes } from 'react';
 
 function ReviewsWidget(props) {
+  const {
+    children,
+  } = props;
+
   return (
-    <h1>
-      Reviews widget
-    </h1>
+    <div>
+      <h1>Reviews Widget</h1>
+      {children}
+    </div>
   );
 }
 
