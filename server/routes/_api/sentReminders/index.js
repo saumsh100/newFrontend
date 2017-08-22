@@ -28,8 +28,9 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
   } = query;
 
   // Todo: setup date variable
-  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  startDate = startDate || moment().add(1, 'years').toISOString();
   endDate = endDate || moment().toISOString();
+
   const include = includeArray.map((included) => {
     if (included.as === 'reminder') {
       return {
@@ -46,8 +47,8 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
       where: {
         accountId,
         createdAt: {
-          $lte: endDate,
-          $gte: startDate,
+          $lte: startDate,
+          $gte: endDate,
         },
         isSent: true,
       },
