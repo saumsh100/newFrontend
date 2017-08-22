@@ -25,27 +25,25 @@ class AlertContainer extends Component {
 
   render() {
     const {
-      alert,
+      alerts,
       hideAlert,
     } = this.props;
 
-    if (!alert) {
+    if (!alerts) {
       return null;
     }
 
-    const alertsStack = alert.toJS().alertsStack;
-
     return (
       <div className={styles.alertsContainer}>
-        {alertsStack.map((alertData, index) => {
-          console.log(alertData);
-          const func = alertData.caller ? () => this.callerId(alertData.id) : this.handleAction;
-          alertData.body = <div onClick={func}>{alertData.body}</div>;
+        {alerts.toArray().map((alert, index) => {
+          console.log(alert);
+          const func = alert.caller ? () => this.callerId(alert.id) : this.handleAction;
+          alert.body = <div onClick={func}>{alert.body}</div>;
           return (
             <Alert
               key={`${index}_alert`}
               index={index}
-              alert={alertData}
+              alert={alert}
               hideAlert={hideAlert}
               handleAction={this.handleAction}
             />
@@ -64,7 +62,7 @@ AlertContainer.propTypes = {
 
 function mapStateToProps({ alerts }) {
   return {
-    alert: alerts,
+    alerts: alerts,
   };
 }
 

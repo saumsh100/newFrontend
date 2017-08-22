@@ -5,14 +5,13 @@ export function showAlertTimeout(payload) {
   return (dispatch, getState) => {
     dispatch(showAlert(payload));
 
-    const { alerts } = getState();
-    const alertsStack = alerts.toJS().alertsStack;
+    const alerts = getState().alerts;
 
-    alertsStack.map((alrt) => {
-      if (alrt && !alrt.sticky) {
+    alerts.toArray().map((alert) => {
+      if (alert && !alert.get('sticky')) {
         window.setTimeout(() => {
-          dispatch(hideAlert({ alert: alrt }));
-        }, alrt.time);
+          dispatch(hideAlert({ alert }));
+        }, alert.time);
       }
     });
   };
