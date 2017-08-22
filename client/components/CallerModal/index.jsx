@@ -3,31 +3,42 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DialogBox } from '../library';
-
-// import styles from './styles.scss';
+import { unsetSelectedCallId } from '../../actions/caller';
+import CallerDisplay from './CallerDisplay/';
+import styles from './styles.scss';
 
 class CallerModal extends Component {
   constructor(props) {
     super(props);
+
+    this.clearSelectedChat = this.clearSelectedChat.bind(this);
+  }
+
+  clearSelectedChat() {
+    this.props.unsetSelectedCallId();
   }
 
   render() {
     const {
-      callerId
+      callerId,
+      call,
+      patient,
     } = this.props;
-
 
     const actions = !!callerId;
 
     return (
       <DialogBox
-        title="Email Invite"
+        title="Caller ID"
         type="small"
         active={actions}
-        onEscKeyDown={this.reinitializeState}
-        onOverlayClick={this.reinitializeState}
+        onEscKeyDown={this.clearSelectedChat}
+        onOverlayClick={this.clearSelectedChat}
       >
-        dasds
+        <CallerDisplay
+          call={call}
+          patient={patient}
+        />
       </DialogBox>
     );
   }
@@ -35,19 +46,36 @@ class CallerModal extends Component {
 
 CallerModal.propTypes = {
   callerId: PropTypes.string,
+  call: PropTypes.object,
+  patient: PropTypes.object,
+  unsetSelectedCallId: PropTypes.func,
 };
 
 function mapStateToProps({ entities, caller }) {
   const callerId = caller.get('callerId');
+  const calls = entities.getIn(['calls', 'models']);
+  const patients = entities.getIn(['patients', 'models']);
+
+  let call = null;
+  let patient = null;
+
+  if (callerId) {
+    call = calls.get(callerId).toJS();
+    if (call.patientId) {
+      patient = patients.get(call.patientId).toJS();
+    }
+  }
 
   return {
+    call,
     callerId,
+    patient,
   };
 }
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    dispatch,
+    unsetSelectedCallId,
   }, dispatch);
 }
 

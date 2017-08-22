@@ -6,11 +6,9 @@ const AlertsSchema = {
   title: null,
   body: null,
   type: null,
-  status: null,
   time: null,
   sticky: null,
   caller: null,
-  action: null,
 };
 
 export default class Alerts extends createModel(AlertsSchema) {

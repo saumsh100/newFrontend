@@ -13,7 +13,7 @@ import {
 } from '../thunks/alerts';
 
 import {
-  hideAlert,
+  removeAlert,
 } from '../actions/alerts';
 
 import {
@@ -120,7 +120,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       socket.on('call.ended', (data) => {
         const callId = Object.keys(data.entities.calls)[0];
         dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
-        dispatch(hideAlert({ alert: { id: callId } }));
+        dispatch(removeAlert({ alert: { id: callId } }));
       });
 
       /**

@@ -7,11 +7,12 @@ import styles from './styles.scss';
 export default function Alert(props) {
   const {
     alert,
-    hideAlert,
+    removeAlert,
+    alertClick,
   } = props;
 
   let alertStyle = styles.alert;
-  alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
+  alertStyle = classNames(styles[`alert--${alert.type}`], alertStyle);
 
   let iconStyle = styles.iconContainer;
   iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
@@ -19,6 +20,7 @@ export default function Alert(props) {
   return (
     <div
       className={alertStyle}
+      onClick={alertClick}
     >
       <div className={styles.textContainer} >
         <div className={styles.title}>
@@ -32,7 +34,7 @@ export default function Alert(props) {
           size={0.8}
           onClick={(e) => {
             e.stopPropagation();
-            hideAlert({ alert });
+            removeAlert({ alert });
           }}
         />
       </div>
@@ -42,7 +44,8 @@ export default function Alert(props) {
 
 Alert.propTypes = {
   alert: PropTypes.object.isRequired,
-  hideAlert: PropTypes.func.isRequired,
+  removeAlert: PropTypes.func.isRequired,
   handleAction: PropTypes.func,
+  alertClick: PropTypes.func,
 };
 
