@@ -3,24 +3,18 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Alert } from '../components/library';
-import { hideAlert } from '../actions/alerts';
+import { removeAlert } from '../actions/alerts';
 import styles from './styles.scss';
 
 class AlertContainer extends Component {
-
   constructor(props) {
     super(props);
-    this.handleAction = this.handleAction.bind(this);
-  }
-
-  handleAction(alert) {
-    alert.action();
   }
 
   render() {
     const {
       alerts,
-      hideAlert,
+      removeAlert,
     } = this.props;
 
     if (!alerts) {
@@ -35,8 +29,7 @@ class AlertContainer extends Component {
               key={`${index}_alert`}
               index={index}
               alert={alert}
-              hideAlert={hideAlert}
-              handleAction={this.handleAction}
+              removeAlert={removeAlert}
             />
           );
         })}
@@ -58,7 +51,7 @@ function mapStateToProps({ alerts }) {
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    hideAlert,
+    removeAlert,
   }, dispatch);
 }
 

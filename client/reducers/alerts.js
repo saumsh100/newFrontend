@@ -8,8 +8,8 @@ const uuid = require('uuid').v4;
 /**
  * Constants
  */
-export const CREATE_ALERT = 'SHOW_ALERT';
-export const REMOVE_ALERT = 'HIDE_ALERT';
+export const CREATE_ALERT = 'CREATE_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
 
 /**
  * Initial State
@@ -20,7 +20,7 @@ export default handleActions({
   [CREATE_ALERT](state, { payload: { alert, type } }) {
     let title = alert.title;
 
-    if (type === 'success') {
+    if (!alert.title && type === 'success') {
       title = 'Success';
     } else if (type === 'error' && !alert.title) {
       title = 'Error';
@@ -32,10 +32,8 @@ export default handleActions({
       title,
       body: alert.body,
       type,
-      status: 'show',
       time: 3000,
       sticky: alert.sticky || false,
-      action: alert.action,
     });
 
     return state.set(id, alertData);
