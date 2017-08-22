@@ -78,6 +78,17 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
       order: [['startDate', 'DESC']],
     });
 
+    const appointmentsAllTimeNext = await Appointment.findOne({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        startDate: {
+          $between: [endDate, moment(endDate).add(100, 'years').toISOString()],
+        },
+      },
+      order: [['startDate', 'ASC']],
+    });
+
     const mostRecentAppointmentDate = appointmentsAllTimePast[0] ?
       appointmentsAllTimePast[0].startDate : null;
 
@@ -90,6 +101,8 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
     stats.allApps = totalAppointmentCount;
     stats.monthsApp = appointmentsInDateRangeCount;
     stats.lastAppointment = mostRecentAppointmentDate;
+    stats.nextAppointment = appointmentsAllTimeNext ? appointmentsAllTimeNext.startDate : null;
+
 
     return res.send(stats);
   } catch (error) {
