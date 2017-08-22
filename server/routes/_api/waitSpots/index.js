@@ -45,8 +45,8 @@ waitSpotsRouter.get('/', async (req, res, next) => {
     endTime,
   } = query;
 
-  startTime = startTime ? startTime : moment().startOf('day').toISOString();
-  endTime = endTime ? endTime : moment().add(1, 'years').toISOString();
+  startTime = startTime || moment().startOf('day').toISOString();
+  endTime = endTime || moment().add(1, 'years').toISOString();
 
   try {
     const waitSpots = await WaitSpot.findAll({
