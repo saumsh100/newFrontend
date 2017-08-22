@@ -46,8 +46,7 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
     where: {
       accountId,
       createdAt: {
-        $lte: endDate,
-        $gte: startDate,
+        $gte: moment().startOf('day').toISOString(),
       },
     },
     include,

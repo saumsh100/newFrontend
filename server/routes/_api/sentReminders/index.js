@@ -40,6 +40,7 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
     }
     return included;
   });
+  console.log(moment().startOf('day'));
   try {
     const sentReminders = await SentReminder.findAll({
       raw: true,
@@ -47,8 +48,7 @@ sentRemindersRouter.get('/', checkPermissions('sentReminders:read'), async (req,
       where: {
         accountId,
         createdAt: {
-          $lte: startDate,
-          $gte: endDate,
+          $gte: moment().startOf('day').toISOString(),
         },
         isSent: true,
       },
