@@ -1,18 +1,57 @@
 
-import React, { PropTypes } from 'react';
-import { Link } from '../../library';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
+import { createReview } from '../../../thunks/reviews';
+import ReviewForm from './ReviewForm';
+import styles from './styles.scss';
 
-function Review(props) {
-  return (
-    <div>
-      <h2>Leave Review</h2>
-      <Link to="/login">
-        <h3>Login</h3>
-      </Link>
-    </div>
-  );
+class Review extends Component {
+  constructor(props) {
+    super(props);
+
+    this.createReview = this.createReview.bind(this);
+  }
+
+  createReview(values) {
+    // Create review then send to next step
+    return this.props.createReview(values)
+      .then(() => {
+        this.props.history.push('/login');
+      });
+  }
+
+  render() {
+    const { review } = this.props;
+    return (
+      <div>
+        <div className={styles.reviewsFormWrapper}>
+          <ReviewForm
+            review={review}
+            onSubmit={this.createReview}
+          />
+        </div>
+      </div>
+    );
+  }
 }
 
-Review.propTypes = {};
+Review.propTypes = {
+  review: PropTypes.object,
+  createReview: PropTypes.func.isRequired,
+};
 
-export default Review;
+function mapStateToProps({ reviews }) {
+  return {
+    review: reviews.get('review'),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    createReview,
+  }, dispatch);
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));

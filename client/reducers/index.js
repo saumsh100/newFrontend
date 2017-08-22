@@ -5,7 +5,7 @@ import { reducer as form } from 'redux-form';
 import alerts from './alerts';
 import toolbar from './toolbar';
 import reputation from './reputation';
-import reviews from './reviews';
+import reviews from './vendastaReviews';
 import auth from './auth';
 import entities from './entities';
 import schedule from './schedule';

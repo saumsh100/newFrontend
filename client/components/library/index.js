@@ -47,6 +47,7 @@ import PractitionerAvatar from './PractitionerAvatar';
 import Search from './Search';
 import RangeSlider from './RangeSlider';
 import Star from './Star';
+import Stars from './Stars';
 import Summary from './Summary';
 import Timer from './Timer';
 import Toggle from './Toggle';
@@ -120,6 +121,7 @@ export {
   Search,
   RangeSlider,
   Star,
+  Stars,
   Summary,
   Stats,
   FlexGrid,

@@ -1,0 +1,75 @@
+
+@import '../../../ui.scss';
+
+.starsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fractionWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.numerator {
+  font-size: 6em;
+}
+
+.denominator {
+  color: $primary-darkgrey;
+  font-size: 2em;
+}
+
+.ratingsText {
+  color: $primary-darkgrey;
+  font-family: $medium-font;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.starWrapper {
+  &:hover {
+    > div.label {
+      display: block;
+    }
+  }
+}
+
+.label {
+  display: none;
+  color: $primary-darkgrey;
+  font-family: $medium-font;
+  text-align: center;
+}
+
+.labelSelected {
+  @extend .label;
+  display: block;
+}
+
+.starChild {
+  -webkit-text-stroke: 3px white;
+  padding: 0px 3px;
+  cursor: pointer;
+  &:hover {
+    color: lighten($primary-yellow, 5%);
+    font-size: 5em !important;
+  }
+}
+
+.empty {
+  @extend .starChild;
+  color: $primary-light-blue;
+}
+
+.filled {
+  @extend .starChild;
+  color: $primary-yellow;
+}
+
+.selected {
+  font-size: 5em !important;
+}
