@@ -10,7 +10,6 @@ import styles from './styles.scss';
 class CallerModal extends Component {
   constructor(props) {
     super(props);
-
     this.clearSelectedChat = this.clearSelectedChat.bind(this);
   }
 

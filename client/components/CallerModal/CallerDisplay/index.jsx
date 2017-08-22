@@ -7,14 +7,14 @@ export default function CallerDisplay({ call, patient }) {
     return null;
   }
 
-  const isAnswered = !call.answered;
+  const isAnswered = !!call.answered;
   const isCallFinished = call.duration > 0;
   let background = null;
 
   if (!isAnswered) {
     // call ringing
     background = styles.notAnswered;
-  } else if (isCallFinished && !isAnswered) {
+  } else if (isCallFinished && isAnswered) {
     background = styles.ended;
   } else {
     background = styles.endedMissed;

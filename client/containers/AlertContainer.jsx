@@ -32,7 +32,7 @@ class AlertContainer extends Component {
         {alerts.toArray().map((alert, index) => {
           const alertData = alert.toJS();
           const func = alertData.caller ? () => this.callerId(alertData.id) : () => null;
-          // TODO make the whole alert clickable
+
           return (
             <Alert
               key={`${index}_alert`}
