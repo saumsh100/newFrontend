@@ -15,7 +15,6 @@ class AlertContainer extends Component {
 
   callerId(id) {
     this.props.setSelectedCallId(id);
-    this.props.removeAlert({ alert: { id } });
   }
 
   render() {

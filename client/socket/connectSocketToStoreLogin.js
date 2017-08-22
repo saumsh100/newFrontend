@@ -105,7 +105,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       socket.on('call.started', (data) => {
         const callId = Object.keys(data.entities.calls)[0];
         const patientId = data.entities.patients ? Object.keys(data.entities.patients)[0] : null;
-        const patient = patientId ? `${data.entities.patients[patientId].firstName} ${data.entities.patients[patientId].lastName}` : 'unknown';
+        const patient = patientId ? `${data.entities.patients[patientId].firstName} ${data.entities.patients[patientId].lastName}` : 'Unknown';
         const alert = {
           id: callId,
           title: 'Call Recieved',

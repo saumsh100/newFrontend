@@ -12,7 +12,7 @@ export default function CallerDisplay({ call, patient }) {
   let background = null;
 
   if (!isAnswered) {
-    // call rigging
+    // call ringing
     background = styles.notAnswered;
   } else if (isCallFinished && !isAnswered) {
     background = styles.ended;
