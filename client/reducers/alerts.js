@@ -1,19 +1,23 @@
 
-import { fromJS } from 'immutable';
+import { Map } from 'immutable';
 import { handleActions } from 'redux-actions';
+import Alert from '../entities/models/Alert';
 
 const uuid = require('uuid').v4;
 
-export const SHOW_ALERT = 'SHOW_ALERT';
-export const HIDE_ALERT = 'HIDE_ALERT';
+/**
+ * Constants
+ */
+export const CREATE_ALERT = 'SHOW_ALERT';
+export const REMOVE_ALERT = 'HIDE_ALERT';
 
-const initialState = fromJS({
-  time: 0,
-  alertsStack: [],
-});
+/**
+ * Initial State
+ */
+const initialState = Map({});
 
 export default handleActions({
-  [SHOW_ALERT](state, { payload: { alert, type } }) {
+  [CREATE_ALERT](state, { payload: { alert, type } }) {
     let title = alert.title;
 
     if (type === 'success') {
@@ -22,37 +26,22 @@ export default handleActions({
       title = 'Error';
     }
 
-    const alertsStack = state.toJS().alertsStack;
-    const time = alert.sticky ? state.toJS().time : state.toJS().time + 3000;
-
-    const alertData = {
-      id: uuid(),
+    const id = uuid();
+    const alertData = new Alert({
+      id,
       title,
       body: alert.body,
       type,
       status: 'show',
-      time,
+      time: 3000,
       sticky: alert.sticky || false,
       action: alert.action,
-    };
+    });
 
-    alertsStack.push(alertData);
-    return state.merge({ time, alertsStack });
+    return state.set(id, alertData);
   },
 
-  [HIDE_ALERT](state, { payload: { alert } }) {
-    const alertsStack = state.toJS().alertsStack;
-
-    const filteredStack = alertsStack.filter((alrt) => {
-      if (alrt.id !== alert.id) {
-        return alrt;
-      }
-    });
-
-    const time = state.toJS().time !== 0 ? state.toJS().time - 3000 : 0;
-    return state.merge({
-      time,
-      alertsStack: filteredStack,
-    });
+  [REMOVE_ALERT](state, { payload: { alert } }) {
+    return state.delete(alert.get('id'));
   },
 }, initialState);

@@ -19,24 +19,22 @@ class AlertContainer extends Component {
 
   render() {
     const {
-      alert,
+      alerts,
       hideAlert,
     } = this.props;
 
-    if (!alert) {
+    if (!alerts) {
       return null;
     }
 
-    const alertsStack = alert.toJS().alertsStack;
-
     return (
       <div className={styles.alertsContainer}>
-        {alertsStack.map((alertData, index) => {
+        {alerts.toArray().map((alert, index) => {
           return (
             <Alert
               key={`${index}_alert`}
               index={index}
-              alert={alertData}
+              alert={alert}
               hideAlert={hideAlert}
               handleAction={this.handleAction}
             />
@@ -54,7 +52,7 @@ AlertContainer.propTypes = {
 
 function mapStateToProps({ alerts }) {
   return {
-    alert: alerts,
+    alerts: alerts,
   };
 }
 

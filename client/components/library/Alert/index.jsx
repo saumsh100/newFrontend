@@ -12,10 +12,10 @@ export default function Alert(props) {
   } = props;
 
   let alertStyle = styles.alert;
-  alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
+  alertStyle = classNames(styles[`alert--${alert.get('status')}--${alert.get('type')}`], alertStyle);
 
   let iconStyle = styles.iconContainer;
-  iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
+  iconStyle = classNames(styles[`${alert.get('type')}Hover`], iconStyle);
 
   return (
     <div
@@ -27,9 +27,9 @@ export default function Alert(props) {
     >
       <div className={styles.textContainer} >
         <div className={styles.title}>
-          <span>{alert.title}!</span>
+          <span>{alert.get('title')}!</span>
         </div>
-        <div>{alert.body}</div>
+        <div>{alert.get('body')}</div>
       </div>
       <div className={iconStyle}>
         <Icon

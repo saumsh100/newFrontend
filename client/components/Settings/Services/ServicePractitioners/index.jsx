@@ -22,7 +22,6 @@ class ServicePractitioners extends Component {
       success: {
         body: `Practitioners updated for ${service.get('name')}.`,
         sticky: true,
-        action: confirm.bind(null, 'this is a test'),
       },
       error: {
         body: `Could not update practitioners for ${service.get('name')}.`,
