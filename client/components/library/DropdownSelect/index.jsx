@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
 import Icon from '../Icon';
+import Input from '../Input';
 import { List, ListItem } from '../List';
 import styles from './styles.scss';
 
@@ -21,12 +22,16 @@ export default class DropdownSelect extends Component {
     this.state = {
       isOpen: false,
       scrollTo: 0,
+      options: [],
+      optionsStatic: [],
+      value: '',
     };
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
   /*
   componentDidUpdate() {
@@ -36,6 +41,13 @@ export default class DropdownSelect extends Component {
     }
   }*/
 
+  componentDidMount() {
+    this.setState({
+      options: this.props.options,
+      optionsStatic: this.props.options,
+    })
+  }
+
   toggle() {
     this.setState({ isOpen: !this.state.isOpen });
   }
@@ -44,18 +56,52 @@ export default class DropdownSelect extends Component {
     this.setState({ isOpen: false });
   }
 
+  handleSearch(value) {
+    const {
+      optionsStatic,
+    } = this.state;
+
+    if (value !== '') {
+      const filteredOptions = optionsStatic.filter((option) => {
+        if (new RegExp(value, "i").test(option.value)) {
+          return option;
+        }
+      });
+
+      return this.setState({
+        options: filteredOptions,
+        value,
+      });
+    }
+    return this.setState({
+      options: optionsStatic,
+      value,
+    });
+  }
+
   renderList() {
     const {
       template,
-      options,
       onChange,
       value,
     } = this.props;
+
+    const {
+      options,
+    } = this.state;
 
     const OptionTemplate = template || DefaultOption;
 
     return (
       <List className={styles.dropDownList} >
+        <div className={styles.searchInput}>
+          <Input
+            label="Search"
+            onChange={e => this.handleSearch(e.target.value)}
+            value={this.state.value}
+            icon="plus"
+          />
+        </div>
         {options.map((option, i) => {
           const isSelected = value === option.value;
           let className = styles.optionListItem;
@@ -66,7 +112,10 @@ export default class DropdownSelect extends Component {
             <ListItem
               key={`dropDownSelect_${i}`}
               className={className}
-              onClick={() => onChange(option.value)}
+              onClick={() => {
+                onChange(option.value)
+                this.toggle()
+              }}
               data-test-id={option.value}
             >
               <div className={styles.optionDiv} >
@@ -140,9 +189,10 @@ export default class DropdownSelect extends Component {
       toggle,
       align: this.props.align,
       isOpen: this.state.isOpen,
-      close: this.close,
+      close: () => { },
       animAlign: 'right',
       className: classNames(this.props.className, styles.wrapper),
+      closeOnInsideClick: this.state.isOpen,
     };
 
     return <RDropdownMenu {...menuOptions} />;
