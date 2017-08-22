@@ -109,6 +109,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         const alert = {
           id: callId,
           title: 'Call Recieved',
+          caller: true,
           body: `Call from ${patient} ${data.entities.calls[callId].callerNum}`,
           sticky: true,
         };

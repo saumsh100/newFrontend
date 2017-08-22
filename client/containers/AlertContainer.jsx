@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Alert } from '../components/library';
 import { hideAlert } from '../actions/alerts';
+import { setSelectedCallId } from '../actions/caller';
 import styles from './styles.scss';
 
 class AlertContainer extends Component {
@@ -11,10 +12,15 @@ class AlertContainer extends Component {
   constructor(props) {
     super(props);
     this.handleAction = this.handleAction.bind(this);
+    this.callerId = this.callerId.bind(this);
   }
 
   handleAction(alert) {
     alert.action();
+  }
+
+  callerId(id) {
+    this.props.setSelectedCallId(id);
   }
 
   render() {
@@ -32,6 +38,9 @@ class AlertContainer extends Component {
     return (
       <div className={styles.alertsContainer}>
         {alertsStack.map((alertData, index) => {
+          console.log(alertData);
+          const func = alertData.caller ? () => this.callerId(alertData.id) : this.handleAction;
+          alertData.body = <div onClick={func}>{alertData.body}</div>;
           return (
             <Alert
               key={`${index}_alert`}
@@ -50,6 +59,7 @@ class AlertContainer extends Component {
 AlertContainer.propTypes = {
   alert: PropTypes.object.isRequired,
   hideAlert: PropTypes.func,
+  setSelectedCallId: PropTypes.func,
 };
 
 function mapStateToProps({ alerts }) {
@@ -61,6 +71,7 @@ function mapStateToProps({ alerts }) {
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     hideAlert,
+    setSelectedCallId,
   }, dispatch);
 }
 

@@ -13,12 +13,14 @@ import dialogs from './dialogs';
 import patientList from './patientList';
 import requests from './requests';
 import accountSettings from './accountSettings';
+import caller from './caller';
 import apiRequests from './apiRequests';
 import segments from './segments';
 import availabilities from './availabilities';
 
 const appReducer = combineReducers({
   alerts,
+  caller,
   accountSettings,
   routing,
   form,
