@@ -10,6 +10,7 @@ import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
 import NavList from '../components/NavList';
 import SubTabs from '../components/SubTabs';
+import CallerModal from '../components/CallerModal';
 import AlertContainer from '../containers/AlertContainer';
 import { setIsCollapsed } from '../actions/toolbar';
 import styles from './styles.scss';
@@ -30,6 +31,7 @@ function DashboardApp(props) {
 
   let AppContainer = (
     <div>
+      <CallerModal />
       <TopBarContainer />
       {overlay}
       <NavRegionContainer>
@@ -58,7 +60,6 @@ function DashboardApp(props) {
   }
 
   return AppContainer;
-
 }
 
 DashboardApp.propTypes = {
@@ -69,7 +70,7 @@ DashboardApp.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ toolbar, entities, auth }) {
+function mapStateToProps({ toolbar, entities, auth, caller }) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),

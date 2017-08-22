@@ -8,28 +8,23 @@ export default function Alert(props) {
   const {
     alert,
     hideAlert,
-    handleAction,
   } = props;
 
   let alertStyle = styles.alert;
-  alertStyle = classNames(styles[`alert--${alert.get('status')}--${alert.get('type')}`], alertStyle);
+  alertStyle = classNames(styles[`alert--${alert.status}--${alert.type}`], alertStyle);
 
   let iconStyle = styles.iconContainer;
-  iconStyle = classNames(styles[`${alert.get('type')}Hover`], iconStyle);
+  iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
 
   return (
     <div
       className={alertStyle}
-      onClick={(e) => {
-        e.stopPropagation();
-        handleAction(alert);
-      }}
     >
       <div className={styles.textContainer} >
         <div className={styles.title}>
-          <span>{alert.get('title')}!</span>
+          <span>{alert.title}!</span>
         </div>
-        <div>{alert.get('body')}</div>
+        <div>{alert.body}</div>
       </div>
       <div className={iconStyle}>
         <Icon

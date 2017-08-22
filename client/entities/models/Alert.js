@@ -9,6 +9,7 @@ const AlertsSchema = {
   status: null,
   time: null,
   sticky: null,
+  caller: null,
   action: null,
 };
 

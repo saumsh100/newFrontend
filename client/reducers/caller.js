@@ -1,11 +1,11 @@
 
-import { fromJS } from 'immutable';
+import { Map } from 'immutable';
 import { handleActions } from 'redux-actions';
 
 export const SET_SELECTED_CALL_ID = 'SET_SELECTED_CALL_ID';
 export const UNSET_SELECTED_CALL_ID = 'UNSET_SELECTED_CALL_ID';
 
-const initialState = fromJS({
+export const initialState = Map({
   callerId: null,
 });
 

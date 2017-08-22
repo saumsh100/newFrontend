@@ -21,6 +21,7 @@ class AlertContainer extends Component {
 
   callerId(id) {
     this.props.setSelectedCallId(id);
+    this.props.hideAlert({ alert: { id } });
   }
 
   render() {
@@ -36,16 +37,16 @@ class AlertContainer extends Component {
     return (
       <div className={styles.alertsContainer}>
         {alerts.toArray().map((alert, index) => {
-          console.log(alert);
-          const func = alert.caller ? () => this.callerId(alert.id) : this.handleAction;
-          alert.body = <div onClick={func}>{alert.body}</div>;
+          const alertData = alert.toJS();
+          const func = alertData.caller ? () => this.callerId(alertData.id) : this.handleAction;
+          // TODO make the whole alert clickable
+          alertData.body = <div onClick={func}>{alert.body}</div>;
           return (
             <Alert
               key={`${index}_alert`}
               index={index}
-              alert={alert}
+              alert={alertData}
               hideAlert={hideAlert}
-              handleAction={this.handleAction}
             />
           );
         })}

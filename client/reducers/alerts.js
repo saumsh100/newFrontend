@@ -32,7 +32,7 @@ export default handleActions({
       title,
       body: alert.body,
       type,
-      caller: alert.caller,
+      caller: alert.caller || false,
       status: 'show',
       time: 3000,
       sticky: alert.sticky || false,
@@ -43,6 +43,6 @@ export default handleActions({
   },
 
   [REMOVE_ALERT](state, { payload: { alert } }) {
-    return state.delete(alert.get('id'));
+    return state.delete(alert.id);
   },
 }, initialState);
