@@ -42,7 +42,7 @@ chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) =>
       where: { accountId },
     });
 
-    res.send(format(req, res, 'chairs', chairs));
+    res.send(format(req, res, 'chair', chairs));
   } catch (error) {
     next(error);
   }
@@ -53,7 +53,7 @@ chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) =>
  */
 chairsRouter.get('/:chairId', checkPermissions('chairs:read'), (req, res, next) => {
   return Promise.resolve(req.chair)
-    .then(chair => res.send(normalize('chair', chair.dataValues)))
+    .then(chair => res.send(format(req, res, 'chair', chair.get({ plain: true }))))
     .catch(next);
 });
 
@@ -62,7 +62,7 @@ chairsRouter.get('/:chairId', checkPermissions('chairs:read'), (req, res, next) 
  */
 chairsRouter.put('/:chairId', checkPermissions('chairs:update'), (req, res, next) => {
   return req.chair.update(req.body)
-    .then(chair => res.send(normalize('chair', chair.dataValues)))
+    .then(chair => res.send(format(req, res, 'chair', chair.get({ plain: true }))))
     .catch(next);
 });
 

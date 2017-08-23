@@ -44,10 +44,6 @@ const SERIALIZERS = {
     pluralizeType: false,
   })),
 
-  chairs: new Serializer('chairs', makeConfig({
-    attributes: ModelAttributes.Chair,
-  })),
-
   practitioner: new Serializer('practitioner', makeConfig({
     attributes: ModelAttributes.Practitioner,
     pluralizeType: false,
