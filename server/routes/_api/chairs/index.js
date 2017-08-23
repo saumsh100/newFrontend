@@ -34,15 +34,15 @@ chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
  * - Get all chairs in an account
  */
 chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) => {
-  const { accountId } = req;
   try {
+    const { accountId } = req;
     const chairs = await Chair.findAll({
       raw: true,
       // TODO: add this back when we have auth back
       where: { accountId },
     });
 
-    res.send(format(req, res, 'chair', chairs));
+    res.send(format(req, res, 'chairs', chairs));
   } catch (error) {
     next(error);
   }

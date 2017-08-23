@@ -34,7 +34,7 @@ practitionersRouter.get('/', (req, res, next) => {
     practitioners = practitioners.map((practitioner) => {
       return practitioner.get({ plain: true });
     });
-    return res.send(format(req, res, 'practitioner', practitioners));
+    return res.send(format(req, res, 'practitioners', practitioners));
   }).catch(next);
 });
 
