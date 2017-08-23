@@ -1,11 +1,133 @@
-.notAnswered {
-  background-color: blue;
+@import '../../ui.scss';
+
+.callDisplayContainer {
+  position: relative;
+  width: 450px;
+  height: auto;
+  background: $primary-white;
+  box-sizing: border-box;
+  border-top: 5px solid $primary-green;
+
+  button {
+    width: 100%;
+    border-radius: 0px;
+    height: 50px;
+    box-shadow: none;
+  }
 }
 
-.endedMissed {
-  background-color: red;
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 70px;
 }
 
-.ended {
-  background-color: yellow;
+.callerAvatar {
+  width: 110px;
+  height: 110px;
+  position: absolute;
+  span {
+    font-size: 3em;
+  }
+
+  img {
+    width: 145px;
+    height: 145px;
+  }
+}
+
+.patientInfoContainer {
+  display: inline-block;
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.patientNameAge {
+  display: flex;
+  justify-content: center;
+  text-transform: capitalize;
+  composes: header from 'sass-loader!../../fonts.scss';
+  padding-bottom: 10px;
+}
+
+.patientBirthday {
+  display: flex;
+  justify-content: center;
+  composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+}
+
+.iconContainer {
+  position: absolute;
+  top: 0px;
+  color: $primary-dark;
+  animation: pulse 1s ease infinite;
+}
+
+.callBody {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.appointmentInfoContainer {
+  composes: subHeaderMediumSmall from 'sass-loader!../../fonts.scss';
+  display: flex;
+  &_last {
+    width: 160px;
+    padding-bottom: 5px;
+  }
+  &_next {
+    width: 160px;
+    margin-left: auto;
+  }
+
+  &_date {
+    composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+  }
+}
+
+
+.callInfo {
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid $primary-grey;
+  display: flex;
+  justify-content: center;
+  &_header {
+    margin-bottom: 20px;
+    composes: header from 'sass-loader!../../fonts.scss';
+  }
+  &_content {
+    height: 100%;
+  }
+
+  &_body {
+    display: flex;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+
+  &_desc {
+    composes: subHeader from 'sass-loader!../../fonts.scss';
+    width: 80px;
+  }
+
+  &_data {
+    composes: subHeaderSmall from 'sass-loader!../../fonts.scss';
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }

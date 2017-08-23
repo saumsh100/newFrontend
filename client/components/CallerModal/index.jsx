@@ -2,15 +2,29 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DialogBox } from '../library';
+import { DialogBox, Modal  } from '../library';
 import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
+import { fetchEntitiesRequest} from '../../thunks/fetchEntities';
 import styles from './styles.scss';
 
 class CallerModal extends Component {
   constructor(props) {
     super(props);
     this.clearSelectedChat = this.clearSelectedChat.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      patient,
+    } = this.props;
+
+    if (nextProps.patient && (!patient || (nextProps.patient.id !== this.props.patient.id))) {
+      this.props.fetchEntitiesRequest({
+        id: 'patientIdStats',
+        url: `/api/patients/${nextProps.patient.id}/stats`,
+      });
+    }
   }
 
   clearSelectedChat() {
@@ -22,23 +36,24 @@ class CallerModal extends Component {
       callerId,
       call,
       patient,
+      patientIdStats,
     } = this.props;
 
-    const actions = !!callerId;
     const callDisplay = call ? (<CallerDisplay
       call={call}
       patient={patient}
+      patientIdStats={patientIdStats}
     />) : null;
+
     return (
-      <DialogBox
-        title="Caller ID"
-        type="small"
-        active={actions}
+      <Modal
+        active={!!callerId}
         onEscKeyDown={this.clearSelectedChat}
         onOverlayClick={this.clearSelectedChat}
+        custom
       >
         {callDisplay}
-      </DialogBox>
+      </Modal>
     );
   }
 }
@@ -50,7 +65,7 @@ CallerModal.propTypes = {
   unsetSelectedCallId: PropTypes.func,
 };
 
-function mapStateToProps({ entities, caller }) {
+function mapStateToProps({ entities, caller, apiRequests }) {
   const callerId = caller.get('callerId');
   const call = entities.getIn(['calls', 'models', callerId]);
   const patients = entities.getIn(['patients', 'models']);
@@ -60,16 +75,21 @@ function mapStateToProps({ entities, caller }) {
     patient = patients.get(call.patientId).toJS();
   }
 
+  const patientIdStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
+
+
   return {
     call,
     callerId,
     patient,
+    patientIdStats,
   };
 }
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     unsetSelectedCallId,
+    fetchEntitiesRequest,
   }, dispatch);
 }
 

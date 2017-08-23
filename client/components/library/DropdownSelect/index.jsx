@@ -112,8 +112,6 @@ export default class DropdownSelect extends Component {
       labelClassName = classNames(styles.activeLabel, labelClassName);
     }
 
-
-
     return (
       <div
         className={disabled ? styles.toggleDivDisabled : toggleClassName}
