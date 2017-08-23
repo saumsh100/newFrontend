@@ -247,7 +247,12 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
         required: false,
       }],
     }],
-  }).then(chat => res.send(normalize('chat', chat.get({ plain: true }))))
+  }).then((chat) => {
+    if (!chat) {
+      return res.send(200);
+    }
+    return res.send(normalize('chat', chat.get({ plain: true })));
+  })
   .catch(next);
 });
 

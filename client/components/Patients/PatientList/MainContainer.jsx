@@ -69,10 +69,13 @@ class MainContainer extends Component {
     const patientsWithAppointments = this.props.appointments.toArray()
       .reduce((res, appointment) => {
         const patient = this.props.patients.get(appointment.patientId) || null;
-        if (patient) {
-          patient.appointment = appointment;
-          res.push(patient);
+        const patientCopy = patient ? Object.assign({}, patient.toJS()) : null;
+
+        if (patientCopy) {
+          patientCopy.appointment = appointment;
+          res.push(patientCopy);
         }
+
         return res;
       }, []);
 
