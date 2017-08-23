@@ -1,4 +1,5 @@
 import { Service, Practitioner, Practitioner_Service } from '../../../_models';
+import format from '../../util/format';
 
 const servicesRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
@@ -29,13 +30,13 @@ servicesRouter.post('/', checkPermissions('services:create'), (req, res, next) =
     accountId: req.accountId,
   });
   return Service.create(serviceData)
-    .then(service => res.status(201).send(normalize('service', service.get({ plain: true }))))
+    .then(service => res.status(201).send(format(req, res, 'service', service.get({ plain: true }))))
     .catch(next);
 });
 
 servicesRouter.get('/:serviceId', (req, res, next) => {
   Promise.resolve(req.service)
-    .then(service => res.send(normalize('service', service.get({ plain: true }))))
+    .then(service => res.send(format(req, res, 'service', service.get({ plain: true }))))
     .catch(next);
 });
 
