@@ -3,9 +3,6 @@ import React, { PropTypes } from 'react';
 import styles from '../styles.scss';
 
 export default function CallerDisplay({ call, patient }) {
-  if (!call) {
-    return null;
-  }
 
   const isAnswered = !!call.answered;
   const isCallFinished = call.duration > 0;
@@ -19,6 +16,7 @@ export default function CallerDisplay({ call, patient }) {
   } else {
     background = styles.endedMissed;
   }
+
   return (
     <div className={background}>
       {call.id}

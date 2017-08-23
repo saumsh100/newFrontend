@@ -25,7 +25,10 @@ class CallerModal extends Component {
     } = this.props;
 
     const actions = !!callerId;
-
+    const callDisplay = call ? (<CallerDisplay
+      call={call}
+      patient={patient}
+    />) : null;
     return (
       <DialogBox
         title="Caller ID"
@@ -34,10 +37,7 @@ class CallerModal extends Component {
         onEscKeyDown={this.clearSelectedChat}
         onOverlayClick={this.clearSelectedChat}
       >
-        <CallerDisplay
-          call={call}
-          patient={patient}
-        />
+        {callDisplay}
       </DialogBox>
     );
   }
@@ -52,17 +52,12 @@ CallerModal.propTypes = {
 
 function mapStateToProps({ entities, caller }) {
   const callerId = caller.get('callerId');
-  const calls = entities.getIn(['calls', 'models']);
+  const call = entities.getIn(['calls', 'models', callerId]);
   const patients = entities.getIn(['patients', 'models']);
-
-  let call = null;
   let patient = null;
 
-  if (callerId) {
-    call = calls.get(callerId).toJS();
-    if (call.patientId) {
-      patient = patients.get(call.patientId).toJS();
-    }
+  if (callerId && call.patientId) {
+    patient = patients.get(call.patientId).toJS();
   }
 
   return {
