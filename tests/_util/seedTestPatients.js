@@ -1,6 +1,5 @@
 
 import bcrypt from 'bcrypt';
-import moment from 'moment';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { Patient, PatientUser } from '../../server/_models';
 import wipeModel from './wipeModel';
@@ -19,7 +18,7 @@ const patient = {
   mobilePhoneNumber: '7789999999',
   createdAt: '2017-07-19T00:14:30.932Z',
   address: null,
-  birthDate: moment('1980-01-01').toISOString(),
+  birthDate: '1980-01-01T00:00:00.932Z',
   familyId: null,
   gender: null,
   homePhoneNumber: null,

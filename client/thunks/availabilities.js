@@ -4,6 +4,7 @@ import axios from 'axios';
 import {
   setIsFetching,
   setAvailabilities,
+  setNextAvailability,
   sixDaysShiftAction,
   setIsSuccessfulBooking,
   setStartingAppointmentTimeAction,
@@ -160,11 +161,13 @@ export function closeBookingModal() {
   };
 }
 
+let requestCount = 0;  // The number of availability requests sent
+
 export function fetchAvailabilities() {
   return (dispatch, getState) => {
     // Set the loading symbol
     dispatch(setIsFetching(true));
-
+    requestCount += 1;
     // Make request with current selected options
     const { availabilities, entities } = getState();
     const account = entities.getIn(['accounts', 'models']).first();
@@ -181,14 +184,21 @@ export function fetchAvailabilities() {
 
     return axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
       .then(({ data }) => {
+        // data.availabilities = [];
         dispatch(setAvailabilities(data.availabilities));
-
+        dispatch(setNextAvailability(data.nextAvailability));
+        requestCount -= 1;
         // Remove loading symbol
-        dispatch(setIsFetching(false));
+        if (!requestCount) {
+          dispatch(setIsFetching(false));
+        }
       })
       .catch((err) => {
         dispatch(setAvailabilities([]));
-        dispatch(setIsFetching(false));
+        requestCount -= 1;
+        if (!requestCount) {
+          dispatch(setIsFetching(false));
+        }
         throw err;
       });
   };

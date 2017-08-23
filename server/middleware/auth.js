@@ -6,7 +6,6 @@ import rolePermissions from '../config/permissions';
 import StatusError from '../util/StatusError';
 // import { AuthSession } from '../models';
 import { AuthSession as _AuthSession } from '../_models';
-const chalk = require('chalk');
 
 function getTokenFromReq(req) {
   if (!req.headers || !req.headers.authorization) {
@@ -41,7 +40,6 @@ function getTokenFromReq(req) {
 
   return jwt.verify(token, tokenSecret, {}, (err, decoded) => {
     if (err) {
-      console.error(err);
       return next(StatusError(401, 'Unauthorized. Error verifying token.'));
     }
 
@@ -145,4 +143,3 @@ module.exports.sequelizeAuthMiddleware = function (req, res, next) {
       .catch(next);
   });
 };
-

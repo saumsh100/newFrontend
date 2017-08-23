@@ -1,0 +1,16 @@
+
+@import '../../ui.scss';
+
+.base {
+  font-family: $medium-font;
+}
+
+.on {
+  @extend .base;
+  color: $primary-green;
+}
+
+.off {
+  @extend .base;
+  color: $primary-red;
+}

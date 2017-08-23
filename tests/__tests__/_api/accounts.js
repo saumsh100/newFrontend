@@ -3,11 +3,12 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import {
   Account,
+  WeeklySchedule,
 } from '../../../server/_models';
-import { accountId, enterpriseId, seedTestUsers } from '../../_util/seedTestUsers';
+import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import generateToken from '../../_util/generateToken';
 import { getModelsArray, omitPropertiesFromBody, omitProperties } from '../../util/selectors';
-import { wipeAllModels } from '../../_util/wipeModel';
+import wipeModel from '../../_util/wipeModel';
 
 const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -35,7 +36,8 @@ describe('/api/accounts', () => {
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModel(WeeklySchedule);
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
@@ -136,7 +138,7 @@ describe('/api/accounts', () => {
           firstName: 'New',
           lastName: 'Guy',
         })
-        .expect(200)
+        .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           const [user] = getModelsArray('users', body);

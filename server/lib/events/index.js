@@ -1,0 +1,8 @@
+import registerCallsSubscriber from './Calls';
+
+export default function registerEventSubscribers(context, io) {
+  context.on('ready', () => {
+    // Here we'll add more subs for other routes
+    registerCallsSubscriber(context, io);
+  });
+}

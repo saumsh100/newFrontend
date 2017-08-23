@@ -78,6 +78,18 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
       order: [['startDate', 'DESC']],
     });
 
+    const appointmentsAllTimeNext = await Appointment.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        startDate: {
+          $between: [endDate, moment(endDate).add(100, 'years').toISOString()],
+        },
+      },
+      order: [['startDate', 'ASC']],
+      limit: 1,
+    });
+
     const mostRecentAppointmentDate = appointmentsAllTimePast[0] ?
       appointmentsAllTimePast[0].startDate : null;
 
@@ -90,6 +102,8 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
     stats.allApps = totalAppointmentCount;
     stats.monthsApp = appointmentsInDateRangeCount;
     stats.lastAppointment = mostRecentAppointmentDate;
+    stats.nextAppointment = appointmentsAllTimeNext[0] ? appointmentsAllTimeNext[0].startDate : null;
+
 
     return res.send(stats);
   } catch (error) {
@@ -195,7 +209,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       include: [
         { association: 'appointments', required: false, where: { startDate: { $between: [startDate, endDate] } } },
         {
-          association: 'chat',
+          association: 'chats',
           required: false,
           include: [{ association: 'textMessages', required: false, include: [{ association: 'user', required: false }] }],
         },
@@ -460,11 +474,11 @@ patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, 
   const { patient } = req;
   const accountId = req.accountId;
   return patient.destroy()
-    .then(() => res.send(204))
+    .then(() => res.sendStatus(204))
     .then(() => {
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      const normalized = normalize('patient', patient);
+      const normalized = normalize('patient', patient.get({ plain: true }));
       return io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
     .catch(next);

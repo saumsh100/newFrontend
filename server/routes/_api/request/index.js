@@ -35,7 +35,8 @@ requestsRouter.post('/', (req, res, next) => {
     })
     .then(async ({ request }) => {
       if (request.patientUserId) {
-        request.patientUser = await PatientUser.findById(request.patientUserId);
+        const pUser = await PatientUser.findById(request.patientUserId);
+        request.patientUser = pUser.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
@@ -80,14 +81,15 @@ requestsRouter.get('/', (req, res, next) => {
   isCancelled = !!isCancelled;
 
   return Request.findAll({
-    raw: true,
-    nest: true,
     where: {
       accountId,
       isCancelled,
     },
     include: includeArray,
-  }).then(requests => res.send(normalize('requests', requests)))
+  }).then(requests => {
+    const sendRequests = requests.map(r => r.get({ plain: true }));
+    return res.send(normalize('requests', sendRequests));
+  })
     .catch(next);
 });
 

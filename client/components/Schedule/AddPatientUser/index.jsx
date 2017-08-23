@@ -42,6 +42,7 @@ class AddPatientUser extends Component {
       customBufferTime: 0,
       requestModel: requestData.requestModel,
       request: true,
+      practitionerId: requestData.practitionerId,
     };
 
     createEntityRequest({

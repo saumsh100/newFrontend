@@ -32,6 +32,21 @@ const redis = {
   uri: environmentVariables.REDIS_URL || 'redis://localhost:6379',
 };
 
+const rabbitConfig = {
+  host: environmentVariables.RABBIT_HOST || 'localhost',
+  port: environmentVariables.RABBIT_PORT || null,
+  username: environmentVariables.RABBIT_USERNAME || null,
+  password: environmentVariables.RABBIT_PASSWORD || null,
+};
+
+let user = '';
+if (rabbitConfig.username && rabbitConfig.password) {
+  user = `${rabbitConfig.username}:${rabbitConfig.password}@`;
+}
+
+const rabbit = rabbitConfig.port ? `amqp://${user}${rabbitConfig.host}:${rabbitConfig.port}?heartbeat=380` :
+`amqp://${user}${rabbitConfig.host}?heartbeat=380`;
+
 const namespaces = {
   dash: '/dash',
   sync: '/sync',
@@ -75,12 +90,16 @@ const s3 = {
 
 s3.urlPrefix = environmentVariables.S3_URL_PREFIX || `https://${s3.bucket}.s3.amazonaws.com/`;
 
+// For Codeship, use these envs if defined!
+const pgUser = environmentVariables.PGUSER;
+const pgPassword = environmentVariables.PGPASSWORD;
+
 // Postgres config
 const postgres = {
   host: environmentVariables.POSTGRESQL_HOST || 'localhost',
   port: environmentVariables.POSTGRESQL_PORT || 5432,
-  username: environmentVariables.POSTGRESQL_USER || 'admin',
-  password: environmentVariables.POSTGRESQL_PASSWORD || '',
+  username: pgUser || (environmentVariables.POSTGRESQL_USER || 'admin'),
+  password: pgPassword || (environmentVariables.POSTGRESQL_PASSWORD || ''),
   database: environmentVariables.POSTGRESQL_DATABASE || defaultDBName,
   ssl: !!environmentVariables.POSTGRESQL_SSL,
   logging: !!environmentVariables.POSTGRESQL_LOGGING,
@@ -104,6 +123,7 @@ module.exports = {
   db,
   caCert,
   redis,
+  rabbit,
   vendasta,
   twilio,
   mandrill,

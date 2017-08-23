@@ -7,7 +7,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
-        "birthDate": "1980-01-01T07:00:00.000Z",
+        "birthDate": "1980-01-01T00:00:00.932Z",
         "email": "testpatient@test.com",
         "familyId": null,
         "firstName": "Ronald",
@@ -22,6 +22,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsId": null,
+        "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
           "afternoon": true,

@@ -1,6 +1,6 @@
 
 import { fromJS } from 'immutable';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { handleActions } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
@@ -23,40 +23,52 @@ import {
   SET_HAS_WAITLIST,
   UPDATE_WAITSPOT,
   SET_IS_LOGIN,
+  SET_NEXT_AVAILABILITY,
 } from '../constants';
 
-export const createInitialWidgetState = state => fromJS(Object.assign({
-  account: null,
-  practitioners: [],
-  services: [],
-  availabilities: [],
-  patientUser: null,
-  isFetching: true,
-  isConfirming: false,
-  isLogin: false,
-  initialForm: {},
-  isTimerExpired: false,
-  isSuccessfulBooking: false,
-  hasWaitList: false,
-  waitSpot: {
-    preferences: {
-      mornings: true,
-      afternoons: true,
-      evenings: true,
-      weekdays: true,
-      weekends: true,
+export const createInitialWidgetState = state => {
+  let selectedStartDate = moment().add(1, 'hours').toISOString()
+  if (state) {
+    const timezone = state.account.timezone;
+    const zone = -1 * moment.tz(new Date(), timezone).zone();
+    selectedStartDate = moment().add(1, 'hours').zone(zone).toISOString();
+  }
+
+  // selectedStartDate = timezone ?
+  return fromJS(Object.assign({
+    account: null,
+    practitioners: [],
+    services: [],
+    availabilities: [],
+    nextAvailability: null,
+    patientUser: null,
+    isFetching: true,
+    isConfirming: false,
+    isLogin: false,
+    initialForm: {},
+    isTimerExpired: false,
+    isSuccessfulBooking: false,
+    hasWaitList: false,
+    waitSpot: {
+      preferences: {
+        mornings: true,
+        afternoons: true,
+        evenings: true,
+        weekdays: true,
+        weekends: true,
+      },
+
+      unavailableDays: [],
     },
 
-    unavailableDays: [],
-  },
-
-  selectedAvailability: null,
-  selectedServiceId: null, // Will be set by the initialState from server
-  selectedPractitionerId: '',
-  selectedStartDate: moment().add(1, 'hours').toISOString(),
-  registrationStep: 1,
-  reservationId: null,
-}, state));
+    selectedAvailability: null,
+    selectedServiceId: null, // Will be set by the initialState from server
+    selectedPractitionerId: '',
+    selectedStartDate,
+    registrationStep: 1,
+    reservationId: null,
+  }, state));
+};
 
 export default handleActions({
   [REFRESH_AVAILABILITIES_STATE](state) {
@@ -79,6 +91,10 @@ export default handleActions({
 
   [SET_AVAILABILITIES](state, action) {
     return state.set('availabilities', action.payload);
+  },
+
+  [SET_NEXT_AVAILABILITY](state, action) {
+    return state.set('nextAvailability', action.payload);
   },
 
   [SET_IS_FETCHING](state, action) {

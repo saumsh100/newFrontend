@@ -239,6 +239,8 @@ class Users extends Component{
         className={styles.inviteUser}
         onClick={this.addNewUser}
         data-test-id="addUserButton"
+        icon="plus"
+        create
       >
         Add a User
       </Button>) : null);
@@ -294,13 +296,15 @@ class Users extends Component{
           />
         </DialogBox>
         <Row className={styles.mainHead}>
-          <h2 className={styles.mainHeader}>Users in {clinicName}</h2>
+          <Header className={styles.header} contentHeader title={`Users in ${clinicName}`} />
           <div>
             {addUserButton}
             <Button
               className={styles.inviteUser}
               onClick={this.addUser}
               data-test-id="inviteUserButton"
+              icon="plus"
+              create
             >
               Invite a User
             </Button>
@@ -330,7 +334,7 @@ class Users extends Component{
           })}
         </List>
         <Row>
-          <h2 className={styles.header} >Pending Invitations</h2>
+         <Header className={styles.header} contentHeader title="Pending Invitations" />
         </Row>
         <List className={styles.userList}>
           {usersInvited}
