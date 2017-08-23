@@ -23,7 +23,7 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
   };
 
   const data = {
-    answered: req.body.answered === true,
+    answered: req.body.answered === true, // callrails sometimes return an empty string for answered
     direction: req.body.direction,
     duration: req.body.duration,
     priorCalls: req.body.prior_calls,
@@ -78,7 +78,7 @@ callsRouterSequelize.post('/:accountId/inbound/post-call', (req, res, next) => {
   };
 
   const data = {
-    answered: req.body.answered === true,
+    answered: req.body.answered === true, // callrails sometimes return an empty string for answered
     direction: req.body.direction,
     duration: req.body.duration,
     priorCalls: req.body.prior_calls,
@@ -128,7 +128,7 @@ callsRouterSequelize.post('/:accountId/inbound/modified', (req, res, next) => {
   };
 
   const data = {
-    answered: req.body.answered === true,
+    answered: req.body.answered === true, // callrails sometimes return an empty string for answered
     direction: req.body.direction,
     duration: req.body.duration,
     priorCalls: req.body.prior_calls,
