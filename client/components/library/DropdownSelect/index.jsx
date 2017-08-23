@@ -33,19 +33,12 @@ export default class DropdownSelect extends Component {
     this.renderToggle = this.renderToggle.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
   }
-  /*
-  componentDidUpdate() {
-    const { scrollTo } = this.state;
-    if (scrollTo) {
-      this.refs[scrollTo].scrollIntoView({block: 'end', behavior: 'smooth'});
-    }
-  }*/
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({
       options: this.props.options,
       optionsStatic: this.props.options,
-    })
+    });
   }
 
   toggle() {
@@ -63,7 +56,7 @@ export default class DropdownSelect extends Component {
 
     if (value !== '') {
       const filteredOptions = optionsStatic.filter((option) => {
-        if (new RegExp(value, "i").test(option.value)) {
+        if (new RegExp(value, 'i').test(option.value)) {
           return option;
         }
       });
@@ -84,6 +77,7 @@ export default class DropdownSelect extends Component {
       template,
       onChange,
       value,
+      search,
     } = this.props;
 
     const {
@@ -94,14 +88,15 @@ export default class DropdownSelect extends Component {
 
     return (
       <List className={styles.dropDownList} >
-        <div className={styles.searchInput}>
-          <Input
-            label="Search"
-            onChange={e => this.handleSearch(e.target.value)}
-            value={this.state.value}
-            icon="plus"
-          />
-        </div>
+        {search ?
+          <div className={styles.searchInput}>
+            <Input
+              label="Search"
+              onChange={e => this.handleSearch(e.target.value)}
+              value={this.state.value}
+              icon="plus"
+            />
+          </div> : null}
         {options.map((option, i) => {
           const isSelected = value === option.value;
           let className = styles.optionListItem;
@@ -160,9 +155,7 @@ export default class DropdownSelect extends Component {
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
       labelClassName = classNames(styles.activeLabel, labelClassName);
     }
-
-
-
+    
     return (
       <div
         className={disabled ? styles.toggleDivDisabled : toggleClassName}
@@ -183,16 +176,15 @@ export default class DropdownSelect extends Component {
   render() {
     const children = this.renderList();
     const toggle = this.renderToggle();
-
     const menuOptions = {
       children,
       toggle,
       align: this.props.align,
       isOpen: this.state.isOpen,
-      close: () => { },
+      close: this.close,
       animAlign: 'right',
       className: classNames(this.props.className, styles.wrapper),
-      closeOnInsideClick: this.state.isOpen,
+      closeOnInsideClick: false,
     };
 
     return <RDropdownMenu {...menuOptions} />;
