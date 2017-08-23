@@ -41,7 +41,7 @@ function PhoneCalls(props) {
       callerName={callerName}
       duration={callJS.duration}
       answered={callJS.answered}
-      wasApptBooked={callJS.wasApptBooked}
+      wasApptBooked={!!callJS.wasApptBooked}
       recording={callJS.recording}
     />);
   });
