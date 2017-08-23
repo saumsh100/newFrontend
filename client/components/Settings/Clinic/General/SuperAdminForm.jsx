@@ -13,6 +13,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
     vendastaId: activeAccount.get('vendastaId'),
     unit: activeAccount.get('unit'),
+    timeInterval: activeAccount.get('timeInterval'),
     canSendReminders: activeAccount.get('canSendReminders'),
     canSendRecalls: activeAccount.get('canSendRecalls'),
   };
@@ -85,6 +86,14 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         <Field
           name="unit"
           label="Schedule Unit"
+          type="number"
+          validate={[notNegative, maxUnitSize]}
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          name="timeInterval"
+          label="Time Interval for Booking Widget"
           type="number"
           validate={[notNegative, maxUnitSize]}
         />
