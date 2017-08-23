@@ -155,7 +155,7 @@ export default class DropdownSelect extends Component {
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
       labelClassName = classNames(styles.activeLabel, labelClassName);
     }
-    
+
     return (
       <div
         className={disabled ? styles.toggleDivDisabled : toggleClassName}
