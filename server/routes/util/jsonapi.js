@@ -22,6 +22,7 @@ const ModelAttributes = {
     'name',
     'createdAt',
     'updatedAt',
+    'deletedAt',
   ],
 
   Practitioner: [
@@ -32,6 +33,24 @@ const ModelAttributes = {
     'isHidden',
     'avatarUrl',
     'isCustomSchedule',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  Service: [
+    'name',
+    'accountId',
+    'duration',
+    'bufferTime',
+    'unitCost',
+    'customCosts',
+    'pmsId',
+    'isHidden',
+    'isDefault',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
   ],
 };
 
@@ -46,6 +65,11 @@ const SERIALIZERS = {
 
   practitioner: new Serializer('practitioner', makeConfig({
     attributes: ModelAttributes.Practitioner,
+    pluralizeType: false,
+  })),
+
+  service: new Serializer('service', makeConfig({
+    attributes: ModelAttributes.Service,
     pluralizeType: false,
   })),
 };
