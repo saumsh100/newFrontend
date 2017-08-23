@@ -1,6 +1,11 @@
 
 @import '../../../ui.scss';
 
+.reviewsWrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .reviewsFormWrapper {
   max-width: 350px;
   width: 100%;

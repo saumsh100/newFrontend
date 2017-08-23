@@ -1,22 +1,70 @@
 
-import React, { PropTypes } from 'react';
-import { Link } from '../../library';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
+import { updateReview } from '../../../thunks/reviews';
+import { createPatient } from '../../../thunks/patientAuth';
+import { Link, VButton } from '../../library';
+import SignUpForm from '../../Availabilities/SubmitView/SignUpForm';
+import styles from './styles.scss';
 
-function SignUp(props) {
-  return (
-    <div>
-      <h2>Signup</h2>
-      <Link to="/login">
-        <h3>Or Login</h3>
-      </Link>
-      <Link to="/submitted">
-        <h3>Submit</h3>
-      </Link>
-    </div>
-  );
+const customSubmitButton = (
+  <VButton
+    type="submit"
+    color="red"
+    icon="email"
+    className={styles.customSubmitButton}
+  >
+    Sign Up with Email
+  </VButton>
+);
+
+class SignUp extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSignUp = this.handleSignUp.bind(this);
+  }
+
+  handleSignUp(values) {
+    // true argument is to ignore sending confirmation text on API
+    return this.props.createPatient(values, true)
+      .then(() => {
+        // Important to return so that it will not navigate if errored
+        return this.props.updateReview();
+      })
+      .then(() => {
+        this.props.history.push('/submitted');
+      });
+  }
+
+  render() {
+    return (
+      <div className={styles.signUpWrapper}>
+        <h2>Signup</h2>
+        <SignUpForm
+          initialValues={{}}
+          onSubmit={this.handleSignUp}
+          submitButton={customSubmitButton}
+        />
+        <Link to="/login">
+          <h3>Or Login</h3>
+        </Link>
+      </div>
+    );
+  }
 }
 
+SignUp.propTypes = {
+  updateReview: PropTypes.func.isRequired,
+};
 
-SignUp.propTypes = {};
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    createPatient,
+    updateReview,
+  }, dispatch);
+}
 
-export default SignUp;
+export default withRouter(connect(null, mapDispatchToProps)(SignUp));

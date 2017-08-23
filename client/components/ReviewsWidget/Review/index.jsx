@@ -18,14 +18,14 @@ class Review extends Component {
     // Create review then send to next step
     return this.props.createReview(values)
       .then(() => {
-        this.props.history.push('/login');
+        this.props.history.push('/signup');
       });
   }
 
   render() {
     const { review } = this.props;
     return (
-      <div>
+      <div className={styles.reviewsWrapper}>
         <div className={styles.reviewsFormWrapper}>
           <ReviewForm
             review={review}

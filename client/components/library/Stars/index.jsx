@@ -28,7 +28,7 @@ export default class Stars extends Component {
   }
 
   render() {
-    const { size, value } = this.props;
+    const { size, value, isStatic } = this.props;
 
     const CustomStar = (props) => {
       const { i } = props;
@@ -36,19 +36,29 @@ export default class Stars extends Component {
       const isSelected = value === i;
       const icon = isFilled ? 'star' : 'star-o';
       let starClass = isFilled ? styles.filled : styles.empty;
-      if (isSelected) {
+      if (isSelected && !isStatic) {
         starClass = classNames(styles.selected, starClass);
       }
 
-      const labelClass = isSelected ? styles.labelSelected : styles.label;
+      if (!isStatic) {
+        starClass = classNames(styles.starChildDynamic, starClass);
+      }
+
+      const wrapperClass = isStatic ? '' : styles.starWrapper;
+      const labelClass = isSelected && !isStatic ? styles.labelSelected : styles.label;
+      const iconProps = {
+        className: starClass,
+        size: size,
+        icon: icon,
+      };
+
+      if (!isStatic) {
+        iconProps.onClick = this.generateSelectHandler(i);
+      }
+
       return (
-        <div className={styles.starWrapper}>
-          <Icon
-            className={starClass}
-            size={size}
-            icon={icon}
-            onClick={this.generateSelectHandler(i)}
-          />
+        <div className={wrapperClass}>
+          <Icon {...iconProps} />
           <div className={labelClass}>
             {starRatingsMap[i]}
           </div>
@@ -84,8 +94,10 @@ export default class Stars extends Component {
 
 Stars.defaultProps = {
   size: 4,
+  isStatic: false,
 };
 
 Stars.propTypes = {
   size: PropTypes.number,
+  isStatic: PropTypes.bool,
 };

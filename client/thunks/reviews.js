@@ -13,14 +13,33 @@ import {
  */
 export function createReview(values) {
   return function (dispatch, getState) {
-    console.log('values', values);
+    // TODO: we should be able to know if this is coming from a SentReview
+    // TODO: vs. organic so that we can add the relation (mark SentReview as successful)
     const { reviews } = getState();
     const accountId = reviews.getIn(['account', 'id']);
     return axios.post(`/reviews/${accountId}`, values)
       .then(({ data }) => {
-        //debugger;
-        //const { entities } = data;
-        //const reviewId = Object.keys(entities)[0];
+        // No normalizr structure here
+        dispatch(setReview(data));
+      });
+  };
+}
+
+/**
+ * updateReview will add the currently logged in patientUserId
+ * to the review so that we can now associate a user with it
+ *
+ * @returns {Function}
+ */
+export function updateReview() {
+  return function (dispatch, getState) {
+    const { auth, reviews } = getState();
+    const reviewId = reviews.getIn(['review', 'id']);
+    const patientUserId = auth.getIn(['patientUser', 'id']);
+    const reviewData = { patientUserId };
+    return axios.put(`/reviews/${reviewId}`, reviewData)
+      .then(({ data }) => {
+        // No normalizr structure here
         dispatch(setReview(data));
       });
   };

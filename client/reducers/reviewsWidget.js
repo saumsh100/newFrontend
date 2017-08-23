@@ -23,10 +23,7 @@ export const setReview = createAction(SET_REVIEW);
 export const createInitialReviewsState = state => {
   return fromJS(Object.assign({
     account: null,
-    review: new Review({
-      stars: null,
-      description: null,
-    }),
+    review: new Review(),
   }, state));
 };
 
