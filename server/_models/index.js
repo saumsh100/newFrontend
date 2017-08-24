@@ -22,9 +22,15 @@ if (postgres.ssl) {
 }
 
 // If true, sequelize will dump all PostgreSQL queries into terminal
-if (postgres.logging) {
-  sequelizeConfig.logging = console.log; // eslint-disable-line
-}
+// if (postgres.logging) {
+  sequelizeConfig.logging = (x) => {
+    const test = /CREATE TABLE/g;
+    if (test.test(x)) {
+      console.log(typeof(x))
+      console.log(x.replace(new RegExp('Executing (default):', 'i'), ''), '\n');
+    }
+  }; // eslint-disable-line
+// }
 
 // initialize sequelize
 const sequelize = new Sequelize(
@@ -32,7 +38,7 @@ const sequelize = new Sequelize(
   postgres.username,
   postgres.password,
   sequelizeConfig,
-);
+  );
 
 // Test the connection for logs
 sequelize
@@ -47,6 +53,7 @@ sequelize
 
 // Import and store all models.
 const models = [];
+// models.push((require('./Address').default(sequelize, Sequelize)));
 models.push((require('./Account').default(sequelize, Sequelize)));
 models.push((require('./Appointment').default(sequelize, Sequelize)));
 models.push((require('./AuthSession').default(sequelize, Sequelize)));
