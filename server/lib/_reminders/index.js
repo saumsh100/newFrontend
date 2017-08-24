@@ -54,12 +54,18 @@ export async function sendRemindersForAccount(account, date) {
         primaryType: reminder.primaryType,
       });
 
-      const data = await sendReminder[primaryType]({
-        patient,
-        account,
-        appointment,
-        sentReminder,
-      });
+      let data = null;
+
+      try {
+        data = await sendReminder[primaryType]({
+          patient,
+          account,
+          appointment,
+          sentReminder,
+        });
+      } catch (error) {
+        continue;
+      }
 
       console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentReminder.update({ isSent: true });
