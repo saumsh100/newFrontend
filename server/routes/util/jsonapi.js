@@ -25,6 +25,34 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  Patient: [
+    'accountId',
+    'pmsId',
+    'patientUserId',
+    'email',
+    'firstName',
+    'lastName',
+    'middleName',
+    'phoneNumber',
+    'homePhoneNumber',
+    'mobilePhoneNumber',
+    'workPhoneNumber',
+    'otherPhoneNumber',
+    'prefContactPhone',
+    'gender',
+    'prefName',
+    'language',
+    'address',
+    'preferences',
+    'type',
+    'birthDate',
+    'insurance',
+    'isDeleted',
+    'isSyncedWithPMS',
+    'familyId',
+    'status',
+  ],
+
   Practitioner: [
     'firstName',
     'lastName',
@@ -60,6 +88,11 @@ const ModelAttributes = {
 const SERIALIZERS = {
   chair: new Serializer('chair', makeConfig({
     attributes: ModelAttributes.Chair,
+    pluralizeType: false,
+  })),
+
+  patient: new Serializer('patient', makeConfig({
+    attributes: ModelAttributes.Patient,
     pluralizeType: false,
   })),
 
