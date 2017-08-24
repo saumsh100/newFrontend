@@ -74,6 +74,8 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
         startDate: {
           $between: [moment('1970-01-01').toISOString(), endDate],
         },
+        isDeleted: false,
+        isCancelled: false,
       },
       order: [['startDate', 'DESC']],
     });
@@ -85,6 +87,8 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
         startDate: {
           $between: [endDate, moment(endDate).add(100, 'years').toISOString()],
         },
+        isDeleted: false,
+        isCancelled: false,
       },
       order: [['startDate', 'ASC']],
       limit: 1,

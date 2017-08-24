@@ -3,8 +3,10 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DialogBox, Modal, Icon  } from '../library';
+import { push } from 'react-router-redux';
 import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
+import { setScheduleDate } from '../../actions/schedule';
 import { fetchEntitiesRequest, updateEntityRequest } from '../../thunks/fetchEntities';
 import styles from './styles.scss';
 
@@ -38,6 +40,8 @@ class CallerModal extends Component {
       patient,
       patientIdStats,
       updateEntityRequest,
+      push,
+      setScheduleDate,
     } = this.props;
 
     const callDisplay = call ? (<CallerDisplay
@@ -46,6 +50,8 @@ class CallerModal extends Component {
       patientIdStats={patientIdStats}
       clearSelectedChat={this.clearSelectedChat}
       updateEntityRequest={updateEntityRequest}
+      push={push}
+      setScheduleDate={setScheduleDate}
     />) : null;
 
     return (
@@ -66,6 +72,9 @@ CallerModal.propTypes = {
   call: PropTypes.object,
   patient: PropTypes.object,
   unsetSelectedCallId: PropTypes.func,
+  updateEntityRequest: PropTypes.func,
+  push: PropTypes.func,
+  setScheduleDate: PropTypes.func,
 };
 
 function mapStateToProps({ entities, caller, apiRequests }) {
@@ -93,6 +102,8 @@ function mapActionsToProps(dispatch) {
     unsetSelectedCallId,
     fetchEntitiesRequest,
     updateEntityRequest,
+    push,
+    setScheduleDate,
   }, dispatch);
 }
 

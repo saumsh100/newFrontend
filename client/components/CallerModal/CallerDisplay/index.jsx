@@ -6,34 +6,53 @@ import classnames from 'classnames';
 import AppointmentBookedToggle from './AppointmentBookedToggle';
 import styles from '../styles.scss';
 
-export default function CallerDisplay({ call, patient, patientIdStats, clearSelectedChat, updateEntityRequest, }) {
+export default function CallerDisplay(props) {
+  const {
+    call,
+    patient,
+    patientIdStats,
+    clearSelectedChat,
+    updateEntityRequest,
+    push,
+    setScheduleDate,
+  } = props;
 
   const isAnswered = call.answered;
   const isCallFinished = call.duration > 0;
-  console.log(isCallFinished)
+
   let borderStyling = null;
   if (!isAnswered && !isCallFinished) {
-    console.log("answered")
-    // call ringing
+    // call incoming
     borderStyling = styles.incoming;
   } else if (isCallFinished && isAnswered) {
-    console.log("ended")
+    // call ended
     borderStyling = styles.ended;
   } else {
-    console.log("missed")
+    // call missed
     borderStyling = styles.missed;
   }
 
-  let callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
+  const callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
 
   const age = moment().diff(patient.birthDate, 'years');
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
   const birthDate = moment(patient.birthDate).format('MMMM Do, YYYY');
 
-  const lastAppt = patientIdStats ? moment(patientIdStats.get('lastAppointment')).format('MMM Do, YYYY h:mm a') : '-';
-  const nextAppt = patientIdStats ? moment(patientIdStats.get('nextAppointment')).format('MMM Do, YYYY h:mm a') : '-';
+  const lastAppt = patientIdStats && patientIdStats.get('lastAppointment') ?
+    moment(patientIdStats.get('lastAppointment')).format('MMM Do, YYYY h:mm a') : '-';
+  const nextAppt = patientIdStats && patientIdStats.get('nextAppointment') ?
+    moment(patientIdStats.get('nextAppointment')).format('MMM Do, YYYY h:mm a') : '-';
 
+  let nextApptStyling = styles.appointmentInfoContainer_date;
+  let lastApptStyling = styles.appointmentInfoContainer_date;
+
+  if (nextAppt !== '-') {
+    nextApptStyling = classnames(nextApptStyling, styles.appointmentInfoContainer_date_hover);
+  }
+  if (lastAppt !== '-') {
+    lastApptStyling = classnames(lastApptStyling, styles.appointmentInfoContainer_date_hover);
+  }
   return (
     <div className={callDisplayContainer} >
       <div className={styles.headerContainer}>
@@ -63,11 +82,33 @@ export default function CallerDisplay({ call, patient, patientIdStats, clearSele
         <div className={styles.appointmentInfoContainer}>
           <div className={styles.appointmentInfoContainer_last} >
             <span>Last Appointment </span>
-            <div className={styles.appointmentInfoContainer_date}>{lastAppt}</div>
+            <div
+              className={lastApptStyling}
+              onClick={() => {
+                if (lastAppt !== '-') {
+                  setScheduleDate({ scheduleDate: moment(patientIdStats.get('lastAppointment')) });
+                  clearSelectedChat();
+                  push('/schedule');
+                }
+              }}
+            >
+              {lastAppt}
+            </div>
           </div>
-          <div className={styles.appointmentInfoContainer_next} >
+          <div className={styles.appointmentInfoContainer_next}>
             <span>Next Appointment </span>
-            <div className={styles.appointmentInfoContainer_date}>{nextAppt}</div>
+            <div
+              className={nextApptStyling}
+              onClick={() => {
+                if (nextAppt !== '-') {
+                  setScheduleDate({ scheduleDate: moment(patientIdStats.get('nextAppointment')) });
+                  clearSelectedChat();
+                  push('/schedule');
+                }
+              }}
+            >
+              {nextAppt}
+            </div>
           </div>
         </div>
 
@@ -124,4 +165,6 @@ CallerDisplay.propTypes = {
   patient: PropTypes.object,
   patientIdStats: PropTypes.object,
   clearSelectedChat: PropTypes.func,
+  push: PropTypes.func,
+  setScheduleDate: PropTypes.func,
 };

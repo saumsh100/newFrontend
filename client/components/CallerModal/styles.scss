@@ -101,6 +101,21 @@
 
   &_date {
     composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+    &_hover {
+      &:hover {
+        color: $primary-color;
+        cursor: pointer;
+      }
+    }
+  }
+  &_dateLast {
+    composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+    &_hover {
+      &:hover {
+        color: $primary-color;
+        cursor: pointer;
+      }
+    }
   }
 }
 
@@ -161,9 +176,12 @@
   font-size: 1rem;
   color: grey;
   font-weight: 900;
-  margin-left: auto;
+  //margin-left: auto;
   cursor: pointer;
   padding-right: 10px;
+  position: absolute;
+  top: 5px;
+  right: 0
 }
 
 @keyframes pulse {
