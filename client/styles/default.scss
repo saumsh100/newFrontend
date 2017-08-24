@@ -87,9 +87,11 @@
     min-width: 200px;
     z-index: 2500 !important;
     white-space: nowrap;
-    background-color: $primary-white;
+    background: $primary-white;
   }
-
+  .dd-menu .dd-menu-items ul, .dd-menu .dd-menu-items ol {
+    background-color: $primary-grey;
+  }
   .separator {
     height: 2px !important;
     background-color: $primary-lightgrey !important;

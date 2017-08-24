@@ -54,9 +54,15 @@ export default class DropdownSelect extends Component {
       optionsStatic,
     } = this.state;
 
+    const {
+      search
+    } = this.props;
+
+    const test = (typeof search === 'string') ? search : 'value';
+
     if (value !== '') {
       const filteredOptions = optionsStatic.filter((option) => {
-        if (new RegExp(value, 'i').test(option.value)) {
+        if (new RegExp(value, 'i').test(option[test])) {
           return option;
         }
       });
