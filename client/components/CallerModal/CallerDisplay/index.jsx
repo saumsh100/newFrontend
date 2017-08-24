@@ -2,11 +2,10 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { Avatar, Icon, Button, Toggle } from '../../library';
-import classnames from 'classnames';
+import AppointmentBookedToggle from './AppointmentBookedToggle';
 import styles from '../styles.scss';
 
-export default function CallerDisplay({ call, patient, patientIdStats, clearSelectedChat}) {
-
+export default function CallerDisplay({ call, patient, patientIdStats, clearSelectedChat, updateEntityRequest, }) {
   const age = moment().diff(patient.birthDate, 'years');
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
@@ -91,14 +90,10 @@ export default function CallerDisplay({ call, patient, patientIdStats, clearSele
             </div>
           </div>
         </div>
-        <div className={styles.toggleContainer}>
-          <span className={styles.toggleContainer_text}> Was Appointment Booked? </span>
-          <div className={styles.toggleContainer_toggle}>
-            <Toggle
-              defaultChecked={call.wasApptBooked}
-            />
-          </div>
-        </div>
+        <AppointmentBookedToggle
+          call={call}
+          updateEntityRequest={updateEntityRequest}
+        />
       </div>
     </div>
   );
@@ -107,4 +102,6 @@ export default function CallerDisplay({ call, patient, patientIdStats, clearSele
 CallerDisplay.propTypes = {
   call: PropTypes.object,
   patient: PropTypes.object,
+  patientIdStats: PropTypes.object,
+  clearSelectedChat: PropTypes.func,
 };

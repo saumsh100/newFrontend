@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { DialogBox, Modal, Icon  } from '../library';
 import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
-import { fetchEntitiesRequest} from '../../thunks/fetchEntities';
+import { fetchEntitiesRequest, updateEntityRequest } from '../../thunks/fetchEntities';
 import styles from './styles.scss';
 
 class CallerModal extends Component {
@@ -37,6 +37,7 @@ class CallerModal extends Component {
       call,
       patient,
       patientIdStats,
+      updateEntityRequest,
     } = this.props;
 
     const callDisplay = call ? (<CallerDisplay
@@ -44,6 +45,7 @@ class CallerModal extends Component {
       patient={patient}
       patientIdStats={patientIdStats}
       clearSelectedChat={this.clearSelectedChat}
+      updateEntityRequest={updateEntityRequest}
     />) : null;
 
     return (
@@ -79,7 +81,6 @@ function mapStateToProps({ entities, caller, apiRequests }) {
 
   const patientIdStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
 
-
   return {
     call,
     callerId,
@@ -92,6 +93,7 @@ function mapActionsToProps(dispatch) {
   return bindActionCreators({
     unsetSelectedCallId,
     fetchEntitiesRequest,
+    updateEntityRequest,
   }, dispatch);
 }
 
