@@ -28,6 +28,7 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
       {
         model: Patient,
         as: 'patient',
+        required: true,
       },
       {
         model: SentReminder,
