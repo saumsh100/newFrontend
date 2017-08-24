@@ -2,7 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DialogBox, Modal  } from '../library';
+import { DialogBox, Modal, Icon  } from '../library';
 import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
 import { fetchEntitiesRequest} from '../../thunks/fetchEntities';
@@ -43,6 +43,7 @@ class CallerModal extends Component {
       call={call}
       patient={patient}
       patientIdStats={patientIdStats}
+      clearSelectedChat={this.clearSelectedChat}
     />) : null;
 
     return (
@@ -53,6 +54,7 @@ class CallerModal extends Component {
         custom
       >
         {callDisplay}
+
       </Modal>
     );
   }

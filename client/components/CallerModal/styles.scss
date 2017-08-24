@@ -27,6 +27,7 @@
   width: 110px;
   height: 110px;
   position: absolute;
+
   span {
     font-size: 3em;
   }
@@ -58,6 +59,7 @@
 }
 
 .iconContainer {
+  display: none;
   position: absolute;
   top: 0px;
   color: $primary-dark;
@@ -72,11 +74,15 @@
 .appointmentInfoContainer {
   composes: subHeaderMediumSmall from 'sass-loader!../../fonts.scss';
   display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
   &_last {
+    text-align: center;
     width: 160px;
     padding-bottom: 5px;
   }
   &_next {
+    text-align: center;
     width: 160px;
     margin-left: auto;
   }
@@ -88,17 +94,23 @@
 
 
 .callInfo {
-  margin-top: 10px;
-  padding-top: 10px;
   padding-bottom: 10px;
-  border-top: 1px solid $primary-grey;
   display: flex;
-  justify-content: center;
   &_header {
-    margin-bottom: 20px;
     composes: header from 'sass-loader!../../fonts.scss';
+    border-top: 1px solid #efefef;
+    margin-bottom: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+    padding-top: 20px;
+    padding-left: 10px;
   }
   &_content {
+    height: 100%;
+  }
+
+  &_content2 {
+    padding-left: 60px;
     height: 100%;
   }
 
@@ -110,12 +122,37 @@
 
   &_desc {
     composes: subHeader from 'sass-loader!../../fonts.scss';
-    width: 80px;
+    width: 90px;
   }
 
   &_data {
     composes: subHeaderSmall from 'sass-loader!../../fonts.scss';
   }
+}
+
+.toggleContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid $primary-grey;
+  &_text {
+    margin-left: auto;
+    padding-right: 5px;
+    composes: font-medium from 'sass-loader!../../fonts.scss';
+  }
+}
+
+
+.closeIcon {
+  font-size: 1rem;
+  color: grey;
+  font-weight: 900;
+  margin-left: auto;
+  cursor: pointer;
+  padding-right: 10px;
 }
 
 @keyframes pulse {

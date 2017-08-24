@@ -1,25 +1,30 @@
 
 import React, { PropTypes } from 'react';
 import moment from 'moment';
-import { Avatar, Icon, Button } from '../../library';
+import { Avatar, Icon, Button, Toggle } from '../../library';
 import classnames from 'classnames';
 import styles from '../styles.scss';
 
-export default function CallerDisplay({ call, patient, patientIdStats, }) {
+export default function CallerDisplay({ call, patient, patientIdStats, clearSelectedChat}) {
 
   const age = moment().diff(patient.birthDate, 'years');
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
   const birthDate = moment(patient.birthDate).format('MMMM Do, YYYY');
 
-  const lastAppt = patientIdStats ? moment(patientIdStats.get('lastAppointment')).format('MMM Do, YYYY h:mm a') : null
-  const nextAppt = patientIdStats ? moment(patientIdStats.get('nextAppointment')).format('MMM Do, YYYY h:mm a') : null
-
+  const lastAppt = patientIdStats ? moment(patientIdStats.get('lastAppointment')).format('MMM Do, YYYY h:mm a') : '-';
+  const nextAppt = patientIdStats ? moment(patientIdStats.get('nextAppointment')).format('MMM Do, YYYY h:mm a') : '-';
 
   return (
     <div className={styles.callDisplayContainer} >
       <div className={styles.headerContainer}>
         <Avatar user={patient} size={"lg"} className={styles.callerAvatar} />
+        <div
+          className={styles.closeIcon}
+          onClick={clearSelectedChat}
+        >
+          x
+        </div>
       </div>
       <div className={styles.callBody}>
         <div className={styles.patientInfoContainer}>
@@ -46,9 +51,10 @@ export default function CallerDisplay({ call, patient, patientIdStats, }) {
             <div className={styles.appointmentInfoContainer_date}>{nextAppt}</div>
           </div>
         </div>
+
+        <div className={styles.callInfo_header} >Call Information</div>
         <div className={styles.callInfo}>
           <div className={styles.callInfo_content}>
-            <span className={styles.callInfo_header} >Call Information</span>
             <div className={styles.callInfo_body}>
               <div className={styles.callInfo_desc}>Number: </div>
               <div className={styles.callInfo_data}>{call.callerNum}</div>
@@ -65,6 +71,8 @@ export default function CallerDisplay({ call, patient, patientIdStats, }) {
               <div className={styles.callInfo_desc}>State: </div>
               <div className={styles.callInfo_data}>{call.callerState}</div>
             </div>
+          </div>
+          <div className={styles.callInfo_content2}>
             <div className={styles.callInfo_body}>
               <div className={styles.callInfo_desc}>Zip: </div>
               <div className={styles.callInfo_data}>{call.callerZip}</div>
@@ -83,8 +91,15 @@ export default function CallerDisplay({ call, patient, patientIdStats, }) {
             </div>
           </div>
         </div>
+        <div className={styles.toggleContainer}>
+          <span className={styles.toggleContainer_text}> Was Appointment Booked? </span>
+          <div className={styles.toggleContainer_toggle}>
+            <Toggle
+              defaultChecked={call.wasApptBooked}
+            />
+          </div>
+        </div>
       </div>
-      <Button>Book Appointment </Button>
     </div>
   );
 }
