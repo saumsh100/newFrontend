@@ -2,10 +2,30 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { Avatar, Icon, Button, Toggle } from '../../library';
+import classnames from 'classnames';
 import AppointmentBookedToggle from './AppointmentBookedToggle';
 import styles from '../styles.scss';
 
 export default function CallerDisplay({ call, patient, patientIdStats, clearSelectedChat, updateEntityRequest, }) {
+
+  const isAnswered = call.answered;
+  const isCallFinished = call.duration > 0;
+  console.log(isCallFinished)
+  let borderStyling = null;
+  if (!isAnswered && !isCallFinished) {
+    console.log("answered")
+    // call ringing
+    borderStyling = styles.incoming;
+  } else if (isCallFinished && isAnswered) {
+    console.log("ended")
+    borderStyling = styles.ended;
+  } else {
+    console.log("missed")
+    borderStyling = styles.missed;
+  }
+
+  let callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
+
   const age = moment().diff(patient.birthDate, 'years');
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
@@ -15,7 +35,7 @@ export default function CallerDisplay({ call, patient, patientIdStats, clearSele
   const nextAppt = patientIdStats ? moment(patientIdStats.get('nextAppointment')).format('MMM Do, YYYY h:mm a') : '-';
 
   return (
-    <div className={styles.callDisplayContainer} >
+    <div className={callDisplayContainer} >
       <div className={styles.headerContainer}>
         <Avatar user={patient} size={"lg"} className={styles.callerAvatar} />
         <div

@@ -56,7 +56,6 @@ class CallerModal extends Component {
         custom
       >
         {callDisplay}
-
       </Modal>
     );
   }

@@ -6,7 +6,7 @@
   height: auto;
   background: $primary-white;
   box-sizing: border-box;
-  border-top: 5px solid $primary-green;
+
 
   button {
     width: 100%;
@@ -14,6 +14,18 @@
     height: 50px;
     box-shadow: none;
   }
+}
+
+.incoming {
+  border-top: 5px solid $primary-green;
+}
+
+.ended {
+  border-top: 5px solid $primary-darkgrey;
+}
+
+.missed {
+  border-top: 5px solid $primary-color;
 }
 
 .headerContainer {
@@ -58,7 +70,7 @@
   composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
 }
 
-.iconContainer {
+.iconContainer { //disabled for now!
   display: none;
   position: absolute;
   top: 0px;
@@ -91,7 +103,6 @@
     composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
   }
 }
-
 
 .callInfo {
   padding-bottom: 10px;
