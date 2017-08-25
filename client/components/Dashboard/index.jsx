@@ -80,7 +80,7 @@ class Dashboard extends React.Component {
     const appointmentFilter = appointments.filter((app) => {
       const sDate = moment(app.startDate);
       const isSameDate = today.isSame(sDate, 'day');
-      return (isSameDate && !app.isDeleted && !app.isCancelled && !app.mark);
+      return (isSameDate && !app.isDeleted && !app.isCancelled && !app.mark && patients.get(app.get('patientId')));
     });
 
     const filterConfirmedRequests = requests.toArray().filter((req) => {
@@ -187,9 +187,15 @@ class Dashboard extends React.Component {
 }
 
 function mapStateToProps({ entities }) {
+  const appointments = entities.getIn(['appointments', 'models']);
+  const patientIds = appointments.toArray().map(app => app.get('patientId'));
+  const patients = entities.getIn(['patients', 'models']).filter((patient) => {
+    return (patientIds.indexOf(patient.get('id')) > -1) && !patient.get('isDeleted');
+  });
+
   return {
-    appointments: entities.getIn(['appointments', 'models']),
-    patients: entities.getIn(['patients', 'models']),
+    appointments,
+    patients,
     practitioners: entities.getIn(['practitioners', 'models']),
     services: entities.getIn(['services', 'models']),
     requests: entities.getIn(['requests', 'models']),

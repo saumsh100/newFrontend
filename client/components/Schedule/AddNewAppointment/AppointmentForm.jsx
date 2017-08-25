@@ -105,6 +105,7 @@ export default function AppointmentForm(props) {
             borderColor="primaryColor"
             required
             data-test-id="time"
+            search="label"
           />
         </Col>
       </Row>
