@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { List, Card, CardHeader, } from '../../../library';
 import ReminderData from './ReminderData';
+import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
 import styles from './styles.scss';
 
 class RemindersList extends Component {
@@ -32,6 +33,8 @@ class RemindersList extends Component {
       return null;
     }
 
+    const sortReminders = sentReminders.sort(SortByCreatedAtDesc);
+
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
@@ -43,7 +46,7 @@ class RemindersList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {sentReminders.toArray().map((sentReminder, index) => {
+            {sortReminders.map((sentReminder, index) => {
 
               if (!sentReminder) {
                 return null;

@@ -5,7 +5,6 @@ import { ListItem, Icon, Avatar } from '../../../library';
 import styles from './styles.scss';
 
 export default function ReminderData(props) {
-
   const {
     patient,
     reminder,
@@ -58,7 +57,7 @@ export default function ReminderData(props) {
             {displayStatus}
           </div>
           <div className={styles.patients__item_date}>
-            {moment(sentReminder.createdAt).format('MM/DD/YYYY')}
+            {moment(sentReminder.createdAt).format('MM/DD/YYYY h:mma')}
           </div>
         </div>
       </div>
