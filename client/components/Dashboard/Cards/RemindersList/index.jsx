@@ -29,7 +29,7 @@ class RemindersList extends Component {
       push,
     } = this.props;
 
-    setScheduleDate(moment(startDate));
+    setScheduleDate({ scheduleDate: moment(startDate) });
     push('/schedule');
   }
 
