@@ -176,7 +176,7 @@ class Reminders extends Component {
   }
 
   render() {
-    if (!this.props.activeAccount) {
+    if (!this.props.activeAccount || !this.props.activeAccount.id) {
       return null;
     }
 
