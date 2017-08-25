@@ -39,7 +39,7 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
     ],
   });
 
-  return appointments.filter(appointment => shouldSendReminder({ appointment: appointment.get({ plain: true }), reminder }));
+  return appointments.filter(appointment => shouldSendReminder({ appointment, reminder }));
 }
 
 /**
