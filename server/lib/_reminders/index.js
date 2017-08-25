@@ -64,6 +64,7 @@ export async function sendRemindersForAccount(account, date) {
           sentReminder,
         });
       } catch (error) {
+        console.log(error)
         continue;
       }
 
