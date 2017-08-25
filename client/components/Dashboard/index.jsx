@@ -84,7 +84,7 @@ class Dashboard extends React.Component {
     });
 
     const filterConfirmedRequests = requests.toArray().filter((req) => {
-      return !req.get('isCancelled') && !req.get('isConfirmed')
+      return !req.get('isCancelled') && !req.get('isConfirmed');
     });
 
     const data = [

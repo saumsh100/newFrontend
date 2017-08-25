@@ -19,6 +19,7 @@ import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
 import loadEnterprise from 'bundle-loader?lazy!./Dashboard/Enterprise';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
+import ForgotPassword from '../components/ForgotPassword';
 import withAuthProps from '../hocs/withAuthProps';
 
 const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
@@ -60,7 +61,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <Switch>
           <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
           <Route exact path={urlTest} render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
-          <Route exact path="/forgotPassword" render={props => (isAuth ? <Redirect to "/"/> : <SignUp {...props} />)}
+          <Route exact path="/forgot" render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)} />
           <Route path="/" component={Dashboard} />
         </Switch>
       </div>

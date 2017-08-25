@@ -5,7 +5,7 @@ import styles from './styles.scss';
 
 export default function ForgotPasswordForm({ onSubmit }) {
   return (
-    <Form form="login" onSubmit={onSubmit} ignoreSaveButton={true}>
+    <Form form="forgotPassword" onSubmit={onSubmit} ignoreSaveButton={true}>
       <Field
         type="email"
         name="email"
@@ -13,14 +13,14 @@ export default function ForgotPasswordForm({ onSubmit }) {
       />
       <Button
         type="submit"
-        className={styles.signInSubmitButton}
+        className={styles.submitButton}
       >
-        Submit
+        Recover Password
       </Button>
     </Form>
   );
 }
 
-Login.propTypes = {
+ForgotPasswordForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };

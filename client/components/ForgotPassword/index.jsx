@@ -13,11 +13,12 @@ class ForgotPassword extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit() {
-
+  handleSubmit(values) {
+    console.log(values);
   }
+
   render() {
-    //const { location: { state } } = this.props;
+    const { location: { state } } = this.props;
 
     return (
       <DocumentTitle title="CareCru | Recover Password">

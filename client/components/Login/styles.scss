@@ -51,6 +51,11 @@
 
   &_text {
     composes: subHeaderExtraSmall from 'sass-loader!../../fonts.scss';
-    margin-left: auto;
+    margin: 0 auto;
+
+    &:hover {
+      color: $primary-color;
+      cursor: pointer;
+    };
   }
 }

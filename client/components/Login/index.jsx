@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import DocumentTitle from 'react-document-title';
 import { Card } from '../library';
 import { login } from '../../thunks/auth';
@@ -10,7 +11,7 @@ import styles from './styles.scss';
 
 class Login extends Component {
   render() {
-    const { location: { state } } = this.props;
+    const { location: { state }, push } = this.props;
 
     return (
       <DocumentTitle title="CareCru | Login">
@@ -25,7 +26,14 @@ class Login extends Component {
             </div>
             <LoginForm onSubmit={() => this.props.login(state && state.from)} />
             <div className={styles.forgotPassword}>
-              <span className={styles.forgotPassword_text}> Forgot Password ? </span>
+              <div
+                className={styles.forgotPassword_text}
+                onClick={() => {
+                  push('/forgot');
+                }}
+              >
+                Forgot your password ?
+              </div>
             </div>
           </Card>
         </div>
@@ -36,11 +44,13 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     login,
+    push,
   }, dispatch);
 }
 
