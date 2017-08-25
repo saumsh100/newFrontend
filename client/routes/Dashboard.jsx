@@ -60,7 +60,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <Switch>
           <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
           <Route exact path={urlTest} render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
-          <Rout exact path="/forgotPassword" render={props => (isAuth ? <Redirect to "/"/> : <SignUp {...props} />)}
+          <Route exact path="/forgotPassword" render={props => (isAuth ? <Redirect to "/"/> : <SignUp {...props} />)}
           <Route path="/" component={Dashboard} />
         </Switch>
       </div>
