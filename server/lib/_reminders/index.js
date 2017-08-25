@@ -38,6 +38,7 @@ export async function sendRemindersForAccount(account, date) {
   for (const reminder of reminders) {
     // Get appointments that this reminder deals with
     const appointments = await getAppointmentsFromReminder({ reminder, account, date });
+
     for (const appointment of appointments) {
       const { patient } = appointment;
       const { primaryType } = reminder;
@@ -64,7 +65,8 @@ export async function sendRemindersForAccount(account, date) {
           sentReminder,
         });
       } catch (error) {
-        console.log(error)
+        console.log(`${primaryType} reminder not sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+        console.log(error);
         continue;
       }
 
