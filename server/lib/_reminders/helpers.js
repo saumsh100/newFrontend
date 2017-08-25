@@ -34,13 +34,12 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
       {
         model: SentReminder,
         as: 'sentReminders',
-        where: {id: '2daa34d6-28c1-43c3-a08c-a54df14389eb'},
         required: false,
       },
     ],
   });
 
-  return appointments.filter(appointment => shouldSendReminder({ appointment: appointment.get({ plain: true }), reminder }));
+  return appointments.filter(appointment => shouldSendReminder({ appointment, reminder }));
 }
 
 /**
