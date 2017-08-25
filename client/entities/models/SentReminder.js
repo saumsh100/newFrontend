@@ -10,6 +10,7 @@ const SentReminderSchema = {
   appointmentId: null,
   isConfirmed: null,
   lengthSeconds: null,
+  isSent: null,
 };
 
 export default class SentReminder extends createModel(SentReminderSchema) {
