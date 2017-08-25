@@ -11,16 +11,11 @@ export default function ForgotPasswordForm({ onSubmit }) {
         name="email"
         label="Email"
       />
-      <Field
-        type="password"
-        name="password"
-        label="Password"
-      />
       <Button
         type="submit"
         className={styles.signInSubmitButton}
       >
-        Sign In
+        Submit
       </Button>
     </Form>
   );

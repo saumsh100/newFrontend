@@ -1,16 +1,23 @@
 
 import React, { Component, PropTypes } from 'react';
+import DocumentTitle from 'react-document-title';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../library';
-//import invite from '../../thunks/inviteSignup';
-import DocumentTitle from 'react-document-title';
-import ForgotPasswordForm from './InviteForm';
+import ForgotPasswordForm from './ForgotPasswordForm';
 import styles from './styles.scss';
 
 class ForgotPassword extends Component {
+  constructor(props) {
+    super(props)
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit() {
+
+  }
   render() {
-    const { location: { state } } = this.props;
+    //const { location: { state } } = this.props;
 
     return (
       <DocumentTitle title="CareCru | Recover Password">
@@ -23,7 +30,7 @@ class ForgotPassword extends Component {
                 alt="CareCru Logo"
               />
             </div>
-            <ForgotPasswordForm onSubmit={() => {}} />
+            <ForgotPasswordForm onSubmit={this.handleSubmit} />
           </Card>
         </div>
       </DocumentTitle>
