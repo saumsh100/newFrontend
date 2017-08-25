@@ -22,15 +22,9 @@ if (postgres.ssl) {
 }
 
 // If true, sequelize will dump all PostgreSQL queries into terminal
-// if (postgres.logging) {
-  sequelizeConfig.logging = (x) => {
-    const test = /CREATE TABLE/g;
-    if (test.test(x)) {
-      console.log(typeof(x))
-      console.log(x.replace(new RegExp('Executing (default):', 'i'), ''), '\n');
-    }
-  }; // eslint-disable-line
-// }
+if (postgres.logging) {
+  sequelizeConfig.logging = console.log // eslint-disable-line
+}
 
 // initialize sequelize
 const sequelize = new Sequelize(

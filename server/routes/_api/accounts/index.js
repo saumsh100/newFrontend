@@ -34,16 +34,6 @@ accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next
   try {
     const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
 
-    const test = await Account.findAll({
-      raw: true,
-      nest: true,
-      where: { id: accountId },
-      include: [{
-        model: Address,
-        as: 'address',
-      }],
-    });
-    console.log(test)
     // Fetch all if correct role, just fetch current account if not
     let accounts;
     if (role === 'SUPERADMIN' || enterpriseRole === 'OWNER') {

@@ -13,13 +13,13 @@ function timeWithZone(hours, minutes, timezone) {
 }
 
 module.exports = {
-  up: function (queryInterface, DataTypes) {
+  up: async function (queryInterface, DataTypes) {
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
 
       Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
+      return queryInterface.createTable('users', { id: DataTypes.INTEGER });
     */
 
     const PLAN = {
@@ -27,7 +27,7 @@ module.exports = {
       ENTERPRISE: 'ENTERPRISE',
     };
 
-    queryInterface.createTable('Enterprises', {
+    await queryInterface.createTable('Enterprises', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -46,6 +46,20 @@ module.exports = {
         defaultValue: PLAN.GROWTH,
         allowNull: false,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     const startTime = timeWithZone(8, 0, 'America/Los_Angeles');
@@ -60,7 +74,7 @@ module.exports = {
       pmsScheduleId: null,
     };
 
-    queryInterface.createTable('WeeklySchedules', {
+    await queryInterface.createTable('WeeklySchedules', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -122,9 +136,23 @@ module.exports = {
       weeklySchedules: {
         type: DataTypes.ARRAY(DataTypes.JSONB),
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'Accounts',
       {
         id: {
@@ -138,9 +166,32 @@ module.exports = {
           allowNull: false,
         },
 
+        createdAt: {
+          allowNull: false,
+          type: DataTypes.DATE,
+        },
+
+        updatedAt: {
+          allowNull: false,
+          type: DataTypes.DATE,
+        },
+
+        deletedAt: {
+          type: DataTypes.DATE,
+        },
+
         enterpriseId: {
           type: DataTypes.UUID,
           allowNull: false,
+          references: {
+            model: 'Enterprises',
+            key: 'id',
+          },
+          onUpdate: 'cascade',
+        },
+
+        EnterpriseId: {
+          type: DataTypes.UUID,
           references: {
             model: 'Enterprises',
             key: 'id',
@@ -223,12 +274,12 @@ module.exports = {
           type: DataTypes.STRING,
         },
 
-        fullLogoUrl: {
-          type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['logo']),
-          get() {
-            return this.get('logo') ? `${globals.s3.urlPrefix}${this.get('logo')}` : null;
-          },
-        },
+        // fullLogoUrl: {
+        //   type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['logo']),
+        //   get() {
+        //     return this.get('logo') ? `${globals.s3.urlPrefix}${this.get('logo')}` : null;
+        //   },
+        // },
 
         clinicName: {
           type: DataTypes.STRING,
@@ -253,7 +304,7 @@ module.exports = {
       HYGIENIST: 'Hygienist',
     };
 
-    queryInterface.createTable('Practitioners', {
+    await queryInterface.createTable('Practitioners', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -309,12 +360,12 @@ module.exports = {
         defaultValue: false,
       },
 
-      fullAvatarUrl: {
-        type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['avatarUrl']),
-        get() {
-          return this.get('avatarUrl') ? `${globals.s3.urlPrefix}${this.get('avatarUrl')}` : null;
-        },
-      },
+      // fullAvatarUrl: {
+      //   type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['avatarUrl']),
+      //   get() {
+      //     return this.get('avatarUrl') ? `${globals.s3.urlPrefix}${this.get('avatarUrl')}` : null;
+      //   },
+      // },
 
       weeklyScheduleId: {
         type: DataTypes.UUID,
@@ -324,9 +375,23 @@ module.exports = {
         },
         onUpdate: 'cascade',
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('PatientUsers', {
+    await queryInterface.createTable('PatientUsers', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -340,6 +405,15 @@ module.exports = {
         validate: {
           isEmail: true,
         },
+      },
+
+      patientUserId: {
+        type: DataTypes.UUID,
+        references: {
+          model: 'PatientUsers',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
       },
 
       password: {
@@ -377,9 +451,23 @@ module.exports = {
       avatarUrl: {
         type: DataTypes.STRING,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Families', {
+    await queryInterface.createTable('Families', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -398,6 +486,20 @@ module.exports = {
       headId: {
         type: DataTypes.STRING,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     const STATUS = {
@@ -405,7 +507,7 @@ module.exports = {
       INACTIVE: 'Inactive',
     };
 
-    queryInterface.createTable('Patients', {
+    await queryInterface.createTable('Patients', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -549,8 +651,22 @@ module.exports = {
         values: Object.keys(STATUS).map(key => STATUS[key]),
         defaultValue: STATUS.ACTIVE,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
-    queryInterface.addIndex(
+    await queryInterface.addIndex(
       'Patients',
       ['accountId', 'email'],
       {
@@ -558,7 +674,7 @@ module.exports = {
       }
     );
 
-    queryInterface.addIndex(
+    await queryInterface.addIndex(
       'Patients',
       ['accountId', 'mobilePhoneNumber'],
       {
@@ -566,7 +682,7 @@ module.exports = {
       }
     );
 
-    queryInterface.createTable('Services', {
+    await queryInterface.createTable('Services', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -615,9 +731,23 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Chairs', {
+    await queryInterface.createTable('Chairs', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -646,9 +776,23 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Appointments', {
+    await queryInterface.createTable('Appointments', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -758,15 +902,29 @@ module.exports = {
         type: DataTypes.INTEGER,
       },
 
-      mark: {
-        type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['patientId']),
-        get() {
-          return !this.get('patientId');
-        },
+      // mark: {
+      //   type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['patientId']),
+      //   get() {
+      //     return !this.get('patientId');
+      //   },
+      // },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
       },
     });
 
-    queryInterface.createTable('AuthSessions', {
+    await queryInterface.createTable('AuthSessions', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -794,10 +952,24 @@ module.exports = {
       permissions: {
         type: DataTypes.JSONB,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
 
-    queryInterface.createTable('Calls', {
+    await queryInterface.createTable('Calls', {
       id: {
         //  CallRail ID
         type: DataTypes.STRING,
@@ -902,9 +1074,23 @@ module.exports = {
         // TODO: should this be an ENUM?
         type: DataTypes.STRING,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Chats', {
+    await queryInterface.createTable('Chats', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -941,6 +1127,20 @@ module.exports = {
       lastTextMessageId: {
         type: DataTypes.STRING,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     const ROLES = {
@@ -950,7 +1150,7 @@ module.exports = {
       SUPERADMIN: 'SUPERADMIN',
     };
 
-    queryInterface.createTable('Permissions', {
+    await queryInterface.createTable('Permissions', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -977,9 +1177,23 @@ module.exports = {
       allowedAccounts: {
         type: DataTypes.ARRAY(DataTypes.UUID),
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Users', {
+    await queryInterface.createTable('Users', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1043,6 +1257,20 @@ module.exports = {
       avatarUrl: {
         type: DataTypes.STRING,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     const ROLES2 = {
@@ -1051,7 +1279,7 @@ module.exports = {
       OWNER: 'OWNER',
     };
 
-    queryInterface.createTable('Invites', {
+    await queryInterface.createTable('Invites', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1112,11 +1340,25 @@ module.exports = {
       token: {
         type: DataTypes.STRING,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     const code4 = () => Math.floor(1000 + (Math.random() * 9000)).toString();
 
-    queryInterface.createTable('PinCodes', {
+    await queryInterface.createTable('PinCodes', {
       pinCode: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -1128,9 +1370,23 @@ module.exports = {
         type: DataTypes.UUID,
         allowNull: false,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Practitioner_Services', {
+    await queryInterface.createTable('Practitioner_Services', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1156,9 +1412,23 @@ module.exports = {
         },
         onUpdate: 'cascade',
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('PractitionerRecurringTimeOffs', {
+    await queryInterface.createTable('PractitionerRecurringTimeOffs', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1214,6 +1484,20 @@ module.exports = {
       note: {
         type: DataTypes.STRING,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     const PRIMARY_TYPES = {
@@ -1222,7 +1506,7 @@ module.exports = {
       SMS: 'sms',
     };
 
-    queryInterface.createTable('Recalls', {
+    await queryInterface.createTable('Recalls', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1249,9 +1533,23 @@ module.exports = {
       lengthSeconds: {
         type: DataTypes.INTEGER,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Reminders', {
+    await queryInterface.createTable('Reminders', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1278,9 +1576,23 @@ module.exports = {
       lengthSeconds: {
         type: DataTypes.INTEGER,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('Requests', {
+    await queryInterface.createTable('Requests', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1369,6 +1681,20 @@ module.exports = {
         },
         onUpdate: 'cascade',
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     const REFERENCE = {
@@ -1376,7 +1702,7 @@ module.exports = {
       ACCOUNT: 'account',
     };
 
-    queryInterface.createTable('Segments', {
+    await queryInterface.createTable('Segments', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1419,9 +1745,23 @@ module.exports = {
         type: DataTypes.JSONB,
         allowNull: false,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('SentRecalls', {
+    await queryInterface.createTable('SentRecalls', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1477,9 +1817,23 @@ module.exports = {
       lengthSeconds: {
         type: DataTypes.INTEGER,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
-    queryInterface.createTable('SentReminders', {
+    await queryInterface.createTable('SentReminders', {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -1550,6 +1904,398 @@ module.exports = {
       lengthSeconds: {
         type: DataTypes.INTEGER,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
+    });
+
+    const OPERATIONS = {
+      CREATE: 'create',
+      UPDATE: 'update',
+      DELETE: 'delete',
+      SYNC: 'sync',
+    };
+
+    await queryInterface.createTable('SyncClientErrors', {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+
+      syncId: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+      },
+
+      accountId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Accounts',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+      },
+
+      version: {
+        type: DataTypes.STRING,
+      },
+
+      adapter: {
+        type: DataTypes.STRING,
+      },
+
+      operation: {
+        type: DataTypes.ENUM,
+        values: Object.keys(OPERATIONS).map(key => OPERATIONS[key]),
+        // TODO: maybe a default value?
+        allowNull: false,
+      },
+
+      success: {
+        type: DataTypes.BOOLEAN,
+      },
+
+      model: {
+        type: DataTypes.STRING,
+      },
+
+      documentId: {
+        type: DataTypes.STRING,
+      },
+
+      payload: {
+        type: DataTypes.TEXT('long'),
+      },
+
+      customErrorMsg: {
+        type: DataTypes.TEXT('long'),
+      },
+
+      errorMessage: {
+        type: DataTypes.TEXT('long'),
+      },
+
+      stackTrace: {
+        type: DataTypes.TEXT('long'),
+      },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
+    });
+
+    await queryInterface.createTable('SyncClientVersions', {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+
+      major: {
+        type: DataTypes.FLOAT,
+      },
+
+      minor: {
+        type: DataTypes.FLOAT,
+      },
+
+      patch: {
+        type: DataTypes.FLOAT,
+      },
+
+      build: {
+        type: DataTypes.FLOAT,
+      },
+
+      url: {
+        type: DataTypes.STRING,
+      },
+
+      key: {
+        type: DataTypes.STRING,
+      },
+
+      secret: {
+        type: DataTypes.STRING,
+      },
+
+      filename: {
+        type: DataTypes.STRING,
+      },
+
+      path: {
+        type: DataTypes.STRING,
+      },
+
+      bucket: {
+        type: DataTypes.STRING,
+      },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
+    });
+
+    await queryInterface.createTable('TextMessages', {
+      id: {
+        // Twilio MessageSID
+        type: DataTypes.STRING,
+        primaryKey: true,
+      },
+
+      chatId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Chats',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+      },
+
+      userId: {
+        type: DataTypes.UUID,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+      },
+
+      // Twilio Data
+      to: customDataTypes.phoneNumber('to', DataTypes, {
+        allowNull: false,
+      }),
+
+      from: customDataTypes.phoneNumber('from', DataTypes, {
+        allowNull: false,
+      }),
+
+      body: {
+        type: DataTypes.STRING,
+      },
+
+      smsStatus: {
+        // TODO: Should this be an enum?
+        type: DataTypes.STRING,
+      },
+
+      dateCreated: {
+        type: DataTypes.DATE,
+      },
+
+      dateUpdated: {
+        type: DataTypes.DATE,
+      },
+
+      apiVersion: {
+        type: DataTypes.STRING,
+      },
+
+      accountSid: {
+        type: DataTypes.STRING,
+      },
+
+      read: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+
+      // Depends on carrier if populated I believe
+      toZip: {
+        type: DataTypes.STRING,
+      },
+
+      toCity: {
+        type: DataTypes.STRING,
+      },
+
+      toState: {
+        type: DataTypes.STRING,
+      },
+
+      toCountry: {
+        type: DataTypes.STRING,
+      },
+
+      fromZip: {
+        type: DataTypes.STRING,
+      },
+
+      fromCity: {
+        type: DataTypes.STRING,
+      },
+
+      fromState: {
+        type: DataTypes.STRING,
+      },
+
+      fromCountry: {
+        type: DataTypes.STRING,
+      },
+
+      numMedia: {
+        type: DataTypes.INTEGER,
+      },
+
+      numSegments: {
+        type: DataTypes.INTEGER,
+      },
+
+      mediaData: {
+        type: DataTypes.JSONB,
+      },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
+    });
+
+    await queryInterface.createTable('Tokens', {
+      id: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+      },
+
+      appointmentId: {
+        type: DataTypes.UUID,
+        references: {
+          model: 'Appointments',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+      },
+
+      patientUserId: {
+        type: DataTypes.UUID,
+      },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
+    });
+
+    await queryInterface.createTable('WaitSpots', {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+
+      accountId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Accounts',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+      },
+
+      patientId: {
+        type: DataTypes.UUID,
+        references: {
+          model: 'Patients',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+      },
+
+      patientUserId: {
+        type: DataTypes.UUID,
+        references: {
+          model: 'PatientUsers',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+      },
+
+      preferences: {
+        type: DataTypes.JSONB,
+        defaultValue: {
+          mornings: true,
+          afternoons: true,
+          evenings: true,
+          weekdays: true,
+          weekends: true,
+        },
+      },
+
+      unavailableDays: {
+        type: DataTypes.ARRAY(DataTypes.DATEONLY),
+      },
+
+      endDate: {
+        type: DataTypes.DATE,
+      },
+
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
 
     // {
@@ -1568,7 +2314,7 @@ module.exports = {
 
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: async function (queryInterface, DataTypes) {
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
@@ -1576,5 +2322,6 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
+    await queryInterface.dropAllTables();
   }
 };
