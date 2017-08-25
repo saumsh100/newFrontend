@@ -24,6 +24,9 @@ class Login extends Component {
               />
             </div>
             <LoginForm onSubmit={() => this.props.login(state && state.from)} />
+            <div className={styles.forgotPassword}>
+              <span className={styles.forgotPassword_text}> Forgot Password ? </span>
+            </div>
           </Card>
         </div>
       </DocumentTitle>
