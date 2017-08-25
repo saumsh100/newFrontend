@@ -1,5 +1,5 @@
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol } from '../../config/globals';
 import { sendConfirmationReminder } from '../mail';
@@ -80,11 +80,11 @@ export default {
         },
         {
           name: 'APPOINTMENT_DATE',
-          content: getAppointmentDate(appointment.startDate),
+          content: getAppointmentDate(appointment.startDate, account.timezone),
         },
         {
           name: 'APPOINTMENT_TIME',
-          content: getAppointmentTime(appointment.startDate),
+          content: getAppointmentTime(appointment.startDate, account.timezone),
         },
         {
           name: 'PATIENT_FIRSTNAME',
@@ -110,12 +110,12 @@ export default {
  - Assume all preferences for now
  */
 
-function getAppointmentDate(date) {
-  return `${date.getFullYear()}/${(date.getMonth() + 1)}/${date.getDate()}`;
+function getAppointmentDate(date, timezone) {
+  return moment.tz(date, timezone).format('YYYY/MM/DD');
 }
 
-function getAppointmentTime(date) {
-  return `${date.getHours()}:${date.getMinutes()}`;
+function getAppointmentTime(date, timezone) {
+  return moment.tz(date, timezone).format('H:mm');
 }
 
 
