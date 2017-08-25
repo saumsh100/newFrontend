@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { List, Card, CardHeader, } from '../../../library';
 import ReminderData from './ReminderData';
 import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
@@ -9,6 +10,7 @@ class RemindersList extends Component {
   constructor(props) {
     super(props)
     this.handleReminderClick = this.handleReminderClick.bind(this);
+    this.handleAppointmentClick = this.handleAppointmentClick.bind(this);
   }
 
   handleReminderClick(id) {
@@ -19,6 +21,16 @@ class RemindersList extends Component {
 
     setSelectedPatientId(id);
     push('/patients/list');
+  }
+
+  handleAppointmentClick(startDate) {
+    const {
+      setScheduleDate,
+      push,
+    } = this.props;
+
+    setScheduleDate(moment(startDate));
+    push('/schedule');
   }
 
   render() {
@@ -56,10 +68,12 @@ class RemindersList extends Component {
                 <ReminderData
                   key={index}
                   index={index}
+                  appointment={appointments.get(sentReminder.get('appointmentId'))}
                   reminder={reminders.get(sentReminder.get('reminderId'))}
                   patient={patients.get(sentReminder.get('patientId')).toJS()}
                   sentReminder={sentReminder}
                   handleReminderClick={this.handleReminderClick}
+                  handleAppointmentClick={this.handleAppointmentClick}
                 />
               );
             })}

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { ListItem, Icon, Avatar } from '../../../library';
 import styles from './styles.scss';
+import Input from "../../../library/Input/index";
 
 export default function ReminderData(props) {
   const {
@@ -11,6 +12,8 @@ export default function ReminderData(props) {
     sentReminder,
     index,
     handleReminderClick,
+    handleAppointmentClick,
+    appointment,
   } = props;
 
   const displayStatus = sentReminder.isConfirmed ? 'Reminder Confirmed' : 'Reminder Sent';
@@ -45,6 +48,18 @@ export default function ReminderData(props) {
               <span>, {age}</span>
             </a>
           </div>
+          <div
+            className={styles.patients__item_appt}
+            onClick={(e)=>{
+              e.stopPropagation();
+              handleAppointmentClick(appointment.startDate);
+            }}
+          >
+            <Icon icon="calendar" size={1} />
+            <span className={styles.patients__item_appt_text}>
+              {appointment && moment(appointment.startDate).format('MM/DD/YYYY, h:mma')}
+            </span>
+          </div>
           <div className={styles.patients__item_phone}>
             {patient.mobilePhoneNumber}
           </div>
@@ -57,7 +72,7 @@ export default function ReminderData(props) {
             {displayStatus}
           </div>
           <div className={styles.patients__item_date}>
-            {moment(sentReminder.createdAt).format('MM/DD/YYYY h:mma')}
+            {moment(sentReminder.createdAt).format('MM/DD/YYYY, h:mma')}
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { push } from 'react-router-redux';
 import DocumentTitle from 'react-document-title';
 import RequestsContainer from '../../containers/RequestContainer';
 import { fetchEntities } from '../../thunks/fetchEntities';
-import { selectAppointment } from '../../actions/schedule';
+import { selectAppointment, setScheduleDate } from '../../actions/schedule';
 import {
   Grid,
   Row,
@@ -60,6 +60,7 @@ class Dashboard extends React.Component {
     const {
       appointments,
       reminders,
+      requests,
       patients,
       services,
       practitioners,
@@ -70,6 +71,7 @@ class Dashboard extends React.Component {
       sentRecalls,
       setSelectedPatientId,
       selectAppointment,
+      setScheduleDate,
       users,
     } = this.props;
 
@@ -156,6 +158,7 @@ class Dashboard extends React.Component {
                     reminders={reminders}
                     sentReminders={sentReminders}
                     setSelectedPatientId={setSelectedPatientId}
+                    setScheduleDate={setScheduleDate}
                     push={push}
                   />
                 </Col>
@@ -236,6 +239,7 @@ function mapDispatchToProps(dispatch) {
     push,
     setSelectedPatientId: Actions.setSelectedPatientIdAction,
     selectAppointment,
+    setScheduleDate,
   }, dispatch);
 }
 
