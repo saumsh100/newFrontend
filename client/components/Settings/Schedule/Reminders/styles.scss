@@ -81,3 +81,22 @@
     color: darken($primary-color, 5%);
   }
 }
+
+.disabledPage {
+  width: 100%;
+  height: calc(100vh - 130px);
+  position: relative;
+  overflow: hidden;
+  &_text {
+    font-size: $large-size;
+    width: 700px;
+    color: $inactive-color;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+}

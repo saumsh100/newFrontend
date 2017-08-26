@@ -46,7 +46,7 @@ class Reminders extends Component {
   componentWillReceiveProps() {
     const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : null;
 
-    if (this.state.canSendReminders === null) {
+    if (this.state.canSendReminders === null && this.props.activeAccount && this.props.activeAccount.id) {
       this.setState({
         canSendReminders,
       });
@@ -201,6 +201,30 @@ class Reminders extends Component {
       { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { form: 'newReminder' } },
     ];
 
+
+    const showComponent = this.props.activeAccount.canSendReminders ? (<div>
+      <div className={styles.header}>
+        <Header title={'Reminders'} className={styles.headerTitle} />
+      </div>
+      <div className={styles.createButtonContainer}>
+        <Button
+          className={styles.edit}
+          onClick={this.openModal}
+          data-test-id="createNewReminder"
+          icon="plus"
+          create
+        >
+          Add New Reminder
+        </Button>
+      </div>
+      {this.props.reminders.size > 0 ? <Header title={'Reminders List'} contentHeader /> : null }
+      {reminders}
+    </div>) : (<div className={styles.disabledPage}>
+      <div className={styles.disabledPage_text}>
+        Reminders have been disabled. Please contact your CareCru account manager for further assistance.
+      </div>
+    </div>);
+
     return (
       <div className={styles.main}>
         <DialogBox
@@ -231,32 +255,7 @@ class Reminders extends Component {
             sendEdit={this.sendEdit.bind(null, this.state.formName)}
           />
         </DialogBox>
-        <div className={styles.header}>
-          <Header title={'Reminders'} className={styles.headerTitle} />
-          <div
-            className={styles.toggle}
-            data-test-id="toggleSendReminders"
-          >
-            <span className={styles.toggle_text}> Reminders ON/OFF:&nbsp; </span>
-            <Toggle
-              name="canSendReminders"
-              onChange={this.canSendReminders}
-              checked={this.state.canSendReminders}
-            />
-          </div>
-        </div>
-        <div className={styles.createButtonContainer}>
-          <Button
-            className={styles.edit}
-            onClick={this.openModal}
-            data-test-id="createNewReminder"
-            icon="plus"
-          >
-            Add New Reminder
-          </Button>
-        </div>
-        {this.props.reminders.size > 0 ? <Header title={'Reminders List'} contentHeader /> : null }
-        {reminders}
+        {showComponent}
       </div>
     );
   }
