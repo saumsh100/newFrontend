@@ -1,0 +1,32 @@
+
+@import '../../../ui';
+
+$h: 30px;
+$br: $h / 2;
+$p: 2px;
+$br-bar: ($h - $p) / 2;
+
+.wrapper {
+	height: $h;
+  width: 100%;
+  border-radius: $br;
+  background-color: $primary-dark;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 3px;
+}
+
+.bar {
+  transition: width 0.5s;
+  box-sizing: border-box;
+  padding-top: 2px;
+  width: 0%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+	color: $primary-dark;
+  font-family: $medium-font;
+  background-color: white;
+  border-radius: $br-bar;
+}

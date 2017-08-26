@@ -78,11 +78,11 @@ function replaceIndex(string, regex, index, repl) {
 
 const toString = str => `"${str}"`;
 const toTemplateString = str => `\`${str}\``;
-const getPath = filename => `${__dirname}/../../routes/my/${filename}`;
+const getPath = filename => `${__dirname}/../../routes/_my/${filename}`;
 
 sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
-  const account = req.account.get({ plain: true });
   try {
+    const account = req.account.get({ plain: true });
     fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
       if (err) throw err;
       fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {

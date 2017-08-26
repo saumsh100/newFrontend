@@ -19,7 +19,6 @@ export const setReview = createAction(SET_REVIEW);
 /**
  * Initial State
  */
-
 export const createInitialReviewsState = state => {
   return fromJS(Object.assign({
     account: null,

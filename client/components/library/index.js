@@ -37,6 +37,7 @@ import SelectPill from './SelectPill';
 import InfoSection from './InfoSection';
 import Pill from './Pill';
 import PieChart from './PieChart';
+import ProgressBar from './ProgressBar';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
@@ -118,6 +119,7 @@ export {
   RouterTabs,
   SaveButton,
   PractitionerAvatar,
+  ProgressBar,
   Search,
   RangeSlider,
   Star,

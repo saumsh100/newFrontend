@@ -56,10 +56,17 @@
     It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
     and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
   </p>
+  <button onclick="window.CareCru.BookingWidget.open()">
+    Leave Review
+  </button>
   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
-<!--<script type="text/javascript" src="http://my.carecru.dev:5000/widgets/1aeab035-b72c-4f7a-ad73-09465cbf5654" />-->
-<!--<script src="http://my.carecru.dev:5100/widgets/2aeab035-b72c-4f7a-ad73-09465cbf5654/widget.js"></script>-->
-<script type="text/javascript" src="http://my.carecru.dev:5100/widgets/2aeab035-b72c-4f7a-ad73-09465cbf5654/widget.js"></script>
+<script>
+  window.CareCru = {
+    showBookingButton: false,
+  };
+</script>
+<!--<script type="text/javascript" src="http://my.carecru.dev:5100/reviews/2aeab035-b72c-4f7a-ad73-09465cbf5654/reviews.js"></script>-->
+<script type="text/javascript" src="http://my.carecru.dev:5100/reviews/2aeab035-b72c-4f7a-ad73-09465cbf5654/cc.js"></script>
 </body>
 </html>
