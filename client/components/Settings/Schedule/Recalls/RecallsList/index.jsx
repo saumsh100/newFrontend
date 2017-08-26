@@ -17,8 +17,8 @@ class RecallsList extends Component {
       icon = 'envelope';
     }
 
-    const button = <Button className={styles.edit} onClick={edit}>Edit</Button>;
-    const buttonDel = <Button className={styles.edit} onClick={deleteFunc}>Delete</Button>;
+    const button = <Button className={styles.edit} onClick={edit} edit>Edit</Button>;
+    const buttonDel = <Button className={styles.edit} onClick={deleteFunc} edit>Delete</Button>;
 
     return (
       <ListItem
