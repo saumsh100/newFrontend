@@ -111,11 +111,11 @@ export default {
  */
 
 function getAppointmentDate(date, timezone) {
-  return moment.tz(date, timezone).format('YYYY/MM/DD');
+  return moment.tz(date, timezone).format('dddd, MMMM Do YYYY');
 }
 
 function getAppointmentTime(date, timezone) {
-  return moment.tz(date, timezone).format('H:mm');
+  return moment.tz(date, timezone).format('h:mm a');
 }
 
 
