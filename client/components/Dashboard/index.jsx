@@ -9,7 +9,7 @@ import { push } from 'react-router-redux';
 import DocumentTitle from 'react-document-title';
 import RequestsContainer from '../../containers/RequestContainer';
 import { fetchEntities } from '../../thunks/fetchEntities';
-import { selectAppointment } from '../../actions/schedule';
+import { selectAppointment, setScheduleDate } from '../../actions/schedule';
 import {
   Grid,
   Row,
@@ -46,7 +46,6 @@ class Dashboard extends React.Component {
     };
 
     Promise.all([
-      // this.props.fetchEntities({ key: 'requests' }),
       this.props.fetchEntities({ key: 'users' }),
       this.props.fetchEntities({ key: 'appointments', join: ['patient', 'chair'], params: query }),
       this.props.fetchEntities({ key: 'practitioners', join: ['services'] }),
@@ -60,8 +59,8 @@ class Dashboard extends React.Component {
   renderCards() {
     const {
       appointments,
-      requests,
       reminders,
+      requests,
       patients,
       services,
       practitioners,
@@ -72,6 +71,7 @@ class Dashboard extends React.Component {
       sentRecalls,
       setSelectedPatientId,
       selectAppointment,
+      setScheduleDate,
       users,
     } = this.props;
 
@@ -158,6 +158,7 @@ class Dashboard extends React.Component {
                     reminders={reminders}
                     sentReminders={sentReminders}
                     setSelectedPatientId={setSelectedPatientId}
+                    setScheduleDate={setScheduleDate}
                     push={push}
                   />
                 </Col>
@@ -188,9 +189,17 @@ class Dashboard extends React.Component {
 
 function mapStateToProps({ entities }) {
   const appointments = entities.getIn(['appointments', 'models']);
-  const patientIds = appointments.toArray().map(app => app.get('patientId'));
+  const sentReminders = entities.getIn(['sentReminders', 'models']);
+  const sentRecalls = entities.getIn(['sentRecalls', 'models']);
+
+  const appPatientIds = appointments.toArray().map(app => app.get('patientId'));
+  const reminderPatientIds = sentReminders.toArray().map(sentReminder => sentReminder.get('patientId'))
+  const recallPatientIds = sentRecalls.toArray().map(sentRecall => sentRecall.get('patientId'))
+
   const patients = entities.getIn(['patients', 'models']).filter((patient) => {
-    return (patientIds.indexOf(patient.get('id')) > -1) && !patient.get('isDeleted');
+    return ((appPatientIds.indexOf(patient.get('id')) > -1 || reminderPatientIds.indexOf(patient.get('id')) > -1 ||
+      recallPatientIds.indexOf(patient.get('id')) > -1)
+      && !patient.get('isDeleted'));
   });
 
   return {
@@ -201,9 +210,9 @@ function mapStateToProps({ entities }) {
     requests: entities.getIn(['requests', 'models']),
     chairs: entities.getIn(['chairs', 'models']),
     reminders: entities.getIn(['reminders', 'models']),
-    sentReminders: entities.getIn(['sentReminders', 'models']),
+    sentReminders,
+    sentRecalls,
     recalls: entities.getIn(['recalls', 'models']),
-    sentRecalls: entities.getIn(['sentRecalls', 'models']),
     users: entities.getIn(['users', 'models']),
   };
 }
@@ -230,6 +239,7 @@ function mapDispatchToProps(dispatch) {
     push,
     setSelectedPatientId: Actions.setSelectedPatientIdAction,
     selectAppointment,
+    setScheduleDate,
   }, dispatch);
 }
 

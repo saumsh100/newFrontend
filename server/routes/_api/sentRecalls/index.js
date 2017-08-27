@@ -41,6 +41,7 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
     nest: true,
     where: {
       accountId,
+      isSent: true,
       createdAt: {
         $gte: moment().startOf('day').toISOString(),
       },

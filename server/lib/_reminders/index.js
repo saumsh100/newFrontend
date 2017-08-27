@@ -1,5 +1,5 @@
 
-import { Account, Chat, Patient, Reminder, SentReminder, TextMessage } from '../../_models';
+import { Account, Appointment, Chat, Patient, Reminder, SentReminder, TextMessage } from '../../_models';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { getAppointmentsFromReminder } from './helpers';
@@ -28,6 +28,34 @@ async function sendSocket(io, chatId) {
     .emit('newMessage', normalize('chat', chat));
 }
 
+
+function sendSocketReminder(io, sentReminderId) {
+  return SentReminder.findOne({
+    where: {
+      id: sentReminderId,
+    },
+    include: [
+      {
+        model: Appointment,
+        as: 'appointment',
+      },
+      {
+        model: Reminder,
+        as: 'reminder',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+    ],
+  }).then((sentReminderOne) => {
+    const sentReminder = sentReminderOne.get({ plain: true });
+    io.of('/dash')
+      .in(sentReminder.accountId)
+      .emit('create:SentReminder', normalize('sentReminder', sentReminder));
+  });
+}
+
 /**
  *
  * @param account
@@ -38,6 +66,7 @@ export async function sendRemindersForAccount(account, date) {
   for (const reminder of reminders) {
     // Get appointments that this reminder deals with
     const appointments = await getAppointmentsFromReminder({ reminder, account, date });
+
     for (const appointment of appointments) {
       const { patient } = appointment;
       const { primaryType } = reminder;
@@ -64,13 +93,15 @@ export async function sendRemindersForAccount(account, date) {
           sentReminder,
         });
       } catch (error) {
-        console.log(error)
+        console.log(`${primaryType} reminder not sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+        console.log(error);
         continue;
       }
 
       console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentReminder.update({ isSent: true });
       await appointment.update({ isReminderSent: true });
+      await sendSocketReminder(global.io, sentReminder.id);
 
       if (primaryType === 'sms') {
         const textMessageData = sanitizeTwilioSmsData(data);
