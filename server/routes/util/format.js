@@ -4,6 +4,7 @@ import jsonapi from './jsonapi';
 import normalize from '../_api/normalize';
 
 const pluralToSingularMap = {
+  appointments: 'appointment',
   chairs: 'chair',
   patients: 'patient',
   practitioners: 'practitioner',
@@ -18,4 +19,4 @@ export default function format(req, res, resourceName, dataArray) {
   }
 
   return normalize(resourceName, dataArray);
-};
+}

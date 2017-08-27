@@ -15,6 +15,26 @@ const makeConfig = (config = {}) => Object.assign(
  * sending down
  */
 const ModelAttributes = {
+  Appointment: [
+    'accountId',
+    'practitionerId',
+    'patientId',
+    'serviceId',
+    'chairId',
+    'pmsId',
+    'isDeleted',
+    'isBookable',
+    'startDate',
+    'endDate',
+    'note',
+    'isReminderSent',
+    'isPatientConfirmed',
+    'isSyncedWithPMS',
+    'isCancelled',
+    'customBufferTime',
+    'mark',
+  ],
+
   Chair: [
     'accountId',
     'pmsId',
@@ -86,6 +106,11 @@ const ModelAttributes = {
  * SERIALIZERS contains all allowable resources for jsonapi serialization*
  */
 const SERIALIZERS = {
+  appointment: new Serializer('appointment', makeConfig({
+    attributes: ModelAttributes.Appointment,
+    pluralizeType: false,
+  })),
+
   chair: new Serializer('chair', makeConfig({
     attributes: ModelAttributes.Chair,
     pluralizeType: false,
