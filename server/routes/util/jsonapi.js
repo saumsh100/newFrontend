@@ -33,6 +33,9 @@ const ModelAttributes = {
     'isCancelled',
     'customBufferTime',
     'mark',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
   ],
 
   Chair: [
@@ -40,6 +43,15 @@ const ModelAttributes = {
     'pmsId',
     'description',
     'name',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  Family: [
+    'accountId',
+    'pmsId',
+    'headId',
     'createdAt',
     'updatedAt',
     'deletedAt',
@@ -113,6 +125,11 @@ const SERIALIZERS = {
 
   chair: new Serializer('chair', makeConfig({
     attributes: ModelAttributes.Chair,
+    pluralizeType: false,
+  })),
+
+  family: new Serializer('family', makeConfig({
+    attributes: ModelAttributes.Family,
     pluralizeType: false,
   })),
 

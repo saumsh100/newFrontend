@@ -6,6 +6,7 @@ import normalize from '../_api/normalize';
 const pluralToSingularMap = {
   appointments: 'appointment',
   chairs: 'chair',
+  families: 'family',
   patients: 'patient',
   practitioners: 'practitioner',
   services: 'service',
