@@ -117,7 +117,6 @@ export default function (sequelize, DataTypes) {
   Account.associate = (models) => {
     const {
       Appointment,
-      // Address,
       Chat,
       Enterprise,
       Patient,
@@ -142,11 +141,6 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'accountId',
       as: 'appointments',
     });
-
-    // Account.hasOne(Address, {
-    //   foreignKey: 'accountId',
-    //   as: 'address',
-    // });
 
     Account.hasMany(Chat, {
       foreignKey: 'accountId',

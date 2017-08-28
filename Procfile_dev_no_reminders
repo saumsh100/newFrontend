@@ -1,1 +1,1 @@
-web: nodemon --inspect server/bin/build/server.bundle.js
+web: nodemon server/bin/build/server.bundle.js

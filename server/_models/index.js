@@ -47,7 +47,6 @@ sequelize
 
 // Import and store all models.
 const models = [];
-// models.push((require('./Address').default(sequelize, Sequelize)));
 models.push((require('./Account').default(sequelize, Sequelize)));
 models.push((require('./Appointment').default(sequelize, Sequelize)));
 models.push((require('./AuthSession').default(sequelize, Sequelize)));
