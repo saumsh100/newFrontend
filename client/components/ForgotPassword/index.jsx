@@ -11,11 +11,17 @@ import { resetPassword  } from '../../thunks/auth';
 class ForgotPassword extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      submitted: false,
+    }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(values) {
     this.props.resetPassword(values.email);
+    this.setState({
+      submitted: true,
+    });
   }
 
   render() {
@@ -32,7 +38,13 @@ class ForgotPassword extends Component {
                 alt="CareCru Logo"
               />
             </div>
-            <ForgotPasswordForm onSubmit={this.handleSubmit} />
+            {this.state.submitted ? <div>
+              Please check your email and follow the steps to reset your password.
+              </div> : <div>
+                <div className={styles.header}>Forgot Password?</div>
+                <div className={styles.text}>You can reset your password here.</div>
+                <ForgotPasswordForm onSubmit={this.handleSubmit} />
+              </div>}
           </Card>
         </div>
       </DocumentTitle>

@@ -130,10 +130,13 @@ export function logout() {
 export function resetPassword(email) {
   return (dispatch, getState) => {
     console.log(email);
-    axios.post('/auth/resetpassword', { email })
-      .then(()=>{
-
+    return axios.post('/auth/resetpassword', { email })
+      .then((response) => {
+        return true;
       })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 }
 
