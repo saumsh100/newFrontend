@@ -28,7 +28,7 @@ class ForgotPassword extends Component {
     const { location: { state } } = this.props;
 
     return (
-      <DocumentTitle title="CareCru | Recover Password">
+      <DocumentTitle title="CareCru | Reset Password">
         <div className={styles.backDrop}>
           <Card className={styles.loginForm}>
             <div className={styles.logoContainer}>
@@ -38,7 +38,7 @@ class ForgotPassword extends Component {
                 alt="CareCru Logo"
               />
             </div>
-            {this.state.submitted ? <div>
+            {this.state.submitted ? <div className={styles.submitText}>
               Please check your email and follow the steps to reset your password.
               </div> : <div>
                 <div className={styles.header}>Forgot Password?</div>

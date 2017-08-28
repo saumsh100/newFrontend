@@ -39,7 +39,8 @@ authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) 
 );
 
 authRouter.post('/resetpassword', ({ body: { email } }, res, next) => {
-  console.log(email);
+  res.status(200).send({email})
+  return email;
 });
 
 module.exports = authRouter;

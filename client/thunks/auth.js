@@ -129,10 +129,8 @@ export function logout() {
 
 export function resetPassword(email) {
   return (dispatch, getState) => {
-    console.log(email);
     return axios.post('/auth/resetpassword', { email })
-      .then((response) => {
-        return true;
+      .then(() => {
       })
       .catch((err) => {
         console.log(err);
