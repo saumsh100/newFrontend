@@ -16,7 +16,7 @@
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
     "seeds": "node_modules/.bin/babel-node ./server/bin/seeds.js",
-    "rebuild": "export $(cat .env | xargs) && node_modules/.bin/sequelize db:migrate:undo:all && node_modules/.bin/sequelize db:migrate",
+    "rebuild": "export $(cat .env | xargs) && sequelize db:migrate:undo:all && sequelize db:migrate",
     "rebuild:seed": "npm run rebuild && sequelize db:seed:all",
     "start": "nf start -w -j Procfile_dev",
     "startdev": "nf start -w -j Procfile_dev_no_reminders",
