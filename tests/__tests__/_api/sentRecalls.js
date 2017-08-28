@@ -18,6 +18,7 @@ const sentRecall = {
   accountId,
   patientId,
   lengthSeconds: 540,
+  isSent: true,
   primaryType: 'sms',
   createdAt: new Date().toISOString(),
 };

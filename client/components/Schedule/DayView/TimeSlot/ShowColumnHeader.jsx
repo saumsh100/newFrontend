@@ -11,8 +11,14 @@ export default function ShowColumnHeader(props) {
     columnHeaderName,
   } = props;
 
+  const width = (columnWidth / 100) * 905;
+  const styleHeader = {
+    width: 'auto',
+    maxWidth: `${width}px`,
+  };
+
   return (
-    <div className={styles.columnHeader} >
+    <div className={styles.columnHeader} style={styleHeader} >
       <div className={styles.columnHeader_text}>
         {columnHeaderName}
       </div>

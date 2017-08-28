@@ -15,6 +15,7 @@ import { Appointment, Patient, SentReminder } from '../../_models';
  */
 export async function getAppointmentsFromReminder({ reminder, date }) {
   const end = moment(date).add(reminder.lengthSeconds, 'seconds').toISOString();
+
   const appointments = await Appointment.findAll({
     where: {
       isDeleted: false,
@@ -28,10 +29,12 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
       {
         model: Patient,
         as: 'patient',
+        required: true,
       },
       {
         model: SentReminder,
         as: 'sentReminders',
+        required: false,
       },
     ],
   });
@@ -52,6 +55,7 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
 export function shouldSendReminder({ appointment, reminder }) {
   const { sentReminders, patient } = appointment;
   const preferences = patient.preferences;
+
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
     return (s.reminderId === reminder.id) || (reminder.lengthSeconds > s.lengthSeconds);
   });

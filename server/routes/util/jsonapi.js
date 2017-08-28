@@ -22,11 +22,40 @@ const ModelAttributes = {
     'name',
     'createdAt',
     'updatedAt',
+    'deletedAt',
+  ],
+
+  Practitioner: [
+    'firstName',
+    'lastName',
+    'type',
+    'isActive',
+    'isHidden',
+    'avatarUrl',
+    'isCustomSchedule',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  Service: [
+    'name',
+    'accountId',
+    'duration',
+    'bufferTime',
+    'unitCost',
+    'customCosts',
+    'pmsId',
+    'isHidden',
+    'isDefault',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
   ],
 };
 
 /**
- * SERIALIZERS contains all allowable resources for josnapi serialization*
+ * SERIALIZERS contains all allowable resources for jsonapi serialization*
  */
 const SERIALIZERS = {
   chair: new Serializer('chair', makeConfig({
@@ -34,8 +63,14 @@ const SERIALIZERS = {
     pluralizeType: false,
   })),
 
-  chairs: new Serializer('chairs', makeConfig({
-    attributes: ModelAttributes.Chair,
+  practitioner: new Serializer('practitioner', makeConfig({
+    attributes: ModelAttributes.Practitioner,
+    pluralizeType: false,
+  })),
+
+  service: new Serializer('service', makeConfig({
+    attributes: ModelAttributes.Service,
+    pluralizeType: false,
   })),
 };
 

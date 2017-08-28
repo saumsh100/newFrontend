@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
 import Icon from '../Icon';
+import Input from '../Input';
 import { List, ListItem } from '../List';
 import styles from './styles.scss';
 
@@ -20,42 +21,110 @@ export default class DropdownSelect extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      scrollTo: 0,
+      options: [],
+      optionsStatic: [],
+      value: '',
+      searching: false,
     };
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
-  /*
-  componentDidUpdate() {
-    const { scrollTo } = this.state;
-    if (scrollTo) {
-      this.refs[scrollTo].scrollIntoView({block: 'end', behavior: 'smooth'});
-    }
-  }*/
+
+  componentWillMount() {
+    this.setState({
+      options: this.props.options,
+      optionsStatic: this.props.options,
+    });
+  }
 
   toggle() {
-    this.setState({ isOpen: !this.state.isOpen });
+    if (this.state.isOpen) {
+      this.setState({
+        isOpen: false,
+        options: this.state.optionsStatic,
+        value: '',
+      });
+    } else {
+      this.setState({
+        isOpen: true,
+      });
+    }
   }
 
   close() {
-    this.setState({ isOpen: false });
+    this.setState({
+      isOpen: false,
+      options: this.state.optionsStatic,
+      value: '',
+    });
+  }
+
+  handleSearch(value) {
+    const {
+      optionsStatic,
+    } = this.state;
+
+    const {
+      search
+    } = this.props;
+
+    const test = (typeof search === 'string') ? search : 'value';
+
+    if (value !== '') {
+      const filteredOptions = optionsStatic.filter((option) => {
+        if (new RegExp(value, 'i').test(option[test])) {
+          return option;
+        }
+      });
+
+      return this.setState({
+        options: filteredOptions,
+        value,
+      });
+    }
+    return this.setState({
+      options: optionsStatic,
+      value: '',
+    });
   }
 
   renderList() {
     const {
       template,
-      options,
       onChange,
       value,
+      search,
     } = this.props;
+
+    const {
+      options,
+    } = this.state;
 
     const OptionTemplate = template || DefaultOption;
 
     return (
       <List className={styles.dropDownList} >
+        {search ?
+          <div className={styles.searchInput}>
+            <Input
+              label="Search"
+              onChange={e => {
+                this.handleSearch(e.target.value)
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                this.setState({
+                  searching: true,
+                });
+              }}
+              value={this.state.value}
+              icon="plus"
+            />
+          </div> : null}
         {options.map((option, i) => {
           const isSelected = value === option.value;
           let className = styles.optionListItem;
@@ -66,7 +135,10 @@ export default class DropdownSelect extends Component {
             <ListItem
               key={`dropDownSelect_${i}`}
               className={className}
-              onClick={() => onChange(option.value)}
+              onClick={() => {
+                onChange(option.value)
+                this.toggle()
+              }}
               data-test-id={option.value}
             >
               <div className={styles.optionDiv} >
@@ -112,8 +184,6 @@ export default class DropdownSelect extends Component {
       labelClassName = classNames(styles.activeLabel, labelClassName);
     }
 
-
-
     return (
       <div
         className={disabled ? styles.toggleDivDisabled : toggleClassName}
@@ -134,7 +204,6 @@ export default class DropdownSelect extends Component {
   render() {
     const children = this.renderList();
     const toggle = this.renderToggle();
-
     const menuOptions = {
       children,
       toggle,
@@ -143,6 +212,8 @@ export default class DropdownSelect extends Component {
       close: this.close,
       animAlign: 'right',
       className: classNames(this.props.className, styles.wrapper),
+      closeOnInsideClick: false,
+      closeOnOutsideClick: true,
     };
 
     return <RDropdownMenu {...menuOptions} />;

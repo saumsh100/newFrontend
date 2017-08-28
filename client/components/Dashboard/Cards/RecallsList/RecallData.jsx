@@ -13,10 +13,6 @@ export default function RecallData(props) {
     handleRecallClick,
   } = props;
 
-  if (!recallJS || !patientJS) {
-    return null;
-  }
-
   const patient = patientJS.toJS();
 
   let icon = recallJS ? recallJS.toJS().primaryType.toLowerCase() : null;
@@ -63,7 +59,7 @@ export default function RecallData(props) {
             {displayStatus}
           </div>
           <div className={styles.patients__item_date}>
-            {moment(sentRecall.createdAt).format('MM/DD/YYYY')}
+            {moment(sentRecall.createdAt).format('MM/DD/YYYY, h:mma')}
           </div>
         </div>
       </div>
