@@ -191,6 +191,7 @@
     "s3": "^4.4.0",
     "sass-loader": "^6.0.3",
     "sequelize": "^4.3.2",
+    "sequelize-cli": "^2.8.0",
     "serve-favicon": "^2.3.0",
     "sharp": "^0.18.1",
     "socket.io": "^1.5.1",
@@ -231,7 +232,6 @@
     "nodemon": "^1.10.2",
     "pretty-bytes": "^4.0.2",
     "react-addons-perf": "^15.2.1",
-    "sequelize-cli": "^2.7.0",
     "sinon": "^1.15.3",
     "supertest": "^2.0.1"
   }
