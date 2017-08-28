@@ -128,7 +128,7 @@ const asyncEmailPasswordReset = values =>
   axios.post('/userCheck', { email: values.email })
     .then((response) => {
       if (response.data.exists !== true) {
-        return { email: 'User with this email does not exist'}
+        return { email: 'User with this email does not exist' }
       }
     });
 

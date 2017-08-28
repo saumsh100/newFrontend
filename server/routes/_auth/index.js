@@ -3,6 +3,7 @@ import { Router } from 'express';
 import omit from 'lodash/omit';
 import { UserAuth } from '../../lib/_auth';
 import { loadPermissionsSequelize } from '../../lib/permissions';
+import { User } from '../../_models';
 
 const authRouter = Router();
 
@@ -39,8 +40,16 @@ authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) 
 );
 
 authRouter.post('/resetpassword', ({ body: { email } }, res, next) => {
-  res.status(200).send({email})
-  return email;
+
+  User.findOne({ where: { username: email  } })
+    .then((user) => {
+      console.log(user);
+      //res.send({ exists: !!user });
+    })
+    .catch(next);
+
+  //res.status(200).send({email})
+  //return email;
 });
 
 module.exports = authRouter;

@@ -29,7 +29,7 @@ class Login extends Component {
               <div
                 className={styles.forgotPassword_text}
                 onClick={() => {
-                  push('/reset');
+                  push('/forgot');
                 }}
               >
                 Forgot your password ?
