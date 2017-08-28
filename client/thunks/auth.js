@@ -127,6 +127,17 @@ export function logout() {
   };
 }
 
+export function resetPassword(email) {
+  return (dispatch, getState) => {
+    return axios.post('/auth/resetpassword', { email })
+      .then(() => {
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export function load() {
   return (dispatch) => {
     const token = localStorage.getItem('token');
