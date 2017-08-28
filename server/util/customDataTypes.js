@@ -1,5 +1,5 @@
 
-const { validatePhoneNumber } = require('./validators');
+const { validatePhoneNumber } = require('./validators'); // changing these to const so that sequelize can run migrations
 
 const createObject = (extraConfig = {}, config) =>
   Object.assign(
