@@ -2,20 +2,27 @@
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../library';
 import styles from './styles.scss';
+import { emailValidate, asyncEmailPasswordReset } from '../library/Form/validate';
 
 export default function ForgotPasswordForm({ onSubmit }) {
   return (
-    <Form form="forgotPassword" onSubmit={onSubmit} ignoreSaveButton={true}>
+    <Form
+      form="forgotPassword"
+      asyncValidate={asyncEmailPasswordReset}
+      onSubmit={onSubmit}
+      ignoreSaveButton
+    >
       <Field
         type="email"
         name="email"
         label="Email"
+        validate={[emailValidate]}
       />
       <Button
         type="submit"
         className={styles.submitButton}
       >
-        Recover Password
+        Reset Password
       </Button>
     </Form>
   );

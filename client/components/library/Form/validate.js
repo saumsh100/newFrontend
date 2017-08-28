@@ -124,6 +124,14 @@ const asyncEmailValidateUser = values =>
         Promise.reject({ email: `User with ${values.email} already exists...` })
     );
 
+const asyncEmailPasswordReset = values =>
+  axios.post('/userCheck', { email: values.email })
+    .then((response) => {
+      if (response.data.exists !== true) {
+        return { email: 'User with this email does not exist'}
+      }
+    });
+
 const numDigitsValidate = max => (value) => {
   if (!value || value.length >= max) return;
   return 'Not enough digits';
@@ -159,6 +167,7 @@ export {
   asyncEmailValidateNewPatient,
   asyncPhoneNumberValidatePatient,
   asyncPhoneNumberValidateNewPatient,
+  asyncEmailPasswordReset,
   asyncEmailValidateUser,
   maxLength,
   emailValidate,

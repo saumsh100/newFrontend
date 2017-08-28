@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Card } from '../library';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import styles from './styles.scss';
+import { resetPassword  } from '../../thunks/auth';
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class ForgotPassword extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values);
+    this.props.resetPassword(values.email);
   }
 
   render() {
@@ -39,4 +40,17 @@ class ForgotPassword extends Component {
   }
 }
 
-export default ForgotPassword;
+ForgotPassword.propTypes = {
+  resetPassword: PropTypes.func.isRequired,
+};
+
+function mapActionsToProps(dispatch) {
+  return bindActionCreators({
+    resetPassword,
+  }, dispatch);
+}
+
+const enhance = connect(null, mapActionsToProps);
+
+export default enhance(ForgotPassword);
+
