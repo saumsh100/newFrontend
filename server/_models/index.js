@@ -23,7 +23,7 @@ if (postgres.ssl) {
 
 // If true, sequelize will dump all PostgreSQL queries into terminal
 if (postgres.logging) {
-  sequelizeConfig.logging = console.log // eslint-disable-line
+  sequelizeConfig.logging = console.log; // eslint-disable-line
 }
 
 // initialize sequelize
@@ -32,7 +32,7 @@ const sequelize = new Sequelize(
   postgres.username,
   postgres.password,
   sequelizeConfig,
-  );
+);
 
 // Test the connection for logs
 sequelize
