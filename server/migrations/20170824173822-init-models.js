@@ -197,6 +197,7 @@ module.exports = {
             key: 'id',
           },
           onUpdate: 'cascade',
+          onDelete: 'set null',
         },
 
         weeklyScheduleId: {
@@ -319,6 +320,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       pmsId: {
@@ -359,13 +361,6 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-
-      // fullAvatarUrl: {
-      //   type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['avatarUrl']),
-      //   get() {
-      //     return this.get('avatarUrl') ? `${globals.s3.urlPrefix}${this.get('avatarUrl')}` : null;
-      //   },
-      // },
 
       weeklyScheduleId: {
         type: DataTypes.UUID,
@@ -414,6 +409,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'set null',
       },
 
       password: {
@@ -522,6 +518,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       pmsId: {
@@ -537,6 +534,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       email: {
@@ -570,10 +568,6 @@ module.exports = {
         // TODO: this should be an enum
         type: DataTypes.STRING,
       },
-
-      /*notes: {
-        type: DataTypes.STRING,
-      },*/
 
       gender: {
         // TODO: needs to be an enum
@@ -644,6 +638,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       status: {
@@ -697,6 +692,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       name: {
@@ -807,6 +803,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       practitionerId: {
@@ -1105,6 +1102,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       patientId: {
@@ -1401,6 +1399,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       serviceId: {
@@ -1411,6 +1410,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       createdAt: {
@@ -1442,6 +1442,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'set null',
       },
 
       startDate: {
@@ -1521,6 +1522,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       primaryType: {
@@ -1564,6 +1566,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       primaryType: {
@@ -1636,6 +1639,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       chairId: {
@@ -1796,6 +1800,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
 
@@ -2084,6 +2089,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
 
       userId: {
