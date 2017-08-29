@@ -21,10 +21,10 @@ export default function EmailSuccess(props) {
         </div>
 
         <p>
-          We've sent an email to {email} with password reset instructions.
+          We've sent an email to <span className={styles.email}>{email}</span> with password reset instructions.
         </p>
         <p>
-          If the email doesn't show up soon, check your spam folder. We sent it from noreply@carecru.com.
+          If the email doesn't show up soon, check your spam folder. We sent it from <span className={styles.email}>noreply@carecru.com</span>.
         </p>
         <Button
           onClick={()=> {

@@ -6,6 +6,7 @@ import { Card } from '../../library';
 import ResetPasswordForm from './ResetPasswordForm';
 import { resetUserPassword } from '../../../thunks/auth';
 import styles from '../styles.scss';
+import CopyrightFooter from '../../Login/CopyrightFooter/index';
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -28,9 +29,9 @@ class ResetPassword extends Component {
               alt="CareCru Logo"
             />
           </div>
-          <div className={styles.text}>Reset Your Password.</div>
           <ResetPasswordForm onSubmit={this.handleSubmit} />
         </Card>
+        <CopyrightFooter />
       </div>
     );
   }
