@@ -3,7 +3,7 @@ const mandrill = require('../config/mandrill');
 
 module.exports = {
   resetPasswordEmail: (config) => {
-    config.subject = 'Reset User Password - CareCru';
+    config.subject = 'Reset Password - CareCru';
     config.templateName = 'Reset Password';
     return sendTemplate(config);
   },

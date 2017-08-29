@@ -7,6 +7,7 @@ import DocumentTitle from 'react-document-title';
 import { Card } from '../library';
 import { login } from '../../thunks/auth';
 import LoginForm from './LoginForm';
+import CopyrightFooter from './CopyrightFooter';
 import styles from './styles.scss';
 
 class Login extends Component {
@@ -36,6 +37,7 @@ class Login extends Component {
               </div>
             </div>
           </Card>
+          <CopyrightFooter />
         </div>
       </DocumentTitle>
     );

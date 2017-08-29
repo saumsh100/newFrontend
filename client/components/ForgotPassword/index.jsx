@@ -9,6 +9,7 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 import EmailSuccess from './EmailSuccess';
 import styles from './styles.scss';
 import { resetPassword  } from '../../thunks/auth';
+import CopyrightFooter from '../Login/CopyrightFooter';
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class ForgotPassword extends Component {
               </div>
             }
           </Card>
+          <CopyrightFooter />
         </div>
       </DocumentTitle>
     );
