@@ -8,7 +8,7 @@ export default function ForgotPasswordForm({ onSubmit }) {
   return (
     <Form
       form="forgotPassword"
-      asyncValidate={asyncEmailPasswordReset}
+      // asyncValidate={asyncEmailPasswordReset}
       onSubmit={onSubmit}
       ignoreSaveButton
     >

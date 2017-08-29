@@ -1,10 +1,12 @@
 
 import React, { Component, PropTypes } from 'react';
 import DocumentTitle from 'react-document-title';
+import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../library';
 import ForgotPasswordForm from './ForgotPasswordForm';
+import EmailSuccess from './EmailSuccess';
 import styles from './styles.scss';
 import { resetPassword  } from '../../thunks/auth';
 
@@ -13,7 +15,8 @@ class ForgotPassword extends Component {
     super(props)
     this.state = {
       submitted: false,
-    }
+      email: null,
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -21,11 +24,12 @@ class ForgotPassword extends Component {
     this.props.resetPassword(values.email);
     this.setState({
       submitted: true,
+      email: values.email,
     });
   }
 
   render() {
-    const { location: { state } } = this.props;
+    const { location: { state }, push } = this.props;
 
     return (
       <DocumentTitle title="CareCru | Reset Password">
@@ -38,13 +42,22 @@ class ForgotPassword extends Component {
                 alt="CareCru Logo"
               />
             </div>
-            {this.state.submitted ? <div className={styles.submitText}>
-              Please check your email and follow the steps to reset your password.
-              </div> : <div>
-                <div className={styles.header}>Forgot Password?</div>
-                <div className={styles.text}>You can reset your password here.</div>
-                <ForgotPasswordForm onSubmit={this.handleSubmit} />
-              </div>}
+            <div className={styles.text}>Enter your email below and if you are a user, we will send you a link to reset your password.</div>
+            {this.state.submitted ?
+              <EmailSuccess email={this.state.email} push={push} />
+              :
+              <div>
+                <ForgotPasswordForm onSubmit={this.handleSubmit}/>
+                <div
+                  className = {styles.textLogin}
+                  onClick={() => {
+                    push('/login');
+                  }}
+                >
+                Back to Login Page
+                </div>
+              </div>
+            }
           </Card>
         </div>
       </DocumentTitle>
@@ -54,11 +67,13 @@ class ForgotPassword extends Component {
 
 ForgotPassword.propTypes = {
   resetPassword: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     resetPassword,
+    push,
   }, dispatch);
 }
 

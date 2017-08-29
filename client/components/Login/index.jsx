@@ -32,7 +32,7 @@ class Login extends Component {
                   push('/forgot');
                 }}
               >
-                Forgot your password ?
+                Forgot your password?
               </div>
             </div>
           </Card>

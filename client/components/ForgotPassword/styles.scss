@@ -29,6 +29,7 @@
   margin-bottom: 30px;
 }
 
+
 .loginLogo {
   width: 100px;
 }
@@ -48,7 +49,26 @@
   padding-bottom: 10px;
 }
 
+.textLogin {
+  padding-top: 15px;
+  text-align: center;
+  composes: subHeaderExtraSmall from 'sass-loader!../../fonts.scss';
+  cursor: pointer;
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.textSuccess {
+  padding: 10px;
+  background-color: lighten($primary-green,10%);
+}
 .submitText {
   text-align: center;
+}
+
+.displayCenter {
+  width: 100%;
+  margin-top: 10px;
 }
 
