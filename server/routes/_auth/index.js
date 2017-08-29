@@ -55,7 +55,7 @@ authRouter.post('/resetpassword', (req, res, next) => {
   User.findOne({ where: { username: email } })
     .then(async (user) => {
       if (!user) {
-        res.send(400);
+        return res.send(400);
       }
 
       await PasswordReset.create({
@@ -77,41 +77,6 @@ authRouter.post('/resetpassword', (req, res, next) => {
       }).catch(err => console.log(err));
 
       return res.sendStatus(201);
-    })
-    .catch(next);
-});
-
-authRouter.post('/resetpassword/:token', (req, res, next) => {
-  const {
-    body,
-    params,
-  } = req;
-
-  const token = params.token;
-
-  const email = body.email;
-
-  const fullUrl = `${req.protocol}://${req.get('host')}/resetlink/${token}`;
-
-  User.findOne({ where: { username: email } })
-    .then((user) => {
-      if (!user) {
-        res.send(400);
-      }
-
-      const mergeVars = [
-        {
-          name: 'RESET_URL',
-          content: fullUrl,
-        },
-      ];
-      resetPasswordEmail({
-        subject: 'Reset Password',
-        toEmail: email,
-        mergeVars,
-      });
-      console.log(user);
-      res.sendStatus(201);
     })
     .catch(next);
 });
