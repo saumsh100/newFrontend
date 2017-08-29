@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../../library';
 import ResetPasswordForm from './ResetPasswordForm';
-import { updateEntityRequest } from '../../../thunks/fetchEntities';
+import { resetUserPassword } from '../../../thunks/auth';
 import styles from '../styles.scss';
 
 class ResetPassword extends Component {
@@ -14,7 +14,7 @@ class ResetPassword extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values);
+    this.props.resetUserPassword(this.props.location, values);
   }
 
   render() {
@@ -42,7 +42,7 @@ ResetPassword.propTypes = {
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    updateEntityRequest,
+    resetUserPassword,
   }, dispatch);
 }
 
