@@ -3,7 +3,12 @@ const postgres = require('./server/config/globals').postgres;
 
 module.exports = {
   'config': path.resolve('server/config/babelHook.js'),
-	'url': `postgres://${postgres.username}:${postgres.password}@${postgres.host}:${postgres.port}/${postgres.database}?ssl=true`,
+	'url': `postgres://${postgres.username}:${postgres.password}@${postgres.host}:${postgres.port}/${postgres.database}`,
+  'dialectOptions':{
+    'ssl':{
+       'require':true
+    }
+   },
 	'models-path': 'server/_models',
 	'seeders-path': 'server/seeders',
   'migrations-path': 'server/migrations',
