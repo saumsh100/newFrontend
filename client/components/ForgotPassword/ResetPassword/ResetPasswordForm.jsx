@@ -29,7 +29,7 @@ export default function ResetPasswordForm({ onSubmit }) {
         type="submit"
         style={{ width: '100%' }}
       >
-        Submit
+        Reset Password
       </Button>
     </Form>
   );

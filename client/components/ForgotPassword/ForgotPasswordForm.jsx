@@ -22,7 +22,7 @@ export default function ForgotPasswordForm({ onSubmit }) {
         type="submit"
         className={styles.submitButton}
       >
-        Reset Password
+        Reset Your Password Now
       </Button>
     </Form>
   );
