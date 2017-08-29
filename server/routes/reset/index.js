@@ -32,9 +32,10 @@ resetRouter.post('/:token', ({ body, params: { token } }, res, next) => {
     }).then(async (user) => {
       await user.setPasswordAsync(passwordChange.password);
       await user.save();
+      await reset.destroy();
       return res.send(200);
     });
-  });
+  }).catch(next);
 });
 
 module.exports = resetRouter;
