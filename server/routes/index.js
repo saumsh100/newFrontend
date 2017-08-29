@@ -43,7 +43,7 @@ rootRouter.use('/_auth', sequelizeAuthRouter);
 rootRouter.use('/auth', sequelizeAuthRouter);
 
 rootRouter.use('/signup', signupRouterSequelize);
-rootRouter.use('/reset', resetRouter); // this is sequelize
+rootRouter.use('/resetpassword', resetRouter); // this is sequelize
 rootRouter.use('/_signup', signupRouterSequelize);
 
 // Bind REST API
@@ -71,14 +71,14 @@ rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
 
 // below route is sequelize
 
-rootRouter.get('/resetlink/:tokenId', (req, res, next) => {
+rootRouter.get('/reset/:tokenId', (req, res, next) => {
   return PasswordReset.findOne({ where: { token: req.params.tokenId } })
     .then((reset) => {
       if (!reset) {
         // TODO: replace with StatusError
         res.status(404).send();
       } else {
-        res.redirect(`/reset/${req.params.tokenId}`);
+        res.redirect(`/resetpassword/${req.params.tokenId}`);
       }
     })
     .catch(next);

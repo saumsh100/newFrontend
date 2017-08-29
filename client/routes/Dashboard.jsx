@@ -56,8 +56,8 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   const signUp = /^\/signup\/.+$/i;
   const urlTest = (signUp.test(history.location.pathname) ? history.location.pathname : '/signup');
 
-  const reset = /^\/reset\/.+$/i;
-  const resetTest = (reset.test(history.location.pathname) ? history.location.pathname : '/reset');
+  const reset = /^\/resetpassword\/.+$/i;
+  const resetTest = (reset.test(history.location.pathname) ? history.location.pathname : '/resetpassword');
 
   return (
     <Router history={history}>
