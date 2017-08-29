@@ -54,6 +54,7 @@ authRouter.post('/resetpassword', (req, res, next) => {
 
   // this is for heroku to create the right http link it uses
   // x-forward-proto for https but shows http in req.protocol
+  console.log(JSON.stringify(req.headers));
   if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] === 'http') {
     protocol = 'https';
   }
