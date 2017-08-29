@@ -1,0 +1,9 @@
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  color: #fafafa;
+  composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+  text-align: center;
+}

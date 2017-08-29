@@ -43,3 +43,20 @@
 .fbLoginButton {
   margin-top: 20px;
 }
+
+.forgotPassword {
+  padding-top: 15px;
+  display: flex;
+  width: 100%;
+
+  &_text {
+    composes: subHeaderExtraSmall from 'sass-loader!../../fonts.scss';
+    margin: 0 auto;
+
+    &:hover {
+      color: $primary-color;
+      cursor: pointer;
+    };
+  }
+}
+
