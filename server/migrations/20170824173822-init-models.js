@@ -661,6 +661,23 @@ module.exports = {
         type: DataTypes.DATE,
       },
     });
+
+    await queryInterface.removeIndex(
+      'Patients',
+      ['accountId', 'email'],
+      {
+        indicesType: 'UNIQUE',
+      }
+    );
+
+    await queryInterface.removeIndex(
+      'Patients',
+      ['accountId', 'mobilePhoneNumber'],
+      {
+        indicesType: 'UNIQUE',
+      }
+    );
+
     await queryInterface.addIndex(
       'Patients',
       ['accountId', 'email'],
