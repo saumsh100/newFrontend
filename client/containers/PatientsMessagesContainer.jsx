@@ -113,7 +113,11 @@ class PatientsMessagesContainer extends Component {
 
     //allow for patients with not chat messages be searched and messages can be sent
 
-    currentChat = (selectedChat ? selectedChat : chatOrder.toArray()[0]);
+    const sortedChat = this.props.chats.toArray().sort((a, b) => {
+      return new Date(b.lastTextMessageDate) - new Date(a.lastTextMessageDate);
+    });
+
+    currentChat = selectedChat || sortedChat[0];
 
     if (!selectedChat && selectedChatPatient) {
       currentChat = null;

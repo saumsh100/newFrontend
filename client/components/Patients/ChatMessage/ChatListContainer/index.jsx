@@ -21,8 +21,11 @@ class ChatListContainer extends Component {
   }
 
   render() {
+    const sortedChat = this.props.chats.toArray().sort((a, b) => {
+      return new Date(b.lastTextMessageDate) - new Date(a.lastTextMessageDate);
+    });
 
-    const everyone = (this.props.chats.size ? (this.props.chats.toArray().map((chats) => {
+    const everyone = (sortedChat.length ? (sortedChat.map((chats) => {
       const chat = JSON.parse(JSON.stringify(chats));
 
       if (!chat.textMessages[0]) {
