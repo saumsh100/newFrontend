@@ -101,7 +101,7 @@ class General extends React.Component {
                 activeAccount={activeAccount}
               />
             </div>
-            <div className={styles.drop}>
+            {/*<div className={styles.drop}>
               <Header
                 title="Logo"
                 contentHeader
@@ -111,7 +111,7 @@ class General extends React.Component {
                   <p>Drop logo here or click to select file.</p>
               </Dropzone>
               {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
-            </div>
+            </div>*/}
           </div>
           <Header
             title="Contact Information"

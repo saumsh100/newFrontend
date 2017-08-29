@@ -74,6 +74,9 @@ class AppointmentsList extends Component {
           const patient= patients.get(app.patientId);
           const service= services.get(app.serviceId);
 
+          if (!patient) {
+            return null;
+          }
           return (
             <AppointmentsItem
               key={`appointmentsList${index}`}

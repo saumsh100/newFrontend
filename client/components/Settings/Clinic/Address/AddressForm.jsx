@@ -148,6 +148,7 @@ class AddressForm extends React.Component {
                 component="DropdownSelect"
                 options={options}
                 data-test-id="timezone"
+                search
               />
             </div>
           </div>

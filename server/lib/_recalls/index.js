@@ -50,11 +50,17 @@ export async function sendRecallsForAccount(account, date) {
         primaryType: recall.primaryType,
       });
 
-      const data = await sendRecall[primaryType]({
-        patient,
-        account,
-        lastAppointment,
-      });
+      let data;
+
+      try {
+        data = await sendRecall[primaryType]({
+          patient,
+          account,
+          lastAppointment,
+        });
+      } catch (error) {
+
+      }
 
       console.log(`${primaryType} recall sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentRecall.update({ isSent: true });

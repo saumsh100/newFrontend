@@ -229,13 +229,6 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
   const joinObject = {};
 
   // Some default code to ensure we don't pull the entire conversation for each chat
-  joinObject.textMessages = {
-    _apply: (sequence) => {
-      return sequence
-        .orderBy('createdAt')
-        .limit(limitted);
-    },
-  };
 
   return Chat.findOne({
     where: { patientId: req.params.patientId },
@@ -254,7 +247,12 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
         required: false,
       }],
     }],
-  }).then(chat => res.send(normalize('chat', chat.get({ plain: true }))))
+  }).then((chat) => {
+    if (!chat) {
+      return res.send(200);
+    }
+    return res.send(normalize('chat', chat.get({ plain: true })));
+  })
   .catch(next);
 });
 

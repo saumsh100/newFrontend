@@ -43,12 +43,10 @@ const PATHS = {
       to: '/settings/schedule/reminderslist',
       label: 'Reminders',
       icon: 'clock-o',
-      disabled: true,
     },
     {
       to: '/settings/schedule/recalls',
       label: 'Recalls',
-      disabled: true,
     },
     {
       to: '',

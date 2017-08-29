@@ -26,10 +26,6 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
     endDate,
   } = query;
 
-
-  startDate = startDate || moment().subtract(1, 'years').toISOString();
-  endDate = endDate || moment().toISOString();
-
   const include = includeArray.map((included) => {
     if (included.as === 'recall') {
       return {
@@ -45,9 +41,9 @@ sentRecallsRouter.get('/', checkPermissions('sentRecalls:read'), (req, res, next
     nest: true,
     where: {
       accountId,
+      isSent: true,
       createdAt: {
-        $lte: endDate,
-        $gte: startDate,
+        $gte: moment().startOf('day').toISOString(),
       },
     },
     include,

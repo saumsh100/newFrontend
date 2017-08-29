@@ -22,7 +22,7 @@ const sentReminder = {
   isSent: true,
   lengthSeconds: 540,
   primaryType: 'email',
-  createdAt: '2017-07-19T00:14:30.932Z',
+  createdAt: new Date().toISOString(),
 };
 
 async function seedTestSentReminder() {
@@ -57,7 +57,7 @@ describe('/api/sentReminders', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['homePhoneNumber', 'insurance', 'otherPhoneNumber', 'prefPhoneNumber', 'workPhoneNumber']);
+          body = omitPropertiesFromBody(body, ['homePhoneNumber', 'insurance', 'otherPhoneNumber', 'prefPhoneNumber', 'workPhoneNumber', 'createdAt']);
           expect(body).toMatchSnapshot();
         });
     });

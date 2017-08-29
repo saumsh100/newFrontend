@@ -8,6 +8,7 @@ const SentRecallSchema = {
   accountId: null,
   patientId: null,
   isConfirmed: null,
+  isSent: null,
 };
 
 export default class SentRecall extends createModel(SentRecallSchema) {

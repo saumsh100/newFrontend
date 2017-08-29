@@ -5,13 +5,14 @@ const authMiddleware = require('../../../middleware/auth');
 const checkPermissions = require('../../../middleware/checkPermissions');
 
 const normalize = require('../normalize');
+
 const _ = require('lodash');
 const uuid = require('uuid');
 const upload = require('../../../lib/upload');
 import moment from 'moment-timezone';
 
 import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair } from '../../../_models';
-
+import format from '../../util/format';
 
 practitionersRouter.param('practitionerId', sequelizeLoader('practitioner', 'Practitioner'));
 
@@ -33,7 +34,7 @@ practitionersRouter.get('/', (req, res, next) => {
     practitioners = practitioners.map((practitioner) => {
       return practitioner.get({ plain: true });
     });
-    return res.send(normalize('practitioners', practitioners));
+    return res.send(format(req, res, 'practitioners', practitioners));
   }).catch(next);
 });
 
@@ -68,7 +69,7 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, re
       .then((practitioner) => {
         practitioner = practitioner.get({ plain: true });
         practitioner.weeklySchedule = weeklySchedule;
-        return res.status(201).send(normalize('practitioner', practitioner));
+        return res.status(201).send(format(req, res, 'practitioner', practitioner));
       });
     });
   }).catch(next);
@@ -79,7 +80,7 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, re
  */
 practitionersRouter.get('/:practitionerId', checkPermissions('practitioners:read'), (req, res, next) => {
   return Promise.resolve(req.practitioner.get({ plain: true }))
-  .then(practitioner => res.send(normalize('practitioner', practitioner)))
+  .then(practitioner => res.send(format(req, res, 'practitioner', practitioner)))
   .catch(next);
 });
 
@@ -131,7 +132,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
       })
       .then((practitionerDel) => {
         practitionerDel = practitionerDel.get({ plain: true });
-        return res.send(normalize('practitioner', practitionerDel));
+        return res.send(format(req, res, 'practitioner', practitionerDel));
       });
     });
   }).catch(next)

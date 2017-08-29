@@ -20,7 +20,7 @@ export default function ShowPatientInfo(props) {
   const endHourMinute = moment(appointment.endDate).format('h:mm a');
   const time = startHourMinute.concat('-', endHourMinute);
 
-  const age = moment().diff(patient.birthDate, 'years');
+  const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
   return (
