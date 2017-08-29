@@ -6,6 +6,7 @@ const ChatSchema = {
   accountId: null,
   patientId: null,
   textMessages: null,
+  lastTextMessageDate: null,
 };
 
 export default class Chat extends createModel(ChatSchema) {
