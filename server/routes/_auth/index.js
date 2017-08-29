@@ -51,6 +51,7 @@ authRouter.post('/resetpassword', (req, res, next) => {
   const token = uuid();
 
   const fullUrl = `${req.protocol}://${req.get('host')}/reset/${token}`;
+  console.log(req.protocol)
 
   User.findOne({ where: { username: email } })
     .then(async (user) => {
