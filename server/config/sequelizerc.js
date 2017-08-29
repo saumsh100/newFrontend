@@ -15,5 +15,7 @@ module.exports = {
   database: postgres.database,
   host: postgres.host,
   port: postgres.port,
+  username: postgres.username,
+  password: postgres.password,
   dialectOptions,
 };
