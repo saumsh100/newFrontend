@@ -138,6 +138,20 @@ export function resetPassword(email) {
   };
 }
 
+export function resetUserPassword(location, values) {
+  return (dispatch, getState) => {
+    const url = `${location.pathname}`;
+    return axios
+      .post(url, values)
+      .then(()=> {
+        dispatch(push('/login'));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export function load() {
   return (dispatch) => {
     const token = localStorage.getItem('token');
