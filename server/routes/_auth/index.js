@@ -50,7 +50,16 @@ authRouter.post('/resetpassword', (req, res, next) => {
   const email = body.email;
   const token = uuid();
 
-  const fullUrl = `${req.protocol}://${req.get('host')}/reset/${token}`;
+  let protocol = req.protocol;
+
+  // this is for heroku to create the right http link it uses
+  // x-forward-proto for https but shows http in req.protocol
+
+  if (req.headers['x-forwarded-proto'] === 'https') {
+    protocol = 'https';
+  }
+
+  const fullUrl = `${protocol}://${req.get('host')}/reset/${token}`;
 
   User.findOne({ where: { username: email } })
     .then(async (user) => {
