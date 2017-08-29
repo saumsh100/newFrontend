@@ -3,7 +3,10 @@ import { Router } from 'express';
 import omit from 'lodash/omit';
 import { UserAuth } from '../../lib/_auth';
 import { loadPermissionsSequelize } from '../../lib/permissions';
-import { User } from '../../_models';
+import { User, PasswordReset } from '../../_models';
+import { resetPasswordEmail } from '../../lib/resetPasswordEmail';
+
+const uuid = require('uuid').v4;
 
 const authRouter = Router();
 
@@ -39,17 +42,78 @@ authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) 
     .catch(next)
 );
 
-authRouter.post('/resetpassword', ({ body: { email } }, res, next) => {
+authRouter.post('/resetpassword', (req, res, next) => {
+  const {
+    body,
+  } = req;
 
-  User.findOne({ where: { username: email  } })
-    .then((user) => {
-      console.log(user);
-      //res.send({ exists: !!user });
+  const email = body.email;
+  const token = uuid();
+
+  const fullUrl = `${req.protocol}://${req.get('host')}/resetlink/${token}`;
+
+  User.findOne({ where: { username: email } })
+    .then(async (user) => {
+      if (!user) {
+        res.send(400);
+      }
+
+      await PasswordReset.create({
+        email,
+        token,
+      });
+
+      const mergeVars = [
+        {
+          name: 'RESET_URL',
+          content: fullUrl,
+        },
+      ];
+
+      resetPasswordEmail({
+        subject: 'Reset Password',
+        toEmail: email,
+        mergeVars,
+      }).catch(err => console.log(err));
+
+      return res.sendStatus(201);
     })
     .catch(next);
+});
 
-  //res.status(200).send({email})
-  //return email;
+authRouter.post('/resetpassword/:token', (req, res, next) => {
+  const {
+    body,
+    params,
+  } = req;
+
+  const token = params.token;
+
+  const email = body.email;
+
+  const fullUrl = `${req.protocol}://${req.get('host')}/resetlink/${token}`;
+
+  User.findOne({ where: { username: email } })
+    .then((user) => {
+      if (!user) {
+        res.send(400);
+      }
+
+      const mergeVars = [
+        {
+          name: 'RESET_URL',
+          content: fullUrl,
+        },
+      ];
+      resetPasswordEmail({
+        subject: 'Reset Password',
+        toEmail: email,
+        mergeVars,
+      });
+      console.log(user);
+      res.sendStatus(201);
+    })
+    .catch(next);
 });
 
 module.exports = authRouter;

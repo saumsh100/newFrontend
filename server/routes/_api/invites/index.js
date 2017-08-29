@@ -84,7 +84,7 @@ invitesRouter.post('/:accountId/invites', async (req, res, next) => {
           ];
 
           sendInvite({
-            subject: 'Test',
+            subject: "You're Invited",
             toEmail: invite.email,
             mergeVars,
           });

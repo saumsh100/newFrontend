@@ -13,6 +13,7 @@ import sequelizeMyRouter from './_my';
 import twilioRouterSequelize from './_twilio';
 // import signupRouter from './signup';
 import signupRouterSequelize from './_signup';
+import resetRouter from './reset';
 /*import {
   Appointment,
   Invite,
@@ -23,6 +24,7 @@ import {
   Appointment,
   Invite,
   Token,
+  PasswordReset,
   User,
 } from '../_models';
 import { sequelizeLoader } from './util/loaders';
@@ -41,6 +43,7 @@ rootRouter.use('/_auth', sequelizeAuthRouter);
 rootRouter.use('/auth', sequelizeAuthRouter);
 
 rootRouter.use('/signup', signupRouterSequelize);
+rootRouter.use('/reset', resetRouter); //this is sequelize
 rootRouter.use('/_signup', signupRouterSequelize);
 
 // Bind REST API
@@ -61,6 +64,19 @@ rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
         res.status(404).send();
       } else {
         res.redirect(`/signup/${req.params.tokenId}`);
+      }
+    })
+    .catch(next);
+});
+
+rootRouter.get('/resetlink/:tokenId', (req, res, next) => {
+  return PasswordReset.findOne({ token: req.params.tokenId })
+    .then((reset) => {
+      if (!reset) {
+        // TODO: replace with StatusError
+        res.status(404).send();
+      } else {
+        res.redirect(`/reset/${req.params.tokenId}`);
       }
     })
     .catch(next);

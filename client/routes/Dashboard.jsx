@@ -56,6 +56,9 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   const signUp = /^\/signup\/.+$/i;
   const urlTest = (signUp.test(history.location.pathname) ? history.location.pathname : '/signup');
 
+  const reset = /^\/reset\/.+$/i;
+  const resetTest = (reset.test(history.location.pathname) ? history.location.pathname : '/reset');
+
   return (
     <Router history={history}>
       <div>
@@ -63,7 +66,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
           <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
           <Route exact path={urlTest} render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
           <Route exact path="/forgot" render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)} />
-          <Route exact path="/reset" render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)} />
+          <Route exact path={resetTest} render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)} />
           <Route path="/" component={Dashboard} />
         </Switch>
       </div>
