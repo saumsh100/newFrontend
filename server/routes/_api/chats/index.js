@@ -43,6 +43,8 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
           required: false,
         },
       ];
+      // include.order = [['createdAt', 'ASC']];
+      include.required = true;
     }
     return include;
   });
@@ -54,7 +56,10 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
     offset: skipped,
     include: newIncludeArray,
   }).then((chats) => {
-    const allChats = chats.map(chat => chat.get({ plain: true }))
+    const allChats = chats.map(chat => {
+      console.log(chat.lastTextMessageDate)
+      return chat.get({ plain: true })
+    })
     return res.send(normalize('chats', allChats));
   })
   .catch(next);
@@ -140,7 +145,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
         },
         required: false,
       }],
-      required: false,
+      required: true,
     },
   ];
 
