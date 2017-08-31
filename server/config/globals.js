@@ -52,6 +52,11 @@ const namespaces = {
   sync: '/sync',
 };
 
+const callrails = {
+  apiKey: environmentVariables.CALLRAIL_API_KEY,
+  apiAccount: environmentVariables.CALLRAIL_API_ACCOUNTID,
+};
+
 const vendasta = {
   apiKey: environmentVariables.VENDASTA_API_KEY,
   apiUser: environmentVariables.VENDASTA_API_USER,
@@ -134,4 +139,5 @@ module.exports = {
   aws,
   s3,
   postgres,
+  callrails,
 };

@@ -20,6 +20,8 @@ import {
 } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { UserAuth } from '../../../lib/_auth';
+import createAccount from '../../../lib/createAccount';
+
 const { timeWithZone } = require('../../../util/time');
 
 const enterprisesRouter = Router();
@@ -117,15 +119,15 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
 /**
  * POST /:enterpriseId/accounts
  */
-enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), (req, res, next) => {
+enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), async (req, res, next) => {
   const accountData = {
     ...pick(req.body, 'name', 'timezone', 'id'),
     enterpriseId: req.enterprise.id,
   };
 
   const timezone = req.body.timezone;
-
-  Account.create(accountData)
+  await createAccount("Blas")
+  return Account.create(accountData)
     .then((account) => {
       const defaultReminders = [
         {
