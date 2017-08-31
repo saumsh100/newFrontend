@@ -11,7 +11,7 @@ export default function AverageRating(props) {
 
   const rows = [];
   for (let i = 1; i < count; i++) {
-    rows.push(<Star key={i} size={1.3} />);
+    rows.push(<Star key={i} size={1.8} />);
   }
 
   return (

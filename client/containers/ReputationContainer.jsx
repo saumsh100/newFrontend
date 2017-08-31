@@ -1,8 +1,8 @@
 
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
-import { connect } from 'react-redux';
 import Reputation from '../components/Reputation';
 
 class ReputationContainer extends Component {
@@ -18,6 +18,12 @@ class ReputationContainer extends Component {
   }
 
   render() {
+    const {
+      reviews,
+      listings,
+    } = this.props;
+
+    console.log(reviews);
     return (
       <div>
         <Reputation {...this.props} />
@@ -34,7 +40,11 @@ ReputationContainer.propTypes = {
 function mapStateToProps({ apiRequests }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
   const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
-  return {};
+
+  return {
+    reviews,
+    listings,
+  };
 }
 
 function mapDispatchToProps(dispatch) {

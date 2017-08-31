@@ -165,8 +165,9 @@
 }
 
 .tab {
-  font-family: $medium-font;
+  //font-family: $medium-font;
   color: $primary-darkgrey;
+  @extend .letterSpacing;
 }
 
 .textPreviews {

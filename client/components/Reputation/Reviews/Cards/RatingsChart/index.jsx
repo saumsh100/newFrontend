@@ -19,7 +19,7 @@ export default function RatingsChart(props) {
         {ratingStars.map((r, index) => {
           const rows = [];
           for (let i = 1; i <= r; i++) {
-            rows.push(<Star key={i} size={1.3} />);
+            rows.push(<Star key={i} size={1.8} />);
           }
           const width = rating[r] ? (Math.floor((rating[r] / maxValue) * 80)) : 5;
           const style = { width: `${width}%` };
