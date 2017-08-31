@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import Container from '../../containers/EnterprisesContainer';
-import List from '../../components/Admin/Enterprises/List/index';
-import Create from '../../components/Admin/Enterprises/Form/index';
+import List from '../../components/Admin/Enterprises/List';
+import Create from '../../components/Admin/Enterprises/Form';
 import Accounts from './Accounts';
 
 const base = (path = '') => `/admin/enterprises${path}`;

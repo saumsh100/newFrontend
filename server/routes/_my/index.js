@@ -95,7 +95,7 @@ sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
         const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(account.id));
 
         // TODO: need to be able to minify and compress code UglifyJS
-        res.send(replacedWidgetJS);
+        res.type('javascript').send(replacedWidgetJS);
       });
     });
   } catch (err) {

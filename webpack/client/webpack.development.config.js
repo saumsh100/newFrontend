@@ -28,7 +28,7 @@ const {
 } = env;
 
 const developmentConfig = merge(baseConfig, {
-  entry: entries('app', 'patient', 'reviews', 'cc'),
+  entry: entries('app', 'patient', 'reviews'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {

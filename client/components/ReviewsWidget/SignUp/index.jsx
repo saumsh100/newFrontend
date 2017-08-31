@@ -48,7 +48,7 @@ class SignUp extends Component {
           onSubmit={this.handleSignUp}
           submitButton={customSubmitButton}
         />
-        <Link to="/login">
+        <Link to="./login">
           <h3>Or Login</h3>
         </Link>
       </div>

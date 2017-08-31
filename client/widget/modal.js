@@ -5,7 +5,7 @@
  * @param modalBody
  * @constructor
  */
-function Modal({ modalBody }) {
+function Modal() {
   const overlay = document.createElement('div');
   overlay.className = 'CareCruModal';
 
@@ -14,7 +14,7 @@ function Modal({ modalBody }) {
 
   const body = document.getElementsByTagName('body')[0];
 
-  inner.appendChild(modalBody);
+  // inner.appendChild(modalBody);
   overlay.appendChild(inner);
   body.appendChild(overlay);
 
@@ -23,13 +23,17 @@ function Modal({ modalBody }) {
 }
 
 Modal.prototype.open = function() {
-  this.overlay.className = `${this.overlay.className} active`;
-  this.inner.className = `${this.inner.className} active`;
+  const oc = this.overlay.className;
+  const ic = this.inner.className;
+  const overlayAlreadyActive = oc.indexOf('active') > -1;
+  const innerAlreadyActive = ic.indexOf('active') > -1;
+  this.overlay.className = overlayAlreadyActive ? oc  : `${oc} active`;
+  this.inner.className = innerAlreadyActive ? ic : `${ic} active`;
 };
 
 Modal.prototype.close = function() {
-  this.overlay.className = this.overlay.className.replace('active', '');
-  this.inner.className = this.inner.className.replace('active', '');
+  this.overlay.className = this.overlay.className.replace(' active', '');
+  this.inner.className = this.inner.className.replace(' active', '');
 };
 
 export default Modal;

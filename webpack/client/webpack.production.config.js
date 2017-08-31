@@ -12,7 +12,7 @@ const entries = appEntries(name => [
 console.log('INTERCOM_APP_ID', process.env.INTERCOM_APP_ID);
 
 const developmentConfig = merge(baseConfig, {
-  entry: entries('app', 'patient', 'reviews'),
+  entry: entries('app', 'patient', 'reviews', 'cc'),
 
   plugins: [
     new webpack.DefinePlugin({

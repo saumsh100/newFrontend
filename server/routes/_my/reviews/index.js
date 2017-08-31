@@ -3,12 +3,17 @@ import { Router } from 'express';
 import fs from 'fs';
 import { Review } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
-import { replaceJavascriptFile } from '../../../util/file';
+import { readFile, replaceJavascriptFile } from '../../../util/file';
+import normalize from '../../_api/normalize';
 
 const reviewsRouter = Router();
 
 reviewsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 reviewsRouter.param('reviewId', sequelizeLoader('review', 'Review'));
+reviewsRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
+  { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
+  { association: 'practitioners', required: false, where: { isActive: true } },
+]));
 
 /**
  * GET /:accountId/embed
@@ -16,11 +21,37 @@ reviewsRouter.param('reviewId', sequelizeLoader('review', 'Review'));
  * - 200 serves reviews embed page
  * - 404 :accountId does not exist
  */
-reviewsRouter.get('/:accountId/embed', async (req, res, next) => {
+reviewsRouter.get('/:accountIdJoin/embed(/*)?', async (req, res, next) => {
   try {
+    const { entities } = normalize('account', req.account.get({ plain: true }));
+    let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
+    for (let i = 0; i < req.account.services.length; i++) {
+      if (req.account.services[i].isDefault) {
+        selectedServiceId = req.account.services[i].id;
+      }
+    }
+
+    const responseAccount = req.account.get({ plain: true });
+    const responseServices = req.account.services.map((service) => {
+      return service.get({ plain: true });
+    });
+
+    const responsePractitioners = req.account.practitioners.map((practitioner) => {
+      return practitioner.get({ plain: true });
+    });
+
     const { account } = req;
     const rawAccount = account.get({ plain: true });
     const initialState = {
+      availabilities: {
+        account: responseAccount,
+        services: responseServices,
+        practitioners: responsePractitioners,
+        selectedServiceId,
+      },
+
+      entities,
+
       reviews: {
         account: rawAccount,
       },
@@ -44,10 +75,6 @@ function replaceIndex(string, regex, index, repl) {
     return match;
   });
 }
-
-const toString = str => `"${str}"`;
-const toTemplateString = str => `\`${str}\``;
-const getPath = filename => `${__dirname}/../../routes/_my/reviews/${filename}`;
 
 reviewsRouter.get('/:accountId/reviews.js', async (req, res, next) => {
   try {
@@ -109,11 +136,24 @@ reviewsRouter.put('/:reviewId', async (req, res, next) => {
  * This is a very important route that returns
  *
  */
+
+const toString = str => `'${str}'`; // single-line text
+const toTemplateString = str => `\`${str}\``; // multi-line text
+
 reviewsRouter.get('/:accountId/cc.js', async (req, res, next) => {
   try {
     const { account } = req;
-    const path = `${process.cwd()}/statics/assets/cc.js`;
-    const js = await replaceJavascriptFile(path);
+    const cwd = process.cwd();
+    const jsPath = `${cwd}/statics/assets/cc.js`;
+    const cssPath = `${cwd}/server/routes/_my/reviews/widget.css`;
+    const iframeSrc = `${req.protocol}://${req.headers.host}/reviews/${account.id}/embed`;
+    const js = await replaceJavascriptFile(jsPath, {
+      __CARECRU_ACCOUNT_ID__: toString(account.id),
+      __CARECRU_WIDGET_PRIMARY_COLOR__: toString(account.bookingWidgetPrimaryColor || '#FF715A'),
+      __CARECRU_STYLE_CSS__: toTemplateString(await readFile(cssPath)),
+      __CARECRU_IFRAME_SRC__: toString(iframeSrc),
+    });
+
     res.type('javascript').send(js);
   } catch (err) {
     next(err);

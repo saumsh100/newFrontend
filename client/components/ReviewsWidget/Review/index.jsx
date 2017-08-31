@@ -18,7 +18,7 @@ class Review extends Component {
     // Create review then send to next step
     return this.props.createReview(values)
       .then(() => {
-        this.props.history.push('/signup');
+        this.props.history.push('./signup');
       });
   }
 

@@ -11,6 +11,7 @@ import Immutable from 'immutable';
 import time from '../../server/util/time';
 import App from './Reviews';
 import configure from '../store/reviewsStore';
+import connectStoreToHost from '../widget/connectStoreToHost';
 import { loadPatient } from '../thunks/patientAuth';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 
@@ -21,6 +22,9 @@ LogRocket.init(process.env.LOGROCKET_APP_ID);
 
 const browserHistory = createBrowserHistory();
 const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
+
+// Bind event handlers from parent
+connectStoreToHost(store);
 
 loadPatient()(store.dispatch).then(() => {
   const { auth } = store.getState();
@@ -60,3 +64,7 @@ loadPatient()(store.dispatch).then(() => {
     module.hot.accept('./Reviews', () => render(App));
   }
 });
+
+
+
+

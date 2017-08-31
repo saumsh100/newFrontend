@@ -5,6 +5,7 @@ import { reducer as form } from 'redux-form';
 import mapValues from 'lodash/mapValues';
 import auth from './patientAuth';
 import entities, { createInitialEntitiesState } from './entities';
+import availabilities, { createInitialWidgetState } from './availabilities';
 import reviews, { createInitialReviewsState } from './reviewsWidget';
 
 export default combineReducers({
@@ -13,9 +14,11 @@ export default combineReducers({
   auth,
   entities,
   reviews,
+  availabilities,
 });
 
 const reducerCreators = {
+  availabilities: createInitialWidgetState,
   entities: createInitialEntitiesState,
   reviews: createInitialReviewsState,
 };

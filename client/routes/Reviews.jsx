@@ -1,39 +1,56 @@
-
-import React, { PropTypes } from 'react';
-import { MemoryRouter } from 'react-router';
-import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter as Router } from 'react-router-redux';
+import React, {PropTypes} from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {ConnectedRouter as Router} from 'react-router-redux';
 import ReviewsWidget from '../components/ReviewsWidget';
 import Review from '../components/ReviewsWidget/Review';
 import Login from '../components/ReviewsWidget/Login';
 import SignUp from '../components/ReviewsWidget/SignUp';
-import Submitted from '../components/ReviewsWidget/Submitted';
+import PatientApp from '../containers/PatientApp';
+import Submitted from '../components/ReviewsWidget/Review/Submitted';
 
-const ReviewsRouter = ({ history }) => {
+const base = (path = '') => `/reviews/:accountId/embed${path}`;
+
+const ReviewsRouter = ({ match }) => {
+  const b = (path = '') => `${match.url}${path}`;
+  return (
+    <Switch>
+      <Route exact path={b()} component={Review} />
+      <Route exact path={b('/submitted')} component={Submitted} />
+    </Switch>
+  );
+};
+
+const EmbedRouter = ({ match }) => {
+  const b = (path = '') => `${match.url}${path}`;
+  return (
+    <Switch>
+      <Redirect exact from={b()} to={b('/review')} />
+      <Route path={b('/review')} component={ReviewsRouter} />
+      <Route exact path={b('/login')} component={Login} />
+      <Route exact path={b('/signup')} component={SignUp} />
+    </Switch>
+  );
+};
+
+const WidgetRouter = ({ history }) => {
   return (
     <Router history={history}>
       <div>
-        {/*<Route component={ReviewsWidget} />*/}
+        {/* TODO: Booking widget will soon become part of app */}
+        <Route exact path={base('/book')} component={PatientApp} />
+        {/* TODO: ReviewsWidget will ultimately become just the widget container */}
         <ReviewsWidget>
-          <MemoryRouter
-            initialEntries={['/review', '/signup', '/login', '/submitted']}
-            initialIndex={0}
-          >
-            <div>
-              <Route path="/review" component={Review} />
-              <Route path="/signup" component={SignUp} />
-              <Route path="/login" component={Login} />
-              <Route path="/submitted" component={Submitted} />
-            </div>
-          </MemoryRouter>
+          <Switch>
+            <Route path={base()} component={EmbedRouter} />
+          </Switch>
         </ReviewsWidget>
       </div>
     </Router>
   );
 };
 
-ReviewsRouter.propTypes = {
+WidgetRouter.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-export default ReviewsRouter;
+export default WidgetRouter;

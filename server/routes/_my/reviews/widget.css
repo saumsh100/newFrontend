@@ -124,7 +124,7 @@
 
  */
 
-.CareCruIframe {
+#CareCruIframe {
   z-index: 101;
   position: absolute;
   top:0;

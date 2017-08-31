@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link, Stars } from '../../library';
+import { Link, Stars } from '../../../library/index';
 import styles from './styles.scss';
 
 class Submitted extends Component {
@@ -29,7 +29,7 @@ class Submitted extends Component {
             - Dr. Sheridan Lee
           </div>
         </div>
-        <Link to="/review">
+        <Link to="../review">
           <h3>Back to Beginning</h3>
         </Link>
       </div>

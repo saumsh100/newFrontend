@@ -35,7 +35,7 @@ class Login extends Component {
         return this.props.updateReview();
       })
       .then(() => {
-        this.props.history.push('/submitted');
+        this.props.history.push('./submitted');
       })
       .catch(({ data, status }) => {
         // TODO: this needs proper error handling for the form
@@ -54,7 +54,7 @@ class Login extends Component {
           onLogin={this.handleLogin}
           submitButton={customSubmitButton}
         />
-        <Link to="/signup">
+        <Link to="./signup">
           <h3>Or Signup</h3>
         </Link>
       </div>
