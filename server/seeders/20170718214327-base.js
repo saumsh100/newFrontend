@@ -40,6 +40,7 @@ const enterprise = {
 
 const account = {
   id: accountId,
+  vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
   enterpriseId,
   weeklyScheduleId,
   name: 'Test Account',
@@ -51,6 +52,7 @@ const account = {
 
 const account2 = {
   id: accountId2,
+  vendastaId: 'UNIQUE_CUSTOMER_IDENTIFIER',
   enterpriseId,
   city: 'Kostolac',
   name: 'Test Account 2',
