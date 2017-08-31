@@ -3,13 +3,21 @@ import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import Reputation from '../components/Reputation';
 
 class ReputationContainer extends Component {
   componentDidMount() {
+    // can change range
+    const params = {
+      startDate: moment().subtract(30, 'days')._d,
+      endDate: moment()._d,
+    };
+
     this.props.fetchEntitiesRequest({
       id: 'reviews',
       url: '/api/reputation/reviews',
+      params,
     });
     this.props.fetchEntitiesRequest({
       id: 'listings',
