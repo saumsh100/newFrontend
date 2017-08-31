@@ -21,6 +21,8 @@ const ownerUserId = '5668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const weeklyScheduleId = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 const clinicPhoneNumber = '+17786558613';
+const addressId = uuid();
+const addressId2 = uuid();
 
 
 const ROLES = {
@@ -42,9 +44,16 @@ const account = {
   id: accountId,
   enterpriseId,
   weeklyScheduleId,
+  addressId,
   name: 'Test Account',
-  city: 'Belgrade',
   twilioPhoneNumber: clinicPhoneNumber,
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
+const address = {
+  id: addressId,
+  city: 'Belgrade',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
@@ -52,8 +61,15 @@ const account = {
 const account2 = {
   id: accountId2,
   enterpriseId,
-  city: 'Kostolac',
+  addressId: addressId2,
   name: 'Test Account 2',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
+const address2 = {
+  id: addressId2,
+  city: 'Kostolac',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
@@ -142,6 +158,8 @@ module.exports = {
     await queryInterface.bulkInsert('Enterprises', [enterprise]);
 
     await queryInterface.bulkInsert('WeeklySchedules', [WeeklySchedule]);
+
+    await queryInterface.bulkInsert('Addresses', [address, address2]);
 
     await queryInterface.bulkInsert('Accounts', [account, account2]);
 
