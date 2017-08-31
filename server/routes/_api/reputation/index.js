@@ -1,4 +1,5 @@
 import { Account } from '../../../_models';
+import moment from 'moment';
 
 const reputationRouter = require('express').Router();
 const axios = require('axios');
@@ -7,6 +8,7 @@ const globals = require('../../../config/globals');
 
 const VENDASTA_LISTINGS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/';
 const VENDASTA_REVIEWS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/review/getStats/';
+const VENDASTA_REVIEWS_LOOKUP = 'https://reputation-intelligence-api.vendasta.com/api/v3/review/search/';
 const {
   apiKey,
   apiUser,
@@ -22,6 +24,11 @@ const fetchReviewsData = (account) => {
   return axios.post(reviewsUrl, { customerIdentifier: account.vendastaId });
 };
 
+const fetchReviewsLookup = (account, minDateTime, maxDateTime) => {
+  const reviewsUrl = `${VENDASTA_REVIEWS_LOOKUP}?apiKey=${apiKey}&apiUser=${apiUser}`;
+  return axios.post(reviewsUrl, { customerIdentifier: account.vendastaId, minDateTime, maxDateTime });
+};
+
 reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, next) => {
   return Account.findById(req.accountId).then((accountModel) => {
     const account = accountModel.get({ plain: true });
@@ -32,11 +39,21 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
 });
 
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
+  const {
+    startDate = moment().subtract(30, 'days')._d,
+    endDate = moment()._d
+  } = req.query;
+
   return Account.findById(req.accountId).then((accountModel) => {
     const account = accountModel.get({ plain: true });
-    fetchReviewsData(account)
-      .then(response => res.send(response.data))
-      .catch(error => next(error));
+    fetchReviewsLookup(account, moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss[Z]'), moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss[Z]'))
+    .then((resp) => {
+      fetchReviewsData(account)
+        .then((response) => {
+          response.data.reviews = resp.data.data;
+          return res.send(response.data);
+        });
+    });
   }).catch(error => next(error));
 });
 

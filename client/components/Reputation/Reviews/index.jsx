@@ -19,7 +19,7 @@ class Reviews extends Component {
       return null;
     }
 
-    
+
     const reviewsData = reviews.get('data').toJS();
 
     console.log(reviewsData);
