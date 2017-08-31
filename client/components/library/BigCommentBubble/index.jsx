@@ -95,7 +95,7 @@ export class BigCommentBubble extends Component {
                 {requiredAction}
               </div>
             }
-            <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt}</div>
+            <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt} Days Ago</div>
             <div className={styles.bigCommentBubble__attachments}>
               {attachments.map((at,i) => (<img key={i} src={at.src} />))}
             </div>

@@ -9,15 +9,27 @@ import styles from './styles.scss';
 
 class Listings extends Component {
   render() {
+
+    const {
+      listings,
+    } = this.props;
+
+    if (!listings) {
+      return null;
+    }
+
+    const listingsData = listings.get('data').toJS();
+    console.log(listingsData);
+
     const scoreData = [
-      { title: 'Industry Avg', count: 404 },
-      { title: 'Industry Avg', count: 404 },
+      { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
+      { title: 'Industry Leaders Average', count: listingsData.listingPointScore.industryLeadersAverage },
     ];
 
     const totalData = [
-      { icon: 'check', title: 'Accurate', count: 3 },
-      { icon: 'exclamation', title: 'Found with Possible Errors', count: 2 },
-      { icon: 'times', title: 'Not Found', count: 15 },
+      { icon: 'check', title: 'Accurate', count: listingsData.sourcesFound },
+      { icon: 'exclamation', title: 'Found with Possible Errors', count: listingsData.sourcesNotFound },
+      { icon: 'times', title: 'Not Found', count: listingsData.sourcesFoundWithErrors },
     ];
 
     const informationData = [
@@ -102,6 +114,7 @@ class Listings extends Component {
               borderColor={colorMap.blue}
               title="Listing Score"
               data={scoreData}
+              listingScore={listingsData.listingScore}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={4}>

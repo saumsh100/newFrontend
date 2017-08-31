@@ -19,16 +19,19 @@ class   Reviews extends Component {
       return null;
     }
 
-
     const reviewsData = reviews.get('data').toJS();
 
     const reviewsList = reviews.get('reviews').toJS();
 
-
     const contructBigComment = reviewsList.map((review) => {
+      const publishedDate = moment(review.publishedDateTime);
+      const today = moment();
+      const duration = moment.duration(today.diff(publishedDate));
+      const days = duration.asDays();
+
       return {
         icon: review.sourceName,
-        createdAt: moment(review.createdDateTime).format('DD/MM/YYYY hh:mma'),
+        createdAt: Math.ceil(days),
         headerLinkName: review.reviewerName,
         headerLinkSite: review.domain,
         siteStars: parseInt(review.rating),
@@ -42,45 +45,6 @@ class   Reviews extends Component {
         reviewerUrl: review.reviewerUrl,
       };
     });
-
-
-    const DataBigComment = [{
-      icon: 'facebook',
-      iconColor: '#ffffff',
-      background: '#395998',
-      iconAlign: 'flex-end',
-      requiredAction: 'ACTION REQUIRED',
-      headerLinkName: 'S. Lalala',
-      headerLinkSite: 'yelp.ca',
-      siteStars: 4,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
-      sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-      createdAt: moment().subtract(10, 'days').fromNow(),
-    }, {
-      icon: 'bitcoin',
-      iconColor: '#ffffff',
-      background: '#ffc55b',
-      iconAlign: 'center',
-
-      headerLinkName: "L. Linda",
-      headerLinkSite: "yelp.ca",
-      siteStars: 5,
-      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
-      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      createdAt: moment().subtract(10, 'days').fromNow()
-    },{
-      icon: "twitter",
-      iconColor: '#ffffff',
-      background: '#FF715A',
-      iconAlign: 'center',
-      requiredAction: 'ACTION REQUIRED',
-      headerLinkName: 'N. Blabla',
-      headerLinkSite: 'yelp.ca',
-      siteStars: 3,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
-      sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-      createdAt: moment().subtract(10, 'days').fromNow(),
-    }];
 
     const filters = [
       {

@@ -8,13 +8,14 @@ class Score extends Component {
       title,
       data,
       borderColor,
+      listingScore
     } = this.props;
 
     return (
       <Card className={styles.score}>
         <div className={styles.score__header}>
           <div className={styles.score__header_count}>
-            {data.length}
+            {listingScore.toFixed(0)}
           </div>
           <div className={styles.score__header_title}>
             {title}

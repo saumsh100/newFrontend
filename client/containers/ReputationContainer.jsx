@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from 'react-loader';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
-import Reputation from '../components/Reputation/Reviews';
+import Reputation from '../components/Reputation/Listings';
 
 
 class ReputationContainer extends Component {

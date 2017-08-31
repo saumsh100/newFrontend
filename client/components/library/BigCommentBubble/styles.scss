@@ -149,6 +149,8 @@
       flex-direction: row;
       font-size: $medium-size;
       font-weight: $large-weight;
+      text-decoration: none;
+      color: $primary-white;
     }
     &__actions {
       width: 50%;
