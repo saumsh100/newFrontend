@@ -8,7 +8,7 @@ import Listings from '../../components/Reputation/Listings';
 
 const base = (path = '') => `/reputation${path}`;
 
-const Patients = () =>
+const Reputation = () =>
   <Container>
     <DocumentTitle title="CareCru | Reputation">
       <Switch>
@@ -19,4 +19,4 @@ const Patients = () =>
     </DocumentTitle>
   </Container>;
 
-export default Patients;
+export default Reputation;

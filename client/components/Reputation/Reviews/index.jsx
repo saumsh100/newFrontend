@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import moment from 'moment';
 import { Card, Col, Grid, Row, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import GoogleMapsVideo from './Cards/GoogleMapsVideo';
@@ -7,10 +8,22 @@ import RatingsChart from './Cards/RatingsChart';
 import ReviewsCard from './Cards/ReviewsCard';
 import Tags from './Cards/Tags';
 import styles from './styles.scss';
-import moment from 'moment';
 
 class Reviews extends Component {
   render() {
+    const {
+      reviews,
+    } = this.props;
+
+    if (!reviews) {
+      return null;
+    }
+
+    
+    const reviewsData = reviews.get('data').toJS();
+
+    console.log(reviewsData);
+
     const rating = {
       5: 11,
       4: 8,
@@ -104,7 +117,7 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <AverageRating count={4.7} average={5}/>
+            <AverageRating count={reviewsData.industryAverageRating} average={reviewsData.industryAverageCount}/>
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>

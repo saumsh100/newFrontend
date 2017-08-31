@@ -9,6 +9,8 @@ export default function AverageRating(props) {
     average,
   } = props;
 
+  let countFloor = Math.floor(count);
+
   const rows = [];
   for (let i = 1; i < count; i++) {
     rows.push(<Star key={i} size={1.8} />);
@@ -17,12 +19,12 @@ export default function AverageRating(props) {
   return (
     <Card className={styles.card}>
       <div className={styles.stats}>
-        <span className={styles.stats__count} >{count}</span>
+        <span className={styles.stats__count} >{countFloor}</span>
         <span className={styles.stats__title} >Average Rating</span>
         <div className={styles.stats__rating}>
           {rows}
         </div>
-        <span className={styles.stats__bottom}>Industry Average {count}/{average}</span>
+        <span className={styles.stats__bottom}>Industry Average {countFloor}/{average}</span>
       </div>
     </Card>
   );

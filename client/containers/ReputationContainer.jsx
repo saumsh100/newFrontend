@@ -2,31 +2,42 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Loader from 'react-loader';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
-import Reputation from '../components/Reputation';
+import Reputation from '../components/Reputation/Reviews';
 
 class ReputationContainer extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+  }
+
   componentDidMount() {
-    this.props.fetchEntitiesRequest({
-      id: 'reviews',
-      url: '/api/reputation/reviews',
-    });
-    this.props.fetchEntitiesRequest({
-      id: 'listings',
-      url: '/api/reputation/listings',
+    Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'reviews',
+        url: '/api/reputation/reviews',
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'listings',
+        url: '/api/reputation/listings',
+      }),
+    ]).then(() => {
+      this.setState({
+        loaded: true,
+      });
     });
   }
 
   render() {
-    const {
-      reviews,
-      listings,
-    } = this.props;
-
-    console.log(reviews);
     return (
       <div>
-        <Reputation {...this.props} />
+        <Loader loaded={this.state.loaded} color="#FF715A">
+          <Reputation {...this.props} />
+        </Loader>
       </div>
     );
   }
