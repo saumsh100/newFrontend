@@ -73,12 +73,12 @@ export class BigCommentBubble extends Component {
           <div className={styles.bigCommentBubble__mainContent}>
             <div className={styles.bigCommentBubble__mainContent__header}>
               <span className={styles.bigCommentBubble__mainContent__header__link}>{headerLinkName}</span>
-              reviewed your buisiness on
+              reviewed your practice on
               <span className={styles.bigCommentBubble__mainContent__header__site}>{headerLinkSite}</span>
             </div>
             <div className={styles.bigCommentBubble__mainContent__rating}>
               {siteStars > 0 && [...Array(siteStars)].map((x, i) =>
-                <Icon key={i + 1} icon="star" />
+                <Icon key={i + 1} size={2} icon="star" />
               )}
             </div>
             <div className={styles.bigCommentBubble__mainContent__title}>

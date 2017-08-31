@@ -39,9 +39,7 @@
     box-shadow: 0px 2px 0px -4px rgba(0,0,0,0.33);
 
     &__header {
-      color: $primary-dark;
-      font-size: 14px;
-      font-weight: $large-weight;
+      composes: fontMedium from 'sass-loader!../../../fonts.scss';
       &__link {
         color: $primary-green;
         cursor: pointer;
