@@ -78,7 +78,7 @@ export class BigCommentBubble extends Component {
             </div>
             <div className={styles.bigCommentBubble__mainContent__rating}>
               {siteStars > 0 && [...Array(siteStars)].map((x, i) =>
-                <Icon key={i + 1} size={2} icon="star" />
+                <Icon key={i + 1} size={1.8} icon="star" />
               )}
             </div>
             <div className={styles.bigCommentBubble__mainContent__title}>

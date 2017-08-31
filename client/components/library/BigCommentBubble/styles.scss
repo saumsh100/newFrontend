@@ -72,15 +72,15 @@
     &__title {
       color: $primary-green;
       margin-bottom: 15px;
-      font-size: 14px;
-      font-weight: $large-weight;
+      composes: fontMedium from 'sass-loader!../../../fonts.scss';
+
     }
     &__rating {
       color: #ede27d;
       margin: 10px 0 10px 0;
     }
     &__preview {
-      color: $primary-dark;
+      letter-spacing: 0.5px;
       &__toggleButton {
         color: $primary-green;
         cursor: pointer;
@@ -88,9 +88,8 @@
       }
     }
     &__createdAt {
-      color: $primary-darkgrey;
-      font-weight: $large-weight;
-      font-size: $small-size;
+      color: lighten($primary-darkgrey, 20%);
+      composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
       margin-bottom: 5px;
       margin: 10px 0 10px 0;
     }

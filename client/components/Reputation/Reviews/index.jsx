@@ -123,7 +123,6 @@ class Reviews extends Component {
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
             <RatingsChart rating={rating} />
           </Col>
-
           <Col className={styles.padding} xs={12} md={12}>
             <Tags />
           </Col>
