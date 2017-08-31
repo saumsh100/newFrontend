@@ -47,9 +47,10 @@
     }
     &_text {
       color: $primary-dark;
+      composes: subHeaderMedium from 'sass-loader!../../../../../fonts.scss'
     }
     &_data {
-      color: $primary-darkgrey;
+      color: lighten($primary-darkgrey, 20%);
     }
   }
   &__body {

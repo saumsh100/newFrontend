@@ -27,7 +27,7 @@ class Information extends Component {
                 <div className={styles.total__body_item}>
                   <div className={styles.total__item}>
                     <div className={styles.total__item_wrapper}>
-                      <b className={styles.total__body_text}>{obj.title}</b>
+                      <span className={styles.total__body_text}>{obj.title}</span>
                     </div>
                     <div className={styles.total__item_wrapper}>
                       <span className={styles.total__body_data}>{obj.data}</span>

@@ -19,7 +19,10 @@ class Listings extends Component {
     }
 
     const listingsData = listings.get('data').toJS();
-    console.log(listingsData);
+    const getInfo = listings.get('accountInfo').toJS();
+    const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]];
+
+    console.log(listingsAcctInfo)
 
     const scoreData = [
       { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
@@ -33,13 +36,13 @@ class Listings extends Component {
     ];
 
     const informationData = [
-      { title: 'Business Name', data: 'ABC Dental Care' },
-      { title: 'Street Address', data: 'East 2nd Ave' },
-      { title: 'City', data: 'Vancouver' },
-      { title: 'State / Prov / Region ', data: 'BC' },
-      { title: 'Zip / Postal Code', data: 'V1B2C3' },
-      { title: 'Phone', data: '123 456 7890' },
-      { title: 'Website', data: 'https://www.abcdentalcare.com' },
+      { title: 'Business Name', data: listingsAcctInfo.companyName },
+      { title: 'Street Address', data: listingsAcctInfo.address },
+      { title: 'City', data: listingsAcctInfo.city },
+      { title: 'State / Prov / Region ', data: listingsAcctInfo.state },
+      { title: 'Zip / Postal Code', data: listingsAcctInfo.zip },
+      { title: 'Phone', data: listingsAcctInfo.workNumber },
+      { title: 'Website', data: listingsAcctInfo.website },
     ];
 
     const hardcodeTableData = [{

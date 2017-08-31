@@ -15,20 +15,19 @@
     padding-bottom: 10px;
     &_count {
       color: $primary-light-blue;
-      composes: fontJumbo from 'sass-loader!../../../fonts.scss';
+      composes: fontJumbo from 'sass-loader!../../../../../fonts.scss';
     }
     &_title {
       color: $primary-dark;
-      font-size: 20px;
-      font-weight: 600;
+      composes: fontLarge from 'sass-loader!../../../../../fonts.scss';
     }
   }
   &__body {
     width: 80%;
     padding-top: 10px;
     &_listing {
-      @extend .font-small;
-      color: $primary-darkgrey;
+      composes: subHeaderSmall from 'sass-loader!../../../../../fonts.scss';
+      color: lighten($primary-darkgrey, 20%);
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
