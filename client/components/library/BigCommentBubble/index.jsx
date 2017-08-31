@@ -64,6 +64,8 @@ export class BigCommentBubble extends Component {
       attachments = [],
       actions,
       requiredAction,
+      url,
+      reviewerUrl
     } = this.props;
     return (
       <div className={styles.bigCommentBubble}>
@@ -72,9 +74,9 @@ export class BigCommentBubble extends Component {
         <div className={styles.bigCommentBubble__commentBody}>
           <div className={styles.bigCommentBubble__mainContent}>
             <div className={styles.bigCommentBubble__mainContent__header}>
-              <span className={styles.bigCommentBubble__mainContent__header__link}>{headerLinkName}</span>
+              <a href={reviewerUrl} className={styles.bigCommentBubble__mainContent__header__link}>{headerLinkName}</a>
               reviewed your practice on
-              <span className={styles.bigCommentBubble__mainContent__header__site}>{headerLinkSite}</span>
+              <a href={`http://www.${headerLinkSite}`} className={styles.bigCommentBubble__mainContent__header__site}>{headerLinkSite}</a>
             </div>
             <div className={styles.bigCommentBubble__mainContent__rating}>
               {siteStars > 0 && [...Array(siteStars)].map((x, i) =>
@@ -86,7 +88,7 @@ export class BigCommentBubble extends Component {
             </div>
             <div className={styles.bigCommentBubble__mainContent__preview}>
               {sitePreview}
-              <span className={styles.bigCommentBubble__mainContent__preview__toggleButton} >more... </span>
+              <a href={url} className={styles.bigCommentBubble__mainContent__preview__toggleButton} >more... </a>
             </div>
             {requiredAction &&
               <div className={styles.bigCommentBubble__mainContent__requirements}>
@@ -106,9 +108,9 @@ export class BigCommentBubble extends Component {
                 <span className="fa fa-trash" />
               </div>
             }
-            <div className={styles.bigCommentBubble__respondBlock__respondButton}>
+            <a href={url} className={styles.bigCommentBubble__respondBlock__respondButton}>
               Respond
-            </div>
+            </a>
           </div>
         </div>
       </div>

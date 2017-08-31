@@ -6,13 +6,12 @@ import styles from '../../styles.scss';
 export default function AverageRating(props) {
   const {
     count,
-    average,
   } = props;
 
-  let countFloor = Math.floor(count);
+  let countFloor = Math.ceil(count);
 
   const rows = [];
-  for (let i = 1; i < count; i++) {
+  for (let i = 1; i <= countFloor; i++) {
     rows.push(<Star key={i} size={1.8} />);
   }
 
@@ -24,7 +23,7 @@ export default function AverageRating(props) {
         <div className={styles.stats__rating}>
           {rows}
         </div>
-        <span className={styles.stats__bottom}>Industry Average {countFloor}/{average}</span>
+        <span className={styles.stats__bottom}>Industry Average {count.toFixed(1)}/5</span>
       </div>
     </Card>
   );

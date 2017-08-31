@@ -9,7 +9,7 @@ import ReviewsCard from './Cards/ReviewsCard';
 import Tags from './Cards/Tags';
 import styles from './styles.scss';
 
-class Reviews extends Component {
+class   Reviews extends Component {
   render() {
     const {
       reviews,
@@ -22,15 +22,27 @@ class Reviews extends Component {
 
     const reviewsData = reviews.get('data').toJS();
 
-    console.log(reviewsData);
+    const reviewsList = reviews.get('reviews').toJS();
 
-    const rating = {
-      5: 11,
-      4: 8,
-      3: 5,
-      2: 3,
-      1: 0,
-    };
+
+    const contructBigComment = reviewsList.map((review) => {
+      return {
+        icon: review.sourceName,
+        createdAt: moment(review.createdDateTime).format('DD/MM/YYYY hh:mma'),
+        headerLinkName: review.reviewerName,
+        headerLinkSite: review.domain,
+        siteStars: parseInt(review.rating),
+        siteTitle: review.title,
+        sitePreview: review.contentSnippet,
+        iconColor: '#ffffff',
+        background: '#395998',
+        iconAlign: 'flex-end',
+        requiredAction: 'ACTION REQUIRED',
+        url: review.url,
+        reviewerUrl: review.reviewerUrl,
+      };
+    });
+
 
     const DataBigComment = [{
       icon: 'facebook',
@@ -117,31 +129,31 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <AverageRating count={reviewsData.industryAverageRating} average={reviewsData.industryAverageCount}/>
+            <AverageRating count={reviewsData.industryAverageRating} />
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
             <Card  className={styles.card}>
               <div className={styles.stats}>
-                <span className={styles.stats__count} >12</span>
-                <span className={styles.stats__title} >Average Rating</span>
+                <span className={styles.stats__count} > {reviewsData.totalCount} </span>
+                <span className={styles.stats__title} >Total Reviews</span>
                 <div className={styles.stats__rating}>
-                  0 With no start rating
+                  {reviewsData.ratingCounts['0'] || '0'} With no start rating
                 </div>
-                <span className={styles.stats__bottom}>Industry Average 106</span>
+                <span className={styles.stats__bottom}>Industry Average {reviewsData.industryAverageCount} </span>
               </div>
             </Card>
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <RatingsChart rating={rating} />
+            <RatingsChart rating={reviewsData.ratingCounts} />
           </Col>
-          <Col className={styles.padding} xs={12} md={12}>
+          {/*<Col className={styles.padding} xs={12} md={12}>
             <Tags />
-          </Col>
+          </Col>*/}
           <Row className={styles.rowReviewsFilter}>
             <Col className={styles.padding} xs={12} md={12} sm={9} lg={9}>
-              <ReviewsCard data={DataBigComment} />
+              <ReviewsCard data={contructBigComment} />
             </Col>
             <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
               <Filters filters={filters} />

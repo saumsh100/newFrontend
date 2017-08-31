@@ -44,11 +44,19 @@
         color: $primary-green;
         cursor: pointer;
         margin-right: 5px;
+        text-decoration: none;
+        &:hover {
+          color: darken($primary-green, 10%);
+        }
       }
       &__site {
         color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
+        text-decoration: none;
+        &:hover {
+          color: darken($primary-green, 10%);
+        }
       }
     }
     &::before {
@@ -85,6 +93,11 @@
         color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
+        text-decoration: none;
+
+        &:hover {
+          color: darken($primary-green, 10%);
+        }
       }
     }
     &__createdAt {
