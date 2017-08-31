@@ -17,11 +17,13 @@ async function callRail(account) {
 }
 
 async function twilioSetup(account) {
-  const test = await twilioClient.availablePhoneNumbers('US').local.list({
-    nearLatLong: '37.840699,-122.461853',
-    distance: '50',
-    contains: '555',
-    inRegion: 'CA'
+  // Right now default to Canada numbers. Maybe add a country dropdown in account creation.
+  console.log(account)
+  console.log(account.destinationPhoneNumber.replace(/\D/g, '').substr(2, 3))
+  const test = await twilioClient.availablePhoneNumbers('CA').local.list({
+    areaCode: '604',
+    smsEnabled: true,
+    voiceEnabled: true,
   });
   console.log(test);
 }

@@ -121,12 +121,12 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
  */
 enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), async (req, res, next) => {
   const accountData = {
-    ...pick(req.body, 'name', 'timezone', 'id'),
+    ...pick(req.body, 'name', 'timezone', 'destinationPhoneNumber', 'id'),
     enterpriseId: req.enterprise.id,
   };
 
   const timezone = req.body.timezone;
-  await createAccount("Blas")
+  await createAccount(accountData);
   return Account.create(accountData)
     .then((account) => {
       const defaultReminders = [

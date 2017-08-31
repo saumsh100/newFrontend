@@ -77,6 +77,11 @@ const EnterpriseForm = (props) => {
             options={options}
 
           />
+          <Field
+            name="destinationPhoneNumber"
+            label="Destination Phone Number"
+            type="tel"
+          />
         </Form>
       </PageContainer>
     ) : (
