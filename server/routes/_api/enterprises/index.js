@@ -6,6 +6,7 @@ import normalize from '../normalize';
 import StatusError from '../../../util/StatusError';
 import {
   Account,
+  Address,
   Appointment,
   Enterprise,
   Reminder,
@@ -53,13 +54,14 @@ enterprisesRouter.get('/:enterpriseId', checkPermissions('enterprises:read'), (r
 enterprisesRouter.get('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:read']), async (req, res, next) => {
   try {
     const accounts = await Account.findAll({
-      raw: true,
       where: {
         enterpriseId: req.enterprise.id,
       },
     });
 
-    res.send(normalize('accounts', accounts));
+    const accountsSend = accounts.map(a => a.get({ plain: true }));
+
+    res.send(normalize('accounts', accountsSend));
   } catch (err) {
     next(err);
   }
@@ -117,15 +119,18 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
 /**
  * POST /:enterpriseId/accounts
  */
-enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), (req, res, next) => {
+enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), async (req, res, next) => {
   const accountData = {
     ...pick(req.body, 'name', 'timezone', 'id'),
     enterpriseId: req.enterprise.id,
   };
 
   const timezone = req.body.timezone;
+  const newAddress = await Address.create({ timezone: req.body.timezone });
 
-  Account.create(accountData)
+  accountData.addressId = newAddress.id;
+
+  return Account.create(accountData)
     .then((account) => {
       const defaultReminders = [
         {

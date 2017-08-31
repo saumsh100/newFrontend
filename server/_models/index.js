@@ -48,6 +48,7 @@ sequelize
 // Import and store all models.
 const models = [];
 models.push((require('./Account').default(sequelize, Sequelize)));
+models.push((require('./Address').default(sequelize, Sequelize)));
 models.push((require('./Appointment').default(sequelize, Sequelize)));
 models.push((require('./AuthSession').default(sequelize, Sequelize)));
 models.push((require('./Call').default(sequelize, Sequelize)));
@@ -87,6 +88,9 @@ models.forEach((model) => {
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
+  }
+  if (db[modelName].scopes) {
+    db[modelName].scopes(db);
   }
 });
 

@@ -4,7 +4,7 @@ import AddressForm  from './AddressForm';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateEntityRequest } from '../../../../thunks/fetchEntities';
+import { updateEntityRequest, createEntityRequest } from '../../../../thunks/fetchEntities';
 import styles from './styles.scss';
 import { Grid } from '../../../library';
 
@@ -16,7 +16,7 @@ class Address extends React.Component {
   }
 
   submit(values) {
-    const { activeAccount, updateEntityRequest } = this.props;
+    const { activeAccount, updateEntityRequest, createEntityRequest } = this.props;
     values.city = values.city.trim();
     values.street = values.street.trim();
     const valuesMap = Map(values);
@@ -31,16 +31,29 @@ class Address extends React.Component {
     };
 
     updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
+    if (activeAccount.addressId) {
+      values.accountId = activeAccount.id;
+      updateEntityRequest({ key: 'addresses', values, url: `/api/addresses/${activeAccount.addressId}` });
+    } else {
+      createEntityRequest({ key: 'addresses', values, url: '/api/addresses/' });
+    }
   }
 
   render() {
-    const { activeAccount } = this.props;
+    const { activeAccount, addresses } = this.props;
     let showComponent = null;
     if (activeAccount) {
+
+      let address = null;
+      if (activeAccount.addressId) {
+        address = addresses.get(activeAccount.addressId);
+      }
+
       showComponent = (
         <AddressForm
           onSubmit={this.submit}
           accountInfo={activeAccount}
+          address={address}
         />
       );
     }
@@ -56,14 +69,22 @@ class Address extends React.Component {
 
 Address.propTypes = {
   activeAccount: PropTypes.object,
+  addresses: PropTypes.object,
   updateEntityRequest: PropTypes.func,
 };
 
-function mapDispatchToActions(dispatch){
+function mapDispatchToActions(dispatch) {
   return bindActionCreators({
     updateEntityRequest,
-  },dispatch);
+    createEntityRequest,
+  }, dispatch);
 }
 
-const enhance = connect(null, mapDispatchToActions);
+function mapStateToProps({ entities }) {
+  return {
+    addresses: entities.getIn(['addresses', 'models']),
+  };
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToActions);
 export default enhance(Address);

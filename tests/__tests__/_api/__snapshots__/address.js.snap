@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/addresses POST / PUT /:addressId should update the address 1`] = `
+Object {
+  "entities": Object {
+    "addresses": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "city": "Test That Thang",
+        "country": "Canada",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "state": "BC",
+        "street": "213292",
+        "timezone": "America/Adak",
+        "zipCode": "v3m2m2",
+      },
+    },
+  },
+  "result": "62954241-3652-4792-bae5-5bfed53d37b7",
+}
+`;
+
+exports[`/api/addresses POST / should create an address and return the account with address 1`] = `
+Object {
+  "entities": Object {
+    "accounts": Object {
+      "52954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "EnterpriseId": null,
+        "address": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "addressId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "bookingWidgetPrimaryColor": null,
+        "canSendRecalls": false,
+        "canSendReminders": false,
+        "clinicName": null,
+        "contactEmail": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "fullLogoUrl": null,
+        "id": "52954241-3652-4792-bae5-5bfed53d37b7",
+        "lastSyncDate": null,
+        "logo": null,
+        "name": "Test Account 2",
+        "phoneNumber": null,
+        "syncClientAdapter": null,
+        "timeInterval": null,
+        "timezone": null,
+        "twilioPhoneNumber": null,
+        "unit": 15,
+        "vendastaId": null,
+        "website": null,
+        "weeklyScheduleId": null,
+      },
+    },
+    "addresses": Object {
+      "62954241-3652-4792-bae5-5bfed53d37b7": Object {
+        "city": "Belgrade",
+        "country": "Canada",
+        "id": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "state": "BC",
+        "street": "213292",
+        "timezone": "America/Adak",
+        "zipCode": "v3m2m2",
+      },
+    },
+  },
+  "result": "52954241-3652-4792-bae5-5bfed53d37b7",
+}
+`;

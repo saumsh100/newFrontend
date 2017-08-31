@@ -51,16 +51,17 @@ class AddressForm extends React.Component {
   }
 
   componentWillMount() {
-    const { accountInfo } = this.props;
+    const { accountInfo, address } = this.props;
+    if (address) {
+      console.log(address.get('street'))
 
-    if (accountInfo) {
       this.setState({
-        country: accountInfo.get('country'),
-        street: accountInfo.get('street'),
-        city: accountInfo.get('city'),
-        zipCode: accountInfo.get('zipCode'),
-        state: accountInfo.get('state'),
-        timezone: accountInfo.get('timezone'),
+        country: address.get('country'),
+        street: address.get('street'),
+        city: address.get('city'),
+        zipCode: address.get('zipCode'),
+        state: address.get('state'),
+        timezone: address.get('timezone'),
       });
     }
   }
@@ -159,6 +160,7 @@ class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
+  address: PropTypes.object,
   change: PropTypes.func,
   onSubmit: PropTypes.func,
 }
