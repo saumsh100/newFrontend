@@ -25,15 +25,15 @@ function Modal() {
 Modal.prototype.open = function() {
   const oc = this.overlay.className;
   const ic = this.inner.className;
-  const overlayAlreadyActive = oc.indexOf('active') > -1;
-  const innerAlreadyActive = ic.indexOf('active') > -1;
-  this.overlay.className = overlayAlreadyActive ? oc  : `${oc} active`;
-  this.inner.className = innerAlreadyActive ? ic : `${ic} active`;
+  const overlayAlreadyActive = oc.indexOf('CareCruActive') > -1;
+  const innerAlreadyActive = ic.indexOf('CareCruActive') > -1;
+  this.overlay.className = overlayAlreadyActive ? oc  : `${oc} CareCruActive`;
+  this.inner.className = innerAlreadyActive ? ic : `${ic} CareCruActive`;
 };
 
 Modal.prototype.close = function() {
-  this.overlay.className = this.overlay.className.replace(' active', '');
-  this.inner.className = this.inner.className.replace(' active', '');
+  this.overlay.className = this.overlay.className.replace(' CareCruActive', '');
+  this.inner.className = this.inner.className.replace(' CareCruActive', '');
 };
 
 export default Modal;

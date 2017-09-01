@@ -24,7 +24,7 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.CareCruModal.active {
+.CareCruModal.CareCruActive {
   z-index: 9999;
   opacity: 1;
   transition: opacity 0.2s;
@@ -63,7 +63,7 @@
   transition: opacity 0.2s, transform 0.2s, z-index 0s 0.2s;
 }
 
-.CareCruModalInner.active {
+.CareCruModalInner.CareCruActive {
   z-index: 100;
   opacity: 1;
   transform: scale(1);

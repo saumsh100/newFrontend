@@ -33,17 +33,19 @@ ee(CareCru.prototype);
  * #open
  */
 CareCru.prototype.open = function (route = 'book') {
+  this.emit('open');
   this.host.sendEvent('changeBaseRoute', route);
   this.modal.open();
-  this.emit('open');
+  this.emit('opened');
 };
 
 /**
  * #close
  */
 CareCru.prototype.close = function () {
-  this.modal.close();
   this.emit('close');
+  this.modal.close();
+  this.emit('closed');
 };
 
 export default CareCru;
