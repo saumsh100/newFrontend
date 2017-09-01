@@ -9,7 +9,7 @@ import ReviewsCard from './Cards/ReviewsCard';
 import Tags from './Cards/Tags';
 import styles from './styles.scss';
 
-class   Reviews extends Component {
+class Reviews extends Component {
   render() {
     const {
       reviews,
@@ -97,7 +97,7 @@ class   Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
-            <Card  className={styles.card}>
+            <Card className={styles.card}>
               <div className={styles.stats}>
                 <span className={styles.stats__count} > {reviewsData.totalCount} </span>
                 <span className={styles.stats__title} >Total Reviews</span>

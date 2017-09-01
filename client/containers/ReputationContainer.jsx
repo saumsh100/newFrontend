@@ -62,6 +62,7 @@ function mapStateToProps({ apiRequests }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
   const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
 
+  console.log(reviews);
   return {
     reviews,
     listings,

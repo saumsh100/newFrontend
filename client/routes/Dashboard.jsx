@@ -14,7 +14,7 @@ import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import loadTypography from 'bundle-loader?lazy!./Dashboard/Typography';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
-import loadReputatuion from 'bundle-loader?lazy!./Dashboard/Reputation';
+import loadReputation from 'bundle-loader?lazy!./Dashboard/Reputation';
 import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
 import loadEnterprise from 'bundle-loader?lazy!./Dashboard/Enterprise';
 import Profile from '../components/Profile';
@@ -35,7 +35,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <LazyRoute path="/typography" load={loadTypography} name="typography" />
 
         {/*<LazyRoute path="/social" load={loadSocial} name="social" />*/}
-        <LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />
+        <LazyRoute path="/reputation" load={loadReputation} name="reputation" />
         <LazyRoute path="/settings" load={loadSettings} name="settings" />
         { isSuperAdmin ? (<LazyRoute path="/admin" load={loadAdmin} name="admin" />) : null }
         { withEnterprise ? (<LazyRoute path="/enterprise" load={loadEnterprise} name="enterprise" />) : null }
