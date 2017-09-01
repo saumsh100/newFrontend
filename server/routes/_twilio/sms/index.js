@@ -138,7 +138,8 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
 
     const responseTextMessageData = sanitizeTwilioSmsData(responseMessage);
     let responseTextMessage = await TextMessage.create(Object.assign({}, responseTextMessageData, { chatId: chatClean.id, read: true }));
-    responseTextMessage = responseMessage.get({ plain: true })
+    responseTextMessage = responseTextMessage.get({ plain: true });
+
     await chat.update({
       lastTextMessageId: responseTextMessage.id,
       lastTextMessageDate: responseTextMessage.createdAt,

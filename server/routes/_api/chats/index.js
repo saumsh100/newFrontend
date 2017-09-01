@@ -29,7 +29,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
 
   const skipped = skip || 0;
   const limitted = limit || 25;
-
+  const order = [['lastTextMessageDate', 'DESC']];
   // Some default code to ensure we don't pull the entire conversation for each chat
   const newIncludeArray = includeArray.map((include) => {
     if (include.as === 'textMessages') {
@@ -43,18 +43,20 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
           required: false,
         },
       ];
+      order.push([{ model: TextMessage, as: 'textMessages' }, 'createdAt', 'ASC']);
+      include.required = true;
     }
     return include;
   });
 
   return Chat.findAll({
     where: { accountId },
-    order: [['lastTextMessageDate', 'DESC']],
+    order,
     limit: limitted,
     offset: skipped,
     include: newIncludeArray,
   }).then((chats) => {
-    const allChats = chats.map(chat => chat.get({ plain: true }))
+    const allChats = chats.map(chat => chat.get({ plain: true }));
     return res.send(normalize('chats', allChats));
   })
   .catch(next);
@@ -140,7 +142,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
         },
         required: false,
       }],
-      required: false,
+      required: true,
     },
   ];
 

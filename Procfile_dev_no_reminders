@@ -1,2 +1,2 @@
-web: nodemon server/bin/build/server.bundle.js
+web: nodemon --inspect server/bin/build/server.bundle.js
 events: nodemon server/bin/build/events.bundle.js

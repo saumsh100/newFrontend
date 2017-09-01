@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 import _ from 'lodash';
 import moment from 'moment';
+import format from '../../util/format';
 import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
@@ -310,7 +311,7 @@ patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next
         where: { accountId },
       });
     }
-    return res.send(normalize('patients', patients));
+    return res.send(format(req, res, 'patients', patients));
   } catch (error) {
     next(error);
   }
@@ -389,7 +390,7 @@ patientsRouter.post('/', async (req, res, next) => {
   let patient;
   try {
     patient = await Patient.create(patientData);
-    const normalizedPatient = normalize('patient', patient.dataValues);
+    const normalizedPatient = format(req, res, 'patient', patient.get({ plain: true }));
     res.status(201).send(normalizedPatient);
 
     // Dispatch socket event
@@ -436,7 +437,7 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
  */
 patientsRouter.get('/:patientId', checkPermissions('patients:read'), async (req, res, next) => {
   return Promise.resolve(req.patient.get({ plain: true }))
-    .then(patient => res.send(normalize('patient', patient)))
+    .then(patient => res.send(format(req, res, 'patient', patient)))
     .catch(next);
 });
 
@@ -458,7 +459,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
             chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
           });
       }
-      const normalized = normalize('patient', patient.dataValues);
+      const normalized = format(req, res, 'patient', patient.get({ plain: true }));
       res.status(201).send(normalized);
       return { patient, normalized };
     })
@@ -482,7 +483,7 @@ patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, 
     .then(() => {
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
-      const normalized = normalize('patient', patient.get({ plain: true }));
+      const normalized = format(req, res, 'patient', patient.get({ plain: true }));
       return io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
     .catch(next);

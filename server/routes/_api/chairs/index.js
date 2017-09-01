@@ -3,7 +3,6 @@ import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
-import normalize from '../normalize';
 import { Chair } from '../../../_models';
 
 const chairsRouter = Router();
@@ -34,8 +33,8 @@ chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
  * - Get all chairs in an account
  */
 chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) => {
-  const { accountId } = req;
   try {
+    const { accountId } = req;
     const chairs = await Chair.findAll({
       raw: true,
       // TODO: add this back when we have auth back
@@ -53,7 +52,7 @@ chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) =>
  */
 chairsRouter.get('/:chairId', checkPermissions('chairs:read'), (req, res, next) => {
   return Promise.resolve(req.chair)
-    .then(chair => res.send(normalize('chair', chair.dataValues)))
+    .then(chair => res.send(format(req, res, 'chair', chair.get({ plain: true }))))
     .catch(next);
 });
 
@@ -62,7 +61,7 @@ chairsRouter.get('/:chairId', checkPermissions('chairs:read'), (req, res, next) 
  */
 chairsRouter.put('/:chairId', checkPermissions('chairs:update'), (req, res, next) => {
   return req.chair.update(req.body)
-    .then(chair => res.send(normalize('chair', chair.dataValues)))
+    .then(chair => res.send(format(req, res, 'chair', chair.get({ plain: true }))))
     .catch(next);
 });
 

@@ -15,6 +15,7 @@ const cors = require('cors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
+import { Deserializer } from 'jsonapi-serializer';
 
 // Initialize Express App!
 const app = express();
@@ -52,6 +53,17 @@ app.use(cookieParser());
 // Parse URL query strings into the body,
 // extended=true means that we use qs as the parser for Object syntax
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
+// Support for parsing application/vnd.api+json
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
+// Deserialize jsonapi request bodies
+app.use(async (req, res, next) => {
+  if (req.header('Content-Type') === 'application/vnd.api+json') {
+    req.body = await new Deserializer({ keyForAttribute: 'camelCase' }).deserialize(req.body);
+  }
+  next();
+});
 
 // Increased size so that Converting to PDF works
 // Parses any Unicode encoding of json into the body

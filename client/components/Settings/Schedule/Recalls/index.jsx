@@ -46,7 +46,7 @@ class Recalls extends Component {
   componentWillReceiveProps() {
     const canSendRecalls = this.props.activeAccount ? this.props.activeAccount.toJS().canSendRecalls : null;
 
-    if (this.state.canSendRecalls === null) {
+    if (this.state.canSendRecalls === null && this.props.activeAccount && this.props.activeAccount.id) {
       this.setState({
         canSendRecalls,
       });
@@ -177,7 +177,7 @@ class Recalls extends Component {
   }
 
   render() {
-    if (!this.props.activeAccount) {
+    if (!this.props.activeAccount || !this.props.activeAccount.id) {
       return null;
     }
 
@@ -201,6 +201,36 @@ class Recalls extends Component {
       { label: 'Save', onClick: this.newRecall, component: RemoteSubmitButton, props: { form: 'newRecall' } },
     ];
 
+
+    const showComponent = this.props.activeAccount.canSendRecalls ? (
+      <div>
+        <div className={styles.header}>
+           <Header title={'Recalls'} className={styles.headerTitle} />
+        </div>
+        <div className={styles.createButtonContainer}>
+          <Button
+            className={styles.edit}
+            onClick={this.openModal}
+            data-test-id="createNewRecall"
+            icon="plus"
+            create
+          >
+            Add New Recall
+          </Button>
+        </div>
+        {this.props.recalls.size > 0 ? <Header
+          title={'Recalls List'}
+          contentHeader
+        /> : null }
+        {recalls}
+      </div>
+    ) : (
+      <div className={styles.disabledPage}>
+        <div className={styles.disabledPage_text}>
+          Recalls have been disabled. Please contact your CareCru account manager for further assistance.
+        </div>
+      </div>
+    );
     return (
       <div className={styles.main}>
         <DialogBox
@@ -231,33 +261,7 @@ class Recalls extends Component {
             sendEdit={this.sendEdit.bind(null, this.state.formName)}
           />
         </DialogBox>
-        <div className={styles.header}>
-          <Header title={'Recalls'} className={styles.headerTitle} />
-          <div className={styles.toggle}>
-            <span className={styles.toggle_text}> Recalls ON/OFF:&nbsp; </span>
-            <Toggle
-              name="canSendRecalls"
-              onChange={this.canSendRecalls}
-              checked={this.state.canSendRecalls}
-              data-test-id="toggleSendRecalls"
-            />
-          </div>
-        </div>
-        <div className={styles.createButtonContainer}>
-          <Button
-            className={styles.edit}
-            onClick={this.openModal}
-            data-test-id="createNewRecall"
-            icon="plus"
-          >
-            Add New Recall
-          </Button>
-        </div>
-        {this.props.recalls.size > 0 ? <Header
-          title={'Recalls List'}
-          contentHeader
-        /> : null }
-        {recalls}
+        {showComponent}
       </div>
     );
   }

@@ -15,6 +15,29 @@ const makeConfig = (config = {}) => Object.assign(
  * sending down
  */
 const ModelAttributes = {
+  Appointment: [
+    'accountId',
+    'practitionerId',
+    'patientId',
+    'serviceId',
+    'chairId',
+    'pmsId',
+    'isDeleted',
+    'isBookable',
+    'startDate',
+    'endDate',
+    'note',
+    'isReminderSent',
+    'isPatientConfirmed',
+    'isSyncedWithPMS',
+    'isCancelled',
+    'customBufferTime',
+    'mark',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Chair: [
     'accountId',
     'pmsId',
@@ -22,20 +45,107 @@ const ModelAttributes = {
     'name',
     'createdAt',
     'updatedAt',
+    'deletedAt',
+  ],
+
+  Family: [
+    'accountId',
+    'pmsId',
+    'headId',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  Patient: [
+    'accountId',
+    'pmsId',
+    'patientUserId',
+    'email',
+    'firstName',
+    'lastName',
+    'middleName',
+    'phoneNumber',
+    'homePhoneNumber',
+    'mobilePhoneNumber',
+    'workPhoneNumber',
+    'otherPhoneNumber',
+    'prefContactPhone',
+    'gender',
+    'prefName',
+    'language',
+    'address',
+    'preferences',
+    'type',
+    'birthDate',
+    'insurance',
+    'isDeleted',
+    'isSyncedWithPMS',
+    'familyId',
+    'status',
+  ],
+
+  Practitioner: [
+    'firstName',
+    'lastName',
+    'type',
+    'isActive',
+    'isHidden',
+    'avatarUrl',
+    'isCustomSchedule',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  Service: [
+    'name',
+    'accountId',
+    'duration',
+    'bufferTime',
+    'unitCost',
+    'customCosts',
+    'pmsId',
+    'isHidden',
+    'isDefault',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
   ],
 };
 
 /**
- * SERIALIZERS contains all allowable resources for josnapi serialization*
+ * SERIALIZERS contains all allowable resources for jsonapi serialization*
  */
 const SERIALIZERS = {
+  appointment: new Serializer('appointment', makeConfig({
+    attributes: ModelAttributes.Appointment,
+    pluralizeType: false,
+  })),
+
   chair: new Serializer('chair', makeConfig({
     attributes: ModelAttributes.Chair,
     pluralizeType: false,
   })),
 
-  chairs: new Serializer('chairs', makeConfig({
-    attributes: ModelAttributes.Chair,
+  family: new Serializer('family', makeConfig({
+    attributes: ModelAttributes.Family,
+    pluralizeType: false,
+  })),
+
+  patient: new Serializer('patient', makeConfig({
+    attributes: ModelAttributes.Patient,
+    pluralizeType: false,
+  })),
+
+  practitioner: new Serializer('practitioner', makeConfig({
+    attributes: ModelAttributes.Practitioner,
+    pluralizeType: false,
+  })),
+
+  service: new Serializer('service', makeConfig({
+    attributes: ModelAttributes.Service,
+    pluralizeType: false,
   })),
 };
 

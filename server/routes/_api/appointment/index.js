@@ -4,6 +4,7 @@ import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
+import format from '../../util/format';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
@@ -547,7 +548,7 @@ appointmentsRouter.get('/', (req, res, next) => {
     offset: parseInt(skipped),
   }).then((appointments) => {
     const sendAppointments = appointments.map(a => a.get({ plain: true }));
-    return res.send(normalize('appointments', sendAppointments));
+    return res.send(format(req, res, 'appointments', sendAppointments));
   })
     .catch(next);
 });
@@ -560,7 +561,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
   return Appointment.create(appointmentData)
     .then((appointment) => {
-      const normalized = normalize('appointment', appointment.dataValues);
+      const normalized = format(req, res, 'appointment', appointment.get( { plain: true }));
       res.status(201).send(normalized);
       return { appointment: appointment.dataValues, normalized };
     })
@@ -660,7 +661,8 @@ if (globals.env !== 'production') {
  * Get an appointment
  */
 appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'), (req, res, next) => Promise.resolve(req.appointment)
-    .then(appointment => res.send(normalize('appointment', appointment.dataValues)))
+    .then(appointment =>
+      res.send(format(req, res, 'appointment', appointment.get({ plain: true }))))
     .catch(next));
 
 /**
@@ -670,7 +672,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
   const accountId = req.accountId;
   return req.appointment.update(req.body)
     .then((appointment) => {
-      const normalized = normalize('appointment', appointment.dataValues);
+      const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
       res.status(201).send(normalized);
       return { appointment: appointment.dataValues };
     })

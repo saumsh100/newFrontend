@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { List, Card, CardHeader, } from '../../../library';
 import RecallData from './RecallData';
 import styles from './styles.scss';
+import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
 
 class RecallsList extends Component {
   constructor(props) {
@@ -30,6 +31,8 @@ class RecallsList extends Component {
       return null;
     }
 
+    const sortRecalls = sentRecalls.sort(SortByCreatedAtDesc);
+
     return (
       <Card className={styles.reminders}>
         <div className={styles.reminders__header}>
@@ -41,7 +44,7 @@ class RecallsList extends Component {
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {sentRecalls.toArray().map((sentRecall, index) => {
+            {sortRecalls.map((sentRecall, index) => {
 
               if (!sentRecall) {
                 return null;

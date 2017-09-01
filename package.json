@@ -16,7 +16,7 @@
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
     "seeds": "node_modules/.bin/babel-node ./server/bin/seeds.js",
-    "rebuild": "export $(cat .env | xargs) && node_modules/.bin/babel-node ./server/bin/rebuild.js",
+    "rebuild": "export $(cat .env | xargs) && node_modules/.bin/sequelize db:migrate:undo:all && node_modules/.bin/sequelize db:migrate",
     "rebuild:seed": "npm run rebuild && sequelize db:seed:all",
     "start": "nf start -w -j Procfile_dev",
     "startdev": "nf start -w -j Procfile_dev_no_reminders",
@@ -129,7 +129,7 @@
     "passport": "~0.3.0",
     "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
-    "pg": "6.4.1",
+    "pg": "^6.4.1",
     "pg-hstore": "2.3.2",
     "pluralize": "^1.2.1",
     "postcss-cssnext": "^2.10.0",
@@ -192,6 +192,7 @@
     "s3": "^4.4.0",
     "sass-loader": "^6.0.3",
     "sequelize": "^4.3.2",
+    "sequelize-cli": "^2.8.0",
     "serve-favicon": "^2.3.0",
     "sharp": "^0.18.1",
     "socket.io": "^1.5.1",
@@ -232,7 +233,6 @@
     "nodemon": "^1.10.2",
     "pretty-bytes": "^4.0.2",
     "react-addons-perf": "^15.2.1",
-    "sequelize-cli": "^2.7.0",
     "sinon": "^1.15.3",
     "supertest": "^2.0.1"
   }

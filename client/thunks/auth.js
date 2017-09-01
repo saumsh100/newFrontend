@@ -127,6 +127,31 @@ export function logout() {
   };
 }
 
+export function resetPassword(email) {
+  return (dispatch, getState) => {
+    return axios.post('/auth/resetpassword', { email })
+      .then(() => {
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
+export function resetUserPassword(location, values) {
+  return (dispatch, getState) => {
+    const url = `${location.pathname}`;
+    return axios
+      .post(url, values)
+      .then(()=> {
+        dispatch(push('/login'));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export function load() {
   return (dispatch) => {
     const token = localStorage.getItem('token');

@@ -96,6 +96,7 @@
         white-space: nowrap;
         text-align: left;
         text-overflow: ellipsis;
+        padding: 1px;
         @media screen and (max-width: 450px) {
           text-align: center;
         }
