@@ -82,7 +82,7 @@ accountsRouter.delete('/:accountId/logo', checkPermissions('accounts:update'), a
   try {
     req.account.logo = null;
     const savedAccount = await req.account.save();
-    res.send(normalize('account', savedAccount.dataValues));
+    res.send(normalize('account', savedAccount.get({ plain: true })));
   } catch (error) {
     next(error);
   }
