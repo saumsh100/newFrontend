@@ -126,9 +126,16 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
   };
 
   const timezone = req.body.timezone;
-  await createAccount(accountData);
+
   return Account.create(accountData)
-    .then((account) => {
+    .then(async (accountFirst) => {
+      const newData = await createAccount(accountFirst);
+      accountFirst.callrailId = newData.callrailId;
+      accountFirst.vendastaId = newData.vendastaId;
+      accountFirst.vendastaAccountId = newData.vendastaAccountId;
+      accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
+      const account = await accountFirst.save();
+
       const defaultReminders = [
         {
           // 21 day email
