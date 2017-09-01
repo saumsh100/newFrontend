@@ -1,8 +1,6 @@
 
 import { createAction } from 'redux-actions';
+import { REMOVE_ALERT, CREATE_ALERT } from '../reducers/alerts';
 
-const SHOW_ALERT = 'SHOW_ALERT';
-const HIDE_ALERT = 'HIDE_ALERT';
-
-export const showAlert = createAction(SHOW_ALERT);
-export const hideAlert = createAction(HIDE_ALERT);
+export const createAlert = createAction(CREATE_ALERT);
+export const removeAlert = createAction(REMOVE_ALERT);

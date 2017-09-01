@@ -125,7 +125,6 @@ export function createEntityRequest({ key, entityData, url, alert }) {
 
     const errorText = alert ? alert.error : { body: `${key} creation failed` };
 
-    console.log('before return');
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;

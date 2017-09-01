@@ -123,7 +123,7 @@ module.exports = {
   db,
   caCert,
   redis,
-  rabbit,
+  rabbit: environmentVariables.RABBITMQ_URL ? `${environmentVariables.RABBITMQ_URL}?heartbeat=380` : rabbit,
   vendasta,
   twilio,
   mandrill,
