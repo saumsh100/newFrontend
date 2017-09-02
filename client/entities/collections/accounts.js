@@ -3,9 +3,10 @@ import Account from '../models/Account';
 
 export default class accounts extends createCollection(Account) {
 
-  getUrlRoot() {
+  getUrlRoot(base) {
     const { auth } = window.store.getState();
-    return `/api/accounts/${auth.get('accountId')}`;
+    const baseUrl = '/api/accounts';
+    return base ? baseUrl : `${base}/${auth.get('accountId')}`;
   }
 
 }

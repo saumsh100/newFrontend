@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
@@ -5,6 +6,7 @@ import Container from '../../containers/EnterprisesContainer';
 import List from '../../components/Admin/Enterprises/List/index';
 import Create from '../../components/Admin/Enterprises/Form/index';
 import Accounts from './Accounts';
+import Connectors from './Connectors';
 
 const base = (path = '') => `/admin/enterprises${path}`;
 
@@ -23,7 +25,7 @@ const Admin = () =>
     <DocumentTitle title="CareCru | Super Admin">
       <Switch>
         <Redirect exact from="/admin" to={base()} />
-
+        <Route path="/admin/nasa" component={Connectors} />
         <Route path={base('/:enterpriseId/accounts')} component={Accounts} />
         <Route path={base()} component={Enterprises} />
       </Switch>
