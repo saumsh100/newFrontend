@@ -7,6 +7,16 @@ import Information from './Cards/Information';
 import Table from './Cards/Table';
 import styles from './styles.scss';
 
+function generateSearchData(entityList) {
+  return entityList.map((entity) => {
+    return {
+      img: entity.iconUrl,
+      name: entity.sourceName,
+      listings: entity.listings.length
+    }
+  })
+}
+
 class Listings extends Component {
   render() {
 
@@ -18,11 +28,10 @@ class Listings extends Component {
       return null;
     }
 
-    console.log(listings.toJS())
-
     const listingsData = listings.get('data').toJS();
     const getInfo = listings.get('accountInfo').toJS();
-    const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]];
+    const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]]
+
 
     const scoreData = [
       { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
@@ -45,49 +54,22 @@ class Listings extends Component {
       { title: 'Website', data: listingsAcctInfo.website },
     ];
 
-    const hardcodeTableData = [{
-      data:
-      [{
-        img: '/images/services/google_maps.png',
-        name: 'Google Maps',
-        phone: '123 456 7890',
-        email: 'lwater12@gmail.com',
-        listing: 0,
-      }, {
-        img: '/images/services/voyager.png',
-        name: 'Google Maps',
-        phone: '123 456 7890',
-        email: 'emilee1@gmail.com',
-        listing: 26,
-      }, {
-        img: '/images/services/google_maps.png',
-        name: 'Google Maps',
-        phone: '123 456 7890',
-        email: 'barlet@gmail.com',
-        listing: 54,
-      }] }, {
-        title: 'Review Sites',
-        data:
-        [{
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'lwater12@gmail.com',
-          listing: 0,
-        }, {
-          img: '/images/services/voyager.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'emilee1@gmail.com',
-          listing: 26,
-        }, {
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'barlet@gmail.com',
-          listing: 0,
-        }] }];
 
+    const listingsSearchData = listings.get('searchData').toJS();
+
+
+
+
+    const test2 = [{
+        data: generateSearchData(listingsSearchData.searchengines),
+      }, {
+        title: 'Review Sites',
+        data: generateSearchData(listingsSearchData.reviewengines),
+      }, {
+        title: 'Social Sites',
+        data: generateSearchData(listingsSearchData.socialengines),
+      },
+    ]
 
     const filters = [
       {
@@ -138,7 +120,8 @@ class Listings extends Component {
             <Table
               borderColor={colorMap.blue}
               cardTitle="Search Engines"
-              data={hardcodeTableData}
+              data={test2}
+              tableData={listings.get('searchData').toJS()}
             />
           </Col>
           {/*<Col className={styles.padding} xs={12} md={3}>

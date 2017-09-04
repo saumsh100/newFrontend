@@ -15,7 +15,6 @@ class Reviews extends Component {
       reviews,
     } = this.props;
 
-    console.log("wooo")
     const reviewsData = reviews.get('data').toJS();
 
     const reviewsList = reviews.get('reviews').toJS();
