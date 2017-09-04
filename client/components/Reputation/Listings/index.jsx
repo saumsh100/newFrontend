@@ -18,11 +18,11 @@ class Listings extends Component {
       return null;
     }
 
+    console.log(listings.toJS())
+
     const listingsData = listings.get('data').toJS();
     const getInfo = listings.get('accountInfo').toJS();
     const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]];
-
-    console.log(listingsAcctInfo)
 
     const scoreData = [
       { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
@@ -134,16 +134,16 @@ class Listings extends Component {
               data={informationData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={9}>
+          <Col className={styles.padding} xs={12} md={12}>
             <Table
               borderColor={colorMap.blue}
               cardTitle="Search Engines"
               data={hardcodeTableData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={3}>
+          {/*<Col className={styles.padding} xs={12} md={3}>
             <Filters filters={filters} />
-          </Col>
+          </Col>*/}
         </Row>
       </Grid>
     );

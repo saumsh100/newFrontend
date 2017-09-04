@@ -8,8 +8,11 @@ const globals = require('../../../config/globals');
 
 const VENDASTA_LISTINGS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/';
 const VENDASTA_LISTINGS_ACCOUNT = 'https://reputation-intelligence-api.vendasta.com/api/v2/account/get/';
+const VENDASTA_LISTINGS_SEARCH = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/lookupPossibleListings/';
+
 const VENDASTA_REVIEWS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/review/getStats/';
 const VENDASTA_REVIEWS_LOOKUP = 'https://reputation-intelligence-api.vendasta.com/api/v3/review/search/';
+
 const {
   apiKey,
   apiUser,
@@ -22,6 +25,11 @@ const fetchListingsData = (account) => {
 
 const fetchListingsInfo = (account) => {
   const listingsUrl = `${VENDASTA_LISTINGS_ACCOUNT}?apiKey=${apiKey}&apiUser=${apiUser}`;
+  return axios.post(listingsUrl, { customerIdentifier: account.vendastaId });
+};
+
+const fetchListingsSearch = (account) => {
+  const listingsUrl = `${VENDASTA_LISTINGS_SEARCH}?apiKey=${apiKey}&apiUser=${apiUser}`;
   return axios.post(listingsUrl, { customerIdentifier: account.vendastaId });
 };
 
@@ -39,13 +47,21 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
   return Account.findById(req.accountId).then((accountModel) => {
     const account = accountModel.get({ plain: true });
     fetchListingsData(account)
-      .then((resp) => {
+      .then((respData) => {
         fetchListingsInfo(account)
-          .then((response) => {
-            response.data.accountInfo = response.data.data;
-            response.data.data = resp.data.data;
-            return res.send(response.data);
+        .then((respInfo) => {
+           fetchListingsSearch(account)
+             .then((respSearch) => {
+               respSearch.data.accountInfo = respInfo.data.data;
+               respSearch.data.searchData = respSearch.data.data;
+               respSearch.data.data = respData.data.data;
+               return res.send(respSearch.data);
+             });
           });
+
+        response.data.accountInfo = response.data.data;
+        response.data.data = resp.data.data;
+        return res.send(response.data);
       });
   }).catch(error => next(error));
 });

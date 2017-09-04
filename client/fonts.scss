@@ -109,6 +109,19 @@
 
 }
 
+.fontExtraLarge {
+  font-size: $x-large-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+}
+
+.fontMediumLarge {
+  font-size: $extra-medium-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+
+}
+
 .cardHeaderTitle {
   font-family: $medium-font;
   font-size: $title-size;

@@ -35,7 +35,7 @@ class Table extends Component {
             className={styles.mostLoyal__header_item}
             title={cardTitle}
           >
-            <a className={styles.mostLoyal__header_link}>Print Listings Repost</a>
+            {/*<a className={styles.mostLoyal__header_link}>Print Listings Repost</a>*/}
           </CardHeader>
         </div>
         <div className={styles.mostLoyal__wrapper}>

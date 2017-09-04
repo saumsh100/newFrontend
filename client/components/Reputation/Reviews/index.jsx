@@ -15,10 +15,7 @@ class Reviews extends Component {
       reviews,
     } = this.props;
 
-    if (!reviews) {
-      return null;
-    }
-
+    console.log("wooo")
     const reviewsData = reviews.get('data').toJS();
 
     const reviewsList = reviews.get('reviews').toJS();
@@ -116,12 +113,12 @@ class Reviews extends Component {
             <Tags />
           </Col>*/}
           <Row className={styles.rowReviewsFilter}>
-            <Col className={styles.padding} xs={12} md={12} sm={9} lg={9}>
+            <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
               <ReviewsCard data={contructBigComment} />
             </Col>
-            <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
+            {/*<Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
               <Filters filters={filters} />
-            </Col>
+            </Col>*/}
           </Row>
         </Row>
       </Grid>
