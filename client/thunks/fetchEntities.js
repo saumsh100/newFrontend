@@ -42,7 +42,7 @@ export function fetchEntities({ key, join, params = {}, url }) {
   };
 }
 
-export function fetchEntitiesRequest({ id, key, join, params = {}, url }) {
+export function fetchEntitiesRequest({ id, key, base, join, params = {}, url }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -51,7 +51,7 @@ export function fetchEntitiesRequest({ id, key, join, params = {}, url }) {
       params.join = join.join(',');
     }
 
-    url = url || entity.getUrlRoot();
+    url = url || entity.getUrlRoot(base);
 
     // Create record for request
     dispatch(createRequest({ id }));
@@ -125,7 +125,6 @@ export function createEntityRequest({ key, entityData, url, alert }) {
 
     const errorText = alert ? alert.error : { body: `${key} creation failed` };
 
-    console.log('before return');
     return axios.post(url, entityData)
       .then((response) => {
         const { data } = response;

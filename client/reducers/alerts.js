@@ -1,42 +1,46 @@
 
-import { fromJS } from 'immutable';
+import { Map } from 'immutable';
 import { handleActions } from 'redux-actions';
+import Alert from '../entities/models/Alert';
 
-export const SHOW_ALERT = 'SHOW_ALERT';
-export const HIDE_ALERT = 'HIDE_ALERT';
+const uuid = require('uuid').v4;
 
-const initialState = fromJS({
-  body: null,
-  icon: null,
-  title: null,
-  type: null,
-  status: null,
-});
+/**
+ * Constants
+ */
+export const CREATE_ALERT = 'CREATE_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
+
+/**
+ * Initial State
+ */
+const initialState = Map({});
 
 export default handleActions({
-  [SHOW_ALERT](state, { payload: { alert, type } }) {
+  [CREATE_ALERT](state, { payload: { alert, type } }) {
     let title = alert.title;
-    if (type === 'success') {
+
+    if (!alert.title && type === 'success') {
       title = 'Success';
     } else if (type === 'error' && !alert.title) {
       title = 'Error';
     }
 
-    return state.merge({
+    const id = alert.id || uuid();
+    const alertData = new Alert({
+      id,
       title,
       body: alert.body,
       type,
-      status: 'show',
+      caller: alert.caller || false,
+      time: 3000,
+      sticky: alert.sticky || false,
     });
+
+    return state.set(id, alertData);
   },
 
-  [HIDE_ALERT](state) {
-    return state.merge({
-      body: null,
-      title: null,
-      icon: null,
-      type: null,
-      status: 'hide',
-    });
+  [REMOVE_ALERT](state, { payload: { alert } }) {
+    return state.delete(alert.id);
   },
 }, initialState);

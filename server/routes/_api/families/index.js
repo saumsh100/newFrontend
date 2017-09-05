@@ -3,6 +3,7 @@ import { Router } from 'express';
 import checkIsArray from '../../../middleware/checkIsArray';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
+import format from '../../util/format';
 import normalize from '../normalize';
 import { Family } from '../../../_models';
 
@@ -15,7 +16,7 @@ familiesRouter.param('familyId', sequelizeLoader('family', 'Family'));
  */
 familiesRouter.get('/:familyId', checkPermissions('family:read'), (req, res, next) => {
   return Promise.resolve(req.family)
-    .then(family => res.send(normalize('family', family.dataValues)))
+    .then(family => res.send(format(req, res, 'family', family.get({ plain: true }))))
     .catch(next);
 });
 
@@ -30,7 +31,7 @@ familiesRouter.get('/', checkPermissions('family:read'), async (req, res, next) 
       where: { accountId },
     });
 
-    res.send(normalize('families', families));
+    res.send(format(req, res, 'families', families));
   } catch (error) {
     next(error);
   }
@@ -78,7 +79,7 @@ familiesRouter.post('/batch', checkPermissions('family:create'), checkIsArray('f
 familiesRouter.post('/', checkPermissions('family:create'), (req, res, next) => {
   const familyData = Object.assign({}, { accountId: req.accountId }, req.body);
   return Family.create(familyData)
-    .then(family => res.status(201).send(normalize('family', family.dataValues)))
+    .then(family => res.status(201).send(format(req, res, 'family', family.get({ plain: true }))))
     .catch(next);
 });
 
@@ -87,7 +88,7 @@ familiesRouter.post('/', checkPermissions('family:create'), (req, res, next) => 
  */
 familiesRouter.put('/:familyId', checkPermissions('family:read'), (req, res, next) => {
   return req.family.update(req.body)
-    .then(family => res.send(normalize('family', family.dataValues)))
+    .then(family => res.send(format(req, res, 'family', family.get({ plain: true }))))
     .catch(next);
 });
 

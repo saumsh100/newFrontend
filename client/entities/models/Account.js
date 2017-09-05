@@ -38,7 +38,7 @@ const AccountSchema = {
   unit: null,
   canSendReminders: null,
   canSendRecalls: null,
-  lastSyncDate: null,
+  lastSyncDate: (new Date(2016, 5, 1)).toISOString(),
 };
 
 export default class Account extends createModel(AccountSchema) {
