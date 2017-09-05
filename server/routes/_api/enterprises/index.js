@@ -128,7 +128,7 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
   const timezone = req.body.timezone;
 
   return Account.create(accountData)
-    .then(async (accountFirst) => {
+    .then(async (account) => {
  //       commenting out the creating and saving of api keys
 //       const newData = await createAccount(accountFirst);
 //       accountFirst.callrailId = newData.callrailId;
