@@ -139,50 +139,46 @@ class Reviews extends Component {
     ];
 
     return (
-      <div>
-        {this.state.hasAccount ? (
-          <Grid className={styles.reviews}>
-            <Row className={styles.reviews__wrapper}>
-              <Col className={styles.padding} xs={12} md={12}>
-                <GoogleMapsVideo />
-              </Col>
+      <Grid className={styles.reviews}>
+        <Row className={styles.reviews__wrapper}>
+          <Col className={styles.padding} xs={12} md={12}>
+            <GoogleMapsVideo />
+          </Col>
 
-              <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-                <AverageRating count={reviewsData.industryAverageRating} />
-              </Col>
+          <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
+            <AverageRating count={reviewsData.industryAverageRating} rating={reviewsData.ratingCounts} />
+          </Col>
 
-              <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
-                <Card className={styles.card}>
-                  <div className={styles.stats}>
-                    <span className={styles.stats__count} > {reviewsData.totalCount} </span>
-                    <span className={styles.stats__title} >Total Reviews</span>
-                    <div className={styles.stats__rating}>
-                      {reviewsData.ratingCounts['0'] || '0'} With no start rating
-                    </div>
-                    <span className={styles.stats__bottom}>
-                      Industry Average {reviewsData.industryAverageCount}
-                    </span>
-                  </div>
-                </Card>
-              </Col>
-              <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-                <RatingsChart rating={reviewsData.ratingCounts} />
-              </Col>
-              {/* <Col className={styles.padding} xs={12} md={12}>
-                <Tags />
-              </Col> */}
-              <Row className={styles.rowReviewsFilter}>
-                <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
-                  <ReviewsCard data={contructBigComment} />
-                </Col>
-                {/* <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
-                  <Filters filters={filters} />
-                </Col> */}
-              </Row>
-            </Row>
-          </Grid>
-          ) : <ReputationDisabled />}
-      </div>
+          <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
+            <Card className={styles.card}>
+              <div className={styles.stats}>
+                <span className={styles.stats__count} > {reviewsData.totalCount} </span>
+                <span className={styles.stats__title} >Total Reviews</span>
+                <div className={styles.stats__rating}>
+                  {reviewsData.ratingCounts['0'] || '0'} With no start rating
+                </div>
+                <span className={styles.stats__bottom}>
+                  Industry Average {reviewsData.industryAverageCount}
+                </span>
+              </div>
+            </Card>
+          </Col>
+          <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
+            <RatingsChart rating={reviewsData.ratingCounts} />
+          </Col>
+          {/* <Col className={styles.padding} xs={12} md={12}>
+            <Tags />
+          </Col> */}
+          <Row className={styles.rowReviewsFilter}>
+            <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
+              <ReviewsCard data={contructBigComment} />
+            </Col>
+            {/* <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
+              <Filters filters={filters} />
+            </Col> */}
+          </Row>
+        </Row>
+      </Grid>
     );
   }
 }
