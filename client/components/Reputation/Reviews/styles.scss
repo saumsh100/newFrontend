@@ -16,11 +16,11 @@
 }
 
 .card {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size $primary-darkgrey;
 }
 
 .googleMapsRespond {
-  border-top: $card-border-size $primary-color;
+  border-top: $card-border-size $primary-darkgrey;
   display: flex;
 	flex-direction: row;
 	height: 168px;
@@ -67,7 +67,7 @@
 	margin: 0 auto;
 	padding: 10px 0 10px 0;
 	&__count {
-    composes: fontJumbo from 'sass-loader!../../../fonts.scss';
+    composes: fontExtraLarge from 'sass-loader!../../../fonts.scss';
 	}
 
 	&__title {
@@ -123,7 +123,7 @@
 
 
 .tags {
-  border-top: $card-border-size $primary-yellow;
+  border-top: $card-border-size $primary-darkgrey;
 
   width: 100%;
   height: 168px;

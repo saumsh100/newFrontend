@@ -8,7 +8,7 @@ const globals = require('../../../config/globals');
 
 const VENDASTA_LISTINGS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/getStats/';
 const VENDASTA_LISTINGS_ACCOUNT = 'https://reputation-intelligence-api.vendasta.com/api/v2/account/get/';
-const VENDASTA_LISTINGS_SEARCH = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/lookupPossibleListings/';
+const VENDASTA_LISTINGS_SEARCH = 'https://reputation-intelligence-api.vendasta.com/api/v2/listing/lookupListings/';
 
 const VENDASTA_REVIEWS_URL = 'https://reputation-intelligence-api.vendasta.com/api/v2/review/getStats/';
 const VENDASTA_REVIEWS_LOOKUP = 'https://reputation-intelligence-api.vendasta.com/api/v3/review/search/';
@@ -50,25 +50,21 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
       .then((respData) => {
         fetchListingsInfo(account)
         .then((respInfo) => {
-           fetchListingsSearch(account)
-             .then((respSearch) => {
-               respSearch.data.accountInfo = respInfo.data.data;
-               respSearch.data.searchData = respSearch.data.data;
-               respSearch.data.data = respData.data.data;
-               return res.send(respSearch.data);
-             });
-          });
-
-        response.data.accountInfo = response.data.data;
-        response.data.data = resp.data.data;
-        return res.send(response.data);
+          fetchListingsSearch(account)
+           .then((respSearch) => {
+             respSearch.data.accountInfo = respInfo.data.data;
+             respSearch.data.searchData = respSearch.data.data;
+             respSearch.data.data = respData.data.data;
+             return res.send(respSearch.data);
+           });
+        });
       });
   }).catch(error => next(error));
 });
 
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
   const {
-    startDate = moment().subtract(30, 'days')._d,
+    startDate = moment().subtract(180, 'days')._d,
     endDate = moment()._d
   } = req.query;
 

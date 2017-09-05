@@ -52,47 +52,50 @@ class Table extends Component {
                   <div className={styles.mostLoyal__subheader_cell} />
                 </div>) : ''}
               <List className={styles.data}>
-                {obj.data.map((obj, i) => (
-                  <ListItem
-                    key={i}
-                    className={styles.data__item}
-                  >
-                    <div className={styles.data__item_wrapper}>
-                      <div className={styles.data__item_left}>
-                        <img className={styles.data__item_img} src={obj.img} alt="" />
-                        <div className={styles.data__item_personal}>
-                          <div className={styles.data__item_name}>
-                            {obj.name}
-                          </div>
-                          <a className={styles.data__item_phone}>
-                            notes
-                          </a>
-                        </div>
-                      </div>
-                      <div className={styles.data__item_center}>
-                        <div className={styles.data__item_status}>
-                          <div className={styles.status__icon}>
-                            {obj.listing ? <Icon className={styles.status__icon_check} icon="check" /> : <Icon className={styles.status__icon_times} icon="times" />}
+                {obj.data.map((obj, i) => {
+                  const listingInfo = obj.listing.length ? obj.listing[0].url : null;
+
+                  return (
+                    <ListItem
+                      key={i}
+                      className={styles.data__item}
+                    >
+                      <div className={styles.data__item_wrapper}>
+                        <div className={styles.data__item_left}>
+                          <img className={styles.data__item_img} src={obj.img} alt="" />
+                          <div className={styles.data__item_personal}>
+                            <div className={styles.data__item_name}>
+                              {obj.name}
+                            </div>
+                            <a className={styles.data__item_phone}>
+                              notes
+                            </a>
                           </div>
                         </div>
-                      </div>
-                      <div className={styles.data__item_right}>
-                        <div
-                          onClick={this.toggleDetailes}
-                          className={styles.data__item_table}
-                        >
-                          <div className={styles.table__text}>
-                            {obj.listing ? <div>Accurate listing found</div> : <div>Listing not found</div>}
+                        <div className={styles.data__item_center}>
+                          <div className={styles.data__item_status}>
+                            <div className={styles.status__icon}>
+                              {obj.listing.length ? <Icon className={styles.status__icon_check} icon="check" /> : <Icon className={styles.status__icon_times} icon="times" />}
+                            </div>
                           </div>
-                          {detailsModeActive ?
-                            (<div className={styles.table__data}>Fix your Listing together with 30+ sites.</div>) :
-                            (<div onClick={this.toggleDetailes} className={styles.table__button}>
-                              <Icon icon="plus-square-o" /> show details</div>)}
+                        </div>
+                        <div className={styles.data__item_right}>
+                          <div
+                            onClick={this.toggleDetailes}
+                            className={styles.data__item_table}
+                          >
+                            <div className={styles.table__text}>
+                              {obj.listing.length ? <div>Accurate listing found</div> : <div>Listing not found</div>}
+                            </div>
+                            {!obj.listing.length ?
+                              null :
+                              (<div className={styles.table__button}>
+                                <Icon icon="plus-square-o" /> <a href={listingInfo} className={styles.table__button} >show details</a></div>)}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </ListItem>
-                ))}
+                    </ListItem>
+                  )})}
               </List>
             </div>
           ))}

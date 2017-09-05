@@ -1,7 +1,7 @@
 @import "../../../../../ui";
 
 .mostLoyal {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size $primary-darkgrey;
   overflow: inherit;
   &__wrapper {
     display: block;
@@ -9,6 +9,8 @@
     //max-height: 700px;
     overflow: auto;
     height: calc(100vh - 380px);
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
   &__header {
     display: flex;
@@ -100,6 +102,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 15px;
+
     }
     &_left {
       display: flex;
@@ -167,11 +170,22 @@
       &__button {
         color: $primary-light-blue;;
         font-size: $small-size;
+        text-decoration: none;
         display: flex;
         justify-content: center;
         align-items: center;
         i {
           margin-right: 4px;
+        }
+
+        link {
+          text-decoration: none;
+          &:hover {
+            color: darken($primary-light-blue, 10%);
+          }
+        }
+        &:hover {
+          color: darken($primary-light-blue, 10%);
         }
       }
     }

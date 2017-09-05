@@ -16,7 +16,7 @@ function generateSearchData(entityList) {
     return {
       img: entity.iconUrl,
       name: entity.sourceName,
-      listings: entity.listings.length,
+      listing: entity.listings,
     };
   });
 }
@@ -29,7 +29,7 @@ class Listings extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // can change range
     const params = {
       startDate: moment().subtract(30, 'days')._d,
@@ -40,7 +40,6 @@ class Listings extends Component {
       this.props.fetchEntitiesRequest({
         id: 'listings',
         url: '/api/reputation/listings',
-        params,
       }),
     ]).then(() => {
       this.setState({
@@ -61,7 +60,6 @@ class Listings extends Component {
     const listingsData = listings.get('data').toJS();
     const getInfo = listings.get('accountInfo').toJS();
     const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]]
-
 
     const scoreData = [
       { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
@@ -86,6 +84,7 @@ class Listings extends Component {
 
 
     const listingsSearchData = listings.get('searchData').toJS();
+    console.log(listingsSearchData);
 
     const tableData = [{
       data: generateSearchData(listingsSearchData.searchengines),
@@ -95,6 +94,9 @@ class Listings extends Component {
     }, {
       title: 'Social Sites',
       data: generateSearchData(listingsSearchData.socialengines),
+    }, {
+      title: 'Directories',
+      data: generateSearchData(listingsSearchData.directories),
     },
     ];
 

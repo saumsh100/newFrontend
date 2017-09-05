@@ -19,7 +19,7 @@ export class IconBox extends Component {
         className={styles.bigComment}
         style={style}
       >
-        <span className={iconClass} />
+        <img src={icon} width="41px" height="38px" />
       </div>
     );
   }

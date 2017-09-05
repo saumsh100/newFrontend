@@ -33,7 +33,6 @@ class Reviews extends Component {
       this.props.fetchEntitiesRequest({
         id: 'reviews',
         url: '/api/reputation/reviews',
-        params,
       }),
     ]).then(() => {
       this.setState({
@@ -54,6 +53,8 @@ class Reviews extends Component {
     const reviewsData = reviews.get('data').toJS();
 
     const reviewsList = reviews.get('reviews').toJS();
+
+    console.log(reviews.toJS());
 
     const contructBigComment = reviewsList.map((review) => {
       const publishedDate = moment(review.publishedDateTime);

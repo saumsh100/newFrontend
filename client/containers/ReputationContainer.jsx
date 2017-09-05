@@ -9,37 +9,11 @@ import Reputation from '../components/Reputation/index';
 
 
 class ReputationContainer extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       loaded: true,
     };
-  }
-
-  componentDidMount() {
-    // can change range
-    /*const params = {
-      startDate: moment().subtract(30, 'days')._d,
-      endDate: moment()._d,
-    };
-
-    Promise.all([
-      this.props.fetchEntitiesRequest({
-        id: 'reviews',
-        url: '/api/reputation/reviews',
-        params,
-      }),
-      this.props.fetchEntitiesRequest({
-        id: 'listings',
-        url: '/api/reputation/listings',
-        params,
-      }),
-    ]).then(() => {
-      this.setState({
-        loaded: true,
-      });
-    });*/
   }
 
   render() {
@@ -57,27 +31,5 @@ ReputationContainer.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
   openForm: PropTypes.func,
 };
-
-/*
-function mapStateToProps({ apiRequests }) {
-  const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
-  const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
-
-  return {
-    reviews,
-    listings,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-  }, dispatch);
-}
-
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-
-export default enhance(ReputationContainer);
-*/
 
 export default ReputationContainer;
