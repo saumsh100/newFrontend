@@ -11,6 +11,7 @@ import GoogleMapsVideo from './Cards/GoogleMapsVideo';
 import AverageRating from './Cards/AverageRating';
 import RatingsChart from './Cards/RatingsChart';
 import ReviewsCard from './Cards/ReviewsCard';
+import ReputationDisabled from '../ReputationDisabled';
 import Tags from './Cards/Tags';
 import styles from './styles.scss';
 
@@ -19,26 +20,44 @@ class Reviews extends Component {
     super(props);
     this.state = {
       loaded: false,
+      hasAccount: false,
     };
   }
 
-  componentDidMount(){
-    // can change range
-    const params = {
-      startDate: moment().subtract(30, 'days')._d,
-      endDate: moment()._d,
-    };
+  componentWillMount() {
+    const {
+      activeAccount,
+    } = this.props;
 
-    Promise.all([
-      this.props.fetchEntitiesRequest({
-        id: 'reviews',
-        url: '/api/reputation/reviews',
-      }),
-    ]).then(() => {
-      this.setState({
-        loaded: true,
-      });
+    let hasAccount = false;
+
+    if (activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '') {
+      hasAccount = true;
+    }
+
+    this.setState({
+      hasAccount,
     });
+  }
+
+  componentDidMount() {
+    if (this.state.hasAccount) {
+      const params = {
+        startDate: moment().subtract(30, 'days')._d,
+        endDate: moment()._d,
+      };
+
+      Promise.all([
+        this.props.fetchEntitiesRequest({
+          id: 'reviews',
+          url: '/api/reputation/reviews',
+        }),
+      ]).then(() => {
+        this.setState({
+          loaded: true,
+        });
+      });
+    }
   }
 
   render() {
@@ -46,15 +65,17 @@ class Reviews extends Component {
       reviews,
     } = this.props;
 
+    if (!this.state.hasAccount) {
+      return <ReputationDisabled />
+    }
+
     if (!reviews) {
-      return null;
+      return <Loader loaded={this.state.loaded} color="#FF715A" />
     }
 
     const reviewsData = reviews.get('data').toJS();
 
     const reviewsList = reviews.get('reviews').toJS();
-
-    console.log(reviews.toJS());
 
     const contructBigComment = reviewsList.map((review) => {
       const publishedDate = moment(review.publishedDateTime);
@@ -117,57 +138,61 @@ class Reviews extends Component {
       }
     ];
 
-
     return (
-      <Loader loaded={this.state.loaded} color="#FF715A">
-        <Grid className={styles.reviews}>
-          <Row className={styles.reviews__wrapper}>
-            <Col className={styles.padding} xs={12} md={12}>
-              <GoogleMapsVideo />
-            </Col>
-
-            <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-              <AverageRating count={reviewsData.industryAverageRating} />
-            </Col>
-
-            <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
-              <Card className={styles.card}>
-                <div className={styles.stats}>
-                  <span className={styles.stats__count} > {reviewsData.totalCount} </span>
-                  <span className={styles.stats__title} >Total Reviews</span>
-                  <div className={styles.stats__rating}>
-                    {reviewsData.ratingCounts['0'] || '0'} With no start rating
-                  </div>
-                  <span className={styles.stats__bottom}>Industry Average {reviewsData.industryAverageCount} </span>
-                </div>
-              </Card>
-            </Col>
-
-            <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-              <RatingsChart rating={reviewsData.ratingCounts} />
-            </Col>
-            {/*<Col className={styles.padding} xs={12} md={12}>
-              <Tags />
-            </Col>*/}
-            <Row className={styles.rowReviewsFilter}>
-              <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
-                <ReviewsCard data={contructBigComment} />
+      <div>
+        {this.state.hasAccount ? (
+          <Grid className={styles.reviews}>
+            <Row className={styles.reviews__wrapper}>
+              <Col className={styles.padding} xs={12} md={12}>
+                <GoogleMapsVideo />
               </Col>
-              {/*<Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
-                <Filters filters={filters} />
-              </Col>*/}
+
+              <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
+                <AverageRating count={reviewsData.industryAverageRating} />
+              </Col>
+
+              <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
+                <Card className={styles.card}>
+                  <div className={styles.stats}>
+                    <span className={styles.stats__count} > {reviewsData.totalCount} </span>
+                    <span className={styles.stats__title} >Total Reviews</span>
+                    <div className={styles.stats__rating}>
+                      {reviewsData.ratingCounts['0'] || '0'} With no start rating
+                    </div>
+                    <span className={styles.stats__bottom}>
+                      Industry Average {reviewsData.industryAverageCount}
+                    </span>
+                  </div>
+                </Card>
+              </Col>
+              <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
+                <RatingsChart rating={reviewsData.ratingCounts} />
+              </Col>
+              {/* <Col className={styles.padding} xs={12} md={12}>
+                <Tags />
+              </Col> */}
+              <Row className={styles.rowReviewsFilter}>
+                <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
+                  <ReviewsCard data={contructBigComment} />
+                </Col>
+                {/* <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
+                  <Filters filters={filters} />
+                </Col> */}
+              </Row>
             </Row>
-          </Row>
-        </Grid>
-      </Loader>
+          </Grid>
+          ) : <ReputationDisabled />}
+      </div>
     );
   }
 }
 
-function mapStateToProps({ apiRequests }) {
+function mapStateToProps({ apiRequests, entities, auth }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
+
   return {
     reviews,
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
 

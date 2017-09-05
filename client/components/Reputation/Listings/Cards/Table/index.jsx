@@ -90,7 +90,15 @@ class Table extends Component {
                             {!obj.listing.length ?
                               null :
                               (<div className={styles.table__button}>
-                                <Icon icon="plus-square-o" /> <a href={listingInfo} className={styles.table__button} >show details</a></div>)}
+                                <Icon icon="plus-square-o" />
+                                <a
+                                  href={listingInfo}
+                                  className={styles.table__button}
+                                  target="_blank"
+                                >
+                                  show details
+                                </a>
+                              </div>)}
                           </div>
                         </div>
                       </div>

@@ -3,7 +3,7 @@
 
 .reviews {
   &__wrapper {
-    padding-top: 15px;
+    margin-bottom: 15px;
   }
 }
 
@@ -96,7 +96,7 @@
 
 .content {
   width: 100%;
-  height: 16px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,6 +151,7 @@
 	min-height: 168px;
   max-height: 745px;
 	overflow: auto;
+  margin-bottom: 15px;
 
   &__cardHeader {
     padding-top: 15px;

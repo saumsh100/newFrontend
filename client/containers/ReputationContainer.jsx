@@ -5,23 +5,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from 'react-loader';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
-import Reputation from '../components/Reputation/index';
-
+import Reputation from '../components/Reputation/Reviews';
 
 class ReputationContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: true,
-    };
-  }
-
   render() {
     return (
       <div>
-        <Loader loaded={this.state.loaded} color="#FF715A">
-          <Reputation {...this.props} />
-        </Loader>
+        <Reputation {...this.props} />
       </div>
     );
   }
@@ -31,5 +21,6 @@ ReputationContainer.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
   openForm: PropTypes.func,
 };
+
 
 export default ReputationContainer;
