@@ -107,6 +107,8 @@ class Listings extends Component {
 
     const listingsSearchData = listings.get('searchData').toJS();
 
+    console.log(listingsSearchData);
+
     const tableData = [{
       data: generateSearchData(listingsSearchData.searchengines),
     }, {

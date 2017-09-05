@@ -55,6 +55,20 @@ class Table extends Component {
                 {obj.data.map((obj, i) => {
                   const listingInfo = obj.listing.length ? obj.listing[0].url : null;
 
+                  let accurateListing = <div>Listing not found</div>;
+                  let accurateListingIcon = <Icon className={styles.status__icon_times} icon="times" />;
+
+                  if (obj.listing.length) {
+                    accurateListing = <div>Accurate listing found</div>;
+                    accurateListingIcon = <Icon className={styles.status__icon_check} icon="check" />;
+                    const warning = obj.listing[0].anchorDataWarningFlag;
+
+                    if (warning) {
+                      accurateListing = <div> Listing found with possible errors </div>;
+                      accurateListingIcon = <Icon className={styles.status__icon_exclamation} icon="exclamation" />;
+                    }
+                  }
+
                   return (
                     <ListItem
                       key={i}
@@ -75,7 +89,7 @@ class Table extends Component {
                         <div className={styles.data__item_center}>
                           <div className={styles.data__item_status}>
                             <div className={styles.status__icon}>
-                              {obj.listing.length ? <Icon className={styles.status__icon_check} icon="check" /> : <Icon className={styles.status__icon_times} icon="times" />}
+                              {accurateListingIcon}
                             </div>
                           </div>
                         </div>
@@ -85,7 +99,7 @@ class Table extends Component {
                             className={styles.data__item_table}
                           >
                             <div className={styles.table__text}>
-                              {obj.listing.length ? <div>Accurate listing found</div> : <div>Listing not found</div>}
+                              {accurateListing}
                             </div>
                             {!obj.listing.length ?
                               null :
