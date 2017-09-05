@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from 'react-loader';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
-import Reputation from '../components/Reputation/Listings';
+import Reputation from '../components/Reputation/index';
 
 
 class ReputationContainer extends Component {
@@ -13,13 +13,13 @@ class ReputationContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
+      loaded: true,
     };
   }
 
   componentDidMount() {
     // can change range
-    const params = {
+    /*const params = {
       startDate: moment().subtract(30, 'days')._d,
       endDate: moment()._d,
     };
@@ -39,7 +39,7 @@ class ReputationContainer extends Component {
       this.setState({
         loaded: true,
       });
-    });
+    });*/
   }
 
   render() {
@@ -58,6 +58,7 @@ ReputationContainer.propTypes = {
   openForm: PropTypes.func,
 };
 
+/*
 function mapStateToProps({ apiRequests }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
   const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
@@ -77,3 +78,6 @@ function mapDispatchToProps(dispatch) {
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ReputationContainer);
+*/
+
+export default ReputationContainer;

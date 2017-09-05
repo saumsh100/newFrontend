@@ -1,5 +1,9 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import Loader from 'react-loader';
 import { Col, Grid, Row, Filters } from '../../library';
+import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import colorMap from '../../library/util/colorMap';
 import Score from './Cards/Score';
 import Total from './Cards/Total';
@@ -12,14 +16,40 @@ function generateSearchData(entityList) {
     return {
       img: entity.iconUrl,
       name: entity.sourceName,
-      listings: entity.listings.length
-    }
-  })
+      listings: entity.listings.length,
+    };
+  });
 }
 
 class Listings extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+  }
 
+  componentDidMount(){
+    // can change range
+    const params = {
+      startDate: moment().subtract(30, 'days')._d,
+      endDate: moment()._d,
+    };
+
+    Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'listings',
+        url: '/api/reputation/listings',
+        params,
+      }),
+    ]).then(() => {
+      this.setState({
+        loaded: true,
+      });
+    });
+  }
+
+  render() {
     const {
       listings,
     } = this.props;
@@ -57,19 +87,16 @@ class Listings extends Component {
 
     const listingsSearchData = listings.get('searchData').toJS();
 
-
-
-
-    const test2 = [{
-        data: generateSearchData(listingsSearchData.searchengines),
-      }, {
-        title: 'Review Sites',
-        data: generateSearchData(listingsSearchData.reviewengines),
-      }, {
-        title: 'Social Sites',
-        data: generateSearchData(listingsSearchData.socialengines),
-      },
-    ]
+    const tableData = [{
+      data: generateSearchData(listingsSearchData.searchengines),
+    }, {
+      title: 'Review Sites',
+      data: generateSearchData(listingsSearchData.reviewengines),
+    }, {
+      title: 'Social Sites',
+      data: generateSearchData(listingsSearchData.socialengines),
+    },
+    ];
 
     const filters = [
       {
@@ -92,45 +119,63 @@ class Listings extends Component {
     ];
 
     return (
-      <Grid className={styles.listings}>
-        <Row>
-          <Col className={styles.padding} xs={12} md={3}>
-            <Score
-              borderColor={colorMap.blue}
-              title="Listing Score"
-              data={scoreData}
-              listingScore={listingsData.listingScore}
-            />
-          </Col>
-          <Col className={styles.padding} xs={12} md={4}>
-            <Total
-              borderColor={colorMap.blue}
-              title="Listing Score"
-              data={totalData}
-            />
-          </Col>
-          <Col className={styles.padding} xs={12} md={5}>
-            <Information
-              borderColor={colorMap.blue}
-              title="Listing Score"
-              data={informationData}
-            />
-          </Col>
-          <Col className={styles.padding} xs={12} md={12}>
-            <Table
-              borderColor={colorMap.blue}
-              cardTitle="Search Engines"
-              data={test2}
-              tableData={listings.get('searchData').toJS()}
-            />
-          </Col>
-          {/*<Col className={styles.padding} xs={12} md={3}>
-            <Filters filters={filters} />
-          </Col>*/}
-        </Row>
-      </Grid>
+      <div>
+        <Loader loaded={this.state.loaded} color="#FF715A">
+          <Grid className={styles.listings}>
+            <Row>
+              <Col className={styles.padding} xs={12} md={3}>
+                <Score
+                  borderColor={colorMap.blue}
+                  title="Listing Score"
+                  data={scoreData}
+                  listingScore={listingsData.listingScore}
+                />
+              </Col>
+              <Col className={styles.padding} xs={12} md={4}>
+                <Total
+                  borderColor={colorMap.blue}
+                  title="Listing Score"
+                  data={totalData}
+                />
+              </Col>
+              <Col className={styles.padding} xs={12} md={5}>
+                <Information
+                  borderColor={colorMap.blue}
+                  title="Listing Score"
+                  data={informationData}
+                />
+              </Col>
+              <Col className={styles.padding} xs={12} md={12}>
+                <Table
+                  borderColor={colorMap.blue}
+                  cardTitle="Search Engines"
+                  data={tableData}
+                />
+              </Col>
+              {/*<Col className={styles.padding} xs={12} md={3}>
+                <Filters filters={filters} />
+              </Col>*/}
+            </Row>
+          </Grid>
+        </Loader>
+      </div>
     );
   }
 }
 
-export default Listings;
+function mapStateToProps({ apiRequests }) {
+  const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
+
+  return {
+    listings,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntitiesRequest,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+export default enhance(Listings);

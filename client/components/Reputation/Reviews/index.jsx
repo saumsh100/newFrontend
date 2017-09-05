@@ -1,7 +1,12 @@
+
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import Loader from 'react-loader';
+import { bindActionCreators } from 'redux';
 import { Card, Col, Grid, Row, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
+import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import GoogleMapsVideo from './Cards/GoogleMapsVideo';
 import AverageRating from './Cards/AverageRating';
 import RatingsChart from './Cards/RatingsChart';
@@ -10,10 +15,41 @@ import Tags from './Cards/Tags';
 import styles from './styles.scss';
 
 class Reviews extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+  }
+
+  componentDidMount(){
+    // can change range
+    const params = {
+      startDate: moment().subtract(30, 'days')._d,
+      endDate: moment()._d,
+    };
+
+    Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'reviews',
+        url: '/api/reputation/reviews',
+        params,
+      }),
+    ]).then(() => {
+      this.setState({
+        loaded: true,
+      });
+    });
+  }
+
   render() {
     const {
       reviews,
     } = this.props;
+
+    if (!reviews) {
+      return null;
+    }
 
     const reviewsData = reviews.get('data').toJS();
 
@@ -82,47 +118,64 @@ class Reviews extends Component {
 
 
     return (
-      <Grid className={styles.reviews}>
-        <Row className={styles.reviews__wrapper}>
-          <Col className={styles.padding} xs={12} md={12}>
-            <GoogleMapsVideo />
-          </Col>
-
-          <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <AverageRating count={reviewsData.industryAverageRating} />
-          </Col>
-
-          <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
-            <Card className={styles.card}>
-              <div className={styles.stats}>
-                <span className={styles.stats__count} > {reviewsData.totalCount} </span>
-                <span className={styles.stats__title} >Total Reviews</span>
-                <div className={styles.stats__rating}>
-                  {reviewsData.ratingCounts['0'] || '0'} With no start rating
-                </div>
-                <span className={styles.stats__bottom}>Industry Average {reviewsData.industryAverageCount} </span>
-              </div>
-            </Card>
-          </Col>
-
-          <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <RatingsChart rating={reviewsData.ratingCounts} />
-          </Col>
-          {/*<Col className={styles.padding} xs={12} md={12}>
-            <Tags />
-          </Col>*/}
-          <Row className={styles.rowReviewsFilter}>
-            <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
-              <ReviewsCard data={contructBigComment} />
+      <Loader loaded={this.state.loaded} color="#FF715A">
+        <Grid className={styles.reviews}>
+          <Row className={styles.reviews__wrapper}>
+            <Col className={styles.padding} xs={12} md={12}>
+              <GoogleMapsVideo />
             </Col>
-            {/*<Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
-              <Filters filters={filters} />
+
+            <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
+              <AverageRating count={reviewsData.industryAverageRating} />
+            </Col>
+
+            <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
+              <Card className={styles.card}>
+                <div className={styles.stats}>
+                  <span className={styles.stats__count} > {reviewsData.totalCount} </span>
+                  <span className={styles.stats__title} >Total Reviews</span>
+                  <div className={styles.stats__rating}>
+                    {reviewsData.ratingCounts['0'] || '0'} With no start rating
+                  </div>
+                  <span className={styles.stats__bottom}>Industry Average {reviewsData.industryAverageCount} </span>
+                </div>
+              </Card>
+            </Col>
+
+            <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
+              <RatingsChart rating={reviewsData.ratingCounts} />
+            </Col>
+            {/*<Col className={styles.padding} xs={12} md={12}>
+              <Tags />
             </Col>*/}
+            <Row className={styles.rowReviewsFilter}>
+              <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
+                <ReviewsCard data={contructBigComment} />
+              </Col>
+              {/*<Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
+                <Filters filters={filters} />
+              </Col>*/}
+            </Row>
           </Row>
-        </Row>
-      </Grid>
+        </Grid>
+      </Loader>
     );
   }
 }
 
-export default Reviews;
+function mapStateToProps({ apiRequests }) {
+  const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
+  return {
+    reviews,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntitiesRequest,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(Reviews);

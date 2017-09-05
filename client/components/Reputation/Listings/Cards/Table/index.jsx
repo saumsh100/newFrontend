@@ -22,10 +22,8 @@ class Table extends Component {
       borderColor,
       cardTitle,
       data,
-      tableData,
     } = this.props;
 
-    console.log(tableData.searchengines)
     const { detailsModeActive } = this.state;
 
     return (
