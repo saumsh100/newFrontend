@@ -5,13 +5,14 @@ import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
+import reviewsRouter from './reviews';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import { PatientUser, Practitioner } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
 
-const sequelizeMyRouter = new Router();
+const sequelizeMyRouter = Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
@@ -24,6 +25,8 @@ sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
   { association: 'practitioners', required: false, where: { isActive: true } },
 ]));
+
+sequelizeMyRouter.use('/reviews', reviewsRouter);
 
 sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
   try {
@@ -75,11 +78,11 @@ function replaceIndex(string, regex, index, repl) {
 
 const toString = str => `"${str}"`;
 const toTemplateString = str => `\`${str}\``;
-const getPath = filename => `${__dirname}/../../routes/my/${filename}`;
+const getPath = filename => `${__dirname}/../../routes/_my/${filename}`;
 
 sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
-  const account = req.account.get({ plain: true });
   try {
+    const account = req.account.get({ plain: true });
     fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
       if (err) throw err;
       fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {
@@ -92,7 +95,7 @@ sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
         const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(account.id));
 
         // TODO: need to be able to minify and compress code UglifyJS
-        res.send(replacedWidgetJS);
+        res.type('javascript').send(replacedWidgetJS);
       });
     });
   } catch (err) {

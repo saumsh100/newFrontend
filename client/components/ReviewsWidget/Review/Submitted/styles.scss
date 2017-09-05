@@ -1,0 +1,27 @@
+
+@import '../../../../ui';
+
+.messageWrapper {
+  text-align: center;
+  width: 75%;
+  max-width: 400px;
+  margin: 0px auto;
+}
+
+.thanksHeader {
+  margin: 20px;
+  font-size: 2em;
+  color: $primary-blue;
+  font-family: $medium-font;
+}
+
+.apologyMessage {
+  margin: 10px;
+  color: $primary-darkgrey;
+}
+
+.fromPractitioner {
+  @extend .apologyMessage;
+  margin-top: 10px;
+}
+

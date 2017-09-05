@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { fetchEntities, deleteEntityRequest } from '../../../../thunks/fetchEntities';
-import { VButton } from '../../../library/index';
+import { VButton } from '../../../library';
 import PageContainer from '../../General/PageContainer';
 import EditableList from '../../General/EditableList';
 import { getCollection } from '../../../Utils';

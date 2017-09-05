@@ -37,6 +37,7 @@ import SelectPill from './SelectPill';
 import InfoSection from './InfoSection';
 import Pill from './Pill';
 import PieChart from './PieChart';
+import ProgressBar from './ProgressBar';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
@@ -47,6 +48,7 @@ import PractitionerAvatar from './PractitionerAvatar';
 import Search from './Search';
 import RangeSlider from './RangeSlider';
 import Star from './Star';
+import Stars from './Stars';
 import Summary from './Summary';
 import Timer from './Timer';
 import Toggle from './Toggle';
@@ -117,9 +119,11 @@ export {
   RouterTabs,
   SaveButton,
   PractitionerAvatar,
+  ProgressBar,
   Search,
   RangeSlider,
   Star,
+  Stars,
   Summary,
   Stats,
   FlexGrid,

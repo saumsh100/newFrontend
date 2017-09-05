@@ -67,6 +67,7 @@ models.push((require('./PractitionerRecurringTimeOff').default(sequelize, Sequel
 models.push((require('./Recall').default(sequelize, Sequelize)));
 models.push((require('./Reminder').default(sequelize, Sequelize)));
 models.push((require('./Request').default(sequelize, Sequelize)));
+models.push((require('./Review').default(sequelize, Sequelize)));
 models.push((require('./Segment').default(sequelize, Sequelize)));
 models.push((require('./SentRecall').default(sequelize, Sequelize)));
 models.push((require('./SentReminder').default(sequelize, Sequelize)));
