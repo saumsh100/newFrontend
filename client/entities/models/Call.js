@@ -29,5 +29,7 @@ const CallSchema = {
 };
 
 export default class Call extends createModel(CallSchema) {
-
+  getUrlRoot() {
+    return `/api/calls/${this.get('id')}`;
+  }
 }

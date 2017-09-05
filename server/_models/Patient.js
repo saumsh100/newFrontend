@@ -87,6 +87,7 @@ export default function (sequelize, DataTypes) {
     address: {
       // TODO: for now just use nested JSON
       type: DataTypes.JSONB,
+      defaultValue: {},
     },
 
     // TODO: needs to be a separate table

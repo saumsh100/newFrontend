@@ -1,7 +1,7 @@
+
 const postgres = require('./globals').postgres;
 
 let dialectOptions;
-
 if (process.env.NODE_ENV === 'production') {
   dialectOptions = {
     ssl: {

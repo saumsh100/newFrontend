@@ -21,7 +21,10 @@ class ServiceDataItem extends Component {
 
   updateService(values) {
     const { service } = this.props;
-    values.name = values.name.trim();
+
+    if (values && values.name) {
+      values.name = values.name.trim();
+    }
 
     const valuesMap = Map(values);
 
@@ -54,10 +57,13 @@ class ServiceDataItem extends Component {
     let showComponent = null;
 
     if (service) {
-      const initialValues = {
+      const initialValuesBasic = {
         name: service.get('name'),
         duration: service.get('duration'),
         bufferTime: service.get('bufferTime'),
+      };
+
+      const initialValuesWidget = {
         isHidden: service.get('isHidden'),
         isDefault: service.get('isDefault') || false,
       };
@@ -74,9 +80,9 @@ class ServiceDataItem extends Component {
             <div className={styles.servicesFormRow}>
               <Header title="Service Details" contentHeader />
               <Form
-                form={`${service.get('id')}Form`}
+                form={`${service.get('id')}basicForm`}
                 onSubmit={this.updateService}
-                initialValues={initialValues}
+                initialValues={initialValuesBasic}
                 data-test-id="serviceDataForm"
                 alignSave="left"
               >
@@ -112,7 +118,7 @@ class ServiceDataItem extends Component {
                 <Form
                   form={`${service.get('id')}WidgetForm`}
                   onSubmit={this.updateService}
-                  initialValues={initialValues}
+                  initialValues={initialValuesWidget}
                   alignSave="left"
                 >
                   <div className={styles.servicesFormRow_widget_content}>
