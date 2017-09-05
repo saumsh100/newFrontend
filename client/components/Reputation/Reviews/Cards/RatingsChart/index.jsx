@@ -10,7 +10,6 @@ export default function RatingsChart(props) {
     rating,
   } = props;
 
-
   const ratingStars = _.keys(rating).sort((a,b) => a < b);
   const maxValue = _.max(_.values(rating));
 

@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Card, Star } from '../../../../library';
-import _ from 'lodash';
-import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
 
 export default function AverageRating(props) {
@@ -26,9 +24,6 @@ export default function AverageRating(props) {
     rows.push(<Star key={i} size={1.8} />);
   }
 
-
-
-
   return (
     <Card className={styles.card}>
       <div className={styles.stats}>
@@ -45,5 +40,6 @@ export default function AverageRating(props) {
 
 AverageRating.PropTypes = {
   count: PropTypes.number,
+  rating: PropTypes.object,
   average: PropTypes.number,
 }
