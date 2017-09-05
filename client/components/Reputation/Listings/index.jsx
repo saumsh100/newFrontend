@@ -84,6 +84,9 @@ class Listings extends Component {
     const getInfo = listings.get('accountInfo').toJS();
     const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]]
 
+    console.log(listingsData);
+
+
     const scoreData = [
       { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
       { title: 'Industry Leaders Average', count: listingsData.listingPointScore.industryLeadersAverage },
@@ -91,8 +94,8 @@ class Listings extends Component {
 
     const totalData = [
       { icon: 'check', title: 'Accurate', count: listingsData.sourcesFound },
-      { icon: 'exclamation', title: 'Found with Possible Errors', count: listingsData.sourcesNotFound },
-      { icon: 'times', title: 'Not Found', count: listingsData.sourcesFoundWithErrors },
+      { icon: 'exclamation', title: 'Found with Possible Errors', count: listingsData.sourcesFoundWithErrors },
+      { icon: 'times', title: 'Not Found', count: listingsData.sourcesNotFound },
     ];
 
     const informationData = [
@@ -106,8 +109,6 @@ class Listings extends Component {
     ];
 
     const listingsSearchData = listings.get('searchData').toJS();
-
-    console.log(listingsSearchData);
 
     const tableData = [{
       data: generateSearchData(listingsSearchData.searchengines),
