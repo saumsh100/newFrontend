@@ -105,9 +105,7 @@ class Listings extends Component {
       { title: 'Website', data: listingsAcctInfo.website },
     ];
 
-
     const listingsSearchData = listings.get('searchData').toJS();
-    console.log(listingsSearchData);
 
     const tableData = [{
       data: generateSearchData(listingsSearchData.searchengines),
@@ -183,6 +181,12 @@ class Listings extends Component {
     );
   }
 }
+
+Listings.propTypes = {
+  listings: PropTypes.object.isRequired,
+  activeAccount: PropTypes.object.isRequired,
+  fetchEntitiesRequest: PropTypes.func,
+};
 
 function mapStateToProps({ apiRequests, entities, auth }) {
   const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);

@@ -183,6 +183,12 @@ class Reviews extends Component {
   }
 }
 
+Reviews.propTypes = {
+  reviews: PropTypes.object.isRequired,
+  activeAccount: PropTypes.object.isRequired,
+  fetchEntitiesRequest: PropTypes.func,
+};
+
 function mapStateToProps({ apiRequests, entities, auth }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
 
