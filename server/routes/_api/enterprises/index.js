@@ -129,12 +129,13 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
 
   return Account.create(accountData)
     .then(async (accountFirst) => {
-      const newData = await createAccount(accountFirst);
-      accountFirst.callrailId = newData.callrailId;
-      accountFirst.vendastaId = newData.vendastaId;
-      accountFirst.vendastaAccountId = newData.vendastaAccountId;
-      accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
-      const account = await accountFirst.save();
+ //       commenting out the creating and saving of api keys
+//       const newData = await createAccount(accountFirst);
+//       accountFirst.callrailId = newData.callrailId;
+//       accountFirst.vendastaId = newData.vendastaId;
+//       accountFirst.vendastaAccountId = newData.vendastaAccountId;
+//       accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
+//       const account = await accountFirst.save();
 
       const defaultReminders = [
         {
