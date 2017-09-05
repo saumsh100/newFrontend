@@ -10,13 +10,10 @@ const companyIcons = {
   'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.pn',
 };
 
-
-
 export default function ReviewsCard(props) {
   const {
     data,
   } = props;
-
 
   return (
     <Card  className={styles.card}>

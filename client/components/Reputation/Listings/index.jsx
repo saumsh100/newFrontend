@@ -152,7 +152,7 @@ class Listings extends Component {
               borderColor={colorMap.blue}
               title="Listing Score"
               data={scoreData}
-              listingScore={listingsData.listingScore}
+              listingScore={listingsData.listingPointScore}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={4}>

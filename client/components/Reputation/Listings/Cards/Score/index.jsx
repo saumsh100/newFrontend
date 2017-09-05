@@ -15,7 +15,7 @@ class Score extends Component {
       <Card className={styles.score}>
         <div className={styles.score__header}>
           <div className={styles.score__header_count}>
-            {listingScore.toFixed(0)}
+            {listingScore.pointScore.toFixed(0)}
           </div>
           <div className={styles.score__header_title}>
             {title}

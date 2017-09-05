@@ -76,7 +76,7 @@ export class BigCommentBubble extends Component {
             <div className={styles.bigCommentBubble__mainContent__header}>
               <a href={reviewerUrl} className={styles.bigCommentBubble__mainContent__header__link}>{headerLinkName}</a>
               reviewed your practice on
-              <a href={`http://www.${headerLinkSite}`} className={styles.bigCommentBubble__mainContent__header__site}>{headerLinkSite}</a>
+              <a href={`http://www.${headerLinkSite}`} target="_blank" className={styles.bigCommentBubble__mainContent__header__site}>{headerLinkSite}</a>
             </div>
             <div className={styles.bigCommentBubble__mainContent__rating}>
               {siteStars > 0 && [...Array(siteStars)].map((x, i) =>
@@ -88,7 +88,7 @@ export class BigCommentBubble extends Component {
             </div>
             <div className={styles.bigCommentBubble__mainContent__preview}>
               {sitePreview}
-              <a href={url} className={styles.bigCommentBubble__mainContent__preview__toggleButton} >more... </a>
+              <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >more... </a>
             </div>
             {requiredAction &&
               <div className={styles.bigCommentBubble__mainContent__requirements}>
@@ -108,7 +108,7 @@ export class BigCommentBubble extends Component {
                 <span className="fa fa-trash" />
               </div>
             }
-            <a href={url} className={styles.bigCommentBubble__respondBlock__respondButton}>
+            <a href={url} target="_blank" className={styles.bigCommentBubble__respondBlock__respondButton}>
               Respond
             </a>
           </div>

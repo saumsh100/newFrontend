@@ -66,7 +66,7 @@ class Reviews extends Component {
     } = this.props;
 
     if (!this.state.hasAccount) {
-      return <ReputationDisabled />
+      return <ReputationDisabled />;
     }
 
     if (!reviews) {
