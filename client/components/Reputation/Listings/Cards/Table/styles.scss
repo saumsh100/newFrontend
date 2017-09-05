@@ -130,7 +130,7 @@
     &_right {
       display: flex;
       align-items: center;
-      text-align: right;
+      //text-align: right;
       height: 100%;
       width: 100%;
       justify-content: flex-start;
@@ -154,14 +154,14 @@
     }
 
     &_table {
-      text-align: center;
+      //text-align: center;
       padding: 0 25px;
       min-width: 200px;
       height: 100%;
       display: flex;
-      align-items: center;
+      //align-items: center;
       flex-direction: column;
-      justify-content: center;
+      //justify-content: center;
     }
     .table {
       &__text {
@@ -175,8 +175,8 @@
         font-size: $small-size;
         text-decoration: none;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        //justify-content: center;
+        //align-items: center;
         i {
           margin-right: 4px;
         }
