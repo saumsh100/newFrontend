@@ -68,7 +68,7 @@ const ROUTES = {
     },
   ],
 
-  /*'/reputation': [
+  '/reputation': [
     {
       to: '/reputation/listings',
       label: 'Listings',
@@ -79,7 +79,7 @@ const ROUTES = {
     },
   ],
 
-  '/social': [
+  /* '/social': [
     {
       to: '/social/patient',
       label: 'Patient Posts',

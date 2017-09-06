@@ -1,78 +1,128 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import Loader from 'react-loader';
 import { Col, Grid, Row, Filters } from '../../library';
+import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import colorMap from '../../library/util/colorMap';
 import Score from './Cards/Score';
 import Total from './Cards/Total';
 import Information from './Cards/Information';
 import Table from './Cards/Table';
 import styles from './styles.scss';
+import ReputationDisabled from "../ReputationDisabled";
+
+function generateSearchData(entityList) {
+  return entityList.map((entity) => {
+    return {
+      img: entity.iconUrl,
+      name: entity.sourceName,
+      listing: entity.listings,
+    };
+  });
+}
 
 class Listings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+      hasAccount: false,
+    };
+  }
+
+  componentWillMount() {
+    const {
+      activeAccount,
+    } = this.props;
+
+    let hasAccount = false;
+
+    if (activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '') {
+      hasAccount = true;
+    }
+
+    this.setState({
+      hasAccount,
+    });
+  }
+
+  componentDidMount() {
+    if (this.state.hasAccount) {
+      const params = {
+        startDate: moment().subtract(30, 'days')._d,
+        endDate: moment()._d,
+      };
+
+      Promise.all([
+        this.props.fetchEntitiesRequest({
+          id: 'listings',
+          url: '/api/reputation/listings',
+        }),
+      ]).then(() => {
+        this.setState({
+          loaded: true,
+        });
+      });
+    }
+  }
+
   render() {
+    const {
+      listings,
+    } = this.props;
+
+    if (!this.state.hasAccount) {
+      return <ReputationDisabled />
+    }
+
+    if (!listings) {
+      return <Loader loaded={this.state.loaded} color="#FF715A" />
+    }
+
+    const listingsData = listings.get('data').toJS();
+    const getInfo = listings.get('accountInfo').toJS();
+    const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]]
+
+    console.log(listingsData);
+
+
     const scoreData = [
-      { title: 'Industry Avg', count: 404 },
-      { title: 'Industry Avg', count: 404 },
+      { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
+      { title: 'Industry Leaders Average', count: listingsData.listingPointScore.industryLeadersAverage },
     ];
 
     const totalData = [
-      { icon: 'check', title: 'Accurate', count: 3 },
-      { icon: 'exclamation', title: 'Found with Possible Errors', count: 2 },
-      { icon: 'times', title: 'Not Found', count: 15 },
+      { icon: 'check', title: 'Accurate', count: listingsData.sourcesFound },
+      { icon: 'exclamation', title: 'Found with Possible Errors', count: listingsData.sourcesFoundWithErrors },
+      { icon: 'times', title: 'Not Found', count: listingsData.sourcesNotFound },
     ];
 
     const informationData = [
-      { title: 'Business Name', data: 'ABC Dental Care' },
-      { title: 'Street Address', data: 'East 2nd Ave' },
-      { title: 'City', data: 'Vancouver' },
-      { title: 'State / Prov / Region ', data: 'BC' },
-      { title: 'Zip / Postal Code', data: 'V1B2C3' },
-      { title: 'Phone', data: '123 456 7890' },
-      { title: 'Website', data: 'https://www.abcdentalcare.com' },
+      { title: 'Business Name', data: listingsAcctInfo.companyName },
+      { title: 'Street Address', data: listingsAcctInfo.address },
+      { title: 'City', data: listingsAcctInfo.city },
+      { title: 'State / Prov / Region ', data: listingsAcctInfo.state },
+      { title: 'Zip / Postal Code', data: listingsAcctInfo.zip },
+      { title: 'Phone', data: listingsAcctInfo.workNumber },
+      { title: 'Website', data: listingsAcctInfo.website },
     ];
 
-    const hardcodeTableData = [{
-      data:
-      [{
-        img: '/images/services/google_maps.png',
-        name: 'Google Maps',
-        phone: '123 456 7890',
-        email: 'lwater12@gmail.com',
-        listing: 0,
-      }, {
-        img: '/images/services/voyager.png',
-        name: 'Google Maps',
-        phone: '123 456 7890',
-        email: 'emilee1@gmail.com',
-        listing: 26,
-      }, {
-        img: '/images/services/google_maps.png',
-        name: 'Google Maps',
-        phone: '123 456 7890',
-        email: 'barlet@gmail.com',
-        listing: 54,
-      }] }, {
-        title: 'Review Sites',
-        data:
-        [{
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'lwater12@gmail.com',
-          listing: 0,
-        }, {
-          img: '/images/services/voyager.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'emilee1@gmail.com',
-          listing: 26,
-        }, {
-          img: '/images/services/google_maps.png',
-          name: 'Google Maps',
-          phone: '123 456 7890',
-          email: 'barlet@gmail.com',
-          listing: 0,
-        }] }];
+    const listingsSearchData = listings.get('searchData').toJS();
 
+    const tableData = [{
+      data: generateSearchData(listingsSearchData.searchengines),
+    }, {
+      title: 'Review Sites',
+      data: generateSearchData(listingsSearchData.reviewengines),
+    }, {
+      title: 'Social Sites',
+      data: generateSearchData(listingsSearchData.socialengines),
+    }, {
+      title: 'Directories',
+      data: generateSearchData(listingsSearchData.directories),
+    },
+    ];
 
     const filters = [
       {
@@ -102,6 +152,7 @@ class Listings extends Component {
               borderColor={colorMap.blue}
               title="Listing Score"
               data={scoreData}
+              listingScore={listingsData.listingPointScore}
             />
           </Col>
           <Col className={styles.padding} xs={12} md={4}>
@@ -118,20 +169,42 @@ class Listings extends Component {
               data={informationData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={9}>
+          <Col className={styles.padding} xs={12} md={12}>
             <Table
               borderColor={colorMap.blue}
               cardTitle="Search Engines"
-              data={hardcodeTableData}
+              data={tableData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={3}>
+          {/*<Col className={styles.padding} xs={12} md={3}>
             <Filters filters={filters} />
-          </Col>
+          </Col>*/}
         </Row>
       </Grid>
     );
   }
 }
 
-export default Listings;
+Listings.propTypes = {
+  listings: PropTypes.object.isRequired,
+  activeAccount: PropTypes.object.isRequired,
+  fetchEntitiesRequest: PropTypes.func,
+};
+
+function mapStateToProps({ apiRequests, entities, auth }) {
+  const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
+
+  return {
+    listings,
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntitiesRequest,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+export default enhance(Listings);

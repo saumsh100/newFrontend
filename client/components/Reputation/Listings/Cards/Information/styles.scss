@@ -2,11 +2,12 @@
 @import "../../../../../fonts";
 
 .total {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size $primary-darkgrey;
   height: 210px;
   &__header {
     display: flex;
     padding: 15px 10px;
+    padding-left: 20px;
   }
   &__wrapper {
     display: flex;
@@ -47,9 +48,10 @@
     }
     &_text {
       color: $primary-dark;
+      composes: subHeaderMedium from 'sass-loader!../../../../../fonts.scss'
     }
     &_data {
-      color: $primary-darkgrey;
+      color: lighten($primary-darkgrey, 20%);
     }
   }
   &__body {
