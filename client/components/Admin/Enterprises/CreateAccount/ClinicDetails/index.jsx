@@ -6,12 +6,19 @@ const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 const maxLength25 = maxLength(50);
 
-export default function ClinicDetails({ onSubmit, index, initialValues }) {
+export default function ClinicDetails(props) {
+  const {
+    onSubmit,
+    index,
+    initialValues,
+    formName,
+  } = props;
+
   return (
     <Form
-      form="clinicDetails"
+      form={formName}
       onSubmit={(values) => {
-        onSubmit(values, index);
+        onSubmit(values, index, formName);
       }}
       initialValues={initialValues}
       ignoreSaveButton
@@ -29,15 +36,13 @@ export default function ClinicDetails({ onSubmit, index, initialValues }) {
           label="Website"
         />
       </div>
-      <Button
-        type="submit"
-      >
-        next
-      </Button>
     </Form>
   );
 }
 
 ClinicDetails.propTypes = {
   onSubmit: PropTypes.func,
+  initialValues: PropTypes.object,
+  index: PropTypes.number,
+  formName: PropTypes.string,
 };

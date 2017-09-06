@@ -3,14 +3,22 @@ import React, { PropTypes, Component } from 'react';
 import { Form, Field, Button } from '../../../../library';
 import { emailValidate, maxLength, passwordsValidate, passwordStrength, asyncEmailValidateUser } from '../../../../library/Form/validate';
 
-export default function AddUser({ onSubmit, index, previous }) {
+export default function AddUser(props) {
+  const {
+    onSubmit,
+    index,
+    initialValues,
+    formName,
+  } = props;
+
   return (
     <Form
-      form="addUser"
+      form={formName}
       onSubmit={(values) => {
-        onSubmit(values, index);
+        onSubmit(values, index, formName);
       }}
       asyncValidate={asyncEmailValidateUser}
+      initialValues={initialValues}
       ignoreSaveButton
     >
       <Field
@@ -57,12 +65,13 @@ export default function AddUser({ onSubmit, index, previous }) {
         validate={[passwordsValidate, passwordStrength]}
         label="Password Confirmation"
       />
-      {index ? <Button onClick={() => previous(index)}> Previous </Button> : null}
-      <Button type="submit" > next </Button>
     </Form>
   );
 }
 
 AddUser.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
+  index: PropTypes.number,
+  formName: PropTypes.string,
 };
