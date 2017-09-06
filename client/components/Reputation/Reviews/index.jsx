@@ -155,7 +155,7 @@ class Reviews extends Component {
                 <span className={styles.stats__count} > {reviewsData.totalCount} </span>
                 <span className={styles.stats__title} >Total Reviews</span>
                 <div className={styles.stats__rating}>
-                  {reviewsData.ratingCounts['0'] || '0'} With no start rating
+                  {reviewsData.ratingCounts['0'] || '0'} with no star rating
                 </div>
                 <span className={styles.stats__bottom}>
                   Industry Average {reviewsData.industryAverageCount}
