@@ -40,3 +40,22 @@
 .cardHeader {
   padding: 20px;
 }
+
+.disabledPage {
+  width: 100%;
+  height: calc(100vh - 160px);
+  position: relative;
+  overflow: hidden;
+  &_text {
+    font-size: $large-size;
+    width: 700px;
+    color: $inactive-color;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+}

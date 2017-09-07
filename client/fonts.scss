@@ -94,10 +94,32 @@
 
 .fontMedium {
   @extend .font-medium;
+  @extend .letterSpacing;
 }
 
 .fontJumbo {
   @extend .font-jumbo;
+  @extend .letterSpacing;
+}
+
+.fontLarge {
+  font-size: $large-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+
+}
+
+.fontExtraLarge {
+  font-size: $x-large-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+}
+
+.fontMediumLarge {
+  font-size: $extra-medium-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+
 }
 
 .cardHeaderTitle {
@@ -156,6 +178,11 @@
 }
 
 .tab {
-  font-family: $medium-font;
+  //font-family: $medium-font;
   color: $primary-darkgrey;
+  @extend .letterSpacing;
+}
+
+.textPreviews {
+
 }

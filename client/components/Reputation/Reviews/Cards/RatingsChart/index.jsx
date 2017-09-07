@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import { Card, Star } from '../../../../library';
@@ -9,7 +10,6 @@ export default function RatingsChart(props) {
     rating,
   } = props;
 
-
   const ratingStars = _.keys(rating).sort((a,b) => a < b);
   const maxValue = _.max(_.values(rating));
 
@@ -19,7 +19,7 @@ export default function RatingsChart(props) {
         {ratingStars.map((r, index) => {
           const rows = [];
           for (let i = 1; i <= r; i++) {
-            rows.push(<Star key={i} size={1.3} />);
+            rows.push(<Star key={i} size={1.8} />);
           }
           const width = rating[r] ? (Math.floor((rating[r] / maxValue) * 80)) : 5;
           const style = { width: `${width}%` };

@@ -9,8 +9,12 @@ import {
 } from '../actions/entities';
 
 import {
-  showAlertTimeout
+  showAlertTimeout,
 } from '../thunks/alerts';
+
+import {
+  removeAlert,
+} from '../actions/alerts';
 
 import {
   setSyncingWithPMS,
@@ -99,7 +103,25 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Calls Socket
        */
       socket.on('call.started', (data) => {
-        console.log(data);
+        const callId = Object.keys(data.entities.calls)[0];
+        const patientId = data.entities.patients ? Object.keys(data.entities.patients)[0] : null;
+        const patient = patientId ? `${data.entities.patients[patientId].firstName} ${data.entities.patients[patientId].lastName}` : 'Unknown';
+        const alert = {
+          id: callId,
+          title: 'Incoming Call',
+          caller: true,
+          body: `Call from ${patient} ${data.entities.calls[callId].callerNum}`,
+          sticky: true,
+        };
+
+        dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
+      });
+
+      socket.on('call.ended', (data) => {
+        const callId = Object.keys(data.entities.calls)[0];
+        dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
+        dispatch(removeAlert({ alert: { id: callId } }));
       });
 
       /**

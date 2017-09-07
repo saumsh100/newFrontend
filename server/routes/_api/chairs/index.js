@@ -3,7 +3,6 @@ import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
-import normalize from '../normalize';
 import { Chair } from '../../../_models';
 
 const chairsRouter = Router();

@@ -14,11 +14,13 @@ import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import loadTypography from 'bundle-loader?lazy!./Dashboard/Typography';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
-import loadReputatuion from 'bundle-loader?lazy!./Dashboard/Reputation';
+import loadReputation from 'bundle-loader?lazy!./Dashboard/Reputation';
 import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
 import loadEnterprise from 'bundle-loader?lazy!./Dashboard/Enterprise';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
+import ForgotPassword from '../components/ForgotPassword';
+import ResetPassword from '../components/ForgotPassword/ResetPassword';
 import withAuthProps from '../hocs/withAuthProps';
 
 const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
@@ -33,7 +35,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <LazyRoute path="/typography" load={loadTypography} name="typography" />
 
         {/*<LazyRoute path="/social" load={loadSocial} name="social" />*/}
-        {/*<LazyRoute path="/reputation" load={loadReputatuion} name="reputation" />*/}
+        <LazyRoute path="/reputation" load={loadReputation} name="reputation" />
         <LazyRoute path="/settings" load={loadSettings} name="settings" />
         { isSuperAdmin ? (<LazyRoute path="/admin" load={loadAdmin} name="admin" />) : null }
         { withEnterprise ? (<LazyRoute path="/enterprise" load={loadEnterprise} name="enterprise" />) : null }
@@ -54,12 +56,17 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   const signUp = /^\/signup\/.+$/i;
   const urlTest = (signUp.test(history.location.pathname) ? history.location.pathname : '/signup');
 
+  const reset = /^\/resetpassword\/.+$/i;
+  const resetTest = (reset.test(history.location.pathname) ? history.location.pathname : '/resetpassword');
+
   return (
     <Router history={history}>
       <div>
         <Switch>
           <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
           <Route exact path={urlTest} render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
+          <Route exact path="/forgot" render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)} />
+          <Route exact path={resetTest} render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)} />
           <Route path="/" component={Dashboard} />
         </Switch>
       </div>

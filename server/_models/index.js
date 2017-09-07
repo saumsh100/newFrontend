@@ -56,6 +56,7 @@ models.push((require('./Chat').default(sequelize, Sequelize)));
 models.push((require('./Enterprise').default(sequelize, Sequelize)));
 models.push((require('./Family').default(sequelize, Sequelize)));
 models.push((require('./Invite').default(sequelize, Sequelize)));
+models.push((require('./PasswordReset').default(sequelize, Sequelize)));
 models.push((require('./Patient').default(sequelize, Sequelize)));
 models.push((require('./PatientUser').default(sequelize, Sequelize)));
 models.push((require('./Permission').default(sequelize, Sequelize)));

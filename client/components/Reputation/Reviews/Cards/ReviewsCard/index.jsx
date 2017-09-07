@@ -3,6 +3,13 @@ import { Card, CardHeader, BigCommentBubble, Col } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
 
+const companyIcons = {
+  'Rate MDs': '//www.cdnstyles.com/static/images/icon32/sourceId-10450.png',
+  'Facebook': '//www.cdnstyles.com/static/images/icon32/sourceId-10050.png',
+  'Yelp': '//www.cdnstyles.com/static/images/icon32/sourceId-10000.png',
+  'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.pn',
+};
+
 export default function ReviewsCard(props) {
   const {
     data,
@@ -18,7 +25,7 @@ export default function ReviewsCard(props) {
               return (
                 <BigCommentBubble
                   key={i}
-                  icon={obj.icon}
+                  icon={companyIcons[obj.icon]}
                   iconColor={obj.iconColor}
                   background={obj.background}
                   iconAlign={obj.iconAlign}
@@ -29,6 +36,8 @@ export default function ReviewsCard(props) {
                   sitePreview={obj.sitePreview}
                   createdAt={obj.createdAt}
                   requiredAction={obj.requiredAction}
+                  url={obj.url}
+                  reviewerUrl={obj.reviewerUrl}
                 />
               );
             })}
