@@ -1,12 +1,12 @@
 @import '../../../../ui';
 
 .mainContainer {
-  background: $primary-color;
+  background: $primary-white;
   animation: fadeinform 1s;
 }
 
 .header {
-  color: $primary-white;
+  color: $primary-dark;
   composes: fontMediumSize from 'sass-loader!../../../../fonts.scss';
 }
 

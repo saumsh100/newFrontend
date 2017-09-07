@@ -107,6 +107,7 @@ class EnterpriseList extends Component {
           className={styles.customDialog}
         >
           <CreateAccount
+            enterprises={enterprises}
             setActive={this.setActive}
           />
         </DialogBox>

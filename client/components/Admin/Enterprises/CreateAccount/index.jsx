@@ -7,6 +7,8 @@ import ClinicDetails from './ClinicDetails';
 import ContactDetails from './ContactDetails';
 import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
+;import EnterpriseList from './EnterpriseList';
+import SelectAccountOptions from './SelectAccountOptions';
 import { Button, ListBullets } from '../../../library';
 import { setAllAccountInfo } from '../../../../thunks/admin';
 import styles from './styles.scss';
@@ -17,9 +19,12 @@ class CreateAccount extends Component {
 
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
-    this.setIndex = this.setIndex.bind(this);
+    this.setEnterprise = this.setEnterprise.bind(this);
+    this.setCreate = this.setCreate.bind(this);
 
     this.state = {
+      enterprise: null,
+      create: false,
       formLength: 4,
       index: 0,
       values: [],
@@ -39,34 +44,65 @@ class CreateAccount extends Component {
   }
 
   previous(index) {
+    if (this.state.index === 1 || (!this.state.index && this.state.create)) {
+      const resetValue = this.state.values
+      resetValue[0] = {}
+      this.setState({
+        index: 0,
+        create: false,
+        values: resetValue,
+      })
+    } else {
+      this.setState({
+        index: index - 1,
+      });
+    }
+  }
+
+  setEnterprise(enterprise) {
+    const newValues = this.state.values;
+    newValues[0] = enterprise;
     this.setState({
-      index: index - 1,
+      enterprise,
+      values: newValues,
+      index: 1,
     });
   }
 
-  setIndex(index) {
+  setCreate() {
     this.setState({
-      index,
+      create: !this.state.create,
+      index: 0,
     });
   }
+
 
   render() {
     const {
       submit,
+      enterprises,
     } = this.props;
 
-    const formNames = ['addEnterprise', 'clinicDetails', 'contactDetails', 'addUser'];
+    const formNames = ['addEnterprise', 'clinicDetails', 'selectAccountOptions', 'addUser'];
+
+    const component = this.state.create ? (
+      AddEnterprise({
+        onSubmit: this.next,
+        index: 0,
+        initialValues: this.state.values[0],
+        formName: formNames[0],
+      })) : (
+        <EnterpriseList
+          enterprises={enterprises}
+          setEnterprise={this.setEnterprise}
+          setCreate={this.setCreate}
+          setIndex={this.setIndex}
+        />);
 
     const formList = [
       {
-        title: 'Add Enterprise',
-        component: AddEnterprise({
-          onSubmit: this.next,
-          index: 0,
-          initialValues: this.state.values[0],
-          formName: formNames[0],
-          theme: 'primaryGrey',
-        }),
+        title: this.state.create ? 'Add Enterprise' : 'Select or Add Enterpriser',
+        component,
       },
       {
         title: 'Clinic Details',
@@ -78,8 +114,8 @@ class CreateAccount extends Component {
         }),
       },
       {
-        title: 'Contact Details',
-        component: ContactDetails({
+        title: 'Select Account Options',
+        component: SelectAccountOptions({
           onSubmit: this.next,
           index: 2,
           initialValues: this.state.values[2],
@@ -97,21 +133,25 @@ class CreateAccount extends Component {
       },
     ];
 
+    console.log(this.state.values);
+
     return (
       <div key={this.state.index} className={styles.mainContainer}>
         <div className={styles.header}>{formList[this.state.index].title}</div>
         <div className={styles.formContainer}>
-          {formList[this.state.index].component}
+          {formList[this.state.index].component }
         </div>
         <div className={styles.buttonContainer}>
-          {this.state.index ? (
+          {this.state.index || this.state.create ? (
             <Button
-              onClick={() => this.previous(this.state.index)}
+              onClick={() => this.previous()}
               icon="arrow-left"
             >
               Previous
             </Button>) : null }
-          {this.state.formLength - 1 > this.state.index ?
+
+
+          {(this.state.formLength - 1 > this.state.index) && (this.state.index >= 1 || this.state.create)?
             (<Button
               onClick={() => {
                 submit(formNames[this.state.index]);
@@ -121,7 +161,10 @@ class CreateAccount extends Component {
             >
               Next
             </Button>)
-          : (
+          : null }
+
+
+          {this.state.formLength - 1 === this.state.index ? (
             <Button
               onClick={() => {
                 submit(formNames[this.state.index])
@@ -132,9 +175,9 @@ class CreateAccount extends Component {
             >
               Submit All
             </Button>
-            )}
+            ) : null }
         </div>
-        <div className={styles.bulletContainer}>
+        {/*<div className={styles.bulletContainer}>
           <div className={styles.bulletContainer_bullets}>
             <ListBullets
               index={this.state.index}
@@ -142,7 +185,7 @@ class CreateAccount extends Component {
               setIndex={this.setIndex}
             />
           </div>
-        </div>
+        </div>*/}
       </div>
     );
   }
