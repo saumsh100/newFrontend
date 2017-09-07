@@ -40,7 +40,7 @@ export default function AddUser(props) {
         name="email"
         label="Email"
       />
-      <Field
+      {/*<Field
         required
         name="role"
         label="Role"
@@ -50,7 +50,7 @@ export default function AddUser(props) {
           { value: 'ADMIN' },
           { value: 'MANAGER' },
         ]}
-      />
+      />*/}
       <Field
         required
         type="password"

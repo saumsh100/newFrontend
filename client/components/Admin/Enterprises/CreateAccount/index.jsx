@@ -23,9 +23,8 @@ class CreateAccount extends Component {
     this.setCreate = this.setCreate.bind(this);
 
     this.state = {
-      enterprise: null,
       create: false,
-      formLength: 4,
+      formLength: 3,
       index: 0,
       values: [],
     };
@@ -43,9 +42,9 @@ class CreateAccount extends Component {
     });
   }
 
-  previous(index) {
+  previous() {
     if (this.state.index === 1 || (!this.state.index && this.state.create)) {
-      const resetValue = this.state.values
+      const resetValue = this.state.values;
       resetValue[0] = {}
       this.setState({
         index: 0,
@@ -54,7 +53,7 @@ class CreateAccount extends Component {
       })
     } else {
       this.setState({
-        index: index - 1,
+        index: this.state.index - 1,
       });
     }
   }
@@ -63,7 +62,6 @@ class CreateAccount extends Component {
     const newValues = this.state.values;
     newValues[0] = enterprise;
     this.setState({
-      enterprise,
       values: newValues,
       index: 1,
     });
@@ -101,7 +99,7 @@ class CreateAccount extends Component {
 
     const formList = [
       {
-        title: this.state.create ? 'Add Enterprise' : 'Select or Add Enterpriser',
+        title: this.state.create ? 'Add Enterprise' : 'Select or Add Enterprise',
         component,
       },
       {
@@ -133,7 +131,6 @@ class CreateAccount extends Component {
       },
     ];
 
-    console.log(this.state.values);
 
     return (
       <div key={this.state.index} className={styles.mainContainer}>
@@ -150,7 +147,6 @@ class CreateAccount extends Component {
               Previous
             </Button>) : null }
 
-
           {(this.state.formLength - 1 > this.state.index) && (this.state.index >= 1 || this.state.create)?
             (<Button
               onClick={() => {
@@ -162,7 +158,6 @@ class CreateAccount extends Component {
               Next
             </Button>)
           : null }
-
 
           {this.state.formLength - 1 === this.state.index ? (
             <Button
@@ -177,15 +172,14 @@ class CreateAccount extends Component {
             </Button>
             ) : null }
         </div>
-        {/*<div className={styles.bulletContainer}>
+        <div className={styles.bulletContainer}>
           <div className={styles.bulletContainer_bullets}>
             <ListBullets
               index={this.state.index}
               length={this.state.formLength}
-              setIndex={this.setIndex}
             />
           </div>
-        </div>*/}
+        </div>
       </div>
     );
   }

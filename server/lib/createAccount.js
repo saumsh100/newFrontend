@@ -126,12 +126,12 @@ async function vendastaSetup(account) {
   }
 }
 
-export default async function createAccount(account) {
-  const vendastaData = await vendastaSetup(account);
+export default async function createAccount(account, setupList) {
+  const vendastaData = setupList.reputationManagement ? await vendastaSetup(account) : null;
 
   const data = {
-    callrailId: callRail(account),
-    twilioPhoneNumber: twilioSetup(account),
+    callrailId: setupList.callTracking ? await callRail(account) : null,
+    twilioPhoneNumber: setupList.remindersRecalls ? await twilioSetup(account) : null,
     ...vendastaData,
   };
   return data;

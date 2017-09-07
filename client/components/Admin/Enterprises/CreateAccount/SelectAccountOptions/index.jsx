@@ -21,36 +21,36 @@ export default function SelectAccountOptions(props) {
       initialValues={initialValues}
       ignoreSaveButton
     >
-      <Field
-        name="destinationPhoneNumber"
-        label="Destination Phone Number"
-        type="tel"
-      />
       <span>
-        Set Up Vendasta
+        Set Up Reputation Management
       </span>
       <div>
         <Field
           component="Toggle"
-          name="vendasta"
+          name="reputationManagement"
         />
       </div>
-      <span>
-        Set Up Twilio
-      </span>
+      <span> Can Send Reminders? </span>
       <div>
         <Field
           component="Toggle"
-          name="twilio"
+          name="canSendReminders"
         />
       </div>
+      <span> Can Send Recalls? </span>
+      <div>
+        <Field
+          component="Toggle"
+          name="canSendRecalls"
+        />
+      </div>div>
       <span>
-        Set Up Call Rails
+        Set Up Call Tracking
       </span>
       <div>
         <Field
           component="Toggle"
-          name="callRails"
+          name="callTracking"
         />
       </div>
     </Form>

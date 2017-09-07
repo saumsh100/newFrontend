@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../../library';
-import Button from "../../../../library/Button/index";
+import moment from 'moment-timezone';
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
@@ -13,6 +13,18 @@ export default function ClinicDetails(props) {
     initialValues,
     formName,
   } = props;
+
+  const options = moment.tz.names().map((value) => {
+    const exp = new RegExp(/america/i);
+    if (exp.test(value)) {
+      return {
+        value,
+      };
+    }
+    return {
+      value: null,
+    };
+  }).filter(filterValue => filterValue.value !== null);
 
   return (
     <Form
@@ -34,6 +46,23 @@ export default function ClinicDetails(props) {
         <Field
           name="website"
           label="Website"
+        />
+      </div>
+      <div>
+        <Field
+          name="destinationPhoneNumber"
+          label="Destination Phone Number"
+          type="tel"
+        />
+      </div>
+      <div>
+        <Field
+          name="timezone"
+          label="Timezone"
+          component="DropdownSelect"
+          options={options}
+          data-test-id="timezone"
+          search
         />
       </div>
     </Form>
