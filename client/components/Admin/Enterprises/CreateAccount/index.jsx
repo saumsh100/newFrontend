@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { submit } from 'redux-form';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
 import AddUser from './AddUser';
+import AddEnterprise from './AddEnterprise';
 import Button from '../../../library/Button/index';
+import { setAllAccountInfo } from '../../../../thunks/admin';
 
 class CreateAccount extends Component {
   constructor(props) {
@@ -13,19 +14,20 @@ class CreateAccount extends Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.state = {
+      formLength: 2,
       index: 0,
       values: [],
     };
   }
 
-  next(values, index, formName) {
-
+  next(values, index) {
     const newValues = this.state.values;
 
     newValues[index] = values;
 
+    const newIndex = this.state.formLength - 1 > index ? index + 1 : this.state.index;
     this.setState({
-      index: index + 1,
+      index: newIndex,
       values: newValues,
     });
   }
@@ -41,12 +43,12 @@ class CreateAccount extends Component {
       submit,
     } = this.props;
 
-    const formNames = ['clinicDetails', 'addUser'];
+    const formNames = ['addEnterprise', 'clinicDetails', 'addUser'];
 
     const formList = [
       {
-        title: 'Clinic Details',
-        component: ClinicDetails({
+        title: 'Add Enterprise',
+        component: AddEnterprise({
           onSubmit: this.next,
           index: 0,
           initialValues: this.state.values[0],
@@ -54,12 +56,21 @@ class CreateAccount extends Component {
         }),
       },
       {
-        title: 'Add New User',
-        component: AddUser({
+        title: 'Clinic Details',
+        component: ClinicDetails({
           onSubmit: this.next,
           index: 1,
           initialValues: this.state.values[1],
           formName: formNames[1],
+        }),
+      },
+      {
+        title: 'Add New User',
+        component: AddUser({
+          onSubmit: this.next,
+          index: 2,
+          initialValues: this.state.values[2],
+          formName: formNames[2],
         }),
       },
     ];
@@ -73,22 +84,34 @@ class CreateAccount extends Component {
         {this.state.index ? <Button onClick={() => this.previous(this.state.index)} >
           Previous </Button>
           : null }
-        <Button
+        {this.state.formLength - 1 > this.state.index ? <Button
           onClick={() => {
             submit(formNames[this.state.index]);
           }}
         >
           Next
-        </Button>
+        </Button> : <Button
+          onClick={() => {
+            submit(formNames[this.state.index])
+            this.props.setAllAccountInfo({ formData: this.state.values });
+          }}
+        >
+          Submit All
+        </Button>}
       </div>
     );
   }
 }
 
+CreateAccount.propTypes = {
+  submit: PropTypes.func,
+  setAllAccountInfo: PropTypes.func,
+};
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     submit,
+    setAllAccountInfo,
   }, dispatch);
 }
 

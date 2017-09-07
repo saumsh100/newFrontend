@@ -71,7 +71,7 @@ class EnterpriseList extends Component {
             e.stopPropagation();
             this.setActive();
           }}
-        >Add Account</VButton>
+        >Add Customer</VButton>
       </div>);
     }
 
@@ -105,7 +105,9 @@ class EnterpriseList extends Component {
           onEscKeyDown={this.setActive}
           onOverlayClick={this.setActive}
         >
-          <CreateAccount />
+          <CreateAccount
+            setActive={this.setActive}
+          />
         </DialogBox>
       </div>
     );

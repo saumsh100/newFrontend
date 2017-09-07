@@ -84,9 +84,6 @@ class Listings extends Component {
     const getInfo = listings.get('accountInfo').toJS();
     const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]]
 
-    console.log(listingsData);
-
-
     const scoreData = [
       { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
       { title: 'Industry Leaders Average', count: listingsData.listingPointScore.industryLeadersAverage },
