@@ -94,6 +94,7 @@ class CreateAccount extends Component {
           onClick={() => {
             submit(formNames[this.state.index])
             this.props.setAllAccountInfo({ formData: this.state.values });
+            this.props.setActive();
           }}
         >
           Submit All
@@ -106,6 +107,7 @@ class CreateAccount extends Component {
 CreateAccount.propTypes = {
   submit: PropTypes.func,
   setAllAccountInfo: PropTypes.func,
+  setActive: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {

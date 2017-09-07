@@ -19,6 +19,7 @@ export default class User extends createModel(UserSchema) {
   getUsername() {
     return this.get('username');
   }
+
   getName() {
     return `${this.get('firstName')} ${this.get('lastName')}` ;
   }

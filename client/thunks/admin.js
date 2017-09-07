@@ -8,6 +8,7 @@ export function setAllAccountInfo(payload) {
   return async (dispatch, getState) => {
 
     try {
+      //creating enterprise
       const createEnterprise = await dispatch(createEntityRequest({ key: 'enterprises', entityData: payload.formData[0] }));
       const enterpriseId = Object.keys(createEnterprise.enterprises)[0];
       const createAccount = await dispatch(createEntityRequest({
@@ -16,15 +17,24 @@ export function setAllAccountInfo(payload) {
         url: `/api/enterprises/${enterpriseId}/accounts`,
       }));
 
+      //creating an account for this enterprise
       const accountId = Object.keys(createAccount.accounts)[0];
       const url = `/api/accounts/${accountId}`;
-      await dispatch(updateEntityRequest({ key: 'accounts', values: payload.formData[1], url }));
+      await dispatch(updateEntityRequest({
+        key: 'accounts',
+        values: payload.formData[1],
+        url
+      }));
 
+      //creating a user for this account
       const urlNewUser = `/api/accounts/${accountId}/newUser/`;
       const userData = payload.formData[2];
       userData.accountId = accountId;
-      await dispatch(createEntityRequest({ key: 'user', entityData: userData, url: urlNewUser }));
-
+      await dispatch(createEntityRequest({
+        key: 'user',
+        entityData: userData,
+        url: urlNewUser,
+      }));
     } catch (error) {
       console.log(error);
     }
