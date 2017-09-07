@@ -20,6 +20,8 @@ import {
 } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { UserAuth } from '../../../lib/_auth';
+import createAccount from '../../../lib/createAccount';
+
 const { timeWithZone } = require('../../../util/time');
 
 const enterprisesRouter = Router();
@@ -117,16 +119,24 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
 /**
  * POST /:enterpriseId/accounts
  */
-enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), (req, res, next) => {
+enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), async (req, res, next) => {
   const accountData = {
-    ...pick(req.body, 'name', 'timezone', 'id'),
+    ...pick(req.body, 'name', 'timezone', 'destinationPhoneNumber', 'id'),
     enterpriseId: req.enterprise.id,
   };
 
   const timezone = req.body.timezone;
 
-  Account.create(accountData)
-    .then((account) => {
+  return Account.create(accountData)
+    .then(async (account) => {
+ //       commenting out the creating and saving of api keys
+//       const newData = await createAccount(accountFirst);
+//       accountFirst.callrailId = newData.callrailId;
+//       accountFirst.vendastaId = newData.vendastaId;
+//       accountFirst.vendastaAccountId = newData.vendastaAccountId;
+//       accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
+//       const account = await accountFirst.save();
+
       const defaultReminders = [
         {
           // 21 day email

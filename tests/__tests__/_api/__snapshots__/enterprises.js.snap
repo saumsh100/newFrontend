@@ -45,6 +45,7 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
+        "callrailId": null,
         "canSendRecalls": false,
         "canSendReminders": false,
         "city": null,
@@ -65,6 +66,7 @@ Object {
         "timezone": "America/Vancouver",
         "twilioPhoneNumber": null,
         "unit": 15,
+        "vendastaAccountId": null,
         "vendastaId": null,
         "website": null,
         "weeklyScheduleId": null,
@@ -85,6 +87,7 @@ Object {
       "1fa3a399-5a41-42d9-b2c8-59df666ec7ea": Object {
         "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
+        "callrailId": null,
         "canSendRecalls": false,
         "canSendReminders": false,
         "city": null,
@@ -105,6 +108,7 @@ Object {
         "timezone": "Africa/Bamako",
         "twilioPhoneNumber": null,
         "unit": 15,
+        "vendastaAccountId": null,
         "vendastaId": null,
         "website": null,
         "zipCode": null,
@@ -122,6 +126,7 @@ Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
         "bookingWidgetPrimaryColor": null,
+        "callrailId": null,
         "canSendRecalls": false,
         "canSendReminders": false,
         "city": null,
@@ -142,6 +147,7 @@ Object {
         "timezone": "America/Vancouver",
         "twilioPhoneNumber": null,
         "unit": 15,
+        "vendastaAccountId": null,
         "vendastaId": null,
         "website": null,
         "weeklyScheduleId": null,
