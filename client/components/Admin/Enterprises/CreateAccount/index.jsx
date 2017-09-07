@@ -14,9 +14,11 @@ import styles from './styles.scss';
 class CreateAccount extends Component {
   constructor(props) {
     super(props);
+
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.setIndex = this.setIndex.bind(this);
+
     this.state = {
       formLength: 4,
       index: 0,

@@ -13,14 +13,14 @@ export function setAllAccountInfo(payload) {
       const enterpriseId = Object.keys(createEnterprise.enterprises)[0];
 
       //creating an account for this enterprise
-      const createAccount = await dispatch(createEntityRequest({
+      const createdAccount = await dispatch(createEntityRequest({
         key: 'accounts',
         entityData: payload.formData[1],
         url: `/api/enterprises/${enterpriseId}/accounts`,
       }));
 
       //updating account information
-      const accountId = Object.keys(createAccount.accounts)[0];
+      const accountId = Object.keys(createdAccount.accounts)[0];
       const url = `/api/accounts/${accountId}`;
       await dispatch(updateEntityRequest({
         key: 'accounts',

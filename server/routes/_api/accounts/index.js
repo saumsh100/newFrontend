@@ -164,7 +164,7 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
       return UserAuth.signup({
         ...req.body,
         username: req.body.email,
-        activeAccountId: req.accountId,
+        activeAccountId: req.account.id,
         enterpriseId: req.account.enterprise.id,
         permissionId: permission.id,
       }).then(({ model: user }) => {
