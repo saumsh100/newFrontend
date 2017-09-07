@@ -31,7 +31,7 @@ class Reviews extends Component {
 
     let hasAccount = false;
 
-    if (activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '') {
+    if (activeAccount.get('vendastaId')) {
       hasAccount = true;
     }
 
@@ -64,6 +64,8 @@ class Reviews extends Component {
     const {
       reviews,
     } = this.props;
+
+    console.log(this.state.hasAccount);
 
     if (!this.state.hasAccount) {
       return <ReputationDisabled />;

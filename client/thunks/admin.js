@@ -4,23 +4,29 @@ import {
   createEntityRequest
 } from './fetchEntities';
 
-export async function setAllAccountInfo(payload) {
-  return (dispatch, getState) => {
+export function setAllAccountInfo(payload) {
+  return async (dispatch, getState) => {
 
-    dispatch(createEntityRequest({ key: 'enterprises', entityData: payload.formData[0] }))
-      .then(({ enterprises }) => {
-        const enterpriseId = Object.keys(enterprises)[0];
+    try {
+      const createEnterprise = await dispatch(createEntityRequest({ key: 'enterprises', entityData: payload.formData[0] }));
+      const enterpriseId = Object.keys(createEnterprise.enterprises)[0];
+      const createAccount = await dispatch(createEntityRequest({
+        key: 'accounts',
+        entityData: payload.formData[1],
+        url: `/api/enterprises/${enterpriseId}/accounts`,
+      }));
 
-        dispatch(createEntityRequest({
-          key: 'accounts',
-          entityData: payload.formData[1],
-          url: `/api/enterprises/${enterpriseId}/accounts`,
-        })).then(({ accounts }) => {
-          const accountId = Object.keys(accounts)[0];
-          const url = `/api/accounts/${accountId}`;
-          dispatch(updateEntityRequest({ key: 'accounts', values: payload.formData[1], url }));
-        });
-      });
+      const accountId = Object.keys(createAccount.accounts)[0];
+      const url = `/api/accounts/${accountId}`;
+      await dispatch(updateEntityRequest({ key: 'accounts', values: payload.formData[1], url }));
 
+      const urlNewUser = `/api/accounts/${accountId}/newUser/`;
+      const userData = payload.formData[2];
+      userData.accountId = accountId;
+      await dispatch(createEntityRequest({ key: 'user', entityData: userData, url: urlNewUser }));
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 }

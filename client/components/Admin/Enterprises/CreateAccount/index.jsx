@@ -14,7 +14,7 @@ class CreateAccount extends Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.state = {
-      formLength: 2,
+      formLength: 3,
       index: 0,
       values: [],
     };
