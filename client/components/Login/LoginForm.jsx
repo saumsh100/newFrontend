@@ -4,7 +4,16 @@ import { Button, Form, Field } from '../library';
 import styles from './styles.scss';
 import FBLoginButton from '../library/FBLoginButton';
 
-export default function Login({ onSubmit }) {
+const defaultSubmitButton = (
+  <Button
+    type="submit"
+    className={styles.signInSubmitButton}
+  >
+    Sign In
+  </Button>
+);
+
+export default function Login({ onSubmit, submitButton = defaultSubmitButton }) {
   return (
     <Form form="login" onSubmit={onSubmit} ignoreSaveButton={true}>
       <Field
@@ -17,12 +26,7 @@ export default function Login({ onSubmit }) {
         name="password"
         label="Password"
       />
-      <Button
-        type="submit"
-        className={styles.signInSubmitButton}
-      >
-        Sign In
-      </Button>
+      {submitButton}
     </Form>
   );
 }

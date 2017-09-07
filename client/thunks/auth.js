@@ -34,20 +34,17 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
       return userSession;
     })
     .catch((err) => {
+      debugger;
       // Catch 401 from /api/users/me and logout
       localStorage.removeItem('token');
       localStorage.removeItem('session');
       dispatch(authLogout());
-      dispatch(push('/login'));
+      dispatch(push('./login'));
     });
 };
 
-export function login(redirectedFrom = '/') {
+export function login(values, redirectedFrom = '/', connect = false) {
   return function (dispatch, getState) {
-    // TODO: this should really be refactored so we aren't accessing state for form values
-    // TODO: change to use values onSubmit
-    const { form: { login: { values } } } = getState();
-
     // reduxForm will not have this set if form is not dirty
     if (!values) return Promise.resolve(null);
 
@@ -63,7 +60,7 @@ export function login(redirectedFrom = '/') {
         const userId = user.id;
         const fullName = `${user.firstName} ${user.lastName}`;
         const email = user.username;
-        if (process.env.NODE_ENV === 'production') {
+        if (connect && process.env.NODE_ENV === 'production') {
           LogRocket.identify(userId, {
             name: fullName,
             email: email,
@@ -82,13 +79,6 @@ export function login(redirectedFrom = '/') {
 
         // dispatch(loginSuccess(decodedToken));
         dispatch(push(redirectedFrom));
-      })
-      .catch((err) => {
-        const { data } = err;
-        throw new SubmissionError({
-          email: data,
-          password: data,
-        });
       });
   };
 }

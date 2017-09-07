@@ -19,6 +19,7 @@ function DefaultOption({ option }) {
 export default class DropdownSelect extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isOpen: false,
       options: [],
@@ -36,8 +37,8 @@ export default class DropdownSelect extends Component {
 
   componentWillMount() {
     this.setState({
-      options: this.props.options,
-      optionsStatic: this.props.options,
+      options: this.props.options || [],
+      optionsStatic: this.props.options || [],
     });
   }
 
@@ -86,6 +87,7 @@ export default class DropdownSelect extends Component {
         value,
       });
     }
+
     return this.setState({
       options: optionsStatic,
       value: '',
@@ -155,7 +157,7 @@ export default class DropdownSelect extends Component {
     const {
       value,
       disabled,
-      options,
+      options = [],
       label,
       template,
       borderColor,
@@ -178,6 +180,7 @@ export default class DropdownSelect extends Component {
     if (borderColor) {
       toggleClassName = classNames(styles[`${borderColor}Border`], toggleClassName);
     }
+
     if (this.state.isOpen) {
       toggleClassName = classNames(styles.active, toggleClassName);
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
