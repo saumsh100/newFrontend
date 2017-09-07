@@ -104,6 +104,7 @@ class EnterpriseList extends Component {
           active={this.state.active}
           onEscKeyDown={this.setActive}
           onOverlayClick={this.setActive}
+          className={styles.customDialog}
         >
           <CreateAccount
             setActive={this.setActive}

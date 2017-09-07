@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { submit } from 'redux-form';
 import { connect } from 'react-redux';
@@ -5,14 +6,16 @@ import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
 import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
-import Button from '../../../library/Button/index';
+import { Button, ListBullets } from '../../../library';
 import { setAllAccountInfo } from '../../../../thunks/admin';
+import styles from './styles.scss';
 
 class CreateAccount extends Component {
   constructor(props) {
     super(props);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
+    this.setIndex = this.setIndex.bind(this);
     this.state = {
       formLength: 3,
       index: 0,
@@ -38,6 +41,12 @@ class CreateAccount extends Component {
     });
   }
 
+  setIndex(index) {
+    this.setState({
+      index,
+    });
+  }
+
   render() {
     const {
       submit,
@@ -53,6 +62,7 @@ class CreateAccount extends Component {
           index: 0,
           initialValues: this.state.values[0],
           formName: formNames[0],
+          theme: 'primaryGrey',
         }),
       },
       {
@@ -76,29 +86,51 @@ class CreateAccount extends Component {
     ];
 
     return (
-      <div key={this.state.index} >
-        <span>{formList[this.state.index].title}</span>
-        <div>
+      <div key={this.state.index} className={styles.mainContainer}>
+        <div className={styles.header}>{formList[this.state.index].title}</div>
+        <div className={styles.formContainer}>
           {formList[this.state.index].component}
         </div>
-        {this.state.index ? <Button onClick={() => this.previous(this.state.index)} >
-          Previous </Button>
-          : null }
-        {this.state.formLength - 1 > this.state.index ? <Button
-          onClick={() => {
-            submit(formNames[this.state.index]);
-          }}
-        >
-          Next
-        </Button> : <Button
-          onClick={() => {
-            submit(formNames[this.state.index])
-            this.props.setAllAccountInfo({ formData: this.state.values });
-            this.props.setActive();
-          }}
-        >
-          Submit All
-        </Button>}
+        <div className={styles.buttonContainer}>
+          {this.state.index ? (
+            <Button
+              onClick={() => this.previous(this.state.index)}
+              icon="arrow-left"
+            >
+              Previous
+            </Button>) : null }
+          {this.state.formLength - 1 > this.state.index ?
+            (<Button
+              onClick={() => {
+                submit(formNames[this.state.index]);
+              }}
+              className={styles.nextButton}
+              icon="arrow-right"
+            >
+              Next
+            </Button>)
+          : (
+            <Button
+              onClick={() => {
+                submit(formNames[this.state.index])
+                this.props.setAllAccountInfo({ formData: this.state.values });
+                this.props.setActive();
+              }}
+              className={styles.nextButton}
+            >
+              Submit All
+            </Button>
+            )}
+        </div>
+        <div className={styles.bulletContainer}>
+          <div className={styles.bulletContainer_bullets}>
+            <ListBullets
+              index={this.state.index}
+              length={this.state.formLength}
+              setIndex={this.setIndex}
+            />
+          </div>
+        </div>
       </div>
     );
   }

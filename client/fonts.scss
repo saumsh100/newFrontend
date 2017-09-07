@@ -122,6 +122,12 @@
 
 }
 
+.fontMediumSize {
+  font-size: $medium-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+}
+
 .cardHeaderTitle {
   font-family: $medium-font;
   font-size: $title-size;

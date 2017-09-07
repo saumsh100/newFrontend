@@ -1,0 +1,46 @@
+@import '../../../../ui';
+
+.mainContainer {
+  background: $primary-color;
+  animation: fadeinform 1s;
+}
+
+.header {
+  color: $primary-white;
+  composes: fontMediumSize from 'sass-loader!../../../../fonts.scss';
+}
+
+.formContainer {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.nextButton {
+  margin-left: auto;
+}
+
+.bulletContainer {
+  display: flex;
+
+  &_bullets {
+    margin: 0 auto;
+  }
+}
+
+.selectPadding {
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+
+@keyframes fadeinform {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}

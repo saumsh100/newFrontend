@@ -1,5 +1,7 @@
+
 import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../../library';
+import styles from '../styles.scss';
 
 export default function AddEnterprise(props) {
   const {
@@ -18,17 +20,23 @@ export default function AddEnterprise(props) {
       }}
       ignoreSaveButton
     >
+      <div className={styles.selectPadding}>
+        <Field
+          required
+          name="plan"
+          label="Plan"
+          component="DropdownSelect"
+          options={[
+            { value: 'ENTERPRISE' },
+            { value: 'GROWTH' },
+          ]}
+        />
+      </div>
       <Field
         required
-        name="plan"
-        label="Plan"
-        component="DropdownSelect"
-        options={[
-          { value: 'ENTERPRISE' },
-          { value: 'GROWTH' },
-        ]}
+        name="name"
+        label="Name"
       />
-      <Field required name="name" label="Name" />
     </Form>
   );
 }
