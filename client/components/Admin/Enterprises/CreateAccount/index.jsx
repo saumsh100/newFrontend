@@ -4,6 +4,7 @@ import { submit } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
+import ContactDetails from './ContactDetails';
 import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
 import { Button, ListBullets } from '../../../library';
@@ -17,7 +18,7 @@ class CreateAccount extends Component {
     this.previous = this.previous.bind(this);
     this.setIndex = this.setIndex.bind(this);
     this.state = {
-      formLength: 3,
+      formLength: 4,
       index: 0,
       values: [],
     };
@@ -52,7 +53,7 @@ class CreateAccount extends Component {
       submit,
     } = this.props;
 
-    const formNames = ['addEnterprise', 'clinicDetails', 'addUser'];
+    const formNames = ['addEnterprise', 'clinicDetails', 'contactDetails', 'addUser'];
 
     const formList = [
       {
@@ -75,12 +76,21 @@ class CreateAccount extends Component {
         }),
       },
       {
-        title: 'Add New User',
-        component: AddUser({
+        title: 'Contact Details',
+        component: ContactDetails({
           onSubmit: this.next,
           index: 2,
           initialValues: this.state.values[2],
           formName: formNames[2],
+        }),
+      },
+      {
+        title: 'Add New User',
+        component: AddUser({
+          onSubmit: this.next,
+          index: 3,
+          initialValues: this.state.values[3],
+          formName: formNames[3],
         }),
       },
     ];
