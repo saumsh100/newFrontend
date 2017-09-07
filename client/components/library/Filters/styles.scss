@@ -10,8 +10,8 @@
     justify-content: center;
     align-items: center;
     padding: 12px 50px;
-    color: $primary-darkgrey;
-    font-size: $medium-size;
+    color: lighten($primary-darkgrey, 20%);
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
     @media screen and (max-width: 1000px) {
       padding: 12px 20px;
     }

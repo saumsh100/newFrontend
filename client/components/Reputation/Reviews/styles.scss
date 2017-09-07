@@ -3,12 +3,12 @@
 
 .reviews {
   &__wrapper {
-    padding-top: 15px;
+    margin-bottom: 15px;
   }
 }
 
 .padding {
-  padding: 0 5px;
+  padding: 0 10px 5px;
   margin-bottom: 10px;
   @media screen and (max-width: 900px) {
     margin-bottom: 15px;
@@ -16,11 +16,11 @@
 }
 
 .card {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size $primary-darkgrey;
 }
 
 .googleMapsRespond {
-  border-top: $card-border-size $primary-color;
+  border-top: $card-border-size $primary-darkgrey;
   display: flex;
 	flex-direction: row;
 	height: 168px;
@@ -37,23 +37,22 @@
 		margin-right: 40px;
 		min-width: 250px;
 	}
+}
 
-	&__descr {
-		width: 80%;
-		height: 120px;
-		display: flex;
-		flex-direction: column;
-		align-items: space-around;
-		justify-content: center;
-		div:first-child {
-			font-weight: $large-weight;
-			margin-bottom: 20px;
-		}
-		div:last-child {
-      font-weight: $large-weight;
-      color: $primary-darkgrey;
-		}
-	}
+.googleMapsRespondDescr {
+  width: 80%;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: space-around;
+  justify-content: center;
+  &_header {
+    margin-bottom: 10px;
+    composes: font-header-title from 'sass-loader!../../../fonts.scss';
+  }
+  &_subHeader {
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
+  }
 }
 
 
@@ -68,8 +67,7 @@
 	margin: 0 auto;
 	padding: 10px 0 10px 0;
 	&__count {
-		font-size: $x-large-size;
-		font-weight: $large-weight;
+    composes: fontExtraLarge from 'sass-loader!../../../fonts.scss';
 	}
 
 	&__title {
@@ -85,18 +83,20 @@
 	&__bottom {
 		width: 100%;
 		margin: 5px 0 0 0;
-		box-shadow: border-box;
+		box-sizing: border-box;
 		padding-top: 15px;
 		text-align: center;
 		border-top: 2px solid $primary-grey;
-		color: $primary-darkgrey;
+		color: lighten($primary-darkgrey,20%);
 		font-size: $medium-size;
+    composes: subHeaderSmall from 'sass-loader!../../../fonts.scss'
+
 	}
 }
 
 .content {
   width: 100%;
-  height: 16px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,7 +111,7 @@
     text-align: left;
     display: flex;
     align-items: center;
-		color: $primary-blue;
+		color: $primary-light-blue;
 		&__percent {
 			height: 16px;
 			margin-right: 4px;
@@ -123,23 +123,20 @@
 
 
 .tags {
-  border-top: $card-border-size $primary-yellow;
+  border-top: $card-border-size $primary-darkgrey;
 
   width: 100%;
   height: 168px;
+  padding: 20px;
   &__left {
     width: 25%;
     min-width: 250px;
     height: 168px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
     &__update {
       margin-top: 10px;
-      color: $primary-darkgrey;
+      color: lighten($primary-darkgrey,20%);
+      font-size: $medium-size;
+      composes: subHeaderSmall from 'sass-loader!../../../fonts.scss'
     }
   }
 }
@@ -154,6 +151,7 @@
 	min-height: 168px;
   max-height: 745px;
 	overflow: auto;
+  margin-bottom: 15px;
 
   &__cardHeader {
     padding-top: 15px;

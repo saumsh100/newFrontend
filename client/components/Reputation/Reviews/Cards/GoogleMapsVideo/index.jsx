@@ -14,10 +14,10 @@ export default function GoogleMapsVideo(props) {
             src="https://www.youtube.com/embed/32vzLgGP0Rg"
           />
         </div>
-        <div className={styles.googleMapsRespond__descr}>
-          <div> Respond to google maps review </div>
-          <div> You can respond from here! Connect your Google My Business
-            account to get started
+        <div className={styles.googleMapsRespondDescr}>
+          <div className={styles.googleMapsRespondDescr_header}> Respond to Google Maps Reviews! </div>
+          <div className={styles.googleMapsRespondDescr_subHeader}> You can respond on Google Maps from here! Connect your Google My Business
+            account to get started.
           </div>
         </div>
       </div>

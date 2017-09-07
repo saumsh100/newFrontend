@@ -5,7 +5,6 @@
   height: 38px;
   display: flex;
   align-items: flex-end;
-  padding: 0 5px;
   font-size: 35px;
 }
 .bigCommentBubble {
@@ -39,18 +38,24 @@
     box-shadow: 0px 2px 0px -4px rgba(0,0,0,0.33);
 
     &__header {
-      color: $primary-dark;
-      font-size: 14px;
-      font-weight: $large-weight;
+      composes: fontMedium from 'sass-loader!../../../fonts.scss';
       &__link {
         color: $primary-green;
         cursor: pointer;
         margin-right: 5px;
+        text-decoration: none;
+        &:hover {
+          color: darken($primary-green, 10%);
+        }
       }
       &__site {
         color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
+        text-decoration: none;
+        &:hover {
+          color: darken($primary-green, 10%);
+        }
       }
     }
     &::before {
@@ -74,25 +79,29 @@
     &__title {
       color: $primary-green;
       margin-bottom: 15px;
-      font-size: 14px;
-      font-weight: $large-weight;
+      composes: fontMedium from 'sass-loader!../../../fonts.scss';
+
     }
     &__rating {
-      color: #ede27d;
+      color: $primary-star;
       margin: 10px 0 10px 0;
     }
     &__preview {
-      color: $primary-dark;
+      letter-spacing: 0.5px;
       &__toggleButton {
         color: $primary-green;
         cursor: pointer;
         margin-left: 5px;
+        text-decoration: none;
+
+        &:hover {
+          color: darken($primary-green, 10%);
+        }
       }
     }
     &__createdAt {
-      color: $primary-darkgrey;
-      font-weight: $large-weight;
-      font-size: $small-size;
+      color: lighten($primary-darkgrey, 20%);
+      composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
       margin-bottom: 5px;
       margin: 10px 0 10px 0;
     }
@@ -139,6 +148,8 @@
       flex-direction: row;
       font-size: $medium-size;
       font-weight: $large-weight;
+      text-decoration: none;
+      color: $primary-white;
     }
     &__actions {
       width: 50%;

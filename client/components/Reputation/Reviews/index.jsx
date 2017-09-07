@@ -1,61 +1,104 @@
+
 import React, { PropTypes, Component } from 'react';
+import moment from 'moment';
+import { connect } from 'react-redux';
+import Loader from 'react-loader';
+import { bindActionCreators } from 'redux';
 import { Card, Col, Grid, Row, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
+import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import GoogleMapsVideo from './Cards/GoogleMapsVideo';
 import AverageRating from './Cards/AverageRating';
 import RatingsChart from './Cards/RatingsChart';
 import ReviewsCard from './Cards/ReviewsCard';
+import ReputationDisabled from '../ReputationDisabled';
 import Tags from './Cards/Tags';
 import styles from './styles.scss';
-import moment from 'moment';
 
 class Reviews extends Component {
-  render() {
-    const rating = {
-      5: 11,
-      4: 8,
-      3: 5,
-      2: 3,
-      1: 0,
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+      hasAccount: false,
     };
+  }
 
-    const DataBigComment = [{
-      icon: 'facebook',
-      iconColor: '#ffffff',
-      background: '#395998',
-      iconAlign: 'flex-end',
-      requiredAction: 'ACTION REQUIRED',
-      headerLinkName: 'S. Lalala',
-      headerLinkSite: 'yelp.ca',
-      siteStars: 4,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
-      sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-      createdAt: moment().subtract(10, 'days').fromNow(),
-    }, {
-      icon: 'bitcoin',
-      iconColor: '#ffffff',
-      background: '#ffc55b',
-      iconAlign: 'center',
+  componentWillMount() {
+    const {
+      activeAccount,
+    } = this.props;
 
-      headerLinkName: "L. Linda",
-      headerLinkSite: "yelp.ca",
-      siteStars: 5,
-      siteTitle: "Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.",
-      sitePreview: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      createdAt: moment().subtract(10, 'days').fromNow()
-    },{
-      icon: "twitter",
-      iconColor: '#ffffff',
-      background: '#FF715A',
-      iconAlign: 'center',
-      requiredAction: 'ACTION REQUIRED',
-      headerLinkName: 'N. Blabla',
-      headerLinkSite: 'yelp.ca',
-      siteStars: 3,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
-      sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-      createdAt: moment().subtract(10, 'days').fromNow(),
-    }];
+    let hasAccount = false;
+
+    if (activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '') {
+      hasAccount = true;
+    }
+
+    this.setState({
+      hasAccount,
+    });
+  }
+
+  componentDidMount() {
+    if (this.state.hasAccount) {
+      const params = {
+        startDate: moment().subtract(30, 'days')._d,
+        endDate: moment()._d,
+      };
+
+      Promise.all([
+        this.props.fetchEntitiesRequest({
+          id: 'reviews',
+          url: '/api/reputation/reviews',
+        }),
+      ]).then(() => {
+        this.setState({
+          loaded: true,
+        });
+      });
+    }
+  }
+
+  render() {
+    const {
+      reviews,
+    } = this.props;
+
+    if (!this.state.hasAccount) {
+      return <ReputationDisabled />;
+    }
+
+    if (!reviews) {
+      return <Loader loaded={this.state.loaded} color="#FF715A" />
+    }
+
+    const reviewsData = reviews.get('data').toJS();
+
+    const reviewsList = reviews.get('reviews').toJS();
+
+    const contructBigComment = reviewsList.map((review) => {
+      const publishedDate = moment(review.publishedDateTime);
+      const today = moment();
+      const duration = moment.duration(today.diff(publishedDate));
+      const days = duration.asDays();
+
+      return {
+        icon: review.sourceName,
+        createdAt: Math.ceil(days),
+        headerLinkName: review.reviewerName,
+        headerLinkSite: review.domain,
+        siteStars: parseInt(review.rating),
+        siteTitle: review.title,
+        sitePreview: review.contentSnippet,
+        iconColor: '#ffffff',
+        background: '#395998',
+        iconAlign: 'flex-end',
+        requiredAction: 'ACTION REQUIRED',
+        url: review.url,
+        reviewerUrl: review.reviewerUrl,
+      };
+    });
 
     const filters = [
       {
@@ -95,7 +138,6 @@ class Reviews extends Component {
       }
     ];
 
-
     return (
       <Grid className={styles.reviews}>
         <Row className={styles.reviews__wrapper}>
@@ -104,36 +146,36 @@ class Reviews extends Component {
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <AverageRating count={4.7} average={5}/>
+            <AverageRating count={reviewsData.industryAverageRating} rating={reviewsData.ratingCounts} />
           </Col>
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
-            <Card  className={styles.card}>
+            <Card className={styles.card}>
               <div className={styles.stats}>
-                <span className={styles.stats__count} >12</span>
-                <span className={styles.stats__title} >Average Rating</span>
+                <span className={styles.stats__count} > {reviewsData.totalCount} </span>
+                <span className={styles.stats__title} >Total Reviews</span>
                 <div className={styles.stats__rating}>
-                  0 With no start rating
+                  {reviewsData.ratingCounts['0'] || '0'} with no star rating
                 </div>
-                <span className={styles.stats__bottom}>Industry Average 106</span>
+                <span className={styles.stats__bottom}>
+                  Industry Average {reviewsData.industryAverageCount}
+                </span>
               </div>
             </Card>
           </Col>
-
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
-            <RatingsChart rating={rating} />
+            <RatingsChart rating={reviewsData.ratingCounts} />
           </Col>
-
-          <Col className={styles.padding} xs={12} md={12}>
+          {/* <Col className={styles.padding} xs={12} md={12}>
             <Tags />
-          </Col>
+          </Col> */}
           <Row className={styles.rowReviewsFilter}>
-            <Col className={styles.padding} xs={12} md={12} sm={9} lg={9}>
-              <ReviewsCard data={DataBigComment} />
+            <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
+              <ReviewsCard data={contructBigComment} />
             </Col>
-            <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
+            {/* <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
               <Filters filters={filters} />
-            </Col>
+            </Col> */}
           </Row>
         </Row>
       </Grid>
@@ -141,4 +183,27 @@ class Reviews extends Component {
   }
 }
 
-export default Reviews;
+Reviews.propTypes = {
+  reviews: PropTypes.object.isRequired,
+  activeAccount: PropTypes.object.isRequired,
+  fetchEntitiesRequest: PropTypes.func,
+};
+
+function mapStateToProps({ apiRequests, entities, auth }) {
+  const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
+
+  return {
+    reviews,
+    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchEntitiesRequest,
+  }, dispatch);
+}
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
+
+export default enhance(Reviews);
