@@ -40,17 +40,6 @@ export default function AddUser(props) {
         name="email"
         label="Email"
       />
-      {/*<Field
-        required
-        name="role"
-        label="Role"
-        component="DropdownSelect"
-        options={[
-          { value: 'OWNER' },
-          { value: 'ADMIN' },
-          { value: 'MANAGER' },
-        ]}
-      />*/}
       <Field
         required
         type="password"

@@ -63,6 +63,10 @@ class Listings extends Component {
         this.setState({
           loaded: true,
         });
+      }).catch(() => {
+        this.setState({
+          hasAccount: false,
+        });
       });
     }
   }

@@ -131,7 +131,7 @@ export default async function createAccount(account, setupList) {
 
   const data = {
     callrailId: setupList.callTracking ? await callRail(account) : null,
-    twilioPhoneNumber: setupList.remindersRecalls ? await twilioSetup(account) : null,
+    twilioPhoneNumber: (setupList.canSendReminders || setupList.canSendRecalls) ? await twilioSetup(account) : null,
     ...vendastaData,
   };
   return data;

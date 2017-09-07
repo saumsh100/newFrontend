@@ -34,9 +34,10 @@ export function setAllAccountInfo(payload) {
       // updating account information
       const accountId = Object.keys(createdAccount.accounts)[0];
       const url = `/api/accounts/${accountId}`;
+
       await dispatch(updateEntityRequest({
         key: 'accounts',
-        values: Object.assign({}, payload.formData[1]),
+        values: Object.assign({}, payload.formData[1], payload.formData[2]),
         url,
       }));
 
@@ -44,7 +45,10 @@ export function setAllAccountInfo(payload) {
       // creating a user for this account
       const urlNewUser = `/api/accounts/${accountId}/newUser/`;
       const userData = payload.formData[3];
+
       userData.accountId = accountId;
+      userData.role = 'OWNER';
+
       await dispatch(createEntityRequest({
         key: 'user',
         entityData: userData,

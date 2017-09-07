@@ -43,7 +43,7 @@ export default function SelectAccountOptions(props) {
           component="Toggle"
           name="canSendRecalls"
         />
-      </div>div>
+      </div>
       <span>
         Set Up Call Tracking
       </span>

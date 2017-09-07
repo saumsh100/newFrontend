@@ -24,7 +24,7 @@ class CreateAccount extends Component {
 
     this.state = {
       create: false,
-      formLength: 3,
+      formLength: 4,
       index: 0,
       values: [],
     };

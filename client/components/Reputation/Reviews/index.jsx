@@ -56,6 +56,10 @@ class Reviews extends Component {
         this.setState({
           loaded: true,
         });
+      }).catch(() =>{
+        this.setState({
+          hasAccount: false,
+        });
       });
     }
   }
@@ -64,8 +68,6 @@ class Reviews extends Component {
     const {
       reviews,
     } = this.props;
-
-    console.log(this.state.hasAccount);
 
     if (!this.state.hasAccount) {
       return <ReputationDisabled />;
