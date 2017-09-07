@@ -11,7 +11,7 @@ import time from '../../server/util/time';
 import socket from '../socket';
 import App from './Connect';
 import configure from '../store/connectStore';
-import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
+import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
 import { load as loadUser } from '../thunks/auth';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 
@@ -26,7 +26,7 @@ loadUser()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
     // hook up sockets to the connecter status update events
-    connectSocketToStoreLogin(store, socket);
+    connectSocketToConnectStore(store, socket);
   }
 
   // TODO: define globals with webpack ProvidePlugin

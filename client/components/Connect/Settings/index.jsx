@@ -26,13 +26,15 @@ class Settings extends Component {
   }
 
   render() {
-    // TODO: add form to change adapter, then route to panel
     const { account } = this.props;
+    if (!account) return null;
 
+    const adapterType = account.get('adapterType');
+    const initialValues = { adapterType };
     return (
       <div>
         <ConnectorSettingsForm
-          account={account}
+          initialValues={initialValues}
           onSubmit={this.handleSettingsSubmit}
         />
       </div>

@@ -22,11 +22,12 @@ const options = [
   },
 ];
 
-export default function ConnectorSettingsForm({ account, onSubmit }) {
+export default function ConnectorSettingsForm({ initialValues, onSubmit }) {
   return (
     <Form
       form="connectorSettings"
       onSubmit={onSubmit}
+      initialValues={initialValues}
       ignoreSaveButton
     >
       <Field

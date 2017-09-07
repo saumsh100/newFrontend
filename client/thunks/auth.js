@@ -6,6 +6,7 @@ import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout } from '../actions/auth';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
+import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
 import socket from '../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
@@ -17,11 +18,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   }
 
   const getSession = () => {
-    /*const cachedValue = localStorage.getItem('session');
-    return cachedValue ?
-      (Promise.resolve(JSON.parse(cachedValue))) :
-      (axios.get('/api/users/me').then(({ data }) => data));*/
-    // This adds req.header only because it's been added elsewhere
     return axios.get('/api/users/me').then(({ data }) => data);
   };
 
@@ -29,12 +25,10 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     .then((session) => {
       const userSession = { ...session, sessionId };
       localStorage.setItem('session', JSON.stringify(userSession));
-      console.log('userSession', userSession);
       dispatch(loginSuccess(userSession));
       return userSession;
     })
-    .catch((err) => {
-      debugger;
+    .catch(() => {
       // Catch 401 from /api/users/me and logout
       localStorage.removeItem('token');
       localStorage.removeItem('session');
@@ -75,7 +69,11 @@ export function login(values, redirectedFrom = '/', connect = false) {
           });
         }
 
-        connectSocketToStoreLogin({ dispatch, getState }, socket);
+        if (connect) {
+          connectSocketToConnectStore({ dispatch, getState }, socket);
+        } else {
+          connectSocketToStoreLogin({ dispatch, getState }, socket);
+        }
 
         // dispatch(loginSuccess(decodedToken));
         dispatch(push(redirectedFrom));

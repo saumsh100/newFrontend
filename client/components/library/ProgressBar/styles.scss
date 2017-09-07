@@ -20,7 +20,7 @@ $br-bar: ($h - $p) / 2;
   transition: width 0.5s;
   box-sizing: border-box;
   padding-top: 2px;
-  width: 0%;
+  min-width: 5%;
   height: 100%;
   display: flex;
   align-items: center;
