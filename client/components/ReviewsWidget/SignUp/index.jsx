@@ -35,7 +35,7 @@ class SignUp extends Component {
         return this.props.updateReview();
       })
       .then(() => {
-        this.props.history.push('/submitted');
+        this.props.history.push('./review/submitted');
       });
   }
 

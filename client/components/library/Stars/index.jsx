@@ -28,7 +28,7 @@ export default class Stars extends Component {
   }
 
   render() {
-    const { size, value, isStatic } = this.props;
+    const { size, value, isStatic, isMinimal } = this.props;
 
     const CustomStar = (props) => {
       const { i } = props;
@@ -69,17 +69,17 @@ export default class Stars extends Component {
     const text = value ? `${starRatingsMap[value]} Experience` : null;
     return (
       <div>
-        <div className={styles.fractionWrapper}>
+        {!isMinimal ? <div className={styles.fractionWrapper}>
           <div className={styles.numerator}>
             {value || '?'}
           </div>
           <div className={styles.denominator}>
             /5
           </div>
-        </div>
-        <div className={styles.ratingsText}>
+        </div> : null}
+        {!isMinimal ? <div className={styles.ratingsText}>
           {text}
-        </div>
+        </div> : null}
         <div className={styles.starsContainer}>
           <CustomStar i={1} />
           <CustomStar i={2} />
@@ -87,6 +87,9 @@ export default class Stars extends Component {
           <CustomStar i={4} />
           <CustomStar i={5} />
         </div>
+        {isMinimal ? <div className={styles.minimalRatingsText}>
+          {text}
+        </div> : null}
       </div>
     );
   }
@@ -95,9 +98,11 @@ export default class Stars extends Component {
 Stars.defaultProps = {
   size: 4,
   isStatic: false,
+  isMinimal: false,
 };
 
 Stars.propTypes = {
-  size: PropTypes.number,
-  isStatic: PropTypes.bool,
+  size: PropTypes.number.isRequired,
+  isStatic: PropTypes.bool.isRequired,
+  isMinimal: PropTypes.bool.isRequired,
 };

@@ -29,6 +29,11 @@
   font-size: 1.5em;
 }
 
+.minimalRatingsText {
+  color: $primary-darkgrey;
+  text-align: center;
+}
+
 .starWrapper {
   &:hover {
     > div.label {
@@ -64,7 +69,7 @@
 
 .empty {
   @extend .starChild;
-  color: $primary-light-blue;
+  color: $primary-darkgrey;
 }
 
 .filled {
