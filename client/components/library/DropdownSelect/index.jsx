@@ -99,7 +99,7 @@ export default class DropdownSelect extends Component {
 
     const OptionTemplate = template || DefaultOption;
 
-    let options = search ? this.state.options : this.props.options;
+    const options = search ? this.state.options : this.props.options;
 
     return (
       <List className={styles.dropDownList} >

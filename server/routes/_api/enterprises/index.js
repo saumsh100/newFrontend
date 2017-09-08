@@ -126,7 +126,7 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
   };
 
   const timezone = req.body.timezone;
-
+  console.log(req.query)
   return Account.create(accountData)
     .then(async (accountFirst) => {
         // commenting out the creating and saving of api keys

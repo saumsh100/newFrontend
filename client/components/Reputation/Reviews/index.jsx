@@ -21,6 +21,7 @@ class Reviews extends Component {
     this.state = {
       loaded: false,
       hasAccount: false,
+      activationText: '',
     };
   }
 
@@ -59,6 +60,7 @@ class Reviews extends Component {
       }).catch(() =>{
         this.setState({
           hasAccount: false,
+          activationText: 'Activate Reviews/Reputation Management package or contact your CareCru account manager for further assistance.',
         });
       });
     }
@@ -70,7 +72,7 @@ class Reviews extends Component {
     } = this.props;
 
     if (!this.state.hasAccount) {
-      return <ReputationDisabled />;
+      return <ReputationDisabled activationText={this.state.activationText} />;
     }
 
     if (!reviews) {

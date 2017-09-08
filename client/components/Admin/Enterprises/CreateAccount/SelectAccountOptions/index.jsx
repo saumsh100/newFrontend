@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { Form, Field, } from '../../../../library';
 import { emailValidate } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
+import Icon from "../../../../library/Icon/index";
 
 export default function SelectAccountOptions(props) {
   const {
@@ -23,8 +24,11 @@ export default function SelectAccountOptions(props) {
     >
       <div className={styles.accountOptions}>
         <div className={styles.displayFlex}>
+          <span>
+            <Icon icon="star" />
+          </span>
           <span className={styles.accountOptions_text}>
-            Set Up Reputation Management
+            Reputation Management
           </span>
           <div>
             <Field
@@ -35,8 +39,11 @@ export default function SelectAccountOptions(props) {
         </div>
 
         <div className={styles.displayFlex}>
+          <span>
+            <Icon icon="clock-o" />
+          </span>
           <span className={styles.accountOptions_text}>
-            Setup Reminders
+            Reminders
           </span>
           <div>
             <Field
@@ -47,8 +54,11 @@ export default function SelectAccountOptions(props) {
         </div>
 
         <div className={styles.displayFlex}>
+          <span>
+            <Icon icon="bullhorn" />
+          </span>
           <span className={styles.accountOptions_text}>
-            Setup Recalls
+            Recalls
           </span>
           <div>
             <Field
@@ -58,8 +68,11 @@ export default function SelectAccountOptions(props) {
           </div>
         </div>
         <div className={styles.displayFlex}>
+          <span>
+            <Icon icon="phone" />
+          </span>
           <span className={styles.accountOptions_text}>
-            Set Up Call Tracking
+            Call Tracking
           </span>
           <div>
             <Field

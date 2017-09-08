@@ -9,7 +9,7 @@ import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
 ;import EnterpriseList from './EnterpriseList';
 import SelectAccountOptions from './SelectAccountOptions';
-import { Button, ListBullets, Icon } from '../../../library';
+import { Button, Icon } from '../../../library';
 import { setAllAccountInfo } from '../../../../thunks/admin';
 import styles from './styles.scss';
 
@@ -121,7 +121,7 @@ class CreateAccount extends Component {
         }),
       },
       {
-        title: 'Add New User',
+        title: 'Add New Owner User',
         component: AddUser({
           onSubmit: this.next,
           index: 3,
@@ -131,12 +131,18 @@ class CreateAccount extends Component {
       },
     ];
 
-    console.log(this.state.values);
-
     return (
       <div key={this.state.index} className={styles.mainContainer}>
         <div className={styles.header}>
-          {formList[this.state.index].title}
+          <div className={styles.logoContainer}>
+            <img
+              className={styles.loginLogo}
+              src="/images/logo_black.png"
+              alt="CareCru Logo"
+              width="80px"
+            />
+          </div>
+          <div className={styles.header_text}>{formList[this.state.index].title}</div>
           <div className={styles.header_icon}>
             <Icon icon="times" onClick={()=>this.props.setActive()} />
           </div>

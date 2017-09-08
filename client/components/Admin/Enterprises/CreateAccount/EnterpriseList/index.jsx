@@ -40,7 +40,7 @@ class EnterpriseList extends Component {
             />
           </div>
           <div className={styles.selectEnterprise_icon}>
-            <IconButton icon="plus" onClick={()=> setCreate() }/>
+            <IconButton icon="plus" onClick={() => setCreate()}/>
           </div>
         </div>
       </Form>
