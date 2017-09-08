@@ -25,6 +25,49 @@ recurringTimeOffRouter.post('/', checkPermissions('timeOffs:create'), (req, res,
 /**
  * Create a timeOff from PMS
  */
+recurringTimeOffRouter.post('/connector', checkPermissions('timeOffs:create'), async (req, res, next) => {
+  const data = req.body;
+
+  req.accountId;
+
+  try {
+    await PractitionerRecurringTimeOff.destroy({
+      where: {
+        startTime: null,
+        fromPMS: true,
+      },
+      paranoid: false,
+      force: true,
+    });
+
+    const pracs = await Practitioner.findAll({
+      raw: true,
+      where: {
+        accountId: req.accountId,
+      },
+    });
+
+    for (let i = 0; i < data.length; i += 1) {
+      for (let j = 0; j < pracs.length; j += 1) {
+        await PractitionerRecurringTimeOff.create({
+          fromPMS: true,
+          note: data[i].note,
+          allDay: true,
+          startDate: moment(data[i].startDate).toISOString(),
+          endDate: moment(data[i].endDate).toISOString(),
+          practitionerId: pracs[j].id,
+        });
+      }
+    }
+    return res.sendStatus(201);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+/**
+ * Create a timeOff from PMS
+ */
 recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, res, next) => {
   const data = req.body;
   const recurringTimeoffs = [];
