@@ -35,6 +35,7 @@ export default handleActions({
       caller: alert.caller || false,
       time: 3000,
       sticky: alert.sticky || false,
+      browserAlert: alert.browserAlert || false,
     });
 
     return state.set(id, alertData);
