@@ -99,7 +99,7 @@ class CreateAccount extends Component {
 
     const formList = [
       {
-        title: this.state.create ? 'Add Enterprise' : 'Select or Add Enterprise',
+        title: this.state.create ? 'Add Enterprise' : 'Add or Select Enterprise',
         component,
       },
       {
