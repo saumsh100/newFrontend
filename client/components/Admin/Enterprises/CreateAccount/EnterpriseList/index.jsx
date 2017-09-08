@@ -37,6 +37,7 @@ class EnterpriseList extends Component {
               label="Enterprises"
               component="DropdownSelect"
               options={enterpriseOptions}
+              search
             />
           </div>
           <div className={styles.selectEnterprise_icon}>

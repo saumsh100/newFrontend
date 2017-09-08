@@ -19,6 +19,7 @@ export default function AddUser(props) {
       }}
       asyncValidate={asyncEmailValidateUser}
       initialValues={initialValues}
+      destroyOnUnmount={false}
       ignoreSaveButton
     >
       <Field

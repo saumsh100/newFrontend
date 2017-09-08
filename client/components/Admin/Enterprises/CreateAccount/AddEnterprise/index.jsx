@@ -19,6 +19,7 @@ export default function AddEnterprise(props) {
         onSubmit(values, index, formName);
       }}
       ignoreSaveButton
+      destroyOnUnmount={false}
     >
       <div className={styles.selectPadding}>
         <Field

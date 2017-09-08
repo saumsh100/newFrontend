@@ -36,6 +36,7 @@ export default function ClinicDetails(props) {
       }}
       initialValues={initialValues}
       ignoreSaveButton
+      destroyOnUnmount={false}
     >
       <div>
         <Field

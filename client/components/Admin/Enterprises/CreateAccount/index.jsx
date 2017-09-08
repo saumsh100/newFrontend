@@ -44,12 +44,12 @@ class CreateAccount extends Component {
 
   previous() {
     if (this.state.index === 1 || (!this.state.index && this.state.create)) {
-      const resetValue = this.state.values;
-      resetValue[0] = {}
+      //const resetValue = this.state.values;
+     // resetValue[0] = {}
       this.setState({
         index: 0,
         create: false,
-        values: resetValue,
+        // values: resetValue,
       })
     } else {
       this.setState({
@@ -136,8 +136,8 @@ class CreateAccount extends Component {
         <div className={styles.header}>
           <div className={styles.logoContainer}>
             <img
-              className={styles.loginLogo}
-              src="/images/logo_black.png"
+              className={styles.logo}
+              src="/images/logo_notext.png"
               alt="CareCru Logo"
               width="80px"
             />

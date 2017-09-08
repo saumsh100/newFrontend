@@ -21,6 +21,7 @@ export default function SelectAccountOptions(props) {
       }}
       initialValues={initialValues}
       ignoreSaveButton
+      destroyOnUnmount={false}
     >
       <div className={styles.accountOptions}>
         <div className={styles.displayFlex}>
