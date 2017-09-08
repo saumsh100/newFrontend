@@ -15,7 +15,11 @@ class EnterpriseList extends Component {
       setCreate,
     } = this.props;
 
-    const enterpriseOptions = enterprises.map((enterprise) => {
+    const enterpriseOptions = enterprises.filter((enterprise) => {
+      if (enterprise.plan === 'ENTERPRISE') {
+        return enterprise;
+      }
+    }).map((enterprise) => {
       return {
         value: enterprise.id,
         label: enterprise.name,
