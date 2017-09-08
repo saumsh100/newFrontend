@@ -107,10 +107,10 @@ class EnterpriseList extends Component {
           className={styles.customDialog}
           custom
         >
-          <CreateAccount
+          {enterprises.length ? <CreateAccount
             enterprises={enterprises}
             setActive={this.setActive}
-          />
+          /> : null }
         </Modal>
       </div>
     );
