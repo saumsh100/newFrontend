@@ -32,7 +32,7 @@ export default class DropdownSelect extends Component {
     return {
       options: this.props.options || [],
       optionsStatic: this.props.options || [],
-      value: this.props.value || '',
+      value: '',
       isOpen: false,
       searching: false,
     };
@@ -43,7 +43,7 @@ export default class DropdownSelect extends Component {
       this.setState({
         isOpen: false,
         options: this.state.optionsStatic,
-        value,
+        value: '',
       });
     } else {
       this.setState({
@@ -99,7 +99,7 @@ export default class DropdownSelect extends Component {
 
     const OptionTemplate = template || DefaultOption;
 
-    const options = search ? this.state.options : this.props.options;
+    let options = search ? this.state.options : this.props.options;
 
     return (
       <List className={styles.dropDownList} >
