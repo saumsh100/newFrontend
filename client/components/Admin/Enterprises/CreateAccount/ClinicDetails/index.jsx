@@ -1,6 +1,8 @@
+
 import React, { PropTypes } from 'react';
-import { Form, Field } from '../../../../library';
 import moment from 'moment-timezone';
+import { Form, Field } from '../../../../library';
+import styles from '../styles.scss';
 
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
@@ -48,14 +50,14 @@ export default function ClinicDetails(props) {
           label="Website"
         />
       </div>
-      <div>
+      <div >
         <Field
           name="destinationPhoneNumber"
           label="Destination Phone Number"
           type="tel"
         />
       </div>
-      <div>
+      <div className={styles.selectPadding}>
         <Field
           name="timezone"
           label="Timezone"

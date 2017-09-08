@@ -14,7 +14,7 @@ import { getCollection } from '../../../Utils';
 import withAuthProps from '../../../../hocs/withAuthProps';
 import { switchActiveEnterprise } from '../../../../thunks/auth';
 import styles from './styles.scss';
-import DialogBox from "../../../library/DialogBox/index";
+import DialogBox from '../../../library/DialogBox/index';
 
 class EnterpriseList extends Component {
   constructor(props) {
@@ -100,17 +100,18 @@ class EnterpriseList extends Component {
             </select>
             ) : null}
         </PageContainer>
-        <DialogBox
+        <Modal
           active={this.state.active}
           onEscKeyDown={this.setActive}
           onOverlayClick={this.setActive}
           className={styles.customDialog}
+          custom
         >
           <CreateAccount
             enterprises={enterprises}
             setActive={this.setActive}
           />
-        </DialogBox>
+        </Modal>
       </div>
     );
   }

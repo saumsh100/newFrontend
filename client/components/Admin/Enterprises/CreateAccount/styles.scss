@@ -2,17 +2,29 @@
 
 .mainContainer {
   background: $primary-white;
-  animation: fadeinform 1s;
+  animation: fadeinform 0.9s;
+  border-radius: 5px;
+  padding: 10px 10px 10px 10px;
 }
 
 .header {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
   color: $primary-dark;
-  composes: fontMediumSize from 'sass-loader!../../../../fonts.scss';
+  composes: fontMediumLarge from 'sass-loader!../../../../fonts.scss';
+
+  &_icon {
+    margin-left: auto;
+    font-size: 1rem;
+    padding-right: 5px;
+    cursor: pointer;
+  }
 }
 
 .formContainer {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 10px 10px 10px;
   display: flex;
   flex-direction: column;
 }
@@ -21,6 +33,9 @@
   display: flex;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .nextButton {
   margin-left: auto;
@@ -36,9 +51,43 @@
 
 .selectPadding {
   padding-top: 15px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
 }
 
+.selectEnterprise {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  &_dd {
+    width: 70%
+  }
+
+  &_icon {
+    padding-top: 12px;
+    align-items: center;
+  }
+}
+
+.accountOptions {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &_text {
+    width: 250px;
+    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  }
+
+}
+
+.displayFlex {
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+}
 
 @keyframes fadeinform {
   0%   { opacity: 0; }

@@ -19,13 +19,7 @@ function DefaultOption({ option }) {
 export default class DropdownSelect extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpen: false,
-      options: [],
-      optionsStatic: [],
-      value: '',
-      searching: false,
-    };
+    this.state = this.getInitialState();
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
@@ -34,19 +28,22 @@ export default class DropdownSelect extends Component {
     this.handleSearch = this.handleSearch.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({
-      options: this.props.options,
-      optionsStatic: this.props.options,
-    });
+  getInitialState() {
+    return {
+      options: this.props.options || [],
+      optionsStatic: this.props.options || [],
+      value: this.props.value || '',
+      isOpen: false,
+      searching: false,
+    };
   }
 
-  toggle() {
+  toggle(value) {
     if (this.state.isOpen) {
       this.setState({
         isOpen: false,
         options: this.state.optionsStatic,
-        value: '',
+        value,
       });
     } else {
       this.setState({
@@ -100,11 +97,9 @@ export default class DropdownSelect extends Component {
       search,
     } = this.props;
 
-    const {
-      options,
-    } = this.state;
-
     const OptionTemplate = template || DefaultOption;
+
+    let options = search ? this.state.options : this.props.options;
 
     return (
       <List className={styles.dropDownList} >
@@ -137,7 +132,7 @@ export default class DropdownSelect extends Component {
               className={className}
               onClick={() => {
                 onChange(option.value)
-                this.toggle()
+                this.toggle(option.value)
               }}
               data-test-id={option.value}
             >

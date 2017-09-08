@@ -9,7 +9,7 @@ import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
 ;import EnterpriseList from './EnterpriseList';
 import SelectAccountOptions from './SelectAccountOptions';
-import { Button, ListBullets } from '../../../library';
+import { Button, ListBullets, Icon } from '../../../library';
 import { setAllAccountInfo } from '../../../../thunks/admin';
 import styles from './styles.scss';
 
@@ -92,9 +92,9 @@ class CreateAccount extends Component {
       })) : (
         <EnterpriseList
           enterprises={enterprises}
-          setEnterprise={this.setEnterprise}
+          onSubmit={this.next}
+          index={0}
           setCreate={this.setCreate}
-          setIndex={this.setIndex}
         />);
 
     const formList = [
@@ -131,10 +131,16 @@ class CreateAccount extends Component {
       },
     ];
 
+    console.log(this.state.values);
 
     return (
       <div key={this.state.index} className={styles.mainContainer}>
-        <div className={styles.header}>{formList[this.state.index].title}</div>
+        <div className={styles.header}>
+          {formList[this.state.index].title}
+          <div className={styles.header_icon}>
+            <Icon icon="times" onClick={()=>this.props.setActive()} />
+          </div>
+        </div>
         <div className={styles.formContainer}>
           {formList[this.state.index].component }
         </div>
@@ -142,7 +148,6 @@ class CreateAccount extends Component {
           {this.state.index || this.state.create ? (
             <Button
               onClick={() => this.previous()}
-              icon="arrow-left"
             >
               Previous
             </Button>) : null }
@@ -153,7 +158,6 @@ class CreateAccount extends Component {
                 submit(formNames[this.state.index]);
               }}
               className={styles.nextButton}
-              icon="arrow-right"
             >
               Next
             </Button>)
@@ -171,14 +175,6 @@ class CreateAccount extends Component {
               Submit All
             </Button>
             ) : null }
-        </div>
-        <div className={styles.bulletContainer}>
-          <div className={styles.bulletContainer_bullets}>
-            <ListBullets
-              index={this.state.index}
-              length={this.state.formLength}
-            />
-          </div>
         </div>
       </div>
     );
