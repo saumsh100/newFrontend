@@ -24,14 +24,22 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    // TODO: booleans should have allowNull=true
     canSendReminders: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
 
+    // TODO: booleans should have allowNull=true
     canSendRecalls: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+
+    canSendReviews: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
     },
 
     unit: {

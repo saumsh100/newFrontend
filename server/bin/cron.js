@@ -11,6 +11,9 @@ const remindersPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * *
 // Run at 5AM every morning
 const recallsPattern = NODE_ENV === 'production' ? '* 5 * * *' : '0 * * * * *';
 
+// Run every 30 min in prod
+const reviewsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
+
 // Appointment Reminders Cron
 cron.schedule(remindersPattern, () => {
   createJob('reminders');
@@ -19,6 +22,11 @@ cron.schedule(remindersPattern, () => {
 // Patient Recalls Cron
 cron.schedule(recallsPattern, () => {
   createJob('recalls');
+});
+
+// Patient Reviews Cron
+cron.schedule(reviewsPattern, () => {
+  createJob('reviews');
 });
 
 // TODO: Birthday Messages Cron

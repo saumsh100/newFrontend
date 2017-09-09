@@ -1,3 +1,4 @@
+
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
@@ -48,6 +49,7 @@ const account = {
   twilioPhoneNumber: clinicPhoneNumber,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  canSendReviews: false,
 };
 
 const account2 = {
@@ -58,6 +60,7 @@ const account2 = {
   name: 'Test Account 2',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  canSendReviews: true,
 };
 
 const managerPermission = {
