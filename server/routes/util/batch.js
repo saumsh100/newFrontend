@@ -40,16 +40,19 @@ function buildErrors(err, model) {
  * Validates the dataArray, return a list of both errors, as well as valid models
  * @param dataArray - List of model data to build models from
  * @param Model - Sequelize Model
+ * @param extraSetValidators - Validators to filter entire set. Must return { validDocs, errs }
+ * @param extraModelValidators - Validators run against each model. Must throw any errors, else
+ * return the model passed in.
  * @returns {Promise.<{errors: Array, docs: Array}>}
  */
-async function preValidate(dataArray, Model) {
+async function preValidate(dataArray, Model, extraSetValidators = [], extraModelValidators = []) {
   const errors = [];
 
   // Build instances of the models
   const docs = dataArray.map(p => Model.build(p));
 
   // Now Do ORM Validation
-  const validatedDocs = [];
+  let validatedDocs = [];
   for (const d of docs) {
     try {
       await d.validate(); // validate against schema
@@ -57,6 +60,31 @@ async function preValidate(dataArray, Model) {
     } catch (err) {
       errors.push(buildErrors(err, d));
     }
+  }
+
+  // Run any extra set validators
+  for (const validator of extraSetValidators) {
+    const { validDocs, errs } = await validator(validatedDocs);
+    validatedDocs = validDocs;
+
+    for (const err of errs) {
+      errors.push(err);
+    }
+  }
+
+  // Run any extra model validators
+  for (const validator of extraModelValidators) {
+    const filteredValidatedDocs = [];
+    for (const d of validatedDocs) {
+      try {
+        await validator(d);
+        filteredValidatedDocs.push(d);
+      } catch (err) {
+        errors.push(buildErrors(err, d));
+      }
+    }
+
+    validatedDocs = filteredValidatedDocs;
   }
 
   return { errors, docs: validatedDocs };
@@ -67,12 +95,18 @@ async function preValidate(dataArray, Model) {
  * @param dataArray - List of model data to build models from
  * @param Model - Sequelize Model
  * @param modelType - Type of the model. Ex: 'Appointment'
+ * @param extraSetValidators - Validators to filter entire set. Must return { validDocs, errs }
+ * @param extraModelValidators - Validators run against each model. Must throw any errors, else
+ * return the model passed in.
  * @returns {Promise.<*>}
  */
-async function batchCreate(dataArray, Model, modelType) {
-  const { docs, errors } = await preValidate(dataArray, Model);
+async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
+                           extraModelValidators = []) {
+  const { docs, errors } = await preValidate(dataArray, Model, extraSetValidators,
+    extraModelValidators);
   const savableCopies = docs.map(d => d.get({ plain: true }));
   const response = await Model.bulkCreate(savableCopies);
+
   if (errors.length) {
     const errorsResponse = errors.map((error) => {
       error.model = modelType;

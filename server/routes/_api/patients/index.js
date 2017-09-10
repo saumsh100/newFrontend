@@ -1,14 +1,15 @@
 /* eslint-disable consistent-return */
 import _ from 'lodash';
+import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
-import { Router } from 'express';
+import { batchCreate } from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
 import { Appointment, Chat, Patient } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
-import { env, namespaces } from '../../../config/globals';
+import { namespaces } from '../../../config/globals';
 
 const patientsRouter = new Router();
 
@@ -400,6 +401,39 @@ patientsRouter.post('/', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+/**
+ * Batch create patients for connector
+ */
+patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
+  async (req, res, next) => {
+  const patients = req.body;
+  const cleanedPatients = patients.map(patient => Object.assign(
+    {},
+    _.omit(patient, ['id']),
+    { accountId: req.accountId }
+  ));
+
+  return batchCreate(cleanedPatients, Patient, 'Patient', [Patient.uniqueAgainstEachOther],
+    [Patient.uniqueValidate])
+    .then((savedPatients) => {
+      const patientData = savedPatients.map(savedPatient => savedPatient.get({ plain: true }));
+      res.status(201).send(format(req, res, 'patients', patientData));
+    })
+    .catch(({ errors, docs }) => {
+      docs = docs.map(d => d.get({ plain: true }));
+
+      // Log any errors that occurred
+      errors.forEach((err) => {
+        console.error(err);
+      });
+
+      const data = format(req, res, 'patients', docs);
+      const responseData = Object.assign({}, data);
+      return res.status(201).send(responseData);
+    })
+    .catch(next);
 });
 
 /**
