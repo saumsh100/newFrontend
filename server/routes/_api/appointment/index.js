@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
-import { batchCreate } from '../../util/batch';
+import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
@@ -587,7 +587,7 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
   const appointments = req.body;
   const cleanedAppointments = appointments.map(appointment => Object.assign(
     {},
-    _.omit(appointment, ['id']),
+    appointment,
     { accountId: req.accountId }
   ));
 
@@ -605,8 +605,7 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
       });
 
       const data = format(req, res, 'appointments', docs);
-      const responseData = Object.assign({}, data);
-      return res.status(201).send(responseData);
+      return res.status(201).send(Object.assign({}, data));
     })
     .catch(next);
 });

@@ -3,7 +3,7 @@ import { Router } from 'express';
 import checkIsArray from '../../../middleware/checkIsArray';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
-import { batchCreate } from '../../util/batch';
+import batchCreate from '../../util/batch';
 import format from '../../util/format';
 import normalize from '../normalize';
 import { Family } from '../../../_models';
@@ -61,8 +61,7 @@ familiesRouter.post('/connector/batch', checkPermissions('family:create'), (req,
       });
 
       const data = format(req, res, 'families', docs);
-      const responseData = Object.assign({}, data);
-      return res.status(201).send(responseData);
+      return res.status(201).send(Object.assign({}, data));
     })
     .catch(next);
 });

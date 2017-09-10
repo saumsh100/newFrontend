@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
-import { batchCreate } from '../../util/batch';
+import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
@@ -411,12 +411,17 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
   const patients = req.body;
   const cleanedPatients = patients.map(patient => Object.assign(
     {},
-    _.omit(patient, ['id']),
+    patient,
     { accountId: req.accountId }
   ));
 
-  return batchCreate(cleanedPatients, Patient, 'Patient', [Patient.uniqueAgainstEachOther],
-    [Patient.uniqueValidate])
+  return batchCreate(
+    cleanedPatients,
+    Patient,
+    'Patient',
+    [Patient.uniqueAgainstEachOther],
+    [Patient.uniqueValidate]
+  )
     .then((savedPatients) => {
       const patientData = savedPatients.map(savedPatient => savedPatient.get({ plain: true }));
       res.status(201).send(format(req, res, 'patients', patientData));
@@ -430,8 +435,7 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
       });
 
       const data = format(req, res, 'patients', docs);
-      const responseData = Object.assign({}, data);
-      return res.status(201).send(responseData);
+      return res.status(201).send(Object.assign({}, data));
     })
     .catch(next);
 });
@@ -444,7 +448,7 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
   const cleanedPatients = patients.map((patient) => {
     return Object.assign(
       {},
-      _.omit(patient, ['id']),
+      patient,
       { accountId: req.accountId },
     );
   });

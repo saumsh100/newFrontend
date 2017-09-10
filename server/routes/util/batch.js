@@ -11,29 +11,26 @@
  * @returns {[*]}
  */
 function buildErrors(err, model) {
-  // Create a JsonAPI error object. If a collection of errors exists, multiple error
-  // objects are created.
-  let errors = [{ status: 500, title: err.name, detail: err.message, model }];
-  if (err.errors) {
-    errors = err.errors.map((error) => {
-      let errorPointer = '/';
-      if (error.path) {
-        errorPointer = `/data/attributes/${error.path}`;
-      }
-
-      return {
-        status: 500,
-        source: {
-          pointer: errorPointer,
-        },
-        title: error.type,
-        detail: error.message,
-        model,
-      };
-    });
+  if (!err.errors || !Array.isArray(err.errors)) {
+    return [{ status: 500, title: err.name, detail: err.message, model }];
   }
 
-  return errors;
+  return err.errors.map((error) => {
+    let errorPointer = '/';
+    if (error.path) {
+      errorPointer = `/data/attributes/${error.path}`;
+    }
+
+    return {
+      status: 500,
+      source: {
+        pointer: errorPointer,
+      },
+      title: error.type,
+      detail: error.message,
+      model,
+    };
+  });
 }
 
 /**
@@ -47,8 +44,6 @@ function buildErrors(err, model) {
  */
 async function preValidate(dataArray, Model, extraSetValidators = [], extraModelValidators = []) {
   const errors = [];
-
-  // Build instances of the models
   const docs = dataArray.map(p => Model.build(p));
 
   // Now Do ORM Validation
@@ -66,7 +61,6 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
   for (const validator of extraSetValidators) {
     const { validDocs, errs } = await validator(validatedDocs);
     validatedDocs = validDocs;
-
     for (const err of errs) {
       errors.push(err);
     }
@@ -102,8 +96,12 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
  */
 async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
                            extraModelValidators = []) {
-  const { docs, errors } = await preValidate(dataArray, Model, extraSetValidators,
-    extraModelValidators);
+  const { docs, errors } = await preValidate(
+    dataArray,
+    Model,
+    extraSetValidators,
+    extraModelValidators
+  );
   const savableCopies = docs.map(d => d.get({ plain: true }));
   const response = await Model.bulkCreate(savableCopies);
 
@@ -114,6 +112,7 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
       if (error.errors && error.errors[0]) {
         error.errorMessage = error.errors[0].message;
       }
+
       return error;
     });
 
@@ -123,6 +122,4 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
   return response;
 }
 
-module.exports = {
-  batchCreate,
-};
+export default batchCreate;
