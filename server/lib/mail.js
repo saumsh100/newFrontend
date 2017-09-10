@@ -25,14 +25,22 @@ module.exports = {
     config.templateName = 'Appointment Requested';
     return sendTemplate(config);
   },
+
   sendAppointmentRequestRejected: (config) => {
     config.subject = 'Sorry, Your appointment was Rejected.';
     config.templateName = 'Appointment Rejected';
     return sendTemplate(config);
   },
+
   sendAppointmentRequestConfirmed: (config) => {
     config.subject = 'Congratulations! Your appointment was Confirmed.';
     config.templateName = 'Appointment Confirmed';
+    return sendTemplate(config);
+  },
+
+  sendReview: (config) => {
+    config.subject = 'Tell us about your experience.';
+    config.templateName = 'Patient Review';
     return sendTemplate(config);
   },
 };

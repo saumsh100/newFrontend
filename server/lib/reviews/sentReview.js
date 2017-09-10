@@ -32,35 +32,25 @@ const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) =>
 
 export default {
   // Send Appointment Reminder text via Twilio
-  sms({ account, appointment, patient }) {
+  /*sms({ account, appointment, patient }) {
     // TODO: add phoneNumber logic for patient
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
       body: createReminderText({ patient, account, appointment }),
     });
-  },
-
-  // Send Appointment Reminder call via Twilio
-  phone({ account, appointment, patient, sentReminder }) {
-    // TODO: add phoneNumber logic for patient
-    return twilio.makeCall({
-      to: patient.mobilePhoneNumber,
-      from: account.twilioPhoneNumber,
-      url: generateCallBackUrl({ account, appointment, patient, sentReminder }),
-    });
-  },
+  },*/
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, appointment, patient, sentReminder }) {
-    return sendConfirmationReminder({
+  email({ account, appointment, patient, sentReview }) {
+    return sendReview({
       toEmail: patient.email,
       fromName: account.name,
       mergeVars: [
         {
-          name: 'CONFIRMATION_URL',
+          name: 'REVIEW_URL',
           // TODO: we might have to make this a token if UUID is too easy to guess...
-          content: `${protocol}://${host}/sentReminders/${sentReminder.id}/confirm`,
+          content: `${protocol}://${host}/sentReminders/${sentReview.id}/confirm`,
         },
         {
           name: 'ACCOUNT_NAME',

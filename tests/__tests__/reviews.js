@@ -107,6 +107,9 @@ describe('Reviews Calculation Library', () => {
         const appts = await getReviewAppointments({ account, date: currentDate });
         expect(appts.length).toBe(0);
       });
+
+      // TODO: test that appts are not returned for patients that have had a sentReview in last week
+      // TODO: test that appts are not returned for duplicate patients (say 2 appointments in last week)
     });
   });
 });

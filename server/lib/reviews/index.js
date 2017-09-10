@@ -4,31 +4,14 @@ import moment from 'moment';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { getReviewAppointments } from './helpers';
-import sendReminder from './sendReminder';
+import sendReview from './sendReview';
 
 
 export async function sendReviewsForAccount(account, date) {
   console.log(`Sending reviews for ${account.name}`);
-
-  // - grab all appointments that need a review
-  //    - what does this mean?
-  //    - date range from (date - 3) to (date - 2)
-  //    - filter out the ones that have already been sent a review
-  //    - filter out patients that have already been sent a review
-  //    -
-
-
-  /*
-     - ignore appt. if:
-        - not in range
-        - patient has already left a Review for clinic
-        - patient has already been sent a SentReview for that appointment
-   */
-
   const appointments = await getReviewAppointments({ account, date });
   for (const appointment of appointments) {
     const { patient } = appointment;
-
 
     // Save sent review first so we can
     // - use sentReviewId as token in email to identify patient on review form
@@ -40,9 +23,18 @@ export async function sendReviewsForAccount(account, date) {
       appointmentId: appointment.id,
     });
 
-    debugger;
-
-
+    try {
+      await sendReminder['email']({
+        patient,
+        account,
+        appointment,
+        sentReview,
+      });
+    } catch (error) {
+      console.log(`${'email'} review failed to send to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+      console.log(error);
+      // continue; need to add this if code is added below for success
+    }
   }
 }
 

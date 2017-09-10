@@ -2,13 +2,8 @@
 import moment from 'moment';
 import { Appointment, Patient, SentReview, Review } from '../../_models';
 
-// Made an effort to throw all easily testable functions into here
-
 /**
- * getAppointmentsFromReminder returns all of the appointments that are
- * - in that clinic
- * - within the reminder timeAway range
- * - and if we should send reminder
+ * getReviewAppointments
  *
  * @param reminder
  * @param date
