@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { Appointment, Patient, SentReminder } from '../../_models';
+import { Appointment, Patient, SentReview, Review } from '../../_models';
 
 // Made an effort to throw all easily testable functions into here
 
@@ -13,7 +13,7 @@ import { Appointment, Patient, SentReminder } from '../../_models';
  * @param reminder
  * @param date
  */
-export async function getReviewAppointments(account, date) {
+export async function getReviewAppointments({ account, date }) {
   const begin = moment(date).subtract(1, 'week').toISOString();
   const appointments = await Appointment.findAll({
     where: {
@@ -29,14 +29,29 @@ export async function getReviewAppointments(account, date) {
         model: Patient,
         as: 'patient',
         required: true,
+        include: [
+          {
+            model: Review,
+            as: 'reviews',
+            required: false,
+          },
+        ],
       },
-      /*{
-        model: SentReminder,
-        as: 'sentReminders',
+      {
+        model: SentReview,
+        as: 'sentReviews',
         required: false,
-      },*/
+      },
     ],
   });
 
-  return appointments;
+  // Filter down to appointments who have no sentReviews and
+  // whose patients have not yet reviewed the clinic
+  const filteredAppointments = appointments.filter((a) => {
+    const reviewNotSent = !a.sentReviews.length;
+    const patientNotReviewed = !a.patient.reviews.length;
+    return reviewNotSent && patientNotReviewed;
+  });
+
+  return filteredAppointments;
 }

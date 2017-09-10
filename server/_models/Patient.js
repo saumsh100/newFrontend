@@ -155,7 +155,7 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account, Appointment, Chat, SentRecall }) => {
+  Patient.associate = ({ Account, Appointment, Chat, SentRecall, Review, SentReview }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -165,18 +165,31 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'patientId',
       as: 'appointments',
     });
+
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
       as: 'chats',
     });
+
     Patient.hasMany(SentRecall, {
       foreignKey: 'patientId',
       as: 'sentRecalls',
     });
+
     // This exists because some endpoints refer to 'chats' as 'chat' in the response
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
       as: 'chat',
+    });
+
+    Patient.hasMany(SentReview, {
+      foreignKey: 'patientId',
+      as: 'sentReviews',
+    });
+
+    Patient.hasMany(Review, {
+      foreignKey: 'patientId',
+      as: 'reviews',
     });
   };
 

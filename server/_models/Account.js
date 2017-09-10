@@ -133,6 +133,8 @@ export default function (sequelize, DataTypes) {
       Recall,
       Service,
       WeeklySchedule,
+      Review,
+      SentReview,
     } = models;
 
     Account.belongsTo(Enterprise, {
@@ -178,6 +180,16 @@ export default function (sequelize, DataTypes) {
     Account.hasMany(Service, {
       foreignKey: 'accountId',
       as: 'services',
+    });
+
+    Account.hasMany(Review, {
+      foreignKey: 'accountId',
+      as: 'reviews',
+    });
+
+    Account.hasMany(SentReview, {
+      foreignKey: 'accountId',
+      as: 'sentReviews',
     });
   };
 

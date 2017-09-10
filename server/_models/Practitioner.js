@@ -70,7 +70,18 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Practitioner.associate = ({ Account, Service, Request, Appointment, WeeklySchedule, PractitionerRecurringTimeOff }) => {
+  Practitioner.associate = (models) => {
+    const {
+      Account,
+      Service,
+      Request,
+      Appointment,
+      WeeklySchedule,
+      PractitionerRecurringTimeOff,
+      Review,
+      SentReview,
+    } = models;
+
     Practitioner.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -89,6 +100,16 @@ export default function (sequelize, DataTypes) {
     Practitioner.hasMany(Appointment, {
       foreignKey: 'practitionerId',
       as: 'appointments',
+    });
+
+    Practitioner.hasMany(Review, {
+      foreignKey: 'practitionerId',
+      as: 'reviews',
+    });
+
+    Practitioner.hasMany(SentReview, {
+      foreignKey: 'practitionerId',
+      as: 'sentReviews',
     });
 
     Practitioner.hasMany(PractitionerRecurringTimeOff, {

@@ -25,7 +25,7 @@ export async function sendReviewsForAccount(account, date) {
         - patient has already been sent a SentReview for that appointment
    */
 
-  const appointments = await getReviewAppointments(account, date);
+  const appointments = await getReviewAppointments({ account, date });
   for (const appointment of appointments) {
     const { patient } = appointment;
 
