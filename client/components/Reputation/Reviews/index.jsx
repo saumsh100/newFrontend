@@ -79,6 +79,8 @@ class Reviews extends Component {
       return <Loader loaded={this.state.loaded} color="#FF715A" />
     }
 
+    console.log(reviews.toJS());
+
     const reviewsData = reviews.get('data').toJS();
 
     const reviewsList = reviews.get('reviews').toJS();

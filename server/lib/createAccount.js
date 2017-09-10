@@ -1,9 +1,6 @@
-import request from 'request-promise';
 import { callrails, vendasta } from '../config/globals';
 import twilioClient from '../config/twilio';
 const axios = require('axios');
-
-
 
 const uuid = require('uuid').v4;
 
