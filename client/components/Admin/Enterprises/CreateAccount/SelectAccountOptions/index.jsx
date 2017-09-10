@@ -4,6 +4,7 @@ import { Form, Field, } from '../../../../library';
 import { emailValidate } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 import Icon from "../../../../library/Icon/index";
+import {Grid, Row, Col} from "../../../../library/Grid/index";
 
 export default function SelectAccountOptions(props) {
   const {
@@ -11,8 +12,6 @@ export default function SelectAccountOptions(props) {
     index,
     initialValues,
     formName,
-    showRepFeatures,
-    setShowFeatures,
   } = props;
 
   return (
@@ -25,82 +24,98 @@ export default function SelectAccountOptions(props) {
       ignoreSaveButton
       destroyOnUnmount={false}
     >
-      <div className={styles.accountOptions}>
-        <div className={styles.displayFlex}>
-          <span>
-            <Icon icon="star" />
-          </span>
-          <span className={styles.accountOptions_text}>
-            Reputation Management
-          </span>
-          <div>
-            <Field
-              component="Toggle"
-              name="reputationManagement"
-              onChange={() => setShowFeatures()}
-            />
-          </div>
-        </div>
-        {showRepFeatures ?
-          (<div className={styles.reputationFeatures}>
-            <div>
-              <Field
-                component="Checkbox"
-                name="listings"
-                label="Listings"
-              />
+      <Grid className={styles.accountOptions}>
+        <Row className={styles.accountOptions_row}>
+          <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
+            <div className={styles.displayFlex}>
+              <span>
+                <Icon icon="star" />
+              </span>
+              <span className={styles.accountOptions_text}>
+                Reputation Management
+              </span>
+              <div>
+                <Field
+                  component="Toggle"
+                  name="reputationManagement"
+                />
+              </div>
             </div>
-            <div>
-              <Field
-                component="Checkbox"
-                name="social"
-                label="Social"
-              />
+            <div className={styles.displayFlex}>
+              <span>
+                <Icon icon="star" />
+              </span>
+              <span className={styles.accountOptions_text}>
+                Directory Listings
+              </span>
+              <div>
+                <Field
+                  component="Toggle"
+                  name="listings"
+                />
+              </div>
             </div>
-          </div>) : null }
-        <div className={styles.displayFlex}>
-          <span>
-            <Icon icon="clock-o" />
-          </span>
-          <span className={styles.accountOptions_text}>
-            Reminders
-          </span>
-          <div>
-            <Field
-              component="Toggle"
-              name="canSendReminders"
-            />
-          </div>
-        </div>
-        <div className={styles.displayFlex}>
-          <span>
-            <Icon icon="bullhorn" />
-          </span>
-          <span className={styles.accountOptions_text}>
-            Recalls
-          </span>
-          <div>
-            <Field
-              component="Toggle"
-              name="canSendRecalls"
-            />
-          </div>
-        </div>
-        <div className={styles.displayFlex}>
-          <span>
-            <Icon icon="phone" />
-          </span>
-          <span className={styles.accountOptions_text}>
-            Call Tracking
-          </span>
-          <div>
-            <Field
-              component="Toggle"
-              name="callTracking"
-            />
-          </div>
-        </div>
-      </div>
+            <div className={styles.displayFlex}>
+              <span>
+                <Icon icon="star" />
+              </span>
+              <span className={styles.accountOptions_text}>
+                Social Marketing
+              </span>
+              <div>
+                <Field
+                  component="Toggle"
+                  name="social"
+                />
+              </div>
+            </div>
+          </Col>
+          <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
+            <div className={styles.displayFlex}>
+              <span>
+                <Icon icon="clock-o" />
+              </span>
+              <span className={styles.accountOptions_text}>
+                Reminders
+              </span>
+              <div>
+                <Field
+                  component="Toggle"
+                  name="canSendReminders"
+                />
+              </div>
+            </div>
+            <div className={styles.displayFlex}>
+              <span>
+                <Icon icon="bullhorn" />
+              </span>
+              <span className={styles.accountOptions_text}>
+                Recalls
+              </span>
+              <div>
+                <Field
+                  component="Toggle"
+                  name="canSendRecalls"
+                />
+              </div>
+            </div>
+            <div className={styles.displayFlex}>
+              <span>
+                <Icon icon="phone" />
+              </span>
+              <span className={styles.accountOptions_text}>
+                Call Tracking
+              </span>
+              <div>
+                <Field
+                  component="Toggle"
+                  name="callTracking"
+                />
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </Grid>
     </Form>
   );
 }

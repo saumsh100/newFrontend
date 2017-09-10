@@ -19,9 +19,7 @@ class CreateAccount extends Component {
 
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
-    this.setEnterprise = this.setEnterprise.bind(this);
     this.setCreate = this.setCreate.bind(this);
-    this.setShowFeatures = this.setShowFeatures.bind(this);
     this.setCountry = this.setCountry.bind(this);
 
     this.state = {
@@ -29,7 +27,6 @@ class CreateAccount extends Component {
       formLength: 3,
       index: 0,
       values: [],
-      showRepFeatures: false,
       country: '',
     };
   }
@@ -48,27 +45,15 @@ class CreateAccount extends Component {
 
   previous() {
     if (this.state.index === 1 || (!this.state.index && this.state.create)) {
-      //const resetValue = this.state.values;
-     // resetValue[0] = {}
       this.setState({
         index: 0,
         create: false,
-        // values: resetValue,
       })
     } else {
       this.setState({
         index: this.state.index - 1,
       });
     }
-  }
-
-  setEnterprise(enterprise) {
-    const newValues = this.state.values;
-    newValues[0] = enterprise;
-    this.setState({
-      values: newValues,
-      index: 1,
-    });
   }
 
   setCreate() {
@@ -78,17 +63,12 @@ class CreateAccount extends Component {
     });
   }
 
-  setShowFeatures() {
-    this.setState({
-      showRepFeatures: !this.state.showRepFeatures,
-    });
-  }
-
   setCountry(country) {
     this.setState({
       country,
     });
   }
+
   render() {
     const {
       submit,
@@ -117,7 +97,7 @@ class CreateAccount extends Component {
         title: this.state.create ? 'Add Enterprise' : 'Add or Select Enterprise',
         component,
       },
-      {
+     {
         title: 'Clinic Details',
         component: ClinicDetails({
           onSubmit: this.next,
@@ -135,8 +115,6 @@ class CreateAccount extends Component {
           index: 2,
           initialValues: this.state.values[2],
           formName: formNames[2],
-          setShowFeatures: this.setShowFeatures,
-          showRepFeatures: this.state.showRepFeatures,
         }),
       },
       {

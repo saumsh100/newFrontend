@@ -62,7 +62,6 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
            });
         });
       }).catch((e) =>  {
-      console.log(e);
       return res.sendStatus(400);
     });
   }).catch(error => next(error));
@@ -84,7 +83,6 @@ reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, nex
           return res.send(response.data);
         })
     }).catch((e) => {
-      console.log(e)
       return res.sendStatus(404);
     });
   }).catch(error => next(error));

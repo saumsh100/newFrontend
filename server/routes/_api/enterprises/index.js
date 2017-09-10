@@ -124,7 +124,7 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
     ...pick(req.body, 'name', 'timezone', 'destinationPhoneNumber', 'street', 'city', 'zipCode', 'state', 'country', 'id'),
     enterpriseId: req.enterprise.id,
   };
-
+  console.log(req.query)
   const timezone = req.body.timezone;
   return Account.create(accountData)
     .then(async (accountFirst) => {

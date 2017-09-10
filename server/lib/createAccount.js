@@ -1,6 +1,9 @@
 import request from 'request-promise';
 import { callrails, vendasta } from '../config/globals';
 import twilioClient from '../config/twilio';
+const axios = require('axios');
+
+
 
 const uuid = require('uuid').v4;
 
@@ -19,28 +22,27 @@ async function callRail(account) {
 
   const createCompany = {
     method: 'POST',
-    uri: `https://api.callrail.com/v2/a/${callrails.apiAccount}/companies.json`,
+    url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/companies.json`,
     headers: {
       Authorization: `Token token=${callrails.apiKey}`,
     },
-    body: {
+    data: {
       name: account.name,
     },
     json: true,
   };
 
-  const company = await request(createCompany);
-
+  const company = await axios(createCompany);
   const createTracker = {
     method: 'POST',
-    uri: `https://api.callrail.com/v2/a/${callrails.apiAccount}/trackers.json`,
+    url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/trackers.json`,
     headers: {
       Authorization: `Token token=${callrails.apiKey}`,
     },
-    body: {
+    data: {
       name: account.name,
       type: 'source',
-      company_id: company.id,
+      company_id: company.data.id,
       call_flow: {
         type: 'basic',
         recording_enabled: true,
@@ -56,16 +58,16 @@ async function callRail(account) {
     },
     json: true,
   };
-  await request(createTracker);
+  await axios(createTracker);
 
   const createWebhook = {
     method: 'POST',
-    uri: `https://api.callrail.com/v2/a/${callrails.apiAccount}/integrations.json`,
+    url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/integrations.json`,
     headers: {
       Authorization: `Token token=${callrails.apiKey}`,
     },
-    body: {
-      company_id: company.id,
+    data: {
+      company_id: company.data.id,
       type: 'Webhooks',
       config: {
         post_call_webhook: [`https://carecru.io/callrail/${account.id}/inbound/post-call`],
@@ -75,9 +77,9 @@ async function callRail(account) {
     json: true,
   };
 
-  await request(createWebhook);
+  await axios(createWebhook);
 
-  return company.id;
+  return company.data.id;
 }
 
 async function twilioSetup(account) {
@@ -106,48 +108,20 @@ async function vendastaSetup(account, setupList) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
-    method: 'POST',
-    uri: accountUrl,
-    body: {
       companyName: account.name,
       customerIdentifier,
-    },
-    json: true,
+      addPresenceBuilderFlag: setupList.listings,
+      addReputationFlag: setupList.reputationManagement,
+      addSocialMarketingFlag: setupList.social,
+      address: account.street,
+      city: account.city,
+      country: account.country ,
+      state: account.state,
+      zip: account.zipCode,
   };
   try {
-    const newCompany = await request(createCompany);
+    const newCompany = await axios.post(accountUrl, createCompany);
 
-    if (setupList.listings) {
-     /* const accountUrlUpdate = `https://api.vendasta.com/api/v3/account/addProduct/?apiKey=${apiKey}&apiUser=${apiUser}`;
-           const updateCompany = {
-        method: 'POST',
-        uri: accountUrlUpdate,
-        body: {
-          accountId: newCompany.data.accountId,
-          productId: 'RM',
-        },
-        json: true,
-      };*/
-
-      const createRepUrl = `https://reputation-intelligence-api.vendasta.com/api/v2/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`
-      const updateCompany = {
-        method: 'POST',
-        uri: createRepUrl,
-        body: {
-          customerIdentifier,
-          address: account.street,
-          city: account.city,
-          companyName: account.name,
-          country: account.country ,
-          state: account.state,
-          zip:account.zipCode,
-        },
-        json: true,
-      };
-
-      const updatedCompany = await request(updateCompany);
-      console.log(updatedCompany)
-    }
     return {
       vendastaId: customerIdentifier,
       vendastaAccountId: newCompany.data.accountId,
@@ -159,12 +133,26 @@ async function vendastaSetup(account, setupList) {
 }
 
 export default async function createAccount(account, setupList) {
-  const vendastaData = setupList.reputationManagement ? await vendastaSetup(account, setupList) : null;
+  const {
+    listings,
+    reputationManagement,
+    social,
+    callTracking,
+    canSendReminders,
+    canSendRecalls,
+  } = setupList;
+
+  let vendastaData = null;
+
+  if (reputationManagement === 'true' || listings === 'true' || social === 'true') {
+    vendastaData = await vendastaSetup(account, setupList);
+  }
 
   const data = {
-    callrailId: setupList.callTracking ? await callRail(account) : null,
-    twilioPhoneNumber: (setupList.canSendReminders || setupList.canSendRecalls) ? await twilioSetup(account) : null,
+    callrailId: callTracking === 'true' ? await callRail(account) : null,
+    twilioPhoneNumber: (canSendReminders === 'true' || canSendRecalls === 'true') ? await twilioSetup(account) : null,
     ...vendastaData,
   };
+
   return data;
 }
