@@ -21,12 +21,16 @@ class CreateAccount extends Component {
     this.previous = this.previous.bind(this);
     this.setEnterprise = this.setEnterprise.bind(this);
     this.setCreate = this.setCreate.bind(this);
+    this.setShowFeatures = this.setShowFeatures.bind(this);
+    this.setCountry = this.setCountry.bind(this);
 
     this.state = {
       create: false,
-      formLength: 4,
+      formLength: 3,
       index: 0,
       values: [],
+      showRepFeatures: false,
+      country: '',
     };
   }
 
@@ -74,12 +78,23 @@ class CreateAccount extends Component {
     });
   }
 
+  setShowFeatures() {
+    this.setState({
+      showRepFeatures: !this.state.showRepFeatures,
+    });
+  }
 
+  setCountry(country) {
+    this.setState({
+      country,
+    });
+  }
   render() {
     const {
       submit,
       enterprises,
     } = this.props;
+
 
     const formNames = ['addEnterprise', 'clinicDetails', 'selectAccountOptions', 'addUser'];
 
@@ -88,7 +103,7 @@ class CreateAccount extends Component {
         onSubmit: this.next,
         index: 0,
         initialValues: this.state.values[0],
-        formName: formNames[0],
+        formName: 'addEnterprise',
       })) : (
         <EnterpriseList
           enterprises={enterprises}
@@ -109,6 +124,8 @@ class CreateAccount extends Component {
           index: 1,
           initialValues: this.state.values[1],
           formName: formNames[1],
+          setCountry: this.setCountry,
+          country: this.state.country,
         }),
       },
       {
@@ -118,6 +135,8 @@ class CreateAccount extends Component {
           index: 2,
           initialValues: this.state.values[2],
           formName: formNames[2],
+          setShowFeatures: this.setShowFeatures,
+          showRepFeatures: this.state.showRepFeatures,
         }),
       },
       {
@@ -158,7 +177,7 @@ class CreateAccount extends Component {
               Previous
             </Button>) : null }
 
-          {(this.state.formLength - 1 > this.state.index) && (this.state.index >= 1 || this.state.create)?
+          {(this.state.formLength - 1 > this.state.index) && (this.state.index >= 1 || this.state.create) ?
             (<Button
               onClick={() => {
                 submit(formNames[this.state.index]);

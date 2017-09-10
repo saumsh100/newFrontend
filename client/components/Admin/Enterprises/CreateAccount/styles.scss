@@ -90,7 +90,14 @@
     font-weight: $large-weight;
     padding-left:20px;
   }
+}
 
+
+.reputationFeatures {
+  display: flex;
+  padding: 5px 0px 10px 0px;
+  animation: fadeinform 0.9s;
+  color: $primary-darkgrey;
 }
 
 .displayFlex {
@@ -98,6 +105,8 @@
   align-items: center;
   padding-bottom: 5px;
 }
+
+
 
 @keyframes fadeinform {
   0%   { opacity: 0; }

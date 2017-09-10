@@ -11,6 +11,8 @@ export default function SelectAccountOptions(props) {
     index,
     initialValues,
     formName,
+    showRepFeatures,
+    setShowFeatures,
   } = props;
 
   return (
@@ -35,10 +37,27 @@ export default function SelectAccountOptions(props) {
             <Field
               component="Toggle"
               name="reputationManagement"
+              onChange={() => setShowFeatures()}
             />
           </div>
         </div>
-
+        {showRepFeatures ?
+          (<div className={styles.reputationFeatures}>
+            <div>
+              <Field
+                component="Checkbox"
+                name="listings"
+                label="Listings"
+              />
+            </div>
+            <div>
+              <Field
+                component="Checkbox"
+                name="social"
+                label="Social"
+              />
+            </div>
+          </div>) : null }
         <div className={styles.displayFlex}>
           <span>
             <Icon icon="clock-o" />
@@ -53,7 +72,6 @@ export default function SelectAccountOptions(props) {
             />
           </div>
         </div>
-
         <div className={styles.displayFlex}>
           <span>
             <Icon icon="bullhorn" />

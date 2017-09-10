@@ -121,12 +121,11 @@ enterprisesRouter.post('/switch', checkPermissions('enterprises:read'), async (r
  */
 enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:update']), async (req, res, next) => {
   const accountData = {
-    ...pick(req.body, 'name', 'timezone', 'destinationPhoneNumber', 'id'),
+    ...pick(req.body, 'name', 'timezone', 'destinationPhoneNumber', 'street', 'city', 'zipCode', 'state', 'country', 'id'),
     enterpriseId: req.enterprise.id,
   };
 
   const timezone = req.body.timezone;
-  console.log(req.query)
   return Account.create(accountData)
     .then(async (accountFirst) => {
         // commenting out the creating and saving of api keys

@@ -102,7 +102,7 @@ async function twilioSetup(account) {
   return number.phone_number;
 }
 
-async function vendastaSetup(account) {
+async function vendastaSetup(account, setupList) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
@@ -116,6 +116,38 @@ async function vendastaSetup(account) {
   };
   try {
     const newCompany = await request(createCompany);
+
+    if (setupList.listings) {
+     /* const accountUrlUpdate = `https://api.vendasta.com/api/v3/account/addProduct/?apiKey=${apiKey}&apiUser=${apiUser}`;
+           const updateCompany = {
+        method: 'POST',
+        uri: accountUrlUpdate,
+        body: {
+          accountId: newCompany.data.accountId,
+          productId: 'RM',
+        },
+        json: true,
+      };*/
+
+      const createRepUrl = `https://reputation-intelligence-api.vendasta.com/api/v2/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`
+      const updateCompany = {
+        method: 'POST',
+        uri: createRepUrl,
+        body: {
+          customerIdentifier,
+          address: account.street,
+          city: account.city,
+          companyName: account.name,
+          country: account.country ,
+          state: account.state,
+          zip:account.zipCode,
+        },
+        json: true,
+      };
+
+      const updatedCompany = await request(updateCompany);
+      console.log(updatedCompany)
+    }
     return {
       vendastaId: customerIdentifier,
       vendastaAccountId: newCompany.data.accountId,
@@ -127,7 +159,7 @@ async function vendastaSetup(account) {
 }
 
 export default async function createAccount(account, setupList) {
-  const vendastaData = setupList.reputationManagement ? await vendastaSetup(account) : null;
+  const vendastaData = setupList.reputationManagement ? await vendastaSetup(account, setupList) : null;
 
   const data = {
     callrailId: setupList.callTracking ? await callRail(account) : null,

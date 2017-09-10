@@ -14,6 +14,22 @@ export const caProvinces = [
   { value: 'YT' },
 ];
 
+export const caProv = [
+  { value: 'Alberta' },
+  { value: 'British Columbia' },
+  { value: 'Manitoba' },
+  { value: 'New Brunswick' },
+  { value: 'Newfoundland and Labrador' },
+  { value: 'Nova Scotia' },
+  { value: 'Northwest Territories' },
+  { value: 'Nunavut' },
+  { value: 'Ontario' },
+  { value: 'Prince Edward Island' },
+  { value: 'Quebec' },
+  { value: 'Saskatchewan' },
+  { value: 'Yukon' },
+];
+
 export const countrySelector = [{ value: 'Canada'},{ value: 'United States'}];
 
 export const languages = [
