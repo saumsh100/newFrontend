@@ -54,7 +54,7 @@ class CallList extends Component {
       durationMissed = durationMissed !== 'unanswered' ? `${durationMissed}s` : durationMissed;
     }
     return (<tr>
-      <td className={styles.column}><Icon icon="phone" className={phoneClass} />&emsp;&emsp;{callSource}</td>
+        <td className={styles.column}><Icon icon="phone" className={phoneClass} />&emsp;<span className={styles.column_source}>{callSource}</span></td>
       <td className={styles.column}>{moment(startTime).format('LLL')}</td>
       <td className={styles.column}>{callerName}</td>
       <td className={styles.column}>{callerNum}</td>

@@ -53,7 +53,7 @@ function PhoneCalls(props) {
       </div>
       <div className={styles.infinite}>
         <table className={styles.table} cellSpacing="0" cellPadding="0">
-          <thead>
+          <thead className={styles.columnHeadContainer}>
             <tr>
               <th className={styles.columnHead}>Source Name</th>
               <th className={styles.columnHead}>Start Time</th>

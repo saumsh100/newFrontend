@@ -12,7 +12,7 @@
     height: 40px;
     padding-left: 15px;
     justify-content: space-between;
-    border-bottom: 3px solid #efefef;
+    //border-bottom: 3px solid #efefef;
     margin-bottom: 10px;
   }
   &__body {
@@ -28,24 +28,42 @@
   }
 }
 
+
+.scroll {
+  padding-top: 20px;
+}
+
 .column {
   text-align: center;
   padding: 10px;
   color: #969696;
-  font-size: 14px;
-  font-family: Gotham-Book;
+  font-size: 12px;
+  font-family: $medium-font;
   position: relative;
   border-right: 3px solid #efefef;
+
   &:last-child {
     border: none;
   }
+
+  &_source {
+    color: $primary-dark;
+    font-family: $medium-font;
+  }
 }
 
-
+.columnHeadContainer {
+  position: absolute;
+  top: 0px;
+  padding-bottom: 10px;
+}
 .columnHead {
-  border-right: 3px solid #efefef;
+  padding-top: 10px;
+  border-top: 3px solid #efefef;
+  font-size: 12px;
+  font-family: $medium-font;  
   &:last-child {
-    border: none;
+    //border: none;
   }
 }
 
@@ -100,7 +118,7 @@
 }
 
 .switchField label:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .switchField input:checked + label {
@@ -133,19 +151,22 @@
 
 .table {
   width: 100%;
-
+  position: relative;
   tbody {
     display:block;
     max-height:360px;
     overflow-y: scroll;
+    box-sizing: border-box;
   }
+
   thead, tbody tr {
     display:table;
     width:100%;
     table-layout:fixed;
   }
+
   thead {
-    width: calc( 100% - 1em )
+    width: calc( 100% )
   }
 }
 
