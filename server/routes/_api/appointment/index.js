@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
+import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
@@ -580,6 +581,54 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 });
 
 /**
+ * Batch create appointments for connector
+ */
+appointmentsRouter.post('/connector/batch', checkPermissions('appointments:create'), async (req, res, next) => {
+  const appointments = req.body;
+  const cleanedAppointments = appointments.map(appointment => Object.assign(
+    {},
+    appointment,
+    { accountId: req.accountId }
+  ));
+
+  return batchCreate(cleanedAppointments, Appointment, 'Appointment')
+    .then((apps) => {
+      const appData = apps.map(app => app.get({ plain: true }));
+      res.status(201).send(format(req, res, 'appointments', appData));
+    })
+    .catch(({ errors, docs }) => {
+      docs = docs.map(d => d.get({ plain: true }));
+
+      // Log any errors that occurred
+      errors.forEach((err) => {
+        console.error(err);
+      });
+
+      const data = format(req, res, 'appointments', docs);
+      return res.status(201).send(Object.assign({}, data));
+    })
+    .catch(next);
+});
+
+/**
+ * Batch update appointments for connector
+ */
+appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update'), (req, res, next) => {
+  const appointments = req.body;
+  const appointmentUpdates = appointments.map((appointment) => {
+    return Appointment.findById(appointment.id)
+      .then(_appointment => _appointment.update(appointment));
+  });
+
+  return Promise.all(appointmentUpdates)
+    .then((_appointments) => {
+      const appData = _appointments.map(app => app.get({ plain: true }));
+      res.send(format(req, res, 'appointments', appData));
+    })
+    .catch(next);
+});
+
+/**
  * Batch create appointment
  */
 appointmentsRouter.post('/batch', checkPermissions('appointments:create'), checkIsArray('appointments'), async (req, res, next) => {
@@ -603,6 +652,7 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
     })
     .catch(next);
 });
+
 
 /**
  * Batch updating
