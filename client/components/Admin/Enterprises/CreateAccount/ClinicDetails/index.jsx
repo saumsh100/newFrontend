@@ -35,7 +35,8 @@ export default function ClinicDetails(props) {
     };
   }).filter(filterValue => filterValue.value !== null);
 
-  const stateProv = caProv.concat(usStates);
+  const stateProv = country === 'US' ? usStates : caProv;
+  const zipPostal = country === 'US' ? 'Zip Code' : 'Postal Code';
 
   const zipPostalVal = (value) => {
     const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
@@ -70,6 +71,7 @@ export default function ClinicDetails(props) {
         <Field
           name="website"
           label="Website"
+          type="url"
           required
         />
       </div>
@@ -113,7 +115,6 @@ export default function ClinicDetails(props) {
           label="State"
           component="DropdownSelect"
           options={stateProv}
-          search
         />
       </div>
       <div className={styles.addressColPlain}>
@@ -126,7 +127,7 @@ export default function ClinicDetails(props) {
       <div className={styles.addressColPlain_padding}>
         <Field
           name="zipCode"
-          label="Zip Code"
+          label={zipPostal}
           validate={[maxPostalLength, zipPostalVal]}
           maxLength="6"
           required

@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
 import ContactDetails from './ContactDetails';
+import { caProv, usStates } from '../../../Settings/Clinic/Address/selectConstants';
 import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
-;import EnterpriseList from './EnterpriseList';
+import EnterpriseList from './EnterpriseList';
 import SelectAccountOptions from './SelectAccountOptions';
 import { Button, Icon } from '../../../library';
 import { setAllAccountInfo } from '../../../../thunks/admin';
@@ -66,6 +67,7 @@ class CreateAccount extends Component {
   setCountry(country) {
     this.setState({
       country,
+      states: usStates,
     });
   }
 
@@ -106,6 +108,7 @@ class CreateAccount extends Component {
           formName: formNames[1],
           setCountry: this.setCountry,
           country: this.state.country,
+          states: this.state.states
         }),
       },
       {

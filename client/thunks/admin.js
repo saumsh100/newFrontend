@@ -60,7 +60,7 @@ export function setAllAccountInfo(payload) {
         url,
       }));
 
-      /*
+
       // creating a user for this account
       const urlNewUser = `/api/accounts/${accountId}/newUser/`;
       const userData = payload.formData[3];
@@ -81,7 +81,7 @@ export function setAllAccountInfo(payload) {
         entityData: userData,
         url: urlNewUser,
         alert: alertCreatedUser,
-      }));*/
+      }));
     } catch (error) {
       console.log(error);
     }
