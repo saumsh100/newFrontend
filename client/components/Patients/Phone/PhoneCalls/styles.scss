@@ -49,19 +49,22 @@
   &_source {
     color: $primary-dark;
     font-family: $medium-font;
+    font-size: 12px;
   }
 }
 
 .columnHeadContainer {
   position: absolute;
   top: 0px;
+  background: $primary-white;
   padding-bottom: 10px;
+  z-index: 100;
 }
 .columnHead {
   padding-top: 10px;
   border-top: 3px solid #efefef;
   font-size: 12px;
-  font-family: $medium-font;  
+  font-family: $medium-font;
   &:last-child {
     //border: none;
   }
