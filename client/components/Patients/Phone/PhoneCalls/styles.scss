@@ -30,7 +30,7 @@
 
 
 .scroll {
-  padding-top: 20px;
+
 }
 
 .column {
@@ -57,16 +57,17 @@
   position: absolute;
   top: 0px;
   background: $primary-white;
-  padding-bottom: 10px;
   z-index: 100;
 }
 .columnHead {
-  padding-top: 10px;
-  border-top: 3px solid #efefef;
   font-size: 12px;
+  border-right: 3px solid #efefef;
   font-family: $medium-font;
+  border-top: 3px solid #efefef;
+  border-bottom: 3px solid #efefef;
+  padding: 3px;
   &:last-child {
-    //border: none;
+    border: none;
   }
 }
 
@@ -157,8 +158,8 @@
   position: relative;
   tbody {
     display:block;
-    max-height:360px;
-    overflow-y: scroll;
+    max-height: calc(100%);
+    overflow: scroll;
     box-sizing: border-box;
   }
 

@@ -53,7 +53,7 @@ class Phone extends Component {
       }),
     ])
       .then((data) => {
-        const moreData = Object.keys(data[1].calls || {}).length > 6;
+        const moreData = Object.keys(data[1].calls || {}).length > 7;
         this.setState({
           loader: true,
           skip: this.state.skip + 7,
@@ -80,7 +80,7 @@ class Phone extends Component {
       join: ['patient'],
       params,
     }).then((data) => {
-      const moreData = Object.keys(data.calls || {}).length > 6;
+      const moreData = Object.keys(data.calls || {}).length > 7;
       this.setState({
         skip: this.state.skip + 7,
         moreData,
