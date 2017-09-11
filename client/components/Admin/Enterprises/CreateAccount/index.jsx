@@ -131,8 +131,14 @@ class CreateAccount extends Component {
       },
     ];
 
+    const overFlowStyle = {
+      overflow: 'auto',
+    };
+
+    const style = this.state.index > 0 ? overFlowStyle : {};
+
     return (
-      <div key={this.state.index} className={styles.mainContainer}>
+      <div key={this.state.index} className={styles.mainContainer} style={style}>
         <div className={styles.header}>
           <div className={styles.logoContainer}>
             <img

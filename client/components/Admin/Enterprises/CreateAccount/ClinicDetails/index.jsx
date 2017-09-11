@@ -60,86 +60,88 @@ export default function ClinicDetails(props) {
       ignoreSaveButton
       destroyOnUnmount={false}
     >
-      <div>
-        <Field
-          name="name"
-          label="Name"
-          required
-        />
-      </div>
-      <div>
-        <Field
-          name="website"
-          label="Website"
-          type="url"
-          required
-        />
-      </div>
-      <div className={styles.selectPadding}>
-        <Field
-          name="timezone"
-          label="Timezone"
-          component="DropdownSelect"
-          options={options}
-          search
-          required
-        />
-      </div>
-      <div >
-        <Field
-          required
-          name="street"
-          label="Street Address"
-        />
-      </div>
-      <div className={styles.selectPadding}>
-        <Field
-          name="country"
-          label="Country"
-          component="DropdownSelect"
-          options={[{
-            value: 'CA',
-            label: 'Canada',
-          }, {
-            value: 'US',
-            label: 'United States',
-          }]}
-          onChange={(e, value) => setCountry(value)}
-          required
-        />
-      </div>
-      <div className={styles.selectPadding}>
-        <Field
-          required
-          name="state"
-          label="State"
-          component="DropdownSelect"
-          options={stateProv}
-        />
-      </div>
-      <div className={styles.addressColPlain}>
-        <Field
-          required
-          name="city"
-          label="City"
-        />
-      </div>
-      <div className={styles.addressColPlain_padding}>
-        <Field
-          name="zipCode"
-          label={zipPostal}
-          validate={[maxPostalLength, zipPostalVal]}
-          maxLength="6"
-          required
-        />
-      </div>
-      <div >
-        <Field
-          name="destinationPhoneNumber"
-          label="Destination Phone Number"
-          type="tel"
-          required
-        />
+      <div className={styles.clinicDetailsContainer}>
+        <div>
+          <Field
+            name="name"
+            label="Name"
+            required
+          />
+        </div>
+        <div>
+          <Field
+            name="website"
+            label="Website"
+            type="url"
+            required
+          />
+        </div>
+        <div className={styles.selectPadding}>
+          <Field
+            name="timezone"
+            label="Timezone"
+            component="DropdownSelect"
+            options={options}
+            search
+            required
+          />
+        </div>
+        <div >
+          <Field
+            required
+            name="street"
+            label="Street Address"
+          />
+        </div>
+        <div className={styles.selectPadding}>
+          <Field
+            name="country"
+            label="Country"
+            component="DropdownSelect"
+            options={[{
+              value: 'CA',
+              label: 'Canada',
+            }, {
+              value: 'US',
+              label: 'United States',
+            }]}
+            onChange={(e, value) => setCountry(value)}
+            required
+          />
+        </div>
+        <div className={styles.selectPadding}>
+          <Field
+            required
+            name="state"
+            label="State"
+            component="DropdownSelect"
+            options={stateProv}
+          />
+        </div>
+        <div className={styles.addressColPlain}>
+          <Field
+            required
+            name="city"
+            label="City"
+          />
+        </div>
+        <div className={styles.addressColPlain_padding}>
+          <Field
+            name="zipCode"
+            label={zipPostal}
+            validate={[maxPostalLength, zipPostalVal]}
+            maxLength="6"
+            required
+          />
+        </div>
+        <div >
+          <Field
+            name="destinationPhoneNumber"
+            label="Destination Phone Number"
+            type="tel"
+            required
+          />
+        </div>
       </div>
     </Form>
   );

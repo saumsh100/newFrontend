@@ -21,7 +21,7 @@ export default function AddEnterprise(props) {
       ignoreSaveButton
       destroyOnUnmount={false}
     >
-      <div className={styles.selectPadding}>
+      <div className={styles.dropDownEnterprise}>
         <Field
           required
           name="plan"
