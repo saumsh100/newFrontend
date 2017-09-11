@@ -210,7 +210,7 @@ export default function AppointmentForm(props) {
             normalize={parseNum}
             validate={[notNegative, maxDuration]}
             type="number"
-            onChange={(e, value)=>{handleUnitChange(value)}}
+            onChange={(e, value)=> handleUnitChange(value)}
             data-test-id="unit"
           />
         </Col>

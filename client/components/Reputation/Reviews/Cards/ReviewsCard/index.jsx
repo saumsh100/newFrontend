@@ -15,6 +15,10 @@ export default function ReviewsCard(props) {
     data,
   } = props;
 
+  if (!data.length) {
+    return null;
+  }
+
   return (
     <Card  className={styles.card}>
       <CardHeader className={styles.reviewsComments__cardHeader} title={'REVIEWS'} />

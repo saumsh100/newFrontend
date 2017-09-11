@@ -151,12 +151,12 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
  *
  */
 accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
-  if (req.account.id !== req.accountId) {
-    return next(StatusError(403, 'req.accountId does not match URL account id'));
-  }
-
   if (req.role !== 'SUPERADMIN') {
     return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+  }
+
+  if ((req.account.id !== req.accountId) && req.role !== 'SUPERADMIN') {
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
   return Permission.create({ role: req.body.role })
@@ -164,7 +164,7 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
       return UserAuth.signup({
         ...req.body,
         username: req.body.email,
-        activeAccountId: req.accountId,
+        activeAccountId: req.account.id,
         enterpriseId: req.account.enterprise.id,
         permissionId: permission.id,
       }).then(({ model: user }) => {
