@@ -80,7 +80,7 @@ async function callRail(account) {
 
     return company.data.id;
   } catch (e) {
-    throw { error: 'Call Rail Account Creation Failed' };
+    console.log('Call Rail Account Creation Failed');
   }
 }
 
@@ -90,13 +90,11 @@ async function twilioSetup(account) {
     return null;
   }
   try {
-    const areaCode = account.destinationPhoneNumber.replace(/\D/g, '').substr(1, 3);
     const data = await twilioClient.availablePhoneNumbers('CA').local.list({
-      areaCode,
       smsEnabled: true,
       voiceEnabled: true,
+      inRegion: account.state,
     });
-
     const number = data.availablePhoneNumbers[0];
     await twilioClient.incomingPhoneNumbers.create({
       phoneNumber: number.phone_number,
@@ -105,7 +103,8 @@ async function twilioSetup(account) {
     });
     return number.phone_number;
   } catch (e) {
-    throw { error: 'Twilio Account Creation Failed' };
+    console.log(e);
+    console.log('Twilio Account Creation Failed');
   }
 }
 
@@ -132,7 +131,7 @@ async function vendastaSetup(account, setupList) {
       vendastaAccountId: newCompany.data.accountId,
     };
   } catch (e) {
-    throw { error: 'Vendasta Account Creation Failed' };
+    console.log('Vendasta Account Creation Failed');
   }
 }
 
