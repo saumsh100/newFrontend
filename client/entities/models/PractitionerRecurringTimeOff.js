@@ -11,6 +11,7 @@ const PractitionerRecurringTimeOffSchema = {
   fromPMS: null,
   dayOfWeek: null,
   note: null,
+  pmsId: null,
   interval: null,
 };
 

@@ -126,6 +126,19 @@ const ModelAttributes = {
     'updatedAt',
     'deletedAt',
   ],
+
+  PractitionerSchedule: [
+    'startDate',
+    'endDate',
+    'startTime',
+    'endTime',
+    'interval',
+    'allDay',
+    'fromPMS',
+    'pmsId',
+    'dayOfWeek',
+    'note',
+  ],
 };
 
 /**
@@ -164,6 +177,11 @@ const SERIALIZERS = {
 
   service: new Serializer('service', makeConfig({
     attributes: ModelAttributes.Service,
+    pluralizeType: false,
+  })),
+
+  practitionerSchedule: new Serializer('practitionerSchedule', makeConfig({
+    attributes: ModelAttributes.PractitionerSchedule,
     pluralizeType: false,
   })),
 };
