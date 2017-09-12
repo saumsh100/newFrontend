@@ -11,7 +11,7 @@ const connectorRouter = new Router();
  */
 connectorRouter.get('/release', checkPermissions('connectorVersion:read'), (req, res, next) => {
   ConnectorVersion.findOne({ order: [['createdAt', 'DESC']] })
-    .then(release => res.send(release))
+    .then(release => res.send(format(req, res, 'connectorVersion', release.get({ plain: true }))))
     .catch(next);
 });
 
