@@ -20,7 +20,7 @@ class Phone extends Component {
       active: false,
       loader: false,
       skip: 0,
-      limit: 7,
+      limit: 8,
       moreData: true,
     };
     this.loadMore = this.loadMore.bind(this);
@@ -56,7 +56,7 @@ class Phone extends Component {
         const moreData = Object.keys(data[1].calls || {}).length > 7;
         this.setState({
           loader: true,
-          skip: this.state.skip + 7,
+          skip: this.state.skip + 8,
           moreData,
         });
       });
@@ -82,7 +82,7 @@ class Phone extends Component {
     }).then((data) => {
       const moreData = Object.keys(data.calls || {}).length > 7;
       this.setState({
-        skip: this.state.skip + 7,
+        skip: this.state.skip + 8,
         moreData,
       });
     });
@@ -102,7 +102,7 @@ class Phone extends Component {
       endDate: moment(values.endDate)._d,
       accountId: decodedToken.activeAccountId,
       skip: 0,
-      limit: 7,
+      limit: 8,
     };
 
     Promise.all([

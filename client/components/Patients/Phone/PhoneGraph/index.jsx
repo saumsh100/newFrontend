@@ -35,7 +35,14 @@ function PhoneGraph(props) {
     autoSkip: false,
     callback(value, index) {
       if (index % 2 === 0 && typeof value !== 'number') return '';
-      return typeof value === 'number' ? value.toFixed(1) : value;
+
+      if (typeof value === 'number' ) {
+        if (Number.isSafeInteger(value)){
+          return value;
+        }
+      } else {
+        return value;
+      }
     },
   };
 
@@ -47,6 +54,7 @@ function PhoneGraph(props) {
         gridLines: {
           beginAtZero: true,
           drawTicks: false,
+
         },
       }],
 

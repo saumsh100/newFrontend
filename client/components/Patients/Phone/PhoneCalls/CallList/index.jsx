@@ -86,6 +86,8 @@ class CallList extends Component {
             <label htmlFor={`switch_${id}_right`}>NO</label>
           </div>
         </form>
+      </td>
+      <td className={styles.column}>
         <a href={recording} target="_blank" rel="noopener noreferrer">
           <svg fill="#000000" className={styles.icon} height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0h24v24H0z" fill="none" />

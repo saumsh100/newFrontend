@@ -62,6 +62,7 @@ function PhoneCalls(props) {
               <th className={styles.columnHead}>City</th>
               <th className={styles.columnHead}>Duration</th>
               <th className={styles.columnHead}>Appointment Booked</th>
+              <th className={styles.columnHead}>&nbsp;</th>
             </tr>
           </thead>
           <tbody className={styles.scroll}>
