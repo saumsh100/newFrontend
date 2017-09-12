@@ -90,13 +90,11 @@ async function twilioSetup(account) {
     return null;
   }
   try {
-    const areaCode = account.destinationPhoneNumber.replace(/\D/g, '').substr(1, 3);
     const data = await twilioClient.availablePhoneNumbers('CA').local.list({
-      areaCode,
       smsEnabled: true,
       voiceEnabled: true,
+      inRegion: account.state,
     });
-
     const number = data.availablePhoneNumbers[0];
     await twilioClient.incomingPhoneNumbers.create({
       phoneNumber: number.phone_number,
@@ -105,6 +103,7 @@ async function twilioSetup(account) {
     });
     return number.phone_number;
   } catch (e) {
+    console.log(e);
     console.log('Twilio Account Creation Failed');
   }
 }

@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Form, Field, } from '../../../../library';
-import { caProv, usStates } from '../../../../Settings/Clinic/Address/selectConstants';
+import { caProvinces, usStates } from '../../../../Settings/Clinic/Address/selectConstants';
 import styles from '../styles.scss';
 
 const maxLength = max => value =>
@@ -19,7 +19,7 @@ export default function Address(props) {
     setCountry,
   } = props;
 
-  const stateProv = country === 'US' ? usStates : caProv;
+  const stateProv = country === 'US' ? usStates : caProvinces;
   const zipPostal = country === 'US' ? 'Zip Code' : 'Postal Code';
 
   const zipPostalVal = (value) => {
