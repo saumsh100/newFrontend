@@ -30,7 +30,9 @@
 
 
 .scroll {
-
+  &_main {
+    border-bottom: 2px solid #efefef;
+  }
 }
 
 .column {
@@ -43,16 +45,12 @@
   border-right: 2px solid #efefef;
 
   &:nth-last-child(2) {
-    border: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
   }
   &:last-child {
-    border: none;
-    width: 28px;
-
+    width: 30px;
+    //border-left: 2px solid #efefef;
+    border-right: 0;
   }
 
   &_source {
@@ -63,12 +61,10 @@
 }
 
 .columnHeadContainer {
-  position: absolute;
-  top: 0px;
+  //position: absolute;
+  //top: 0px;
   background: $primary-white;
   z-index: 100;
-  box-sizing: border-box;
- // padding-left: 30px;
   width: 100%;
 }
 .columnHead {
@@ -79,11 +75,11 @@
   border-bottom: 2px solid #efefef;
   padding: 3px;
   &:last-child {
-    border: none;
-    width: 42px;
+    width: 44px;
+    border-right: 0px;
   }
   &:nth-last-child(2) {
-    border: none;
+
   }
 }
 
@@ -102,6 +98,9 @@
   font-family: Gotham-Book;
   padding: 10px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .switchField input {
@@ -164,8 +163,9 @@
 
 .icon {
   position: absolute;
-  top: 32px;
+  top: 17px;
   right: 10px;
+
   fill: #969696;
 }
 
@@ -174,8 +174,8 @@
   position: relative;
   tbody {
     display:block;
-    max-height: calc(100vh - 500px);
-    height: calc(100vh - 500px);
+    height: calc(100vh - 490px);
+    max-height: calc(100vh - 490px);
     overflow: scroll;
     box-sizing: border-box;
   }
@@ -193,7 +193,6 @@
 
 .position {
   position: relative;
-  top: 14px;
 }
 
 .grey {
