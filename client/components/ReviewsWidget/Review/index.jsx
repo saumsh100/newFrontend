@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { createReview } from '../../../thunks/reviews';
+import { VButton } from '../../library';
 import ReviewForm from './ReviewForm';
 import styles from './styles.scss';
 
@@ -24,13 +25,18 @@ class Review extends Component {
 
   render() {
     const { review } = this.props;
+    const { stars, description } = review.toJS();
+    const initialValues = { stars, description };
     return (
       <div className={styles.reviewsWrapper}>
         <div className={styles.reviewsFormWrapper}>
           <ReviewForm
-            review={review}
+            initialValues={initialValues}
             onSubmit={this.createReview}
           />
+          <VButton>
+            Next
+          </VButton>
         </div>
       </div>
     );

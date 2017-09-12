@@ -37,7 +37,7 @@
 .starWrapper {
   &:hover {
     > div.label {
-      display: block;
+      // display: block;
     }
   }
 }
@@ -51,7 +51,7 @@
 
 .labelSelected {
   @extend .label;
-  display: block;
+  // display: block;
 }
 
 .starChild {
@@ -63,7 +63,7 @@
   cursor: pointer;
   &:hover {
     color: lighten($primary-yellow, 5%);
-    font-size: 5em !important;
+    // font-size: 5em !important;
   }
 }
 
@@ -78,5 +78,5 @@
 }
 
 .selected {
-  font-size: 5em !important;
+  // font-size: 5em !important;
 }

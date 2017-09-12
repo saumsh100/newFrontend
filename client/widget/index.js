@@ -82,6 +82,14 @@ function main() {
       window.CareCru.open(cc);
     }
   }
+
+  if (stars) {
+    if (window.CareCruz[accountId]) {
+      window.CareCruz[accountId].setStars(stars);
+    } else {
+      window.CareCru.setStars(stars);
+    }
+  }
 }
 
 main();

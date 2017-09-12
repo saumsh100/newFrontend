@@ -39,6 +39,10 @@ CareCru.prototype.open = function (route = 'book') {
   this.emit('opened');
 };
 
+CareCru.prototype.setStars = function (stars) {
+  this.host.sendEvent('setStars', parseInt(stars));
+};
+
 /**
  * #close
  */

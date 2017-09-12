@@ -9,9 +9,9 @@ export default {
 
   // If 4 stars or greater
   grateful: {
-    header: 'Thank you!\n We appreciate\n you too.',
+    header: 'Thanks!\n We appreciate\n you too.',
     response: 'Reviews are important to us to help\n' +
-    'grow our practice. Please take a few\n' +
-    'minutes to leave us a Google review.',
+    'grow our practice. Please take a\n' +
+    'minute to leave us a Google review.',
   },
 };

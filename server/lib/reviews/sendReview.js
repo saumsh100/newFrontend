@@ -2,7 +2,7 @@
 import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol } from '../../config/globals';
-import { sendConfirmationReminder } from '../mail';
+import { sendReview } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
 export const createConfirmationText = ({ patient, account, appointment }) => {
@@ -43,6 +43,15 @@ export default {
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
   email({ account, appointment, patient, sentReview }) {
+    const reviewsUrl = `${account.website}?cc=review`;
+    const stars = [];
+    for (let i = 1; i < 6; i++) {
+      stars.push({
+        name: `STARS_URL_${i}`,
+        content: `${reviewsUrl}&stars=${i}`,
+      });
+    }
+
     return sendReview({
       toEmail: patient.email,
       fromName: account.name,
@@ -53,42 +62,42 @@ export default {
           content: `${protocol}://${host}/sentReminders/${sentReview.id}/confirm`,
         },
         {
+          name: 'ACCOUNT_PRIMARY_COLOR',
+          content: account.bookingWidgetPrimaryColor,
+        },
+        {
+          name: 'ACCOUNT_LOGO_URL',
+          content: account.fullLogoUrl,
+        },
+        {
           name: 'ACCOUNT_NAME',
           content: account.name,
         },
         {
-          name: 'ACCOUNT_CONTACTEMAIL',
+          name: 'ACCOUNT_CONTACT_EMAIL',
           content: account.contactEmail,
+        },
+        {
+          name: 'ACCOUNT_CONTACT_NUMBER',
+          content: account.phoneNumber,
         },
         {
           name: 'ACCOUNT_WEBSITE',
           content: account.website,
         },
         {
-          name: 'ACCOUNT_PHONENUMBER',
-          content: account.phoneNumber,
+          name: 'ACCOUNT_CITY',
+          content: `${account.city}, ${account.state}`,
         },
         {
-          name: 'APPOINTMENT_DATE',
-          content: getAppointmentDate(appointment.startDate, account.timezone),
-        },
-        {
-          name: 'APPOINTMENT_TIME',
-          content: getAppointmentTime(appointment.startDate, account.timezone),
+          name: 'ACCOUNT_ADDRESS',
+          content: account.street,
         },
         {
           name: 'PATIENT_FIRSTNAME',
           content: patient.firstName,
         },
-      ],
-
-      attachments: [
-        {
-          type: 'application/octet-stream',
-          name: 'appointment.ics',
-          content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
-        },
-      ],
+      ].concat(stars),
     });
   },
 };

@@ -14,8 +14,9 @@ const ReviewsRouter = ({ match }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <Switch>
-      <Route exact path={b()} component={Review} />
-      <Route exact path={b('/submitted')} component={Submitted} />
+      {/*<Redirect exact from={b()} to={b('/submitted')} />*/}
+      <Route exact path={b()} component={Submitted} />
+      {/*<Route exact path={b('/submitted')} component={Submitted} />*/}
     </Switch>
   );
 };

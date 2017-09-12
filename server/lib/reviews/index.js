@@ -24,7 +24,7 @@ export async function sendReviewsForAccount(account, date) {
     });
 
     try {
-      await sendReminder['email']({
+      await sendReview['email']({
         patient,
         account,
         appointment,
@@ -33,8 +33,11 @@ export async function sendReviewsForAccount(account, date) {
     } catch (error) {
       console.log(`${'email'} review failed to send to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       console.log(error);
-      // continue; need to add this if code is added below for success
+      continue;
     }
+
+    // If sendReview was successful, then update isSent
+    await sentReview.update({ isSent: true });
   }
 }
 

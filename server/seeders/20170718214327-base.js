@@ -56,10 +56,16 @@ const account2 = {
   id: accountId2,
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
-  city: 'Kostolac',
-  name: 'Test Account 2',
+  city: 'Edmonton',
+  state: 'AB',
+  street: '10204 112th St.',
+  contactEmail: 'info@libertychiropractic.ca',
+  website: 'http://localhost:5555/tests/sites/reviews.html',
+  bookingWidgetPrimaryColor: 'purple',
+  name: 'Liberty Chiropractic',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  phoneNumber: '+17808508886',
   canSendReviews: true,
 };
 
