@@ -53,7 +53,7 @@ function PhoneCalls(props) {
       </div>
       <div className={styles.infinite}>
         <table className={styles.table} cellSpacing="0" cellPadding="0">
-          <thead>
+          <thead className={styles.columnHeadContainer}>
             <tr>
               <th className={styles.columnHead}>Source Name</th>
               <th className={styles.columnHead}>Start Time</th>
@@ -62,6 +62,7 @@ function PhoneCalls(props) {
               <th className={styles.columnHead}>City</th>
               <th className={styles.columnHead}>Duration</th>
               <th className={styles.columnHead}>Appointment Booked</th>
+              <th className={styles.columnHead}>&nbsp;</th>
             </tr>
           </thead>
           <tbody className={styles.scroll}>
