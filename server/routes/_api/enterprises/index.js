@@ -129,7 +129,6 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
   const timezone = req.body.timezone;
   return Account.create(accountData)
     .then(async (accountFirst) => {
-      // commenting out the creating and saving of api keys
 
       const newData = await createAccount(accountFirst, req.query);
       accountFirst.callrailId = newData.callrailId;
@@ -137,9 +136,6 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
       accountFirst.vendastaAccountId = newData.vendastaAccountId;
       accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
       const account = await accountFirst.save();
-
-        //throw StatusError(400, e);
-
 
       const defaultReminders = [
         {
