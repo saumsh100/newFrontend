@@ -86,6 +86,7 @@ export default function ClinicDetails(props) {
             required
           />
         </div>
+        {/*
         <div >
           <Field
             required
@@ -93,6 +94,7 @@ export default function ClinicDetails(props) {
             label="Street Address"
           />
         </div>
+
         <div className={styles.selectPadding}>
           <Field
             name="country"
@@ -133,7 +135,7 @@ export default function ClinicDetails(props) {
             maxLength="6"
             required
           />
-        </div>
+        </div>*/}
         <div >
           <Field
             name="destinationPhoneNumber"
