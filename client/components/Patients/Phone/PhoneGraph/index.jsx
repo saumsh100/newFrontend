@@ -14,6 +14,8 @@ function PhoneGraph(props) {
   const x = callGraphStats.toJS().data.xValues;
   const y = callGraphStats.toJS().data.yValues;
 
+  const newY = y.slice(0, -1)
+
   const UserMenu = buttonProps => (
     <Button flat {...buttonProps} className={styles.userMenuButton}>
       <span className={styles.userRole}><i className="fa fa-calendar" /> {props.startDate.format('MMMM Do YYYY')} - {props.endDate.format('MMMM Do YYYY')}&nbsp;</span>
@@ -65,7 +67,6 @@ function PhoneGraph(props) {
           drawTicks: false,
           drawOnChartArea: false,
         },
-
       }],
     },
   };
@@ -114,7 +115,8 @@ function PhoneGraph(props) {
             {
               label: 'Calls Received',
               color: 'red',
-              data: y,
+              data: newY,
+              fill: false,
             },
           ]}
           options={lineChartOptions}
