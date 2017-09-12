@@ -14,69 +14,74 @@ async function callRail(account) {
     return null;
   }
 
-  const phoneNumber = account.destinationPhoneNumber.replace(/\s+/g, '');
-  const areaCode = account.destinationPhoneNumber.replace(/\D/g, '').substr(1, 3);
+  try {
 
-  const createCompany = {
-    method: 'POST',
-    url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/companies.json`,
-    headers: {
-      Authorization: `Token token=${callrails.apiKey}`,
-    },
-    data: {
-      name: account.name,
-    },
-    json: true,
-  };
+    const phoneNumber = account.destinationPhoneNumber.replace(/\s+/g, '');
+    const areaCode = account.destinationPhoneNumber.replace(/\D/g, '').substr(1, 3);
 
-  const company = await axios(createCompany);
-  const createTracker = {
-    method: 'POST',
-    url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/trackers.json`,
-    headers: {
-      Authorization: `Token token=${callrails.apiKey}`,
-    },
-    data: {
-      name: account.name,
-      type: 'source',
-      company_id: company.data.id,
-      call_flow: {
-        type: 'basic',
-        recording_enabled: true,
-        destination_number: phoneNumber,
+    const createCompany = {
+      method: 'POST',
+      url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/companies.json`,
+      headers: {
+        Authorization: `Token token=${callrails.apiKey}`,
       },
-      tracking_number: {
-        area_code: areaCode,
-        local: phoneNumber,
+      data: {
+        name: account.name,
       },
-      source: {
-        type: 'offline',
+      json: true,
+    };
+
+    const company = await axios(createCompany);
+    const createTracker = {
+      method: 'POST',
+      url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/trackers.json`,
+      headers: {
+        Authorization: `Token token=${callrails.apiKey}`,
       },
-    },
-    json: true,
-  };
-  await axios(createTracker);
-
-  const createWebhook = {
-    method: 'POST',
-    url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/integrations.json`,
-    headers: {
-      Authorization: `Token token=${callrails.apiKey}`,
-    },
-    data: {
-      company_id: company.data.id,
-      type: 'Webhooks',
-      config: {
-        post_call_webhook: [`https://carecru.io/callrail/${account.id}/inbound/post-call`],
-        pre_call_webhook: [`https://carecru.io/callrail/${account.id}/inbound/pre-call`],
+      data: {
+        name: account.name,
+        type: 'source',
+        company_id: company.data.id,
+        call_flow: {
+          type: 'basic',
+          recording_enabled: true,
+          destination_number: phoneNumber,
+        },
+        tracking_number: {
+          area_code: areaCode,
+          local: phoneNumber,
+        },
+        source: {
+          type: 'offline',
+        },
       },
-    },
-    json: true,
-  };
+      json: true,
+    };
+    await axios(createTracker);
 
-  await axios(createWebhook);
+    const createWebhook = {
+      method: 'POST',
+      url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/integrations.json`,
+      headers: {
+        Authorization: `Token token=${callrails.apiKey}`,
+      },
+      data: {
+        company_id: company.data.id,
+        type: 'Webhooks',
+        config: {
+          post_call_webhook: [`https://carecru.io/callrail/${account.id}/inbound/post-call`],
+          pre_call_webhook: [`https://carecru.io/callrail/${account.id}/inbound/pre-call`],
+        },
+      },
+      json: true,
+    };
 
-  return company.data.id;
+    await axios(createWebhook);
+
+    return company.data.id;
+  } catch (e) {
+    throw { error: 'Call Rail Account Creation Failed' };
+  }
 }
 
 async function twilioSetup(account) {
@@ -84,21 +89,24 @@ async function twilioSetup(account) {
   if (!account.destinationPhoneNumber) {
     return null;
   }
+  try {
+    const areaCode = account.destinationPhoneNumber.replace(/\D/g, '').substr(1, 3);
+    const data = await twilioClient.availablePhoneNumbers('CA').local.list({
+      areaCode,
+      smsEnabled: true,
+      voiceEnabled: true,
+    });
 
-  const areaCode = account.destinationPhoneNumber.replace(/\D/g, '').substr(1, 3);
-  const data = await twilioClient.availablePhoneNumbers('CA').local.list({
-    areaCode,
-    smsEnabled: true,
-    voiceEnabled: true,
-  });
-
-  const number = data.availablePhoneNumbers[0];
-  await twilioClient.incomingPhoneNumbers.create({
-    phoneNumber: number.phone_number,
-    friendlyName: account.name,
-    smsUrl: `https://carecru.io/twilio/sms/accounts/${account.id}`,
-  });
-  return number.phone_number;
+    const number = data.availablePhoneNumbers[0];
+    await twilioClient.incomingPhoneNumbers.create({
+      phoneNumber: number.phone_number,
+      friendlyName: account.name,
+      smsUrl: `https://carecru.io/twilio/sms/accounts/${account.id}`,
+    });
+    return number.phone_number;
+  } catch (e) {
+    throw { error: 'Twilio Account Creation Failed' };
+  }
 }
 
 async function vendastaSetup(account, setupList) {
@@ -124,8 +132,7 @@ async function vendastaSetup(account, setupList) {
       vendastaAccountId: newCompany.data.accountId,
     };
   } catch (e) {
-    console.log(e);
-    return {};
+    throw { error: 'Vendasta Account Creation Failed' };
   }
 }
 
@@ -140,16 +147,31 @@ export default async function createAccount(account, setupList) {
   } = setupList;
 
   let vendastaData = null;
+  let callrailId = null;
+  let twilioPhoneNumber = null;
 
-  if (reputationManagement === 'true' || listings === 'true' || social === 'true') {
-    vendastaData = await vendastaSetup(account, setupList);
+  try {
+    if (canSendReminders === 'true' || canSendRecalls === 'true') {
+      twilioPhoneNumber = await twilioSetup(account);
+    }
+    if (callTracking === 'true') {
+      callrailId = await callRail(account);
+    }
+
+    if (reputationManagement === 'true' || listings === 'true' || social === 'true') {
+      vendastaData = await vendastaSetup(account, setupList);
+    }
+
+  } catch (e) {
+    console.log(e);
   }
 
   const data = {
-    callrailId: callTracking === 'true' ? await callRail(account) : null,
-    twilioPhoneNumber: (canSendReminders === 'true' || canSendRecalls === 'true') ? await twilioSetup(account) : null,
+    callrailId,
+    twilioPhoneNumber,
     ...vendastaData,
   };
 
   return data;
+
 }

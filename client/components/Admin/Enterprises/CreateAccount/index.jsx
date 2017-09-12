@@ -4,8 +4,7 @@ import { submit } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
-import ContactDetails from './ContactDetails';
-import { caProv, usStates } from '../../../Settings/Clinic/Address/selectConstants';
+import Address from './Address';
 import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
 import EnterpriseList from './EnterpriseList';
@@ -25,7 +24,7 @@ class CreateAccount extends Component {
 
     this.state = {
       create: false,
-      formLength: 4,
+      formLength: 5,
       index: 0,
       values: [],
       country: '',
@@ -42,6 +41,10 @@ class CreateAccount extends Component {
       index: newIndex,
       values: newValues,
     });
+
+    if (index === this.state.formLength - 1) {
+      this.props.setAllAccountInfo({ formData: newValues });
+    }
   }
 
   previous() {
@@ -67,7 +70,6 @@ class CreateAccount extends Component {
   setCountry(country) {
     this.setState({
       country,
-      states: usStates,
     });
   }
 
@@ -78,7 +80,7 @@ class CreateAccount extends Component {
     } = this.props;
 
 
-    const formNames = ['addEnterprise', 'clinicDetails', 'selectAccountOptions', 'addUser'];
+    const formNames = ['addEnterprise', 'clinicDetails', 'addressDetails', 'addUser', 'selectAccountOptions',];
 
     const component = this.state.create ? (
       AddEnterprise({
@@ -108,25 +110,35 @@ class CreateAccount extends Component {
           formName: formNames[1],
           setCountry: this.setCountry,
           country: this.state.country,
-          states: this.state.states
+        }),
+      },
+      {
+        title: 'Address',
+        component: Address({
+          onSubmit: this.next,
+          index: 2,
+          initialValues: this.state.values[2],
+          formName: formNames[2],
+          setCountry: this.setCountry,
+          country: this.state.country,
+        }),
+      },
+      {
+        title: 'Add Owner User',
+        component: AddUser({
+          onSubmit: this.next,
+          index: 3,
+          initialValues: this.state.values[3],
+          formName: formNames[3],
         }),
       },
       {
         title: 'Select Account Options',
         component: SelectAccountOptions({
           onSubmit: this.next,
-          index: 2,
-          initialValues: this.state.values[2],
-          formName: formNames[2],
-        }),
-      },
-      {
-        title: 'Add New Owner User',
-        component: AddUser({
-          onSubmit: this.next,
-          index: 3,
-          initialValues: this.state.values[3],
-          formName: formNames[3],
+          index: 4,
+          initialValues: this.state.values[4],
+          formName: formNames[4],
         }),
       },
     ];
@@ -178,8 +190,7 @@ class CreateAccount extends Component {
           {this.state.formLength - 1 === this.state.index ? (
             <Button
               onClick={() => {
-                submit(formNames[this.state.index])
-                this.props.setAllAccountInfo({ formData: this.state.values });
+                submit(formNames[this.state.index]);
                 this.props.setActive();
               }}
               className={styles.nextButton}

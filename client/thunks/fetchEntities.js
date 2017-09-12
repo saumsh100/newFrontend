@@ -116,7 +116,7 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
 }
 
 
-export function createEntityRequest({ key, entityData, url, params = {},  alert }) {
+export function createEntityRequest({ key, entityData, url, params = {}, alert }) {
   console.log('inside createEntityRequest; url=', url);
   return (dispatch, getState) => {
     const { entities } = getState();
