@@ -48,6 +48,19 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  ConnectorVersion: [
+    'tag',
+    'url',
+    'key',
+    'secret',
+    'filename',
+    'path',
+    'bucket',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Family: [
     'accountId',
     'pmsId',
@@ -87,6 +100,7 @@ const ModelAttributes = {
 
   Practitioner: [
     'firstName',
+    'pmsId',
     'lastName',
     'type',
     'isActive',
@@ -125,6 +139,11 @@ const SERIALIZERS = {
 
   chair: new Serializer('chair', makeConfig({
     attributes: ModelAttributes.Chair,
+    pluralizeType: false,
+  })),
+
+  connectorVersion: new Serializer('connectorVersion', makeConfig({
+    attributes: ModelAttributes.ConnectorVersion,
     pluralizeType: false,
   })),
 
