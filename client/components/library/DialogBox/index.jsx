@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './styles.scss';
 import CardHeader from '../CardHeader';
+import Icon from '../Icon';
 import Modal from '../Modal';
 
 class DialogBox extends Component {
@@ -58,7 +59,7 @@ class DialogBox extends Component {
               className={styles.dialogBody__closeIcon}
               onClick={this.deactivate}
             >
-              x
+              <Icon icon="times" />
             </div>
           </div>
           {children}

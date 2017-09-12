@@ -116,7 +116,7 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
 }
 
 
-export function createEntityRequest({ key, entityData, url, alert }) {
+export function createEntityRequest({ key, entityData, url, params = {}, alert }) {
   console.log('inside createEntityRequest; url=', url);
   return (dispatch, getState) => {
     const { entities } = getState();
@@ -125,7 +125,7 @@ export function createEntityRequest({ key, entityData, url, alert }) {
 
     const errorText = alert ? alert.error : { body: `${key} creation failed` };
 
-    return axios.post(url, entityData)
+    return axios.post(url, entityData, { params })
       .then((response) => {
         const { data } = response;
         console.log('in then response=', response);

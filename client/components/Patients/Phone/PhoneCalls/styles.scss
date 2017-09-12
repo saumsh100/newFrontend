@@ -12,7 +12,7 @@
     height: 40px;
     padding-left: 15px;
     justify-content: space-between;
-    border-bottom: 3px solid #efefef;
+    //border-bottom: 3px solid #efefef;
     margin-bottom: 10px;
   }
   &__body {
@@ -28,24 +28,58 @@
   }
 }
 
+
+.scroll {
+  &_main {
+    border-bottom: 2px solid #efefef;
+  }
+}
+
 .column {
   text-align: center;
   padding: 10px;
   color: #969696;
-  font-size: 14px;
-  font-family: Gotham-Book;
+  font-size: 12px;
+  font-family: $medium-font;
   position: relative;
-  border-right: 3px solid #efefef;
+  border-right: 2px solid #efefef;
+
+  &:nth-last-child(2) {
+
+  }
   &:last-child {
-    border: none;
+    width: 30px;
+    //border-left: 2px solid #efefef;
+    border-right: 0;
+  }
+
+  &_source {
+    color: $primary-dark;
+    font-family: $medium-font;
+    font-size: 12px;
   }
 }
 
-
+.columnHeadContainer {
+  //position: absolute;
+  //top: 0px;
+  background: $primary-white;
+  z-index: 100;
+  width: 100%;
+}
 .columnHead {
-  border-right: 3px solid #efefef;
+  font-size: 12px;
+  border-right: 2px solid #efefef;
+  font-family: $medium-font;
+  border-top: 2px solid #efefef;
+  border-bottom: 2px solid #efefef;
+  padding: 3px;
   &:last-child {
-    border: none;
+    width: 44px;
+    border-right: 0px;
+  }
+  &:nth-last-child(2) {
+
   }
 }
 
@@ -64,6 +98,9 @@
   font-family: Gotham-Book;
   padding: 10px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .switchField input {
@@ -100,7 +137,7 @@
 }
 
 .switchField label:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .switchField input:checked + label {
@@ -126,32 +163,36 @@
 
 .icon {
   position: absolute;
-  top: 32px;
+  top: 17px;
   right: 10px;
+
   fill: #969696;
 }
 
 .table {
   width: 100%;
-
+  position: relative;
   tbody {
     display:block;
-    max-height:360px;
-    overflow-y: scroll;
+    height: calc(100vh - 490px);
+    max-height: calc(100vh - 490px);
+    overflow: scroll;
+    box-sizing: border-box;
   }
+
   thead, tbody tr {
     display:table;
     width:100%;
     table-layout:fixed;
   }
+
   thead {
-    width: calc( 100% - 1em )
+    width: calc( 100% )
   }
 }
 
 .position {
   position: relative;
-  top: 14px;
 }
 
 .grey {

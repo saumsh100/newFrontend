@@ -11,6 +11,7 @@ export default function RFInput(props) {
     type,
     error,
     meta,
+    pattern,
   } = props;
 
   const newProps = omit(props, ['input', 'meta',]);

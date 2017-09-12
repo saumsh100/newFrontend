@@ -63,6 +63,8 @@ const SUPERADMIN = {
   syncClientVersion: allow('read', 'create'),
   syncClientControl: allow('create'),
 
+  connectorVersion: allow('read', 'create'),
+
   timeOffs: allowAll,
   weeklySchedules: allowAll,
 

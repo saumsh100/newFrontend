@@ -47,6 +47,14 @@ export default function (sequelize, DataTypes) {
       defaultValue: 15,
     },
 
+    callrailId: {
+      type: DataTypes.INTEGER,
+    },
+
+    vendastaAccountId: {
+      type: DataTypes.STRING,
+    },
+
     street: {
       type: DataTypes.STRING,
     },

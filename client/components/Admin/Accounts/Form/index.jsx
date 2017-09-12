@@ -71,11 +71,18 @@ const EnterpriseForm = (props) => {
         >
           <Field required name="name" label="Name" />
           <Field
+            required
             name="timezone"
             label="Timezone"
             component="DropdownSelect"
             options={options}
 
+          />
+          <Field
+            required
+            name="destinationPhoneNumber"
+            label="Destination Phone Number"
+            type="tel"
           />
         </Form>
       </PageContainer>

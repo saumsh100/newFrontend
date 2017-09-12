@@ -3,6 +3,10 @@ import React, { PropTypes } from 'react';
 import { Line } from 'react-chartjs-2';
 import colorMap from '../util/colorMap';
 
+const axesOptions = {
+
+};
+
 export default function LineChart(props) {
   const {
     dataSets = [],
@@ -11,6 +15,7 @@ export default function LineChart(props) {
     displayTooltips,
     height,
     width,
+    options = {},
   } = props;
 
   const legend = {
@@ -21,9 +26,11 @@ export default function LineChart(props) {
     enabled: !!displayTooltips,
   };
 
-  const options = {
+  const finalOptions = {
     legend,
     tooltips,
+    ...axesOptions,
+    ...options,
   };
 
   const newData = {
@@ -41,13 +48,13 @@ export default function LineChart(props) {
         borderDashOffset: 0,
         borderJoinStyle: 'miter',
         pointBorderColor: colorMap[color],
-        pointBackgroundColor: '#fff',
+        pointBackgroundColor: colorMap[color],
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: colorMap[color],
         pointHoverBorderColor: colorMap[color],
         pointHoverBorderWidth: 2,
-        pointRadius: 1,
+        pointRadius: 5,
         pointHitRadius: 10,
       });
     }),
@@ -55,8 +62,9 @@ export default function LineChart(props) {
 
   return (
     <Line
+      {...props}
       data={newData}
-      options={options}
+      options={finalOptions}
       height={height}
       width={width}
     />
