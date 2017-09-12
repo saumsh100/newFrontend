@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/deliveredProcedures POST / / - create a deliverProcedure 1`] = `
+Object {
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "discountAmount": null,
+  "patientAmount": null,
+  "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+  "pmsId": null,
+  "primaryInsuranceAmount": null,
+  "procedureCode": "11111",
+  "secondaryInsuranceAmount": null,
+  "totalAmount": null,
+  "units": null,
+}
+`;
