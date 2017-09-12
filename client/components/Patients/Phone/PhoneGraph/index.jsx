@@ -27,7 +27,7 @@ function PhoneGraph(props) {
   };
 
   const ticks = {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: 'Gotham-Medium',
     fontColor: '#2e3845',
     padding: 20,
@@ -37,10 +37,10 @@ function PhoneGraph(props) {
       if (index % 2 === 0 && typeof value !== 'number') return '';
 
       if (typeof value === 'number' ) {
-        if (Number.isSafeInteger(value)){
+        if (Number.isSafeInteger(value)) {
           return value;
         }
-      } else {
+      } else if (index % 2 !== 0) {
         return value;
       }
     },
@@ -54,7 +54,6 @@ function PhoneGraph(props) {
         gridLines: {
           beginAtZero: true,
           drawTicks: false,
-
         },
       }],
 
