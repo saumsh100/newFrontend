@@ -74,7 +74,7 @@ function PhoneCalls(props) {
               useWindow={false}
               threshold={1}
             >
-              {displayCalls}
+              <div className={styles.scroll_main}>{displayCalls}</div>
             </InfiniteScroll>
           </tbody>
         </table>
