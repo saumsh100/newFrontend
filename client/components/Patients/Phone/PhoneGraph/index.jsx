@@ -29,7 +29,7 @@ function PhoneGraph(props) {
   };
 
   const ticks = {
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'Gotham-Medium',
     fontColor: '#2e3845',
     padding: 15,
