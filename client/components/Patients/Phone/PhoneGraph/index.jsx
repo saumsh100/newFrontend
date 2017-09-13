@@ -32,19 +32,26 @@ function PhoneGraph(props) {
     fontSize: 12,
     fontFamily: 'Gotham-Medium',
     fontColor: '#2e3845',
-    padding: 20,
+    padding: 15,
     maxRotation: 0,
     autoSkip: false,
     callback(value, index) {
-      if (index % 2 === 0 && typeof value !== 'number') return '';
-
-      if (typeof value === 'number' ) {
+      if (typeof value === 'number') {
         if (Number.isSafeInteger(value)) {
           return value;
         }
-      } else if (index % 2 !== 0) {
+      }
+      if (index % 2 === 0 && typeof value !== 'number' && x.length < 45) {
+        return '';
+      }
+
+      if (index % 2 !== 0 && x.length < 45 && typeof value !== 'number') {
+        return value;
+      } else if (x.length > 45 && typeof value !== 'number' && index % 10 === 0) {
         return value;
       }
+
+      return '';
     },
   };
 
