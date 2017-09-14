@@ -10,6 +10,7 @@ const pluralToSingularMap = {
   patients: 'patient',
   practitioners: 'practitioner',
   services: 'service',
+  configurations: 'configuration',
 };
 
 export default function format(req, res, resourceName, dataArray) {

@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
+import format from '../../util/format';
 import StatusError from'../../../util/StatusError';
 import {
   Account,
@@ -11,6 +12,8 @@ import {
   Invite,
   Permission,
   User,
+  AccountConfiguration,
+  Configuration,
 } from '../../../_models';
 import upload from '../../../lib/upload';
 import { sequelizeLoader } from '../../util/loaders';
@@ -122,6 +125,50 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
 });
 
 /**
+ * GET /configurations/
+ *
+ * - get connector configuration settings.
+ *
+ */
+accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    const sendValues = [];
+    const accountConfigs = await AccountConfiguration.findAll({
+      where: { accountId: req.accountId },
+      include: [
+        {
+          model: Configuration,
+          as: 'configuration',
+        },
+      ],
+      raw: true,
+      nest: true,
+    });
+
+    for (let i = 0; i < accountConfigs.length; i += 1) {
+      const sendValue = {
+        name: accountConfigs[i].configuration.name,
+        description: accountConfigs[i].configuration.description,
+        'data-type': accountConfigs[i].configuration.type,
+        value: accountConfigs[i].configuration.defaultValue,
+        id: accountConfigs[i].id,
+      };
+
+      if (accountConfigs[i].value) {
+        sendValue.value = accountConfigs[i].value;
+      }
+
+      sendValues.push(sendValue);
+    }
+
+    return res.send(format(req, res, 'configurations', sendValues));
+  } catch (err) {
+    return next(err);
+  }
+});
+
+
+/**
  * GET /:accountId
  *
  * - get basic account data
@@ -143,6 +190,55 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .then(account => res.send(normalize('account', account.get({ plain: true }))))
     .catch(next);
 });
+
+/**
+ * POST /configurations/
+ *
+ * - get connector configuration settings.
+ *
+ */
+
+accountsRouter.post('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  const {
+    name,
+  } = req.body;
+
+  try {
+    const config = await Configuration.findOne({
+      where: { name },
+    });
+
+    if (!config) {
+      return res.sendStatus(400);
+    }
+
+    const newConfig = await AccountConfiguration.create({
+      accountId: req.accountId,
+      configurationId: config.id,
+      ...req.body,
+    });
+
+
+    const accountConfig = newConfig.get({ plain: true });
+
+    const sendValue = {
+      name,
+      description: config.description,
+      'data-type': config.type,
+      value: config.defaultValue,
+      id: newConfig.id,
+    };
+
+    if (accountConfig.value) {
+      sendValue.value = accountConfig.value;
+    }
+
+    return res.send(format(req, res, 'configuration', sendValue));
+  } catch (err) {
+    return next(err);
+  }
+});
+
 
 /**
  * POST /:accountId/newUser
