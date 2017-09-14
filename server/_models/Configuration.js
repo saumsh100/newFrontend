@@ -25,5 +25,16 @@ export default function (sequelize, DataTypes) {
     },
   });
 
+  Configuration.associate = (models) => {
+    const {
+      AccountConfiguration,
+    } = models;
+
+    Configuration.hasOne(AccountConfiguration, {
+      foreignKey: 'configurationId',
+      as: 'accountConfiguration',
+    });
+  };
+
   return Configuration;
 }
