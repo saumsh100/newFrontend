@@ -199,6 +199,7 @@ class ScheduleComponent extends Component {
                 <Col xs={12} className={styles.schedule__sidebar_request} >
                   <RequestsContainer
                     key={'scheduleRequests'}
+                    maxHeight="calc(100vh - 740px)"
                   />
                 </Col>
               </Row>

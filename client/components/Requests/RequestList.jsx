@@ -69,11 +69,12 @@ class RequestList extends Component {
       patientUsers,
       practitioners,
       setHoverRequestId,
+      maxHeight,
     } = this.props;
 
     const style = {
-      maxHeight: '555px',
-    }
+      maxHeight: maxHeight || '555px',
+    };
 
     return (
       <List className={styles.requestList} style={style}>

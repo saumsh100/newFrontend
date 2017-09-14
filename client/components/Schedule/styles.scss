@@ -30,7 +30,6 @@
         }
         &_request {
           overflow: auto;
-          max-height: calc(100vh - 695px);
         }
         &_calendar {
           border-top: $card-border-size $inactive-color;
