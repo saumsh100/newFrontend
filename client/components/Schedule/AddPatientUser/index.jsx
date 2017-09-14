@@ -67,12 +67,13 @@ class AddPatientUser extends Component {
         <CardHeader
           className={styles.header}
           title="Create New Patient"
-        />
+        >
         <Icon
           icon="times"
           onClick={reinitializeState}
           className={styles.trashIcon}
         />
+        </CardHeader>
         <div className={styles.formContainer}>
           <NewPatientForm
             mergingPatientData={mergingPatientData}

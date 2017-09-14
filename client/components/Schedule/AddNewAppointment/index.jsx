@@ -153,21 +153,20 @@ class AddNewAppointment extends Component {
           reset(formName);
         }
       });
+    }
 
-    } 
-      const appModel = selectedAppointment.appModel;
-      const appModelSynced = appModel.set('isSyncedWithPMS', false);
-      const valuesMap = Map(newAppointment);
-      const modifiedAppointment = appModelSynced.merge(valuesMap);
+    const appModel = selectedAppointment.appModel;
+    const appModelSynced = appModel.set('isSyncedWithPMS', false);
+    const valuesMap = Map(newAppointment);
+    const modifiedAppointment = appModelSynced.merge(valuesMap);
 
-      return updateEntityRequest({
-        key: 'appointments',
-        model: modifiedAppointment,
-        alert: alertUpdate,
-      }).then(() => {
-        reinitializeState();
-      });
-    
+    return updateEntityRequest({
+      key: 'appointments',
+      model: modifiedAppointment,
+      alert: alertUpdate,
+    }).then(() => {
+      reinitializeState();
+    });
   }
 
   handleSliderChange(value) {

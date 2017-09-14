@@ -50,15 +50,15 @@ export default function CreateServiceForm(props) {
         </Row>
         <Row className={styles.servicesFormRow__createRow}>
           <Col xs={12}>
-              <Field
-                required
-                name="bufferTime"
-                label="Buffer Time"
-                type="number"
-                validate={[notNegative, maxDuration]}
-                normalize={parseNum}
-                data-test-id="bufferTime"
-              />
+            <Field
+              required
+              name="bufferTime"
+              label="Buffer Time"
+              type="number"
+              validate={[notNegative, maxDuration]}
+              normalize={parseNum}
+              data-test-id="bufferTime"
+            />
           </Col>
         </Row>
       </Form>
