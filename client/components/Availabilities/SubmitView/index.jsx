@@ -170,6 +170,15 @@ class SubmitView extends Component {
         </a>
       );
 
+      const forgotPasswordAnchor = (
+        <a
+          href="#forgotpassword"
+          onClick{()=>{ e.preventDefault();}}
+          >
+          Click here
+        </a>
+      );
+      
       formComponent = (
         <div>
           <LoginForm
@@ -178,6 +187,9 @@ class SubmitView extends Component {
           />
           <div className={styles.alreadyHaveWrapper}>
             Don't have an account? {signupHereAnchor}
+          </div>
+          <div>
+            Forgot your password? {forgotPasswordAnchor}
           </div>
         </div>
       );
