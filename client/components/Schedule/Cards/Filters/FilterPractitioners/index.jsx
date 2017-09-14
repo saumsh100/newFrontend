@@ -38,7 +38,7 @@ export default function FilterPractitioners(props) {
   return (
     <div>
       <div className={styles.filter_practitioner__title}>
-        Practitioner
+        Practitioners
       </div>
       <ul className={styles.filter_practitioner__wrapper}>
         <Checkbox
