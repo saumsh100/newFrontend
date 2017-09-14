@@ -11,6 +11,7 @@ const pluralToSingularMap = {
   practitioners: 'practitioner',
   services: 'service',
   practitionerSchedules: 'practitionerSchedule',
+  configurations: 'configuration',
 };
 
 const toNormalize = {

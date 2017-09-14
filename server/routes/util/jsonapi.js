@@ -48,6 +48,13 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  Configuration: [
+    'name',
+    'description',
+    'data-type',
+    'value',
+  ],
+
   ConnectorVersion: [
     'tag',
     'url',
@@ -157,6 +164,11 @@ const SERIALIZERS = {
 
   connectorVersion: new Serializer('connectorVersion', makeConfig({
     attributes: ModelAttributes.ConnectorVersion,
+    pluralizeType: false,
+  })),
+
+  configuration: new Serializer('configuration', makeConfig({
+    attributes: ModelAttributes.Configuration,
     pluralizeType: false,
   })),
 
