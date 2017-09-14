@@ -193,13 +193,13 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
 });
 
 /**
- * POST /configurations/
+ * PUT /configurations/
  *
- * - get connector configuration settings.
+ * - Update connector configuration settings.
  *
  */
 
-accountsRouter.post('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
   const {
     name,
   } = req.body;
