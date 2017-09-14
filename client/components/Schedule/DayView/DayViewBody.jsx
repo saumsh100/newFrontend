@@ -74,7 +74,7 @@ class DayViewBody extends Component {
         selectAppointment={selectAppointment}
       />
     );
-    
+
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.toJS().chairsFilter;
     const chairsArray = chairs.toArray().sort(SortByName).filter((chair) => {

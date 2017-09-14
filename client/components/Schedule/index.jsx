@@ -178,7 +178,7 @@ class ScheduleComponent extends Component {
             </Col>
             <Col xs={12} sm={3} md={3} className={styles.schedule__sidebar}>
               <Row className={styles.schedule__sidebar_rowCalendar}>
-                <Col xs={12} >
+                <Col xs={12}>
                   <Calendar
                     selectedDays={new Date(currentDate)}
                     onDayClick={this.setCurrentDay}
