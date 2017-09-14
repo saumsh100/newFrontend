@@ -20,6 +20,7 @@ import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
 import Filters from './Cards/Filters';
 import styles from './styles.scss';
+import Calendar from "../library/Calendar/index";
 
 class ScheduleComponent extends Component {
   constructor(props) {
@@ -131,7 +132,7 @@ class ScheduleComponent extends Component {
       <DocumentTitle title="CareCru | Schedule">
         <Grid>
           <Row className={styles.rowMainContainer}>
-            <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
+            <Col xs={12} sm={9} md={9} className={styles.schedule__container}>
               <Card>
                 <div className={`${styles.schedule__title} ${styles.title}`}>
                   <CurrentDate currentDate={currentDate}>
@@ -175,7 +176,15 @@ class ScheduleComponent extends Component {
                 <Legend />
               </Card>
             </Col>
-            <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
+            <Col xs={12} sm={3} md={3} className={styles.schedule__sidebar}>
+              <Row className={styles.schedule__sidebar_rowCalendar}>
+                <Col xs={12} >
+                  <Calendar
+                    selectedDays={new Date(currentDate)}
+                    onDayClick={this.setCurrentDay}
+                  />
+                </Col>
+              </Row>
               <Row>
                 <Col xs={12}>
                   <Filters

@@ -15,7 +15,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: lightgrey;
+  background-color: #fafafa;
 }
 .DayPicker:focus {
   outline: none;
@@ -117,8 +117,7 @@
 .DayPicker-Day--disabled {
   color: #dce0e0;
   cursor: default;
-  background-color: darkgrey;
-  background-color: darkgrey;
+  background-color: #eff1f1;
 }
 
 .DayPicker-Day--outside {
