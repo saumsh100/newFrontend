@@ -119,7 +119,7 @@ export default function AppointmentForm(props) {
                 name="practitionerId"
                 label="Practitioner"
                 borderColor="primaryColor"
-                onChange={(e, newValue) => handlePractitionerChange(newValue)}
+                // onChange={(e, newValue) => handlePractitionerChange(newValue)}
                 required
                 data-test-id="practitionerId"
               />
@@ -142,7 +142,8 @@ export default function AppointmentForm(props) {
          </Row>
          </Col>*/}
       </Row>
-      <Row className={styles.addNewAppt_row}>
+      {/* TODO: Removing this because service is annoying to deal with for patients */}
+      {/*<Row className={styles.addNewAppt_row}>
         <Col xs={12} md={12} className={styles.addNewAppt_col}>
           <Field
             options={serviceOptions}
@@ -154,7 +155,7 @@ export default function AppointmentForm(props) {
             data-test-id="serviceId"
           />
         </Col>
-      </Row>
+      </Row>*/}
       <Row className={styles.addNewAppt_row}>
         <Col xs={12} md={5} className={styles.addNewAppt_col}>
           <Field
