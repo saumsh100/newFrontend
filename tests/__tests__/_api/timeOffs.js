@@ -55,6 +55,23 @@ describe('/api/recurringTimeOffs', () => {
     });
   });
 
+  describe('DELETE /', () => {
+    beforeEach(async () => {
+      await seedTestPractitionerTimeOffs();
+    });
+
+    test('/:timeOffId - delete a time off', () => {
+      return request(app)
+        .delete(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
   describe('PUT /', () => {
     beforeEach(async () => {
       await seedTestPractitionerTimeOffs();
@@ -68,23 +85,6 @@ describe('/api/recurringTimeOffs', () => {
           endDate: '2017-07-19T00:18:30.932Z',
         })
         .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        });
-    });
-  });
-
-  describe('DELETE /', () => {
-    beforeEach(async () => {
-      await seedTestPractitionerTimeOffs().catch(err => console.log(err, 'asdsadsads'));
-    });
-
-    test('/:timeOffId - delete a time off', () => {
-      return request(app)
-        .delete(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(204)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();

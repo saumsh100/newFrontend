@@ -5,11 +5,10 @@ import {
 } from './fetchEntities';
 
 // To understand which form data is used.
-// ['addEnterprise', 'clinicDetails', 'selectAccountOptions', 'addUser'];
+// ['addEnterprise', 'clinicDetails', 'addressDetai 'selectAccountOptions', 'addUser'];
 
 export function setAllAccountInfo(payload) {
   return async (dispatch, getState) => {
-
     try {
       const alertCreateEnterprise = {
         success: {
@@ -29,7 +28,8 @@ export function setAllAccountInfo(payload) {
         enterpriseId = payload.formData[0].id;
       }
 
-      const query = payload.formData[2]; // query for account options
+      const query = payload.formData[4]; // query for account options
+      console.log(query)
       const alertCreateAccount = {
         success: {
           body: 'Account has been created',
@@ -39,11 +39,10 @@ export function setAllAccountInfo(payload) {
         },
       };
 
-
       // creating an account for this enterprise
       const createdAccount = await dispatch(createEntityRequest({
         key: 'accounts',
-        entityData: payload.formData[1],
+        entityData: { ...payload.formData[1], ...payload.formData[2] },
         url: `/api/enterprises/${enterpriseId}/accounts`,
         params: query,
         alert: alertCreateAccount,
@@ -56,7 +55,7 @@ export function setAllAccountInfo(payload) {
 
       await dispatch(updateEntityRequest({
         key: 'accounts',
-        values: Object.assign({}, payload.formData[1], payload.formData[2]),
+        values: Object.assign({}, payload.formData[1], payload.formData[2], payload.formData[4]),
         url,
       }));
 

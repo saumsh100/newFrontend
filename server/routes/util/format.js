@@ -11,6 +11,13 @@ const pluralToSingularMap = {
   practitioners: 'practitioner',
   services: 'service',
   deliveredProcedures: 'deliveredProcedure',
+  practitionerSchedules: 'practitionerSchedule',
+  configurations: 'configuration',
+};
+
+const toNormalize = {
+  practitionerSchedules: 'practitionerRecurringTimeOffs',
+  practitionerSchedule: 'practitionerRecurringTimeOff',
 };
 
 export default function format(req, res, resourceName, dataArray) {
@@ -20,5 +27,7 @@ export default function format(req, res, resourceName, dataArray) {
     return jsonapi(resourceName, dataArray);
   }
 
-  return normalize(resourceName, dataArray);
+  const name = toNormalize[resourceName] || resourceName;
+
+  return normalize(name, dataArray);
 }

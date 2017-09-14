@@ -86,7 +86,7 @@ class PatientInfoDisplay extends Component {
                     <span>Next Appointment</span>
                   </div>
                   <div className={styles.end}>
-                    <span className={styles2.contact}>{nextApp}</span>
+                    <span className={styles.info}>{nextApp}</span>
                   </div>
                 </div>
               </div>

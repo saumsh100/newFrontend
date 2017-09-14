@@ -48,6 +48,13 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  Configuration: [
+    'name',
+    'description',
+    'data-type',
+    'value',
+  ],
+
   ConnectorVersion: [
     'tag',
     'url',
@@ -142,6 +149,19 @@ const ModelAttributes = {
     'updatedAt',
     'deletedAt',
   ],
+
+  PractitionerSchedule: [
+    'startDate',
+    'endDate',
+    'startTime',
+    'endTime',
+    'interval',
+    'allDay',
+    'fromPMS',
+    'pmsId',
+    'dayOfWeek',
+    'note',
+  ],
 };
 
 /**
@@ -163,6 +183,16 @@ const SERIALIZERS = {
     pluralizeType: false,
   })),
 
+  configuration: new Serializer('configuration', makeConfig({
+    attributes: ModelAttributes.Configuration,
+    pluralizeType: false,
+  })),
+
+  deliveredProcedure: new Serializer('procedure', makeConfig({
+    attributes: ModelAttributes.DeliveredProcedure,
+    pluralizeType: false,
+  })),
+
   family: new Serializer('family', makeConfig({
     attributes: ModelAttributes.Family,
     pluralizeType: false,
@@ -180,6 +210,11 @@ const SERIALIZERS = {
 
   service: new Serializer('service', makeConfig({
     attributes: ModelAttributes.Service,
+    pluralizeType: false,
+  })),
+
+  practitionerSchedule: new Serializer('practitionerSchedule', makeConfig({
+    attributes: ModelAttributes.PractitionerSchedule,
     pluralizeType: false,
   })),
 };
