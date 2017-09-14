@@ -133,29 +133,30 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
 accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
     const sendValues = [];
-    const accountConfigs = await AccountConfiguration.findAll({
-      where: { accountId: req.accountId },
-      include: [
-        {
-          model: Configuration,
-          as: 'configuration',
-        },
-      ],
+    const accountConfigs = await Configuration.findAll({
       raw: true,
       nest: true,
+      include: {
+        model: AccountConfiguration,
+        as: 'accountConfiguration',
+        where: {
+          accountId: req.accountId,
+        },
+        required: false,
+      },
     });
 
     for (let i = 0; i < accountConfigs.length; i += 1) {
       const sendValue = {
-        name: accountConfigs[i].configuration.name,
-        description: accountConfigs[i].configuration.description,
-        'data-type': accountConfigs[i].configuration.type,
-        value: accountConfigs[i].configuration.defaultValue,
+        name: accountConfigs[i].name,
+        description: accountConfigs[i].description,
+        'data-type': accountConfigs[i].type,
+        value: accountConfigs[i].defaultValue,
         id: accountConfigs[i].id,
       };
 
-      if (accountConfigs[i].value) {
-        sendValue.value = accountConfigs[i].value;
+      if (accountConfigs[i].accountConfiguration.id) {
+        sendValue.value = accountConfigs[i].accountConfiguration.value;
       }
 
       sendValues.push(sendValue);
@@ -225,13 +226,9 @@ accountsRouter.post('/configurations', checkPermissions('accounts:read'), async 
       name,
       description: config.description,
       'data-type': config.type,
-      value: config.defaultValue,
+      value: accountConfig.value,
       id: newConfig.id,
     };
-
-    if (accountConfig.value) {
-      sendValue.value = accountConfig.value;
-    }
 
     return res.send(format(req, res, 'configuration', sendValue));
   } catch (err) {
