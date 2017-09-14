@@ -42,8 +42,8 @@ export default {
   },*/
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, appointment, patient, sentReview }) {
-    const reviewsUrl = `${account.website}?cc=review`;
+  email({ account, patient, sentReview }) {
+    const reviewsUrl = `${account.website}?cc=review&srid=${sentReview.id}&accountId=${account.id}`;
     const stars = [];
     for (let i = 1; i < 6; i++) {
       stars.push({
@@ -56,11 +56,6 @@ export default {
       toEmail: patient.email,
       fromName: account.name,
       mergeVars: [
-        {
-          name: 'REVIEW_URL',
-          // TODO: we might have to make this a token if UUID is too easy to guess...
-          content: `${protocol}://${host}/sentReminders/${sentReview.id}/confirm`,
-        },
         {
           name: 'ACCOUNT_PRIMARY_COLOR',
           content: account.bookingWidgetPrimaryColor,

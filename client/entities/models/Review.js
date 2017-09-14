@@ -3,7 +3,7 @@ import createModel from '../createModel';
 
 const ReviewSchema = {
   id: null,
-  stars: 4,
+  stars: null,
   description: null,
   patientUserId: null,
   practitionerId: null,

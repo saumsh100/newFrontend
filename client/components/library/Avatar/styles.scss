@@ -3,6 +3,7 @@
 
 $medium-size: 2rem;
 $large-size: 3rem;
+$xlarge-size: 4rem;
 $extraLarge-size: 10rem;
 
 .avatar {
@@ -30,6 +31,13 @@ $extraLarge-size: 10rem;
   height: $large-size;
   min-width: $large-size;
   min-height: $large-size;
+}
+
+.xlarge {
+  width: $xlarge-size;
+  height: $xlarge-size;
+  min-width: $xlarge-size;
+  min-height: $xlarge-size;
 }
 
 .extraLarge {

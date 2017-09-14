@@ -60,7 +60,7 @@ const account2 = {
   state: 'AB',
   street: '10204 112th St.',
   contactEmail: 'info@libertychiropractic.ca',
-  website: 'http://localhost:5555/tests/sites/reviews.html',
+  website: 'http://carecru.ngrok.io/tests/sites/reviews.html',
   bookingWidgetPrimaryColor: 'purple',
   name: 'Liberty Chiropractic',
   createdAt: '2017-07-19T00:14:30.932Z',

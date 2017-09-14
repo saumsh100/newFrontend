@@ -3,6 +3,14 @@
 
 .main {
   padding: 20px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .row {
@@ -11,8 +19,19 @@
   justify-content: center;
 }
 
-.avatar {
+.footer {
+  @extend .row;
+  flex: 1;
+  flex-direction: column;
+}
 
+.textAreaWrapper {
+  width: 100%;
+}
+
+.avatar {
+  width: 4rem;
+  height: 4rem;
 }
 
 .messageWrapper {
@@ -29,22 +48,30 @@
 .header {
   @extend .text-centered;
   @extend .row;
-  padding: 20px;
+  padding: 20px 20px 0 20px;
   margin: 0 auto; // when you add max-width you need this
   max-width: 210px;
-  font-size: 2em;
+  font-size: 1.8em;
   color: $primary-blue;
-  font-family: $medium-font;
+  // font-family: $medium-font;
 }
 
 .message {
   @extend .text-centered;
-  padding: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
   color: $primary-darkgrey;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .button {
   width: 100%;
+  margin-top: auto;
+}
+
+.googleButton {
+  @extend .button;
   display: flex;
   justify-content: flex-start;
   flex-direction: row;

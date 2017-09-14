@@ -30,7 +30,8 @@
 }
 
 .minimalRatingsText {
-  color: $primary-darkgrey;
+  color: lighten($primary-darkgrey, 25%);
+  font-size: 12px;
   text-align: center;
 }
 
@@ -69,7 +70,7 @@
 
 .empty {
   @extend .starChild;
-  color: $primary-darkgrey;
+  color: lighten($primary-darkgrey, 15%);
 }
 
 .filled {

@@ -9,10 +9,13 @@ import styles from './styles.scss';
 function Header(props) {
   return (
     <div className={styles.headerContainer}>
-      <IconButton
-        icon="close"
-        onClick={props.closeBookingModal}
-      />
+      <div className={styles.pullRight}>
+        <IconButton
+          icon="close"
+          onClick={props.closeBookingModal}
+          className={styles.closeButton}
+        />
+      </div>
     </div>
   );
 }
@@ -25,4 +28,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default Header;
+export default connect(null, mapDispatchToProps)(Header);

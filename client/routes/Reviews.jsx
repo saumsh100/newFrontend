@@ -1,8 +1,9 @@
+
 import React, {PropTypes} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {ConnectedRouter as Router} from 'react-router-redux';
 import ReviewsWidget from '../components/ReviewsWidget';
-import Review from '../components/ReviewsWidget/Review';
+import WidgetContainer from '../components/ReviewsWidget/Container';
 import Login from '../components/ReviewsWidget/Login';
 import SignUp from '../components/ReviewsWidget/SignUp';
 import PatientApp from '../containers/PatientApp';
@@ -13,11 +14,13 @@ const base = (path = '') => `/reviews/:accountId/embed${path}`;
 const ReviewsRouter = ({ match }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
-    <Switch>
-      {/*<Redirect exact from={b()} to={b('/submitted')} />*/}
-      <Route exact path={b()} component={Submitted} />
-      {/*<Route exact path={b('/submitted')} component={Submitted} />*/}
-    </Switch>
+    <WidgetContainer>
+      <Switch>
+        {/*<Redirect exact from={b()} to={b('/submitted')} />*/}
+        <Route exact path={b()} component={Submitted} />
+        {/*<Route exact path={b('/submitted')} component={Submitted} />*/}
+      </Switch>
+    </WidgetContainer>
   );
 };
 

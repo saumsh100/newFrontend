@@ -1,7 +1,6 @@
 
 import { Router } from 'express';
-import fs from 'fs';
-import { Review } from '../../../_models';
+import { Review, SentReview, sequelize } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { readFile, replaceJavascriptFile } from '../../../util/file';
 import normalize from '../../_api/normalize';
@@ -10,6 +9,7 @@ const reviewsRouter = Router();
 
 reviewsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 reviewsRouter.param('reviewId', sequelizeLoader('review', 'Review'));
+reviewsRouter.param('sentReviewId', sequelizeLoader('sentReview', 'SentReview'));
 reviewsRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
   { association: 'practitioners', required: false, where: { isActive: true } },
@@ -66,37 +66,6 @@ reviewsRouter.get('/:accountIdJoin/embed(/*)?', async (req, res, next) => {
   }
 });
 
-
-function replaceIndex(string, regex, index, repl) {
-  let nth = -1;
-  return string.replace(regex, (match) => {
-    nth += 1;
-    if (index === nth) return repl;
-    return match;
-  });
-}
-
-reviewsRouter.get('/:accountId/reviews.js', async (req, res, next) => {
-  try {
-    const account = req.account.get({ plain: true });
-    fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
-      if (err) throw err;
-      fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {
-        if (_err) throw _err;
-        const color = account.bookingWidgetPrimaryColor || '#FF715A';
-        const iframeSrc = `${req.protocol}://${req.headers.host}/reviews/${account.id}/embed`;
-        const withColor = replaceIndex(widgetJS, /__REPLACE_THIS_COLOR__/g, 1, toString(color));
-        const withSrc = replaceIndex(withColor, /__REPLACE_THIS_IFRAME_SRC__/g, 1, toString(iframeSrc));
-        const withStyleText = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
-        // TODO: need to be able to minify and compress code UglifyJS
-        res.send(withStyleText);
-      });
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
 /**
  * POST /:accountId
  *
@@ -109,6 +78,50 @@ reviewsRouter.post('/:accountId', async (req, res, next) => {
     const reviewData = Object.assign({}, req.body, { accountId: account.id });
     const review = await Review.create(reviewData);
     res.status(201).send(review.get({ plain: true }));
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /:accountId/:sentReminderId
+ */
+reviewsRouter.post('/:accountId/:sentReviewId', async (req, res, next) => {
+  try {
+    const { account, sentReview } = req;
+    const { stars, description } = req.body;
+
+    // Make sure sentReview does not already have a submitted review
+    if (sentReview.isCompleted && sentReview.reviewId) {
+      next(StatusError(400, 'sentReview has already been fulfilled'));
+    }
+
+    // create a transaction due to the multiple writes required
+    const t = await sequelize.transaction();
+
+    // we specifically wrap the transaction in a try/catch
+    try {
+      const review = await Review.create({
+        accountId: account.id,
+        practitionerId: sentReview.practitionerId,
+        patientId: sentReview.patientId,
+        sentReviewId: sentReview.id,
+        stars,
+        description,
+      }, { transaction: t });
+
+      // Update sentReview
+      await sentReview.update({
+        isCompleted: true,
+        reviewId: review.id,
+      }, { transaction: t });
+
+      await t.commit();
+      return res.status(201).send(review.get({ plain: true }));
+    } catch (err) {
+      await t.rollback();
+      next(err);
+    }
   } catch (err) {
     next(err);
   }

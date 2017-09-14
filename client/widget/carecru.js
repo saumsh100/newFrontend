@@ -21,6 +21,7 @@ function CareCru({ iframeSrc }) {
   });
 
   this.host.onEvent('closeModal', () => {
+    console.log('CLOSING');
     this.modal.close();
   });
 }
@@ -41,6 +42,10 @@ CareCru.prototype.open = function (route = 'book') {
 
 CareCru.prototype.setStars = function (stars) {
   this.host.sendEvent('setStars', parseInt(stars));
+};
+
+CareCru.prototype.setSentReviewId = function (srid) {
+  this.host.sendEvent('setSentReviewId', srid);
 };
 
 /**
