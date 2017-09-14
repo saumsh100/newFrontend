@@ -18,9 +18,6 @@ export default function CreateServiceForm(props) {
   return (
   <Row className={styles.formContainer__createForm}>
     <Col xs={12}>
-    <Row className={styles.servicesFormRow__createRow}>
-      <CardHeader title="Create New Service" />
-    </Row>
       <Form
         form={formName}
         onSubmit={onSubmit}
