@@ -201,7 +201,7 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
 /**
  * Update a timeOff
  */
-recurringTimeOffRouter.put('/:timeOffId', checkPermissions('timeOffs:update'), (req, res, next) =>{
+recurringTimeOffRouter.put('/:timeOffId', checkPermissions('timeOffs:update'), (req, res, next) => {
   return req.recurringTimeOff.update(req.body)
     .then(tf => res.send(format(req, res, 'practitionerSchedule', tf.get({ plain: true }))))
     .catch(next);

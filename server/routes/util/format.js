@@ -13,6 +13,11 @@ const pluralToSingularMap = {
   practitionerSchedules: 'practitionerSchedule',
 };
 
+const toNormalize = {
+  practitionerSchedules: 'practitionerRecurringTimeOffs',
+  practitionerSchedule: 'practitionerRecurringTimeOff',
+};
+
 export default function format(req, res, resourceName, dataArray) {
   if (req.responseConfig.type === JSONAPI) {
     resourceName = (pluralToSingularMap[resourceName]) ? pluralToSingularMap[resourceName]
@@ -20,5 +25,7 @@ export default function format(req, res, resourceName, dataArray) {
     return jsonapi(resourceName, dataArray);
   }
 
-  return normalize(resourceName, dataArray);
+  const name = toNormalize[resourceName] || resourceName;
+
+  return normalize(name, dataArray);
 }
