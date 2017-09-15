@@ -32,6 +32,7 @@ class TimeOffListItem extends Component {
       note,
       allDay,
       fromPMS,
+      pmsId,
     } = timeOff;
 
     const startTime = setTime(startDate);
@@ -47,14 +48,14 @@ class TimeOffListItem extends Component {
 
     const showNote = note ? `${note}` : 'No Description';
 
-    const button = fromPMS ? <div className={styles.timeOffList_readOnly}>Read Only</div> : (<IconButton
+    const button = fromPMS || pmsId ? <div className={styles.timeOffList_readOnly}>Read Only</div> : (<IconButton
       icon="trash"
       className={styles.timeOffList_delete}
       onClick={this.deleteTimeOff}
     />);
 
     return (
-      <ListItem onClick={fromPMS ? () => {} : onClick} className={styles.timeOffList_item}>
+      <ListItem onClick={fromPMS || pmsId ? () => {} : onClick} className={styles.timeOffList_item}>
         <div className={styles.timeOffList_date}>
           {showData}
           <div className={styles.timeOffList_note}>

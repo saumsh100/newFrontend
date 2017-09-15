@@ -50,6 +50,7 @@ requestsRouter.post('/', (req, res, next) => {
       const { name } = account;
       // Send Email
       sendAppointmentRequested({
+        accountId: req.accountId,
         toEmail: email,
         fromName: name,
         mergeVars: [
@@ -85,6 +86,7 @@ requestsRouter.get('/', (req, res, next) => {
       accountId,
       isCancelled,
     },
+
     include: includeArray,
   }).then(requests => {
     const sendRequests = requests.map(r => r.get({ plain: true }));
@@ -155,6 +157,7 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       const { name, phoneNumber, contactEmail, website } = account;
       // Send Email
       sendAppointmentRequestRejected({
+        accountId: req.accountId,
         toEmail: email,
         fromName: name,
         mergeVars: [
@@ -202,6 +205,7 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
 
       // Send Email
       return sendAppointmentRequestConfirmed({
+        accountId: req.accountId,
         toEmail: email,
         fromName: name,
         mergeVars: [
