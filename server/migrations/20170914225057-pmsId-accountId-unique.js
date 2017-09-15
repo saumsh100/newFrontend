@@ -62,7 +62,7 @@ module.exports = {
         await queryInterface.removeConstraint('Chairs', 'chair_accountId_pmsId_unique', { transaction: t });
         await queryInterface.removeConstraint('Families', 'family_accountId_pmsId_unique', { transaction: t });
         await queryInterface.removeConstraint('Appointments', 'appointment_accountId_pmsId_unique', { transaction: t });
-        await queryInterface.removeConstraint('Patients', 'custom_unique_constraint_name', { transaction: t });
+        await queryInterface.removeConstraint('Patients', 'patient_accountId_pmsId_unique', { transaction: t });
       } catch (e) {
         console.log(e);
         t.rollback();
