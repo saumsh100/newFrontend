@@ -37,7 +37,7 @@ class RequestList extends Component {
       endDate: request.get('endDate'),
       serviceId: request.get('serviceId'),
       note: request.note,
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
       customBufferTime: 0,
       request: true,
       requestModel: modifiedRequest,

@@ -10,7 +10,7 @@ Object {
   "isDeleted": false,
   "isPatientConfirmed": false,
   "isReminderSent": false,
-  "isSyncedWithPMS": false,
+  "isSyncedWithPms": false,
   "note": null,
   "patientId": null,
   "pmsId": null,

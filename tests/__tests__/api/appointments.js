@@ -32,7 +32,7 @@ const batchAppointment = {
   accountId,
   patientId,
   practitionerId,
-  isSyncedWithPMS: false,
+  isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -45,7 +45,7 @@ const batchAppointment2 = {
   accountId,
   patientId,
   practitionerId,
-  isSyncedWithPMS: false,
+  isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -58,7 +58,7 @@ const batchAppointment3 = {
   accountId,
   patientId,
   practitionerId,
-  isSyncedWithPMS: false,
+  isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -71,7 +71,7 @@ const batchAppointment4 = {
   accountId,
   patientId,
   practitionerId,
-  isSyncedWithPMS: false,
+  isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -82,7 +82,7 @@ const invalidBatchAppointment = {
   accountId,
   patientId,
   practitionerId,
-  isSyncedWithPMS: false,
+  isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -251,7 +251,7 @@ describe('/api/appointments', () => {
         .put(`/api/appointments/${appointmentId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          isSyncedWithPMS: true,
+          isSyncedWithPms: true,
         })
         .expect(201)
         .then(({ body }) => {
