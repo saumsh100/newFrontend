@@ -3,7 +3,7 @@ import { updateEntity } from '../actions/entities';
 import { push } from 'react-router-redux';
 import { setIsSyncing, setProgress, setIsDone } from '../reducers/connect';
 
-export default function connectSocketToStoreLogin(store, socket) {
+export default function connectSocketToConnectStore(store, socket) {
   const jwtToken = localStorage.getItem('token');
   const { dispatch, getState } = store;
 
@@ -19,6 +19,8 @@ export default function connectSocketToStoreLogin(store, socket) {
     }, 500);
   };
 
+  console.log('Connected to socket');
+
   socket
     .emit('authenticate', { token: jwtToken })
     .on('authenticated', () => {
@@ -27,6 +29,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       });
 
       socket.on('syncFinished', (data) => {
+        console.log('finished', data);
         dispatch(setIsSyncing(false));
         dispatch(setIsDone(true));
         setTimeout(() => {
@@ -37,6 +40,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       });
 
       socket.on('syncProgress', (data) => {
+        console.log('progress', data);
         dispatch(setProgress(data));
       });
     })

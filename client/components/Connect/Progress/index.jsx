@@ -4,31 +4,29 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { startSync, stopSync } from '../../../thunks/connect';
-import {
-  ProgressBar,
-  Icon,
-  Link,
-  Grid,
-  Row,
-  Col,
-  VButton,
-} from '../../library';
+import { ProgressBar } from '../../library';
 import styles from './styles.scss';
 
 const collectionOrder = [
   'chairs',
   'practitioners',
+  'timeOffs',
   'families',
   'patients',
+  'families:update',
+  'deliveredProcedures',
   'appointments',
 ];
 
 const collectionWeights = [
   10,
+  5,
+  5,
   10,
-  20,
-  30,
-  30,
+  25,
+  10,
+  10,
+  25,
 ];
 
 const getPercentageFromProgress = (progress) => {
