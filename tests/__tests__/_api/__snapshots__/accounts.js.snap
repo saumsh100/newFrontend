@@ -6,6 +6,7 @@ Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
+        "adapterType": null,
         "bookingWidgetPrimaryColor": null,
         "callrailId": null,
         "canSendRecalls": false,
@@ -47,6 +48,7 @@ Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
+        "adapterType": null,
         "bookingWidgetPrimaryColor": null,
         "callrailId": null,
         "canSendRecalls": false,
@@ -89,6 +91,7 @@ Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
+        "adapterType": null,
         "bookingWidgetPrimaryColor": null,
         "callrailId": null,
         "canSendRecalls": false,
@@ -131,6 +134,7 @@ Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
+        "adapterType": null,
         "bookingWidgetPrimaryColor": null,
         "callrailId": null,
         "canSendRecalls": false,
@@ -172,6 +176,7 @@ Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
+        "adapterType": null,
         "bookingWidgetPrimaryColor": null,
         "callrailId": null,
         "canSendRecalls": false,
@@ -267,6 +272,7 @@ Object {
     "accounts": Object {
       "62954241-3652-4792-bae5-5bfed53d37b7": Object {
         "EnterpriseId": null,
+        "adapterType": null,
         "bookingWidgetPrimaryColor": null,
         "callrailId": null,
         "canSendRecalls": false,
