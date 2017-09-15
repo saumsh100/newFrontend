@@ -45,8 +45,6 @@ const SUPERADMIN = {
   chats: allowAll,
   users: allowAll,
 
-  deliveredProcedures: allowAll,
-
   listings: allow('read'),
 
   patients: allowAll,

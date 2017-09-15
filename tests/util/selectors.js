@@ -28,7 +28,6 @@ export function omitPropertiesFromBody(responseBody, omitProps, jsonApi = false)
     return mapValues(modelsSet, model => omitProperties(model, omitProps));
   });
 
-  delete responseBody.result;
   return responseBody;
 }
 
