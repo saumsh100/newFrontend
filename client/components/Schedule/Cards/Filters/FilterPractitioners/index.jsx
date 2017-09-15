@@ -17,7 +17,7 @@ export default function FilterPractitioners(props) {
   if (!practitioners) {
     return null;
   }
-  const colors = ['primaryColor', 'primaryBlueGreen', 'primaryGreen', 'primaryYellow' ];
+  const colors = ['primaryColor', 'primaryBlueGreen', 'primaryYellow', 'primaryGreen'];
   const colorLen = colors.length;
   const colorArray = [];
 
@@ -37,9 +37,6 @@ export default function FilterPractitioners(props) {
 
   return (
     <div>
-      <div className={styles.filter_practitioner__title}>
-        Practitioners
-      </div>
       <ul className={styles.filter_practitioner__wrapper}>
         <Checkbox
           hidden

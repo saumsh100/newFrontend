@@ -54,7 +54,7 @@
 }
 
 .primaryColor {
-  background: linear-gradient($primary-color 40%, white 60%);
+  background: linear-gradient(rgba(255, 113, 90, 1), white 70%);
   border-radius: 50%;
   border-color: $primary-color;
   //transition-timing-function: ease-in;
@@ -62,21 +62,21 @@
   height: 55px;
 }
 .primaryYellow {
-  background: linear-gradient($primary-yellow 40%, white 60% );
+  background: linear-gradient(rgba(255, 196, 90, 1), white 70% );
   border-radius: 50%;
   border-color: $primary-yellow;
   width: 55px;
   height: 55px;
 }
 .primaryGreen {
-  background: linear-gradient($primary-green 40%, white 60%);
+  background: linear-gradient(rgba(44, 196, 167, 1), white 70%);
   border-radius: 50%;
   border-color: $primary-green;
   width: 55px;
   height: 55px;
 }
 .primaryBlueGreen {
-  background: linear-gradient($primary-blue 40%, white 60%);
+  background: linear-gradient(rgba(32,100,119,1), white 70%);
   border-radius: 50%;
   border-color: $primary-blue;
   width: 55px;

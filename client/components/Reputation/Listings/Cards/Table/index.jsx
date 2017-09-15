@@ -81,9 +81,6 @@ class Table extends Component {
                             <div className={styles.data__item_name}>
                               {obj.name}
                             </div>
-                            <a className={styles.data__item_phone}>
-                              notes
-                            </a>
                           </div>
                         </div>
                         <div className={styles.data__item_center}>
@@ -104,7 +101,6 @@ class Table extends Component {
                             {!obj.listing.length ?
                               null :
                               (<div className={styles.table__button}>
-                                <Icon icon="plus-square-o" />
                                 <a
                                   href={listingInfo}
                                   className={styles.table__button}

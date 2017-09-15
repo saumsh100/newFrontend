@@ -4,7 +4,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import styles from '../styles.scss';
 import { Icon } from '../../../library';
-import withHoverable from '../../../../hocs/withHoverable'
+import withHoverable from '../../../../hocs/withHoverable';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -128,7 +128,7 @@ function ShowAppointment(props) {
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
-          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1.2} icon="check-circle-o" />)}</div>
+          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1.2} icon="check-circle" />)}</div>
           <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1.2} icon="clock-o" />)} </div>
         </div>
         <div className={styles.showAppointment_nameAge}>
