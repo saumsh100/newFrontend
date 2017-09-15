@@ -1,14 +1,15 @@
 import React, { PropTypes } from 'react';
-import { Button, Form, Field } from '../../../library';
-//import styles from './styles.scss';
+import { Button, Form, Field, VButton } from '../../../library';
+import styles from '../styles.scss';
 import { emailValidate, asyncEmailPasswordReset } from '../../../library/Form/validate';
 
-export default function ForgotPasswordForm({ onSubmit }) {
+export default function ForgotPasswordForm({ onSubmit, className }) {
   return (
     <Form
       form="forgotPassword"
       onSubmit={onSubmit}
       ignoreSaveButton
+      className={className}
     >
       <Field
         type="email"
@@ -16,11 +17,11 @@ export default function ForgotPasswordForm({ onSubmit }) {
         label="Email"
         validate={[emailValidate]}
       />
-      <Button
-        type="submit"
+      <VButton
+        className={styles.exitButton}
       >
-        Reset Your Password Now
-      </Button>
+        Reset your password
+      </VButton>
     </Form>
   );
 }
