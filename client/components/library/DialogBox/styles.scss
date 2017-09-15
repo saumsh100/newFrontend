@@ -4,23 +4,28 @@
 
 .dialogBody {
   display: flex;
-  padding: 0.4rem 0.6rem;
+  padding: 20px;
   min-width: 250px;
   max-height: 96%;
   flex-direction: column;
   &__header{
     display: flex;
     align-items: center;
+    padding-bottom: 10px;
   }
   &__closeIcon {
     font-size: 1rem;
     padding-top: 0.5em;
-    color: grey;
+    color: $primary-darkgrey;
     font-weight: 900;
     margin-left: auto;
     cursor: pointer;
+    &:hover {
+      color: darken($primary-darkgrey, 10%);
+    }
   }
   &__footer {
+    padding-top: 10px;
     margin-left: auto;
   }
 

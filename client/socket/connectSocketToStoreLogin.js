@@ -38,6 +38,13 @@ export default function connectSocketToStoreLogin(store, socket) {
        */
       socket.on('create:Request', (data) => {
         dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
+        const alert = {
+          title: 'Appointment Request',
+          body: 'You have an appointment request.',
+          browserAlert: true,
+        };
+
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
       socket.on('update:Request', (data) => {
         dispatch(receiveEntities({ key: 'requests', entities: data.entities }));

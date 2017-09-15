@@ -1,12 +1,13 @@
 /* eslint-disable consistent-return */
 import { Router } from 'express';
 import fs from 'fs';
+import StatusError from '../../util/StatusError';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import { PatientUser, Practitioner } from '../../_models';
+import { Patient, PatientUser, Practitioner } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
@@ -135,6 +136,29 @@ sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   delete patientUser.password;
   try {
     res.json(patientUser);
+  } catch (err) {
+    next(err);
+  }
+});
+
+sequelizeMyRouter.get('/unsubscribe/:encoded', async (req, res, next) => {
+  try {
+    // TODO: unsubscribe patient preferences
+    const { encoded } = req.params;
+    const { md_email } = req.query;
+    const [email, accountId] = new Buffer(encoded, 'base64').toString('ascii').split(':');
+
+    const patient = await Patient.findOne({ where: { email, accountId } });
+    if (!patient) {
+      return next(StatusError(404, 'Page not found'));
+    }
+
+    if (md_email !== email) {
+      console.log(md_email, email);
+      return next(StatusError(404, 'Page not found'));
+    }
+
+    res.render('unsub', { email, accountId, firstName: patient.firstName });
   } catch (err) {
     next(err);
   }
