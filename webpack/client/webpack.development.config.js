@@ -28,7 +28,7 @@ const {
 } = env;
 
 const developmentConfig = merge(baseConfig, {
-  entry: entries('app', 'patient'),
+  entry: entries('app', 'patient', 'reviews', 'connect'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -47,7 +47,7 @@ const developmentConfig = merge(baseConfig, {
 
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
-      chunks: ['app', 'patient'],
+      chunks: ['app', 'patient', 'reviews'],
     }),
 
     new BrowserSyncPlugin(

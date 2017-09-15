@@ -34,6 +34,8 @@ const generateEmailConfirmationURL = (tokenId, protocol, host) => {
 };
 
 async function sendConfirmationMessage(patientUser) {
+  // Leave console.log here, it is helpful
+  console.log(`Sending Confirmation Message to ${patientUser.firstName} ${patientUser.lastName} at ${patientUser.phoneNumber}`);
   const { pinCode } = await PinCode.create({ modelId: patientUser.id });
   return twilio.sendMessage({
     to: patientUser.phoneNumber,
@@ -44,6 +46,7 @@ async function sendConfirmationMessage(patientUser) {
 
 authRouter.post('/signup', (req, res, next) => {
   const { body: patient } = req;
+  const { ignoreConfirmationText } = req.query;
   if (patient.password !== patient.confirmPassword) {
     next({ status: 400, message: 'Passwords doesn\'t match.' });
   }
@@ -52,7 +55,7 @@ authRouter.post('/signup', (req, res, next) => {
   // TODO: we have to use some form library for validations.
   return PatientAuth.signup(patient)
     .then(async ({ session, model }) => {
-      if (phoneNumber) {
+      if (phoneNumber && ignoreConfirmationText !== 'true') {
         await sendConfirmationMessage(model);
       }
 

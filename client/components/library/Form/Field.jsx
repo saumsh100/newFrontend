@@ -32,6 +32,7 @@ class ReduxField extends Component {
     if (typeof component === 'string') {
       component = RFComponents[component];
     }
+
     // add normalizer for phone numbers
     if (type === 'tel') {
       // TODO: we are currently overriding the normalize for tel, they should be able to stack (compose)

@@ -150,8 +150,8 @@ const passwordStrength = (value) => {
   if (!value) return;
   const result = zxcvbn(value);
   const { score, feedback: { warning } } = result;
-  if (score < 2) {
-    return warning || 'New password not strong enough';
+  if (score < 1) {
+    return warning || 'Password not strong enough';
   }
 };
 

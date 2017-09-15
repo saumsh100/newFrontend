@@ -1,0 +1,34 @@
+
+@import '../../../ui.scss';
+
+.btn {
+  width: 100%;
+  font-size: 20px;
+  font-family: $medium-font;
+  height: 60px;
+  margin-top: 50px;
+}
+
+.logoWrapper {
+  height: auto;
+  margin-bottom: 20px;
+  // background-color: black;
+}
+
+.logo {
+  width: 100px;
+}
+
+.header {
+  composes: header from 'sass-loader!../../../fonts.scss';
+  margin-bottom: 50px;
+  color: $primary-dark;
+  // text-align: center;
+}
+
+.subHeader {
+  composes: header from 'sass-loader!../../../fonts.scss';
+  margin-bottom: 50px;
+  color: $primary-dark;
+  // text-align: center;
+}

@@ -6,7 +6,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Account, Invite, User, Enterprise } from '../../../_models';
-import { sendInvite } from '../../../lib/inviteMail';
+import { sendInvite } from '../../../lib/mail';
 import StatusError from '../../../util/StatusError';
 
 const uuid = require('uuid').v4;
