@@ -281,7 +281,7 @@ const Patients = [
       carrier: 'sadasadsadsads',
       sin: 'dsasdasdasdadsasad',
     },
-    isSyncedWithPMS: false,
+    isSyncedWithPms: false,
   }
 ];
 

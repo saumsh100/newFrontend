@@ -13,10 +13,10 @@
         "homePhoneNumber": null,
         "id": "0b59a171-889e-4631-b392-cc422f711db1",
         "insurance": {
-          
+
         },
         "isDeleted": false,
-        "isSyncedWithPMS": false,
+        "isSyncedWithPms": false,
         "language": "English",
         "lastName": "Skovorodnikov",
         "mobilePhoneNumber": "+16042657486",
