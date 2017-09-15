@@ -34,7 +34,7 @@ module.exports = {
     */
     return queryInterface.sequelize.transaction(async (t) => {
       try {
-        await queryInterface.removeConstraint('PractitionerRecurringTimeOffs', 'practitioner_practitionerId_pmsId_unique', { transaction: t });
+        await queryInterface.removeConstraint('PractitionerRecurringTimeOffs', 'practitioner_practitionerId_pmsId_unique');
 
         await queryInterface.addConstraint('PractitionerRecurringTimeOffs', ['pmsId'], {
           type: 'unique',
