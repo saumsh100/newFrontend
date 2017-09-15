@@ -9,9 +9,9 @@ export function showAlertTimeout(payload) {
       notify(payload.alert, payload.type);
     }
 
-    const alerts = getState().alerts;
+    const alerts = getState().alerts ? getState().alerts.toArray() : [];
 
-    alerts.toArray().map((alert) => {
+    alerts.map((alert) => {
       if (alert && !alert.get('sticky')) {
         window.setTimeout(() => {
           dispatch(removeAlert({alert}));

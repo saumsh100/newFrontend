@@ -157,7 +157,7 @@ export function removeReservation(reservationId) {
 export function closeBookingModal() {
   return (dispatch, getState) => {
     // clean up state for closing the Modal
-    window.parent.postMessage('message', '*');
+    window.iframeClient && window.iframeClient.sendEvent('closeModal');
   };
 }
 
