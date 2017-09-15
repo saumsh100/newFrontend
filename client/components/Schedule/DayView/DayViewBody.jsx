@@ -36,7 +36,7 @@ class DayViewBody extends Component {
     // Setting the colors for each practitioner
     const sortedPractitioners = practitioners.toArray().sort(SortByFirstName);
 
-    const colors = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6'];
+    const colors = ['#FF715A', '#347283', '#2CC4A7', '#FFC45A'];
     const colorLen = colors.length;
     const reset = Math.ceil(( sortedPractitioners.length - colorLen) / colorLen);
 

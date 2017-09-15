@@ -24,7 +24,7 @@
         &_rowRequest {
           flex: 1;
           overflow: auto;
-          margin-top: 15px;
+          margin-bottom: 15px;
           border-top: $card-border-size $primary-blue;
           background-color: lighten($primary-lightgrey, 2%);
         }
@@ -201,6 +201,7 @@
 
 .legend {
   display: flex;
+  padding-top: 2px;
   padding-right: 5px;
   background-color: $primary-lightgrey;
 

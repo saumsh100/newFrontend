@@ -79,8 +79,8 @@ function ShowAppointment(props) {
 
   const splitRow = rowSort.length > 1 ? (columnWidth * (appPosition / (rowSort.length))) : 0;
   const top = `${((topCalc / totalHours) * 100) + 0.05}%`;
-  const left = `${((columnWidth * practIndex) + splitRow) + 0.05}%`;
-  const width = `${(columnWidth * ((100 / rowSort.length) / 100)) - 0.15}%`;
+  const left = `${((columnWidth * practIndex) + splitRow) + 0.07}%`;
+  const width = `${(columnWidth * ((100 / rowSort.length) / 100)) - 0.16}%`;
   const height = `${((heightCalc / totalHours) * 100) - 0.1}%`;
 
   const backgroundColor = bgColor; //isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
@@ -128,8 +128,8 @@ function ShowAppointment(props) {
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
-          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1.3} icon="check-circle-o" />)}</div>
-          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1.3} icon="clock-o" />)} </div>
+          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1.2} icon="check-circle-o" />)}</div>
+          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1.2} icon="clock-o" />)} </div>
         </div>
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} style={nameColor} >
@@ -144,7 +144,7 @@ function ShowAppointment(props) {
           </span>
         </div>
         <div className={styles.showAppointment_serviceChair}>
-          <span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>
+          {/*<span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>*/}
           <span className={styles.showAppointment_serviceChair_chair}>{chairData}</span>
         </div>
       </div>

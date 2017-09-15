@@ -185,6 +185,14 @@ class ScheduleComponent extends Component {
                   />
                 </Col>
               </Row>
+              <Row className={styles.schedule__sidebar_rowRequest}>
+                <Col xs={12} className={styles.schedule__sidebar_request} >
+                  <RequestsContainer
+                    key={'scheduleRequests'}
+                    maxHeight="calc(100vh - 740px)"
+                  />
+                </Col>
+              </Row>
               <Row>
                 <Col xs={12}>
                   <Filters
@@ -192,14 +200,6 @@ class ScheduleComponent extends Component {
                     chairs={chairs.get('models').toArray()}
                     practitioners={filterPractitioners}
                     services={services.get('models')}
-                  />
-                </Col>
-              </Row>
-              <Row className={styles.schedule__sidebar_rowRequest}>
-                <Col xs={12} className={styles.schedule__sidebar_request} >
-                  <RequestsContainer
-                    key={'scheduleRequests'}
-                    maxHeight="calc(100vh - 740px)"
                   />
                 </Col>
               </Row>
