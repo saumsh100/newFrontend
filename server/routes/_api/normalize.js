@@ -96,10 +96,6 @@ const weeklyScheduleSchema = () => {
   return new schema.Entity('weeklySchedules');
 };
 
-const deliveredProcedureSchema = () => {
-  return new schema.Entity('deliveredProcedures');
-};
-
 const practitionerSchema = () => {
   return new schema.Entity('practitioners', {
     weeklySchedule: weeklyScheduleSchema(),
@@ -166,7 +162,6 @@ const SCHEMAS = {
   invite: inviteSchema(),
   patient: patientSchema(),
   family: familySchema(),
-  deliveredProcedure: deliveredProcedureSchema(),
   request: requestSchema(),
   service: serviceSchema(),
   textMessage: textMessageSchema(),
@@ -189,7 +184,6 @@ const SCHEMAS = {
   calls: [callSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
-  deliveredProcedures: [deliveredProcedureSchema()],
   enterprises: [enterpriseSchema()],
   invites: [inviteSchema()],
   patients: [patientSchema()],
