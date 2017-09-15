@@ -30,7 +30,7 @@ export default function DisplaySearchedPatient(props) {
     displayPatientComponent = (
       <div className={styles.patientSearch}>
         <div className={styles.patientSearch_searchIcon}>
-          <Icon icon="search-plus" size={6} />
+          <img src="/images/carecru_logo_collapsed.png" width="90px" height="90px" className={styles.patientSearch_img}/>
         </div>
         <div className={styles.patientSearch_speel}>
           Search for a patient by typing into the input below.

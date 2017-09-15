@@ -75,7 +75,7 @@ class AddNewAppointment extends Component {
       patientSelected,
       note,
     } = patientValues;
-    
+
     const totalDurationMin = duration + buffer;
 
     const startDate = mergeTime(new Date(date), new Date(time));
