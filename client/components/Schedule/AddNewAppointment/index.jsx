@@ -153,9 +153,10 @@ class AddNewAppointment extends Component {
       });
 
     }
-      const appModel = selectedAppointment.appModel;
-      const appModelSynced = appModel.set('isSyncedWithPMS', false);
-      const valuesMap = Map(newAppointment);
+
+    const appModel = selectedAppointment.appModel;
+    const appModelSynced = appModel.set('isSyncedWithPMS', false);
+    const valuesMap = Map(newAppointment);
       const modifiedAppointment = appModelSynced.merge(valuesMap);
 
       return updateEntityRequest({

@@ -16,12 +16,15 @@ export default function CheckboxImage(props) {
   } = props;
 
   let imgStyle = styles.checkBoxImage__photo;
+  let avatarStyle = {};
 
   if (checked && imgColor) {
     imgStyle = classNames(styles[imgColor], imgStyle);
+    avatarStyle = classNames(styles.checkBoxImage__avatar, avatarStyle)
   } else if (checked && !imgColor) {
     imgStyle = classNames(styles.primaryColor, imgStyle);
   }
+
 
   return (
     <div className={styles.checkBoxImage}>
@@ -31,7 +34,9 @@ export default function CheckboxImage(props) {
       />
       <label className={styles.checkBoxImage__label} htmlFor={id}>
         <li className={styles.checkBoxImage__list}>
-          <Avatar className={imgStyle} user={{ avatarUrl: url, firstName }} size="lg" />
+          <div className={imgStyle}>
+            <Avatar className={avatarStyle} user={{ avatarUrl: url, firstName }} size="lg" />
+          </div>
           {label}
         </li>
       </label>
