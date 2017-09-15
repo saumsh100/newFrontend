@@ -1,0 +1,6662 @@
+[
+ {
+   "code": 1011,
+   "description": "Up to Age of 3",
+   "type": "Oral Assessment"
+ },
+ {
+   "code": 1101,
+   "description": "Primary Dentition",
+   "type": "Complete Oral"
+ },
+ {
+   "code": 1102,
+   "description": "Mixed Dentition",
+   "type": "Complete Oral"
+ },
+ {
+   "code": 1103,
+   "description": "Permanent Dentition",
+   "type": "Complete Oral"
+ },
+ {
+   "code": 1201,
+   "description": "Limited Oral New Patient",
+   "type": "Examination and Diagnosis"
+ },
+ {
+   "code": 1202,
+   "description": "Limited Oral Previous Pat",
+   "type": "Examination and Diagnosis"
+ },
+ {
+   "code": 1204,
+   "description": "Specific",
+   "type": "Examination and Diagnosis"
+ },
+ {
+   "code": 1205,
+   "description": "Emergency",
+   "type": "Examination and Diagnosis"
+ },
+ {
+   "code": 1301,
+   "description": "Comprehensive",
+   "type": "Stomatognathic"
+ },
+ {
+   "code": 1302,
+   "description": "Limited",
+   "type": "Stomatognathic"
+ },
+ {
+   "code": 1401,
+   "description": "General",
+   "type": "Pathology"
+ },
+ {
+   "code": 1402,
+   "description": "Specific",
+   "type": "Pathology"
+ },
+ {
+   "code": 1501,
+   "description": "General",
+   "type": "Periodontal"
+ },
+ {
+   "code": 1502,
+   "description": "Specific",
+   "type": "Periodontal"
+ },
+ {
+   "code": 1503,
+   "description": "Exam and Diagnosis",
+   "type": "Periodontal"
+ },
+ {
+   "code": 1601,
+   "description": "General",
+   "type": "Surgical"
+ },
+ {
+   "code": 1602,
+   "description": "Specific",
+   "type": "Surgical"
+ },
+ {
+   "code": 1701,
+   "description": "General",
+   "type": "Prosthodontic"
+ },
+ {
+   "code": 1702,
+   "description": "Specific",
+   "type": "Prosthodontic"
+ },
+ {
+   "code": 1703,
+   "description": "Fixed Oral",
+   "type": "Prosthodontic"
+ },
+ {
+   "code": 1801,
+   "description": "Complete",
+   "type": "Endodontic"
+ },
+ {
+   "code": 1802,
+   "description": "Specific",
+   "type": "Endodontic"
+ },
+ {
+   "code": 1901,
+   "description": "General",
+   "type": "Orthodontic"
+ },
+ {
+   "code": 1902,
+   "description": "Specific",
+   "type": "Orthodontic"
+ },
+ {
+   "code": 2101,
+   "description": "Complete Series, Min 12",
+   "type": "Intraoral"
+ },
+ {
+   "code": 2102,
+   "description": "Complete Series, Min 16",
+   "type": "Intraoral"
+ },
+ {
+   "code": 2111,
+   "description": "Single film",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2112,
+   "description": "Two films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2113,
+   "description": "Three films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2114,
+   "description": "Four films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2115,
+   "description": "Five films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2116,
+   "description": "Six films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2117,
+   "description": "Seven films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2118,
+   "description": "Eight films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2119,
+   "description": "Nine films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2120,
+   "description": "Ten films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2121,
+   "description": "Eleven films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2122,
+   "description": "Twelve films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2123,
+   "description": "Thirteen films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2124,
+   "description": "Fourteen films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2125,
+   "description": "Fifteen films",
+   "type": "Intraoral Periapical"
+ },
+ {
+   "code": 2131,
+   "description": "Single  Film",
+   "type": "Intraoral Occlusal"
+ },
+ {
+   "code": 2132,
+   "description": "Two films",
+   "type": "Intraoral Occlusal"
+ },
+ {
+   "code": 2133,
+   "description": "Three films",
+   "type": "Intraoral Occlusal"
+ },
+ {
+   "code": 2141,
+   "description": "Single film",
+   "type": "Intraoral Bitewing"
+ },
+ {
+   "code": 2142,
+   "description": "Two films",
+   "type": "Intraoral Bitewing"
+ },
+ {
+   "code": 2143,
+   "description": "Three films",
+   "type": "Intraoral Bitewing"
+ },
+ {
+   "code": 2144,
+   "description": "Four films",
+   "type": "Intraoral Bitewing"
+ },
+ {
+   "code": 2151,
+   "description": "Single film",
+   "type": "Regional/Localized, Other"
+ },
+ {
+   "code": 2152,
+   "description": "Two films",
+   "type": "Regional/Localized, Other"
+ },
+ {
+   "code": 2153,
+   "description": "Three films",
+   "type": "Regional/Localized, Other"
+ },
+ {
+   "code": 2154,
+   "description": "Four films",
+   "type": "Regional/Localized, Other"
+ },
+ {
+   "code": 2159,
+   "description": "Additional films",
+   "type": "Regional/Localized, Other"
+ },
+ {
+   "code": 2301,
+   "description": "Single film",
+   "type": "Postero-Anterior"
+ },
+ {
+   "code": 2302,
+   "description": "Two films",
+   "type": "Postero-Anterior"
+ },
+ {
+   "code": 2303,
+   "description": "Three films",
+   "type": "Postero-Anterior"
+ },
+ {
+   "code": 2304,
+   "description": "Sinus Exam",
+   "type": "Postero-Anterior"
+ },
+ {
+   "code": 2309,
+   "description": "Additional films",
+   "type": "Postero-Anterior"
+ },
+ {
+   "code": 2401,
+   "description": "Single film",
+   "type": "Sialography"
+ },
+ {
+   "code": 2402,
+   "description": "Two films",
+   "type": "Sialography"
+ },
+ {
+   "code": 2409,
+   "description": "Additional films",
+   "type": "Sialography"
+ },
+ {
+   "code": 2501,
+   "description": "Single film",
+   "type": "Temporomandibular Joint"
+ },
+ {
+   "code": 2502,
+   "description": "Two films",
+   "type": "Temporomandibular Joint"
+ },
+ {
+   "code": 2503,
+   "description": "Three films",
+   "type": "Temporomandibular Joint"
+ },
+ {
+   "code": 2504,
+   "description": "Four films",
+   "type": "Temporomandibular Joint"
+ },
+ {
+   "code": 2509,
+   "description": "Additional films",
+   "type": "Temporomandibular Joint"
+ },
+ {
+   "code": 2601,
+   "description": "Single film",
+   "type": "Panoramic"
+ },
+ {
+   "code": 2701,
+   "description": "Single film",
+   "type": "Cephalometric"
+ },
+ {
+   "code": 2702,
+   "description": "Two films",
+   "type": "Cephalometric"
+ },
+ {
+   "code": 2703,
+   "description": "Three films",
+   "type": "Cephalometric"
+ },
+ {
+   "code": 2704,
+   "description": "Four films",
+   "type": "Cephalometric"
+ },
+ {
+   "code": 2751,
+   "description": "One unit of time",
+   "type": "Cephalometric Tracing"
+ },
+ {
+   "code": 2752,
+   "description": "Two units of time",
+   "type": "Cephalometric Tracing"
+ },
+ {
+   "code": 2759,
+   "description": "Additional units of time",
+   "type": "Cephalometric Tracing"
+ },
+ {
+   "code": 2801,
+   "description": "One unit of time",
+   "type": "Interpretation"
+ },
+ {
+   "code": 2802,
+   "description": "Two units of time",
+   "type": "Interpretation"
+ },
+ {
+   "code": 2807,
+   "description": "Half unit of time",
+   "type": "Interpretation"
+ },
+ {
+   "code": 2809,
+   "description": "Additional units of time",
+   "type": "Interpretation"
+ },
+ {
+   "code": 2911,
+   "description": "Single film",
+   "type": "Duplicate"
+ },
+ {
+   "code": 2912,
+   "description": "Two films",
+   "type": "Duplicate"
+ },
+ {
+   "code": 2913,
+   "description": "Three films",
+   "type": "Duplicate"
+ },
+ {
+   "code": 2919,
+   "description": "Aditional films",
+   "type": "Duplicate"
+ },
+ {
+   "code": 2921,
+   "description": "12 films",
+   "type": "Duplicate"
+ },
+ {
+   "code": 2922,
+   "description": "13 or more films",
+   "type": "Duplicate"
+ },
+ {
+   "code": 2931,
+   "description": "Single view",
+   "type": "Tomography"
+ },
+ {
+   "code": 2932,
+   "description": "Two views",
+   "type": "Tomography"
+ },
+ {
+   "code": 2933,
+   "description": "Three views",
+   "type": "Tomography"
+ },
+ {
+   "code": 2934,
+   "description": "Four views",
+   "type": "Tomography"
+ },
+ {
+   "code": 2939,
+   "description": "Additional views",
+   "type": "Tomography"
+ },
+ {
+   "code": 2941,
+   "description": "Per case",
+   "type": "Hand and wrist"
+ },
+ {
+   "code": 2951,
+   "description": "Maxillary Guide",
+   "type": "Radiographic Guide"
+ },
+ {
+   "code": 2952,
+   "description": "Mandibular Guide",
+   "type": "Radiographic Guide"
+ },
+ {
+   "code": 3001,
+   "description": "Maxillary",
+   "type": "Surgical Template"
+ },
+ {
+   "code": 3002,
+   "description": "Mandibular",
+   "type": "Surgical Template"
+ },
+ {
+   "code": 4101,
+   "description": "Microbiological Culture",
+   "type": "Tests"
+ },
+ {
+   "code": 4201,
+   "description": "Bacteriological Culture",
+   "type": "Tests"
+ },
+ {
+   "code": 4311,
+   "description": "Biopsy Puncture",
+   "type": "Histological - Soft tissu"
+ },
+ {
+   "code": 4312,
+   "description": "Biopsy Incision",
+   "type": "Histological - Soft tissu"
+ },
+ {
+   "code": 4322,
+   "description": "Biopsy Incision",
+   "type": "Histological - Hard tissu"
+ },
+ {
+   "code": 4401,
+   "description": "Smear from oral cavity",
+   "type": "Cytological"
+ },
+ {
+   "code": 4402,
+   "description": "Vital Staining of Tissue",
+   "type": "Cytological"
+ },
+ {
+   "code": 4403,
+   "description": "Dir. Fluorescence Visual.",
+   "type": "Cytological"
+ },
+ {
+   "code": 4501,
+   "description": "One unit of time",
+   "type": "Pulp Vitality"
+ },
+ {
+   "code": 4507,
+   "description": "half unit of time",
+   "type": "Pulp Vitality"
+ },
+ {
+   "code": 4602,
+   "description": "Histological",
+   "type": "Lab Reports"
+ },
+ {
+   "code": 4603,
+   "description": "Cytological",
+   "type": "Lab Reports"
+ },
+ {
+   "code": 4711,
+   "description": "One unit of time",
+   "type": "Diagnostic Equilibration"
+ },
+ {
+   "code": 4712,
+   "description": "Two units of time",
+   "type": "Diagnostic Equilibration"
+ },
+ {
+   "code": 4721,
+   "description": "One unit of time",
+   "type": "Diagnostic wax-up"
+ },
+ {
+   "code": 4741,
+   "description": "One unit of time",
+   "type": "Interpretation of models"
+ },
+ {
+   "code": 4801,
+   "description": "Single photo",
+   "type": "Diagnostic photographs"
+ },
+ {
+   "code": 4802,
+   "description": "Two photos",
+   "type": "Diagnostic photographs"
+ },
+ {
+   "code": 4803,
+   "description": "Three photos",
+   "type": "Diagnostic photographs"
+ },
+ {
+   "code": 4809,
+   "description": "Additional photos",
+   "type": "Diagnostic photographs"
+ },
+ {
+   "code": 4911,
+   "description": "Unmounted",
+   "type": "Cast Diagnostic"
+ },
+ {
+   "code": 4921,
+   "description": "Mounted hinged axis",
+   "type": "Casts, Diagnostic, mnted"
+ },
+ {
+   "code": 4922,
+   "description": "Mounted transfer",
+   "type": "Casts, Diagnostic, mnted"
+ },
+ {
+   "code": 4923,
+   "description": "Mounted occlusal",
+   "type": "Casts, Diagnostic, mnted"
+ },
+ {
+   "code": 4931,
+   "description": "Orthodontic",
+   "type": "Casts, Diagnostic, ortho"
+ },
+ {
+   "code": 4941,
+   "description": "Transverse axis location",
+   "type": "Miscellaneous"
+ },
+ {
+   "code": 4942,
+   "description": "Three dimentional recordi",
+   "type": "Miscellaneous"
+ },
+ {
+   "code": 5201,
+   "description": "One unit of time",
+   "type": "Consultation"
+ },
+ {
+   "code": 5202,
+   "description": "Two units of time",
+   "type": "Consultation"
+ },
+ {
+   "code": 5209,
+   "description": "Additional units of time",
+   "type": "Consultation"
+ },
+ {
+   "code": 6941,
+   "description": "Hand and wrist per case",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7011,
+   "description": "Small FOV",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7012,
+   "description": "Large FOV (1 arch)",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7013,
+   "description": "Large FOV (2 arches)",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7021,
+   "description": "One Unit of Time",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7022,
+   "description": "Two Units of Time",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7027,
+   "description": "One Half Unit",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7029,
+   "description": "Each add. Unit over two",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7031,
+   "description": "One Unit of Time",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7032,
+   "description": "Two Units of Time",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7037,
+   "description": "One Half Unit",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7039,
+   "description": "Each add. Unit over two",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7041,
+   "description": "Small FOV",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7042,
+   "description": "Large FOV(1 arch)",
+   "type": "Radiographs"
+ },
+ {
+   "code": 7043,
+   "description": "Large FOV(2arches)",
+   "type": "Radiographs"
+ },
+ {
+   "code": 11101,
+   "description": "One unit of time",
+   "type": "Polishing"
+ },
+ {
+   "code": 11111,
+   "description": "One unit of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 11112,
+   "description": "Two units of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 11113,
+   "description": "Three unit of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 11114,
+   "description": "Four unit of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 11115,
+   "description": "Five units of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 11116,
+   "description": "Six unit of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 11117,
+   "description": "half unit of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 11119,
+   "description": "Additional units of time",
+   "type": "Scaling"
+ },
+ {
+   "code": 12101,
+   "description": "Topical Application",
+   "type": "Fluoride Treatment"
+ },
+ {
+   "code": 12102,
+   "description": "Self administed supervise",
+   "type": "Fluoride Treatment"
+ },
+ {
+   "code": 12601,
+   "description": "Maxillary Arch",
+   "type": "Custom Appliance"
+ },
+ {
+   "code": 12602,
+   "description": "Mandibular Arch",
+   "type": "Custom Appliance"
+ },
+ {
+   "code": 12603,
+   "description": "Maxillary and Mandibular",
+   "type": "Custom Appliance"
+ },
+ {
+   "code": 13101,
+   "description": "One unit of time",
+   "type": "Nutritional Counselling"
+ },
+ {
+   "code": 13211,
+   "description": "One unit of time",
+   "type": "Individual instruction"
+ },
+ {
+   "code": 13401,
+   "description": "First tooth",
+   "type": "Pit And Fissure sealant"
+ },
+ {
+   "code": 13409,
+   "description": "Additional teeth",
+   "type": "Pit And Fissure sealant"
+ },
+ {
+   "code": 13411,
+   "description": "First tooth",
+   "type": "Preventative Restorative "
+ },
+ {
+   "code": 13601,
+   "description": "One unit of time",
+   "type": "Antimicrobial agents"
+ },
+ {
+   "code": 13602,
+   "description": "Two units of time",
+   "type": "Antimicrobial agents"
+ },
+ {
+   "code": 14101,
+   "description": "Maxillary",
+   "type": "Appliance Removable"
+ },
+ {
+   "code": 14102,
+   "description": "Mandibular",
+   "type": "Appliance Removable"
+ },
+ {
+   "code": 14103,
+   "description": "Maxillary and Mandibular",
+   "type": "Appliance Removable"
+ },
+ {
+   "code": 14201,
+   "description": "Maxillary",
+   "type": "Fixed Appliances"
+ },
+ {
+   "code": 14202,
+   "description": "Mandibular",
+   "type": "Fixed Appliances"
+ },
+ {
+   "code": 14301,
+   "description": "Motivation of patient",
+   "type": "Miscellaneous"
+ },
+ {
+   "code": 14311,
+   "description": "One unit of time",
+   "type": "Myofunctional Therapy"
+ },
+ {
+   "code": 14312,
+   "description": "Two units of time",
+   "type": "Myofunctional Therapy"
+ },
+ {
+   "code": 14319,
+   "description": "Additional units of time",
+   "type": "Myofunctional Therapy"
+ },
+ {
+   "code": 14401,
+   "description": "One unit of time",
+   "type": "Adjustments and repairs"
+ },
+ {
+   "code": 14402,
+   "description": "Two units of time",
+   "type": "Adjustments and repairs"
+ },
+ {
+   "code": 14501,
+   "description": "Mouth Guard - Preformed",
+   "type": "Appliances"
+ },
+ {
+   "code": 14502,
+   "description": "Mouth Guard - Processed",
+   "type": "Appliances"
+ },
+ {
+   "code": 14611,
+   "description": "Maxillary",
+   "type": "Appliances"
+ },
+ {
+   "code": 14612,
+   "description": "Mandibular",
+   "type": "Appliances"
+ },
+ {
+   "code": 14621,
+   "description": "One Unit of Time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14622,
+   "description": "Two Units of Time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14623,
+   "description": "Three Units of Time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14629,
+   "description": "Each additional Unit",
+   "type": "Appliances"
+ },
+ {
+   "code": 14631,
+   "description": "Reline, direct",
+   "type": "Appliances"
+ },
+ {
+   "code": 14711,
+   "description": "Maxillary",
+   "type": "Appliances"
+ },
+ {
+   "code": 14712,
+   "description": "Mandibular",
+   "type": "Appliances"
+ },
+ {
+   "code": 14721,
+   "description": "Maxillary",
+   "type": "Appliances"
+ },
+ {
+   "code": 14722,
+   "description": "Mandibular",
+   "type": "Appliances"
+ },
+ {
+   "code": 14731,
+   "description": "One unit of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14732,
+   "description": "Two units of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14741,
+   "description": "Relines, direct",
+   "type": "Appliances"
+ },
+ {
+   "code": 14811,
+   "description": "Maxillary",
+   "type": "Appliances"
+ },
+ {
+   "code": 14812,
+   "description": "Mandibular",
+   "type": "Appliances"
+ },
+ {
+   "code": 14821,
+   "description": "One unit of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14822,
+   "description": "Two units of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14831,
+   "description": "Recline, Direct",
+   "type": "Appliances"
+ },
+ {
+   "code": 14901,
+   "description": "Intraoral",
+   "type": "Appliances"
+ },
+ {
+   "code": 14902,
+   "description": "Tongue Retaining Device",
+   "type": "Appliances"
+ },
+ {
+   "code": 14911,
+   "description": "One unit of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14912,
+   "description": "Two units of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14919,
+   "description": "Each Add. Unit over two",
+   "type": "Appliances"
+ },
+ {
+   "code": 14921,
+   "description": "One unit of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14922,
+   "description": "Two units of time",
+   "type": "Appliances"
+ },
+ {
+   "code": 14929,
+   "description": "Each add. Unit over two",
+   "type": "Appliances"
+ },
+ {
+   "code": 15101,
+   "description": "Unilateral",
+   "type": "Band Type"
+ },
+ {
+   "code": 15102,
+   "description": "Unilateral with Intra-alv",
+   "type": "Band Type"
+ },
+ {
+   "code": 15103,
+   "description": "Bilateral",
+   "type": "Band Type"
+ },
+ {
+   "code": 15104,
+   "description": "Bilateral with teeth atta",
+   "type": "Band Type"
+ },
+ {
+   "code": 15105,
+   "description": "Bilateral Tubes and wires",
+   "type": "Band Type"
+ },
+ {
+   "code": 15201,
+   "description": "Fixed",
+   "type": "SS Crown type"
+ },
+ {
+   "code": 15202,
+   "description": "Fixed, Intra Alveolar Att",
+   "type": "SS Crown type"
+ },
+ {
+   "code": 15401,
+   "description": "Bilateral",
+   "type": "Removable"
+ },
+ {
+   "code": 15402,
+   "description": "Bilateral with teeth",
+   "type": "Removable"
+ },
+ {
+   "code": 15403,
+   "description": "Bilateral no clasps",
+   "type": "Removable"
+ },
+ {
+   "code": 15501,
+   "description": "Acid Etched",
+   "type": "Pontic Type"
+ },
+ {
+   "code": 15601,
+   "description": "Space maintainer aft. 30",
+   "type": "Maintenance"
+ },
+ {
+   "code": 15602,
+   "description": "Space maintainer add. cla",
+   "type": "Maintenance"
+ },
+ {
+   "code": 15603,
+   "description": "Space maintainer repair",
+   "type": "Maintenance"
+ },
+ {
+   "code": 15604,
+   "description": "Space maintainer removal",
+   "type": "Maintenance"
+ },
+ {
+   "code": 16101,
+   "description": "One unit of time",
+   "type": "Restorations"
+ },
+ {
+   "code": 16102,
+   "description": "Two units of time",
+   "type": "Restorations"
+ },
+ {
+   "code": 16201,
+   "description": "One unit of time",
+   "type": "Restorations"
+ },
+ {
+   "code": 16202,
+   "description": "Two units of time",
+   "type": "Restorations"
+ },
+ {
+   "code": 16203,
+   "description": "Three units of time",
+   "type": "Restorations"
+ },
+ {
+   "code": 16209,
+   "description": "Each add unit over three",
+   "type": "Restorations"
+ },
+ {
+   "code": 16301,
+   "description": "One unit of time",
+   "type": "Recontouring"
+ },
+ {
+   "code": 16309,
+   "description": "Each add unit of time",
+   "type": "Recontouring"
+ },
+ {
+   "code": 16401,
+   "description": "One unit of time",
+   "type": "Recontouring"
+ },
+ {
+   "code": 16409,
+   "description": "Each add unit to time",
+   "type": "Recontouring"
+ },
+ {
+   "code": 16511,
+   "description": "One unit of time",
+   "type": "Equilibration"
+ },
+ {
+   "code": 16512,
+   "description": "Two units of time",
+   "type": "Equilibration"
+ },
+ {
+   "code": 16513,
+   "description": "Three unit of time",
+   "type": "Equilibration"
+ },
+ {
+   "code": 16514,
+   "description": "Four unit of time",
+   "type": "Equilibration"
+ },
+ {
+   "code": 16517,
+   "description": "One half unit",
+   "type": "Equilibration"
+ },
+ {
+   "code": 16519,
+   "description": "Each add unit over four",
+   "type": "Equilibration"
+ },
+ {
+   "code": 20111,
+   "description": "First tooth",
+   "type": "Caries/Trauma/Pain Contro"
+ },
+ {
+   "code": 20119,
+   "description": "Additional teeth",
+   "type": "Caries/Trauma/Pain Contro"
+ },
+ {
+   "code": 20121,
+   "description": "First tooth",
+   "type": "Trauma/Pain Control with "
+ },
+ {
+   "code": 20129,
+   "description": "Additional teeth",
+   "type": "Trauma/Pain Control with "
+ },
+ {
+   "code": 20131,
+   "description": "First tooth",
+   "type": "Trauma Control, Smoothing"
+ },
+ {
+   "code": 20139,
+   "description": "Additional teeth",
+   "type": "Trauma Control, Smoothing"
+ },
+ {
+   "code": 20141,
+   "description": "First tooth",
+   "type": "Pulp Capping"
+ },
+ {
+   "code": 21111,
+   "description": "One Surface",
+   "type": "Primary teeth, non-bonded"
+ },
+ {
+   "code": 21112,
+   "description": "Two Surface",
+   "type": "Primary teeth, non-bonded"
+ },
+ {
+   "code": 21113,
+   "description": "Three Surface",
+   "type": "Primary teeth, non-bonded"
+ },
+ {
+   "code": 21114,
+   "description": "Four Surface",
+   "type": "Primary teeth, non-bonded"
+ },
+ {
+   "code": 21115,
+   "description": "Five Surface",
+   "type": "Primary teeth, non-bonded"
+ },
+ {
+   "code": 21121,
+   "description": "One Surface",
+   "type": "Primary teeth, bonded"
+ },
+ {
+   "code": 21122,
+   "description": "Two Surface",
+   "type": "Primary teeth, bonded"
+ },
+ {
+   "code": 21123,
+   "description": "Three Surface",
+   "type": "Primary teeth, bonded"
+ },
+ {
+   "code": 21124,
+   "description": "Four Surface",
+   "type": "Primary teeth, bonded"
+ },
+ {
+   "code": 21125,
+   "description": "Five Surface",
+   "type": "Primary teeth, bonded"
+ },
+ {
+   "code": 21211,
+   "description": "One Surface",
+   "type": "Perm. Bic/Ant, non-bonde"
+ },
+ {
+   "code": 21212,
+   "description": "Two Surface",
+   "type": "Perm. Bic/Ant, non-bond"
+ },
+ {
+   "code": 21213,
+   "description": "Three Surface",
+   "type": "Perm. Bic/Ant, non-bonde"
+ },
+ {
+   "code": 21214,
+   "description": "Four Surface",
+   "type": "Perm. Bic/Ant, non-bonde"
+ },
+ {
+   "code": 21215,
+   "description": "Five Surface",
+   "type": "Perm. Bic/Ant, non-bonde"
+ },
+ {
+   "code": 21221,
+   "description": "One Surface",
+   "type": "Perm. Molars, non-bonded"
+ },
+ {
+   "code": 21222,
+   "description": "Two Surface",
+   "type": "Perm. Molars, non-bonded"
+ },
+ {
+   "code": 21223,
+   "description": "Three Surface",
+   "type": "Perm. Molars, non-bonded"
+ },
+ {
+   "code": 21224,
+   "description": "Four Surface",
+   "type": "Perm. Molars, non-bonded"
+ },
+ {
+   "code": 21225,
+   "description": "Five Surface",
+   "type": "Perm. Molars, non-bonded"
+ },
+ {
+   "code": 21231,
+   "description": "One Surface",
+   "type": "Perm. Bic/Ant, bonded"
+ },
+ {
+   "code": 21232,
+   "description": "Two Surface",
+   "type": "Perm. Bic/Ant, bonded"
+ },
+ {
+   "code": 21233,
+   "description": "Three Surface",
+   "type": "Perm. Bic/Ant, bonded"
+ },
+ {
+   "code": 21234,
+   "description": "Four Surface",
+   "type": "Perm. Bic/Ant, bonded"
+ },
+ {
+   "code": 21235,
+   "description": "Five Surface",
+   "type": "Perm. Bic/Ant"
+ },
+ {
+   "code": 21241,
+   "description": "One Surface",
+   "type": "Perm. Molars, bonded"
+ },
+ {
+   "code": 21242,
+   "description": "Two Surface",
+   "type": "Perm. Molars, bonded"
+ },
+ {
+   "code": 21243,
+   "description": "Three Surface",
+   "type": "Perm. Molars, bonded"
+ },
+ {
+   "code": 21244,
+   "description": "Four Surface",
+   "type": "Perm. Molars, bonded"
+ },
+ {
+   "code": 21245,
+   "description": "Five Surface",
+   "type": "Perm. Molars, bonded"
+ },
+ {
+   "code": 21301,
+   "description": "non-bonded with crown",
+   "type": "Amalgam Core"
+ },
+ {
+   "code": 21302,
+   "description": "bonded with crown",
+   "type": "Amalgam Core"
+ },
+ {
+   "code": 21401,
+   "description": "One Pin",
+   "type": "Retentive per restoration"
+ },
+ {
+   "code": 21402,
+   "description": "Two Pins",
+   "type": "Retentive per restoration"
+ },
+ {
+   "code": 21403,
+   "description": "Three Pins",
+   "type": "Retentive per restoration"
+ },
+ {
+   "code": 21404,
+   "description": "Four Pins",
+   "type": "Retentive per restoration"
+ },
+ {
+   "code": 21405,
+   "description": "Five Pins Or More",
+   "type": "Retentive per restoration"
+ },
+ {
+   "code": 21501,
+   "description": "Per Restoration",
+   "type": "Tooth Supporting Denture "
+ },
+ {
+   "code": 22201,
+   "description": "Anterior",
+   "type": "Metal, Primary teeth"
+ },
+ {
+   "code": 22202,
+   "description": "Anterior - open face",
+   "type": "Metal, Primary teeth"
+ },
+ {
+   "code": 22211,
+   "description": "Posterior",
+   "type": "Metal, Primary teeth"
+ },
+ {
+   "code": 22212,
+   "description": "Posterior - open face",
+   "type": "Metal, Primary teeth"
+ },
+ {
+   "code": 22301,
+   "description": "Anterior",
+   "type": "Metal, Permanent teeth"
+ },
+ {
+   "code": 22311,
+   "description": "Posterior",
+   "type": "Metal, Permanent teeth"
+ },
+ {
+   "code": 22401,
+   "description": "Anterior",
+   "type": "Plastic, primary teeth"
+ },
+ {
+   "code": 22411,
+   "description": "Posterior",
+   "type": "Plastic, primary teeth"
+ },
+ {
+   "code": 22501,
+   "description": "Anterior",
+   "type": "Plastic, Permanent teeth"
+ },
+ {
+   "code": 22511,
+   "description": "Posterior",
+   "type": "Plastic, Permanent teeth"
+ },
+ {
+   "code": 22601,
+   "description": "Anterior",
+   "type": "Porcelain, Primary teeth"
+ },
+ {
+   "code": 22611,
+   "description": "Posterior",
+   "type": "Porcelain, Primary teeth"
+ },
+ {
+   "code": 23111,
+   "description": "One Surface",
+   "type": "Acid Etched Anteriors"
+ },
+ {
+   "code": 23112,
+   "description": "Two Surface",
+   "type": "Acid Etched Anteriors"
+ },
+ {
+   "code": 23113,
+   "description": "Three Surface",
+   "type": "Acid Etched Anteriors"
+ },
+ {
+   "code": 23114,
+   "description": "Four Surface",
+   "type": "Acid Etched Anteriors"
+ },
+ {
+   "code": 23115,
+   "description": "Five Surface",
+   "type": "Acid Etched Anteriors"
+ },
+ {
+   "code": 23121,
+   "description": "Direct chairside applicat",
+   "type": "Tooth Coloured"
+ },
+ {
+   "code": 23122,
+   "description": "Non Prefab direct build u",
+   "type": "Tooth Coloured"
+ },
+ {
+   "code": 23123,
+   "description": "Diastema closure",
+   "type": "Tooth Coloured"
+ },
+ {
+   "code": 23311,
+   "description": "One Surface",
+   "type": "Acid Etched Bicuspids"
+ },
+ {
+   "code": 23312,
+   "description": "Two Surface",
+   "type": "Acid Etched Bicuspids"
+ },
+ {
+   "code": 23313,
+   "description": "Three Surface",
+   "type": "Acid Etched Bicuspids"
+ },
+ {
+   "code": 23314,
+   "description": "Four Surface",
+   "type": "Acid Etched Bicuspids"
+ },
+ {
+   "code": 23315,
+   "description": "Five Surface",
+   "type": "Acid Etched Bicuspids"
+ },
+ {
+   "code": 23321,
+   "description": "One Surface",
+   "type": "Acid Etched Molar"
+ },
+ {
+   "code": 23322,
+   "description": "Two Surface",
+   "type": "Acid Etched Molar"
+ },
+ {
+   "code": 23323,
+   "description": "Three Surface",
+   "type": "Acid Etched Molar"
+ },
+ {
+   "code": 23324,
+   "description": "Four Surface",
+   "type": "Acid Etched Molar"
+ },
+ {
+   "code": 23325,
+   "description": "Five Surface",
+   "type": "Acid Etched Molar"
+ },
+ {
+   "code": 23411,
+   "description": "One Surface",
+   "type": "Acid Etched Anteriors, Pr"
+ },
+ {
+   "code": 23412,
+   "description": "Two Surface",
+   "type": "Acid Etched Anteriors, Pr"
+ },
+ {
+   "code": 23413,
+   "description": "Three Surface",
+   "type": "Acid Etched Anteriors, Pr"
+ },
+ {
+   "code": 23414,
+   "description": "Four Surface",
+   "type": "Acid Etched Anteriors, Pr"
+ },
+ {
+   "code": 23415,
+   "description": "Five Surface",
+   "type": "Acid Etched Anteriors, Pr"
+ },
+ {
+   "code": 23511,
+   "description": "One Surface",
+   "type": "Acid Etched Posterior, Pr"
+ },
+ {
+   "code": 23512,
+   "description": "Two Surface",
+   "type": "Acid Etched Posterior, Pr"
+ },
+ {
+   "code": 23513,
+   "description": "Three Surface",
+   "type": "Acid Etched Posterior, Pr"
+ },
+ {
+   "code": 23514,
+   "description": "Four Surface",
+   "type": "Acid Etched Posterior, Pr"
+ },
+ {
+   "code": 23515,
+   "description": "Five Surface",
+   "type": "Acid Etched Posterior, Pr"
+ },
+ {
+   "code": 23602,
+   "description": "Resin Core With Crown",
+   "type": "Acid Etched/Bonded"
+ },
+ {
+   "code": 23701,
+   "description": "Resin Infiltration",
+   "type": "One Surface"
+ },
+ {
+   "code": 23709,
+   "description": "Resil Infiltration",
+   "type": "Each addl surface"
+ },
+ {
+   "code": 24101,
+   "description": "Class I",
+   "type": "Anteriors"
+ },
+ {
+   "code": 24102,
+   "description": "Class III",
+   "type": "Anteriors"
+ },
+ {
+   "code": 24103,
+   "description": "Class V",
+   "type": "Anteriors"
+ },
+ {
+   "code": 24201,
+   "description": "Class I",
+   "type": "Posteriors"
+ },
+ {
+   "code": 24202,
+   "description": "Class II",
+   "type": "Posteriors"
+ },
+ {
+   "code": 24203,
+   "description": "Class V",
+   "type": "Posteriors"
+ },
+ {
+   "code": 25111,
+   "description": "One Surface",
+   "type": "Metal"
+ },
+ {
+   "code": 25112,
+   "description": "Two Surface",
+   "type": "Metal"
+ },
+ {
+   "code": 25113,
+   "description": "Three Surface",
+   "type": "Metal"
+ },
+ {
+   "code": 25114,
+   "description": "Four Surface",
+   "type": "Metal"
+ },
+ {
+   "code": 25121,
+   "description": "One Surface",
+   "type": "Composite"
+ },
+ {
+   "code": 25122,
+   "description": "Two Surface",
+   "type": "Composite"
+ },
+ {
+   "code": 25123,
+   "description": "Three Surface",
+   "type": "Composite"
+ },
+ {
+   "code": 25124,
+   "description": "Four Surface",
+   "type": "Composite"
+ },
+ {
+   "code": 25141,
+   "description": "One Surface",
+   "type": "Porcelain/Ceramic bonded"
+ },
+ {
+   "code": 25142,
+   "description": "Two Surface",
+   "type": "Porcelain/Ceramic bonded"
+ },
+ {
+   "code": 25143,
+   "description": "Three Surface",
+   "type": "Porcelain/Ceramic bonded"
+ },
+ {
+   "code": 25144,
+   "description": "Four Surface",
+   "type": "Porcelain/Ceramic bonded"
+ },
+ {
+   "code": 25511,
+   "description": "Onlay Metal",
+   "type": "Cast Metal, indirect"
+ },
+ {
+   "code": 25521,
+   "description": "Onlay Resin",
+   "type": "Onlay, Composite"
+ },
+ {
+   "code": 25531,
+   "description": "Onlay Porcelain",
+   "type": "Onlay, Composite"
+ },
+ {
+   "code": 25601,
+   "description": "One pin",
+   "type": "Retentive"
+ },
+ {
+   "code": 25602,
+   "description": "Two pin",
+   "type": "Retentive"
+ },
+ {
+   "code": 25603,
+   "description": "Three pin",
+   "type": "Retentive"
+ },
+ {
+   "code": 25604,
+   "description": "Four pin",
+   "type": "Retentive"
+ },
+ {
+   "code": 25605,
+   "description": "Five pin",
+   "type": "Retentive"
+ },
+ {
+   "code": 25711,
+   "description": "Single Section",
+   "type": "Cast metal Separate"
+ },
+ {
+   "code": 25721,
+   "description": "Single Section",
+   "type": "Cast metal Concurrent"
+ },
+ {
+   "code": 25722,
+   "description": "Two Sections",
+   "type": "Cast metal Concurrent"
+ },
+ {
+   "code": 25731,
+   "description": "One Prefabricated Post",
+   "type": "Prefabricated Retentive"
+ },
+ {
+   "code": 25732,
+   "description": "Two Prefabricated Posts",
+   "type": "Prefabricated Retentive"
+ },
+ {
+   "code": 25733,
+   "description": "Three Prefabricated Posts",
+   "type": "Prefabricated Retentive"
+ },
+ {
+   "code": 25771,
+   "description": "per post",
+   "type": "Temporary placement"
+ },
+ {
+   "code": 25781,
+   "description": "One unit of time",
+   "type": "Post Removal"
+ },
+ {
+   "code": 25782,
+   "description": "Two units of time",
+   "type": "Post Removal"
+ },
+ {
+   "code": 25783,
+   "description": "Three units of time",
+   "type": "Post Removal"
+ },
+ {
+   "code": 25784,
+   "description": "Four units of time",
+   "type": "Post Removal"
+ },
+ {
+   "code": 25789,
+   "description": "Additional units of time",
+   "type": "Post Removal"
+ },
+ {
+   "code": 26101,
+   "description": "Indirect, abutment, per i",
+   "type": "Mesostructures"
+ },
+ {
+   "code": 26102,
+   "description": "Indirect Custom, per impl",
+   "type": "Mesostructures"
+ },
+ {
+   "code": 26103,
+   "description": "Direct, per implant",
+   "type": "Mesostructures"
+ },
+ {
+   "code": 27111,
+   "description": "Processed",
+   "type": "Crown, Acrylic/Composite"
+ },
+ {
+   "code": 27113,
+   "description": "Transitional Indirect",
+   "type": "Crown, Acrylic/Composite"
+ },
+ {
+   "code": 27121,
+   "description": "Direct Transitional",
+   "type": "Crown, Acrylic/Composite"
+ },
+ {
+   "code": 27131,
+   "description": "Metal Base, processed",
+   "type": "Crowns, Acrylic -Indirect"
+ },
+ {
+   "code": 27135,
+   "description": "Screwed, without metal po",
+   "type": "Crowns, Acrylic -Indirect"
+ },
+ {
+   "code": 27138,
+   "description": "Semi-precision RPD",
+   "type": "Crowns, Acrylic -Indirect"
+ },
+ {
+   "code": 27145,
+   "description": "Prefab Metal Base -direct",
+   "type": "Crowns, Acrylic - Direct"
+ },
+ {
+   "code": 27155,
+   "description": "Prefab Metal Base-indirec",
+   "type": "Crowns, Acrylic -Indirect"
+ },
+ {
+   "code": 27201,
+   "description": "Porcelain/Ceramic Jacket",
+   "type": "Crown, Porcelain/Ceramic"
+ },
+ {
+   "code": 27205,
+   "description": "Implant Supported",
+   "type": "Porcelain/Ceramic Jacket"
+ },
+ {
+   "code": 27211,
+   "description": "Porcelain Crown",
+   "type": "Fused to Metal"
+ },
+ {
+   "code": 27213,
+   "description": "Screwed, without post",
+   "type": "Fused to Metal"
+ },
+ {
+   "code": 27215,
+   "description": "Implant Supported",
+   "type": "Fused to Metal"
+ },
+ {
+   "code": 27217,
+   "description": "Semi-precision Glass Fuse",
+   "type": "Fused to Metal"
+ },
+ {
+   "code": 27218,
+   "description": "Semi-precision RPD",
+   "type": "Fused to Metal"
+ },
+ {
+   "code": 27221,
+   "description": "Porcelain/Ceramic/Polymer Glass",
+   "type": "3/4 Crown"
+ },
+ {
+   "code": 27301,
+   "description": "Normal",
+   "type": "Full Metal Crown"
+ },
+ {
+   "code": 27305,
+   "description": "Implant Supported",
+   "type": "Full Metal Crown"
+ },
+ {
+   "code": 27311,
+   "description": "Cast Metal",
+   "type": "3/4 Crown"
+ },
+ {
+   "code": 27401,
+   "description": "One crown",
+   "type": "Metal Crown, to Denture"
+ },
+ {
+   "code": 27409,
+   "description": "Additional crowns",
+   "type": "Metal Crown, to Denture"
+ },
+ {
+   "code": 27511,
+   "description": "Separate procedure",
+   "type": "Metal Copings"
+ },
+ {
+   "code": 27519,
+   "description": "Separate procedure",
+   "type": "Veneers, Lab processed"
+ },
+ {
+   "code": 27601,
+   "description": "Veneer Plastic",
+   "type": "Veneers, Acrylic/Comp"
+ },
+ {
+   "code": 27602,
+   "description": "Veneer Porcelain",
+   "type": "Veneers, Porcelain/Cerami"
+ },
+ {
+   "code": 27711,
+   "description": "Direct Plastic",
+   "type": "Inlay/Onlay/Crown Repair"
+ },
+ {
+   "code": 27721,
+   "description": "Direct Porcelain/Ceramic",
+   "type": "Inlay/Onlay/Crown Repair"
+ },
+ {
+   "code": 27722,
+   "description": "Indirect Porcelain/Cerami",
+   "type": "Inlay/Onlay/Crown Repair"
+ },
+ {
+   "code": 27801,
+   "description": "One unit of time",
+   "type": "Recontouring of Crowns"
+ },
+ {
+   "code": 27809,
+   "description": "Additional units of time",
+   "type": "Inlay/Onlay/Crown"
+ },
+ {
+   "code": 28101,
+   "description": "Placement of Pulp Chamber",
+   "type": "Natural Tooth Preperation"
+ },
+ {
+   "code": 28102,
+   "description": "Fluoride Application",
+   "type": "Natural Tooth Preperation"
+ },
+ {
+   "code": 28103,
+   "description": "Fabricated Attachment",
+   "type": "Prefabricated Attachment"
+ },
+ {
+   "code": 28105,
+   "description": "Implant Supported",
+   "type": "Prefabricated Attachment"
+ },
+ {
+   "code": 28211,
+   "description": "No Attachment",
+   "type": "Metal Cast Coping Crowns"
+ },
+ {
+   "code": 28215,
+   "description": "Implant Supported Attachm",
+   "type": "Metal Cast Coping Crowns"
+ },
+ {
+   "code": 28221,
+   "description": "Attachment",
+   "type": "Metal Cast Coping Crowns"
+ },
+ {
+   "code": 28225,
+   "description": "Attachment",
+   "type": "Metal Cast Coping Crowns"
+ },
+ {
+   "code": 29101,
+   "description": "One unit of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29102,
+   "description": "Two units of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29103,
+   "description": "Three units of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29104,
+   "description": "Additional units of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29109,
+   "description": "Additional units of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29111,
+   "description": "One unit of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29112,
+   "description": "Two units of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29113,
+   "description": "Three units of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29114,
+   "description": "Additional units of time",
+   "type": "Recementing/Rebonding"
+ },
+ {
+   "code": 29301,
+   "description": "One unit of time",
+   "type": "Rmvl, Inly/Only/Crwn/Vnr"
+ },
+ {
+   "code": 29302,
+   "description": "Two units of time",
+   "type": "Rmvl, Inly/Only/Crwn/Vnr"
+ },
+ {
+   "code": 29311,
+   "description": "One unit of time",
+   "type": "Removal, Crowns"
+ },
+ {
+   "code": 29312,
+   "description": "Two units of time",
+   "type": "Removal, Crowns"
+ },
+ {
+   "code": 29313,
+   "description": "Three units of time",
+   "type": "Removal, Crowns"
+ },
+ {
+   "code": 29314,
+   "description": "Four units of time",
+   "type": "Removal, Crowns"
+ },
+ {
+   "code": 29321,
+   "description": "One unit of time",
+   "type": "Removal, Mesostructure"
+ },
+ {
+   "code": 29322,
+   "description": "Two units of time",
+   "type": "Removal, Mesostructure"
+ },
+ {
+   "code": 29323,
+   "description": "Three units of time",
+   "type": "Removal, Mesostructure"
+ },
+ {
+   "code": 29324,
+   "description": "Four units of time",
+   "type": "Removal, Mesostructure"
+ },
+ {
+   "code": 29331,
+   "description": "One unit of time",
+   "type": "Removal, Comprised Mesost"
+ },
+ {
+   "code": 29332,
+   "description": "Two units of time",
+   "type": "Removal, Comprised Mesost"
+ },
+ {
+   "code": 29333,
+   "description": "Three units of time",
+   "type": "Removal, Comprised Mesost"
+ },
+ {
+   "code": 29334,
+   "description": "Four units of time",
+   "type": "Removal, Comprised Mesost"
+ },
+ {
+   "code": 29341,
+   "description": "One unit of time",
+   "type": "Removal, Healing Abutment"
+ },
+ {
+   "code": 29342,
+   "description": "Two units of time",
+   "type": "Removal, Healing Abutment"
+ },
+ {
+   "code": 29343,
+   "description": "Three units of time",
+   "type": "Removal, Healing Abutment"
+ },
+ {
+   "code": 29344,
+   "description": "Four units of time",
+   "type": "Removal, Healing Abutment"
+ },
+ {
+   "code": 29351,
+   "description": "One unit of time",
+   "type": "Removal"
+ },
+ {
+   "code": 29352,
+   "description": "two units of time",
+   "type": "Removal"
+ },
+ {
+   "code": 29353,
+   "description": "three units of time",
+   "type": "Removal"
+ },
+ {
+   "code": 29354,
+   "description": "Four units of time",
+   "type": "Removal"
+ },
+ {
+   "code": 29359,
+   "description": "add unit over 4",
+   "type": "Removal"
+ },
+ {
+   "code": 32221,
+   "description": "Anterior and Bicuspid",
+   "type": "Pulpotomy, Permanent"
+ },
+ {
+   "code": 32222,
+   "description": "Molar",
+   "type": "Pulpotomy, Permanent"
+ },
+ {
+   "code": 32231,
+   "description": "Separate from Dentition",
+   "type": "Pulpotomy, Primary"
+ },
+ {
+   "code": 32232,
+   "description": "Concurrent with Dentition",
+   "type": "Pulpotomy, Primary"
+ },
+ {
+   "code": 32311,
+   "description": "One Canal",
+   "type": "Pulpectomy, Permanent"
+ },
+ {
+   "code": 32312,
+   "description": "Two Canals",
+   "type": "Pulpectomy, Permanent"
+ },
+ {
+   "code": 32313,
+   "description": "Three Canals",
+   "type": "Pulpectomy, Permanent"
+ },
+ {
+   "code": 32314,
+   "description": "Four Canals",
+   "type": "Pulpectomy, Permanent"
+ },
+ {
+   "code": 32315,
+   "description": "Five Canals",
+   "type": "Pulpectomy, Permanent"
+ },
+ {
+   "code": 32321,
+   "description": "Primary Anterior",
+   "type": "Pulpectomy"
+ },
+ {
+   "code": 32322,
+   "description": "Primary Posterior",
+   "type": "Pulpectomy"
+ },
+ {
+   "code": 33111,
+   "description": "Permanent One canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33112,
+   "description": "Difficult One canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33113,
+   "description": "Exceptional One canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33114,
+   "description": "Calcified One canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33115,
+   "description": "Retreatment One canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33116,
+   "description": "One Canal - Aborted by Prev. Dentist",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33121,
+   "description": "Permanent two canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33122,
+   "description": "Difficult two canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33123,
+   "description": "Exceptional two canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33124,
+   "description": "Calcified two canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33125,
+   "description": "Retreatment two canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33126,
+   "description": "Two Canals - Aborted by Prev. Dentist",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33131,
+   "description": "Permanent three canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33132,
+   "description": "Difficult three canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33133,
+   "description": "Exceptional three canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33134,
+   "description": "Calcified three canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33135,
+   "description": "Retreatment three canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33136,
+   "description": "Three Canals - Aborted by Prev. Dentist",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33141,
+   "description": "Permanent four+ canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33142,
+   "description": "Difficult four+ canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33143,
+   "description": "Exceptional four+ canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33144,
+   "description": "Calcified four+ canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33145,
+   "description": "Retreatment four+ canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33146,
+   "description": "Four Canal - Aborted by Prev. Dentist",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33401,
+   "description": "Primary One Canal",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33402,
+   "description": "Primary Two Canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33403,
+   "description": "Primary Three Canals",
+   "type": "Root Canal"
+ },
+ {
+   "code": 33501,
+   "description": "One Canal",
+   "type": "Pulpal Revascularization"
+ },
+ {
+   "code": 33502,
+   "description": "Two Canal",
+   "type": "Pulpal Revascularization"
+ },
+ {
+   "code": 33503,
+   "description": "Three Canals or more",
+   "type": "Pulpal Revascularization"
+ },
+ {
+   "code": 33601,
+   "description": "One Canal",
+   "type": "Apexification"
+ },
+ {
+   "code": 33602,
+   "description": "Two Canals",
+   "type": "Apexification"
+ },
+ {
+   "code": 33603,
+   "description": "Three Canals",
+   "type": "Apexification"
+ },
+ {
+   "code": 33604,
+   "description": "Additional Canals",
+   "type": "Apexification"
+ },
+ {
+   "code": 33605,
+   "description": "Difficult Access",
+   "type": "Apexification"
+ },
+ {
+   "code": 33611,
+   "description": "One Canal",
+   "type": "Insertion of Dentogenic M"
+ },
+ {
+   "code": 33612,
+   "description": "Two Canals",
+   "type": "Insertion of Dentogenic M"
+ },
+ {
+   "code": 33613,
+   "description": "Three Canals",
+   "type": "Insertion of Dentogenic M"
+ },
+ {
+   "code": 33614,
+   "description": "Additional Canals",
+   "type": "Insertion of Dentogenic M"
+ },
+ {
+   "code": 33621,
+   "description": "One Canal",
+   "type": "Obturation of Apex Canal"
+ },
+ {
+   "code": 33622,
+   "description": "Two Canals",
+   "type": "Obturation of Apex Canal"
+ },
+ {
+   "code": 33623,
+   "description": "Three Canals",
+   "type": "Obturation of Apex Canal"
+ },
+ {
+   "code": 33624,
+   "description": "Four canals or more",
+   "type": "Obturation of Apex Canal"
+ },
+ {
+   "code": 34111,
+   "description": "One Root",
+   "type": "Maxillary Anterior"
+ },
+ {
+   "code": 34112,
+   "description": "Two Roots",
+   "type": "Maxillary Anterior"
+ },
+ {
+   "code": 34121,
+   "description": "One Root",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34122,
+   "description": "Two Roots",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34123,
+   "description": "Three Roots",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34131,
+   "description": "One Root",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34132,
+   "description": "Two Roots",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34133,
+   "description": "Three Roots",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34134,
+   "description": "Additional Roots",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34141,
+   "description": "One Root",
+   "type": "Mandibular Anterior"
+ },
+ {
+   "code": 34142,
+   "description": "Two Roots",
+   "type": "Mandibular Anterior"
+ },
+ {
+   "code": 34151,
+   "description": "One Root",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34152,
+   "description": "Two Roots",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34153,
+   "description": "Three Roots",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34161,
+   "description": "One Root",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34162,
+   "description": "Two Roots",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34163,
+   "description": "Three Roots",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34164,
+   "description": "Additional Roots",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34211,
+   "description": "One canal",
+   "type": "Maxillary Anterior"
+ },
+ {
+   "code": 34212,
+   "description": "Two canals",
+   "type": "Maxillary Anterior"
+ },
+ {
+   "code": 34221,
+   "description": "One canal",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34222,
+   "description": "Two canals",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34223,
+   "description": "Three canals",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34224,
+   "description": "Additional canals",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34231,
+   "description": "One canal",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34232,
+   "description": "Two canals",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34233,
+   "description": "Three canals",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34234,
+   "description": "Additional canals",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34241,
+   "description": "One canal",
+   "type": "Mandibular Anterior"
+ },
+ {
+   "code": 34242,
+   "description": "Two canals",
+   "type": "Mandibular Anterior"
+ },
+ {
+   "code": 34251,
+   "description": "One canal",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34252,
+   "description": "Two canals",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34253,
+   "description": "Three canals",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34254,
+   "description": "Additional canals",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34261,
+   "description": "One canal",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34262,
+   "description": "Two canals",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34263,
+   "description": "Three canals",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34264,
+   "description": "Additional canals",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34311,
+   "description": "One canal",
+   "type": "Maxillary Anterior"
+ },
+ {
+   "code": 34312,
+   "description": "Two canals",
+   "type": "Maxillary Anterior"
+ },
+ {
+   "code": 34321,
+   "description": "One canal",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34322,
+   "description": "Two canals",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34323,
+   "description": "Three canals",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34324,
+   "description": "Additional canals",
+   "type": "Maxillary Bicuspid"
+ },
+ {
+   "code": 34331,
+   "description": "One canal",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34332,
+   "description": "Two canals",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34333,
+   "description": "Three canals",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34334,
+   "description": "Additional canals",
+   "type": "Maxillary Molar"
+ },
+ {
+   "code": 34341,
+   "description": "One canal",
+   "type": "Mandibular Anterior"
+ },
+ {
+   "code": 34342,
+   "description": "Two canals",
+   "type": "Mandibular Anterior"
+ },
+ {
+   "code": 34351,
+   "description": "One canal",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34352,
+   "description": "Two canals",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34353,
+   "description": "Three canals",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34354,
+   "description": "Additional canals",
+   "type": "Mandibular Bicuspid"
+ },
+ {
+   "code": 34361,
+   "description": "One canal",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34362,
+   "description": "Two canals",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34363,
+   "description": "Three canals",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34364,
+   "description": "Additional canals",
+   "type": "Mandibular Molar"
+ },
+ {
+   "code": 34411,
+   "description": "One root",
+   "type": "Amputation"
+ },
+ {
+   "code": 34412,
+   "description": "Two roots",
+   "type": "Amputation"
+ },
+ {
+   "code": 34422,
+   "description": "Maxillary Molar",
+   "type": "Hemisection"
+ },
+ {
+   "code": 34423,
+   "description": "Mandibular Molar",
+   "type": "Hemisection"
+ },
+ {
+   "code": 34431,
+   "description": "First Visit",
+   "type": "Decompression"
+ },
+ {
+   "code": 34432,
+   "description": "Additional Visits",
+   "type": "Decompression"
+ },
+ {
+   "code": 34441,
+   "description": "Maxillary Anterior",
+   "type": "Exploratory Endodontic"
+ },
+ {
+   "code": 34442,
+   "description": "Maxillary Bicuspid",
+   "type": "Exploratory Endodontic"
+ },
+ {
+   "code": 34443,
+   "description": "Maxillary Molar",
+   "type": "Exploratory Endodontic"
+ },
+ {
+   "code": 34444,
+   "description": "Mandibular Anterior",
+   "type": "Exploratory Endodontic"
+ },
+ {
+   "code": 34445,
+   "description": "Mandibular Bicuspid",
+   "type": "Exploratory Endodontic"
+ },
+ {
+   "code": 34446,
+   "description": "Mandibular Molar",
+   "type": "Exploratory Endodontic"
+ },
+ {
+   "code": 34451,
+   "description": "One rooted tooth",
+   "type": "Intentional Removal of To"
+ },
+ {
+   "code": 34452,
+   "description": "Two rooted tooth",
+   "type": "Intentional Removal of To"
+ },
+ {
+   "code": 34453,
+   "description": "Additional rooted tooth",
+   "type": "Intentional Removal of To"
+ },
+ {
+   "code": 34511,
+   "description": "One root",
+   "type": "Non Surgical Perforations"
+ },
+ {
+   "code": 34521,
+   "description": "Anterior tooth",
+   "type": "Surgical Perforations"
+ },
+ {
+   "code": 34522,
+   "description": "Bicuspid tooth",
+   "type": "Surgical Perforations"
+ },
+ {
+   "code": 34523,
+   "description": "Molar tooth",
+   "type": "Surgical Perforations"
+ },
+ {
+   "code": 34601,
+   "description": "One unit of time",
+   "type": "Canal Enlargement"
+ },
+ {
+   "code": 34602,
+   "description": "Two units of time",
+   "type": "Canal Enlargement"
+ },
+ {
+   "code": 39101,
+   "description": "Banding of tooth",
+   "type": "Isolation of Endodonic to"
+ },
+ {
+   "code": 39201,
+   "description": "Anteriors and Bicuspids",
+   "type": "Open and Drain"
+ },
+ {
+   "code": 39202,
+   "description": "Molars",
+   "type": "Open and Drain"
+ },
+ {
+   "code": 39211,
+   "description": "Anteriors and Bicuspids",
+   "type": "Opening through crown"
+ },
+ {
+   "code": 39212,
+   "description": "Molars",
+   "type": "Opening through crown"
+ },
+ {
+   "code": 39311,
+   "description": "One unit of time",
+   "type": "Bleaching Endodontic Toot"
+ },
+ {
+   "code": 39312,
+   "description": "Two units of time",
+   "type": "Bleaching Endodontic Toot"
+ },
+ {
+   "code": 39313,
+   "description": "Three units of time",
+   "type": "Bleaching Endodontic Toot"
+ },
+ {
+   "code": 39319,
+   "description": "Additional units of time",
+   "type": "Bleaching Endodontic Toot"
+ },
+ {
+   "code": 39411,
+   "description": "Anterior",
+   "type": "Exploratory Access"
+ },
+ {
+   "code": 39412,
+   "description": "Bicuspid",
+   "type": "Exploratory Access"
+ },
+ {
+   "code": 39413,
+   "description": "Molar",
+   "type": "Exploratory Access"
+ },
+ {
+   "code": 41211,
+   "description": "One unit of time",
+   "type": "Oral Mucosal Disorders"
+ },
+ {
+   "code": 41212,
+   "description": "Two units of time",
+   "type": "Oral Mucosal Disorders"
+ },
+ {
+   "code": 41213,
+   "description": "Three units of time",
+   "type": "Oral Mucosal Disorders"
+ },
+ {
+   "code": 41214,
+   "description": "Four units of time",
+   "type": "Oral Mucosal Disorders"
+ },
+ {
+   "code": 41219,
+   "description": "Additional units of time",
+   "type": "Oral Mucosal Disorders"
+ },
+ {
+   "code": 41221,
+   "description": "One unit of time",
+   "type": "Nervous & Muscular Disord"
+ },
+ {
+   "code": 41222,
+   "description": "Two units of time",
+   "type": "Nervous & Muscular Disord"
+ },
+ {
+   "code": 41223,
+   "description": "Three units of time",
+   "type": "Nervous & Muscular Disord"
+ },
+ {
+   "code": 41224,
+   "description": "Four units of time",
+   "type": "Nervous & Muscular Disord"
+ },
+ {
+   "code": 41229,
+   "description": "Additional units of time",
+   "type": "Nervous & Muscular Disord"
+ },
+ {
+   "code": 41231,
+   "description": "One unit of time",
+   "type": "Systemic Disease"
+ },
+ {
+   "code": 41232,
+   "description": "Two units of time",
+   "type": "Systemic Disease"
+ },
+ {
+   "code": 41233,
+   "description": "Three units of time",
+   "type": "Systemic Disease"
+ },
+ {
+   "code": 41234,
+   "description": "Four units of time",
+   "type": "Systemic Disease"
+ },
+ {
+   "code": 41239,
+   "description": "Additional units of time",
+   "type": "Systemic Disease"
+ },
+ {
+   "code": 41301,
+   "description": "One unit of time",
+   "type": "Desensitization"
+ },
+ {
+   "code": 41302,
+   "description": "Two units of time",
+   "type": "Desensitization"
+ },
+ {
+   "code": 41309,
+   "description": "Additional units of time",
+   "type": "Desensitization"
+ },
+ {
+   "code": 42111,
+   "description": "Per Sextant",
+   "type": "Gingival Curettage"
+ },
+ {
+   "code": 42121,
+   "description": "Per Site",
+   "type": "Gingival Curettage"
+ },
+ {
+   "code": 42201,
+   "description": "Per Sextant",
+   "type": "Gingivoplasty"
+ },
+ {
+   "code": 42211,
+   "description": "Per Site",
+   "type": "Gingivoplasy"
+ },
+ {
+   "code": 42311,
+   "description": "Per Sextant",
+   "type": "Gingivectomy Uncomplicate"
+ },
+ {
+   "code": 42331,
+   "description": "Single tooth",
+   "type": "Gingival Fiber Incision"
+ },
+ {
+   "code": 42339,
+   "description": "Additional teeth",
+   "type": "Gingival Fiber Incision"
+ },
+ {
+   "code": 42341,
+   "description": "Single tooth",
+   "type": "Tissue Recontouring"
+ },
+ {
+   "code": 42411,
+   "description": "Per Sextant",
+   "type": "Flap With Osteoplasty"
+ },
+ {
+   "code": 42421,
+   "description": "Per Sextant",
+   "type": "Flap & Curettage Defect"
+ },
+ {
+   "code": 42441,
+   "description": "Per Site",
+   "type": "Flap Exploratory"
+ },
+ {
+   "code": 42451,
+   "description": "Per Site",
+   "type": "Flap for Crown"
+ },
+ {
+   "code": 42461,
+   "description": "per site",
+   "type": "Flap for Crown"
+ },
+ {
+   "code": 42471,
+   "description": "per site",
+   "type": "Flap for Crown"
+ },
+ {
+   "code": 42481,
+   "description": "per site",
+   "type": "Flap for Crown"
+ },
+ {
+   "code": 42511,
+   "description": "Per Site",
+   "type": "Pedical (Including Apical"
+ },
+ {
+   "code": 42521,
+   "description": "Per Site",
+   "type": "Pedical (Coronally Positi"
+ },
+ {
+   "code": 42531,
+   "description": "Per Site",
+   "type": "Free Soft Tissue"
+ },
+ {
+   "code": 42536,
+   "description": "Per Site",
+   "type": "Free Soft Tissue"
+ },
+ {
+   "code": 42541,
+   "description": "Per Site",
+   "type": "Pedicle Soft Tissue"
+ },
+ {
+   "code": 42551,
+   "description": "Per Site",
+   "type": "Autograft, root coverage"
+ },
+ {
+   "code": 42552,
+   "description": "Per Site",
+   "type": "Allograft, root coverage"
+ },
+ {
+   "code": 42556,
+   "description": "Per Site",
+   "type": "Autograft, Implant cover"
+ },
+ {
+   "code": 42557,
+   "description": "Per Site",
+   "type": "Allograft, Implant cover"
+ },
+ {
+   "code": 42561,
+   "description": "Per Site",
+   "type": "Autograft, Ridge Aug."
+ },
+ {
+   "code": 42562,
+   "description": "Per Site",
+   "type": "Allograft, Ridge Aug."
+ },
+ {
+   "code": 42611,
+   "description": "Per Site",
+   "type": "Autograft Osseous"
+ },
+ {
+   "code": 42621,
+   "description": "Per Site",
+   "type": "Allograft"
+ },
+ {
+   "code": 42631,
+   "description": "Per Site",
+   "type": "Graft"
+ },
+ {
+   "code": 42701,
+   "description": "Non-Resorb Membrne per st",
+   "type": "Guided Tissue Regeneratio"
+ },
+ {
+   "code": 42702,
+   "description": "Resor Membrane",
+   "type": "Guided Tissue Regeneratio"
+ },
+ {
+   "code": 42703,
+   "description": "Non-Resor Surg Re-Entry",
+   "type": "Guided Tissue Regeneratio"
+ },
+ {
+   "code": 42721,
+   "description": "Per Site",
+   "type": "Osseous Tis. Regeneration"
+ },
+ {
+   "code": 42811,
+   "description": "With flap Curretage",
+   "type": "Distal Wedge Procedure"
+ },
+ {
+   "code": 42819,
+   "description": "With flap Curretage and O",
+   "type": "Distal Wedge Procedure"
+ },
+ {
+   "code": 42821,
+   "description": "One unit of time",
+   "type": "Post surgical treatment"
+ },
+ {
+   "code": 42822,
+   "description": "Two units of time",
+   "type": "Post surgical treatment"
+ },
+ {
+   "code": 43111,
+   "description": "Per joint",
+   "type": "A Splint"
+ },
+ {
+   "code": 43211,
+   "description": "Per joint",
+   "type": "Acid Etch Joint Restorati"
+ },
+ {
+   "code": 43231,
+   "description": "Per joint",
+   "type": "Wire Ligation"
+ },
+ {
+   "code": 43241,
+   "description": "Per joint",
+   "type": "Wire Ligation, Acrylic Co"
+ },
+ {
+   "code": 43271,
+   "description": "Per Abutment",
+   "type": "Cast/Soldered Splint"
+ },
+ {
+   "code": 43281,
+   "description": "One unit of time",
+   "type": "Removal of periodonal spl"
+ },
+ {
+   "code": 43289,
+   "description": "Additional units of time",
+   "type": "Removal of periodonal spl"
+ },
+ {
+   "code": 43421,
+   "description": "One unit of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43422,
+   "description": "Two units of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43423,
+   "description": "Three units of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43424,
+   "description": "Four units of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43425,
+   "description": "Five units of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43426,
+   "description": "Six units of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43427,
+   "description": "Half units of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43429,
+   "description": "Additional units of time",
+   "type": "Root Planing"
+ },
+ {
+   "code": 43521,
+   "description": "One unit of time",
+   "type": "Antimicrobial agents, int"
+ },
+ {
+   "code": 43529,
+   "description": "Additional units of time",
+   "type": "Antimicrobial agents, int"
+ },
+ {
+   "code": 51101,
+   "description": "Maxillary",
+   "type": "Complete Denture"
+ },
+ {
+   "code": 51102,
+   "description": "Mandibular",
+   "type": "Complete Denture"
+ },
+ {
+   "code": 51104,
+   "description": "Liners",
+   "type": "Complete Denture"
+ },
+ {
+   "code": 51201,
+   "description": "Maxillary",
+   "type": "Complete Denture Equilibr"
+ },
+ {
+   "code": 51202,
+   "description": "Mandibular",
+   "type": "Complete Denture Equilibr"
+ },
+ {
+   "code": 51204,
+   "description": "Liners",
+   "type": "Complete Denture Equilibr"
+ },
+ {
+   "code": 51301,
+   "description": "Maxillary",
+   "type": "Standard Surgical"
+ },
+ {
+   "code": 51302,
+   "description": "Mandibular",
+   "type": "Standard Surgical"
+ },
+ {
+   "code": 51601,
+   "description": "Maxillary",
+   "type": "Provisional"
+ },
+ {
+   "code": 51602,
+   "description": "Mandibular",
+   "type": "Provisional"
+ },
+ {
+   "code": 51711,
+   "description": "Maxillary",
+   "type": "Supported by Natural Teet"
+ },
+ {
+   "code": 51712,
+   "description": "Mandibular",
+   "type": "Supported by Natural Teet"
+ },
+ {
+   "code": 51721,
+   "description": "Maxillary",
+   "type": "Supported by Implants"
+ },
+ {
+   "code": 51722,
+   "description": "Mandibular",
+   "type": "Supported by Implants"
+ },
+ {
+   "code": 51731,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 51732,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 51811,
+   "description": "Maxillary",
+   "type": "Immediate Overdenture"
+ },
+ {
+   "code": 51812,
+   "description": "Mandibular",
+   "type": "Immediate Overdenture"
+ },
+ {
+   "code": 51821,
+   "description": "Maxillary",
+   "type": "Immediate Overdenture"
+ },
+ {
+   "code": 51822,
+   "description": "Mandibular",
+   "type": "Immediate Overdenture"
+ },
+ {
+   "code": 51831,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 51832,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 51911,
+   "description": "Maxillary",
+   "type": "Removable Tissue Borne"
+ },
+ {
+   "code": 51912,
+   "description": "Mandibular",
+   "type": "Removable Tissue Borne"
+ },
+ {
+   "code": 51921,
+   "description": "Maxillary",
+   "type": "Removable with Retention"
+ },
+ {
+   "code": 51922,
+   "description": "Mandibular",
+   "type": "Removable with Retention"
+ },
+ {
+   "code": 51931,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 51932,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 51941,
+   "description": "Maxillary",
+   "type": "Removable Tissue Borne"
+ },
+ {
+   "code": 51942,
+   "description": "Mandibular",
+   "type": "Removable Tissue Borne"
+ },
+ {
+   "code": 51951,
+   "description": "Maxillary",
+   "type": "Removable with Retention"
+ },
+ {
+   "code": 51952,
+   "description": "Mandibular",
+   "type": "Removable with Retention"
+ },
+ {
+   "code": 51961,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 51962,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52101,
+   "description": "Maxillary",
+   "type": "Transitional Acrylic Base"
+ },
+ {
+   "code": 52102,
+   "description": "Mandibular",
+   "type": "Transitional Acrylic Base"
+ },
+ {
+   "code": 52111,
+   "description": "Maxillary",
+   "type": "Immediate Acrylic Base"
+ },
+ {
+   "code": 52112,
+   "description": "Mandibular",
+   "type": "Immediate Acrylic Base"
+ },
+ {
+   "code": 52201,
+   "description": "Maxillary",
+   "type": "Resilient Retainer"
+ },
+ {
+   "code": 52202,
+   "description": "Mandibular",
+   "type": "Resilient Retainer"
+ },
+ {
+   "code": 52211,
+   "description": "Maxillary",
+   "type": "Immediate Resilient Retai"
+ },
+ {
+   "code": 52212,
+   "description": "Mandibular",
+   "type": "Immediate Resilient Retai"
+ },
+ {
+   "code": 52301,
+   "description": "Maxillary",
+   "type": "Metal wrough/Cast Clasps"
+ },
+ {
+   "code": 52302,
+   "description": "Mandibular",
+   "type": "Metal wrough/Cast Clasps"
+ },
+ {
+   "code": 52311,
+   "description": "Maxillary",
+   "type": "Immediate Metal wrough"
+ },
+ {
+   "code": 52312,
+   "description": "Mandibular",
+   "type": "Immediate Metal wrough"
+ },
+ {
+   "code": 52401,
+   "description": "Maxillary",
+   "type": "Palatal/Lingual Bar"
+ },
+ {
+   "code": 52402,
+   "description": "Mandibular",
+   "type": "Palatal/Lingual Bar"
+ },
+ {
+   "code": 52411,
+   "description": "Maxillary",
+   "type": "Immediate Palatal/Lingual"
+ },
+ {
+   "code": 52412,
+   "description": "Mandibular",
+   "type": "Immediate Palatal/Lingual"
+ },
+ {
+   "code": 52511,
+   "description": "Maxillary",
+   "type": "Flexible, Non Metal, Non "
+ },
+ {
+   "code": 52512,
+   "description": "Mandibular",
+   "type": "Flexible, Non Metal, Non "
+ },
+ {
+   "code": 52711,
+   "description": "Maxillary",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52712,
+   "description": "Mandibular",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52721,
+   "description": "Maxillary",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52722,
+   "description": "Mandibular",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52731,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52732,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52811,
+   "description": "Maxillary",
+   "type": "Immediate Cast Clasps"
+ },
+ {
+   "code": 52812,
+   "description": "Mandibular",
+   "type": "Immediate Cast Clasps"
+ },
+ {
+   "code": 52821,
+   "description": "Maxillary",
+   "type": "Immediate Cast Clasps"
+ },
+ {
+   "code": 52822,
+   "description": "Mandibular",
+   "type": "Immediate Cast Clasps"
+ },
+ {
+   "code": 52831,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52832,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52911,
+   "description": "Maxillary",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52912,
+   "description": "Mandibular",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52921,
+   "description": "Maxillary",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52922,
+   "description": "Mandibular",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52931,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52932,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52941,
+   "description": "Maxillary",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52942,
+   "description": "Mandibular",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52951,
+   "description": "Maxillary",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52952,
+   "description": "Mandibular",
+   "type": "Cast/Wrought Clasps"
+ },
+ {
+   "code": 52961,
+   "description": "Maxillary",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 52962,
+   "description": "Mandibular",
+   "type": "Support by Teeth/Implants"
+ },
+ {
+   "code": 53101,
+   "description": "Maxillary",
+   "type": "Free End"
+ },
+ {
+   "code": 53102,
+   "description": "Mandibular",
+   "type": "Free End"
+ },
+ {
+   "code": 53104,
+   "description": "Altered Cast Impression",
+   "type": "Free End"
+ },
+ {
+   "code": 53111,
+   "description": "Maxillary",
+   "type": "Immediate Free End"
+ },
+ {
+   "code": 53112,
+   "description": "Mandibular",
+   "type": "Immediate Free End"
+ },
+ {
+   "code": 53201,
+   "description": "Maxillary",
+   "type": "Tooth-Borne"
+ },
+ {
+   "code": 53202,
+   "description": "Mandibular",
+   "type": "Tooth-Borne"
+ },
+ {
+   "code": 53205,
+   "description": "Unilateral",
+   "type": "Tooth-Borne"
+ },
+ {
+   "code": 53211,
+   "description": "Maxillary",
+   "type": "Immediate Tooth-Borne"
+ },
+ {
+   "code": 53212,
+   "description": "Mandibular",
+   "type": "Immediate Tooth-Borne"
+ },
+ {
+   "code": 53215,
+   "description": "Unilateral",
+   "type": "Immediate Tooth-Borne"
+ },
+ {
+   "code": 53401,
+   "description": "Maxillary",
+   "type": "Precision Attachments"
+ },
+ {
+   "code": 53402,
+   "description": "Mandibular",
+   "type": "Precision Attachments"
+ },
+ {
+   "code": 53611,
+   "description": "Resilient",
+   "type": "Maxillary Stress Breaker "
+ },
+ {
+   "code": 53621,
+   "description": "Resilient",
+   "type": "Mandibular stress breaker"
+ },
+ {
+   "code": 53711,
+   "description": "Maxillary",
+   "type": "Immediate Removable"
+ },
+ {
+   "code": 53712,
+   "description": "Mandibular",
+   "type": "Immediate Removable"
+ },
+ {
+   "code": 53714,
+   "description": "Altered Cast",
+   "type": "Immediate Removable"
+ },
+ {
+   "code": 53721,
+   "description": "Maxillary",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53722,
+   "description": "Mandibular",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53724,
+   "description": "Altered Cast",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53731,
+   "description": "Maxillary",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53732,
+   "description": "Mandibular",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53734,
+   "description": "Altered Cast",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53811,
+   "description": "Maxillary",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53812,
+   "description": "Mandibular",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53814,
+   "description": "Altered Cast",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53821,
+   "description": "Maxillary",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53822,
+   "description": "Mandibular",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53824,
+   "description": "Altered Cast",
+   "type": "Immediate Removable with "
+ },
+ {
+   "code": 53831,
+   "description": "Maxillary",
+   "type": "Immediate Removable Natur"
+ },
+ {
+   "code": 53832,
+   "description": "Mandibular",
+   "type": "Immediate Removable Natur"
+ },
+ {
+   "code": 53834,
+   "description": "Altered Cast",
+   "type": "Immediate Removable Natur"
+ },
+ {
+   "code": 53911,
+   "description": "Maxillary",
+   "type": "Independant with Natural "
+ },
+ {
+   "code": 53912,
+   "description": "Mandibular",
+   "type": "Independant with Natural "
+ },
+ {
+   "code": 53921,
+   "description": "Maxillary",
+   "type": "Independant with Implants"
+ },
+ {
+   "code": 53922,
+   "description": "Mandibular",
+   "type": "Independant with Implants"
+ },
+ {
+   "code": 53931,
+   "description": "Maxillary",
+   "type": "Independant Natural & Imp"
+ },
+ {
+   "code": 53932,
+   "description": "Mandibular",
+   "type": "Independant Natural & Imp"
+ },
+ {
+   "code": 53941,
+   "description": "Maxillary",
+   "type": "Retention with Natural Te"
+ },
+ {
+   "code": 53942,
+   "description": "Mandibular",
+   "type": "Retention with Natural Te"
+ },
+ {
+   "code": 53951,
+   "description": "Maxillary",
+   "type": "Retention with Implants"
+ },
+ {
+   "code": 53952,
+   "description": "Mandibular",
+   "type": "Retention with Implants"
+ },
+ {
+   "code": 53961,
+   "description": "Maxillary",
+   "type": "Retention Natural & Impla"
+ },
+ {
+   "code": 53962,
+   "description": "Mandibular",
+   "type": "Retention Natural & Impla"
+ },
+ {
+   "code": 54201,
+   "description": "One unit of time",
+   "type": "Minor"
+ },
+ {
+   "code": 54202,
+   "description": "Two units of time",
+   "type": "Minor"
+ },
+ {
+   "code": 54209,
+   "description": "Additional units of time",
+   "type": "Minor"
+ },
+ {
+   "code": 54301,
+   "description": "Maxillary",
+   "type": "Remount and Occlusal"
+ },
+ {
+   "code": 54302,
+   "description": "Mandibular",
+   "type": "Remount and Occlusal"
+ },
+ {
+   "code": 55101,
+   "description": "Maxillary",
+   "type": "Complete, No Impression"
+ },
+ {
+   "code": 55102,
+   "description": "Mandibular",
+   "type": "Complete, No Impression"
+ },
+ {
+   "code": 55201,
+   "description": "Maxillary",
+   "type": "Complete with Impression"
+ },
+ {
+   "code": 55202,
+   "description": "Mandibular",
+   "type": "Complete with Impression"
+ },
+ {
+   "code": 55301,
+   "description": "Maxillary",
+   "type": "Partial, No Impression"
+ },
+ {
+   "code": 55302,
+   "description": "Mandibular",
+   "type": "Partial, No Impression"
+ },
+ {
+   "code": 55401,
+   "description": "Maxillary",
+   "type": "Partial, with Impression"
+ },
+ {
+   "code": 55402,
+   "description": "Mandibular",
+   "type": "Partial, with Impression"
+ },
+ {
+   "code": 55501,
+   "description": "One unit of time",
+   "type": "Retained Prosthesis"
+ },
+ {
+   "code": 55509,
+   "description": "Additional units of time",
+   "type": "Retained Prosthesis"
+ },
+ {
+   "code": 55601,
+   "description": "One unit of time",
+   "type": "Rebuilding worn acrylic t"
+ },
+ {
+   "code": 55609,
+   "description": "Additional units of time",
+   "type": "Rebuilding worn acrylic t"
+ },
+ {
+   "code": 56111,
+   "description": "Maxillary",
+   "type": "Complete"
+ },
+ {
+   "code": 56112,
+   "description": "Mandibular",
+   "type": "Complete"
+ },
+ {
+   "code": 56211,
+   "description": "Maxillary",
+   "type": "Direct Complete"
+ },
+ {
+   "code": 56212,
+   "description": "Mandibular",
+   "type": "Direct Complete"
+ },
+ {
+   "code": 56221,
+   "description": "Maxillary",
+   "type": "Direct Partial"
+ },
+ {
+   "code": 56222,
+   "description": "Mandibular",
+   "type": "Direct Partial"
+ },
+ {
+   "code": 56231,
+   "description": "Maxillary",
+   "type": "Processed Complete"
+ },
+ {
+   "code": 56232,
+   "description": "Mandibular",
+   "type": "Processed Complete"
+ },
+ {
+   "code": 56241,
+   "description": "Maxillary",
+   "type": "Processed Partial"
+ },
+ {
+   "code": 56242,
+   "description": "Mandibular",
+   "type": "Processed Partial"
+ },
+ {
+   "code": 56251,
+   "description": "Maxillary",
+   "type": "Func. Impression Complete"
+ },
+ {
+   "code": 56252,
+   "description": "Mandibular",
+   "type": "Func. Impression Complete"
+ },
+ {
+   "code": 56261,
+   "description": "Maxillary",
+   "type": "Functional Impression Par"
+ },
+ {
+   "code": 56262,
+   "description": "Mandibular",
+   "type": "Functional Impression Par"
+ },
+ {
+   "code": 56311,
+   "description": "Maxillary",
+   "type": "Processed Complete"
+ },
+ {
+   "code": 56312,
+   "description": "Mandibular",
+   "type": "Processed Complete"
+ },
+ {
+   "code": 56321,
+   "description": "Maxillary",
+   "type": "Processed Partial"
+ },
+ {
+   "code": 56322,
+   "description": "Mandibular",
+   "type": "Processed Partial"
+ },
+ {
+   "code": 56411,
+   "description": "Maxillary",
+   "type": "Existing Framework, Parti"
+ },
+ {
+   "code": 56412,
+   "description": "Mandibular",
+   "type": "Existing Framework, Parti"
+ },
+ {
+   "code": 56511,
+   "description": "Maxillary",
+   "type": "per Appointment, Complete"
+ },
+ {
+   "code": 56512,
+   "description": "Mandibular",
+   "type": "per Appointment, Complete"
+ },
+ {
+   "code": 56521,
+   "description": "Maxillary",
+   "type": "per Appointment, Partial"
+ },
+ {
+   "code": 56522,
+   "description": "Mandibular",
+   "type": "per Appointment, Partial"
+ },
+ {
+   "code": 56541,
+   "description": "Maxillary",
+   "type": "per Appointment, Implant "
+ },
+ {
+   "code": 56542,
+   "description": "Mandibular",
+   "type": "per Appointment, Implant "
+ },
+ {
+   "code": 56561,
+   "description": "Maxillary",
+   "type": "per Appointment, Partial"
+ },
+ {
+   "code": 56562,
+   "description": "Mandibular",
+   "type": "per Appointment, Partial"
+ },
+ {
+   "code": 56601,
+   "description": "Resilient Liner",
+   "type": "Resetting of Teeth"
+ },
+ {
+   "code": 56602,
+   "description": "Resetting Of Teeth",
+   "type": "Resetting of Teeth"
+ },
+ {
+   "code": 56603,
+   "description": "Cast occlusal surfaces",
+   "type": "Resetting of Teeth"
+ },
+ {
+   "code": 56611,
+   "description": "One unit of time",
+   "type": "Retention Elements-Direct"
+ },
+ {
+   "code": 56612,
+   "description": "Two units of time",
+   "type": "Retention Elements-Direct"
+ },
+ {
+   "code": 56619,
+   "description": "Each unit over two",
+   "type": "Retention Elements-Direct"
+ },
+ {
+   "code": 56621,
+   "description": "Elements - indirect",
+   "type": "Retention Elements-Indir"
+ },
+ {
+   "code": 57372,
+   "description": "Gingival presthesis",
+   "type": "Other"
+ },
+ {
+   "code": 57602,
+   "description": "Palatal",
+   "type": "Stents"
+ },
+ {
+   "code": 59111,
+   "description": "Resilient Retainer - Max",
+   "type": "Partial Dentures, Acrylic"
+ },
+ {
+   "code": 59112,
+   "description": "Resilient Retainer - Mand",
+   "type": "Partial Dentures, Acrylic"
+ },
+ {
+   "code": 59121,
+   "description": "Resil Retainer Imm-Max",
+   "type": "PartialDentures,w/AcrBase"
+ },
+ {
+   "code": 59122,
+   "description": "Resil Retainer Imm-Mand",
+   "type": "PartialDentures,w/AcrBase"
+ },
+ {
+   "code": 59201,
+   "description": "W/Metal Clasps/Rests-Max",
+   "type": "Partial Dentures, Acrylic"
+ },
+ {
+   "code": 59202,
+   "description": "W/Metal Clasps/Rests-Mand",
+   "type": "Partial Dentures, Acrylic"
+ },
+ {
+   "code": 59211,
+   "description": "W/Metal Clasps Imm-Max",
+   "type": "PartialDentures,w/AcrBase"
+ },
+ {
+   "code": 59212,
+   "description": "W/Metal Clasps Imm-Mand",
+   "type": "PartialDentures,w/AcrBase"
+ },
+ {
+   "code": 59301,
+   "description": "W/Palatal/Lingual Bar Max",
+   "type": "Partial Dentures, Acrylic"
+ },
+ {
+   "code": 59302,
+   "description": "W/Palatal/Lingual Bar Man",
+   "type": "Partial Dentures, Acrylic"
+ },
+ {
+   "code": 59311,
+   "description": "W/Pal/Ling imm Bar Max",
+   "type": "PartialDentures,Acrylic"
+ },
+ {
+   "code": 59312,
+   "description": "W/Pal/Ling imm Bar Man",
+   "type": "PartialDentures,Acrylic"
+ },
+ {
+   "code": 59511,
+   "description": "FE,CastFr/Con,Clasps max",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59512,
+   "description": "FE,CastFr/Con,Clasps mand",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59521,
+   "description": "FE,CastFr/Con,Cl imm max",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59522,
+   "description": "FE,CastFr/Con,Cl imm mand",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59531,
+   "description": "TB,CastFr/Con,Clasps max",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59532,
+   "description": "TB,CastFr/Con,Clasps mand",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59541,
+   "description": "TB,CastFr/Con,Cl imm max",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59542,
+   "description": "TB,CastFr/Con,Cl imm mand",
+   "type": "Part Dent,Cast w/AcrBase"
+ },
+ {
+   "code": 59601,
+   "description": "Prosthetic (by dentist)",
+   "type": "Examination"
+ },
+ {
+   "code": 62101,
+   "description": "Cast Metal",
+   "type": "Pontics, Cast Metal"
+ },
+ {
+   "code": 62102,
+   "description": "Cast Metal with Porcelain",
+   "type": "Pontics, Cast Metal"
+ },
+ {
+   "code": 62103,
+   "description": "Prefabricated Facing",
+   "type": "Pontics, Cast Metal"
+ },
+ {
+   "code": 62104,
+   "description": "Retentive bar",
+   "type": "Pontics, Cast Metal"
+ },
+ {
+   "code": 62105,
+   "description": "Retentive bar, attached",
+   "type": "Pontics, Cast Metal"
+ },
+ {
+   "code": 62107,
+   "description": "Semi-Precision Rest",
+   "type": "Pontics, Cast Metal"
+ },
+ {
+   "code": 62108,
+   "description": "Semi-Prece Attach.",
+   "type": "Pontics, Cast Metal"
+ },
+ {
+   "code": 62501,
+   "description": "Fused to Metal",
+   "type": "Pontic Porcelain"
+ },
+ {
+   "code": 62502,
+   "description": "Aluminous",
+   "type": "Pontic Porcelain"
+ },
+ {
+   "code": 62701,
+   "description": "Processed to Metal",
+   "type": "Acrylic/Plastic/Composite"
+ },
+ {
+   "code": 62702,
+   "description": "Processed Indirect",
+   "type": "Acrylic/Plastic/Composite"
+ },
+ {
+   "code": 62703,
+   "description": "Transitional Direct",
+   "type": "Acrylic/Plastic/Composite"
+ },
+ {
+   "code": 62704,
+   "description": "Pont, Acrylc/Comps/Compmr",
+   "type": "Acrylic/Plastic/Composite"
+ },
+ {
+   "code": 62801,
+   "description": "Direct Acid Etched",
+   "type": "Natural Crown"
+ },
+ {
+   "code": 62802,
+   "description": "Direct Acid Etched (L/T)",
+   "type": "Natural Crown"
+ },
+ {
+   "code": 63001,
+   "description": "One unit of time",
+   "type": "Recontouring of Retainers"
+ },
+ {
+   "code": 63009,
+   "description": "Additional units of time",
+   "type": "Recontouring of Retainers"
+ },
+ {
+   "code": 66211,
+   "description": "One unit of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66212,
+   "description": "Two units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66213,
+   "description": "Three units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66214,
+   "description": "Four units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66219,
+   "description": "Additional units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66221,
+   "description": "One unit of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66222,
+   "description": "Two units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66223,
+   "description": "Three units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66224,
+   "description": "Four units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66229,
+   "description": "Additional units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66231,
+   "description": "One unit of time",
+   "type": "Re-Insertion"
+ },
+ {
+   "code": 66232,
+   "description": "Two units of time",
+   "type": "Re-Insertion"
+ },
+ {
+   "code": 66233,
+   "description": "Three units of time",
+   "type": "Re-Insertion"
+ },
+ {
+   "code": 66234,
+   "description": "Fout units of time",
+   "type": "Re-Insertion"
+ },
+ {
+   "code": 66239,
+   "description": "Additional units of time",
+   "type": "Re-Insertion"
+ },
+ {
+   "code": 66241,
+   "description": "One unit of time",
+   "type": "Reparis, Replaced"
+ },
+ {
+   "code": 66242,
+   "description": "Two units of time",
+   "type": "Reparis, Replaced"
+ },
+ {
+   "code": 66243,
+   "description": "Three units of time",
+   "type": "Reparis, Replaced"
+ },
+ {
+   "code": 66244,
+   "description": "Four units of time",
+   "type": "Reparis, Replaced"
+ },
+ {
+   "code": 66249,
+   "description": "Additional units of time",
+   "type": "Reparis, Replaced"
+ },
+ {
+   "code": 66251,
+   "description": "One unit of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66252,
+   "description": "Two units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66253,
+   "description": "Three units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66254,
+   "description": "Four units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66259,
+   "description": "Additional units of time",
+   "type": "Fixed Bridge"
+ },
+ {
+   "code": 66301,
+   "description": "One unit of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66302,
+   "description": "Two units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66303,
+   "description": "Three units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66304,
+   "description": "Four units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66309,
+   "description": "Additional units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66311,
+   "description": "One unit of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66312,
+   "description": "Two units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66313,
+   "description": "Three units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66314,
+   "description": "Four units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66319,
+   "description": "Additional units of time",
+   "type": "Recementation"
+ },
+ {
+   "code": 66711,
+   "description": "First tooth",
+   "type": "Porcelain Resin Direct"
+ },
+ {
+   "code": 66719,
+   "description": "Additional teeth",
+   "type": "Porcelain Resin Direct"
+ },
+ {
+   "code": 66721,
+   "description": "First tooth",
+   "type": "Solder Indexing"
+ },
+ {
+   "code": 66729,
+   "description": "Additional teeth",
+   "type": "Solder Indexing"
+ },
+ {
+   "code": 66731,
+   "description": "First tooth",
+   "type": "Fractured Porcelain"
+ },
+ {
+   "code": 66739,
+   "description": "Additional teeth",
+   "type": "Fractured Porcelain"
+ },
+ {
+   "code": 66743,
+   "description": "Three units of time",
+   "type": "Implant Supported Direct"
+ },
+ {
+   "code": 66744,
+   "description": "Four units of time",
+   "type": "Implant Supported Direct"
+ },
+ {
+   "code": 67111,
+   "description": "Processed Plastic/Acrylic",
+   "type": "Indirect"
+ },
+ {
+   "code": 67115,
+   "description": "First implant",
+   "type": "Indirect"
+ },
+ {
+   "code": 67121,
+   "description": "First tooth",
+   "type": "Direct Plastic/Acrylic"
+ },
+ {
+   "code": 67125,
+   "description": "Indirect Implant Support",
+   "type": "Retainers"
+ },
+ {
+   "code": 67131,
+   "description": "Plastic processed to meta",
+   "type": "Indirect"
+ },
+ {
+   "code": 67135,
+   "description": "First tooth",
+   "type": "Indirect Processed to Met"
+ },
+ {
+   "code": 67145,
+   "description": "First implant",
+   "type": "Indirect Processed to Met"
+ },
+ {
+   "code": 67155,
+   "description": "First implant",
+   "type": "Direct Processed to Metal"
+ },
+ {
+   "code": 67161,
+   "description": "Two surface Inlay",
+   "type": "Fixed Bridge Retainers"
+ },
+ {
+   "code": 67171,
+   "description": "Three surface Inlay",
+   "type": "Fixed Bridge Retainers"
+ },
+ {
+   "code": 67181,
+   "description": "Onlay",
+   "type": "Fixed Bridge Retainers"
+ },
+ {
+   "code": 67201,
+   "description": "Retainer Porcelain",
+   "type": "Ceramic, Full Coverage"
+ },
+ {
+   "code": 67202,
+   "description": "Retainer Porcelain",
+   "type": "Ceramic, Complicated"
+ },
+ {
+   "code": 67205,
+   "description": "Retainer Full Coverage",
+   "type": "Ceramic, Complicated"
+ },
+ {
+   "code": 67211,
+   "description": "Fused to Metal",
+   "type": "Retainer Porcelain"
+ },
+ {
+   "code": 67212,
+   "description": "Fused to Metal",
+   "type": "Porcelain Retainer"
+ },
+ {
+   "code": 67215,
+   "description": "First implant",
+   "type": "Implant Supported"
+ },
+ {
+   "code": 67217,
+   "description": "Stress Breaker with above",
+   "type": "Implant Supported"
+ },
+ {
+   "code": 67218,
+   "description": "Precision Attachment",
+   "type": "Implant Supported"
+ },
+ {
+   "code": 67221,
+   "description": "Retainer Porcelain/Cerami",
+   "type": "Retainer Porcelain Veneer"
+ },
+ {
+   "code": 67231,
+   "description": "Two Surface Inlay",
+   "type": "Porcelain Retainer"
+ },
+ {
+   "code": 67241,
+   "description": "Three Surface Inlay",
+   "type": "Porcelain Retainer"
+ },
+ {
+   "code": 67251,
+   "description": "Onlay",
+   "type": "Porcelain Retainer"
+ },
+ {
+   "code": 67301,
+   "description": "Full Metal Cast",
+   "type": "Retainers, Metal"
+ },
+ {
+   "code": 67305,
+   "description": "Implant Supported",
+   "type": "Retainers, Metal"
+ },
+ {
+   "code": 67311,
+   "description": "3/4 Metal Cast",
+   "type": "Retainers, Metal"
+ },
+ {
+   "code": 67317,
+   "description": "Semi-Precision Rest",
+   "type": "Interlock"
+ },
+ {
+   "code": 67318,
+   "description": "Semi-Precision Attachment",
+   "type": "RPD Retainer"
+ },
+ {
+   "code": 67321,
+   "description": "Two surface",
+   "type": "Metal Inlay"
+ },
+ {
+   "code": 67322,
+   "description": "Three surface",
+   "type": "Metal Inlay"
+ },
+ {
+   "code": 67331,
+   "description": "Metal Onlay",
+   "type": "Retainers, Metal"
+ },
+ {
+   "code": 67341,
+   "description": "Bonded to abutment tooth",
+   "type": "Metal Onlay"
+ },
+ {
+   "code": 67415,
+   "description": "Retainer, Metal, Prefab",
+   "type": "Retainers, overdentures"
+ },
+ {
+   "code": 67501,
+   "description": "Abutment Preparation",
+   "type": "Abutment Preparation"
+ },
+ {
+   "code": 67502,
+   "description": "Telescoping crown unit",
+   "type": "Abutment Preparation"
+ },
+ {
+   "code": 69201,
+   "description": "Restorative Dentistry",
+   "type": "Splinting"
+ },
+ {
+   "code": 69301,
+   "description": "One pin/restoration",
+   "type": "Retentive Pins"
+ },
+ {
+   "code": 69302,
+   "description": "Two pins/restorations",
+   "type": "Retentive Pins"
+ },
+ {
+   "code": 69303,
+   "description": "Three pins/restorations",
+   "type": "Retentive Pins"
+ },
+ {
+   "code": 69304,
+   "description": "Four pins/restorations",
+   "type": "Retentive Pins"
+ },
+ {
+   "code": 69305,
+   "description": "Five pins/restorations",
+   "type": "Retentive Pins"
+ },
+ {
+   "code": 69401,
+   "description": "One Unit of Time",
+   "type": "Porcelain Staining"
+ },
+ {
+   "code": 69409,
+   "description": "Additional Units of Time",
+   "type": "Porcelain Staining"
+ },
+ {
+   "code": 69701,
+   "description": "Abutment tooth",
+   "type": "Provisional Coverage"
+ },
+ {
+   "code": 69702,
+   "description": "Pontic",
+   "type": "Provisional Coverage"
+ },
+ {
+   "code": 69811,
+   "description": "Maxillary",
+   "type": "Denture teeth and acrylic"
+ },
+ {
+   "code": 69812,
+   "description": "Mandibular",
+   "type": "Denture teeth and acrylic"
+ },
+ {
+   "code": 69821,
+   "description": "Maxillary",
+   "type": "Full Metal and Porcelain"
+ },
+ {
+   "code": 69822,
+   "description": "Mandibular",
+   "type": "Full Metal and Porcelain"
+ },
+ {
+   "code": 71101,
+   "description": "First Tooth",
+   "type": "Uncomplicated"
+ },
+ {
+   "code": 71109,
+   "description": "Additional Teeth",
+   "type": "Uncomplicated"
+ },
+ {
+   "code": 71201,
+   "description": "First Tooth",
+   "type": "Complicated"
+ },
+ {
+   "code": 71209,
+   "description": "Additional Teeth",
+   "type": "Complicated"
+ },
+ {
+   "code": 71211,
+   "description": "Single Tooth",
+   "type": "Removal of Tooth"
+ },
+ {
+   "code": 71219,
+   "description": "Additional Tooth",
+   "type": "Removal of Tooth"
+ },
+ {
+   "code": 72111,
+   "description": "First Tooth",
+   "type": "Requiring Incision"
+ },
+ {
+   "code": 72119,
+   "description": "Additional Teeth",
+   "type": "Requiring Incision"
+ },
+ {
+   "code": 72211,
+   "description": "First Tooth",
+   "type": "Bone removal / sectioning"
+ },
+ {
+   "code": 72219,
+   "description": "Additional Teeth",
+   "type": "Bone removal / sectioning"
+ },
+ {
+   "code": 72221,
+   "description": "First Tooth",
+   "type": "Bone removal & sectioning"
+ },
+ {
+   "code": 72229,
+   "description": "Additional Teeth",
+   "type": "Bone removal & sectioning"
+ },
+ {
+   "code": 72241,
+   "description": "Coronectomy of unerupted",
+   "type": "Coron, Int Part Remov"
+ },
+ {
+   "code": 72242,
+   "description": "Coronectomy to prev compl",
+   "type": "Coron, Int Part Remov"
+ },
+ {
+   "code": 72311,
+   "description": "First Tooth",
+   "type": "Residual Root Tip"
+ },
+ {
+   "code": 72319,
+   "description": "Additional Teeth",
+   "type": "Residual Root Tip"
+ },
+ {
+   "code": 72321,
+   "description": "First Tooth",
+   "type": "Soft tissue coverage"
+ },
+ {
+   "code": 72329,
+   "description": "Additional Teeth",
+   "type": "Soft tissue coverage"
+ },
+ {
+   "code": 72331,
+   "description": "First Tooth",
+   "type": "Bone tissue coverage"
+ },
+ {
+   "code": 72339,
+   "description": "Additional Teeth",
+   "type": "Bone tissue coverage"
+ },
+ {
+   "code": 72411,
+   "description": "First Tooth",
+   "type": "Post Extraction"
+ },
+ {
+   "code": 72419,
+   "description": "Additional Teeth",
+   "type": "Post Extraction"
+ },
+ {
+   "code": 72421,
+   "description": "First Tooth",
+   "type": "Allograft"
+ },
+ {
+   "code": 72429,
+   "description": "Addit Tooth",
+   "type": "Allograft"
+ },
+ {
+   "code": 72431,
+   "description": "First Tooth",
+   "type": "Xenograft"
+ },
+ {
+   "code": 72439,
+   "description": "Addit Tooth",
+   "type": "Xenograft"
+ },
+ {
+   "code": 72511,
+   "description": "First Tooth",
+   "type": "Unerupted"
+ },
+ {
+   "code": 72519,
+   "description": "Additional Teeth",
+   "type": "Unerupted"
+ },
+ {
+   "code": 72521,
+   "description": "First Tooth",
+   "type": "Hard tissue coverage"
+ },
+ {
+   "code": 72529,
+   "description": "Additional Teeth",
+   "type": "Hard tissue coverage"
+ },
+ {
+   "code": 72531,
+   "description": "First Tooth",
+   "type": "Orthodontic attachment"
+ },
+ {
+   "code": 72539,
+   "description": "Additional Teeth",
+   "type": "Orthodontic attachment"
+ },
+ {
+   "code": 72541,
+   "description": "Single Tooth",
+   "type": "Soft tissue coverage"
+ },
+ {
+   "code": 72551,
+   "description": "Single Tooth",
+   "type": "Hard tissue coverage"
+ },
+ {
+   "code": 72561,
+   "description": "Plcmnt of ach dev. w/o el",
+   "type": "Rigid Osseous Anchorage"
+ },
+ {
+   "code": 72562,
+   "description": "Plcmnt of ach dev. w el",
+   "type": "Rigid Osseous Anchorage"
+ },
+ {
+   "code": 72563,
+   "description": "Plcmnt of ach dev. w/o el",
+   "type": "Rigid Osseous Anchorage"
+ },
+ {
+   "code": 72564,
+   "description": "Plcmnt of ach dev. w el",
+   "type": "Rigid Osseous Anchorage"
+ },
+ {
+   "code": 72611,
+   "description": "First Tooth",
+   "type": "Transplant erupted tooth"
+ },
+ {
+   "code": 72621,
+   "description": "First Tooth",
+   "type": "Transplant unerupt tooth"
+ },
+ {
+   "code": 72711,
+   "description": "First Tooth",
+   "type": "Surgical Enucleation Uner"
+ },
+ {
+   "code": 72719,
+   "description": "Additional Teeth",
+   "type": "Surgical Enucleation Uner"
+ },
+ {
+   "code": 72801,
+   "description": "First Tooth",
+   "type": "Removal of Fractured cusp"
+ },
+ {
+   "code": 72809,
+   "description": "Additional Teeth",
+   "type": "Removal of Fractured cusp"
+ },
+ {
+   "code": 73111,
+   "description": "per sextant",
+   "type": "with Extractions"
+ },
+ {
+   "code": 73121,
+   "description": "per sextant",
+   "type": "without Extractions"
+ },
+ {
+   "code": 73152,
+   "description": "Torus Palatinus",
+   "type": "Excision of Bone"
+ },
+ {
+   "code": 73153,
+   "description": "Torus Mandibularis Unilat",
+   "type": "Excision of Bone"
+ },
+ {
+   "code": 73154,
+   "description": "Torus Mandibularis Bilate",
+   "type": "Excision of Bone"
+ },
+ {
+   "code": 73161,
+   "description": "per quadrant",
+   "type": "Remove Exostosis Multiple"
+ },
+ {
+   "code": 73171,
+   "description": "Unilateral reduction",
+   "type": "Tuberosity"
+ },
+ {
+   "code": 73172,
+   "description": "Bilateral reduction",
+   "type": "Tuberosity"
+ },
+ {
+   "code": 73181,
+   "description": "Unilateral Tuberosity",
+   "type": "Agumentation of Bone"
+ },
+ {
+   "code": 73182,
+   "description": "Bilateral Tuberosity",
+   "type": "Agumentation of Bone"
+ },
+ {
+   "code": 73183,
+   "description": "Unilateral Mandibular",
+   "type": "Agumentation of Bone"
+ },
+ {
+   "code": 73184,
+   "description": "Bilateral Mandibular",
+   "type": "Agumentation of Bone"
+ },
+ {
+   "code": 73222,
+   "description": "per sextant",
+   "type": "Excision of Vestibular Hy"
+ },
+ {
+   "code": 73223,
+   "description": "Palate",
+   "type": "Shaving of Papillary Hype"
+ },
+ {
+   "code": 73224,
+   "description": "Periconal Gingiva",
+   "type": "Excision"
+ },
+ {
+   "code": 73231,
+   "description": "per sextant",
+   "type": "Hyperplastic Tissue Remov"
+ },
+ {
+   "code": 73421,
+   "description": "Per Sextant",
+   "type": "Sulcus Deepening"
+ },
+ {
+   "code": 74111,
+   "description": "1 cm and under",
+   "type": "Excision of Tumors"
+ },
+ {
+   "code": 74112,
+   "description": "1-2 cm",
+   "type": "Excision of Tumors"
+ },
+ {
+   "code": 74113,
+   "description": "2-3 cm",
+   "type": "Excision of Tumors"
+ },
+ {
+   "code": 74114,
+   "description": "3-4 cm",
+   "type": "Excision of Tumors"
+ },
+ {
+   "code": 74115,
+   "description": "4-6 cm",
+   "type": "Excision of Tumors"
+ },
+ {
+   "code": 74116,
+   "description": "6-9 cm",
+   "type": "Excision of Tumors"
+ },
+ {
+   "code": 74121,
+   "description": "1 cm and under",
+   "type": "Tumor Excision Bone Tissu"
+ },
+ {
+   "code": 74122,
+   "description": "1-2 cm",
+   "type": "Tumor Excision Bone Tissu"
+ },
+ {
+   "code": 74401,
+   "description": "per sextant",
+   "type": "Bone Grafts"
+ },
+ {
+   "code": 74402,
+   "description": "Max or Mand + E",
+   "type": "Autograft"
+ },
+ {
+   "code": 74403,
+   "description": "Max or Mand + E",
+   "type": "Allograft"
+ },
+ {
+   "code": 74611,
+   "description": "1 cm and under",
+   "type": "Enucleation of Cyst"
+ },
+ {
+   "code": 74612,
+   "description": "1-2 cm",
+   "type": "Enucleation of Cyst"
+ },
+ {
+   "code": 74621,
+   "description": "Cyst",
+   "type": "Marsupialization"
+ },
+ {
+   "code": 74631,
+   "description": "1 cm and under",
+   "type": "Excision of Cyst"
+ },
+ {
+   "code": 74632,
+   "description": "1-2 cm",
+   "type": "Excision of Cyst"
+ },
+ {
+   "code": 75111,
+   "description": "Surgical Exploration",
+   "type": "Soft Tissue"
+ },
+ {
+   "code": 75112,
+   "description": "Abscess",
+   "type": "Soft Tissue"
+ },
+ {
+   "code": 75121,
+   "description": "Abscess Drainage",
+   "type": "Hard Tissue"
+ },
+ {
+   "code": 75211,
+   "description": "Extraoral Superficial",
+   "type": "Soft Tissue"
+ },
+ {
+   "code": 75301,
+   "description": "From skin or alveolar tis",
+   "type": "Removal"
+ },
+ {
+   "code": 75302,
+   "description": "Reaction producing bodies",
+   "type": "Removal"
+ },
+ {
+   "code": 76116,
+   "description": "Intermaxillary Fixation",
+   "type": "Splints per Arch"
+ },
+ {
+   "code": 76141,
+   "description": "Wire",
+   "type": "Removal"
+ },
+ {
+   "code": 76142,
+   "description": "Arch Splint",
+   "type": "Removal"
+ },
+ {
+   "code": 76201,
+   "description": "Closed",
+   "type": "Mandibular reduction"
+ },
+ {
+   "code": 76301,
+   "description": "Closed",
+   "type": "Horizontal reduction"
+ },
+ {
+   "code": 76911,
+   "description": "3 cm or less",
+   "type": "Debridement"
+ },
+ {
+   "code": 76912,
+   "description": "3-6 cm",
+   "type": "Debridement"
+ },
+ {
+   "code": 76921,
+   "description": "3 cm or less",
+   "type": "Closed Alveolar"
+ },
+ {
+   "code": 76922,
+   "description": "3-6 cm",
+   "type": "Closed Alveolar"
+ },
+ {
+   "code": 76941,
+   "description": "First Tooth",
+   "type": "Replantation Avulsed"
+ },
+ {
+   "code": 76949,
+   "description": "Additional teeth",
+   "type": "Replantation Avulsed"
+ },
+ {
+   "code": 76951,
+   "description": "First Tooth",
+   "type": "Reposition Displaced"
+ },
+ {
+   "code": 76952,
+   "description": "Second tooth",
+   "type": "Reposition Displaced"
+ },
+ {
+   "code": 76959,
+   "description": "Additional teeth",
+   "type": "Reposition Displaced"
+ },
+ {
+   "code": 76961,
+   "description": "2 cm or less",
+   "type": "Repair Laceration"
+ },
+ {
+   "code": 76962,
+   "description": "2-4 cm",
+   "type": "Repair Laceration"
+ },
+ {
+   "code": 76963,
+   "description": "4-6 cm",
+   "type": "Repair Laceration"
+ },
+ {
+   "code": 77604,
+   "description": "Surgical Expansion, Alveolar, Maxilla",
+   "type": "Maxillofacial Disformitie"
+ },
+ {
+   "code": 77605,
+   "description": "Surgical Expansion, Alveolar, Mandible",
+   "type": "Maxillofacial Disformitie"
+ },
+ {
+   "code": 77801,
+   "description": "Upper Labial",
+   "type": "Frenectomy"
+ },
+ {
+   "code": 77802,
+   "description": "Lower Labial",
+   "type": "Frenectomy"
+ },
+ {
+   "code": 77803,
+   "description": "Lower Lingual",
+   "type": "Frenectomy"
+ },
+ {
+   "code": 77804,
+   "description": "Upper Labial Myotomy",
+   "type": "Frenectomy"
+ },
+ {
+   "code": 77805,
+   "description": "Upper Z",
+   "type": "Frenectomy"
+ },
+ {
+   "code": 77806,
+   "description": "Lower Z",
+   "type": "Frenectomy"
+ },
+ {
+   "code": 78102,
+   "description": "Uncomplicated",
+   "type": "Dislocation"
+ },
+ {
+   "code": 78104,
+   "description": "Luxation without anesthet",
+   "type": "Dislocation"
+ },
+ {
+   "code": 78601,
+   "description": "Anit-inflammatory drugs",
+   "type": "Management by Injections"
+ },
+ {
+   "code": 79101,
+   "description": "Dilation",
+   "type": "Salivary Glands"
+ },
+ {
+   "code": 79111,
+   "description": "Anterior 1/3 of Canal",
+   "type": "Sialolithotomy"
+ },
+ {
+   "code": 79311,
+   "description": "Immediate Recover",
+   "type": "Recovery of Foreign bodie"
+ },
+ {
+   "code": 79331,
+   "description": "Buccal Flap",
+   "type": "Oro-Antral Fistula Closur"
+ },
+ {
+   "code": 79333,
+   "description": "Palatal Flap",
+   "type": "Oro-Antral Fistula Closur"
+ },
+ {
+   "code": 79341,
+   "description": "Buccal Flap",
+   "type": "Oro-Antral Fistula Sub Cl"
+ },
+ {
+   "code": 79343,
+   "description": "Palatal Flap",
+   "type": "Oro-Antral Fistula Sub Cl"
+ },
+ {
+   "code": 79351,
+   "description": "Sinus Osseous",
+   "type": "Autograft"
+ },
+ {
+   "code": 79352,
+   "description": "Sinus Osseous",
+   "type": "Allograft"
+ },
+ {
+   "code": 79353,
+   "description": "Sinus Osseous",
+   "type": "Xenograft"
+ },
+ {
+   "code": 79354,
+   "description": "Sinus Osseous",
+   "type": "Autograft"
+ },
+ {
+   "code": 79355,
+   "description": "Sinus Osseous",
+   "type": "Allograft"
+ },
+ {
+   "code": 79356,
+   "description": "Sinus Osseous",
+   "type": "Xenograft"
+ },
+ {
+   "code": 79601,
+   "description": "Subsequent Care",
+   "type": "Post Surgical Care"
+ },
+ {
+   "code": 79602,
+   "description": "Minor",
+   "type": "Post Surgical Care"
+ },
+ {
+   "code": 79605,
+   "description": "without Anesthesia",
+   "type": "Alveolitis"
+ },
+ {
+   "code": 79606,
+   "description": "with Anesthesia",
+   "type": "Alveolitis"
+ },
+ {
+   "code": 79921,
+   "description": "Maxillary",
+   "type": "Mucosal Insert"
+ },
+ {
+   "code": 79922,
+   "description": "Mandibular",
+   "type": "Mucosal Insert"
+ },
+ {
+   "code": 79931,
+   "description": "Surg inst w impl cover",
+   "type": "Oss, Root Form"
+ },
+ {
+   "code": 79932,
+   "description": "Surg inst w Healing cap",
+   "type": "Oss, Root Form"
+ },
+ {
+   "code": 79933,
+   "description": "Surg inst w fin trans",
+   "type": "Oss, Root Form"
+ },
+ {
+   "code": 79934,
+   "description": "Surg r-ent rem. heal screw, place heal trans.",
+   "type": "Oss, Root Form"
+ },
+ {
+   "code": 79935,
+   "description": "Surg r-ent rem. heal screw, place final stand.",
+   "type": "Oss, Root Form"
+ },
+ {
+   "code": 79936,
+   "description": "Surg r-ent rem. heal screw, place final trans.",
+   "type": "Oss, Root Form"
+ },
+ {
+   "code": 79941,
+   "description": "Surg install of Implant",
+   "type": "Subperiosteal"
+ },
+ {
+   "code": 79951,
+   "description": "Installation of a Provisional Implant",
+   "type": "Per Implant"
+ },
+ {
+   "code": 79952,
+   "description": "Removal of a Provisional Implant",
+   "type": "Per Implant"
+ },
+ {
+   "code": 79961,
+   "description": "uncomp per imp",
+   "type": "implants"
+ },
+ {
+   "code": 79962,
+   "description": "comp per imp",
+   "type": "implants"
+ },
+ {
+   "code": 80000,
+   "description": "Orthodontics",
+   "type": ""
+ },
+ {
+   "code": 80601,
+   "description": "for Tooth Guidance",
+   "type": "Observations"
+ },
+ {
+   "code": 80602,
+   "description": "Orthodontic applicance",
+   "type": "Observations"
+ },
+ {
+   "code": 80631,
+   "description": "One unit of time",
+   "type": "Repairs to appliances"
+ },
+ {
+   "code": 80632,
+   "description": "Two units of time",
+   "type": "Repairs to appliances"
+ },
+ {
+   "code": 80639,
+   "description": "Additional units of time",
+   "type": "Repairs to appliances"
+ },
+ {
+   "code": 80641,
+   "description": "One unit of time",
+   "type": "Alterations to appliances"
+ },
+ {
+   "code": 80642,
+   "description": "Two units of time",
+   "type": "Alterations to appliances"
+ },
+ {
+   "code": 80649,
+   "description": "Additional units of time",
+   "type": "Alterations to appliances"
+ },
+ {
+   "code": 80651,
+   "description": "One unit of time",
+   "type": "Recementation of applican"
+ },
+ {
+   "code": 80659,
+   "description": "Additional units of time",
+   "type": "Recementation of applican"
+ },
+ {
+   "code": 80661,
+   "description": "One unit of time",
+   "type": "Separation"
+ },
+ {
+   "code": 80669,
+   "description": "Additional units of time",
+   "type": "Separation"
+ },
+ {
+   "code": 80671,
+   "description": "One unit of time",
+   "type": "Removal of fixed applianc"
+ },
+ {
+   "code": 80679,
+   "description": "Additional units of time",
+   "type": "Removal of fixed applianc"
+ },
+ {
+   "code": 81113,
+   "description": "Maxillary Bilateral",
+   "type": "Space Regaining"
+ },
+ {
+   "code": 81114,
+   "description": "Mandibular Bilateral",
+   "type": "Space Regaining"
+ },
+ {
+   "code": 81115,
+   "description": "Maxillary Complex",
+   "type": "Space Regaining"
+ },
+ {
+   "code": 81116,
+   "description": "Mandibular Complex",
+   "type": "Space Regaining"
+ },
+ {
+   "code": 81121,
+   "description": "Maxillary",
+   "type": "Cross-Bite Correction"
+ },
+ {
+   "code": 81122,
+   "description": "Mandibular",
+   "type": "Cross-Bite Correction"
+ },
+ {
+   "code": 81123,
+   "description": "Maxillary Complex",
+   "type": "Cross-Bite Correction"
+ },
+ {
+   "code": 81124,
+   "description": "Mandibular Complex",
+   "type": "Cross-Bite Correction"
+ },
+ {
+   "code": 81131,
+   "description": "Maxillary Simple",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81132,
+   "description": "Mandibular Simple",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81133,
+   "description": "Maxillary Complex",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81134,
+   "description": "Mandibular Complex",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81135,
+   "description": "Maxillary, Rapid Expansio",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81141,
+   "description": "Maxillary Simple",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81142,
+   "description": "Mandibular Simple",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81143,
+   "description": "Maxillary Complex",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81144,
+   "description": "Mandibular Complex",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81151,
+   "description": "Maxillary Simple",
+   "type": "Alignment of Anterior Tee"
+ },
+ {
+   "code": 81152,
+   "description": "Mandibular Simple",
+   "type": "Alignment of Anterior Tee"
+ },
+ {
+   "code": 81153,
+   "description": "Maxillary Complex",
+   "type": "Alignment of Anterior Tee"
+ },
+ {
+   "code": 81154,
+   "description": "Mandibular Complex",
+   "type": "Alignment of Anterior Tee"
+ },
+ {
+   "code": 81211,
+   "description": "Maxillary",
+   "type": "Space Regaining"
+ },
+ {
+   "code": 81212,
+   "description": "Mandibular",
+   "type": "Space Regaining"
+ },
+ {
+   "code": 81221,
+   "description": "Maxillary",
+   "type": "Space Regaining Unilatera"
+ },
+ {
+   "code": 81222,
+   "description": "Mandibular",
+   "type": "Space Regaining Unilatera"
+ },
+ {
+   "code": 81231,
+   "description": "Maxillary",
+   "type": "Cross-bite correction-Ant"
+ },
+ {
+   "code": 81232,
+   "description": "Mandibular",
+   "type": "Cross-bite correction-Ant"
+ },
+ {
+   "code": 81241,
+   "description": "Maxillary",
+   "type": "Cross-bite correction-Pos"
+ },
+ {
+   "code": 81242,
+   "description": "Mandibular",
+   "type": "Cross-bite correction-Pos"
+ },
+ {
+   "code": 81243,
+   "description": "Two molar band",
+   "type": "Cross-bite correction-Pos"
+ },
+ {
+   "code": 81251,
+   "description": "Maxillary",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81252,
+   "description": "Mandibular",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81253,
+   "description": "Maxillary Rapid expansion",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81254,
+   "description": "Headgear",
+   "type": "Dental Arch Expansion"
+ },
+ {
+   "code": 81261,
+   "description": "Maxillary",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81262,
+   "description": "Mandibular",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81263,
+   "description": "Maxillary Complex",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81264,
+   "description": "Mandibular Complex",
+   "type": "Closure of Diastemas"
+ },
+ {
+   "code": 81271,
+   "description": "Maxillary",
+   "type": "Alignment of Incisors"
+ },
+ {
+   "code": 81272,
+   "description": "Mandibular",
+   "type": "Alignment of Incisors"
+ },
+ {
+   "code": 81273,
+   "description": "Maxillary Complex",
+   "type": "Alignment of Incisors"
+ },
+ {
+   "code": 81274,
+   "description": "Mandibular Complex",
+   "type": "Alignment of Incisors"
+ },
+ {
+   "code": 81291,
+   "description": "Maxillary",
+   "type": "Impaction"
+ },
+ {
+   "code": 81292,
+   "description": "Mandibular",
+   "type": "Impaction"
+ },
+ {
+   "code": 81293,
+   "description": "Maxillary",
+   "type": "Erupted"
+ },
+ {
+   "code": 81294,
+   "description": "Mandibular",
+   "type": "Erupted"
+ },
+ {
+   "code": 83101,
+   "description": "Maxillary",
+   "type": "Removable appliance reten"
+ },
+ {
+   "code": 83102,
+   "description": "Mandibular",
+   "type": "Removable appliance reten"
+ },
+ {
+   "code": 83103,
+   "description": "Tooth Positioner",
+   "type": "Removable appliance reten"
+ },
+ {
+   "code": 83201,
+   "description": "Maxillary",
+   "type": "Fixed appliance retention"
+ },
+ {
+   "code": 83202,
+   "description": "Mandibular",
+   "type": "Fixed appliance retention"
+ },
+ {
+   "code": 84101,
+   "description": "Class I Malocclusion",
+   "type": "Fixed Permanent Dentition"
+ },
+ {
+   "code": 84201,
+   "description": "Class II Malocclusion",
+   "type": "Fixed Permanent Dentition"
+ },
+ {
+   "code": 84301,
+   "description": "Class III Malocclusion",
+   "type": "Fixed Permanent Dentition"
+ },
+ {
+   "code": 84401,
+   "description": "Malocclusion no Banding",
+   "type": "Fixed Permanent Dentition"
+ },
+ {
+   "code": 85101,
+   "description": "Class I Malocclusion",
+   "type": "Fixed Mixed Dentition"
+ },
+ {
+   "code": 85201,
+   "description": "Class II Malocclusion",
+   "type": "Fixed Mixed Dentition"
+ },
+ {
+   "code": 85301,
+   "description": "Class III Malocclusion",
+   "type": "Fixed Mixed Dentition"
+ },
+ {
+   "code": 86101,
+   "description": "Class I Malocclusion",
+   "type": "Fixed Primary Dentition"
+ },
+ {
+   "code": 86201,
+   "description": "Class II Malocclusion",
+   "type": "Fixed Primary Dentition"
+ },
+ {
+   "code": 86301,
+   "description": "Class III Malocclusion",
+   "type": "Fixed Primary Dentition"
+ },
+ {
+   "code": 87101,
+   "description": "Class I Malocclusion",
+   "type": "Removable Perm Dentition"
+ },
+ {
+   "code": 87201,
+   "description": "Class II Malocclusion",
+   "type": "Removable Perm Dentition"
+ },
+ {
+   "code": 87301,
+   "description": "Class III Malocclusion",
+   "type": "Removable Perm Dentition"
+ },
+ {
+   "code": 88101,
+   "description": "Class I Malocclusion",
+   "type": "Removable Mixed Dentition"
+ },
+ {
+   "code": 88201,
+   "description": "Class II Malocclusion",
+   "type": "Removable Mixed Dentition"
+ },
+ {
+   "code": 88301,
+   "description": "Class III Malocclusion",
+   "type": "Removable Mixed Dentition"
+ },
+ {
+   "code": 89101,
+   "description": "Class I Malocclusion",
+   "type": "Removable Primary Dentiti"
+ },
+ {
+   "code": 89201,
+   "description": "Class II Malocclusion",
+   "type": "Removable Primary Dentiti"
+ },
+ {
+   "code": 89301,
+   "description": "Class III Malocclusion",
+   "type": "Removable Primary Dentiti"
+ },
+ {
+   "code": 91211,
+   "description": "One unit of time",
+   "type": "Unusual Time Requirement"
+ },
+ {
+   "code": 91212,
+   "description": "Two units of time",
+   "type": "Unusual Time Requirement"
+ },
+ {
+   "code": 91213,
+   "description": "Three units of time",
+   "type": "Unusual Time Requirement"
+ },
+ {
+   "code": 91219,
+   "description": "Additional units of time",
+   "type": "Unusual Time Requirement"
+ },
+ {
+   "code": 91231,
+   "description": "One unit of time",
+   "type": "Management of Patient"
+ },
+ {
+   "code": 91232,
+   "description": "Two units of time",
+   "type": "Management of Patient"
+ },
+ {
+   "code": 91233,
+   "description": "Three units of time",
+   "type": "Management of Patient"
+ },
+ {
+   "code": 91234,
+   "description": "Four units of time",
+   "type": "Management of Patient"
+ },
+ {
+   "code": 91239,
+   "description": "Additional units of time",
+   "type": "Management of Patient"
+ },
+ {
+   "code": 92101,
+   "description": "Regional Block",
+   "type": "Local"
+ },
+ {
+   "code": 92102,
+   "description": "Trigeminal Division Block",
+   "type": "Local"
+ },
+ {
+   "code": 92212,
+   "description": "Two units of time",
+   "type": "General"
+ },
+ {
+   "code": 92213,
+   "description": "Three units of time",
+   "type": "General"
+ },
+ {
+   "code": 92214,
+   "description": "Four units of time",
+   "type": "General"
+ },
+ {
+   "code": 92215,
+   "description": "Five units of time",
+   "type": "General"
+ },
+ {
+   "code": 92216,
+   "description": "Six units of time",
+   "type": "General"
+ },
+ {
+   "code": 92217,
+   "description": "Seven units of time",
+   "type": "General"
+ },
+ {
+   "code": 92218,
+   "description": "Eight units of time",
+   "type": "General"
+ },
+ {
+   "code": 92219,
+   "description": "Additional units of time",
+   "type": "General"
+ },
+ {
+   "code": 92222,
+   "description": "Two units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92223,
+   "description": "Three units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92224,
+   "description": "Four units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92225,
+   "description": "Five units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92226,
+   "description": "Six units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92227,
+   "description": "Seven units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92228,
+   "description": "Eight units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92229,
+   "description": "Additional units of time",
+   "type": "Anesthetic Facilities"
+ },
+ {
+   "code": 92301,
+   "description": "One unit of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92302,
+   "description": "Two units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92303,
+   "description": "Three units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92304,
+   "description": "Four units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92305,
+   "description": "Five units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92306,
+   "description": "Six units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92307,
+   "description": "Seven units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92308,
+   "description": "Eight units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92309,
+   "description": "Additional units of time",
+   "type": "Deep Sedation"
+ },
+ {
+   "code": 92411,
+   "description": "One unit of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92412,
+   "description": "Two units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92413,
+   "description": "Three units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92414,
+   "description": "Four units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92415,
+   "description": "Five units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92416,
+   "description": "Six units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92417,
+   "description": "Seven units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92418,
+   "description": "Eight units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92419,
+   "description": "Additional units of time",
+   "type": "Nitrous Oxide And Oxygen"
+ },
+ {
+   "code": 92421,
+   "description": "One unit of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92422,
+   "description": "Two units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92423,
+   "description": "Three units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92424,
+   "description": "Four units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92425,
+   "description": "Five units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92426,
+   "description": "Six units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92427,
+   "description": "Seven units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92428,
+   "description": "Eight units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92429,
+   "description": "Additional units of time",
+   "type": "Oral Sedation"
+ },
+ {
+   "code": 92431,
+   "description": "One unit of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92432,
+   "description": "Two units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92433,
+   "description": "Three units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92434,
+   "description": "Four units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92435,
+   "description": "Five units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92436,
+   "description": "Six units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92437,
+   "description": "Seven units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92438,
+   "description": "Eight units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92439,
+   "description": "Additional units of time",
+   "type": "Nitrous Oxide Oral Sedati"
+ },
+ {
+   "code": 92441,
+   "description": "One unit of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92442,
+   "description": "Two units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92443,
+   "description": "Three units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92444,
+   "description": "Four units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92445,
+   "description": "Five units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92446,
+   "description": "Six units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92447,
+   "description": "Seven units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92448,
+   "description": "Eight units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92449,
+   "description": "Additional units of time",
+   "type": "Intravenous Sedation"
+ },
+ {
+   "code": 92451,
+   "description": "One unit of time",
+   "type": "Combined techniques"
+ },
+ {
+   "code": 92452,
+   "description": "Two units of time",
+   "type": "Combined techniques"
+ },
+ {
+   "code": 92459,
+   "description": "Additional units of time",
+   "type": "Combined techniques"
+ },
+ {
+   "code": 92511,
+   "description": "One unit of time",
+   "type": "Hypnosis"
+ },
+ {
+   "code": 92512,
+   "description": "Two units of time",
+   "type": "Hypnosis"
+ },
+ {
+   "code": 92519,
+   "description": "Additional units of time",
+   "type": "Hypnosis"
+ },
+ {
+   "code": 92521,
+   "description": "One unit of time",
+   "type": "Acupuncture"
+ },
+ {
+   "code": 92522,
+   "description": "Two units of time",
+   "type": "Acupuncture"
+ },
+ {
+   "code": 92529,
+   "description": "Additional units of time",
+   "type": "Acupuncture"
+ },
+ {
+   "code": 92531,
+   "description": "One unit of time",
+   "type": "Electronic Dental Anesth"
+ },
+ {
+   "code": 92532,
+   "description": "Two units of time",
+   "type": "Electronic Dental Anesth"
+ },
+ {
+   "code": 92539,
+   "description": "Each add. Unit over four",
+   "type": "Electronic Dental Anesth"
+ },
+ {
+   "code": 93111,
+   "description": "One unit of time",
+   "type": "Consultation"
+ },
+ {
+   "code": 93112,
+   "description": "Two units of time",
+   "type": "Consultation"
+ },
+ {
+   "code": 93119,
+   "description": "Additional units of time",
+   "type": "Consultation"
+ },
+ {
+   "code": 93121,
+   "description": "Short",
+   "type": "Dental Legal Report"
+ },
+ {
+   "code": 93122,
+   "description": "Summary",
+   "type": "Dental Legal Report"
+ },
+ {
+   "code": 93123,
+   "description": "Expert Opinion",
+   "type": "Dental Legal Report"
+ },
+ {
+   "code": 93131,
+   "description": "One unit of time",
+   "type": "Consultation During Autop"
+ },
+ {
+   "code": 93132,
+   "description": "Two units of time",
+   "type": "Consultation During Autop"
+ },
+ {
+   "code": 93139,
+   "description": "Additional units of time",
+   "type": "Consultation During Autop"
+ },
+ {
+   "code": 93211,
+   "description": "Duplication of records",
+   "type": "Patient File Management"
+ },
+ {
+   "code": 93301,
+   "description": "Completing ODA/CDA Form",
+   "type": "Standard Claim Forms"
+ },
+ {
+   "code": 93302,
+   "description": "Providing Treatment plan",
+   "type": "Claim Form Completion"
+ },
+ {
+   "code": 93303,
+   "description": "Completing other forms",
+   "type": "Prepaid Claim Forms"
+ },
+ {
+   "code": 93311,
+   "description": "One unit of time",
+   "type": "Unreasonable telephone ti"
+ },
+ {
+   "code": 93312,
+   "description": "Two units of time",
+   "type": "Unreasonable telephone ti"
+ },
+ {
+   "code": 93318,
+   "description": "Zero units of time",
+   "type": "Unreasonable telephone ti"
+ },
+ {
+   "code": 93319,
+   "description": "Additional units of time",
+   "type": "Unreasonable telephone ti"
+ },
+ {
+   "code": 93321,
+   "description": "One unit of time",
+   "type": "Extraordinary Office Time"
+ },
+ {
+   "code": 93322,
+   "description": "Two units of time",
+   "type": "Extraordinary Office Time"
+ },
+ {
+   "code": 93329,
+   "description": "Additional units of time",
+   "type": "Extraordinary Office Time"
+ },
+ {
+   "code": 93331,
+   "description": "Payment for Treatment",
+   "type": "In-Process Orthodontic"
+ },
+ {
+   "code": 93332,
+   "description": "Monthly Installment",
+   "type": "Orthodontic Treatment"
+ },
+ {
+   "code": 93333,
+   "description": "Quarterly Installment",
+   "type": "Orthodontic Treatment"
+ },
+ {
+   "code": 93334,
+   "description": "One time appliance",
+   "type": "Orthodontic Treatment"
+ },
+ {
+   "code": 94101,
+   "description": "Non Emergency",
+   "type": "House Call"
+ },
+ {
+   "code": 94102,
+   "description": "Emergency",
+   "type": "House Call"
+ },
+ {
+   "code": 94301,
+   "description": "Regular hours",
+   "type": "Office Visit"
+ },
+ {
+   "code": 94302,
+   "description": "After hours",
+   "type": "Office Visit"
+ },
+ {
+   "code": 94303,
+   "description": "Missed appointment",
+   "type": "Office Visit"
+ },
+ {
+   "code": 94304,
+   "description": "Missed special appointmen",
+   "type": "Office Visit"
+ },
+ {
+   "code": 94305,
+   "description": "Travelling expenses",
+   "type": "Office Visit"
+ },
+ {
+   "code": 94306,
+   "description": "Out of Office",
+   "type": "Office Visit"
+ },
+ {
+   "code": 94411,
+   "description": "One unit of time",
+   "type": "Preparation as a Witness"
+ },
+ {
+   "code": 94412,
+   "description": "Two units of time",
+   "type": "Preparation as a Witness"
+ },
+ {
+   "code": 94413,
+   "description": "Three units of time",
+   "type": "Preparation as a Witness"
+ },
+ {
+   "code": 94414,
+   "description": "Four units of time",
+   "type": "Preparation as a Witness"
+ },
+ {
+   "code": 94419,
+   "description": "Additional units of time",
+   "type": "Preparation as a Witness"
+ },
+ {
+   "code": 94421,
+   "description": "One-half day",
+   "type": "Court appearance"
+ },
+ {
+   "code": 94422,
+   "description": "Full day",
+   "type": "Court appearance"
+ },
+ {
+   "code": 95101,
+   "description": "Identification",
+   "type": "Opinion as an expert"
+ },
+ {
+   "code": 95102,
+   "description": "Participation in Civil Di",
+   "type": ""
+ },
+ {
+   "code": 95104,
+   "description": "Written Odontology Report",
+   "type": ""
+ },
+ {
+   "code": 96101,
+   "description": "Emergency",
+   "type": "Prescriptions"
+ },
+ {
+   "code": 96102,
+   "description": "Emergency and written",
+   "type": "Prescriptions"
+ },
+ {
+   "code": 96103,
+   "description": "Non-emergency dispensing",
+   "type": "Prescriptions"
+ },
+ {
+   "code": 96201,
+   "description": "I.M. Therapeutic Drug",
+   "type": "Injection"
+ },
+ {
+   "code": 96202,
+   "description": "I.V. Therapeutic Drug",
+   "type": "Injection"
+ },
+ {
+   "code": 96203,
+   "description": "Intralesional Delivery",
+   "type": "Injection"
+ },
+ {
+   "code": 97111,
+   "description": "One unit of time",
+   "type": "Bleaching Vital in office"
+ },
+ {
+   "code": 97112,
+   "description": "Two units of time",
+   "type": "Bleaching Vital in office"
+ },
+ {
+   "code": 97113,
+   "description": "Three units of time",
+   "type": "Bleaching Vital in office"
+ },
+ {
+   "code": 97119,
+   "description": "Additional units of time",
+   "type": "Bleaching Vital in office"
+ },
+ {
+   "code": 97121,
+   "description": "Maxillary Arch",
+   "type": "Bleaching Vital in home"
+ },
+ {
+   "code": 97122,
+   "description": "Mandibular Arch",
+   "type": "Bleaching Vital in home"
+ },
+ {
+   "code": 97123,
+   "description": "Maxillary and Mandibular ",
+   "type": "Bleaching Vital in home"
+ },
+ {
+   "code": 97131,
+   "description": "One unit of time",
+   "type": "Micro-Abrasion"
+ },
+ {
+   "code": 97132,
+   "description": "Two units of time",
+   "type": "Micro-Abrasion"
+ },
+ {
+   "code": 97133,
+   "description": "Three units of time",
+   "type": "Micro-Abrasion"
+ },
+ {
+   "code": 97134,
+   "description": "Four units of time",
+   "type": "Micro-Abrasion"
+ },
+ {
+   "code": 97139,
+   "description": "Additional units of time",
+   "type": "Micro-Abrasion"
+ },
+ {
+   "code": 98101,
+   "description": "One unit of time",
+   "type": "Counseling"
+ },
+ {
+   "code": 98102,
+   "description": "Two units of time",
+   "type": "Counseling"
+ },
+ {
+   "code": 98109,
+   "description": "Each additional unit",
+   "type": "Counseling"
+ },
+ {
+   "code": 99111,
+   "description": "Commercial Lab Fees",
+   "type": ""
+ },
+ {
+   "code": 99222,
+   "description": "Oral Path biopsy serv",
+   "type": "Laboratory Procedures"
+ },
+ {
+   "code": 99333,
+   "description": "In House Lab Fees",
+   "type": ""
+ },
+ {
+   "code": 99555,
+   "description": "Expenses",
+   "type": ""
+ },
+ {
+   "code": 99711,
+   "description": "GST",
+   "type": ""
+ },
+ {
+   "code": 99712,
+   "description": "PST",
+   "type": ""
+ },
+ {
+   "code": 99713,
+   "description": "HST",
+   "type": ""
+ }
+]
