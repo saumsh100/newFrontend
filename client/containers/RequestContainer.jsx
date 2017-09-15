@@ -26,6 +26,7 @@ class RequestContainer extends React.Component {
         patientUsers={this.props.patientUsers}
         practitioners={this.props.practitioners}
         location={location}
+        maxHeight={this.props.maxHeight}
       />
     );
   }

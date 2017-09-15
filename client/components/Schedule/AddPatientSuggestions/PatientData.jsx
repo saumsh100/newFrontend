@@ -17,7 +17,7 @@ export default function PatientData(props) {
     endDate: requestData.endDate,
     serviceId: requestData.serviceId,
     note: requestData.note,
-    isSyncedWithPMS: false,
+    isSyncedWithPms: false,
     customBufferTime: 0,
     request: true,
     patientId: patient.id,

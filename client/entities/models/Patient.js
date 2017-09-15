@@ -30,7 +30,7 @@ const PatientSchema = {
   id: null,
   insurance: {},
   isDeleted: null,
-  isSyncedWithPMS: null,
+  isSyncedWithPms: null,
   appointments: null,
   patientUserId: null,
 };

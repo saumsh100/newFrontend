@@ -171,7 +171,7 @@
         font-size: $small-size;
       }
       &__button {
-        color: $primary-light-blue;;
+        color: $primary-blue;;
         font-size: $small-size;
         text-decoration: none;
         display: flex;
@@ -184,11 +184,11 @@
         link {
           text-decoration: none;
           &:hover {
-            color: darken($primary-light-blue, 10%);
+            color: darken($primary-blue, 10%);
           }
         }
         &:hover {
-          color: darken($primary-light-blue, 10%);
+          color: darken($primary-blue, 10%);
         }
       }
     }

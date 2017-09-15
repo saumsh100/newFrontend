@@ -37,7 +37,7 @@ class RequestList extends Component {
       endDate: request.get('endDate'),
       serviceId: request.get('serviceId'),
       note: request.note,
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
       customBufferTime: 0,
       request: true,
       requestModel: modifiedRequest,
@@ -69,10 +69,15 @@ class RequestList extends Component {
       patientUsers,
       practitioners,
       setHoverRequestId,
+      maxHeight,
     } = this.props;
 
+    const style = {
+      maxHeight: maxHeight || '555px',
+    };
+
     return (
-      <List className={styles.requestList}>
+      <List className={styles.requestList} style={style}>
         {sortedRequests.map((request) => {
           //const active = request.get('id') === this.props.setHoverRequestId;
           const practitionerId = request.get('practitionerId');

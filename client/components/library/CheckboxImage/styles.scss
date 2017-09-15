@@ -36,8 +36,15 @@
   }
 
   &__photo {
-    max-width: 45px;
+    max-width: 55px;
     margin-bottom: 5px;
+    display: inline-block;
+    position:relative;
+  }
+  &__avatar {
+    position: absolute;
+    left: 4px;
+    top: 3.4px;
   }
 
   &__spec {
@@ -47,26 +54,31 @@
 }
 
 .primaryColor {
-  border: 3px solid;
+  background: linear-gradient(rgba(255, 113, 90, 1), white 70%);
+  border-radius: 50%;
   border-color: $primary-color;
-  transition-timing-function: ease-in;
-  transition: .10s
+  //transition-timing-function: ease-in;
+  width: 55px;
+  height: 55px;
 }
 .primaryYellow {
-  border: 3px solid;
+  background: linear-gradient(rgba(255, 196, 90, 1), white 70% );
+  border-radius: 50%;
   border-color: $primary-yellow;
-  transition-timing-function: ease-in;
-  transition: .10s
+  width: 55px;
+  height: 55px;
 }
 .primaryGreen {
-  border: 3px solid;
+  background: linear-gradient(rgba(44, 196, 167, 1), white 70%);
+  border-radius: 50%;
   border-color: $primary-green;
-  transition-timing-function: ease-in;
-  transition: .10s
+  width: 55px;
+  height: 55px;
 }
 .primaryBlueGreen {
-  border: 3px solid;
-  border-color: $primary-blue-green;
-  transition-timing-function: ease-in;
-  transition: .10s
+  background: linear-gradient(rgba(32,100,119,1), white 70%);
+  border-radius: 50%;
+  border-color: $primary-blue;
+  width: 55px;
+  height: 55px;
 }

@@ -31,12 +31,12 @@ export default function PractitionersSlot(props) {
             return app;
           }
 
-          const service = services.get(app.get('serviceId'));
+          //const service = services.get(app.get('serviceId'));
           const chair = chairs.get(app.get('chairId'));
-          const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
+          //const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
           const chairsFilter = chair && checkFilters.chairsFilter.indexOf(chair.get('id')) > -1;
 
-          return ((app.practitionerId === pract.id) && chairsFilter && servicesFilter);
+          return ((app.practitionerId === pract.id) && chairsFilter);
         }).map((app) => {
           if (app.get('mark')) {
             return app;
@@ -44,7 +44,7 @@ export default function PractitionersSlot(props) {
 
           return Object.assign({}, app.toJS(), {
             appModel: app,
-            serviceData: services.get(app.get('serviceId')).get('name'),
+            //serviceData: services.get(app.get('serviceId')).get('name'),
             chairData: chairs.get(app.get('chairId')).get('name'),
             patientData: patients.get(app.get('patientId')),
             practitionerData: pract,
