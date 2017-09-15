@@ -86,6 +86,7 @@ class ServiceListContainer extends Component {
             actions={actions}
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
+            title="Create New Service"
           >
             <CreateServiceForm
               formName={formName}

@@ -13,7 +13,7 @@ const appointment = {
   accountId,
   patientId,
   practitionerId,
-  isSyncedWithPMS: false,
+  isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',

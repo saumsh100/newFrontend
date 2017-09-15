@@ -45,7 +45,7 @@ export default function FiltersDisplay(props) {
           handleEntityCheck={handleEntityCheck}
         />
         <div className={styles.filter_options}>
-          <FilterEntities
+          {/*<FilterEntities
             display="name"
             label="Services"
             filterKey="servicesFilter"
@@ -54,7 +54,7 @@ export default function FiltersDisplay(props) {
             selectedFilterItem={selectedFilters.servicesFilter}
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
-          />
+          />*/}
           <FilterEntities
             display="name"
             label="Chairs"

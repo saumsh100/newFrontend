@@ -139,7 +139,7 @@ class PractitionerRecurringTimeOff extends Component {
 
     let showAddOrListComponent = (
       <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
-        <Button onClick={this.addTimeOff} create icon="plus">Add Time Off</Button>
+        <Button onClick={this.addTimeOff} create icon="plus">Add Recurring Time Off</Button>
       </div>
     );
     if (recurringTimeOffs.size > 0) {
@@ -185,8 +185,6 @@ class PractitionerRecurringTimeOff extends Component {
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
-          className={styles.modal}
-          custom
         >
           <RecurringTimeOffForm
             key={formName}

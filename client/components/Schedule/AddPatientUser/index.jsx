@@ -29,7 +29,7 @@ class AddPatientUser extends Component {
 
     const phoneNumber = values.phoneNumber;
 
-    values.isSyncedWithPMS = false;
+    values.isSyncedWithPms = false;
     values.patientUserId = patientUser.id;
     values.mobilePhoneNumber = phoneNumber;
 
@@ -38,7 +38,7 @@ class AddPatientUser extends Component {
       endDate: requestData.endDate,
       serviceId: requestData.serviceId,
       note: requestData.note,
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
       customBufferTime: 0,
       requestModel: requestData.requestModel,
       request: true,
@@ -67,12 +67,13 @@ class AddPatientUser extends Component {
         <CardHeader
           className={styles.header}
           title="Create New Patient"
-        />
+        >
         <Icon
           icon="times"
           onClick={reinitializeState}
           className={styles.trashIcon}
         />
+        </CardHeader>
         <div className={styles.formContainer}>
           <NewPatientForm
             mergingPatientData={mergingPatientData}

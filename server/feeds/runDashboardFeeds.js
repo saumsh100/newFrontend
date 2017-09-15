@@ -48,7 +48,7 @@ function runDashboardFeeds(socket) {
 
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-        if (doc.isSyncedWithPMS) {
+        if (doc.isSyncedWithPms) {
           if (isDeleted(doc)) {
             socket.emit('remove:Patient', doc.id);
           } else if (isCreated(doc)) {

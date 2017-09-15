@@ -127,7 +127,7 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
-    isSyncedWithPMS: {
+    isSyncedWithPms: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
