@@ -22,7 +22,7 @@
       align-items: center;
       border: 1px solid $primary-grey;
       width: 100px;
-      color: $primary-dark;
+      color: $inactive-color;
       font-weight: $large-weight;
     }
 
@@ -52,22 +52,24 @@
 
   &_icon {
     display: flex;
-    color: $inactive-color;
-    opacity: 1;
+    color: darken($primary-grey,10%);
+    opacity: 0.7;
     float: right;
     &_item {
+      padding-top: 2px;
       padding-right: 2px;
     }
   }
 
   &_nameAge {
     display: flex;
-    color: $primary-white;
     width: auto;
     padding-left: 5px;
     padding-top: 15px;
+    padding-bottom: 3px;
     &_name {
-      font-weight: $large-weight;
+      composes: subHeader from 'sass-loader!../../../fonts.scss';
+      //color: darken($primary-white, 5%);
       padding-right: 5px;
       white-space: nowrap;
       overflow: hidden;
@@ -78,10 +80,8 @@
   &_duration {
     padding-left: 5px;
     display: flex;
-    color: $primary-dark;
-    font-weight: $large-weight;
-    font-size: $small-size;
-
+    composes: subHeaderMediumSmall from 'sass-loader!../../../fonts.scss';
+    color: #ededed;
     &_text {
       white-space: nowrap;
       overflow: hidden;
@@ -93,8 +93,7 @@
     display: flex;
     padding-left: 5px;
     color: $primary-dark;
-    font-family: $medium-font;
-    font-size: $extra-small-size;
+    composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
 
     &_service{
       padding-right: 5px;

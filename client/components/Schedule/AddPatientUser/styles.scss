@@ -5,18 +5,18 @@
   display: inline-block;
   align-content: center;
   justify-content: center;
-  height: auto
+  height: auto;
+  padding: 20px;
+  border-radius: .5rem;
 }
 
 .header {
-  padding-left: 15px;
+  padding-bottom: 10px;
 }
 .formContainer {
-  padding: 15px;
   &_spacing {
     padding: 0px;
   }
-
   &_dropDown {
     padding-top: 15px;
     padding-bottom: 20px;
@@ -24,15 +24,16 @@
 }
 
 .trashIcon {
-  position: absolute;
-  right: 5px;
+  //position: absolute;
+  //right: 5px;
   top: 5px;
   font-size: 1.4em;
   color: $primary-darkgrey;
+  margin-left: auto;
 
   &:hover {
     cursor: pointer;
-    color: $primary-color;
+    color: darken($primary-darkgrey, 10%);
   }
 }
 

@@ -17,6 +17,7 @@
     user-select: none;
     background-color: white;
 }
+
 .DayPicker:focus {
     outline: none;
 }

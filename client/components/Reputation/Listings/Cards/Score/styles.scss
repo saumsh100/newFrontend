@@ -14,7 +14,7 @@
     border-bottom: 1px solid $primary-lightgrey;
     padding-bottom: 10px;
     &_count {
-      color: $primary-light-blue;
+      color: $primary-blue;
       composes: fontExtraLarge from 'sass-loader!../../../../../fonts.scss';
     }
     &_title {
