@@ -68,6 +68,22 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  DeliveredProcedure: [
+    'accountId',
+    'patientId',
+    'procedureCode',
+    'pmsId',
+    'units',
+    'totalAmount',
+    'primaryInsuranceAmount',
+    'secondaryInsuranceAmount',
+    'patientAmount',
+    'discountAmount',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Family: [
     'accountId',
     'pmsId',
@@ -169,6 +185,11 @@ const SERIALIZERS = {
 
   configuration: new Serializer('configuration', makeConfig({
     attributes: ModelAttributes.Configuration,
+    pluralizeType: false,
+  })),
+
+  deliveredProcedure: new Serializer('procedure', makeConfig({
+    attributes: ModelAttributes.DeliveredProcedure,
     pluralizeType: false,
   })),
 
