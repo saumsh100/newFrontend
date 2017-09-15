@@ -337,7 +337,7 @@ class Overview extends Component {
             </Col>
             <Col   xs={12} sm={6}>
               <ContainerList
-                cardTitle="Top Services by Hours"
+                cardTitle="Top Procedures by Hours"
                 data={serviceData}
               />
             </Col>
@@ -409,7 +409,6 @@ Overview.propTypes = {
   appointmentStats: PropTypes.object,
   appointmentStatsLastYear: PropTypes.object,
   dayStats: PropTypes.object,
-  appointmentStats: PropTypes.object,
   patientStats: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   location: PropTypes.object,

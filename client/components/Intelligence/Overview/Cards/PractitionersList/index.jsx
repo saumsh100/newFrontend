@@ -18,7 +18,9 @@ class PractitionersList extends Component {
         <div className={styles.practitioner__item_wrapper}>
           <div className={styles.practitioner__item_header}>
             <div className={styles.practitioner__item_img}>
-              <PractitionerAvatar size="lg" practitioner={practitioner} />
+              <div className={styles.practitioner__item_gradient}>
+                <PractitionerAvatar className={styles.practitioner__item_avatar} size="lg" practitioner={practitioner} />
+              </div>
             </div>
             <div className={styles.practitioner__item_about}>
               <div className={styles.practitioner__item_name}>
