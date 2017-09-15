@@ -21,6 +21,7 @@ import AgeRange from './Cards/AgeRange';
 import TopReference from './Cards/TopReference';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
+import { SortByFirstName } from "../../library/util/SortEntities";
 
 class Overview extends Component {
   constructor(props) {
@@ -154,8 +155,27 @@ class Overview extends Component {
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
+    const colors = ['primaryColor', 'primaryBlueGreen', 'primaryYellow', 'primaryGreen'];
+    const colorLen = colors.length;
+    const colorArray = [];
+
+
+    const reset = Math.ceil((prac.size - colorLen) / colorLen);
+
+    for (let j = 0; j <= reset; j++) {
+      for (let i = 0; i < colorLen; i++) {
+        colorArray.push(colors[i]);
+      }
+    }
+
     const realData = (appointmentStats ? (
-      prac.toArray().map((key) => {
+      prac.toArray().sort((pracData, pracData2) => {
+        const a = pracData.toJS();
+        const b = pracData2.toJS();
+        if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+        if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
+        return 0;
+      }).map((key, index) => {
         const data = {};
         data.appointmentBooked = Math.floor(key.toObject().appointmentTime / 60) || 0;
         data.appointmentNotFiltred = Math.floor(key.toObject().totalTime / 60) - data.appointmentBooked;
@@ -177,6 +197,7 @@ class Overview extends Component {
             newPatients={data.newPatients}
             percentage={data.percentage}
             practitioner={key.toObject()}
+            color={colorArray[index]}
           />);
       })) : <div />);
 
@@ -191,6 +212,9 @@ class Overview extends Component {
       name: `${key.toObject().firstName} ${key.toObject().lastName}`,
       age: key.toObject().age,
       number: key.toObject().numAppointments,
+      firstName: key.toObject().firstName,
+      lastName: key.toObject().lastName,
+      avatarUrl: key.toObject().avatarUrl,
     })) : []);
 
     sortedPatients = sortedPatients.sort((a, b) => b.number - a.number);

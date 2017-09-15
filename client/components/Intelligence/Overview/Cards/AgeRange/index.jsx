@@ -9,7 +9,7 @@ export default function AgeRange(props) {
   } = props;
 
   return (
-    <Card  className={styles.card}>
+    <Card className={styles.card}>
       <CardHeader className={styles.cardHeader} title="Age Range for the Last 12 Months" />
       <div className={styles.ageRange}>
         <div className={styles.ageRange__content}>
@@ -20,7 +20,7 @@ export default function AgeRange(props) {
             dataSets={[{
               label: 'Appointments Percentage',
               color: ['yellow', 'red', 'green', 'blue', 'darkblue'],
-              data: chartData
+              data: chartData,
             }]}
           />
         </div>

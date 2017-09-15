@@ -12,6 +12,39 @@ class AppointmentsBooked extends Component {
       dataSets,
 
     } = this.props;
+
+    const ticks = {
+      fontSize: 10,
+      fontFamily: 'Gotham-Medium',
+      fontColor: '#2e3845',
+      padding: 15,
+      maxRotation: 0,
+      autoSkip: false,
+
+    };
+
+    const lineChartOptions = {
+      maintainAspectRatio: false,
+      scales: {
+        yAxes: [{
+          ticks,
+          gridLines: {
+            beginAtZero: true,
+            drawTicks: false,
+          },
+        }],
+
+        xAxes: [{
+          ticks,
+          gridLines: {
+            offsetGridLines: true,
+            display: true,
+            drawTicks: false,
+            drawOnChartArea: false,
+          },
+        }],
+      },
+    };
     return (
       <Card className={styles.booked} >
         <div className={styles.booked__header}>
@@ -19,9 +52,11 @@ class AppointmentsBooked extends Component {
         </div>
         <div className={styles.booked__body}>
           <LineChart
-            displayTooltips={true}
+            displayTooltips
+            height={500}
             labels={labels}
             dataSets={dataSets}
+            options={lineChartOptions}
           />
         </div>
       </Card>
