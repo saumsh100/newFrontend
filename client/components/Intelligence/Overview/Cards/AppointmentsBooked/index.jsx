@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Card, CardHeader, LineChart } from '../../../../library';
 import styles from './styles.scss';
 
-
 class AppointmentsBooked extends Component {
   render() {
     const {
@@ -20,7 +19,6 @@ class AppointmentsBooked extends Component {
       padding: 15,
       maxRotation: 0,
       autoSkip: false,
-
     };
 
     const lineChartOptions = {
