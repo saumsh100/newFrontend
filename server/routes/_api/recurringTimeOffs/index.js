@@ -2,6 +2,7 @@ import moment from 'moment-timezone';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
 import { PractitionerRecurringTimeOff, Account, Practitioner, WeeklySchedule } from '../../../_models';
+import batchCreate from '../../util/batch';
 
 const union = require('lodash/union');
 const recurringTimeOffRouter = require('express').Router();
@@ -19,6 +20,32 @@ recurringTimeOffRouter.post('/', checkPermissions('timeOffs:create'), (req, res,
   return PractitionerRecurringTimeOff.create(req.body)
     .then((tf) => {
       return res.status(201).send(normalize('practitionerRecurringTimeOff', tf.get({ plain: true })))
+    })
+    .catch(next);
+});
+
+/**
+ * Batch Create a timeOff from PMS
+ */
+recurringTimeOffRouter.post('/connector/batch', checkPermissions('timeOffs:create'), async (req, res, next) => {
+  const timeOffs = req.body;
+
+  return batchCreate(timeOffs, PractitionerRecurringTimeOff, 'PractitionerRecurringTimeOff')
+    .then((apps) => {
+
+      const appData = apps.map(app => app.get({ plain: true }));
+
+      res.status(201).send(format(req, res, 'practitionerSchedules', appData));
+    })
+    .catch(({ errors, docs }) => {
+      docs = docs.map(d => d.get({ plain: true }));
+
+      // Log any errors that occurred
+      errors.forEach((err) => {
+        console.error(err);
+      });
+      const data = format(req, res, 'practitionerSchedules', docs);
+      return res.status(201).send(Object.assign({}, data));
     })
     .catch(next);
 });
