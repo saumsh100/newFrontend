@@ -15,64 +15,54 @@ import {
 } from '../../library';
 import styles from './styles.scss';
 
-const collectionOrder = [
-  'chairs',
-  'practitioners',
-  'families',
-  'patients',
-  'appointments',
-];
-
-const collectionWeights = [
-  10,
-  10,
-  20,
-  30,
-  30,
-];
-
-const getPercentageFromProgress = (progress) => {
-  const { collection, saved, total } = progress;
-  const ii = collectionOrder.indexOf(collection);
-  const collectionWeight = collectionWeights[ii];
-  const weightSoFar = collectionWeights.slice(0, ii).reduce((a, b) => a + b, 0);
-  return weightSoFar + (saved / total) * collectionWeight;
-};
-
-class Panel extends Component {
+class Completed extends Component {
   constructor(props) {
     super(props);
 
-    this.startSync = this.startSync.bind(this);
+    this.stopSync = this.stopSync.bind(this);
   }
 
-  startSync() {
-    this.props.startSync()
-      .then(() => this.props.history.push('./progress'));
+  stopSync() {
+    this.props.stopSync();
   }
 
   render() {
     const { account } = this.props;
     if (!account) return null;
 
+    const { origin, protocol } = window.location;
+    const split = origin.split('.');
+    const url = `${protocol}//${split[1]}.${split[2]}/intelligence`;
+    const dashboardLink = (
+      <a href={url} target="_blank">
+        here
+      </a>
+    );
+
     return (
       <div>
-        <div className={styles.subHeader}>
-          All systems are go captain! Click the button below to start the sync.
+        <div className={styles.logoWrapper}>
+          <img
+            className={styles.logo}
+            src="/images/carecru_logo_collapsed_dark.png"
+            alt="CareCru Logo"
+          />
         </div>
-        <VButton
-          color="dark"
-          className={styles.btn}
-          onClick={this.startSync}
-        >
-          Start Sync
-        </VButton>
+        <div className={styles.header}>
+          Congratulations!
+        </div>
+        <div className={styles.subHeader}>
+          CareCru is now connected.
+        </div>
+        <div className={styles.subHeader}>
+          Click {dashboardLink} to view your data in the dashboard.
+        </div>
       </div>
     );
   }
 }
 
-Panel.propTypes = {
+Completed.propTypes = {
   isSyncing: PropTypes.bool.isRequired,
   account: PropTypes.object,
   progress: PropTypes.object,
@@ -90,7 +80,8 @@ function mapStateToProps({ entities, auth, connect }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     startSync,
+    stopSync,
   }, dispatch);
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Panel));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Completed));

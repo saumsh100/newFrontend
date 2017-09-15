@@ -13,11 +13,11 @@ import styles from './styles.scss';
 const customSubmitButton = (
   <VButton
     type="submit"
-    color="red"
+    color="dark"
     icon="email"
     className={styles.customSubmitButton}
   >
-    Log In
+    Get Started
   </VButton>
 );
 
@@ -51,8 +51,14 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
-        <div className={styles.logo} />
+      <div className={styles.loginWrapper}>
+        <div className={styles.logoWrapper}>
+          <img
+            className={styles.logo}
+            src="/images/carecru_logo_collapsed_dark.png"
+            alt="CareCru Logo"
+          />
+        </div>
         <div className={styles.header}>
           Welcome to CareCru.
         </div>
@@ -62,6 +68,7 @@ class Login extends Component {
         <LoginForm
           onSubmit={this.handleLogin}
           submitButton={customSubmitButton}
+          className={styles.loginForm}
         />
       </div>
     );

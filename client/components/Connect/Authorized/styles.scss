@@ -17,3 +17,12 @@
     margin: 0px;
   }
 }
+
+.authWrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 30px;
+  box-sizing: border-box;
+}

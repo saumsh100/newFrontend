@@ -13,9 +13,9 @@ const defaultSubmitButton = (
   </Button>
 );
 
-export default function Login({ onSubmit, submitButton = defaultSubmitButton }) {
+export default function Login({ onSubmit, submitButton = defaultSubmitButton, className }) {
   return (
-    <Form form="login" onSubmit={onSubmit} ignoreSaveButton={true}>
+    <Form form="login" onSubmit={onSubmit} ignoreSaveButton={true} className={className}>
       <Field
         type="email"
         name="email"

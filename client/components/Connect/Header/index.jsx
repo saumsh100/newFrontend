@@ -2,19 +2,36 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { logout } from '../../../thunks/auth';
-import { IconButton } from '../../library';
+import { IconButton, VButton, Button } from '../../library';
 import styles from './styles.scss';
 
 function Header(props) {
+  const logoutButton = () => (
+    <VButton
+      className={styles.button}
+      icon="angle-left"
+      onClick={props.logout}
+      title="Sign Out"
+    />
+  );
+
+  const settingsButton = () => (
+    <VButton
+      className={styles.button}
+      icon="angle-left"
+      onClick={() => props.history.push('./settings')}
+      title="Settings"
+    />
+  );
+
   return (
     <div className={styles.headerWrapper}>
-      <div className={styles.pullRight}>
-        <IconButton
-          icon="sign-out"
-          onClick={props.logout}
-        />
-      </div>
+      <Switch>
+        <Route exact path="/panel" component={settingsButton} />
+        <Route exact path="/settings" component={logoutButton} />
+      </Switch>
     </div>
   );
 }
@@ -27,4 +44,5 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(Header);
+// need with Router so that it re-renders on changing routes
+export default withRouter(connect(null, mapDispatchToProps)(Header));

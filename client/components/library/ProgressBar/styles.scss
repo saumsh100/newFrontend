@@ -1,15 +1,15 @@
 
 @import '../../../ui';
 
-$h: 30px;
+$h: 80px;
 $br: $h / 2;
 $p: 2px;
 $br-bar: ($h - $p) / 2;
 
 .wrapper {
 	height: $h;
-  width: 100%;
   border-radius: $br;
+  width: 100%;
   background-color: $primary-dark;
   overflow: hidden;
   box-sizing: border-box;

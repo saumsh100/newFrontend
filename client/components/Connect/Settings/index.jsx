@@ -32,7 +32,10 @@ class Settings extends Component {
     const adapterType = account.get('adapterType');
     const initialValues = { adapterType };
     return (
-      <div>
+      <div className={styles.settingsWrapper}>
+        <div className={styles.subHeader}>
+          Select your practice management software with the correct version (ie. Tracker 11).
+        </div>
         <ConnectorSettingsForm
           initialValues={initialValues}
           onSubmit={this.handleSettingsSubmit}

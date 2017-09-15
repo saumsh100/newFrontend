@@ -1,10 +1,23 @@
 
 import { updateEntity } from '../actions/entities';
-import { setIsSyncing, setProgress } from '../reducers/connect';
+import { push } from 'react-router-redux';
+import { setIsSyncing, setProgress, setIsDone } from '../reducers/connect';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
   const { dispatch, getState } = store;
+
+  window.setProgress = (data) => {
+    dispatch(setProgress(data));
+  };
+
+  window.setFinished = () => {
+    dispatch(setIsSyncing(false));
+    dispatch(setIsDone(true));
+    setTimeout(() => {
+      dispatch(push('./completed'));
+    }, 500);
+  };
 
   socket
     .emit('authenticate', { token: jwtToken })
@@ -15,6 +28,11 @@ export default function connectSocketToStoreLogin(store, socket) {
 
       socket.on('syncFinished', (data) => {
         dispatch(setIsSyncing(false));
+        dispatch(setIsDone(true));
+        setTimeout(() => {
+          dispatch(push('./completed'));
+        }, 500);
+
         dispatch(updateEntity({ key: 'accounts', entity: data }));
       });
 

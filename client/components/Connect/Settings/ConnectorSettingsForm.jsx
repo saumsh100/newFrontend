@@ -5,7 +5,7 @@ import {
   Field,
   VButton,
 } from '../../library';
-import styles from './styles.scss';
+import styles from './form.scss';
 
 const options = [
   {
@@ -29,6 +29,7 @@ export default function ConnectorSettingsForm({ initialValues, onSubmit }) {
       onSubmit={onSubmit}
       initialValues={initialValues}
       ignoreSaveButton
+      className={styles.form}
     >
       <Field
         name="adapterType"
@@ -37,9 +38,12 @@ export default function ConnectorSettingsForm({ initialValues, onSubmit }) {
         options={options}
         required
       />
-      <VButton>
-        Next
-      </VButton>
+      <VButton
+        className={styles.nextButton}
+        color="dark"
+        iconRight="angle-right"
+        title="Next"
+      />
     </Form>
   );
 }

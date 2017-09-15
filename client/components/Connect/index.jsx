@@ -8,8 +8,8 @@ function Connect(props) {
   } = props;
 
   return (
-    <div className={styles.reviewsWidgetContainer}>
-      <div className={styles.reviewsWidgetCenter}>
+    <div className={styles.connectContainer}>
+      <div className={styles.connectCenter}>
         {children}
       </div>
     </div>

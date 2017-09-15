@@ -6,6 +6,8 @@ import { ConnectedRouter as Router } from 'react-router-redux';
 import Login from '../components/Connect/Login';
 import ConnectSettings from '../components/Connect/Settings';
 import ConnectPanel from '../components/Connect/Panel';
+import ConnectProgress from '../components/Connect/Progress';
+import ConnectCompleted from '../components/Connect/Completed';
 import ConnectContainer from '../components/Connect';
 import AuthorizedContainer from '../components/Connect/Authorized';
 import FourZeroFour from '../components/FourZeroFour';
@@ -18,6 +20,8 @@ const ConnectRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <Redirect exact from="/" to="/settings" />
         <Route path="/settings" component={ConnectSettings} />
         <Route path="/panel" component={ConnectPanel} />
+        <Route path="/progress" component={ConnectProgress} />
+        <Route path="/completed" component={ConnectCompleted} />
         {/* isSuperAdmin ? (<LazyRoute path="/admin" load={loadAdmin} name="admin" />) : null */}
         {/* withEnterprise ? (<LazyRoute path="/enterprise" load={loadEnterprise} name="enterprise" />) : null */}
         <Route component={FourZeroFour} />

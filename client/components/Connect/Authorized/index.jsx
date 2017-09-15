@@ -21,7 +21,7 @@ class Authorized extends Component {
     } = this.props;
 
     return (
-      <div>
+      <div className={styles.authWrapper}>
         <Header />
         {children}
       </div>
