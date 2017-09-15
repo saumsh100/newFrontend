@@ -28,6 +28,7 @@ class Listings extends Component {
     this.state = {
       loaded: false,
       hasAccount: false,
+      activationText: '',
     };
   }
 
@@ -63,6 +64,11 @@ class Listings extends Component {
         this.setState({
           loaded: true,
         });
+      }).catch(() => {
+        this.setState({
+          hasAccount: false,
+          activationText: 'Activate Listings/Reputation Management package or contact your CareCru account manager for further assistance.',
+        });
       });
     }
   }
@@ -73,7 +79,7 @@ class Listings extends Component {
     } = this.props;
 
     if (!this.state.hasAccount) {
-      return <ReputationDisabled />
+      return <ReputationDisabled activationText={this.state.activationText} />
     }
 
     if (!listings) {
@@ -83,9 +89,6 @@ class Listings extends Component {
     const listingsData = listings.get('data').toJS();
     const getInfo = listings.get('accountInfo').toJS();
     const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]]
-
-    console.log(listingsData);
-
 
     const scoreData = [
       { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },

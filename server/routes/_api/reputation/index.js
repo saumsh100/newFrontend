@@ -19,6 +19,8 @@ const {
 } = globals.vendasta;
 
 const fetchListingsData = (account) => {
+  console.log(account.vendastaAccountId)
+  console.log(account.vendastaId);
   const listingsUrl = `${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`;
   return axios.post(listingsUrl, { customerIdentifier: account.vendastaId });
 };
@@ -39,6 +41,7 @@ const fetchReviewsData = (account) => {
 };
 
 const fetchReviewsLookup = (account, minDateTime, maxDateTime) => {
+  console.log(account.vendastaId)
   const reviewsUrl = `${VENDASTA_REVIEWS_LOOKUP}?apiKey=${apiKey}&apiUser=${apiUser}`;
   return axios.post(reviewsUrl, { customerIdentifier: account.vendastaId, minDateTime, maxDateTime });
 };
@@ -58,7 +61,9 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
              return res.send(respSearch.data);
            });
         });
-      });
+      }).catch((e) =>  {
+      return res.sendStatus(400);
+    });
   }).catch(error => next(error));
 });
 
@@ -76,7 +81,9 @@ reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, nex
         .then((response) => {
           response.data.reviews = resp.data.data;
           return res.send(response.data);
-        });
+        })
+    }).catch((e) => {
+      return res.sendStatus(404);
     });
   }).catch(error => next(error));
 });

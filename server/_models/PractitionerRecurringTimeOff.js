@@ -39,6 +39,10 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    pmsId: {
+      type: DataTypes.STRING,
+    },
+
     dayOfWeek: {
       type: DataTypes.ENUM,
       values: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],

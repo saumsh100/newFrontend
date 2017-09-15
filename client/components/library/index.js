@@ -32,6 +32,7 @@ import Input from './Input';
 import Label from './Label';
 import Link from './Link';
 import LineChart from './LineChart';
+import ListBullets from './ListBullets';
 import Modal from './Modal';
 import SelectPill from './SelectPill';
 import InfoSection from './InfoSection';
@@ -108,6 +109,7 @@ export {
   Link,
   Label,
   LineChart,
+  ListBullets,
   Modal,
   Pill,
   SelectPill,

@@ -13,10 +13,12 @@ export default function RatingsChart(props) {
   const ratingStars = _.keys(rating).sort((a,b) => a < b);
   const maxValue = _.max(_.values(rating));
 
+  const hasRatings = Object.keys(rating).length;
+
   return (
     <Card className={styles.card}>
       <div className={styles.stats}>
-        {ratingStars.map((r, index) => {
+        {hasRatings ? ratingStars.map((r, index) => {
           const rows = [];
           for (let i = 1; i <= r; i++) {
             rows.push(<Star key={i} size={1.8} />);
@@ -37,7 +39,7 @@ export default function RatingsChart(props) {
               </div>
             </div>
           );
-        })}
+        }) : <div className={styles.stats_noReviews}> There are currently zero reviews. </div>}
       </div>
     </Card>
   );

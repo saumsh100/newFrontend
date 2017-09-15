@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
+import format from '../../util/format';
 import StatusError from'../../../util/StatusError';
 import {
   Account,
@@ -11,6 +12,8 @@ import {
   Invite,
   Permission,
   User,
+  AccountConfiguration,
+  Configuration,
 } from '../../../_models';
 import upload from '../../../lib/upload';
 import { sequelizeLoader } from '../../util/loaders';
@@ -122,6 +125,51 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
 });
 
 /**
+ * GET /configurations/
+ *
+ * - get connector configuration settings.
+ *
+ */
+accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    const sendValues = [];
+    const accountConfigs = await Configuration.findAll({
+      raw: true,
+      nest: true,
+      include: {
+        model: AccountConfiguration,
+        as: 'accountConfiguration',
+        where: {
+          accountId: req.accountId,
+        },
+        required: false,
+      },
+    });
+
+    for (let i = 0; i < accountConfigs.length; i += 1) {
+      const sendValue = {
+        name: accountConfigs[i].name,
+        description: accountConfigs[i].description,
+        'data-type': accountConfigs[i].type,
+        value: accountConfigs[i].defaultValue,
+        id: accountConfigs[i].id,
+      };
+
+      if (accountConfigs[i].accountConfiguration.id) {
+        sendValue.value = accountConfigs[i].accountConfiguration.value;
+      }
+
+      sendValues.push(sendValue);
+    }
+
+    return res.send(format(req, res, 'configurations', sendValues));
+  } catch (err) {
+    return next(err);
+  }
+});
+
+
+/**
  * GET /:accountId
  *
  * - get basic account data
@@ -145,18 +193,63 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
 });
 
 /**
+ * PUT /configurations/
+ *
+ * - Update connector configuration settings.
+ *
+ */
+
+accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  const {
+    name,
+  } = req.body;
+
+  try {
+    const config = await Configuration.findOne({
+      where: { name },
+    });
+
+    if (!config) {
+      return res.sendStatus(400);
+    }
+
+    const newConfig = await AccountConfiguration.create({
+      accountId: req.accountId,
+      configurationId: config.id,
+      ...req.body,
+    });
+
+
+    const accountConfig = newConfig.get({ plain: true });
+
+    const sendValue = {
+      name,
+      description: config.description,
+      'data-type': config.type,
+      value: accountConfig.value,
+      id: newConfig.id,
+    };
+
+    return res.send(format(req, res, 'configuration', sendValue));
+  } catch (err) {
+    return next(err);
+  }
+});
+
+
+/**
  * POST /:accountId/newUser
  *
  * - add user to account
  *
  */
 accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
-  if (req.account.id !== req.accountId) {
-    return next(StatusError(403, 'req.accountId does not match URL account id'));
-  }
-
   if (req.role !== 'SUPERADMIN') {
     return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
+  }
+
+  if ((req.account.id !== req.accountId) && req.role !== 'SUPERADMIN') {
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
   return Permission.create({ role: req.body.role })
@@ -164,7 +257,7 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
       return UserAuth.signup({
         ...req.body,
         username: req.body.email,
-        activeAccountId: req.accountId,
+        activeAccountId: req.account.id,
         enterpriseId: req.account.enterprise.id,
         permissionId: permission.id,
       }).then(({ model: user }) => {

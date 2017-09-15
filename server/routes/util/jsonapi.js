@@ -48,6 +48,26 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  Configuration: [
+    'name',
+    'description',
+    'data-type',
+    'value',
+  ],
+
+  ConnectorVersion: [
+    'tag',
+    'url',
+    'key',
+    'secret',
+    'filename',
+    'path',
+    'bucket',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Family: [
     'accountId',
     'pmsId',
@@ -87,6 +107,7 @@ const ModelAttributes = {
 
   Practitioner: [
     'firstName',
+    'pmsId',
     'lastName',
     'type',
     'isActive',
@@ -112,6 +133,19 @@ const ModelAttributes = {
     'updatedAt',
     'deletedAt',
   ],
+
+  PractitionerSchedule: [
+    'startDate',
+    'endDate',
+    'startTime',
+    'endTime',
+    'interval',
+    'allDay',
+    'fromPMS',
+    'pmsId',
+    'dayOfWeek',
+    'note',
+  ],
 };
 
 /**
@@ -125,6 +159,16 @@ const SERIALIZERS = {
 
   chair: new Serializer('chair', makeConfig({
     attributes: ModelAttributes.Chair,
+    pluralizeType: false,
+  })),
+
+  connectorVersion: new Serializer('connectorVersion', makeConfig({
+    attributes: ModelAttributes.ConnectorVersion,
+    pluralizeType: false,
+  })),
+
+  configuration: new Serializer('configuration', makeConfig({
+    attributes: ModelAttributes.Configuration,
     pluralizeType: false,
   })),
 
@@ -145,6 +189,11 @@ const SERIALIZERS = {
 
   service: new Serializer('service', makeConfig({
     attributes: ModelAttributes.Service,
+    pluralizeType: false,
+  })),
+
+  practitionerSchedule: new Serializer('practitionerSchedule', makeConfig({
+    attributes: ModelAttributes.PractitionerSchedule,
     pluralizeType: false,
   })),
 };

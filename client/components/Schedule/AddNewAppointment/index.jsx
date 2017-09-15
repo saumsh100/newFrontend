@@ -63,7 +63,6 @@ class AddNewAppointment extends Component {
     const {
       date,
       time,
-      serviceId,
       practitionerId,
       chairId,
       isPatientConfirmed,
@@ -87,7 +86,6 @@ class AddNewAppointment extends Component {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
       patientId: patientSelected.id,
-      serviceId,
       practitionerId,
       chairId,
       note,
@@ -154,7 +152,7 @@ class AddNewAppointment extends Component {
         }
       });
 
-    } 
+    }
       const appModel = selectedAppointment.appModel;
       const appModelSynced = appModel.set('isSyncedWithPMS', false);
       const valuesMap = Map(newAppointment);
@@ -167,7 +165,7 @@ class AddNewAppointment extends Component {
       }).then(() => {
         reinitializeState();
       });
-    
+
   }
 
   handleSliderChange(value) {
@@ -250,7 +248,7 @@ class AddNewAppointment extends Component {
       }
     });
 
-    change(formName, 'appointment.serviceId', '');
+    // change(formName, 'appointment.serviceId', '');
     this.setState({
       servicesAllowed,
     });

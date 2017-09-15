@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import { sequelizeLoader } from '../../util/loaders';
+import format from '../../util/format';
 import { PractitionerRecurringTimeOff, Account, Practitioner, WeeklySchedule } from '../../../_models';
 
 const union = require('lodash/union');
@@ -20,6 +21,18 @@ recurringTimeOffRouter.post('/', checkPermissions('timeOffs:create'), (req, res,
       return res.status(201).send(normalize('practitionerRecurringTimeOff', tf.get({ plain: true })))
     })
     .catch(next);
+});
+
+/**
+ * Create a timeOff from PMS
+ */
+recurringTimeOffRouter.post('/connector', checkPermissions('timeOffs:create'), async (req, res, next) => {
+  try {
+    const timeOff = await PractitionerRecurringTimeOff.create(req.body);
+    return res.status(201).send(format(req, res, 'practitionerSchedule', timeOff.get({ plain: true })));
+  } catch (e) {
+    return next(e);
+  }
 });
 
 /**
@@ -188,9 +201,9 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
 /**
  * Update a timeOff
  */
-recurringTimeOffRouter.put('/:timeOffId', checkPermissions('timeOffs:update'), (req, res, next) =>{
+recurringTimeOffRouter.put('/:timeOffId', checkPermissions('timeOffs:update'), (req, res, next) => {
   return req.recurringTimeOff.update(req.body)
-    .then(tf => res.send(normalize('practitionerRecurringTimeOff', tf.get({ plain: true }))))
+    .then(tf => res.send(format(req, res, 'practitionerSchedule', tf.get({ plain: true }))))
     .catch(next);
 });
 
