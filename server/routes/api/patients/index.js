@@ -337,7 +337,7 @@ patientsRouter.post('/', (req, res, next) => {
     .then(({ patient, normalized }) => {
       // Dispatch to the appropriate socket room
       const io = req.app.get('socketio');
-      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       return io.of(ns).in(accountId).emit('create:Patient', normalized);
     })
     .catch(next);
@@ -412,7 +412,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
     .then(({ patient, normalized }) => {
       // Dispatch to the appropriate socket room
       const io = req.app.get('socketio');
-      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       return io.of(ns).in(accountId).emit('update:Patient', normalized);
     })
     .catch(next);
@@ -428,7 +428,7 @@ patientsRouter.delete('/:joinPatientId', checkPermissions('patients:delete'), (r
     .then(() => res.send(204))
     .then(() => {
       const io = req.app.get('socketio');
-      const ns = patient.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = normalize('patient', patient);
       return io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
