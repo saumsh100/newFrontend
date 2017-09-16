@@ -567,14 +567,14 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
       return { appointment: appointment.dataValues, normalized };
     })
     .then(async ({ appointment }) => {
-      if (appointment.isSyncedWithPMS && appointment.patientId) {
+      if (appointment.isSyncedWithPms && appointment.patientId) {
         // Dashboard app needs patient data
         const patient = await Patient.findById(appointment.patientId);
         appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
-      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
@@ -728,14 +728,14 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
     })
     .then(async ({ appointment }) => {
       // Dispatch to the appropriate socket room
-      if (appointment.isSyncedWithPMS && appointment.patientId) {
+      if (appointment.isSyncedWithPms && appointment.patientId) {
         // Dashboard app needs patient data
         const patient = await Patient.findById(appointment.patientId);
         appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
-      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
@@ -752,7 +752,7 @@ appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:dele
     .then(() => res.send(204))
     .then(() => {
       const io = req.app.get('socketio');
-      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = normalize('appointment', appointment.get({ plain: true }));
       return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })

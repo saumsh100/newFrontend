@@ -5,8 +5,8 @@ module.exports = {
 
     return queryInterface.sequelize.transaction(async (t) => {
       try {
-        await queryInterface.renameColumn('Appointments', 'isSyncedWithPMS', 'isSyncedWithPms');
-        await queryInterface.renameColumn('Patients', 'isSyncedWithPMS', 'isSyncedWithPms');
+        await queryInterface.renameColumn('Appointments', 'isSyncedWithPms', 'isSyncedWithPms');
+        await queryInterface.renameColumn('Patients', 'isSyncedWithPms', 'isSyncedWithPms');
       } catch (e) {
         console.log(e);
         t.rollback();
@@ -18,8 +18,8 @@ module.exports = {
 
     return queryInterface.sequelize.transaction(async (t) => {
       try {
-        await queryInterface.renameColumn('Appointments', 'isSyncedWithPms', 'isSyncedWithPMS');
-        await queryInterface.renameColumn('Patients', 'isSyncedWithPms', 'isSyncedWithPMS');
+        await queryInterface.renameColumn('Appointments', 'isSyncedWithPms', 'isSyncedWithPms');
+        await queryInterface.renameColumn('Patients', 'isSyncedWithPms', 'isSyncedWithPms');
       } catch (e) {
         console.log(e);
         t.rollback();
