@@ -626,7 +626,7 @@ module.exports = {
         defaultValue: false,
       },
 
-      isSyncedWithPms: {
+      isSyncedWithPMS: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
@@ -900,7 +900,7 @@ module.exports = {
         allowNull: false,
       },
 
-      isSyncedWithPms: {
+      isSyncedWithPMS: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
         allowNull: false,
