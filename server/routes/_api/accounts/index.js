@@ -213,13 +213,25 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
     if (!config) {
       return res.sendStatus(400);
     }
-
-    const newConfig = await AccountConfiguration.create({
-      accountId: req.accountId,
-      configurationId: config.id,
-      ...req.body,
+    
+    const checkConfigExists = await AccountConfiguration.findOne({
+      where: {
+        accountId: req.accountId,
+        configurationId: config.id, 
+      },
     });
-
+      
+    let newConfig;
+      
+    if (checkConfigExists) {
+      newConfig = await checkConfigExists.update(req.body);
+    } else {
+      newConfig = await AccountConfiguration.create({
+        accountId: req.accountId,
+        configurationId: config.id,
+        ...req.body,
+      });                                         
+    }
 
     const accountConfig = newConfig.get({ plain: true });
 
