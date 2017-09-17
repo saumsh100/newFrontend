@@ -164,6 +164,19 @@ sequelizeMyRouter.get('/unsubscribe/:encoded', async (req, res, next) => {
   }
 });
 
+sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
+  return PasswordReset.findOne({ where: { token: req.params.tokenId } })
+    .then((reset) => {
+      if (!reset) {
+        // TODO: replace with StatusError
+        res.status(404).send();
+      } else {
+        res.redirect(`/resetpassword/${req.params.tokenId}`);
+      }
+    })
+    .catch(next);
+});
+
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares
 sequelizeMyRouter.use('(/*)?', (req, res, next) => {
