@@ -203,7 +203,7 @@ class SubmitView extends Component {
           <div className={styles.alreadyHaveWrapper}>
             Don't have an account? {signupHereAnchor}
           </div>
-          <div>
+          <div className={styles.alreadyHaveWrapper}>
             Forgot your password? {forgotPasswordAnchor}
           </div>
         </div>
@@ -257,8 +257,8 @@ class SubmitView extends Component {
 
     if (forgotPassword) {
       formComponent = !this.state.submittedEmail ? (
-        <ForgotPasswordForm onSubmit={this.handleResetPassword} />
-      ) : (<EmailSuccess email={this.state.email} />);
+        <ForgotPasswordForm onSubmit={this.handleResetPassword} className={styles.loginForm} />
+      ) : (<EmailSuccess email={this.state.email} className={styles.emailSubmitted} />);
     }
 
     const loadingComponent = (
