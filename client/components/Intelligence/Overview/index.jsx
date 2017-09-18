@@ -365,7 +365,7 @@ class Overview extends Component {
                 data={serviceData}
               />
             </Col>
-            <FlexGrid className={styles.padding} borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
+            <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
               {realData}
             </FlexGrid>
             <Col
