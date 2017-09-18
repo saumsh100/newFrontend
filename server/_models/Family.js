@@ -14,6 +14,25 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          return Family.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+          }).then((family) => {
+            if (family) {
+              return next({
+                messages: 'AccountId PMS ID Violation',
+                model: family,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     headId: {

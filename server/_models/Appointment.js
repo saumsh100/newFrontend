@@ -31,6 +31,25 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          return Appointment.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+          }).then((appointment) => {
+            if (appointment) {
+              return next({
+                messages: 'AccountId PMS ID Violation',
+                model: appointment,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     isDeleted: {

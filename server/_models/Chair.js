@@ -18,6 +18,25 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          return Chair.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+          }).then((chair) => {
+            if (chair) {
+              return next({
+                messages: 'AccountId PMS ID Violation',
+                model: chair,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     name: {
