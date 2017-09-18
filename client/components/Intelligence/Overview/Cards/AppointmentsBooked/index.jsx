@@ -14,11 +14,21 @@ class AppointmentsBooked extends Component {
 
     const ticks = {
       fontSize: 16,
-      fontFamily: 'Gotham-Medium',
+      fontFamily: 'Gotham-Book',
       fontColor: '#2e3845',
-      padding: 15,
+      padding: 30,
       maxRotation: 0,
       autoSkip: false,
+      callback(value, index) {
+        if (typeof value === 'number') {
+          if (Number.isSafeInteger(value)) {
+            return value;
+          }
+        }
+        if (typeof value !== 'number') {
+          return value;
+        }
+      },
     };
 
     const lineChartOptions = {

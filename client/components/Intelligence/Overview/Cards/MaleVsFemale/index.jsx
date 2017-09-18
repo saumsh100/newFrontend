@@ -16,12 +16,12 @@ export default function MaleVsFemale(props) {
       <div className={styles.maleVsFamale}>
         <div className={styles.maleVsFamale__menContainer}>
           <div className={styles.maleVsFamale__menContainer__item} >
-            <img src="/images/female.png" width="80px" height="80px" />
+            <img src="/images/female.png" width="130px" height="130px" />
             <span className={styles.maleVsFamale__menContainer__item_famale}>{female}%</span>
             <span className={styles.maleVsFamale__menContainer__item_smallText} >Female</span>
           </div>
           <div className={styles.maleVsFamale__menContainer__item}>
-            <img src="/images/male.png" width="80px" height="80px" />
+            <img src="/images/male.png" width="130px" height="130px" />
             <span className={styles.maleVsFamale__menContainer__item_man}>{male}%</span>
             <span className={styles.maleVsFamale__menContainer__item_smallText} >Male</span>
           </div>

@@ -10,9 +10,9 @@ export default function AgeRange(props) {
 
   const ticks = {
     fontSize: 16,
-    fontFamily: 'Gotham-Medium',
+    fontFamily: 'Gotham-Book',
     fontColor: '#2e3845',
-    padding: 15,
+    padding: 30,
     maxRotation: 0,
     autoSkip: false,
   };

@@ -13,11 +13,21 @@ export default function WebsiteTrafficSources(props) {
 
   const ticks = {
     fontSize: 16,
-    fontFamily: 'Gotham-Medium',
+    fontFamily: 'Gotham-Book',
     fontColor: '#2e3845',
-    padding: 15,
+    padding: 20,
     maxRotation: 0,
     autoSkip: false,
+    callback(value, index) {
+      if (typeof value === 'number') {
+        if (Number.isSafeInteger(value)) {
+          return value;
+        }
+      }
+      if (typeof value !== 'number') {
+        return value;
+      }
+    },
   };
 
   const lineChartOptions = {
