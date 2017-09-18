@@ -12,6 +12,7 @@ class AppointmentsBooked extends Component {
 
     } = this.props;
 
+    const test = dataSets[0].data.length;
     const ticks = {
       fontSize: 16,
       fontFamily: 'Gotham-Book',
@@ -20,7 +21,7 @@ class AppointmentsBooked extends Component {
       maxRotation: 0,
       autoSkip: false,
       callback(value, index) {
-        if (typeof value === 'number') {
+        if (typeof value === 'number' && index % 40 === 0) {
           if (Number.isSafeInteger(value)) {
             return value;
           }

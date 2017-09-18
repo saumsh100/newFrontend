@@ -3,12 +3,11 @@
 .userItem {
   border-top: 5px solid $inactive-color;
   //margin-bottom: 20px;
-    max-height: 650px;
+    max-height: 460px;
+    height: 460px;
     &__header {
         display: flex;
-        align-items: center;
-        padding: 0 45px 0 15px;
-        height: 60px;
+        padding: 15px 45px 20px 20px;
     }
 }
 .patients {
