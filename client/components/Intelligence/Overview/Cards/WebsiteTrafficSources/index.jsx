@@ -19,7 +19,7 @@ export default function WebsiteTrafficSources(props) {
     maxRotation: 0,
     autoSkip: false,
     callback(value, index) {
-      if (typeof value === 'number' && index % 20 === 0) {
+      if (typeof value === 'number' && index % 10 === 0) {
         if (Number.isSafeInteger(value)) {
           return value;
         }
