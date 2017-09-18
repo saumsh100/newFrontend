@@ -15,6 +15,16 @@ export default function AgeRange(props) {
     padding: 30,
     maxRotation: 0,
     autoSkip: false,
+    callback(value, index) {
+      if (typeof value === 'number') {
+        if (Number.isSafeInteger(value)) {
+          return `${value}%`;
+        }
+      }
+      if (typeof value !== 'number') {
+        return value;
+      }
+    },
   };
 
   const lineChartOptions = {
@@ -35,6 +45,7 @@ export default function AgeRange(props) {
           display: true,
           drawTicks: false,
           drawOnChartArea: false,
+          beginAtZero: true,
         },
       }],
     },

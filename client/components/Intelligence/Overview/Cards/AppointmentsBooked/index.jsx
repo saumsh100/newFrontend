@@ -21,7 +21,7 @@ class AppointmentsBooked extends Component {
       maxRotation: 0,
       autoSkip: false,
       callback(value, index) {
-        if (typeof value === 'number' && index % 10 === 0) {
+        if (typeof value === 'number' && index % 3 === 0) {
           if (Number.isSafeInteger(value)) {
             return value;
           }
