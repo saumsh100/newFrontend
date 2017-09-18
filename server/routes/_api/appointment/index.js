@@ -597,7 +597,6 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
       res.status(201).send(format(req, res, 'appointments', appData));
     })
     .catch(({ errors, docs }) => {
-      console.log(docs[1])
       docs = docs.map(d => d.get({ plain: true }));
 
       // Log any errors that occurred
