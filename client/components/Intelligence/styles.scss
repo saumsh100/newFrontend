@@ -1,7 +1,7 @@
 @import "../../ui.scss";
 
 .mainIntelligenceContainer {
-  padding: $container-padding;
+  padding: 10px 15px 10px 10px;
 }
 
 .header {
@@ -26,7 +26,7 @@
 
 .cards {
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   div:not(:last-child) {
     margin-right: 10px;
     flex: 1;
@@ -34,7 +34,6 @@
 }
 
 .padding {
-  padding-top: 20px;
   padding: 5px;
 }
 

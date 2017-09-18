@@ -369,7 +369,7 @@ class Overview extends Component {
               {realData}
             </FlexGrid>
             <Col
-              className={classNames(styles.padding, styles.websiteVisitorConversions)}
+              className={styles.padding}
               xs={12}
               md={6}
             >
@@ -385,19 +385,19 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <Col className={styles.paddingLine} xs={12} md={6}>
+            <Col className={styles.padding} xs={12} md={6}>
               <AgeRange
                 chartData={ageRange}
               />
             </Col>
-            <Col className={styles.paddingLine} cxs={12} md={6}>
+            <Col className={styles.padding} cxs={12} md={6}>
               <MaleVsFemale
                 title="Male vs Female Patients for the Last 12 Months"
                 male={male || 0}
                 female={female || 0}
               />
             </Col>
-            <Col className={styles.padding} xs={12} sm={6}>
+            <Col className={styles.padding} xs={12} sm={12}>
               <AppointmentsBooked
                 borderColor={colorMap.grey}
                 cardTitle="Appointments Booked Last 12 Months"
@@ -411,7 +411,7 @@ class Overview extends Component {
                 ]}
               />
             </Col>
-            <Col className={styles.padding} xs={12} sm={6}>
+            <Col className={styles.padding} xs={12} sm={12}>
               <WebsiteTrafficSources
                 title="Appointments By Day for the Last 12 Months"
                 labels={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}
