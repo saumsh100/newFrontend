@@ -34,6 +34,7 @@ class AppointmentsBooked extends Component {
 
     const lineChartOptions = {
       maintainAspectRatio: false,
+      responsive: true,
       scales: {
         yAxes: [{
           ticks,
@@ -53,6 +54,7 @@ class AppointmentsBooked extends Component {
           },
         }],
       },
+      barValueSpacing: 2,
     };
     return (
       <Card className={styles.booked} >

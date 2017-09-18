@@ -49,6 +49,7 @@ export default function AgeRange(props) {
         },
       }],
     },
+    barValueSpacing: 2
   };
 
   return (
