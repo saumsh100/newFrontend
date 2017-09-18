@@ -172,6 +172,11 @@ const SERIALIZERS = {
     pluralizeType: false,
   })),
 
+  deliveredProcedure: new Serializer('procedure', makeConfig({
+    attributes: ModelAttributes.DeliveredProcedure,
+    pluralizeType: false,
+  })),
+
   family: new Serializer('family', makeConfig({
     attributes: ModelAttributes.Family,
     pluralizeType: false,

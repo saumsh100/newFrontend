@@ -22,7 +22,7 @@ const Appointment = createModel('Appointment', {
   // Lifecycle Attributes
   isReminderSent: type.boolean().default(false),
   isPatientConfirmed: type.boolean().default(false),
-  isSyncedWithPMS: type.boolean().default(false).required(),
+  isSyncedWithPms: type.boolean().default(false).required(),
   isCancelled: type.boolean().default(false),
 
   // Custom buffer time in minutes

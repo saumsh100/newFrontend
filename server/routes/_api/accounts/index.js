@@ -17,6 +17,7 @@ import {
 } from '../../../_models';
 import upload from '../../../lib/upload';
 import { sequelizeLoader } from '../../util/loaders';
+import { namespaces } from '../../../config/globals';
 
 const accountsRouter = Router();
 
@@ -229,6 +230,9 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
       value: accountConfig.value,
       id: newConfig.id,
     };
+
+    const io = req.app.get('socketio');
+    io.of(namespaces.sync).in(req.accountId).emit('CONFIG_CHANGED', name);
 
     return res.send(format(req, res, 'configuration', sendValue));
   } catch (err) {

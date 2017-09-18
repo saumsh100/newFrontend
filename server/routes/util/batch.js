@@ -102,8 +102,10 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
     extraSetValidators,
     extraModelValidators
   );
+
   const savableCopies = docs.map(d => d.get({ plain: true }));
-  const response = await Model.bulkCreate(savableCopies);
+
+  const response = await Model.bulkCreate(savableCopies).catch(e => console.log(e));
 
   if (errors.length) {
     const errorsResponse = errors.map((error) => {
