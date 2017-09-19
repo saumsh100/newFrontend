@@ -22,8 +22,8 @@
           border-top: $card-border-size $inactive-color;
         }
         &_rowRequest {
-          flex: 1;
-          overflow: auto;
+          //flex: 1;
+          //overflow: auto;
           margin-bottom: 15px;
           border-top: $card-border-size $primary-blue;
           background-color: lighten($primary-lightgrey, 2%);
