@@ -8,6 +8,7 @@ class Item extends Component {
       data,
       borderColor,
       cardTitle,
+      className,
     } = this.props;
     return (
       <Col className={styles.paddingFill} xs={12} sm={6} md={3}>
@@ -15,7 +16,7 @@ class Item extends Component {
           <div className={styles.userItem__header}>
             <CardHeader title={cardTitle}/>
           </div>
-          <div className={styles.userItem__body}>
+          <div className={`${styles.userItem__body} ${className}`}>
             <List className={styles.patients}>
               {data.map((obj, i) => {
                 return (

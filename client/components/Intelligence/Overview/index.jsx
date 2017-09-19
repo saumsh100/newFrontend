@@ -351,6 +351,7 @@ class Overview extends Component {
               <TopReference
                 title="Most Business"
                 data={serviceData}
+                className={styles.maxHeight}
                 borderColor={colorMap.grey}
               />
             </Col>
