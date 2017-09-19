@@ -69,6 +69,11 @@ class Overview extends Component {
         url: '/api/appointments/statslastyear',
         params,
       }),
+      this.props.fetchEntitiesRequest({
+        id: 'patientRevenueStats',
+        url: '/api/patients/revenueStats',
+        params,
+      }),
     ])
       .then(() => {
         this.setState({
@@ -126,6 +131,7 @@ class Overview extends Component {
     const appointmentStats = (this.props.appointmentStats ?
       this.props.appointmentStats.toObject() : null);
     const patientStats = (this.props.patientStats ? this.props.patientStats.toObject() : null);
+    const patientRevenueStats = (this.props.patientRevenueStats ? this.props.patientRevenueStats.toJS() : []);
 
     const prac = (appointmentStats ? appointmentStats.practitioner : {});
     const serve = (appointmentStats ? appointmentStats.services : {});
@@ -147,10 +153,15 @@ class Overview extends Component {
       appointmentNotFiltred: 0,
     };
 
-    let serviceData = (appointmentStats ? serve.map(key => ({
-      title: key.toObject().name,
-      hours: Math.round(key.toObject().time * 10 / 600),
-    })) : []);
+    let serviceData = patientRevenueStats.map((patient) => {
+      const age = patient.birthDate ? moment().diff(patient.birthDate, 'years') : 'N/A';
+      return {
+        name: `${patient.firstName} ${patient.lastName}`,
+        age,
+        number: `$${Math.floor(patient.totalAmount)}`,
+        firstName: patient.firstName,
+      };
+    });
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
@@ -187,10 +198,11 @@ class Overview extends Component {
       appointmentStats.confirmedAppointments : 0);
 
     let sortedPatients = (appointmentStats ? patients.toArray().map(key => ({
-      img: key.toObject().avatarUrl,
+      avatarUrl: key.toObject().avatarUrl,
       name: `${key.toObject().firstName} ${key.toObject().lastName}`,
       age: key.toObject().age,
       number: key.toObject().numAppointments,
+      firstName: key.toObject().firstName,
     })) : []);
 
     sortedPatients = sortedPatients.sort((a, b) => b.number - a.number);
@@ -335,10 +347,12 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <Col   xs={12} sm={6}>
-              <ContainerList
-                cardTitle="Top Services by Hours"
+            <Col xs={12} sm={6}>
+              <TopReference
+                title="Most Business"
                 data={serviceData}
+                className={styles.maxHeight}
+                borderColor={colorMap.grey}
               />
             </Col>
             <FlexGrid className={styles.padding} borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
@@ -357,6 +371,7 @@ class Overview extends Component {
             </Col>
             <Col className={styles.padding} xs={12} md={6}>
               <TopReference
+                title="Most Appointments"
                 data={sortedPatients}
                 borderColor={colorMap.grey}
               />
@@ -410,6 +425,7 @@ Overview.propTypes = {
   appointmentStatsLastYear: PropTypes.object,
   dayStats: PropTypes.object,
   appointmentStats: PropTypes.object,
+  patientRevenueStats: PropTypes.object,
   patientStats: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   location: PropTypes.object,
@@ -420,12 +436,14 @@ function mapStateToProps({ apiRequests }) {
   const appointmentStatsLastYear = (apiRequests.get('appointmentStatsLastYear') ? apiRequests.get('appointmentStatsLastYear').data : null);
   const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);
   const patientStats = (apiRequests.get('patientStats') ? apiRequests.get('patientStats').data : null);
+  const patientRevenueStats = (apiRequests.get('patientRevenueStats') ? apiRequests.get('patientRevenueStats').data : null);
 
   return {
     appointmentStats,
     appointmentStatsLastYear,
     dayStats,
     patientStats,
+    patientRevenueStats,
   };
 }
 

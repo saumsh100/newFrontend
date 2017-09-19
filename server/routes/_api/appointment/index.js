@@ -4,6 +4,7 @@ import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
+import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -90,16 +91,6 @@ appointmentsRouter.get('/business', (req, res, next) => {
     ],
   })
     .then(async (appointments) => {
-      const queryCancelled = {
-        where: {
-          accountId,
-          $or: [],
-          patientId: {
-            $not: null,
-          },
-        },
-        raw: true,
-      };
 
       for (let i = 0; i < appointments.length; i++) {
         if (testHygien.test(appointments[i].practitioner.type)) {
@@ -127,6 +118,9 @@ appointmentsRouter.get('/business', (req, res, next) => {
           }
         }
       }
+
+      send.productionEarnings = await mostBusinessProcedure(startDate, endDate, accountId);
+
       return res.send(send);
     })
     .catch(next);
@@ -179,12 +173,13 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
       const result = results[0];
       const account = results[1];
 
-      const days = new Array(6).fill(0);
+      const days = new Array(7).fill(0);
       // calculate the frequency of the day of the week
       for (let i = 0; i < result.length; i++) {
         const day = account.timezone ? moment.tz(result[i].startDate, account.timezone).get('day') : moment(result[i].startDate).get('day');
-        days[day - 1]++;
+        days[day]++;
       }
+
       res.send({ days });
     })
     .catch(next);

@@ -16,8 +16,12 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Procedure.associate = (({ }) => {
-
+  Procedure.associate = (({ DeliveredProcedure }) => {
+    Procedure.hasMany(DeliveredProcedure, {
+      foreignKey: 'procedureCode',
+      sourceKey: 'code',
+      as: 'deliveredProcedures',
+    });
   });
 
   return Procedure;

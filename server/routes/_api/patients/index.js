@@ -4,6 +4,7 @@ import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
+import { mostBusinessPatient } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
@@ -41,12 +42,6 @@ function ageRangePercent(array) {
   newArray[5] = Math.round(100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
   return newArray;
 }
-
-const generateDuringFilter = (m, startDate, endDate) => {
-  return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
-    m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
-  );
-};
 
 patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async (req, res, next) => {
   const startDate = moment().subtract(1, 'years').toISOString();
@@ -115,6 +110,25 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
   } catch (error) {
     next(error);
   }
+});
+
+patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    accountId,
+    params,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = params;
+
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
+
+  return mostBusinessPatient(startDate, endDate, accountId)
+          .then(result => res.send(result))
+          .catch(next);
 });
 
 patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res, next) => {
