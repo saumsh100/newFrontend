@@ -1,7 +1,8 @@
-
+/*
 import React from 'react';
-import { storiesOf, action } from '@kadira/storybook';
-import { withKnobs, boolean, object } from '@kadira/storybook-addon-knobs';
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import { withKnobs } from '@storybook/addon-knobs';
 import RangeSlider from './';
 
 
@@ -12,3 +13,4 @@ storiesOf('Slider', module)
       onChange={action('change')}
     />
   ));
+*/

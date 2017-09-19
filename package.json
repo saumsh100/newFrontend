@@ -36,6 +36,10 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@storybook/addon-actions": "^3.2.6",
+    "@storybook/addon-knobs": "^3.2.8",
+    "@storybook/addon-links": "^3.2.6",
+    "@storybook/react": "^3.2.8",
     "async": "0.2.9",
     "attr-accept": "^1.0.3",
     "autoprefixer": "^6.3.1",
@@ -215,12 +219,6 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@kadira/storybook": "^2.35.3",
-    "@kadira/storybook-addon-knobs": "^1.7.1",
-    "@storybook/addon-actions": "^3.2.6",
-    "@storybook/addon-knobs": "^3.2.8",
-    "@storybook/addon-links": "^3.2.6",
-    "@storybook/react": "^3.2.8",
     "babel-jest": "^20.0.3",
     "browser-sync": "^2.18.12",
     "browser-sync-webpack-plugin": "^1.1.4",

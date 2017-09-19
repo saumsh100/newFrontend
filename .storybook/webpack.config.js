@@ -5,20 +5,15 @@ const cssnext = require('postcss-cssnext');
 const path = require('path');
 const localIdentName = '[name]__[local]___[hash:base64:5]';
 
+
 // IMPORTANT
 // When you add this file, we won't add the default configurations which is similar
 // to "React Create App". This only has babel loader to load JavaScript.
 
-module.exports = {
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
+module.exports = (storybookBaseConfig, configType) => {
+  storybookBaseConfig.resolve.extensions.push('.js', '.jsx')
 
-  plugins: [
-
-  ],
-  module: {
-    rules: [
+  storybookBaseConfig.module.rules.push(
       {
         test: /\.jsx?$/,
         use: {
@@ -28,6 +23,7 @@ module.exports = {
           },
         },
         exclude: /node_modules/,
+        include: path.resolve(__dirname, '../')
       },
       {
         test: /\.scss$/,
@@ -71,10 +67,12 @@ module.exports = {
             name: 'img/[name].[ext]',
           },
         },
+        include: path.resolve(__dirname, '../')
       },
       {
         test: /\.(ttf|eot|svg|woff(2)?)(\?v=\d+\.\d+\.\d+)?(\?[a-z0-9]+)?$/,
         use: 'file-loader',
+        include: path.resolve(__dirname, '../')
       },
       {
         test: /\.css$/,
@@ -90,12 +88,17 @@ module.exports = {
           },
         ],
         include: /flexboxgrid/,
+
       },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
         exclude: /flexboxgrid/, // so we have to exclude it
+        include: path.resolve(__dirname, '../')
       },
-    ],
-  },
+    );
+
+  return storybookBaseConfig;
 };
+
+

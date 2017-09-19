@@ -1,10 +1,8 @@
 
 import React from 'react';
-//import { storiesOf, action } from '@storybook/';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
-//import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs';
 
 import Button from './';
 
@@ -19,7 +17,7 @@ storiesOf('Button', module)
   ))
   .add('with icon ?', () => (
     <Button
-      icon="arrow-left"
+      icon="save"
       onClick={action('clicked')}
     >
       Test
