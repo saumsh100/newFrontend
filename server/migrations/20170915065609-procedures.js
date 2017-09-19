@@ -18,6 +18,7 @@ module.exports = {
   },
 
   down: function (queryInterface) {
+    queryInterface.bulkDelete('DeliveredProcedures', null, {});
     return queryInterface.bulkDelete('Procedures', null, {});
   }
 };

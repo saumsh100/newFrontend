@@ -65,7 +65,6 @@ module.exports = {
               model: 'Procedures',
               key: 'code',
             },
-
             onUpdate: 'cascade',
           },
 
