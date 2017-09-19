@@ -217,6 +217,9 @@
   "devDependencies": {
     "@kadira/storybook": "^2.35.3",
     "@kadira/storybook-addon-knobs": "^1.7.1",
+    "@storybook/addon-actions": "^3.2.6",
+    "@storybook/addon-knobs": "^3.2.8",
+    "@storybook/addon-links": "^3.2.6",
     "@storybook/react": "^3.2.8",
     "babel-jest": "^20.0.3",
     "browser-sync": "^2.18.12",
@@ -236,8 +239,6 @@
     "pretty-bytes": "^4.0.2",
     "react-addons-perf": "^15.2.1",
     "sinon": "^1.15.3",
-    "supertest": "^2.0.1",
-    "@storybook/addon-actions": "^3.2.6",
-    "@storybook/addon-links": "^3.2.6"
+    "supertest": "^2.0.1"
   }
 }
