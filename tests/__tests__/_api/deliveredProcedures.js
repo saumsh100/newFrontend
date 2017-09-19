@@ -7,7 +7,13 @@ import wipeModel from '../../_util/wipeModel';
 import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { patientId, seedTestPatients, wipeTestPatients } from '../../_util/seedTestPatients';
 import { code, seedTestProcedures, wipeTestProcedures } from '../../_util/seedTestProcedures';
+import { seedTestDeliveredProcedures, wipeTestDeliveredProcedures } from '../../_util/seedTestDeliveredProcedures';
 import { omitPropertiesFromBody, getModelsArray, omitProperties } from '../../util/selectors';
+
+import {
+  mostBusinessProcedure,
+  mostBusinessPatient,
+} from '../../../server/lib/intelligence/revenue';
 
 const rootUrl = '/_api/deliveredProcedures';
 
@@ -15,6 +21,7 @@ const makeDeliveredProcedure = (config = {}) => Object.assign({}, {
   accountId,
   patientId,
   procedureCode: code,
+  entryDate: '2017-07-19T00:14:30.932Z',
 }, config);
 
 describe('/api/deliveredProcedures', () => {
@@ -67,7 +74,7 @@ describe('/api/deliveredProcedures', () => {
         });
     });
 
-    test('/batch - 1 invalid deliverProcedure, 3 valid families', () => {
+    test('/batch - 1 invalid deliverProcedure, 3 valid deliverProcedure', () => {
 
       return request(app)
         .post(`${rootUrl}/connector/batch`)
@@ -80,9 +87,51 @@ describe('/api/deliveredProcedures', () => {
         ])
         .expect(500)
         .then(({ body }) => {
-          
         });
     });
 
+  });
+});
+
+describe('Revenue Functions', () => {
+  beforeAll(async () => {
+    await seedTestUsers();
+    await seedTestPatients();
+    await seedTestProcedures();
+    await seedTestDeliveredProcedures();
+  });
+
+  afterAll(async () => {
+    await wipeTestDeliveredProcedures();
+    await wipeTestProcedures();
+    await wipeTestPatients();
+    await wipeTestUsers();
+  });
+
+  it('should respond the total amount spent on Test Procedure', (done) => {
+    const startDate = (new Date(2017, 1, 1)).toISOString();
+    const endDate = (new Date(2018, 1, 1)).toISOString();
+    mostBusinessProcedure(startDate, endDate, accountId)
+      .then((result) => {
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBe(1);
+        expect(result[0].procedureCode).toBe(code);
+        expect(result[0].totalAmount).toBe(432.22);
+        done();
+      }).catch();
+  });
+
+  it('should respond with an array with one patient (Ronald Mcdonald) and the total spent by him', (done) => {
+    const startDate = (new Date(2017, 1, 1)).toISOString();
+    const endDate = (new Date(2018, 1, 1)).toISOString();
+    mostBusinessPatient(startDate, endDate, accountId)
+      .then((result) => {
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBe(1);
+        expect(result[0].totalAmount).toBe(432.22);
+        expect(result[0].firstName).toBe('Ronald');
+        expect(result[0].lastName).toBe('Mcdonald');
+        done();
+      }).catch();
   });
 });

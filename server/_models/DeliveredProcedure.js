@@ -17,6 +17,11 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    entryDate: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    },
+
     procedureCode: {
       type: DataTypes.STRING,
       allowNull: false,
