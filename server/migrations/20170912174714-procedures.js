@@ -53,6 +53,16 @@ module.exports = {
             onUpdate: 'cascade',
           },
 
+          entryDate: {
+            allowNull: false,
+            type: DataTypes.DATE,
+          },
+
+          procedureCode: {
+            type: DataTypes.STRING,
+            allowNull: false,
+          },
+
           patientId: {
             type: DataTypes.UUID,
             allowNull: false,
@@ -66,17 +76,6 @@ module.exports = {
 
           pmsId: {
             type: DataTypes.STRING,
-          },
-
-          procedureCode: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            references: {
-              model: 'Procedures',
-              key: 'code',
-            },
-
-            onUpdate: 'cascade',
           },
 
           units: {

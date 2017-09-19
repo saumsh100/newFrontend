@@ -69,6 +69,11 @@ class Overview extends Component {
         url: '/api/appointments/statslastyear',
         params,
       }),
+      this.props.fetchEntitiesRequest({
+        id: 'patientRevenueStats',
+        url: '/api/patients/revenueStats',
+        params,
+      }),
     ])
       .then(() => {
         this.setState({
@@ -126,6 +131,7 @@ class Overview extends Component {
     const appointmentStats = (this.props.appointmentStats ?
       this.props.appointmentStats.toObject() : null);
     const patientStats = (this.props.patientStats ? this.props.patientStats.toObject() : null);
+    const patientRevenueStats = (this.props.patientRevenueStats ? this.props.patientRevenueStats.toObject() : null);
 
     const prac = (appointmentStats ? appointmentStats.practitioner : {});
     const serve = (appointmentStats ? appointmentStats.services : {});
@@ -420,12 +426,14 @@ function mapStateToProps({ apiRequests }) {
   const appointmentStatsLastYear = (apiRequests.get('appointmentStatsLastYear') ? apiRequests.get('appointmentStatsLastYear').data : null);
   const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);
   const patientStats = (apiRequests.get('patientStats') ? apiRequests.get('patientStats').data : null);
+  const patientRevenueStats = (apiRequests.get('patientRevenueStats') ? apiRequests.get('patientRevenueStats').data : null);
 
   return {
     appointmentStats,
     appointmentStatsLastYear,
     dayStats,
     patientStats,
+    patientRevenueStats,
   };
 }
 

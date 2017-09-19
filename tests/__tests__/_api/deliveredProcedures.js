@@ -15,6 +15,7 @@ const makeDeliveredProcedure = (config = {}) => Object.assign({}, {
   accountId,
   patientId,
   procedureCode: code,
+  entryDate: '2017-07-19T00:14:30.932Z',
 }, config);
 
 describe('/api/deliveredProcedures', () => {
@@ -80,7 +81,7 @@ describe('/api/deliveredProcedures', () => {
         ])
         .expect(500)
         .then(({ body }) => {
-          
+
         });
     });
 
