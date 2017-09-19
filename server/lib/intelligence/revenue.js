@@ -1,6 +1,9 @@
 import sequelize from 'sequelize';
 import { DeliveredProcedure, Patient, Procedure } from '../../_models';
 
+// SQL query that gets Patients and joins with delivered procedures and
+// groups by deliveredProcedures.procedurecode and totals up the cost from them.
+// IE the total cost the patient spent between startDate and endDate
 
 export function mostBusinessPatient(startDate, endDate, accountId) {
   return Patient.findAll({
@@ -34,6 +37,9 @@ export function mostBusinessPatient(startDate, endDate, accountId) {
     limit: 5,
   });
 }
+
+// SQL query that gets Procedures and joins with delivered procedures and
+// groups by deliveredProcedures.procedurecode and totals up the cost from them.
 
 export function mostBusinessProcedure(startDate, endDate, accountId) {
   return Procedure.findAll({
