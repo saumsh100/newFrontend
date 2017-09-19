@@ -130,7 +130,7 @@ class Business extends Component {
 
   render() {
     const callStats = (this.props.callStats ? this.props.callStats.toJS() : {});
-    const businessStats = (this.props.businessStats ? this.props.businessStats.toJS() : {});
+    const businessStats = (this.props.businessStats ? this.props.businessStats.toJS() : { productionEarnings: [] });
     const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toJS() : {});
     let activePatients = 0;
     let unfilledHours = 0;
@@ -159,7 +159,12 @@ class Business extends Component {
     unfilledHours = unfilledHours.toFixed(2);
     filledHours = filledHours.toFixed(2);
 
-    serviceData = serviceData.sort((a, b) => b.hours - a.hours);
+    serviceData = businessStats.productionEarnings.map(pro => {
+      return {
+        title: `${pro.description} - ${pro.type}`,
+        data: pro.totalAmount,
+      };
+    });
 
     const pickupPercent = Math.floor(100 * callStats.pickup / callStats.total) || null;
     const bookingPercent = Math.floor(100 * callStats.booked / callStats.total) || null;
@@ -323,7 +328,7 @@ class Business extends Component {
                   <ContainerList
                     className={styles.business__body_list}
                     borderColor={colorMap.darkblue}
-                    cardTitle="Procedure by Hours"
+                    cardTitle="Procedure by Production"
                     data={serviceData}
                   />
                 </Col>

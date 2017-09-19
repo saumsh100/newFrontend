@@ -10,6 +10,7 @@ export function mostBusinessPatient(startDate, endDate, accountId) {
     attributes: [
       'Patient.firstName',
       'Patient.lastName',
+      'Patient.birthDate',
       [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
     ],
     include: [

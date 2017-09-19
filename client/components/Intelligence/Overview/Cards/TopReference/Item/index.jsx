@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, List, ListItem, Card, CardHeader } from '../../../../../library';
+import { Col, List, ListItem, Card, CardHeader, Avatar } from '../../../../../library';
 import styles from './styles.scss';
 
 class Item extends Component {
@@ -20,7 +20,7 @@ class Item extends Component {
               {data.map((obj, i) => {
                 return (
                   <ListItem key={i} className={styles.patients__item}>
-                    <img className={styles.patients__item_img} src={obj.img} alt=""/>
+                    <Avatar className={styles.patients__item_img} user={obj} alt=""/>
                     <div className={styles.patients__item_wrapper}>
                       <div className={styles.patients__item_left}>
                         <div className={styles.patients__item_name}>
