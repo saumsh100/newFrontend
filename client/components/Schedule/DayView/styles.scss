@@ -114,9 +114,7 @@
 
     &_note {
       padding: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
     }
   }
 }

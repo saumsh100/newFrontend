@@ -84,8 +84,8 @@ export default function ShowMark(props) {
         className={styles.showAppointment}
         style={appStyle}
       >
-        <div className={styles.showAppointment_mark}>
-          <span className={styles.showAppointment_mark_note}> {note || ''} </span>
+        <div className={styles.showAppointment_mark} >
+          <span className={styles.showAppointment_mark_note} style={{ width, maxHeight: height, }}> {note || ''} </span>
         </div>
       </div>
     </div>

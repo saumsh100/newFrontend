@@ -128,8 +128,8 @@ function ShowAppointment(props) {
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
-          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1.2} icon="check-circle" />)}</div>
-          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1.2} icon="clock-o" />)} </div>
+          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1} icon="check-circle" />)}</div>
+          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1} icon="clock-o" />)} </div>
         </div>
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} style={nameColor} >
