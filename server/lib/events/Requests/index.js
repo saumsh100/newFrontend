@@ -25,7 +25,7 @@ function sendRequestIdSocket(sub, io) {
 
 export default function registerRequestsSubscriber(context, io) {
   // Need to create a new sub for every route to tell
-  // the difference eg. call.created and call.ended
+  // the difference eg. request.created and request.ended
   const subCreated = context.socket('SUB', { routing: 'topic' });
 
   subCreated.setEncoding('utf8');
