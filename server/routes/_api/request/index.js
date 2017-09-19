@@ -39,9 +39,8 @@ requestsRouter.post('/', (req, res, next) => {
         request.patientUser = pUser.get({ plain: true });
       }
 
-      const io = req.app.get('socketio');
-      const ns = namespaces.dash;
-      return io.of(ns).in(accountId).emit('create:Request', normalize('request', request));
+      const pub = req.app.get('pub');
+      pub.publish('request.created', request.id);
     })
     .then(async () => {
       const patientUser = await PatientUser.findById(patientUserId);
