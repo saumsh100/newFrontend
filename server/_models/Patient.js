@@ -25,6 +25,25 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          return Patient.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+          }).then((patient) => {
+            if (patient) {
+              return next({
+                messages: 'AccountId PMS ID Violation',
+                model: patient,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     // Used to connect authenticated patientUser to his patient record

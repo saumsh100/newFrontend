@@ -41,6 +41,25 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          return PractitionerRecurringTimeOff.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+          }).then((timeOff) => {
+            if (timeOff) {
+              return next({
+                messages: 'PractitionerId PMS ID Violation',
+                model: timeOff,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     dayOfWeek: {
