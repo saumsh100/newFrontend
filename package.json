@@ -22,7 +22,7 @@
     "startdev": "nf start -w -j Procfile_dev_no_reminders",
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
-    "storybook": "start-storybook -p 9001 -c .storybook",
+    "storybook": "start-storybook -s ./statics/fonts -p 6006",
     "test": "npm run test:api",
     "test:cypress": "cypress run",
     "test:jest": "export $(cat .env | xargs) && jest --verbose --forceExit",
@@ -32,7 +32,8 @@
     "clean:assets": "rimraf statics/assets",
     "clean:modules": "rimraf node_modules",
     "postinstall": "npm run client:build:prod && npm run server:build:prod",
-    "remind:cron": "nf start -j REMIND_CRON"
+    "remind:cron": "nf start -j REMIND_CRON",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "async": "0.2.9",
@@ -216,6 +217,7 @@
   "devDependencies": {
     "@kadira/storybook": "^2.35.3",
     "@kadira/storybook-addon-knobs": "^1.7.1",
+    "@storybook/react": "^3.2.8",
     "babel-jest": "^20.0.3",
     "browser-sync": "^2.18.12",
     "browser-sync-webpack-plugin": "^1.1.4",
@@ -234,6 +236,8 @@
     "pretty-bytes": "^4.0.2",
     "react-addons-perf": "^15.2.1",
     "sinon": "^1.15.3",
-    "supertest": "^2.0.1"
+    "supertest": "^2.0.1",
+    "@storybook/addon-actions": "^3.2.6",
+    "@storybook/addon-links": "^3.2.6"
   }
 }
