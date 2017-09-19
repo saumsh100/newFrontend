@@ -109,9 +109,9 @@
   }
 
   &_mark {
-    font-family: $medium-font;
-    font-size: $extra-small-size;
-
+    font-size: $small-size;
+    letter-spacing: 0.5px;
+    padding: 5px 5px 5px 5px;
     &_note {
       padding: 2px;
       white-space: normal;

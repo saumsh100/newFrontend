@@ -58,10 +58,10 @@ export default function ShowMark(props) {
   // const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
 
   const splitRow = rowSort.length > 1 ? (columnWidth * (appPosition / (rowSort.length))) : 0;
-  const top = `${(topCalc / totalHours) * 100}%`;
-  const left = `${(columnWidth * practIndex) + splitRow}%`;
-  const width = `${columnWidth * ((100 / rowSort.length) / 100)}%`;
-  const height = `${(heightCalc / totalHours) * 100}%`;
+  const top = `${((topCalc / totalHours) * 100) + 0.05}%`;
+  const left = `${((columnWidth * practIndex) + splitRow) + 0.07}%`;
+  const width = `${(columnWidth * ((100 / rowSort.length) / 100)) - 0.16}%`;
+  const height = `${((heightCalc / totalHours) * 100) - 0.1}%`;
 
   // main app style
   const appStyle = {
@@ -69,8 +69,7 @@ export default function ShowMark(props) {
     left,
     height,
     width,
-    backgroundColor: hexToRgbA('#b4b4b5', 0.6),
-    border: '1.5px solid #b4b4b5',
+    backgroundColor: hexToRgbA('#b4b4b5', 0.8),
     zIndex: appPosition,
   };
 
