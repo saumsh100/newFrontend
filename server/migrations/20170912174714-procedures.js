@@ -61,6 +61,12 @@ module.exports = {
           procedureCode: {
             type: DataTypes.STRING,
             allowNull: false,
+            references: {
+              model: 'Procedures',
+              key: 'code',
+            },
+
+            onUpdate: 'cascade',
           },
 
           patientId: {

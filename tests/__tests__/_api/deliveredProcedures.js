@@ -68,7 +68,7 @@ describe('/api/deliveredProcedures', () => {
         });
     });
 
-    test('/batch - 1 invalid deliverProcedure, 3 valid families', () => {
+    test('/batch - 1 invalid deliverProcedure, 3 valid deliverProcedure', () => {
 
       return request(app)
         .post(`${rootUrl}/connector/batch`)
@@ -81,7 +81,6 @@ describe('/api/deliveredProcedures', () => {
         ])
         .expect(500)
         .then(({ body }) => {
-
         });
     });
 
