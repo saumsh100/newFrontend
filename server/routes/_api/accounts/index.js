@@ -213,16 +213,16 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
     if (!config) {
       return res.sendStatus(400);
     }
-    
+
     const checkConfigExists = await AccountConfiguration.findOne({
       where: {
         accountId: req.accountId,
-        configurationId: config.id, 
+        configurationId: config.id,
       },
     });
-      
+
     let newConfig;
-      
+
     if (checkConfigExists) {
       newConfig = await checkConfigExists.update(req.body);
     } else {
@@ -230,7 +230,7 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
         accountId: req.accountId,
         configurationId: config.id,
         ...req.body,
-      });                                         
+      });
     }
 
     const accountConfig = newConfig.get({ plain: true });
