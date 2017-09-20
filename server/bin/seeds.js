@@ -226,7 +226,7 @@ for (let i = 0; i < 100; i++) {
       sin: 'dsasdasdasdadsasad',
     },
 
-    isSyncedWithPMS: false,
+    isSyncedWithPms: false,
   });
 
   const callsource = (faker.random.boolean() ? 'direct' : 'website');
@@ -450,7 +450,7 @@ const SEEDS = {
       endDate: recentStartTime.add(50 * oneHour),
       patientId: alexPatientId,
       isPatientConfirmed: true,
-      isSyncedWithPMS: true,
+      isSyncedWithPms: true,
       isCancelled: false,
       serviceId,
       practitionerId,
@@ -466,7 +466,7 @@ const SEEDS = {
       serviceId,
       chairId,
       isPatientConfirmed: true,
-      isSyncedWithPMS: true,
+      isSyncedWithPms: true,
       isCancelled: false,
       note: 'Kirat Appointment',
     },
@@ -479,7 +479,7 @@ const SEEDS = {
       practitionerId,
       chairId,
       isPatientConfirmed: true,
-      isSyncedWithPMS: true,
+      isSyncedWithPms: true,
       isCancelled: false,
       note: 'mark appointment',
     },
@@ -504,7 +504,7 @@ const SEEDS = {
       practitionerId,
       chairId,
       isPatientConfirmed: true,
-      isSyncedWithPMS: true,
+      isSyncedWithPms: true,
       isCancelled: false,
       note: 'Sergey Appointment',
     },
@@ -517,7 +517,7 @@ const SEEDS = {
       practitionerId,
       chairId,
       isPatientConfirmed: true,
-      isSyncedWithPMS: true,
+      isSyncedWithPms: true,
       isCancelled: false,
       note: 'Justin Appointment',
     },
@@ -732,7 +732,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
       familyId: justinFamilyId,
     },
     {
@@ -748,7 +748,7 @@ const SEEDS = {
       language: 'English',
       lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
       status: 'Active',
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
     },
     {
       id: jdPatientId,
@@ -770,7 +770,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
     },
     {
       id: sergeyPatientId,
@@ -792,7 +792,7 @@ const SEEDS = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       },
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
     },
     {
       id: markPatientId,
@@ -806,7 +806,7 @@ const SEEDS = {
       gender: 'male',
       status: 'Active',
       language: 'English',
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
       familyId: justinFamilyId,
     },
     {
@@ -824,7 +824,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
     },
     // account 2
     {
@@ -841,7 +841,7 @@ const SEEDS = {
       language: 'English',
       email: 'alex.bashliy@keenethics.com',
       appointmentPreference: 'both',
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
     },
     ...randomPatients,
   ],

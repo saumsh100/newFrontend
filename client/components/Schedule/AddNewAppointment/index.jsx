@@ -63,7 +63,6 @@ class AddNewAppointment extends Component {
     const {
       date,
       time,
-      serviceId,
       practitionerId,
       chairId,
       isPatientConfirmed,
@@ -77,8 +76,7 @@ class AddNewAppointment extends Component {
       note,
     } = patientValues;
 
-
-    let totalDurationMin = duration + buffer;
+    const totalDurationMin = duration + buffer;
 
     const startDate = mergeTime(new Date(date), new Date(time));
     const endDate = moment(startDate).add(totalDurationMin, 'minutes');
@@ -87,13 +85,12 @@ class AddNewAppointment extends Component {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
       patientId: patientSelected.id,
-      serviceId,
       practitionerId,
       chairId,
       note,
       isPatientConfirmed,
       isCancelled,
-      isSyncedWithPMS: false,
+      isSyncedWithPms: false,
       customBufferTime: buffer,
     };
 
@@ -154,20 +151,20 @@ class AddNewAppointment extends Component {
         }
       });
 
-    } 
-      const appModel = selectedAppointment.appModel;
-      const appModelSynced = appModel.set('isSyncedWithPMS', false);
-      const valuesMap = Map(newAppointment);
-      const modifiedAppointment = appModelSynced.merge(valuesMap);
+    }
 
-      return updateEntityRequest({
-        key: 'appointments',
-        model: modifiedAppointment,
-        alert: alertUpdate,
-      }).then(() => {
-        reinitializeState();
-      });
-    
+    const appModel = selectedAppointment.appModel;
+    const appModelSynced = appModel.set('isSyncedWithPms', false);
+    const valuesMap = Map(newAppointment);
+    const modifiedAppointment = appModelSynced.merge(valuesMap);
+
+    return updateEntityRequest({
+      key: 'appointments',
+      model: modifiedAppointment,
+      alert: alertUpdate,
+    }).then(() => {
+      reinitializeState();
+    });
   }
 
   handleSliderChange(value) {
@@ -250,7 +247,7 @@ class AddNewAppointment extends Component {
       }
     });
 
-    change(formName, 'appointment.serviceId', '');
+    // change(formName, 'appointment.serviceId', '');
     this.setState({
       servicesAllowed,
     });
@@ -296,7 +293,7 @@ class AddNewAppointment extends Component {
     if (deleteApp) {
       const delModel = Map({
         isDeleted: true,
-        isSyncedWithPMS: false,
+        isSyncedWithPms: false,
       });
       const appModel = selectedAppointment.appModel;
       const deletedModel = appModel.merge(delModel);

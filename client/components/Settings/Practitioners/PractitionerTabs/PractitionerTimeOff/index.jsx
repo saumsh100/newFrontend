@@ -186,7 +186,6 @@ class PractitionerTimeOff extends Component {
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
-          custom
           data-test-id="addTimeOffDialog"
         >
           <TimeOffForm

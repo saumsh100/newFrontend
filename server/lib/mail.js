@@ -1,5 +1,6 @@
 
-const mandrill = require('../config/mandrill');
+import mandrill from '../config/mandrill';
+import { host, protocol, env } from '../config/globals';
 
 module.exports = {
   sendConfirmationReminder: (config) => {
@@ -33,8 +34,14 @@ module.exports = {
   },
 
   sendAppointmentRequestConfirmed: (config) => {
-    config.subject = 'Congratulations! Your appointment was Confirmed.';
-    config.templateName = 'Appointment Confirmed';
+    config.subject = 'Congratulations! Your appointment request was confirmed.';
+    config.templateName = 'Appointment Request Confirmed';
+    return sendTemplate(config);
+  },
+
+  sendInvite: (config) => {
+    config.subject = 'Join CareCru';
+    config.templateName = 'Join CareCru';
     return sendTemplate(config);
   },
 
@@ -52,6 +59,22 @@ module.exports = {
  * @returns {Promise}
  */
 function sendTemplate(config) {
+  const accountString = config.accountId ? `:${config.accountId}` : '';
+  const string = config.email + accountString;
+  const encoded = new Buffer(string).toString('base64');
+  const hostUrl = config.accountId ? `my.${host}` : host;
+  const unsubContent = `${protocol}://${hostUrl}/unsubscribe/${encoded}`;
+  const defaultMergeVars = [
+    {
+      name: 'UNSUB',
+      content: unsubContent,
+    },
+    {
+      name: 'ACCOUNT_NAME',
+      content: config.fromName,
+    },
+  ];
+
   const {
     from = 'noreply@carecru.com',
     subject,
@@ -63,6 +86,12 @@ function sendTemplate(config) {
   } = config;
 
   return new Promise((resolve, reject) => {
+    // Do not send emails in test mode
+    if (env === 'test') {
+      console.log(`TEST: Successfully sent the ${templateName} email to ${toEmail}`);
+      return resolve({});
+    }
+
     mandrill.messages.sendTemplate({
         template_name: templateName,
 
@@ -83,7 +112,7 @@ function sendTemplate(config) {
             type: 'to',
           }],
 
-          global_merge_vars: mergeVars,
+          global_merge_vars: mergeVars.concat(defaultMergeVars),
           attachments,
         },
       },

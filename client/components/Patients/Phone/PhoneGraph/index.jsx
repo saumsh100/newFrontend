@@ -14,6 +14,8 @@ function PhoneGraph(props) {
   const x = callGraphStats.toJS().data.xValues;
   const y = callGraphStats.toJS().data.yValues;
 
+  const newY = y.slice(0, -1)
+
   const UserMenu = buttonProps => (
     <Button flat {...buttonProps} className={styles.userMenuButton}>
       <span className={styles.userRole}><i className="fa fa-calendar" /> {props.startDate.format('MMMM Do YYYY')} - {props.endDate.format('MMMM Do YYYY')}&nbsp;</span>
@@ -27,22 +29,29 @@ function PhoneGraph(props) {
   };
 
   const ticks = {
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'Gotham-Medium',
     fontColor: '#2e3845',
-    padding: 20,
+    padding: 15,
     maxRotation: 0,
     autoSkip: false,
     callback(value, index) {
-      if (index % 2 === 0 && typeof value !== 'number') return '';
-
-      if (typeof value === 'number' ) {
+      if (typeof value === 'number') {
         if (Number.isSafeInteger(value)) {
           return value;
         }
-      } else if (index % 2 !== 0) {
+      }
+      if (index % 2 === 0 && typeof value !== 'number' && x.length < 45) {
+        return '';
+      }
+
+      if (index % 2 !== 0 && x.length < 45 && typeof value !== 'number') {
+        return value;
+      } else if (x.length > 45 && typeof value !== 'number' && index % 10 === 0) {
         return value;
       }
+
+      return '';
     },
   };
 
@@ -65,7 +74,6 @@ function PhoneGraph(props) {
           drawTicks: false,
           drawOnChartArea: false,
         },
-
       }],
     },
   };
@@ -114,7 +122,8 @@ function PhoneGraph(props) {
             {
               label: 'Calls Received',
               color: 'red',
-              data: y,
+              data: newY,
+              fill: false,
             },
           ]}
           options={lineChartOptions}

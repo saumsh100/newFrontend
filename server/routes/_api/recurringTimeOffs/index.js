@@ -1,6 +1,8 @@
 import moment from 'moment-timezone';
 import { sequelizeLoader } from '../../util/loaders';
+import format from '../../util/format';
 import { PractitionerRecurringTimeOff, Account, Practitioner, WeeklySchedule } from '../../../_models';
+import batchCreate from '../../util/batch';
 
 const union = require('lodash/union');
 const recurringTimeOffRouter = require('express').Router();
@@ -23,43 +25,38 @@ recurringTimeOffRouter.post('/', checkPermissions('timeOffs:create'), (req, res,
 });
 
 /**
+ * Batch Create a timeOff from PMS
+ */
+recurringTimeOffRouter.post('/connector/batch', checkPermissions('timeOffs:create'), async (req, res, next) => {
+  const timeOffs = req.body;
+
+  return batchCreate(timeOffs, PractitionerRecurringTimeOff, 'PractitionerRecurringTimeOff')
+    .then((apps) => {
+
+      const appData = apps.map(app => app.get({ plain: true }));
+
+      res.status(201).send(format(req, res, 'practitionerSchedules', appData));
+    })
+    .catch(({ errors, docs }) => {
+      docs = docs.map(d => d.get({ plain: true }));
+
+      // Log any errors that occurred
+      errors.forEach((err) => {
+        console.error(err);
+      });
+      const data = format(req, res, 'practitionerSchedules', docs);
+      return res.status(201).send(Object.assign({}, data));
+    })
+    .catch(next);
+});
+
+/**
  * Create a timeOff from PMS
  */
 recurringTimeOffRouter.post('/connector', checkPermissions('timeOffs:create'), async (req, res, next) => {
-  const data = req.body;
-
-  req.accountId;
-
   try {
-    await PractitionerRecurringTimeOff.destroy({
-      where: {
-        startTime: null,
-        fromPMS: true,
-      },
-      paranoid: false,
-      force: true,
-    });
-
-    const pracs = await Practitioner.findAll({
-      raw: true,
-      where: {
-        accountId: req.accountId,
-      },
-    });
-
-    for (let i = 0; i < data.length; i += 1) {
-      for (let j = 0; j < pracs.length; j += 1) {
-        await PractitionerRecurringTimeOff.create({
-          fromPMS: true,
-          note: data[i].note,
-          allDay: true,
-          startDate: moment(data[i].startDate).toISOString(),
-          endDate: moment(data[i].endDate).toISOString(),
-          practitionerId: pracs[j].id,
-        });
-      }
-    }
-    return res.sendStatus(201);
+    const timeOff = await PractitionerRecurringTimeOff.create(req.body);
+    return res.status(201).send(format(req, res, 'practitionerSchedule', timeOff.get({ plain: true })));
   } catch (e) {
     return next(e);
   }
@@ -231,9 +228,9 @@ recurringTimeOffRouter.post('/pms', checkPermissions('timeOffs:create'), (req, r
 /**
  * Update a timeOff
  */
-recurringTimeOffRouter.put('/:timeOffId', checkPermissions('timeOffs:update'), (req, res, next) =>{
+recurringTimeOffRouter.put('/:timeOffId', checkPermissions('timeOffs:update'), (req, res, next) => {
   return req.recurringTimeOff.update(req.body)
-    .then(tf => res.send(normalize('practitionerRecurringTimeOff', tf.get({ plain: true }))))
+    .then(tf => res.send(format(req, res, 'practitionerSchedule', tf.get({ plain: true }))))
     .catch(next);
 });
 

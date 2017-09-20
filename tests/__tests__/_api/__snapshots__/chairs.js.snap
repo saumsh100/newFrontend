@@ -21,8 +21,8 @@ Object {
     },
   },
   "result": Array [
-    "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
     "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+    "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
   ],
 }
 `;
@@ -34,20 +34,20 @@ Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
-        "name": "C1",
+        "name": "C2",
         "pmsId": null,
       },
-      "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+      "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
       "type": "chair",
     },
     Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
-        "name": "C2",
+        "name": "C1",
         "pmsId": null,
       },
-      "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+      "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
       "type": "chair",
     },
   ],

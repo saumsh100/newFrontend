@@ -48,11 +48,13 @@ sequelize
 // Import and store all models.
 const models = [];
 models.push((require('./Account').default(sequelize, Sequelize)));
+models.push((require('./AccountConfiguration').default(sequelize, Sequelize)));
 models.push((require('./Appointment').default(sequelize, Sequelize)));
 models.push((require('./AuthSession').default(sequelize, Sequelize)));
 models.push((require('./Call').default(sequelize, Sequelize)));
 models.push((require('./Chair').default(sequelize, Sequelize)));
 models.push((require('./Chat').default(sequelize, Sequelize)));
+models.push((require('./Configuration').default(sequelize, Sequelize)));
 models.push((require('./ConnectorVersion').default(sequelize, Sequelize)));
 models.push((require('./Enterprise').default(sequelize, Sequelize)));
 models.push((require('./Family').default(sequelize, Sequelize)));
