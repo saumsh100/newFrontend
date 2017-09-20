@@ -1,12 +1,13 @@
 
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
+import crypto from 'crypto';
 import { PatientAuth } from '../../lib/_auth';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import twilio, { phoneNumber } from '../../config/twilio';
 import { sequelizeLoader } from '../util/loaders';
 import StatusError from '../../util/StatusError';
-import { PatientUser, PinCode, Token } from '../../_models';
+import { PatientUser, PatientUserReset, PinCode, Token } from '../../_models';
 import { sendPatientSignup, sendPatientResetPassword } from '../../lib/mail';
 
 const authRouter = Router();
@@ -141,7 +142,7 @@ authRouter.post('/reset', (req, res, next) => {
   } = req;
 
   const email = body.email;
-  const token = uuid();
+  const token = crypto.randomBytes(12).toString('hex');
 
   let protocol = req.protocol;
 
@@ -159,8 +160,8 @@ authRouter.post('/reset', (req, res, next) => {
         return res.sendStatus(200);
       }
 
-      await PasswordReset.create({
-        email,
+      await PatientUserReset.create({
+        patientUserId: patientUser.id,
         token,
       });
 

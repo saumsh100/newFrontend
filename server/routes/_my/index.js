@@ -7,10 +7,11 @@ import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import { Patient, PatientUser, Practitioner } from '../../_models';
+import { Patient, PatientUser, PatientUserReset } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
+
 
 const sequelizeMyRouter = new Router();
 
@@ -165,14 +166,39 @@ sequelizeMyRouter.get('/unsubscribe/:encoded', async (req, res, next) => {
 });
 
 sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
-  return PasswordReset.findOne({ where: { token: req.params.tokenId } })
+  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
     .then((reset) => {
       if (!reset) {
         // TODO: replace with StatusError
         res.status(404).send();
       } else {
-        res.redirect(`/resetpassword/${req.params.tokenId}`);
+        res.redirect(`/reset-password/${req.params.tokenId}`);
       }
+    })
+    .catch(next);
+});
+
+sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
+  const {
+    password,
+  } = req.body;
+
+  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
+    .then(async (reset) => {
+      if (!reset) {
+        return next(StatusError(401, 'Invalid Token'));
+      }
+
+      const user = await PatientUser.findOne({
+        where: {
+          id: reset.patientUserId,
+        },
+      });
+
+      await user.setPasswordAsync(password);
+      await user.save();
+      await reset.destroy();
+      return res.sendStatus(201);
     })
     .catch(next);
 });
