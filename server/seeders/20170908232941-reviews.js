@@ -57,8 +57,8 @@ module.exports = {
       accountId,
       practitionerId: practitioner1.id,
       patientId: patient1.id,
-      startDate: (new Date(2017, 8, 8, 8, 0)).toISOString(),
-      endDate: (new Date(2017, 8, 8, 9, 0)).toISOString(),
+      startDate: (new Date(2017, 8, 18, 8, 0)).toISOString(),
+      endDate: (new Date(2017, 8, 18, 9, 0)).toISOString(),
       createdAt: new Date(),
       updatedAt: new Date(),
     };

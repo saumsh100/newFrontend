@@ -199,6 +199,14 @@ module.exports = {
           defaultValue: false,
           allowNull: false,
         }, { transaction: t });
+
+        await queryInterface.addColumn('Accounts', 'googlePlaceId', {
+          type: DataTypes.STRING,
+        }, { transaction: t });
+
+        await queryInterface.addColumn('Accounts', 'facebookUrl', {
+          type: DataTypes.STRING,
+        }, { transaction: t });
       } catch (e) {
         console.log(e);
         return t.rollback();
@@ -217,6 +225,8 @@ module.exports = {
         await queryInterface.dropTable('Reviews', { transaction: t });
         await queryInterface.dropTable('SentReviews', { transaction: t });
         await queryInterface.removeColumn('Accounts', 'canSendReviews', { transaction: t });
+        await queryInterface.removeColumn('Accounts', 'googlePlaceId', { transaction: t });
+        await queryInterface.removeColumn('Accounts', 'facebookUrl', { transaction: t });
       } catch (e) {
         console.log(e);
         return t.rollback();
