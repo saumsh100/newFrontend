@@ -15,6 +15,7 @@ class ResetPassword extends Component {
   }
 
   handleSubmit(values) {
+    // This just posts right back to location URL...
     this.props.resetUserPassword(this.props.location, values);
   }
 

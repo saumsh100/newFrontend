@@ -177,11 +177,19 @@ sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
     .catch(next);
 });
 
+sequelizeMyRouter.get('(/*)?', (req, res, next) => {
+  try {
+    return res.render('my');
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares
-sequelizeMyRouter.use('(/*)?', (req, res, next) => {
+/*sequelizeMyRouter.use('(/*)?', (req, res, next) => {
   // TODO: this needs to be wrapped in try catch
   return res.status(404).end();
-});
+});*/
 
 module.exports = sequelizeMyRouter;
