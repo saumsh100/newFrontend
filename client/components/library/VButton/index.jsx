@@ -19,9 +19,10 @@ const scheme = [
 
 const mapper = getClassMapper(scheme, styles);
 
-const VButton = props => (
-  <props.as
-      {...mapper.omit(props, 'as', 'icon')}
+const VButton = (props) => {
+  return (
+    <props.as
+      {...mapper.omit(props, 'as', 'icon', 'submit')}
       className={mapper.map(props, styles.default, props.className)}
     >
       { props.icon ? (
@@ -33,6 +34,7 @@ const VButton = props => (
       ) : null }
     </props.as>
   );
+};
 
 VButton.defaultProps = {
   as: 'button',

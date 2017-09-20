@@ -18,7 +18,7 @@ export default function Button(props) {
       disabled: props.disabled,
       icon: props.icon,
       create: props.create,
-      edit: props.edit
+      edit: props.edit,
     })
   );
 
@@ -51,4 +51,6 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   icon: PropTypes.string,
   theme: PropTypes.string,
+  create: PropTypes.string,
+  edit: PropTypes.string,
 };

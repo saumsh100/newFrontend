@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import Button from '../Button';
+import VButton from '../VButton';
 import styles from './styles.scss';
 import Icon from '../Icon';
 
@@ -17,12 +17,16 @@ export default function SaveButton(props) {
     saveClasses = classnames(saveClasses, styles[alignSave]);
   }
 
+  if (pristine) {
+    saveClasses = classnames(saveClasses, styles.disabled);
+  }
+
   return (
     <div className={styles.formActionsWrapper}>
       <div className={styles.formActionsPull}>
-        <Button disabled={pristine} type="submit" className={saveClasses} icon="floppy-o" >
+        <VButton color={pristine ? '' : 'red'} disabled={pristine} type="submit" className={saveClasses} icon="floppy-o" >
             Save
-        </Button>
+        </VButton>
       </div>
     </div>
   );
