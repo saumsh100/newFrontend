@@ -45,7 +45,7 @@ export default function (sequelize, DataTypes) {
         isUnique(value, next) {
           return PractitionerRecurringTimeOff.findOne({
             where: {
-              accountId: this.accountId,
+              practitionerId: this.practitionerId,
               pmsId: value,
             },
           }).then((timeOff) => {
