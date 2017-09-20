@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import { Guage, PractitionerAvatar } from '../../../../library';
 import styles from './styles.scss';
 
@@ -12,13 +13,19 @@ class PractitionersList extends Component {
       appointmentNotFiltred,
       newPatients,
       practitioner,
+      color,
       percentage } = this.props;
+
+    const gradientStyle = classNames(styles[color], styles.practitioner__item_gradient);
+
     return (
       <li className={styles.practitioner__item}>
         <div className={styles.practitioner__item_wrapper}>
           <div className={styles.practitioner__item_header}>
             <div className={styles.practitioner__item_img}>
-              <PractitionerAvatar size="lg" practitioner={practitioner} />
+              <div className={gradientStyle}>
+                <PractitionerAvatar className={styles.practitioner__item_avatar} size="lg" practitioner={practitioner} />
+              </div>
             </div>
             <div className={styles.practitioner__item_about}>
               <div className={styles.practitioner__item_name}>
