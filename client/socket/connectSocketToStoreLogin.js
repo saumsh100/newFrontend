@@ -36,7 +36,7 @@ export default function connectSocketToStoreLogin(store, socket) {
       /**
        * Request Socket
        */
-      socket.on('create:Request', (data) => {
+      socket.on('request.created', (data) => {
         dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
         const alert = {
           title: 'Appointment Request',
