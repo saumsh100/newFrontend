@@ -13,7 +13,7 @@ import * as Thunks from '../../../thunks/availabilities';
 import * as AuthThunks from '../../../thunks/patientAuth';
 import styles from './styles.scss';
 
-const TOTAL_SECONDS_ALLOWED = 3 * 60;
+const TOTAL_SECONDS_ALLOWED = 5 * 60;
 
 class SubmitView extends Component {
   constructor(props) {

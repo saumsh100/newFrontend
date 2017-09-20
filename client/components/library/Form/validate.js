@@ -16,9 +16,12 @@ const asyncPhoneNumberValidatePatient = (values) => {
   if (!values.phoneNumber) return;
   return axios.post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
     .then((response) => {
-      if (response.data.exists) {
-        console.log('throwing error');
-        throw { phoneNumber: 'There is already a user with that phone number' };
+      console.log(response);
+      console.log(response.data);
+      const { error } = response.data;
+      console.log(error);
+      if (error) {
+        throw { phoneNumber: error };
       }
     });
 };

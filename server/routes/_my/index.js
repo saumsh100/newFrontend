@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import fs from 'fs';
 import StatusError from '../../util/StatusError';
+import { lookupsClient } from '../../config/twilio';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
@@ -124,7 +125,26 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   phoneNumber = validatePhoneNumber(phoneNumber);
   try {
     const patientUsers = await PatientUser.findAll({ where: { phoneNumber } });
-    return res.send({ exists: !!patientUsers[0] });
+    const alreadyExists = !!patientUsers[0];
+    if (alreadyExists) {
+      return res.send({ error: 'There is already a user with that mobile number.' });
+    }
+
+    lookupsClient.phoneNumbers(phoneNumber).get({
+      type: 'carrier'
+    }, function(error, number) {
+      if (error) {
+        return res.sendStatus(200);
+      }
+
+      const isLandline = number && number.carrier && number.carrier.type === 'landline';
+      console.log('isLandline', isLandline);
+      if (isLandline) {
+        res.send({ error: 'You cannot use a landline number. Please enter a mobile number.' });
+      } else {
+        res.sendStatus(200);
+      }
+    });
   } catch (error) {
     next(error);
   }
