@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { storiesOf, action } from '@kadira/storybook';
-import { withKnobs, object } from '@kadira/storybook-addon-knobs';
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import { withKnobs, object } from '@storybook/addon-knobs';
 
 import DayPicker from './';
 
@@ -16,8 +17,8 @@ storiesOf('DayPicker', module)
       onChange={action('changed')}
       style={object('Style', style)}
     />
-  ))
-  .add('target icon ', () => (
+  ));
+  /*.add('target icon ', () => (
     <DayPicker
       target="icon"
       onChange={action('changed')}
@@ -29,4 +30,4 @@ storiesOf('DayPicker', module)
       target="icon"
       onChange={action('changed')}
     />
-  ));
+  ));*/

@@ -101,6 +101,16 @@
 
 .upper-case { text-transform: uppercase; }
 
+.disabled {
+  cursor: not-allowed;
+  color: $inactive-color;
+  background-color: $background-color !important;
+  &:hover {
+    color: $inactive-color !important;
+    background-color: $background-color !important;
+  }
+}
+
 .flat {
   display: flex;
   background-color: transparent;
