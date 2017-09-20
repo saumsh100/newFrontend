@@ -33,22 +33,24 @@ const UserMenu = (props) => {
 
   return (
     <Button flat {...newProps} className={styles.userMenuButton}>
-      <div className={styles.userMenuGreeting}>
-        <div className={styles.greeting}>
-          Hello, {user.get('firstName')}
+      <div className={styles.userContainer}>
+        <div className={styles.userMenuGreeting}>
+          <div className={styles.greeting}>
+            Hello, {user.get('firstName')}
+          </div>
+          <div className={styles.userRole}>
+            {role}
+          </div>
+          <div className={styles.businessName}>
+            {businessName}
+          </div>
         </div>
-        <div className={styles.userRole}>
-          {role}
-        </div>
-        <div className={styles.businessName}>
-          {businessName}
-        </div>
+        <Avatar
+          className={styles.userAvatar}
+          user={user.toJS()}
+        />
+        <Icon icon="caret-down" />
       </div>
-      <Avatar
-        className={styles.userAvatar}
-        user={user.toJS()}
-      />
-      <Icon icon="caret-down" />
     </Button>
   );
 };

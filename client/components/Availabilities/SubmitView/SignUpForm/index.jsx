@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { VButton, Form, Field } from '../../../library';
+import { Button, Form, Field } from '../../../library';
 import { asyncValidatePatient, passwordsMatch, passwordStrength } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
@@ -51,12 +51,12 @@ export default function SignUpForm({ onSubmit, initialValues }) {
         name="confirmPassword"
         type="password"
       />
-      <VButton
+      <Button
         type="submit"
         className={styles.signup__footer_btn}
       >
         Sign Up and Book
-      </VButton>
+      </Button>
     </Form>
   );
 }

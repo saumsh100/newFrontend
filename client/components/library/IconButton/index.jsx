@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import omit from 'lodash/omit';
 import classNames from 'classnames';
-import VButton from '../VButton';
+import VButton from '../Button';
 import Icon from '../Icon';
 import styles from './styles.scss';
 

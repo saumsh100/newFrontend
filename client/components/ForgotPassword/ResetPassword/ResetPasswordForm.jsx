@@ -28,6 +28,7 @@ export default function ResetPasswordForm({ onSubmit }) {
       <Button
         type="submit"
         style={{ width: '100%' }}
+        color="red"
       >
         Reset Password
       </Button>

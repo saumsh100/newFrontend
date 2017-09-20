@@ -213,7 +213,7 @@ class Recalls extends Component {
             onClick={this.openModal}
             data-test-id="createNewRecall"
             icon="plus"
-            create
+            secondary
           >
             Add New Recall
           </Button>

@@ -84,7 +84,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
                 icon="plus"
                 onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
                 data-test-id={`${day}AddBreakButton`}
-                create
+                secondary
               >
                 Add Break
               </Button>

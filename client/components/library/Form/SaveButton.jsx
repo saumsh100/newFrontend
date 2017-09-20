@@ -1,7 +1,7 @@
 
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import VButton from '../VButton';
+import VButton from '../Button';
 import styles from './styles.scss';
 import Icon from '../Icon';
 
@@ -24,7 +24,7 @@ export default function SaveButton(props) {
   return (
     <div className={styles.formActionsWrapper}>
       <div className={styles.formActionsPull}>
-        <VButton color={pristine ? '' : 'red'} disabled={pristine} type="submit" className={saveClasses} icon="floppy-o" >
+        <VButton disabled={pristine} type="submit" className={saveClasses} icon="floppy-o" >
             Save
         </VButton>
       </div>

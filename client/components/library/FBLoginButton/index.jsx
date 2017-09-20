@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { isArray } from 'lodash';
-import VButton from '../VButton';
+import VButton from '../Button';
 import { omitTypes } from '../../Utils';
 import { Icon } from '../../library';
 import styles from './fb-login-button.scss';
