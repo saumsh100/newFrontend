@@ -24,7 +24,7 @@ export default function EmailSuccess(props) {
           We've sent an email to <span className={styles.email}>{email}</span> with password reset instructions.
         </p>
         <p>
-          If the email doesn't show up soon, check your spam folder. We sent it from <span className={styles.email}>noreply@carecru.com</span>.
+          If the email doesn't show up soon, please check your spam folder. We sent the email from <span className={styles.email}>noreply@carecru.com</span>.
         </p>
         <Button
           onClick={()=> {

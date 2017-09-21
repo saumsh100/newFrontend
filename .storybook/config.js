@@ -1,11 +1,11 @@
-
-import { configure } from '@kadira/storybook';
-import '../client/apps/default';
+import { configure } from '@storybook/react';
+import 'babel-polyfill';
 import './fonts.css';
+//import '../client/ui.scss'
 
-const req = require.context('../client/components/library', true, /.stories.js$/);
-
+const req = require.context('../client/components/library', true, /\.stories\.js$/);
 function loadStories() {
+  //require('../stories');
   req.keys().forEach((filename) => req(filename))
 }
 

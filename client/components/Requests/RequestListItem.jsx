@@ -67,7 +67,7 @@ class RequestListItem extends Component {
    showHoverComponents = (
       <div>
         <div className={styles.clickHandlers}>
-          <IconButton
+          <Icon
             icon={'times-circle-o'}
             className={styles.clickHandlers__remove}
             onClick={this.onClickRemove}

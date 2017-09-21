@@ -45,9 +45,15 @@ module.exports = {
     return sendTemplate(config);
   },
 
-  sendReview: (config) => {
-    config.subject = 'Tell us about your experience.';
-    config.templateName = 'Patient Review';
+  sendResetPassword: (config) => {
+    config.subject = 'Reset Password';
+    config.templateName = 'Reset Password';
+    return sendTemplate(config);
+  },
+
+  sendPatientResetPassword: (config) => {
+    config.subject = 'Reset Password';
+    config.templateName = 'Patient Reset Password';
     return sendTemplate(config);
   },
 };

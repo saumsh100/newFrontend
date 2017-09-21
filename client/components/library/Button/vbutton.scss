@@ -1,11 +1,18 @@
 @import '../../../ui.scss';
 
+:root {
+  --primaryButtonColor: $primary-color;
+  --secondaryButtonColor: $clr-dark-blue;
+  --tertiaryButtonColor: $primary-green;
+}
+
+
 .default {
   font-size: 14px;
 
   font-family: $dashboard-font;
-  background-color: $background-color;
-  color: $primary-dark;
+  background-color: var(--primaryButtonColor);
+  color: $primary-white;
 
   vertical-align: middle;
   cursor: pointer;
@@ -28,9 +35,15 @@
 }
 
 .default:hover {
-  background-color: darken($background-color, 5%);
-  color: darken($primary-dark, 5%);
+  background-color: darken($primary-color, 5%);
+  color: darken($primary-white, 5%);
 }
+
+.secondary { color: $primary-white;  background-color: var(--secondaryButtonColor) }
+.secondary:hover { color: $primary-white; background-color: darken($clr-dark-blue, 5%)}
+
+.tertiary { color: $primary-white; background-color: var(--tertiaryButtonColor) }
+.tertiary:hover { color: $primary-white; background-color: darken($primary-green, 5%); }
 
 .color-red { color: $primary-white; background-color: $primary-color; }
 .color-red:hover { color: $primary-white; background-color: $primary-color-hover; }
@@ -40,6 +53,9 @@
 
 .color-blue { color: $primary-white; background-color: $primary-light-blue; }
 .color-blue:hover { color: $primary-white; background-color: darken($primary-light-blue, 5%); }
+
+.color-darkblue { color: $primary-white; background-color: $clr-dark-blue; }
+.color-darkblue:hover { color: $primary-white; background-color: darken($clr-dark-blue, 5%); }
 
 .color-darkblue { color: $primary-white; background-color: $primary-blue; }
 .color-darkblue:hover { color: $primary-white; background-color: darken($primary-blue, 5%); }
@@ -61,7 +77,6 @@
 
 .icon {
   margin-right: .5em;
-
   &:last-child {
     margin-right: 0;
   }
@@ -95,3 +110,31 @@
 }
 
 .upper-case { text-transform: uppercase; }
+
+.disabled {
+  cursor: not-allowed;
+  color: $inactive-color;
+  background-color: $background-color !important;
+  &:hover {
+    color: $inactive-color !important;
+    background-color: $background-color !important;
+  }
+}
+
+.flat {
+  display: flex;
+  background-color: transparent;
+  color: $primary-dark;
+  box-shadow: none;
+
+  &:not(.disabled) {
+    &:hover {
+      color: $primary-color-hover;
+      background-color: transparent;
+    }
+  }
+
+  &:focus, &:active {
+    outline: none;
+  }
+}

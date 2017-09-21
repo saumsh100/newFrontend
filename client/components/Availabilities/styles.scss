@@ -360,7 +360,7 @@
         &_selected {
             background-color: #f3715c !important;
             background-color: var(--bookingWidgetPrimaryColor) !important;
-            filter: grayscale(80%);
+            opacity: 0.5 !important;
         }
         &_item {
             cursor: pointer;

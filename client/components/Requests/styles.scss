@@ -135,11 +135,16 @@
     font-size: .9rem;
     top: 50%;
     transform: translateY(-50%);    right: 20px;
+
   }
 
   &__remove{
     font-size: 22px;
     color: $inactive-color;
+    margin-right: 15px;
+    &:hover {
+      color: darken($inactive-color, 10%);
+    }
   }
 
   &__confirm{

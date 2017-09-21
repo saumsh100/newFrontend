@@ -100,7 +100,7 @@
 
     &_selected {
       // background-color: var(--bookingWidgetPrimaryColor) !important;
-      filter: grayscale(80%);
+      opacity: 0.5 !important;
       &:hover {
 
       }
