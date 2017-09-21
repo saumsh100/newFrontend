@@ -126,8 +126,8 @@
 
 }
 
-.fontExtraLarge {
-  font-size: $x-large-size;
+.fontMediumSize {
+  font-size: $medium-size;
   font-weight: $large-weight;
   @extend .letterSpacing;
 }
@@ -139,11 +139,18 @@
 
 }
 
-.fontMediumSize {
-  font-size: $medium-size;
+.fontExtraLarge {
+  font-size: $x-large-size;
   font-weight: $large-weight;
   @extend .letterSpacing;
 }
+
+.fontExtraMediumLarge {
+  font-size: $x-mediumLarge-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+}
+
 
 .cardHeaderTitle {
   font-size: $title-size;
