@@ -120,6 +120,7 @@
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+
     &__item {
       display: flex;
       flex-direction: column;
@@ -128,6 +129,10 @@
       color: $primary-dark;
       font-weight: $large-weight;
       font-size: $extra-large-size;
+
+      img {
+        padding-bottom: 15px;
+      };
 
       &_man {
         color: $primary-blue;
