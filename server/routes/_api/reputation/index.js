@@ -19,8 +19,6 @@ const {
 } = globals.vendasta;
 
 const fetchListingsData = (account) => {
-  console.log(account.vendastaAccountId)
-  console.log(account.vendastaId);
   const listingsUrl = `${VENDASTA_LISTINGS_URL}?apiKey=${apiKey}&apiUser=${apiUser}`;
   return axios.post(listingsUrl, { customerIdentifier: account.vendastaId });
 };
@@ -41,7 +39,6 @@ const fetchReviewsData = (account) => {
 };
 
 const fetchReviewsLookup = (account, minDateTime, maxDateTime) => {
-  console.log(account.vendastaId)
   const reviewsUrl = `${VENDASTA_REVIEWS_LOOKUP}?apiKey=${apiKey}&apiUser=${apiUser}`;
   return axios.post(reviewsUrl, { customerIdentifier: account.vendastaId, minDateTime, maxDateTime });
 };
@@ -69,7 +66,7 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
 
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
   const {
-    startDate = moment().subtract(180, 'days')._d,
+    startDate = moment().subtract(999, 'days')._d,
     endDate = moment()._d
   } = req.query;
 

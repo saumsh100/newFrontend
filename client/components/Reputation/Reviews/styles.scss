@@ -167,6 +167,7 @@
   max-height: 745px;
 	overflow: auto;
   margin-bottom: 15px;
+  height: calc(100vh - 360px);
 
   &__cardHeader {
     padding-top: 15px;

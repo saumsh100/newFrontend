@@ -7,7 +7,7 @@ const companyIcons = {
   'Rate MDs': '//www.cdnstyles.com/static/images/icon32/sourceId-10450.png',
   'Facebook': '//www.cdnstyles.com/static/images/icon32/sourceId-10050.png',
   'Yelp': '//www.cdnstyles.com/static/images/icon32/sourceId-10000.png',
-  'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.pn',
+  'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
 };
 
 export default function ReviewsCard(props) {
