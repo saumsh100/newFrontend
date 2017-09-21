@@ -24,6 +24,7 @@ import {
   UPDATE_WAITSPOT,
   SET_IS_LOGIN,
   SET_NEXT_AVAILABILITY,
+  SET_FORGOT_PASSWORD,
 } from '../constants';
 
 export const createInitialWidgetState = state => {
@@ -45,6 +46,7 @@ export const createInitialWidgetState = state => {
     isFetching: true,
     isConfirming: false,
     isLogin: false,
+    forgotPassword: false,
     initialForm: {},
     isTimerExpired: false,
     isSuccessfulBooking: false,
@@ -82,6 +84,7 @@ export default handleActions({
       isSuccessfulBooking: false,
       registrationStep: 1,
       reservationId: null,
+      forgotPassword: false,
     });
   },
 
@@ -107,6 +110,10 @@ export default handleActions({
 
   [SET_IS_LOGIN](state, action) {
     return state.set('isLogin', action.payload);
+  },
+
+  [SET_FORGOT_PASSWORD](state, action){
+    return state.set('forgotPassword', action.payload);
   },
 
   [SET_IS_TIMER_EXPIRED](state, action) {

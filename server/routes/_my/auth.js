@@ -1,13 +1,14 @@
 
 import { Router } from 'express';
+import { v4 as uuid } from 'uuid';
 import crypto from 'crypto';
 import { PatientAuth } from '../../lib/_auth';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import twilio, { phoneNumber } from '../../config/twilio';
 import { sequelizeLoader } from '../util/loaders';
 import StatusError from '../../util/StatusError';
-import { PatientUser, PinCode, Token } from '../../_models';
-import { sendPatientSignup } from '../../lib/mail';
+import { PatientUser, PatientUserReset, PinCode, Token } from '../../_models';
+import { sendPatientSignup, sendPatientResetPassword } from '../../lib/mail';
 
 const authRouter = Router();
 
@@ -133,6 +134,53 @@ authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+authRouter.post('/reset', (req, res, next) => {
+  const {
+    body,
+  } = req;
+
+  const email = body.email;
+  const token = crypto.randomBytes(12).toString('hex');
+
+  let protocol = req.protocol;
+
+  // this is for heroku to create the right http link it uses
+  // x-forward-proto for https but shows http in req.protocol
+  if (req.headers['x-forwarded-proto'] === 'https') {
+    protocol = 'https';
+  }
+
+  const fullUrl = `${protocol}://${req.get('host')}/reset/${token}`;
+
+  PatientUser.findOne({ where: { email } })
+    .then(async (patientUser) => {
+      if (!patientUser) {
+        return res.sendStatus(200);
+      }
+
+      await PatientUserReset.create({
+        patientUserId: patientUser.id,
+        token,
+      });
+
+      const mergeVars = [
+        {
+          name: 'RESET_URL',
+          content: fullUrl,
+        },
+      ];
+
+      // Do not await...
+      sendPatientResetPassword({
+        toEmail: email,
+        mergeVars,
+      });
+
+      return res.sendStatus(200);
+    })
+    .catch(next);
 });
 
 authRouter.post('/', ({ body: { email, password } }, res, next) =>

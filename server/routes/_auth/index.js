@@ -4,7 +4,7 @@ import omit from 'lodash/omit';
 import { UserAuth } from '../../lib/_auth';
 import { loadPermissionsSequelize } from '../../lib/permissions';
 import { User, PasswordReset } from '../../_models';
-import { resetPasswordEmail } from '../../lib/resetPasswordEmail';
+import { sendResetPassword } from '../../lib/mail';
 
 const uuid = require('uuid').v4;
 
@@ -79,7 +79,7 @@ authRouter.post('/resetpassword', (req, res, next) => {
         },
       ];
 
-      resetPasswordEmail({
+      sendResetPassword({
         subject: 'Reset Password',
         toEmail: email,
         mergeVars,

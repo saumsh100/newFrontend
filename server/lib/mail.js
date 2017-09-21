@@ -44,6 +44,18 @@ module.exports = {
     config.templateName = 'Join CareCru';
     return sendTemplate(config);
   },
+
+  sendResetPassword: (config) => {
+    config.subject = 'Reset Password';
+    config.templateName = 'Reset Password';
+    return sendTemplate(config);
+  },
+
+  sendPatientResetPassword: (config) => {
+    config.subject = 'Reset Password';
+    config.templateName = 'Patient Reset Password';
+    return sendTemplate(config);
+  },
 };
 
 /**

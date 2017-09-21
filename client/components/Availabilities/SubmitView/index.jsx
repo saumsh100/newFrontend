@@ -8,6 +8,8 @@ import { Button, Timer, VButton, Avatar, DropdownMenu, MenuItem } from '../../li
 import SignUpForm from './SignUpForm';
 import ConfirmNumberForm from './ConfirmNumberForm';
 import LoginForm from './LoginForm';
+import ForgotPasswordForm from './ForgotPasswordForm';
+import EmailSuccess from './EmailSuccess/index';
 import * as Actions from '../../../actions/availabilities';
 import * as Thunks from '../../../thunks/availabilities';
 import * as AuthThunks from '../../../thunks/patientAuth';
@@ -21,10 +23,13 @@ class SubmitView extends Component {
 
     this.state = {
       loading: false,
+      submittedEmail: false,
+      email: null,
     };
 
     this.signUpAndConfirm = this.signUpAndConfirm.bind(this);
     this.confirmAndBook = this.confirmAndBook.bind(this);
+    this.handleResetPassword = this.handleResetPassword.bind(this);
     this.resendPinCode = this.resendPinCode.bind(this);
     this.createRequest = this.createRequest.bind(this);
   }
@@ -40,6 +45,14 @@ class SubmitView extends Component {
           password: data,
         });
       });
+  }
+
+  handleResetPassword({ email }) {
+    this.props.resetPatientUserPassword(email);
+    this.setState({
+      submittedEmail: true,
+      email,
+    });
   }
 
   logout() {
@@ -94,6 +107,7 @@ class SubmitView extends Component {
       isAuthenticated,
       isConfirming,
       isLogin,
+      forgotPassword,
       isTimerExpired,
       setIsTimerExpired,
       isSuccessfulBooking,
@@ -103,6 +117,7 @@ class SubmitView extends Component {
       bookingWidgetPrimaryColor,
       setIsLogin,
       initialValues,
+      setForgotPassword,
     } = this.props;
 
     // If patient is authenticated, display <BookView />
@@ -170,6 +185,15 @@ class SubmitView extends Component {
         </a>
       );
 
+      const forgotPasswordAnchor = (
+        <a
+          href="#forgotpassword"
+          onClick={(e) => { e.preventDefault(); setForgotPassword(true) }}
+          >
+          Click here
+        </a>
+      );
+
       formComponent = (
         <div>
           <LoginForm
@@ -178,6 +202,9 @@ class SubmitView extends Component {
           />
           <div className={styles.alreadyHaveWrapper}>
             Don't have an account? {signupHereAnchor}
+          </div>
+          <div className={styles.alreadyHaveWrapper}>
+            Forgot your password? {forgotPasswordAnchor}
           </div>
         </div>
       );
@@ -226,6 +253,12 @@ class SubmitView extends Component {
           </Button>
         </div>
       );
+    }
+
+    if (forgotPassword) {
+      formComponent = !this.state.submittedEmail ? (
+        <ForgotPasswordForm onSubmit={this.handleResetPassword} className={styles.loginForm} />
+      ) : (<EmailSuccess email={this.state.email} className={styles.emailSubmitted} />);
     }
 
     const loadingComponent = (
@@ -306,6 +339,7 @@ SubmitView.propTypes = {
   logout: PropTypes.func.isRequired,
   resendPinCode: PropTypes.func.isRequired,
   setPatientUser: PropTypes.func.isRequired,
+  setForgotPassword: PropTypes.func.isRequired,
   setIsConfirming: PropTypes.func.isRequired,
   setIsLogin: PropTypes.func.isRequired,
   setIsTimerExpired: PropTypes.func.isRequired,
@@ -313,6 +347,7 @@ SubmitView.propTypes = {
   isTimerExpired: PropTypes.bool.isRequired,
   isConfirming: PropTypes.bool.isRequired,
   isLogin: PropTypes.bool.isRequired,
+  forgotPassword: PropTypes.bool.isRequired,
   isSuccessfulBooking: PropTypes.bool.isRequired,
   closeBookingModal: PropTypes.func.isRequired,
   bookingWidgetPrimaryColor: PropTypes.string,
@@ -321,8 +356,8 @@ SubmitView.propTypes = {
     firstName: PropTypes.string,
   }),
   initialValues: PropTypes.object,
-
   hasWaitList: PropTypes.bool.isRequired,
+  resetPatientUserPassword: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ availabilities, auth }) {
@@ -334,6 +369,7 @@ function mapStateToProps({ availabilities, auth }) {
     patientUser: auth.get('patientUser'),
     isAuthenticated: auth.get('isAuthenticated'),
     hasWaitList: availabilities.get('hasWaitList'),
+    forgotPassword: availabilities.get('forgotPassword'),
 
     // TODO: shouldn't have to go to Redux to grab this...
     bookingWidgetPrimaryColor: availabilities.getIn(['account', 'bookingWidgetPrimaryColor']),
@@ -355,6 +391,8 @@ function mapDispatchToProps(dispatch) {
     setIsLogin: Actions.setIsLogin,
     setIsTimerExpired: Actions.setIsTimerExpired,
     closeBookingModal: Thunks.closeBookingModal,
+    setForgotPassword: Actions.setForgotPassword,
+    resetPatientUserPassword: AuthThunks.resetPatientUserPassword,
   }, dispatch);
 }
 

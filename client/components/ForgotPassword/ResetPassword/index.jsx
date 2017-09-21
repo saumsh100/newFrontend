@@ -11,14 +11,26 @@ import CopyrightFooter from '../../Login/CopyrightFooter/index';
 class ResetPassword extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      submitted: false,
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(values) {
-    this.props.resetUserPassword(this.props.location, values);
+    // This just posts right back to location URL...
+    return this.props.resetUserPassword(this.props.location, values)
+    .then(() => {
+      this.setState({ submitted: true });
+    });
   }
 
   render() {
+
+    const display = !this.state.submitted ?  <ResetPasswordForm onSubmit={this.handleSubmit} /> :
+    <div>Password Successfully Changed</div>;
+
     return (
       <div className={styles.backDrop}>
         <Card className={styles.loginForm}>
@@ -29,7 +41,7 @@ class ResetPassword extends Component {
               alt="CareCru Logo"
             />
           </div>
-          <ResetPasswordForm onSubmit={this.handleSubmit} />
+          {display}
         </Card>
         <CopyrightFooter />
       </div>
@@ -50,5 +62,3 @@ function mapActionsToProps(dispatch) {
 const enhance = connect(null, mapActionsToProps);
 
 export default enhance(ResetPassword);
-
-

@@ -67,5 +67,21 @@ export default function (sequelize, DataTypes) {
     });
   });
 
+  /**
+   * setPasswordAsync is used to set password attr on PatientUser model
+   *
+   * @param password
+   * @returns {Promise}
+   */
+  PatientUser.prototype.setPasswordAsync = function (password) {
+    return new Promise((resolve, reject) => {
+      bcrypt.hash(password, passwordHashSaltRounds, (err, hashedPassword) => {
+        if (err) reject(err);
+        this.password = hashedPassword;
+        return resolve(this);
+      });
+    });
+  };
+
   return PatientUser;
 }
