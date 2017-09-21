@@ -175,7 +175,7 @@ class SubmitView extends Component {
       );
     }
 
-    if (isLogin) {
+    if (!patientUser && isLogin) {
       const signupHereAnchor = (
         <a
           href="#signup"
