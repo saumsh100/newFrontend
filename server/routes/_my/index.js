@@ -78,7 +78,7 @@ function replaceIndex(string, regex, index, repl) {
 
 const toString = str => `"${str}"`;
 const toTemplateString = str => `\`${str}\``;
-const getPath = filename => `${__dirname}/../../routes/my/${filename}`;
+const getPath = filename => `${__dirname}/../../routes/_my/${filename}`;
 
 sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
   const account = req.account.get({ plain: true });
