@@ -257,7 +257,7 @@ class SubmitView extends Component {
 
     if (forgotPassword) {
       formComponent = !this.state.submittedEmail ? (
-        <ForgotPasswordForm onSubmit={this.handleResetPassword} className={styles.loginForm} />
+        <ForgotPasswordForm onSubmit={this.handleResetPassword} setIsLogin={setIsLogin} setForgotPassword={setForgotPassword} className={styles.loginForm} />
       ) : (<EmailSuccess email={this.state.email} className={styles.emailSubmitted} />);
     }
 
