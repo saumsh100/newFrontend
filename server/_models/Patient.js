@@ -132,6 +132,13 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    isSyncedWithPMS: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['isSyncedWithPms']),
+      get() {
+        return !!this.get('isSyncedWithPms');
+      },
+    },
+
     familyId: {
       type: DataTypes.UUID,
     },
