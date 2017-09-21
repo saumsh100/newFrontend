@@ -1,6 +1,6 @@
 import { set } from 'lodash'
 import React, { Component, PropTypes } from 'react';
-import { ListItem, Button } from '../../library';
+import { ListItem, Button, Avatar } from '../../library';
 import styles from './styles.scss';
 
 export default function PatientData(props) {
@@ -28,7 +28,7 @@ export default function PatientData(props) {
   return (
     <ListItem
       className={styles.suggestionsListItem}>
-      <img className={styles.patientContainer_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
+      <Avatar className={styles.patientContainer_img} user={patient} alt="" />
       <div className={styles.patientContainer} >
         <div className={styles.patientContainer_fullName}>
           {fullName}

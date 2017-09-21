@@ -195,7 +195,7 @@ class SubmitView extends Component {
               <strong>Wait</strong> for the clinic to confirm your appointment details.
             </span>
           </div>
-          <VButton
+          <Button
             icon="sign-out"
             className={styles.exitButton}
             onClick={() => {
@@ -204,7 +204,7 @@ class SubmitView extends Component {
             }}
           >
             Exit
-          </VButton>
+          </Button>
         </div>
       );
     }
@@ -217,13 +217,13 @@ class SubmitView extends Component {
             To start again, simply click on the button below to go back and select
             the availability you desire.
           </div>
-          <VButton
+          <Button
             icon="arrow-left"
             className={styles.exitButton}
             onClick={restartBookingProcess}
           >
             Go Back
-          </VButton>
+          </Button>
         </div>
       );
     }
@@ -286,9 +286,9 @@ class SubmitView extends Component {
                   like to complete the booking, click the button below.
                 </span>
                   </div>
-                  <VButton className={styles.exitButton} onClick={() => this.createRequest()}>
+                  <Button className={styles.exitButton} onClick={() => this.createRequest()}>
                     Book This Appointment
-                  </VButton>
+                  </Button>
                 </div>
               ) : formComponent }
           </div> : loadingComponent }

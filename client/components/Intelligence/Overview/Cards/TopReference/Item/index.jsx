@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Col, List, ListItem, Card, CardHeader } from '../../../../../library';
 import styles from './styles.scss';
+import Avatar from '../../../../../library/Avatar/index';
 
 class Item extends Component {
   render() {
@@ -18,9 +19,10 @@ class Item extends Component {
           <div className={styles.userItem__body}>
             <List className={styles.patients}>
               {data.map((obj, i) => {
+                console.log(obj)
                 return (
                   <ListItem key={i} className={styles.patients__item}>
-                    <img className={styles.patients__item_img} src={obj.img} alt=""/>
+                    <Avatar className={styles.patients__item_img} user={obj} size="lg"/>
                     <div className={styles.patients__item_wrapper}>
                       <div className={styles.patients__item_left}>
                         <div className={styles.patients__item_name}>

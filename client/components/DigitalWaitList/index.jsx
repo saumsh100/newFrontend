@@ -170,10 +170,10 @@ class DigitalWaitList extends Component {
     } = this.props;
 
     let formName = 'addWaitSpot';
-    let title = "Add Patient to Waitlist"
+    let title = 'Add Patient to Waitlist';
     if (selectedWaitSpot) {
       formName = 'editWaitSpot';
-      title = "Edit Patient Waitlist"
+      title = 'Edit Patient Waitlist';
     }
 
     return (

@@ -139,7 +139,7 @@ class PractitionerRecurringTimeOff extends Component {
 
     let showAddOrListComponent = (
       <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
-        <Button onClick={this.addTimeOff} create icon="plus">Add Recurring Time Off</Button>
+        <Button onClick={this.addTimeOff} secondary icon="plus">Add Recurring Time Off</Button>
       </div>
     );
     if (recurringTimeOffs.size > 0) {

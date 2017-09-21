@@ -1,14 +1,14 @@
-
+/*
 import React, { Component, PropTypes } from 'react';
-import { storiesOf, action } from '@kadira/storybook';
-import { boolean, withKnobs, object } from '@kadira/storybook-addon-knobs';
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
-import Input from './Input';
-import Button from './Button';
-import DropdownSelect from './DropdownSelect';
-import DayPicker from './DayPicker';
-import Toggle from './Toggle';
-import Checkbox from './Checkbox';
+import Input from '../Input/index';
+import Button from '../Button/index';
+import DropdownSelect from '../DropdownSelect/index';
+import DayPicker from '../DayPicker/index';
+import Toggle from '../Toggle/index';
+import Checkbox from '../Checkbox/index';
 
 const options = [
   { value: 'Edmonton' },
@@ -48,14 +48,14 @@ class TestFormComponents extends Component {
   handleDropDownSelect(value) {
     this.setState({
       dropDownSelect: value,
-    })
+    });
   }
 
   handleToggle(e) {
     e.stopPropagation();
     this.setState({
       value: (this.state.value === 'on') ? 'off' : 'on',
-    })
+    });
   }
 
   handleSubmit() {
@@ -119,4 +119,4 @@ storiesOf('TestFormComponents', module)
     />
   ));
 
-
+*/

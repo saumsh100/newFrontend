@@ -221,12 +221,12 @@ class Users extends Component{
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName }},
+      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
     const actionsNewUser = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { form: 'newUser' }},
+      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { form: 'newUser' } },
     ];
 
     const editActions = [
@@ -240,7 +240,7 @@ class Users extends Component{
         onClick={this.addNewUser}
         data-test-id="addUserButton"
         icon="plus"
-        create
+        secondary
       >
         Add a User
       </Button>) : null);
@@ -297,14 +297,14 @@ class Users extends Component{
         </DialogBox>
         <Row className={styles.mainHead}>
           <Header className={styles.header} contentHeader title={`Users in ${clinicName}`} />
-          <div>
+          <div className={styles.paddingRight}>
             {addUserButton}
             <Button
               className={styles.inviteUser}
               onClick={this.addUser}
               data-test-id="inviteUserButton"
               icon="plus"
-              create
+              secondary
             >
               Invite a User
             </Button>
