@@ -78,6 +78,7 @@
       align-items: center;
       justify-content: space-between;
       color: $primary-darkgrey;
+      line-height: 1.5em;
       @media screen and (max-width: 450px) {
         display: flex;
         width: 100%;

@@ -352,13 +352,16 @@ class AddNewAppointment extends Component {
           <RemoteSubmitButton
             {...remoteButtonProps}
             className={styles.remoteSubmit_button}
-            raised
+            icon="floppy-o"
           >
             Save
           </RemoteSubmitButton>
           {selectedAppointment && !selectedAppointment.request && (
             <div className={styles.remoteSubmit_buttonDelete}>
-              <Button raised onClick={this.deleteAppointment} >
+              <Button
+                onClick={this.deleteAppointment}
+                icon="trash"
+              >
                 Delete
               </Button>
             </div>
