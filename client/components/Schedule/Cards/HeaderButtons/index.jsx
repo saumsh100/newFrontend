@@ -79,7 +79,7 @@ class HeaderButtons extends Component {
           className={syncStyle}
           onClick={onDemandSync}
         >
-          <span className={styles.headerButtons__quickAdd_text}> Sync ClearDent </span>
+          <span className={styles.headerButtons__quickAdd_text}> Sync PMS </span>
           <Icon
             icon="refresh"
             size={1.5}
@@ -90,7 +90,7 @@ class HeaderButtons extends Component {
           <div className={styles.headerButtons__quickAdd} onClick={addNewAppointment}>
             <span className={styles.headerButtons__quickAdd_text} data-test-id="quickAddAppointment"> Quick Add </span>
             <Icon
-              icon="plus"
+              icon="plus-circle"
               size={1.5}
               className={styles.headerButtons__quickAdd_icon}
             />
