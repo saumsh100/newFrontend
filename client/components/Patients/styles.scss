@@ -36,6 +36,7 @@
   &_date {
     padding-left: 10px;
     @extend .subHeaderSmall;
+    opacity: 0.6;
   }
 }
 
@@ -48,6 +49,7 @@
 
   &_footer {
     @extend .subHeaderSmall;
+    padding-bottom: 3px;
   }
 }
 

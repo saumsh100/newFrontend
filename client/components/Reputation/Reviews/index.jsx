@@ -79,8 +79,6 @@ class Reviews extends Component {
       return <Loader loaded={this.state.loaded} color="#FF715A" />
     }
 
-    console.log(reviews.toJS());
-
     const reviewsData = reviews.get('data').toJS();
 
     const reviewsList = reviews.get('reviews').toJS();
@@ -149,9 +147,9 @@ class Reviews extends Component {
     return (
       <Grid className={styles.reviews}>
         <Row className={styles.reviews__wrapper}>
-          <Col className={styles.padding} xs={12} md={12}>
+          {/* <Col className={styles.padding} xs={12} md={12}>
             <GoogleMapsVideo />
-          </Col>
+          </Col>*/}
 
           <Col className={styles.padding} xs={12} md={4} sm={6} lg={4} >
             <AverageRating count={reviewsData.industryAverageRating} rating={reviewsData.ratingCounts} />

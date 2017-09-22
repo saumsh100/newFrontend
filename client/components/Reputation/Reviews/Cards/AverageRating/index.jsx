@@ -20,7 +20,7 @@ export default function AverageRating(props) {
     }
 
     countCeil = sum / totalStars;
-    countCeil = countCeil.toFixed();
+    countCeil = countCeil.toFixed(1);
   }
 
   const rows = [];

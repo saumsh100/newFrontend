@@ -83,9 +83,6 @@ export class BigCommentBubble extends Component {
                 <Icon key={i + 1} size={1.8} icon="star" />
               )}
             </div>
-            <div className={styles.bigCommentBubble__mainContent__title}>
-              {siteTitle}
-            </div>
             <div className={styles.bigCommentBubble__mainContent__preview}>
               {sitePreview}
               <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >more... </a>
