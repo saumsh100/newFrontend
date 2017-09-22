@@ -52,8 +52,9 @@ describe('/_twilio/', () => {
     await wipeTestUsers();
   });
 
+
   describe('POST /', () => {
-    test('Receive SMS', () => {
+    test.skip('Receive SMS', () => {
       return request(app)
         .post(`${rootUrl}/sms/accounts/${accountId}`)
         .set('Authorization', `Bearer ${token}`)
