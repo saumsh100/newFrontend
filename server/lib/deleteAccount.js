@@ -54,13 +54,21 @@ export async function callRailDelete(account) {
 }
 
 export async function vendastaDelete(account) {
-  const accountUrl = `https://api.vendasta.com/api/v3/account/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
+  const accountUrl = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${account.vendastaAccountId}`;
+  const accountUrl2 = `https://presence-builder-api.vendasta.com/api/v3/site/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
   console.log(account.vendastaAccountId)
-  const deleteCompany = {
-    accountId: account.vendastaAccountId,
-  };
+  // const deleteCompany = {
+  //   accountId: account.vendastaAccountId,
+  // };
   try {
-    await axios.post(accountUrl, deleteCompany);
+    const test = await axios.get(accountUrl);
+    console.log(test.data.data.productsJson);
+
+    const deleteCompany = {
+      msid: test.data.data.productsJson.MS.productId,
+    };
+
+    // await axios.post(accountUrl2, deleteCompany);
 
   } catch (e) {
     console.log(e)

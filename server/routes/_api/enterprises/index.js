@@ -135,7 +135,6 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
       accountFirst.vendastaId = newData.vendastaId;
       accountFirst.vendastaAccountId = newData.vendastaAccountId;
       accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
-      accountFirst.vendastaMsId = newData.vendastaMsId;
       const account = await accountFirst.save();
 
       const defaultReminders = [

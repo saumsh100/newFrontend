@@ -165,7 +165,7 @@ class General extends React.Component {
           </div>
 
           {role === 'SUPERADMIN' ? addAccounts : null }
-
+          <Button onClick={this.deleteAccounts}> asdadad </Button>
         </div>
       );
     }
