@@ -201,8 +201,6 @@ export default class DropdownSelect extends Component {
   }
 
   render() {
-    console.log(this.props.error);
-
     const children = this.renderList();
     const toggle = this.renderToggle();
     const menuOptions = {
