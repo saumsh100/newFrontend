@@ -212,7 +212,7 @@ class Reminders extends Component {
           onClick={this.openModal}
           data-test-id="createNewReminder"
           icon="plus"
-          create
+          secondary
         >
           Add New Reminder
         </Button>

@@ -13,11 +13,12 @@ const scheme = [
   'rounded',
   'upperCase',
   'compact',
+  'raised',
+  'flat',
 
   'positive',
   'negative',
   'fluid',
-  'flat',
 ];
 
 const mapper = getClassMapper(scheme, styles);
