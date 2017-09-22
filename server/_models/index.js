@@ -9,7 +9,7 @@ const sequelizeConfig = {
   port: postgres.port,
   define: {
     underscored: false,
-    paranoid: true,
+    // paranoid: true,
   },
 };
 

@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
+import { twilioDelete } from '../../../lib/deleteAccount';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
@@ -126,6 +127,22 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
 });
 
 /**
+ * POST /:accountId/switch
+ *
+ * - only superadmins are allowed to switch into accounts right now...
+ *
+ */
+accountsRouter.post('/:accountId/integrations', async (req, res, next) => {
+  const { account, role, sessionId, permissionId, userId, sessionData } = req;
+  if (role !== 'SUPERADMIN') {
+    return next(StatusError(403, 'Operation not permitted'));
+  }
+  await twilioDelete(req.account);
+  return res.send(200);
+});
+
+
+/**
  * GET /configurations/
  *
  * - get connector configuration settings.
@@ -213,16 +230,16 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
     if (!config) {
       return res.sendStatus(400);
     }
-    
+
     const checkConfigExists = await AccountConfiguration.findOne({
       where: {
         accountId: req.accountId,
-        configurationId: config.id, 
+        configurationId: config.id,
       },
     });
-      
+
     let newConfig;
-      
+
     if (checkConfigExists) {
       newConfig = await checkConfigExists.update(req.body);
     } else {
@@ -230,7 +247,7 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
         accountId: req.accountId,
         configurationId: config.id,
         ...req.body,
-      });                                         
+      });
     }
 
     const accountConfig = newConfig.get({ plain: true });

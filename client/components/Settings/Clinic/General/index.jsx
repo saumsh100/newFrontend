@@ -7,7 +7,7 @@ import ContactForm from './ContactForm';
 import SuperAdminForm from './SuperAdminForm';
 import Address from '../Address';
 import { Map } from 'immutable';
-import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
+import { updateEntityRequest, fetchEntities, createEntityRequest } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo } from '../../../../thunks/accounts';
 import { Grid, Row, Col, Dropzone, AccountLogo, Button, Header} from '../../../library';
 import styles from './styles.scss';
@@ -24,6 +24,7 @@ class General extends React.Component {
     this.updateName = this.updateName.bind(this);
     this.uploadLogo = this.uploadLogo.bind(this);
     this.deleteLogo = this.deleteLogo.bind(this);
+    this.deleteAccounts = this.deleteAccounts.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +46,12 @@ class General extends React.Component {
         uploading: false,
       });
     });
+  }
+
+  deleteAccounts() {
+    console.log('asdsads')
+    const { activeAccount, createEntityRequest } = this.props;
+    createEntityRequest({ url: `/api/accounts/${activeAccount.id}/integrations`, params: {} });
   }
 
   deleteLogo() {
@@ -145,6 +152,8 @@ class General extends React.Component {
               activeAccount={activeAccount}
             /> : null }
           </div>
+
+          <Button className={styles.deleteLogo} onClick={this.deleteAccounts}>Delete Accounts</Button>
         </div>
       );
     }
@@ -161,6 +170,7 @@ General.propTypes = {
   activeAccount: PropTypes.object,
   users: PropTypes.object,
   updateEntityRequest: PropTypes.func,
+  createEntityRequest: PropTypes.func,
   fetchEntities: PropTypes.func,
   uploadLogo: PropTypes.func,
   deleteLogo: PropTypes.func,
@@ -169,6 +179,7 @@ General.propTypes = {
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     updateEntityRequest,
+    createEntityRequest,
     fetchEntities,
     uploadLogo,
     deleteLogo,

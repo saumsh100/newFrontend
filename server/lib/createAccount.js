@@ -112,16 +112,16 @@ async function vendastaSetup(account, setupList) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
-      companyName: account.name,
-      customerIdentifier,
-      addPresenceBuilderFlag: setupList.listings,
-      addReputationFlag: setupList.reputationManagement,
-      addSocialMarketingFlag: setupList.social,
-      address: account.street,
-      city: account.city,
-      country: account.country ,
-      state: account.state,
-      zip: account.zipCode,
+    companyName: account.name,
+    customerIdentifier,
+    addPresenceBuilderFlag: setupList.listings,
+    addReputationFlag: setupList.reputationManagement,
+    addSocialMarketingFlag: setupList.social,
+    address: account.street,
+    city: account.city,
+    country: account.country,
+    state: account.state,
+    zip: account.zipCode,
   };
   try {
     const newCompany = await axios.post(accountUrl, createCompany);
