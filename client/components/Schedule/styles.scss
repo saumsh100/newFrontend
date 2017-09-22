@@ -1,7 +1,7 @@
 @import "../../ui.scss";
 
 .rowMainContainer {
-  padding: 10px 10px 10px 10px;
+  //padding: 10px 10px 10px 10px;
 }
 
 .calendarContainer {
@@ -19,10 +19,13 @@
     }
 
     &__sidebar {
-        padding-left: 15px;
+        padding: 10px 10px 10px 15px;
+        height: calc(100vh - 78px);
+        overflow: auto;
         display: flex;
         flex-direction: column;
         &_rowCalendar {
+          min-height: 260px;
           margin-bottom: 15px;
           border-top: $card-border-size $inactive-color;
         }
