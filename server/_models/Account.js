@@ -47,6 +47,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
+    vendastaMsId: {
+      type: DataTypes.STRING,
+    },
+
     street: {
       type: DataTypes.STRING,
     },

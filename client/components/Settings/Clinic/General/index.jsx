@@ -3,6 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
+import AddAccounts from './AddAccounts';
 import ContactForm from './ContactForm';
 import SuperAdminForm from './SuperAdminForm';
 import Address from '../Address';
@@ -76,6 +77,16 @@ class General extends React.Component {
 
   render() {
     const { activeAccount, users } = this.props;
+
+    const addAccounts = [(<Header
+      title="Address Information"
+      contentHeader
+    />), (<div className={styles.formContainer}>
+      <AddAccounts
+        onSubmit={this.deleteAccounts}
+        activeAccount={activeAccount}
+      />
+    </div>)];
 
     let showComponent = null;
     if (activeAccount) {
@@ -153,7 +164,8 @@ class General extends React.Component {
             /> : null }
           </div>
 
-          <Button className={styles.deleteLogo} onClick={this.deleteAccounts}>Delete Accounts</Button>
+          {role === 'SUPERADMIN' ? addAccounts : null }
+
         </div>
       );
     }

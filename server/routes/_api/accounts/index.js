@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
-import { twilioDelete } from '../../../lib/deleteAccount';
+import { twilioDelete, callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
@@ -137,7 +137,7 @@ accountsRouter.post('/:accountId/integrations', async (req, res, next) => {
   if (role !== 'SUPERADMIN') {
     return next(StatusError(403, 'Operation not permitted'));
   }
-  await twilioDelete(req.account);
+  await vendastaDelete(req.account);
   return res.send(200);
 });
 

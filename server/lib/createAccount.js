@@ -125,12 +125,16 @@ async function vendastaSetup(account, setupList) {
   };
   try {
     const newCompany = await axios.post(accountUrl, createCompany);
-
+    console.log(newCompany.data.data)
+    console.log(newCompany.data.data.productsJson)
+    console.log(newCompany.data.data.productsJson.MS.productId)
     return {
       vendastaId: customerIdentifier,
-      vendastaAccountId: newCompany.data.accountId,
+      vendastaAccountId: newCompany.data.data.accountId,
+      vendastaMsId: newCompany.data.data.productsJson.MS.productId,
     };
   } catch (e) {
+    console.log(e)
     console.log('Vendasta Account Creation Failed');
   }
 }

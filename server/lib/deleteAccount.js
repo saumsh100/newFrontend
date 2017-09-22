@@ -10,8 +10,7 @@ const {
 } = vendasta;
 
 export async function twilioDelete(account) {
-  // Right now default to Canada numbers. Maybe add a country dropdown in account creation.
-  if (!account.destinationPhoneNumber) {
+  if (!account.twilioPhoneNumber) {
     return null;
   }
   try {
@@ -24,13 +23,47 @@ export async function twilioDelete(account) {
       }
     }
 
-    console.log(phoneNumberId)
     if (!phoneNumberId) {
       throw 'ERROR';
     }
     await twilioClient.incomingPhoneNumbers(phoneNumberId).delete();
   } catch (e) {
     console.log(e);
+    console.log('Twilio Account Delete Failed');
+  }
+}
+
+export async function callRailDelete(account) {
+  if (!account.callrailId) {
+    return null;
+  }
+  try {
+    const deleteCompany = {
+      method: 'DELETE',
+      url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/companies/${account.callrailId}.json`,
+      headers: {
+        Authorization: `Token token=${callrails.apiKey}`,
+      },
+    };
+
+    await axios(deleteCompany);
+  } catch (e) {
+    console.log(e);
     console.log('Twilio Account Creation Failed');
+  }
+}
+
+export async function vendastaDelete(account) {
+  const accountUrl = `https://api.vendasta.com/api/v3/account/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
+  console.log(account.vendastaAccountId)
+  const deleteCompany = {
+    accountId: account.vendastaAccountId,
+  };
+  try {
+    await axios.post(accountUrl, deleteCompany);
+
+  } catch (e) {
+    console.log(e)
+    console.log('Vendasta Account Creation Failed');
   }
 }
