@@ -1,7 +1,7 @@
 
 import Client from  'ifrau/client';
 import { push } from 'react-router-redux';
-import { setReview } from '../reducers/reviewsWidget';
+import { mergeReviewValues } from '../reducers/reviewsWidget';
 
 const allowedRoutes = {
   book: true,
@@ -23,9 +23,9 @@ export default function connectStoreToHost(store) {
     store.dispatch(push(`./${route}`));
   });
 
-  client.onEvent('setStars', (stars) => {
-    // Route SPA to that route and view
-    store.dispatch(setReview({ stars }));
+  client.onEvent('mergeReviewValues', (values) => {
+    // used to route
+    store.dispatch(mergeReviewValues(values));
   });
 
   window.iframeClient = client;

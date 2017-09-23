@@ -73,6 +73,7 @@ function main() {
 
   // Parse URL to see if we are being linked here
   const cc = getQueryVariable('cc');
+  const sentReviewId = getQueryVariable('srid');
   const accountId = getQueryVariable('accountId');
   if (cc) {
     // open the appropriate modal with that route open
@@ -83,11 +84,12 @@ function main() {
     }
   }
 
-  if (stars) {
+  if (stars && sentReviewId) {
+    const data = { stars, sentReviewId };
     if (window.CareCruz[accountId]) {
-      window.CareCruz[accountId].setStars(stars);
+      window.CareCruz[accountId].mergeReviewValues(data);
     } else {
-      window.CareCru.setStars(stars);
+      window.CareCru.mergeReviewValues(data);
     }
   }
 }

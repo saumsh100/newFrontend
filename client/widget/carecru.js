@@ -40,12 +40,8 @@ CareCru.prototype.open = function (route = 'book') {
   this.emit('opened');
 };
 
-CareCru.prototype.setStars = function (stars) {
-  this.host.sendEvent('setStars', parseInt(stars));
-};
-
-CareCru.prototype.setSentReviewId = function (srid) {
-  this.host.sendEvent('setSentReviewId', srid);
+CareCru.prototype.mergeReviewValues = function (values) {
+  this.host.sendEvent('mergeReviewValues', values);
 };
 
 /**

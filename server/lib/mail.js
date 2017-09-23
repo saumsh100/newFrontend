@@ -56,6 +56,12 @@ module.exports = {
     config.templateName = 'Patient Reset Password';
     return sendTemplate(config);
   },
+
+  sendReview: (config) => {
+    config.subject = 'Tell us about your experience.';
+    config.templateName = 'Patient Review';
+    return sendTemplate(config);
+  },
 };
 
 /**

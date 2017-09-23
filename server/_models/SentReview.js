@@ -34,6 +34,10 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    reviewId: {
+      type: DataTypes.UUID,
+    },
+
     isSent: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -57,7 +61,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  SentReview.associate = ({ Account, Appointment, Patient, Practitioner }) => {
+  SentReview.associate = ({ Account, Appointment, Patient, Practitioner, Review }) => {
     SentReview.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -76,6 +80,11 @@ export default function (sequelize, DataTypes) {
     SentReview.belongsTo(Practitioner, {
       foreignKey: 'practitionerId',
       as: 'practitioner',
+    });
+
+    SentReview.belongsTo(Review, {
+      foreignKey: 'reviewId',
+      as: 'review',
     });
   };
 

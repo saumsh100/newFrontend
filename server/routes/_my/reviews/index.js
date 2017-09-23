@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { Review, SentReview, sequelize } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { readFile, replaceJavascriptFile } from '../../../util/file';
+import StatusError from '../../../util/StatusError';
 import normalize from '../../_api/normalize';
 
 const reviewsRouter = Router();
@@ -93,7 +94,7 @@ reviewsRouter.post('/:accountId/:sentReviewId', async (req, res, next) => {
 
     // Make sure sentReview does not already have a submitted review
     if (sentReview.isCompleted && sentReview.reviewId) {
-      next(StatusError(400, 'sentReview has already been fulfilled'));
+      return next(StatusError(400, 'sentReview has already been fulfilled'));
     }
 
     // create a transaction due to the multiple writes required
@@ -105,7 +106,6 @@ reviewsRouter.post('/:accountId/:sentReviewId', async (req, res, next) => {
         accountId: account.id,
         practitionerId: sentReview.practitionerId,
         patientId: sentReview.patientId,
-        sentReviewId: sentReview.id,
         stars,
         description,
       }, { transaction: t });

@@ -2,8 +2,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
 import sentimentContent from './content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
+import { saveReview } from '../../../../thunks/reviews';
 import { Avatar, Link, Input, Stars, TextArea, VButton } from '../../../library';
 import styles from './styles.scss';
 
@@ -13,10 +15,22 @@ class Submitted extends Component {
 
     this.share = this.share.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.submitBad = this.submitBad.bind(this);
+    this.submitGood = this.submitGood.bind(this);
   }
 
   share() {
-    window.open('https://search.google.com/local/writereview?placeid=ChIJmdp9t7VwhlQRailxK3m6p1g', '_blank');
+    const placeId = this.props.account.get('googlePlaceId');
+    if (!placeId) {
+      console.error('Account does not have a googlePlaceId');
+      return;
+    }
+
+    // TODO: save review, and then link to google
+
+    console.log('opening!');
+    const url = `https://search.google.com/local/writereview?placeid=${placeId}`;
+    window.open(url, '_blank');
   }
 
   handleChange(field) {
@@ -24,6 +38,20 @@ class Submitted extends Component {
       value = field === 'stars' ? value : value.target.value;
       this.props.mergeReviewValues({ [field]: value });
     };
+  }
+
+  submitBad() {
+    return this.props.saveReview()
+      .then(() => this.props.history.push('./review/complete'))
+      .catch(err => console.log('error in submitBad', err));
+  }
+
+  submitGood() {
+    // Save review
+    this.share();
+    return this.props.saveReview()
+      .then(() => this.props.history.push('./review/complete'))
+      .catch(err => console.log('error in submitGood', err));
   }
 
   render() {
@@ -72,7 +100,7 @@ class Submitted extends Component {
             <VButton
               className={styles.button}
               color={description ? 'red' : 'darkblue'}
-              onClick={this.share}
+              onClick={this.submitBad}
               disabled={!description}
             >
               Submit Feedback
@@ -81,7 +109,7 @@ class Submitted extends Component {
               className={styles.googleButton}
               color="darkblue"
               iconRight="google"
-              onClick={this.share}
+              onClick={this.submitGood}
             >
               Share Review on Google
             </VButton>
@@ -99,6 +127,7 @@ Submitted.propTypes = {
 
 function mapStateToProps({ entities, reviews }) {
   const review = reviews.get('review');
+  const account = reviews.get('account');
   const pracId = review.get('practitionerId');
   const pracModels = entities.getIn(['practitioners', 'models']);
   const reviewedPractitioner = review.get('practitionerId') ?
@@ -107,6 +136,7 @@ function mapStateToProps({ entities, reviews }) {
 
   return {
     review,
+    account,
     reviewedPractitioner,
   };
 }
@@ -114,7 +144,8 @@ function mapStateToProps({ entities, reviews }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     mergeReviewValues,
+    saveReview,
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Submitted);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Submitted));

@@ -8,6 +8,7 @@ import Login from '../components/ReviewsWidget/Login';
 import SignUp from '../components/ReviewsWidget/SignUp';
 import PatientApp from '../containers/PatientApp';
 import Submitted from '../components/ReviewsWidget/Review/Submitted';
+import Complete from '../components/ReviewsWidget/Review/Complete';
 
 const base = (path = '') => `/reviews/:accountId/embed${path}`;
 
@@ -18,7 +19,7 @@ const ReviewsRouter = ({ match }) => {
       <Switch>
         {/*<Redirect exact from={b()} to={b('/submitted')} />*/}
         <Route exact path={b()} component={Submitted} />
-        {/*<Route exact path={b('/submitted')} component={Submitted} />*/}
+        <Route exact path={b('/complete')} component={Complete} />
       </Switch>
     </WidgetContainer>
   );

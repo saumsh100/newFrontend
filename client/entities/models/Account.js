@@ -39,6 +39,8 @@ const AccountSchema = {
   canSendReminders: null,
   canSendRecalls: null,
   lastSyncDate: (new Date(2016, 5, 1)).toISOString(),
+  googlePlaceId: null,
+  facebookUrl: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

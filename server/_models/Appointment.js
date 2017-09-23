@@ -182,6 +182,7 @@ export default function (sequelize, DataTypes) {
         }
         return error;
       });
+
       throw { docs: response, errors: errorsResponse };
     }
 

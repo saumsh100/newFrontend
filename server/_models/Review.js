@@ -24,10 +24,6 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
-    sentReviewId: {
-      type: DataTypes.UUID,
-    },
-
     stars: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -61,11 +57,6 @@ export default function (sequelize, DataTypes) {
     Review.belongsTo(PatientUser, {
       foreignKey: 'patientUserId',
       as: 'patientUser',
-    });
-
-    Review.belongsTo(SentReview, {
-      foreignKey: 'sentReviewId',
-      as: 'sentReview',
     });
   };
 

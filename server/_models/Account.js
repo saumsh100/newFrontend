@@ -128,6 +128,14 @@ export default function (sequelize, DataTypes) {
     lastSyncDate: {
       type: DataTypes.DATE,
     },
+
+    googlePlaceId: {
+      type: DataTypes.STRING,
+    },
+
+    facebookUrl: {
+      type: DataTypes.STRING,
+    },
   });
 
   Account.associate = (models) => {
