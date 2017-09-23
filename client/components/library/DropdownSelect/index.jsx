@@ -154,6 +154,7 @@ export default class DropdownSelect extends Component {
       label,
       template,
       borderColor,
+      error,
     } = this.props;
 
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
@@ -192,6 +193,9 @@ export default class DropdownSelect extends Component {
           {toggleDiv}
         </div>
         <Icon className={caretIconClassName} icon="caret-down" />
+        <div className={styles.error}>
+          {error || ''}
+        </div>
       </div>
     );
   }

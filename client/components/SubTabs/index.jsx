@@ -70,12 +70,12 @@ const ROUTES = {
 
   '/reputation': [
     {
-      to: '/reputation/listings',
-      label: 'Listings',
-    },
-    {
       to: '/reputation/reviews',
       label: 'Reviews',
+    },
+    {
+      to: '/reputation/listings',
+      label: 'Listings',
     },
   ],
 

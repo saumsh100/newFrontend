@@ -137,6 +137,9 @@ export default function (sequelize, DataTypes) {
       get() {
         return !!this.get('isSyncedWithPms');
       },
+      set(value) {
+        this.setDataValue('isSyncedWithPms', value);
+      },
     },
 
     familyId: {

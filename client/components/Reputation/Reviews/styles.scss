@@ -65,11 +65,11 @@
 	width: 80%;
 	min-width: 250px;
 	margin: 0 auto;
-	padding: 10px 0 10px 0;
+	padding: 15px 0 15px 0;
   position: relative;
 
 	&__count {
-    composes: fontExtraLarge from 'sass-loader!../../../fonts.scss';
+    composes: fontExtraMediumLarge from 'sass-loader!../../../fonts.scss';
 	}
 
 	&__title {
@@ -118,6 +118,7 @@
     width: 50%;
     text-align: right;
     display: inline-block;
+    padding-right: 15px;
   }
 
   &__bar {
@@ -128,6 +129,7 @@
 		color: $primary-blue;
 		&__percent {
 			height: 16px;
+      padding-top: 10px;
 			margin-right: 4px;
 			background-color: $primary-blue;
 			display: inline-block;
@@ -161,20 +163,22 @@
 
 .reviewsComments {
 	width: 100%;
-	margin-top: 10px;
 	min-height: 168px;
   max-height: 745px;
 	overflow: auto;
   margin-bottom: 15px;
+  height: calc(100vh - 360px);
 
   &__cardHeader {
     padding-top: 15px;
     padding-left: 15px;
+    padding-bottom: 15px;
+    margin-right: 10px;
   }
 
 	&__container {
-		border-right: 2px solid $primary-lightgrey;
-		padding: 10px 10px 0 0;
+		//border-right: 2px solid $primary-lightgrey;
+		//padding: 10px 10px 0 0;
 	}
 
   &__comment {
