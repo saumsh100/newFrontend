@@ -131,11 +131,12 @@ export function resetUserPassword(location, values) {
     const url = `${location.pathname}`;
     return axios
       .post(url, values)
-      .then(()=> {
-        dispatch(push('/login'));
-      })
       .catch((err) => {
-        console.log(err);
+        const { data } = err;
+        throw new SubmissionError({
+          password: data,
+          confirmPassword: data,
+        });
       });
   };
 }

@@ -94,6 +94,16 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    isSyncedWithPMS: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['isSyncedWithPms']),
+      get() {
+        return !!this.get('isSyncedWithPms');
+      },
+      set(value) {
+        this.setDataValue('isSyncedWithPms', value);
+      },
+    },
+
     isCancelled: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

@@ -150,7 +150,7 @@ class PractitionerTimeOff extends Component {
 
     let showAddOrListComponent = (
       <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
-        <Button onClick={this.addTimeOff} icon="plus" theme={Button.theme.secondary} data-test-id="addTimeOffButton" create >Add Time Off</Button>
+        <Button onClick={this.addTimeOff} icon="plus" secondary data-test-id="addTimeOffButton" create >Add Time Off</Button>
       </div>
     );
 

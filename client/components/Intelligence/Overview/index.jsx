@@ -21,6 +21,7 @@ import AgeRange from './Cards/AgeRange';
 import TopReference from './Cards/TopReference';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
+import { SortByFirstName } from '../../library/util/SortEntities';
 
 class Overview extends Component {
   constructor(props) {
@@ -165,8 +166,27 @@ class Overview extends Component {
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
+    const colors = ['primaryColor', 'primaryBlueGreen', 'primaryYellow', 'primaryGreen'];
+    const colorLen = colors.length;
+    const colorArray = [];
+
+
+    const reset = Math.ceil((prac.size - colorLen) / colorLen);
+
+    for (let j = 0; j <= reset; j++) {
+      for (let i = 0; i < colorLen; i++) {
+        colorArray.push(colors[i]);
+      }
+    }
+
     const realData = (appointmentStats ? (
-      prac.toArray().map((key) => {
+      prac.toArray().sort((pracData, pracData2) => {
+        const a = pracData.toJS();
+        const b = pracData2.toJS();
+        if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+        if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
+        return 0;
+      }).map((key, index) => {
         const data = {};
         data.appointmentBooked = Math.floor(key.toObject().appointmentTime / 60) || 0;
         data.appointmentNotFiltred = Math.floor(key.toObject().totalTime / 60) - data.appointmentBooked;
@@ -188,6 +208,7 @@ class Overview extends Component {
             newPatients={data.newPatients}
             percentage={data.percentage}
             practitioner={key.toObject()}
+            color={colorArray[index]}
           />);
       })) : <div />);
 
@@ -198,11 +219,12 @@ class Overview extends Component {
       appointmentStats.confirmedAppointments : 0);
 
     let sortedPatients = (appointmentStats ? patients.toArray().map(key => ({
-      avatarUrl: key.toObject().avatarUrl,
       name: `${key.toObject().firstName} ${key.toObject().lastName}`,
       age: key.toObject().age,
       number: key.toObject().numAppointments,
       firstName: key.toObject().firstName,
+      lastName: key.toObject().lastName,
+      avatarUrl: key.toObject().avatarUrl,
     })) : []);
 
     sortedPatients = sortedPatients.sort((a, b) => b.number - a.number);
@@ -355,11 +377,11 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <FlexGrid className={styles.padding} borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
+            <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
               {realData}
             </FlexGrid>
             <Col
-              className={classNames(styles.padding, styles.websiteVisitorConversions)}
+              className={styles.padding}
               xs={12}
               md={6}
             >
@@ -376,19 +398,19 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <Col className={styles.paddingLine} xs={12} md={6}>
+            <Col className={styles.padding} xs={12} md={6}>
               <AgeRange
                 chartData={ageRange}
               />
             </Col>
-            <Col className={styles.paddingLine} cxs={12} md={6}>
+            <Col className={styles.padding} cxs={12} md={6}>
               <MaleVsFemale
                 title="Male vs Female Patients for the Last 12 Months"
                 male={male || 0}
                 female={female || 0}
               />
             </Col>
-            <Col className={styles.padding} xs={12} sm={6}>
+            <Col className={styles.padding} xs={12} sm={12}>
               <AppointmentsBooked
                 borderColor={colorMap.grey}
                 cardTitle="Appointments Booked Last 12 Months"
@@ -402,7 +424,7 @@ class Overview extends Component {
                 ]}
               />
             </Col>
-            <Col className={styles.padding} xs={12} sm={6}>
+            <Col className={styles.padding} xs={12} sm={12}>
               <WebsiteTrafficSources
                 title="Appointments By Day for the Last 12 Months"
                 labels={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}

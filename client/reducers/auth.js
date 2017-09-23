@@ -8,6 +8,7 @@ import {
 
 const initialState = fromJS({
   isAuthenticated: false,
+  forgotPassword: false,
   role: null,
   accountId: null,
   enterprise: null,
@@ -26,4 +27,5 @@ export default handleActions({
   [LOGOUT]() {
     return initialState;
   },
+
 }, initialState);

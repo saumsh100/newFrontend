@@ -244,7 +244,7 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
     };
 
     const io = req.app.get('socketio');
-    io.of(namespaces.sync).in(req.accountId).emit('CONFIG_CHANGED', name);
+    io.of(namespaces.sync).in(req.accountId).emit('CONFIG:REFRESH', name);
 
     return res.send(format(req, res, 'configuration', sendValue));
   } catch (err) {

@@ -61,21 +61,21 @@ const ROUTES = {
       to: '/intelligence/business',
       label: 'Business',
     },
-    {
+    /*{
       to: '/intelligence/social',
       label: 'Social',
       disabled: true,
-    },
+    },*/
   ],
 
   '/reputation': [
     {
-      to: '/reputation/listings',
-      label: 'Listings',
-    },
-    {
       to: '/reputation/reviews',
       label: 'Reviews',
+    },
+    {
+      to: '/reputation/listings',
+      label: 'Listings',
     },
   ],
 

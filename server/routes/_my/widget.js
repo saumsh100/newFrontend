@@ -47,17 +47,17 @@
   }
 
   CareCruBookingModal.prototype.open = function() {
-    this.overlay.className = `${this.overlay.className} active`;
-    this.inner.className = `${this.inner.className} active`;
-    document.body.style.setProperty('overflow', 'hidden');
-    document.body.style.setProperty('position', 'fixed');
+    this.overlay.className = `${this.overlay.className} CareCruActive`;
+    this.inner.className = `${this.inner.className} CareCruActive`;
+    document.documentElement.style.setProperty('overflow', 'hidden');
+    document.documentElement.style.setProperty('position', 'fixed');
   };
 
   CareCruBookingModal.prototype.close = function() {
-    this.overlay.className = this.overlay.className.replace('active', '');
-    this.inner.className = this.inner.className.replace('active', '');
-    document.body.style.setProperty('overflow', '');
-    document.body.style.setProperty('position', '');
+    this.overlay.className = this.overlay.className.replace('CareCruActive', '');
+    this.inner.className = this.inner.className.replace('CareCruActive', '');
+    document.documentElement.style.setProperty('overflow', '');
+    document.documentElement.style.setProperty('position', '');
   };
 
   window.document.addEventListener('DOMContentLoaded', function() {

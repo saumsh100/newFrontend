@@ -3,6 +3,11 @@
 .rowMainContainer {
   padding: 10px 10px 10px 10px;
 }
+
+.calendarContainer {
+  width: 200px;
+  height: 200px;
+}
 .schedule {
     &__container {
 
@@ -22,8 +27,8 @@
           border-top: $card-border-size $inactive-color;
         }
         &_rowRequest {
-          flex: 1;
-          overflow: auto;
+          //height: auto;
+          //overflow: auto;
           margin-bottom: 15px;
           border-top: $card-border-size $primary-blue;
           background-color: lighten($primary-lightgrey, 2%);
@@ -165,7 +170,7 @@
     }
 
     &_text {
-      padding-left: 10px;
+      padding-left: 20px;
       text-transform: capitalize;
     }
     &_icon{

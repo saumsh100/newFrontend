@@ -72,7 +72,6 @@ rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
 });
 
 // below route is sequelize
-
 rootRouter.get('/reset/:tokenId', (req, res, next) => {
   return PasswordReset.findOne({ where: { token: req.params.tokenId } })
     .then((reset) => {

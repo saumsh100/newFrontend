@@ -25,3 +25,13 @@
   color: white;
   border-radius: 0.3rem;
 }
+
+.disabled {
+  cursor: not-allowed;
+  color: $inactive-color;
+  background-color: $background-color !important;
+  &:hover {
+    color: $inactive-color !important;
+    background-color: $background-color !important;
+  }
+}

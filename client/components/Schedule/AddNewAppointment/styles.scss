@@ -19,21 +19,24 @@
 
 .remoteSubmit {
   display: flex;
-  padding-right: 100px;
+  justify-content: flex-end;
+  padding-right: 50px;
   &_button {
-    margin-left: auto;
   }
   &_buttonDelete {
-    padding-left: 10px;
   }
 }
 
 .trashIcon {
   position: absolute;
   right: 0px;
-  top: 5px;
+  top: 15px;
   font-size: 1.4em;
   color: $primary-grey;
+
+  &:hover {
+    color: darken($primary-grey, 5%) !important;
+  }
 }
 
 .addNewAppt {

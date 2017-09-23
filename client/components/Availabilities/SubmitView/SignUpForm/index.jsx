@@ -1,19 +1,10 @@
 
 import React, { PropTypes } from 'react';
-import { VButton, Form, Field } from '../../../library';
+import { Button, Form, Field } from '../../../library';
 import { asyncValidatePatient, passwordsMatch, passwordStrength } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
-const defaultSubmitButton = (
-  <VButton
-    type="submit"
-    className={styles.signup__footer_btn}
-  >
-    Sign Up and Book
-  </VButton>
-);
-
-export default function SignUpForm({ onSubmit, initialValues, submitButton = defaultSubmitButton }) {
+export default function SignUpForm({ onSubmit, initialValues }) {
 
   return (
     <Form
@@ -38,7 +29,7 @@ export default function SignUpForm({ onSubmit, initialValues, submitButton = def
       <Field
         required
         name="phoneNumber"
-        label="Phone Number"
+        label="Mobile Number"
         type="tel"
       />
       <Field
@@ -61,7 +52,12 @@ export default function SignUpForm({ onSubmit, initialValues, submitButton = def
         name="confirmPassword"
         type="password"
       />
-      {submitButton}
+      <Button
+        type="submit"
+        className={styles.signup__footer_btn}
+      >
+        Sign Up and Book
+      </Button>
     </Form>
   );
 }

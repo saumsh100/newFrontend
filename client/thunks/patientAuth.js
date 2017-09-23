@@ -64,6 +64,18 @@ export function logout() {
   };
 }
 
+export function resetPatientUserPassword(email) {
+  console.log('adssadasd')
+  return (dispatch, getState) => {
+    return axios.post('/auth/reset', { email })
+      .then(() => {
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export function loadPatient() {
   return (dispatch) => {
     const token = Token.get();

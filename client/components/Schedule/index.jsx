@@ -20,7 +20,7 @@ import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
 import Filters from './Cards/Filters';
 import styles from './styles.scss';
-import Calendar from "../library/Calendar/index";
+import Calendar from '../library/Calendar/index';
 
 class ScheduleComponent extends Component {
   constructor(props) {

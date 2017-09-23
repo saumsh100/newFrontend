@@ -88,7 +88,8 @@
   position: relative;
   overflow: hidden;
   &_text {
-    font-size: $large-size;
+    font-size: 20px;
+    line-height: 1.5em;
     width: 700px;
     color: $inactive-color;
     text-align: center;

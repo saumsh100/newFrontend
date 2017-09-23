@@ -110,7 +110,7 @@ class General extends React.Component {
                 <AccountLogo account={activeAccount} size="original" />
                   <p>Drop logo here or click to select file.</p>
               </Dropzone>
-              {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
+              {activeAccount.fullLogoUrl ? <Button icon="trash" className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
             </div>
           </div>
           <Button onClick={this.props.downloadConnector}>Download Connector</Button>

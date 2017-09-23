@@ -21,7 +21,7 @@ class Item extends Component {
               {data.map((obj, i) => {
                 return (
                   <ListItem key={i} className={styles.patients__item}>
-                    <Avatar className={styles.patients__item_img} user={obj} alt=""/>
+                    <Avatar className={styles.patients__item_img} user={obj} size="lg"/>
                     <div className={styles.patients__item_wrapper}>
                       <div className={styles.patients__item_left}>
                         <div className={styles.patients__item_name}>

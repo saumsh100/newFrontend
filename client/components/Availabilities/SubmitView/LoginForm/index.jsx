@@ -1,15 +1,9 @@
 
 import React, { PropTypes } from 'react';
-import { VButton, Form, Field } from '../../../library';
+import { Button, Form, Field } from '../../../library';
 import styles from './styles.scss';
 
-const defaultSubmitButton = (
-  <VButton type="submit" negative fluid className={styles.button}>
-    Sign In and Book
-  </VButton>
-);
-
-const LoginForm = ({ onLogin, className, submitButton = defaultSubmitButton }) => (
+const LoginForm = ({ onLogin, className }) => (
   <Form
     form="patientLoginForm"
     onSubmit={onLogin}
@@ -28,7 +22,9 @@ const LoginForm = ({ onLogin, className, submitButton = defaultSubmitButton }) =
       name="password"
       type="password"
     />
-    {submitButton}
+    <Button type="submit" negative fluid className={styles.button}>
+      Sign In and Book
+    </Button>
   </Form>
 );
 

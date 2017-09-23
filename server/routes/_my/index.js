@@ -2,18 +2,19 @@
 import { Router } from 'express';
 import fs from 'fs';
 import StatusError from '../../util/StatusError';
+import { lookupsClient } from '../../config/twilio';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
 import reviewsRouter from './reviews';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import { Patient, PatientUser, Practitioner } from '../../_models';
+import { Patient, PatientUser, PatientUserReset } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
 
-const sequelizeMyRouter = Router();
+const sequelizeMyRouter = new Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
@@ -127,7 +128,26 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   phoneNumber = validatePhoneNumber(phoneNumber);
   try {
     const patientUsers = await PatientUser.findAll({ where: { phoneNumber } });
-    return res.send({ exists: !!patientUsers[0] });
+    const alreadyExists = !!patientUsers[0];
+    if (alreadyExists) {
+      return res.send({ error: 'There is already a user with that mobile number.' });
+    }
+
+    lookupsClient.phoneNumbers(phoneNumber).get({
+      type: 'carrier'
+    }, function(error, number) {
+      if (error) {
+        return res.sendStatus(200);
+      }
+
+      const isLandline = number && number.carrier && number.carrier.type === 'landline';
+      console.log('isLandline', isLandline);
+      if (isLandline) {
+        res.send({ error: 'You cannot use a landline number. Please enter a mobile number.' });
+      } else {
+        res.sendStatus(200);
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -167,11 +187,57 @@ sequelizeMyRouter.get('/unsubscribe/:encoded', async (req, res, next) => {
   }
 });
 
+sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
+  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
+    .then((reset) => {
+      if (!reset) {
+        // TODO: replace with StatusError
+        res.status(404).send();
+      } else {
+        res.redirect(`/reset-password/${req.params.tokenId}`);
+      }
+    })
+    .catch(next);
+});
+
+sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
+  const {
+    password,
+  } = req.body;
+
+  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
+    .then(async (reset) => {
+      if (!reset) {
+        return next(StatusError(401, 'Invalid Token'));
+      }
+
+      const user = await PatientUser.findOne({
+        where: {
+          id: reset.patientUserId,
+        },
+      });
+
+      await user.setPasswordAsync(password);
+      await user.save();
+      await reset.destroy();
+      return res.sendStatus(201);
+    })
+    .catch(next);
+});
+
+sequelizeMyRouter.get('(/*)?', (req, res, next) => {
+  try {
+    return res.render('my');
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares
-sequelizeMyRouter.use('(/*)?', (req, res, next) => {
+/*sequelizeMyRouter.use('(/*)?', (req, res, next) => {
   // TODO: this needs to be wrapped in try catch
   return res.status(404).end();
-});
+});*/
 
 module.exports = sequelizeMyRouter;

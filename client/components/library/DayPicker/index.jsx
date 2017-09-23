@@ -52,7 +52,7 @@ class DayPicker extends Component {
     } else {
       const selectedIndex = value.findIndex(v => {
         const date = moment(new Date(v))._d;
-        return DateUtils.isSameDay(date, day);
+        return DateUtils.isSameDay(new Date(date), new Date(day));
       });
 
       if (selectedIndex > -1) {
