@@ -304,15 +304,18 @@ export default function (sequelize, DataTypes) {
   Patient.uniqueAgainstEachOther = async (docs) => {
     const errs = [];
     const validDocs = uniqWith(docs, (a, b) => {
+
       if (a.accountId && b.accountId && (a.accountId === b.accountId)) {
         if (a.dataValues.mobilePhoneNumber && b.dataValues.mobilePhoneNumber
           && (a.dataValues.mobilePhoneNumber === b.dataValues.mobilePhoneNumber)) {
           errs.push(UniqueFieldError({ tableName: 'Patient' }, 'mobilePhoneNumber'));
+          return true;
         }
 
         if (a.dataValues.email && b.dataValues.email &&
           (a.dataValues.email === b.dataValues.email)) {
           errs.push(UniqueFieldError({ tableName: 'Patient' }, 'email'));
+          return true;
         }
       }
     });

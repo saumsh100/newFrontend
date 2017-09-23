@@ -570,6 +570,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+      io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
@@ -731,6 +732,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+      io.of(ns).in(accountId).emit('UPDATE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
@@ -749,6 +751,7 @@ appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:dele
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = normalize('appointment', appointment.get({ plain: true }));
+      io.of(ns).in(accountId).emit('DELETE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })
     .catch(next);

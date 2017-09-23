@@ -72,6 +72,7 @@ const ModelAttributes = {
     'accountId',
     'patientId',
     'procedureCode',
+    'entryDate',
     'pmsId',
     'units',
     'totalAmount',
@@ -161,6 +162,7 @@ const ModelAttributes = {
     'pmsId',
     'dayOfWeek',
     'note',
+    'practitionerId',
   ],
 };
 
