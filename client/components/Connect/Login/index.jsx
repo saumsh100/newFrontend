@@ -31,11 +31,12 @@ class Login extends Component {
   handleLogin(values) {
     return this.props.login(values)
       .then(() => {
-        javaParent('onLoginSuccess', {
-          username: values.email,
-          password: values.password,
-          token: window.localStorage.getItem('token'),
-        });
+        window.JavaParent
+          && window.JavaParent.onLoginSuccess
+          && window.JavaParent.onLoginSuccess(
+            values.email,
+            values.password,
+            window.localStorage.getItem('token'));
       })
       .then(() => {
         this.props.history.push('./');
