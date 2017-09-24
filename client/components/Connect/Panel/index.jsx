@@ -3,41 +3,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { startSync, stopSync } from '../../../thunks/connect';
-import {
-  ProgressBar,
-  Icon,
-  Link,
-  Grid,
-  Row,
-  Col,
-  VButton,
-} from '../../library';
+import { startSync } from '../../../thunks/connect';
+import { VButton } from '../../library';
 import styles from './styles.scss';
-
-const collectionOrder = [
-  'chairs',
-  'practitioners',
-  'families',
-  'patients',
-  'appointments',
-];
-
-const collectionWeights = [
-  10,
-  10,
-  20,
-  30,
-  30,
-];
-
-const getPercentageFromProgress = (progress) => {
-  const { collection, saved, total } = progress;
-  const ii = collectionOrder.indexOf(collection);
-  const collectionWeight = collectionWeights[ii];
-  const weightSoFar = collectionWeights.slice(0, ii).reduce((a, b) => a + b, 0);
-  return weightSoFar + (saved / total) * collectionWeight;
-};
 
 class Panel extends Component {
   constructor(props) {
@@ -48,7 +16,8 @@ class Panel extends Component {
 
   startSync() {
     this.props.startSync()
-      .then(() => this.props.history.push('./progress'));
+      .then(() => this.props.history.push('./progress'))
+      .catch(err => console.error('Error starting sync', err));
   }
 
   render() {

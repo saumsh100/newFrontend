@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 import { SubmissionError } from 'redux-form';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import { Link, VButton } from '../../library';
@@ -17,20 +18,35 @@ class Settings extends Component {
   }
 
   handleSettingsSubmit(values) {
-    const { account, history } = this.props;
-    const model = account.merge(values);
-    return this.props.updateEntityRequest({ key: 'accounts', model })
+    const { history } = this.props;
+
+    const body = {
+      name: 'ADAPTER_TYPE',
+      value: values.adapterType,
+    };
+
+    const config = {
+      headers: {
+        'Accept': 'application/vnd.api+json',
+      },
+    };
+
+    return axios.put('/api/accounts/configurations', body, config)
+      .then(() => history.push('./panel'))
+      .catch(err => console.error('Could not save', err));
+
+    /*return this.props.updateEntityRequest({ key: 'accounts', model })
       .then(() => {
         history.push('./panel');
-      });
+      });*/
   }
 
   render() {
     const { account } = this.props;
     if (!account) return null;
 
-    const adapterType = account.get('adapterType');
-    const initialValues = { adapterType };
+    // const adapterType = account.get('adapterType');
+    const initialValues = {};
     return (
       <div className={styles.settingsWrapper}>
         <div className={styles.subHeader}>

@@ -15,11 +15,23 @@ import {
  */
 export function startSync() {
   return (dispatch, getState) => {
-    const { entities, auth } = getState();
-    const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-    const newAccount = account.merge({ syncEnabled: true });
+    //const { entities, auth } = getState();
+    //const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+    //const newAccount = account.merge({ syncEnabled: true });
+
+    const body = {
+      name: 'CONNECTOR_ENABLED',
+      value: '1',
+    };
+
+    const config = {
+      headers: {
+        'Accept': 'application/vnd.api+json',
+      },
+    };
+
     // TODO: what this needs to do is update account.syncEnabled
-    return dispatch(updateEntityRequest({ key: 'accounts', model: newAccount }))
+    return axios.put('/api/accounts/configurations', body, config)
       .then(() => {
         dispatch(setIsSyncing(true));
       });

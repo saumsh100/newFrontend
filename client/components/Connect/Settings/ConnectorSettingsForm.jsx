@@ -9,15 +9,15 @@ import styles from './form.scss';
 
 const options = [
   {
-    value: 'Cleardent_7',
+    value: 'CLEARDENT_V7',
     label: 'Cleardent 7',
   },
   {
-    value: 'Cleardent_9',
+    value: 'CLEARDENT_V9',
     label: 'Cleardent 9',
   },
   {
-    value: 'Tracker_11',
+    value: 'TRACKER_V11',
     label: 'Tracker 11',
   },
 ];
