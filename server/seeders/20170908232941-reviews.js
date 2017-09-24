@@ -57,15 +57,27 @@ module.exports = {
       accountId,
       practitionerId: practitioner1.id,
       patientId: patient1.id,
-      startDate: (new Date(2017, 8, 18, 8, 0)).toISOString(),
-      endDate: (new Date(2017, 8, 18, 9, 0)).toISOString(),
+      startDate: (new Date(2017, 8, 22, 8, 0)).toISOString(),
+      endDate: (new Date(2017, 8, 22, 9, 0)).toISOString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    // This appointment needs a review sent...
+    const appointment2 = {
+      id: uuid(),
+      accountId,
+      practitionerId: practitioner1.id,
+      patientId: patient1.id,
+      startDate: (new Date(2017, 8, 23, 8, 0)).toISOString(),
+      endDate: (new Date(2017, 8, 23, 9, 0)).toISOString(),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
     await queryInterface.bulkInsert('Practitioners', [practitioner1, practitioner2]);
     await queryInterface.bulkInsert('Patients', [patient1]);
-    await queryInterface.bulkInsert('Appointments', [appointment1]);
+    await queryInterface.bulkInsert('Appointments', [appointment1, appointment2]);
   },
 
   down: function (queryInterface) {
