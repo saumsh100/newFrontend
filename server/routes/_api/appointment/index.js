@@ -732,7 +732,13 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-      io.of(ns).in(accountId).emit('UPDATE:Appointment', appointment.id);
+
+      // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
+      // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
+      const action = appointment.isDeleted ? 'DELETE' : 'UPDATE';
+      io.of(ns).in(accountId).emit(`${action}:Appointment`, appointment.id);
+
+      // TODO: why are we double sending? what was wrong with our current lowercase actions? client-side is easy to update!
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
