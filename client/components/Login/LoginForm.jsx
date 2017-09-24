@@ -20,11 +20,13 @@ export default function Login({ onSubmit, submitButton = defaultSubmitButton, cl
         type="email"
         name="email"
         label="Email"
+        required
       />
       <Field
         type="password"
         name="password"
         label="Password"
+        required
       />
       {submitButton}
     </Form>
