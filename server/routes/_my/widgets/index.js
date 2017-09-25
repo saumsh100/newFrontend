@@ -17,6 +17,57 @@ reviewsRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
 ]));
 
 /**
+ * GET /:accountId/embed
+ *
+ * - 200 serves reviews embed page
+ * - 404 :accountId does not exist
+ */
+reviewsRouter.get('/:accountIdJoin/app(/*)?', async (req, res, next) => {
+  try {
+    const { entities } = normalize('account', req.account.get({ plain: true }));
+    let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
+    for (let i = 0; i < req.account.services.length; i++) {
+      if (req.account.services[i].isDefault) {
+        selectedServiceId = req.account.services[i].id;
+      }
+    }
+
+    const responseAccount = req.account.get({ plain: true });
+    const responseServices = req.account.services.map((service) => {
+      return service.get({ plain: true });
+    });
+
+    const responsePractitioners = req.account.practitioners.map((practitioner) => {
+      return practitioner.get({ plain: true });
+    });
+
+    const { account } = req;
+    const rawAccount = account.get({ plain: true });
+    const initialState = {
+      availabilities: {
+        account: responseAccount,
+        services: responseServices,
+        practitioners: responsePractitioners,
+        selectedServiceId,
+      },
+
+      entities,
+
+      reviews: {
+        account: rawAccount,
+      },
+    };
+
+    res.render('reviews', {
+      account: rawAccount,
+      initialState: JSON.stringify(initialState),
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * POST /:accountId
  *
  * - 201 sends down the created review data
@@ -87,6 +138,37 @@ reviewsRouter.put('/:reviewId', async (req, res, next) => {
     const { review } = req;
     const updatedReview = await review.update(req.body);
     res.send(updatedReview.get({ plain: true }));
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /:accountId/cc.js
+ *
+ * This is a very important route that returns
+ *
+ */
+
+const toString = str => `'${str}'`; // single-line text
+const toTemplateString = str => `\`${str}\``; // multi-line text
+
+reviewsRouter.get('/:accountId/cc.js', async (req, res, next) => {
+  try {
+    const { account } = req;
+    const cwd = process.cwd();
+    const jsPath = `${cwd}/statics/assets/cc.js`;
+    const cssPath = `${cwd}/server/routes/_my/widgets/widget.css`;
+    // /book route by default to load widget
+    const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${account.id}/app/book`;
+    const js = await replaceJavascriptFile(jsPath, {
+      __CARECRU_ACCOUNT_ID__: toString(account.id),
+      __CARECRU_WIDGET_PRIMARY_COLOR__: toString(account.bookingWidgetPrimaryColor || '#FF715A'),
+      __CARECRU_STYLE_CSS__: toTemplateString(await readFile(cssPath)),
+      __CARECRU_IFRAME_SRC__: toString(iframeSrc),
+    });
+
+    res.type('javascript').send(js);
   } catch (err) {
     next(err);
   }

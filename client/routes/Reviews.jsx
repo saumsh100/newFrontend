@@ -10,7 +10,7 @@ import PatientApp from '../containers/PatientApp';
 import Submitted from '../components/ReviewsWidget/Review/Submitted';
 import Complete from '../components/ReviewsWidget/Review/Complete';
 
-const base = (path = '') => `/reviews/:accountId/embed${path}`;
+const base = (path = '') => `/widgets/:accountId/app${path}`;
 
 const ReviewsRouter = ({ match }) => {
   const b = (path = '') => `${match.url}${path}`;
