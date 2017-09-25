@@ -6,12 +6,11 @@ import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { getReviewAppointments } from './helpers';
 import sendReview from './sendReview';
 
-
 export async function sendReviewsForAccount(account, date) {
   console.log(`Sending reviews for ${account.name}`);
   const appointments = await getReviewAppointments({ account, date });
   for (const appointment of appointments) {
-    const { patient } = appointment;
+    const { patient, practitioner } = appointment;
 
     // Save sent review first so we can
     // - use sentReviewId as token in email to identify patient on review form
@@ -29,6 +28,7 @@ export async function sendReviewsForAccount(account, date) {
         account,
         appointment,
         sentReview,
+        practitioner,
       });
     } catch (error) {
       console.log(`${'email'} review failed to send to ${patient.firstName} ${patient.lastName} for ${account.name}`);

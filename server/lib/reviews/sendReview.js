@@ -42,7 +42,7 @@ export default {
   },*/
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, patient, sentReview }) {
+  email({ account, patient, practitioner, sentReview }) {
     const reviewsUrl = `${account.website}?cc=review&srid=${sentReview.id}&accountId=${account.id}`;
     const stars = [];
     for (let i = 1; i < 6; i++) {
@@ -91,6 +91,10 @@ export default {
         {
           name: 'PATIENT_FIRSTNAME',
           content: patient.firstName,
+        },
+        {
+          name: 'PRACTITIONER_URL',
+          content: practitioner.fullAvatarUrl || account.fullLogoUrl,
         },
       ].concat(stars),
     });

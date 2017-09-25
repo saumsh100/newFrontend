@@ -59,7 +59,7 @@ module.exports = {
 
   sendReview: (config) => {
     config.subject = 'Tell us about your experience.';
-    config.templateName = 'Patient Review';
+    config.templateName = 'Patient Review Stars';
     return sendTemplate(config);
   },
 };

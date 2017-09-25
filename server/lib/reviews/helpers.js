@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import uniqBy from 'lodash/uniqBy';
-import { Appointment, Patient, SentReview, Review } from '../../_models';
+import { Appointment, Patient, SentReview, Review, Practitioner } from '../../_models';
 
 /**
  * getReviewAppointments
@@ -46,6 +46,13 @@ export async function getReviewAppointments({ account, date }) {
         as: 'sentReviews',
         required: false,
       },
+
+      // Need this for the practitioner avatar
+      {
+        model: Practitioner,
+        as: 'practitioner',
+        required: true,
+      },
     ],
   });
 
@@ -63,9 +70,6 @@ export async function getReviewAppointments({ account, date }) {
 
   // Do not send to the same patient twice
   const filteredAppointments = uniqBy(sendableAppointments, 'patientId');
-
-  // console.log(sendableAppointments);
-  console.log('filteredApointments', filteredAppointments);
 
   return filteredAppointments;
 }

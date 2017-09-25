@@ -48,6 +48,19 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       </div>
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
+          <div className={styles.paddingText}>
+            Can Send Reviews
+          </div>
+          <div className={styles.paddingField_toggle}>
+            <Field
+              component="Toggle"
+              name="canSendReviews"
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.paddingField}>
+        <div className={styles.paddingField_flex}>
           <div className={styles.paddingText} >
             Can Send Recalls
           </div>

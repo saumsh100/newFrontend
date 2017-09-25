@@ -21,7 +21,6 @@ function CareCru({ iframeSrc }) {
   });
 
   this.host.onEvent('closeModal', () => {
-    console.log('CLOSING');
     this.modal.close();
   });
 }
