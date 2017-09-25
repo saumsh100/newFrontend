@@ -125,22 +125,21 @@ async function vendastaSetup(account, setupList) {
   };
   try {
     const newCompany = await axios.post(accountUrl, createCompany);
-    console.log(newCompany.data.data)
-    console.log(newCompany.data.data.productsJson)
-    // console.log(newCompany.data.data.productsJson.MS.productId)
 
     const accountUrlGet = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${newCompany.data.data.accountId}`;
 
     const product = await axios.get(accountUrlGet);
 
-    const srid = setupList.reputationManagement ? product.data.data.productsJson.RM.productId : null;
-    const msid = setupList.reputationManagement ? product.data.data.productsJson.MS.productId : null;
-    const smid = setupList.reputationManagement ? product.data.data.productsJson.SM.productId : null;
+    const srid = product.data.data.productsJson.RM ? product.data.data.productsJson.RM.productId : null;
+    const msid = product.data.data.productsJson.MS ? product.data.data.productsJson.MS.productId : null;
+    const smid = product.data.data.productsJson.SM ? product.data.data.productsJson.SM.productId : null;
 
     return {
       vendastaId: customerIdentifier,
       vendastaAccountId: newCompany.data.data.accountId,
-      // vendastaMsId: newCompany.data.data.productsJson.MS.productId,
+      vendastaMsId: msid,
+      vendastaSmId: smid,
+      vendastaSrId: srid,
     };
   } catch (e) {
     console.log(e)

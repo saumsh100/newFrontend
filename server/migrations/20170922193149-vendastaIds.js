@@ -20,6 +20,24 @@ module.exports = {
           { transaction: t }
         );
 
+        await queryInterface.addColumn(
+          'Accounts',
+          'vendastaSmId',
+          {
+            type: Sequelize.STRING,
+          },
+          { transaction: t }
+        );
+
+        await queryInterface.addColumn(
+          'Accounts',
+          'vendastaSrId',
+          {
+            type: Sequelize.STRING,
+          },
+          { transaction: t }
+        );
+
       } catch (e) {
         console.log(e);
         t.rollback();
@@ -40,6 +58,18 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'vendastaMsId',
+          { transaction: t }
+        );
+
+        await queryInterface.removeColumn(
+          'Accounts',
+          'vendastaSmId',
+          { transaction: t }
+        );
+
+        await queryInterface.removeColumn(
+          'Accounts',
+          'vendastaSrId',
           { transaction: t }
         );
 
