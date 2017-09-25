@@ -48,11 +48,11 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), async (r
         where: {
           pmsId: req.body.pmsId,
           accountId: req.accountId,
-          include: [{
-            model: WeeklySchedule,
-            as: 'weeklySchedule',
-          }],
         },
+        include: [{
+          model: WeeklySchedule,
+          as: 'weeklySchedule',
+        }],
       });
       if (practitioner) {
         const normalized = format(req, res, 'practitioner', practitioner.get({ plain: true }));
