@@ -24,7 +24,7 @@ chairsRouter.post('/', checkPermissions('chairs:create'), async (req, res, next)
 
   try {
     if (chairData.pmsId) {
-      const chair = await chairData.findOne({
+      const chair = await Chair.findOne({
         where: {
           pmsId: chairData.pmsId,
           accountId: req.accountId,
