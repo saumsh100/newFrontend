@@ -112,15 +112,32 @@ async function twilioSetup(account) {
   }
 }
 
+async function vendastaReputation(account) {
+  try {
+    const accountUrl = `https://api.vendasta.com/api/v3/account/addProduct/?apiKey=${apiKey}&apiUser=${apiUser}`;
+    const newProduct = {
+      accountId: account.vendastaAccountId,
+      productId: 'RM',
+    };
+
+    const newProductReq = await axios.post(accountUrl, newProduct);
+    console.log(newProductReq.data.data, "asdsdasd");
+
+  } catch (e) {
+    console.log(e);
+    return account;
+  }
+}
+
 async function vendastaSetup(account, setupList) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
     companyName: account.name,
     customerIdentifier,
-    addPresenceBuilderFlag: setupList.listings,
-    addReputationFlag: setupList.reputationManagement,
-    addSocialMarketingFlag: setupList.social,
+    // addPresenceBuilderFlag: setupList.listings,
+    // addReputationFlag: setupList.reputationManagement,
+    // addSocialMarketingFlag: setupList.social,
     address: account.street,
     city: account.city,
     country: account.country,
@@ -130,9 +147,11 @@ async function vendastaSetup(account, setupList) {
   try {
     const newCompany = await axios.post(accountUrl, createCompany);
 
+
     const accountUrlGet = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${newCompany.data.data.accountId}`;
 
     const product = await axios.get(accountUrlGet);
+    console.log(newCompany.data.data)
     console.log(product.data.data)
     const srid = product.data.data.productsJson.RM ? product.data.data.productsJson.RM.productId : null;
     const msid = product.data.data.productsJson.MS ? product.data.data.productsJson.MS.productId : null;
@@ -147,7 +166,9 @@ async function vendastaSetup(account, setupList) {
     };
 
     const newAccount = await account.update(newData);
-
+    await vendastaReputation(newAccount);
+    const product2 = await axios.get(accountUrlGet);
+    console.log(product2.data.data, 'asdsad')
     return newAccount;
   } catch (e) {
     console.log(e)
