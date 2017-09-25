@@ -1,7 +1,8 @@
 @import "../../ui.scss";
 
 .rowMainContainer {
-  //padding: 10px 10px 10px 10px;
+  box-sizing: border-box;
+  padding: 10px 10px 0px 10px;
 }
 
 .calendarContainer {
@@ -12,15 +13,15 @@
     &__container {
 
     &_content {
-        max-height: calc(98vh - 155px);
+        max-height: calc(98vh - 153px);
         //height: calc(100vh - 145px);
         overflow-y: auto;
       }
     }
 
     &__sidebar {
-        padding: 10px 10px 10px 15px;
-        height: calc(100vh - 78px);
+        padding: 0px 0px 0px 15px;
+        height: calc(100vh - 80px);
         overflow: auto;
         display: flex;
         flex-direction: column;
