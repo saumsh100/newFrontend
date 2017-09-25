@@ -12,6 +12,10 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    practitionerId: {
+      type: DataTypes.UUID,
+    },
+
     patientId: {
       type: DataTypes.UUID,
     },
@@ -34,7 +38,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Review.associate = ({ Account, Patient, PatientUser }) => {
+  Review.associate = ({ Account, Patient, Practitioner, PatientUser, SentReview }) => {
     Review.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -43,6 +47,11 @@ export default function (sequelize, DataTypes) {
     Review.belongsTo(Patient, {
       foreignKey: 'patientId',
       as: 'patient',
+    });
+
+    Review.belongsTo(Practitioner, {
+      foreignKey: 'practitionerId',
+      as: 'practitioner',
     });
 
     Review.belongsTo(PatientUser, {

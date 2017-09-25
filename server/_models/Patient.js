@@ -184,7 +184,7 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account, Appointment, Chat, SentRecall, DeliveredProcedure }) => {
+  Patient.associate = ({ Account, Appointment, Chat, SentRecall, DeliveredProcedure, Review, SentReview }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -194,14 +194,17 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'patientId',
       as: 'appointments',
     });
+
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
       as: 'chats',
     });
+
     Patient.hasMany(SentRecall, {
       foreignKey: 'patientId',
       as: 'sentRecalls',
     });
+
     // This exists because some endpoints refer to 'chats' as 'chat' in the response
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
@@ -211,6 +214,16 @@ export default function (sequelize, DataTypes) {
     Patient.hasMany(DeliveredProcedure, {
       foreignKey: 'patientId',
       as: 'deliveredProcedures',
+    });
+
+    Patient.hasMany(SentReview, {
+      foreignKey: 'patientId',
+      as: 'sentReviews',
+    });
+
+    Patient.hasMany(Review, {
+      foreignKey: 'patientId',
+      as: 'reviews',
     });
   };
 
@@ -314,7 +327,6 @@ export default function (sequelize, DataTypes) {
   Patient.uniqueAgainstEachOther = async (docs) => {
     const errs = [];
     const validDocs = uniqWith(docs, (a, b) => {
-
       if (a.accountId && b.accountId && (a.accountId === b.accountId)) {
         if (a.dataValues.mobilePhoneNumber && b.dataValues.mobilePhoneNumber
           && (a.dataValues.mobilePhoneNumber === b.dataValues.mobilePhoneNumber)) {

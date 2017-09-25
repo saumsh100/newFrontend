@@ -6,6 +6,8 @@ const ReviewSchema = {
   stars: null,
   description: null,
   patientUserId: null,
+  practitionerId: null,
+  sentReviewId: null,
 };
 
 export default class Review extends createModel(ReviewSchema) {

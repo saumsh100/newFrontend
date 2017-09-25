@@ -6,17 +6,14 @@ import {
 } from '../../../library';
 
 function ReviewForm(props) {
-  let initialValues = {};
-  if (props.review) {
-    const { stars, description } = props.review.toJS();
-    initialValues = { stars, description };
-  }
-
+  const { onSubmit, initialValues } = props;
   return (
     <Form
       form="createReviewForm"
-      onSubmit={props.onSubmit}
+      onSubmit={onSubmit}
       initialValues={initialValues}
+      enableReinitialize
+      ignoreSaveButton
     >
       <Field
         required
@@ -34,6 +31,7 @@ function ReviewForm(props) {
 
 ReviewForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
 };
 
 export default ReviewForm;

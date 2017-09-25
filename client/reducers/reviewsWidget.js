@@ -9,12 +9,14 @@ import Review from '../entities/models/Review';
  */
 export const SET_ACCOUNT = 'SET_ACCOUNT';
 export const SET_REVIEW = 'SET_REVIEW';
+export const MERGE_REVIEW_VALUES = 'MERGE_REVIEW_VALUES';
 
 /**
  * Actions
  */
 export const setAccount = createAction(SET_ACCOUNT);
 export const setReview = createAction(SET_REVIEW);
+export const mergeReviewValues = createAction(MERGE_REVIEW_VALUES);
 
 /**
  * Initial State
@@ -38,5 +40,9 @@ export default handleActions({
 
   [SET_REVIEW](state, { payload }) {
     return state.set('review', new Review(payload));
+  },
+
+  [MERGE_REVIEW_VALUES](state, { payload }) {
+    return state.mergeIn(['review'], payload);
   },
 }, initialState);

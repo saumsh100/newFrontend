@@ -31,14 +31,18 @@ const ORDER = [
   'Reminder',
   'SentRecall',
   'SentReminder',
+  'SentReview',
+  'Review',
   'SyncClientError',
   'SyncClientVersion',
   'Token',
   'WaitSpot',
+  'Segment',
   'Chat',
   'TextMessage',
   'Call',
   'PinCode',
+  'PasswordReset',
 ];
 
 async function wipeAllModels() {

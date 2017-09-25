@@ -77,6 +77,7 @@ models.push((require('./Review').default(sequelize, Sequelize)));
 models.push((require('./Segment').default(sequelize, Sequelize)));
 models.push((require('./SentRecall').default(sequelize, Sequelize)));
 models.push((require('./SentReminder').default(sequelize, Sequelize)));
+models.push((require('./SentReview').default(sequelize, Sequelize)));
 models.push((require('./Service').default(sequelize, Sequelize)));
 models.push((require('./SyncClientError').default(sequelize, Sequelize)));
 models.push((require('./SyncClientVersion').default(sequelize, Sequelize)));

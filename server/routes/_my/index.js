@@ -8,13 +8,14 @@ import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
 import reviewsRouter from './reviews';
+import widgetsRouter from './widgets';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import { Patient, PatientUser, PatientUserReset } from '../../_models';
+import { Patient, PatientUser, Practitioner, PatientUserReset } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
 
-const sequelizeMyRouter = new Router();
+const sequelizeMyRouter = Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
@@ -29,6 +30,7 @@ sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
 ]));
 
 sequelizeMyRouter.use('/reviews', reviewsRouter);
+sequelizeMyRouter.use('/widgets', widgetsRouter);
 
 sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
   try {
@@ -141,7 +143,6 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
       }
 
       const isLandline = number && number.carrier && number.carrier.type === 'landline';
-      console.log('isLandline', isLandline);
       if (isLandline) {
         res.send({ error: 'You cannot use a landline number. Please enter a mobile number.' });
       } else {

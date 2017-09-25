@@ -57,11 +57,14 @@
 .color-darkblue { color: $primary-white; background-color: $clr-dark-blue; }
 .color-darkblue:hover { color: $primary-white; background-color: darken($clr-dark-blue, 5%); }
 
+.color-darkblue { color: $primary-white; background-color: $primary-blue; }
+.color-darkblue:hover { color: $primary-white; background-color: darken($primary-blue, 5%); }
+
 .color-yellow { color: $primary-white; background-color: $primary-yellow; }
 .color-yellow:hover { color: $primary-white; background-color: darken($primary-yellow, 5%); }
 
 .color-dark { color: $primary-white; background-color: $primary-dark; }
-.color-dark:hover { color: darken($primary-white, 5%); background-color: darken($primary-dark, 5%); }
+.color-dark:hover { color: $primary-white; background-color: darken($primary-dark, 5%); }
 
 .color-darkgrey { color: $clr-dark-grey; background-color: $clr-bg-dark-grey; }
 .color-darkgrey:hover { color: darken($clr-dark-grey, 5%); background-color: darken($clr-bg-dark-grey, 5%); }

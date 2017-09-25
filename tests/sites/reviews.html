@@ -11,8 +11,7 @@
       padding: 20px;
     }
   </style>
-  <link rel="stylesheet" href="../../server/routes/_my/widget.css">
-  <link rel="stylesheet" href="../../server/routes/_my/reviews/widget.css">
+  <script src="../../client/components/ReviewsWidget/Review/Submitted/index.jsx"></script>
 </head>
 <body>
 <div>
@@ -58,28 +57,16 @@
     It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
     and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
   </p>
-  <button onclick="window.CareCruz['2aeab035-b72c-4f7a-ad73-09465cbf5654'].open('review')">
-    Leave Review for Clinic #1
+  <button onclick="window.CareCru.open('review')">
+    Leave Review
   </button>
-  <button onclick="window.CareCruz['ef341b0c-b39a-401d-9d14-fa9d6e8caa30'].open('review')">
-    Leave Review for Clinic #2
-  </button>
-  <button onclick="window.CareCruz['2aeab035-b72c-4f7a-ad73-09465cbf5654'].open('book')">
-    Book Appointment for Clinic #1
-  </button>
-  <button onclick="window.CareCruz['ef341b0c-b39a-401d-9d14-fa9d6e8caa30'].open('book')">
-    Book Appointment for Clinic #2
+  <button onclick="window.CareCru.open('book')">
+    Book Appointment
   </button>
   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
-<script>
-  window.CareCruSettings = {
-    showBookingButton: false,
-  };
-</script>
 <!--<script type="text/javascript" src="http://my.carecru.dev:5100/reviews/2aeab035-b72c-4f7a-ad73-09465cbf5654/reviews.js"></script>-->
 
-<script type="text/javascript" src="http://my.carecru.dev:5100/reviews/2aeab035-b72c-4f7a-ad73-09465cbf5654/cc.js"></script>
-<script type="text/javascript" src="http://my.carecru.dev:5100/reviews/ef341b0c-b39a-401d-9d14-fa9d6e8caa30/cc.js"></script>
+<script type="text/javascript" src="http://my.carecru.me/widgets/72954241-3652-4792-bae5-5bfed53d37b7/cc.js"></script>
 </body>
 </html>

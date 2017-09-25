@@ -39,6 +39,10 @@ CareCru.prototype.open = function (route = 'book') {
   this.emit('opened');
 };
 
+CareCru.prototype.mergeReviewValues = function (values) {
+  this.host.sendEvent('mergeReviewValues', values);
+};
+
 /**
  * #close
  */

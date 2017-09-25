@@ -43,6 +43,7 @@ import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
+import TextArea from './TextArea';
 import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import PractitionerAvatar from './PractitionerAvatar';
@@ -132,6 +133,7 @@ export {
   Tabs,
   Tab,
   Tag,
+  TextArea,
   Timer,
   Toggle,
   Tooltip,

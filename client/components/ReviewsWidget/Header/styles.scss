@@ -1,7 +1,21 @@
 
 @import '../../../ui.scss';
 
-.customSubmitButton {
+.headerContainer {
   width: 100%;
+  background-color: $primary-lightgrey;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 5px solid $primary-color;
 }
 
+.pullRight {
+  margin-left: auto;
+}
+
+.closeButton {
+  width: 35px;
+  font-size: 1em;
+
+}

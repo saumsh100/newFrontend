@@ -29,10 +29,16 @@
   font-size: 1.5em;
 }
 
+.minimalRatingsText {
+  color: lighten($primary-darkgrey, 25%);
+  font-size: 12px;
+  text-align: center;
+}
+
 .starWrapper {
   &:hover {
     > div.label {
-      display: block;
+      // display: block;
     }
   }
 }
@@ -46,7 +52,7 @@
 
 .labelSelected {
   @extend .label;
-  display: block;
+  // display: block;
 }
 
 .starChild {
@@ -58,13 +64,13 @@
   cursor: pointer;
   &:hover {
     color: lighten($primary-yellow, 5%);
-    font-size: 5em !important;
+    // font-size: 5em !important;
   }
 }
 
 .empty {
   @extend .starChild;
-  color: $primary-light-blue;
+  color: lighten($primary-darkgrey, 15%);
 }
 
 .filled {
@@ -73,5 +79,5 @@
 }
 
 .selected {
-  font-size: 5em !important;
+  // font-size: 5em !important;
 }

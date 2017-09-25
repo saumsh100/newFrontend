@@ -18,10 +18,10 @@ import {
   shouldSendReminder,
   getValidSmsReminders,
 } from '../../server/lib/_reminders/helpers';
-import { wipeModelSequelize } from '../util/wipeModel';
-import { wipeTestAccounts, seedTestAccountsSequelize, accountId } from '../util/seedTestAccounts';
-import { seedTestPatientsSequelize, patientId } from '../util/seedTestPatients';
-import { seedTestPractitionersSequelize, practitionerId } from '../util/seedTestPractitioners';
+import { wipeAllModels } from '../_util/wipeModel';
+import { seedTestUsers, accountId } from '../_util/seedTestUsers';
+import { seedTestPatients, patientId } from '../_util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../_util/seedTestPractitioners';
 
 // TODO: make seeds more modular so we can see here
 // const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
@@ -52,24 +52,14 @@ const dates = (y, m, d, h) => {
 
 describe('RemindersList Calculation Library', () => {
   beforeEach(async () => {
-    await wipeModelSequelize(Appointment);
-    await wipeModelSequelize(SentReminder);
-    await wipeModelSequelize(Reminder);
-    await wipeModelSequelize(Patient);
-    await wipeModelSequelize(Practitioner);
-    await wipeModelSequelize(Family);
-    await seedTestAccountsSequelize();
-    await seedTestPatientsSequelize();
-    await seedTestPractitionersSequelize();
+    await wipeAllModels();
+    await seedTestUsers();
+    await seedTestPatients();
+    await seedTestPractitioners();
   });
 
   afterAll(async () => {
-    await wipeModelSequelize(Appointment);
-    await wipeModelSequelize(SentReminder);
-    await wipeModelSequelize(Reminder);
-    await wipeModelSequelize(Patient);
-    await wipeModelSequelize(Practitioner);
-    await wipeTestAccounts();
+    await wipeAllModels();
   });
 
   describe('Helpers', () => {

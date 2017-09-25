@@ -1,3 +1,4 @@
+
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
@@ -49,16 +50,26 @@ const account = {
   twilioPhoneNumber: clinicPhoneNumber,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  canSendReviews: false,
 };
 
 const account2 = {
   id: accountId2,
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
-  city: 'Kostolac',
-  name: 'Test Account 2',
+  city: 'Edmonton',
+  state: 'AB',
+  street: '10204 112th St.',
+  contactEmail: 'info@libertychiropractic.ca',
+  website: 'http://carecru.ngrok.io/tests/sites/reviews.html',
+  googlePlaceId: 'ChIJP-dQSDEioFMRBpVTwZ2_h1o',
+  facebookUrl: 'https://www.facebook.com/libertychiroedm/',
+  bookingWidgetPrimaryColor: '#4D3069',
+  name: 'Liberty Chiropractic',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  phoneNumber: '+17808508886',
+  canSendReviews: true,
 };
 
 const managerPermission = {
