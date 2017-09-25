@@ -13,12 +13,17 @@ class Filters extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values);
+    const {
+      setReputationFilter,
+      key
+    } = this.props;
+
+    setReputationFilter({ key, filterData: values });
   }
 
-  // TODO: add initialValues to form and get Select All and Clear All working
   render() {
-    const { filters, selectAll, setAll } = this.props;
+    const { filters, selectAll, setAll, reviewsFilter } = this.props;
+
     return (
       <Card  className={styles.card}>
         <div className={styles.filters}>

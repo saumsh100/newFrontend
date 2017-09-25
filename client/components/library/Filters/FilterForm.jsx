@@ -4,6 +4,7 @@ import { Form, Field } from '../../library';
 import { connect } from 'react-redux';
 import FilterField from './FilterField';
 import styles from './styles.scss';
+import FormSection from '../Form/FormSection';
 
 function FilterForm(props) {
   const {
@@ -26,22 +27,24 @@ function FilterForm(props) {
           });
 
         return (
-          <div key={`filterForm_${i}`}>
-            <div className={styles.filters__title}>
-              {f.titleIcon &&
-              <div
-                style={{ backgroundColor: f.titleIcon.color }}
-                className={styles.filters__title__icon}
-              >
-                <span className={`fa fa-${f.titleIcon.icon}`} />
+          <FormSection name={f.title}>
+            <div key={`filterForm_${i}`}>
+              <div className={styles.filters__title}>
+                {f.titleIcon &&
+                <div
+                  style={{ backgroundColor: f.titleIcon.color }}
+                  className={styles.filters__title__icon}
+                >
+                  <span className={`fa fa-${f.titleIcon.icon}`} />
+                </div>
+                }
+                {f.title}
               </div>
-              }
-              {f.title}
+              <div className={styles.filters__checkFilter}>
+                {content}
+              </div>
             </div>
-            <div className={styles.filters__checkFilter}>
-              {content}
-            </div>
-          </div>
+          </FormSection>
         );
       })}
     </Form>

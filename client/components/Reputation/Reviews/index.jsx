@@ -7,7 +7,9 @@ import { bindActionCreators } from 'redux';
 import { Card, Col, Grid, Row, Filters } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
+import { setReputationFilter } from '../../../actions/reputation';
 import GoogleMapsVideo from './Cards/GoogleMapsVideo';
+import { setReputationFilterState } from '../../../thunks/reputation';
 import AverageRating from './Cards/AverageRating';
 import RatingsChart from './Cards/RatingsChart';
 import ReviewsCard from './Cards/ReviewsCard';
@@ -54,10 +56,11 @@ class Reviews extends Component {
           url: '/api/reputation/reviews',
         }),
       ]).then(() => {
+        this.props.setReputationFilterState();
         this.setState({
           loaded: true,
         });
-      }).catch(() =>{
+      }).catch(() => {
         this.setState({
           hasAccount: false,
           activationText: 'Activate Reviews/Reputation Management package or contact your CareCru account manager for further assistance.',
@@ -69,6 +72,8 @@ class Reviews extends Component {
   render() {
     const {
       reviews,
+      reviewsFilter,
+      setReputationFilter,
     } = this.props;
 
     if (!this.state.hasAccount) {
@@ -76,13 +81,15 @@ class Reviews extends Component {
     }
 
     if (!reviews) {
-      return <Loader loaded={this.state.loaded} color="#FF715A" />
+      return <Loader loaded={this.state.loaded} color="#FF715A" />;
     }
 
     const reviewsData = reviews.get('data').toJS();
-
     const reviewsList = reviews.get('reviews').toJS();
 
+
+    const test = reviewsFilter.toJS().ratings;
+    console.log(test)
     const contructBigComment = reviewsList.map((review) => {
       const publishedDate = moment(review.publishedDateTime);
       const today = moment();
@@ -105,6 +112,8 @@ class Reviews extends Component {
         reviewerUrl: review.reviewerUrl,
       };
     });
+
+    //const filterData = [];
 
     const filters = [
       {
@@ -130,18 +139,6 @@ class Reviews extends Component {
           { type: 'checkbox', value: 'No Rating' },
         ],
       },
-      {
-        title: 'Status',
-        items: [
-          {type: 'select', name: 'opt2', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
-          {type: 'select', name: 'opt3', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
-          {type: 'select', name: 'opt4', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
-          {type: 'checkbox', value: 'With Comments'},
-          {type: 'checkbox', value: 'Without Comments'},
-          {type: 'checkbox', value: 'With new Comments'},
-          {type: 'checkbox', value: 'Without new Comments'},
-        ]
-      }
     ];
 
     return (
@@ -176,12 +173,17 @@ class Reviews extends Component {
             <Tags />
           </Col> */}
           <Row className={styles.rowReviewsFilter}>
-            <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
+            <Col className={styles.padding} xs={12} md={8} sm={9} lg={9}>
               <ReviewsCard data={contructBigComment} />
             </Col>
-            {/* <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
-              <Filters filters={filters} />
-            </Col> */}
+            <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
+              <Filters
+                filters={filters}
+                reviewsFilter={reviewsFilter}
+                setReputationFilter={setReputationFilter}
+                key="reviewsFilter"
+              />
+            </Col>
           </Row>
         </Row>
       </Grid>
@@ -195,11 +197,12 @@ Reviews.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
 };
 
-function mapStateToProps({ apiRequests, entities, auth }) {
+function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
 
   return {
     reviews,
+    reviewsFilter: reputation.get('reviewsFilter'),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
@@ -207,6 +210,8 @@ function mapStateToProps({ apiRequests, entities, auth }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntitiesRequest,
+    setReputationFilter,
+    setReputationFilterState,
   }, dispatch);
 }
 
