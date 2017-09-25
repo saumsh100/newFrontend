@@ -4,6 +4,7 @@ import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
+import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -90,16 +91,6 @@ appointmentsRouter.get('/business', (req, res, next) => {
     ],
   })
     .then(async (appointments) => {
-      const queryCancelled = {
-        where: {
-          accountId,
-          $or: [],
-          patientId: {
-            $not: null,
-          },
-        },
-        raw: true,
-      };
 
       for (let i = 0; i < appointments.length; i++) {
         if (testHygien.test(appointments[i].practitioner.type)) {
@@ -127,6 +118,9 @@ appointmentsRouter.get('/business', (req, res, next) => {
           }
         }
       }
+
+      send.productionEarnings = await mostBusinessProcedure(startDate, endDate, accountId);
+
       return res.send(send);
     })
     .catch(next);
@@ -179,12 +173,13 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
       const result = results[0];
       const account = results[1];
 
-      const days = new Array(6).fill(0);
+      const days = new Array(7).fill(0);
       // calculate the frequency of the day of the week
       for (let i = 0; i < result.length; i++) {
         const day = account.timezone ? moment.tz(result[i].startDate, account.timezone).get('day') : moment(result[i].startDate).get('day');
-        days[day - 1]++;
+        days[day]++;
       }
+
       res.send({ days });
     })
     .catch(next);
@@ -575,6 +570,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res,
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+      io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
@@ -736,6 +732,13 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+
+      // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
+      // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
+      const action = appointment.isDeleted ? 'DELETE' : 'UPDATE';
+      io.of(ns).in(accountId).emit(`${action}:Appointment`, appointment.id);
+
+      // TODO: why are we double sending? what was wrong with our current lowercase actions? client-side is easy to update!
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
@@ -754,6 +757,7 @@ appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:dele
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = normalize('appointment', appointment.get({ plain: true }));
+      io.of(ns).in(accountId).emit('DELETE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })
     .catch(next);

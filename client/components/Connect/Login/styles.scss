@@ -1,0 +1,54 @@
+
+@import '../../../ui.scss';
+
+.loginWrapper {
+  height: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.header {
+  composes: fontJumbo from 'sass-loader!../../../fonts.scss';
+  color: $primary-dark;
+}
+
+.subHeader {
+  composes: header from 'sass-loader!../../../fonts.scss';
+  margin-bottom: 20px;
+  color: $primary-darkgrey;
+}
+
+.logoWrapper {
+  height: auto;
+  margin-bottom: 20px;
+  // background-color: black;
+}
+
+.logo {
+  width: 100px;
+}
+
+.loginForm {
+  > div {
+    > input {
+      font-family: $medium-font;
+      font-size: 20px;
+    }
+
+    > label {
+      font-family: $medium-font;
+    }
+
+    > span:last-child {
+      top: 70px;
+    }
+  }
+}
+
+.customSubmitButton {
+  width: 100%;
+  font-size: 20px;
+  font-family: $medium-font;
+  height: 60px;
+  margin-top: 20px;
+}

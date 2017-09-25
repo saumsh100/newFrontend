@@ -75,6 +75,7 @@ Object {
   "brokenAppts": 0,
   "entities": Object {},
   "hygieneAppts": 1,
+  "productionEarnings": Array [],
 }
 `;
 
@@ -118,6 +119,7 @@ Object {
 exports[`/api/appointments GET / /statsdate - data for most popular day of the week 1`] = `
 Object {
   "days": Array [
+    0,
     0,
     0,
     0,

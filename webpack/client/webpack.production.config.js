@@ -12,7 +12,7 @@ const entries = appEntries(name => [
 console.log('INTERCOM_APP_ID', process.env.INTERCOM_APP_ID);
 
 const developmentConfig = merge(baseConfig, {
-  entry: entries('app', 'patient', 'reviews', 'my', 'cc'),
+  entry: entries('app', 'patient', 'reviews', 'my', 'cc', 'connect'),
 
   plugins: [
     new webpack.DefinePlugin({
@@ -30,7 +30,7 @@ const developmentConfig = merge(baseConfig, {
 
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
-      chunks: ['app', 'patient', 'reviews', 'my'],
+      chunks: ['app', 'patient', 'reviews', 'my', 'connect'],
     }),
   ],
 });
