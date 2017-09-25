@@ -9,6 +9,10 @@ export default function Avatar({ user, className, size, onClick = () => {} }) {
     classes = classNames(styles.large, classes);
   }
 
+  if (size === 'xl') {
+    classes = classNames(styles.xlarge, classes);
+  }
+
   if (size === 'extralg') {
     classes = classNames(styles.extraLarge, classes);
   }

@@ -83,6 +83,7 @@ export default class DropdownSelect extends Component {
         value,
       });
     }
+
     return this.setState({
       options: optionsStatic,
       value: '',
@@ -150,10 +151,11 @@ export default class DropdownSelect extends Component {
     const {
       value,
       disabled,
-      options,
+      options = [],
       label,
       template,
       borderColor,
+      error,
     } = this.props;
 
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
@@ -173,6 +175,7 @@ export default class DropdownSelect extends Component {
     if (borderColor) {
       toggleClassName = classNames(styles[`${borderColor}Border`], toggleClassName);
     }
+
     if (this.state.isOpen) {
       toggleClassName = classNames(styles.active, toggleClassName);
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
@@ -192,6 +195,9 @@ export default class DropdownSelect extends Component {
           {toggleDiv}
         </div>
         <Icon className={caretIconClassName} icon="caret-down" />
+        <div className={styles.error}>
+          {error || ''}
+        </div>
       </div>
     );
   }

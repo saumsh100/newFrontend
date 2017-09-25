@@ -8,6 +8,9 @@ syncControlRouter.post('/runSync', (req, res, next) => {
   const io = req.app.get('socketio');
   console.log(`On demand sync. AccountId=${req.accountId}`);
 
+  // TODO; if SUPERADMIN activeAccountId gets switched, or ADMIN account
+  // TODO: then this could sync the wrong clinic... needs correct account checking and accountID in body
+
   res.send('On-demand sync trigger sent.');
   io.of(namespaces.sync)
     .in(req.accountId)
@@ -18,6 +21,9 @@ syncControlRouter.post('/finishSync', async (req, res, next) => {
   try {
     const io = req.app.get('socketio');
     console.log(`Sync finished. AccountId=${req.accountId}`);
+
+    // TODO; if SUPERADMIN activeAccountId gets switched, or ADMIN account
+    // TODO: then this could sync the wrong clinic... needs correct account checking and accountID in body
 
     // Early return for code safety reasons
     res.sendStatus(200);

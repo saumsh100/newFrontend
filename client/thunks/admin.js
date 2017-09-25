@@ -29,7 +29,7 @@ export function setAllAccountInfo(payload) {
       }
 
       const query = payload.formData[4]; // query for account options
-      console.log(query)
+
       const alertCreateAccount = {
         success: {
           body: 'Account has been created',

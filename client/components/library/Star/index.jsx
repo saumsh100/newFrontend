@@ -6,12 +6,12 @@ import styles from './styles.scss';
 export default function Star(props) {
   const {
     size,
+    className,
   } = props;
-  
-  const fontAwesomeClass = 'fa fa-star';
-  const className = classNames(fontAwesomeClass, styles.star);
 
-  return <i className={className} style={{fontSize: size + 'em'}} />;
+  const fontAwesomeClass = 'fa fa-star';
+  const classes = classNames(className, fontAwesomeClass, styles.star);
+  return <i className={classes} style={{fontSize: size + 'em'}} />;
 }
 
 Star.defaultProps = {
@@ -20,4 +20,5 @@ Star.defaultProps = {
 
 Star.propTypes = {
   size: PropTypes.number,
+  className: PropTypes.string,
 };

@@ -78,8 +78,10 @@ async function callRail(account) {
 
     await axios(createWebhook);
 
-    return company.data.id;
+    const newAccount = account.update({ callrailId: company.data.id });
+    return newAccount;
   } catch (e) {
+    return account;
     console.log('Call Rail Account Creation Failed');
   }
 }
@@ -101,10 +103,12 @@ async function twilioSetup(account) {
       friendlyName: account.name,
       smsUrl: `https://carecru.io/twilio/sms/accounts/${account.id}`,
     });
-    return number.phone_number;
+    const newAccount = account.update({ twilioPhoneNumber: number.phone_number });
+    return newAccount;
   } catch (e) {
     console.log(e);
     console.log('Twilio Account Creation Failed');
+    return account;
   }
 }
 
@@ -129,21 +133,26 @@ async function vendastaSetup(account, setupList) {
     const accountUrlGet = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${newCompany.data.data.accountId}`;
 
     const product = await axios.get(accountUrlGet);
-
+    console.log(product.data.data)
     const srid = product.data.data.productsJson.RM ? product.data.data.productsJson.RM.productId : null;
     const msid = product.data.data.productsJson.MS ? product.data.data.productsJson.MS.productId : null;
     const smid = product.data.data.productsJson.SM ? product.data.data.productsJson.SM.productId : null;
 
-    return {
+    const newData = {
       vendastaId: customerIdentifier,
       vendastaAccountId: newCompany.data.data.accountId,
       vendastaMsId: msid,
       vendastaSmId: smid,
       vendastaSrId: srid,
     };
+
+    const newAccount = await account.update(newData);
+
+    return newAccount;
   } catch (e) {
     console.log(e)
     console.log('Vendasta Account Creation Failed');
+    return account;
   }
 }
 
@@ -157,32 +166,21 @@ export default async function createAccount(account, setupList) {
     canSendRecalls,
   } = setupList;
 
-  let vendastaData = null;
-  let callrailId = null;
-  let twilioPhoneNumber = null;
+  let Account = account;
 
   try {
     if (canSendReminders === 'true' || canSendRecalls === 'true') {
-      twilioPhoneNumber = await twilioSetup(account);
+      Account = await twilioSetup(account);
     }
     if (callTracking === 'true') {
-      callrailId = await callRail(account);
+      Account = await callRail(account);
     }
 
     if (reputationManagement === 'true' || listings === 'true' || social === 'true') {
-      vendastaData = await vendastaSetup(account, setupList);
+      Account = await vendastaSetup(account, setupList);
     }
-
   } catch (e) {
     console.log(e);
   }
-
-  const data = {
-    callrailId,
-    twilioPhoneNumber,
-    ...vendastaData,
-  };
-
-  return data;
-
+  return Account;
 }

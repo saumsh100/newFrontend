@@ -130,12 +130,7 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
   return Account.create(accountData)
     .then(async (accountFirst) => {
 
-      const newData = await createAccount(accountFirst, req.query);
-      accountFirst.callrailId = newData.callrailId;
-      accountFirst.vendastaId = newData.vendastaId;
-      accountFirst.vendastaAccountId = newData.vendastaAccountId;
-      accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
-      const account = await accountFirst.save();
+      const account = await createAccount(accountFirst, req.query);
 
       const defaultReminders = [
         {

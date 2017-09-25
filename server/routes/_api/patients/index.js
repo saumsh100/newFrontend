@@ -4,6 +4,7 @@ import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
+import { mostBusinessPatient } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
@@ -41,12 +42,6 @@ function ageRangePercent(array) {
   newArray[5] = Math.round(100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
   return newArray;
 }
-
-const generateDuringFilter = (m, startDate, endDate) => {
-  return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
-    m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
-  );
-};
 
 patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async (req, res, next) => {
   const startDate = moment().subtract(1, 'years').toISOString();
@@ -115,6 +110,25 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
   } catch (error) {
     next(error);
   }
+});
+
+patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    accountId,
+    params,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = params;
+
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
+
+  return mostBusinessPatient(startDate, endDate, accountId)
+          .then(result => res.send(result))
+          .catch(next);
 });
 
 patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res, next) => {
@@ -397,6 +411,7 @@ patientsRouter.post('/', async (req, res, next) => {
     // Dispatch socket event
     const io = req.app.get('socketio');
     const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+    io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
     return io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
   } catch (error) {
     next(error);
@@ -505,6 +520,13 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
       // Dispatch to the appropriate socket room
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+
+      // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
+      // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
+      const action = patient.isDeleted ? 'DELETE' : 'UPDATE';
+      // TODO: should the payload be only an id?
+      io.of(ns).in(accountId).emit(`${action}:Patient`, patient.id);
+
       return io.of(ns).in(accountId).emit('update:Patient', normalized);
     })
     .catch(next);
@@ -522,6 +544,7 @@ patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, 
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = format(req, res, 'patient', patient.get({ plain: true }));
+      io.of(ns).in(accountId).emit('DELETE:Patient', patient.id);
       return io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
     .catch(next);

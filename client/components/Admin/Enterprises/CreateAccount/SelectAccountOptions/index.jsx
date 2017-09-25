@@ -55,17 +55,18 @@ export default function SelectAccountOptions(props) {
                 />
               </div>
             </div>
+
             <div className={styles.displayFlex}>
               <span>
-                <Icon icon="star" />
+                <Icon icon="phone" />
               </span>
               <span className={styles.accountOptions_text}>
-                Social Marketing
+                Call Tracking
               </span>
               <div>
                 <Field
                   component="Toggle"
-                  name="social"
+                  name="callTracking"
                 />
               </div>
             </div>
@@ -101,15 +102,15 @@ export default function SelectAccountOptions(props) {
             </div>
             <div className={styles.displayFlex}>
               <span>
-                <Icon icon="phone" />
+                <Icon icon="commenting" />
               </span>
               <span className={styles.accountOptions_text}>
-                Call Tracking
+                Reviews
               </span>
               <div>
                 <Field
                   component="Toggle"
-                  name="callTracking"
+                  name="canSendReviews"
                 />
               </div>
             </div>
