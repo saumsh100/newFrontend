@@ -37,7 +37,11 @@
       top: 50%;
       left: 50%;
       margin-right: -50%;
-      transform: translate(-50%, -50%)
+      transform: translate(-50%, -50%);
+      @media screen and (max-width: 1250px) {
+        display: none;
+      }
+
     }
 
     &__link {
@@ -51,6 +55,9 @@
         &__text{
           padding-right: 10px;
         }
+      @media screen and (max-width: 1250px) {
+      }
+
     }
 }
 
