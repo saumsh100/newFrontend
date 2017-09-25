@@ -16,11 +16,28 @@ chairsRouter.param('chairId', sequelizeLoader('chair', 'Chair'));
  *
  * - Create a chair
  */
-chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
+chairsRouter.post('/', checkPermissions('chairs:create'), async (req, res, next) => {
   // Attach chair to the clinic of posting user
   const chairData = Object.assign({}, req.body, {
     accountId: req.accountId || req.body.accountId,
   });
+
+  try {
+    if (chairData.pmsId) {
+      const chair = await chairData.findOne({
+        where: {
+          pmsId: chairData.pmsId,
+          accountId: req.accountId,
+        },
+      });
+      if (chair) {
+        const normalized = format(req, res, 'chair', chair.get({ plain: true }));
+        return res.status(200).send(normalized);
+      }
+    }
+  } catch (e) {
+    return next(e);
+  }
 
   return Chair.create(chairData)
     .then(chair => res.status(201).send(format(req, res, 'chair', chair.get({ plain: true }))))
