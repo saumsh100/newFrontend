@@ -180,6 +180,13 @@
   @extend .letterSpacing;
 }
 
+.headerImportant {
+  font-size: $header-size !important;
+  font-weight: $jumbo-weight !important;
+  @extend .letterSpacing;
+}
+
+
 .subHeader {
   color: $empty-grey;
   @extend .letterSpacing;

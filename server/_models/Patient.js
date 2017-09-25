@@ -25,6 +25,25 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          return Patient.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+          }).then((patient) => {
+            if (patient) {
+              return next({
+                messages: 'AccountId PMS ID Violation',
+                model: patient,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     // Used to connect authenticated patientUser to his patient record
@@ -165,7 +184,7 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account, Appointment, Chat, SentRecall }) => {
+  Patient.associate = ({ Account, Appointment, Chat, SentRecall, DeliveredProcedure, Review, SentReview }) => {
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -175,18 +194,36 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'patientId',
       as: 'appointments',
     });
+
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
       as: 'chats',
     });
+
     Patient.hasMany(SentRecall, {
       foreignKey: 'patientId',
       as: 'sentRecalls',
     });
+
     // This exists because some endpoints refer to 'chats' as 'chat' in the response
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
       as: 'chat',
+    });
+
+    Patient.hasMany(DeliveredProcedure, {
+      foreignKey: 'patientId',
+      as: 'deliveredProcedures',
+    });
+
+    Patient.hasMany(SentReview, {
+      foreignKey: 'patientId',
+      as: 'sentReviews',
+    });
+
+    Patient.hasMany(Review, {
+      foreignKey: 'patientId',
+      as: 'reviews',
     });
   };
 
@@ -294,11 +331,13 @@ export default function (sequelize, DataTypes) {
         if (a.dataValues.mobilePhoneNumber && b.dataValues.mobilePhoneNumber
           && (a.dataValues.mobilePhoneNumber === b.dataValues.mobilePhoneNumber)) {
           errs.push(UniqueFieldError({ tableName: 'Patient' }, 'mobilePhoneNumber'));
+          return true;
         }
 
         if (a.dataValues.email && b.dataValues.email &&
           (a.dataValues.email === b.dataValues.email)) {
           errs.push(UniqueFieldError({ tableName: 'Patient' }, 'email'));
+          return true;
         }
       }
     });

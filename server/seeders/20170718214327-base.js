@@ -1,7 +1,9 @@
+
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
 const moment = require('moment');
+const procedures = require('../fixtures/procedures/procedureDump.json');
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -48,16 +50,26 @@ const account = {
   twilioPhoneNumber: clinicPhoneNumber,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  canSendReviews: false,
 };
 
 const account2 = {
   id: accountId2,
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
-  city: 'Kostolac',
-  name: 'Test Account 2',
+  city: 'Edmonton',
+  state: 'AB',
+  street: '10204 112th St.',
+  contactEmail: 'info@libertychiropractic.ca',
+  website: 'http://carecru.ngrok.io/tests/sites/reviews.html',
+  googlePlaceId: 'ChIJP-dQSDEioFMRBpVTwZ2_h1o',
+  facebookUrl: 'https://www.facebook.com/libertychiroedm/',
+  bookingWidgetPrimaryColor: '#4D3069',
+  name: 'Liberty Chiropractic',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  phoneNumber: '+17808508886',
+  canSendReviews: true,
 };
 
 const managerPermission = {
@@ -161,13 +173,15 @@ module.exports = {
     ]);
 
     const patients = [];
+    const deliveredProcedures = [];
 
     for (let i = 0; i < 100; i += 1) {
       const firstName = faker.name.firstName('male');
       const lastName = faker.name.lastName();
       const phoneNumber = faker.phone.phoneNumberFormat(0);
+      const id = uuid();
       patients.push({
-        id: uuid(),
+        id,
         accountId,
         firstName,
         lastName,
@@ -185,6 +199,33 @@ module.exports = {
         }),
         createdAt: faker.date.past(),
         updatedAt: new Date(),
+      });
+
+      const primaryInsuranceAmount = faker.finance.amount(0, 200, 2);
+
+      const secondaryInsuranceAmount = faker.finance.amount(0, 200, 2);
+
+      const patientAmount = faker.finance.amount(0, 200, 2);
+
+      const discountAmount = faker.finance.amount(0, 200, 2);
+
+      const totalAmount = parseFloat(patientAmount) + parseFloat(secondaryInsuranceAmount) +
+      parseFloat(primaryInsuranceAmount) - parseFloat(discountAmount);
+
+      deliveredProcedures.push({
+        id: uuid(),
+        accountId,
+        primaryInsuranceAmount,
+        secondaryInsuranceAmount,
+        patientAmount,
+        discountAmount,
+        totalAmount,
+        units: 1.00,
+        createdAt: faker.date.past(),
+        entryDate: faker.date.past(),
+        updatedAt: new Date(),
+        patientId: id,
+        procedureCode: procedures[Math.floor(Math.random() * procedures.length)].code,
       });
     }
 
@@ -215,6 +256,8 @@ module.exports = {
     }
 
     await queryInterface.bulkInsert('Patients', patients);
+
+    await queryInterface.bulkInsert('DeliveredProcedures', deliveredProcedures);
 
     const practitioners = [];
 

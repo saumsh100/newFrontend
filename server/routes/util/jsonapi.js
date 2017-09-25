@@ -68,6 +68,23 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  DeliveredProcedure: [
+    'accountId',
+    'patientId',
+    'procedureCode',
+    'entryDate',
+    'pmsId',
+    'units',
+    'totalAmount',
+    'primaryInsuranceAmount',
+    'secondaryInsuranceAmount',
+    'patientAmount',
+    'discountAmount',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Family: [
     'accountId',
     'pmsId',
@@ -145,6 +162,7 @@ const ModelAttributes = {
     'pmsId',
     'dayOfWeek',
     'note',
+    'practitionerId',
   ],
 };
 

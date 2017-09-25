@@ -27,7 +27,8 @@ const UserMenu = (props) => {
 
   const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
   // TODO: create a separate container for this to load in user data from 'currentUser'
-  const businessName = enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN') ?
+  const isEnterprise = role === 'SUPERADMIN';//enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN');
+  const businessName = isEnterprise ?
     enterprise.get('name') :
     activeAccount && activeAccount.name;
 

@@ -1,0 +1,27 @@
+
+@import '../../../ui.scss';
+
+.form {
+  > div {
+    > input {
+      font-family: $medium-font;
+      font-size: 20px;
+    }
+
+    > label {
+      font-family: $medium-font;
+    }
+
+    > span:last-child {
+      top: 70px;
+    }
+  }
+}
+
+.nextButton {
+  width: 100%;
+  font-size: 20px;
+  font-family: $medium-font;
+  height: 60px;
+  margin-top: 50px;
+}

@@ -109,8 +109,15 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
 
   if (errors.length) {
     const errorsResponse = errors.map((error) => {
+      if (error.length === 1 && typeof error[0].detail === 'object'
+        && (error[0].detail.messages === 'AccountId PMS ID Violation' ||
+          error[0].detail.messages === 'PractitionerId PMS ID Violation')) {
+        response.push(error[0].detail.model);
+      }
+
       error.model = modelType;
       error.errorMessage = `${modelType} save error`;
+
       if (error.errors && error.errors[0]) {
         error.errorMessage = error.errors[0].message;
       }

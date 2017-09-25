@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Col, List, ListItem, Card, CardHeader } from '../../../../../library';
+import { Col, List, ListItem, Card, CardHeader, Avatar } from '../../../../../library';
 import styles from './styles.scss';
-import Avatar from '../../../../../library/Avatar/index';
 
 class Item extends Component {
   render() {
@@ -9,6 +8,7 @@ class Item extends Component {
       data,
       borderColor,
       cardTitle,
+      className,
     } = this.props;
     return (
       <Col className={styles.paddingFill} xs={12} sm={6} md={3}>
@@ -16,10 +16,9 @@ class Item extends Component {
           <div className={styles.userItem__header}>
             <CardHeader title={cardTitle}/>
           </div>
-          <div className={styles.userItem__body}>
+          <div className={`${styles.userItem__body} ${className}`}>
             <List className={styles.patients}>
               {data.map((obj, i) => {
-                console.log(obj)
                 return (
                   <ListItem key={i} className={styles.patients__item}>
                     <Avatar className={styles.patients__item_img} user={obj} size="lg"/>

@@ -9,6 +9,7 @@ import RFRangeSlider from './RFRangeSlider';
 import RFTextArea from './RFTextArea';
 import RFAutoComplete from './RFAutoComplete';
 import RFColorPicker from './RFColorPicker';
+import RFStars from './RFStars';
 
 export default {
   Input: RFInput,
@@ -22,4 +23,5 @@ export default {
   TextArea: RFTextArea,
   AutoComplete: RFAutoComplete,
   ColorPicker: RFColorPicker,
+  Stars: RFStars,
 };

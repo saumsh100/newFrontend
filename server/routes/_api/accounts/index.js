@@ -143,6 +143,7 @@ accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (
         where: {
           accountId: req.accountId,
         },
+
         required: false,
       },
     });
@@ -201,11 +202,11 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
  */
 
 accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  const {
-    name,
-  } = req.body;
-
   try {
+    const {
+      name,
+    } = req.body;
+
     const config = await Configuration.findOne({
       where: { name },
     });
@@ -248,7 +249,7 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
 
     return res.send(format(req, res, 'configuration', sendValue));
   } catch (err) {
-    return next(err);
+    next(err);
   }
 });
 

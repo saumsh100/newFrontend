@@ -31,6 +31,25 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          return Appointment.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+          }).then((appointment) => {
+            if (appointment) {
+              return next({
+                messages: 'AccountId PMS ID Violation',
+                model: appointment,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     isDeleted: {
@@ -103,7 +122,17 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Appointment.associate = ({ Account, Chair, Patient, Practitioner, SentReminder, Service }) => {
+  Appointment.associate = (models) => {
+    const {
+      Account,
+      Chair,
+      Patient,
+      Practitioner,
+      SentReminder,
+      Service,
+      SentReview,
+    } = models;
+
     Appointment.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -128,6 +157,11 @@ export default function (sequelize, DataTypes) {
     Appointment.hasMany(SentReminder, {
       foreignKey: 'appointmentId',
       as: 'sentReminders',
+    });
+
+    Appointment.hasMany(SentReview, {
+      foreignKey: 'appointmentId',
+      as: 'sentReviews',
     });
 
     Appointment.belongsTo(Service, {
@@ -170,6 +204,7 @@ export default function (sequelize, DataTypes) {
         }
         return error;
       });
+
       throw { docs: response, errors: errorsResponse };
     }
 

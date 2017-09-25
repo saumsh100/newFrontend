@@ -8,7 +8,7 @@ import SuperAdminForm from './SuperAdminForm';
 import Address from '../Address';
 import { Map } from 'immutable';
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
-import { uploadLogo, deleteLogo } from '../../../../thunks/accounts';
+import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
 import { Grid, Row, Col, Dropzone, AccountLogo, Button, Header} from '../../../library';
 import styles from './styles.scss';
 import jwt from 'jwt-decode';
@@ -133,6 +133,13 @@ class General extends React.Component {
               activeAccount={activeAccount}
             />
           </div>
+          <Header
+            title="Download Connector"
+            contentHeader
+          />
+          <div className={styles.formContainer}>
+            <Button onClick={this.props.downloadConnector}>Download Connector</Button>
+          </div>
           {role === 'SUPERADMIN' ? <Header
             title="Administrative Information"
             contentHeader
@@ -164,6 +171,7 @@ General.propTypes = {
   fetchEntities: PropTypes.func,
   uploadLogo: PropTypes.func,
   deleteLogo: PropTypes.func,
+  downloadConnector: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch){
@@ -172,6 +180,7 @@ function mapDispatchToProps(dispatch){
     fetchEntities,
     uploadLogo,
     deleteLogo,
+    downloadConnector,
   }, dispatch);
 }
 

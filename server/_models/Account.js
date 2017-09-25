@@ -24,14 +24,22 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    // TODO: booleans should have allowNull=true
     canSendReminders: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
 
+    // TODO: booleans should have allowNull=true
     canSendRecalls: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+
+    canSendReviews: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
     },
 
     unit: {
@@ -120,6 +128,14 @@ export default function (sequelize, DataTypes) {
     lastSyncDate: {
       type: DataTypes.DATE,
     },
+
+    googlePlaceId: {
+      type: DataTypes.STRING,
+    },
+
+    facebookUrl: {
+      type: DataTypes.STRING,
+    },
   });
 
   Account.associate = (models) => {
@@ -133,6 +149,8 @@ export default function (sequelize, DataTypes) {
       Recall,
       Service,
       WeeklySchedule,
+      Review,
+      SentReview,
     } = models;
 
     Account.belongsTo(Enterprise, {
@@ -178,6 +196,16 @@ export default function (sequelize, DataTypes) {
     Account.hasMany(Service, {
       foreignKey: 'accountId',
       as: 'services',
+    });
+
+    Account.hasMany(Review, {
+      foreignKey: 'accountId',
+      as: 'reviews',
+    });
+
+    Account.hasMany(SentReview, {
+      foreignKey: 'accountId',
+      as: 'sentReviews',
     });
   };
 
