@@ -113,7 +113,6 @@ class General extends React.Component {
               {activeAccount.fullLogoUrl ? <Button icon="trash" className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
             </div>
           </div>
-          <Button onClick={this.props.downloadConnector}>Download Connector</Button>
           <Header
             title="Contact Information"
             contentHeader
@@ -133,6 +132,13 @@ class General extends React.Component {
             <Address
               activeAccount={activeAccount}
             />
+          </div>
+          <Header
+            title="Download Connector"
+            contentHeader
+          />
+          <div className={styles.formContainer}>
+            <Button onClick={this.props.downloadConnector}>Download Connector</Button>
           </div>
           {role === 'SUPERADMIN' ? <Header
             title="Administrative Information"
