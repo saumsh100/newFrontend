@@ -549,15 +549,32 @@ appointmentsRouter.get('/', (req, res, next) => {
     .catch(next);
 });
 
-appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) => {
+appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req, res, next) => {
   const accountId = req.accountId;
   const appointmentData = Object.assign({}, req.body, {
     accountId,
   });
 
+  try {
+    if (appointmentData.pmsId) {
+      const appointment = await Appointment.findOne({
+        where: {
+          pmsId: appointmentData.pmsId,
+          accountId,
+        },
+      });
+      if (appointment) {
+        const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
+        return res.status(200).send(normalized);
+      }
+    }
+  } catch (e) {
+    return next(e);
+  }
+
   return Appointment.create(appointmentData)
     .then((appointment) => {
-      const normalized = format(req, res, 'appointment', appointment.get( { plain: true }));
+      const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
       res.status(201).send(normalized);
       return { appointment: appointment.dataValues, normalized };
     })

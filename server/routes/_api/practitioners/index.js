@@ -41,7 +41,27 @@ practitionersRouter.get('/', (req, res, next) => {
 /**
  * Create a practitioner
  */
-practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, res, next) => {
+practitionersRouter.post('/', checkPermissions('practitioners:create'), async (req, res, next) => {
+  try {
+    if (req.body.pmsId) {
+      const practitioner = await Practitioner.findOne({
+        where: {
+          pmsId: req.body.pmsId,
+          accountId: req.accountId,
+          include: [{
+            model: WeeklySchedule,
+            as: 'weeklySchedule',
+          }],
+        },
+      });
+      if (practitioner) {
+        const normalized = format(req, res, 'practitioner', practitioner.get({ plain: true }));
+        return res.status(200).send(normalized);
+      }
+    }
+  } catch (e) {
+    return next(e);
+  }
   return Account.findOne({
     where: { id: req.accountId },
     raw: true,
