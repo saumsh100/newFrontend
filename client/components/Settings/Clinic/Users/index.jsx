@@ -200,6 +200,7 @@ class Users extends Component{
         return (
           <InviteUsersList
             key={invite.id}
+            id={invite.id}
             email={invite.get('email')}
             currentUserRole={this.state.role}
             date={invite.get('createdAt')}

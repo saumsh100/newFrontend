@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`/api/users DELETE /:userId delete a user 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
+exports[`/api/users DELETE /:userId delete a user fail due to being a manager 1`] = `
+Object {
+  "entities": Object {},
+}
+`;
+
 exports[`/api/users GET / / - retrieve users 1`] = `
 Object {
   "entities": Object {
