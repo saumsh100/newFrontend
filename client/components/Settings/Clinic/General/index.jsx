@@ -43,14 +43,6 @@ class General extends React.Component {
     .then((downloadLink) => {
       const reg = /Expires=([^&]*)/;
       const matches = downloadLink.match(reg);
-      console.log(matches);
-
-      const now = moment(Number(matches[1]) * 1000);
-      console.log(now)
-      const end = moment(new Date());
-      const duration = moment.duration(now.diff(end));
-
-      console.log(duration.asSeconds());
 
       this.setState({
         downloadLink,
