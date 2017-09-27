@@ -39,27 +39,25 @@ connectorRouter.get('/download', (req, res, next) => {
         return res.sendStatus(404);
       }
 
-      const fileKey = release.filename;
-
-      console.log('Trying to download file', fileKey);
+      const fileKey = `${release.path}/${release.filename}`;
 
       try {
         const s3 = new S3({
-          params: {
-            Bucket: release.bucket,
-            Key: fileKey,
-          },
-
           credentials: {
             accessKeyId: release.key,
             secretAccessKey: release.secret,
           },
         });
 
-        res.attachment(fileKey);
-        const fileStream = s3.getObject().createReadStream();
-        fileStream.on('error', e => console.log(e));
-        fileStream.pipe(res);
+        const url = s3.getSignedUrl('getObject', {
+          Bucket: release.bucket,
+          Key: fileKey,
+          Expires: 60 * 5,
+        });
+
+        console.log(req.accountId, url);
+
+        return res.send(url);
       } catch (e) {
         next(e);
       }

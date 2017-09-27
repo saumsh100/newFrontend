@@ -53,16 +53,7 @@ export function downloadConnector() {
   return function (dispatch, getState) {
 
     return axios
-      .get('/api/connector/download', { responseType: 'blob' })
-      .then((response) => {
-        let filename;
-        const disposition = response.headers['content-disposition'];
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        const matches = filenameRegex.exec(disposition);
-        if (matches != null && matches[1]) {
-          filename = matches[1].replace(/['"]/g, '');
-        }
-        FileSaver.saveAs(response.data, filename);
-      });
+      .get('/api/connector/download')
+      .then(response => response.data);
   };
 }

@@ -1,6 +1,7 @@
 
 import React, {PropTypes, Component} from 'react';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
 import ContactForm from './ContactForm';
@@ -19,11 +20,14 @@ class General extends React.Component {
     super(props);
     this.state = {
       uploading: false,
+      downloadLink: null,
+      expired: null,
     };
 
     this.updateName = this.updateName.bind(this);
     this.uploadLogo = this.uploadLogo.bind(this);
     this.deleteLogo = this.deleteLogo.bind(this);
+    this.downloadConnector = this.downloadConnector.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +36,27 @@ class General extends React.Component {
     const url = `/api/users/${decodedToken.userId}`;
 
     this.props.fetchEntities({ url });
+  }
+
+  downloadConnector() {
+    this.props.downloadConnector()
+    .then((downloadLink) => {
+      const reg = /Expires=([^&]*)/;
+      const matches = downloadLink.match(reg);
+      console.log(matches);
+
+      const now = moment(Number(matches[1]) * 1000);
+      console.log(now)
+      const end = moment(new Date());
+      const duration = moment.duration(now.diff(end));
+
+      console.log(duration.asSeconds());
+
+      this.setState({
+        downloadLink,
+        expired: Number(matches[1] * 1000),
+      });
+    });
   }
 
   uploadLogo(files) {
@@ -82,6 +107,24 @@ class General extends React.Component {
         }
         return null;
       });
+
+      let button = <Button onClick={this.downloadConnector}>Download Connector</Button>;
+
+      if (this.state.downloadLink) {
+        const now = moment(this.state.expired);
+        const end = moment(new Date());
+        const duration = moment.duration(now.diff(end)).asSeconds();
+
+        const timeLeft = duration > 0 ? `Link Expires in ${duration} s` : 'Link Expired';
+
+        button = <a className={styles.linkAsButton} href={this.state.downloadLink} download>{timeLeft}</a>;
+
+        setTimeout(() => {
+          if (duration > 0) {
+            this.setState({ expired: this.state.expired });
+          }
+        }, 100);
+      }
 
       showComponent = (
         <div className={styles.outerContainer}>
@@ -138,7 +181,7 @@ class General extends React.Component {
             contentHeader
           />
           <div className={styles.formContainer}>
-            <Button onClick={this.props.downloadConnector}>Download Connector</Button>
+            {button}
           </div>
           {role === 'SUPERADMIN' ? <Header
             title="Administrative Information"
