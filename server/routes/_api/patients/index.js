@@ -115,13 +115,13 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
 patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
   const {
     accountId,
-    params,
+    query,
   } = req;
 
   let {
     startDate,
     endDate,
-  } = params;
+  } = query;
 
   startDate = startDate || moment().subtract(1, 'years').toISOString();
   endDate = endDate || moment().toISOString();
