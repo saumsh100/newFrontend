@@ -39,7 +39,7 @@ connectorRouter.get('/download', (req, res, next) => {
         return res.sendStatus(404);
       }
 
-      const fileKey = `${release.path}/${release.filename}`;
+      const fileKey = release.path ? `${release.path}/${release.filename}` : release.filename;
 
       try {
         const s3 = new S3({
