@@ -48,9 +48,7 @@ class Overview extends Component {
       endDate: this.state.endDate._d,
       accountId: decodedToken.activeAccountId,
     };
-
-    console.log(params)
-
+    
     Promise.all([
       this.props.fetchEntitiesRequest({
         id: 'patientStats',
