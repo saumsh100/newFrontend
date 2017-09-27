@@ -9,9 +9,23 @@ export default function SelectAccountOptions(props) {
   const {
     onSubmit,
     index,
-    initialValues,
     formName,
+    activeAccount,
   } = props;
+
+  const {
+    callrailId,
+    twilioPhoneNumber,
+    vendastaMsId,
+    vendastaSrId,
+  } = activeAccount;
+
+  const initialValues = {
+    reputationManagement: !!vendastaSrId,
+    listings: !!vendastaMsId,
+    canSendReminders: !!twilioPhoneNumber,
+    callTracking: !!callrailId,
+  };
 
   return (
     <Form
@@ -55,45 +69,15 @@ export default function SelectAccountOptions(props) {
             </div>
             <div className={styles.displayFlex}>
               <span>
-                <Icon icon="star" />
-              </span>
-              <span className={styles.accountOptions_text}>
-                Social Marketing
-              </span>
-              <div>
-                <Field
-                  component="Toggle"
-                  name="social"
-                />
-              </div>
-            </div>
-          </Col>
-          <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
-            <div className={styles.displayFlex}>
-              <span>
                 <Icon icon="clock-o" />
               </span>
               <span className={styles.accountOptions_text}>
-                Reminders
+                Twilio
               </span>
               <div>
                 <Field
                   component="Toggle"
                   name="canSendReminders"
-                />
-              </div>
-            </div>
-            <div className={styles.displayFlex}>
-              <span>
-                <Icon icon="bullhorn" />
-              </span>
-              <span className={styles.accountOptions_text}>
-                Recalls
-              </span>
-              <div>
-                <Field
-                  component="Toggle"
-                  name="canSendRecalls"
                 />
               </div>
             </div>

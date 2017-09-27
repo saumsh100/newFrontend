@@ -1,5 +1,6 @@
 import { callrails, vendasta } from '../config/globals';
 import twilioClient from '../config/twilio';
+
 const axios = require('axios');
 
 const uuid = require('uuid').v4;
@@ -9,13 +10,12 @@ const {
   apiUser,
 } = vendasta;
 
-async function callRail(account) {
+export async function callRail(account) {
   if (!account.destinationPhoneNumber) {
     return null;
   }
 
   try {
-
     const phoneNumber = account.destinationPhoneNumber.replace(/\s+/g, '');
     const areaCode = account.destinationPhoneNumber.replace(/\D/g, '').substr(1, 3);
 
@@ -86,7 +86,7 @@ async function callRail(account) {
   }
 }
 
-async function twilioSetup(account) {
+export async function twilioSetup(account) {
   // Right now default to Canada numbers. Maybe add a country dropdown in account creation.
   if (!account.destinationPhoneNumber) {
     return null;
@@ -112,32 +112,58 @@ async function twilioSetup(account) {
   }
 }
 
-async function vendastaReputation(account) {
+async function vendastaAddProducts(account, setupList) {
+  const accountUrl = `https://api.vendasta.com/api/v3/account/addProduct/?apiKey=${apiKey}&apiUser=${apiUser}`;
+
   try {
-    const accountUrl = `https://api.vendasta.com/api/v3/account/addProduct/?apiKey=${apiKey}&apiUser=${apiUser}`;
-    const newProduct = {
-      accountId: account.vendastaAccountId,
-      productId: 'RM',
+    if (setupList.listings) {
+      await axios.post(accountUrl, {
+        accountId: account.vendastaAccountId,
+        productId: 'MS',
+      });
+    }
+
+    if (setupList.reputationManagement) {
+      await axios.post(accountUrl, {
+        accountId: account.vendastaAccountId,
+        productId: 'RM',
+      });
+    }
+
+    const accountUrlGet = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${account.vendastaAccountId}`;
+
+    const newCompany = await axios.post(accountUrlGet);
+
+    const srid = newCompany.data.data.productsJson.RM
+      ? newCompany.data.data.productsJson.RM.productId : null;
+    const msid = newCompany.data.data.productsJson.MS
+      ? newCompany.data.data.productsJson.MS.productId : null;
+
+    const newData = {
+      vendastaMsId: msid,
+      vendastaSrId: srid,
     };
 
-    const newProductReq = await axios.post(accountUrl, newProduct);
-    console.log(newProductReq.data.data, "asdsdasd");
-
+    const newAccount = await account.update(newData);
+    return newAccount;
   } catch (e) {
     console.log(e);
+    console.log('Vendasta Account Creation Failed');
     return account;
   }
 }
 
+
 async function vendastaSetup(account, setupList) {
+  console.log(setupList)
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
     companyName: account.name,
     customerIdentifier,
-    // addPresenceBuilderFlag: setupList.listings,
-    // addReputationFlag: setupList.reputationManagement,
-    // addSocialMarketingFlag: setupList.social,
+    addPresenceBuilderFlag: setupList.listings,
+    addReputationFlag: setupList.reputationManagement,
+    addSocialMarketingFlag: setupList.social,
     address: account.street,
     city: account.city,
     country: account.country,
@@ -147,35 +173,37 @@ async function vendastaSetup(account, setupList) {
   try {
     const newCompany = await axios.post(accountUrl, createCompany);
 
-
-    const accountUrlGet = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${newCompany.data.data.accountId}`;
-
-    const product = await axios.get(accountUrlGet);
-    console.log(newCompany.data.data)
-    console.log(product.data.data)
-    const srid = product.data.data.productsJson.RM ? product.data.data.productsJson.RM.productId : null;
-    const msid = product.data.data.productsJson.MS ? product.data.data.productsJson.MS.productId : null;
-    const smid = product.data.data.productsJson.SM ? product.data.data.productsJson.SM.productId : null;
+    const srid = newCompany.data.data.productsJson.RM
+      ? newCompany.data.data.productsJson.RM.productId : null;
+    const msid = newCompany.data.data.productsJson.MS
+      ? newCompany.data.data.productsJson.MS.productId : null;
 
     const newData = {
       vendastaId: customerIdentifier,
       vendastaAccountId: newCompany.data.data.accountId,
       vendastaMsId: msid,
-      vendastaSmId: smid,
       vendastaSrId: srid,
     };
 
     const newAccount = await account.update(newData);
-    await vendastaReputation(newAccount);
-    const product2 = await axios.get(accountUrlGet);
-    console.log(product2.data.data, 'asdsad')
     return newAccount;
   } catch (e) {
-    console.log(e)
+    console.log(e);
     console.log('Vendasta Account Creation Failed');
     return account;
   }
 }
+
+export async function vendastaFullSetup(account, setupList) {
+  if (setupList.options === 'createAdd') {
+    return await vendastaSetup(account, setupList);
+  } else if (setupList.options === 'add') {
+    return await vendastaAddProducts(account, setupList);
+  }
+
+  return account;
+}
+
 
 export default async function createAccount(account, setupList) {
   const {

@@ -22,15 +22,6 @@ module.exports = {
 
         await queryInterface.addColumn(
           'Accounts',
-          'vendastaSmId',
-          {
-            type: Sequelize.STRING,
-          },
-          { transaction: t }
-        );
-
-        await queryInterface.addColumn(
-          'Accounts',
           'vendastaSrId',
           {
             type: Sequelize.STRING,
@@ -58,12 +49,6 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'vendastaMsId',
-          { transaction: t }
-        );
-
-        await queryInterface.removeColumn(
-          'Accounts',
-          'vendastaSmId',
           { transaction: t }
         );
 

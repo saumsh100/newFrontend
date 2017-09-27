@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
 import { twilioDelete, callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
+import { callRail, twilioSetup, vendastaFullSetup } from '../../../lib/createAccount';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
@@ -26,6 +27,18 @@ accountsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 accountsRouter.param('joinAccountId', sequelizeLoader('account', 'Account', [{ model: Enterprise, as: 'enterprise' }]));
 accountsRouter.param('inviteId', sequelizeLoader('invite', 'Invite'));
 accountsRouter.param('permissionId', sequelizeLoader('permission', 'Permission'));
+
+const apiFunctionsCreate = {
+  twilio: twilioSetup,
+  callrail: callRail,
+  vendasta: vendastaFullSetup,
+};
+
+const apiFunctionsDelete = {
+  twilio: twilioDelete,
+  callrail: callRailDelete,
+  vendasta: vendastaDelete,
+};
 
 /**
  * GET /
@@ -133,12 +146,47 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
  *
  */
 accountsRouter.post('/:accountId/integrations', async (req, res, next) => {
-  const { account, role, sessionId, permissionId, userId, sessionData } = req;
-  if (role !== 'SUPERADMIN') {
-    return next(StatusError(403, 'Operation not permitted'));
+  let { account } = req;
+  const { integrations } = req.body;
+
+  try {
+    for (let i = 0; i < integrations.length; i += 1) {
+      account = await apiFunctionsCreate[integrations[i].type](account, integrations[i]);
+    }
+  } catch (e) {
+    console.log(e)
   }
-  await vendastaDelete(req.account);
-  return res.send(200);
+  // if (role !== 'SUPERADMIN') {
+  //   return next(StatusError(403, 'Operation not permitted'));
+  // }
+  // await vendastaDelete(req.account);
+  return res.send(normalize('account', account.get({ plain: true })));
+});
+
+
+/**
+ * POST /:accountId/switch
+ *
+ * - only superadmins are allowed to switch into accounts right now...
+ *
+ */
+accountsRouter.delete('/:accountId/integrations', async (req, res, next) => {
+  let { account } = req;
+  const integrations = req.query.integrations;
+
+  try {
+    for (let i = 0; i < integrations.length; i += 1) {
+      const data = JSON.parse(integrations[i]);
+      account = await apiFunctionsDelete[data.type](account, data);
+    }
+  } catch (e) {
+    console.log(e)
+  }
+  // if (role !== 'SUPERADMIN') {
+  //   return next(StatusError(403, 'Operation not permitted'));
+  // }
+  // await vendastaDelete(req.account);
+  return res.send(normalize('account', account.get({ plain: true })));
 });
 
 
