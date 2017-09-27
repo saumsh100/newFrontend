@@ -45,8 +45,11 @@ function main() {
 
   UI.injectStyleText(__CARECRU_STYLE_CSS__);
 
+  const cc = getQueryVariable('cc');
+  const iframeSrc = cc ? `${__CARECRU_IFRAME_SRC__}/${cc}` : `${__CARECRU_IFRAME_SRC__}/book`;
+
   // Create API for that clinic's widget
-  window.CareCru = new CareCruAPI({ iframeSrc: __CARECRU_IFRAME_SRC__ });
+  window.CareCru = new CareCruAPI({ iframeSrc });
 
   // Add to clinic registry so pages with multiple widgets can programmitcally manage
   window.CareCruz[__CARECRU_ACCOUNT_ID__] = window.CareCru;
@@ -65,7 +68,6 @@ function main() {
   }
 
   // Parse URL to see if we are being linked here
-  const cc = getQueryVariable('cc');
   const sentReviewId = getQueryVariable('srid');
   const accountId = getQueryVariable('accountId');
   const stars = getQueryVariable('stars');

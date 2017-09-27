@@ -14,6 +14,16 @@ export default function connectStoreToHost(store) {
     console.log('connected to host!');
   });
 
+  window.changeBaseRoute = (route) => {
+    if (!allowedRoutes[route]) {
+      return;
+    }
+
+    // Route SPA to that route and view
+    store.dispatch(push(`./${route}`));
+  };
+
+
   client.onEvent('changeBaseRoute', (route) => {
     if (!allowedRoutes[route]) {
       return;

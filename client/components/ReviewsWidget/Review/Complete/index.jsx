@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import sentimentContent from '../Submitted/content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
+import { closeBookingModal } from '../../../../thunks/availabilities';
 import { Avatar, Link, Input, Stars, TextArea, VButton } from '../../../library';
 import styles from './styles.scss';
 
@@ -24,7 +25,6 @@ class Complete extends Component {
 
     return (
       <div className={styles.main}>
-        <h1>THANK YOU!</h1>
         <div className={styles.row}>
           <Avatar
             size="xl"
@@ -32,13 +32,7 @@ class Complete extends Component {
           />
         </div>
         <div className={styles.header}>
-          {content.header}
-        </div>
-        <div className={styles.message}>
-          {content.response}
-        </div>
-        <div className={styles.from}>
-          - {reviewedPractitioner.getPrettyName()}
+          Feedback sent to {reviewedPractitioner.getPrettyName()}.
         </div>
         <div>
           <Stars
@@ -47,6 +41,13 @@ class Complete extends Component {
             isMinimal
           />
         </div>
+        <VButton
+          className={styles.button}
+          color='red'
+          onClick={this.props.closeBookingModal}
+        >
+          Done
+        </VButton>
       </div>
     );
   }
@@ -77,6 +78,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     mergeReviewValues,
     saveReview,
+    closeBookingModal,
   }, dispatch);
 }
 

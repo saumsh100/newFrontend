@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import sentimentContent from './content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
-import { Avatar, Link, Input, Stars, TextArea, VButton } from '../../../library';
+import { Avatar, Link, Input, Stars, TextArea, Button } from '../../../library';
 import styles from './styles.scss';
 
 class Submitted extends Component {
@@ -97,22 +97,22 @@ class Submitted extends Component {
               /> : null}
           </div>
           {poorReview ?
-            <VButton
+            <Button
               className={styles.button}
               color={description ? 'red' : 'darkblue'}
               onClick={this.submitBad}
               disabled={!description}
             >
               Submit Feedback
-            </VButton> :
-            <VButton
+            </Button> :
+            <Button
               className={styles.googleButton}
               color="darkblue"
               iconRight="google"
               onClick={this.submitGood}
             >
               Share Review on Google
-            </VButton>
+            </Button>
           }
         </div>
       </div>
