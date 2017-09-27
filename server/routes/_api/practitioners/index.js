@@ -78,8 +78,29 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), async (r
     delete account.weeklySchedule.createdAt;
     delete account.weeklySchedule.id;
     return WeeklySchedule.create(account.weeklySchedule)
-    .then((weeklySchedule) => {
+    .then(async (weeklySchedule) => {
       weeklySchedule = weeklySchedule.get({ plain: true });
+
+      const chairs = await Chair.findAll({
+        raw: true,
+        where: { accountId: req.accountId },
+      });
+
+      const chairIds = chairs.map(chair => chair.id);
+      weeklySchedule.monday.chairIds = chairIds;
+      weeklySchedule.tuesday.chairIds = chairIds;
+      weeklySchedule.wednesday.chairIds = chairIds;
+      weeklySchedule.thursday.chairIds = chairIds;
+      weeklySchedule.friday.chairIds = chairIds;
+      weeklySchedule.saturday.chairIds = chairIds;
+      weeklySchedule.sunday.chairIds = chairIds;
+
+      await WeeklySchedule.update(weeklySchedule, {
+        where: {
+          id: weeklySchedule.id,
+        },
+      });
+
       const practitionerData = Object.assign({},
         {
           accountId: req.accountId,
@@ -181,7 +202,7 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
       raw: true,
       where: { accountId: req.accountId },
     })
-    .then((chairs) => {
+    .then(async (chairs) => {
       const chairIds = chairs.map(chair => chair.id);
       account.weeklySchedule.monday.chairIds = chairIds;
       account.weeklySchedule.tuesday.chairIds = chairIds;
@@ -191,31 +212,52 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
       account.weeklySchedule.saturday.chairIds = chairIds;
       account.weeklySchedule.sunday.chairIds = chairIds;
 
-      return WeeklySchedule.create(account.weeklySchedule)
-      .then((weeklySchedule) => {
-        const practitionerData = req.body;
-        practitionerData.weeklyScheduleId = weeklySchedule.dataValues.id;
-        return req.practitioner
-        .update(practitionerData)
-        .then(async (practitioner) => {
-          const prac = await Practitioner.findOne({
-            where: {
-              id: practitioner.dataValues.id,
-            },
-            include: [
-              {
-                model: WeeklySchedule,
-                as: 'weeklySchedule',
-                required: false,
-              },
-            ],
-            raw: true,
-            nest: true,
-          });
-
-          return res.status(201).send(normalize('practitioner', prac));
-        });
+      const prac = await Practitioner.findOne({
+        where: {
+          id: req.practitioner.id,
+        },
+        include: [
+          {
+            model: WeeklySchedule,
+            as: 'weeklySchedule',
+            required: false,
+          },
+        ],
+        raw: true,
+        nest: true,
       });
+
+      if (prac.weeklySchedule.id) {
+        await WeeklySchedule.update(account.weeklySchedule, {
+          where: {
+            id: prac.weeklySchedule.id,
+          },
+        });
+        await req.practitioner.update(req.body);
+      } else {
+        const newSched = await WeeklySchedule.create(account.weeklySchedule);
+        const practitionerData = req.body;
+        practitionerData.weeklyScheduleId = newSched.dataValues.id;
+
+        await req.practitioner.update(practitionerData);
+      }
+
+      const practitioner = await Practitioner.findOne({
+        where: {
+          id: req.practitioner.id,
+        },
+        include: [
+          {
+            model: WeeklySchedule,
+            as: 'weeklySchedule',
+            required: false,
+          },
+        ],
+        raw: true,
+        nest: true,
+      });
+
+      return res.status(201).send(normalize('practitioner', practitioner));
     });
   }).catch(next);
 });
