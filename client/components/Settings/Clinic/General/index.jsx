@@ -100,22 +100,31 @@ class General extends React.Component {
         return null;
       });
 
-      let button = <Button onClick={this.downloadConnector}>Download Connector</Button>;
+      let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
 
       if (this.state.downloadLink) {
         const now = moment(this.state.expired);
         const end = moment(new Date());
         const duration = moment.duration(now.diff(end)).asSeconds();
 
-        const timeLeft = duration > 0 ? `Link Expires in ${duration} s` : 'Link Expired';
-
-        button = <a className={styles.linkAsButton} href={this.state.downloadLink} download>{timeLeft}</a>;
+        button = duration > 0 ? (<a
+          className={styles.linkAsButton}
+          href={this.state.downloadLink}
+          download
+        >Click to Download
+          <br /> {duration} s
+        </a>) : (<a
+          className={styles.linkAsButton}
+          href={this.state.downloadLink}
+          download
+        >Link Expired
+        </a>);
 
         setTimeout(() => {
           if (duration > 0) {
             this.setState({ expired: this.state.expired });
           }
-        }, 100);
+        }, 500);
       }
 
       showComponent = (
