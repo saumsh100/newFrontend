@@ -112,7 +112,7 @@ class General extends React.Component {
           href={this.state.downloadLink}
           download
         >Click to Download
-          <br /> {duration} s
+          <br /> {Math.floor(duration)} s
         </a>) : (<a
           className={styles.linkAsButton}
           href={this.state.downloadLink}
