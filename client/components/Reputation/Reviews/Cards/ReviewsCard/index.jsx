@@ -40,7 +40,7 @@ export default function ReviewsCard(props) {
                   reviewerUrl={obj.reviewerUrl}
                 />
               );
-            }) : <div>&nbsp;</div>}
+            }) : <div className={styles.clearedReviews}>Please Select a Filter Option</div>}
           </Col>
         </div>
       </div>

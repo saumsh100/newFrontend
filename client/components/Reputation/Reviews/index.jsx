@@ -2,7 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { reset } from 'redux-form';
+import { reset, change } from 'redux-form';
 import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { Card, Col, Grid, Row, Filters } from '../../library';
@@ -72,7 +72,8 @@ class Reviews extends Component {
       reviews,
       reviewsFilter,
       setReputationFilter,
-      reset
+      reset,
+      change,
     } = this.props;
 
     if (!this.state.hasAccount) {
@@ -91,20 +92,18 @@ class Reviews extends Component {
 
     let constructBigComment = reviewsList;
 
-    if (filterSources.length) {
-      constructBigComment = constructBigComment.filter((review) => {
-          if (filterSources.indexOf(review.sourceName) > -1) {
-            return review;
-          }
-      });
-    }
-    if (filterRatings.length) {
-      constructBigComment = constructBigComment.filter((review) => {
-        if (filterRatings.indexOf(review.rating) > -1) {
+    constructBigComment = constructBigComment.filter((review) => {
+        if (filterSources.indexOf(review.sourceName) > -1) {
           return review;
         }
-      });
-    }
+    });
+
+    constructBigComment = constructBigComment.filter((review) => {
+      if (filterRatings.indexOf(review.rating) > -1) {
+        return review;
+      }
+    });
+
 
     constructBigComment = constructBigComment.map((review) => {
         const publishedDate = moment(review.publishedDateTime);
@@ -150,6 +149,23 @@ class Reviews extends Component {
       },
     ];
 
+    const initialValues = {
+      sources: {
+        'Google Maps': true,
+        'Yelp': true,
+        'Facebook': true,
+        'Rate MDs': true,
+      },
+      ratings: {
+        '1 Star': true,
+        '2 Star': true,
+        '3 Star': true,
+        '4 Star': true,
+        '5 Star': true,
+        'No Rating': true,
+      }
+    };
+
     return (
       <Grid className={styles.reviews}>
         <Row className={styles.reviews__wrapper}>
@@ -182,16 +198,18 @@ class Reviews extends Component {
             <Tags />
           </Col> */}
           <Row className={styles.rowReviewsFilter}>
-            <Col className={styles.padding} xs={12} md={8} sm={9} lg={9}>
+            <Col Col style={{paddingLeft: '10px'}} xs={12} md={8} sm={9} lg={9}>
               <ReviewsCard data={constructBigComment} />
             </Col>
-            <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
+            <Col style={{paddingLeft: '10px', paddingRight: '10px'}} xs={12} md={4} sm={3} lg={3}>
               <Filters
                 key="reviewsFilter"
                 setReputationFilter={setReputationFilter}
                 filterKey="reviewsFilter"
                 reset={reset}
                 filters={filters}
+                initialValues={initialValues}
+                change={change}
               />
             </Col>
           </Row>
@@ -223,6 +241,7 @@ function mapDispatchToProps(dispatch) {
     setReputationFilter,
     setReputationFilterState,
     reset,
+    change,
   }, dispatch);
 }
 

@@ -10,16 +10,27 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.clearAll = this.clearAll.bind(this);
   }
 
-  componentDidMount() {
+  clearAll() {
     const {
       change,
       filterKey,
+      initialValues,
     } = this.props;
+    const firstKey = Object.keys(initialValues)[0];
+    const firstKeys = Object.keys(initialValues[firstKey]);
+    const secondKey = Object.keys(initialValues)[1];
+    const secondKeys = Object.keys(initialValues[secondKey]);
 
+    firstKeys.map((fk) => {
+      change(filterKey, `${firstKey}.${fk}`, false);
+    });
 
-
+    secondKeys.map((sk) => {
+      change(filterKey, `${secondKey}.${sk}`, false);
+    });
   }
 
   handleSubmit(values) {
@@ -103,7 +114,8 @@ class Filters extends Component {
               <span className="fa fa-sliders" />
             </div>
             <div className={styles.filters__header__right}>
-              <span onClick={()=> reset(filterKey)}>Clear All</span>
+              <span onClick={()=> reset(filterKey)}>Select All</span>
+              <span onClick={()=> this.clearAll()}>Clear All</span>
             </div>
           </div>
 

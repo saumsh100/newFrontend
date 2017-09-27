@@ -97,6 +97,7 @@ class Listings extends Component {
       reset,
       setReputationFilter,
       listingsFilter,
+      change,
     } = this.props;
 
     if (!this.state.hasAccount) {
@@ -135,7 +136,6 @@ class Listings extends Component {
     const listingsSearchData = listings.get('searchData').toJS();
 
     const filterData = listingsFilter.toJS();
-    console.log(filterData);
 
     const tableData2 = [];
 
@@ -230,7 +230,7 @@ class Listings extends Component {
           <Col className={styles.padding} xs={12} md={9}>
             <Table
               borderColor={colorMap.blue}
-              cardTitle="Search Engines"
+              cardTitle="Primary Listings"
               data={tableData2}
             />
           </Col>
