@@ -8,18 +8,15 @@ import {
 
 const initialState = fromJS({
   reviewsfiltersloaded: false,
-  reviewsFilter: fromJS({
-    sources: null,
-    dateRange: null,
-    ratings: null,
-  }),
+  reviewsFilter: [],
 });
 
 export default handleActions({
   [SET_REPUTATION_FILTER](state,action) {
     const key = action.payload.key;
     const mergeObj = {};
-    mergeObj[key] = action.payload.filterData;
+    mergeObj[key] = action.payload.filterData
+    console.log(mergeObj)
     return state.merge(mergeObj);
   },
   [SET_FILTERS_LOADED](state,action) {

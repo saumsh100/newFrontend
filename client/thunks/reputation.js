@@ -26,11 +26,10 @@ export function setReputationFilterState() {
       }
     });
 
-    const filterData = {
-      sources: sourceNames,
-      dateRange: null,
-      ratings: ratingObj,
-    };
+    const ratings = ['0','1','2','3','4','5'];
+    const sourcesArray = ratings.concat(Object.keys(sourceNames))
+
+    const filterData = sourcesArray;
 
     return dispatch(setReputationFilter({ key: 'reviewsFilter', filterData }));
   };

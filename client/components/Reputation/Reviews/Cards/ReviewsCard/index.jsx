@@ -15,17 +15,13 @@ export default function ReviewsCard(props) {
     data,
   } = props;
 
-  if (!data.length) {
-    return null;
-  }
-
   return (
     <Card  className={styles.card}>
       <CardHeader className={styles.reviewsComments__cardHeader} title={'REVIEWS'} />
       <div className={styles.reviewsComments}>
         <div className={styles.reviewsComments__container} >
           <Col xs={12} md={12} className={styles.reviewsComments__comment} >
-            {data.map((obj, i) => {
+            {data.length ? data.map((obj, i) => {
               return (
                 <BigCommentBubble
                   key={i}
@@ -44,7 +40,7 @@ export default function ReviewsCard(props) {
                   reviewerUrl={obj.reviewerUrl}
                 />
               );
-            })}
+            }) : <div>&nbsp;</div>}
           </Col>
         </div>
       </div>

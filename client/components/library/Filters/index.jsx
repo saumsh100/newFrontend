@@ -15,15 +15,24 @@ class Filters extends Component {
   handleSubmit(values) {
     const {
       setReputationFilter,
-      key
+      key,
     } = this.props;
 
-    setReputationFilter({ key, filterData: values });
+    const filterData = []
+    Object.keys(values).forEach((k) => {
+      if (values[k] === false) {
+        delete values[k];
+      } else {
+        filterData.push(k);
+      }
+    });
+
+    setReputationFilter({ key: 'reviewsFilter', filterData });
   }
 
   render() {
     const { filters, selectAll, setAll, reviewsFilter } = this.props;
-
+    console.log(selectAll)
     return (
       <Card  className={styles.card}>
         <div className={styles.filters}>
@@ -33,7 +42,6 @@ class Filters extends Component {
               <span className="fa fa-sliders" />
             </div>
             <div className={styles.filters__header__right}>
-              <span onClick={()=>setAll(true)}>Select All</span>
               <span onClick={()=>setAll(false)}>Clear All</span>
             </div>
           </div>
@@ -57,6 +65,6 @@ Filters.propTypes = {
   filters: PropTypes.arrayOf(Object),
 };
 
-const enhance = withState('selectAll', 'setAll', false)
+const enhance = withState('selectAll', 'setAll', false);
 
 export default enhance(Filters);

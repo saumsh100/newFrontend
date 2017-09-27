@@ -87,33 +87,39 @@ class Reviews extends Component {
     const reviewsData = reviews.get('data').toJS();
     const reviewsList = reviews.get('reviews').toJS();
 
+    const filterData = reviewsFilter.toJS();
 
-    const test = reviewsFilter.toJS().ratings;
-    console.log(test)
-    const contructBigComment = reviewsList.map((review) => {
-      const publishedDate = moment(review.publishedDateTime);
-      const today = moment();
-      const duration = moment.duration(today.diff(publishedDate));
-      const days = duration.asDays();
+    const contructBigComment = reviewsList.filter((review) => {
 
-      return {
-        icon: review.sourceName,
-        createdAt: Math.ceil(days),
-        headerLinkName: review.reviewerName,
-        headerLinkSite: review.domain,
-        siteStars: parseInt(review.rating),
-        siteTitle: review.title,
-        sitePreview: review.contentSnippet,
-        iconColor: '#ffffff',
-        background: '#395998',
-        iconAlign: 'flex-end',
-        requiredAction: 'ACTION REQUIRED',
-        url: review.url,
-        reviewerUrl: review.reviewerUrl,
-      };
+      if (filterData.length) {
+        if (filterData.indexOf(review.rating) > -1 || filterData.indexOf(review.sourceName) > -1) {
+          return review;
+        }
+      } else {
+        return review;
+      }
+    }).map((review) => {
+        const publishedDate = moment(review.publishedDateTime);
+        const today = moment();
+        const duration = moment.duration(today.diff(publishedDate));
+        const days = duration.asDays();
+
+        return {
+          icon: review.sourceName,
+          createdAt: Math.ceil(days),
+          headerLinkName: review.reviewerName,
+          headerLinkSite: review.domain,
+          siteStars: parseInt(review.rating),
+          siteTitle: review.title,
+          sitePreview: review.contentSnippet,
+          iconColor: '#ffffff',
+          background: '#395998',
+          iconAlign: 'flex-end',
+          requiredAction: 'ACTION REQUIRED',
+          url: review.url,
+          reviewerUrl: review.reviewerUrl,
+        };
     });
-
-    //const filterData = [];
 
     const filters = [
       {
@@ -124,18 +130,18 @@ class Reviews extends Component {
       }, {
         title: 'Sources',
         items: [
-          { type: 'checkbox', value: 'Google Maps (5)' },
-          { type: 'checkbox', value: 'Yelp (4)' },
-          { type: 'checkbox', value: 'Facebook (3)' },
+          { type: 'checkbox', value: 'Google Maps' },
+          { type: 'checkbox', value: 'Yelp' },
+          { type: 'checkbox', value: 'Facebook' },
         ],
       }, {
         title: 'Rating',
         items: [
-          { type: 'checkbox', value: '1 Star' },
-          { type: 'checkbox', value: '2 Star' },
-          { type: 'checkbox', value: '3 Star' },
-          { type: 'checkbox', value: '4 Star' },
-          { type: 'checkbox', value: '5 Star' },
+          { type: 'checkbox', value: '1' },
+          { type: 'checkbox', value: '2' },
+          { type: 'checkbox', value: '3' },
+          { type: 'checkbox', value: '4' },
+          { type: 'checkbox', value: '5' },
           { type: 'checkbox', value: 'No Rating' },
         ],
       },
@@ -199,10 +205,10 @@ Reviews.propTypes = {
 
 function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
-
+  const reviewsFilter = (apiRequests.get('reviews') ? reputation.get('reviewsFilter') : null);
   return {
     reviews,
-    reviewsFilter: reputation.get('reviewsFilter'),
+    reviewsFilter,
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }

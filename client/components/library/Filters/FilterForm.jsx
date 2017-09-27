@@ -27,7 +27,6 @@ function FilterForm(props) {
           });
 
         return (
-          <FormSection name={f.title}>
             <div key={`filterForm_${i}`}>
               <div className={styles.filters__title}>
                 {f.titleIcon &&
@@ -44,7 +43,6 @@ function FilterForm(props) {
                 {content}
               </div>
             </div>
-          </FormSection>
         );
       })}
     </Form>
