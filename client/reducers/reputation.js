@@ -8,15 +8,21 @@ import {
 
 const initialState = fromJS({
   reviewsfiltersloaded: false,
-  reviewsFilter: [],
+  reviewsFilter: {
+    sources: [],
+    ratings: [],
+  },
+  listingsFilter: {
+    sourceTypes: ['Search Engines', 'Review Sites', 'Directories', 'Social Sites'],
+    listingStatuses: ['Accurate', 'Found with Possible Errors', 'Not Found'],
+  }
 });
 
 export default handleActions({
   [SET_REPUTATION_FILTER](state,action) {
     const key = action.payload.key;
     const mergeObj = {};
-    mergeObj[key] = action.payload.filterData
-    console.log(mergeObj)
+    mergeObj[key] = action.payload.filterData;
     return state.merge(mergeObj);
   },
   [SET_FILTERS_LOADED](state,action) {

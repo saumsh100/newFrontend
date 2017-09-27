@@ -1,4 +1,4 @@
-import { setReputationFilter } from "../actions/reputation";
+import { setReputationFilter } from '../actions/reputation';
 
 export function setReputationFilterState() {
   return function (dispatch, getState) {
@@ -27,9 +27,11 @@ export function setReputationFilterState() {
     });
 
     const ratings = ['0','1','2','3','4','5'];
-    const sourcesArray = ratings.concat(Object.keys(sourceNames))
 
-    const filterData = sourcesArray;
+    const filterData = {
+      sources: Object.keys(sourceNames),
+      ratings,
+    };
 
     return dispatch(setReputationFilter({ key: 'reviewsFilter', filterData }));
   };

@@ -12,6 +12,7 @@ function FilterForm(props) {
     handleSubmit,
     formName,
     flipped,
+    initialValues,
   } = props;
 
   return (
@@ -19,6 +20,7 @@ function FilterForm(props) {
       form={formName}
       onChange={handleSubmit}
       ignoreSaveButton
+      initialValues={initialValues}
     >
       {filters.map((f, i) => {
         const content =
@@ -27,6 +29,7 @@ function FilterForm(props) {
           });
 
         return (
+          <FormSection name={f.title}>
             <div key={`filterForm_${i}`}>
               <div className={styles.filters__title}>
                 {f.titleIcon &&
@@ -43,6 +46,7 @@ function FilterForm(props) {
                 {content}
               </div>
             </div>
+          </FormSection>
         );
       })}
     </Form>
@@ -55,16 +59,4 @@ FilterForm.propTypes = {
   formName: PropTypes.string,
 };
 
-function mapStateToProps({ form },{ formName }) {
-
-  if (!form[formName]) {
-    return {
-      values: {},
-    };
-  }
-  return {
-    values: form[formName].values,
-  }
-}
-
-export default connect(mapStateToProps, null)(FilterForm);
+export default FilterForm;
