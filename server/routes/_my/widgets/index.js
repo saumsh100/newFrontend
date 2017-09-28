@@ -159,8 +159,16 @@ reviewsRouter.get('/:accountId/cc.js', async (req, res, next) => {
     const cwd = process.cwd();
     const jsPath = `${cwd}/statics/assets/cc.js`;
     const cssPath = `${cwd}/server/routes/_my/widgets/widget.css`;
+
+    console.log('cwd', cwd);
+    console.log('jsPath', jsPath);
+    console.log('cssPath', cssPath);
+
     // /book route by default to load widget
     const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${account.id}/app`;
+
+    console.log('iframeSrc', iframeSrc);
+
     const js = await replaceJavascriptFile(jsPath, {
       __CARECRU_ACCOUNT_ID__: toString(account.id),
       __CARECRU_WIDGET_PRIMARY_COLOR__: toString(account.bookingWidgetPrimaryColor || '#FF715A'),
