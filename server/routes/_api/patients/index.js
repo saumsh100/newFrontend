@@ -4,7 +4,7 @@ import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
-import { mostBusinessPatient } from '../../../lib/intelligence/revenue';
+import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
@@ -110,6 +110,25 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
   } catch (error) {
     next(error);
   }
+});
+
+patientsRouter.get('/revenueStatsTotal', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    accountId,
+    query,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = query;
+
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
+
+  return mostBusinessClinic(startDate, endDate, accountId)
+          .then(result => res.send(result[0]))
+          .catch(next);
 });
 
 patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
