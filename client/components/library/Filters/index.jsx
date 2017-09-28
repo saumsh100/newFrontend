@@ -19,6 +19,7 @@ class Filters extends Component {
       filterKey,
       initialValues,
     } = this.props;
+
     const firstKey = Object.keys(initialValues)[0];
     const firstKeys = Object.keys(initialValues[firstKey]);
     const secondKey = Object.keys(initialValues)[1];
@@ -110,15 +111,14 @@ class Filters extends Component {
         <div className={styles.filters}>
           <div className={styles.filters__header}>
             <div className={styles.filters__header__left}>
-              <span>Filters</span>
               <span className="fa fa-sliders" />
+              <span>Filters</span>
             </div>
             <div className={styles.filters__header__right}>
               <span onClick={()=> reset(filterKey)}>Select All</span>
               <span onClick={()=> this.clearAll()}>Clear All</span>
             </div>
           </div>
-
           <FilterForm
             filters={filters}
             formName={filterKey}

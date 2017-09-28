@@ -22,7 +22,11 @@ class Reviews extends Component {
       loaded: false,
       hasAccount: false,
       activationText: '',
+      endDate: moment(),
+      startDate: moment().subtract(1, 'year'),
     };
+
+    this.submitDate = this.submitDate.bind(this);
   }
 
   componentWillMount() {
@@ -44,14 +48,15 @@ class Reviews extends Component {
   componentDidMount() {
     if (this.state.hasAccount) {
       const params = {
-        startDate: moment().subtract(30, 'days')._d,
-        endDate: moment()._d,
+        startDate: this.state.startDate._d,
+        endDate: this.state.endDate._d,
       };
 
       Promise.all([
         this.props.fetchEntitiesRequest({
           id: 'reviews',
           url: '/api/reputation/reviews',
+          params,
         }),
       ]).then(() => {
         this.props.setReputationFilterState();
@@ -65,6 +70,31 @@ class Reviews extends Component {
         });
       });
     }
+  }
+
+  submitDate(values) {
+    this.setState({
+      loaded: false,
+    });
+    const params = {
+      startDate: moment(values.startDate)._d,
+      endDate: moment(values.endDate)._d,
+    };
+
+    Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'reviews',
+        url: '/api/reputation/reviews',
+        params,
+      }),
+    ]).then(() => {
+      const newState = {
+        startDate: moment(values.startDate),
+        endDate: moment(values.endDate),
+        loader: true,
+      };
+      this.setState(newState);
+    });
   }
 
   render() {
@@ -152,8 +182,8 @@ class Reviews extends Component {
     const initialValues = {
       sources: {
         'Google Maps': true,
-        'Yelp': true,
-        'Facebook': true,
+        Yelp: true,
+        Facebook: true,
         'Rate MDs': true,
       },
       ratings: {
@@ -199,7 +229,12 @@ class Reviews extends Component {
           </Col> */}
           <Row className={styles.rowReviewsFilter}>
             <Col Col style={{paddingLeft: '10px'}} xs={12} md={8} sm={9} lg={9}>
-              <ReviewsCard data={constructBigComment} />
+              <ReviewsCard
+                data={constructBigComment}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                submitDate={this.submitDate}
+              />
             </Col>
             <Col style={{paddingLeft: '10px', paddingRight: '10px'}} xs={12} md={4} sm={3} lg={3}>
               <Filters
