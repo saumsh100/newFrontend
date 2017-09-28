@@ -15,6 +15,7 @@ const scheme = [
   'compact',
   'raised',
   'flat',
+  'bordered',
 
   'positive',
   'negative',
