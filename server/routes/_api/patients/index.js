@@ -424,7 +424,8 @@ patientsRouter.post('/', async (req, res, next) => {
   let patient;
   try {
     patient = await Patient.create(patientData);
-    const normalizedPatient = format(req, res, 'patient', patient.get({ plain: true }));
+    const normalizedPatient = format(req, res, 'patient', patient.dataValues);
+
     res.status(201).send(normalizedPatient);
 
     // Dispatch socket event
@@ -531,7 +532,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
             chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
           });
       }
-      const normalized = format(req, res, 'patient', patient.get({ plain: true }));
+      const normalized = format(req, res, 'patient', patient.dataValues);
       res.status(201).send(normalized);
       return { patient, normalized };
     })
