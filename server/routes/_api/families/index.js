@@ -105,8 +105,26 @@ familiesRouter.post('/batch', checkPermissions('family:create'), checkIsArray('f
 /**
  * Create an family entry
  */
-familiesRouter.post('/', checkPermissions('family:create'), (req, res, next) => {
+familiesRouter.post('/', checkPermissions('family:create'), async (req, res, next) => {
   const familyData = Object.assign({}, { accountId: req.accountId }, req.body);
+
+  try {
+    if (familyData.pmsId) {
+      const family = await Family.findOne({
+        where: {
+          pmsId: familyData.pmsId,
+          accountId: req.accountId,
+        },
+      });
+      if (family) {
+        const normalized = format(req, res, 'family', family.get({ plain: true }));
+        return res.status(200).send(normalized);
+      }
+    }
+  } catch (e) {
+    return next(e);
+  }
+
   return Family.create(familyData)
     .then(family => res.status(201).send(format(req, res, 'family', family.get({ plain: true }))))
     .catch(next);

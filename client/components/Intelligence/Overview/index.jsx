@@ -48,7 +48,7 @@ class Overview extends Component {
       endDate: this.state.endDate._d,
       accountId: decodedToken.activeAccountId,
     };
-
+    
     Promise.all([
       this.props.fetchEntitiesRequest({
         id: 'patientStats',
@@ -108,6 +108,11 @@ class Overview extends Component {
       this.props.fetchEntitiesRequest({
         id: 'appointmentStats',
         url: '/api/appointments/stats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'patientRevenueStats',
+        url: '/api/patients/revenueStats',
         params,
       }),
     ]).then(() => {
