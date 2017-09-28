@@ -1,7 +1,10 @@
 
 import axios from 'axios';
+import { push } from 'react-router-redux';
 import {
   setReview,
+  setIsLoadingSentReview,
+  mergeReviewValues,
 } from '../reducers/reviewsWidget';
 
 /**
@@ -70,6 +73,36 @@ export function updateReview() {
       .then(({ data }) => {
         // No normalizr structure here
         dispatch(setReview(data));
+      });
+  };
+}
+
+/**
+ * loadSentReview will load the sentReview so that we can properly route to
+ * completed if the sentReview is completed
+ *
+ * @returns {Function}
+ */
+export function loadSentReview() {
+  return function (dispatch, getState) {
+    dispatch(setIsLoadingSentReview(true));
+
+    const { reviews } = getState();
+    const sentReviewId = reviews.getIn(['review', 'sentReviewId']);
+
+    // TODO: is it okay to just open up
+    return axios.get(`/sentReviews/${sentReviewId}`)
+      .then(({ data }) => {
+        if (data.sentReview.isCompleted) {
+          dispatch(mergeReviewValues(data.review));
+          dispatch(push('./review/complete'));
+        }
+
+        dispatch(setIsLoadingSentReview(false));
+      })
+      .catch((err) => {
+        console.error(err);
+        dispatch(setIsLoadingSentReview(false));
       });
   };
 }

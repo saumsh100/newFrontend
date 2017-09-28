@@ -1,7 +1,7 @@
 
 import React, {PropTypes} from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
-import {ConnectedRouter as Router} from 'react-router-redux';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { ConnectedRouter as Router } from 'react-router-redux';
 import ReviewsWidget from '../components/ReviewsWidget';
 import WidgetContainer from '../components/ReviewsWidget/Container';
 import Login from '../components/ReviewsWidget/Login';
@@ -38,6 +38,7 @@ const EmbedRouter = ({ match }) => {
 };
 
 const WidgetRouter = ({ history }) => {
+  console.log('widgetRouter', history);
   return (
     <Router history={history}>
       <div>

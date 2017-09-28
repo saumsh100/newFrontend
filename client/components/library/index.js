@@ -33,6 +33,7 @@ import Label from './Label';
 import Link from './Link';
 import LineChart from './LineChart';
 import ListBullets from './ListBullets';
+import Loading from './Loading';
 import Modal from './Modal';
 import SelectPill from './SelectPill';
 import InfoSection from './InfoSection';
@@ -111,6 +112,7 @@ export {
   Label,
   LineChart,
   ListBullets,
+  Loading,
   Modal,
   Pill,
   SelectPill,
