@@ -275,6 +275,7 @@ class Business extends Component {
                     <Field
                       required
                       component="DayPicker"
+                      disabledDays={date => moment().subtract(5, 'years').isAfter(date)}
                       name="startDate"
                       label="Start Date"
                       data-test-id="startDate"
