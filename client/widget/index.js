@@ -46,6 +46,9 @@ function main() {
   UI.injectStyleText(__CARECRU_STYLE_CSS__);
 
   const cc = getQueryVariable('cc');
+
+  console.log('__CARECRU_IFRAME_SRC__', __CARECRU_IFRAME_SRC__);
+
   const iframeSrc = cc ? `${__CARECRU_IFRAME_SRC__}/${cc}` : `${__CARECRU_IFRAME_SRC__}/book`;
 
   // Create API for that clinic's widget
