@@ -71,3 +71,24 @@
 .lastSyncWrapper {
   padding: 10px 0;
 }
+
+.linkAsButton {
+  font-size: 14px;
+  font-family: Gotham-Book;
+  background-color: var(--primaryButtonColor);
+  color: #ededed;
+  vertical-align: middle;
+  cursor: pointer;
+  font-weight: bold;
+  outline: none;
+  text-decoration: none;
+  border: none;
+  border-radius: 2px;
+  padding: 0.85714em 1.5em;
+  margin: 0 0.35714em 0 0;
+  line-height: 1em;
+  text-align: center;
+  transition: background-color .1s ease, color .1s;
+  display: block;
+  width: 140px;
+}

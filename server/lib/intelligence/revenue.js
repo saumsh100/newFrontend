@@ -71,3 +71,20 @@ export function mostBusinessProcedure(startDate, endDate, accountId) {
     limit: 5,
   });
 }
+
+
+export function mostBusinessClinic(startDate, endDate, accountId) {
+  return DeliveredProcedure.findAll({
+    where: {
+      accountId,
+      entryDate: {
+        gt: startDate,
+        lt: endDate,
+      },
+    },
+    attributes: [
+      [sequelize.fn('sum', sequelize.col('totalAmount')), 'totalAmountClinic'],
+    ],
+    group: ['accountId'],
+  });
+}

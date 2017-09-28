@@ -75,6 +75,11 @@ class Overview extends Component {
         url: '/api/patients/revenueStats',
         params,
       }),
+      this.props.fetchEntitiesRequest({
+        id: 'totalRevenueStats',
+        url: '/api/patients/revenueStatsTotal',
+        params,
+      }),
     ])
       .then(() => {
         this.setState({
@@ -110,6 +115,16 @@ class Overview extends Component {
         url: '/api/appointments/stats',
         params,
       }),
+      this.props.fetchEntitiesRequest({
+        id: 'patientRevenueStats',
+        url: '/api/patients/revenueStats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'totalRevenueStats',
+        url: '/api/patients/revenueStatsTotal',
+        params,
+      }),
     ]).then(() => {
       const newState = {
         startDate: moment(values.startDate),
@@ -131,6 +146,10 @@ class Overview extends Component {
   render() {
     const appointmentStats = (this.props.appointmentStats ?
       this.props.appointmentStats.toObject() : null);
+
+    const totalRevenueStats = (this.props.totalRevenueStats ?
+      this.props.totalRevenueStats.toObject().totalAmountClinic : 0);
+
     const patientStats = (this.props.patientStats ? this.props.patientStats.toObject() : null);
     const patientRevenueStats = (this.props.patientRevenueStats ? this.props.patientRevenueStats.toJS() : []);
 
@@ -240,7 +259,7 @@ class Overview extends Component {
         color: 'primaryColor',
       },
       {
-        count: '?',
+        count: `$${Math.floor(totalRevenueStats).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
         title: 'Estimated Revenue',
         icon: 'line-chart',
         size: 6,
@@ -310,6 +329,7 @@ class Overview extends Component {
                     <Field
                       required
                       component="DayPicker"
+                      disabledDays={date => moment().subtract(5, 'years').isAfter(date)}
                       name="startDate"
                       label="Start Date"
                       data-test-id="startDate"
@@ -448,6 +468,7 @@ Overview.propTypes = {
   dayStats: PropTypes.object,
   appointmentStats: PropTypes.object,
   patientRevenueStats: PropTypes.object,
+  totalRevenueStats: PropTypes.object,
   patientStats: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   location: PropTypes.object,
@@ -459,6 +480,7 @@ function mapStateToProps({ apiRequests }) {
   const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);
   const patientStats = (apiRequests.get('patientStats') ? apiRequests.get('patientStats').data : null);
   const patientRevenueStats = (apiRequests.get('patientRevenueStats') ? apiRequests.get('patientRevenueStats').data : null);
+  const totalRevenueStats = (apiRequests.get('totalRevenueStats') ? apiRequests.get('totalRevenueStats').data : null);
 
   return {
     appointmentStats,
@@ -466,6 +488,7 @@ function mapStateToProps({ apiRequests }) {
     dayStats,
     patientStats,
     patientRevenueStats,
+    totalRevenueStats,
   };
 }
 
