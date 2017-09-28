@@ -31,6 +31,14 @@ export default class Practitioner extends createModel(PractitionerSchema) {
     return name;
   }
 
+  getPrettyShortName() {
+    if (this.get('type') === 'Dentist') {
+      return `Dr. ${this.get('lastName')}`;
+    } else {
+      return this.get('firstName');
+    }
+  }
+
   getUrlRoot() {
     return `/api/practitioners/${this.getId()}`;
   }

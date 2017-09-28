@@ -9,19 +9,28 @@ const allowedRoutes = {
 };
 
 export default function connectStoreToHost(store) {
+  const { reviews } = store.getState();
+  const account = reviews.get('account');
+
+  // Did this because it was the easiest way to ensure baseRouting
+  const base = (path = '') => `/widgets/${account.id}/app${path}`;
+
+  // Create new ifrau Client to connect to a host app (clinic website)
   const client = new Client();
   client.connect().then(function() {
     console.log('connected to host!');
   });
 
-  window.changeBaseRoute = (route) => {
+  // For testing...
+  /*window.changeBaseRoute = (route) => {
     if (!allowedRoutes[route]) {
       return;
     }
 
     // Route SPA to that route and view
-    store.dispatch(push(`./${route}`));
-  };
+    console.log('dispatching changeBaseRoute!');
+    store.dispatch(push(base(`/${route}`)));
+  };*/
 
 
   client.onEvent('changeBaseRoute', (route) => {
@@ -30,7 +39,7 @@ export default function connectStoreToHost(store) {
     }
 
     // Route SPA to that route and view
-    store.dispatch(push(`./${route}`));
+    store.dispatch(push(base(`/${route}`)));
   });
 
   client.onEvent('mergeReviewValues', (values) => {

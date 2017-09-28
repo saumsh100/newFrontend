@@ -63,7 +63,7 @@ function main() {
     const button = UI.bookingButton();
     button.onclick = (e) => {
       e.preventDefault();
-      CareCru.open('book');
+      CareCru.open();
     };
   }
 

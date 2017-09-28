@@ -29,11 +29,15 @@ Modal.prototype.open = function() {
   const innerAlreadyActive = ic.indexOf('CareCruActive') > -1;
   this.overlay.className = overlayAlreadyActive ? oc  : `${oc} CareCruActive`;
   this.inner.className = innerAlreadyActive ? ic : `${ic} CareCruActive`;
+  document.documentElement.style.setProperty('overflow', 'hidden');
+  document.documentElement.style.setProperty('position', 'fixed');
 };
 
 Modal.prototype.close = function() {
   this.overlay.className = this.overlay.className.replace(' CareCruActive', '');
   this.inner.className = this.inner.className.replace(' CareCruActive', '');
+  document.documentElement.style.setProperty('overflow', '');
+  document.documentElement.style.setProperty('position', '');
 };
 
 export default Modal;

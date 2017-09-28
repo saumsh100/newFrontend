@@ -7,6 +7,7 @@ import sentimentContent from './content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
 import { Avatar, Link, Input, Stars, TextArea, Button } from '../../../library';
+import Picture from '../Picture';
 import styles from './styles.scss';
 
 class Submitted extends Component {
@@ -65,10 +66,7 @@ class Submitted extends Component {
     return (
       <div className={styles.main}>
         <div className={styles.row}>
-          <Avatar
-            size="xl"
-            user={reviewedPractitioner}
-          />
+          <Picture reviewedPractitioner={reviewedPractitioner} />
         </div>
         <div className={styles.header}>
           {content.header}
@@ -79,7 +77,7 @@ class Submitted extends Component {
         <div className={styles.from}>
           - {reviewedPractitioner.getPrettyName()}
         </div>
-        <div>
+        <div className={styles.starsWrapper}>
           <Stars
             value={stars}
             isStatic={false}
@@ -99,7 +97,6 @@ class Submitted extends Component {
           {poorReview ?
             <Button
               className={styles.button}
-              color={description ? 'red' : 'darkblue'}
               onClick={this.submitBad}
               disabled={!description}
             >
@@ -107,8 +104,7 @@ class Submitted extends Component {
             </Button> :
             <Button
               className={styles.googleButton}
-              color="darkblue"
-              iconRight="google"
+              iconRight="google-plus"
               onClick={this.submitGood}
             >
               Share Review on Google
