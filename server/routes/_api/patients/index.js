@@ -570,6 +570,47 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
 });
 
 /**
+ * Update a patient (connector)
+ */
+patientsRouter.put('/connector/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+  const accountId = req.accountId;
+  const phoneNumber = req.patient.mobilePhoneNumber;
+
+  return req.patient.update({
+    isSyncedWithPms: true,
+    ...req.body,
+  })
+    .then((patient) => {
+      if (phoneNumber !== patient.mobilePhoneNumber) {
+        Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } })
+          .then((chat) => {
+            if (!chat[0]) {
+              return;
+            }
+            chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
+          });
+      }
+      const normalized = format(req, res, 'patient', patient.dataValues);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+
+      // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
+      // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
+      const action = patient.isDeleted ? 'DELETE' : 'UPDATE';
+      // TODO: should the payload be only an id?
+      io.of(ns).in(accountId).emit(`${action}:Patient`, patient.id);
+
+      return io.of(ns).in(accountId).emit('update:Patient', normalized);
+    })
+    .catch(next);
+});
+
+/**
  * Delete a patient
  */
 patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {

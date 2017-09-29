@@ -333,6 +333,20 @@ describe('/api/patients', () => {
           expect(body).toMatchSnapshot();
         });
     });
+
+    test('/:patientId - update patient (connector)', () => {
+      return request(app)
+        .put(`${rootUrl}/connector/${patientId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          firstName: 'Testing',
+        })
+        .expect(201)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
   });
 
   describe('DELETE /', () => {
