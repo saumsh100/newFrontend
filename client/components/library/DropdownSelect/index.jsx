@@ -188,6 +188,7 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
+        <Input onFocus={this.toggle} onBlur={this.toggle} className={styles.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>
