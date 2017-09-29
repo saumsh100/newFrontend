@@ -3,6 +3,7 @@ import CareCruAPI from './carecru';
 import UI from './ui';
 
 /* IMPORTANT: DO NOT TOUCH THESE, VERY SENSITIVE SEARCH AND REPLACE */
+/* DO NOT USE THESE STRINGS ANYWHERE ELSE OR ELSE SEARCH AND REPLACE WILL NOT WORK */
 const __CARECRU_ACCOUNT_ID__ = "__CARECRU_ACCOUNT_ID__";
 const __CARECRU_WIDGET_PRIMARY_COLOR__ = "__CARECRU_WIDGET_PRIMARY_COLOR__";
 const __CARECRU_STYLE_CSS__ = "__CARECRU_STYLE_CSS__";
@@ -48,9 +49,8 @@ function main() {
 
   const cc = getQueryVariable('cc');
 
-  console.log('__CARECRU_IFRAME_SRC__', __CARECRU_IFRAME_SRC__);
-
   const iframeSrc = cc ? `${__CARECRU_IFRAME_SRC__}/${cc}` : `${__CARECRU_IFRAME_SRC__}/book`;
+  console.log('iframeSrc', __CARECRU_IFRAME_SRC__);
 
   // Create API for that clinic's widget
   window.CareCru = new CareCruAPI({ iframeSrc });
