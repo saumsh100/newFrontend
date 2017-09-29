@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 import Account from '../entities/models/Account';
 import Review from '../entities/models/Review';
+import SentReview from '../entities/models/SentReview';
 
 /**
  * Constants
@@ -10,6 +11,7 @@ import Review from '../entities/models/Review';
 export const SET_ACCOUNT = 'SET_ACCOUNT';
 export const SET_REVIEW = 'SET_REVIEW';
 export const MERGE_REVIEW_VALUES = 'MERGE_REVIEW_VALUES';
+export const MERGE_SENT_REVIEW_VALUES = 'MERGE_SENT_REVIEW_VALUES';
 export const SET_IS_LOADING_SENT_REVIEW = 'SET_IS_LOADING_SENT_REVIEW';
 
 /**
@@ -18,6 +20,7 @@ export const SET_IS_LOADING_SENT_REVIEW = 'SET_IS_LOADING_SENT_REVIEW';
 export const setAccount = createAction(SET_ACCOUNT);
 export const setReview = createAction(SET_REVIEW);
 export const mergeReviewValues = createAction(MERGE_REVIEW_VALUES);
+export const mergeSentReviewValues = createAction(MERGE_SENT_REVIEW_VALUES);
 export const setIsLoadingSentReview = createAction(SET_IS_LOADING_SENT_REVIEW);
 
 /**
@@ -27,6 +30,7 @@ export const createInitialReviewsState = state => {
   return fromJS(Object.assign({
     account: null,
     review: new Review(),
+    sentReview: new SentReview(),
     isLoadingSentReview: false,
   }, state));
 };
@@ -47,6 +51,10 @@ export default handleActions({
 
   [MERGE_REVIEW_VALUES](state, { payload }) {
     return state.mergeIn(['review'], payload);
+  },
+
+  [MERGE_SENT_REVIEW_VALUES](state, { payload }) {
+    return state.mergeIn(['sentReview'], payload);
   },
 
   [SET_IS_LOADING_SENT_REVIEW](state, { payload }) {

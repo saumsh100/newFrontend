@@ -43,6 +43,10 @@ CareCru.prototype.mergeReviewValues = function (values) {
   this.host.sendEvent('mergeReviewValues', values);
 };
 
+CareCru.prototype.mergeSentReviewValues = function (values) {
+  this.host.sendEvent('mergeSentReviewValues', values);
+};
+
 /**
  * #close
  */

@@ -39,8 +39,8 @@ export function saveReview() {
   return function (dispatch, getState) {
     const { reviews } = getState();
     const accountId = reviews.getIn(['account', 'id']);
+    const sentReviewId = reviews.getIn(['sentReview', 'id']);
     const review = reviews.get('review');
-    const sentReviewId = review.get('sentReviewId');
 
     let savedReview = review;
     if (review.get('stars') >= 4) {
@@ -88,7 +88,7 @@ export function loadSentReview() {
     dispatch(setIsLoadingSentReview(true));
 
     const { reviews } = getState();
-    const sentReviewId = reviews.getIn(['review', 'sentReviewId']);
+    const sentReviewId = reviews.getIn(['sentReview', 'id']);
 
     // TODO: is it okay to just open up
     return axios.get(`/sentReviews/${sentReviewId}`)

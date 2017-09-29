@@ -86,11 +86,14 @@ function main() {
   }
 
   if (stars && sentReviewId) {
-    const data = { stars, sentReviewId };
+    const reviewData = { stars };
+    const sentReviewData = { id: sentReviewId };
     if (window.CareCruz[accountId]) {
-      window.CareCruz[accountId].mergeReviewValues(data);
+      window.CareCruz[accountId].mergeReviewValues(reviewData);
+      window.CareCruz[accountId].mergeSentReviewValues(sentReviewData);
     } else {
-      window.CareCru.mergeReviewValues(data);
+      window.CareCru.mergeReviewValues(reviewData);
+      window.CareCru.mergeSentReviewValues(sentReviewData);
     }
   }
 }

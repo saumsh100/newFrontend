@@ -51,7 +51,7 @@ WidgetContainer.propTypes = {};
 
 function mapStateToProps({ reviews }) {
   return {
-    sentReviewId: reviews.getIn(['review', 'sentReviewId']),
+    sentReviewId: reviews.getIn(['sentReview', 'id']),
     isLoadingSentReview: reviews.get('isLoadingSentReview'),
   };
 }
