@@ -114,7 +114,7 @@
   align-items: center;
   justify-content: center;
   &__stars {
-    width: 50%;
+    width: 90%;
     text-align: right;
     display: inline-block;
     padding-right: 15px;
@@ -173,7 +173,6 @@
   &__cardHeader {
     //padding-top: 15px;
     padding-left: 15px;
-    padding-bottom: 15px;
     margin-right: 10px;
     justify-content: flex-start;
   }
@@ -214,4 +213,11 @@
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%)
+}
+
+.ccReviews {
+  margin-left: 20px;
+  font-family: $medium-font;
+  color: $primary-darkgrey;
+  font-size: 12px;
 }

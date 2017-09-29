@@ -18,7 +18,8 @@ const companyIcons = {
   'Rate MDs': '//www.cdnstyles.com/static/images/icon32/sourceId-10450.png',
   'Facebook': '//www.cdnstyles.com/static/images/icon32/sourceId-10050.png',
   'Yelp': '//www.cdnstyles.com/static/images/icon32/sourceId-10000.png',
-  'Google': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
+  'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
+  'CareCru': 'https://carecru.com/wp-content/uploads/2017/07/cropped-CareCru-Icon.png',
 };
 
 const capitalize = (str) => {
@@ -54,6 +55,9 @@ export default class ReviewsCard extends Component {
       submitDate,
     } = this.props;
 
+    const careCruReviews = data.filter(r => r.icon === 'CareCru');
+    const ccLength = careCruReviews.length;
+
     const UserMenu = props => (
       <Button flat {...props} className={styles.dateRangeContainer}>
         <span><i className="fa fa-calendar"/> </span>
@@ -64,14 +68,16 @@ export default class ReviewsCard extends Component {
     );
 
     const initialValues = {
-      endDate: endDate._d,
-      startDate: startDate._d,
+      endDate,
+      startDate,
     };
 
     return (
       <Card className={styles.card}>
-        <CardHeader count={data.length} className={styles.reviewsComments__cardHeader} title={'REVIEWS'}>
-          <DateRangeReviews UserMenu={UserMenu} submitDate={submitDate} initialValues={initialValues}/>
+        <CardHeader count={data.length - ccLength} className={styles.reviewsComments__cardHeader} title={'REVIEWS'}>
+          <div className={styles.ccReviews}>
+            {`${ccLength} CARECRU REVIEW${ccLength === 1 ? '' : 'S'}`}
+          </div>
         </CardHeader>
         <div className={styles.reviewsComments}>
           <div className={styles.reviewsComments__container}>
@@ -80,6 +86,7 @@ export default class ReviewsCard extends Component {
                   return (
                     <BigCommentBubble
                       key={i}
+                      sourceName={obj.icon}
                       icon={companyIcons[obj.icon]}
                       iconColor={obj.iconColor}
                       background={obj.background}
@@ -89,7 +96,7 @@ export default class ReviewsCard extends Component {
                       siteStars={obj.siteStars}
                       siteTitle={obj.siteTitle}
                       sitePreview={obj.sitePreview}
-                      createdAt={obj.createdAt}
+                      createdAt={obj.publishedDate}
                       requiredAction={obj.requiredAction}
                       url={obj.url}
                       reviewerUrl={obj.reviewerUrl}

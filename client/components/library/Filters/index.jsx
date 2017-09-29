@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { withState } from 'recompose';
-import { Card, Checkbox, Search, Form } from '../../library';
+import { Card, Checkbox, Search, Form, Button } from '../../library';
 import FilterForm from './FilterForm';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
@@ -115,8 +115,18 @@ class Filters extends Component {
               <span>Filters</span>
             </div>
             <div className={styles.filters__header__right}>
-              <span onClick={()=> reset(filterKey)}>Select All</span>
-              <span onClick={()=> this.clearAll()}>Clear All</span>
+              <Button
+                flat
+                onClick={()=> reset(filterKey)}
+              >
+                Select All
+              </Button>
+              <Button
+                flat
+                onClick={()=> this.clearAll()}
+              >
+                Clear All
+              </Button>
             </div>
           </div>
           <FilterForm

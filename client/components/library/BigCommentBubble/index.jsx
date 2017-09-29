@@ -1,5 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
+import moment from 'moment';
 import { Icon } from '../index';
 import DoubleIcon from '../DoubleIcon';
 import styles from './styles.scss';
@@ -49,6 +50,7 @@ export class BigCommentBubble extends Component {
   render() {
     const {
       icon,
+      sourceName,
       doubleIcon,
       iconColor,
       background,
@@ -89,16 +91,16 @@ export class BigCommentBubble extends Component {
             <div className={styles.bigCommentBubble__mainContent__preview}>
               {sitePreview}
               {/* TODO: put this there ONLY if length is greater */}
-              <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >
+              {sitePreview ? <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >
                 more...
-              </a>
+              </a> : null}
             </div>
             {requiredAction &&
               <div className={styles.bigCommentBubble__mainContent__requirements}>
                 {requiredAction}
               </div>
             }
-            <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt} Days Ago</div>
+            <div className={styles.bigCommentBubble__mainContent__createdAt}>{moment(createdAt).fromNow(true)} ago</div>
             <div className={styles.bigCommentBubble__attachments}>
               {attachments.map((at,i) => (<img key={i} src={at.src} />))}
             </div>
