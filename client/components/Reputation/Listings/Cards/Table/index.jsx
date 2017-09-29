@@ -30,16 +30,9 @@ class Table extends Component {
       <Card
         className={styles.mostLoyal}
       >
-        <div className={styles.mostLoyal__header}>
-          <CardHeader
-            className={styles.mostLoyal__header_item}
-            title={cardTitle}
-          >
-            {/*<a className={styles.mostLoyal__header_link}>Print Listings Repost</a>*/}
-          </CardHeader>
-        </div>
+
         <div className={styles.mostLoyal__wrapper}>
-          {data.map((obj, i) => (
+          {data.length ? data.map((obj, i) => (
             <div
               key={i}
               className={styles.mostLoyal__body}
@@ -116,7 +109,7 @@ class Table extends Component {
                   )})}
               </List>
             </div>
-          ))}
+          )) : <div className={styles.clearedListings}>Please Select a Filter Option</div>}
         </div>
       </Card>
     );

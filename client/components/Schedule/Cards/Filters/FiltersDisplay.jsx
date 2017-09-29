@@ -19,11 +19,11 @@ export default function FiltersDisplay(props) {
   return (
     <Card className={styles.schedule_filter}>
       <div className={styles.filter_header}>
+        <div className={styles.filter_header__icon}>
+          <Icon size={1.2} icon="sliders" />
+        </div>
         <div className={styles.filter_header__title}>
           Filters
-        </div>
-        <div className={styles.filter_header__icon}>
-          <Icon size={2} icon="sliders" />
         </div>
         <div className={styles.filter_header__link} >
           <div

@@ -2,17 +2,17 @@
 import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import { reset, change } from 'redux-form';
 import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { Card, Col, Grid, Row, Filters } from '../../library';
-import colorMap from '../../library/util/colorMap';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
-import GoogleMapsVideo from './Cards/GoogleMapsVideo';
+import { setReputationFilter } from '../../../actions/reputation';
+import { setReputationFilterState } from '../../../thunks/reputation';
 import AverageRating from './Cards/AverageRating';
 import RatingsChart from './Cards/RatingsChart';
 import ReviewsCard from './Cards/ReviewsCard';
 import ReputationDisabled from '../ReputationDisabled';
-import Tags from './Cards/Tags';
 import styles from './styles.scss';
 
 class Reviews extends Component {
@@ -22,7 +22,11 @@ class Reviews extends Component {
       loaded: false,
       hasAccount: false,
       activationText: '',
+      endDate: moment(),
+      startDate: moment().subtract(1, 'year'),
     };
+
+    this.submitDate = this.submitDate.bind(this);
   }
 
   componentWillMount() {
@@ -44,20 +48,22 @@ class Reviews extends Component {
   componentDidMount() {
     if (this.state.hasAccount) {
       const params = {
-        startDate: moment().subtract(30, 'days')._d,
-        endDate: moment()._d,
+        startDate: this.state.startDate._d,
+        endDate: this.state.endDate._d,
       };
 
       Promise.all([
         this.props.fetchEntitiesRequest({
           id: 'reviews',
           url: '/api/reputation/reviews',
+          params,
         }),
       ]).then(() => {
+        this.props.setReputationFilterState();
         this.setState({
           loaded: true,
         });
-      }).catch(() =>{
+      }).catch(() => {
         this.setState({
           hasAccount: false,
           activationText: 'Activate Reviews/Reputation Management package or contact your CareCru account manager for further assistance.',
@@ -66,9 +72,38 @@ class Reviews extends Component {
     }
   }
 
+  submitDate(values) {
+    this.setState({
+      loaded: false,
+    });
+    const params = {
+      startDate: moment(values.startDate)._d,
+      endDate: moment(values.endDate)._d,
+    };
+
+    Promise.all([
+      this.props.fetchEntitiesRequest({
+        id: 'reviews',
+        url: '/api/reputation/reviews',
+        params,
+      }),
+    ]).then(() => {
+      const newState = {
+        startDate: moment(values.startDate),
+        endDate: moment(values.endDate),
+        loader: true,
+      };
+      this.setState(newState);
+    });
+  }
+
   render() {
     const {
       reviews,
+      reviewsFilter,
+      setReputationFilter,
+      reset,
+      change,
     } = this.props;
 
     if (!this.state.hasAccount) {
@@ -76,51 +111,63 @@ class Reviews extends Component {
     }
 
     if (!reviews) {
-      return <Loader loaded={this.state.loaded} color="#FF715A" />
+      return <Loader loaded={this.state.loaded} color="#FF715A" />;
     }
 
     const reviewsData = reviews.get('data').toJS();
-
     const reviewsList = reviews.get('reviews').toJS();
 
-    const contructBigComment = reviewsList.map((review) => {
-      const publishedDate = moment(review.publishedDateTime);
-      const today = moment();
-      const duration = moment.duration(today.diff(publishedDate));
-      const days = duration.asDays();
+    const filterSources = reviewsFilter.get('sources').toJS();
+    const filterRatings = reviewsFilter.get('ratings').toJS();
 
-      return {
-        icon: review.sourceName,
-        createdAt: Math.ceil(days),
-        headerLinkName: review.reviewerName,
-        headerLinkSite: review.domain,
-        siteStars: parseInt(review.rating),
-        siteTitle: review.title,
-        sitePreview: review.contentSnippet,
-        iconColor: '#ffffff',
-        background: '#395998',
-        iconAlign: 'flex-end',
-        requiredAction: 'ACTION REQUIRED',
-        url: review.url,
-        reviewerUrl: review.reviewerUrl,
-      };
+    let constructBigComment = reviewsList;
+
+    constructBigComment = constructBigComment.filter((review) => {
+        if (filterSources.indexOf(review.sourceName) > -1) {
+          return review;
+        }
     });
 
-    const filters = [
-      {
-        title: 'Date Range',
+    constructBigComment = constructBigComment.filter((review) => {
+      if (filterRatings.indexOf(review.rating) > -1) {
+        return review;
+      }
+    });
+
+
+    constructBigComment = constructBigComment.map((review) => {
+        const publishedDate = moment(review.publishedDateTime);
+        const today = moment();
+        const duration = moment.duration(today.diff(publishedDate));
+        const days = duration.asDays();
+
+        return {
+          icon: review.sourceName,
+          createdAt: Math.ceil(days),
+          headerLinkName: review.reviewerName,
+          headerLinkSite: review.domain,
+          siteStars: parseInt(review.rating),
+          siteTitle: review.title,
+          sitePreview: review.contentSnippet,
+          iconColor: '#ffffff',
+          background: '#395998',
+          iconAlign: 'flex-end',
+          requiredAction: 'ACTION REQUIRED',
+          url: review.url,
+          reviewerUrl: review.reviewerUrl,
+        };
+    });
+
+    const filters = [ {
+        title: 'sources',
         items: [
-          {type: 'select', name: 'opt1', options: [{ value: 'options1' }, { value: 'options2' }, { values: 'options3' }, { value: 'options4' },]}
-        ]
-      }, {
-        title: 'Sources',
-        items: [
-          { type: 'checkbox', value: 'Google Maps (5)' },
-          { type: 'checkbox', value: 'Yelp (4)' },
-          { type: 'checkbox', value: 'Facebook (3)' },
+          { type: 'checkbox', value: 'Google Maps' },
+          { type: 'checkbox', value: 'Yelp' },
+          { type: 'checkbox', value: 'Facebook' },
+          { type: 'checkbox', value: 'Rate MDs' },
         ],
       }, {
-        title: 'Rating',
+        title: 'ratings',
         items: [
           { type: 'checkbox', value: '1 Star' },
           { type: 'checkbox', value: '2 Star' },
@@ -130,19 +177,24 @@ class Reviews extends Component {
           { type: 'checkbox', value: 'No Rating' },
         ],
       },
-      {
-        title: 'Status',
-        items: [
-          {type: 'select', name: 'opt2', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
-          {type: 'select', name: 'opt3', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
-          {type: 'select', name: 'opt4', options: [{ value: 'Select Response Status' }, { value: 'options1' }, { value: 'options3' }, { value: 'options4' }]},
-          {type: 'checkbox', value: 'With Comments'},
-          {type: 'checkbox', value: 'Without Comments'},
-          {type: 'checkbox', value: 'With new Comments'},
-          {type: 'checkbox', value: 'Without new Comments'},
-        ]
-      }
     ];
+
+    const initialValues = {
+      sources: {
+        'Google Maps': true,
+        Yelp: true,
+        Facebook: true,
+        'Rate MDs': true,
+      },
+      ratings: {
+        '1 Star': true,
+        '2 Star': true,
+        '3 Star': true,
+        '4 Star': true,
+        '5 Star': true,
+        'No Rating': true,
+      }
+    };
 
     return (
       <Grid className={styles.reviews}>
@@ -176,12 +228,25 @@ class Reviews extends Component {
             <Tags />
           </Col> */}
           <Row className={styles.rowReviewsFilter}>
-            <Col className={styles.padding} xs={12} md={12} sm={12} lg={12}>
-              <ReviewsCard data={contructBigComment} />
+            <Col Col style={{paddingLeft: '10px'}} xs={12} md={8} sm={9} lg={9}>
+              <ReviewsCard
+                data={constructBigComment}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                submitDate={this.submitDate}
+              />
             </Col>
-            {/* <Col className={styles.padding} xs={12} md={4} sm={3} lg={3}>
-              <Filters filters={filters} />
-            </Col> */}
+            <Col style={{paddingLeft: '10px', paddingRight: '10px'}} xs={12} md={4} sm={3} lg={3}>
+              <Filters
+                key="reviewsFilter"
+                setReputationFilter={setReputationFilter}
+                filterKey="reviewsFilter"
+                reset={reset}
+                filters={filters}
+                initialValues={initialValues}
+                change={change}
+              />
+            </Col>
           </Row>
         </Row>
       </Grid>
@@ -195,11 +260,12 @@ Reviews.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
 };
 
-function mapStateToProps({ apiRequests, entities, auth }) {
+function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const reviews = (apiRequests.get('reviews') ? apiRequests.get('reviews').data : null);
-
+  const reviewsFilter = (apiRequests.get('reviews') ? reputation.get('reviewsFilter') : null);
   return {
     reviews,
+    reviewsFilter,
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
@@ -207,6 +273,10 @@ function mapStateToProps({ apiRequests, entities, auth }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntitiesRequest,
+    setReputationFilter,
+    setReputationFilterState,
+    reset,
+    change,
   }, dispatch);
 }
 

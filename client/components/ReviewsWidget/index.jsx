@@ -1,24 +1,45 @@
 
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styles from './styles.scss';
 
-function ReviewsWidget(props) {
-  const {
-    children,
-  } = props;
+class ReviewsWidget extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  return (
-    <div className={styles.reviewsWidgetContainer}>
-      <div className={styles.reviewsWidgetCenter}>
-        {children}
+  componentWillMount() {
+    // Without this, none of our themed styles would work
+    const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
+    document.documentElement.style.setProperty('--primaryColor', color);
+  }
+
+  render() {
+    const {
+      children,
+    } = this.props;
+
+    return (
+      <div className={styles.reviewsWidgetContainer}>
+        <div className={styles.reviewsWidgetCenter}>
+          {children}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 ReviewsWidget.propTypes = {};
 
-export default ReviewsWidget;
+function mapStateToProps({ reviews }) {
+  const account = reviews.get('account');
+  return {
+    account,
+  };
+}
+
+export default withRouter(connect(mapStateToProps, null)(ReviewsWidget));
 
 // ChIJmdp9t7VwhlQRailxK3m6p1g
 // https://search.google.com/local/writereview?placeid=ChIJmdp9t7VwhlQRailxK3m6p1g

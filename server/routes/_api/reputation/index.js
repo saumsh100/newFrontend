@@ -66,7 +66,7 @@ reputationRouter.get('/listings', checkPermission('listings:read'), (req, res, n
 
 reputationRouter.get('/reviews', checkPermission('reviews:read'), (req, res, next) => {
   const {
-    startDate = moment().subtract(999, 'days')._d,
+    startDate = moment().subtract(900, 'days')._d,
     endDate = moment()._d
   } = req.query;
 

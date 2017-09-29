@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { createBrowserHistory } from 'history';
+import { push } from 'react-router-redux';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
@@ -40,6 +41,7 @@ loadPatient()(store.dispatch).then(() => {
 
   // TODO: define globals with webpack ProvidePlugin
   window.store = store;
+  window.push = push;
   window.browserHistory = browserHistory;
   window.moment = extendMoment(moment);
   window.time = time;
