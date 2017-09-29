@@ -2,41 +2,32 @@
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
-  FETCH_REPUTATION,
-  FETCH_REPUTATION_SUCCESS,
+  SET_REPUTATION_FILTER,
+  SET_FILTERS_LOADED,
 } from '../constants';
 
 const initialState = fromJS({
-  // set only to 'loading', 'success' or 'error'
-  status: 'loading',
-  lastFetched: null,
-  data: fromJS({
-    sourcesNotFound: null,
-    sourcesFound: null,
-    listingScore: null,
-    listingPointScore: fromJS({
-      industryAverage: null,
-      industryLeadersAverage: null,
-      pointScore: null,
-    }),
-
-    citationsFound: null,
-    sourcesFoundWithErrors: null,
-    accuracyScore: null,
-  }),
+  reviewsfiltersloaded: false,
+  reviewsFilter: {
+    sources: [],
+    ratings: [],
+  },
+  listingsFilter: {
+    sourceTypes: ['Search Engines', 'Review Sites', 'Directories', 'Social Sites'],
+    listingStatuses: ['Accurate', 'Found with Possible Errors', 'Not Found'],
+  }
 });
 
 export default handleActions({
-  [FETCH_REPUTATION](state) {
-    return state.set('status', 'loading');
+  [SET_REPUTATION_FILTER](state,action) {
+    const key = action.payload.key;
+    const mergeObj = {};
+    mergeObj[key] = action.payload.filterData;
+    return state.merge(mergeObj);
   },
-
-  [FETCH_REPUTATION_SUCCESS](state, action) {
-    const { data } = action.payload;
+  [SET_FILTERS_LOADED](state,action) {
     return state.merge({
-      status: 'success',
-      lastFetched: (new Date()).toLocaleString(),
-      data,
+      reviewsFilterloaded: action.payload.data,
     });
   },
 }, initialState);

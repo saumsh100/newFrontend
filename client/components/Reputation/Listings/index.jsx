@@ -1,19 +1,37 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux';
+import { reset, change } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import Loader from 'react-loader';
 import { Col, Grid, Row, Filters } from '../../library';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
+import { setReputationFilter} from '../../../actions/reputation';
 import colorMap from '../../library/util/colorMap';
 import Score from './Cards/Score';
 import Total from './Cards/Total';
 import Information from './Cards/Information';
 import Table from './Cards/Table';
 import styles from './styles.scss';
-import ReputationDisabled from "../ReputationDisabled";
+import ReputationDisabled from '../ReputationDisabled';
 
-function generateSearchData(entityList) {
-  return entityList.map((entity) => {
+function generateSearchData(entityList, statuses) {
+  return entityList.filter((entity) => {
+    if (statuses.length) {
+      const listings = entity.listings;
+      let accurateListing = 'Not Found';
+      if (listings.length) {
+        accurateListing = 'Accurate';
+        const warning = listings[0].anchorDataWarningFlag;
+
+        if (warning) {
+          accurateListing = 'Found with Possible Errors';
+        }
+      }
+      if (statuses.indexOf(accurateListing) > -1) {
+        return entity
+      }
+    }
+  }).map((entity) => {
     return {
       img: entity.iconUrl,
       name: entity.sourceName,
@@ -76,6 +94,10 @@ class Listings extends Component {
   render() {
     const {
       listings,
+      reset,
+      setReputationFilter,
+      listingsFilter,
+      change,
     } = this.props;
 
     if (!this.state.hasAccount) {
@@ -113,39 +135,72 @@ class Listings extends Component {
 
     const listingsSearchData = listings.get('searchData').toJS();
 
-    const tableData = [{
-      data: generateSearchData(listingsSearchData.searchengines),
-    }, {
-      title: 'Review Sites',
-      data: generateSearchData(listingsSearchData.reviewengines),
-    }, {
-      title: 'Social Sites',
-      data: generateSearchData(listingsSearchData.socialengines),
-    }, {
-      title: 'Directories',
-      data: generateSearchData(listingsSearchData.directories),
-    },
-    ];
+    const filterData = listingsFilter.toJS();
+
+    const tableData2 = [];
+
+    if (filterData.sourceTypes.length) {
+      filterData.sourceTypes.map((lf) => {
+        if (lf === 'Search Engines') {
+          tableData2.push({
+            title: 'Search Engines',
+            data: generateSearchData(listingsSearchData.searchengines, filterData.listingStatuses),
+          });
+        }
+        if (lf === 'Review Sites') {
+          tableData2.push({
+            title: 'Review Sites',
+            data: generateSearchData(listingsSearchData.reviewengines, filterData.listingStatuses),
+          });
+        }
+        if (lf === 'Directories') {
+          tableData2.push({
+            title: 'Directories',
+            data: generateSearchData(listingsSearchData.directories, filterData.listingStatuses),
+          });
+        }
+        if (lf === 'Social Sites') {
+          tableData2.push({
+            title: 'Social Sites',
+            data: generateSearchData(listingsSearchData.socialengines, filterData.listingStatuses ),
+          });
+        }
+      });
+    }
 
     const filters = [
       {
-        title: 'Sources',
+        title: 'Source Type',
         items: [
-          { type: 'checkbox', value: 'Search Engines (2)' },
-          { type: 'checkbox', value: 'Review Sites (4)' },
-          { type: 'checkbox', value: 'Derictories (8)' },
-          { type: 'checkbox', value: 'Sorial Sites (6)' },
+          { type: 'checkbox', value: 'Search Engines' },
+          { type: 'checkbox', value: 'Review Sites' },
+          { type: 'checkbox', value: 'Directories' },
+          { type: 'checkbox', value: 'Social Sites' },
         ],
       },
       {
-        title: 'Sources',
+        title: 'Listing Status',
         items: [
-          { type: 'checkbox', value: 'Accurate (3)' },
-          { type: 'checkbox', value: 'Friends with possible errors (2)' },
-          { type: 'checkbox', value: 'Respond (15)' },
+          { type: 'checkbox', value: 'Accurate' },
+          { type: 'checkbox', value: 'Found with Possible Errors' },
+          { type: 'checkbox', value: 'Not Found' },
         ],
       },
     ];
+
+    const initialValues = {
+      'Source Type': {
+        'Search Engines': true,
+        'Review Sites': true,
+        Directories: true,
+        'Social Sites': true,
+      },
+      'Listing Status': {
+        Accurate: true,
+        'Found with Possible Errors': true,
+        'Not Found': true,
+      }
+    };
 
     return (
       <Grid className={styles.listings}>
@@ -172,16 +227,24 @@ class Listings extends Component {
               data={informationData}
             />
           </Col>
-          <Col className={styles.padding} xs={12} md={12}>
+          <Col className={styles.padding} xs={12} md={9}>
             <Table
               borderColor={colorMap.blue}
-              cardTitle="Search Engines"
-              data={tableData}
+              cardTitle="Primary Listings"
+              data={tableData2}
             />
           </Col>
-          {/*<Col className={styles.padding} xs={12} md={3}>
-            <Filters filters={filters} />
-          </Col>*/}
+          <Col className={styles.padding} xs={12} md={3}>
+            <Filters
+              key="listingsFilter"
+              filters={filters}
+              filterKey="listingsFilter"
+              setReputationFilter={setReputationFilter}
+              reset={reset}
+              change={change}
+              initialValues={initialValues}
+            />
+          </Col>
         </Row>
       </Grid>
     );
@@ -194,11 +257,13 @@ Listings.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
 };
 
-function mapStateToProps({ apiRequests, entities, auth }) {
+function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
+  const listingsFilter = (apiRequests.get('listings') ? reputation.get('listingsFilter') : null);
 
   return {
     listings,
+    listingsFilter,
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }
@@ -206,6 +271,9 @@ function mapStateToProps({ apiRequests, entities, auth }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntitiesRequest,
+    reset,
+    change,
+    setReputationFilter,
   }, dispatch);
 }
 
