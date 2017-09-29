@@ -63,6 +63,7 @@ class CallerModal extends Component {
          callDisplay = (<CallerDisplayUnknown
            call={call}
            clearSelectedChat={this.clearSelectedChat}
+           updateEntityRequest={updateEntityRequest}
          />)
        }
     }

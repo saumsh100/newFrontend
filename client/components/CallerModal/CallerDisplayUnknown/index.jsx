@@ -1,13 +1,15 @@
 
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import { Avatar, Icon } from '../../library';
+import { Avatar, Icon } from '../../library'
+import AppointmentBookedToggle from '../CallerDisplay/AppointmentBookedToggle';
 import styles from '../styles.scss';
 
 export default function CallerDisplayUnknown(props) {
   const {
     call,
     clearSelectedChat,
+    updateEntityRequest,
   } = props;
 
   const isAnswered = call.answered;
@@ -30,7 +32,7 @@ export default function CallerDisplayUnknown(props) {
   return (
     <div className={callDisplayContainer} >
       <div className={styles.headerContainerUnknown}>
-        <Icon size={5} className={styles.callerAvatarUnknown} icon="question-circle" />
+        <div className={styles.callerAvatarUnknown} ><span> ? </span></div> }
         <div
           className={styles.closeIcon}
           onClick={clearSelectedChat}
@@ -39,6 +41,11 @@ export default function CallerDisplayUnknown(props) {
         </div>
       </div>
       <div className={styles.callBody}>
+        <div className={styles.patientInfoContainerUnknown}>
+          <div className={styles.patientNameAge}>
+            <span>Unknown Caller</span>
+          </div>
+        </div>
         <div className={styles.iconContainer} >
           <Icon size={2} icon="phone" />
         </div>
@@ -81,6 +88,10 @@ export default function CallerDisplayUnknown(props) {
             </div>
           </div>
         </div>
+        <AppointmentBookedToggle
+          call={call}
+          updateEntityRequest={updateEntityRequest}
+        />
       </div>
     </div>
   );
