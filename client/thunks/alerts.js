@@ -33,6 +33,7 @@ function notify(alert, type) {
 
   const options = {
     body: alert.body,
+    icon: 
   };
 
   // Let's check whether notification permissions have already been granted
