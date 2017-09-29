@@ -562,29 +562,35 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
   });
 
   try {
-    if (appointmentData.pmsId) {
-      const appointment = await Appointment.findOne({
-        where: {
-          pmsId: appointmentData.pmsId,
-          accountId,
-        },
-      });
-      if (appointment) {
-        const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
-        return res.status(200).send(normalized);
-      }
-    }
-  } catch (e) {
-    return next(e);
-  }
+    const appointmentTest = await Appointment.build(appointmentData);
+    await appointmentTest.validate();
 
-  return Appointment.create(appointmentData)
-    .then((appointment) => {
-      const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
+    return Appointment.create(appointmentData)
+        .then((appointment) => {
+          const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
+          res.status(201).send(normalized);
+          return { appointment: appointment.dataValues, normalized };
+        })
+        .then(async ({ appointment }) => {
+          if (appointment.isSyncedWithPms && appointment.patientId) {
+            // Dashboard app needs patient data
+            const patient = await Patient.findById(appointment.patientId);
+            appointment.patient = patient.get({ plain: true });
+          }
+
+          const io = req.app.get('socketio');
+          const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+          io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
+          return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
+        })
+        .catch(next);
+  } catch (e) {
+    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+      const appointment = e.errors[0].message.model.dataValues;
+
+      const normalized = format(req, res, 'appointment', appointment);
       res.status(201).send(normalized);
-      return { appointment: appointment.dataValues, normalized };
-    })
-    .then(async ({ appointment }) => {
+
       if (appointment.isSyncedWithPms && appointment.patientId) {
         // Dashboard app needs patient data
         const patient = await Patient.findById(appointment.patientId);
@@ -595,8 +601,9 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
-    })
-    .catch(next);
+    }
+    return next(e);
+  }
 });
 
 /**
@@ -607,7 +614,10 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
   const cleanedAppointments = appointments.map(appointment => Object.assign(
     {},
     appointment,
-    { accountId: req.accountId }
+    {
+      accountId: req.accountId,
+      isSyncedWithPms: true,
+    }
   ));
 
   return batchCreate(cleanedAppointments, Appointment, 'Appointment')

@@ -1,3 +1,6 @@
+import moment from 'moment-timezone';
+import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair } from '../../../_models';
+import format from '../../util/format';
 import { sequelizeLoader } from '../../util/loaders';
 
 const practitionersRouter = require('express').Router();
@@ -9,10 +12,6 @@ const normalize = require('../normalize');
 const _ = require('lodash');
 const uuid = require('uuid');
 const upload = require('../../../lib/upload');
-import moment from 'moment-timezone';
-
-import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair } from '../../../_models';
-import format from '../../util/format';
 
 practitionersRouter.param('practitionerId', sequelizeLoader('practitioner', 'Practitioner'));
 
@@ -43,77 +42,69 @@ practitionersRouter.get('/', (req, res, next) => {
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), async (req, res, next) => {
   try {
-    if (req.body.pmsId) {
-      const practitioner = await Practitioner.findOne({
-        where: {
-          pmsId: req.body.pmsId,
-          accountId: req.accountId,
-        },
-        include: [{
+    const practitionerTest = await Practitioner.build(req.body);
+    await practitionerTest.validate();
+
+    return Account.findOne({
+      where: { id: req.accountId },
+      raw: true,
+      nest: true,
+      include: [
+        {
           model: WeeklySchedule,
           as: 'weeklySchedule',
-        }],
-      });
-      if (practitioner) {
-        const normalized = format(req, res, 'practitioner', practitioner.get({ plain: true }));
-        return res.status(200).send(normalized);
-      }
-    }
-  } catch (e) {
-    return next(e);
-  }
-  return Account.findOne({
-    where: { id: req.accountId },
-    raw: true,
-    nest: true,
-    include: [
-      {
-        model: WeeklySchedule,
-        as: 'weeklySchedule',
-      },
-    ],
-  })
-  .then((account) => {
-    delete account.weeklySchedule.weeklyScheduleId;
-    delete account.weeklySchedule.createdAt;
-    delete account.weeklySchedule.id;
-    return WeeklySchedule.create(account.weeklySchedule)
-    .then(async (weeklySchedule) => {
-      weeklySchedule = weeklySchedule.get({ plain: true });
-
-      const chairs = await Chair.findAll({
-        raw: true,
-        where: { accountId: req.accountId },
-      });
-
-      const chairIds = chairs.map(chair => chair.id);
-      weeklySchedule.monday.chairIds = chairIds;
-      weeklySchedule.tuesday.chairIds = chairIds;
-      weeklySchedule.wednesday.chairIds = chairIds;
-      weeklySchedule.thursday.chairIds = chairIds;
-      weeklySchedule.friday.chairIds = chairIds;
-      weeklySchedule.saturday.chairIds = chairIds;
-      weeklySchedule.sunday.chairIds = chairIds;
-
-      await WeeklySchedule.update(weeklySchedule, {
-        where: {
-          id: weeklySchedule.id,
         },
-      });
+      ],
+    })
+    .then((account) => {
+      delete account.weeklySchedule.weeklyScheduleId;
+      delete account.weeklySchedule.createdAt;
+      delete account.weeklySchedule.id;
+      return WeeklySchedule.create(account.weeklySchedule)
+      .then(async (weeklySchedule) => {
+        weeklySchedule = weeklySchedule.get({ plain: true });
 
-      const practitionerData = Object.assign({},
-        {
-          accountId: req.accountId,
-          weeklyScheduleId: weeklySchedule.id,
-        }, req.body);
-      return Practitioner.create(practitionerData)
-      .then((practitioner) => {
-        practitioner = practitioner.get({ plain: true });
-        practitioner.weeklySchedule = weeklySchedule;
-        return res.status(201).send(format(req, res, 'practitioner', practitioner));
+        const chairs = await Chair.findAll({
+          raw: true,
+          where: { accountId: req.accountId },
+        });
+
+        const chairIds = chairs.map(chair => chair.id);
+        weeklySchedule.monday.chairIds = chairIds;
+        weeklySchedule.tuesday.chairIds = chairIds;
+        weeklySchedule.wednesday.chairIds = chairIds;
+        weeklySchedule.thursday.chairIds = chairIds;
+        weeklySchedule.friday.chairIds = chairIds;
+        weeklySchedule.saturday.chairIds = chairIds;
+        weeklySchedule.sunday.chairIds = chairIds;
+
+        await WeeklySchedule.update(weeklySchedule, {
+          where: {
+            id: weeklySchedule.id,
+          },
+        });
+
+        const practitionerData = Object.assign({},
+          {
+            accountId: req.accountId,
+            weeklyScheduleId: weeklySchedule.id,
+          }, req.body);
+        return Practitioner.create(practitionerData)
+        .then((practitioner) => {
+          practitioner = practitioner.get({ plain: true });
+          practitioner.weeklySchedule = weeklySchedule;
+          return res.status(201).send(format(req, res, 'practitioner', practitioner));
+        });
       });
     });
-  }).catch(next);
+  } catch (e) {
+    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+      const practitioner = e.errors[0].message.model.dataValues;
+      const normalized = format(req, res, 'practitioner', practitioner);
+      return res.status(201).send(normalized);
+    }
+    return next(e);
+  }
 });
 
 /**

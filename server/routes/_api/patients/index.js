@@ -421,9 +421,11 @@ patientsRouter.post('/', async (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
 
-  let patient;
   try {
-    patient = await Patient.create(patientData);
+    const patientTest = await Patient.build(patientData);
+    await patientTest.validate();
+
+    const patient = await Patient.create(patientData);
     const normalizedPatient = format(req, res, 'patient', patient.dataValues);
 
     res.status(201).send(normalizedPatient);
@@ -433,8 +435,20 @@ patientsRouter.post('/', async (req, res, next) => {
     const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
     io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
     return io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+      const patient = e.errors[0].message.model.dataValues;
+
+      const normalizedPatient = format(req, res, 'patient', patient);
+      res.status(201).send(normalizedPatient);
+
+      // Dispatch socket event
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+      io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
+      return io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
+    }
+    return next(e);
   }
 });
 
@@ -447,7 +461,10 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
   const cleanedPatients = patients.map(patient => Object.assign(
     {},
     patient,
-    { accountId: req.accountId }
+    {
+      accountId: req.accountId,
+      isSyncedWithPms: true,
+    }
   ));
 
   return batchCreate(
@@ -558,6 +575,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
 patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
   const { patient } = req;
   const accountId = req.accountId;
+
   return patient.destroy()
     .then(() => res.sendStatus(204))
     .then(() => {

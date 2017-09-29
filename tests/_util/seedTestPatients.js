@@ -14,7 +14,7 @@ const patient = {
   email: 'testpatient@test.com',
   firstName: 'Ronald',
   lastName: 'Mcdonald',
-  pmsId: null,
+  pmsId: '12',
   mobilePhoneNumber: '7789999999',
   createdAt: '2017-07-19T00:14:30.932Z',
   address: null,
