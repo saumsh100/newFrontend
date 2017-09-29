@@ -161,6 +161,7 @@ reviewsRouter.get('/:accountId/cc.js', async (req, res, next) => {
     const jsPath = `${cwd}/statics/assets/cc.js`;
     const cssPath = `${cwd}/server/routes/_my/widgets/widget.css`;
 
+    console.log('protocol', protocol);
     // /book route by default to load widget
     const iframeSrc = `${protocol}://${req.headers.host}/widgets/${account.id}/app`;
     const js = await replaceJavascriptFile(jsPath, {
