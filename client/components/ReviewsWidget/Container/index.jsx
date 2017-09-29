@@ -14,7 +14,7 @@ class WidgetContainer extends Component {
 
   componentWillMount() {
     // Host app will trigger a dispatch to set sentReviewId
-    // but we can't be sure that it's set by the time we load. 
+    // but we can't be sure that it's set by the time we load.
     if (this.props.sentReviewId) {
       this.props.loadSentReview();
     }

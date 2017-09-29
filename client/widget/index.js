@@ -2,10 +2,11 @@
 import CareCruAPI from './carecru';
 import UI from './ui';
 
-const __CARECRU_ACCOUNT_ID__ = null;
-const __CARECRU_WIDGET_PRIMARY_COLOR__ = null;
-const __CARECRU_STYLE_CSS__ = null;
-const __CARECRU_IFRAME_SRC__ = null;
+/* IMPORTANT: DO NOT TOUCH THESE, VERY SENSITIVE SEARCH AND REPLACE */
+const __CARECRU_ACCOUNT_ID__ = "__CARECRU_ACCOUNT_ID__";
+const __CARECRU_WIDGET_PRIMARY_COLOR__ = "__CARECRU_WIDGET_PRIMARY_COLOR__";
+const __CARECRU_STYLE_CSS__ = "__CARECRU_STYLE_CSS__";
+const __CARECRU_IFRAME_SRC__ = "__CARECRU_IFRAME_SRC__";
 
 function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
