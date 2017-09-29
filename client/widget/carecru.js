@@ -20,8 +20,9 @@ function CareCru({ iframeSrc }) {
     console.log('Connected to client!');
   });
 
+  const self = this;
   this.host.onEvent('closeModal', () => {
-    this.modal.close();
+    self.close();
   });
 }
 
