@@ -15,8 +15,8 @@ export default function GoogleMapsVideo(props) {
           />
         </div>
         <div className={styles.googleMapsRespondDescr}>
-          <div className={styles.googleMapsRespondDescr_header}> Respond to Google Maps Reviews! </div>
-          <div className={styles.googleMapsRespondDescr_subHeader}> You can respond on Google Maps from here! Connect your Google My Business
+          <div className={styles.googleMapsRespondDescr_header}> Respond to Google Reviews! </div>
+          <div className={styles.googleMapsRespondDescr_subHeader}> You can respond on Google from here! Connect your Google My Business
             account to get started.
           </div>
         </div>

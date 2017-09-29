@@ -158,15 +158,17 @@ class Reviews extends Component {
         };
     });
 
-    const filters = [ {
+    const filters = [
+      {
         title: 'sources',
         items: [
-          { type: 'checkbox', value: 'Google Maps' },
+          { type: 'checkbox', value: 'Google' },
           { type: 'checkbox', value: 'Yelp' },
           { type: 'checkbox', value: 'Facebook' },
           { type: 'checkbox', value: 'Rate MDs' },
         ],
-      }, {
+      },
+      {
         title: 'ratings',
         items: [
           { type: 'checkbox', value: '1 Star' },
@@ -181,11 +183,12 @@ class Reviews extends Component {
 
     const initialValues = {
       sources: {
-        'Google Maps': true,
+        Google: true,
         Yelp: true,
         Facebook: true,
         'Rate MDs': true,
       },
+
       ratings: {
         '1 Star': true,
         '2 Star': true,
@@ -228,7 +231,7 @@ class Reviews extends Component {
             <Tags />
           </Col> */}
           <Row className={styles.rowReviewsFilter}>
-            <Col Col style={{paddingLeft: '10px'}} xs={12} md={8} sm={9} lg={9}>
+            <Col Col style={{ paddingLeft: '10px' }} xs={12} md={8} sm={9} lg={9}>
               <ReviewsCard
                 data={constructBigComment}
                 startDate={this.state.startDate}
