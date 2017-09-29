@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { createReview } from '../../../thunks/reviews';
-import { VButton } from '../../library';
+import { Button } from '../../library';
 import ReviewForm from './ReviewForm';
 import styles from './styles.scss';
 
@@ -34,9 +34,9 @@ class Review extends Component {
             initialValues={initialValues}
             onSubmit={this.createReview}
           />
-          <VButton>
+          <Button>
             Next
-          </VButton>
+          </Button>
         </div>
       </div>
     );

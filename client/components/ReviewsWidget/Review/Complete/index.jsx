@@ -7,7 +7,7 @@ import sentimentContent from '../Submitted/content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
 import { closeBookingModal } from '../../../../thunks/availabilities';
-import { Avatar, Link, Input, Stars, TextArea, VButton } from '../../../library';
+import { Avatar, Link, Input, Stars, TextArea, Button } from '../../../library';
 import Picture from '../Picture';
 import styles from './styles.scss';
 
@@ -34,13 +34,13 @@ class Complete extends Component {
             isMinimal
           />
         </div>
-        <VButton
+        <Button
           className={styles.button}
           color='red'
           onClick={this.props.closeBookingModal}
         >
           Done
-        </VButton>
+        </Button>
       </div>
     );
   }

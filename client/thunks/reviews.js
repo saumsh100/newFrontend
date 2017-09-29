@@ -5,6 +5,7 @@ import {
   setReview,
   setIsLoadingSentReview,
   mergeReviewValues,
+  mergeSentReviewValues,
 } from '../reducers/reviewsWidget';
 
 /**
@@ -95,6 +96,7 @@ export function loadSentReview() {
       .then(({ data }) => {
         if (data.sentReview.isCompleted) {
           dispatch(mergeReviewValues(data.review));
+          dispatch(mergeSentReviewValues(data.senReview));
           dispatch(push('./review/complete'));
         }
 
