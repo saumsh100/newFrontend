@@ -49,22 +49,25 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
     data.dateTime = moment(req.body.datetime).toISOString();
   }
 
+  console.log(callernum);
+
   Patient.findOne({ where: { accountId: req.account.id, mobilePhoneNumber: callernum }, raw: true })
     .then((patient) => {
       if (patient) {
         console.log(`Received a call from ${patient.firstName} ${patient.lastName}`);
         callData.patientId = patient.id;
-        Call.create(Object.assign({}, data, callData));
+        return Call.create(Object.assign({}, data, callData));
       } else {
         console.log(`Received communication from unknown number: ${callernum}.`);
-        Call.create(Object.assign({}, data, callData));
+        return Call.create(Object.assign({}, data, callData));
       }
-    }).then(() => {
+    })
+    .then((call) => {
       const pub = req.app.get('pub');
-      pub.publish('call.started', callData.id);
+      pub.publish('call.started', call.id);
     });
 
-  res.sendStatus(201);
+  return res.sendStatus(201);
   // res.end();
 });
 

@@ -377,10 +377,10 @@ class Overview extends Component {
         </DialogBox>
         <Loader loaded={this.state.loader} color="#FF715C">
           <Row className={styles.intelligence__body}>
-            <Col xs={12}>
+            <Col xs={12} >
               <DashboardStats data={data} data-test-id={`${notConfirmedAppointments}_appointmentsConfirmed`}/>
             </Col>
-            <Col  xs={12} sm={6}>
+            <Col xs={12} sm={6} className={styles.padding}>
               <AppointmentFilled
                 appointmentFilled={totalData.appointmentBooked}
                 appointmentNotFilled={totalData.appointmentNotFiltred}
@@ -389,7 +389,7 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <Col xs={12} sm={6}>
+            <Col xs={12} sm={6} className={styles.padding}>
               <TopReference
                 title="Most Business"
                 data={serviceData}
