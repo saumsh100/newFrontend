@@ -15,7 +15,7 @@
     padding: 0 5px;
     border-bottom: 1px solid #e6e6e6;
     line-height: 40px;
-    //justify-content: flex-end;
+    justify-content: flex-start;
 
     @media screen and (max-width: 1350px){
       justify-content: space-between;
@@ -31,13 +31,7 @@
     }
 
     &__icon {
-      padding-top: 5px;
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-right: -50%;
-      transform: translate(-50%, -50%);
+      padding-left: 15px;
       @media screen and (max-width: 1250px) {
         display: none;
       }

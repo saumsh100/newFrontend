@@ -1,5 +1,6 @@
 
 import { Router } from 'express';
+import { protocol } from '../../../config/globals';
 import { Review, SentReview, sequelize } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { readFile, replaceJavascriptFile } from '../../../util/file';
@@ -159,8 +160,9 @@ reviewsRouter.get('/:accountId/cc.js', async (req, res, next) => {
     const cwd = process.cwd();
     const jsPath = `${cwd}/statics/assets/cc.js`;
     const cssPath = `${cwd}/server/routes/_my/widgets/widget.css`;
+
     // /book route by default to load widget
-    const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${account.id}/app/book`;
+    const iframeSrc = `${protocol}://${req.headers.host}/widgets/${account.id}/app`;
     const js = await replaceJavascriptFile(jsPath, {
       __CARECRU_ACCOUNT_ID__: toString(account.id),
       __CARECRU_WIDGET_PRIMARY_COLOR__: toString(account.bookingWidgetPrimaryColor || '#FF715A'),

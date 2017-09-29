@@ -6,19 +6,19 @@ import { withRouter } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
 import { updateReview } from '../../../thunks/reviews';
 import { login } from '../../../thunks/patientAuth';
-import { Link, VButton } from '../../library';
+import { Link, Button } from '../../library';
 import LoginForm from '../../Availabilities/SubmitView/LoginForm';
 import styles from './styles.scss';
 
 const customSubmitButton = (
-  <VButton
+  <Button
     type="submit"
     color="red"
     icon="email"
     className={styles.customSubmitButton}
   >
     Login with Email
-  </VButton>
+  </Button>
 );
 
 class Login extends Component {

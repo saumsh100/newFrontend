@@ -353,6 +353,7 @@ class AddNewAppointment extends Component {
             {...remoteButtonProps}
             className={styles.remoteSubmit_button}
             icon="floppy-o"
+            bordered
           >
             Save
           </RemoteSubmitButton>
@@ -361,6 +362,7 @@ class AddNewAppointment extends Component {
               <Button
                 onClick={this.deleteAppointment}
                 icon="trash"
+                bordered
               >
                 Delete
               </Button>

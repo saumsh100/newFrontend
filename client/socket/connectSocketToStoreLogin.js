@@ -117,7 +117,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           id: callId,
           title: 'Incoming Call',
           caller: true,
-          body: `Call from ${patient} ${data.entities.calls[callId].callerNum}`,
+          body: `${patient} ${data.entities.calls[callId].callerNum}`,
           sticky: true,
           browserAlert: true,
         };

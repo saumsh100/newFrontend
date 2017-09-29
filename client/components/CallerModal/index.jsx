@@ -6,6 +6,7 @@ import { DialogBox, Modal, Icon  } from '../library';
 import { push } from 'react-router-redux';
 import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
+import CallerDisplayUnknown from './CallerDisplayUnknown/';
 import { setScheduleDate } from '../../actions/schedule';
 import { fetchEntitiesRequest, updateEntityRequest } from '../../thunks/fetchEntities';
 import styles from './styles.scss';
@@ -44,15 +45,28 @@ class CallerModal extends Component {
       setScheduleDate,
     } = this.props;
 
-    const callDisplay = call ? (<CallerDisplay
-      call={call}
-      patient={patient}
-      patientIdStats={patientIdStats}
-      clearSelectedChat={this.clearSelectedChat}
-      updateEntityRequest={updateEntityRequest}
-      push={push}
-      setScheduleDate={setScheduleDate}
-    />) : null;
+
+    let callDisplay = null;
+
+    if (call) {
+       if (patient) {
+         callDisplay = (<CallerDisplay
+           call={call}
+           patient={patient}
+           patientIdStats={patientIdStats}
+           clearSelectedChat={this.clearSelectedChat}
+           updateEntityRequest={updateEntityRequest}
+           push={push}
+           setScheduleDate={setScheduleDate}
+         />)
+       } else {
+         callDisplay = (<CallerDisplayUnknown
+           call={call}
+           clearSelectedChat={this.clearSelectedChat}
+           updateEntityRequest={updateEntityRequest}
+         />)
+       }
+    }
 
     return (
       <Modal
