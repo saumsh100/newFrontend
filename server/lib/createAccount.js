@@ -1,5 +1,8 @@
 import { callrails, vendasta } from '../config/globals';
 import twilioClient from '../config/twilio';
+import {
+  Account,
+} from '../_models';
 
 const axios = require('axios');
 
@@ -9,6 +12,56 @@ const {
   apiKey,
   apiUser,
 } = vendasta;
+
+async function getVendastaIds(listings, reputationManagement, accountId, limit) {
+  setTimeout(async () => {
+    if (limit <= 0) {
+      return;
+    }
+    console.log(`Geting Vendasta Ids for accountId=${accountId}`);
+    let completed = 0;
+
+    const account = await Account.findOne({
+      where: {
+        id: accountId,
+      },
+    });
+    const accountUrl = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${account.vendastaAccountId}`;
+
+    const getCompany = await axios.get(accountUrl);
+
+    let srid;
+    let msid;
+
+    if (listings) {
+      srid = getCompany.data.data.productsJson.RM
+        ? getCompany.data.data.productsJson.RM.productId : null;
+
+      completed += 1;
+    }
+
+    if (reputationManagement) {
+      msid = getCompany.data.data.productsJson.MS
+            ? getCompany.data.data.productsJson.MS.productId : null;
+
+      completed += 1;
+    }
+
+    // check if ids where returned for the ones we want.
+
+    if (completed >= +listings + +reputationManagement) {
+      const newData = {
+        vendastaMsId: msid,
+        vendastaSrId: srid,
+      };
+
+      await account.update(newData);
+      return;
+    }
+
+    getVendastaIds(listings, reputationManagement, accountId, limit - 1);
+  }, 15000);
+}
 
 export async function callRail(account) {
   if (!account.destinationPhoneNumber) {
@@ -145,6 +198,9 @@ async function vendastaAddProducts(account, setupList) {
     };
 
     const newAccount = await account.update(newData);
+
+    getVendastaIds(setupList.listings === 'true', setupList.reputationManagement === 'true', account.id, 10);
+
     return newAccount;
   } catch (e) {
     console.log(e);
@@ -155,7 +211,7 @@ async function vendastaAddProducts(account, setupList) {
 
 
 async function vendastaSetup(account, setupList) {
-  console.log(setupList)
+
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
@@ -163,7 +219,6 @@ async function vendastaSetup(account, setupList) {
     customerIdentifier,
     addPresenceBuilderFlag: setupList.listings,
     addReputationFlag: setupList.reputationManagement,
-    addSocialMarketingFlag: setupList.social,
     address: account.street,
     city: account.city,
     country: account.country,
@@ -186,6 +241,9 @@ async function vendastaSetup(account, setupList) {
     };
 
     const newAccount = await account.update(newData);
+
+    getVendastaIds(setupList.listings === 'true', setupList.reputationManagement === 'true', account.id, 10);
+
     return newAccount;
   } catch (e) {
     console.log(e);
@@ -215,21 +273,21 @@ export default async function createAccount(account, setupList) {
     canSendRecalls,
   } = setupList;
 
-  let Account = account;
+  let AccountReturn = account;
 
   try {
     if (canSendReminders === 'true' || canSendRecalls === 'true') {
-      Account = await twilioSetup(account);
+      AccountReturn = await twilioSetup(account);
     }
     if (callTracking === 'true') {
-      Account = await callRail(account);
+      AccountReturn = await callRail(account);
     }
 
     if (reputationManagement === 'true' || listings === 'true' || social === 'true') {
-      Account = await vendastaSetup(account, setupList);
+      AccountReturn = await vendastaSetup(account, setupList);
     }
   } catch (e) {
     console.log(e);
   }
-  return Account;
+  return AccountReturn;
 }
