@@ -8,6 +8,9 @@ import {
 import {
   receiveEntities,
 } from '../actions/entities';
+import {
+  updateEntityRequest,
+} from "./fetchEntities";
 
 export function checkPatientUser(patientUser, requestData) {
   return function (dispatch, getState) {
@@ -25,8 +28,20 @@ export function checkPatientUser(patientUser, requestData) {
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
         const modifiedRequest = requestData;
 
-        set(modifiedRequest, 'patientId', Object.keys(data.entities['patients'])[0]);
-        dispatch(selectAppointment(modifiedRequest));
+        const patientId = Object.keys(data.entities['patients'])[0];
+        set(modifiedRequest, 'patientId', patientId );
+
+        axios.get(`/api/patients/${patientId}/stats`).then((appInfo) => {
+          if (appInfo.data.nextAppointment) {
+            alert('An Appointment was already created for this request!');
+            dispatch(updateEntityRequest({
+              key: 'requests',
+              model: requestData.requestModel,
+            }));
+          } else {
+            dispatch(selectAppointment(modifiedRequest));
+          }
+        });
 
         return data.entities;
       } else {
