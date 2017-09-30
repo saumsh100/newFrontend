@@ -5,19 +5,19 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { updateReview } from '../../../thunks/reviews';
 import { createPatient } from '../../../thunks/patientAuth';
-import { Link, VButton } from '../../library';
+import { Link, Button } from '../../library';
 import SignUpForm from '../../Availabilities/SubmitView/SignUpForm';
 import styles from './styles.scss';
 
 const customSubmitButton = (
-  <VButton
+  <Button
     type="submit"
     color="red"
     icon="email"
     className={styles.customSubmitButton}
   >
     Sign Up with Email
-  </VButton>
+  </Button>
 );
 
 class SignUp extends Component {

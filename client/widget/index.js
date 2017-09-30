@@ -2,10 +2,12 @@
 import CareCruAPI from './carecru';
 import UI from './ui';
 
-const __CARECRU_ACCOUNT_ID__ = null;
-const __CARECRU_WIDGET_PRIMARY_COLOR__ = null;
-const __CARECRU_STYLE_CSS__ = null;
-const __CARECRU_IFRAME_SRC__ = null;
+/* IMPORTANT: DO NOT TOUCH THESE, VERY SENSITIVE SEARCH AND REPLACE */
+/* DO NOT USE THESE STRINGS ANYWHERE ELSE OR ELSE SEARCH AND REPLACE WILL NOT WORK */
+const __CARECRU_ACCOUNT_ID__ = "__CARECRU_ACCOUNT_ID__";
+const __CARECRU_WIDGET_PRIMARY_COLOR__ = "__CARECRU_WIDGET_PRIMARY_COLOR__";
+const __CARECRU_STYLE_CSS__ = "__CARECRU_STYLE_CSS__";
+const __CARECRU_IFRAME_SRC__ = "__CARECRU_IFRAME_SRC__";
 
 function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
@@ -45,8 +47,13 @@ function main() {
 
   UI.injectStyleText(__CARECRU_STYLE_CSS__);
 
+  const cc = getQueryVariable('cc');
+
+  const iframeSrc = cc ? `${__CARECRU_IFRAME_SRC__}/${cc}` : `${__CARECRU_IFRAME_SRC__}/book`;
+  console.log('iframeSrc', __CARECRU_IFRAME_SRC__);
+
   // Create API for that clinic's widget
-  window.CareCru = new CareCruAPI({ iframeSrc: __CARECRU_IFRAME_SRC__ });
+  window.CareCru = new CareCruAPI({ iframeSrc });
 
   // Add to clinic registry so pages with multiple widgets can programmitcally manage
   window.CareCruz[__CARECRU_ACCOUNT_ID__] = window.CareCru;
@@ -60,12 +67,11 @@ function main() {
     const button = UI.bookingButton();
     button.onclick = (e) => {
       e.preventDefault();
-      CareCru.open('book');
+      CareCru.open();
     };
   }
 
   // Parse URL to see if we are being linked here
-  const cc = getQueryVariable('cc');
   const sentReviewId = getQueryVariable('srid');
   const accountId = getQueryVariable('accountId');
   const stars = getQueryVariable('stars');
@@ -80,11 +86,14 @@ function main() {
   }
 
   if (stars && sentReviewId) {
-    const data = { stars, sentReviewId };
+    const reviewData = { stars };
+    const sentReviewData = { id: sentReviewId };
     if (window.CareCruz[accountId]) {
-      window.CareCruz[accountId].mergeReviewValues(data);
+      window.CareCruz[accountId].mergeReviewValues(reviewData);
+      window.CareCruz[accountId].mergeSentReviewValues(sentReviewData);
     } else {
-      window.CareCru.mergeReviewValues(data);
+      window.CareCru.mergeReviewValues(reviewData);
+      window.CareCru.mergeSentReviewValues(sentReviewData);
     }
   }
 }

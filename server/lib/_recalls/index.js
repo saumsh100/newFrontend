@@ -82,7 +82,7 @@ export async function computeRecallsAndSend({ date }) {
 
   const accounts = await Account.findAll({
     where: {
-      canSendReminders: true,
+      canSendRecalls: true,
     },
 
     include: [{

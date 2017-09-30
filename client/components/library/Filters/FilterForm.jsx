@@ -4,6 +4,7 @@ import { Form, Field } from '../../library';
 import { connect } from 'react-redux';
 import FilterField from './FilterField';
 import styles from './styles.scss';
+import FormSection from '../Form/FormSection';
 
 function FilterForm(props) {
   const {
@@ -11,6 +12,7 @@ function FilterForm(props) {
     handleSubmit,
     formName,
     flipped,
+    initialValues,
   } = props;
 
   return (
@@ -18,6 +20,7 @@ function FilterForm(props) {
       form={formName}
       onChange={handleSubmit}
       ignoreSaveButton
+      initialValues={initialValues}
     >
       {filters.map((f, i) => {
         const content =
@@ -26,22 +29,24 @@ function FilterForm(props) {
           });
 
         return (
-          <div key={`filterForm_${i}`}>
-            <div className={styles.filters__title}>
-              {f.titleIcon &&
-              <div
-                style={{ backgroundColor: f.titleIcon.color }}
-                className={styles.filters__title__icon}
-              >
-                <span className={`fa fa-${f.titleIcon.icon}`} />
+          <FormSection name={f.title}>
+            <div key={`filterForm_${i}`}>
+              <div className={styles.filters__title}>
+                {f.titleIcon &&
+                <div
+                  style={{ backgroundColor: f.titleIcon.color }}
+                  className={styles.filters__title__icon}
+                >
+                  <span className={`fa fa-${f.titleIcon.icon}`} />
+                </div>
+                }
+                {f.title}
               </div>
-              }
-              {f.title}
+              <div className={styles.filters__checkFilter}>
+                {content}
+              </div>
             </div>
-            <div className={styles.filters__checkFilter}>
-              {content}
-            </div>
-          </div>
+          </FormSection>
         );
       })}
     </Form>
@@ -54,16 +59,4 @@ FilterForm.propTypes = {
   formName: PropTypes.string,
 };
 
-function mapStateToProps({ form },{ formName }) {
-
-  if (!form[formName]) {
-    return {
-      values: {},
-    };
-  }
-  return {
-    values: form[formName].values,
-  }
-}
-
-export default connect(mapStateToProps, null)(FilterForm);
+export default FilterForm;

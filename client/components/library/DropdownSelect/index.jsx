@@ -38,7 +38,7 @@ export default class DropdownSelect extends Component {
     };
   }
 
-  toggle(value) {
+  toggle() {
     if (this.state.isOpen) {
       this.setState({
         isOpen: false,
@@ -133,7 +133,7 @@ export default class DropdownSelect extends Component {
               className={className}
               onClick={() => {
                 onChange(option.value)
-                this.toggle(option.value)
+                this.close()
               }}
               data-test-id={option.value}
             >
@@ -188,6 +188,7 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
+        <Input onFocus={disabled ? false : this.toggle} onBlur={disabled ? false: this.toggle} className={styles.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>

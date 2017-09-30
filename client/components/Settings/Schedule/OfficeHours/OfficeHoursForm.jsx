@@ -98,6 +98,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
                       className={styles.inlineBlock}
                       disabled={isDisabled}
                       label="Start Time"
+                      search="label"
                     />
                   </Col>
                   <Col xs={1} className={styles.flexCentered}>
@@ -113,6 +114,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
                       name="endTime"
                       disabled={isDisabled}
                       label="End Time"
+                      search="label"
                     />
                   </Col>
                   {modal ? (<Icon

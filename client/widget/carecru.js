@@ -20,8 +20,9 @@ function CareCru({ iframeSrc }) {
     console.log('Connected to client!');
   });
 
+  const self = this;
   this.host.onEvent('closeModal', () => {
-    this.modal.close();
+    self.close();
   });
 }
 
@@ -41,6 +42,10 @@ CareCru.prototype.open = function (route = 'book') {
 
 CareCru.prototype.mergeReviewValues = function (values) {
   this.host.sendEvent('mergeReviewValues', values);
+};
+
+CareCru.prototype.mergeSentReviewValues = function (values) {
+  this.host.sendEvent('mergeSentReviewValues', values);
 };
 
 /**

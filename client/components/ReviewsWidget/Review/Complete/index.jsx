@@ -6,7 +6,9 @@ import { withRouter } from 'react-router-dom';
 import sentimentContent from '../Submitted/content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
-import { Avatar, Link, Input, Stars, TextArea, VButton } from '../../../library';
+import { closeBookingModal } from '../../../../thunks/availabilities';
+import { Avatar, Link, Input, Stars, TextArea, Button } from '../../../library';
+import Picture from '../Picture';
 import styles from './styles.scss';
 
 class Complete extends Component {
@@ -16,29 +18,14 @@ class Complete extends Component {
 
   render() {
     const { review, reviewedPractitioner } = this.props;
-    const poorReview = review.get('stars') < 4;
-    const sentiment = poorReview ? 'sorry' : 'grateful';
-    const content = sentimentContent[sentiment];
     const stars = review.get('stars');
-    const description = review.get('description');
-
     return (
       <div className={styles.main}>
-        <h1>THANK YOU!</h1>
         <div className={styles.row}>
-          <Avatar
-            size="xl"
-            user={reviewedPractitioner}
-          />
+          <Picture reviewedPractitioner={reviewedPractitioner} />
         </div>
-        <div className={styles.header}>
-          {content.header}
-        </div>
-        <div className={styles.message}>
-          {content.response}
-        </div>
-        <div className={styles.from}>
-          - {reviewedPractitioner.getPrettyName()}
+        <div className={styles.completeHeader}>
+          Feedback sent to {reviewedPractitioner.getPrettyShortName()}.
         </div>
         <div>
           <Stars
@@ -47,6 +34,13 @@ class Complete extends Component {
             isMinimal
           />
         </div>
+        <Button
+          className={styles.button}
+          color='red'
+          onClick={this.props.closeBookingModal}
+        >
+          Done
+        </Button>
       </div>
     );
   }
@@ -77,6 +71,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     mergeReviewValues,
     saveReview,
+    closeBookingModal,
   }, dispatch);
 }
 

@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  border-top: 5px solid $primary-color;
+  border-top: 5px solid var(--primaryColor);
 }
 
 .pullRight {
@@ -17,5 +17,6 @@
 .closeButton {
   width: 35px;
   font-size: 1em;
-
+  padding: 10px !important;
+  box-sizing: border-box;
 }

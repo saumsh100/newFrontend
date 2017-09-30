@@ -1,0 +1,15 @@
+
+@import '../../../../ui';
+
+.blurBackground {
+  background: linear-gradient(var(--primaryColor), white 70%);
+  border-radius: 50%;
+  // border-color: $primary-color;
+  //transition-timing-function: ease-in;
+  width: 4.4rem;
+  height: 4.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
