@@ -9,6 +9,8 @@ const {
   apiUser,
 } = vendasta;
 
+
+// deletes twilio takes in account Model
 export async function twilioDelete(account) {
   if (!account.twilioPhoneNumber) {
     return null;
@@ -37,6 +39,7 @@ export async function twilioDelete(account) {
   }
 }
 
+// deletes callrail takes in account Model
 export async function callRailDelete(account) {
   if (!account.callrailId) {
     return null;
@@ -61,6 +64,7 @@ export async function callRailDelete(account) {
   }
 }
 
+// deletes vendasta Listing takes in account Model
 async function vendastaDeleteMS(account) {
   const accountUrl = `https://presence-builder-api.vendasta.com/api/v3/site/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
 
@@ -76,11 +80,12 @@ async function vendastaDeleteMS(account) {
     });
   } catch (e) {
     console.log(e);
-    console.log('Vendasta Account Creation Failed');
+    console.log('Vendasta Listings Deletion Failed');
     return account;
   }
 }
 
+// deletes vendasta Rep Management takes in account Model
 async function vendastaDeleteRM(account) {
   const accountUrl = `https://reputation-intelligence-api.vendasta.com/api/v2/account/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
 
@@ -96,11 +101,12 @@ async function vendastaDeleteRM(account) {
     });
   } catch (e) {
     console.log(e);
-    console.log('Vendasta Account Creation Failed');
+    console.log('Vendasta Rep Management Creation Failed');
     return account;
   }
 }
 
+// function to figure out what to delete for vendasta - takes in account model and vendasta options
 export async function vendastaDelete(account, options) {
   try {
     if (options.options === 'deleteAll') {
@@ -122,11 +128,12 @@ export async function vendastaDelete(account, options) {
     return account;
   } catch (e) {
     console.log(e);
-    console.log('Vendasta Account Creation Failed');
+    console.log('Vendasta Delete Failed');
     return account;
   }
 }
 
+// deletes all from vendasta - takes in account Model
 async function vendastaDeleteAll(account) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
 
@@ -143,7 +150,7 @@ async function vendastaDeleteAll(account) {
     });
   } catch (e) {
     console.log(e);
-    console.log('Vendasta Account Creation Failed');
+    console.log('Vendasta Account Deletion Failed');
     return account;
   }
 }

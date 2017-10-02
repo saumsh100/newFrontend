@@ -35,6 +35,7 @@ export default function SelectAccountOptions(props) {
       }}
       initialValues={initialValues}
       destroyOnUnmount={false}
+      alignSave="left"
     >
       <Grid className={styles.accountOptions}>
         <Row className={styles.accountOptions_row}>
