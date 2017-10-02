@@ -31,11 +31,13 @@ export default handleActions({
       id,
       title,
       body: alert.body,
+      subText: alert.subText || '',
       type,
       caller: alert.caller || false,
       time: 3000,
       sticky: alert.sticky || false,
       browserAlert: alert.browserAlert || false,
+      clickable: alert.clickable || false,
     });
 
     return state.set(id, alertData);
