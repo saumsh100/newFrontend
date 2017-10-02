@@ -180,7 +180,11 @@ class ScheduleComponent extends Component {
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={this.reinitializeState}
                   >
-                    <ConfirmAppointmentRequest />
+                    <ConfirmAppointmentRequest
+                      appointments={appointments.get('models')}
+                      patients={patients.get('models')}
+                      selectedAppointment={selectedAppointment}
+                    />
                   </DialogBox>
                 </div>
                 {/* Here is the legend */}

@@ -54,7 +54,7 @@ async function connectedPatientUser(dispatch, requestData, data) {
     const appData = appointment[Object.keys(appointment)[0]];
     dispatch(setScheduleDate({ scheduleDate: moment(appData.startDate) }));
 
-    set(modifiedRequest, 'nextAppt', true);
+    set(modifiedRequest, 'nextAppt', Object.keys(appointment)[0]);
     dispatch(selectAppointment(modifiedRequest));
   }
 
