@@ -22,8 +22,8 @@ class Reviews extends Component {
       loaded: false,
       hasAccount: false,
       activationText: '',
-      endDate: moment(),
-      startDate: moment().subtract(1, 'year'),
+      endDate: null,
+      startDate: null,
     };
 
     this.submitDate = this.submitDate.bind(this);
@@ -48,8 +48,8 @@ class Reviews extends Component {
   componentDidMount() {
     if (this.state.hasAccount) {
       const params = {
-        startDate: this.state.startDate._d,
-        endDate: this.state.endDate._d,
+        startDate: this.state.startDate,
+        endDate: this.state.endDate,
       };
 
       Promise.all([
@@ -76,6 +76,7 @@ class Reviews extends Component {
     this.setState({
       loaded: false,
     });
+
     const params = {
       startDate: moment(values.startDate)._d,
       endDate: moment(values.endDate)._d,
@@ -136,14 +137,9 @@ class Reviews extends Component {
 
 
     constructBigComment = constructBigComment.map((review) => {
-        const publishedDate = moment(review.publishedDateTime);
-        const today = moment();
-        const duration = moment.duration(today.diff(publishedDate));
-        const days = duration.asDays();
-
         return {
           icon: review.sourceName,
-          createdAt: Math.ceil(days),
+          publishedDate: review.publishedDateTime,
           headerLinkName: review.reviewerName,
           headerLinkSite: review.domain,
           siteStars: parseInt(review.rating),
@@ -158,15 +154,18 @@ class Reviews extends Component {
         };
     });
 
-    const filters = [ {
+    const filters = [
+      {
         title: 'sources',
         items: [
+          { type: 'checkbox', value: 'CareCru' },
           { type: 'checkbox', value: 'Google Maps' },
           { type: 'checkbox', value: 'Yelp' },
           { type: 'checkbox', value: 'Facebook' },
           { type: 'checkbox', value: 'Rate MDs' },
         ],
-      }, {
+      },
+      {
         title: 'ratings',
         items: [
           { type: 'checkbox', value: '1 Star' },
@@ -181,11 +180,13 @@ class Reviews extends Component {
 
     const initialValues = {
       sources: {
+        'CareCru': true,
         'Google Maps': true,
         Yelp: true,
         Facebook: true,
         'Rate MDs': true,
       },
+
       ratings: {
         '1 Star': true,
         '2 Star': true,
@@ -228,7 +229,7 @@ class Reviews extends Component {
             <Tags />
           </Col> */}
           <Row className={styles.rowReviewsFilter}>
-            <Col Col style={{paddingLeft: '10px'}} xs={12} md={8} sm={9} lg={9}>
+            <Col Col style={{ paddingLeft: '10px' }} xs={12} md={8} sm={9} lg={9}>
               <ReviewsCard
                 data={constructBigComment}
                 startDate={this.state.startDate}

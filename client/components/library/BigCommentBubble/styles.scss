@@ -1,3 +1,4 @@
+
 @import "../../../ui";
 
 .bigComment {
@@ -216,4 +217,25 @@
       font-size: $small-size;
     }
   }
+}
+
+.howToWrapper {
+  height: 30px;
+  background-color: $primary-grey;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0px 25px;
+}
+
+.howToLink {
+  color: $primary-blue;
+  cursor: pointer;
+  &:hover {
+    color: darken($primary-blue, 10%);
+  }
+}
+
+.CareCruRespond {
+  background-color: $primary-color;
 }

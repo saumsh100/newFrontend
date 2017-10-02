@@ -41,6 +41,7 @@
       justify-content: flex-end;
       font-size: $medium-size;
       font-weight: $large-weight;
+      font-family: $medium-font;
       span {
         margin-left: 10px;
       }
@@ -51,8 +52,14 @@
       font-size: $small-size;
       color: $primary-darkgrey;
       font-weight: $large-weight;
+      display: flex;
+      flex-direction: row;
       span {
         margin: 0 5px;
+      }
+
+      > button {
+        padding: 0px;
       }
     }
   }
