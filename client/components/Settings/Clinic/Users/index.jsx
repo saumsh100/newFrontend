@@ -51,8 +51,17 @@ class Users extends Component{
   deleteInvite(id) {
     const { accountId } = this.props;
 
+    const alert = {
+      success: {
+        body: 'Invite Deleted.',
+      },
+      error: {
+        body: 'Invite Could Not Be Deleted',
+      },
+    };
+
     const url = `/api/accounts/${accountId}/invites/${id}`;
-    this.props.deleteEntityRequest({ key: 'invites', id, url });
+    this.props.deleteEntityRequest({ key: 'invites', id, url, alert });
   }
 
   sendNewUser(entityData) {
@@ -66,7 +75,16 @@ class Users extends Component{
       newActive: false,
     });
 
-    this.props.createEntityRequest({ key: 'user', entityData, url });
+    const alert = {
+      success: {
+        body: 'User Creaeted.',
+      },
+      error: {
+        body: 'User Could Not Be Created',
+      },
+    };
+
+    this.props.createEntityRequest({ key: 'user', entityData, url, alert });
 
     // resetting inputs to empty
     entityData.firstName = '';
@@ -87,7 +105,16 @@ class Users extends Component{
       active: false,
     });
 
-    this.props.createEntityRequest({ key: 'invites', entityData, url });
+    const alert = {
+      success: {
+        body: 'Invite Sent.',
+      },
+      error: {
+        body: 'Invite Could Not Be Sent',
+      },
+    };
+
+    this.props.createEntityRequest({ key: 'invites', entityData, url, alert });
     entityData.email = '';
   }
 
@@ -122,7 +149,16 @@ class Users extends Component{
     if (numOfOwners === 1 && userOwner === true) {
       alert('There must be one Owner!')
     } else {
-      this.props.updateEntityRequest({ key: 'accounts', values, url });
+      const alert = {
+        success: {
+          body: 'Permission Changed.',
+        },
+        error: {
+          body: 'Permission Could Not Be Changed',
+        },
+      };
+
+      this.props.updateEntityRequest({ key: 'accounts', values, url, alert });
     }
   }
 
@@ -209,7 +245,7 @@ class Users extends Component{
             nameStyle={styles.name}
             emailStyle={styles.email}
             userListStyle={styles.userListItem}
-            editStyles={styles.edit}
+            editStyles={styles.cancel}
           />
         );
       })

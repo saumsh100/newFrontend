@@ -14,8 +14,17 @@ class ActiveUsersList extends Component {
   }
 
   deleteUser(id, name) {
+    const alert = {
+      success: {
+        body: 'User Deleted.',
+      },
+      error: {
+        body: 'User Could Not Be Deleted',
+      },
+    };
+
     if (confirm(`Are you sure you want to delete ${name}?`)) {
-      this.props.deleteEntityRequest({ key: 'users', id });
+      this.props.deleteEntityRequest({ key: 'users', id, alert });
     }
   }
 

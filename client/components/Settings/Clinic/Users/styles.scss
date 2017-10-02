@@ -120,6 +120,14 @@
   }
 }
 
+.cancel {
+  margin-right: 10px !important;
+  display: flex;
+  i {
+    margin-top: -1px;
+  }
+}
+
 .inviteFormContainer {
   padding-bottom: 15px;
 }
