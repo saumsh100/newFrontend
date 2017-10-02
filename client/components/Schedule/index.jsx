@@ -9,6 +9,7 @@ import {
   Card,
   DayPicker,
   Modal,
+  DialogBox,
 } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
@@ -21,6 +22,7 @@ import HeaderButtons from './Cards/HeaderButtons';
 import Filters from './Cards/Filters';
 import styles from './styles.scss';
 import Calendar from '../library/Calendar/index';
+import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 
 class ScheduleComponent extends Component {
   constructor(props) {
@@ -87,6 +89,7 @@ class ScheduleComponent extends Component {
 
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
+      console.log(selectedAppointment);
       formName = `editAppointment_${selectedAppointment.serviceId}`;
     }
 
@@ -161,9 +164,9 @@ class ScheduleComponent extends Component {
                   />
                   <Modal
                     active={
-                      addNewAppointment ||
-                      !!selectedAppointment ||
-                      !!mergingPatientData.patientUser
+                      (addNewAppointment ||
+                        (!!selectedAppointment && !selectedAppointment.nextAppt) ||
+                      !!mergingPatientData.patientUser)
                     }
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={this.reinitializeState}
@@ -171,6 +174,14 @@ class ScheduleComponent extends Component {
                   >
                     {displayModalComponent}
                   </Modal>
+                  <DialogBox
+                    title="Confirm Appointment Request"
+                    active={selectedAppointment && selectedAppointment.nextAppt}
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={this.reinitializeState}
+                  >
+                    <ConfirmAppointmentRequest />
+                  </DialogBox>
                 </div>
                 {/* Here is the legend */}
                 <Legend />

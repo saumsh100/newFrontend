@@ -373,7 +373,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
         patientUserId: { $eq: null },
         $or: [{ firstName, lastName }, { email }, { phoneNumber }],
       },
-      include: [{
+      /*: [{
         model: Appointment,
         as: 'appointments',
         where: {
@@ -383,9 +383,30 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           limit: 1,
           order: ['startDate', 'asc'],
         },
-      }],
+      }],*/
     });
     return res.send(normalize('patients', patients));
+  } catch (error) {
+    next(error);
+  }
+});
+
+patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:read'), async (req, res, next) => {
+  try {
+    const nextAppt = await Appointment.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        startDate: {
+          $gte: new Date(),
+        },
+        isDeleted: false,
+        isCancelled: false,
+      },
+      order: [['startDate', 'ASC']],
+      limit: 1,
+    });
+    res.send(normalize('appointments', nextAppt));
   } catch (error) {
     next(error);
   }
