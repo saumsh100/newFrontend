@@ -17,6 +17,7 @@ const practitioner = {
   firstName: 'Colonel',
   lastName: 'Sanders',
   weeklyScheduleId,
+  pmsId: '12',
   createdAt: '2017-07-19T00:14:30.932Z',
   type: 'Hygienist',
   isActive: true,

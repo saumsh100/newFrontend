@@ -48,8 +48,12 @@ export default function (sequelize, DataTypes) {
               practitionerId: this.practitionerId,
               pmsId: value,
             },
-          }).then((timeOff) => {
+            paranoid: false,
+          }).then(async (timeOff) => {
             if (timeOff) {
+              timeOff.setDataValue('deletedAt', null);
+              timeOff = await timeOff.save({ paranoid: false });
+
               return next({
                 messages: 'PractitionerId PMS ID Violation',
                 model: timeOff,
