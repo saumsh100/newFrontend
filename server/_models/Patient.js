@@ -32,8 +32,12 @@ export default function (sequelize, DataTypes) {
               accountId: this.accountId,
               pmsId: value,
             },
-          }).then((patient) => {
+            paranoid: false,
+          }).then(async (patient) => {
             if (patient) {
+              patient.setDataValue('deletedAt', null);
+              patient = await patient.save({ paranoid: false });
+
               return next({
                 messages: 'AccountId PMS ID Violation',
                 model: patient,

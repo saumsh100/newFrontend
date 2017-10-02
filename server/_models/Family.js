@@ -21,8 +21,12 @@ export default function (sequelize, DataTypes) {
               accountId: this.accountId,
               pmsId: value,
             },
-          }).then((family) => {
+            paranoid: false,
+          }).then(async (family) => {
             if (family) {
+              family.setDataValue('deletedAt', null);
+              family = await family.save({ paranoid: false });
+
               return next({
                 messages: 'AccountId PMS ID Violation',
                 model: family,

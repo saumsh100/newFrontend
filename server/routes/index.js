@@ -59,14 +59,20 @@ rootRouter.use('/callrail', callsRouterSequelize);
 rootRouter.use('/_callrail', callsRouterSequelize);
 
 rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
-  return Invite.findOne({ token: req.params.tokenId })
+  return Invite.findOne({
+    where: {
+      token: req.params.tokenId,
+    },
+    paranoid: false,
+  })
     .then((invite) => {
       if (!invite) {
         // TODO: replace with StatusError
-        res.status(404).send();
-      } else {
-        res.redirect(`/signup/${req.params.tokenId}`);
+        return res.status(404).send('404 NOT FOUND');
+      } else if (invite && invite.deletedAt) {
+        return res.status(404).send('Invite Expired/Cancelled');
       }
+      return res.redirect(`/signup/${req.params.tokenId}`);
     })
     .catch(next);
 });

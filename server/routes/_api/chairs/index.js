@@ -23,25 +23,21 @@ chairsRouter.post('/', checkPermissions('chairs:create'), async (req, res, next)
   });
 
   try {
-    if (chairData.pmsId) {
-      const chair = await Chair.findOne({
-        where: {
-          pmsId: chairData.pmsId,
-          accountId: req.accountId,
-        },
-      });
-      if (chair) {
-        const normalized = format(req, res, 'chair', chair.get({ plain: true }));
-        return res.status(200).send(normalized);
-      }
-    }
+    const chairTest = await Chair.build(chairData);
+    await chairTest.validate();
+
+    return Chair.create(chairData)
+        .then(chair => res.status(201).send(format(req, res, 'chair', chair.get({ plain: true }))))
+        .catch(next);
   } catch (e) {
+    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+      const chair = e.errors[0].message.model.dataValues;
+
+      const normalized = format(req, res, 'chair', chair);
+      return res.status(201).send(normalized);
+    }
     return next(e);
   }
-
-  return Chair.create(chairData)
-    .then(chair => res.status(201).send(format(req, res, 'chair', chair.get({ plain: true }))))
-    .catch(next);
 });
 
 /**
@@ -56,6 +52,9 @@ chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) =>
       raw: true,
       // TODO: add this back when we have auth back
       where: { accountId },
+      order: [
+        ['name', 'DESC'],
+      ],
     });
 
     res.send(format(req, res, 'chairs', chairs));
