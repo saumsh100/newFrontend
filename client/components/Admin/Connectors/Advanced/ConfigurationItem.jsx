@@ -21,7 +21,7 @@ export default class ConfigurationItem extends Component {
   }
 
   render() {
-    const { configuration } = this.props;
+    const { account, configuration } = this.props;
     const { attributes } = configuration;
     const initialValues = { value: attributes.value };
     return (
@@ -35,7 +35,7 @@ export default class ConfigurationItem extends Component {
         <Form
           initialValues={initialValues}
           onSubmit={this.handleValueChange}
-          form={`configuration_value_${configuration.id}`}
+          form={`account_configuration_${account.id}_${configuration.id}`}
         >
           <Field
             label="Value"

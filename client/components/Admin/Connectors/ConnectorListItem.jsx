@@ -98,6 +98,7 @@ export default class ConnectorsListItem extends Component {
         </ListItem>
         {!this.state.isCollapsed ?
           <Advanced
+            key={`Advanced_${account.id}`}
             account={account}
           />
         : null}

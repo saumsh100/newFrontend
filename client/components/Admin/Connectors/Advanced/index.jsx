@@ -26,7 +26,9 @@ export default class Advanced extends Component {
 
   componentWillMount() {
     this.setState({ isLoading: true });
-    return axios.get('/api/accounts/configurations', headersConfig)
+
+    const { account } = this.props;
+    return axios.get(`/api/accounts/${account.id}/configurations`, headersConfig)
       .then(({ data }) => {
         this.setState({
           isLoading: false,
@@ -37,7 +39,8 @@ export default class Advanced extends Component {
   }
 
   onUpdateConfiguration(configuration) {
-    return axios.put('/api/accounts/configurations', configuration,headersConfig)
+    const { account } = this.props;
+    return axios.put(`/api/accounts/${account.id}/configurations`, configuration,headersConfig)
       .then(({ data }) => {
         const newConfig = data.data;
         const { configurations } = this.state;
