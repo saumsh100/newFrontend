@@ -22,7 +22,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {

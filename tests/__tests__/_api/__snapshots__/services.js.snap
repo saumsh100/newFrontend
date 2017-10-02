@@ -108,7 +108,7 @@ Object {
         "isCustomSchedule": true,
         "isHidden": false,
         "lastName": "Sanders",
-        "pmsId": null,
+        "pmsId": "12",
         "type": "Hygienist",
         "weeklyScheduleId": "8ce3ba61-60cd-40c6-bc85-c018cabd4a40",
       },

@@ -26,7 +26,11 @@ export default function (sequelize, DataTypes) {
               accountId: this.accountId,
               pmsId: value,
             },
-          }).then((service) => {
+            paranoid: false,
+          }).then(async (service) => {
+            service.setDataValue('deletedAt', null);
+            service = await service.save({ paranoid: false });
+
             if (service) {
               return next({
                 messages: 'AccountId PMS ID Violation',

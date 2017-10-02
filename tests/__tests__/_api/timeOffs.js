@@ -12,6 +12,7 @@ const practitionerTimeOffId = '46344262-9039-47fa-a4e6-d762dcc57308';
 const practitionerTimeOff = {
   id: practitionerTimeOffId,
   practitionerId,
+  pmsId: '12',
   startDate: '2017-07-19T00:16:30.932Z',
   endDate: '2017-07-19T00:17:30.932Z',
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -68,6 +69,24 @@ describe('/api/recurringTimeOffs', () => {
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/:timeOffId - delete a time off then undelete it', () => {
+      return request(app)
+        .delete(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(() => {
+          return request(app)
+            .post('/_api/recurringTimeOffs')
+            .set('Authorization', `Bearer ${token}`)
+            .send(practitionerTimeOff)
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body);
+              expect(body).toMatchSnapshot();
+            });
         });
     });
   });
