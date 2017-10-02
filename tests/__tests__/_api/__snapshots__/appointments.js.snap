@@ -150,14 +150,13 @@ Object {
     0,
     0,
     0,
-    0,
     1,
+    0,
     0,
     0,
   ],
   "entities": Object {},
   "months": Array [
-    "October",
     "November",
     "December",
     "January",
@@ -169,6 +168,7 @@ Object {
     "July",
     "August",
     "September",
+    "October",
   ],
 }
 `;
