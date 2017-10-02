@@ -125,7 +125,6 @@ describe('/api/chairs', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           id: newChairId,
-          accountId,
           name: 'New Chair',
         })
         .expect(201)
@@ -146,7 +145,6 @@ describe('/api/chairs', () => {
         .set('Accept', 'application/vnd.api+json')
         .send({
           id: newChairId,
-          accountId,
           name: 'New Chair',
         })
         .expect(201)

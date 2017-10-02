@@ -14,12 +14,17 @@ export default function Alert(props) {
   let alertStyle = styles.alert;
   alertStyle = classNames(styles[`alert--${alert.type}`], alertStyle);
 
+  const cursorStyle = alert && alert.clickable ? {
+    cursor: 'pointer',
+  } : {};
+
   let iconStyle = styles.iconContainer;
   iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
 
   return (
     <div
       className={alertStyle}
+      style={cursorStyle}
       onClick={alertClick}
     >
       <div className={styles.textContainer} >
@@ -27,6 +32,7 @@ export default function Alert(props) {
           <span>{alert.title}!</span>
         </div>
         <div className={styles.alertBodyText}>{alert.body}</div>
+        <div className={styles.alertBodyText}>{alert.subText}</div>
       </div>
       <div className={iconStyle}>
         <Icon

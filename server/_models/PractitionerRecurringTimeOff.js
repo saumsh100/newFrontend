@@ -43,6 +43,7 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       validate: {
         isUnique(value, next) {
+          // validator for if pmsId and accountId are a unique combo
           return PractitionerRecurringTimeOff.findOne({
             where: {
               practitionerId: this.practitionerId,
