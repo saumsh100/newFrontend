@@ -8,6 +8,7 @@ import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
 import reviewsRouter from './reviews';
+import sentReviewsRouter from './sentReviews';
 import widgetsRouter from './widgets';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import { Patient, PatientUser, Practitioner, PatientUserReset } from '../../_models';
@@ -30,6 +31,7 @@ sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
 ]));
 
 sequelizeMyRouter.use('/reviews', reviewsRouter);
+sequelizeMyRouter.use('/sentReviews', sentReviewsRouter);
 sequelizeMyRouter.use('/widgets', widgetsRouter);
 
 sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {

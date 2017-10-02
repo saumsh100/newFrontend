@@ -198,6 +198,7 @@ module.exports = {
           sin: 'dsasdasdasdadsasad',
         }),
         createdAt: faker.date.past(),
+        pmsCreatedAt: faker.date.past(),
         updatedAt: new Date(),
       });
 
@@ -317,6 +318,7 @@ module.exports = {
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
         }),
+        pmsCreatedAt: faker.date.past(),
         createdAt: faker.date.past(),
         updatedAt: new Date(),
       });

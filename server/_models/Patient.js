@@ -136,6 +136,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     },
 
+    pmsCreatedAt: {
+      type: DataTypes.DATE,
+    },
+
     // TODO: should be a seperate table
     insurance: {
       type: DataTypes.JSONB,

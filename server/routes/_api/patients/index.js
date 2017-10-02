@@ -4,7 +4,7 @@ import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
-import { mostBusinessPatient } from '../../../lib/intelligence/revenue';
+import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
@@ -112,16 +112,35 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
   }
 });
 
-patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
+patientsRouter.get('/revenueStatsTotal', checkPermissions('patients:read'), async (req, res, next) => {
   const {
     accountId,
-    params,
+    query,
   } = req;
 
   let {
     startDate,
     endDate,
-  } = params;
+  } = query;
+
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
+
+  return mostBusinessClinic(startDate, endDate, accountId)
+          .then(result => res.send(result[0]))
+          .catch(next);
+});
+
+patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    accountId,
+    query,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = query;
 
   startDate = startDate || moment().subtract(1, 'years').toISOString();
   endDate = endDate || moment().toISOString();
@@ -405,7 +424,8 @@ patientsRouter.post('/', async (req, res, next) => {
   let patient;
   try {
     patient = await Patient.create(patientData);
-    const normalizedPatient = format(req, res, 'patient', patient.get({ plain: true }));
+    const normalizedPatient = format(req, res, 'patient', patient.dataValues);
+
     res.status(201).send(normalizedPatient);
 
     // Dispatch socket event
@@ -512,7 +532,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
             chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
           });
       }
-      const normalized = format(req, res, 'patient', patient.get({ plain: true }));
+      const normalized = format(req, res, 'patient', patient.dataValues);
       res.status(201).send(normalized);
       return { patient, normalized };
     })

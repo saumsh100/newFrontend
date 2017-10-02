@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
+import { newPatients } from '../../../lib/intelligence/patients';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -370,7 +371,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
     });
 
   return Promise.all([a, b, c, d, e])
-    .then((values) => {
+    .then(async (values) => {
       const sendStats = {};
       sendStats.practitioner = {};
       sendStats.services = {};
@@ -500,6 +501,11 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       newObject[sorted[3]] = sendStats.patients[sorted[3]];
 
       sendStats.patients = newObject;
+
+      const newPatientsNumber = await newPatients(startDate, endDate, accountId);
+
+      sendStats.newPatients = newPatientsNumber[0] && newPatientsNumber[0].dataValues.newPatients
+        ? newPatientsNumber[0].dataValues.newPatients : sendStats.newPatients;
 
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;

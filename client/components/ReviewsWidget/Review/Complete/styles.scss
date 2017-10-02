@@ -45,11 +45,12 @@
   text-align: center;
 }
 
-.header {
+.completeHeader {
   @extend .text-centered;
   @extend .row;
   padding: 20px 20px 0 20px;
   margin: 0 auto; // when you add max-width you need this
+  margin-bottom: 20px;
   max-width: 210px;
   font-size: 1.8em;
   color: $primary-blue;
@@ -68,6 +69,10 @@
 .button {
   width: 100%;
   margin-top: auto;
+  background-color: var(--primaryColor);
+  &:hover {
+    background-color: var(--primaryColor);
+  }
 }
 
 .googleButton {
@@ -86,5 +91,17 @@
 .from {
   @extend .message;
   padding-top: 0px;
+}
+
+.blurBackground {
+  background: linear-gradient(var(--primaryColor), white 70%);
+  border-radius: 50%;
+  //border-color: $primary-color;
+  //transition-timing-function: ease-in;
+  width: 4.4rem;
+  height: 4.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 

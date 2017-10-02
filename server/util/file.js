@@ -35,8 +35,8 @@ export function readFile(path) {
 export async function replaceJavascriptFile(path, config) {
   const js = await readFile(path);
   return reduce(config, (result, value, key) => {
-    const before = `${key} = null`;
-    const after = `${key} = ${value}`;
+    const before = `"${key}"`;
+    const after = value;
     return replaceIndex(result, new RegExp(before, 'g'), 0, after);
   }, js);
 }

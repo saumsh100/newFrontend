@@ -76,7 +76,7 @@ const EnterpriseForm = (props) => {
             label="Timezone"
             component="DropdownSelect"
             options={options}
-
+            search
           />
           <Field
             required
