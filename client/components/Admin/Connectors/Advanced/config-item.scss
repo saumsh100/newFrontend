@@ -1,0 +1,15 @@
+
+@import '../../../../ui.scss';
+
+.configWrapper {
+  margin: 20px;
+  padding: 20px;
+  background-color: $primary-grey;
+  border-radius: 10px;
+  border: 1px solid $primary-darkgrey;
+}
+
+.name {
+  font-family: $medium-font;
+  margin-bottom: 10px;
+}
