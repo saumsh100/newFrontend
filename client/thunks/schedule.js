@@ -26,7 +26,6 @@ export function checkPatientUser(patientUser, requestData) {
       const checkObjEmpty = !_.values(data.entities['patients']).some(x => x !== undefined);
 
       if (!checkObjEmpty) {
-
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
         const modifiedRequest = requestData;
 
@@ -36,27 +35,28 @@ export function checkPatientUser(patientUser, requestData) {
         dispatch(selectAppointment(modifiedRequest));
 
         return data.entities;
-      } else {
-        const params = {
-          firstName: patientUser.get('firstName'),
-          lastName: patientUser.get('lastName'),
-          email: patientUser.get('email'),
-          phoneNumber: patientUser.get('phoneNumber'),
-        };
-
-        const searchResponse = await axios.get('/api/patients/suggestions', { params });
-        const dataSuggest = searchResponse.data;
-
-        dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }))
-        const dataArray = getEntities(dataSuggest.entities);
-
-        dispatch(setMergingPatient({
-          patientUser,
-          requestData,
-          suggestions: dataArray,
-        }));
-        return dataArray;
       }
+
+      const params = {
+        firstName: patientUser.get('firstName'),
+        lastName: patientUser.get('lastName'),
+        email: patientUser.get('email'),
+        phoneNumber: patientUser.get('phoneNumber'),
+      };
+
+      const searchResponse = await axios.get('/api/patients/suggestions', { params });
+      const dataSuggest = searchResponse.data;
+
+      dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }))
+      const dataArray = getEntities(dataSuggest.entities);
+
+      dispatch(setMergingPatient({
+        patientUser,
+        requestData,
+        suggestions: dataArray,
+      }));
+
+      return dataArray;
     } catch (err) {
       throw err;
     }

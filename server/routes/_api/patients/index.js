@@ -373,6 +373,17 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
         patientUserId: { $eq: null },
         $or: [{ firstName, lastName }, { email }, { phoneNumber }],
       },
+      include: [{
+        model: Appointment,
+        as: 'appointments',
+        where: {
+          startDate: {
+            $gte: new Date(),
+          },
+          limit: 1,
+          order: ['startDate', 'asc'],
+        },
+      }],
     });
     return res.send(normalize('patients', patients));
   } catch (error) {
