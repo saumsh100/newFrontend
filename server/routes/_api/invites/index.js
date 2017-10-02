@@ -105,6 +105,59 @@ invitesRouter.post('/:accountId/invites', async (req, res, next) => {
 });
 
 /**
+ * POST /:accountId/invites/resend
+ *
+ * - resends an email invite
+ */
+invitesRouter.post('/:accountId/invites/:inviteId/resend', async (req, res, next) => {
+  // Override accountId, and add token
+
+  return Promise.resolve(req.invite)
+  .then((invite) => {
+    User.findAll({
+      where: {
+        id: invite.sendingUserId,
+      },
+      raw: true,
+    }).then((user) => {
+      let protocol = req.protocol;
+
+      // this is for heroku to create the right http link it uses
+      // x-forward-proto for https but shows http in req.protocol
+
+      if (req.headers['x-forwarded-proto'] === 'https') {
+        protocol = 'https';
+      }
+
+      const fullUrl = `${protocol}://${req.get('host')}/signupinvite/${invite.token}`;
+
+      const mergeVars = [
+        {
+          name: 'URL',
+          content: fullUrl,
+        },
+        {
+          name: 'NAME',
+          content: `${user[0].firstName} ${user[0].lastName}`,
+        },
+        {
+          name: 'CURRENT_YEAR',
+          content: moment().format('YYYY'),
+        },
+      ];
+
+      sendInvite({
+        subject: "You're Invited",
+        toEmail: invite.email,
+        mergeVars,
+      });
+
+      return res.send(normalize('invite', invite.dataValues));
+    });
+  }).catch(next);
+});
+
+/**
  * DELETE /:accountId/invites/:inviteId
  *
  * - cancel a user invitation
