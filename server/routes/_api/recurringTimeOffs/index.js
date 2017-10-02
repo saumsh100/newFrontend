@@ -18,10 +18,14 @@ recurringTimeOffRouter.param('timeOffId', sequelizeLoader('recurringTimeOff', 'P
  */
 recurringTimeOffRouter.post('/', checkPermissions('timeOffs:create'), async (req, res, next) => {
   try {
-    const timeOffTest = await PractitionerRecurringTimeOff.build(req.body);
+    const timeOffData = Object.assign({}, req.body, {
+      accountId: req.accountId,
+    });
+
+    const timeOffTest = await PractitionerRecurringTimeOff.build(timeOffData);
     await timeOffTest.validate();
 
-    return PractitionerRecurringTimeOff.create(req.body)
+    return PractitionerRecurringTimeOff.create(timeOffData)
         .then((tf) => {
           return res.status(201).send(normalize('practitionerRecurringTimeOff', tf.get({ plain: true })));
         });

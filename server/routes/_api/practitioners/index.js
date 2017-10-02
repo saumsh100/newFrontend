@@ -42,7 +42,12 @@ practitionersRouter.get('/', (req, res, next) => {
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), async (req, res, next) => {
   try {
-    const practitionerTest = await Practitioner.build(req.body);
+    const accountId = req.accountId;
+    let practitionerData = Object.assign({}, req.body, {
+      accountId,
+    });
+
+    const practitionerTest = await Practitioner.build(practitionerData);
     await practitionerTest.validate();
 
     return Account.findOne({
@@ -84,7 +89,7 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), async (r
           },
         });
 
-        const practitionerData = Object.assign({},
+        practitionerData = Object.assign({},
           {
             accountId: req.accountId,
             weeklyScheduleId: weeklySchedule.id,
