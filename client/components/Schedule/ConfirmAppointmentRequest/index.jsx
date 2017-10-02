@@ -30,7 +30,7 @@ class ConfirmAppointmentRequest extends Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.}>It seems like an appointment was already created for {patient.get('firstName')} on {
+        <div className={styles.test}>It seems like an appointment was already created for {patient.get('firstName')} on {
           startDate.format('MMMM Do, YYYY h:ma')}</div>
         <div>
           <div>
