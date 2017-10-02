@@ -13,35 +13,27 @@ import {
 } from "./fetchEntities";
 
 export function checkPatientUser(patientUser, requestData) {
-  return function (dispatch, getState) {
+  return async function (dispatch, getState) {
     // AccountId passed up in the query
     const query = {
       patientUserId: patientUser.get('id'),
     };
 
-    return axios.get('/api/patients', { params: query })
-    .then((response) => {
-      const { data } = response;
+    try {
+      const patientData = await axios.get('/api/patients', { params: query });
+
+      const { data } = patientData;
       const checkObjEmpty = !_.values(data.entities['patients']).some(x => x !== undefined);
 
       if (!checkObjEmpty) {
+
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
         const modifiedRequest = requestData;
 
         const patientId = Object.keys(data.entities['patients'])[0];
-        set(modifiedRequest, 'patientId', patientId );
 
-        axios.get(`/api/patients/${patientId}/stats`).then((appInfo) => {
-          if (appInfo.data.nextAppointment) {
-            alert('An Appointment was already created for this request!');
-            dispatch(updateEntityRequest({
-              key: 'requests',
-              model: requestData.requestModel,
-            }));
-          } else {
-            dispatch(selectAppointment(modifiedRequest));
-          }
-        });
+        set(modifiedRequest, 'patientId', patientId);
+        dispatch(selectAppointment(modifiedRequest));
 
         return data.entities;
       } else {
@@ -52,20 +44,22 @@ export function checkPatientUser(patientUser, requestData) {
           phoneNumber: patientUser.get('phoneNumber'),
         };
 
-        return axios.get('/api/patients/suggestions', { params }).then((searchResponse) => {
-          const dataSuggest = searchResponse.data;
+        const searchResponse = await axios.get('/api/patients/suggestions', { params });
+        const dataSuggest = searchResponse.data;
 
-          dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }))
-          const dataArray = getEntities(dataSuggest.entities);
+        dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }))
+        const dataArray = getEntities(dataSuggest.entities);
 
-          dispatch(setMergingPatient({
-            patientUser,
-            requestData,
-            suggestions: dataArray,
-          }));
-        });
+        dispatch(setMergingPatient({
+          patientUser,
+          requestData,
+          suggestions: dataArray,
+        }));
+        return dataArray;
       }
-    });
+    } catch (err) {
+      throw err;
+    }
   };
 }
 
