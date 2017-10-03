@@ -189,14 +189,7 @@ accountsRouter.delete('/:accountId/integrations', async (req, res, next) => {
   return res.send(normalize('account', account.get({ plain: true })));
 });
 
-
-/**
- * GET /configurations/
- *
- * - get connector configuration settings.
- *
- */
-accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+async function getAccountConnectorConfigurations(req, res, next, accountId) {
   try {
     const sendValues = [];
     const accountConfigs = await Configuration.findAll({
@@ -206,7 +199,7 @@ accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (
         model: AccountConfiguration,
         as: 'accountConfiguration',
         where: {
-          accountId: req.accountId,
+          accountId,
         },
 
         required: false,
@@ -233,7 +226,28 @@ accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (
   } catch (err) {
     return next(err);
   }
+}
+
+/**
+ * GET /configurations
+ *
+ * - get connector configuration settings.
+ *
+ */
+accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return getAccountConnectorConfigurations(req, res, next, req.accountId);
 });
+
+/**
+ * GET /:accountId/configurations
+ *
+ * - get connector configuration settings.
+ *
+ */
+accountsRouter.get('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return getAccountConnectorConfigurations(req, res, next, req.account.id);
+});
+
 
 
 /**
@@ -259,14 +273,7 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .catch(next);
 });
 
-/**
- * PUT /configurations/
- *
- * - Update connector configuration settings.
- *
- */
-
-accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+async function updateAccountConnectorConfigurations(req, res, next, accountId) {
   try {
     const {
       name,
@@ -282,7 +289,7 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
 
     const checkConfigExists = await AccountConfiguration.findOne({
       where: {
-        accountId: req.accountId,
+        accountId,
         configurationId: config.id,
       },
     });
@@ -293,7 +300,7 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
       newConfig = await checkConfigExists.update(req.body);
     } else {
       newConfig = await AccountConfiguration.create({
-        accountId: req.accountId,
+        accountId,
         configurationId: config.id,
         ...req.body,
       });
@@ -310,12 +317,32 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
     };
 
     const io = req.app.get('socketio');
-    io.of(namespaces.sync).in(req.accountId).emit('CONFIG:REFRESH', name);
+    io.of(namespaces.sync).in(accountId).emit('CONFIG:REFRESH', name);
 
     return res.send(format(req, res, 'configuration', sendValue));
   } catch (err) {
     next(err);
   }
+}
+
+/**
+ * PUT /:accountId/configurations
+ *
+ * - Update connector configuration settings.
+ *
+ */
+accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return updateAccountConnectorConfigurations(req, res, next, req.accountId);
+});
+
+/**
+ * PUT /:accountId/configurations
+ *
+ * - Update connector configuration settings.
+ *
+ */
+accountsRouter.put('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return updateAccountConnectorConfigurations(req, res, next, req.account.id);
 });
 
 
