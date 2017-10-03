@@ -34,7 +34,6 @@ const batchAppointment = {
   id: batchAppointmentId,
   startDate: '2017-07-21T00:14:30.932Z',
   endDate: '2017-07-21T00:16:30.932Z',
-  accountId,
   patientId,
   practitionerId,
   isSyncedWithPms: false,
@@ -47,7 +46,6 @@ const batchAppointment2 = {
   id: batchAppointmentId2,
   startDate: '2017-07-21T00:14:30.932Z',
   endDate: '2017-07-21T00:16:30.932Z',
-  accountId,
   patientId,
   practitionerId,
   isSyncedWithPms: false,
@@ -60,7 +58,6 @@ const batchAppointment3 = {
   id: batchAppointmentId3,
   startDate: '2017-07-21T00:14:30.932Z',
   endDate: '2017-07-21T00:16:30.932Z',
-  accountId,
   patientId,
   practitionerId,
   isSyncedWithPms: false,
@@ -73,7 +70,6 @@ const batchAppointment4 = {
   id: batchAppointmentId4,
   startDate: '2017-07-21T00:14:30.932Z',
   endDate: '2017-07-21T00:16:30.932Z',
-  accountId,
   patientId,
   practitionerId,
   isSyncedWithPms: false,
@@ -84,7 +80,6 @@ const batchAppointment4 = {
 
 const invalidBatchAppointment = {
   id: invalidBatchAppointmentId,
-  accountId,
   patientId,
   practitionerId,
   isSyncedWithPms: false,
@@ -187,10 +182,12 @@ describe('/api/appointments', () => {
     });
 
     test('/ - create an appointment', () => {
+      const createAppointment = Object.assign({}, appointment);
+      appointment.accountId;
       return request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send(appointment)
+        .send(createAppointment)
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -286,7 +283,6 @@ describe('/api/appointments', () => {
           const appointmentCreate = {
             startDate: '2017-01-21T00:14:30.932Z',
             endDate: '2017-01-21T00:14:30.932Z',
-            accountId,
             patientId,
             practitionerId,
             pmsId: '12',
