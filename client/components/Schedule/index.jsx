@@ -127,6 +127,7 @@ class ScheduleComponent extends Component {
           reinitializeState={this.reinitializeState}
           selectAppointment={selectAppointment}
           setMergingPatient={setMergingPatient}
+          setCurrentDay={this.setCurrentDay}
         />
       );
     } else if (mergingPatientData.patientUser) {

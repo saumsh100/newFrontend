@@ -11,7 +11,7 @@ export default function PatientData(props) {
   } = props;
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
-
+  const futureAppointments = patient.appointments;
   const appointment = {
     startDate: requestData.startDate,
     endDate: requestData.endDate,
@@ -23,7 +23,10 @@ export default function PatientData(props) {
     patientId: patient.id,
     requestModel: requestData.requestModel,
     practitionerId: requestData.practitionerId,
+    nextAppt: futureAppointments.length ? futureAppointments[0].id : false,
   };
+
+  const futureAppStartDate = futureAppointments.length ? futureAppointments[0].startDate : null;
 
   return (
     <ListItem
@@ -37,12 +40,12 @@ export default function PatientData(props) {
           {patient.email}
         </div>
         <div className={styles.patientContainer_phone}>
-          {patient.phoneNumber}
+          {patient.mobilePhoneNumber}
         </div>
       </div>
       <Button
         onClick={() => {
-          handleUpdatePatient(appointment);
+          handleUpdatePatient(appointment, futureAppStartDate);
         }}
         className={styles.connectButton}
         data-test-id={`${patient.firstName}${patient.lastName}`}

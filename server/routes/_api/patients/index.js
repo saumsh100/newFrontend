@@ -367,25 +367,30 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
   let patients;
   try {
     patients = await Patient.findAll({
-      raw: true,
       where: {
         accountId,
         patientUserId: { $eq: null },
         $or: [{ firstName, lastName }, { email }, { phoneNumber }],
       },
-      /*: [{
+      include: [{
         model: Appointment,
         as: 'appointments',
         where: {
           startDate: {
             $gte: new Date(),
           },
-          limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
-          order: ['startDate', 'asc'],
         },
-      }],*/
+        //limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
+        order: [['startDate', 'asc']],
+        required: false,
+      }],
     });
-    return res.send(normalize('patients', patients));
+
+    const patientsData = patients.map((patient) => {
+      return patient.get({ plain: true });
+    });
+
+    return res.send(normalize('patients', patientsData));
   } catch (error) {
     next(error);
   }

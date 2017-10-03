@@ -70,7 +70,6 @@ async function suggestedPatients(dispatch, requestData, patientUser) {
 
   const searchResponse = await axios.get('/api/patients/suggestions', { params });
   const dataSuggest = searchResponse.data;
-
   dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }));
 
   const dataArray = getEntities(dataSuggest.entities);
