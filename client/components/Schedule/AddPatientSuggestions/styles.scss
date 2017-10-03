@@ -37,6 +37,7 @@
 .suggestionsListItem {
   display: flex;
   padding: 20px 20px 20px 20px;
+  line-height: 1.5em;
 }
 
 .title {
@@ -63,19 +64,18 @@
   }
 
   &_fullName {
-    font-family: $medium-font;
-    font-size: $medium-size;
+    composes: listItemHeader from 'sass-loader!../../../fonts.scss';
     @media screen and (max-width: 850px){
       font-size: $medium-size;
     }
   }
 
   &_phone {
-
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
   }
 
   &_email {
-
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
   }
 }
 

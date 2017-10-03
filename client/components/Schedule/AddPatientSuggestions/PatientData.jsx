@@ -31,7 +31,7 @@ export default function PatientData(props) {
   return (
     <ListItem
       className={styles.suggestionsListItem}>
-      <Avatar size={"lg"} className={styles.patientContainer_img} user={patient} alt="" />
+      <Avatar size={'lg'} className={styles.patientContainer_img} user={patient} alt="" />
       <div className={styles.patientContainer} >
         <div className={styles.patientContainer_fullName}>
           {fullName}
