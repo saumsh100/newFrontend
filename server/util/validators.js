@@ -4,7 +4,9 @@
  * @return phone number String or null if invalid.
  */
 function validatePhoneNumber(phoneNumber) {
-  if (!phoneNumber || phoneNumber.length < 10) return null;
+  if (!phoneNumber === null) return null;
+  
+  if (!phoneNumber || phoneNumber.length < 10) return undefined;
 
   const pn = phoneNumber.replace(/\D/g, '');
 
@@ -15,7 +17,7 @@ function validatePhoneNumber(phoneNumber) {
     return '+'.concat(pn);
   }
 
-  return null;
+  return undefined;
 }
 
 module.exports = {
