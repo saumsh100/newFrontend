@@ -233,7 +233,6 @@ describe('/api/patients', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           email: 'testpatient@test.com',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -249,7 +248,6 @@ describe('/api/patients', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           phoneNumber: '7788888888',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -265,7 +263,6 @@ describe('/api/patients', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           phoneNumber: '+17789999999',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -275,10 +272,12 @@ describe('/api/patients', () => {
     });
 
     test('/ - create a patient', () => {
+      const createPatient = Object.assign({}, patient);
+      delete createPatient.accountId;
       return request(app)
         .post(`${rootUrl}`)
         .set('Authorization', `Bearer ${token}`)
-        .send(patient)
+        .send(createPatient)
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -372,7 +371,6 @@ describe('/api/patients', () => {
         .expect(204)
         .then(({ body }) => {
           const patientCreate = {
-            accountId,
             email: 'testpatient@test.com',
             firstName: 'Ronald',
             lastName: 'Mcdonald',

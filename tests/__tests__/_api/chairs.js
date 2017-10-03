@@ -228,7 +228,6 @@ describe('/api/chairs', () => {
             .set('Authorization', `Bearer ${token}`)
             .send({
               id: chairId1,
-              accountId,
               name: 'C5',
               pmsId: '12',
             })
