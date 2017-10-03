@@ -4,7 +4,7 @@
  * @return phone number String or null if invalid.
  */
 function validatePhoneNumber(phoneNumber) {
-  if (!phoneNumber === null) return null;
+  if (phoneNumber === null) return null;
   
   if (!phoneNumber || phoneNumber.length < 10) return undefined;
 
