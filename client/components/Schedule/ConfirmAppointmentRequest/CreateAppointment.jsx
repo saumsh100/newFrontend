@@ -7,6 +7,7 @@ export default function CreateAppointment(props) {
   const {
     patient,
     request,
+    reinitializeState,
     createAppointment,
   } = props;
 
@@ -40,10 +41,10 @@ export default function CreateAppointment(props) {
         </div>
       </ListItem>
       <div className={styles.buttonContainer}>
-        <Button icon="times" >
+        <Button icon="times" color="darkgrey" onClick={() => reinitializeState()}>
           No
         </Button>
-        <Button icon="check"  >
+        <Button icon="check" tertiary onClick={() => createAppointment()}>
           Yes
         </Button>
       </div>

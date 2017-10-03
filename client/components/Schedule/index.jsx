@@ -183,7 +183,7 @@ class ScheduleComponent extends Component {
                     {displayModalComponent}
                   </Modal>
                   <DialogBox
-                    title={this.state.confirmState ? 'Could this be the same appointment ?' :
+                    title={this.state.confirmState ? 'Could this be the same appointment?' :
                       'Create an appointment for this request?'}
                     type="mediumSmall"
                     active={selectedAppointment && selectedAppointment.nextAppt}

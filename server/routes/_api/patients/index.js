@@ -380,7 +380,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           startDate: {
             $gte: new Date(),
           },
-          limit: 1,
+          limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
           order: ['startDate', 'asc'],
         },
       }],*/
@@ -404,7 +404,7 @@ patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:rea
         isCancelled: false,
       },
       order: [['startDate', 'ASC']],
-      limit: 1,
+      // limit: 1,
     });
     res.send(normalize('appointments', nextAppt));
   } catch (error) {

@@ -23,10 +23,10 @@ export default function SameAppointment(props) {
     <div className={styles.container}>
       <div className={styles.text}>It seems like an appointment was already created for
         <div className={styles.listItemHeader}>{patient.get('firstName')} on {startDate.format('MMMM Do, YYYY')} from
-          &nbsp;{startDate.format('h:mma')} - {endDate.format('h:mma')}.
+          {startDate.format('h:mma')} - {endDate.format('h:mma')}.
         </div>
-        If you would like us to send an appointment confirmation email to
-        <span> {patient.get('firstName')}</span>, please click Yes.
+        Would you like us to send an appointment confirmation email to
+        <span> {patient.get('firstName')}</span>?
       </div>
       <ListItem className={styles.dataContainer}>
         <div className={styles.avatarContainer}>
@@ -48,10 +48,10 @@ export default function SameAppointment(props) {
         </div>
       </ListItem>
       <div className={styles.buttonContainer}>
-        <Button icon="times" onClick={() => setConfirmState()}>
+        <Button icon="times" color="darkgrey" onClick={() => setConfirmState()}>
           No
         </Button>
-        <Button icon="check" onClick={() => confirmRequest(patient)}>
+        <Button icon="check" tertiary onClick={() => confirmRequest(patient)}>
           Yes
         </Button>
       </div>

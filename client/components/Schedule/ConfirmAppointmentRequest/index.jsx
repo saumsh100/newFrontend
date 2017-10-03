@@ -10,9 +10,7 @@ class ConfirmAppointmentRequest extends Component {
     super(props);
     this.confirmRequest = this.confirmRequest.bind(this);
     this.createAppointment = this.createAppointment.bind(this);
-    this.state = {
-      createAppRequest: false,
-    }
+
   }
 
   confirmRequest(patient) {
@@ -38,10 +36,12 @@ class ConfirmAppointmentRequest extends Component {
     }).then(() => reinitializeState());
   }
 
-  createAppointment(appointment) {
-    this.setState({
-      createAppRequest: true,
-    })
+  createAppointment() {
+    const modifiedAppointment = this.props.selectedAppointment;
+    modifiedAppointment.nextAppt = false;
+    console.log(modifiedAppointment);
+    this.props.reinitializeState();
+    this.props.selectAppointment(modifiedAppointment);
   }
 
   render() {
@@ -50,6 +50,8 @@ class ConfirmAppointmentRequest extends Component {
       appointments,
       selectedAppointment,
       setConfirmState,
+      reinitializeState,
+      confirmState,
     } = this.props;
 
     if (!selectedAppointment) {
@@ -59,7 +61,7 @@ class ConfirmAppointmentRequest extends Component {
     const patient = patients.get(selectedAppointment.patientId);
     const appointment = appointments.get(selectedAppointment.nextAppt);
 
-    const displayComponent = this.props.confirmState ? (
+    const displayComponent = confirmState ? (
       <SameAppointment
         patient={patient}
         appointment={appointment}
@@ -71,6 +73,8 @@ class ConfirmAppointmentRequest extends Component {
       <CreateAppointment
         patient={patient}
         request={selectedAppointment.requestModel}
+        reinitializeState={reinitializeState}
+        createAppointment={this.createAppointment}
       />
     );
     return <div>{displayComponent}</div>;

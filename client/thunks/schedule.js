@@ -28,8 +28,6 @@ export function checkPatientUser(patientUser, requestData) {
       const checkObjEmpty = !_.values(data.entities['patients']).some(x => x !== undefined);
 
       if (!checkObjEmpty) {
-
-
         return connectedPatientUser(dispatch, requestData, data);
       }
 

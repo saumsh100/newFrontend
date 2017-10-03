@@ -11,12 +11,13 @@
 
 .text {
   text-align: left;
-  padding-left: 0px;
+  padding-top: 10px;
 }
+
 .dataContainer {
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
   padding: 0px 10px 0px 10px;
   height: auto;
   border: 1px solid #e6e6e6;
@@ -71,7 +72,7 @@
 
 
 .buttonContainer {
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   width: 100%;
   justify-content: flex-end;
