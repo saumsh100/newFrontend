@@ -22,8 +22,7 @@ export default function SameAppointment(props) {
   return (
     <div className={styles.container}>
       <div className={styles.text}>It seems like an appointment was already created for
-        <div className={styles.listItemHeader}>{patient.get('firstName')} on {startDate.format('MMMM Do, YYYY')} from
-          {startDate.format('h:mma')} - {endDate.format('h:mma')}.
+        <div className={styles.listItemHeader}>{patient.get('firstName')} on {startDate.format('MMMM Do, YYYY')} from {startDate.format('h:mma')} - {endDate.format('h:mma')}.
         </div>
         Would you like us to send an appointment confirmation email to
         <span> {patient.get('firstName')}</span>?

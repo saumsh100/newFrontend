@@ -106,21 +106,22 @@ class ScheduleComponent extends Component {
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
 
     let displayModalComponent = (
-      <AddNewAppointment
-        formName={formName}
-        chairs={chairs.get('models').toArray()}
-        practitioners={filterPractitioners}
-        services={services.get('models')}
+      <ConfirmAppointmentRequest
+        appointments={appointments.get('models')}
         patients={patients.get('models')}
         selectedAppointment={selectedAppointment}
+        selectAppointment={selectAppointment}
         reinitializeState={this.reinitializeState}
-        weeklySchedules={weeklySchedules}
-        setPatientSearched={this.setPatientSearched}
-        patientSearched={this.state.patientSearched}
+        setConfirmState={this.setConfirmState}
+        confirmState={this.state.confirmState}
       />
     );
 
+    let displayTitle = this.state.confirmState ? 'Could this be the same appointment?' :
+      'Create an appointment for this request?';
+
     if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
+      displayTitle = 'Create or Connect a Patient';
       displayModalComponent = (
         <AddPatientSuggestions
           mergingPatientData={mergingPatientData}
@@ -131,6 +132,7 @@ class ScheduleComponent extends Component {
         />
       );
     } else if (mergingPatientData.patientUser) {
+      displayTitle = 'Add New Patient';
       displayModalComponent = (
         <AddPatientUser
           mergingPatientData={mergingPatientData}
@@ -174,32 +176,34 @@ class ScheduleComponent extends Component {
                   <Modal
                     active={
                       (addNewAppointment ||
-                        (!!selectedAppointment && !selectedAppointment.nextAppt) ||
-                      !!mergingPatientData.patientUser)
+                        (!!selectedAppointment && !selectedAppointment.nextAppt))
                     }
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={this.reinitializeState}
                     custom
                   >
-                    {displayModalComponent}
+                    <AddNewAppointment
+                      formName={formName}
+                      chairs={chairs.get('models').toArray()}
+                      practitioners={filterPractitioners}
+                      services={services.get('models')}
+                      patients={patients.get('models')}
+                      selectedAppointment={selectedAppointment}
+                      reinitializeState={this.reinitializeState}
+                      weeklySchedules={weeklySchedules}
+                      setPatientSearched={this.setPatientSearched}
+                      patientSearched={this.state.patientSearched}
+                    />
                   </Modal>
                   <DialogBox
-                    title={this.state.confirmState ? 'Could this be the same appointment?' :
-                      'Create an appointment for this request?'}
-                    type="mediumSmall"
-                    active={selectedAppointment && selectedAppointment.nextAppt}
+                    title={displayTitle}
+                    type="medium"
+                    active={((selectedAppointment && selectedAppointment.nextAppt) ||
+                      !!mergingPatientData.patientUser)}
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={this.reinitializeState}
                   >
-                    <ConfirmAppointmentRequest
-                      appointments={appointments.get('models')}
-                      patients={patients.get('models')}
-                      selectedAppointment={selectedAppointment}
-                      selectAppointment={selectAppointment}
-                      reinitializeState={this.reinitializeState}
-                      setConfirmState={this.setConfirmState}
-                      confirmState={this.state.confirmState}
-                    />
+                    {displayModalComponent}
                   </DialogBox>
                 </div>
                 {/* Here is the legend */}

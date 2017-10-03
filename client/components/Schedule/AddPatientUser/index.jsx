@@ -59,30 +59,15 @@ class AddPatientUser extends Component {
   render() {
     const {
       mergingPatientData,
-      reinitializeState,
     } = this.props;
 
     return (
-      <Card className={styles.cardContainer}>
-        <CardHeader
-          className={styles.header}
-          title="Create New Patient"
-        >
-        <Icon
-          icon="times"
-          onClick={reinitializeState}
-          className={styles.trashIcon}
-        />
-        </CardHeader>
-        <div className={styles.formContainer}>
-          <NewPatientForm
-            mergingPatientData={mergingPatientData}
-            formName="Create New Patient"
-            onSubmit={this.handleSubmit}
-            handleDatePicker={this.handleDatePicker}
-          />
-        </div>
-      </Card>
+      <NewPatientForm
+        mergingPatientData={mergingPatientData}
+        formName="Create New Patient"
+        onSubmit={this.handleSubmit}
+        handleDatePicker={this.handleDatePicker}
+      />
     );
   }
 }

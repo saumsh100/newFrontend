@@ -17,8 +17,7 @@ export default function CreateAppointment(props) {
   return (
     <div className={styles.container}>
       <div className={styles.text}>Would you like to create an appointment for
-        <div className={styles.listItemHeader}>{patient.get('firstName')} on {startDate.format('MMMM Do, YYYY')} from
-          &nbsp;{startDate.format('h:mma')} - {endDate.format('h:mma')}?
+        <div className={styles.listItemHeader}>{patient.get('firstName')} on {startDate.format('MMMM Do, YYYY')} from {startDate.format('h:mma')} - {endDate.format('h:mma')}?
         </div>
       </div>
       <ListItem className={styles.dataContainer}>
