@@ -30,11 +30,13 @@ class ScheduleComponent extends Component {
     this.state = {
       addNewAppointment: false,
       patientSearched: null,
+      confirmState: true,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
     this.setPatientSearched = this.setPatientSearched.bind(this);
+    this.setConfirmState = this.setConfirmState.bind(this);
   }
 
   setCurrentDay(day) {
@@ -51,6 +53,7 @@ class ScheduleComponent extends Component {
     this.setState({
       addNewAppointment: false,
       patientSearched: null,
+      confirmState: true,
     });
   }
 
@@ -64,6 +67,12 @@ class ScheduleComponent extends Component {
     this.setState({
       patientSearched,
     });
+  }
+
+  setConfirmState() {
+    this.setState({
+      confirmState: !this.state.confirmState,
+    })
   }
 
   render() {
@@ -89,7 +98,6 @@ class ScheduleComponent extends Component {
 
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
-      console.log(selectedAppointment);
       formName = `editAppointment_${selectedAppointment.serviceId}`;
     }
 
@@ -175,7 +183,9 @@ class ScheduleComponent extends Component {
                     {displayModalComponent}
                   </Modal>
                   <DialogBox
-                    title="Confirm Appointment Request"
+                    title={this.state.confirmState ? 'Could this be the same appointment ?' :
+                      'Create an appointment for this request?'}
+                    type="mediumSmall"
                     active={selectedAppointment && selectedAppointment.nextAppt}
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={this.reinitializeState}
@@ -184,6 +194,10 @@ class ScheduleComponent extends Component {
                       appointments={appointments.get('models')}
                       patients={patients.get('models')}
                       selectedAppointment={selectedAppointment}
+                      selectAppointment={selectAppointment}
+                      reinitializeState={this.reinitializeState}
+                      setConfirmState={this.setConfirmState}
+                      confirmState={this.state.confirmState}
                     />
                   </DialogBox>
                 </div>

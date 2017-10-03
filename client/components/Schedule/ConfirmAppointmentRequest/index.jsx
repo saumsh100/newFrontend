@@ -1,14 +1,47 @@
 import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Avatar } from '../../library';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
-import styles from './styles.scss';
+import SameAppointment from './SameAppointment';
+import CreateAppointment from './CreateAppointment';
 
 class ConfirmAppointmentRequest extends Component {
   constructor(props) {
     super(props);
+    this.confirmRequest = this.confirmRequest.bind(this);
+    this.createAppointment = this.createAppointment.bind(this);
+    this.state = {
+      createAppRequest: false,
+    }
+  }
+
+  confirmRequest(patient) {
+    const {
+      selectedAppointment,
+      updateEntityRequest,
+      reinitializeState,
+    } = this.props;
+
+    const alertRequestUpdate = {
+      success: {
+        body: `Email confirmation sent to ${patient.getFullName()}`,
+      },
+      error: {
+        body: `Request failed for ${patient.get('firstName')} Failed`,
+      },
+    };
+
+    updateEntityRequest({
+      key: 'requests',
+      model: selectedAppointment.requestModel,
+      alert: alertRequestUpdate,
+    }).then(() => reinitializeState());
+  }
+
+  createAppointment(appointment) {
+    this.setState({
+      createAppRequest: true,
+    })
   }
 
   render() {
@@ -16,7 +49,7 @@ class ConfirmAppointmentRequest extends Component {
       patients,
       appointments,
       selectedAppointment,
-      reinitializeState,
+      setConfirmState,
     } = this.props;
 
     if (!selectedAppointment) {
@@ -25,33 +58,28 @@ class ConfirmAppointmentRequest extends Component {
 
     const patient = patients.get(selectedAppointment.patientId);
     const appointment = appointments.get(selectedAppointment.nextAppt);
-    const startDate = moment(appointment.get('startDate'));
-    const endDate = moment(appointment.get('endDate'));
 
-    return (
-      <div className={styles.container}>
-        <div className={styles.test}>It seems like an appointment was already created for {patient.get('firstName')} on {
-          startDate.format('MMMM Do, YYYY h:ma')}</div>
-        <div>
-          <div>
-            <Avatar user={patient} />
-          </div>
-          <div>
-            <div>{patient.getFullName()}</div>
-            <div>{startDate.format('h:mm')} - {endDate.format('h:mma')}</div>
-            <span>
-              <div>{patient.get('email'}</div>
-              <div>{patient.get('mobilePhoneNumber')}</div>
-            </span>
-          </div>
-        </div>
-      </div>
+    const displayComponent = this.props.confirmState ? (
+      <SameAppointment
+        patient={patient}
+        appointment={appointment}
+        confirmRequest={this.confirmRequest}
+        createAppointment={this.createAppointment}
+        setConfirmState={setConfirmState}
+      />
+    ) : (
+      <CreateAppointment
+        patient={patient}
+        request={selectedAppointment.requestModel}
+      />
     );
+    return <div>{displayComponent}</div>;
   }
 }
 
 ConfirmAppointmentRequest.propTypes = {
-  updateEntityRequest: PropTypes.func,
+  updateEntityRequest: PropTypes.func.required,
+  reinitializeState: PropTypes.func.required,
 };
 
 function mapDispatchToProps(dispatch) {
