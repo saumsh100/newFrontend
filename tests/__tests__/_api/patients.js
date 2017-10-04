@@ -198,7 +198,7 @@ describe('/api/patients', () => {
       return request(app)
         .get(`${rootUrl}/suggestions?firstName=Mr&lastName=Nothing&email=lala&phoneNumber=1&requestCreatedAt=${requestCreatedAt}`)
         .set('Authorization', `Bearer ${token}`)
-        .expect(200)g
+        .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
