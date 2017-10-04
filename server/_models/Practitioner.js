@@ -22,14 +22,19 @@ export default function (sequelize, DataTypes) {
     pmsId: {
       type: DataTypes.STRING,
       validate: {
+        // validator for if pmsId and accountId are a unique combo
         isUnique(value, next) {
           return Practitioner.findOne({
             where: {
               accountId: this.accountId,
               pmsId: value,
             },
-          }).then((practitioner) => {
+            paranoid: false,
+          }).then(async (practitioner) => {
             if (practitioner) {
+              practitioner.setDataValue('deletedAt', null);
+              practitioner = await practitioner.save({ paranoid: false });
+
               return next({
                 messages: 'AccountId PMS ID Violation',
                 model: practitioner,

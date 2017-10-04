@@ -19,14 +19,19 @@ export default function (sequelize, DataTypes) {
     pmsId: {
       type: DataTypes.STRING,
       validate: {
+        // validator for if pmsId and accountId are a unique combo
         isUnique(value, next) {
           return Chair.findOne({
             where: {
               accountId: this.accountId,
               pmsId: value,
             },
-          }).then((chair) => {
+            paranoid: false,
+          }).then(async (chair) => {
             if (chair) {
+              chair.setDataValue('deletedAt', null);
+              chair = await chair.save({ paranoid: false });
+
               return next({
                 messages: 'AccountId PMS ID Violation',
                 model: chair,

@@ -16,12 +16,28 @@ recurringTimeOffRouter.param('timeOffId', sequelizeLoader('recurringTimeOff', 'P
 /**
  * Create a timeOff
  */
-recurringTimeOffRouter.post('/', checkPermissions('timeOffs:create'), (req, res, next) => {
-  return PractitionerRecurringTimeOff.create(req.body)
-    .then((tf) => {
-      return res.status(201).send(normalize('practitionerRecurringTimeOff', tf.get({ plain: true })))
-    })
-    .catch(next);
+recurringTimeOffRouter.post('/', checkPermissions('timeOffs:create'), async (req, res, next) => {
+  try {
+    const timeOffData = Object.assign({}, req.body, {
+      accountId: req.accountId,
+    });
+
+    const timeOffTest = await PractitionerRecurringTimeOff.build(timeOffData);
+    await timeOffTest.validate();
+
+    return PractitionerRecurringTimeOff.create(timeOffData)
+        .then((tf) => {
+          return res.status(201).send(normalize('practitionerRecurringTimeOff', tf.get({ plain: true })));
+        });
+  } catch (e) {
+    if (e.errors[0] && e.errors[0].message.messages === 'PractitionerId PMS ID Violation') {
+      const practitionerSchedule = e.errors[0].message.model.dataValues;
+
+      const normalized = format(req, res, 'practitionerSchedule', practitionerSchedule);
+      return res.status(201).send(normalized);
+    }
+    return next(e);
+  }
 });
 
 /**

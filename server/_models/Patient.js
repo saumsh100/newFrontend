@@ -26,14 +26,19 @@ export default function (sequelize, DataTypes) {
     pmsId: {
       type: DataTypes.STRING,
       validate: {
+        // validator for if pmsId and accountId are a unique combo
         isUnique(value, next) {
           return Patient.findOne({
             where: {
               accountId: this.accountId,
               pmsId: value,
             },
-          }).then((patient) => {
+            paranoid: false,
+          }).then(async (patient) => {
             if (patient) {
+              patient.setDataValue('deletedAt', null);
+              patient = await patient.save({ paranoid: false });
+
               return next({
                 messages: 'AccountId PMS ID Violation',
                 model: patient,

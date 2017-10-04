@@ -6,6 +6,57 @@ Object {
 }
 `;
 
+exports[`/api/patients DELETE / /:patientId - delete patient then undelete it 1`] = `
+Object {
+  "entities": Object {
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "birthDate": "1980-01-01T00:00:00.932Z",
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Ronald",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPms": false,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsCreatedAt": null,
+        "pmsId": "12",
+        "prefContactPhone": null,
+        "prefName": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+  },
+  "result": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+}
+`;
+
 exports[`/api/patients GET / / - get all patients under a clinic 1`] = `
 Object {
   "entities": Object {
@@ -31,7 +82,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
@@ -85,7 +136,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
@@ -161,7 +212,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
@@ -230,7 +281,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
@@ -307,7 +358,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
@@ -360,7 +411,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {
@@ -414,6 +465,57 @@ Object {
 }
 `;
 
+exports[`/api/patients PUT / /:patientId - update patient (connector) 1`] = `
+Object {
+  "entities": Object {
+    "patients": Object {
+      "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "address": null,
+        "birthDate": "1980-01-01T00:00:00.932Z",
+        "email": "testpatient@test.com",
+        "familyId": null,
+        "firstName": "Testing",
+        "gender": null,
+        "homePhoneNumber": null,
+        "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "insurance": null,
+        "isDeleted": false,
+        "isSyncedWithPms": true,
+        "language": null,
+        "lastName": "Mcdonald",
+        "middleName": null,
+        "mobilePhoneNumber": "+17789999999",
+        "otherPhoneNumber": null,
+        "patientUserId": null,
+        "phoneNumber": null,
+        "pmsCreatedAt": null,
+        "pmsId": "12",
+        "prefContactPhone": null,
+        "prefName": null,
+        "preferences": Object {
+          "afternoon": true,
+          "birthdayMessage": true,
+          "emailNotifications": true,
+          "evening": true,
+          "morning": true,
+          "newsletter": true,
+          "phone": true,
+          "reminders": true,
+          "sms": true,
+          "weekdays": true,
+          "weekends": true,
+        },
+        "status": "Active",
+        "type": null,
+        "workPhoneNumber": null,
+      },
+    },
+  },
+  "result": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+}
+`;
+
 exports[`/api/patients PUT / /:patientId - update patient 1`] = `
 Object {
   "entities": Object {
@@ -439,7 +541,7 @@ Object {
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,
-        "pmsId": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {

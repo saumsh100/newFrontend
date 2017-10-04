@@ -233,7 +233,6 @@ describe('/api/patients', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           email: 'testpatient@test.com',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -249,7 +248,6 @@ describe('/api/patients', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           phoneNumber: '7788888888',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -265,7 +263,6 @@ describe('/api/patients', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           phoneNumber: '+17789999999',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -275,10 +272,12 @@ describe('/api/patients', () => {
     });
 
     test('/ - create a patient', () => {
+      const createPatient = Object.assign({}, patient);
+      delete createPatient.accountId;
       return request(app)
         .post(`${rootUrl}`)
         .set('Authorization', `Bearer ${token}`)
-        .send(patient)
+        .send(createPatient)
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -333,6 +332,20 @@ describe('/api/patients', () => {
           expect(body).toMatchSnapshot();
         });
     });
+
+    test('/:patientId - update patient (connector)', () => {
+      return request(app)
+        .put(`${rootUrl}/connector/${patientId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          firstName: 'Testing',
+        })
+        .expect(201)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
   });
 
   describe('DELETE /', () => {
@@ -348,6 +361,46 @@ describe('/api/patients', () => {
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/:patientId - delete patient then undelete it', () => {
+      return request(app)
+        .delete(`${rootUrl}/${patientId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(({ body }) => {
+          const patientCreate = {
+            email: 'testpatient@test.com',
+            firstName: 'Ronald',
+            lastName: 'Mcdonald',
+            mobilePhoneNumber: '7789999999',
+            createdAt: '2017-07-19T00:14:30.932Z',
+            address: null,
+            birthDate: null,
+            familyId: null,
+            gender: null,
+            homePhoneNumber: null,
+            pmsId: '12',
+            language: null,
+            middleName: null,
+            otherPhoneNumber: null,
+            patientUserId: null,
+            phoneNumber: null,
+            prefName: null,
+            prefPhoneNumber: null,
+            type: null,
+            workPhoneNumber: null,
+          };
+          return request(app)
+            .post(`${rootUrl}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(patientCreate)
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body);
+              expect(body).toMatchSnapshot();
+            });
         });
     });
   });
