@@ -4,6 +4,7 @@ import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
 import { Chair } from '../../../_models';
+import handleSequelizeError from '../../util/handleSequelizeError';
 
 const chairsRouter = Router();
 
@@ -30,11 +31,8 @@ chairsRouter.post('/', checkPermissions('chairs:create'), async (req, res, next)
         .then(chair => res.status(201).send(format(req, res, 'chair', chair.get({ plain: true }))))
         .catch(next);
   } catch (e) {
-    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
-      const chair = e.errors[0].message.model.dataValues;
-
-      const normalized = format(req, res, 'chair', chair);
-      return res.status(201).send(normalized);
+    if (e.errors && e.errors[0]) {
+      return handleSequelizeError(e.errors[0], 'chair', res, req, next);
     }
     return next(e);
   }

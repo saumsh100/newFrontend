@@ -1,3 +1,4 @@
+const { validateAccountIdPmsId } = require('../util/validators');
 
 export default function (sequelize, DataTypes) {
   const Appointment = sequelize.define('Appointment', {
@@ -34,25 +35,7 @@ export default function (sequelize, DataTypes) {
       validate: {
         // validator for if pmsId and accountId are a unique combo
         isUnique(value, next) {
-          return Appointment.findOne({
-            where: {
-              accountId: this.accountId,
-              pmsId: value,
-            },
-            paranoid: false,
-          }).then(async (appointment) => {
-            if (appointment) {
-              appointment.setDataValue('deletedAt', null);
-              appointment = await appointment.save({ paranoid: false });
-
-              return next({
-                messages: 'AccountId PMS ID Violation',
-                model: appointment,
-              });
-            }
-
-            return next();
-          });
+          return validateAccountIdPmsId(Appointment, value, this, next);
         },
       },
     },
