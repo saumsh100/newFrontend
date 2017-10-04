@@ -65,7 +65,7 @@
     }
 
     &_date {
-      @extend .subHeader;
+      @extend .listItemHeader;
     }
   }
 }

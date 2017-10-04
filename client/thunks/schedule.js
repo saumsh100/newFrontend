@@ -49,10 +49,8 @@ async function connectedPatientUser(dispatch, requestData, data) {
   const appInfo = await axios.get(`/api/patients/${patientId}/nextAppointment`);
   const appointment = appInfo.data.entities.appointments;
   if (appointment) {
-    const appData = appointment[Object.keys(appointment)[0]];
-    dispatch(setScheduleDate({ scheduleDate: moment(appData.startDate) }));
-
-    set(modifiedRequest, 'nextAppt', Object.keys(appointment)[0]);
+    const appList = getEntities(appInfo.data.entities);
+    set(modifiedRequest, 'nextAppt', appList);
     dispatch(selectAppointment(modifiedRequest));
   }
 
@@ -73,7 +71,6 @@ async function suggestedPatients(dispatch, requestData, patientUser) {
   dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }));
 
   const dataArray = getEntities(dataSuggest.entities);
-
   dispatch(setMergingPatient({
     patientUser,
     requestData,

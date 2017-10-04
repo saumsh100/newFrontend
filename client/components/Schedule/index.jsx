@@ -107,7 +107,6 @@ class ScheduleComponent extends Component {
 
     let displayModalComponent = (
       <ConfirmAppointmentRequest
-        appointments={appointments.get('models')}
         patients={patients.get('models')}
         selectedAppointment={selectedAppointment}
         selectAppointment={selectAppointment}

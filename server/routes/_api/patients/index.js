@@ -370,7 +370,11 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
       where: {
         accountId,
         patientUserId: { $eq: null },
-        $or: [{ firstName, lastName }, { email }, { phoneNumber }],
+        $or: [{ firstName: {
+          ilike: firstName,
+        }, lastName: {
+          ilike: lastName,
+        } }, { email }, { phoneNumber }],
       },
       include: [{
         model: Appointment,
@@ -379,6 +383,8 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           startDate: {
             $gte: new Date(),
           },
+          isDeleted: false,
+          isCancelled: false,
         },
         //limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
         order: [['startDate', 'asc']],

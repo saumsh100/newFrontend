@@ -41,7 +41,8 @@ class AddPatientSuggestions extends Component {
     const patientUserId = mergingPatientData.patientUser.id;
     const modifiedPatient = patientModel.set('patientUserId', patientUserId);
 
-    const confirmSuggestion = confirm('Are you sure you want to connect these patients?')
+    const confirmSuggestion = confirm('Are you sure you want to connect these patients?');
+    console.log(futureAppStartDate);
 
     if (confirmSuggestion) {
       updateEntityRequest({

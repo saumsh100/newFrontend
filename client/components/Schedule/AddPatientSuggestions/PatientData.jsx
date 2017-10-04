@@ -23,7 +23,7 @@ export default function PatientData(props) {
     patientId: patient.id,
     requestModel: requestData.requestModel,
     practitionerId: requestData.practitionerId,
-    nextAppt: futureAppointments.length ? futureAppointments[0].id : false,
+    nextAppt: futureAppointments,
   };
 
   const futureAppStartDate = futureAppointments.length ? futureAppointments[0].startDate : null;
