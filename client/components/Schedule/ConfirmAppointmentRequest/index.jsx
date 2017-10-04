@@ -5,15 +5,19 @@ import { connect } from 'react-redux';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import { Button } from '../../library';
 import SameAppointment from './SameAppointment';
-import CreateAppointment from './CreateAppointment';
 import styles from './styles.scss';
 
 class ConfirmAppointmentRequest extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      selectedApp: null,
+    };
+
     this.confirmRequest = this.confirmRequest.bind(this);
     this.createAppointment = this.createAppointment.bind(this);
-
+    this.setSelected = this.setSelected.bind(this);
   }
 
   confirmRequest(patient) {
@@ -32,28 +36,36 @@ class ConfirmAppointmentRequest extends Component {
       },
     };
 
-    updateEntityRequest({
-      key: 'requests',
-      model: selectedAppointment.requestModel,
-      alert: alertRequestUpdate,
-    }).then(() => reinitializeState());
+    const testConfirm = confirm('Are you sure you want to confirm this request ?');
+
+    if (testConfirm) {
+      updateEntityRequest({
+        key: 'requests',
+        model: selectedAppointment.requestModel,
+        alert: alertRequestUpdate,
+      }).then(() => reinitializeState());
+    }
   }
 
   createAppointment() {
     const modifiedAppointment = this.props.selectedAppointment;
     modifiedAppointment.nextAppt = false;
-    console.log(modifiedAppointment);
     this.props.reinitializeState();
     this.props.selectAppointment(modifiedAppointment);
   }
 
+  setSelected(id) {
+    this.setState({
+      selectedApp: id,
+    });
+  }
   render() {
     const {
       patients,
       selectedAppointment,
       setConfirmState,
       reinitializeState,
-      confirmState,
+      setCurrentDay,
     } = this.props;
 
     if (!selectedAppointment) {
@@ -87,36 +99,32 @@ class ConfirmAppointmentRequest extends Component {
       )
     }
 
-    const displayComponent = confirmState ? (
+    return (
       <div className={styles.container}>
         {displayText}
         {appointments.map((app) => {
           return (<SameAppointment
+            key={app.id}
             patient={patient}
             appointment={app}
             confirmRequest={this.confirmRequest}
             createAppointment={this.createAppointment}
             setConfirmState={setConfirmState}
+            setCurrentDay={setCurrentDay}
+            setSelected={this.setSelected}
+            selectedApp={this.state.selectedApp}
           />);
         })}
         <div className={styles.buttonContainer}>
-          <Button icon="times" color="darkgrey" onClick={() => setConfirmState()}>
+          <Button icon="times" color="darkgrey" onClick={() => this.createAppointment()}>
             No
           </Button>
-          <Button icon="check" tertiary onClick={() => confirmRequest(patient)}>
+          <Button icon="check" tertiary onClick={() => this.confirmRequest(patient)}>
             Yes
           </Button>
         </div>
       </div>
-    ) : (
-      <CreateAppointment
-        patient={patient}
-        request={selectedAppointment.requestModel}
-        reinitializeState={reinitializeState}
-        createAppointment={this.createAppointment}
-      />
     );
-    return <div>{displayComponent}</div>;
   }
 }
 

@@ -27,14 +27,13 @@ class AddPatientSuggestions extends Component {
     });
   }
 
-  handleUpdatePatient(appointment, futureAppStartDate) {
+  handleUpdatePatient(appointment) {
     const {
       patients,
       reinitializeState,
       selectAppointment,
       mergingPatientData,
       updateEntityRequest,
-      setCurrentDay,
     } = this.props;
 
     const patientModel = patients.get(appointment.patientId);
@@ -42,7 +41,6 @@ class AddPatientSuggestions extends Component {
     const modifiedPatient = patientModel.set('patientUserId', patientUserId);
 
     const confirmSuggestion = confirm('Are you sure you want to connect these patients?');
-    console.log(futureAppStartDate);
 
     if (confirmSuggestion) {
       updateEntityRequest({
@@ -51,11 +49,6 @@ class AddPatientSuggestions extends Component {
         url: `/api/patients/${modifiedPatient.get('id')}`,
       })
         .then(() => {
-          if (futureAppStartDate) {
-            reinitializeState();
-            setCurrentDay(futureAppStartDate);
-            return selectAppointment(appointment);
-          }
           reinitializeState();
           return selectAppointment(appointment);
         });
@@ -65,7 +58,6 @@ class AddPatientSuggestions extends Component {
   render() {
     const {
       mergingPatientData,
-      reinitializeState,
     } = this.props;
 
     const suggestions = mergingPatientData.suggestions;

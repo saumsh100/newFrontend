@@ -1,3 +1,5 @@
+@import '../../../ui.scss';
+
 .container {
 
 }
@@ -70,6 +72,11 @@
   }
 }
 
+.selected {
+  background: $primary-grey;
+  border-left: 2px solid;
+  border-left-color: $primary-color;
+}
 
 .buttonContainer {
   margin-top: 20px;

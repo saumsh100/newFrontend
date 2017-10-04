@@ -30,13 +30,11 @@ class ScheduleComponent extends Component {
     this.state = {
       addNewAppointment: false,
       patientSearched: null,
-      confirmState: true,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
     this.setPatientSearched = this.setPatientSearched.bind(this);
-    this.setConfirmState = this.setConfirmState.bind(this);
   }
 
   setCurrentDay(day) {
@@ -53,7 +51,6 @@ class ScheduleComponent extends Component {
     this.setState({
       addNewAppointment: false,
       patientSearched: null,
-      confirmState: true,
     });
   }
 
@@ -69,12 +66,6 @@ class ScheduleComponent extends Component {
     });
   }
 
-  setConfirmState() {
-    this.setState({
-      confirmState: !this.state.confirmState,
-    })
-  }
-
   render() {
     const {
       practitioners,
@@ -87,7 +78,6 @@ class ScheduleComponent extends Component {
       selectedAppointment,
       setMergingPatient,
       weeklySchedules,
-      timeOffs,
     } = this.props;
 
     const {
@@ -105,19 +95,17 @@ class ScheduleComponent extends Component {
 
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
 
-    let displayModalComponent = (
+    let displayModalComponent = selectedAppointment && selectedAppointment.nextAppt ? (
       <ConfirmAppointmentRequest
         patients={patients.get('models')}
         selectedAppointment={selectedAppointment}
         selectAppointment={selectAppointment}
         reinitializeState={this.reinitializeState}
-        setConfirmState={this.setConfirmState}
-        confirmState={this.state.confirmState}
+        setCurrentDay={this.setCurrentDay}
       />
-    );
+    ) : null;
 
-    let displayTitle = this.state.confirmState ? 'Could this be the same appointment?' :
-      'Create an appointment for this request?';
+    let displayTitle = 'Could this be the same appointment?';
 
     if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
       displayTitle = 'Create or Connect a Patient';
@@ -127,7 +115,6 @@ class ScheduleComponent extends Component {
           reinitializeState={this.reinitializeState}
           selectAppointment={selectAppointment}
           setMergingPatient={setMergingPatient}
-          setCurrentDay={this.setCurrentDay}
         />
       );
     } else if (mergingPatientData.patientUser) {

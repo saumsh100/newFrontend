@@ -26,7 +26,6 @@ export default function PatientData(props) {
     nextAppt: futureAppointments,
   };
 
-  const futureAppStartDate = futureAppointments.length ? futureAppointments[0].startDate : null;
 
   return (
     <ListItem
@@ -45,7 +44,7 @@ export default function PatientData(props) {
       </div>
       <Button
         onClick={() => {
-          handleUpdatePatient(appointment, futureAppStartDate);
+          handleUpdatePatient(appointment);
         }}
         className={styles.connectButton}
         data-test-id={`${patient.firstName}${patient.lastName}`}

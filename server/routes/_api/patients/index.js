@@ -362,6 +362,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
     lastName,
     email,
     phoneNumber,
+    requestCreatedAt,
   } = req.query;
 
   let patients;
@@ -381,7 +382,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
         as: 'appointments',
         where: {
           startDate: {
-            $gte: new Date(),
+            $gte: new Date(requestCreatedAt),
           },
           isDeleted: false,
           isCancelled: false,
@@ -403,13 +404,17 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
 });
 
 patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    requestCreatedAt,
+  } = req.query;
+
   try {
     const nextAppt = await Appointment.findAll({
       raw: true,
       where: {
         patientId: req.patient.id,
         startDate: {
-          $gte: new Date(),
+          $gte: new Date(requestCreatedAt),
         },
         isDeleted: false,
         isCancelled: false,

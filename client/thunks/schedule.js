@@ -39,14 +39,18 @@ export function checkPatientUser(patientUser, requestData) {
 }
 
 async function connectedPatientUser(dispatch, requestData, data) {
-  const patientId = Object.keys(data.entities.patients)[0];
 
+  const patientId = Object.keys(data.entities.patients)[0];
   dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
+
+  const query = {
+    requestCreatedAt: requestData.createdAt,
+  };
 
   const modifiedRequest = requestData;
   set(modifiedRequest, 'patientId', patientId);
 
-  const appInfo = await axios.get(`/api/patients/${patientId}/nextAppointment`);
+  const appInfo = await axios.get(`/api/patients/${patientId}/nextAppointment`, { params: query });
   const appointment = appInfo.data.entities.appointments;
   if (appointment) {
     const appList = getEntities(appInfo.data.entities);
@@ -64,6 +68,7 @@ async function suggestedPatients(dispatch, requestData, patientUser) {
     lastName: patientUser.get('lastName'),
     email: patientUser.get('email'),
     phoneNumber: patientUser.get('phoneNumber'),
+    requestCreatedAt: requestData.createdAt,
   };
 
   const searchResponse = await axios.get('/api/patients/suggestions', { params });

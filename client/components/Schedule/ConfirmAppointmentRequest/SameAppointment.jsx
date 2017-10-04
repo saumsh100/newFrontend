@@ -1,12 +1,16 @@
 import React, { PropTypes } from 'react';
+import classnames from 'classnames';
 import moment from 'moment';
-import { Button, Avatar, ListItem } from '../../library';
+import { Icon,  ListItem } from '../../library';
 import styles from './styles.scss';
 
 export default function SameAppointment(props) {
   const {
     patient,
     appointment,
+    setCurrentDay,
+    setSelected,
+    selectedApp,
   } = props;
 
   if (!patient || !appointment) {
@@ -16,10 +20,22 @@ export default function SameAppointment(props) {
   const startDate = moment(appointment.startDate);
   const endDate = moment(appointment.endDate);
 
+  let dataContainer = styles.dataContainer;
+
+  if (appointment.id === selectedApp) {
+    dataContainer = classnames(dataContainer, styles.selected);
+  }
+
   return (
-    <ListItem className={styles.dataContainer}>
+    <ListItem
+      className={dataContainer}
+      onClick={()=> {
+        setCurrentDay(startDate);
+        setSelected(appointment.id)
+      }}
+    >
       <div className={styles.avatarContainer}>
-        <Avatar size={'lg'} user={patient} />
+        <Icon size={2} icon="calendar" />
       </div>
       <div className={styles.dataContainer_body}>
         <div className={styles.dataContainer_patientInfo}>
