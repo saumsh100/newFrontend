@@ -96,7 +96,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
   })
     .then(async (appointments) => {
       const hygenApps = await appsHygienist(startDate, endDate, accountId);
-      send.hygieneAppts = hygenApps[0] ? hygenApps[0].appsHygienist : 0;
+      send.hygieneAppts = hygenApps[0] ? Number(hygenApps[0].appsHygienist) : 0;
 
       const $or = [];
 
