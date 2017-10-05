@@ -30,11 +30,13 @@ class ScheduleComponent extends Component {
     this.state = {
       addNewAppointment: false,
       patientSearched: null,
+      sendEmail: false,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
     this.setPatientSearched = this.setPatientSearched.bind(this);
+    this.setSendEmail = this.setSendEmail.bind(this);
   }
 
   setCurrentDay(day) {
@@ -51,6 +53,7 @@ class ScheduleComponent extends Component {
     this.setState({
       addNewAppointment: false,
       patientSearched: null,
+      sendEmail: false,
     });
   }
 
@@ -64,6 +67,12 @@ class ScheduleComponent extends Component {
     this.setState({
       patientSearched,
     });
+  }
+
+  setSendEmail() {
+    this.setState({
+      sendEmail: !this.state.sendEmail,
+    })
   }
 
   render() {
@@ -102,10 +111,12 @@ class ScheduleComponent extends Component {
         selectAppointment={selectAppointment}
         reinitializeState={this.reinitializeState}
         setCurrentDay={this.setCurrentDay}
+        setSendEmail={this.setSendEmail}
+        sendEmail={this.state.sendEmail}
       />
     ) : null;
 
-    let displayTitle = 'Could this be the same appointment?';
+    let displayTitle = this.state.sendEmail ? 'Send Confirmation Email?' : 'Could this be the same appointment?';
 
     if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
       displayTitle = 'Create or Connect a Patient';

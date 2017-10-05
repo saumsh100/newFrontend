@@ -22,7 +22,7 @@ export default function SameAppointment(props) {
 
   let dataContainer = styles.dataContainer;
 
-  if (appointment.id === selectedApp) {
+  if (appointment.id === (selectedApp && selectedApp.id)) {
     dataContainer = classnames(dataContainer, styles.selected);
   }
 
@@ -31,7 +31,7 @@ export default function SameAppointment(props) {
       className={dataContainer}
       onClick={()=> {
         setCurrentDay(startDate);
-        setSelected(appointment.id)
+        setSelected(appointment)
       }}
     >
       <div className={styles.avatarContainer}>

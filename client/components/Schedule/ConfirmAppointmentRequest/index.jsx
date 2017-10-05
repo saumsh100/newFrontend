@@ -3,9 +3,10 @@ import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
-import { Button } from '../../library';
+import { Button, Icon } from '../../library';
 import SameAppointment from './SameAppointment';
 import styles from './styles.scss';
+import SendConfirmationEmail from "./SendConfirmationEmail";
 
 class ConfirmAppointmentRequest extends Component {
   constructor(props) {
@@ -20,25 +21,40 @@ class ConfirmAppointmentRequest extends Component {
     this.setSelected = this.setSelected.bind(this);
   }
 
-  confirmRequest(patient) {
+  confirmRequest(patient, sendEmail) {
     const {
       selectedAppointment,
       updateEntityRequest,
       reinitializeState,
     } = this.props;
 
-    const alertRequestUpdate = {
-      success: {
-        body: `Email confirmation sent to ${patient.getFullName()}`,
-      },
-      error: {
-        body: `Request failed for ${patient.get('firstName')} Failed`,
-      },
-    };
-
-    const testConfirm = confirm('Are you sure you want to confirm this request ?');
-
-    if (testConfirm) {
+    if (sendEmail) {
+      const alertRequestUpdate = {
+        success: {
+          body: `Email confirmation sent to ${patient.getFullName()}`,
+        },
+        error: {
+          body: `Request failed for ${patient.get('firstName')} Failed`,
+        },
+      };
+      const requestId = selectedAppointment.requestId;
+      this.props.updateEntityRequest({
+        url: `/api/requests/${requestId}/confirm/${this.state.selectedApp['id']}`,
+        values: {},
+        alert: alertRequestUpdate,
+      })
+        .then(() => {
+          reinitializeState();
+        });
+    } else {
+      const alertRequestUpdate = {
+        success: {
+          body: `Request updated for ${patient.getFullName()}`,
+        },
+        error: {
+          body: `Request failed for ${patient.get('firstName')} Failed`,
+        },
+      };
       updateEntityRequest({
         key: 'requests',
         model: selectedAppointment.requestModel,
@@ -54,23 +70,28 @@ class ConfirmAppointmentRequest extends Component {
     this.props.selectAppointment(modifiedAppointment);
   }
 
-  setSelected(id) {
+  setSelected(app) {
     this.setState({
-      selectedApp: id,
+      selectedApp: app,
     });
   }
+
   render() {
     const {
       patients,
       selectedAppointment,
-      setConfirmState,
-      reinitializeState,
       setCurrentDay,
+      setSendEmail,
+      sendEmail,
     } = this.props;
 
     if (!selectedAppointment) {
       return null;
     }
+
+    const {
+      selectedApp,
+    } = this.state;
 
     const patient = patients.get(selectedAppointment.patientId);
     const appointments = selectedAppointment.nextAppt;
@@ -85,44 +106,86 @@ class ConfirmAppointmentRequest extends Component {
           <div className={styles.listItemHeader}>
             {patient.get('firstName')} on {startDate.format('MMMM Do, YYYY')} from {startDate.format('h:mma')} - {endDate.format('h:mma')}.
           </div>
-          Would you like us to send an appointment confirmation email to
-          <span> {patient.get('firstName')}</span>?
+          <br />
+          Would you like to connect the appointment request with this appointment?
         </div>
       );
     } else {
       displayText = (
         <div className={styles.text}>It seems like a few appointments were already created for
-          <span className={styles.listItemHeader}> {patient.getFullName()}.</span> If any of these are the same appointment
-          as the one requested would you like to send an appointment confirmation email to
-          <span> {patient.get('firstName')}</span>?
+          <span className={styles.listItemHeader}> {patient.get('firstName')}.</span>
+          <br />
+          Would you like to connect the appointment request with one of these appointments?
         </div>
       )
     }
 
     return (
-      <div className={styles.container}>
-        {displayText}
-        {appointments.map((app) => {
-          return (<SameAppointment
-            key={app.id}
-            patient={patient}
-            appointment={app}
-            confirmRequest={this.confirmRequest}
-            createAppointment={this.createAppointment}
-            setConfirmState={setConfirmState}
-            setCurrentDay={setCurrentDay}
-            setSelected={this.setSelected}
-            selectedApp={this.state.selectedApp}
-          />);
-        })}
-        <div className={styles.buttonContainer}>
-          <Button icon="times" color="darkgrey" onClick={() => this.createAppointment()}>
-            No
-          </Button>
-          <Button icon="check" tertiary onClick={() => this.confirmRequest(patient)}>
-            Yes
-          </Button>
-        </div>
+      <div>
+        {!sendEmail ? (
+          <div className={styles.container}>
+            {displayText}
+            {appointments.map((app) => {
+              return (<SameAppointment
+                key={app.id}
+                patient={patient}
+                appointment={app}
+                confirmRequest={this.confirmRequest}
+                createAppointment={this.createAppointment}
+                setCurrentDay={setCurrentDay}
+                setSelected={this.setSelected}
+                selectedApp={this.state.selectedApp}
+              />);
+            })}
+            {appointments.length === 1 ? (
+              <div className={styles.buttonContainer}>
+                <Button
+                  icon="times"
+                  color="darkgrey"
+                  onClick={() => this.createAppointment()}
+                >
+                  No
+                </Button>
+                <Button
+                  icon="check"
+                  tertiary
+                  onClick={() => {
+                    if (confirm('Are you sure this is the correct Appointment?')) {
+                      this.setSelected(appointments[0]);
+                      return setSendEmail();
+                    }
+                  }}
+                >
+                  Yes
+                </Button>
+              </div>) : (
+                <div className={styles.buttonContainer}>
+                  <Button
+                    icon="times"
+                    color="darkgrey"
+                    onClick={() => this.createAppointment()}
+                  >
+                    No
+                  </Button>
+                  <Button
+                    icon="check"
+                    style={{cursor: selectedApp ? 'pointer' : 'not-allowed'}}
+                    color={selectedApp ? 'green' : 'darkgrey'}
+                    onClick={() => {
+                      if (selectedApp) {
+                        return confirm('Are you sure this is the correct Appointment?') ? setSendEmail() : null;
+                      }
+                    }}
+                  >
+                    Yes
+                  </Button>
+                </div>)}
+          </div>) : (
+            <SendConfirmationEmail
+              selectedApp={selectedApp}
+              confirmRequest={this.confirmRequest}
+              patient={patient}
+            />)}
       </div>
     );
   }
