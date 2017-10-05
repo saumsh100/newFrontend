@@ -15,7 +15,7 @@ export default function Star(props) {
 }
 
 Star.defaultProps = {
-  size: 1
+  size: 1,
 };
 
 Star.propTypes = {
