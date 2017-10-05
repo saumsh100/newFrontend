@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Guage, Card } from '../../../../library';
 import styles from './styles.scss';
-
+import nFormatter from '../../../nFormatter';
 
 class AppointmentFilled extends Component {
   render() {
@@ -14,7 +14,7 @@ class AppointmentFilled extends Component {
         <div className={styles.appointmentFilled__wrapper}>
           <div className={styles.appointmentFilled__header}>
             <div className={styles.appointmentFilled__header_number}>
-              {appointmentNotFilled}
+              {nFormatter(appointmentNotFilled, 1)}
             </div>
             <div className={styles.appointmentFilled__header_title}>
               Production Hours Not Filled

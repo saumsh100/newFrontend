@@ -14,6 +14,7 @@ import BusinessStats from './Cards/BusinessStats';
 import Patients from './Cards/Patients';
 import styles from './styles.scss';
 import stylesOverview from '../Overview/styles.scss';
+import nFormatter from '../nFormatter';
 
 class Business extends Component {
 
@@ -160,9 +161,10 @@ class Business extends Component {
     filledHours = filledHours.toFixed(2);
 
     serviceData = businessStats.productionEarnings.map(pro => {
+
       return {
         title: `${pro.description} - ${pro.type}`,
-        data: pro.totalAmount,
+        data: `${nFormatter(pro.totalAmount, 2)}`,
       };
     });
 
