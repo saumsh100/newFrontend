@@ -67,7 +67,7 @@ async function suggestedPatients(dispatch, requestData, patientUser) {
     firstName: patientUser.get('firstName'),
     lastName: patientUser.get('lastName'),
     email: patientUser.get('email'),
-    phoneNumber: patientUser.get('phoneNumber'),
+    mobilePhoneNumber: patientUser.get('phoneNumber'),
     requestCreatedAt: requestData.createdAt,
   };
 

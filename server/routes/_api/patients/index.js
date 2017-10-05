@@ -361,7 +361,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
     firstName,
     lastName,
     email,
-    phoneNumber,
+    mobilePhoneNumber,
     requestCreatedAt,
   } = req.query;
 
@@ -373,9 +373,11 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
         patientUserId: { $eq: null },
         $or: [{ firstName: {
           ilike: firstName,
-        }, lastName: {
-          ilike: lastName,
-        } }, { email }, { phoneNumber }],
+        },
+          lastName: {
+            ilike: lastName,
+          },
+        }, { email }, { mobilePhoneNumber }],
       },
       include: [{
         model: Appointment,

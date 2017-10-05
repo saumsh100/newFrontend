@@ -116,7 +116,7 @@ class MainContainer extends Component {
         <DialogBox
           actions={actions}
           title="New Patient"
-          type="small"
+          type="medium"
           active={this.props.active}
           onEscKeyDown={this.props.reinitializeState}
           onOverlayClick={this.props.reinitializeState}
