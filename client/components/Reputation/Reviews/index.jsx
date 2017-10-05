@@ -124,9 +124,9 @@ class Reviews extends Component {
     let constructBigComment = reviewsList;
 
     constructBigComment = constructBigComment.filter((review) => {
-        if (filterSources.indexOf(review.sourceName) > -1) {
-          return review;
-        }
+      if (filterSources.indexOf(review.sourceName) > -1) {
+        return review;
+      }
     });
 
     constructBigComment = constructBigComment.filter((review) => {
@@ -135,23 +135,22 @@ class Reviews extends Component {
       }
     });
 
-
     constructBigComment = constructBigComment.map((review) => {
-        return {
-          icon: review.sourceName,
-          publishedDate: review.publishedDateTime,
-          headerLinkName: review.reviewerName,
-          headerLinkSite: review.domain,
-          siteStars: parseInt(review.rating),
-          siteTitle: review.title,
-          sitePreview: review.contentSnippet,
-          iconColor: '#ffffff',
-          background: '#395998',
-          iconAlign: 'flex-end',
-          requiredAction: 'ACTION REQUIRED',
-          url: review.url,
-          reviewerUrl: review.reviewerUrl,
-        };
+      return {
+        icon: review.sourceName,
+        publishedDate: review.publishedDateTime,
+        headerLinkName: review.reviewerName,
+        headerLinkSite: review.domain,
+        siteStars: parseInt(review.rating),
+        siteTitle: review.title,
+        sitePreview: review.contentSnippet,
+        iconColor: '#ffffff',
+        background: '#395998',
+        iconAlign: 'flex-end',
+        requiredAction: 'ACTION REQUIRED',
+        url: review.url,
+        reviewerUrl: review.reviewerUrl,
+      };
     });
 
     const filters = [

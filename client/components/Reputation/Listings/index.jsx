@@ -134,7 +134,7 @@ class Listings extends Component {
     ];
 
     const listingsSearchData = listings.get('searchData').toJS();
-
+    console.log(listingsSearchData)
     const filterData = listingsFilter.toJS();
 
     const tableData2 = [];
@@ -199,7 +199,7 @@ class Listings extends Component {
         Accurate: true,
         'Found with Possible Errors': true,
         'Not Found': true,
-      }
+      },
     };
 
     return (

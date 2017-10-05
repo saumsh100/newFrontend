@@ -29,11 +29,11 @@ class Collapsible extends Component {
     return (
       <div className={styles.collapsibleContainer}>
         <div className={styles.title} onClick={this.setCollapsed}>
-          {title}
           <Icon icon={icon} className={styles.icon} />
+          {title}
         </div>
         <div className={styles.collapsed}>
-          {showCollapsed}
+          <div className={styles.show}>{showCollapsed}</div>
         </div>
       </div>
     );
