@@ -524,10 +524,20 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
       sendStats.patients = newObject;
 
-      const newPatientsNumber = await newPatients(startDate, endDate, accountId);
+      const checkPmsCreatedAt = await Patient.findOne({
+        where: {
+          pmsCreatedAt: {
+            $ne: null,
+          },
+        },
+      });
 
-      sendStats.newPatients = newPatientsNumber[0] && newPatientsNumber[0].dataValues.newPatients
-        ? newPatientsNumber[0].dataValues.newPatients : sendStats.newPatients;
+      let newPatientsNumber = await newPatients(startDate, endDate, accountId);
+
+      newPatientsNumber = newPatientsNumber[0] ? newPatientsNumber[0].dataValues.newPatients : 0;
+
+      sendStats.newPatients = checkPmsCreatedAt
+        ? newPatientsNumber : sendStats.newPatients;
 
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;
