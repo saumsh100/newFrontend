@@ -169,8 +169,8 @@ class ConfirmAppointmentRequest extends Component {
                   </Button>
                   <Button
                     icon="check"
-                    style={{cursor: selectedApp ? 'pointer' : 'not-allowed'}}
-                    color={selectedApp ? 'green' : 'darkgrey'}
+                    style={{ cursor: selectedApp ? 'pointer' : 'not-allowed' }}
+                    color={selectedApp ? 'green' : 'grey'}
                     onClick={() => {
                       if (selectedApp) {
                         return confirm('Are you sure this is the correct Appointment?') ? setSendEmail() : null;
