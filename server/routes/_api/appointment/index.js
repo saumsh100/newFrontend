@@ -1,11 +1,13 @@
 
 import Moment from 'moment-timezone';
+import sequelize from 'sequelize';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
 import { newPatients } from '../../../lib/intelligence/patients';
+import { appsHygienist } from '../../../lib/intelligence/appointments';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -73,6 +75,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       patientId: {
         $not: null,
       },
+      isCancelled: true,
     },
     raw: true,
     nest: true,
@@ -92,33 +95,52 @@ appointmentsRouter.get('/business', (req, res, next) => {
     ],
   })
     .then(async (appointments) => {
+      const hygenApps = await appsHygienist(startDate, endDate, accountId);
+      send.hygieneAppts = hygenApps[0] ? hygenApps[0].appsHygienist : 0;
+
+      const $or = [];
 
       for (let i = 0; i < appointments.length; i++) {
-        if (testHygien.test(appointments[i].practitioner.type)) {
-          send.hygieneAppts++;
-        }
 
         if (appointments[i].isCancelled) {
           send.brokenAppts++;
-          const filled = await Appointment.findOne({
-            where: {
-              accountId,
-              startDate: {
-                gte: appointments[i].startDate,
-                lte: appointments[i].endDate,
-              },
-              patientId: {
-                $not: null,
-              },
-              practitionerId: appointments[i].practitionerId,
-              isCancelled: false,
+
+          $or.push({
+            accountId,
+            isCancelled: false,
+            startDate: {
+              gte: appointments[i].startDate,
+              lte: appointments[i].endDate,
             },
+            endDate: {
+              gte: appointments[i].startDate,
+              lte: appointments[i].endDate,
+            },
+            patientId: {
+              $not: null,
+            },
+            practitionerId: appointments[i].practitionerId,
           });
-          if (filled) {
-            send.brokenAppts--;
-          }
         }
       }
+
+      console.log('gere')
+      const filled = await Appointment.findAll({
+        where: {
+          accountId,
+          $or,
+        },
+        raw: true,
+        attributes: [
+          [sequelize.fn('COUNT', sequelize.col('accountId')), 'filled'],
+        ],
+        group: ['accountId'],
+      });
+      console.log(filled)
+
+      const filledLength = filled[0] ? filled[0].filled : 0;
+
+      send.brokenAppts = appointments.length - filledLength;
 
       send.productionEarnings = await mostBusinessProcedure(startDate, endDate, accountId);
 
