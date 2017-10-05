@@ -1,4 +1,3 @@
-// import sequelize from 'sequelize';
 import moment from 'moment';
 import { Appointment, Practitioner, sequelize } from '../../_models';
 
@@ -70,6 +69,12 @@ export async function appsNotCancelled(startDate, endDate, accountId) {
 
 export async function appsCancelledReplaced(startDate, endDate, practitionerId) {
 
+
+  /*
+  * Query finds the number of appointments that where made after a cancelation for the same time slot
+  * for a given practitioner
+  * Query finds non cancelled appointments inside of cancelled appointments with the same start or end date
+  */
   return sequelize.query(`SELECT COUNT("accountId") as "notCancelled" FROM "Appointments"
   WHERE "isCancelled" = false
   AND "practitionerId" = :practitionerId
