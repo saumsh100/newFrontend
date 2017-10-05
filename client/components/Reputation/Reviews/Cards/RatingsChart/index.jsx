@@ -39,6 +39,7 @@ export default function RatingsChart(props) {
           return (
             <div key={index} className={styles.content}>
               <div className={styles.content__stars}>
+                {r ==='0' ? 'No Rating' : ''}
                 {rows}
               </div>
               <div className={styles.content__bar}>
