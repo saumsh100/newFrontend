@@ -7,7 +7,7 @@ import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
 import { newPatients } from '../../../lib/intelligence/patients';
-import { appsHygienist } from '../../../lib/intelligence/appointments';
+import { appsHygienist, appsNotCancelled } from '../../../lib/intelligence/appointments';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -109,12 +109,12 @@ appointmentsRouter.get('/business', (req, res, next) => {
             accountId,
             isCancelled: false,
             startDate: {
-              gte: appointments[i].startDate,
-              lte: appointments[i].endDate,
+              $between: [appointments[i].startDate,
+                appointments[i].endDate],
             },
             endDate: {
-              gte: appointments[i].startDate,
-              lte: appointments[i].endDate,
+              $between: [appointments[i].startDate,
+                appointments[i].endDate],
             },
             patientId: {
               $not: null,
@@ -124,23 +124,10 @@ appointmentsRouter.get('/business', (req, res, next) => {
         }
       }
 
-      console.log('gere')
-      const filled = await Appointment.findAll({
-        where: {
-          accountId,
-          $or,
-        },
-        raw: true,
-        attributes: [
-          [sequelize.fn('COUNT', sequelize.col('accountId')), 'filled'],
-        ],
-        group: ['accountId'],
-      });
-      console.log(filled)
 
-      const filledLength = filled[0] ? filled[0].filled : 0;
+      const filled = await appsNotCancelled(startDate, endDate, accountId);
 
-      send.brokenAppts = appointments.length - filledLength;
+      send.brokenAppts = appointments.length - filled;
 
       send.productionEarnings = await mostBusinessProcedure(startDate, endDate, accountId);
 
