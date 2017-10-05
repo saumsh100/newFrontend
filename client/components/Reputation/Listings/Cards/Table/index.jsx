@@ -1,8 +1,9 @@
 
 import React, { Component, PropTypes } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../../../library';
+import { List, ListItem, Card, Icon } from '../../../../library';
 import styles from './styles.scss';
-
+import ShowDetails from './ShowDetails';
+import Collapsible from "../../../../library/Collapsible/index";
 
 class Table extends Component {
   constructor(props) {
@@ -94,13 +95,12 @@ class Table extends Component {
                             {!obj.listing.length ?
                               null :
                               (<div className={styles.table__button}>
-                                <a
-                                  href={listingInfo}
-                                  className={styles.table__button}
-                                  target="_blank"
-                                >
-                                  show details
-                                </a>
+                                <Collapsible title="show details">
+                                  <ShowDetails
+                                    listingData={obj.listing}
+                                    url={listingInfo}
+                                  />
+                                </Collapsible>
                               </div>)}
                           </div>
                         </div>
