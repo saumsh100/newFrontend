@@ -71,9 +71,10 @@ export async function appsCancelledReplaced(startDate, endDate, practitionerId) 
 
 
   /*
-  * Query finds the number of appointments that where made after a cancelation for the same time slot
+  * Query finds the number of appointments that were made after a cancellation for the same time slot
   * for a given practitioner
-  * Query finds non cancelled appointments inside of cancelled appointments with the same start or end date
+  * Query finds non cancelled appointments for all cancelled appointments with the same start or end date
+  * from a startDate and endDate
   */
   return sequelize.query(`SELECT COUNT("accountId") as "notCancelled" FROM "Appointments"
   WHERE "isCancelled" = false
