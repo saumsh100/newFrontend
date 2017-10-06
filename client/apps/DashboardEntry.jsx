@@ -34,6 +34,7 @@ load()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
     if (process.env.NODE_ENV === 'production') {
+      console.log(auth.get('user'))
       const user = auth.get('user').toJS();
       const userId = user.id;
       const fullName = `${user.firstName} ${user.lastName}`;
