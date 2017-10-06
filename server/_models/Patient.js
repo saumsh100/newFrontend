@@ -5,6 +5,9 @@ import isNull from 'lodash/isNull';
 import customDataTypes from '../util/customDataTypes';
 import { UniqueFieldError } from '../models/createModel/errors';
 
+const { validateAccountIdPmsId } = require('../util/validators');
+
+
 const STATUS = {
   ACTIVE: 'Active',
   INACTIVE: 'Inactive',
@@ -28,25 +31,7 @@ export default function (sequelize, DataTypes) {
       validate: {
         // validator for if pmsId and accountId are a unique combo
         isUnique(value, next) {
-          return Patient.findOne({
-            where: {
-              accountId: this.accountId,
-              pmsId: value,
-            },
-            paranoid: false,
-          }).then(async (patient) => {
-            if (patient) {
-              patient.setDataValue('deletedAt', null);
-              patient = await patient.save({ paranoid: false });
-
-              return next({
-                messages: 'AccountId PMS ID Violation',
-                model: patient,
-              });
-            }
-
-            return next();
-          });
+          return validateAccountIdPmsId(Patient, value, this, next);
         },
       },
     },

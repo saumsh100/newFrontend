@@ -117,6 +117,7 @@ const ModelAttributes = {
     'birthDate',
     'insurance',
     'isDeleted',
+    'pmsCreatedAt',
     'isSyncedWithPms',
     'familyId',
     'status',

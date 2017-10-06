@@ -22,6 +22,8 @@ import TopReference from './Cards/TopReference';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
 import { SortByFirstName } from '../../library/util/SortEntities';
+import nFormatter from '../nFormatter';
+
 
 class Overview extends Component {
   constructor(props) {
@@ -178,7 +180,7 @@ class Overview extends Component {
       return {
         name: `${patient.firstName} ${patient.lastName}`,
         age,
-        number: `$${Math.floor(patient.totalAmount)}`,
+        number: `$${nFormatter(patient.totalAmount, 2)}`,
         firstName: patient.firstName,
       };
     });
@@ -252,28 +254,28 @@ class Overview extends Component {
 
     const data = [
       {
-        count: notConfirmedAppointments,
+        count: nFormatter(notConfirmedAppointments, 2),
         title: 'Appointments Booked',
         icon: 'calendar',
         size: 6,
         color: 'primaryColor',
       },
       {
-        count: `$${Math.floor(totalRevenueStats).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+        count: `$${nFormatter(totalRevenueStats, 1)}`,
         title: 'Estimated Revenue',
         icon: 'line-chart',
         size: 6,
         color: 'primaryBlue',
       },
       {
-        count: newVisitors,
+        count: nFormatter(newVisitors, 1),
         title: 'New Patients',
         icon: 'user',
         size: 6,
         color: 'primaryGreen',
       },
       {
-        count: confirmedAppointments,
+        count: nFormatter(confirmedAppointments, 2),
         title: 'Confirmed Appointments',
         icon: 'check-circle',
         size: 6,
