@@ -65,3 +65,4 @@ export default function ChairsForm(props) {
     </Form>
   );
 }
+
