@@ -9,13 +9,32 @@
 }
 
 .formContainer {
+  padding-top: 15px;
   padding-bottom: 15px;
 }
 .chairContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
+  span  {
+    width: 80px;
+  }
+
   &_name {
+    padding-right: 20px;
+  }
+}
+
+.allChairs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  span {
+    width: 80px;
+  }
+
+  &_text {
+    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
     padding-right: 20px;
   }
 }

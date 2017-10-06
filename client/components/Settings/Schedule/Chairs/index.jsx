@@ -102,10 +102,10 @@ class Chairs extends Component {
     return (
       <div>
         <div className={styles.headerContainer}>
-          <Header title={'Chairs'} />
+          <Header title={'Set Active Chairs'} />
         </div>
-        <div>
-          <span> All Chairs </span>
+        <div className={styles.allChairs}>
+          <span className={styles.allChairs_text}> All Chairs </span>
           <Toggle
             name="allChairs"
             onChange={this.setAllChairs}
