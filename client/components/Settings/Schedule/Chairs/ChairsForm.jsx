@@ -54,10 +54,12 @@ export default function ChairsForm(props) {
               <span className={styles.chairContainer_name}>
                 {chair.get('name')}
               </span>
-              <Field
-                component="Toggle"
-                name={chair.get('id')}
-              />
+              <div className={styles.chairContainer_toggle}>
+                <Field
+                  component="Toggle"
+                  name={chair.get('id')}
+                />
+              </div>
             </div>
           );
         })}

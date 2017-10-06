@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import { batchActions } from 'redux-batched-actions';
 import { fetchEntities, updateEntityRequest } from '../../../../thunks/fetchEntities';
+import { showAlertTimeout } from '../../../../thunks/alerts';
 import { Header, Toggle } from '../../../library';
 import { SortByName } from '../../../library/util/SortEntities';
 import styles from './styles.scss';
@@ -56,29 +57,37 @@ class Chairs extends Component {
 
     const {
       updateEntityRequest,
-      chairs
+      chairs,
+      showAlertTimeout,
     } = this.props;
 
     chairArray.map((id) => {
       const chair = chairs.get(id);
       const modifiedService = chair.set('isActive', !chair.get('isActive'));
 
-      const alert = {
-        success: {
-          body: ` ${chair.get('name')} was updated.`,
-        },
-        error: {
-          body: `Could not update ${chair.get('name')}.`,
-        },
-      };
+      if (chairArray.length === 1) {
+        const alert = {
+          success: {
+            body: ` ${chair.get('name')} was updated.`,
+          },
+          error: {
+            body: `Could not update ${chair.get('name')}.`,
+          },
+        };
 
-      updateEntityRequest({ key: 'chairs', model: modifiedService, alert }).then(()=>{
+        return updateEntityRequest({ key: 'chairs', model: modifiedService, alert }).then(()=>{
+          this.setState({
+            previousValues,
+          });
+        });
+      }
+
+      return updateEntityRequest({ key: 'chairs', model: modifiedService }).then(()=> {
         this.setState({
           previousValues,
-        })
+        });
       });
     });
-
   }
 
   render() {
@@ -104,20 +113,22 @@ class Chairs extends Component {
         <div className={styles.headerContainer}>
           <Header title={'Set Active Chairs'} />
         </div>
-        <div className={styles.allChairs}>
-          <span className={styles.allChairs_text}> All Chairs </span>
-          <Toggle
-            name="allChairs"
-            onChange={this.setAllChairs}
-            checked={allChairs}
-          />
+        <div className={styles.container}>
+          <div className={styles.allChairs}>
+            <span className={styles.allChairs_text}> All Chairs </span>
+            <Toggle
+              name="allChairs"
+              onChange={this.setAllChairs}
+              checked={allChairs}
+            />
+          </div>
+          {sortedChairs.length ? <ChairsForm
+            chairs={sortedChairs}
+            handleSubmit={this.handleSubmit}
+            initialValues={initialValues}
+            formValues={this.state.previousValues}
+          /> : null }
         </div>
-        {sortedChairs.length ? <ChairsForm
-          chairs={sortedChairs}
-          handleSubmit={this.handleSubmit}
-          initialValues={initialValues}
-          formValues={this.state.previousValues}
-        /> : null }
       </div>
     );
   }
@@ -151,6 +162,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     updateEntityRequest,
+    showAlertTimeout,
     change,
     dispatch,
   }, dispatch);
