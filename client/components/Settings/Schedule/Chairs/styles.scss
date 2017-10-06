@@ -1,0 +1,21 @@
+
+.headerContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #efefef;
+  margin-right: 15px;
+}
+
+.formContainer {
+  padding-bottom: 15px;
+}
+.chairContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  &_name {
+    padding-right: 20px;
+  }
+}
