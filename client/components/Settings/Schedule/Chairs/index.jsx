@@ -9,23 +9,27 @@ import { SortByName } from '../../../library/util/SortEntities';
 import styles from './styles.scss';
 import ChairsForm from './ChairsForm';
 
-
 function checkValues(obj) {
   const allTrue = Object.keys(obj).every((key) => {
-    return obj[key].isActive;
+    return obj[key];
   });
   return allTrue;
 }
 
-function createInitialValues(practitionerIds, practitioners) {
-  return practitioners.map(p => {
-    return practitionerIds.indexOf(p.get('id')) > -1;
-  }).toJS();
+function createInitialValues(chairs) {
+  const obj = {};
+  chairs.map((chair) => {
+    obj[chair.get('id')] = chair.get('isActive');
+  });
+  return obj;
 }
 
 class Chairs extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      previousValues: {},
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setAllChairs = this.setAllChairs.bind(this);
   }
@@ -36,15 +40,10 @@ class Chairs extends Component {
     });
   }
 
-  handleSubmit(values) {
-    console.log(values);
-  }
-
   setAllChairs(e) {
     e.stopPropagation();
     const { change, chairs, allChairs } = this.props;
 
-    console.log(allChairs);
     const actions = Object.keys(chairs.toJS()).map((key) => {
       return change('chairsForm', key, !allChairs);
     });
@@ -52,18 +51,40 @@ class Chairs extends Component {
     this.props.dispatch(batchActions(actions));
   }
 
+
+  handleSubmit(id, previousValues) {
+
+    const {
+      updateEntityRequest,
+      chairs
+    } = this.props;
+
+    const chair = chairs.get(id[0]);
+    const modifiedService = chair.set('isActive', !chair.get('isActive'));
+    updateEntityRequest({ key: 'chairs', model: modifiedService });
+
+    this.setState({
+      previousValues,
+    })
+  }
+
   render() {
     const {
       chairs,
       allChairs,
+      values,
     } = this.props;
 
     if (!chairs) {
       return null;
     }
-
     const sortedChairs = chairs.sort(SortByName).toArray();
-    console.log(allChairs);
+
+    const initialValues = createInitialValues(sortedChairs)
+
+    if (!Object.keys(initialValues).length) {
+      return null;
+    }
 
     return (
       <div>
@@ -75,11 +96,14 @@ class Chairs extends Component {
           <Toggle
             name="allChairs"
             onChange={this.setAllChairs}
+            checked={allChairs}
           />
         </div>
         {sortedChairs.length ? <ChairsForm
           chairs={sortedChairs}
           handleSubmit={this.handleSubmit}
+          initialValues={initialValues}
+          formValues={this.state.previousValues}
         /> : null }
       </div>
     );
@@ -99,12 +123,14 @@ function mapStateToProps({ entities, form }) {
     return {
       allChairs: null,
       chairs,
+      values: {}
     };
   }
 
   return {
     chairs,
-    allChairs: checkValues(chairs.toJS()),
+    allChairs: checkValues(form['chairsForm'].values),
+    values: form['chairsForm'].values,
   };
 }
 
