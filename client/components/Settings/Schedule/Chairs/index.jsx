@@ -52,20 +52,33 @@ class Chairs extends Component {
   }
 
 
-  handleSubmit(id, previousValues) {
+  handleSubmit(chairArray, previousValues) {
 
     const {
       updateEntityRequest,
       chairs
     } = this.props;
 
-    const chair = chairs.get(id[0]);
-    const modifiedService = chair.set('isActive', !chair.get('isActive'));
-    updateEntityRequest({ key: 'chairs', model: modifiedService });
+    chairArray.map((id) => {
+      const chair = chairs.get(id);
+      const modifiedService = chair.set('isActive', !chair.get('isActive'));
 
-    this.setState({
-      previousValues,
-    })
+      const alert = {
+        success: {
+          body: ` ${chair.get('name')} was updated.`,
+        },
+        error: {
+          body: `Could not update ${chair.get('name')}.`,
+        },
+      };
+
+      updateEntityRequest({ key: 'chairs', model: modifiedService, alert }).then(()=>{
+        this.setState({
+          previousValues,
+        })
+      });
+    });
+
   }
 
   render() {
