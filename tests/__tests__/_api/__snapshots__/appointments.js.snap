@@ -120,12 +120,12 @@ Object {
       "firstName": "Ronald",
       "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
       "lastName": "Mcdonald",
-      "numAppointments": 0,
+      "numAppointments": 1,
     },
   },
   "practitioner": Object {
     "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
-      "appointmentTime": 0,
+      "appointmentTime": 2,
       "avatarUrl": null,
       "firstName": "Colonel",
       "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
