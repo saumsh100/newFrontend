@@ -12,7 +12,6 @@
 
 .suggestionsList {
   margin: 0 auto;
-  width: 75%;
   max-height: 200px;
   height: auto;
   border: 1px solid #efefef;
@@ -38,6 +37,7 @@
 .suggestionsListItem {
   display: flex;
   padding: 20px 20px 20px 20px;
+  line-height: 1.5em;
 }
 
 .title {
@@ -49,7 +49,7 @@
 }
 
 .patientSpeel {
-  padding: 15px;
+  padding: 15px 0px 20px 0px;
   font-size: $medium-size;
 }
 
@@ -64,25 +64,23 @@
   }
 
   &_fullName {
-    font-family: $medium-font;
-    font-size: $medium-size;
+    composes: listItemHeader from 'sass-loader!../../../fonts.scss';
     @media screen and (max-width: 850px){
       font-size: $medium-size;
     }
   }
 
   &_phone {
-
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
   }
 
   &_email {
-
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
   }
 }
 
 .createPatientButtonContainer {
-  padding-top: 35px;
-  padding-bottom: 15px;
+  padding-top: 20px;
   display: flex;
   justify-content: center;
 }

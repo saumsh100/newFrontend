@@ -361,20 +361,70 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
     firstName,
     lastName,
     email,
-    phoneNumber,
+    mobilePhoneNumber,
+    requestCreatedAt,
   } = req.query;
 
   let patients;
   try {
     patients = await Patient.findAll({
-      raw: true,
       where: {
         accountId,
         patientUserId: { $eq: null },
-        $or: [{ firstName, lastName }, { email }, { phoneNumber }],
+        $or: [{ firstName: {
+          ilike: firstName,
+        },
+          lastName: {
+            ilike: lastName,
+          },
+        }, { email }, { mobilePhoneNumber }],
       },
+      include: [{
+        model: Appointment,
+        as: 'appointments',
+        where: {
+          startDate: {
+            $gte: new Date(requestCreatedAt),
+          },
+          isDeleted: false,
+          isCancelled: false,
+        },
+        //limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
+        order: [['startDate', 'asc']],
+        required: false,
+      }],
     });
-    return res.send(normalize('patients', patients));
+
+    const patientsData = patients.map((patient) => {
+      return patient.get({ plain: true });
+    });
+
+    return res.send(normalize('patients', patientsData));
+  } catch (error) {
+    next(error);
+  }
+});
+
+patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    requestCreatedAt,
+  } = req.query;
+
+  try {
+    const nextAppt = await Appointment.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        startDate: {
+          $gte: new Date(requestCreatedAt),
+        },
+        isDeleted: false,
+        isCancelled: false,
+      },
+      order: [['startDate', 'ASC']],
+      // limit: 1,
+    });
+    res.send(normalize('appointments', nextAppt));
   } catch (error) {
     next(error);
   }

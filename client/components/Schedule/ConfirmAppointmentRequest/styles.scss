@@ -1,0 +1,87 @@
+@import '../../../ui.scss';
+
+.container {
+
+}
+
+.subHeader {
+  composes: subHeader from from 'sass-loader!../../../fonts.scss';
+}
+.listItemHeader {
+  composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+}
+
+.text {
+  text-align: left;
+  padding-top: 10px;
+}
+
+.dataContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0px 10px 0px 10px;
+  height: auto;
+  border: 1px solid #e6e6e6;
+
+  @media screen and (max-width: 1300px) {
+    flex-direction: column;
+    padding-top: 10px;
+  }
+
+  &_body {
+    display: flex;
+    flex-direction: row;
+    line-height: 1.5em;
+    padding: 10px;
+    width: 100%;
+    @media screen and (max-width: 1300px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &_contactInfo {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    margin-left: auto;
+    @extend .subHeader;
+    @media screen and (max-width: 1300px) {
+      align-items: center;
+      margin-left: 0;
+    }
+    &_email {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &_phone {
+
+    }
+  }
+
+  &_patientInfo {
+    &_fullName {
+      @extend .listItemHeader;
+    }
+
+    &_date {
+      @extend .listItemHeader;
+    }
+  }
+}
+
+.selected {
+  background: $primary-grey;
+  border-left: 2px solid;
+  border-left-color: $primary-color;
+}
+
+.buttonContainer {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
