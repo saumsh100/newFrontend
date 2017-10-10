@@ -135,6 +135,7 @@ class ConfirmAppointmentRequest extends Component {
                 setCurrentDay={setCurrentDay}
                 setSelected={this.setSelected}
                 selectedApp={this.state.selectedApp}
+                length={appointments.length}
               />);
             })}
             {appointments.length === 1 ? (
@@ -185,6 +186,7 @@ class ConfirmAppointmentRequest extends Component {
               selectedApp={selectedApp}
               confirmRequest={this.confirmRequest}
               patient={patient}
+              length={appointments.length}
             />)}
       </div>
     );

@@ -8,6 +8,7 @@ export default function SendConfirmationEmail(props) {
     selectedApp,
     confirmRequest,
     patient,
+    length,
   } = props;
 
   const startDate = moment(selectedApp.startDate);
@@ -16,8 +17,7 @@ export default function SendConfirmationEmail(props) {
   return (
     <div className={styles.container}>
       Would you like to send an email confirmation to {patient.getFullName()}?
-      <div className={styles.dataContainer} >
-
+      {length > 1 ? <div className={styles.dataContainer} >
         <div className={styles.avatarContainer}>
           <Icon size={2} icon="calendar" />
         </div>
@@ -35,8 +35,7 @@ export default function SendConfirmationEmail(props) {
             <div className={styles.dataContainer_contactInfo_phone}>{patient.get('mobilePhoneNumber')}</div>
           </div>
         </div>
-
-      </div>
+      </div> : null }
       <div className={styles.buttonContainer}>
         <Button icon="times" color="darkgrey" onClick={() => confirmRequest(patient, false)}>
           No
