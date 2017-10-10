@@ -95,7 +95,7 @@
   color: white;
   box-sizing: border-box;
   line-height: 150%;
-  z-index: 9998 !important;
+  z-index: 9998;
 }
 
 .CareCruButton:hover {
