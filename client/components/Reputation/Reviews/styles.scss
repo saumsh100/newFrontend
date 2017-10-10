@@ -56,7 +56,7 @@
 
 
 .stats {
-  min-height: 168px;
+  min-height: 180px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -113,6 +113,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: $primary-blue;
   &__stars {
     width: 90%;
     text-align: right;

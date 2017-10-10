@@ -1,5 +1,46 @@
 @import "../../../../../ui";
 
+
+
+.showDetails {
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+  padding-left: 12px;
+
+  &_info {
+
+  }
+
+  &_text{
+    composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+    color: darken($primary-darkgrey, 5%);
+    line-height: 1.3em;
+  }
+
+  &_website {
+    text-decoration: none;
+    color: $primary-blue;
+    &:hover {
+      text-decoration: underline;
+      color: darken($primary-blue, 5%);
+    }
+  }
+
+  &_links {
+    display: flex;
+  }
+  &_view {
+    padding-top: 5px;
+    text-decoration: none;
+    color: lighten($primary-blue, 5%);
+    &:hover {
+      text-decoration: underline;
+      color: darken($primary-blue, 5%);
+    }
+  }
+}
+
 .mostLoyal {
   border-top: $card-border-size $primary-darkgrey;
   overflow: inherit;
@@ -176,6 +217,7 @@
         font-size: $small-size;
         text-decoration: none;
         display: flex;
+        padding-top: 5px;
         //justify-content: center;
         //align-items: center;
         i {

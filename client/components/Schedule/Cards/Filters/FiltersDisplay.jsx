@@ -27,12 +27,16 @@ export default function FiltersDisplay(props) {
         </div>
         <div className={styles.filter_header__link} >
           <div
-            className={styles.filter_header__link__text}
+            className={styles.filter_header__link__selectText}
             onClick={handleSelectAll}
           >
             Select All
           </div>
-          <div onClick={handleClearAll} >Clear All</div>
+          <div
+            onClick={handleClearAll}
+            className={styles.filter_header__link__clearText}
+          >Clear All
+          </div>
         </div>
       </div>
       <div className={styles.filter_practitioner}>

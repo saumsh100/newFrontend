@@ -112,6 +112,7 @@ Object {
         "syncClientAdapter": null,
         "timeInterval": null,
         "timezone": "Africa/Bamako",
+        "twilioPhoneNumber": null,
         "unit": 15,
         "website": null,
         "zipCode": null,
