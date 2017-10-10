@@ -86,10 +86,23 @@ class DayPicker extends Component {
       iconClassName,
       value,
       timezone,
+      horizontal,
     } = this.props;
 
     // If value is defined, format to 10/8/2017 style
     const displayValue = value ? moment(value).format('l') : value;
+
+    if (horizontal) {
+      return (
+        <RDayPicker
+          onDayClick={this.handleDayClick}
+          selectedDays={convertValueToDate(value, timezone)}
+          // handleInputChange={this.handleInputChange}
+
+          {...this.props}
+        />
+      );
+    }
 
     let dayPickerTargetComponent = (
       <Input
@@ -146,6 +159,7 @@ DayPicker.propTypes = {
   iconClassName: PropTypes.string,
   timezone: PropTypes.string,
   multiple: PropTypes.bool.isRequired,
+  horizontal: PropTypes.bool.isRequired,
 };
 
 export default DayPicker;

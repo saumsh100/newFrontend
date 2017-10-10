@@ -7,6 +7,10 @@ import WidgetContainer from '../components/ReviewsWidget/Container';
 import Login from '../components/ReviewsWidget/Login';
 import SignUp from '../components/ReviewsWidget/SignUp';
 import PatientApp from '../containers/PatientApp';
+import Availabilities from '../components/ReviewsWidget/Booking/Availabilities';
+import Waitlist from '../components/ReviewsWidget/Booking/Waitlist';
+import BookingReview from '../components/ReviewsWidget/Booking/Review';
+import BookingComplete from '../components/ReviewsWidget/Booking/Complete';
 import Submitted from '../components/ReviewsWidget/Review/Submitted';
 import Complete from '../components/ReviewsWidget/Review/Complete';
 
@@ -25,12 +29,28 @@ const ReviewsRouter = ({ match }) => {
   );
 };
 
+const BookingRouter = ({ match }) => {
+  const b = (path = '') => `${match.url}${path}`;
+  return (
+    <div>
+      <Switch>
+        {/*<Redirect exact from={b()} to={b('/submitted')} />*/}
+        <Route exact path={b()} component={Availabilities} />
+        <Route exact path={b('/wait')} component={Waitlist} />
+        <Route exact path={b('/review')} component={BookingReview} />
+        <Route exact path={b('/complete')} component={BookingComplete} />
+      </Switch>
+    </div>
+  );
+};
+
 const EmbedRouter = ({ match }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <Switch>
       <Redirect exact from={b()} to={b('/review')} />
       <Route path={b('/review')} component={ReviewsRouter} />
+      <Route path={b('/book')} component={BookingRouter} />
       <Route exact path={b('/login')} component={Login} />
       <Route exact path={b('/signup')} component={SignUp} />
     </Switch>
@@ -43,7 +63,7 @@ const WidgetRouter = ({ history }) => {
     <Router history={history}>
       <div>
         {/* TODO: Booking widget will soon become part of app */}
-        <Route exact path={base('/book')} component={PatientApp} />
+        {/*<Route exact path={base('/book')} component={PatientApp} />*/}
         {/* TODO: ReviewsWidget will ultimately become just the widget container */}
         <ReviewsWidget>
           <Switch>
