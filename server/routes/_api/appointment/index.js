@@ -476,7 +476,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           time += timeApp;
           notConfirmedAppointments++;
 
-          if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
+          if (appointment.isCancelled === false) {
             if (!sendStats.patients[appointment.patient.id]) {
               sendStats.patients[appointment.patient.id] = {
                 numAppointments: 0,
@@ -493,7 +493,9 @@ appointmentsRouter.get('/stats', (req, res, next) => {
             }
             sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
-            confirmedAppointments++;
+            if (appointment.isConfirmed) {
+              confirmedAppointments += 1;
+            }
           }
         }
       });
