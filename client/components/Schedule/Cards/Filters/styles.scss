@@ -46,8 +46,17 @@
         font-size: 12px;
         padding-right: 5px;
         margin-left: auto;
-        &__text{
+        &__selectText{
           padding-right: 10px;
+          &:hover {
+            color: darken(#b4b4b4, 10%)
+          }
+        }
+
+        &__clearText {
+          &:hover {
+            color: darken(#b4b4b4, 10%)
+          }
         }
       @media screen and (max-width: 1250px) {
       }

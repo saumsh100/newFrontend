@@ -93,6 +93,7 @@ class ScheduleComponent extends Component {
     const mergingPatientData = schedule.toJS().mergingPatientData;
 
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
+    const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
 
     let displayModalComponent = (
       <AddNewAppointment
@@ -197,7 +198,7 @@ class ScheduleComponent extends Component {
                 <Col xs={12}>
                   <Filters
                     schedule={schedule}
-                    chairs={chairs.get('models').toArray()}
+                    chairs={filterChairs}
                     practitioners={filterPractitioners}
                     services={services.get('models')}
                   />

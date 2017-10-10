@@ -40,6 +40,10 @@ const PATHS = {
       label: 'Online Booking',
     },
     {
+      to: '/settings/schedule/chairs',
+      label: 'Chairs',
+    },
+    {
       to: '/settings/schedule/reminderslist',
       label: 'Reminders',
       icon: 'clock-o',

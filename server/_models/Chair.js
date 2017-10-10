@@ -17,6 +17,11 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+
     pmsId: {
       type: DataTypes.STRING,
       validate: {
