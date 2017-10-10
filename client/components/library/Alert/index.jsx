@@ -24,8 +24,6 @@ export default function Alert(props) {
   return (
     <div
       className={alertStyle}
-      style={cursorStyle}
-      onClick={alertClick}
     >
       <div className={styles.textContainer} >
         <div className={styles.title}>
@@ -33,6 +31,13 @@ export default function Alert(props) {
         </div>
         <div className={styles.alertBodyText}>{alert.body}</div>
         <div className={styles.alertBodyText}>{alert.subText}</div>
+        {alert.clickable ? <div className={styles.clickableLink}>
+          <div
+            onClick={alertClick}
+          >
+            Click to View
+          </div>
+        </div> : null }
       </div>
       <div className={iconStyle}>
         <Icon
