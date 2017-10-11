@@ -19,6 +19,7 @@ export default class Advanced extends Component {
     this.state = {
       isLoading: false,
       configurations: [],
+      recalls: [],
     };
 
     this.onUpdateConfiguration = this.onUpdateConfiguration.bind(this);
@@ -28,11 +29,15 @@ export default class Advanced extends Component {
     this.setState({ isLoading: true });
 
     const { account } = this.props;
-    return axios.get(`/api/accounts/${account.id}/configurations`, headersConfig)
-      .then(({ data }) => {
+    return Promise.all([
+        axios.get(`/api/accounts/${account.id}/configurations`, headersConfig),
+        axios.get(`/api/accounts/${account.id}/recalls/stats`)
+      ])
+      .then(([{ data }, recallsData]) => {
         this.setState({
           isLoading: false,
           configurations: data.data,
+          recalls: recallsData.data,
         });
       })
       .catch(err => console.error('Failed to load configs', err));
@@ -54,9 +59,22 @@ export default class Advanced extends Component {
 
   render() {
     const { account } = this.props;
-    const { configurations } = this.state;
+    const { configurations, recalls } = this.state;
     return (
       <div className={styles.advancedWrapper}>
+        <h3>Recalls</h3>
+        {!recalls.length ? <div>No Recalls</div> : null}
+        {recalls.map((recall) => {
+          return (
+            <div>
+              <div>Type: {recall.primaryType}</div>
+              <div>Length: {recall.lengthSeconds}</div>
+              <div>Success: {recall.success}</div>
+              <div>Fail: {recall.fail}</div>
+            </div>
+          );
+        })}
+        <h3>Configurations</h3>
         {configurations.map((config) => {
           return (
             <ConfigurationItem
