@@ -27,7 +27,7 @@ export default function Alert(props) {
     >
       <div className={styles.textContainer} >
         <div className={styles.title}>
-          <span>{alert.title}!</span>
+          <span>{alert.title}</span>
         </div>
         <div className={styles.alertBodyText}>{alert.body}</div>
         <div className={styles.alertBodyText}>{alert.subText}</div>
