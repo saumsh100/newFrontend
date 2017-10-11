@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Appointment, Practitioner, sequelize } from '../../_models';
+import { Appointment, Practitioner, Patient, sequelize } from '../../_models';
 
 
 export function appsHygienist(startDate, endDate, accountId) {
@@ -43,6 +43,62 @@ export function appsHygienist(startDate, endDate, accountId) {
       [sequelize.fn('COUNT', sequelize.col('Appointment.accountId')), 'appsHygienist'],
     ],
     group: ['Appointment.accountId'],
+    raw: true,
+  });
+}
+
+
+export function appsNewPatient(startDate, endDate, accountId, practitionerId) {
+  return Appointment.findAll({
+    include: [
+      {
+        model: Practitioner,
+        as: 'practitioner',
+        duplicating: false,
+        required: true,
+        attributes: [],
+        where: {
+          id: practitionerId,
+        },
+      },
+      {
+        model: Patient,
+        as: 'patient',
+        duplicating: false,
+        required: true,
+        where: {
+          pmsCreatedAt: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+        attributes: ['id'],
+      },
+    ],
+    where: {
+      accountId,
+      isCancelled: {
+        $ne: true,
+      },
+      $or: [
+        {
+          startDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+        {
+          endDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
+      ],
+    },
+    attributes: [
+      [sequelize.fn('COUNT', sequelize.col('patient.id')), 'appsNewPatient'],
+    ],
+    group: ['patient.id'],
     raw: true,
   });
 }
