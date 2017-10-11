@@ -46,6 +46,7 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'isActive',
   ],
 
   Configuration: [
