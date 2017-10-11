@@ -66,6 +66,7 @@ export async function sendRemindersForAccount(account, date) {
   for (const reminder of reminders) {
     // Get appointments that this reminder deals with
     const appointments = await getAppointmentsFromReminder({ reminder, account, date });
+    console.log(reminder, appointments)
 
     for (const appointment of appointments) {
       const { patient } = appointment;
@@ -156,7 +157,7 @@ export async function computeRemindersAndSend({ date }) {
     include: [{
       model: Reminder,
       as: 'reminders',
-      order: ['lengthSeconds', 'DESC'],
+      order: [['lengthSeconds', 'ASC']],
     }],
   });
 

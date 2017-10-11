@@ -467,6 +467,9 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         if (appointment.practitioner.isActive) {
           if (range.contains(moment(appointment.patient.createdAt))) {
             sendStats.newPatients++;
+          }
+
+          if (range.contains(moment(appointment.patient.pmsCreatedAt))) {
             sendStats.practitioner[appointment.practitioner.id].newPatients++;
           }
 
