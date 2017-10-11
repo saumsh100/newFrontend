@@ -52,9 +52,9 @@ remindersRouter.get('/:accountId/reminders/stats', checkPermissions('accounts:re
 
       const failAppts = unseenAppts.filter((a) => {
         if (a.primaryType === 'sms' || a.primaryType === 'phone') {
-          return !a.mobilePhoneNumber;
+          return !a.patient.mobilePhoneNumber;
         } else {
-          return !a.email;
+          return !a.patient.email;
         }
       });
 
