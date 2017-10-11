@@ -36,6 +36,7 @@ remindersRouter.get('/:accountId/reminders', checkPermissions('accounts:read'), 
  */
 remindersRouter.get('/:accountId/reminders/stats', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
+    const date = (new Date()).toISOString();
     const reminders = await Reminder.findAll({
       raw: true,
       where: { accountId: req.accountId },
