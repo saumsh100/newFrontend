@@ -30,6 +30,20 @@ $empty-grey: darken(lightgrey, 5%);
   border-bottom: 1px solid $primary-white;
 }
 
+.theme {
+  &_primaryBlueLabel {
+    color: $primary-blue !important;
+    opacity: 0.5 !important;
+  }
+  &_primaryBlueBorder{
+    border-bottom: 1px solid $primary-blue;
+  }
+  &_primaryBlueCaret{
+    color: $primary-blue !important;
+  }
+}
+
+
 .active {
   border-bottom: 2px solid $primary-dark ;
 }

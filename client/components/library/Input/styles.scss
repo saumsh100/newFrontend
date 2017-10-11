@@ -65,6 +65,9 @@ $empty-grey: darken(lightgrey, 5%);
   &_primaryWhiteLabel {
     color: $primary-white;
   }
+  &_primaryWhiteBorder{
+    border-color: $primary-white;
+  }
   &_primaryWhiteInput{
     border-bottom: 1px solid $primary-white;
   }
@@ -81,8 +84,19 @@ $empty-grey: darken(lightgrey, 5%);
     }
   }
 
-  &_primaryWhiteBorder{
-    border-color: $primary-white;
+  &_primaryBlueLabel {
+    color: $primary-blue;
+    opacity: 0.5;
+  }
+  &_primaryBlueBorder{
+    border-color: $primary-blue;
+  }
+  &_primaryBlueInput{
+    border-bottom: 1px solid $primary-blue;
+    &:focus ~ .label {
+      color: $primary-blue;
+      opacity: 0.5;
+    }
   }
 }
 

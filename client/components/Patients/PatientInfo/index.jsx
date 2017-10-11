@@ -55,7 +55,7 @@ class PatientInfo extends Component {
         </Row>
         <Row>
           <Col sm={12} md={4} className={styles.infoDisplay}>
-            <InfoDisplay patientId={patientId} />
+            <InfoDisplay patient={patient} />
           </Col>
           <Col sm={12} md={8} className={styles.timeline}>
             <Timeline patientId={patientId} />
@@ -75,15 +75,17 @@ PatientInfo.propTypes = {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    fetchEntitiesRequest,
   }, dispatch);
 }
 
 function mapStateToProps({ entities }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
+
   if (!patients) {
     return null;
   }
-  console.log(match.params.patientId)
+
   return {
     patient: patients.get(match.params.patientId),
   };
