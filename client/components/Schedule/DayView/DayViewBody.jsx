@@ -78,7 +78,7 @@ class DayViewBody extends Component {
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.toJS().chairsFilter;
     const chairsArray = chairs.toArray().sort(SortByName).filter((chair) => {
-      return checkedChairs.indexOf(chair.id) > -1;
+      return checkedChairs.indexOf(chair.id) > -1 && chair.isActive;
     });
 
     const chairsSlot = (

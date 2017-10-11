@@ -14,7 +14,6 @@ import BusinessStats from './Cards/BusinessStats';
 import Patients from './Cards/Patients';
 import styles from './styles.scss';
 import stylesOverview from '../Overview/styles.scss';
-import nFormatter from '../nFormatter';
 
 class Business extends Component {
 
@@ -164,7 +163,7 @@ class Business extends Component {
 
       return {
         title: `${pro.description} - ${pro.type}`,
-        data: `${nFormatter(pro.totalAmount, 2)}`,
+        data: `${Math.floor(pro.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
       };
     });
 

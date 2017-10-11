@@ -16,6 +16,7 @@ import {
   Configuration,
 } from '../../../_models';
 import upload from '../../../lib/upload';
+import { getReviewAppointments } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 
@@ -365,6 +366,29 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
       res.send(obj);
     })
     .catch(next);
+});
+
+/**
+ * PUT /:accountId
+ *
+ * - update clinic account data
+ */
+accountsRouter.get('/:accountId/reviews/stats', checkPermissions('accounts:update'), async (req, res, next) => {
+  try {
+    const date = (new Date()).toISOString();
+
+    // Get the review appointments and filter out
+    const appts = await getReviewAppointments({ date, account: req.account });
+    const noEmail = appts.filter(({ patient }) => !patient.email);
+
+    res.send({
+      success: appts.length - noEmail.length,
+      fail: noEmail.length,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 });
 
 module.exports = accountsRouter;

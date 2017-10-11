@@ -40,7 +40,7 @@ class AddPatientSuggestions extends Component {
     const patientUserId = mergingPatientData.patientUser.id;
     const modifiedPatient = patientModel.set('patientUserId', patientUserId);
 
-    const confirmSuggestion = confirm("Are you sure you want to connect these patients?")
+    const confirmSuggestion = confirm('Are you sure you want to connect these patients?');
 
     if (confirmSuggestion) {
       updateEntityRequest({
@@ -50,7 +50,7 @@ class AddPatientSuggestions extends Component {
       })
         .then(() => {
           reinitializeState();
-          selectAppointment(appointment);
+          return selectAppointment(appointment);
         });
     }
   }
@@ -58,7 +58,6 @@ class AddPatientSuggestions extends Component {
   render() {
     const {
       mergingPatientData,
-      reinitializeState,
     } = this.props;
 
     const suggestions = mergingPatientData.suggestions;
@@ -66,15 +65,7 @@ class AddPatientSuggestions extends Component {
     const fullName = `${patientUser.firstName} ${patientUser.lastName}`;
 
     return (
-      <div className={styles.suggestionsContainer}>
-        <IconButton
-          icon="times"
-          onClick={reinitializeState}
-          className={styles.trashIcon}
-        />
-        <div className={styles.title}>
-          <span>Create Patient</span>
-        </div>
+      <div>
         <div className={styles.patientSpeel}>
           We noticed the CareCru patient, {fullName}, did not have a patient record in your PMS. We have provided
           some possible matches to this patient. Please select one or create a new patient.
@@ -92,7 +83,7 @@ class AddPatientSuggestions extends Component {
           })}
         </List>
         <div className={styles.createPatientButtonContainer}>
-          <Button onClick={this.handleCreatePatient}>
+          <Button color="darkgrey" onClick={this.handleCreatePatient}>
             Create New Patient
           </Button>
         </div>

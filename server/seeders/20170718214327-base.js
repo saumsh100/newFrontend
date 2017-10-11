@@ -365,7 +365,14 @@ module.exports = {
       name: 'Chair 1',
       createdAt: new Date(),
       updatedAt: new Date(),
-    }]);
+    }, {
+      id: uuid(),
+      accountId,
+      name: 'Chair 2',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    ]);
 
     // await queryInterface.bulkInsert('Appointments', appointments2);
   },

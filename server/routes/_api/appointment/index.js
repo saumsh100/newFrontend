@@ -7,7 +7,7 @@ import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
 import { newPatients } from '../../../lib/intelligence/patients';
-import { appsHygienist, appsNotCancelled } from '../../../lib/intelligence/appointments';
+import { appsHygienist, appsNotCancelled, appsNewPatient } from '../../../lib/intelligence/appointments';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -442,22 +442,24 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       }
 
       // practitioner data
-      values[1].map((practitioner) => {
+
+      for (let i = 0; i < values[1].length; i += 1) {
+        const practitioner = values[1][i];
         if (practitioner.isActive) {
           const data = {};
-
+          data.newPatients = await appsNewPatient(startDate, endDate, accountId, practitioner.id);
+          data.newPatients = data.newPatients.length;
           data.firstName = practitioner.firstName;
           data.lastName = practitioner.lastName;
           data.id = practitioner.id;
           data.totalTime = timeOpen;
           data.type = practitioner.type;
           data.appointmentTime = 0;
-          data.newPatients = 0;
-          data.avatarUrl = practitioner.avatarUrl,
-          data.fullAvatarUrl = practitioner.fullAvatarUrl,
+          data.avatarUrl = practitioner.avatarUrl;
+          data.fullAvatarUrl = practitioner.fullAvatarUrl;
           sendStats.practitioner[practitioner.id] = data;
         }
-      });
+      }
 
       let confirmedAppointments = 0;
       let notConfirmedAppointments = 0;
@@ -467,7 +469,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         if (appointment.practitioner.isActive) {
           if (range.contains(moment(appointment.patient.createdAt))) {
             sendStats.newPatients++;
-            sendStats.practitioner[appointment.practitioner.id].newPatients++;
           }
 
           let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
@@ -476,7 +477,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           time += timeApp;
           notConfirmedAppointments++;
 
-          if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
+          if (appointment.isCancelled === false) {
             if (!sendStats.patients[appointment.patient.id]) {
               sendStats.patients[appointment.patient.id] = {
                 numAppointments: 0,
@@ -493,7 +494,9 @@ appointmentsRouter.get('/stats', (req, res, next) => {
             }
             sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
-            confirmedAppointments++;
+            if (appointment.isConfirmed) {
+              confirmedAppointments += 1;
+            }
           }
         }
       });

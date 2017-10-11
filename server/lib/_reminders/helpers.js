@@ -57,7 +57,7 @@ export function shouldSendReminder({ appointment, reminder }) {
   const preferences = patient.preferences;
 
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
-    return (s.reminderId === reminder.id) || (reminder.lengthSeconds > s.lengthSeconds);
+    return (s.reminderId === reminder.id) || (reminder.lengthSeconds >= s.lengthSeconds);
   });
 
   return !reminderAlreadySentOrLongerAway && preferences.reminders;
