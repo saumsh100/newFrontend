@@ -130,7 +130,7 @@ Object {
       "firstName": "Colonel",
       "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
       "lastName": "Sanders",
-      "newPatients": 1,
+      "newPatients": 0,
       "totalTime": 394200,
       "type": "Hygienist",
     },
