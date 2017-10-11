@@ -8,9 +8,23 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
   padding-left: 15px;
   padding-bottom: 15px;
+  padding-right: 15px;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+
+  &_closeIcon {
+    font-size: 1rem;
+    color: $primary-darkgrey;
+    font-weight: 900;
+    margin-left: auto;
+    cursor: pointer;
+    &:hover {
+      color: darken($primary-darkgrey, 10%);
+    }
+  }
 }
 
 .content {
@@ -52,6 +66,20 @@
 }
 
 .formContainer {
-  padding: 15px 25px 25px 25px;
+  padding: 15px 25px 5px 25px;
   background: #FFFFFF;
 }
+
+.remoteSubmit {
+  display: flex;
+  justify-content: flex-end;
+  background: #FFFFFF;
+  padding-bottom: 24px;
+  padding-right: 33px;
+
+  &_buttonDelete {
+    padding-right: 10px;
+  }
+}
+
+

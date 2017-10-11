@@ -34,9 +34,10 @@ export default function PersonalForm(props) {
 
   return (
     <Form
-      form="personForm"
+      form="Form2"
       onSubmit={handleSubmit}
       className={styles.formContainer}
+      ignoreSaveButton
     >
       <Grid className={styles.grid}>
         <Row className={styles.row}>

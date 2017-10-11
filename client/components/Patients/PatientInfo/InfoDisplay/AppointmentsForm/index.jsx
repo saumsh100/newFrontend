@@ -1,32 +1,8 @@
 
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
-import { usStates } from '../../../../Settings/Clinic/Address/selectConstants';
 import styles from '../styles.scss';
-import FormSection from "../../../../library/Form/FormSection";
-
-const normalizeBirthdate = (value) => {
-  return value.trim();
-};
-
-const validateBirthdate = (value) => {
-  const format = 'MM/DD/YYYY';
-  const pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-  if (!pattern.test(value)) {
-    return format;
-  } else {
-    const date = moment(value, format);
-    const isValid = date.isValid();
-    if (!isValid) {
-      return format;
-    }
-  }
-};
-
-const optionsGender = [
-  { value: 'Male' },
-  { value: 'Female' },
-];
+import FormSection from '../../../../library/Form/FormSection';
 
 export default function AppointmentsForm(props) {
   const {
@@ -35,9 +11,10 @@ export default function AppointmentsForm(props) {
 
   return (
     <Form
-      form="personForm"
+      form="Form2"
       onSubmit={handleSubmit}
       className={styles.formContainer}
+      ignoreSaveButton
     >
       <Grid className={styles.grid}>
         <FormSection name="Last Appointment">

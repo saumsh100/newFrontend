@@ -25,7 +25,6 @@ export function fetchEntities({ key, join, params = {}, url }) {
     if (join && join.length) {
       params.join = join.join(',');
     }
-    console.log(url)
     url = url || entity.getUrlRoot();
     return axios.get(url, { params })
       .then((response) => {
