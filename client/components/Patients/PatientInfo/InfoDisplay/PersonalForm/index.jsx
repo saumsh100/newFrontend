@@ -40,6 +40,7 @@ export default function PersonalForm(props) {
       ignoreSaveButton
     >
       <Grid className={styles.grid}>
+        <div className={styles.formHeader}> Basic </div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
             <Field
@@ -63,6 +64,7 @@ export default function PersonalForm(props) {
             />
           </Col>
         </Row>
+        <div className={styles.formHeader}> Contact </div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
             <Field
@@ -92,6 +94,7 @@ export default function PersonalForm(props) {
             />
           </Col>
         </Row>
+        <div className={styles.formHeader}> Address </div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
             <Field

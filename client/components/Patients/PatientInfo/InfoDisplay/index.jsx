@@ -74,7 +74,7 @@ class InfoDisplay extends Component {
               </div>
             </div>
             <div className={styles.content}>
-              <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
+              <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} >
                 <Tab label="Appointments" >
                   <AppointmentsForm
                     patient={patient}
@@ -104,6 +104,7 @@ class InfoDisplay extends Component {
             <div className={styles.remoteSubmit}>
               <div className={styles.remoteSubmit_buttonDelete}>
                 <Button
+                  color="grey"
                   onClick={() => this.reinitializeState()}
                 >
                   Cancel

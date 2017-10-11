@@ -9,15 +9,10 @@ export default function FamilyForm(props) {
   } = props;
 
   return (
-    <Form
-      form="Form4"
-      onSubmit={handleSubmit}
-      className={styles.formContainer}
-      ignoreSaveButton
-    >
-      <Grid className={styles.grid}>
-        <Row></Row>
-      </Grid>
-    </Form>
+    <div className={styles.disabledPage}>
+      <div className={styles.disabledPage_text}>
+        Patient Family has been disabled. Please contact your Carecru account manager for further assistance.
+      </div>
+    </div>
   )
 }
