@@ -62,7 +62,7 @@ remindersRouter.get('/:accountId/reminders/stats', checkPermissions('accounts:re
         ...reminder,
         success: unseenAppts.length - failAppts.length,
         fail: failAppts.length,
-      })
+      });
     }
 
     res.send(data);
