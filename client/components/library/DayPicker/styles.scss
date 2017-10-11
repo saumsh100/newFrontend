@@ -23,4 +23,10 @@
 
 .dateInput {
   letter-spacing: 2px;
+  position:relative;
+}
+
+.calendarIcon {
+  position: absolute;
+  right: 0px;
 }

@@ -1,7 +1,7 @@
 @import '../../../../ui';
 
 .editModal {
-  width: 500px;
+  width: 600px;
   padding-top: 15px;
   background: $primary-white;
   border-top: 5px solid $primary-color;
@@ -15,4 +15,43 @@
 
 .content {
   padding: 0px 5px 0px 5px;
+}
+
+.grid {
+  box-sizing: border-box;
+  padding-bottom: 5px;
+}
+
+.row {
+  align-items: center;
+  border-bottom: 1px solid $primary-grey;
+  margin-bottom: 20px;
+}
+.row:last-child {
+  border-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.colLeft {
+  padding-right: 20px;
+  padding-bottom: 10px;
+}
+
+.colRight {
+  padding-right: 5px;
+  padding-bottom: 10px;
+}
+
+.formHeader {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+}
+
+.formHeader:first-child {
+  padding-top: 20px;
+}
+
+.formContainer {
+  padding: 15px 25px 25px 25px;
+  background: #FFFFFF;
 }

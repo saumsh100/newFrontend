@@ -2,8 +2,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Card, Modal, Tabs, Tab } from '../../../library';
 import PersonalForm from './PersonalForm';
+import AppointmentsForm from './AppointmentsForm/index';
 import styles from './styles.scss';
-import CardHeader from "../../../library/CardHeader/index";
+
 
 class InfoDisplay extends Component {
   constructor(props) {
@@ -51,13 +52,13 @@ class InfoDisplay extends Component {
           custom
         >
           <div className={styles.editModal}>
-            <div className={styles.header}>{`Editing ${patient.get('firstName').toUpperCase()}'s Patient Info`}</div>
+            <div className={styles.header}>{`Editing ${patient.get('firstName')}'s Patient Info`}</div>
             <div className={styles.content}>
               <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
                 <Tab label="Appointments" >
-                  <div>
-                    test 1
-                  </div>
+                  <AppointmentsForm
+                    patient={patient}
+                  />
                 </Tab>
                 <Tab label="Personal"  >
                   <PersonalForm

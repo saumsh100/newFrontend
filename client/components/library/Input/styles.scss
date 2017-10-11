@@ -33,7 +33,12 @@ $empty-grey: darken(lightgrey, 5%);
   }
 }
 
-
+.icon {
+  position: absolute;
+  right: 0px;
+  bottom: 30px;
+  opacity: 0.5;
+}
 
 .erroredInput {
   border-bottom: 1px solid $error-color;
@@ -71,6 +76,9 @@ $empty-grey: darken(lightgrey, 5%);
   &_primaryWhiteInput{
     border-bottom: 1px solid $primary-white;
   }
+  &_primaryWhiteIcon{
+    color: $primary-white;
+  }
 
   &_primaryGreyLabel {
     color: $primary-grey;
@@ -83,20 +91,27 @@ $empty-grey: darken(lightgrey, 5%);
       color: $primary-white;
     }
   }
+  &_primaryGreyIcon {
+    color: $primary-grey;
+  }
 
   &_primaryBlueLabel {
-    color: $primary-blue;
-    opacity: 0.5;
+    font-size: 14px;
+    letter-spacing: 2px;
   }
   &_primaryBlueBorder{
     border-color: $primary-blue;
   }
   &_primaryBlueInput{
     border-bottom: 1px solid $primary-blue;
+
     &:focus ~ .label {
       color: $primary-blue;
       opacity: 0.5;
     }
+  }
+  &_primaryBlueIcon {
+    color: $primary-blue;
   }
 }
 

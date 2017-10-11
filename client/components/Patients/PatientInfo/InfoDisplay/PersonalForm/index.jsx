@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { usStates } from '../../../../Settings/Clinic/Address/selectConstants';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 
 const normalizeBirthdate = (value) => {
   return value.trim();
@@ -50,15 +50,15 @@ export default function PersonalForm(props) {
               theme="primaryBlue"
             />
           </Col>
-          <Col xs={6} className={styles.colSelect}>
+          <Col xs={6} className={styles.colRight}>
             <Field
               required
               normalize={normalizeBirthdate}
               validate={[validateBirthdate]}
               name="birthDate"
               label="Birth Date (MM/DD/YYYY)"
-              data-test-id="birthDate"
               theme="primaryBlue"
+              icon="birthday-cake"
             />
           </Col>
         </Row>
@@ -69,14 +69,16 @@ export default function PersonalForm(props) {
               type="tel"
               label="Home Number"
               theme="primaryBlue"
+              icon="phone"
             />
           </Col>
-          <Col xs={6} >
+          <Col xs={6} className={styles.colRight}>
             <Field
               name="mobilePhoneNumber"
               type="tel"
               label="Mobile Number"
               theme="primaryBlue"
+              icon="mobile"
             />
           </Col>
           <Col xs={6} className={styles.colLeft}>
@@ -85,6 +87,7 @@ export default function PersonalForm(props) {
               type="tel"
               label="Work Number"
               theme="primaryBlue"
+              icon="phone-square"
             />
           </Col>
         </Row>
@@ -94,13 +97,15 @@ export default function PersonalForm(props) {
               name="address1"
               label="Address Line 1"
               theme="primaryBlue"
+              icon="map-marker"
             />
           </Col>
-          <Col xs={6}>
+          <Col xs={6} className={styles.colRight}>
             <Field
               name="address2"
               label="Address Line 2"
               theme="primaryBlue"
+              icon="map-marker"
             />
           </Col>
           <Col xs={6} className={styles.colLeft}>
@@ -110,7 +115,7 @@ export default function PersonalForm(props) {
               theme="primaryBlue"
             />
           </Col>
-          <Col xs={6} className={styles.colSelect}>
+          <Col xs={6} className={styles.colRight}>
             <Field
               required
               name="state"
@@ -129,7 +134,7 @@ export default function PersonalForm(props) {
               theme="primaryBlue"
             />
           </Col>
-          <Col xs={6} className={styles.colSelect}>
+          <Col xs={6} className={styles.colRight}>
             <Field
               name="country"
               label="Country"
