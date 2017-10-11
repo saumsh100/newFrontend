@@ -180,7 +180,7 @@ class Overview extends Component {
       return {
         name: `${patient.firstName} ${patient.lastName}`,
         age,
-        number: `$${nFormatter(patient.totalAmount, 2)}`,
+        number: `$${patient.totalAmount.toLocaleString()}`,
         firstName: patient.firstName,
       };
     });
@@ -254,7 +254,7 @@ class Overview extends Component {
 
     const data = [
       {
-        count: nFormatter(notConfirmedAppointments, 2),
+        count: notConfirmedAppointments,
         title: 'Appointments Booked',
         icon: 'calendar',
         size: 6,
@@ -268,14 +268,14 @@ class Overview extends Component {
         color: 'primaryBlue',
       },
       {
-        count: nFormatter(newVisitors, 1),
+        count: newVisitors,
         title: 'New Patients',
         icon: 'user',
         size: 6,
         color: 'primaryGreen',
       },
       {
-        count: nFormatter(confirmedAppointments, 2),
+        count: confirmedAppointments,
         title: 'Confirmed Appointments',
         icon: 'check-circle',
         size: 6,
@@ -324,9 +324,13 @@ class Overview extends Component {
                   <Form
                     className={styles.formDrop}
                     form="dates"
-                    onSubmit={this.submit}
+                    onSubmit={(values) => {
+                      this.submit(values);
+                      this.myinput.focus();
+                    }}
                     initialValues={initialValues}
                     data-test-id="dates"
+                    enableReinitialize={true}
                   >
                     <Field
                       required
@@ -349,34 +353,6 @@ class Overview extends Component {
             </Card>
           </Col>
         </Row>
-        <DialogBox
-          actions={actions}
-          title="New Patient"
-          type="small"
-          active={this.state.active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
-        >
-          <Form
-            form="dates"
-            onSubmit={this.submit}
-            initialValues={initialValues}
-            ignoreSaveButton
-          >
-            <Field
-              required
-              component="DayPicker"
-              name="startDate"
-              label="Start Date"
-            />
-            <Field
-              required
-              component="DayPicker"
-              name="endDate"
-              label="End Date"
-            />
-          </Form>
-        </DialogBox>
         <Loader loaded={this.state.loader} color="#FF715C">
           <Row className={styles.intelligence__body}>
             <Col xs={12} >
@@ -393,6 +369,7 @@ class Overview extends Component {
             </Col>
             <Col xs={12} sm={6} className={styles.padding}>
               <TopReference
+                ref={(ref) => this.myinput = ref}
                 title="Most Business"
                 data={serviceData}
                 className={styles.maxHeight}

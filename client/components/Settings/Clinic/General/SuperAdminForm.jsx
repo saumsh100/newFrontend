@@ -16,6 +16,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     timeInterval: activeAccount.get('timeInterval'),
     canSendReminders: activeAccount.get('canSendReminders'),
     canSendRecalls: activeAccount.get('canSendRecalls'),
+    canSendReviews: activeAccount.get('canSendReviews'),
   };
 
   const lastSyncDate = activeAccount.get('lastSyncDate');

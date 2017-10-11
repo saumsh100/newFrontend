@@ -38,6 +38,15 @@
 
 }
 
+.clickableLink {
+  color: $primary-green;
+  padding-top: 10px;
+  text-decoration: none;
+  &:hover {
+    color: darken($primary-green, 10%);
+    cursor: pointer;
+  }
+}
 .iconContainer {
   position: absolute;
   color: $inactive-color;
