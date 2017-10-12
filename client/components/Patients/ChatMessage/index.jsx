@@ -142,7 +142,7 @@ class ChatMessage extends Component {
 
       displayAnonInfo = <UserInfo
         currentPatient={{
-          avatarUrl: '/images/avatar.png',
+          avatarUrl: '',
           anonPhone: userPhone,
         }}
       />;
