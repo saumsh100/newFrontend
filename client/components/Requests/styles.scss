@@ -129,6 +129,12 @@
   top: 50%;
   align-items: center;
   transform: translateY(-50%);    right: 10px;
+
+  @media screen and (max-width: 1250px){
+    flex-direction: column;
+    margin-right: 10px;
+  }
+
   &__newreqText{
     @extend .font-small-dark;
     position: absolute;
@@ -145,6 +151,11 @@
     margin-right: 15px;
     &:hover {
       color: darken($inactive-color, 10%);
+    }
+    @media screen and (max-width: 1250px){
+      margin-right: 0px;
+      flex-direction: column;
+      margin-bottom: 10px;
     }
   }
 
