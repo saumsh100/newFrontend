@@ -1,0 +1,19 @@
+@import '../../../../../ui';
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  color: $primary-blue;
+  opacity: 0.6;
+  font-size: $extra-small-size;
+  padding-bottom: 10px;
+}
+
+.data {
+  color: $primary-dark;
+  font-size: $small-size;
+  composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+}
