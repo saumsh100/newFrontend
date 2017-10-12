@@ -4,7 +4,7 @@
     border-top: $card-border-size $inactive-color;
     min-height: 150px;
     //max-height: calc(100vh - 750px);
-    overflow: auto;
+    //overflow: auto;
     flex: 1;
     height: 100%;
 }
@@ -70,6 +70,7 @@
 .filter_practitioner {
    // margin: 0 5px;
     padding: 5px 0px 10px 10px;
+    background: $primary-white;
 
     &__name {
       font-size: $small-size;
