@@ -21,7 +21,7 @@ const options = [
     label: 'Tracker 11',
   },
   {
-    value: 'DENTRIX_G61',
+    value: 'DENTRIX_V61',
     label: 'Dentrix G6.1',
   },
 ];
