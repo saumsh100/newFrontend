@@ -104,7 +104,9 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
         where: {
           accountId: account.id,
           patientPhoneNumber: From,
-          patientId: null,
+          patientId: {
+            $eq: null,
+          },
         },
       });
     }
