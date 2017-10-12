@@ -1,13 +1,16 @@
+.mainContainer {
+  box-sizing: border-box;
+  padding: 10px 10px 10px 10px;
+}
 .patientDisplay {
   height: 420px;
   max-height: 420px;
-  padding: 30px 50px 30px 50px;
+  margin-bottom: 10px;
 }
 
 .infoDisplay {
-  padding: 0px 15px 0px 50px;
+  padding-right: 10px;
 }
 
 .timeline {
-  padding: 0px 50px 0px 15px;
 }

@@ -111,7 +111,7 @@ export default class DropdownSelect extends Component {
                 this.handleSearch(e.target.value)
               }}
               value={this.state.value}
-              icon="plus"
+              icon="search"
             />
           </div> : null}
         {options.map((option, i) => {

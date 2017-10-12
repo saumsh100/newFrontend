@@ -47,10 +47,10 @@ class PatientInfo extends Component {
     }
 
     return (
-      <Grid>
+      <Grid className={styles.mainContainer}>
         <Row>
           <Col sm={12} md={12} className={styles.patientDisplay}>
-            <TopDisplay patientId={patientId} />
+            <TopDisplay patient={patient} />
           </Col>
         </Row>
         <Row>

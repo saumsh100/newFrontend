@@ -1,4 +1,84 @@
+@import '../../../../ui';
+
 .card {
   height: 100%;
   width: 100%;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
+}
+
+.imageContainer {
+  height: 50%;
+  background: url('https://i.imgur.com/1l18YL8.jpg');
+}
+
+.dataContainer {
+  position: relative;
+  display: flex;
+  height: 50%;
+  width: 100%;
+}
+
+.avatarContainer {
+  width: 30%;
+  border-right: 1px solid $primary-grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &_avatar {
+    top: -75px;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(white, $primary-darkgrey);
+  }
+
+  &_data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.8em;
+    padding-top: 70px;
+
+    &_name {
+      color: $primary-blue;
+      font-size: $extra-medium-size;
+      composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_email {
+      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_phone {
+      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_icon {
+      padding-right: 5px;
+      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_active {
+      margin-top: 5px;
+      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+      color: #ffffff;
+      opacity: 0.6;
+      background: lighten($primary-darkgrey,10%);
+      padding: 3px;
+      height: 10px;
+      display: flex;
+      align-items: center;
+      border-radius: 7px;
+    }
+  }
+}
+
+.displayFlex {
+  display: flex;
+  align-items: center;
 }
