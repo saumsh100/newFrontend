@@ -110,6 +110,10 @@ export default function (sequelize, DataTypes) {
       },
     },
 
+    pmsId: {
+      type: DataTypes.STRING,
+    },
+
     // TODO: remove this once we are swapped to be parentId architecture
     weeklySchedules: {
       type: DataTypes.ARRAY(DataTypes.JSONB),

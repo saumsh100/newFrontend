@@ -169,6 +169,7 @@ const ModelAttributes = {
 
   WeeklySchedule: [
     'startDate',
+    'pmsId',
     'isAdvanced',
     'monday',
     'tuesday',
