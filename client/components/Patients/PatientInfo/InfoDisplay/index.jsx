@@ -104,7 +104,7 @@ class InfoDisplay extends Component {
             <div className={styles.remoteSubmit}>
               <div className={styles.remoteSubmit_buttonDelete}>
                 <Button
-                  color="grey"
+                  color="darkgrey"
                   onClick={() => this.reinitializeState()}
                 >
                   Cancel
