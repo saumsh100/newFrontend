@@ -23,7 +23,6 @@ export default class DropdownSelect extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
-    this.open = this.open.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -35,7 +34,6 @@ export default class DropdownSelect extends Component {
       optionsStatic: this.props.options || [],
       value: '',
       isOpen: false,
-      searching: false,
     };
   }
 
@@ -51,12 +49,6 @@ export default class DropdownSelect extends Component {
         isOpen: true,
       });
     }
-  }
-
-  open() {
-    this.setState({
-      isOpen: true,
-    });
   }
 
   close() {
@@ -118,9 +110,6 @@ export default class DropdownSelect extends Component {
               onChange={e => {
                 this.handleSearch(e.target.value)
               }}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
               value={this.state.value}
               icon="plus"
             />
@@ -136,8 +125,8 @@ export default class DropdownSelect extends Component {
               key={`dropDownSelect_${i}`}
               className={className}
               onClick={() => {
-                onChange(option.value)
-                this.close()
+                onChange(option.value);
+                this.close();
               }}
               data-test-id={option.value}
             >
@@ -192,7 +181,7 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
-        <Input onFocus={disabled ? false : this.open} onBlur={disabled ? false : this.close} className={styles.hiddenInput} />
+        <Input onFocus={disabled ? false : this.toggle} className={styles.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>
