@@ -34,7 +34,6 @@ export default class DropdownSelect extends Component {
       optionsStatic: this.props.options || [],
       value: '',
       isOpen: false,
-      searching: false,
     };
   }
 
@@ -111,12 +110,6 @@ export default class DropdownSelect extends Component {
               onChange={e => {
                 this.handleSearch(e.target.value)
               }}
-              onClick={(e) => {
-                e.stopPropagation();
-                this.setState({
-                  searching: true,
-                });
-              }}
               value={this.state.value}
               icon="plus"
             />
@@ -132,8 +125,8 @@ export default class DropdownSelect extends Component {
               key={`dropDownSelect_${i}`}
               className={className}
               onClick={() => {
-                onChange(option.value)
-                this.close()
+                onChange(option.value);
+                this.close();
               }}
               data-test-id={option.value}
             >
@@ -188,7 +181,7 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
-        <Input onFocus={disabled ? false : this.toggle} onBlur={disabled ? false: this.toggle} className={styles.hiddenInput} />
+        <Input onFocus={disabled ? false : this.toggle} className={styles.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>

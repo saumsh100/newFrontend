@@ -221,11 +221,11 @@ class ScheduleComponent extends Component {
                 <Col xs={12} className={styles.schedule__sidebar_request} >
                   <RequestsContainer
                     key={'scheduleRequests'}
-                    maxHeight="calc(100vh - 740px)"
+                    maxHeight="250px"
                   />
                 </Col>
               </Row>
-              <Row>
+              <Row className={styles.schedule__sidebar_rowFilter}>
                 <Col xs={12}>
                   <Filters
                     schedule={schedule}

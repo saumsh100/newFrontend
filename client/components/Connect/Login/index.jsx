@@ -29,7 +29,7 @@ class Login extends Component {
   }
 
   handleLogin(values) {
-    return this.props.login(values)
+    return this.props.login({ values, connect: true })
       .then(() => {
         window.JavaParent
           && window.JavaParent.onLoginSuccess
