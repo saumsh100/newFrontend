@@ -20,7 +20,7 @@ class Login extends Component {
 
   handleLogin(values) {
     const { location: { state } } = this.props;
-    return this.props.login(values, state && state.from, true)
+    return this.props.login({ values, redirectedFrom: state && state.from })
       .catch((err) => {
         const { data } = err;
         throw new SubmissionError({
