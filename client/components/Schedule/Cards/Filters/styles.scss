@@ -3,7 +3,7 @@
 .schedule_filter {
     border-top: $card-border-size $inactive-color;
     min-height: 150px;
-    max-height: calc(100vh - 750px);
+    //max-height: calc(100vh - 750px);
     overflow: auto;
 }
 

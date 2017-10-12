@@ -23,6 +23,7 @@ export default class DropdownSelect extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
+    this.open = this.open.bind(this);
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -50,6 +51,12 @@ export default class DropdownSelect extends Component {
         isOpen: true,
       });
     }
+  }
+
+  open() {
+    this.setState({
+      isOpen: true,
+    });
   }
 
   close() {
@@ -113,9 +120,6 @@ export default class DropdownSelect extends Component {
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                this.setState({
-                  searching: true,
-                });
               }}
               value={this.state.value}
               icon="plus"
@@ -188,7 +192,7 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
-        <Input onFocus={disabled ? false : this.toggle} onBlur={disabled ? false: this.toggle} className={styles.hiddenInput} />
+        <Input onFocus={disabled ? false : this.open} onBlur={disabled ? false : this.close} className={styles.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>
