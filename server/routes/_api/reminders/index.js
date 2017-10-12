@@ -4,6 +4,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
 import { Reminder } from '../../../_models';
 import StatusError from '../../../util/StatusError';
+import { getAppointmentsFromReminder } from '../../../lib/_reminders/helpers';
 
 const remindersRouter = Router();
 
@@ -25,6 +26,46 @@ remindersRouter.get('/:accountId/reminders', checkPermissions('accounts:read'), 
     });
 
     res.send(normalize('reminders', reminders));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /:accountId/reminders/stats
+ */
+remindersRouter.get('/:accountId/reminders/stats', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    const date = (new Date()).toISOString();
+    const reminders = await Reminder.findAll({
+      raw: true,
+      where: { accountId: req.accountId },
+      order: [['lengthSeconds', 'ASC']],
+    });
+
+    const data = [];
+    const seen = {};
+    for (const reminder of reminders) {
+      const appts = await getAppointmentsFromReminder({ reminder, account: req.account, date });
+      const unseenAppts = appts.filter(a => !seen[a.id]);
+      unseenAppts.forEach(a => seen[a.id] = true);
+
+      const failAppts = unseenAppts.filter((a) => {
+        if (a.primaryType === 'sms' || a.primaryType === 'phone') {
+          return !a.patient.mobilePhoneNumber;
+        } else {
+          return !a.patient.email;
+        }
+      });
+
+      data.push({
+        ...reminder,
+        success: unseenAppts.length - failAppts.length,
+        fail: failAppts.length,
+      });
+    }
+
+    res.send(data);
   } catch (error) {
     next(error);
   }

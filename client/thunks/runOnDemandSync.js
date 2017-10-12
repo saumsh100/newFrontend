@@ -10,7 +10,7 @@ export function runOnDemandSync() {
 
     const alert = {
       success: {
-        body: 'Syncing with Clear Dent',
+        body: 'Syncing with PMS',
       },
 
       error: {

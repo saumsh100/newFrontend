@@ -54,6 +54,7 @@ Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
+        "isActive": true,
         "name": "C2",
         "pmsId": null,
       },
@@ -64,6 +65,7 @@ Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
+        "isActive": true,
         "name": "C1",
         "pmsId": "12",
       },
@@ -116,6 +118,7 @@ Object {
     "attributes": Object {
       "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
       "description": null,
+      "isActive": true,
       "name": "New Chair",
       "pmsId": null,
     },

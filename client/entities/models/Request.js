@@ -3,6 +3,7 @@ import moment from 'moment';
 import createModel from '../createModel';
 
 const RequestsSchema = {
+  createdAt: null,
   startDate: null,
   endDate: null,
   id: null,

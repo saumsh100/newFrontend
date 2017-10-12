@@ -15,6 +15,7 @@ const batchPatientId2 = '7a1146f9-1d48-4a5f-8479-f6172d5a83b5';
 const batchPatientId3 = '8405acdd-4559-4396-beb8-2e8ce79307c3';
 const batchPatientId4 = '68238eca-3e5c-4fbd-a641-f68ded47510d';
 const batchInvalidPatientId = 'eb6be674-1861-4432-8a2e-48c402ba2aaa';
+const requestCreatedAt = new Date();
 
 const batchPatient = {
   id: batchPatientId,
@@ -182,9 +183,20 @@ describe('/api/patients', () => {
         });
     });
 
+    test('/:patientId/nextAppointment - retrieve patients next appointments', () => {
+      return request(app)
+        .get(`${rootUrl}/${patientId}/nextAppointment?requestCreatedAt=${requestCreatedAt}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
     test('/suggestions - no result found', () => {
       return request(app)
-        .get(`${rootUrl}/suggestions?firstName=Mr&lastName=Nothing&email=lala&phoneNumber=1`)
+        .get(`${rootUrl}/suggestions?firstName=Mr&lastName=Nothing&email=lala&phoneNumber=1&requestCreatedAt=${requestCreatedAt}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -195,7 +207,7 @@ describe('/api/patients', () => {
 
     test('/suggestions - result found', () => {
       return request(app)
-        .get(`${rootUrl}/suggestions?firstName=Ronald&lastName=Mcdonald`)
+        .get(`${rootUrl}/suggestions?firstName=Ronald&lastName=Mcdonald&requestCreatedAt=${requestCreatedAt}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {

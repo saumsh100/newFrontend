@@ -11,6 +11,9 @@ const normalizeBirthdate = (value) => {
 };
 
 const validateBirthdate = (value) => {
+  if (value === undefined) {
+    return;
+  }
   const format = 'MM/DD/YYYY';
   const pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
   if (!pattern.test(value)) {

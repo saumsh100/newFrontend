@@ -257,17 +257,17 @@ class Users extends Component{
     ];
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
     const actionsNewUser = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { form: 'newUser' } },
     ];
 
     const editActions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Edit', onClick: this.sendEdit, component: Button },
     ];
 

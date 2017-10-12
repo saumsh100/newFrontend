@@ -162,6 +162,13 @@ Object {
 }
 `;
 
+exports[`/api/patients GET / /:patientId/nextAppointment - retrieve patients next appointments 1`] = `
+Object {
+  "entities": Object {},
+  "result": Array [],
+}
+`;
+
 exports[`/api/patients GET / /:patientId/stats - retrieve patient appointments 1`] = `
 Object {
   "allApps": 1,
@@ -340,6 +347,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "appointments": Array [],
         "birthDate": "1980-01-01T00:00:00.932Z",
         "email": "testpatient@test.com",
         "familyId": null,
@@ -349,6 +357,7 @@ Object {
         "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "insurance": null,
         "isDeleted": false,
+        "isSyncedWithPMS": false,
         "isSyncedWithPms": false,
         "language": null,
         "lastName": "Mcdonald",

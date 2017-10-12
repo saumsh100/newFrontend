@@ -2,7 +2,8 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card } from '../../library';
+import { push } from 'react-router-redux';
+import { Card, Button } from '../../library';
 import ResetPasswordForm from './ResetPasswordForm';
 import { resetUserPassword } from '../../../thunks/auth';
 import styles from '../styles.scss';
@@ -27,9 +28,22 @@ class ResetPassword extends Component {
   }
 
   render() {
+    const {
+      push,
+    } = this.props;
 
     const display = !this.state.submitted ?  <ResetPasswordForm onSubmit={this.handleSubmit} /> :
-    <div>Password Successfully Changed</div>;
+      (<div>
+          <div className={styles.textSuccess2}>Password Successfully Changed!</div>
+          <Button
+            onClick={()=> {
+              push('/login');
+            }}
+            className={styles.displayCenter}
+          >
+            Return to Login
+          </Button>
+       </div>);
 
     return (
       <div className={styles.backDrop}>
@@ -56,6 +70,7 @@ ResetPassword.propTypes = {
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     resetUserPassword,
+    push,
   }, dispatch);
 }
 
