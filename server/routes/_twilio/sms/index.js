@@ -99,11 +99,12 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
       },
     });
 
-    if (!chat) {
+    if (!chat || !patient) {
       chat = await Chat.findOne({
         where: {
           accountId: account.id,
           patientPhoneNumber: From,
+          patientId: null,
         },
       });
     }
