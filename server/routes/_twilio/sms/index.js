@@ -93,8 +93,21 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
       where: {
         accountId: account.id,
         patientPhoneNumber: From,
+        patientId: {
+          $ne: null,
+        },
       },
     });
+
+    if (!chat) {
+      chat = await Chat.findOne({
+        where: {
+          accountId: account.id,
+          patientPhoneNumber: From,
+        },
+      });
+    }
+
     if (!chat) {
       chat = await Chat.create({
         accountId: account.id,
