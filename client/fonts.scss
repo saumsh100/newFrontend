@@ -107,7 +107,11 @@
 
 //New Camel Case Class Structure
 
-
+.fontExtraSmall {
+  font-size: $extra-small-size;
+  font-weight: $small-weight;
+  @extend .letterSpacing;
+}
 
 .fontMedium {
   font-family: Gotham-Medium;

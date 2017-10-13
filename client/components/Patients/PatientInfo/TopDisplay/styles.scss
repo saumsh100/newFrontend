@@ -13,6 +13,7 @@
 .imageContainer {
   height: 50%;
   background: url('https://i.imgur.com/1l18YL8.jpg');
+  opacity: 0.7;
 }
 
 .dataContainer {
@@ -33,7 +34,10 @@
     position: absolute;
     width: 150px;
     height: 150px;
-    background: linear-gradient(white, $primary-darkgrey);
+    background: linear-gradient(#dadada, #a1a1a1);
+    span {
+      font-size: 45px !important;
+    }
   }
 
   &_data {
@@ -70,10 +74,11 @@
       background: lighten($primary-darkgrey,10%);
       padding: 3px;
       height: 10px;
-      display: flex;
+      //display: flex;
       align-items: center;
       border-radius: 7px;
       font-size: 14px;
+      display: none;
     }
   }
 }

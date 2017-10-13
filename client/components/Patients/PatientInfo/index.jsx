@@ -4,9 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from '../../library';
 import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
-import InfoDisplay from './InfoDisplay';
+import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
+import DataDisplay from './DataDisplay';
 import styles from './styles.scss';
 
 class PatientInfo extends Component {
@@ -38,7 +39,6 @@ class PatientInfo extends Component {
   }
 
   render() {
-
     const patientId = this.props.match.params.patientId;
     const patient = this.props.patient;
 
@@ -54,10 +54,13 @@ class PatientInfo extends Component {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={4} className={styles.infoDisplay}>
-            <InfoDisplay patient={patient} />
+          <Col sm={12} md={3} className={styles.infoDisplay}>
+            <EditDisplay patient={patient} />
+            <DataDisplay
+              patient={patient}
+            />
           </Col>
-          <Col sm={12} md={8} className={styles.timeline}>
+          <Col sm={12} md={9} className={styles.timeline}>
             <Timeline patientId={patientId} />
           </Col>
         </Row>

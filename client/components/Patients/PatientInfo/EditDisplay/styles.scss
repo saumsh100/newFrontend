@@ -1,5 +1,26 @@
 @import '../../../../ui';
 
+.mainContainer {
+  display: flex;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+
+  &_edit {
+    opacity: 0.6;
+    cursor: pointer;
+    &:hover {
+      color: darken($primary-darkgrey, 10%);
+    }
+  }
+}
+
 .editModal {
   width: 600px;
   padding-top: 15px;

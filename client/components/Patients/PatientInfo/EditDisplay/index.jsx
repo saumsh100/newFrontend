@@ -8,7 +8,7 @@ import FamilyForm from './FamilyForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import styles from './styles.scss';
 
-class InfoDisplay extends Component {
+class EditDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,9 +53,14 @@ class InfoDisplay extends Component {
     };
 
     return (
-      <Card>
-        <div onClick={() => this.setModal()}>
-          Edit
+      <div className={styles.mainContainer}>
+        <div className={styles.text}>
+          <div className={styles.text_title}>
+            Patient Info
+          </div>
+          <div className={styles.text_edit} onClick={() => this.setModal()}>
+            Edit
+          </div>
         </div>
         <Modal
           active={this.state.isOpen}
@@ -119,9 +124,9 @@ class InfoDisplay extends Component {
             </div>
           </div>
         </Modal>
-      </Card>
+      </div>
     );
   }
 }
 
-export default InfoDisplay;
+export default EditDisplay;

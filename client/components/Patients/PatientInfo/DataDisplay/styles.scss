@@ -1,0 +1,29 @@
+@import '../../../../ui';
+
+.mainContainer {
+  width: 100%;
+  margin-top: 10px;
+  border-top: 5px solid $inactive-color;
+  background: white;
+}
+
+.grid {
+  box-sizing: border-box;
+  padding: 35px 35px 10px 35px;
+}
+
+.row {
+  border-bottom: 1px solid $primary-grey;
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+.row:first-child {
+  padding-top: 0px;
+}
+.row:last-child {
+  border-bottom: 0px;
+}
+
+.paddingCol {
+  padding-bottom: 40px;
+}
