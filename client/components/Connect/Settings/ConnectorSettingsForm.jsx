@@ -20,6 +20,10 @@ const options = [
     value: 'TRACKER_V11',
     label: 'Tracker 11',
   },
+  {
+    value: 'DENTRIX_V61',
+    label: 'Dentrix G6.1',
+  },
 ];
 
 export default function ConnectorSettingsForm({ initialValues, onSubmit }) {

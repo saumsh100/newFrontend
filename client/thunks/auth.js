@@ -37,7 +37,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     });
 };
 
-export function login(values, redirectedFrom = '/', connect = false) {
+export function login({ values, redirectedFrom = '/', connect = false }) {
   return function (dispatch, getState) {
     // reduxForm will not have this set if form is not dirty
     if (!values) return Promise.resolve(null);

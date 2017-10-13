@@ -94,7 +94,7 @@ class MainContainer extends Component {
     const formName = 'newUser';
 
     const actions = [
-      { label: 'Cancel', onClick: this.props.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.props.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.props.newPatient, component: RemoteSubmitButton, props: { form: formName }},
     ];
 
