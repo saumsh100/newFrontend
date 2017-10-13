@@ -7,6 +7,7 @@ class Event extends Component {
   render() {
     const {
       type,
+      time,
     } = this.props;
 
     let content = null;
@@ -72,13 +73,18 @@ class Event extends Component {
 
 
     return (
-      <div className={styles.event}>
-        <div className={styles.iconContainer}>
-          <div className={bgIconStyle}>
-            <Icon size={1} icon={icon} className={styles.icon}/>
+      <div className={styles.eventContainer}>
+        <div className={styles.event}>
+          <div className={styles.iconContainer}>
+            <div className={bgIconStyle}>
+              <Icon size={1} icon={icon} className={styles.icon}/>
+            </div>
           </div>
+          {content}
         </div>
-        {content}
+        <div className={styles.time}>
+          <span className={styles.time_text}>10:30am</span>
+        </div>
       </div>
     );
   }

@@ -1,14 +1,18 @@
 @import '../../../ui';
 
+.eventContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  width: 100%;
+  &:first-child {
+    margin-top: 0px;
+  }
+}
 .event {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 30px;
-}
-
-.event:first-child {
-  margin-top: 0px;
 }
 
 .iconContainer {
@@ -71,3 +75,16 @@
     composes: fontSmall from 'sass-loader!../../../fonts.scss';
   }
 }
+
+.time {
+  padding-top: 5px;
+  width: 100%;
+  display: flex;
+  &_text {
+    composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
+    margin-left: auto;
+    color: $primary-darkgrey;
+    opacity: 0.6;
+  }
+}
+
