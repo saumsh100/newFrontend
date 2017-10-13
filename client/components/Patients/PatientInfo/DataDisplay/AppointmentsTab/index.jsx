@@ -6,7 +6,7 @@ import styles from '../styles.scss';
 export default function AppointmentsTab(props) {
   return (
     <Grid className={styles.grid}>
-      <div className={styles.header}> Last Appointment </div>
+      <div className={styles.subHeader}> Last Appointment </div>
       <Row className={styles.row}>
         <Col xs={6}>
           <InfoDump
@@ -21,7 +21,7 @@ export default function AppointmentsTab(props) {
           />
         </Col>
       </Row>
-      <div className={styles.header}> Continuing Care </div>
+      <div className={styles.subHeader}> Continuing Care </div>
       <Row className={styles.row}>
         <Col xs={6}>
           <InfoDump
@@ -36,7 +36,7 @@ export default function AppointmentsTab(props) {
           />
         </Col>
       </Row>
-      <div className={styles.header}> Other </div>
+      <div className={styles.subHeader}> Other </div>
       <Row className={styles.row}>
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump

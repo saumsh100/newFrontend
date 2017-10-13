@@ -113,6 +113,12 @@
   @extend .letterSpacing;
 }
 
+.fontSmall {
+  font-size: $small-size;
+  font-weight: $small-weight;
+  @extend .letterSpacing;
+}
+
 .fontMedium {
   font-family: Gotham-Medium;
   @extend .letterSpacing;

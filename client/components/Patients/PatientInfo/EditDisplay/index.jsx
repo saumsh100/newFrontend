@@ -59,6 +59,7 @@ class EditDisplay extends Component {
             Patient Info
           </div>
           <div className={styles.text_edit} onClick={() => this.setModal()}>
+            <Icon icon="pencil" className={styles.text_icon} />
             Edit
           </div>
         </div>

@@ -21,14 +21,18 @@ class DataDisplay extends Component {
   }
 
   render() {
+    const {
+      patient
+    } = this.props;
+
     return (
       <div className={styles.mainContainer}>
         <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
           <Tab label="Appointments" >
-            <AppointmentsTab />
+            <AppointmentsTab patient={patient} />
           </Tab>
           <Tab label="Personal">
-            <PersonalTab />
+            <PersonalTab patient={patient} />
           </Tab>
         </Tabs>
       </div>

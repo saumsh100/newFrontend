@@ -19,6 +19,10 @@
       color: darken($primary-darkgrey, 10%);
     }
   }
+
+  &_icon {
+    padding-right: 5px;
+  }
 }
 
 .editModal {

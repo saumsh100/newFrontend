@@ -12,8 +12,9 @@
 
 .imageContainer {
   height: 50%;
-  background: url('https://i.imgur.com/1l18YL8.jpg');
-  opacity: 0.7;
+  //background: url('http://mycreativepanda.com/wp-content/themes/twentytwelve/images/homepage-slideshow/1.jpg');
+  background: linear-gradient($primary-blue, $primary-darkgrey);
+  opacity: 1;
 }
 
 .dataContainer {

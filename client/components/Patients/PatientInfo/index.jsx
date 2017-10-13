@@ -54,13 +54,16 @@ class PatientInfo extends Component {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={3} className={styles.infoDisplay}>
+          <Col sm={12} md={4} className={styles.infoDisplay}>
             <EditDisplay patient={patient} />
             <DataDisplay
               patient={patient}
             />
           </Col>
-          <Col sm={12} md={9} className={styles.timeline}>
+          <Col sm={12} md={8} className={styles.timeline}>
+            <div className={styles.timeline_header}>
+              Timeline and Activities
+            </div>
             <Timeline patientId={patientId} />
           </Col>
         </Row>

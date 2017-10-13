@@ -1,50 +1,57 @@
 import React, { PropTypes } from 'react';
+import moment from 'moment';
 import { Grid, Row, Col } from '../../../../library';
 import InfoDump from '../../TopDisplay/InfoDump';
 import styles from '../styles.scss';
 
 export default function PersonalTab(props) {
+  const {
+    patient
+  } = props;
+
   return (
     <Grid className={styles.grid}>
+      <div className={styles.subHeader}> Basic </div>
       <Row className={styles.row}>
         <Col xs={6}>
           <InfoDump
-            label="RECALL"
-            data="March 21,2017"
+            label="Gender"
+            data={patient.gender}
           />
         </Col>
         <Col xs={6}>
           <InfoDump
-            label="HYGIENE"
-            data="OCT 16,2017"
+            label="BIRTHDAY"
+            data={moment(patient.birthDate).format('MMMM Do, YYYY')}
           />
         </Col>
       </Row>
+      <div className={styles.subHeader}> Contact </div>
       <Row className={styles.row}>
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump
-            label="RECALL"
-            data="9 Months"
+            label="HOME NUMBER"
+            data={patient.homePhoneNumber}
           />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump
-            label="HYGIENE"
-            data="6 Months"
+            label="MOBILE NUMBER"
+            data={patient.mobilePhoneNumber}
           />
         </Col>
         <Col xs={6}>
           <InfoDump
-            label="HYGIENE"
-            data="6 Months"
+            label="WORK NUMBER"
+            data={patient.workPhoneNumber}
           />
         </Col>
       </Row>
       <Row className={styles.row}>
         <Col xs={6} >
           <InfoDump
-            label="LAST X-RAY"
-            data="March 21,2017"
+            label="ADDRESS"
+            data={patient.country}
           />
         </Col>
       </Row>
